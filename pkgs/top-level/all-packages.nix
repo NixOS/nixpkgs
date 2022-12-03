@@ -36123,6 +36123,8 @@ with pkgs;
 
   flatcam = callPackage ../applications/science/electronics/flatcam { };
 
+  flopoco = callPackage ../applications/science/electronics/flopoco { };
+
   fparser = callPackage ../applications/science/electronics/fparser { };
 
   geda = callPackage ../applications/science/electronics/geda {
