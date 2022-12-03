@@ -12648,6 +12648,8 @@ with pkgs;
     vkBasalt32 = pkgsi686Linux.vkBasalt;
   };
 
+  vkmark = callPackage ../tools/graphics/vkmark { };
+
   vncrec = callPackage ../tools/video/vncrec { };
 
   vo-amrwbenc = callPackage ../development/libraries/vo-amrwbenc { };
