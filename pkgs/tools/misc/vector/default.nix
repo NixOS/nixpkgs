@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7iYiSO966o0M9M0ijGCpuRVRgus+tURLBN9S5lPDRb8=";
+    hash = "sha256-0c0bbqp6k4nirw347r54sp9mpsfyzyvb7v47rrs6wmy0nxlmaj42";
   };
 
   cargoHash = "sha256:1ih47596l9knag7bsk48za0fmrcyzi6l0jyss1hdfp9wd2g9x59p";
