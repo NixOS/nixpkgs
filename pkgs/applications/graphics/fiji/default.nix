@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchzip
 , makeWrapper
 , autoPatchelfHook
 , jdk11
@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "fiji";
-  version = "20201104-1356";
+  version = "20221201-1017";
 
-  src = fetchurl {
-    url = "https://downloads.imagej.net/${pname}/archive/${version}/${pname}-nojre.tar.gz";
-    sha256 = "1jv4wjjkpid5spr2nk5xlvq3hg687qx1n5zh8zlw48y1y09c4q7a";
+  src = fetchzip {
+    url = "https://downloads.imagej.net/${pname}/archive/${version}/${pname}-nojre.zip";
+    sha256 = "sha256-opok3OFYiiM7k3VhruGfGBlQYlJ1KsFPFqnCSLRmIn4=";
   };
 
   dontBuild = true;
@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/bin/.fiji-launcher-hack $out/bin/fiji \
       --prefix PATH : ${lib.makeBinPath [ jdk11 ]} \
-      --set JAVA_HOME ${jdk11.home}
+      --set JAVA_HOME ${jdk11.home} \
+      --add-flags "--system --default-gc"
 
     ln $out/fiji/images/icon.png $out/share/pixmaps/fiji.png
 
