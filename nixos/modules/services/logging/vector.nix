@@ -8,6 +8,13 @@ in
   options.services.vector = {
     enable = mkEnableOption (lib.mdDoc "Vector");
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vector;
+      defaultText = literalExpression "pkgs.vector";
+      description = lib.mdDoc "Vector package to use";
+    };
+
     journaldAccess = mkOption {
       type = types.bool;
       default = false;
@@ -44,14 +51,14 @@ in
           conf = format.generate "vector.toml" cfg.settings;
           validateConfig = file:
           pkgs.runCommand "validate-vector-conf" {
-            nativeBuildInputs = [ pkgs.vector ];
+            nativeBuildInputs = [ cfg.package ];
           } ''
               vector validate --no-environment "${file}"
               ln -s "${file}" "$out"
             '';
         in
         {
-          ExecStart = "${pkgs.vector}/bin/vector --config ${validateConfig conf}";
+          ExecStart = "${cfg.package}/bin/vector --config ${validateConfig conf}";
           User = "vector";
           Group = "vector";
           Restart = "no";
