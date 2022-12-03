@@ -7,10 +7,8 @@
 , ninja
 , scikit-build
 , setuptools
-, jarowinkler
 , numpy
 , hypothesis
-, jarowinkler-cpp
 , pandas
 , pytestCheckHook
 , rapidfuzz-cpp
