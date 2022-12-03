@@ -35911,14 +35911,6 @@ with pkgs;
     });
 
     java = openjdk17;
-    z3 = z3_4_4_0.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "Z3Prover";
-        repo = "z3";
-        rev = "0482e7fe727c75e259ac55a932b28cf1842c530e";
-        sha256 = "1m53avlljxqd2p8w266ksmjywjycsd23h224yn786qsnf36dr63x";
-      };
-    });
   };
   isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
 
