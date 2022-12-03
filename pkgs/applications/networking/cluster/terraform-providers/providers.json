@@ -231,11 +231,11 @@
     "vendorHash": "sha256-2H+xp/A3J/xUf02voYyWP+J5MSsFM7Kz7KlgjaF99ao="
   },
   "cloudfoundry": {
-    "hash": "sha256-OOORVbjcXhH6gVjLdOu8kTqy6dzIARruF4H8byMNkko=",
+    "hash": "sha256-RYUs35sSL9CuwrOfUQ/S1G6W8ILgpJqVn8Xk9s2s35Y=",
     "homepage": "https://registry.terraform.io/providers/cloudfoundry-community/cloudfoundry",
     "owner": "cloudfoundry-community",
     "repo": "terraform-provider-cloudfoundry",
-    "rev": "v0.50.1",
+    "rev": "v0.50.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-mEWhLh4E3SI7xfmal1sJ5PdAYbYJrW/YFoBjTW9w4bA="
   },
