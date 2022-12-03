@@ -15,7 +15,6 @@
 , perl
 , makeDesktopItem
 , isabelle-components
-, isabelle
 , symlinkJoin
 , fetchhg
 }:
@@ -46,7 +45,7 @@ let
       cp libsha1.so $out/lib/
     '';
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: rec {
   pname = "isabelle";
   version = "2022";
 
@@ -219,14 +218,15 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.unix;
   };
-} // {
-  withComponents = f:
+
+  passthru.withComponents = f:
     let
+      isabelle = finalAttrs.finalPackage;
       base = "$out/${isabelle.dirname}";
       components = f isabelle-components;
     in symlinkJoin {
       name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ components;
+      paths = [ isabelle ] ++ (builtins.map (c: c.override { inherit isabelle; }) components);
 
       postBuild = ''
         rm $out/bin/*
@@ -244,4 +244,4 @@ in stdenv.mkDerivation rec {
         echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
       '') components;
     };
-}
+})
