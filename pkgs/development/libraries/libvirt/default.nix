@@ -372,8 +372,9 @@ stdenv.mkDerivation rec {
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = {
-    homepage = "https://libvirt.org/";
     description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
+    homepage = "https://libvirt.org/";
+    changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin lovesegfault ];
