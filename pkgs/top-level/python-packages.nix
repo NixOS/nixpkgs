@@ -3542,8 +3542,6 @@ self: super: with self; {
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 
-  functorch = callPackage ../development/python-modules/functorch { };
-
   funcy = callPackage ../development/python-modules/funcy { };
 
   furl = callPackage ../development/python-modules/furl { };
@@ -11892,8 +11890,6 @@ self: super: with self; {
   wcmatch = callPackage ../development/python-modules/wcmatch { };
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
-
-  weakrefmethod = callPackage ../development/python-modules/weakrefmethod { };
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 

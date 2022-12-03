@@ -806,7 +806,7 @@ in
       optional (
         cfg.writableStore &&
         cfg.useNixStoreImage &&
-        opt.writableStore.highestPrio > lib.modules.defaultPriority)
+        opt.writableStore.highestPrio > lib.modules.defaultOverridePriority)
         ''
           You have enabled ${opt.useNixStoreImage} = true,
           without setting ${opt.writableStore} = false.

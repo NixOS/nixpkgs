@@ -83,6 +83,7 @@ mapAliases ({
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
+  functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
   garminconnect-ha = garminconnect; # added 2022-02-05
   gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
@@ -216,6 +217,7 @@ mapAliases ({
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   Wand = wand; # added 2022-11-13
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
+  weakrefmethod = throw "weakrefmethod was removed since it's not needed in Python >= 3.4"; # added 2022-12-01
   webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31

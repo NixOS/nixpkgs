@@ -3468,6 +3468,8 @@ with pkgs;
 
   beats = callPackage ../tools/misc/beats { };
 
+  BeatSaberModManager = callPackage ../games/BeatSaberModManager/default.nix { };
+
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
@@ -5741,16 +5743,13 @@ with pkgs;
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_21_01_0
-    citrix_workspace_21_03_0
-    citrix_workspace_21_06_0
-    citrix_workspace_21_08_0
     citrix_workspace_21_09_0
     citrix_workspace_21_12_0
     citrix_workspace_22_05_0
     citrix_workspace_22_07_0
+    citrix_workspace_22_12_0
   ;
-  citrix_workspace = citrix_workspace_22_07_0;
+  citrix_workspace = citrix_workspace_22_12_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
@@ -6262,6 +6261,8 @@ with pkgs;
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
   dfc  = callPackage ../tools/system/dfc { };
+
+  dfrs  = callPackage ../tools/system/dfrs { };
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
@@ -9875,6 +9876,8 @@ with pkgs;
 
   pwsafe = callPackage ../applications/misc/pwsafe { };
 
+  pw-viz = callPackage ../applications/misc/pw-viz { };
+
   napi-rs-cli = callPackage ../development/tools/napi-rs-cli { };
 
   neil = callPackage ../development/tools/neil { };
@@ -12248,6 +12251,8 @@ with pkgs;
   topgrade = callPackage ../tools/misc/topgrade {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
+
+  topiary = callPackage ../development/tools/misc/topiary { };
 
   todo = callPackage ../tools/misc/todo { };
 
@@ -19989,7 +19994,9 @@ with pkgs;
 
   lmdbxx = callPackage ../development/libraries/lmdbxx { };
 
-  lemon-graph = callPackage ../development/libraries/lemon-graph { };
+  lemon-graph = callPackage ../development/libraries/lemon-graph {
+    stdenv = if stdenv.isLinux then gcc11Stdenv else stdenv;
+  };
 
   levmar = callPackage ../development/libraries/levmar { };
 
@@ -22593,6 +22600,8 @@ with pkgs;
 
   snappy = callPackage ../development/libraries/snappy { };
 
+  snac2 = callPackage ../servers/snac2 { };
+
   snappymail = callPackage ../servers/snappymail { };
 
   snow = callPackage ../tools/security/snow { };
@@ -23880,6 +23889,8 @@ with pkgs;
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
   home-assistant-component-tests = recurseIntoAttrs home-assistant.tests.components;
+
+  honk = callPackage ../servers/honk { };
 
   hqplayerd = callPackage ../servers/hqplayerd { };
 
@@ -32932,6 +32943,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  vsce = callPackage ../development/tools/vsce { };
+
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
   vscode-fhs = vscode.fhs;
   vscode-fhsWithPackages = vscode.fhsWithPackages;
@@ -35921,14 +35934,14 @@ with pkgs;
   isabelle = callPackage ../applications/science/logic/isabelle {
     polyml = polyml.overrideAttrs (_: {
       pname = "polyml-for-isabelle";
-      version = "2021-1";
+      version = "2022";
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
       buildFlags = [ "compiler" ];
       src = fetchFromGitHub {
         owner = "polyml";
         repo = "polyml";
-        rev = "39d96a2def903ed019c6855e3b688df5070d633a";
-        sha256 = "sha256-S7d2Vr/nB+rCX9d4qQj4f7edVZKocKIjc5rrx9A/B4Q=";
+        rev = "bafe319bc3a65bf63bd98a4721a6f4dd9e0eabd6";
+        sha256 = "1ygs09zzq8icq1gc8qf4sb24lxx7sbcyd5hw3vw67a3ryaki0qw2";
       };
     });
 
@@ -36034,7 +36047,7 @@ with pkgs;
   };
 
 
-  inherit (callPackages ../applications/science/logic/z3 { python = python2; })
+  inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_11
     z3_4_8
     z3_4_7;
@@ -37934,6 +37947,8 @@ with pkgs;
   mmark = callPackage ../tools/typesetting/mmark { };
 
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
+
+  wiremock = callPackage ../tools/networking/wiremock { };
 
   teseq = callPackage ../applications/misc/teseq {  };
 

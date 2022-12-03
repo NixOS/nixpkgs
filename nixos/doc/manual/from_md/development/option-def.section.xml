@@ -66,11 +66,11 @@ config = {
     <title>Setting Priorities</title>
     <para>
       A module can override the definitions of an option in other
-      modules by setting a <emphasis>priority</emphasis>. All option
-      definitions that do not have the lowest priority value are
-      discarded. By default, option definitions have priority 1000. You
-      can specify an explicit priority by using
-      <literal>mkOverride</literal>, e.g.
+      modules by setting an <emphasis>override priority</emphasis>. All
+      option definitions that do not have the lowest priority value are
+      discarded. By default, option definitions have priority 100 and
+      option defaults have priority 1500. You can specify an explicit
+      priority by using <literal>mkOverride</literal>, e.g.
     </para>
     <programlisting language="bash">
 services.openssh.enable = mkOverride 10 false;
@@ -78,7 +78,35 @@ services.openssh.enable = mkOverride 10 false;
     <para>
       This definition causes all other definitions with priorities above
       10 to be discarded. The function <literal>mkForce</literal> is
-      equal to <literal>mkOverride 50</literal>.
+      equal to <literal>mkOverride 50</literal>, and
+      <literal>mkDefault</literal> is equal to
+      <literal>mkOverride 1000</literal>.
+    </para>
+  </section>
+  <section xml:id="sec-option-definitions-ordering">
+    <title>Ordering Definitions</title>
+    <para>
+      It is also possible to influence the order in which the
+      definitions for an option are merged by setting an <emphasis>order
+      priority</emphasis> with <literal>mkOrder</literal>. The default
+      order priority is 1000. The functions <literal>mkBefore</literal>
+      and <literal>mkAfter</literal> are equal to
+      <literal>mkOrder 500</literal> and
+      <literal>mkOrder 1500</literal>, respectively. As an example,
+    </para>
+    <programlisting language="bash">
+hardware.firmware = mkBefore [ myFirmware ];
+</programlisting>
+    <para>
+      This definition ensures that <literal>myFirmware</literal> comes
+      before other unordered definitions in the final list value of
+      <literal>hardware.firmware</literal>.
+    </para>
+    <para>
+      Note that this is different from
+      <link linkend="sec-option-definitions-setting-priorities">override
+      priorities</link>: setting an order does not affect whether the
+      definition is included or not.
     </para>
   </section>
   <section xml:id="sec-option-definitions-merging">

@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.29.0";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-Fh2OVb4d6WHuoJM503jaN9lan/JCrxMXZjCVpvuYbRQ=";
+    sha256 = "sha256-tVkRHyWTpl6dubSDtVJVYkHQOfZDR75vUWmI0lp9tI0=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-ZwJX+kXpj6nARFDx/+LsHWLzMUGBYJvM0DA0+WZukpI=";
+  cargoSha256 = "sha256-cinO426Q6TO6a1i63ff892kicnPxNrs6tJFpqPYuVWc=";
 
   checkInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.

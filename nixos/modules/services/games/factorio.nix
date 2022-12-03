@@ -46,7 +46,7 @@ in
     services.factorio = {
       enable = mkEnableOption (lib.mdDoc name);
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 34197;
         description = lib.mdDoc ''
           The port to which the service should bind.
