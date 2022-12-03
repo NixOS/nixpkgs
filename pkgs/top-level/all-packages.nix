@@ -11849,7 +11849,7 @@ with pkgs;
 
   subedit = callPackage ../tools/text/subedit { };
 
-  subsurface = libsForQt514.callPackage ../applications/misc/subsurface { };
+  subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
   sudo = callPackage ../tools/security/sudo { };
 
