@@ -13122,6 +13122,8 @@ with pkgs;
 
   wrk2 = callPackage ../tools/networking/wrk2 { };
 
+  wsysmon = callPackage ../tools/system/wsysmon { };
+
   wuzz = callPackage ../tools/networking/wuzz { };
 
   wv = callPackage ../tools/misc/wv { };
