@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   name = "libfoo-1.2.3";
   src = fetchurl {
     url = "http://example.org/libfoo-1.2.3.tar.bz2";
-    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+    hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
 }
 ```
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "1.2.3";
   src = fetchurl {
     url = "http://example.org/libfoo-source-${version}.tar.bz2";
-    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+    hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
 }
 ```

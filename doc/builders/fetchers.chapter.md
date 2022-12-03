@@ -14,7 +14,7 @@ For example, consider the following fetcher:
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.0.tar.gz";
-  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
 };
 ```
 
@@ -23,17 +23,17 @@ A common mistake is to update a fetcher’s URL, or a version parameter, without
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
-  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
 };
 ```
 
 **This will reuse the old contents**.
-Remember to invalidate the hash argument, in this case by setting the `sha256` attribute to an empty string.
+Remember to invalidate the hash argument, in this case by setting the `hash` attribute to an empty string.
 
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
-  sha256 = "";
+  hash = "";
 };
 ```
 
@@ -42,14 +42,14 @@ Use the resulting error message to determine the correct hash.
 ```
 error: hash mismatch in fixed-output derivation '/path/to/my.drv':
          specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-            got:    sha256-RApQUm78dswhBLC/rfU9y0u6pSAzHceIJqgmetRD24E=
+            got:    sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=
 ```
 
 A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
-Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
+Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `hash`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `hash`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
 
 ```nix
 { stdenv, fetchurl }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   name = "hello";
   src = fetchurl {
     url = "http://www.example.org/hello.tar.gz";
-    sha256 = "1111111111111111111111111111111111111111111111111111";
+    hash = "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=";
   };
 }
 ```
@@ -76,18 +76,18 @@ The main difference between `fetchurl` and `fetchzip` is in how they store the c
 - `includes`: Include only files matching these patterns (applies after the above arguments).
 - `revert`: Revert the patch.
 
-Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
+Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `hash` argument is changed as well.
 
 
 Most other fetchers return a directory rather than a single file.
 
 ## `fetchsvn` {#fetchsvn}
 
-Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `sha256`.
+Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`.
 
 ## `fetchgit` {#fetchgit}
 
-Used with Git. Expects `url` to a Git repo, `rev`, and `sha256`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
+Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
 Additionally, the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
 
@@ -104,32 +104,32 @@ stdenv.mkDerivation {
       "directory/to/be/included"
       "another/directory"
     ];
-    sha256 = "0000000000000000000000000000000000000000000000000000";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 }
 ```
 
 ## `fetchfossil` {#fetchfossil}
 
-Used with Fossil. Expects `url` to a Fossil archive, `rev`, and `sha256`.
+Used with Fossil. Expects `url` to a Fossil archive, `rev`, and `hash`.
 
 ## `fetchcvs` {#fetchcvs}
 
-Used with CVS. Expects `cvsRoot`, `tag`, and `sha256`.
+Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `sha256`.
+Used with Mercurial. Expects `url`, `rev`, and `hash`.
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
 ## `fetchFromGitea` {#fetchfromgitea}
 
-`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `sha256` is currently preferred.
+`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `hash` is currently preferred.
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
-`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `sha256` is currently preferred.
+`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `hash` is currently preferred.
 
 `fetchFromGitHub` uses `fetchzip` to download the source archive generated by GitHub for the specified revision. If `leaveDotGit`, `deepClone` or `fetchSubmodules` are set to `true`, `fetchFromGitHub` will use `fetchgit` instead. Refer to its section for documentation of these options.
 
@@ -156,7 +156,7 @@ This is used with repo.or.cz repositories. The arguments expected are very simil
 ## `fetchFromSourcehut` {#fetchfromsourcehut}
 
 This is used with sourcehut repositories. Similar to `fetchFromGitHub` above,
-it expects `owner`, `repo`, `rev` and `sha256`, but don't forget the tilde (~)
+it expects `owner`, `repo`, `rev` and `hash`, but don't forget the tilde (~)
 in front of the username! Expected arguments also include `vc` ("git" (default)
 or "hg"), `domain` and `fetchSubmodules`.
 

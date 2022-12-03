@@ -76,7 +76,7 @@ Security fixes are submitted in the same way as other changes and thus the same 
   (fetchpatch {
     name = "CVE-2019-11068.patch";
     url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
-    sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
+    hash = "sha256-SEKe/8HcW0UBHCfPTTOnpRlzmV2nQPPeL6HOMxBZd14=";
   })
   ```
 
