@@ -8063,8 +8063,6 @@ self: super: with self; {
     inherit (pkgs) nix;
   };
 
-  nixpkgs = callPackage ../development/python-modules/nixpkgs { };
-
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
