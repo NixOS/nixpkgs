@@ -1,12 +1,15 @@
 { lib
 , buildPythonApplication
+, copyDesktopItems
 , fetchPypi
 , gobject-introspection
 , jellyfin-apiclient-python
 , jinja2
+, makeDesktopItem
 , mpv
 , pillow
 , pystray
+, python
 , python-mpv-jsonipc
 , pywebview
 , tkinter
@@ -23,6 +26,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     wrapGAppsHook
     gobject-introspection
   ];
@@ -59,6 +63,15 @@ buildPythonApplication rec {
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
   '';
 
+  # Install all the icons for the desktop item
+  postInstall = ''
+    for s in 16 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/''${s}x''${s}/apps
+      ln -s $out/${python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
+        $out/share/icons/hicolor/''${s}x''${s}/apps/${pname}.png
+    done
+  '';
+
   # needed for pystray to access appindicator using GI
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -68,6 +81,16 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "Jellyfin MPV Shim";
+      categories = [ "Video" "AudioVideo" "TV" "Player" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
