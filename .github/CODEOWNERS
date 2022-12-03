@@ -146,6 +146,11 @@
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
 
+# Certificate Authorities
+pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
+pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
+pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
+
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
 
