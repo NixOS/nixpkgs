@@ -8,10 +8,8 @@
 , ninja
 , scikit-build
 , setuptools
-, jarowinkler
 , numpy
 , hypothesis
-, jarowinkler-cpp
 , pandas
 , pytestCheckHook
 , rapidfuzz-cpp
@@ -44,7 +42,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    jarowinkler-cpp
     rapidfuzz-cpp
     taskflow
   ];
@@ -60,9 +57,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jarowinkler
     numpy
   ];
+
+  preCheck = ''
+    export RAPIDFUZZ_IMPLEMENTATION=cpp
+  '';
 
   checkInputs = [
     hypothesis
