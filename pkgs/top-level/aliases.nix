@@ -673,6 +673,7 @@ mapAliases ({
 
   jack2Full = jack2; # moved from top-level 2021-03-14
   jami-client-gnome = throw "jami-client-gnome has been removed: abandoned upstream"; # Added 2022-05-15
+  jami-client-qt = jami-client; # Added 2022-11-06
   jami-libclient = throw "jami-libclient has been removed: moved into jami-qt"; # Added 2022-07-29
   jamomacore = throw "jamomacore has been removed: abandoned upstream"; # Added 2020-11-21
   jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # Added 2021-03-15
