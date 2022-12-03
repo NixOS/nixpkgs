@@ -182,4 +182,12 @@ self: super: {
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # fix build with avx, see https://github.com/haskell-crypto/cryptonite/issues/347
+  # https://github.com/haskell-crypto/cryptonite/pull/373
+  cryptonite = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/haskell-crypto/cryptonite/commit/1da7efd7ffac8b8b3ea325da79cd73a2e4a39085.patch";
+    excludes = [ "cbits/decaf/tools/generate.sh" ];
+    sha256 = "sha256-fgu8D9z3lFfVNz5GJqsbWApG+T2PPZyXJ+AkFXArwH0=";
+  }) (doDistribute super.cryptonite);
 }
