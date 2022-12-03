@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "ptpython"
+    "pyphen"
   ];
 
   meta = with lib; {
