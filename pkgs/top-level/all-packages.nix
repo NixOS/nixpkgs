@@ -1431,7 +1431,7 @@ with pkgs;
 
   q = callPackage ../tools/networking/q {};
 
-  qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
+  qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
 
@@ -3608,7 +3608,7 @@ with pkgs;
   bookstack = callPackage ../servers/web-apps/bookstack { };
 
   # Upstream recommends qt5.12 and it doesn't build with qt5.15
-  boomerang = libsForQt512.callPackage ../development/tools/boomerang { };
+  boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
 
@@ -3736,7 +3736,7 @@ with pkgs;
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
-  calamares = libsForQt515.callPackage ../tools/misc/calamares {
+  calamares = libsForQt5.callPackage ../tools/misc/calamares {
     python = python3;
     boost = boost.override { enablePython = true; python = python3; };
   };
@@ -7151,7 +7151,7 @@ with pkgs;
 
   fontforge-fonttools = callPackage ../tools/misc/fontforge/fontforge-fonttools.nix {};
 
-  fontmatrix = libsForQt514.callPackage ../applications/graphics/fontmatrix {};
+  fontmatrix = libsForQt5.callPackage ../applications/graphics/fontmatrix {};
 
   footswitch = callPackage ../tools/inputmethods/footswitch { };
 
@@ -10062,7 +10062,7 @@ with pkgs;
 
   ola = callPackage ../applications/misc/ola { };
 
-  olive-editor = libsForQt514.callPackage ../applications/video/olive-editor {
+  olive-editor = libsForQt5.callPackage ../applications/video/olive-editor {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
@@ -11849,7 +11849,7 @@ with pkgs;
 
   subedit = callPackage ../tools/text/subedit { };
 
-  subsurface = libsForQt514.callPackage ../applications/misc/subsurface { };
+  subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
   sudo = callPackage ../tools/security/sudo { };
 
@@ -12074,7 +12074,7 @@ with pkgs;
 
   ted = callPackage ../tools/typesetting/ted { };
 
-  teamviewer = libsForQt515.callPackage ../applications/networking/remote/teamviewer { };
+  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
   teip = callPackage ../tools/text/teip { };
 
@@ -17569,7 +17569,7 @@ with pkgs;
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
-  minizincide = qt514.callPackage ../development/tools/minizinc/ide.nix { };
+  minizincide = libsForQt5.callPackage ../development/tools/minizinc/ide.nix { };
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
 
@@ -17797,7 +17797,7 @@ with pkgs;
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
 
-  cutter = libsForQt515.callPackage ../development/tools/analysis/rizin/cutter.nix { };
+  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
   ragel = ragelStable;
 
@@ -22097,7 +22097,7 @@ with pkgs;
 
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
-    inherit (qt514) qmake qttools qtwebengine qtxmlpatterns;
+    inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
   };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
@@ -22141,33 +22141,7 @@ with pkgs;
     developerBuild = true;
   };
 
-  qt512 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.12) {
-      inherit newScope;
-      inherit lib fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3 python2;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit darwin;
-      inherit buildPackages;
-      stdenv = if stdenv.cc.isGNU
-        then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
-        else stdenv;
-    });
-
-  qt514 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.14) {
-      inherit newScope;
-      inherit lib fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3 python2;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit darwin;
-      inherit buildPackages;
-      stdenv = if stdenv.cc.isGNU
-        then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
-        else stdenv;
-    });
-
-  qt515 = recurseIntoAttrs (makeOverridable
+  qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
       inherit newScope;
       inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
@@ -22177,23 +22151,9 @@ with pkgs;
       inherit buildPackages;
     });
 
-  libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs;
-    qt5 = qt512;
+  libsForQt5 = recurseIntoAttrs (import ./qt5-packages.nix {
+    inherit lib pkgs qt5;
   });
-
-  libsForQt514 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs;
-    qt5 = qt514;
-  });
-
-  libsForQt515 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs;
-    qt5 = qt515;
-  });
-
-  qt5 =        qt515;
-  libsForQt5 = libsForQt515;
 
   # TODO: remove once no package needs this anymore or together with OpenSSL 1.1
   qt5_openssl_1_1 = qt5.overrideScope' (_: super: {
@@ -22211,7 +22171,7 @@ with pkgs;
   };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
-  plasma5Packages = libsForQt515;
+  plasma5Packages = libsForQt5;
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
@@ -23070,7 +23030,7 @@ with pkgs;
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
-  vtk_8 = libsForQt515.callPackage ../development/libraries/vtk/8.x.nix {
+  vtk_8 = libsForQt5.callPackage ../development/libraries/vtk/8.x.nix {
     stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
@@ -23081,7 +23041,7 @@ with pkgs;
 
   vtk_8_withQt5 = vtk_8.override { enableQt = true; };
 
-  vtk_9 = libsForQt515.callPackage ../development/libraries/vtk/9.x.nix {
+  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
@@ -27422,7 +27382,7 @@ with pkgs;
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
-  foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
+  foxitreader = libsForQt5.callPackage ../applications/misc/foxitreader { };
 
   pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
     year = "2021";
@@ -27451,7 +27411,7 @@ with pkgs;
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
-  airwave = callPackage ../applications/audio/airwave { qt5 = qt514; };
+  airwave = callPackage ../applications/audio/airwave { };
 
   akira-unstable = callPackage ../applications/graphics/akira { };
 
@@ -27612,7 +27572,7 @@ with pkgs;
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
-  ptcollab = libsForQt515.callPackage ../applications/audio/ptcollab { };
+  ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
@@ -27999,7 +27959,7 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
-  cpeditor = libsForQt515.callPackage ../applications/editors/cpeditor { };
+  cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
 
   csa = callPackage ../applications/audio/csa { };
 
@@ -29908,7 +29868,7 @@ with pkgs;
 
   kermit = callPackage ../tools/misc/kermit { };
 
-  kexi = libsForQt514.callPackage ../applications/office/kexi { };
+  kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
   khronos = callPackage ../applications/office/khronos { };
 
@@ -29950,8 +29910,7 @@ with pkgs;
 
   kooha = callPackage ../applications/video/kooha { };
 
-  # Qt 5.15 is not default on mac, tdesktop requires 5.15 (and kotatogram subsequently)
-  kotatogram-desktop = libsForQt515.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
+  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices CoreText CoreGraphics
       CoreMedia OpenGL AudioUnit ApplicationServices Foundation AGL Security SystemConfiguration
       Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
@@ -30103,7 +30062,7 @@ with pkgs;
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
-  kvirc = libsForQt515.callPackage ../applications/networking/irc/kvirc { };
+  kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   lame = callPackage ../development/libraries/lame { };
 
@@ -31560,14 +31519,7 @@ with pkgs;
 
   pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
 
-  pulseview = libsForQt514.callPackage ../applications/science/electronics/pulseview {
-    # use the same stdenv as libsForQt514 to fix build
-    boost = boost.override {
-      stdenv = if stdenv.cc.isGNU
-        then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
-        else stdenv;
-      };
-  };
+  pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
 
   puredata = callPackage ../applications/audio/puredata { };
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
@@ -31703,7 +31655,7 @@ with pkgs;
 
   quisk = python38Packages.callPackage ../applications/radio/quisk { };
 
-  quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
+  quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
     inherit (gnome) adwaita-icon-theme;
@@ -31918,7 +31870,7 @@ with pkgs;
 
   scantailor = callPackage ../applications/graphics/scantailor { };
 
-  scantailor-advanced = libsForQt515.callPackage ../applications/graphics/scantailor/advanced.nix { };
+  scantailor-advanced = libsForQt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
 
@@ -32099,7 +32051,7 @@ with pkgs;
 
   insync = callPackage ../applications/networking/insync { };
 
-  insync-v3 = libsForQt515.callPackage ../applications/networking/insync/v3.nix { };
+  insync-v3 = libsForQt5.callPackage ../applications/networking/insync/v3.nix { };
 
   libstrangle = callPackage ../tools/X11/libstrangle {
     stdenv = stdenv_32bit;
@@ -32293,7 +32245,7 @@ with pkgs;
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
-  swift-im = libsForQt514.callPackage ../applications/networking/instant-messengers/swift-im {
+  swift-im = libsForQt5.callPackage ../applications/networking/instant-messengers/swift-im {
     inherit (gnome2) GConf;
     boost = boost168;
   };
@@ -32578,7 +32530,7 @@ with pkgs;
 
   tonelib-metal = callPackage ../applications/audio/tonelib-metal { };
 
-  tony = libsForQt514.callPackage ../applications/audio/tony { };
+  tony = libsForQt5.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
 
