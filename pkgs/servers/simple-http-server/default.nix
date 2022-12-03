@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
-    changelog = "https://github.com/TheWaWaR/simple-http-server/tree/v${version}";
+    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda mephistophiles ];
   };
