@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
     sed -i -- 's|/bin/rm|rm|g' xsetup
   '';
 
-  buildPhase = ''
-    echo "running installer..."
+  dontBuild = true;
 
+  installPhase = ''
     cat <<EOF > install_config.txt
     Edition=Vivado HL WebPACK
     Destination=$out/opt
@@ -115,8 +115,6 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/Vivado/$version/bin/vivado $out/bin/vivado
     ln -s $out/opt/SDK/$version/bin/xsdk $out/bin/xsdk
   '';
-
-  dontInstall = true;
 
   libPath = lib.makeLibraryPath [
     stdenv.cc.cc
