@@ -291,11 +291,9 @@ buildStdenv.mkDerivation ({
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
 
-  '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
     # Use our own python
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
-  '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
@@ -357,6 +355,7 @@ buildStdenv.mkDerivation ({
     "--with-system-png" # needs APNG support
     "--with-system-webp"
     "--with-system-zlib"
+    "--with-wasi-sysroot=${wasiSysRoot}"
     # for firefox, host is buildPlatform, target is hostPlatform
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
@@ -370,8 +369,6 @@ buildStdenv.mkDerivation ({
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
-  ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
-  ++ lib.optional (lib.versionAtLeast version "100") (enableFeature sndioSupport "sndio")
   ++ [
     (enableFeature alsaSupport "alsa")
     (enableFeature crashreporterSupport "crashreporter")
@@ -381,6 +378,7 @@ buildStdenv.mkDerivation ({
     (enableFeature jackSupport "jack")
     (enableFeature jemallocSupport "jemalloc")
     (enableFeature pulseaudioSupport "pulseaudio")
+    (enableFeature sndioSupport "sndio")
     (enableFeature webrtcSupport "webrtc")
     (enableFeature debugBuild "debug")
     (if debugBuild then "--enable-profiling" else "--enable-optimize")
@@ -434,7 +432,7 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  (sndioSupport && lib.versionAtLeast version "100") sndio
+  ++ lib.optional  sndioSupport sndio
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  jemallocSupport jemalloc
