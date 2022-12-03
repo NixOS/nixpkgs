@@ -7883,6 +7883,8 @@ with pkgs;
 
   hashcat-utils = callPackage ../tools/security/hashcat-utils { };
 
+  hashrat = callPackage ../tools/security/hashrat { };
+
   hash_extender = callPackage ../tools/security/hash_extender {
     openssl = openssl_1_1;
   };
