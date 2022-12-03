@@ -17,7 +17,7 @@
 , libjpeg
 , pkg-config
 , wrapGAppsHook
-, wxGTK30-gtk3 # crash with wxGTK30 with GTK2 compat
+, wxGTK30 # crash with wxGTK30 with GTK2 compat
 , wxSVG
 , xine-ui
 , xmlto
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     libexif
     libjpeg
     wxSVG
-    wxGTK30-gtk3
+    wxGTK30
     xine-ui
  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]

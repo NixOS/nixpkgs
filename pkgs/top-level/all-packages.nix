@@ -2062,7 +2062,7 @@ with pkgs;
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsx2 = callPackage ../applications/emulators/pcsx2 {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
   };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
@@ -10682,7 +10682,7 @@ with pkgs;
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
-    wxGTK30-gtk3 = wxGTK30-gtk3.override { withWebKit = true; };
+    wxGTK30 = wxGTK30.override { withWebKit = true; };
   };
 
   polaris = callPackage ../servers/polaris { };
@@ -16703,7 +16703,7 @@ with pkgs;
   bloop = callPackage ../development/tools/build-managers/bloop { };
 
   bossa = callPackage ../development/embedded/bossa {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
   };
 
   bossa-arduino = callPackage ../development/embedded/bossa/arduino.nix { };
@@ -23159,12 +23159,9 @@ with pkgs;
   };
 
   wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
-    withGtk2 = true;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
-  wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
-  wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
 
   wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix {
     inherit (darwin.stubs) derez rez setfile;
@@ -23182,7 +23179,7 @@ with pkgs;
   };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -31755,7 +31752,7 @@ with pkgs;
   radioboat = callPackage ../applications/audio/radioboat { };
 
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
   };
 
   raiseorlaunch = callPackage ../applications/misc/raiseorlaunch {};

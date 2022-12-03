@@ -21,7 +21,7 @@
 , fetchFromGitHub
 , libusb1
 , libevdev
-, wxGTK30-gtk3
+, wxGTK30
 , soundtouch
 , miniupnpc
 , mbedtls
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     portaudio
     libusb1
     libpulseaudio
-    wxGTK30-gtk3
+    wxGTK30
     soundtouch
     miniupnpc
     mbedtls

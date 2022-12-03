@@ -11,7 +11,7 @@
 , libpng
 , pngpp
 , zlib
-, wxGTK30-gtk3
+, wxGTK30
 , wxsqlite3
 }:
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libpng
     pngpp
     zlib
-    wxGTK30-gtk3
+    wxGTK30
     wxsqlite3
   ];
 

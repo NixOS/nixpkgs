@@ -5,7 +5,7 @@
 , bintools-unwrapped
 , libffi
 , libusb1
-, wxGTK30-gtk3
+, wxGTK30
 , python3
 , gcc-arm-embedded
 , klipper
@@ -28,7 +28,7 @@
     avrdude
     stm32flash
     pkg-config
-    wxGTK30-gtk3 # Required for bossac
+    wxGTK30 # Required for bossac
   ];
 
   preBuild = "cp ${firmwareConfig} ./.config";

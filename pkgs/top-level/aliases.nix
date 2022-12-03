@@ -1590,6 +1590,8 @@ mapAliases ({
   wxGTK = throw "wxGTK28 has been removed from nixpkgs as it has reached end of life"; # Added 2022-11-04
   wxGTK28 = throw "wxGTK28 has been removed from nixpkgs as it has reached end of life"; # Added 2022-11-04
   wxGTK29 = throw "wxGTK29 has been removed from nixpkgs as it has reached end of life"; # Added 2022-11-04
+  wxGTK30-gtk2 = throw "'wxGTK30-gtk2' has been removed from nixpkgs as it depends on deprecated GTK2"; # Added 2022-12-03
+  wxGTK30-gtk3 = throw "'wxGTK30-gtk3' has been renamed to/replaced by 'wxGTK30'"; # Added 2022-12-03
   wxGTK31-gtk2 = throw "'wxGTK31-gtk2' has been removed from nixpkgs as it depends on deprecated GTK2"; # Added 2022-10-27
   wxGTK31-gtk3 = throw "'wxGTK31-gtk3' has been renamed to/replaced by 'wxGTK31'"; # Added 2022-10-27
   wxmupen64plus = throw "wxmupen64plus was removed because the upstream disappeared"; # Added 2022-01-31

@@ -12,6 +12,7 @@
 , ncurses
 , libintl
 , wxGTK
+, gtk3
 , IOKit
 , Carbon
 , Cocoa
@@ -42,7 +43,7 @@ buildPythonPackage rec {
   then
     [ AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL ]
   else
-    [ wxGTK.gtk ]
+    [ gtk3 ]
   );
 
   propagatedBuildInputs = [
@@ -58,7 +59,7 @@ buildPythonPackage rec {
       --replace 'cairoLib = None' 'cairoLib = ctypes.CDLL("${cairo}/lib/libcairo.so")'
     substituteInPlace wx/lib/wxcairo/wx_pycairo.py \
       --replace '_dlls = dict()' '_dlls = {k: ctypes.CDLL(v) for k, v in [
-        ("gdk",        "${wxGTK.gtk}/lib/libgtk-x11-2.0.so"),
+        ("gdk",        "${gtk3}/lib/libgtk-x11-2.0.so"),
         ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
         ("appsvc",     None)
       ]}'

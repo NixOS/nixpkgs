@@ -9,7 +9,7 @@
 , libxml2
 , libjack2
 , libsndfile
-, wxGTK30-gtk3
+, wxGTK30
 , libsigcxx
 , libsamplerate
 , rubberband
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libxml2
     libjack2
     libsndfile
-    wxGTK30-gtk3
+    wxGTK30
     libsigcxx
     libsamplerate
     rubberband
