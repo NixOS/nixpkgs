@@ -2546,8 +2546,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "105.21.0";
-          sha256 = "12p6msv8wi773piqm1y5zik3ky652bdaw9s83ffwnlndsh87s9n5";
+          version = "106.3.0";
+          sha256 = "sha256-xe1Ad24r2Ks85WAfaD5em8KGwaQ5h6i5qkUouU6lmtc=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
