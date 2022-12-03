@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Paste bin";
     homepage = "https://github.com/w4/bin";
     license = licenses.wtfpl;
+    maintainers = [ maintainers.w4 ];
   };
 }

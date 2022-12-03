@@ -14749,6 +14749,15 @@
     githubId = 3889405;
     name = "vyp";
   };
+  w4 = {
+    email = "jordan@doyle.la";
+    github = "w4";
+    githubId = 5258114;
+    name = "Jordan Doyle";
+    keys = [{
+      fingerprint = "327D 73A1 FEF2 CDA5 1140  1183 1EA6 BAE6 F66D C49A";
+    }];
+  };
   wackbyte = {
     name = "wackbyte";
     email = "wackbyte@pm.me";
