@@ -5864,6 +5864,8 @@ with pkgs;
 
   dfc  = callPackage ../tools/system/dfc { };
 
+  dfrs  = callPackage ../tools/system/dfrs { };
+
   dev86 = callPackage ../development/compilers/dev86 { };
 
   diskrsync = callPackage ../tools/backup/diskrsync { };
