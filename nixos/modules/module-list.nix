@@ -211,6 +211,7 @@
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
+  ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
