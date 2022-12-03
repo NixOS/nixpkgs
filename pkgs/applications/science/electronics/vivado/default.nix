@@ -48,6 +48,15 @@ stdenv.mkDerivation rec {
     sha256 = "06pb4wjz76wlwhhzky9vkyi4aq6775k63c2kw3j9prqdipxqzf9j";
   };
 
+  postPatch = ''
+    patchShebangs xsetup
+
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+             tps/lnx64/jre/bin/java
+
+    sed -i -- 's|/bin/rm|rm|g' xsetup
+  '';
+
   buildPhase = ''
     echo "running installer..."
 
@@ -63,14 +72,7 @@ stdenv.mkDerivation rec {
     CreateFileAssociation=0
     EOF
 
-    patchShebangs .
-
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             tps/lnx64/jre/bin/java
-
     mkdir -p $out/opt
-
-    sed -i -- 's|/bin/rm|rm|g' xsetup
 
     # The installer will be killed as soon as it says that post install tasks have failed.
     # This is required because it tries to run the unpatched scripts to check if the installation
