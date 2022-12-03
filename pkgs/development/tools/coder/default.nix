@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Remote development environments on your infrastructure provisioned with Terraform";
+    description = "Coder provisions software development environments via Terraform on Linux, macOS, Windows, X86, ARM, and of course, Kubernetes.";
     homepage = "https://coder.com";
     license = licenses.agpl3;
     maintainers = with maintainers; [ urandom ghuntley ];
