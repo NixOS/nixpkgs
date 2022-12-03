@@ -48,13 +48,7 @@ stdenv.mkDerivation rec {
     sha256 = "06pb4wjz76wlwhhzky9vkyi4aq6775k63c2kw3j9prqdipxqzf9j";
   };
 
-  dontUnpack = true;
-
   buildPhase = ''
-    echo "unpacking $src..."
-    mkdir extracted
-    tar xzf $src -C extracted --strip-components=1
-
     echo "running installer..."
 
     cat <<EOF > install_config.txt
@@ -69,25 +63,24 @@ stdenv.mkDerivation rec {
     CreateFileAssociation=0
     EOF
 
-    patchShebangs extracted
+    patchShebangs .
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             extracted/tps/lnx64/jre/bin/java
+             tps/lnx64/jre/bin/java
 
     mkdir -p $out/opt
 
-    sed -i -- 's|/bin/rm|rm|g' extracted/xsetup
+    sed -i -- 's|/bin/rm|rm|g' xsetup
 
     # The installer will be killed as soon as it says that post install tasks have failed.
     # This is required because it tries to run the unpatched scripts to check if the installation
     # has succeeded. However, these scripts will fail because they have not been patched yet,
     # and the installer will proceed to delete the installation if not killed.
-    (extracted/xsetup --agree 3rdPartyEULA,WebTalkTerms,XilinxEULA --batch Install --config install_config.txt || true) | while read line
+    (./xsetup --agree 3rdPartyEULA,WebTalkTerms,XilinxEULA --batch Install --config install_config.txt || true) | while read line
     do
-        [[ "''${line}" == *"Execution of Pre/Post Installation Tasks Failed"* ]] && echo "killing installer!" && ((pkill -9 -f "extracted/tps/lnx64/jre/bin/java") || true)
+        [[ "''${line}" == *"Execution of Pre/Post Installation Tasks Failed"* ]] && echo "killing installer!" && ((pkill -9 -f "tps/lnx64/jre/bin/java") || true)
         echo ''${line}
     done
-    rm -rf extracted
     # Patch installed files
     patchShebangs $out/opt/Vivado/2017.2/bin
     patchShebangs $out/opt/SDK/2017.2/bin
