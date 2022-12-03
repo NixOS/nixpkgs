@@ -23639,6 +23639,10 @@ with pkgs;
 
   bftpd = callPackage ../servers/ftp/bftpd {};
 
+  bin-paste = callPackage ../servers/bin-paste {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
   dig = bind.dnsutils;
