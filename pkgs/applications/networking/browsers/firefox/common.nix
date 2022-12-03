@@ -142,7 +142,7 @@ assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
 
 let
-  flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  inherit (lib) enableFeature;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
@@ -369,28 +369,27 @@ buildStdenv.mkDerivation ({
   # elf-hack is broken when using clang+lld:
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
-  ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
-
-  ++ flag alsaSupport "alsa"
-  ++ flag jackSupport "jack"
-  ++ flag pulseaudioSupport "pulseaudio"
-  ++ lib.optional (lib.versionAtLeast version "100") (flag sndioSupport "sndio")
-  ++ flag ffmpegSupport "ffmpeg"
-  ++ flag jemallocSupport "jemalloc"
-  ++ flag geolocationSupport "necko-wifi"
-  ++ flag gssSupport "negotiateauth"
-  ++ flag webrtcSupport "webrtc"
-  ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional (!drmSupport) "--disable-eme"
-
-  ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else [ "--disable-debug" "--enable-optimize" ])
-  # --enable-release adds -ffunction-sections & LTO that require a big amount of
-  # RAM and the 32-bit memory space cannot handle that linking
-  ++ flag (!debugBuild && !stdenv.is32bit) "release"
-  ++ flag enableDebugSymbols "debug-symbols"
+  ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
+  ++ lib.optional (lib.versionAtLeast version "100") (enableFeature sndioSupport "sndio")
+  ++ [
+    (enableFeature alsaSupport "alsa")
+    (enableFeature crashreporterSupport "crashreporter")
+    (enableFeature ffmpegSupport "ffmpeg")
+    (enableFeature geolocationSupport "necko-wifi")
+    (enableFeature gssSupport "negotiateauth")
+    (enableFeature jackSupport "jack")
+    (enableFeature jemallocSupport "jemalloc")
+    (enableFeature pulseaudioSupport "pulseaudio")
+    (enableFeature webrtcSupport "webrtc")
+    (enableFeature debugBuild "debug")
+    (if debugBuild then "--enable-profiling" else "--enable-optimize")
+    # --enable-release adds -ffunction-sections & LTO that require a big amount
+    # of RAM, and the 32-bit memory space cannot handle that linking
+    (enableFeature (!debugBuild && !stdenv.is32bit) "release")
+    (enableFeature enableDebugSymbols "debug-symbols")
+  ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
 
