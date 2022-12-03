@@ -31478,6 +31478,10 @@ with pkgs;
 
   premid = callPackage ../applications/misc/premid { };
 
+  openbcigui = callPackage ../applications/misc/openbcigui {
+    jdk = openjdk8;
+  };
+
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
   };
@@ -35398,6 +35402,8 @@ with pkgs;
   neuron-mpi = neuron.override {useMpi = true; };
 
   neuron-full = neuron-mpi.override { python = python2; };
+
+  neuromore = callPackage ../applications/misc/neuromore { };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
