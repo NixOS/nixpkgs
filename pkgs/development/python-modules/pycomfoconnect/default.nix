@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , protobuf
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pycomfoconnect";
-  version = "0.4";
+  version = "0.5.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "michaelarnauts";
     repo = "comfoconnect";
     rev = "refs/tags/${version}";
-    sha256 = "0bipzv68yw056iz9m2g9h40hzrwd058a7crxp0xbq4rw2d8j0jn6";
+    sha256 = "sha256-I/0vCgSEi6mgYg1fMH4Ha7PoonewtqYYsvXZT8y4rJE=";
   };
 
   propagatedBuildInputs = [
