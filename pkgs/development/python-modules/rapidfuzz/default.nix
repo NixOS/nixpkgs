@@ -50,7 +50,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    jarowinkler
     numpy
   ];
 
