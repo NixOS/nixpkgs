@@ -6,6 +6,7 @@
 , pkg-config
 , intel-gmmlib
 , intel-graphics-compiler
+, level-zero
 , libva
 }:
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
+  buildInputs = [ intel-gmmlib intel-graphics-compiler libva level-zero ];
 
   cmakeFlags = [
     "-DSKIP_UNIT_TESTS=1"
@@ -32,9 +33,14 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  outputs = [ "out" "drivers" ];
+
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
+
+    mkdir -p $drivers/lib
+    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''

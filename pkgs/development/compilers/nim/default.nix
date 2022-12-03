@@ -74,7 +74,7 @@ let
 
   bootstrapCompiler = stdenv.mkDerivation {
     pname = "nim-bootstrap";
-    inherit (nim-unwrapped) version src;
+    inherit (nim-unwrapped) version src preBuild;
     enableParallelBuilding = true;
     installPhase = ''
       runHook preInstall
@@ -118,12 +118,14 @@ in {
       "-d:useGnuReadline"
     ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
 
+    preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      substituteInPlace makefile \
+        --replace "aarch64" "arm64"
+    '';
+
     buildPhase = ''
       runHook preBuild
       local HOME=$TMPDIR
-    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-      sed -i "s/aarch64/arm64/g" makefile
-    '' + ''
       ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
       ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES

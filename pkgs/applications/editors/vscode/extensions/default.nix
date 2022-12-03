@@ -301,6 +301,23 @@ let
         };
       };
 
+      astro-build.astro-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "astro-vscode";
+          publisher = "astro-build";
+          version = "0.29.1";
+          sha256 = "sha256-fMeEeYCZuORhZRds0A8HjHPncK0+SQbV0+f/zU5AIg4=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
+          description = "Astro language support for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
+          homepage = "https://github.com/withastro/language-tools";
+          license = licenses.mit;
+          maintainers = with maintainers; [ wackbyte ];
+        };
+      };
+
       asvetliakov.vscode-neovim = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-neovim";
@@ -2546,8 +2563,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "105.21.0";
-          sha256 = "12p6msv8wi773piqm1y5zik3ky652bdaw9s83ffwnlndsh87s9n5";
+          version = "106.3.0";
+          sha256 = "sha256-xe1Ad24r2Ks85WAfaD5em8KGwaQ5h6i5qkUouU6lmtc=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

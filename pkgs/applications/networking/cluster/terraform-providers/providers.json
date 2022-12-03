@@ -112,13 +112,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-e+D9xI3lZfMDze1YW+Wjni29cPfsSlghmCkLFP/4ork=",
+    "hash": "sha256-g38aJ8JN/0PZ0ArSti1/5nzflIlkz/qhn5Qz4yXCie8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.44.0",
+    "rev": "v4.45.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-mDn16Cww7PD5tPKRKf4uoOK3UJH9se8LCziTX10XcXY="
+    "vendorHash": "sha256-C3wr/3huORBacbe0+Z0qqH+iSaJCxQwLq9wqLSirDiM="
   },
   "azuread": {
     "hash": "sha256-itaFeOEnoTIJfACvJZCIe9RWNVgewdVFZzXUK7yGglQ=",
@@ -130,11 +130,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-aUTapTSpNZo2Tg3e/BMBGedEVwX0Sa+T2UrbgyiLOhk=",
+    "hash": "sha256-2RjraGiMtITdBJ47crqlqFR51WbKpk4U6fkGHCTNXuo=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.33.0",
+    "rev": "v3.34.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -149,11 +149,11 @@
   },
   "baiducloud": {
     "deleteVendor": true,
-    "hash": "sha256-0L/T12jeSkdZDJknVu5JffyaniZ1RVWgMpPu3qKNmWU=",
+    "hash": "sha256-Yw0dtfPiXLSLDvlAL3OUfZsd8ihc/OCBedsSSUcedOU=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.18.2",
+    "rev": "v1.18.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-ya2FpsLQMIu8zWYObpyPgBHVkHoNKzHgdMxukbtsje4="
   },
@@ -231,11 +231,11 @@
     "vendorHash": "sha256-2H+xp/A3J/xUf02voYyWP+J5MSsFM7Kz7KlgjaF99ao="
   },
   "cloudfoundry": {
-    "hash": "sha256-OOORVbjcXhH6gVjLdOu8kTqy6dzIARruF4H8byMNkko=",
+    "hash": "sha256-RYUs35sSL9CuwrOfUQ/S1G6W8ILgpJqVn8Xk9s2s35Y=",
     "homepage": "https://registry.terraform.io/providers/cloudfoundry-community/cloudfoundry",
     "owner": "cloudfoundry-community",
     "repo": "terraform-provider-cloudfoundry",
-    "rev": "v0.50.1",
+    "rev": "v0.50.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-mEWhLh4E3SI7xfmal1sJ5PdAYbYJrW/YFoBjTW9w4bA="
   },
@@ -625,11 +625,11 @@
     "vendorHash": "sha256-nDvnLEOtXkUJFY22pKogOzkWrj4qjyQbdlJ5pa/xnK8="
   },
   "ksyun": {
-    "hash": "sha256-Rye7gKARdbrB6KDEygEJy9m7VqlGw6QeE2F1oa3n8as=",
+    "hash": "sha256-PfUTE8j2tb4piNeRx4FRy8s45w8euQU773oJHbcdlVE=",
     "homepage": "https://registry.terraform.io/providers/kingsoftcloud/ksyun",
     "owner": "kingsoftcloud",
     "repo": "terraform-provider-ksyun",
-    "rev": "v1.3.58",
+    "rev": "v1.3.59",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-miHKAz+ONXtuC1DNukcyZbbaYReY69dz9Zk6cJdORdQ="
   },
@@ -707,11 +707,11 @@
     "vendorHash": "sha256-omaslX89hMAdIppBfILsGO6133Q3UgihgiJcy/Gn83M="
   },
   "mailgun": {
-    "hash": "sha256-EQDpDuLX3uKVom/UuNbWX72N6pTPSvK+qh6nyHTcMiI=",
+    "hash": "sha256-r1E2Y5JRu77T29ebUNTXUEypnrsfYYbBhvpKZGt5T9w=",
     "homepage": "https://registry.terraform.io/providers/wgebis/mailgun",
     "owner": "wgebis",
     "repo": "terraform-provider-mailgun",
-    "rev": "v0.7.3",
+    "rev": "v0.7.4",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-yUXxq8NTOv8ZmWp0WiIID2cRU6AZiItIs99uGZpt9dc="
   },
@@ -1086,20 +1086,20 @@
     "vendorHash": "sha256-W+dV6rmyOqCeQboYvpxYoNZixv2+uBd2+sc9BvTE+Ag="
   },
   "tailscale": {
-    "hash": "sha256-/qC8TOtoVoBTWeAFpt2TYE8tlYBCCcn/mzVQ/DN51YQ=",
+    "hash": "sha256-X3YV640d3pLyKm/v88oEhXfYnox+ksrEWKgiJbYl6gk=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.13.5",
+    "rev": "v0.13.6",
     "spdx": "MIT",
-    "vendorHash": "sha256-8EIxqKkVO706oejlvN79K8aEZAF5H2vZRdr5vbQa0l4="
+    "vendorHash": "sha256-2wPmLpjhG6QgG+BUCO0oIzHjBOWIOYuptgdtSIm9TZw="
   },
   "tencentcloud": {
-    "hash": "sha256-kmcZfq9gL3kybCVl4MHXYKykrqtupf7dvizbhNVVhms=",
+    "hash": "sha256-beoS4io1KffsMCvYHwpWzo6NNwdi7JyPBBi/BwGFU9Y=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.16",
+    "rev": "v1.79.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
