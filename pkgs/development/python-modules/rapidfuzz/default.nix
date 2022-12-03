@@ -43,7 +43,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    jarowinkler-cpp
     rapidfuzz-cpp
     taskflow
   ];
@@ -56,6 +55,10 @@ buildPythonPackage rec {
     jarowinkler
     numpy
   ];
+
+  preCheck = ''
+    export RAPIDFUZZ_IMPLEMENTATION=cpp
+  '';
 
   checkInputs = [
     hypothesis
