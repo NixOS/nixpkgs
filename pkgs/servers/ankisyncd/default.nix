@@ -1,62 +1,55 @@
 { lib
-, fetchFromGitHub
 , python3
-, anki
+, pkgs
+, makeWrapper
+, poetry2nix
 }:
 
-python3.pkgs.buildPythonApplication rec {
+poetry2nix.mkPoetryApplication rec {
+  projectDir = ./.;
+
   pname = "ankisyncd";
-  version = "2.2.0";
-  src = fetchFromGitHub {
+  version = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./VERSION);
+
+  src = pkgs.fetchFromGitHub {
     owner = "ankicommunity";
     repo = "anki-sync-server";
     rev = version;
-    sha256 = "196xhd6vzp1ncr3ahz0bv0gp1ap2s37j8v48dwmvaywzayakqdab";
+    sha256 = "sha256-Jh7w1UCbqJQj9t2T++OhtMouBaI+wplT7yce84Qm+yA=";
   };
-  format = "other";
+
+  overrides = [
+    poetry2nix.defaultPoetryOverrides
+    (self: super: {
+      orjson = pkgs.python3Packages.orjson;
+
+      # but cause duplicates in the closure and some other build issues
+      # We can just ignore them for now
+      notebook = null;
+      jupyter = null;
+      jupyterlab = null;
+      mkdocs-jupyter = null;
+      mkdocs-material = null;
+      mkdocs = null;
+    })
+  ];
+  nativeBuildInputs = [ makeWrapper ];
+  python = python3;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${python3.sitePackages}
+    mkdir -p $out/bin
 
-    cp -r ankisyncd utils ankisyncd.conf $out/${python3.sitePackages}
-    mkdir $out/share
-    cp ankisyncctl.py $out/share/
+    cp -a $src/src $out/lib
+
+    makeWrapper "${python3}/bin/python" "$out/bin/ankisyncd" \
+      --add-flags "-m ankisyncd" \
+      --set PYTHONPATH "$PYTHONPATH" --argv0 "ankisyncd" \
+      --chdir "$out/lib"
 
     runHook postInstall
   '';
-
-  fixupPhase = ''
-    PYTHONPATH="$PYTHONPATH:$out/${python3.sitePackages}:${anki}"
-
-    makeWrapper "${python3.interpreter}" "$out/bin/ankisyncd" \
-          --set PYTHONPATH $PYTHONPATH \
-          --add-flags "-m ankisyncd"
-
-    makeWrapper "${python3.interpreter}" "$out/bin/ankisyncctl" \
-          --set PYTHONPATH $PYTHONPATH \
-          --add-flags "$out/share/ankisyncctl.py"
-  '';
-
-  checkInputs = with python3.pkgs; [
-    pytest
-    webtest
-  ];
-
-  buildInputs = [ ];
-
-  propagatedBuildInputs = [ anki ];
-
-  checkPhase = ''
-    # Exclude tests that require sqlite's sqldiff command, since
-    # it isn't yet packaged for NixOS, although 2 PRs exist:
-    # - https://github.com/NixOS/nixpkgs/pull/69112
-    # - https://github.com/NixOS/nixpkgs/pull/75784
-    # Once this is merged, these tests can be run as well.
-    pytest --ignore tests/test_web_media.py tests/
-  '';
-
   meta = with lib; {
     description = "Self-hosted Anki sync server";
     maintainers = with maintainers; [ matt-snider ];

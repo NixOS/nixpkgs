@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+CURRENT_DIR="$(dirname $0)"
+
+VERSION=$(cat VERSION)
+
+curl "https://raw.githubusercontent.com/ankicommunity/anki-sync-server/${VERSION}/pyproject.toml" > pyproject.toml
+
+poetry lock
+poetry2nix lock

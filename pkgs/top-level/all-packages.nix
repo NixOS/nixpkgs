@@ -232,9 +232,7 @@ with pkgs;
 
   anders = callPackage ../applications/science/logic/anders { };
 
-  ankisyncd = callPackage ../servers/ankisyncd {
-    python3 = python39;
-  };
+  ankisyncd = callPackage ../servers/ankisyncd {};
 
   mov-cli = callPackage ../applications/video/mov-cli { };
 
