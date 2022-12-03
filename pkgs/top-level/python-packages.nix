@@ -2780,6 +2780,8 @@ in {
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
+  fdt = callPackage ../development/python-modules/fdt { };
+
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feedgen = callPackage ../development/python-modules/feedgen { };
