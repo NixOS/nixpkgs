@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The FloPoCo arithmetic core generator";
-    homepage = "http://flopoco.org";
+    homepage = "https://flopoco.org/";
     license = licenses.unfree;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wegank ];
