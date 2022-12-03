@@ -25,7 +25,9 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Create the first release note entry in this section!
+          <link xlink:href="https://github.com/junegunn/fzf">fzf</link>,
+          a command line fuzzyfinder. Available as
+          <link linkend="opt-programs.fzf.fuzzyCompletion">programs.fzf</link>.
         </para>
       </listitem>
     </itemizedlist>
