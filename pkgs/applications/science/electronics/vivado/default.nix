@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     coreutils
   ];
 
-  inherit ncurses5;
-
   # requireFile prevents rehashing each time, which saves time during
   # rebuilds.
   src = requireFile rec {
