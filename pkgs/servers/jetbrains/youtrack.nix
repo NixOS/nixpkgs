@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "youtrack";
-  version = "2021.4.35970";
+  version = "2022.3.64281";
 
   jar = fetchurl {
     url = "https://download.jetbrains.com/charisma/${pname}-${version}.jar";
-    sha256 = "sha256-HB515TS0XXEAiT463nVHP/naeoF7nmeB+6EK0NJ+5c0=";
+    sha256 = "sha256-NW6j8rRl4ol8AU3c9Vhw021aH6eV4FQSWY203IkfAgc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
