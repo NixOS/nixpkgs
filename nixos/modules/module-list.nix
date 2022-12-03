@@ -216,6 +216,7 @@
   ./programs/screen.nix
   ./programs/sedutil.nix
   ./programs/seahorse.nix
+  ./programs/skim.nix
   ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/spacefm.nix
