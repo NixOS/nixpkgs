@@ -10,4 +10,4 @@ DEPENDENCIES
   prometheus_exporter (= 0.5.0)
 
 BUNDLED WITH
-   2.3.24
+   2.3.25
