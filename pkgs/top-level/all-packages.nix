@@ -2024,11 +2024,11 @@ with pkgs;
 
   maiko = callPackage ../applications/emulators/maiko { };
 
-  mame = libsForQt5.callPackage ../applications/emulators/mame {
-    inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-  };
+  mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
-  mame-tools = (lib.getOutput "tools" mame);
+  mame-tools = lib.addMetaAttrs {
+    description = mame.meta.description + " (tools only)";
+  } (lib.getOutput "tools" mame);
 
   mednafen = callPackage ../applications/emulators/mednafen {
     inherit (darwin) libiconv;
