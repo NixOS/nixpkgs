@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "snowflake";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "anti-censorship/pluggable-transports";
     repo = "snowflake";
     rev = "v${version}";
-    sha256 = "sha256-Jr9ihExw++cRZpunP43DbDx0RTaGpgil0avs4mTW8tA=";
+    sha256 = "sha256-DR1H5ncFPHZWQAwOZKkfRrjwfzhirSzwtvKesaRmqcA=";
   };
 
   vendorHash = "sha256-66GqvwHPkMii5oXZV36ayYYkW1oaq5qTjkEA5BeS/5U=";
