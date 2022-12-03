@@ -5,18 +5,8 @@ let
 in {
   options = {
     programs.fzf = {
-      fuzzyCompletion = mkOption {
-        type = types.bool;
-        description = lib.mdDoc "Whether to use fzf for fuzzy completion";
-        default = false;
-        example = true;
-      };
-      keybindings = mkOption {
-        type = types.bool;
-        description = lib.mdDoc "Whether to set up fzf keybindings";
-        default = false;
-        example = true;
-      };
+      fuzzyCompletion = mkEnableOption (mdDoc "fuzzy completion with fzf");
+      keybindings = mkEnableOption (mdDoc "fzf keybindings");
     };
   };
   config = {
