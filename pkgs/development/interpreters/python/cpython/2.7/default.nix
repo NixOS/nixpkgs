@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -79,8 +79,12 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
-  src = fetchurl {
-    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+  # ActiveState is a fork of cpython that includes fixes for security
+  # issues after its EOL
+  src = fetchFromGitHub {
+    owner = "ActiveState";
+    repo = "cpython";
+    rev = "v${version}";
     inherit sha256;
   };
 
@@ -119,12 +123,12 @@ let
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
 
-      # Patch is likely to go away in the next release (if there is any)
-      ./CVE-2019-20907.patch
-
-      ./CVE-2021-3177.patch
-
-      ./CVE-2021-23336.patch
+      # remove once 2.7.18.6 is released
+      (fetchpatch {
+        name = "CVE-2021-3733.patch";
+        url = "https://github.com/ActiveState/cpython/commit/eeb7fe50450f08a782921f3229abed2f23e7b2d7.patch";
+        sha256 = "sha256-ch4cMoFythDmyvlVxOAVw3Ow4PPWVDq5o9c1qox2824=";
+      })
 
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
@@ -334,7 +338,7 @@ in with passthru; stdenv.mkDerivation ({
       '';
       license = lib.licenses.psfl;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ fridh ];
+      maintainers = with lib.maintainers; [ fridh thiagokokada ];
       # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
       # in case both 2 and 3 are installed.
       priority = -100;
