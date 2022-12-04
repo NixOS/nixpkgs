@@ -28,6 +28,33 @@
     };
   };
 
+  www-react = buildPythonPackage rec {
+    pname = "buildbot-www-react";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-KxISRflN8hQG49Jia3nxFcu1J2vBz7QwX3zH2RmdtKQ=";
+    };
+
+    # Remove unneccessary circular dependency on buildbot
+    postPatch = ''
+      sed -i "s/'buildbot'//" setup.py
+    '';
+
+    buildInputs = [ buildbot-pkg ];
+
+    # No tests
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot UI (React)";
+      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      license = licenses.gpl2Only;
+    };
+  };
+
   console-view = buildPythonPackage rec {
     pname = "buildbot-console-view";
     inherit (buildbot-pkg) version;
