@@ -1,7 +1,7 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,21 +11,29 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
-    rev = "v${version}";
-    sha256 = "sha256-sQXkKTzyzyyCpqoJPKfBd0CUbaKvNjbzTmdBo/RlBcs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sQXkKTzyzyyCpqoJPKfBd0CUbaKvNjbzTmdBo/RlBcs=";
   };
 
-  cargoSha256 = "sha256-Vtsrjks3rdzTPBAtnYWWfMD4Vany9ErTubqPtuyVqR4=";
+  cargoHash = "sha256-Vtsrjks3rdzTPBAtnYWWfMD4Vany9ErTubqPtuyVqR4=";
 
-  buildFeatures = [ "cli" ];
+  buildFeatures = [
+    "cli"
+  ];
 
-  cargoBuildFlags = [ "--lib" "--bin=lightningcss" ];
+  cargoBuildFlags = [
+    "--lib"
+    "--bin=lightningcss"
+  ];
 
-  cargoTestFlags = [ "--lib" ];
+  cargoTestFlags = [
+    "--lib"
+  ];
 
   meta = with lib; {
     description = "Extremely fast CSS parser, transformer, and minifier written in Rust";
     homepage = "https://lightningcss.dev/";
+    changelog = "https://github.com/parcel-bundler/lightningcss/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ toastal ];
   };
