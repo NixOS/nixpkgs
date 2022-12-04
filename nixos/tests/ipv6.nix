@@ -37,7 +37,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
       server =
         { services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
 

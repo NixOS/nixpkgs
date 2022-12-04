@@ -3,10 +3,7 @@ let
     inherit hostAddress localAddress;
     privateNetwork = true;
     config = {
-      services.httpd = {
-        enable = true;
-        adminAddr = "foo@example.org";
-      };
+      services.httpd.enable = true;
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
   };

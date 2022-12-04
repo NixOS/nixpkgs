@@ -5,10 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes.machine = { ... }: {
     services.limesurvey = {
       enable = true;
-      virtualHost = {
-        hostName = "example.local";
-        adminAddr = "root@example.local";
-      };
+      virtualHost.hostName = "example.local";
     };
 
     # limesurvey won't work without a dot in the hostname

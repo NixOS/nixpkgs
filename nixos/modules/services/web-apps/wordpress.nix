@@ -257,7 +257,6 @@ let
           type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
           example = literalExpression ''
             {
-              adminAddr = "webmaster@example.org";
               forceSSL = true;
               enableACME = true;
             }

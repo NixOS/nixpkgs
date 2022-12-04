@@ -58,7 +58,6 @@ in
           services.httpd.enable = true;
           services.httpd.virtualHosts.localhost = {
             listen = [{ ip = "*"; port = 9000; }];
-            adminAddr = "foo@example.org";
             documentRoot = "/tmp";
           };
         };

@@ -71,10 +71,7 @@ in {
       enable = true;
       config = v2rayConfig;
     };
-    services.httpd = {
-      enable = true;
-      adminAddr = "foo@example.org";
-    };
+    services.httpd.enable = true;
   };
 
   testScript = ''

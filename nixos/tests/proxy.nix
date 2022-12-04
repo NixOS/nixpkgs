@@ -4,7 +4,6 @@ let
   backend = { pkgs, ... }: {
     services.httpd = {
       enable = true;
-      adminAddr = "foo@example.org";
       virtualHosts.localhost.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
     };
     networking.firewall.allowedTCPPorts = [ 80 ];
@@ -19,7 +18,6 @@ in {
     proxy = { nodes, ... }: {
       services.httpd = {
         enable = true;
-        adminAddr = "bar@example.org";
         extraModules = [ "proxy_balancer" "lbmethod_byrequests" ];
         extraConfig = ''
           ExtendedStatus on

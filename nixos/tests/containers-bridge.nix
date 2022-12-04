@@ -37,7 +37,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           localAddress6 = containerIp6;
           config =
             { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };
         };
@@ -49,7 +48,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           hostBridge = "br0";
           config =
             { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };
         };

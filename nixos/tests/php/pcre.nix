@@ -9,7 +9,6 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
     time.timeZone = "UTC";
     services.httpd = {
       enable = true;
-      adminAddr = "please@dont.contact";
       phpPackage = php;
       enablePHP = true;
       phpOptions = "pcre.jit = true";

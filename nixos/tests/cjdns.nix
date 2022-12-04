@@ -31,7 +31,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           services.cjdns.ETHInterface.bind = "eth1";
 
           services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
 

@@ -9,14 +9,12 @@
   services.httpd.virtualHosts =
     { &quot;blog.example.org&quot; = {
         documentRoot = &quot;/webroot/blog.example.org&quot;;
-        adminAddr = &quot;alice@example.org&quot;;
         forceSSL = true;
         enableACME = true;
         enablePHP = true;
       };
       &quot;wiki.example.org&quot; = {
         documentRoot = &quot;/webroot/wiki.example.org&quot;;
-        adminAddr = &quot;alice@example.org&quot;;
         forceSSL = true;
         enableACME = true;
         enablePHP = true;
@@ -32,8 +30,7 @@
   <programlisting language="bash">
 let
   commonConfig =
-    { adminAddr = &quot;alice@example.org&quot;;
-      forceSSL = true;
+    { forceSSL = true;
       enableACME = true;
     };
 in
@@ -80,7 +77,6 @@ in
     let
       makeVirtualHost = webroot:
         { documentRoot = webroot;
-          adminAddr = &quot;alice@example.org&quot;;
           forceSSL = true;
           enableACME = true;
         };

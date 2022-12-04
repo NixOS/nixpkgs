@@ -5,7 +5,6 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
   nodes.machine = { config, lib, pkgs, ... }: {
     services.httpd = {
       enable = true;
-      adminAddr = "admin@phpfpm";
       virtualHosts."phpfpm" =
         let
           testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";

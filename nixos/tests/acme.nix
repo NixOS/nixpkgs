@@ -328,9 +328,6 @@ in {
           server = "httpd";
           group = "wwwrun";
           vhostBaseData = vhostBaseHttpd;
-          extraConfig = {
-            services.httpd.adminAddr = config.security.acme.defaults.email;
-          };
         });
     };
 

@@ -23,7 +23,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           forwardPorts = [ { protocol = "tcp"; hostPort = hostPort; containerPort = containerPort; } ];
           config =
             { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };
         };
