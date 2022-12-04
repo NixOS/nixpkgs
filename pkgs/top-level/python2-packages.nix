@@ -17,8 +17,6 @@ with self; with super; {
 
   chardet = callPackage ../development/python2-modules/chardet { };
 
-  cheetah = callPackage ../development/python2-modules/cheetah { };
-
   configparser = callPackage ../development/python2-modules/configparser { };
 
   construct = callPackage ../development/python2-modules/construct { };
