@@ -47,8 +47,6 @@ with self; with super; {
     inherit (pkgs) marisa;
   };
 
-  markdown = callPackage ../development/python2-modules/markdown { };
-
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
   mock = callPackage ../development/python2-modules/mock { };
