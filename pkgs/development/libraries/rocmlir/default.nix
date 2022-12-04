@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , clang
 , git
@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_FAT_LIBROCKCOMPILER=ON"
   ];
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocMLIR/tags?per_page=2" | jq '.[1].name | split("-") | .[1]' --raw-output)"
-    update-source-version rocmlir "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+    page = "tags?per_page=2";
+    filter = ".[1].name | split(\"-\") | .[1]";
+  };
 
   meta = with lib; {
     description = "MLIR-based convolution and GEMM kernel generator";

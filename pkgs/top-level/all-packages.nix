@@ -15149,6 +15149,8 @@ with pkgs;
     useOpenCL = true;
   };
 
+  rocmUpdateScript = callPackage ../development/rocm-modules/update-script { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
