@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "12.22.0";
+  version = "12.25.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UIoMJjZrU9aDGnDx5K2SJO6lBgivMqGUDbtTfF3WfNE=";
+    hash = "sha256-xhSNt6ia+M4vNXOdHCVKPSM/ypb4CP4HWY9oXlsM/UM=";
   };
 
   vendorHash = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
