@@ -4,7 +4,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nearcore";
-  version = "1.29.1";
+  version = "1.29.2";
 
   # https://github.com/near/nearcore/tags
   src = fetchFromGitHub {
@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
     # there is also a branch for this version number, so we need to be explicit
     rev = "refs/tags/${version}";
 
-    sha256 = "sha256-TmmGLrDpNOfadOIwmG7XRgI89XQjaqIavxCEE2plumc=";
+    sha256 = "sha256-dVju9emwTqNQCYST4HuwSWdafM0yxVS3JXXJqCdFEpc=";
   };
 
-  cargoSha256 = "sha256-4suoHP6AXhXlt7+sHMX5RW/LGZrbMhNNmzYvFBcnMTs=";
+  cargoSha256 = "sha256-k/JzKbWn5M+H6w1UEv2APzZNBZOBYZY09keyCrXaGCM=";
   cargoPatches = [ ./0001-make-near-test-contracts-optional.patch ];
 
   postPatch = ''
