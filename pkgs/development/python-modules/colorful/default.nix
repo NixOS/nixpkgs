@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "colorful";
-  version = "0.5.4";
+  version = "0.5.5";
 
   # No tests in the Pypi package.
   src = fetchFromGitHub {
     owner = "timofurrer";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1fcz5v8b318a3dsdha4c874jsf3wmcw3f25bv2csixclyzacli98";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-fgxbj1WE9JcGt+oEcBguL0wQEWIn5toRTLWsvCFO3k8=";
   };
 
   checkInputs = [ pytestCheckHook ];
