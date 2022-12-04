@@ -5,13 +5,14 @@
 , pname
 , version
 , hash
+, isAarch64
 , metaCommon ? { }
 }:
 
 let
   pname = "losslesscut";
   src = fetchurl {
-    url = "https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-mac-x64.dmg";
+    url = "https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-mac-${if isAarch64 then "arm64" else "x64"}.dmg";
     inherit hash;
   };
 in
@@ -30,7 +31,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = metaCommon // (with lib; {
-    platforms = platforms.darwin;
+    platforms = singleton (if isAarch64 then "aarch64-darwin" else "x86_64-darwin");
     mainProgram = "losslesscut";
   });
 }
