@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-cU4aeJlRBwxQm6a/rqpO2HVZfz/vfEo4P5x+BjKqqeo=";
   };
 
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/bdraco/yalexs-ble";
+    changelog = "https://github.com/bdraco/yalexs-ble/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };
