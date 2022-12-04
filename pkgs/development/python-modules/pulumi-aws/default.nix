@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pulumi python amazon web services provider";
     homepage = "https://github.com/pulumi/pulumi-aws";
+    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };
