@@ -8460,6 +8460,8 @@ with pkgs;
 
   kargo = callPackage ../tools/misc/kargo { };
 
+  kaiscr = python3Packages.callPackage ../applications/video/kaiscr { };
+
   kazam = callPackage ../applications/video/kazam { };
 
   kalibrate-rtl = callPackage ../applications/radio/kalibrate-rtl { };
