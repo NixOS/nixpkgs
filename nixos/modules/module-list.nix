@@ -76,6 +76,7 @@
   ./hardware/pcmcia.nix
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
+  ./hardware/raid/swraid.nix
   ./hardware/rtl-sdr.nix
   ./hardware/saleae-logic.nix
   ./hardware/steam-hardware.nix
