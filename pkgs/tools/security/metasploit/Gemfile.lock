@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 04fa45669108bfbd5029f69544ba4bd1f9cf765f
-  ref: refs/tags/6.2.28
+  revision: 4120d9bda17afde78f1f756ac43ca78ed3cf8266
+  ref: refs/tags/6.2.29
   specs:
-    metasploit-framework (6.2.28)
+    metasploit-framework (6.2.29)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -129,22 +129,22 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.665.0)
-    aws-sdk-core (3.168.1)
+    aws-partitions (1.670.0)
+    aws-sdk-core (3.168.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.351.0)
+    aws-sdk-ec2 (1.353.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.73.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.59.0)
+    aws-sdk-kms (1.60.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.117.1)
+    aws-sdk-s3 (1.117.2)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -204,7 +204,7 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
-    irb (1.5.0)
+    irb (1.5.1)
       reline (>= 0.3.0)
     jmespath (1.6.2)
     jsobfu (0.4.2)
@@ -222,7 +222,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-credential (5.0.9)
+    metasploit-credential (6.0.0)
       metasploit-concern
       metasploit-model
       metasploit_data_models (>= 5.0.0)
@@ -399,7 +399,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2022.6)
+    tzinfo-data (1.2022.7)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext

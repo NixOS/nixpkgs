@@ -18,9 +18,10 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ opentimestamps appdirs GitPython pysocks ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool to create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/opentimestamps-client";
-    license = lib.licenses.lgpl3;
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

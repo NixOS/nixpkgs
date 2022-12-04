@@ -35,10 +35,6 @@ stdenv.mkDerivation rec {
     export GOCACHE=$TMPDIR/go-cache
   '';
 
-  postInstall = ''
-    install -Dm755 ../vendor/avb/avbtool.py -t $out/bin
-  '';
-
   meta = with lib; {
     description = "Android SDK platform tools";
     longDescription = ''
@@ -53,7 +49,8 @@ stdenv.mkDerivation rec {
       - mke2fs.android (required by fastboot)
       - simg2img, img2simg, append2simg
       - lpdump, lpmake, lpadd, lpflash, lpunpack
-      - mkbootimg, unpack_bootimg, repack_bootimg
+      - mkbootimg, unpack_bootimg, repack_bootimg, avbtool
+      - mkdtboimg
     '';
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools

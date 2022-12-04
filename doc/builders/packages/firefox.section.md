@@ -12,7 +12,7 @@ The `wrapFirefox` function allows to pass policies, preferences and extensions t
       (fetchFirefoxAddon {
         name = "ublock"; # Has to be unique!
         url = "https://addons.mozilla.org/firefox/downloads/file/3679754/ublock_origin-1.31.0-an+fx.xpi";
-        sha256 = "1h768ljlh3pi23l27qp961v1hd0nbj2vasgy11bmcrlqp40zgvnr";
+        hash = "sha256-2e73AbmYZlZXCP5ptYVcFjQYdjDp4iPoEPEOSCVF5sA=";
       })
     ];
 

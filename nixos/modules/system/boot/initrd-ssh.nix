@@ -73,6 +73,15 @@ in
       '';
     };
 
+    ignoreEmptyHostKeys = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
+        to deploy ssh host keys out of band.
+      '';
+    };
+
     authorizedKeys = mkOption {
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
@@ -141,7 +150,7 @@ in
       }
 
       {
-        assertion = cfg.hostKeys != [];
+        assertion = (cfg.hostKeys != []) || cfg.ignoreEmptyHostKeys;
         message = ''
           You must now pre-generate the host keys for initrd SSH.
           See the boot.initrd.network.ssh.hostKeys documentation

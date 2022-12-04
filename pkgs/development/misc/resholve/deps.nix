@@ -1,4 +1,5 @@
 { callPackage
+, python27
 , ...
 }:
 
@@ -14,5 +15,5 @@
 
 rec {
   # binlore = callPackage ./binlore.nix { };
-  oil = callPackage ./oildev.nix { };
+  oil = callPackage ./oildev.nix { inherit python27; };
 }

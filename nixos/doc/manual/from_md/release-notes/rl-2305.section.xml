@@ -121,6 +121,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.mastodon</literal> gained a tootctl wrapped
+          named <literal>mastodon-tootctl</literal> similar to
+          <literal>nextcloud-occ</literal> which can be executed from
+          any user and switches to the configured mastodon user with
+          sudo and sources the environment variables.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -137,6 +146,13 @@
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>unifi-poller</literal> package and corresponding
+          NixOS module have been renamed to <literal>unpoller</literal>
+          to match upstream.
         </para>
       </listitem>
     </itemizedlist>

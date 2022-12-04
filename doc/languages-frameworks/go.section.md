@@ -23,7 +23,7 @@ pet = buildGoModule rec {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "0m2fzpqxk7hrbxsgqplkg7h2p7gv6s1miymv3gvw0cz039skag0s";
+    hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
   };
 
   vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
@@ -59,7 +59,7 @@ deis = buildGoPackage rec {
     owner = "deis";
     repo = "deis";
     rev = "v${version}";
-    sha256 = "1qv9lxqx7m18029lj8cw3k7jngvxs4iciwrypdy0gd2nnghc68sw";
+    hash = "sha256-XCPD4LNWtAd8uz7zyCLRfT8rzxycIUmTACjU03GnaeM=";
   };
 
   goDeps = ./deps.nix;
@@ -76,11 +76,11 @@ The `goDeps` attribute can be imported from a separate `nix` file that defines w
     goPackagePath = "gopkg.in/yaml.v2";
     fetch = {
       # `fetch type` that needs to be used to get package source.
-      # If `git` is used there should be `url`, `rev` and `sha256` defined next to it.
+      # If `git` is used there should be `url`, `rev` and `hash` defined next to it.
       type = "git";
       url = "https://gopkg.in/yaml.v2";
       rev = "a83829b6f1293c91addabc89d0571c246397bbf4";
-      sha256 = "1m4dsmk90sbi17571h6pld44zxz7jc4lrnl4f27dpd1l8g5xvjhh";
+      hash = "sha256-EMrdy0M0tNuOcITaTAmT5/dPSKPXwHDKCXFpkGbVjdQ=";
     };
   }
   {
@@ -89,7 +89,7 @@ The `goDeps` attribute can be imported from a separate `nix` file that defines w
       type = "git";
       url = "https://github.com/docopt/docopt-go";
       rev = "784ddc588536785e7299f7272f39101f7faccc3f";
-      sha256 = "0wwz48jl9fvl1iknvn9dqr4gfy1qs03gxaikrxxp9gry6773v3sj";
+      hash = "sha256-Uo89zjE+v3R7zzOq/gbQOHj3SMYt2W1nDHS7RCUin3M=";
     };
   }
 ]

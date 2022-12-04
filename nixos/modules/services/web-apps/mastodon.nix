@@ -92,12 +92,18 @@ let
       ] else []
     ) env))));
 
-  mastodonEnv = pkgs.writeShellScriptBin "mastodon-env" ''
+  mastodonTootctl = pkgs.writeShellScriptBin "mastodon-tootctl" ''
+    #! ${pkgs.runtimeShell}
     set -a
     export RAILS_ROOT="${cfg.package}"
     source "${envFile}"
     source /var/lib/mastodon/.secrets_env
-    eval -- "\$@"
+
+    sudo=exec
+    if [[ "$USER" != ${cfg.user} ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env'
+    fi
+    $sudo ${cfg.package}/bin/tootctl "$@"
   '';
 
 in {
@@ -133,15 +139,10 @@ in {
         description = lib.mdDoc ''
           User under which mastodon runs. If it is set to "mastodon",
           that user will be created, otherwise it should be set to the
-          name of a user created elsewhere.  In both cases,
-          `mastodon` and a package containing only
-          the shell script `mastodon-env` will be added to
-          the user's package set. To run a command from
-          `mastodon` such as `tootctl`
-          with the environment configured by this module use
-          `mastodon-env`, as in:
-
-          `mastodon-env tootctl accounts create newuser --email newuser@example.com`
+          name of a user created elsewhere.
+          In both cases, the `mastodon` package will be added to the user's package set
+          and a tootctl wrapper to system packages that switches to the configured account
+          and load the right environment.
         '';
         type = lib.types.str;
         default = "mastodon";
@@ -485,6 +486,8 @@ in {
       }
     ];
 
+    environment.systemPackages = [ mastodonTootctl ];
+
     systemd.services.mastodon-init-dirs = {
       script = ''
         umask 077
@@ -704,7 +707,7 @@ in {
           inherit (cfg) group;
         };
       })
-      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package mastodonEnv pkgs.imagemagick ])
+      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package pkgs.imagemagick ])
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;

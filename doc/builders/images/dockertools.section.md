@@ -245,10 +245,10 @@ Its parameters are described in the example below:
 pullImage {
   imageName = "nixos/nix";
   imageDigest =
-    "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
+    "sha256:473a2b527958665554806aea24d0131bacec46d23af09fef4598eeab331850fa";
   finalImageName = "nix";
-  finalImageTag = "1.11";
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+  finalImageTag = "2.11.1";
+  sha256 = "sha256-qvhj+Hlmviz+KEBVmsyPIzTB3QlVAFzwAY1zDPIBGxc=";
   os = "linux";
   arch = "x86_64";
 }
