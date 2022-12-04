@@ -38,7 +38,10 @@ stdenv.mkDerivation {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773200
+      "BULK_MEMORY_SOURCES:="
     )
+
   '';
 
   enableParallelBuilding = true;
