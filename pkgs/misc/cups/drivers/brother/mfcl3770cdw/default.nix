@@ -1,5 +1,5 @@
-{ pkgsi686Linux
-, stdenv
+{ stdenv
+, stdenv_32bit
 , fetchurl
 , dpkg
 , makeWrapper
@@ -22,7 +22,7 @@ let
   reldir = "opt/brother/Printers/${model}/";
 
 in rec {
-  driver = pkgsi686Linux.stdenv.mkDerivation rec {
+  driver = stdenv.mkDerivation rec {
     inherit src version;
     name = "${model}drv-${version}";
 
@@ -41,7 +41,7 @@ in rec {
           coreutils ghostscript gnugrep gnused which
         ]}
     # need to use i686 glibc here, these are 32bit proprietary binaries
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "${stdenv_32bit.cc.libc.out}/lib/32/ld-linux.so.2" \
       $dir/lpd/brmfcl3770cdwfilter
     '';
 
