@@ -19,8 +19,6 @@ with self; with super; {
 
   configparser = callPackage ../development/python2-modules/configparser { };
 
-  construct = callPackage ../development/python2-modules/construct { };
-
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
   coverage = callPackage ../development/python2-modules/coverage { };
