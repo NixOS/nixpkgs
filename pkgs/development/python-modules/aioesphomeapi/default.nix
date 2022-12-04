@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "11.4.3";
+  version = "13.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g901qWU6aiaV0kLmtWJffXZrOsKjvOGI0TOgQFzuuPA=";
+    hash = "sha256-u+RaQcEfljgjK+7vMJj60WkvjozzRM5Z1Yaf4NkrF+U=";
   };
 
   postPatch = ''
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab hexa ];
   };

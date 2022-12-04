@@ -2,20 +2,20 @@
   "x86_64-linux": {
     "alpha": {
       "experimental": {
-        "name": "factorio_alpha_x64-1.1.70.tar.xz",
+        "name": "factorio_alpha_x64-1.1.72.tar.xz",
         "needsAuth": true,
-        "sha256": "1d0ahy34xmj9k79kd8imnzi576ivhcvf0qqvl6r9qdc8cmbmip18",
+        "sha256": "0hphx3jpmwwpyxyw4v4s7awy6vmcxi067sfl5j1ym5rdgsvr6n63",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.70/alpha/linux64",
-        "version": "1.1.70"
+        "url": "https://factorio.com/get-download/1.1.72/alpha/linux64",
+        "version": "1.1.72"
       },
       "stable": {
-        "name": "factorio_alpha_x64-1.1.70.tar.xz",
+        "name": "factorio_alpha_x64-1.1.72.tar.xz",
         "needsAuth": true,
-        "sha256": "1d0ahy34xmj9k79kd8imnzi576ivhcvf0qqvl6r9qdc8cmbmip18",
+        "sha256": "0hphx3jpmwwpyxyw4v4s7awy6vmcxi067sfl5j1ym5rdgsvr6n63",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.70/alpha/linux64",
-        "version": "1.1.70"
+        "url": "https://factorio.com/get-download/1.1.72/alpha/linux64",
+        "version": "1.1.72"
       }
     },
     "demo": {
@@ -38,20 +38,20 @@
     },
     "headless": {
       "experimental": {
-        "name": "factorio_headless_x64-1.1.70.tar.xz",
+        "name": "factorio_headless_x64-1.1.72.tar.xz",
         "needsAuth": false,
-        "sha256": "05bkawn394jb5d9if8xbf2xff3gnmd591axy41h7x1yg8sz94zw4",
+        "sha256": "1jbckp2d1zp6kxsqax367vxc1970kbs9apm8sdv9bfn8majial6a",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.70/headless/linux64",
-        "version": "1.1.70"
+        "url": "https://factorio.com/get-download/1.1.72/headless/linux64",
+        "version": "1.1.72"
       },
       "stable": {
-        "name": "factorio_headless_x64-1.1.70.tar.xz",
+        "name": "factorio_headless_x64-1.1.72.tar.xz",
         "needsAuth": false,
-        "sha256": "05bkawn394jb5d9if8xbf2xff3gnmd591axy41h7x1yg8sz94zw4",
+        "sha256": "1jbckp2d1zp6kxsqax367vxc1970kbs9apm8sdv9bfn8majial6a",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.70/headless/linux64",
-        "version": "1.1.70"
+        "url": "https://factorio.com/get-download/1.1.72/headless/linux64",
+        "version": "1.1.72"
       }
     }
   }

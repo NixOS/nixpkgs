@@ -16,6 +16,7 @@
 , feedbackd
 , wrapGAppsHook
 , fetchpatch
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +68,8 @@ stdenv.mkDerivation rec {
     libxkbcommon
     feedbackd
   ];
+
+  passthru.tests.phosh = nixosTests.phosh;
 
   meta = with lib; {
     description = "A virtual keyboard supporting Wayland";

@@ -11,6 +11,7 @@
 , libgudev
 , callaudiod
 , pulseaudio
+, evince
 , glib
 , gtk3
 , gnome
@@ -28,11 +29,12 @@
 , polkit
 , libsecret
 , evolution-data-server
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-I0BWwEKvOYQ1s2IpvV70GWxhARdX6AZ+B4ypnTlLlDw=";
+    sha256 = "sha256-q2AYm+zbL4/pRG1wn+MT6IYM8CZt15o48U9+piMPf74=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    evince
     phoc
     libhandy
     libsecret
@@ -100,7 +103,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
     runHook postCheck
   '';
@@ -122,6 +125,8 @@ stdenv.mkDerivation rec {
     providedSessions = [
       "sm.puri.Phosh"
     ];
+
+    tests.phosh = nixosTests.phosh;
   };
 
   meta = with lib; {

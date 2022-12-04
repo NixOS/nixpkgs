@@ -40,6 +40,8 @@
 # `false`, and a different renderer may be used with different bugs and performance
 # characteristics but (hopefully) indistinguishable output.
 , allowDocBook ? true
+# whether lib.mdDoc is required for descriptions to be read as markdown.
+, markdownByDefault ? false
 }:
 
 let
@@ -152,6 +154,7 @@ in rec {
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
         ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
+        ${lib.optionalString markdownByDefault "--markdown-by-default"} \
         $baseJSON $options \
         > $dst/options.json
 

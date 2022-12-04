@@ -38,12 +38,15 @@ rec {
       //
       (drv.passthru or {})
       //
-      (if (drv ? crossDrv && drv ? nativeDrv)
-       then {
-         crossDrv = overrideDerivation drv.crossDrv f;
-         nativeDrv = overrideDerivation drv.nativeDrv f;
-       }
-       else { }));
+      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
+      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
+        crossDrv = overrideDerivation drv.crossDrv f;
+        nativeDrv = overrideDerivation drv.nativeDrv f;
+      })
+      //
+      lib.optionalAttrs (drv ? __spliced) {
+        __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      });
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and

@@ -989,11 +989,11 @@ self: super: builtins.intersectAttrs super {
   }) super.procex;
 
   # Test suite wants to run main executable
-  fourmolu_0_8_2_0 = overrideCabal (drv: {
+  fourmolu_0_9_0_0 = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
-  }) super.fourmolu_0_8_2_0;
+  }) super.fourmolu_0_9_0_0;
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {
@@ -1101,6 +1101,20 @@ self: super: builtins.intersectAttrs super {
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
+
+  tailwind = addBuildDepend
+      # Overrides for tailwindcss copied from:
+      # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
+      (pkgs.nodePackages.tailwindcss.overrideAttrs (oa: {
+        plugins = [
+          pkgs.nodePackages."@tailwindcss/aspect-ratio"
+          pkgs.nodePackages."@tailwindcss/forms"
+          pkgs.nodePackages."@tailwindcss/line-clamp"
+          pkgs.nodePackages."@tailwindcss/typography"
+        ];
+      })) super.tailwind;
+
+  emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 

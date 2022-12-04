@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "new-lg4ff";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "new-lg4ff";
     rev = "${version}";
-    sha256 = "+05xDpNI4m6wTS+YPgA0fP4iM10nMOZOtCrdQxpevBU=";
+    sha256 = "ZFwNdeJcSxzWtqjOF86SZpqhuz8jXZ2drvlQeIqsaNY=";
   };
 
   preBuild = ''

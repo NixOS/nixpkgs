@@ -1,5 +1,5 @@
 { mkDerivation, lib, cmake, gettext, pkg-config, extra-cmake-modules
-, qtquickcontrols, qtwebkit, qttools, kde-cli-tools, qtbase
+, qtquickcontrols, qttools, kde-cli-tools, qtbase
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
 , threadweaver, kxmlgui, kwindowsystem, grantlee, kcrash, karchive, kguiaddons
@@ -24,7 +24,7 @@ mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    qtquickcontrols qtwebkit boost libkomparediff2
+    qtquickcontrols boost libkomparediff2
     kconfig kdeclarative kdoctools kiconthemes ki18n kitemmodels kitemviews
     kjobwidgets kcmutils kio knewstuff knotifyconfig kparts ktexteditor
     threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner

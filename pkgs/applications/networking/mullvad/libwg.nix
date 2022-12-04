@@ -13,7 +13,7 @@ buildGoModule {
 
   sourceRoot = "source/wireguard/libwg";
 
-  vendorSha256 = "qvymWCdJ+GY90W/Fpdp+r1+mTq6O4LyN2Yw/PjKdFm0=";
+  vendorSha256 = "QNde5BqkSuqp3VJQOhn7aG6XknRDZQ62PE3WGhEJ5LU=";
 
   # XXX: hack to make the ar archive go to the correct place
   # This is necessary because passing `-o ...` to `ldflags` does not work

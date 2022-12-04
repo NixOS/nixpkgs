@@ -177,7 +177,7 @@ buildNpmPackage rec {
 
   patches = [ ./remove-prepack-script.patch ];
 
-  npmDepsHash = "sha256-s8SpZY/1tKZVd3vt7sA9vsqHvEaNORQBMrSyhWpj048=";
+  npmDepsHash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
@@ -196,7 +196,7 @@ buildNpmPackage rec {
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
 * `npmFlags`: Flags to pass to all npm commands.
-* `npmInstallFlags`: Flags to pass to `npm ci`.
+* `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
 

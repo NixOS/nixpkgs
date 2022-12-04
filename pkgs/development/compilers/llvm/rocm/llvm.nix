@@ -24,7 +24,7 @@ let
     if stdenv.isx86_64 then "X86"
     else if stdenv.isAarch64 then "AArch64"
     else throw "Unsupported ROCm LLVM platform";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   inherit src version;
 
   pname = "rocm-llvm";
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-    "-DLLVM_ENABLE_PROJECTS=clang;lld;compiler-rt"
+    "-DLLVM_ENABLE_PROJECTS=clang;lld;compiler-rt;clang-tools-extra"
   ]
   ++ lib.optionals enableManpages [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts nix-prefetch-github
 
-    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/llvm-project/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/llvm-project/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
     current_version="$(grep "version =" pkgs/development/compilers/llvm/rocm/default.nix | cut -d'"' -f2)"
     if [[ "$version" != "$current_version" ]]; then
       tarball_meta="$(nix-prefetch-github RadeonOpenCompute llvm-project --rev "rocm-$version")"
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ acowley lovesegfault Flakebi ];
+    maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

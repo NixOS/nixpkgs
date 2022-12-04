@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.7.1";
+  version = "6.7.4";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "sha256-KBcP34gPk3Am/If6qcF3sGLDU8XRaeoyQrB4AmFN3Qw=";
+    sha256 = "sha256-nb+KDnyNdtFkLi/dP1PmpSL3wwmA5Sd2PEV2DCUFz78=";
   };
 
   propagatedBuildInputs = [ packaging ply toml ];

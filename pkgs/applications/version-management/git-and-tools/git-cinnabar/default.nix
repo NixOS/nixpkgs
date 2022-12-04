@@ -9,13 +9,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "git-cinnabar";
-  version = "0.5.10";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     rev = version;
-    sha256 = "sha256-vHHugCZ7ikB4lIv/TcNuOMSQsm0zCkGqu2hAFrqygu0=";
+    sha256 = "sha256-64ofKGeHwCqiZHOA6MrYrN2eV/qqClcjerDuSqsjKDg=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     for pythonBin in git-cinnabar git-remote-hg; do
         makeWrapper $out/libexec/$pythonBin $out/bin/$pythonBin \
             --prefix PATH : ${lib.getBin python3}/bin \
-            --prefix GIT_CINNABAR_EXPERIMENTS , python3 \
             --set PYTHONPATH ${mercurial}/${python3.sitePackages}
     done
 

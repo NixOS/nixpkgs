@@ -24,18 +24,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6CCSs359gPwUMQ2SFpxaWHXCjqqgIbvCaPL2zLuYRKg=";
+    hash = "sha256-NM6+1Etf7pOOSKNuxGIUlAbtZwixof7wNgkPoMwPn7w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-9nE/SFGv1tYyGDdemCahxHlRnLms3eK0r4XQMhQBjSQ=";
+    hash = "sha256-anxDfls5MTfvklIDst+Ocduzc8ds5pD3WDaDUtF6R+g=";
   };
 
   postPatch = ''
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
   EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
-    udev
   ] ++ lib.optionals clevisSupport [
     clevis
     jose

@@ -6,6 +6,7 @@
 , gst_all_1
 , lib
 , python3Packages
+, sphinxHook
 , runtimeShell
 , writeScript
 
@@ -70,6 +71,7 @@ python3Packages.buildPythonApplication rec {
   # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [
     gobject-introspection
+    sphinxHook
   ];
 
   buildInputs = [
@@ -78,6 +80,9 @@ python3Packages.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-ugly
   ]);
+
+  outputs = [ "out" "doc" "man" ];
+  sphinxBuilders = [ "html" "man" ];
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions

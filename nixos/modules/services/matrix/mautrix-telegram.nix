@@ -7,8 +7,8 @@ let
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
   settingsFormat = pkgs.formats.json {};
-  settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config-unsubstituted.json" cfg.settings;
-  settingsFile = "${dataDir}/config.json";
+  settingsFile =
+    settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
 
 in {
   options = {
@@ -97,12 +97,23 @@ in {
         default = null;
         description = lib.mdDoc ''
           File containing environment variables to be passed to the mautrix-telegram service,
-          in which secret tokens can be specified securely by defining values for
+          in which secret tokens can be specified securely by defining values for e.g.
           `MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN`,
           `MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN`,
           `MAUTRIX_TELEGRAM_TELEGRAM_API_ID`,
           `MAUTRIX_TELEGRAM_TELEGRAM_API_HASH` and optionally
           `MAUTRIX_TELEGRAM_TELEGRAM_BOT_TOKEN`.
+
+          These environment variables can also be used to set other options by
+          replacing hierachy levels by `.`, converting the name to uppercase
+          and prepending `MAUTRIX_TELEGRAM_`.
+          For example, the first value above maps to
+          {option}`settings.appservice.as_token`.
+
+          The environment variable values can be prefixed with `json::` to have
+          them be parsed as JSON. For example, `login_shared_secret_map` can be
+          set as follows:
+          `MAUTRIX_TELEGRAM_BRIDGE_LOGIN_SHARED_SECRET_MAP=json::{"example.com":"secret"}`.
         '';
       };
 
@@ -128,17 +139,19 @@ in {
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
       path = [ pkgs.lottieconverter ];
 
-      preStart = ''
-        # Not all secrets can be passed as environment variable (yet)
-        # https://github.com/tulir/mautrix-telegram/issues/584
-        [ -f ${settingsFile} ] && rm -f ${settingsFile}
-        old_umask=$(umask)
-        umask 0177
-        ${pkgs.envsubst}/bin/envsubst \
-          -o ${settingsFile} \
-          -i ${settingsFileUnsubstituted}
-        umask $old_umask
+      # mautrix-telegram tries to generate a dotfile in the home directory of
+      # the running user if using a postgresql databse:
+      #
+      #  File "python3.10/site-packages/asyncpg/connect_utils.py", line 257, in _dot_postgre>
+      #    return (pathlib.Path.home() / '.postgresql' / filename).resolve()
+      #  File "python3.10/pathlib.py", line 1000, in home
+      #    return cls("~").expanduser()
+      #  File "python3.10/pathlib.py", line 1440, in expanduser
+      #    raise RuntimeError("Could not determine home directory.")
+      # RuntimeError: Could not determine home directory.
+      environment.HOME = dataDir;
 
+      preStart = ''
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
@@ -174,8 +187,6 @@ in {
             --config='${settingsFile}'
         '';
       };
-
-      restartTriggers = [ settingsFileUnsubstituted ];
     };
   };
 

@@ -16,11 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pixman";
-  version = "0.38.4";
+  version = "0.42.2";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/lib/${pname}-${version}.tar.bz2";
-    sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
+    urls = [
+      "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
+      "https://cairographics.org/releases/${pname}-${version}.tar.gz"
+    ];
+    hash = "sha256-6hSA762i/ZSLx1Nm98NJ4cltMpfQmj/mJibjjiNKYl4=";
   };
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
@@ -29,7 +32,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng ];
 
-  configureFlags = lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
+  configureFlags = lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt"
+    # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
+    ++ lib.optional (stdenv.isAarch64 && !stdenv.cc.isGNU) "--disable-arm-a64-neon";
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62

@@ -38,7 +38,7 @@ builder rec {
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile;
+    pkgsBuildBuild.guile_3_0;
   nativeBuildInputs = [
     makeWrapper
     pkg-config

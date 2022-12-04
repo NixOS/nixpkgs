@@ -1,6 +1,6 @@
 { buildPythonPackage, fetchFromGitHub, stdenv, lib, isPyPy
 , pycrypto, ecdsa # TODO
-, tox, mock, coverage, can, brotli
+, mock, can, brotli
 , withOptionalDeps ? true, tcpdump, ipython
 , withCryptography ? true, cryptography
 , withVoipSupport ? true, sox
@@ -52,8 +52,9 @@ buildPythonPackage rec {
 
   # Running the tests seems too complicated:
   doCheck = false;
-  checkInputs = [ tox mock coverage can brotli ];
+  checkInputs = [ mock can brotli ];
   checkPhase = ''
+    # TODO: be more specific about files
     patchShebangs .
     .config/ci/test.sh
   '';

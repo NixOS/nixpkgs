@@ -47,9 +47,10 @@ rec {
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
+        else if final.isFreeBSD             then "fblibc"
+        else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"
         else if final.isNone                then "newlib"
-        else if final.isNetBSD              then "nblibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       # Choose what linker we wish to use by default. Someday we might also

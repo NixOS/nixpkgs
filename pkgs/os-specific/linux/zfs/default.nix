@@ -204,7 +204,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman globin ];
+        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -235,10 +235,10 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.7-staging-2022-10-27";
-    rev = "04f1983aab16d378be376768275856bc38be48bd";
+    version = "2.1.7-staging-2022-11-08";
+    rev = "0f4ee295ba94803e5833f57481cfdbee5d1160d4";
 
-    sha256 = "sha256-6s9Qcw6Qqq7+JU9UPa8DDu2yzhD1OV3piLlYsgEoIhg=";
+    sha256 = "sha256-AixYjnr8MgST/VxEPY4NdcAvpoKiJ3zrvOai5bJjC/U=";
 
     isUnstable = true;
   };

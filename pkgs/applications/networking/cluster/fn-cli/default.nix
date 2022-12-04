@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, docker }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, docker }:
 
 buildGoModule rec {
   pname = "fn";
-  version = "0.6.20";
+  version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "fnproject";
     repo = "cli";
     rev = version;
-    sha256 = "sha256-HeyWMzxSga6T2/BRVwrmgb3utjnVTJk3zhhcVfq8/Cc=";
+    hash = "sha256-FXgDCZcHcKvgkV1YFjMKl+5oJ5H1DV/Gj9am5VJuIjw=";
   };
 
   vendorSha256 = null;
@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://fnproject.io";
     license = licenses.asl20;
     maintainers = [ maintainers.c4605 ];
+    broken = stdenv.isDarwin;
   };
 }

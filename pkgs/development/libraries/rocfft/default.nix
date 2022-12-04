@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -9,25 +10,18 @@
 , hip
 , sqlite
 , python3
-, gtest ? null
-, boost ? null
-, fftw ? null
-, fftwFloat ? null
-, llvmPackages ? null
+, gtest
+, boost
+, fftw
+, fftwFloat
+, llvmPackages
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> fftw != null;
-assert buildBenchmarks -> fftwFloat != null;
-assert (buildTests || buildBenchmarks) -> boost != null;
-assert (buildTests || buildBenchmarks) -> llvmPackages != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
-  rocmVersion = "5.3.1";
-  version = "1.0.18-${rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -40,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocFFT";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-jb2F1fRe+YLloYJ/KtzrptUDhmdBDBtddeW/g55owKM=";
   };
 
@@ -104,11 +98,20 @@ stdenv.mkDerivation rec {
     mv $out/rocfft_rtc_helper $out/bin
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocFFT/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocfft "$version" --ignore-same-hash
+  '';
+
   meta = with lib; {
     description = "FFT implementation for ROCm ";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.version != hip.version;
+    hydraPlatforms = [ ]; # rocFFT produces an extremely large output
   };
-}
+})

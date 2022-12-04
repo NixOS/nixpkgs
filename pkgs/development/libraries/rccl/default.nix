@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -9,16 +10,13 @@
 , rocm-smi
 , hip
 , gtest
-, chrpath ? null
+, chrpath
 , buildTests ? false
 }:
 
-assert buildTests -> chrpath != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
-  rocmVersion = "5.3.1";
-  version = "2.12.10-${rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rccl";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-whRXGD8oINDYhFs8+hEWKWoGNqacGlyy7xi8peA8Qsk=";
   };
 
@@ -74,11 +72,19 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rccl/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rccl "$version" --ignore-same-hash
+  '';
+
   meta = with lib; {
     description = "ROCm communication collectives library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rccl";
     license = with licenses; [ bsd2 bsd3 ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.version != hip.version;
   };
-}
+})

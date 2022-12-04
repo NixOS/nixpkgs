@@ -57,15 +57,6 @@ in {
               '';
             };
 
-            group = mkOption {
-              type = types.str;
-              default = "ethereum";
-              description = lib.mdDoc ''
-                Group of the user running the lighthouse process. This is used to share the jwt
-                secret with the execution layer.
-              '';
-            };
-
             execution = {
               address = mkOption {
                 type = types.str;
@@ -221,19 +212,6 @@ in {
 
   config = mkIf (cfg.beacon.enable || cfg.validator.enable) {
 
-    users = {
-      users.lighthouse-beacon = {
-        name = "lighthouse-beacon";
-        group = cfg.beacon.group;
-        description = "Lighthouse beacon node user";
-        home = "${cfg.beacon.dataDir}";
-        isSystemUser = true;
-      };
-      groups = mkIf (cfg.beacon.group == "ethereum") {
-        ethereum = {};
-      };
-    };
-
     environment.systemPackages = [ pkgs.lighthouse ] ;
 
     networking.firewall = mkIf cfg.beacon.enable {
@@ -259,16 +237,17 @@ in {
           --network ${cfg.network} \
           --datadir ${cfg.beacon.dataDir}/${cfg.network} \
           --execution-endpoint http://${cfg.beacon.execution.address}:${toString cfg.beacon.execution.port} \
-          --execution-jwt ${cfg.beacon.execution.jwtPath} \
+          --execution-jwt ''${CREDENTIALS_DIRECTORY}/LIGHTHOUSE_JWT \
           ${lib.optionalString cfg.beacon.http.enable '' --http --http-address ${cfg.beacon.http.address} --http-port ${toString cfg.beacon.http.port}''} \
           ${lib.optionalString cfg.beacon.metrics.enable '' --metrics --metrics-address ${cfg.beacon.metrics.address} --metrics-port ${toString cfg.beacon.metrics.port}''} \
           ${cfg.extraArgs} ${cfg.beacon.extraArgs}
       '';
       serviceConfig = {
-        User = "lighthouse-beacon";
-        Group = cfg.beacon.group;
+        LoadCredential = "LIGHTHOUSE_JWT:${cfg.beacon.execution.jwtPath}";
+        DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "lighthouse-beacon";
+        ReadWritePaths = [ cfg.beacon.dataDir ];
         NoNewPrivileges = true;
         PrivateTmp = true;
         ProtectHome = true;
@@ -309,6 +288,7 @@ in {
       serviceConfig = {
         Restart = "on-failure";
         StateDirectory = "lighthouse-validator";
+        ReadWritePaths = [ cfg.validator.dataDir ];
         CapabilityBoundingSet = "";
         DynamicUser = true;
         NoNewPrivileges = true;

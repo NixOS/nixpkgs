@@ -102,7 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object-oriented HTTP framework";
-    homepage = "https://www.cherrypy.org";
+    homepage = "https://cherrypy.dev/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

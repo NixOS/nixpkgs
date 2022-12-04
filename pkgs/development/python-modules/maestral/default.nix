@@ -27,16 +27,16 @@
 buildPythonPackage rec {
   pname = "maestral";
   version = "1.6.3";
-  disabled = pythonOlder "3.6";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-JVzaWwdHAn5JOruLEN9Z2/5eV1oh3J2NQffNI3RqYfA=";
+    hash = "sha256-JVzaWwdHAn5JOruLEN9Z2/5eV1oh3J2NQffNI3RqYfA=";
   };
-
-  format = "pyproject";
 
   propagatedBuildInputs = [
     click
@@ -83,17 +83,22 @@ buildPythonPackage rec {
     "test_filestatus"
     "test_path_exists_case_insensitive"
     "test_cased_path_candidates"
+    # AssertionError
+    "test_locking_multiprocess"
   ];
 
-  pythonImportsCheck = [ "maestral" ];
+  pythonImportsCheck = [
+    "maestral"
+  ];
 
   passthru.tests.maestral = nixosTests.maestral;
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
+    homepage = "https://maestral.app";
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg sfrijters ];
     platforms = platforms.unix;
-    homepage = "https://maestral.app";
   };
 }

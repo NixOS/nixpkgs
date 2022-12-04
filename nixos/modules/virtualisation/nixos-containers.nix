@@ -9,6 +9,10 @@ let
   configurationDirectory = "/etc/${configurationDirectoryName}";
   stateDirectory = "/var/lib/${configurationPrefix}containers";
 
+  nixos-container = pkgs.nixos-container.override {
+    inherit stateDirectory configurationDirectory;
+  };
+
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
   containerInit = (cfg:
@@ -138,6 +142,8 @@ let
         fi
       ''}
 
+      export SYSTEMD_NSPAWN_UNIFIED_HIERARCHY=1
+
       # Run systemd-nspawn without startup notification (we'll
       # wait for the container systemd to signal readiness)
       # Kill signal handling means systemd-nspawn will pass a system-halt signal
@@ -248,7 +254,7 @@ let
     ExecReload = pkgs.writeScript "reload-container"
       ''
         #! ${pkgs.runtimeShell} -e
-        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+        ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
           bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
       '';
 
@@ -866,9 +872,7 @@ in
     '';
 
     environment.systemPackages = [
-      (pkgs.nixos-container.override {
-        inherit stateDirectory configurationDirectory;
-      })
+      nixos-container
     ];
 
     boot.kernelModules = [

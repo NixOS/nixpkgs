@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     repo  = "mod-dh";
     rev = "e846a5bd24d59ed15ba70b3a9d5363a38ca51d09";
     sha256  = "sha256-RFOpN+tIMfakb7AZN0ock9eq2mytvL0DWedvQV67+ks=";
-    sparseCheckout = "console";
+    sparseCheckout = [ "console" ];
   };
 
   phases = [ "unpackPhase" "installPhase" ];

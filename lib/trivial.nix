@@ -195,7 +195,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Raccoon";
+  codeName = "Stoat";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -514,6 +514,8 @@ rec {
           in
             [r] ++ go q;
     in
+      assert (isInt base);
+      assert (isInt i);
       assert (base >= 2);
       assert (i >= 0);
       lib.reverseList (go i);

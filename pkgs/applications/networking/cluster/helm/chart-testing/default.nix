@@ -1,4 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ buildGoModule
+, coreutils
+, fetchFromGitHub
+, git
+, installShellFiles
+, kubectl
+, kubernetes-helm
+, lib
+, makeWrapper
+, yamale
+, yamllint
+}:
 
 buildGoModule rec {
   pname = "chart-testing";
@@ -8,10 +19,10 @@ buildGoModule rec {
     owner = "helm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b8U7zVvzewSxqX7RG7+FMAVytW4s2apNxR3krNJuiro=";
+    hash = "sha256-b8U7zVvzewSxqX7RG7+FMAVytW4s2apNxR3krNJuiro=";
   };
 
-  vendorSha256 = "sha256-z4hNGswxRMU40qkgwY3n516FiyaoeDaAE+CCla3TMkk=";
+  vendorHash = "sha256-z4hNGswxRMU40qkgwY3n516FiyaoeDaAE+CCla3TMkk=";
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \
@@ -26,7 +37,7 @@ buildGoModule rec {
     "-X github.com/helm/chart-testing/v3/ct/cmd.BuildDate=19700101-00:00:00"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postInstall = ''
     install -Dm644 -t $out/etc/ct etc/chart_schema.yaml
@@ -36,6 +47,15 @@ buildGoModule rec {
       --bash <($out/bin/ct completion bash) \
       --zsh <($out/bin/ct completion zsh) \
       --fish <($out/bin/ct completion fish) \
+
+    wrapProgram $out/bin/ct --prefix PATH : ${lib.makeBinPath [
+      coreutils
+      git
+      kubectl
+      kubernetes-helm
+      yamale
+      yamllint
+    ]}
   '';
 
   meta = with lib; {

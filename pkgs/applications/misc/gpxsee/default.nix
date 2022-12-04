@@ -1,16 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, substituteAll
-, qmake, qttools, qttranslations, qtlocation, qtpbfimageplugin, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, nix-update-script
+, substituteAll
+, qtbase
+, qttools
+, qttranslations
+, qtlocation ? null # qt5 only
+, qtpositioning ? null # qt6 only
+, qtpbfimageplugin
+, qtsvg
+, qt5compat ? null # qt6 only
+, wrapQtAppsHook
 }:
 
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+
+in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "11.6";
+  version = "11.9";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    hash = "sha256-kwEltkLcMCZlUJyE+nyy70WboVO1FgMw0cH1hxLVtKQ=";
+    hash = "sha256-R/Kuk4nRJg3ozNNmzzNDnGcsmBmlk0g9d+F8JwLFz98=";
   };
 
   patches = (substituteAll {
@@ -19,7 +36,15 @@ stdenv.mkDerivation rec {
     inherit qttranslations;
   });
 
-  buildInputs = [ qtlocation qtpbfimageplugin ];
+  buildInputs = [ qtpbfimageplugin ]
+    ++ (if isQt6 then [
+    qtbase
+    qtpositioning
+    qtsvg
+    qt5compat
+  ] else [
+    qtlocation
+  ]);
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
@@ -49,5 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ womfoo sikmir ];
     platforms = platforms.unix;
+    broken = isQt6 && stdenv.isDarwin;
   };
 }

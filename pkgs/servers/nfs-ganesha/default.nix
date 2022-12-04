@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , krb5, xfsprogs, jemalloc, dbus, libcap
-, ntirpc, liburcu, bison, flex, nfs-utils
+, ntirpc, liburcu, bison, flex, nfs-utils, acl
 } :
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "4.0.8";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "sha256-03zrEWwPQi7ED6Yr3HgzQyOtqJjjnUj5nChgGV6v0zk=";
+    sha256 = "sha256-M7lQkO36I4Cwxs49XdxsUVVI2/Nz7fhU36j9fxUuMfM=";
   };
 
   preConfigure = "cd src";
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    acl
     krb5
     xfsprogs
     jemalloc

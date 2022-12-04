@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
+{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle, git, perl
 , makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
@@ -36,7 +36,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [ gradle perl ];
     patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle_6 makeWrapper ];
+  nativeBuildInputs = [ git gradle makeWrapper ];
 
   doCheck = true;
 

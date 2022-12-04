@@ -39,7 +39,7 @@ users.users.alice = {
     Passwords may still be assigned by setting the user's
     <link linkend="opt-users.users._name_.hashedPassword">hashedPassword</link>
     option. A hashed password can be generated using
-    <literal>mkpasswd -m sha-512</literal>.
+    <literal>mkpasswd</literal>.
   </para>
   <para>
     A user ID (uid) is assigned automatically. You can also specify a

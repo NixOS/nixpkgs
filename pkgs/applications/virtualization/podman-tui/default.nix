@@ -1,41 +1,35 @@
-{ lib
-, stdenv
-, pkg-config
-, fetchFromGitHub
-, buildGoModule
-, btrfs-progs
-, gpgme
-, libassuan
-, lvm2
-, testers
-, podman-tui
-}:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, testers, podman-tui }:
+
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-9ZFyrRf4yMik4+TQYN+75fWuKHuI8hkaKJ6o5qWYb7E=";
+    hash = "sha256-UhlhNmVPTOXVWpL4pxF5c6ZQj//pXrzZWlRUaKGSTSA=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
-  nativeBuildInputs = [ pkg-config ];
+  CGO_ENABLED = 0;
 
-  buildInputs = [ gpgme libassuan ]
-    ++ lib.optionals stdenv.isLinux [ btrfs-progs lvm2 ];
+  tags = [ "containers_image_openpgp" "remote" ]
+    ++ lib.optional stdenv.isDarwin "darwin";
 
   ldflags = [ "-s" "-w" ];
 
   preCheck =
-    let skippedTests = [
-      "TestNetdialogs"
-    ]; in
+    let
+      skippedTests = [
+        "TestDialogs"
+        "TestNetdialogs"
+      ];
+    in
     ''
-      export HOME=/home/$(whoami)
+      export USER=$(whoami)
+      export HOME=/home/$USER
 
       # Disable flaky tests
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")

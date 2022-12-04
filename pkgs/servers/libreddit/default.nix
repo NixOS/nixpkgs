@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libreddit";
-  version = "0.23.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "libreddit";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qO9AgEAm+wK8LAlUOYIKYTXJYT3yz65UWAFTf711+5w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IIL06jhl9wMLQTQtr96kq4Kkf2oGO3xxJxcB9Y34iUk=";
   };
 
-  cargoSha256 = "sha256-ApZLYKavYt1Zp7qvdbhBXPBj7qv/D/oZp5lK2sfWnDI=";
+  cargoSha256 = "sha256-uIr8aUDErHVUKML2l6nITSBpOxqg3h1Md0948BxvutI=";
 
   buildInputs = lib.optional stdenv.isDarwin [
     Security
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Private front-end for Reddit";
     homepage = "https://github.com/libreddit/libreddit";
+    changelog = "https://github.com/libreddit/libreddit/releases/tag/v${version}";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ fab jojosch ];
   };

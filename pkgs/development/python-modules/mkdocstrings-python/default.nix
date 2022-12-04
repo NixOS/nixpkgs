@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = version;
-    hash = "sha256-cZk6Eu6Jp3tSPAb0HplR/I0pX2YIFhOaAsI3YRS0LVw=";
+    hash = "sha256-KAVBK0ZR1R27cWH99DVOYNFWKa4ubBXzgM0hVpGRIpE=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'license = "ISC"' 'license = {text = "ISC"}' \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 

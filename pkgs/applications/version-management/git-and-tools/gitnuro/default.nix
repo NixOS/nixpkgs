@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gitnuro";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-${version}.jar";
-    hash = "sha256-tAFFl14mmXhLr6V/vTDe9lwX7trsaTWgIqkwxD3mBUw=";
+    hash = "sha256-ugZBk/aQ2pjL9xY66g20MorAQ02GHIdJTv8ejadaBgY=";
   };
 
   icon = fetchurl {

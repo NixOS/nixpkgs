@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "element";
@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/gennaro-tedesco/element";
     license = licenses.asl20;
     maintainers = [ maintainers.j0hax ];
+    broken = stdenv.isDarwin;
   };
 }

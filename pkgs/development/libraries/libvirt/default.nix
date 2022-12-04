@@ -59,6 +59,7 @@
   # Darwin
 , gmp
 , libiconv
+, qemu
 , Carbon
 , AppKit
 
@@ -113,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.8.0";
+  version = "8.9.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p7z+paiSeIm2cWnc6n9Hrd++BDmccGj+EOhqHNsJiXw=";
+    sha256 = "sha256-79frEYItbf1weOkrcyI/Z/TjTg6kLMQbteaTi9LAt0g=";
     fetchSubmodules = true;
   };
 
@@ -154,6 +155,9 @@ stdenv.mkDerivation rec {
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/vircryptotest/d' tests/meson.build
+    sed -i '/domaincapstest/d' tests/meson.build
+    sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuvhostusertest/d' tests/meson.build
   '' + optionalString (isDarwin && isx86_64) ''
     sed -i '/qemucaps2xmltest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
@@ -267,6 +271,7 @@ stdenv.mkDerivation rec {
       (cfg "runstatedir" "/run")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
+      (cfg "qemu_datadir" (if isDarwin then "${qemu}/share/qemu" else ""))
 
       (feat "apparmor" isLinux)
       (feat "attr" isLinux)

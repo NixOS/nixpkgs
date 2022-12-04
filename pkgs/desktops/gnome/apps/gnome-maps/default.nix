@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -63,6 +64,14 @@ stdenv.mkDerivation rec {
     librest_1_0
     libsecret
     libsoup_3
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "timeTest.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/commit/bec3d2f26de1b3a8c8b7e603f6d6a46c853426fa.diff";
+      sha256 = "sha256-7/ogIDG0piZOPaCPX4nUA3jHI7RGTd2KMZsp8z0XLcc=";
+    })
   ];
 
   postPatch = ''

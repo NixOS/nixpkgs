@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "wsgidav";
-  version = "4.0.2";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mar10";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LQdS9d2DB4PXqRSzmtZCSyCQI47ncLCG+RSB+goZYoA=";
+    hash = "sha256-iNyXY0txKX4X1+O27T7my8dfs8wqXoG7Kuo9yN9SRnY=";
   };
 
   nativeBuildInputs = [

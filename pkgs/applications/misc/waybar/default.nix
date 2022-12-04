@@ -29,18 +29,19 @@
 , traySupport     ? true,  libdbusmenu-gtk3
 , udevSupport     ? true,  udev
 , upowerSupport   ? true,  upower
+, wireplumberSupport ? true, wireplumber
 , withMediaPlayer ? false, glib, gobject-introspection, python3, playerctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.15";
+  version = "0.9.16";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    sha256 = "sha256-u2nEMS0lJ/Kf09+mWYWQLji9MVgjYAfUi5bmPEfTfFc=";
+    sha256 = "sha256-hcU0ijWIN7TtIPkURVmAh0kanQWkBUa22nubj7rSfBs=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +68,8 @@ stdenv.mkDerivation rec {
     ++ optional  swaySupport   sway
     ++ optional  traySupport   libdbusmenu-gtk3
     ++ optional  udevSupport   udev
-    ++ optional  upowerSupport upower;
+    ++ optional  upowerSupport upower
+    ++ optional  wireplumberSupport wireplumber;
 
   checkInputs = [ catch2_3 ];
   doCheck = runTests;
@@ -86,6 +88,7 @@ stdenv.mkDerivation rec {
       sndio = sndioSupport;
       tests = runTests;
       upower_glib = upowerSupport;
+      wireplumber = wireplumberSupport;
     }
   ) ++ [
     "-Dsystemd=disabled"

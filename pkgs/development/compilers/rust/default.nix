@@ -31,9 +31,8 @@ in
   inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
 
   # This just contains tools for now. But it would conceivably contain
-  # libraries too, say if we picked some default/recommended versions from
-  # `cratesIO` to build by Hydra and/or try to prefer/bias in Cargo.lock for
-  # all vendored Carnix-generated nix.
+  # libraries too, say if we picked some default/recommended versions to build
+  # by Hydra.
   #
   # In the end game, rustc, the rust standard library (`core`, `std`, etc.),
   # and cargo would themselves be built with `buildRustCreate` like

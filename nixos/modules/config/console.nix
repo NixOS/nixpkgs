@@ -34,14 +34,16 @@ let
       "/share/unimaps"
     ];
   };
-
-  setVconsole = !config.boot.isContainer;
 in
 
 {
   ###### interface
 
   options.console  = {
+    enable = mkEnableOption (lib.mdDoc "virtual console") // {
+      default = true;
+    };
+
     font = mkOption {
       type = with types; either str path;
       default = "Lat2-Terminus16";
@@ -125,11 +127,17 @@ in
           '');
     }
 
-    (mkIf (!setVconsole) {
-      systemd.services.systemd-vconsole-setup.enable = false;
+    (mkIf (!cfg.enable) {
+      systemd.services = {
+        "serial-getty@ttyS0".enable = false;
+        "serial-getty@hvc0".enable = false;
+        "getty@tty1".enable = false;
+        "autovt@".enable = false;
+        systemd-vconsole-setup.enable = false;
+      };
     })
 
-    (mkIf setVconsole (mkMerge [
+    (mkIf cfg.enable (mkMerge [
       { environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the

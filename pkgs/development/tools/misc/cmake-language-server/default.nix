@@ -1,7 +1,8 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, poetry
+, poetry-core
+, pythonRelaxDepsHook
 , cmake-format
 , pygls
 , cmake
@@ -26,8 +27,13 @@ buildPythonApplication rec {
     ./disable-test-timeouts.patch
   ];
 
+  pythonRelaxDeps = [
+    "pygls"
+  ];
+
   nativeBuildInputs = [
-    poetry
+    poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

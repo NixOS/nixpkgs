@@ -465,8 +465,11 @@ rec {
    *
    * This creates a simple derivation with symlinks to all inputs.
    *
-   * entries is a list of attribute sets like
-   * { name = "name" ; path = "/nix/store/..."; }
+   * entries can be a list of attribute sets like
+   * [ { name = "name" ; path = "/nix/store/..."; } ]
+   *
+   * or an attribute set name -> path like:
+   * { name = "/nix/store/..."; other = "/nix/store/..."; }
    *
    * Example:
    *
@@ -482,14 +485,28 @@ rec {
    *
    * See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
-    ''mkdir -p $out
-      cd $out
-      ${lib.concatMapStrings (x: ''
-          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
-      '') entries}
-    '';
+  linkFarm = name: entries:
+  let
+    entries' =
+      if (lib.isAttrs entries) then entries
+      # We do this foldl to have last-wins semantics in case of repeated entries
+      else if (lib.isList entries) then lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
+      else throw "linkFarm entries must be either attrs or a list!";
+
+    linkCommands = lib.mapAttrsToList (name: path: ''
+      mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
+      ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+    '') entries';
+  in
+  runCommand name {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    passthru.entries = entries';
+   } ''
+    mkdir -p $out
+    cd $out
+    ${lib.concatStrings linkCommands}
+  '';
 
   /*
    * Easily create a linkFarm from a set of derivations.

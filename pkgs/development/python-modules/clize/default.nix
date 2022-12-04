@@ -8,9 +8,9 @@
 , pytestCheckHook
 , pythonOlder
 , python-dateutil
-, setuptools
+, repeated-test
+, setuptools-scm
 , sigtools
-, unittest2
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -42,14 +42,11 @@ buildPythonPackage rec {
     ];
   };
 
-  # repeated_test no longer exists in nixpkgs
-  # also see: https://github.com/epsy/clize/issues/74
-  doCheck = false;
   checkInputs = [
     pytestCheckHook
     python-dateutil
     pygments
-    unittest2
+    repeated-test
   ];
 
   pythonImportsCheck = [

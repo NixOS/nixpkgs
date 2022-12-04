@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-c6blw0WD1V4bNZ5YaVjLbeCIug8l7PeKlrv+kzncK/s=";
+    hash = "sha256-K5EeDcGcjrZYQTbuYAzT7XhcAqpYW1w/jP5T0cOPsVU=";
   };
 
   postPatch = ''
@@ -58,9 +58,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/main/CHANGELOG.md";
     description = "Tools to enumerate and find Bluetooth Adapters";
     homepage = "https://bluetooth-adapters.readthedocs.io/";
+    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

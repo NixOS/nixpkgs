@@ -248,7 +248,8 @@ with self;
 
   core = janePackage {
     pname = "core";
-    hash = "1m2ybvlz9zlb2d0jc0j7wdgd18mx9sh3ds2ylkv0cfjx1pzi0l25";
+    version = "0.15.1";
+    hash = "sha256-SHjnNFl+JAjdgVoRgmnz0wqrrc3zoh0ZyG2UhUsUbJ8=";
     meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base base_bigstring base_quickcheck ppx_jane time_now ];
@@ -592,7 +593,8 @@ with self;
 
   ppx_expect = janePackage {
     pname = "ppx_expect";
-    hash = "134dl5qhjxsj2mcmrx9f3m0iys0n5mjfpz9flj8zn8d2jir43776";
+    version = "0.15.1";
+    hash = "sha256-qlOipzTTdN9yQ35sItKmWpCv74kbuJLDg4IHNVTKvow=";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Cram like framework for OCaml";
     propagatedBuildInputs = [ ppx_here ppx_inline_test re ];
@@ -740,8 +742,9 @@ with self;
 
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
-    minimumOCamlVersion = "4.04.2";
-    hash = "1fyf7hgxprn7pj58rmmrfpv938a0avpzvvk6wzihpmfm6whgbdm8";
+    version = "0.15.1";
+    minimalOCamlVersion = "4.08.0";
+    hash = "sha256-NYknZHyDklr71hihM2pPFQ7uAKkuKO2DJkjtsF+xc5g=";
     meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
     propagatedBuildInputs = [ ppxlib sexplib0 base ];
   };
@@ -921,7 +924,8 @@ with self;
 
   sexplib = janePackage {
     pname = "sexplib";
-    hash = "05h34fm3p0179xivc14bixc50pzc8zws46l5gsq310kpm37srq3c";
+    version = "0.15.1";
+    hash = "sha256-LkGNnp717LMHeWe1Ka6qUZcpw8fKSsd5MusaLgFjm70=";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Library for serializing OCaml values to and from S-expressions";
     propagatedBuildInputs = [ num parsexp ];

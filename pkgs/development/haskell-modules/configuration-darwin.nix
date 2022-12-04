@@ -304,9 +304,9 @@ self: super: ({
   ormolu_0_5_0_1 = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.ormolu_0_5_0_1);
-  fourmolu_0_8_2_0 = overrideCabal (drv: {
+  fourmolu_0_9_0_0 = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu_0_8_2_0);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_9_0_0);
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

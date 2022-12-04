@@ -58,7 +58,6 @@ in rec {
     "--offline"
     "--frozen-lockfile"
     "--ignore-engines"
-    "--ignore-scripts"
   ];
 
   mkYarnModules = {
@@ -70,6 +69,7 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? [ ],
+    ignoreScripts ? true,
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -141,7 +141,7 @@ in rec {
 
         ${workspaceDependencyLinks}
 
-        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ yarnFlags)}
+        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ lib.optional ignoreScripts "--ignore-scripts" ++ yarnFlags)}
 
         ${lib.concatStringsSep "\n" postInstall}
 
@@ -303,7 +303,7 @@ in rec {
         workspaceDependenciesTransitive;
 
     in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
-      inherit src pname;
+      inherit src version pname;
 
       name = baseName;
 
@@ -376,11 +376,10 @@ in rec {
 
       meta = {
         inherit (nodejs.meta) platforms;
-        description = packageJSON.description or "";
-        homepage = packageJSON.homepage or "";
-        version = packageJSON.version or "";
-        license = if packageJSON ? license then getLicenseFromSpdxId packageJSON.license else "";
-      } // (attrs.meta or {});
+      } // lib.optionalAttrs (package ? description) { inherit (package) description; }
+        // lib.optionalAttrs (package ? homepage) { inherit (package) homepage; }
+        // lib.optionalAttrs (package ? license) { license = getLicenseFromSpdxId package.license; }
+        // (attrs.meta or {});
     });
 
   yarn2nix = mkYarnPackage {
@@ -413,7 +412,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = defaultYarnFlags ++ [ "--ignore-scripts" "--production=true" ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 

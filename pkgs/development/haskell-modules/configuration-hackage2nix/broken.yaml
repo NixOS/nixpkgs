@@ -445,6 +445,7 @@ broken-packages:
   - boombox
   - boots-app
   - boring-window-switcher
+  - borsh
   - bot
   - botpp
   - bottom
@@ -1354,6 +1355,7 @@ broken-packages:
   - etcd
   - ethereum-rlp
   - eurofxref
+  - evdev-streamly
   - eve
   - eved
   - event
@@ -1953,6 +1955,7 @@ broken-packages:
   - HaPy
   - haquery
   - harchive
+  - harfbuzz-pure
   - HARM
   - HarmTrace-Base
   - haroonga
@@ -2137,7 +2140,6 @@ broken-packages:
   - heidi
   - hein
   - heist-async
-  - heist-emanote
   - helisp
   - helix
   - hell
@@ -2356,7 +2358,6 @@ broken-packages:
   - hquantlib
   - hquery
   - hR
-  - h-raylib
   - hreq-core
   - h-reversi
   - hricket
@@ -2627,6 +2628,7 @@ broken-packages:
   - imapget
   - imgur
   - imj-prelude
+  - imm
   - immortal-worker
   - imperative-edsl
   - imperative-edsl-vhdl
@@ -3297,6 +3299,7 @@ broken-packages:
   - monadacme
   - monad-atom
   - monad-atom-simple
+  - monad-bayes
   - monad-branch
   - MonadCatchIO-transformers
   - monad-choice
@@ -3777,7 +3780,6 @@ broken-packages:
   - pasta
   - pastis
   - pasty
-  - patat
   - patches-vector
   - Pathfinder
   - pathfindingcore
@@ -3955,6 +3957,7 @@ broken-packages:
   - polysemy-check
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
+  - polysemy-log-co
   - polysemy-managed
   - polysemy-mocks
   - polysemy-readline
@@ -4955,6 +4958,7 @@ broken-packages:
   - supervisor
   - supervisors
   - supplemented
+  - supply-chain-core
   - surjective
   - sv-core
   - SVD2HS
@@ -4969,7 +4973,6 @@ broken-packages:
   - swagger
   - swagger-petstore
   - swagger-test
-  - swarm
   - swearjure
   - swf
   - swift-lda
@@ -5027,7 +5030,6 @@ broken-packages:
   - tagsoup-selection
   - tai
   - tai64
-  - tailwind
   - tak
   - takahashi
   - Takusen
@@ -5080,7 +5082,9 @@ broken-packages:
   - tensorflow
   - tensorflow-opgen
   - tensor-safe
+  - termbox-banana
   - termbox-bindings
+  - termbox-tea
   - termination-combinators
   - termplot
   - term-rewriting
@@ -5110,6 +5114,7 @@ broken-packages:
   - text-and-plots
   - text-ascii
   - text-builder-linear
+  - text-compression
   - text-containers
   - text-display
   - text-format-heavy
@@ -5335,6 +5340,7 @@ broken-packages:
   - type-int
   - type-interpreter
   - type-level-bst
+  - type-level-kv-list-esqueleto
   - type-level-natural-number-induction
   - type-level-natural-number-operations
   - typelevel-tensor

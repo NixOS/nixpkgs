@@ -13,13 +13,19 @@ in {
     services.erigon = {
       enable = mkEnableOption (lib.mdDoc "Ethereum implementation on the efficiency frontier");
 
-      group = mkOption {
-        type = types.str;
-        default = "ethereum";
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        description = lib.mdDoc "Additional arguments passed to Erigon";
+        default = [ ];
+      };
+
+      secretJwtPath = mkOption {
+        type = types.path;
         description = lib.mdDoc ''
-          Group of the user running the lighthouse process. This is used to share the jwt
-          secret with the execution layer.
+          Path to the secret jwt used for the http api authentication.
         '';
+        default = "";
+        example = "config.age.secrets.ERIGON_JWT.path";
       };
 
       settings = mkOption {
@@ -64,19 +70,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users = {
-      users.erigon = {
-        name = "erigon";
-        group = cfg.group;
-        description = "Erigon user";
-        home = "/var/lib/erigon";
-        isSystemUser = true;
-      };
-      groups = mkIf (cfg.group == "ethereum") {
-        ethereum = {};
-      };
-    };
-
     # Default values are the same as in the binary, they are just written here for convenience.
     services.erigon.settings = {
       datadir = mkDefault "/var/lib/erigon";
@@ -98,9 +91,9 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.erigon}/bin/erigon --config ${configFile}";
-        User = "erigon";
-        Group = cfg.group;
+        LoadCredential = "ERIGON_JWT:${cfg.secretJwtPath}";
+        ExecStart = "${pkgs.erigon}/bin/erigon --config ${configFile} --authrpc.jwtsecret=%d/ERIGON_JWT ${lib.escapeShellArgs cfg.extraArgs}";
+        DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "erigon";
         CapabilityBoundingSet = "";

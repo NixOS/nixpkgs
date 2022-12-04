@@ -14,13 +14,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-1QpJtonn/mWGcTv2mSeGKAHwPAqOV6VBAYFZH1/jAH8=";
+    hash = "sha256-r3Bi7QLzDKo3/idEY7fYIxTJPULNvAS6hy19Hko2qHE=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {

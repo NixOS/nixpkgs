@@ -142,10 +142,10 @@ class Repo:
 
     def as_nix(self, plugin: "Plugin") -> str:
         return f'''fetchgit {{
-            url = "{self.uri}";
-            rev = "{plugin.commit}";
-            sha256 = "{plugin.sha256}";
-        }}'''
+      url = "{self.uri}";
+      rev = "{plugin.commit}";
+      sha256 = "{plugin.sha256}";
+    }}'''
 
 
 class RepoGitHub(Repo):

@@ -1,22 +1,23 @@
 { lib
 , stdenv
 , fetchurl
+, libtool
 , ncurses
-, withLibrary ? false, libtool
+, withLibrary ? false
 , unicodeSupport ? true
 , enableShared ? !stdenv.isDarwin
 }:
 
 assert withLibrary -> libtool != null;
-assert unicodeSupport -> ncurses.unicodeSupport && ncurses != null;
+assert unicodeSupport -> ncurses != null && ncurses.unicodeSupport;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dialog";
-  version = "1.3-20211214";
+  version = "1.3-20220728";
 
   src = fetchurl {
-    url = "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz";
-    hash = "sha256-zCll4FxqjDcHCza1ZBTqpWDfjYfyzqIXWeKJUOmyeks=";
+    url = "ftp://ftp.invisible-island.net/dialog/dialog-${finalAttrs.version}.tgz";
+    hash = "sha256-VEGJc9VZpGGwBpX6/mjfYvK8c9UGtDaCHXfKPfRUGQs=";
   };
 
   buildInputs = [
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-rpath-hacks"
-    (lib.withFeature withLibrary "libtool")
-    "--with-ncurses${lib.optionalString unicodeSupport "w"}"
+    "--${if withLibrary then "with" else "without"}-libtool"
     "--with-libtool-opts=${lib.optionalString enableShared "-shared"}"
+    "--with-ncurses${lib.optionalString unicodeSupport "w"}"
   ];
 
   installTargets = [
@@ -41,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres spacefrogg ];
     inherit (ncurses.meta) platforms;
   };
-}
+})

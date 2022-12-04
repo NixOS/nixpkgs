@@ -11,11 +11,13 @@
 , i2c-tools
 , pytestCheckHook
 , colorlog
+, crcmod
+, pillow
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.10.0";
+  version = "1.11.1";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2mXWih3LchJ/YsjuwHwWse7SNJYx1vxtovl8vasKV4w=";
+    sha256 = "sha256-9g6h8GMOcICiry9M9b/Tt0ONsTxuJI/duprUkxB1Gr0=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +40,8 @@ buildPythonPackage rec {
     smbus-cffi
     i2c-tools
     colorlog
+    crcmod
+    pillow
   ];
 
   propagatedNativeBuildInputs = [

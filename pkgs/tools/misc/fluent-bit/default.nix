@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "2.0.3";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-8P28xaFyaU0GrIrO+D+Rp9H4xgOymHtbAbd2mI79vSI=";
+    sha256 = "sha256-DUMsNuu1sdtkWCX5yweFcjbRcDRHhZYLku4mTmQqXDk=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fluentbit.io";
     maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

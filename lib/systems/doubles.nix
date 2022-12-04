@@ -13,7 +13,7 @@ let
     "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     # FreeBSD
-    "i686-freebsd" "x86_64-freebsd"
+    "i686-freebsd13" "x86_64-freebsd13"
 
     # Genode
     "aarch64-genode" "i686-genode" "x86_64-genode"

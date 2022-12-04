@@ -68,7 +68,7 @@ fi
 # like squashfs.
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
-if [ -n "@readOnlyStore@" ]; then
+if [ -n "@readOnlyNixStore@" ]; then
     if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
         if [ -z "$container" ]; then
             mount --bind /nix/store /nix/store

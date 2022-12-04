@@ -23,7 +23,7 @@
   # TODO investigate adding "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "api" "api-client" "sinks" "sources" "transforms" "vrl-cli" ]
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
@@ -32,7 +32,7 @@
 
 let
   pname = "vector";
-  version = "0.25.0";
+  version = "0.25.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2hCgHf7iBPl9BQITXyUDwgAz/i2HhXT4eczWrExCUDk=";
+    hash = "sha256-7iYiSO966o0M9M0ijGCpuRVRgus+tURLBN9S5lPDRb8=";
   };
 
-  cargoHash = "sha256-E23m8/XCEXeEpz1itIzCit9RpoB1/PRrYVWxt+VVfxA=";
+  cargoHash = "sha256-EqK6r/pFFKmnpPPUhqdC3bztYQZ+2w7u7V8Rj+9oWII=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];

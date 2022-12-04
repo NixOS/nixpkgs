@@ -84,6 +84,10 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  ''
+  # error: unknown type name 'NSAppearanceName'
+  + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    sed -z -i "s/if (@available(macOS 10.14, \*)).*}/}/g" src/AudacityApp.mm
   '';
 
   nativeBuildInputs = [
@@ -199,7 +203,5 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ lheckemann veprbl wegank ];
     platforms = platforms.unix;
-    # error: unknown type name 'NSAppearanceName'
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

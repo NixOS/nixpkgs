@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-copybutton";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-copybutton";
     rev = "v${version}";
-    sha256 = "sha256-W27kCU/8NHoBtiAyA+CgNa00j6ck3CAaq1hLLGo60Ro=";
+    sha256 = "sha256-ptQNeklF9f0XeDbBq64ZFV15O8b4lQQLHRfblOQ3nRQ=";
     fetchSubmodules = true;
   };
 

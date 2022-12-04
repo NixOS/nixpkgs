@@ -52,10 +52,6 @@ mkDerivation rec {
     rust.rustc
   ]);
 
-  cmakeFlags = [
-    "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"
-  ];
-
   buildInputs = [
     kconfig
     kcoreaddons

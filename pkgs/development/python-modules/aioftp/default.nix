@@ -33,10 +33,6 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
   disabledTests = lib.optionals stdenv.isDarwin [
     # uses 127.0.0.2, which macos doesn't like
     "test_pasv_connection_pasv_forced_response_address"

@@ -5,7 +5,7 @@
 , fetchpatch
 , python3
 , substituteAll
-, ffmpeg
+, ffmpeg-headless
 , inetutils
 , nixosTests
 
@@ -31,14 +31,40 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
-        version = "1.11.1";
-        src = fetchFromGitHub {
-          owner = "litl";
-          repo = "backoff";
-          rev = "v${version}";
-          hash = "sha256-87IMcLaoCn0Vns8Ub/AFmv0gXtS0aPZX0cSt7+lOPm4=";
+      # https://github.com/postlund/pyatv/issues/1879
+      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
+        pname = "aiohttp";
+        version = "3.8.1";
+        src = self.fetchPypi {
+          inherit pname version;
+          hash = "sha256-/FRx4aVN4V73HBvG6+gNTcaB6mAOaL/Ry85AQn8LdXg=";
         };
+      });
+
+      arcam-fmj = super.arcam-fmj.overridePythonAttrs (old: rec {
+        disabledTestPaths = [
+          # incompatible with pytest-aiohttp 0.3.0
+          # see https://github.com/elupus/arcam_fmj/pull/12
+          "tests/test_fake.py"
+          "tests/test_standard.py"
+          "tests/test_utils.py"
+        ];
+      });
+
+      caldav = super.caldav.overridePythonAttrs (old: rec {
+        version = "0.9.1";
+        src = fetchFromGitHub {
+          owner = "python-caldav";
+          repo = "caldav";
+          rev = "v${version}";
+          hash = "sha256-Gil0v4pGyp5+TnYPjb8Vk0xTqnQKaeD8Ko/ZWhvkbUk=";
+        };
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace ", 'xandikos<0.2.4'" "" \
+            --replace ", 'radicale'" ""
+        '';
+        checkInputs = old.checkInputs ++ [ self.nose ];
       });
 
       gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
@@ -62,6 +88,16 @@ let
         };
       });
 
+      nibe = super.nibe.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "yozik04";
+          repo = "nibe";
+          rev = "refs/tags/${version}";
+          hash = "sha256-DguGWNJfc5DfbcKMX2eMM2U1WyVPcdtv2BmpVloOFSU=";
+        };
+      });
+
       # pytest-aiohttp>0.3.0 breaks home-assistant tests
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
@@ -70,7 +106,7 @@ let
           pname = "pytest-aiohttp";
           hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
-        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        propagatedBuildInputs = with self; [ aiohttp pytest ];
         doCheck = false;
         patches = [];
       });
@@ -228,7 +264,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.11.2";
+  hassVersion = "2022.11.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -246,19 +282,20 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-LYO0SM75+e/4FoOONW+qel1AX/7qM9e+K729jR6PyUQ=";
+    hash = "sha256-5QV9k3aMMhkB5ZVNOzkwAcA2qTLT7HBays8BoRyshVo=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
-      ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
+      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
     })
   ];
 
   postPatch = let
     relaxedConstraints = [
+      "aiohttp"
       "attrs"
       "awesomeversion"
       "bcrypt"

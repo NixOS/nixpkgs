@@ -14,14 +14,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "22.3.4";
+  version = "22.4";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-agffkTEaURjw/Ro8znYRQLKhDP2Ey0LimuzqbW5xb28=";
+    hash = "sha256-MsT5t2da79Eb9FlTLPr2893JcF0ujNnToJTCQRT1QEo=";
   };
 
   patches = [ ./0001-add-nixos-support.patch ];

@@ -20,6 +20,7 @@
 , ladspa-sdk
 , gitUpdater
 , ladspaPlugins
+, rubberband
 , mkDerivation
 , which
 }:
@@ -53,6 +54,7 @@ mkDerivation rec {
     opencv3
     ladspa-sdk
     ladspaPlugins
+    rubberband
   ];
 
   nativeBuildInputs = [ cmake which pkg-config ];

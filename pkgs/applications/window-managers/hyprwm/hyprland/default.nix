@@ -90,7 +90,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ wozeparrot ];
     inherit (wayland.meta) platforms;
     mainProgram = "Hyprland";
-    # ofborg failure: g++ does not recognize '-std=c++23'
-    broken = stdenv.isAarch64;
   };
 })

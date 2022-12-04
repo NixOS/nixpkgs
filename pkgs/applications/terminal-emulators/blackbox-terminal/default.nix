@@ -26,14 +26,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blackbox";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "raggesilver";
     repo = "blackbox";
     rev = "v${version}";
-    sha256 = "sha256-8u4qHC8+3rKDFNdg5kI48dBgAm3d6ESXN5H9aT/nIBY=";
+    sha256 = "sha256-4/rtviBv5KXheLLExxOvaF0wU87eRKMNxlYCVxuIQgU=";
   };
 
   postPatch = ''
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Beautiful GTK 4 terminal";
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
+    changelog = "https://gitlab.gnome.org/raggesilver/blackbox/-/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chuangzhu ];
     platforms = platforms.linux;

@@ -85,6 +85,7 @@
 , "coc-smartf"
 , "coc-snippets"
 , "coc-solargraph"
+, "coc-spell-checker"
 , "coc-stylelint"
 , "coc-sumneko-lua"
 , "coc-sqlfluff"
@@ -116,7 +117,6 @@
 , "csslint"
 , "dat"
 , "degit"
-, {"deltachat-desktop": "../../applications/networking/instant-messengers/deltachat-desktop"}
 , "dhcp"
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"

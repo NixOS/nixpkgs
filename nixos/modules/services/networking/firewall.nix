@@ -325,7 +325,7 @@ in
         example = literalExpression "pkgs.iptables-legacy";
         description =
           lib.mdDoc ''
-            The iptables package to use for running the firewall service."
+            The iptables package to use for running the firewall service.
           '';
       };
 

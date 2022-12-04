@@ -67,7 +67,11 @@ let
     node ~/dist/server/tools/peertube.js $@
   '';
 
-  nginxCommonHeaders = ''
+  nginxCommonHeaders = lib.optionalString cfg.enableWebHttps ''
+    add_header Strict-Transport-Security      'max-age=63072000; includeSubDomains';
+  '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+    add_header Alt-Svc                        'h3=":443"; ma=86400';
+  '' + ''
     add_header Access-Control-Allow-Origin    '*';
     add_header Access-Control-Allow-Methods   'GET, OPTIONS';
     add_header Access-Control-Allow-Headers   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
@@ -75,7 +79,7 @@ let
 
 in {
   options.services.peertube = {
-    enable = lib.mkEnableOption (lib.mdDoc "Enable Peertube’s service");
+    enable = lib.mkEnableOption (lib.mdDoc "Peertube");
 
     user = lib.mkOption {
       type = lib.types.str;
@@ -96,13 +100,13 @@ in {
     };
 
     listenHttp = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 9000;
       description = lib.mdDoc "listen port for HTTP server.";
     };
 
     listenWeb = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 9000;
       description = lib.mdDoc "listen port for WEB server.";
     };
@@ -177,7 +181,7 @@ in {
       };
 
       port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 5432;
         description = lib.mdDoc "Database host port.";
       };
@@ -370,7 +374,7 @@ in {
     systemd.services.peertube-init-db = lib.mkIf cfg.database.createLocally {
       description = "Initialization database for PeerTube daemon";
       after = [ "network.target" "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+      requires = [ "postgresql.service" ];
 
       script = let
         psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
@@ -399,7 +403,9 @@ in {
     systemd.services.peertube = {
       description = "PeerTube daemon";
       after = [ "network.target" ]
-        ++ lib.optionals cfg.redis.createLocally [ "redis.service" ]
+        ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
+        ++ lib.optionals cfg.database.createLocally [ "postgresql.service" "peertube-init-db.service" ];
+      requires = lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [ "postgresql.service" "peertube-init-db.service" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -487,6 +493,10 @@ in {
           extraConfig = ''
             client_max_body_size                        12G;
             add_header X-File-Maximum-Size              8G always;
+          '' + lib.optionalString cfg.enableWebHttps ''
+            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
+          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+            add_header Alt-Svc                          'h3=":443"; ma=86400';
           '';
         };
 
@@ -497,6 +507,10 @@ in {
           extraConfig = ''
             client_max_body_size                        6M;
             add_header X-File-Maximum-Size              4M always;
+          '' + lib.optionalString cfg.enableWebHttps ''
+            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
+          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+            add_header Alt-Svc                          'h3=":443"; ma=86400';
           '';
         };
 
@@ -560,6 +574,10 @@ in {
           priority = 1320;
           extraConfig = ''
             add_header Cache-Control                    'public, max-age=604800, immutable';
+          '' + lib.optionalString cfg.enableWebHttps ''
+            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
+          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+            add_header Alt-Svc                          'h3=":443"; ma=86400';
           '';
         };
 
@@ -718,6 +736,10 @@ in {
             rewrite ^/static/webseed/(.*)$              /$1 break;
           '';
         };
+
+        extraConfig = lib.optionalString cfg.enableWebHttps ''
+          add_header Strict-Transport-Security          'max-age=63072000; includeSubDomains';
+        '';
       };
     };
 

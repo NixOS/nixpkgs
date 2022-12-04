@@ -1,23 +1,47 @@
-{ lib, rustPlatform, fetchFromGitHub, zoxide }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, bzip2
+, zstd
+, zoxide
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "1.3.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DXsuTmkfzWbjpTb3ZJRVSDGgivDlEQraqAeyRzAB4UU=";
+    sha256 = "sha256-0wYYElXm7Nr1zjtWLSdBaUVsb+2CN4TwaJr5g1juUUs=";
   };
 
-  cargoSha256 = "sha256-gv7ujyAbFEpz95cHRDKPxUW2TiYiJz35jfiKlzi6gJY=";
+  cargoSha256 = "sha256-SnXZkMrAhhP8lVFCd6LKHFSg9o2K1Wy+z/4oUZOHoXw=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    bzip2
+    zstd
+  ];
 
   checkInputs = [ zoxide ];
+
+  buildFeatures = [ "zstd/pkg-config" ];
+
+  checkFlags = [
+    # extra test files not shipped with the repository
+    "--skip=functions::tests::test_list_up_contents"
+    "--skip=magic_image::tests::test_inspect_image"
+    "--skip=magic_packed::tests::test_inspect_signature"
+  ];
 
   meta = with lib; {
     description = "A tui file manager with vim-like key mapping";
     homepage = "https://github.com/kyoheiu/felix";
+    changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "fx";

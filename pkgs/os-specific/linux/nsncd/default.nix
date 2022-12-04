@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nsncd";
-  version = "unstable-2021-10-20";
+  version = "unstable-2022-11-14";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nsncd";
-    rev = "b9425070bb308565a6e4dc5aefd568952a07a4ed";
-    hash = "sha256-ZjInzPJo+PWAM2gAKhlasLXiqo+2Df4DIXpNwtqQVc8=";
+    rev = "47e580f1db99603df6e212a2e62f18cc970cef40";
+    hash = "sha256-Nv3MYZcuYgD66BAGs3Tg37s086HAGsaDBFvELqQF3Tk=";
   };
 
-  cargoSha256 = "sha256-hxdI+HHB0PB/zDMI21Pg5Xr9mTDn4T+OcAAenUox4bs=";
+  cargoSha256 = "sha256-c1L6nEUBHw1YegmoRrI3WU/bF80Nzbz13hsGlNyBR9o=";
 
   meta = with lib; {
     description = "the name service non-caching daemon";

@@ -16,14 +16,12 @@ buildGoModule rec {
     sha256 = "0nb9hpqbghgi3zvq41kabydzyc6ffaaw9b4jkc5jrwn1klpw1xk8";
   };
 
-  prePatch = ''
+  preBuild = ''
     cp ${./go.mod} go.mod
+    cp ${./go.sum} go.sum
   '';
-  overrideModAttrs = (_: {
-    inherit prePatch;
-  });
 
-  vendorSha256 = "0hjifc3kbwmx7kjn858vi05cwwra6q19cqjfd94k726pwhk37qkw";
+  vendorSha256 = "sha256-fOIzJuTXiDNJak5ilgI2KnPOCogbFWTlPL3yNQdzUUI=";
 
   buildInputs = [
     pam

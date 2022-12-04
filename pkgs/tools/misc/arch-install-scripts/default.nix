@@ -22,13 +22,13 @@
 
 resholve.mkDerivation rec {
   pname = "arch-install-scripts";
-  version = "27";
+  version = "28";
 
   src = fetchFromGitHub {
     owner = "archlinux";
     repo = "arch-install-scripts";
     rev = "v${version}";
-    hash = "sha256-owJImToG8GIk1TfkSKJyXCu9RTJ1qYlvQ6DTMSazaeQ=";
+    hash = "sha256-TytCeejhjWYDzWFjGubUl08OrsAQa9fFULoamDfbdDY=";
   };
 
   nativeBuildInputs = [ asciidoc gnum4 ];

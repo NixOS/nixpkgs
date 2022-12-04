@@ -1,7 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, xz, boost, libdevil, zlib, p7zip
-, openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
-, asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
-, jdk ? null, python ? null, systemd, libunwind, which, minizip
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, xz
+, boost
+, libdevil
+, zlib
+, p7zip
+, openal
+, libvorbis
+, glew
+, freetype
+, xorg
+, SDL2
+, libGLU
+, libGL
+, asciidoc
+, docbook_xsl
+, docbook_xsl_ns
+, curl
+, makeWrapper
+, jdk
+, python
+, systemd
+, libunwind
+, which
+, minizip
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 
@@ -36,16 +60,36 @@ stdenv.mkDerivation rec {
     echo "${version} maintenance" > VERSION
   '';
 
-  cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
-                "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
-                "-DPREFER_STATIC_LIBS:BOOL=OFF"];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
+    "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
+    "-DPREFER_STATIC_LIBS:BOOL=OFF"
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper docbook_xsl docbook_xsl_ns asciidoc ];
-  buildInputs = [ xz boost libdevil zlib p7zip openal libvorbis freetype SDL2
-    xorg.libX11 xorg.libXcursor libGLU libGL glew curl
-    systemd libunwind which minizip ]
-    ++ lib.optional withAI jdk
-    ++ lib.optional withAI python;
+  buildInputs = [
+    xz
+    boost
+    libdevil
+    zlib
+    p7zip
+    openal
+    libvorbis
+    freetype
+    SDL2
+    xorg.libX11
+    xorg.libXcursor
+    libGLU
+    libGL
+    glew
+    curl
+    systemd
+    libunwind
+    which
+    minizip
+  ]
+  ++ lib.optional withAI jdk
+  ++ lib.optional withAI python;
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
@@ -57,8 +101,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight domenkozar sorki ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

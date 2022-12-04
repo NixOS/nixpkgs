@@ -32,12 +32,12 @@
 , which
 , icu
 , boost
-, jdk
+, jdk17
 , ant
 , cups
 , xorg
 , fontforge
-, jre_minimal
+, jre17_minimal
 , openssl
 , gperf
 , cppunit
@@ -96,7 +96,7 @@
 , gpgme
 , libwebp
 , abseil-cpp
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
+, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 , mkDerivation ? null
@@ -121,7 +121,7 @@ let
     getDev getLib
     optional optionals optionalString;
 
-  jre' = jre_minimal.override {
+  jre' = jre17_minimal.override {
     modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
@@ -460,7 +460,7 @@ in
     bison
     fontforge
     gdb
-    jdk
+    jdk17
     libtool
     pkg-config
   ]

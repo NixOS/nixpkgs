@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-+//cAoN8m66SboEYP5Dhtm0q0+oyvEr5o584e4JQ9xM=";
+    hash = "sha256-KJkqzvsm0IMaqeKnIbLGeOSJrsLvW+z7lCg6NbuU13g=";
   };
 
   postPatch = ''

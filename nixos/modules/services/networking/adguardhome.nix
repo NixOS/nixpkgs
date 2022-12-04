@@ -51,8 +51,8 @@ in
     };
 
     settings = mkOption {
-      default = { };
-      type = submodule {
+      default = null;
+      type = nullOr (submodule {
         freeformType = (pkgs.formats.yaml { }).type;
         options = {
           schema_version = mkOption {
@@ -79,7 +79,7 @@ in
             '';
           };
         };
-      };
+      });
       description = lib.mdDoc ''
         AdGuard Home configuration. Refer to
         <https://github.com/AdguardTeam/AdGuardHome/wiki/Configuration#configuration-file>
@@ -89,6 +89,10 @@ in
         On start and if {option}`mutableSettings` is `true`,
         these options are merged into the configuration file on start, taking
         precedence over configuration changes made on the web interface.
+
+        Set this to `null` (default) for a non-declarative configuration without any
+        Nix-supplied values.
+        Declarative configurations are supplied with a default `schema_version`, `bind_host`, and `bind_port`.
         :::
       '';
     };
@@ -105,15 +109,15 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.settings != { }
-          -> (hasAttrByPath [ "dns" "bind_host" ] cfg.settings)
+        assertion = cfg.settings != null -> cfg.mutableSettings
+          || (hasAttrByPath [ "dns" "bind_host" ] cfg.settings)
           || (hasAttrByPath [ "dns" "bind_hosts" ] cfg.settings);
         message =
           "AdGuard setting dns.bind_host or dns.bind_hosts needs to be configured for a minimal working configuration";
       }
       {
-        assertion = cfg.settings != { }
-          -> hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
+        assertion = cfg.settings != null -> cfg.mutableSettings
+          || hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
         message =
           "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
       }
@@ -128,7 +132,7 @@ in
         StartLimitBurst = 10;
       };
 
-      preStart = optionalString (cfg.settings != { }) ''
+      preStart = optionalString (cfg.settings != null) ''
         if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
            && [ "${toString cfg.mutableSettings}" = "1" ]; then
           # Writing directly to AdGuardHome.yaml results in empty file

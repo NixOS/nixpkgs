@@ -12,7 +12,7 @@ let
         version = "0.7.0";
         src = old.src.override {
           inherit version;
-          sha256 = "0izl6bibhz3v538ad5hl13lfr6kvprf62rcl77wq2i5538h8hg3s";
+          hash = "sha256-ejyIIBqlRIH5OZRlYVy+e5rs6AgUlqbQKHt8uOIy9Ec=";
         };
       });
     };

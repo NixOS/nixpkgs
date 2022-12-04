@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
 
   postPatch = ''
     patchShebangs .

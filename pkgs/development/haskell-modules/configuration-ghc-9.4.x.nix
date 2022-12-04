@@ -61,13 +61,6 @@ in {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  cabal2nix =
-    # cabal2nix depends on foundation, which is broken on aarch64-linux.
-    # https://github.com/haskell-foundation/foundation/issues/571
-    overrideCabal
-      (drv: { badPlatforms = [ "aarch64-linux" ]; })
-      super.cabal2nix;
-
   doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
 
@@ -78,8 +71,6 @@ in {
   lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
   invariant = jailbreakForCurrentVersion super.invariant "0.5.6";
   implicit-hie-cradle = jailbreakForCurrentVersion super.implicit-hie-cradle "0.5.0.0";
-  # https://github.com/co-log/co-log-core/pull/22#issuecomment-1294040208
-  co-log-core = jailbreakForCurrentVersion super.co-log-core "0.3.1.0";
 
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
@@ -104,8 +95,8 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib_9_4_2_20220822;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_2_20220822;
+  ghc-lib = doDistribute self.ghc-lib_9_4_3_20221104;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_3_20221104;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_1_0;
@@ -206,6 +197,11 @@ in {
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
+  # 2022-11-06: Override override from common, because Cabal-syntax is included since ghc 9.4.
+  implicit-hie = super.implicit-hie.override {
+    Cabal-syntax = null;
+  };
+
   # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
@@ -224,4 +220,12 @@ in {
     hls-retrie-plugin = null;
     hls-splice-plugin = null;
   };
+
+  # https://github.com/tweag/ormolu/issues/941
+  ormolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu);
+  fourmolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu);
 }

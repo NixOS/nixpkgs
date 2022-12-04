@@ -22,12 +22,13 @@
   mtl,
   nix-derivation,
   optics,
-  process,
   random,
   relude,
   safe,
   stm,
   streamly,
+  strict,
+  strict-types,
   terminal-size,
   text,
   time,
@@ -37,10 +38,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.0.0.3";
+  version = "2.0.0.5";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.3.tar.gz";
-    sha256 = "0mgg309vncjvx80mhqcyb7kk1918nfl02d38jczm9lsrlrmdafd9";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.5.tar.gz";
+    sha256 = "02xrbf2nr64yfny3idkjb1xbd97wl8m5viifrwjf4hi6ivs5bl18";
   };
   isLibrary = true;
   isExecutable = true;
@@ -66,6 +67,8 @@ mkDerivation {
     safe
     stm
     streamly
+    strict
+    strict-types
     terminal-size
     text
     time
@@ -94,6 +97,8 @@ mkDerivation {
     safe
     stm
     streamly
+    strict
+    strict-types
     terminal-size
     text
     time
@@ -120,15 +125,17 @@ mkDerivation {
     mtl
     nix-derivation
     optics
-    process
     random
     relude
     safe
     stm
     streamly
+    strict
+    strict-types
     terminal-size
     text
     time
+    typed-process
     wcwidth
     word8
   ];

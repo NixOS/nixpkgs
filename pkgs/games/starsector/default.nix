@@ -1,32 +1,27 @@
 { lib
-, alsa-lib
 , fetchzip
 , libXxf86vm
 , makeWrapper
+, openal
 , openjdk
 , stdenv
 , xorg
 , copyDesktopItems
 , makeDesktopItem
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.95.1a-RC5";
+  version = "0.95.1a-RC6";
 
   src = fetchzip {
     url = "https://s3.amazonaws.com/fractalsoftworks/starsector/starsector_linux-${version}.zip";
-    sha256 = "sha256-V8/WQPvPIrF3Tg7JVO+GfeYqWhkWWrnHSVcFXGQqDAA=";
+    sha256 = "sha256-+0zGJHM+SMonx3sytCQNQA/QBgzdPMEfQvOjrCDSOs8=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-  ];
-  buildInputs = with xorg; [
-    alsa-lib
-    libXxf86vm
-  ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  buildInputs = [ xorg.libXxf86vm openal ];
 
   dontBuild = true;
 
@@ -46,30 +41,33 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    rm -r jre_linux # remove jre7
+    mkdir -p $out/bin $out/share/starsector
+    rm -r jre_linux # remove bundled jre7
     rm starfarer.api.zip
-    cp -r ./* $out
+    cp -r ./* $out/share/starsector
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
     ln -s $out/graphics/ui/s_icon64.png $out/share/icons/hicolor/64x64/apps/starsector.png
 
-    wrapProgram $out/starsector.sh \
+    wrapProgram $out/share/starsector/starsector.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
-      --chdir "$out"
-    ln -s $out/starsector.sh $out/bin/starsector
+      --chdir "$out/share/starsector"
+    ln -s $out/share/starsector/starsector.sh $out/bin/starsector
 
     runHook postInstall
   '';
 
   # it tries to run everything with relative paths, which makes it CWD dependent
   # also point mod, screenshot, and save directory to $XDG_DATA_HOME
+  # additionally, add some GC options to improve performance of the game
   postPatch = ''
     substituteInPlace starsector.sh \
       --replace "./jre_linux/bin/java" "${openjdk}/bin/java" \
-      --replace "./native/linux" "$out/native/linux"
+      --replace "./native/linux" "$out/share/starsector/native/linux" \
+      --replace "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
+      --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"
   '';
 
   meta = with lib; {
@@ -79,4 +77,12 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ bbigras ];
   };
+
+  passthru.updateScript = writeScript "starsector-update-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+    set -eou pipefail;
+    version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://s3.amazonaws.com/fractalsoftworks/starsector/starsector_linux-\K.*?(?=\.zip)" | head -1)
+    update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
+  '';
 }

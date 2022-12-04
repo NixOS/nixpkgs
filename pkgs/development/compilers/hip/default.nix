@@ -28,14 +28,14 @@
 }:
 
 let
-  hip = stdenv.mkDerivation rec {
+  hip = stdenv.mkDerivation (finalAttrs: {
     pname = "hip";
-    version = "5.3.1";
+    version = "5.3.3";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
-      rev = "rocm-${version}";
+      rev = "rocm-${finalAttrs.version}";
       hash = "sha256-kmRvrwnT0h2dBMI+H9d1vmeW3TmDBD+qW4YYhaMV2dE=";
     };
 
@@ -103,19 +103,19 @@ let
       description = "C++ Heterogeneous-Compute Interface for Portability";
       homepage = "https://github.com/ROCm-Developer-Tools/HIP";
       license = licenses.mit;
-      maintainers = with maintainers; [ lovesegfault Flakebi ];
+      maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
       platforms = platforms.linux;
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hip";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-i7hT/j+V0LT6Va2XcQyyKXF1guoIyhcOHvn842wCRx4=";
   };
 
@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts nix-prefetch-github
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/HIP/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCm-Developer-Tools/HIP/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
     current_version="$(grep "version =" pkgs/development/compilers/hip/default.nix | head -n1 | cut -d'"' -f2)"
     if [[ "$version" != "$current_version" ]]; then
       tarball_meta="$(nix-prefetch-github ROCm-Developer-Tools HIP --rev "rocm-$version")"
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
       echo hip already up-to-date
     fi
 
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/hipamd/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCm-Developer-Tools/hipamd/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
     current_version="$(grep "version =" pkgs/development/compilers/hip/default.nix | tail -n1 | cut -d'"' -f2)"
     if [[ "$version" != "$current_version" ]]; then
       tarball_meta="$(nix-prefetch-github ROCm-Developer-Tools hipamd --rev "rocm-$version")"
@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
     description = "C++ Heterogeneous-Compute Interface for Portability";
     homepage = "https://github.com/ROCm-Developer-Tools/hipamd";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault Flakebi ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

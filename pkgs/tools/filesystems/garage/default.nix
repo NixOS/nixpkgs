@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     description = "S3-compatible object store for small self-hosted geo-distributed deployments";
     homepage = "https://garagehq.deuxfleurs.fr";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ nickcao _0x4A6F ];
+    maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s ];
   };
 }

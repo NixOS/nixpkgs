@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
-    sha256 = "sha256-CY+dPSyQ/ovSdI80uEipDdnWy1KjbZnwpn9sd8HrbPQ=";
+    sha256 = "sha256-6rjZOX9JOTjZwqWVWTtKjGNy8KgWllE9VQZzwhuBAwE=";
   };
 
   patches = [

@@ -1,7 +1,7 @@
 { beam
 , callPackage
 , openssl_1_1
-, wxGTK30
+, wxGTK32
 , buildPackages
 , stdenv
 , wxSupport ? true
@@ -31,7 +31,7 @@ in
 
     # R25
     erlangR25 = self.beamLib.callErlang ../development/interpreters/erlang/R25.nix {
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK32;
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
@@ -45,7 +45,7 @@ in
 
     # R24
     erlangR24 = self.beamLib.callErlang ../development/interpreters/erlang/R24.nix {
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK32;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
@@ -61,7 +61,7 @@ in
     # R23
     erlangR23 = self.beamLib.callErlang ../development/interpreters/erlang/R23.nix {
       openssl = openssl_1_1;
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK32;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
@@ -77,7 +77,7 @@ in
     # R22
     erlangR22 = self.beamLib.callErlang ../development/interpreters/erlang/R22.nix {
       openssl = openssl_1_1;
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK32;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
@@ -93,7 +93,7 @@ in
     # R21
     erlangR21 = self.beamLib.callErlang ../development/interpreters/erlang/R21.nix {
       openssl = openssl_1_1;
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK32;
       autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
     };

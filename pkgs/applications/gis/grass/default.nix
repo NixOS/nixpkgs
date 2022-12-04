@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config bison flex makeWrapper wrapGAppsHook
     gdal geos libmysqlclient netcdf pdal
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_1 ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
 
   buildInputs = [
     cairo zlib proj libtiff libpng fftw sqlite

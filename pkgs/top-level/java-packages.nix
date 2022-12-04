@@ -9,11 +9,12 @@ let
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
+  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
 
   mavenfod = callPackage ../development/java-modules/maven-fod.nix { };
 
 in {
-  inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15 openjfx17;
+  inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15 openjfx17 openjfx19;
 
   compiler = let
 
@@ -44,7 +45,7 @@ in {
 
     mkBootstrap = adoptopenjdk: path: args:
       /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
-      if   adoptopenjdk.jdk-hotspot.meta.available
+      if   !stdenv.hostPlatform.isi686
       then
         # only linux has the gtkSupport option
         if stdenv.isLinux
@@ -196,6 +197,14 @@ in {
       {
         inherit openjdk18-bootstrap;
         openjfx = openjfx17;
+      };
+
+    openjdk19 = mkOpenjdk
+      ../development/compilers/openjdk/19.nix
+      ../development/compilers/openjdk/darwin/19.nix
+      {
+        openjdk19-bootstrap = temurin-bin.jdk-19;
+        openjfx = openjfx19;
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (

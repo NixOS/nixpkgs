@@ -2,6 +2,7 @@
 , targetPackages
 
 , crossStageStatic, libcCross
+, threadsCross
 , version
 
 , gmp, mpfr, libmpc, isl
@@ -86,7 +87,7 @@ let
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "mcf"
+                          else if targetPlatform.isWindows then (threadsCross.model or "win32")
                           else "single"}"
       "--enable-nls"
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [

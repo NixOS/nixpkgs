@@ -310,16 +310,16 @@ For this to work fully, you must also have this script sourced when you are logg
 
 ```ShellSession
 #!/bin/sh
-if [ -d $HOME/.nix-profile/etc/profile.d ]; then
-  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do
-    if [ -r $i ]; then
-      . $i
+if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
+  for i in "${HOME}/.nix-profile/etc/profile.d/"*.sh; do
+    if [ -r "$i" ]; then
+      . "$i"
     fi
   done
 fi
 ```
 
-Now just run `source $HOME/.profile` and you can starting loading man pages from your environment.
+Now just run `. "${HOME}/.profile"` and you can start loading man pages from your environment.
 
 ### GNU info setup {#sec-gnu-info-setup}
 

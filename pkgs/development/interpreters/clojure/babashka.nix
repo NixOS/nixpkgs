@@ -2,11 +2,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "1.0.165";
+  version = "1.0.167";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-sFLJVNyx0IFfPjxbYzSthRdF77sRHeNGFXHzKH22HfY=";
+    sha256 = "sha256-tqhl2d0HZJNVP3EX2y5YiOmCgJsXegUUO91+f9MxQyU=";
   };
 
   executable = "bb";

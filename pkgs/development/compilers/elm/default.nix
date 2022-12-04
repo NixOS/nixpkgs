@@ -214,7 +214,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       elm-pages = nodePkgs."elm-pages".overrideAttrs (
         old: {
-          nativeBuildInputs = [ makeWrapper ];
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
 
           # can't use `patches = [ <patch_file> ]` with a nodePkgs derivation;
           # need to patch in one of the build phases instead.
@@ -240,6 +240,10 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       lamdera = callPackage ./packages/lamdera.nix {};
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
+      elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ old.nodejs.pkgs.node-gyp-build ];
+      });
+
+      inherit (nodePkgs) elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })
   )

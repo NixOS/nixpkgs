@@ -20,7 +20,13 @@
     pkgs.mkpasswd # for generating password files
 
     # Some text editors.
-    pkgs.vim
+    (pkgs.vim.customize {
+      name = "vim";
+      vimrcConfig.packages.default = {
+        start = [ pkgs.vimPlugins.vim-nix ];
+      };
+      vimrcConfig.customRC = "syntax on";
+    })
 
     # Some networking tools.
     pkgs.fuse

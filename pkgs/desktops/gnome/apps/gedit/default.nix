@@ -7,12 +7,15 @@
 , gtk3
 , gtk-mac-integration
 , glib
-, adwaita-icon-theme
+, amtk
+, tepl
 , libpeas
 , libxml2
 , gtksourceview4
 , gsettings-desktop-schemas
 , wrapGAppsHook
+, gtk-doc
+, docbook-xsl-nons
 , ninja
 , libsoup
 , gnome
@@ -25,11 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "43.alpha";
+  version = "43.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "K3iOqhbYeeOVdGmS/OdmC5WtIpQ5OgHs0t5CzdWW95o=";
+    url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
+    sha256 = "mDg7Sv0/0eoYzcdP7G4SjneFgvOyP1NgGRQT//jw5qY=";
   };
 
   patches = [
@@ -49,10 +54,13 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
+    gtk-doc
+    docbook-xsl-nons
   ];
 
   buildInputs = [
-    adwaita-icon-theme
+    amtk
+    tepl
     glib
     gsettings-desktop-schemas
     gspell

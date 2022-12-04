@@ -7,7 +7,8 @@
 , libglvnd, libunwind
 , vulkan-loader, glslang
 , galliumDrivers ? ["auto"]
-, vulkanDrivers ? ["auto"]
+# upstream Mesa defaults to only enabling swrast (aka lavapipe) on aarch64 for some reason, so force building the others
+, vulkanDrivers ? [ "auto" ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "broadcom" "freedreno" "panfrost" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
@@ -36,7 +37,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.2.2";
+  version = "22.2.3";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -51,7 +52,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9";
+    sha256 = "ee7d026f7b1991dbae0861d359b671145c3a86f2a731353b885d2ea2d5c098d6";
   };
 
   # TODO:

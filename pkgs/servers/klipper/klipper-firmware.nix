@@ -6,7 +6,6 @@
 , libffi
 , libusb1
 , wxGTK30-gtk3
-, python2
 , python3
 , gcc-arm-embedded
 , klipper
@@ -20,7 +19,6 @@
   src = klipper.src;
 
   nativeBuildInputs = [
-    python2
     python3
     pkgsCross.avr.stdenv.cc
     gcc-arm-embedded

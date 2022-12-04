@@ -25,7 +25,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 22;
       description = lib.mdDoc ''
         Port on which SSH initrd service should listen.

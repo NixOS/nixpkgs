@@ -62,6 +62,8 @@ self: super: {
 
     pg_partman = super.callPackage ./ext/pg_partman.nix { };
 
+    pg_relusage = super.callPackage ./ext/pg_relusage.nix { };
+
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
     repmgr = super.callPackage ./ext/repmgr.nix { };

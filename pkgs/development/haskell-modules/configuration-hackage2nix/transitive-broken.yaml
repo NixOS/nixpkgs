@@ -641,6 +641,7 @@ dont-distribute-packages:
  - apiary-websockets
  - apis
  - apotiki
+ - appendful-persistent
  - approx-rand-test
  - arbor-monad-metric-datadog
  - archive-tar-bytestring
@@ -1531,6 +1532,7 @@ dont-distribute-packages:
  - geni-util
  - geniconvert
  - geniserver
+ - genvalidity-appendful
  - genvalidity-network-uri
  - genvalidity-sydtest
  - genvalidity-sydtest-aeson
@@ -2041,7 +2043,6 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
- - heist-extra
  - helic
  - helics
  - helics-wai
@@ -2191,9 +2192,6 @@ dont-distribute-packages:
  - hsql-odbc
  - hsql-postgresql
  - hsql-sqlite3
- - hsqml-datamodel-vinyl
- - hsqml-demo-morris
- - hsqml-morris
  - hsreadability
  - hssqlppp-th
  - hstar
@@ -2958,6 +2956,7 @@ dont-distribute-packages:
  - persistent-audit
  - persistent-hssqlppp
  - persistent-map
+ - persistent-mtl_0_5_0_0
  - persistent-mysql-haskell
  - persistent-relational-record
  - persona-idp
@@ -3484,7 +3483,7 @@ dont-distribute-packages:
  - skeletons
  - sketch-frp-copilot
  - skylark-client
- - skylighting_0_13_1
+ - skylighting_0_13_1_1
  - slate
  - slidemews
  - slip32
@@ -3566,6 +3565,7 @@ dont-distribute-packages:
  - sql-simple-pool
  - sql-simple-postgresql
  - sql-simple-sqlite
+ - sqlite-easy
  - sqlite-simple-typed
  - sqsd-local
  - sscgi
@@ -3584,6 +3584,7 @@ dont-distribute-packages:
  - stackage-setup
  - stackage-upload
  - stackage2nix
+ - stackctl
  - stan
  - starrover2
  - stateful-mtl
@@ -3628,6 +3629,7 @@ dont-distribute-packages:
  - supercollider-midi
  - superconstraints
  - supernova
+ - supply-chain
  - sv
  - sv-cassava
  - sv-svfactor

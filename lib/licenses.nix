@@ -154,6 +154,11 @@ in mkLicense lset) ({
     fullName = "BSD-2-Clause Plus Patent License";
   };
 
+  bsd2WithViews = {
+    spdxId = "BSD-2-Clause-Views";
+    fullName = "BSD 2-Clause with views sentence";
+  };
+
   bsd3 = {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';

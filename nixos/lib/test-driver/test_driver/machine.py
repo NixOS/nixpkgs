@@ -684,10 +684,10 @@ class Machine:
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
             retry(tty_matches)
 
-    def send_chars(self, chars: str) -> None:
+    def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
             for char in chars:
-                self.send_key(char)
+                self.send_key(char, delay)
 
     def wait_for_file(self, filename: str) -> None:
         """Waits until the file exists in machine's file system."""
@@ -860,10 +860,11 @@ class Machine:
                 if matches is not None:
                     return
 
-    def send_key(self, key: str) -> None:
+    def send_key(self, key: str, delay: Optional[float] = 0.01) -> None:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
-        time.sleep(0.01)
+        if delay is not None:
+            time.sleep(delay)
 
     def send_console(self, chars: str) -> None:
         assert self.process

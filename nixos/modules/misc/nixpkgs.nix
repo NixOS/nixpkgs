@@ -23,12 +23,12 @@ let
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "packageOverrides" ] { } rhs) pkgs;
     } //
     optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
     };
 
   configType = mkOptionType {
@@ -67,11 +67,6 @@ let
   # Context for messages
   hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
   buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
-  platformLines = optionalString hasPlatform ''
-    Your system configuration configures nixpkgs with platform parameters:
-    ${hostPlatformLine
-    }${buildPlatformLine
-    }'';
 
   legacyOptionsDefined =
     optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
@@ -307,7 +302,7 @@ in
           ''
         else
           throw ''
-            Neither ${opt.hostPlatform} nor or the legacy option ${opt.system} has been set.
+            Neither ${opt.hostPlatform} nor the legacy option ${opt.system} has been set.
             You can set ${opt.hostPlatform} in hardware-configuration.nix by re-running
             a recent version of nixos-generate-config.
             The option ${opt.system} is still fully supported for NixOS 22.05 interoperability,

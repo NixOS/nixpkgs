@@ -5,8 +5,17 @@ npmConfigHook() {
 
     echo "Configuring npm"
 
-    export HOME=$TMPDIR
+    export HOME="$TMPDIR"
     export npm_config_nodedir="@nodeSrc@"
+
+    if [ -z "${npmDeps-}" ]; then
+        echo
+        echo "ERROR: no dependencies were specified"
+        echo 'Hint: set `npmDeps` if using these hooks individually. If this is happening with `buildNpmPackage`, please open an issue.'
+        echo
+
+        exit 1
+    fi
 
     local -r cacheLockfile="$npmDeps/package-lock.json"
     local -r srcLockfile="$PWD/package-lock.json"
@@ -47,15 +56,17 @@ npmConfigHook() {
       exit 1
     fi
 
+    @prefetchNpmDeps@ --fixup-lockfile "$srcLockfile"
+
     local cachePath
 
     if [ -z "${makeCacheWritable-}" ]; then
-        cachePath=$npmDeps
+        cachePath="$npmDeps"
     else
         echo "Making cache writable"
         cp -r "$npmDeps" "$TMPDIR/cache"
         chmod -R 700 "$TMPDIR/cache"
-        cachePath=$TMPDIR/cache
+        cachePath="$TMPDIR/cache"
     fi
 
     npm config set cache "$cachePath"
@@ -71,7 +82,7 @@ npmConfigHook() {
         echo "Here are a few things you can try, depending on the error:"
         echo '1. Set `makeCacheWritable = true`'
         echo "  Note that this won't help if npm is complaining about not being able to write to the logs directory -- look above that for the actual error."
-        echo '2. Set `npmInstallFlags = [ "--legacy-peer-deps" ]`'
+        echo '2. Set `npmFlags = [ "--legacy-peer-deps" ]`'
         echo
 
         exit 1
@@ -95,6 +106,8 @@ npmConfigHook() {
     if (( lockfileVersion < 2 )); then
       rm node_modules/.meow
     fi
+
+    patchShebangs node_modules
 
     echo "Finished npmConfigHook"
 }

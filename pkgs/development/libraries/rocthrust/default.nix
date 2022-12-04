@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -8,22 +9,14 @@
 , rocm-comgr
 , rocprim
 , hip
-, gtest ? null
+, gtest
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildTests -> gtest != null;
-
-# Doesn't seem to work, thousands of errors compiling with no clear fix
-# Is this an upstream issue? We don't seem to be missing dependencies
-assert buildTests == false;
-assert buildBenchmarks == false;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  rocmVersion = "5.3.1";
-  version = "2.16.0-${rocmVersion}";
+  version = "5.3.3";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -37,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-cT0VyEVz86xR6qubAY2ncTxtCRTwXrNTWcFyf3mV+y0=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +74,21 @@ stdenv.mkDerivation rec {
   #   rmdir $out/bin
   # '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocThrust/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocthrust "$version" --ignore-same-hash
+  '';
+
   meta = with lib; {
     description = "ROCm parallel algorithm library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    # Tests/Benchmarks don't seem to work, thousands of errors compiling with no clear fix
+    # Is this an upstream issue? We don't seem to be missing dependencies
+    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
   };
-}
+})

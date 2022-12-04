@@ -23,7 +23,6 @@
 , extraGrammars ? { }
 }:
 
-# TODO: move to carnix or https://github.com/kolloch/crate2nix
 let
   # to update:
   # 1) change all these hashes

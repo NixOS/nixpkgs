@@ -590,9 +590,9 @@ in
           };
         };
         kwinrc = {
-          Windows = {
-            # Forces windows to be maximized
-            Placement = lib.mkDefault "Maximizing";
+          "Wayland" = {
+            "InputMethod[$e]" = "/run/current-system/sw/share/applications/com.github.maliit.keyboard.desktop";
+            "VirtualKeyboardEnabled" = "true";
           };
           "org.kde.kdecoration2" = {
             # No decorations (title bar)

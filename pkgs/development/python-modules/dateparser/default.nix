@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , fetchpatch
 , python-dateutil
@@ -14,50 +14,47 @@
 , parameterized
 , pytestCheckHook
 , GitPython
+, parsel
+, requests
 , ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.1";
+  version = "1.1.4";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
     rev = "v${version}";
-    sha256 = "sha256-bDup3q93Zq+pvwsy/lQy2byOMjG6C/+7813hWQMbZRU=";
+    sha256 = "sha256-r13WNI+T2NtTwjnGOqX3ZOqPhvr8fBdXGULW7IXszlo=";
   };
 
-  patches = [
-    ./regex-compat.patch
-    (fetchpatch {
-      name = "tests-31st.patch";
-      url = "https://github.com/scrapinghub/dateparser/commit/b132381b9c15e560a0be5183c7d96180119a7b4f.diff";
-      sha256 = "nQUWtfku5sxx/C45KJnfwvDXiccXGeVM+cQDKX9lxbE=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace \
-      'regex !=2019.02.19,!=2021.8.27,<2022.3.15' \
-      'regex'
-  '';
-
   propagatedBuildInputs = [
-    # install_requires
-    python-dateutil pytz regex tzlocal
-    # extra_requires
-    hijri-converter convertdate fasttext langdetect
+    python-dateutil
+    pytz
+    regex
+    tzlocal
   ];
+
+  passthru.optional-dependencies = {
+    calendars = [ hijri-converter convertdate ];
+    fasttext = [ fasttext ];
+    langdetect = [ langdetect ];
+  };
 
   checkInputs = [
     parameterized
     pytestCheckHook
     GitPython
+    parsel
+    requests
     ruamel-yaml
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME="$TEMPDIR"
@@ -75,6 +72,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dateparser" ];
 
   meta = with lib; {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.rev}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;

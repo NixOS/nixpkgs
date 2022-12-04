@@ -55,6 +55,7 @@ buildPythonPackage rec {
     "test_create_wrong_encoding"
   ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "test_delete"
+    "test_separate_consecutive_moves"
   ];
 
   disabledTestPaths = [
