@@ -195,6 +195,37 @@ let
         if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
         else if lib.isList dep then checkDependencyList' ([ index ] ++ positions) name dep
         else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
+
+      checkExecutableOnBuild = listName: dep:
+        if (lib.isDerivation dep && dep ? stdenv) then
+          if (stdenv.buildPlatform.canExecute dep.stdenv.hostPlatform)
+          then dep
+          else lib.warn "${dep.name} in ${attrs.name or attrs.pname}'s ${listName} not executable on build" dep
+        else dep;
+
+      nameToSplicedName = {
+        depsBuildBuild = "buildBuild";
+        nativeBuildInputs = "buildHost";
+        depsBuildTarget = "buildTarget";
+
+        depsHostHost = "hostHost";
+        buildInputs = "hostTarget";
+        depsTargetTarget = "targetTarget";
+
+        depsBuildBuildPropagated = "buildBuild";
+        propagatedNativeBuildInputs = "buildHost";
+        depsBuildTargetPropagated = "buildTarget";
+
+        depsHostHostPropagated = "hostHost";
+        propagatedBuildInputs = "hostTarget";
+        depsTargetTargetPropagated = "targetTarget";
+      };
+
+      checkDepListAndChooseSpliced = itemsSupposedToBeExecutable: listName: list:
+        map (dep: if itemsSupposedToBeExecutable then checkExecutableOnBuild listName dep else dep)
+          (map (drv: drv.__spliced.${nameToSplicedName.${listName}} or drv) (checkDependencyList listName list))
+      ;
+
     in
     if builtins.length erroneousHardeningFlags != 0
     then
@@ -214,34 +245,34 @@ let
 
         dependencies = map (map lib.chooseDevOutputs) [
           [
-            (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-            (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
+            (checkDepListAndChooseSpliced true "depsBuildBuild" depsBuildBuild)
+            (checkDepListAndChooseSpliced true "nativeBuildInputs" (nativeBuildInputs
               ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
               ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
               ++ lib.optionals doCheck checkInputs
               ++ lib.optionals doInstallCheck' installCheckInputs))
-            (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
+            (checkDepListAndChooseSpliced true "depsBuildTarget" depsBuildTarget)
           ]
           [
-            (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-            (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs))
+            (checkDepListAndChooseSpliced false "depsHostHost" depsHostHost)
+            (checkDepListAndChooseSpliced false "buildInputs" buildInputs)
           ]
           [
-            (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
+            (checkDepListAndChooseSpliced false "depsTargetTarget" depsTargetTarget)
           ]
         ];
         propagatedDependencies = map (map lib.chooseDevOutputs) [
           [
-            (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-            (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
-            (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
+            (checkDepListAndChooseSpliced true "depsBuildBuildPropagated" depsBuildBuildPropagated)
+            (checkDepListAndChooseSpliced true "propagatedNativeBuildInputs" propagatedNativeBuildInputs)
+            (checkDepListAndChooseSpliced true "depsBuildTargetPropagated" depsBuildTargetPropagated)
           ]
           [
-            (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-            (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+            (checkDepListAndChooseSpliced false "depsHostHostPropagated" depsHostHostPropagated)
+            (checkDepListAndChooseSpliced false "propagatedBuildInputs" propagatedBuildInputs)
           ]
           [
-            (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
+            (checkDepListAndChooseSpliced false "depsTargetTargetPropagated" depsTargetTargetPropagated)
           ]
         ];
 
