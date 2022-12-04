@@ -27977,6 +27977,8 @@ with pkgs;
 
   cozy-drive = callPackage ../applications/networking/cozy-drive {};
 
+  cplay-ng = callPackage ../applications/audio/cplay-ng { };
+
   cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
     python3Packages = python37Packages;
   };
