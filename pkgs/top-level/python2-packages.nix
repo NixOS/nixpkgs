@@ -129,8 +129,6 @@ with self; with super; {
 
   sphinx = callPackage ../development/python2-modules/sphinx { };
 
-  TurboCheetah = callPackage ../development/python2-modules/TurboCheetah { };
-
   typing = callPackage ../development/python2-modules/typing { };
 
   zeek = disabled super.zeek;
