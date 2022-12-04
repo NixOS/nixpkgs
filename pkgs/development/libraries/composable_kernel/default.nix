@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , rocm-cmake
 , hip
@@ -76,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $example/bin
     mv bin/example_* $example/bin
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";
