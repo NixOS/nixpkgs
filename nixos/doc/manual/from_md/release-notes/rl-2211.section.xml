@@ -1124,9 +1124,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <listitem>
             <para>
               Previously, the options
-              <xref linkend="opt-services.grafana.provision.datasources" />
+              <link linkend="opt-services.grafana.provision.datasources">services.grafana.provision.datasources</link>
               and
-              <xref linkend="opt-services.grafana.provision.dashboards" />
+              <link linkend="opt-services.grafana.provision.dashboards">services.grafana.provision.dashboards</link>
               expected lists of datasources or dashboards for the
               <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/">declarative
               provisioning</link>.
@@ -1139,14 +1139,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                 <para>
                   <emphasis role="strong">datasources</emphasis>, please
                   rename your declarations to
-                  <xref linkend="opt-services.grafana.provision.datasources.settings.datasources" />.
+                  <link linkend="opt-services.grafana.provision.datasources.settings.datasources">services.grafana.provision.datasources.settings.datasources</link>.
                 </para>
               </listitem>
               <listitem>
                 <para>
                   <emphasis role="strong">dashboards</emphasis>, please
                   rename your declarations to
-                  <xref linkend="opt-services.grafana.provision.dashboards.settings.providers" />.
+                  <link linkend="opt-services.grafana.provision.dashboards.settings.providers">services.grafana.provision.dashboards.settings.providers</link>.
                 </para>
               </listitem>
             </itemizedlist>
@@ -1159,9 +1159,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                   It’s possible to declare the
                   <literal>apiVersion</literal> of your dashboards and
                   datasources by
-                  <xref linkend="opt-services.grafana.provision.datasources.settings.apiVersion" />
+                  <link linkend="opt-services.grafana.provision.datasources.settings.apiVersion">services.grafana.provision.datasources.settings.apiVersion</link>
                   (or
-                  <xref linkend="opt-services.grafana.provision.dashboards.settings.apiVersion" />).
+                  <link linkend="opt-services.grafana.provision.dashboards.settings.apiVersion">services.grafana.provision.dashboards.settings.apiVersion</link>).
                 </para>
               </listitem>
               <listitem>
@@ -1169,9 +1169,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                   Instead of declaring datasources and dashboards in
                   pure Nix, it’s also possible to specify configuration
                   files (or directories) with YAML instead using
-                  <xref linkend="opt-services.grafana.provision.datasources.path" />
+                  <link linkend="opt-services.grafana.provision.datasources.path">services.grafana.provision.datasources.path</link>
                   (or
-                  <xref linkend="opt-services.grafana.provision.dashboards.path" />.
+                  <link linkend="opt-services.grafana.provision.dashboards.path">services.grafana.provision.dashboards.path</link>.
                   This is useful when having provisioning files from
                   non-NixOS Grafana instances that you also want to
                   deploy to NixOS.
@@ -1186,9 +1186,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
               </listitem>
               <listitem>
                 <para>
-                  <xref linkend="opt-services.grafana.provision.notifiers" />
+                  <link linkend="opt-services.grafana.provision.notifiers">services.grafana.provision.notifiers</link>
                   is not affected by this change because this feature is
-                  deprecated by Grafana and will probably removed in
+                  deprecated by Grafana and will probably be removed in
                   Grafana 10. It’s recommended to use
                   <literal>services.grafana.provision.alerting.contactPoints</literal>
                   instead.
