@@ -16,7 +16,7 @@ index 24e137a5b..c17ccea8a 100644
  $(TESTS):
  	@cd $(SRCDIR) && \
 -	$(call PRINT_JULIA, $(call spawn,$(JULIA_EXECUTABLE)) --check-bounds=yes --startup-file=no --depwarn=error ./runtests.jl $@)
-+	$(call PRINT_JULIA, $(call spawn,$(JULIA_EXECUTABLE)) --check-bounds=yes --startup-file=no --depwarn=error ./runtests.jl --skip LibGit2_jll --skip MozillaCACerts_jll --skip NetworkOptions --skip nghttp2_jll --skip Zlib_jll $@)
++	$(call PRINT_JULIA, $(call spawn,$(JULIA_EXECUTABLE)) --check-bounds=yes --startup-file=no --depwarn=error ./runtests.jl --skip LibGit2_jll --skip MozillaCACerts_jll --skip NetworkOptions --skip nghttp2_jll --skip Zlib_jll --skip MbedTLS_jll $@)
  
  $(addprefix revise-, $(TESTS)): revise-% :
  	@cd $(SRCDIR) && \

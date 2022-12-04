@@ -110,6 +110,7 @@ pythonPackages.buildPythonApplication rec {
   patches = [
     # Expose setup.py for later use
     ./expose-setup.py.patch
+    ./CVE-2022-4223.patch
   ];
 
   postPatch = ''
