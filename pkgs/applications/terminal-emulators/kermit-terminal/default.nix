@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kermit";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "orhun";
     repo = pname;
     rev = version;
-    hash = "sha256-O5jpiQ+aaOTPst4/Z+H5e7ylA8CNBevqNoH50p4uEA4=";
+    hash = "sha256-XPHF33Nu+H8OcQFwsuUOhDBDWKm8sh5B36sfROeSWPg=";
   };
 
   nativeBuildInputs = [
