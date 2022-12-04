@@ -14,9 +14,7 @@
 , confDir ? "/etc"
 }:
 let
-  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
-
-  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
+  boehmgc-nix = (boehmgc.override { enableLargeConfig = true; }).overrideAttrs (drv: {
     # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
     patches = (drv.patches or [ ]) ++ [ ./patches/boehmgc-coroutine-sp-fallback.patch ];
   });
@@ -120,17 +118,6 @@ let
   };
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common rec {
-    version = "2.3.16";
-    src = fetchurl {
-      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
-      hash = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
-    };
-    patches = [
-      patch-monitorfdhup
-    ];
-  }).override { boehmgc = boehmgc-nix_2_3; };
-
   nix_2_10 = common {
     version = "2.10.3";
     hash = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
@@ -217,6 +204,8 @@ in lib.makeExtensible (self: ({
 
   unstable = self.stable;
 } // lib.optionalAttrs config.allowAliases {
+  nix_2_3 = throw "nixVersions.nix_2_3 has been removed";
+
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
   nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
