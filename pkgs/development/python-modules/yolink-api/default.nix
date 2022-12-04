@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-uEW8d8b7ObwmGwVTOq25kZWaLVv4lxTl+cqZK5Kjkmo=";
   };
 
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interface with Yolink";
     homepage = "https://github.com/YoSmart-Inc/yolink-api";
+    changelog = "https://github.com/YoSmart-Inc/yolink-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
