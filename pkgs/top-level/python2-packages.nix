@@ -37,8 +37,6 @@ with self; with super; {
 
   gtkme = callPackage ../development/python2-modules/gtkme { };
 
-  httpretty = callPackage ../development/python2-modules/httpretty { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
   idna = callPackage ../development/python2-modules/idna { };
