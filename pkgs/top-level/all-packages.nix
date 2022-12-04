@@ -12057,6 +12057,8 @@ with pkgs;
 
   tayga = callPackage ../tools/networking/tayga { };
 
+  tcb = callPackage ../tools/security/tcb { };
+
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
