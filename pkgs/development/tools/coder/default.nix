@@ -11,13 +11,13 @@ buildGoModule rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tPpWj2MV2LLIOGq+RTpHpLozgqv7gBgYD3jjehRXOvk=";
+    hash = "sha256-85eH3gKn1khMiksA/kL+fHt1WiaOzVntYCiL1PR/0Cg=";
   };
 
   # integration tests require network access
   doCheck = false;
 
-  vendorHash = "sha256-3SStGCDpo+AS4PM9mbXM0EjsJ/3CVFQyb/NRK9RSZ3A=";
+  vendorHash = "sha256-tdqqGM2b8un4BFtvRJsmiIGdb1AOKP8XxcgGg2DilXA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
