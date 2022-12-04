@@ -4,12 +4,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.30";
+  version = "0.4.31";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JmvA8Z1oFOP62TpJ0g7VO5hq3YS3/DFB/BKt2o79AOE=";
+    sha256 = "sha256-nqw5wUzQxKCBzYBRhqB6v7WWrF1Ojf8z6Kf1YUA9+wU=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +29,8 @@ buildPythonApplication rec {
     cffi
     cbor
     nkdfu
+    fido2
+    tlv8
   ];
 
   # spsdk is patched to allow for newer cryptography
