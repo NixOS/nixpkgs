@@ -3,11 +3,14 @@
 , fetchFromGitHub
 , mock
 , pytestCheckHook
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "configargparse";
   version = "1.5.3";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bw2";
@@ -19,6 +22,7 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     pytestCheckHook
+    pyyaml
   ];
 
   pythonImportsCheck = [ "configargparse" ];
