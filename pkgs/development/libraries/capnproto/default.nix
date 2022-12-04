@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "0.9.1";
+  version = "0.9.2";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    sha256 = "0cbiwkmd29abih8rjjm35dfkrkr8c6axbzq3fkryay6jyvpi42c5";
+    sha256 = "sha256-BspWOPZcP5nCTvmsDE62Zutox+aY5pw42d6hpH3v4cM=";
   };
 
   nativeBuildInputs = [ cmake ]
