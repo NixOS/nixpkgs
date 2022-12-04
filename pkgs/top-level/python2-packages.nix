@@ -59,8 +59,6 @@ with self; with super; {
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
-  mutagen = callPackage ../development/python2-modules/mutagen { };
-
   numpy = callPackage ../development/python2-modules/numpy { };
 
   packaging = callPackage ../development/python2-modules/packaging { };
