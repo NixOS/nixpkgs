@@ -5105,6 +5105,8 @@ with pkgs;
 
   oci-cli = callPackage ../tools/admin/oci-cli { };
 
+  oci-seccomp-bpf-hook = callPackage ../os-specific/linux/oci-seccomp-bpf-hook { };
+
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
 
   ocrfeeder = callPackage ../applications/graphics/ocrfeeder { };
@@ -16771,10 +16773,15 @@ with pkgs;
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
-    python = pkgs.python3;
+    python = python3;
+    libbpf = libbpf_1;
+    llvmPackages = llvmPackages_14;
   };
 
-  bpftrace = callPackage ../os-specific/linux/bpftrace { };
+  bpftrace = callPackage ../os-specific/linux/bpftrace {
+    libbpf = libbpf_1;
+    llvmPackages = llvmPackages_14;
+  };
 
   bpm-tools = callPackage ../tools/audio/bpm-tools { };
 

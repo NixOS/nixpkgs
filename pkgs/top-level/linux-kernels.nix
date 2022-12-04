@@ -254,6 +254,7 @@ in {
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
     inherit (pkgs) bcc bpftrace; # added 2021-12
+    inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -420,8 +421,6 @@ in {
     ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
 
     netatop = callPackage ../os-specific/linux/netatop { };
-
-    oci-seccomp-bpf-hook = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/oci-seccomp-bpf-hook { } else null;
 
     perf = callPackage ../os-specific/linux/kernel/perf { };
 
