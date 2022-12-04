@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-jb2F1fRe+YLloYJ/KtzrptUDhmdBDBtddeW/g55owKM=";
+    hash = "sha256-XlpWT6PS+VpJjA4iG8yaiFRxE63kugNG1ZyQXoQVJL8=";
   };
 
   nativeBuildInputs = [

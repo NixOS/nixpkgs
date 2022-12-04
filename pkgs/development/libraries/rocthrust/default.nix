@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "5.3.3";
+  version = "5.4.0";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
+    hash = "sha256-3OcJUL6T1HJz6TQb1//lumsTxqfwbWbQ4lGuZoKmqbY=";
   };
 
   nativeBuildInputs = [

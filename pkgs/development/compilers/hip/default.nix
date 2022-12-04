@@ -30,13 +30,13 @@
 let
   hip = stdenv.mkDerivation (finalAttrs: {
     pname = "hip";
-    version = "5.3.3";
+    version = "5.4.0";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
       rev = "rocm-${finalAttrs.version}";
-      hash = "sha256-kmRvrwnT0h2dBMI+H9d1vmeW3TmDBD+qW4YYhaMV2dE=";
+      hash = "sha256-34SJM2n3jZWIS2uwpboWOXVFhaVWGK5ELPKD/cJc1zw=";
     };
 
     patches = [
@@ -59,9 +59,6 @@ let
             -e 's,#!/bin/bash,#!${stdenv.shell},' \
             -i "$f"
       done
-
-      substituteInPlace bin/hip_embed_pch.sh \
-        --replace '$LLVM_DIR/bin/' ""
 
       sed 's,#!/usr/bin/python,#!${python3.interpreter},' -i hip_prof_gen.py
 
@@ -110,13 +107,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-i7hT/j+V0LT6Va2XcQyyKXF1guoIyhcOHvn842wCRx4=";
+    hash = "sha256-VL0vZVv099pZPX0J2pXPFvrhkVO/b6X+ZZDaD9B1hYI=";
   };
 
   nativeBuildInputs = [ cmake python3 makeWrapper perl ];

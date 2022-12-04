@@ -52,10 +52,6 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ];
 
-  patches = [
-    ./install-symlinks.patch
-  ];
-
   postPatch = ''
     patchShebangs lib/OffloadArch/make_generated_offload_arch_h.sh
     substituteInPlace ../clang/cmake/modules/CMakeLists.txt \

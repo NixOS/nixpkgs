@@ -3,32 +3,40 @@
 , fetchFromGitHub
 , writeScript
 , cmake
-, hip
+, clang
+, git
+, libxml2
+, libedit
 , python3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-s/5gAH5vh2tgATZemPP66juQFDg8BR2sipzX2Q6pOOQ=";
+    hash = "sha256-MokE7Ej8mLHTQeLYvKr7PPlsNG6ul91fqfXDlGu5JpI=";
   };
 
   nativeBuildInputs = [
     cmake
-    hip
+    clang
   ];
 
   buildInputs = [
+    git
+    libxml2
+    libedit
     python3
   ];
 
   cmakeFlags = [
-    "-DBUILD_FAT_LIBMLIRMIOPEN=ON"
+    "-DCMAKE_C_COMPILER=clang"
+    "-DCMAKE_CXX_COMPILER=clang++"
+    "-DBUILD_FAT_LIBROCKCOMPILER=ON"
   ];
 
   passthru.updateScript = writeScript "update.sh" ''
@@ -44,6 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    broken = finalAttrs.version != clang.version;
   };
 })

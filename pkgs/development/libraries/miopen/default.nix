@@ -22,6 +22,7 @@
 , boost
 , sqlite
 , bzip2
+, nlohmann_json
 , texlive
 , doxygen
 , sphinx
@@ -57,7 +58,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopen";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -71,7 +72,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpen";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-5/JitdGJ0afzK4pGOOywRLsB3/Thc6/71sRkKIxf2Lg=";
+    hash = "sha256-EOe3LUafOeVLzRoahPdS6DMZ/+6WWeVI7jG25zfPrx8=";
   };
 
   nativeBuildInputs = [
@@ -97,6 +98,7 @@ in stdenv.mkDerivation (finalAttrs: {
     boost
     sqlite
     bzip2
+    nlohmann_json
   ] ++ lib.optionals buildDocs [
     latex
     doxygen
