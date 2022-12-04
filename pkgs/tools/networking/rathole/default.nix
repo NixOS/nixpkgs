@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rathole";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "rapiz1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mebrhBmRPN+AydxKhe2g7ehe9r9rDqt5dXO8rRUIlJg=";
+    sha256 = "sha256-YauQg+P4Y8oO8Kn6FB3NxBI7PHoo/bjS38bM1lFeCH0=";
   };
 
-  cargoSha256 = "sha256-uECM5j/xgrzPvrarDl6wxaD3Cn3Ut3aMM9OBvsc7ZqE=";
+  cargoSha256 = "sha256-OcPmHqjW79SKMET6J5HIwmR5vESh+PJcQjSMsqmnIb8=";
 
   nativeBuildInputs = [ pkg-config ];
 
