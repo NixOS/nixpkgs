@@ -63,7 +63,6 @@ let
 
     } else rec {
       python = scons.python.withPackages (ps: with ps; [
-        pyyaml
         setuptools
         typing
         cheetah3
