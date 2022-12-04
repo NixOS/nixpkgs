@@ -3,13 +3,16 @@
 , fetchurl
 , rpmextract
 }:
+
 stdenvNoCC.mkDerivation rec {
   pname = "perccli";
-  version = "7.1910.00";
+  version = "7.2110.00";
 
   src = fetchurl {
-    url = "https://dl.dell.com/FOLDER07815522M/1/PERCCLI_${version}_A12_Linux.tar.gz";
-    sha256 = "sha256-Gt/kr5schR/IzFmnhXO57gjZpOJ9NSnPX/Sj7zo8Qjk=";
+    # On pkg update: manually adjust the version in the URL because of the different format.
+    url = "https://dl.dell.com/FOLDER09074160M/1/PERCCLI_7.211.0_Linux.tar.gz";
+    sha256 = "sha256-FQasejMVm80uliXOg/riGGwcsK0fSDGh1KYz9r34wBQ=";
+
     # Dell seems to block "uncommon" user-agents, such as Nixpkgs's custom one.
     # Sending no user-agent at all seems to be fine though.
     curlOptsList = [ "--user-agent" "" ];
@@ -19,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   buildCommand = ''
     tar xf $src
-    rpmextract PERCCLI_*_Linux/perccli-*.noarch.rpm
+    rpmextract perccli-00${version}00.0000-1.noarch.rpm
     install -D ./opt/MegaRAID/perccli/perccli64 $out/bin/perccli64
     ln -s perccli64 $out/bin/perccli
 
