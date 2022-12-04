@@ -61,6 +61,7 @@ let
 
         # Keep the attributes around for later consumption
         passthru = attrs // {
+          inherit provider-source-address;
           updateScript = writeShellScript "update" ''
             provider="$(basename ${provider-source-address})"
             ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"

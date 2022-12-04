@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "1.5.9";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-UEzidH4ZWggcOWHHuAclHbbgATDBdogL99Ze0PlwRoc=";
+    sha256 = "sha256-XoGha0DyrtrGXW72Zvnk1FrvULPMYc0FvQj4JFSKxXo=";
   };
 
   nativeBuildInputs = [

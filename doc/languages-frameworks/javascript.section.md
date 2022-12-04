@@ -242,7 +242,7 @@ If the downloaded files contain the `package.json` and `yarn.lock` files they ca
 ```nix
 offlineCache = fetchYarnDeps {
   yarnLock = src + "/yarn.lock";
-  sha256 = "....";
+  hash = "....";
 };
 ```
 

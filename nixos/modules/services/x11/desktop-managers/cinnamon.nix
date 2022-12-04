@@ -74,6 +74,10 @@ in
           name = mkDefault "Mint-X-Dark";
           package = mkDefault pkgs.cinnamon.mint-x-icons;
         };
+        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+          name = mkDefault "Bibata-Modern-Classic";
+          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+        };
       };
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
