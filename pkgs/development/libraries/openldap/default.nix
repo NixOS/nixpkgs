@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
     db
     libsodium
     libtool
