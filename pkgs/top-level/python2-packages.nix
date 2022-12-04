@@ -57,11 +57,6 @@ with self; with super; {
 
   packaging = callPackage ../development/python2-modules/packaging { };
 
-  pillow = callPackage ../development/python2-modules/pillow {
-    inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
-    inherit (pkgs.xorg) libX11;
-  };
-
   pip = callPackage ../development/python2-modules/pip { };
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
