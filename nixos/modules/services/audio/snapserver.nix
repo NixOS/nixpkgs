@@ -101,9 +101,7 @@ in {
 
       openFirewall = mkOption {
         type = types.bool;
-        # Make the behavior consistent with other services. Set the default to
-        # false and remove the accompanying warning after NixOS 22.05 is released.
-        default = true;
+        default = false;
         description = lib.mdDoc ''
           Whether to automatically open the specified ports in the firewall.
         '';
