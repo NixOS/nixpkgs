@@ -115,8 +115,6 @@ with self; with super; {
 
   pyyaml = callPackage ../development/python2-modules/pyyaml { };
 
-  qpid-python = callPackage ../development/python2-modules/qpid-python { };
-
   recoll = disabled super.recoll;
 
   rivet = disabled super.rivet;
