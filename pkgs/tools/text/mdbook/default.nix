@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix
+, rustPlatform
+, CoreServices
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
@@ -7,13 +13,15 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
-    rev = "v${version}";
-    sha256 = "sha256-/oCMqskEoHhXmJ0HZQwnPrt+LU8hfWbyo9sPy8F0zAk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/oCMqskEoHhXmJ0HZQwnPrt+LU8hfWbyo9sPy8F0zAk=";
   };
 
-  cargoSha256 = "sha256-ew6UsiXHbH4exwq+VxZiw/lJmiAzbdPtOMXTISKAd1U=";
+  cargoHash = "sha256-ew6UsiXHbH4exwq+VxZiw/lJmiAzbdPtOMXTISKAd1U=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   # Tests rely on unset 'RUST_LOG' value to emit INFO messages.
   # 'RUST_LOG=' nixpkgs default enables warnings only and breaks tests.
@@ -30,7 +38,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Create books from MarkDown";
     homepage = "https://github.com/rust-lang/mdBook";
-    license = [ licenses.mpl20 ];
-    maintainers = [ maintainers.havvy ];
+    changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mpl20 ];
+    maintainers = with maintainers; [ havvy ];
   };
 }
