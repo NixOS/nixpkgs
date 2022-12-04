@@ -4,14 +4,14 @@
 let inherit (lib) getDev; in
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
+  version = "0.13.1-1";
   pname = "mydumper";
 
   src = fetchFromGitHub {
     owner  = "maxbube";
     repo   = "mydumper";
     rev    = "v${version}";
-    sha256 = "0vbz0ri5hm6yzkrcgnaj8px6bf59myr5dbhyy7fd4cv44hr685k6";
+    sha256 = "sha256-Oknivkyr3wOfjnDccEeFVt7D2l1CkeWgXahsQCtAc0I=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
