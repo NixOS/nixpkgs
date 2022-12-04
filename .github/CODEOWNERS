@@ -284,11 +284,8 @@
 # Matrix
 /pkgs/servers/heisenbridge                                 @piegamesde
 /pkgs/servers/matrix-conduit                               @piegamesde
-/pkgs/servers/matrix-synapse/matrix-appservice-irc         @piegamesde
 /nixos/modules/services/misc/heisenbridge.nix              @piegamesde
-/nixos/modules/services/misc/matrix-appservice-irc.nix     @piegamesde
 /nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
-/nixos/tests/matrix-appservice-irc.nix                     @piegamesde
 /nixos/tests/matrix-conduit.nix                            @piegamesde
 
 # Dotnet
