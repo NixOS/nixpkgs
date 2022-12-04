@@ -1,4 +1,7 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "oapi-codegen";
@@ -7,19 +10,20 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "deepmap";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-VbaGFTDfe/bm4EP3chiG4FPEna+uC4HnfGG4C7YUWHc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VbaGFTDfe/bm4EP3chiG4FPEna+uC4HnfGG4C7YUWHc=";
   };
 
-  vendorSha256 = "sha256-o9pEeM8WgGVopnfBccWZHwFR420mQAA4K/HV2RcU2wU=";
+  vendorHash = "sha256-o9pEeM8WgGVopnfBccWZHwFR420mQAA4K/HV2RcU2wU=";
 
   # Tests use network
   doCheck = false;
 
   meta = with lib; {
     description = "Go client and server OpenAPI 3 generator";
-    homepage    = "https://github.com/deepmap/oapi-codegen";
-    license     = licenses.asl20;
-    maintainers = [ maintainers.j4m3s ];
+    homepage = "https://github.com/deepmap/oapi-codegen";
+    changelog = "https://github.com/deepmap/oapi-codegen/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ j4m3s ];
   };
 }
