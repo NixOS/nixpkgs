@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyezviz";
-  version = "0.2.0.9";
+  version = "0.2.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "baqs";
     repo = "pyEzviz";
     rev = "refs/tags/${version}";
-    hash = "sha256-HdtyERk2Af+O7/ei7S1+JO6zQxNXrSX95k9707SQuwE=";
+    hash = "sha256-oi2F+OYxiQXq8JlIqbQyjpUuRciMwIaBCh27lvM7TuM=";
   };
 
   propagatedBuildInputs = [
