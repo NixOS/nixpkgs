@@ -31041,6 +31041,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  notmuch-mailmover = callPackage ../applications/networking/mailreaders/notmuch/notmuch-mailmover.nix { };
+
   notejot = callPackage ../applications/misc/notejot { };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
