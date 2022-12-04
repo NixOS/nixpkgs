@@ -44,6 +44,7 @@ with lib;
       networkmanager-sstp = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
+      zbar = super.zbar.override { enableVideo = false; withXorg = false; };
     }));
   };
 }
