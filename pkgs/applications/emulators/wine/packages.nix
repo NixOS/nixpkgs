@@ -11,6 +11,7 @@ in with src; {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
     pname = "wine";
     inherit src version supportFlags patches moltenvk;
+    stdenv = stdenv_32bit;
     pkgArches = [ pkgsi686Linux ];
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d_i686 ];
     geckos = [ gecko32 ];
