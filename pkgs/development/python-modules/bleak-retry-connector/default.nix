@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "2.8.7";
+  version = "2.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-V/MXy2Q8iUFmEqnUygIoPisq0ZY9gO31QEXLajYtDUo=";
+    hash = "sha256-U9Urxu7BdTTecONcb2d6jg9oE6fmdNMEVSayLNQiyvY=";
   };
 
   postPatch = ''
