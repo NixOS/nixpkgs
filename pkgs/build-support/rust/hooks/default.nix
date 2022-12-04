@@ -1,6 +1,7 @@
 { buildPackages
 , callPackage
 , cargo
+, cargo-nextest
 , clang
 , lib
 , makeSetupHook
@@ -54,6 +55,15 @@ in {
         inherit shortTarget;
       };
     } ./cargo-install-hook.sh) {};
+
+  cargoNextestHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-nextest-hook.sh";
+      deps = [ cargo cargo-nextest ];
+      substitutions = {
+        inherit rustTargetPlatformSpec;
+      };
+    } ./cargo-nextest-hook.sh) {};
 
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
