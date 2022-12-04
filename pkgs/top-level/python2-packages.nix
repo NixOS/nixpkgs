@@ -72,8 +72,6 @@ with self; with super; {
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  prettytable = callPackage ../development/python2-modules/prettytable { };
-
   protobuf = callPackage ../development/python2-modules/protobuf {
     disabled = isPyPy;
     protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
