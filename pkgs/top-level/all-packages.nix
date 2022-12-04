@@ -2766,6 +2766,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  asusctl = callPackage ../applications/system/asusctl { };
+
   autorevision = callPackage ../tools/misc/autorevision { };
 
   automirror = callPackage ../tools/misc/automirror { };
@@ -3329,6 +3331,8 @@ with pkgs;
   sshchecker = callPackage ../tools/security/sshchecker { };
 
   sshs = callPackage ../development/tools/sshs { };
+
+  supergfxctl = callPackage ../applications/system/supergfxctl { };
 
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 

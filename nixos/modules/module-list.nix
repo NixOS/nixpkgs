@@ -211,6 +211,7 @@
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
+  ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
@@ -450,6 +451,7 @@
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/argonone.nix
+  ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
@@ -477,6 +479,7 @@
   ./services/hardware/sane_extra_backends/brscan5.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
   ./services/hardware/spacenavd.nix
+  ./services/hardware/supergfxd.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
