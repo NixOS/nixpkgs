@@ -346,7 +346,7 @@ let
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
-    imager = [ pkgs.xlibsWrapper ];
+    imager = [ pkgs.xorg.libX11.dev ];
     iBMQ = [ pkgs.gsl ];
     igraph = with pkgs; [ gmp libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
