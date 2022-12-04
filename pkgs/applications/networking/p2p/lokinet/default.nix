@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
+    hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Anonymous, decentralized and IP based overlay network for the internet";
     homepage = "https://lokinet.org/";
+    changelog = "https://github.com/oxen-io/lokinet/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wyndon ];
   };
