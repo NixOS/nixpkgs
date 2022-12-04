@@ -10,12 +10,21 @@ At the moment we support two different methods for managing plugins:
 - Vim packages (*recommended*)
 - vim-plug (vim only)
 
+Right now two Vim packages are available: `vim` which has most features that require extra
+dependencies disabled and `vim-full` which has them configurable and enabled by default.
+
+::: {.note}
+`vim_configurable` is a deprecated alias for `vim-full` and refers to the fact that its
+build-time features are configurable. It has nothing to do with user configuration,
+and both the `vim` and `vim-full` packages can be customized as explained in the next section.
+:::
+
 ## Custom configuration {#custom-configuration}
 
 Adding custom .vimrc lines can be done using the following code:
 
 ```nix
-vim_configurable.customize {
+vim-full.customize {
   # `name` optionally specifies the name of the executable and package
   name = "vim-with-plugins";
 
@@ -62,7 +71,7 @@ neovim-qt.override {
 To store your plugins in Vim packages (the native Vim plugin manager, see `:help packages`) the following example can be used:
 
 ```nix
-vim_configurable.customize {
+vim-full.customize {
   vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
     # loaded on launch
     start = [ youcompleteme fugitive ];
@@ -101,7 +110,7 @@ The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.n
 ```nix
 {
   packageOverrides = pkgs: with pkgs; {
-    myVim = vim_configurable.customize {
+    myVim = vim-full.customize {
       # `name` specifies the name of the executable and package
       name = "vim-with-plugins";
       # add here code from the example section
@@ -190,7 +199,7 @@ To use [vim-plug](https://github.com/junegunn/vim-plug) to manage your Vim
 plugins the following example can be used:
 
 ```nix
-vim_configurable.customize {
+vim-full.customize {
   vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
     # loaded on launch
     plug.plugins = [ youcompleteme fugitive phpCompletion elm-vim ];

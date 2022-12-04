@@ -160,6 +160,17 @@
     <itemizedlist>
       <listitem>
         <para>
+          <literal>vim_configurable</literal> has been renamed to
+          <literal>vim-full</literal> to avoid confusion:
+          <literal>vim-full</literal>’s build-time features are
+          configurable, but both <literal>vim</literal> and
+          <literal>vim-full</literal> are
+          <emphasis>customizable</emphasis> (in the sense of user
+          configuration, like vimrc).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The module for the application firewall
           <literal>opensnitch</literal> got the ability to configure
           rules. Available as
