@@ -165,6 +165,7 @@
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/fzf.nix
   ./programs/gamemode.nix
   ./programs/geary.nix
   ./programs/git.nix
@@ -723,7 +724,7 @@
   ./services/monitoring/thanos.nix
   ./services/monitoring/tremor-rs.nix
   ./services/monitoring/tuptime.nix
-  ./services/monitoring/unifi-poller.nix
+  ./services/monitoring/unpoller.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vmagent.nix

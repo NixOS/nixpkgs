@@ -3646,6 +3646,15 @@
     githubId = 126339;
     name = "Domen Kozar";
   };
+  DomesticMoth = {
+    name = "Andrew";
+    email = "silkmoth@protonmail.com";
+    github = "DomesticMoth";
+    githubId = 91414737;
+    keys = [{
+      fingerprint = "7D6B AE0A A98A FDE9 3396  E721 F87E 15B8 3AA7 3087";
+    }];
+  };
   dominikh = {
     email = "dominik@honnef.co";
     github = "dominikh";
@@ -6556,6 +6565,12 @@
     github = "jglukasik";
     githubId = 6445082;
     name = "Joseph Lukasik";
+  };
+  jhh = {
+    email = "jeff@j3ff.io";
+    github = "jhh";
+    githubId = 14412;
+    name = "Jeff Hutchison";
   };
   jhhuh = {
     email = "jhhuh.note@gmail.com";
@@ -11970,6 +11985,12 @@
     githubId = 852967;
     name = "Russell O'Connor";
   };
+  rodrgz = {
+    email = "rodrgz@proton.me";
+    github = "rodrgz";
+    githubId = 53882428;
+    name = "Erik Rodriguez";
+  };
   roelvandijk = {
     email = "roel@lambdacube.nl";
     github = "roelvandijk";
@@ -14358,6 +14379,7 @@
   };
   urandom = {
     email = "colin@urandom.co.uk";
+    matrix = "@urandom0:matrix.org";
     github = "urandom2";
     githubId = 2526260;
     keys = [{
@@ -16010,5 +16032,11 @@
     email = "wuyoli@tilde.team";
     github = "wuyoli";
     githubId = 104238274;
+  };
+  ziguana = {
+    name = "Zig Uana";
+    email = "git@ziguana.dev";
+    github = "ziguana";
+    githubId = 45833444;
   };
 }
