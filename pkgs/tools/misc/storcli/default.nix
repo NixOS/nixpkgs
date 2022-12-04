@@ -4,13 +4,14 @@
 , rpmextract
 , unzip
 }:
+
 stdenvNoCC.mkDerivation rec {
   pname = "storcli";
-  version = "7.2106.00";
+  version = "7.2309.00";
 
   src = fetchurl {
-    url = "https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/00${version}00.0000_Unified_StorCLI.zip";
-    sha256 = "sha256-sRMpNXCdcysliVQwRE/1yAeU/cp+y0f2F8BPiWyotxQ=";
+    url = "https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/Unified_storcli_all_os_${version}00.0000.zip";
+    sha256 = "sha256-b98+drI83ddXMOpo6HnTDf75jr83JVIpAwEGjLesmVo=";
   };
 
   nativeBuildInputs = [ rpmextract unzip ];
