@@ -5,7 +5,7 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.7.4";
+  version = "1.8.1";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
 
@@ -13,7 +13,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-yAB0qxeC2sWCQ1EcKG/7LsuUrxV/kbxkcOzRfAotxFc=";
+    sha256 = "sha256-5wrw8LNH14WAyIKIRGFbvrISb5RUXeD5Uh/weja9p4Q=";
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
@@ -23,7 +23,7 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
-    cargoSha256 = "sha256-Ly7yIGB6kLy0c9RzWt8BFuX90dxu2QASocNTEdQA3yo=";
+    cargoSha256 = "sha256-Lpo2jaDMaZGwSrpQBvBCscVbWi2Db1Cx1Tv84v1H4Es=";
 
     nativeBuildInputs = [ makeWrapper ];
 
