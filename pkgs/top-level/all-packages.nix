@@ -10721,7 +10721,7 @@ with pkgs;
 
   pympress = callPackage ../applications/office/pympress { };
 
-  pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
+  pyocd = with python3Packages; toPythonApplication pyocd;
 
   pypass = with python3Packages; toPythonApplication pypass;
 
