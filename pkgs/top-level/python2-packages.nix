@@ -103,8 +103,6 @@ with self; with super; {
 
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
 
-  pyyaml = callPackage ../development/python2-modules/pyyaml { };
-
   recoll = disabled super.recoll;
 
   rivet = disabled super.rivet;
