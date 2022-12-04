@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
-    rev = "v${version}";
-    sha256 = "m4q2qTL55fkdi3hm75C3/XV9SUQkpJS+B5SEgpPEctk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-+Vxvo++bkoCsJFmt/u1eaqhgpz8Uddz06iIi66ju+MQ=";
   };
 
   nativeBuildInputs = [ setuptools pybind11 ];
