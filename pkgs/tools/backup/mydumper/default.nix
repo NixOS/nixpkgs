@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, glib, zlib, pcre, libmysqlclient, libressl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, glib
+, zlib
+, pcre
+, libmysqlclient
+, libressl
+}:
 
 let inherit (lib) getDev; in
 
@@ -23,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "High-perfomance MySQL backup tool";
     homepage = "https://github.com/maxbube/mydumper";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };
