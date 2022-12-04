@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils }:
+{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "nco";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       --replace "/bin/mv" "${coreutils}/bin/mv"
   '';
 
+  makeFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://nco.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
