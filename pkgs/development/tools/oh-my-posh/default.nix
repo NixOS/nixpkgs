@@ -1,25 +1,39 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "12.22.0";
+  version = "12.25.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-UIoMJjZrU9aDGnDx5K2SJO6lBgivMqGUDbtTfF3WfNE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xhSNt6ia+M4vNXOdHCVKPSM/ypb4CP4HWY9oXlsM/UM=";
   };
 
   vendorHash = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  ldflags = [ "-s" "-w" "-X" "main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
-  tags = [ "netgo" "osusergo" "static_build" ];
+  tags = [
+    "netgo"
+    "osusergo"
+    "static_build"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/oh-my-posh
@@ -33,6 +47,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A prompt theme engine for any shell";
     homepage = "https://ohmyposh.dev";
+    changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins urandom ];
   };
