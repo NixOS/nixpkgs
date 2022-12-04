@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Oral B BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
+    changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
