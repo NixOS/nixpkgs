@@ -113,12 +113,15 @@ in
         };
 
         paths = mkOption {
+          # This is nullable for legacy reasons only. We should consider making it a pure listOf
+          # after some time has passed since this comment was added.
           type = types.nullOr (types.listOf types.str);
-          default = null;
+          default = [ ];
           description = lib.mdDoc ''
-            Which paths to backup.  If null or an empty array, no
-            backup command will be run.  This can be used to create a
-            prune-only job.
+            Which paths to backup, in addition to ones specified via
+            `dynamicFilesFrom`.  If null or an empty array and
+            `dynamicFilesFrom` is also null, no backup command will be run.
+             This can be used to create a prune-only job.
           '';
           example = [
             "/var/lib/postgresql"
@@ -231,7 +234,7 @@ in
           description = lib.mdDoc ''
             A script that produces a list of files to back up.  The
             results of this command are given to the '--files-from'
-            option.
+            option. The result is merged with paths specified via `paths`.
           '';
           example = "find /home/matt/git -type d -name .git";
         };
@@ -300,10 +303,7 @@ in
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
-            backupPaths =
-              if (backup.dynamicFilesFrom == null)
-              then optionalString (backup.paths != null) (concatStringsSep " " backup.paths)
-              else "--files-from ${filesFromTmpFile}";
+            doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
               (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
@@ -335,7 +335,7 @@ in
             restartIfChanged = false;
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
+              ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
@@ -353,8 +353,11 @@ in
               ${optionalString (backup.initialize) ''
                 ${resticCmd} snapshots || ${resticCmd} init
               ''}
+              ${optionalString (backup.paths != null && backup.paths != []) ''
+                cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}
+              ''}
               ${optionalString (backup.dynamicFilesFrom != null) ''
-                ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} > ${filesFromTmpFile}
+                ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
               ''}
             '';
           } // optionalAttrs (backup.dynamicFilesFrom != null || backup.backupCleanupCommand != null) {
