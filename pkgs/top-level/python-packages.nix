@@ -8266,6 +8266,8 @@ self: super: with self; {
 
   pyobihai = callPackage ../development/python-modules/pyobihai { };
 
+  pyocd = callPackage ../development/python-modules/pyocd { };
+
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
   };
