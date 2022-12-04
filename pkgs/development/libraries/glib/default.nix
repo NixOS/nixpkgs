@@ -56,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.1";
+  version = "2.74.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "CrmBYY0dtHhF5WQXsNfBI/gaNCeyuck/Wkb/W7uWSWQ=";
+    sha256 = "6bxB7NlpDZvGqXDMc4ARm4KOW2pLFsOTxjiz3CuHy8s=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -118,14 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable flaky test.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
-
-    # Fix infinite loop (e.g. in gnome-keyring)
-    # https://github.com/NixOS/nixpkgs/pull/197754#issuecomment-1312805358
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3039
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/2a36bb4b7e46f9ac043561c61f9a790786a5440c.patch";
-      sha256 = "b77Hxt6WiLxIGqgAj9ZubzPWrWmorcUOEe/dp01BcXA=";
-    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
