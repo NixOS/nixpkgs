@@ -7,14 +7,23 @@ import ./make-test-python.nix (
     rcloneRepository = "rclone:local:/tmp/restic-rclone-backup";
 
     backupPrepareCommand = ''
-      touch /opt/backupPrepareCommand
-      test ! -e /opt/backupCleanupCommand
+      touch /tmp/backupPrepareCommand
+      test ! -e /tmp/backupCleanupCommand
     '';
 
     backupCleanupCommand = ''
-      rm /opt/backupPrepareCommand
-      touch /opt/backupCleanupCommand
+      rm /tmp/backupPrepareCommand
+      touch /tmp/backupCleanupCommand
     '';
+
+    testDir = pkgs.stdenvNoCC.mkDerivation {
+      name = "test-files-to-backup";
+      unpackPhase = "true";
+      installPhase = ''
+        mkdir $out
+        touch $out/some_file
+      '';
+    };
 
     passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
     paths = [ "/opt" ];
@@ -94,15 +103,19 @@ import ./make-test-python.nix (
       )
       server.succeed(
           # set up
-          "mkdir -p /opt",
-          "touch /opt/some_file",
+          "cp -rT ${testDir} /opt",
           "mkdir -p /tmp/restic-rclone-backup",
 
           # test that remotebackup runs custom commands and produces a snapshot
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
-          "rm /opt/backupCleanupCommand",
+          "rm /tmp/backupCleanupCommand",
           '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+
+          # test that restoring that snapshot produces the same directory
+          "mkdir /tmp/restore-1",
+          "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-1",
+          "diff -ru ${testDir} /tmp/restore-1/opt",
 
           # test that remote-from-file-backup produces a snapshot
           "systemctl start restic-backups-remote-from-file-backup.service",
@@ -120,27 +133,27 @@ import ./make-test-python.nix (
           # test that we can create four snapshots in remotebackup and rclonebackup
           "timedatectl set-time '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
-          "rm /opt/backupCleanupCommand",
+          "rm /tmp/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
           "timedatectl set-time '2018-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
-          "rm /opt/backupCleanupCommand",
+          "rm /tmp/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
           "timedatectl set-time '2018-12-14 13:45'",
           "systemctl start restic-backups-remotebackup.service",
-          "rm /opt/backupCleanupCommand",
+          "rm /tmp/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
           "timedatectl set-time '2018-12-15 13:45'",
           "systemctl start restic-backups-remotebackup.service",
-          "rm /opt/backupCleanupCommand",
+          "rm /tmp/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
           "timedatectl set-time '2018-12-16 13:45'",
           "systemctl start restic-backups-remotebackup.service",
-          "rm /opt/backupCleanupCommand",
+          "rm /tmp/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
           '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
