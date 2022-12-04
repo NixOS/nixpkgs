@@ -31,9 +31,13 @@
 , buildDocs ? true
 , buildTests ? false
 # LFS isn't working, so we will manually fetch these
-# This isn't strictly required, but is recommended
+# This isn't strictly required, but is recommended to enable
 # https://github.com/ROCmSoftwarePlatform/MIOpen/issues/1373
-, fetchKDBs ? true
+#
+# MIOpen will produce a very large output due to KDBs fetched
+# Also possibly in the future because of KDB generation
+# This is disabled by default so we can cache on hydra
+, fetchKDBs ? false
 , useOpenCL ? false
 }:
 
@@ -191,8 +195,5 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     broken = finalAttrs.version != hip.version;
-    # MIOpen will produce a very large output due to KDBs fetched
-    # Also possibly in the future because of KDB generation
-    hydraPlatforms = [ ];
   };
 })
