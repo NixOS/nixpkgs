@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "2.13.2";
+  version = "2.13.3";
 
   disabled = pythonOlder "3.7";
 
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a83Vww9dEh0nNylnZwCm6PJYmfKvw5RnMLerfKfN1dY=";
+    hash = "sha256-hx8DNFxzD41tvxcKaSqqKkxJMlcrxAaihulUdkzyOt0=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +51,13 @@ buildPythonPackage rec {
 
   preBuild = ''
     export RAPIDFUZZ_BUILD_EXTENSION=1
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
   '';
+
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
+    "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
+  ];
 
   propagatedBuildInputs = [
     jarowinkler
