@@ -74,6 +74,7 @@ in
       version = "0.7.3";
       sha256 = "sha256-WDhe2L+NalMoIy2rhfmv8KCNDMkcqBC9ezEKKocihJg=";
       cargoSha256 = "sha256-5m4c8/upBYN8nuysDhGKEnNVJjEGC+yLrraicrAQOfI=";
+      eol = true; # Confirmed with upstream maintainers over Matrix.
     };
 
     garage_0_7 = garage_0_7_3;
