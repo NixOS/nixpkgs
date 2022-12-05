@@ -49,6 +49,11 @@ in {
       })
     ];
 
+    # Remove trilium-portable.sh, so trilium knows it is packaged making it stop auto generating a desktop item on launch
+    postPatch = ''
+      rm ./trilium-portable.sh
+    '';
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
