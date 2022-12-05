@@ -79,6 +79,7 @@
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 /nixos/modules/system                                 @dasJ
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
+/nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
