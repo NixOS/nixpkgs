@@ -17631,6 +17631,8 @@ with pkgs;
 
   nailgun = callPackage ../development/tools/nailgun { };
 
+  nap = callPackage ../development/tools/nap { };
+
   nil = callPackage ../development/tools/nil { };
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
