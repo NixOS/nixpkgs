@@ -40,12 +40,13 @@ stdenv.mkDerivation rec {
     sha256 = "06pb4wjz76wlwhhzky9vkyi4aq6775k63c2kw3j9prqdipxqzf9j";
   };
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
-    patchelf
     procps
     ncurses5
-    makeWrapper
-    coreutils
   ];
 
   postPatch = ''
