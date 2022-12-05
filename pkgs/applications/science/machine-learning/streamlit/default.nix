@@ -1,21 +1,18 @@
-{
-  # Nix
-  lib
-, buildPythonApplication
-, fetchPypi
-, # Build inputs
-  altair
+{ lib
+, altair
 , blinker
-, click
+, buildPythonApplication
 , cachetools
-, GitPython
+, click
+, fetchPypi
+, gitpython
 , importlib-metadata
 , jinja2
 , pillow
+, protobuf3
 , pyarrow
 , pydeck
 , pympler
-, protobuf3
 , requests
 , rich
 , semver
@@ -25,7 +22,6 @@
 , tzlocal
 , validators
 , watchdog
-,
 }:
 
 buildPythonApplication rec {
@@ -43,7 +39,7 @@ buildPythonApplication rec {
     blinker
     cachetools
     click
-    GitPython
+    gitpython
     importlib-metadata
     jinja2
     pillow
