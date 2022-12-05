@@ -13,17 +13,19 @@ in rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-V9QbztkFj3t5yBV+yySysDy3Q6IUY4gNzBL8h23aEg4=";
 
+  auditable = true; # TODO: remove when this is the default
+
   nativeBuildInputs = [ nasm cargo-c ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   checkType = "debug";
 
   postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    $cargoCommand cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    $cargoCommand cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {
