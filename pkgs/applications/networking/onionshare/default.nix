@@ -8,6 +8,8 @@
 , flask
 , flask-httpauth
 , flask-socketio
+, gevent-socketio
+, gevent-websocket
 , cepa
 , psutil
 , pyqt5
@@ -81,6 +83,8 @@ rec {
       flask
       flask-httpauth
       flask-socketio
+      gevent-socketio
+      gevent-websocket
       cepa
       psutil
       pycrypto
