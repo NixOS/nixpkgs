@@ -6886,8 +6886,6 @@ self: super: with self; {
 
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
-  parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
-
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 
   pencompy = callPackage ../development/python-modules/pencompy { };
