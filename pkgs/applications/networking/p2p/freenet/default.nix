@@ -1,15 +1,7 @@
-{ lib, stdenv, fetchurl, jdk, bash, coreutils, substituteAll, nixosTests }:
+{ lib, stdenv, fetchurl, jdk, bash, coreutils, substituteAll, nixosTests, jna }:
 
 let
   version = "build01494";
-  jna = fetchurl {
-    url = "https://github.com/freenet/fred/releases/download/${version}/jna-4.5.2.jar";
-    sha256 = "sha256-DI63rPZyYWVteQBRkd66ujtr9d1gpDc1okVCk4Hb7P8=";
-  };
-  jna_platform = fetchurl {
-    url = "https://github.com/freenet/fred/releases/download/${version}/jna-platform-4.5.2.jar";
-    sha256 = "sha256-8dAMFn2JIcbiPGJu+fHDrgvkc8lcaP+gErx65VqH4tY=";
-  };
   freenet_ext = fetchurl {
     url = "https://github.com/freenet/fred/releases/download/${version}/freenet-ext.jar";
     sha256 = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
@@ -38,8 +30,8 @@ let
       mkdir -p $out/share/freenet
       ln -s ${bcprov} $out/share/freenet/bcprov.jar
       ln -s ${freenet_ext} $out/share/freenet/freenet-ext.jar
-      ln -s ${jna_platform} $out/share/freenet/jna_platform.jar
-      ln -s ${jna} $out/share/freenet/jna.jar
+      ln -s ${jna}/share/java/jna-platform.jar $out/share/freenet/jna_platform.jar
+      ln -s ${jna}/share/java/jna.jar $out/share/freenet/jna.jar
       ln -s $src $out/share/freenet/freenet.jar
     '';
   };
@@ -71,5 +63,6 @@ in stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
+    changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
   };
 }

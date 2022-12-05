@@ -252,7 +252,9 @@ let
     }).overrideAttrs (attrs: {
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp lib/ReSharperHost/linux-x64/Rider.Backend
+        patchelf --set-interpreter $interp \
+          lib/ReSharperHost/linux-x64/Rider.Backend \
+          plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
 
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet

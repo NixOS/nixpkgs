@@ -3,12 +3,14 @@
 , lib
 , qtbase
 , qtdeclarative
+, cups
 , substituteAll
 }:
 
 qtModule {
   pname = "qttools";
   qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ cups ];
   patches = [
     ../patches/qttools-paths.patch
   ];
