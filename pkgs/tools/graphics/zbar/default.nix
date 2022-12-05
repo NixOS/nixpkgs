@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , imagemagickBig
 , pkg-config
+, withXorg ? true
 , libX11
 , libv4l
 , qtbase
@@ -41,16 +42,18 @@ stdenv.mkDerivation rec {
     xmlto
     autoreconfHook
     docbook_xsl
-    wrapQtAppsHook
+  ] ++ lib.optionals enableVideo [
     wrapGAppsHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     imagemagickBig
-    libX11
     libintl
   ] ++ lib.optionals enableDbus [
     dbus
+  ] ++ lib.optionals withXorg [
+    libX11
   ] ++ lib.optionals enableVideo [
     libv4l
     gtk3
