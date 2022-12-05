@@ -32782,9 +32782,7 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  neovide = callPackage ../applications/editors/neovim/neovide {
-    inherit (darwin.apple_sdk.frameworks) Security ApplicationServices Carbon AppKit;
-  };
+  neovide = callPackage ../applications/editors/neovim/neovide { };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
