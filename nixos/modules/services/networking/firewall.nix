@@ -125,6 +125,11 @@ let
       # Allows this host to act as a DHCPv4 server
       iptables -t mangle -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
 
+      # Allows spoofers on the trusted interfaces
+      ${flip concatMapStrings cfg.trustedInterfaces (iface: ''
+        ip46tables -t mangle -A nixos-fw-rpfilter -i ${iface} -j RETURN
+      '')}
+
       ${optionalString cfg.logReversePathDrops ''
         ip46tables -t mangle -A nixos-fw-rpfilter -j LOG --log-level info --log-prefix "rpfilter drop: "
       ''}
