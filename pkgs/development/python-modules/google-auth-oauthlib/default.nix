@@ -34,7 +34,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
+    # requires loopback networking
     "test_run_local_server"
+    "test_get_user_credentials"
   ];
 
   pythonImportsCheck = [
