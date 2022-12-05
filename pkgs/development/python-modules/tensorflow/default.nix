@@ -168,7 +168,7 @@ let
     '';
   };
   bazel-build = if stdenv.isDarwin then _bazel-build.overrideAttrs (prev: {
-    bazelBuildFlags = prev.bazelBuildFlags ++ [
+    bazelFlags = prev.bazelFlags ++ [
       "--override_repository=rules_cc=${rules_cc_darwin_patched}"
       "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
     ];
