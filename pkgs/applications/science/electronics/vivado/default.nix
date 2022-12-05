@@ -26,14 +26,6 @@ stdenv.mkDerivation rec {
   pname = "vivado";
   version = "2017.2";
 
-  buildInputs = [
-    patchelf
-    procps
-    ncurses5
-    makeWrapper
-    coreutils
-  ];
-
   # requireFile prevents rehashing each time, which saves time during
   # rebuilds.
   src = requireFile rec {
@@ -47,6 +39,14 @@ stdenv.mkDerivation rec {
     '';
     sha256 = "06pb4wjz76wlwhhzky9vkyi4aq6775k63c2kw3j9prqdipxqzf9j";
   };
+
+  buildInputs = [
+    patchelf
+    procps
+    ncurses5
+    makeWrapper
+    coreutils
+  ];
 
   postPatch = ''
     patchShebangs xsetup
