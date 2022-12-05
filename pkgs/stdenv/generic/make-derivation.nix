@@ -200,7 +200,18 @@ let
         if (lib.isDerivation dep && dep ? stdenv) then
           if (stdenv.buildPlatform.canExecute dep.stdenv.hostPlatform)
           then dep
-          else lib.warn "${dep.name} in ${attrs.name or attrs.pname}'s ${listName} not executable on build" dep
+          else
+            # TODO(@Artturin) remove workaround
+            # if something has __spliced then it has been spliced but may not have a buildHost
+            # example: perl's cross-compilation is bad and has some hacks
+            # perl's mini output is only created when buildPlatfom != hostPlatform
+            # > pkgsCross.aarch64-multiplatform.buildPackages.perl.mini
+            # <does not exist>
+            # > pkgsCross.aarch64-multiplatform.buildPackages.__splicedPackages.perl.mini.__spliced
+            # { targetTarget = «derivation ...perl-aarch64-unknown-linux-gnu...»; }
+            if (!dep ? __spliced) then
+              lib.warn "${dep.name} in ${attrs.name or attrs.pname}'s ${listName} not executable on build" dep
+            else dep
         else dep;
 
       nameToSplicedName = {
