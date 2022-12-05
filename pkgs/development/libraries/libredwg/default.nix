@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     cp ${printVersion} build-aux/git-version-gen
   '';
 
+  preConfigure = lib.optionalString (stdenv.isDarwin && enablePython) ''
+    # prevent configure picking up stack_size from distutils.sysconfig
+    export PYTHON_EXTRA_LDFLAGS=" "
+  '';
+
   nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
     ++ lib.optional enablePython swig;
 
