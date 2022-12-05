@@ -22,8 +22,8 @@ let
       hash = "sha256-BhNAApgZ/w/92XjpoDY6ZEIhSTwgJ4D3/EfNvPmNM2o=";
     } else if llvmMajor == "11" then {
       version = "unstable-2022-05-04";
-      rev = "a31ffaeef77e23d500b3ea3d35e0c42ff5648ad9"; # 266 commits ahead of v11.0.0
-      hash = "sha256-rkYMFVfS3xG8ozs7zhiSBjIxvxEetetctE+fLS3hXoU=";
+      rev = "4ef524240833abfeee1c5b9fff6b1bd53f4806b3"; # 267 commits ahead of v11.0.0
+      hash = "sha256-NoIoa20+2sH41rEnr8lsMhtfesrtdPINiXtUnxYVm8s=";
     } else throw "Incompatible LLVM version.";
 in
 stdenv.mkDerivation {
