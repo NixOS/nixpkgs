@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschlyter";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-lBmkfB7HXB+1xLbfOl4wVtsOVfKhztoDBqzV8i6bFAg=";
   };
 
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Twinkly LEDs";
     homepage = "https://github.com/jschlyter/ttls";
+    changelog = ""https://github.com/jschlyter/ttls/blob/v${version}/CHANGES.md;
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
