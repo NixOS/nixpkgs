@@ -332,7 +332,7 @@ mkYarnPackage rec {
 
 ## Outside of nixpkgs {#javascript-outside-nixpkgs}
 
-There are some other options available that can't be used inside nixpkgs. Those other options are written in Nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](https://nixos.wiki/wiki/Import_From_Derivation) is not allowed in Hydra at present. If you are packaging something outside nixpkgs, those can be considered
+There are some other options available that can't be used inside nixpkgs. Those other options are written in Nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](#ssec-import-from-derivation) is not allowed in Hydra at present. If you are packaging something outside nixpkgs, those can be considered
 
 ### npmlock2nix {#javascript-npmlock2nix}
 
