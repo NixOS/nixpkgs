@@ -16024,4 +16024,10 @@
     github = "ziguana";
     githubId = 45833444;
   };
+  hllizi = {
+    name = "David Lahm";
+    email = "david@klinger-lahm.de";
+    github = "hllizi";
+    githubId = 35627697;
+  };
 }

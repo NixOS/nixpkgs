@@ -38152,4 +38152,6 @@ with pkgs;
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
 
   widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
+
+  ucblogo = callPackage ../development/interpreters/ucblogo { };
 }
