@@ -10,6 +10,7 @@
 , pillow
 , pkg-config
 , pygobject3
+, pythonOlder
 , SDL2
 , soundtouch
 }:
