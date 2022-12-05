@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for getting data from OVO's API";
     homepage = "https://github.com/timmo001/ovoenergy";
+    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
