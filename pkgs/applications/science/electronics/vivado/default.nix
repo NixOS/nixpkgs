@@ -83,7 +83,27 @@ stdenv.mkDerivation rec {
         [[ "''${line}" == *"Execution of Pre/Post Installation Tasks Failed"* ]] && echo "killing installer!" && ((pkill -9 -f "tps/lnx64/jre/bin/java") || true)
         echo ''${line}
     done
+  '';
 
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    ncurses5
+    zlib
+    libuuid
+    libSM
+    libICE
+    libX11
+    libXrender
+    libxcb
+    libXext
+    libXtst
+    libXi
+    glib
+    freetype
+    gtk2
+  ];
+
+  preFixup = ''
     # Patch installed files
     patchShebangs $out/opt/Vivado/$version/bin
     patchShebangs $out/opt/SDK/$version/bin
@@ -119,24 +139,6 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/Vivado/$version/bin/vivado $out/bin/vivado
     ln -s $out/opt/SDK/$version/bin/xsdk $out/bin/xsdk
   '';
-
-  libPath = lib.makeLibraryPath [
-    stdenv.cc.cc
-    ncurses5
-    zlib
-    libuuid
-    libSM
-    libICE
-    libX11
-    libXrender
-    libxcb
-    libXext
-    libXtst
-    libXi
-    glib
-    freetype
-    gtk2
-  ];
 
   meta = with lib; {
     description = "Xilinx Vivado";
