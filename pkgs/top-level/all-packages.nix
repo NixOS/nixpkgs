@@ -7535,6 +7535,8 @@ with pkgs;
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
+  eontimer = libsForQt5.callPackage ../tools/games/eontimer { };
+
   eplot = callPackage ../tools/graphics/eplot { };
 
   epstool = callPackage ../tools/graphics/epstool { };
