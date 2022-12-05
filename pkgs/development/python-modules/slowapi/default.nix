@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-3ZkQnroHMCHuTPH/cvi/iWndvdyQ/ZJQ2Qtu1CZyeGg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3ZkQnroHMCHuTPH/cvi/iWndvdyQ/ZJQ2Qtu1CZyeGg=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for API rate limiting";
     homepage = "https://github.com/laurentS/slowapi";
+    changelog = "https://github.com/laurentS/slowapi/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
