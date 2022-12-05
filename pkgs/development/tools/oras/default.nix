@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "oras";
@@ -31,6 +31,17 @@ buildGoModule rec {
     $out/bin/oras version | grep "${version}"
 
     runHook postInstallCheck
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd oras \
+      --bash <($out/bin/oras completion bash) \
+      --fish <($out/bin/oras completion fish) \
+      --zsh <($out/bin/oras completion zsh)
   '';
 
   meta = with lib; {
