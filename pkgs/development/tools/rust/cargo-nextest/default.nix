@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.44";
+  version = "0.9.45";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    sha256 = "sha256-hEBRwezymduUlPZTAHAmK5Xkc/6nGr/JDL5TDWUiZO0=";
+    sha256 = "sha256-Sb5xJCxUz60TfDMqv7Q7hTRVXvligpWkTG4FRAO/H3c=";
   };
 
-  cargoSha256 = "sha256-i7XYDy9NVOszanCGDaoPkc6z5DV8vm6TsekqBkV5eRA=";
+  cargoSha256 = "sha256-LzhrPQXr+CfzNoMWrPekDvtoPn0iqLhBV+3NO5AV0Po=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
