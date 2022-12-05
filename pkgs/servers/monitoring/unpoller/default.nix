@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -23,6 +24,8 @@ buildGoModule rec {
     "-X github.com/prometheus/common/version.Revision=${src.rev}"
     "-X github.com/prometheus/common/version.Version=${version}-0"
   ];
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) unpoller; };
 
   meta = with lib; {
     description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
