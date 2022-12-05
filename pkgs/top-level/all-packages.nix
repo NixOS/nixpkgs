@@ -14696,6 +14696,8 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  jna = callPackage ../development/java-modules/jna { };
+
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
   juniper = callPackage ../development/compilers/juniper { };
