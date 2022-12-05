@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for ACL/ACE/Security descriptor manipulation";
     homepage = "https://github.com/skelsec/winacl";
+    changelog = "https://github.com/skelsec/winacl/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
