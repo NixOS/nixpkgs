@@ -19,8 +19,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.6.0";
-    sha256 = "sha256-seVqRtdQ4ciWhsXzneS7pG1aaFtw28SPu9XDkBtr5nc=";
+    rev = "v0.7.1";
+    sha256 = "sha256-bpi4hLpov1CbFy4jr9Eytc5O4ismYw0J+KgXyZtQYks=";
   };
 
   llvmPkgs = llvmPackages_11 // {
@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.12260.1";
+  version = "1.0.12504.5";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "sha256-fNBgJGIpHC+rnKsV1Kq1ubz/4l0+ltUHaUpaWsYTgmg=";
+    sha256 = "sha256-Ok+cXMTBABrHHM4Vc2yzlou48YHoQnaB3We8mGZhSwI=";
   };
 
   nativeBuildInputs = [ cmake bison flex python3 ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace ./external/SPIRV-Tools/CMakeLists.txt \
+    substituteInPlace external/SPIRV-Tools/CMakeLists.txt \
       --replace '$'''{SPIRV-Tools_DIR}../../..' \
                 '${spirv-tools}' \
       --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
                 'set_target_properties(SPIRV-Tools-shared' \
       --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
                 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
-    substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
+    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
       --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
       --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
   '';
