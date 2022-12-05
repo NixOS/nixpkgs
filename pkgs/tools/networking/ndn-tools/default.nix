@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     "--with-tests"
   ];
 
-  doCheck = false;
+  doCheck = false; # some tests fail because of the sandbox environment
   checkPhase = ''
     runHook preCheck
-    build/unit-tests # some tests fail because of the sandbox environment
+    build/unit-tests
     runHook postCheck
   '';
 

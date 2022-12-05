@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     "--with-tests"
   ];
 
-  doCheck = false;
+  doCheck = false; # some tests fail in upstream, some fail because of the sandbox environment
   checkPhase = ''
     runHook preCheck
-    LD_PRELOAD=build/libndn-cxx.so build/unit-tests # some tests fail in upstream, some fail because of the sandbox environment
+    LD_PRELOAD=build/libndn-cxx.so build/unit-tests
     runHook postCheck
   '';
 
