@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , git
-, GitPython
+, gitpython
 , pycryptodomex
 , pytestCheckHook
 , pythonOlder
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     bitcoinlib
-    GitPython
+    gitpython
     pycryptodomex
   ];
 
