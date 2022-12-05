@@ -15074,6 +15074,8 @@ with pkgs;
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  rml = callPackage ../development/compilers/rml { };
+
   composable_kernel = callPackage ../development/libraries/composable_kernel {
     inherit (llvmPackages) openmp;
   };
