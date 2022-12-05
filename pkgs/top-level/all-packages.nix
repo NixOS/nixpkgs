@@ -21798,7 +21798,9 @@ with pkgs;
   ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix {};
   ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix {};
 
-  ogrepaged = callPackage ../development/libraries/ogrepaged { };
+  ogrepaged = callPackage ../development/libraries/ogrepaged {
+    ogre = ogre1_9;
+  };
 
   olm = callPackage ../development/libraries/olm { };
 
