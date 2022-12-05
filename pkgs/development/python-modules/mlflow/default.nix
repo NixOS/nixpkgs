@@ -9,7 +9,7 @@
 , fetchpatch
 , fetchPypi
 , flask
-, GitPython
+, gitpython
 , gorilla
 , gunicorn
 , importlib-metadata
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     docker
     entrypoints
     flask
-    GitPython
+    gitpython
     gorilla
     gunicorn
     importlib-metadata
