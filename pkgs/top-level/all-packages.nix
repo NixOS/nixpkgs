@@ -31942,6 +31942,8 @@ with pkgs;
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  sniffnet = callPackage ../applications/networking/sniffnet { };
+
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
   snixembed = callPackage ../applications/misc/snixembed { };
