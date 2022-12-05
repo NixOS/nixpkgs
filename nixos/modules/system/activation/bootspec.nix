@@ -44,8 +44,8 @@ let
               .v1.init = $init
             ''
             "--sort-keys"
-            "--arg" "toplevel" "$out"
-            "--arg" "init" "$out/init"
+            "--arg" "toplevel" "${placeholder "out"}"
+            "--arg" "init" "${placeholder "out"}/init"
           ] + " < ${json}";
 
           # We slurp all specialisations and inject them as values, such that
