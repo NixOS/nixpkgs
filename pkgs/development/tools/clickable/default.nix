@@ -6,18 +6,19 @@
 , pyyaml
 , jsonschema
 , argcomplete
+, watchdog
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clickable";
-  version = "7.4.0";
+  version = "7.7.2";
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    sha256 = "sha256-QS7vi0gUQbqqRYkZwD2B+zkt6DQ6AamQO7sihD8qWS0=";
+    sha256 = "1l67n07mb18ffryfwk21q6lfsmvij6gigyi4kp2kn5dqh1hi17bl";
   };
 
   propagatedBuildInputs = [
@@ -26,18 +27,11 @@ buildPythonPackage rec {
     pyyaml
     jsonschema
     argcomplete
+    watchdog
   ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # Test require network connection
-    "test_cpp_plugin"
-    "test_html"
-    "test_python"
-    "test_qml_only"
-    "test_rust"
-  ];
+  
+  # Disable checks due to them requiring docker or networking
+  doCheck = false;
 
   meta = {
     description = "A build system for Ubuntu Touch apps";
