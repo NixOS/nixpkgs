@@ -70,7 +70,7 @@ buildPythonApplication rec {
     dockerfile-parse
     dpath
     flake8
-    GitPython
+    gitpython
     jmespath
     jsonpath-ng
     jsonschema
