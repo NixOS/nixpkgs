@@ -41,6 +41,7 @@ with lib;
       networkmanager-openvpn = super.networkmanager-openvpn.override { withGnome = false; };
       networkmanager-sstp = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
+      pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
     }));
   };
