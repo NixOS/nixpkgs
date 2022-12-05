@@ -6,9 +6,7 @@
   ++ lib.optionals (!stdenv.isDarwin) [ "qt" ]
 }:
 
-with lib;
-
-assert isList enabledFlavors && enabledFlavors != [];
+assert lib.isList enabledFlavors && enabledFlavors != [];
 
 let
   pinentryMkDerivation =
@@ -18,11 +16,10 @@ let
 
   enableFeaturePinentry = f:
     let
-      info = flavorInfo.${f};
       flag = flavorInfo.${f}.flag or null;
     in
-      optionalString (flag != null)
-        (enableFeature (elem f enabledFlavors) ("pinentry-" + flag));
+      lib.optionalString (flag != null)
+        (lib.enableFeature (lib.elem f enabledFlavors) ("pinentry-" + flag));
 
   flavorInfo = {
     curses = { bin = "curses"; flag = "curses"; buildInputs = [ ncurses ]; };
@@ -45,17 +42,17 @@ pinentryMkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
-    ++ concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
+    ++ lib.concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
   buildInputs = [ libgpg-error libassuan libsecret ]
     ++ lib.optional (!stdenv.isDarwin) libcap
-    ++ concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
+    ++ lib.concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
   patches = [
     ./autoconf-ar.patch
-  ] ++ optionals (elem "gtk2" enabledFlavors) [
+  ] ++ lib.optionals (lib.elem "gtk2" enabledFlavors) [
     (fetchpatch {
       url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
       sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
@@ -63,23 +60,23 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
-    (withFeature   (libcap != null)    "libcap")
-    (enableFeature (libsecret != null) "libsecret")
-  ] ++ (map enableFeaturePinentry (attrNames flavorInfo));
+    (lib.withFeature   (libcap != null)    "libcap")
+    (lib.enableFeature (libsecret != null) "libsecret")
+  ] ++ (map enableFeaturePinentry (lib.attrNames flavorInfo));
 
   postInstall =
-    concatStrings (flip map enabledFlavors (f:
+    lib.concatStrings (lib.flip map enabledFlavors (f:
       let
         binary = "pinentry-" + flavorInfo.${f}.bin;
       in ''
         moveToOutput bin/${binary} ${placeholder f}
         ln -sf ${placeholder f}/bin/${binary} ${placeholder f}/bin/pinentry
-      '' + optionalString (f == "gnome3") ''
+      '' + lib.optionalString (f == "gnome3") ''
         wrapGApp ${placeholder f}/bin/${binary}
-      '' + optionalString (f == "qt") ''
+      '' + lib.optionalString (f == "qt") ''
         wrapQtApp ${placeholder f}/bin/${binary}
       '')) + ''
-      ln -sf ${placeholder (head enabledFlavors)}/bin/pinentry-${flavorInfo.${head enabledFlavors}.bin} $out/bin/pinentry
+      ln -sf ${placeholder (lib.head enabledFlavors)}/bin/pinentry-${flavorInfo.${lib.head enabledFlavors}.bin} $out/bin/pinentry
     '';
 
   outputs = [ "out" ] ++ enabledFlavors;
