@@ -822,6 +822,7 @@ mapAliases ({
 
   # Linux kernels
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
+  linux-rt_5_15 = linuxKernel.kernels.linux_rt_5_15;
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linuxPackages_4_14 = linuxKernel.packages.linux_4_14;
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
@@ -841,6 +842,7 @@ mapAliases ({
   linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi4 = linuxKernel.packages.linux_rpi4;
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
+  linuxPackages_rt_5_15 = linuxKernel.packages.linux_rt_5_15;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
   linux_4_14 = linuxKernel.kernels.linux_4_14;
   linux_4_19 = linuxKernel.kernels.linux_4_19;
