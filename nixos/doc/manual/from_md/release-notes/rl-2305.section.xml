@@ -72,6 +72,46 @@
       </listitem>
       <listitem>
         <para>
+          The
+          <link linkend="opt-services.snapserver.openFirewall">services.snapserver.openFirewall</link>
+          module option default value has been changed from
+          <literal>true</literal> to <literal>false</literal>. You will
+          need to explicitely set this option to
+          <literal>true</literal>, or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link linkend="opt-services.avahi.openFirewall">services.avahi.openFirewall</link>
+          module option default value has been changed from
+          <literal>true</literal> to <literal>false</literal>. You will
+          need to explicitely set this option to
+          <literal>true</literal>, or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link linkend="opt-services.tmate-ssh-server.openFirewall">services.tmate-ssh-server.openFirewall</link>
+          module option default value has been changed from
+          <literal>true</literal> to <literal>false</literal>. You will
+          need to explicitely set this option to
+          <literal>true</literal>, or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link linkend="opt-services.unifi-video.openFirewall">services.unifi-video.openFirewall</link>
+          module option default value has been changed from
+          <literal>true</literal> to <literal>false</literal>. You will
+          need to explicitely set this option to
+          <literal>true</literal>, or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and automatically
           mounted ext3-formatted instance store devices and partitions
           in stage-1 (initramfs), storing <literal>/tmp</literal> on the
