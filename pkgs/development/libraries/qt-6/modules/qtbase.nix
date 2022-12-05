@@ -18,7 +18,6 @@
 , ccache
 , xmlstarlet
 , libproxy
-, xlibsWrapper
 , xorg
 , zstd
 , double-conversion
@@ -129,7 +128,6 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper
     util-linux
     systemd
     mtdev
