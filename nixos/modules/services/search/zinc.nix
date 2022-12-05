@@ -6,14 +6,8 @@ let
   cfg = config.services.zinc;
 in
 {
-  ###### interface
-
   options.services.zinc = {
-    enable = mkOption {
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable ZincSearch.";
-      default = false;
-    };
+    enable = mkEnableOption (lib.mdDoc "Whether to enable ZincSearch.");
 
     package = mkOption {
       type = types.package;
@@ -46,8 +40,6 @@ in
     };
   };
 
-  ###### implementation
-
   config = mkIf cfg.enable {
     systemd.services.zinc = {
       description = "ZincSearch Daemon";
@@ -57,14 +49,17 @@ in
         ZINC_FIRST_ADMIN_USER = cfg.firstAdminUsername;
         ZINC_SERVER_PORT = toString cfg.port;
         ZINC_PROMETHEUS_ENABLE = "true";
-        GIN_MODE = "release"; # https://github.com/zinclabs/zinc/blob/16ccff60aa361421e0075e44e47142986cedebe1/pkg/config/config.go#L121
+
+        # recommended setting for production operation of the Gin web framework
+        # https://github.com/zinclabs/zinc/blob/16ccff60aa361421e0075e44e47142986cedebe1/pkg/config/config.go#L121
+        GIN_MODE = "release";
       };
 
       script = ''
         export ZINC_DATA_PATH=$STATE_DIRECTORY
         export ZINC_FIRST_ADMIN_PASSWORD="$(head -n1 ${escapeShellArg cfg.firstAdminPasswordFile})"
         if [[ $ZINC_FIRST_ADMIN_PASSWORD == "" ]]; then
-          echo "ZINC_FIRST_ADMIN_PASSWORD is unset"
+          echo "ZINC_FIRST_ADMIN_PASSWORD is unset; check that the NixOS firstAdminPasswordFile option is not blank or empty"
           exit 1
         fi
         ${cfg.package}/bin/zinc

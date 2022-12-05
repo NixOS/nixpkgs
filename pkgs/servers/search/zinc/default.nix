@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, buildGoModule }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, callPackage, nodejs-18_x }:
 
 let
-  nodeDependencies = (pkgs.callPackage ./web/default.nix {}).nodeDependencies.override (old: {
+  nodeDependencies = (callPackage ./web {}).nodeDependencies.override (old: {
     CYPRESS_INSTALL_BINARY = "0";
   });
 in
@@ -24,7 +24,7 @@ buildGoModule rec {
   web = stdenv.mkDerivation {
     pname = "${pname}-web";
     inherit src version;
-    buildInputs = [pkgs.nodejs-18_x];
+    buildInputs = [ nodejs-18_x ];
     buildPhase = ''
       cd web
       export PATH="${nodeDependencies}/bin:$PATH"
@@ -38,14 +38,14 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-akjb0cxHbITKS26c+7lVSHWO/KRoQVVKzAOra+tdAD8=";
   preBuild = ''
-    # (can't symlink; "can't embed irregular file")
+    # goembed does not support symlinks
     cp -rf ${web} web/dist
   '';
   buildPhase = ''
     runHook preBuild
     go build \
       -o zinc \
-      -ldflags="-s -w -X github.com/zinclabs/zinc/pkg/meta.Version=${version} -X github.com/zinclabs/zinc/pkg/meta.CommitHash=${src.rev} -X github.com/zinclabs/zinc/pkg/meta.BuildDate=19691231" \
+      -ldflags="-s -w -X github.com/zinclabs/zinc/pkg/meta.Version=${version} -X github.com/zinclabs/zinc/pkg/meta.CommitHash=${src.rev} -X github.com/zinclabs/zinc/pkg/meta.BuildDate=19700101" \
       cmd/zinc/main.go
     runHook postInstall
   '';
@@ -61,8 +61,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "ZincSearch - A lightweight alternative to elasticsearch that requires minimal resources";
+    homepage = "https://zincsearch.com/";
+    description = "Lightweight alternative to elasticsearch that requires minimal resources";
     license = licenses.asl20;
     maintainers = with maintainers; [ mfenniak ];
     platforms = platforms.linux;
