@@ -12,7 +12,7 @@
 , tomli
 , tomlkit
 , typing-extensions
-, GitPython
+, gitpython
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JTFGplqIA6WavwzKOkrm1rHBKNRrplBPvAdEkb/fTlI=";
+    hash = "sha256-JTFGplqIA6WavwzKOkrm1rHBKNRrplBPvAdEkb/fTlI=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    GitPython
+    gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     pytest-timeout
     pytest-xdist
