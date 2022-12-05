@@ -83,13 +83,15 @@ stdenv.mkDerivation rec {
         [[ "''${line}" == *"Execution of Pre/Post Installation Tasks Failed"* ]] && echo "killing installer!" && ((pkill -9 -f "tps/lnx64/jre/bin/java") || true)
         echo ''${line}
     done
+
     # Patch installed files
     patchShebangs $out/opt/Vivado/$version/bin
     patchShebangs $out/opt/SDK/$version/bin
-    echo "Shebangs patched"
+
     # Hack around lack of libtinfo in NixOS
     ln -s $ncurses/lib/libncursesw.so.6 $out/opt/Vivado/$version/lib/lnx64.o/libtinfo.so.5
     ln -s $ncurses/lib/libncursesw.so.6 $out/opt/SDK/$version/lib/lnx64.o/libtinfo.so.5
+
     # Patch ELFs
     for f in $out/opt/Vivado/$version/bin/unwrapped/lnx64.o/*
     do
@@ -101,15 +103,17 @@ stdenv.mkDerivation rec {
     done
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/SDK/$version/eclipse/lnx64.o/eclipse
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/SDK/$version/tps/lnx64/jre/bin/java
-    echo "ELFs patched"
+
     wrapProgram $out/opt/Vivado/$version/bin/vivado --prefix LD_LIBRARY_PATH : "$libPath"
     wrapProgram $out/opt/SDK/$version/bin/xsdk --prefix LD_LIBRARY_PATH : "$libPath"
     wrapProgram $out/opt/SDK/$version/eclipse/lnx64.o/eclipse --prefix LD_LIBRARY_PATH : "$libPath"
     wrapProgram $out/opt/SDK/$version/tps/lnx64/jre/bin/java --prefix LD_LIBRARY_PATH : "$libPath"
+
     # wrapProgram on its own will not work because of the way the Vivado script runs ./launch
     # Therefore, we need Even More Patches...
     sed -i -- 's|`basename "\$0"`|vivado|g' $out/opt/Vivado/$version/bin/.vivado-wrapped
     sed -i -- 's|`basename "\$0"`|xsdk|g' $out/opt/SDK/$version/bin/.xsdk-wrapped
+
     # Add vivado and xsdk to bin folder
     mkdir $out/bin
     ln -s $out/opt/Vivado/$version/bin/vivado $out/bin/vivado
