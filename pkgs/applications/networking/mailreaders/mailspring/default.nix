@@ -17,6 +17,7 @@
 , xorg
 , mesa
 , libdrm
+, libappindicator
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     coreutils
     openssl
     (lib.getLib udev)
+    libappindicator
   ];
 
   unpackPhase = ''
