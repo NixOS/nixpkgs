@@ -10,22 +10,17 @@ let
     then glibcCross
     else assert stdenv.hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
-  dots_in_usernames = fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch";
-    sha256 = "1fj3rg6x3jppm5jvi9y7fhd2djbi4nc5pgwisw00xlh4qapgz692";
-  };
-
 in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.11.1";
+  version = "4.13";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
-    repo = "shadow";
-    rev = "v${version}";
-    sha256 = "sha256-PxLX5V0t18JftT5wT41krNv18Ew7Kz3MfZkOi/80ODA=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-L54DhdBYthfB9436t/XWXiqKhW7rfd0GLS7pYGB32rA=";
   };
 
   buildInputs = [ libxcrypt ]
@@ -34,13 +29,17 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
 
-  patches =
-    [ ./keep-path.patch
-      # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
-      ./respect-xml-catalog-files-var.patch
-      dots_in_usernames
-      ./runtime-shell.patch
-    ];
+  patches = [
+    ./keep-path.patch
+    # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
+    ./respect-xml-catalog-files-var.patch
+    ./runtime-shell.patch
+    # Fix HAVE_SHADOWGRP configure check
+    (fetchpatch {
+      url = "https://github.com/shadow-maint/shadow/commit/a281f241b592aec636d1b93a99e764499d68c7ef.patch";
+      sha256 = "sha256-GJWg/8ggTnrbIgjI+HYa26DdVbjTHTk/IHhy7GU9G5w=";
+    })
+  ];
 
   RUNTIME_SHELL = runtimeShell;
 
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     ''sed 's/^\(s[ug]idperms\) = [0-9]755/\1 = 0755/' -i src/Makefile.am
     '';
 
-  outputs = [ "out" "su" "man" ];
+  outputs = [ "out" "su" "dev" "man" ];
 
   enableParallelBuilding = true;
 
