@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to read weather data from ZAMG Austria";
     homepage = "https://github.com/killer0071234/python-zamg";
+    changelog = "https://github.com/killer0071234/python-zamg/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
