@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3ZkQnroHMCHuTPH/cvi/iWndvdyQ/ZJQ2Qtu1CZyeGg=";
+    hash = "sha256-IAB7JW8iVb5M610GVK0POXlSiya22KzNgr26BNvPC4Q=";
   };
 
   nativeBuildInputs = [
