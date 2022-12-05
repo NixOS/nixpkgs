@@ -47,7 +47,7 @@ let
     nativeBuildInputs = [
       makeWrapper
     ];
-  
+ 
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
     installPhase = ''
@@ -65,7 +65,7 @@ let
     pname = "buildbot";
     version = "3.7.0";
     format = "setuptools";
-  
+
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
