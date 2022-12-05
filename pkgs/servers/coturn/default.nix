@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A TURN server";
     homepage = "https://coturn.net/";
-    changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog",
+    changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
     license = with licenses; [ bsd3 ];
     platforms = platforms.all;
     maintainers = with maintainers; [ ralith _0x4A6F ];
