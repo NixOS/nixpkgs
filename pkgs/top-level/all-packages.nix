@@ -1827,6 +1827,8 @@ with pkgs;
 
   gitls = callPackage ../applications/version-management/git-and-tools/gitls { };
 
+  gitmux = callPackage ../applications/version-management/git-and-tools/gitmux { };
+
   gitnuro = callPackage ../applications/version-management/git-and-tools/gitnuro { };
 
   gitsign = callPackage ../applications/version-management/git-and-tools/gitsign { };
