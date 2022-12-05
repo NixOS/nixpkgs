@@ -1,5 +1,5 @@
 { lib
-, GitPython
+, gitpython
 , buildPythonApplication
 , emoji
 , fetchFromGitHub
@@ -18,7 +18,6 @@ buildPythonApplication rec {
   pname = "terraform-compliance";
   version = "1.2.11";
 
-  # No tests in Pypi package
   src = fetchFromGitHub {
     owner = "eerkunt";
     repo = pname;
@@ -31,7 +30,9 @@ buildPythonApplication rec {
       --replace "IPython==7.16.1" "IPython"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_which_success"
@@ -39,7 +40,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    GitPython
+    gitpython
     emoji
     filetype
     ipython
