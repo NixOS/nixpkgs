@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rnix-lsp";
-  version = "0.2.5";
+  version = "unstable-2022-11-27";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "rnix-lsp";
-    rev = "v${version}";
-    sha256 = "sha256-WXpj2fgduYlF4t0QEvdfV1Eft8/nFXWF2zyEBKMUEIk=";
+    rev = "95d40673fe43642e2e1144341e86d0036abd95d9";
+    sha256 = "sha256-F0s0m62S5bHNVWNHLZD6SeHiLrsDx98VQbRjDyIu+qQ=";
   };
 
-  cargoSha256 = "sha256-LfbmOhZJVthsLm8lnzHvEt7Vy27y4w4wpPfrf/s3s84=";
+  cargoSha256 = "sha256-RKHBp+/bEH9FEPLcf1MKmTugk1A8rQU447mNm9Le3DE=";
 
   checkInputs = lib.optional (!stdenv.isDarwin) nix;
 
