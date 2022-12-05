@@ -5117,6 +5117,8 @@ with pkgs;
 
   orjail = callPackage ../tools/security/orjail { };
 
+  online-judge-template-generator = python3Packages.callPackage ../tools/misc/online-judge-template-generator { };
+
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
   onnxruntime = callPackage ../development/libraries/onnxruntime {
@@ -12057,6 +12059,8 @@ with pkgs;
 
   tayga = callPackage ../tools/networking/tayga { };
 
+  tcb = callPackage ../tools/security/tcb { };
+
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
@@ -14691,6 +14695,8 @@ with pkgs;
   java-service-wrapper = callPackage ../tools/system/java-service-wrapper {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
+
+  jna = callPackage ../development/java-modules/jna { };
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
@@ -17623,6 +17629,8 @@ with pkgs;
   };
 
   nailgun = callPackage ../development/tools/nailgun { };
+
+  nap = callPackage ../development/tools/nap { };
 
   nil = callPackage ../development/tools/nil { };
 

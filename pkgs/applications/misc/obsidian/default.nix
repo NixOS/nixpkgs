@@ -51,7 +51,8 @@ let
       runHook preInstall
       mkdir -p $out/bin
       makeWrapper ${electron_18}/bin/electron $out/bin/obsidian \
-        --add-flags $out/share/obsidian/app.asar
+        --add-flags $out/share/obsidian/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
       install -m 444 -D "${desktopItem}/share/applications/"* \

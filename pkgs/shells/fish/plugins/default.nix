@@ -1,6 +1,7 @@
 { lib, newScope }:
 
 lib.makeScope newScope (self: with self; {
+  autopair = callPackage ./autopair.nix { };
 
   autopair-fish = callPackage ./autopair-fish.nix { };
 
