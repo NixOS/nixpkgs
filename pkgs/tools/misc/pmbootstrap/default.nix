@@ -3,11 +3,11 @@
 
 buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "1.50.0";
+  version = "1.50.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UtXUq+B3EMHS3CTqfzbyQK0gHgrFwcwQ6zTzw/EwIuA=";
+    hash = "sha256-2S3I3J3wmRkVSUshyQCUTuYgHLsDMnXZQHt7KySBzIY=";
   };
 
   repo = fetchFromGitLab {
@@ -15,10 +15,13 @@ buildPythonApplication rec {
     owner = "postmarketOS";
     repo = pname;
     rev = version;
-    hash = "sha256-wuNsmc7FBk05VgH+E4uwMJeZRTlqAUe6kLvHqCLAwEY=";
+    hash = "sha256-UkgCNob4nazFO8xXyosV+11Sj4yveYBfgh7aw+/6Rlg=";
   };
 
   pmb_test = "${repo}/test";
+
+  # Tests depend on sudo
+  doCheck = stdenv.isLinux;
 
   checkInputs = [ pytestCheckHook git openssl ps sudo ];
 
@@ -93,7 +96,5 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
-    # https://github.com/NixOS/nixpkgs/pull/146576#issuecomment-974267651
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
