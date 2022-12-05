@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/python-opentimestamps";
+    changelog = "https://github.com/opentimestamps/python-opentimestamps/releases/tag/python-opentimestamps-v${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ erikarvstedt ];
   };
