@@ -7,6 +7,8 @@
 }:
 
 let
+  # copied from flake.nix
+  # tests require extra setup with nix
   custom = runCommand "custom" { } ''
     mkdir -p $out/bin
     touch $out/bin/{'foo$','foo"`'}
@@ -29,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = [ custom ];
 
+  # see comment on `custom`
   postPatch = ''
     for file in tests/fixtures/*-expected.sh; do
       substituteInPlace $file \
