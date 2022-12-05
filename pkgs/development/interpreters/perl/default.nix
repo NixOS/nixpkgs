@@ -1,4 +1,5 @@
-{ config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
+{ config, lib, stdenv, fetchurl, fetchFromGitHub, buildPackages
+, __splicedPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
 , enableCrypt ? true, libxcrypt ? null
@@ -21,7 +22,7 @@ let
   libcLib = lib.getLib libc;
   crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
 
-  common = { perl, buildPerl, version, sha256 }: stdenv.mkDerivation (rec {
+  common = { self, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
     pname = "perl";
 
@@ -145,11 +146,11 @@ let
       interpreter = "${perl}/bin/perl";
       libPrefix = "lib/perl5/site_perl";
       pkgs = callPackage ../../../top-level/perl-packages.nix {
-        inherit perl buildPerl;
+        perl = self;
         overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
       };
       buildEnv = callPackage ./wrapper.nix {
-        inherit perl;
+        perl = self;
         inherit (pkgs) requiredPerlModules;
       };
       withPackages = f: buildEnv.override { extraLibs = f pkgs; };
@@ -233,24 +234,21 @@ let
 in {
   # Maint version
   perl534 = common {
-    perl = pkgs.perl534;
-    buildPerl = buildPackages.perl534;
+    self = __splicedPackages.perl534;
     version = "5.34.1";
     sha256 = "sha256-NXlRpJGwuhzjYRJjki/ux4zNWB3dwkpEawM+JazyQqE=";
   };
 
   # Maint version
   perl536 = common {
-    perl = pkgs.perl536;
-    buildPerl = buildPackages.perl536;
+    self = __splicedPackages.perl536;
     version = "5.36.0";
     sha256 = "sha256-4mCFr4rDlvYq3YpTPDoOqMhJfYNvBok0esWr17ek4Ao=";
   };
 
   # the latest Devel version
   perldevel = common {
-    perl = pkgs.perldevel;
-    buildPerl = buildPackages.perldevel;
+    self = __splicedPackages.perldevel;
     version = "5.37.0";
     sha256 = "sha256-8RQO6gtH+WmghqzRafbqAH1MhKv/vJCcvysi7/+T9XI=";
   };
