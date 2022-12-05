@@ -6635,9 +6635,7 @@ with pkgs;
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
-  the-way = callPackage ../development/tools/the-way {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
+  the-way = callPackage ../development/tools/the-way { };
 
   timeline = callPackage ../applications/office/timeline { };
 
