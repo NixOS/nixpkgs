@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = version;
-    sha256 = "sha256-QXApGJme/uteeKS8oiVLPOYUKzxTKdSC4WMlKS0VW5Q=";
+    sha256 = "sha256-ckqPxG3ieqA0H9g1GfE8hYs6tUsZfzt6/yYR1qlgoxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
