@@ -5348,7 +5348,9 @@ with pkgs;
     rainloop-community
     rainloop-standard;
 
-  rav1e = callPackage ../tools/video/rav1e { };
+  rav1e = callPackage ../tools/video/rav1e {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   raven-reader = callPackage ../applications/networking/newsreaders/raven-reader { };
 
