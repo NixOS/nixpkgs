@@ -3,7 +3,7 @@
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
-rustPlatform.buildRustPackage rec {
+(rustPlatform.buildRustPackage rec {
   pname = "crosvm";
   version = "107.1";
 
@@ -60,4 +60,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
-}
+})
+.overrideAttrs (a:
+  lib.warnIf (a.NIX_CFLAGS_COMPILE or "" != "")
+    ''you have set `NIX_CFLAGS_COMPILE` to ${a.NIX_CFLAGS_COMPILE}
+      this may cause crosvm's build scripts to produce an empty
+      constants.json and then fail to complete the build'' {})
