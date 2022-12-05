@@ -11,7 +11,7 @@
 ,       lib
 }:
 stdenv.mkDerivation {
-  name = "ucb-logo";
+  name = "ucblogo";
   version = "6.2.2";
   src = fetchTarball {
     url = "https://github.com/jrincayc/ucblogo-code/archive/refs/tags/version_6.2.2.zip";
