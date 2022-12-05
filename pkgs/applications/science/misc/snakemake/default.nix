@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     datrie
     docutils
     filelock
-    GitPython
+    gitpython
     jinja2
     jsonschema
     nbformat
