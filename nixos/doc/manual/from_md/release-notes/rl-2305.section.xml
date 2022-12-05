@@ -121,6 +121,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.mastodon</literal> gained a tootctl wrapped
+          named <literal>mastodon-tootctl</literal> similar to
+          <literal>nextcloud-occ</literal> which can be executed from
+          any user and switches to the configured mastodon user with
+          sudo and sources the environment variables.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through

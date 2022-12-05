@@ -139,8 +139,8 @@ rec {
       '';
 
       DOCKER_BUILDTAGS = lib.optional withSystemd "journald"
-        ++ lib.optional withBtrfs "exclude_graphdriver_btrfs"
-        ++ lib.optional withLvm "exclude_graphdriver_devicemapper"
+        ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
+        ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
     });
 

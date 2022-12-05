@@ -32,7 +32,7 @@
 
 let
   pname = "vector";
-  version = "0.25.1";
+  version = "0.25.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7iYiSO966o0M9M0ijGCpuRVRgus+tURLBN9S5lPDRb8=";
+    hash = "sha256-gkhVabfAV250zofss7b/3ulb09Wk5EMGz9GSaS5eCzA=";
   };
 
-  cargoHash = "sha256-EqK6r/pFFKmnpPPUhqdC3bztYQZ+2w7u7V8Rj+9oWII=";
+  cargoHash = "sha256-zxwwXFCdcbB+Kx2SNyAIDsII6SN5+QHJQlzOUx+us2o=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];

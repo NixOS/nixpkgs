@@ -24,4 +24,5 @@ fi
 
 $(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link) "$deps_file"
 
+cd "$asf_path"
 exec "$asf_path/web-ui/update.sh"

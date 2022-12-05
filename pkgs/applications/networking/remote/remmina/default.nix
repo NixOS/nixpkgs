@@ -3,8 +3,8 @@
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, libsoup, spice-protocol, spice-gtk_libsoup2, libepoxy, at-spi2-core
-, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
+, libsecret, libsoup_3, spice-protocol, spice-gtk, libepoxy, at-spi2-core
+, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
 , withLibsecret ? true
@@ -15,13 +15,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.27";
+  version = "1.4.28";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-WIppHK4ucvKqgXB8VPy9ldbw22ZuDaEn1gNaLpyb4jA=";
+    sha256 = "sha256-w0z7teful/sdp7/f4X8eqF9Ny3bhP542V0tutQi/yXI=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -31,11 +31,10 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsoup spice-protocol
-    # https://gitlab.com/Remmina/Remmina/-/issues/2754
-    spice-gtk_libsoup2
+    libsoup_3 spice-protocol
+    spice-gtk
     libepoxy at-spi2-core
-    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
+    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk_4_1
     harfbuzz python3
   ] ++ optionals withLibsecret [ libsecret ]
     ++ optionals withVte [ vte ];

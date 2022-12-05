@@ -165,6 +165,11 @@ stdenv.mkDerivation rec {
   + lib.optionalString (!libOnly) ''
     mkdir -p $out/bin
     ln -st $out/bin $out/.bin-unwrapped/*
+
+    # Ensure that service files use the wrapped binaries.
+    find "$out" -name "*.service" | while read f; do
+        substituteInPlace "$f" --replace "$out/.bin-unwrapped/" "$out/bin/"
+    done
   '';
 
   meta = {

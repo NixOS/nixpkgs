@@ -1,16 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.35.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
-    rev = "v${version}";
-    sha256 = "sha256-rcc4Ziktoq1ZNWdCNxoNtthLzKoMYFOH/dBg2KNQVGY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MzvCMPGg2FYInyXcTh/Y7RhhxH4Z7Y3m4Hkni1hi8wI=";
   };
-  vendorSha256 = "sha256-jYBNDUUuTLQTCRWGAgjsvRN13RW97qt+5KREg7YBJnw=";
+  vendorHash = "sha256-Dl+ErHyHBf5KbHs7H6RmXT0cMIAQ6hReX4aGsoggWbo=";
 
   ldflags = [
     "-s"
@@ -18,7 +22,9 @@ buildGoModule rec {
     "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -41,6 +47,7 @@ buildGoModule rec {
     description = "Write tests against structured configuration data";
     downloadPage = "https://github.com/open-policy-agent/conftest";
     homepage = "https://www.conftest.dev";
+    changelog = "https://github.com/open-policy-agent/conftest/releases/tag/v${version}";
     license = licenses.asl20;
     longDescription = ''
       Conftest helps you write tests against structured configuration data.
