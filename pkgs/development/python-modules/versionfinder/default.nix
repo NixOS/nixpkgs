@@ -2,7 +2,7 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
-, GitPython
+, gitpython
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    GitPython
+    gitpython
     backoff
   ];
 
