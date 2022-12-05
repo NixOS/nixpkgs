@@ -29,7 +29,7 @@ buildPythonPackage rec {
     argcomplete
     watchdog
   ];
-  
+
   # Disable checks due to them requiring docker or networking
   doCheck = false;
 
