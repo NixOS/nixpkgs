@@ -47,7 +47,7 @@ let
     nativeBuildInputs = [
       makeWrapper
     ];
- 
+
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
     installPhase = ''
