@@ -2,7 +2,7 @@
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , libiconv, CoreFoundation, Security
-, auditable ? true
+, auditable ? false # TODO: change to true when this is the default
 }:
 
 rustPlatform.buildRustPackage {

@@ -35,4 +35,6 @@ let
   });
 in
 
-rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } args
+rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args // {
+  auditable = true; # TODO: remove when this is the default
+})

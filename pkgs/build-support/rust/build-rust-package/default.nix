@@ -43,7 +43,8 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
-, auditable ? true
+, auditable ? false # TODO: change to true
+
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
