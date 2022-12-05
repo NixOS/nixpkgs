@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Template Text Parser Templates collections";
     homepage = "https://github.com/dmulyalin/ttp_templates";
+    changelog = "https://github.com/dmulyalin/ttp_templates/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
