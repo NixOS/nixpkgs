@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ewels";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-eW5CR7ReVsFLJ09F4EUQbvFB+GdlnTay0bX4NNLQ0xo=";
   };
 
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to format click help output nicely with rich";
     homepage = "https://github.com/ewels/rich-click";
+    changelog = "https://github.com/ewels/rich-click/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
