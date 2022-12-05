@@ -13,7 +13,7 @@
 , langdetect
 , parameterized
 , pytestCheckHook
-, GitPython
+, gitpython
 , parsel
 , requests
 , ruamel-yaml
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   checkInputs = [
     parameterized
     pytestCheckHook
-    GitPython
+    gitpython
     parsel
     requests
     ruamel-yaml
