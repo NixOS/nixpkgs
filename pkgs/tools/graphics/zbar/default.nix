@@ -41,8 +41,9 @@ stdenv.mkDerivation rec {
     xmlto
     autoreconfHook
     docbook_xsl
-    wrapQtAppsHook
+  ] ++ lib.optionals enableVideo [
     wrapGAppsHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
