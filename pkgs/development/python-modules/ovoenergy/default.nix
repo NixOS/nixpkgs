@@ -3,12 +3,16 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
+, incremental
+, pydantic
 , pythonOlder
+, pythonRelaxDepsHook
+, typer
 }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,13 +20,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-OSK74uvpHuEtWgbLVFrz1NO7lvtHbt690smGQ+GlsOI=";
+    rev = "${version}";
+    hash = "sha256-ZbLs8w0qeaV2qWP08FKnlZ3fefj15Bw2A2bGpL6/d0I=";
   };
+
+  pythonRelaxDeps = true;
+
+
+  nativeBuildInputs = [
+    incremental
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     click
+    pydantic
+    typer
   ];
 
   # Project has no tests
