@@ -10458,6 +10458,8 @@ self: super: with self; {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  qtsass = callPackage ../development/python-modules/qtsass { };
+
   quadprog = callPackage ../development/python-modules/quadprog { };
 
   qualysclient = callPackage ../development/python-modules/qualysclient { };

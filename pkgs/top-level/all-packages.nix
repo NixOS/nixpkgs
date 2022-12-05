@@ -11927,6 +11927,8 @@ with pkgs;
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  qtsass = with python3.pkgs; toPythonApplication qtsass;
+
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
 
   quadrafuzz = callPackage ../applications/audio/quadrafuzz { };
