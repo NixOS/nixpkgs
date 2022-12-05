@@ -33,7 +33,7 @@ cargoCheckHook() {
 
     (
         set -x
-        cargo test \
+        ${cargoCommand-cargo} test \
               -j $NIX_BUILD_CORES \
               ${argstr} -- \
               --test-threads=${threads} \

@@ -11,6 +11,7 @@
 , cargoInstallHook
 , cargoNextestHook
 , cargoSetupHook
+, cargo-auditable
 , rustc
 , libiconv
 , windows
@@ -42,6 +43,7 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
+, auditable ? true
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -113,6 +115,8 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   cargoCheckFeatures = checkFeatures;
 
+  cargoCommand = if auditable then "cargo auditable" else "cargo";
+
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ [
@@ -123,6 +127,8 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     cargoInstallHook
     cargoSetupHook
     rustc
+  ] ++ lib.optionals auditable [
+    cargo-auditable
   ];
 
   buildInputs = buildInputs
