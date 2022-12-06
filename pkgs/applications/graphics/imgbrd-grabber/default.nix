@@ -1,6 +1,7 @@
 { lib, stdenv
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 , qtmultimedia
 , qttools
@@ -48,6 +49,16 @@ stdenv.mkDerivation rec {
 
   extraOutputsToLink = [ "doc" ];
 
+  patches = [
+    # fix a compilation error that was added in a recent version of TypeScript
+    # remove after updating to the next release
+    (fetchpatch {
+      url = "https://github.com/Bionus/imgbrd-grabber/commit/21a06657831fa4026a5ac7bbd879dc7ac13cb278.patch";
+      sha256 = "sha256-DAMk9Uvx7sqwTWLqb4Ghuh4JlLJloqrGnefMoVf5msQ=";
+      stripLen = 1;
+    })
+  ];
+
   postPatch = ''
     # the package.sh script provides some install helpers
     # using this might make it easier to maintain/less likely for the
@@ -69,6 +80,10 @@ stdenv.mkDerivation rec {
     ln -sf ${catch2.src} tests/src/vendor/catch
 
     sed "s|strict\": true|strict\": false|g" -i ./sites/tsconfig.json
+  '';
+
+  preBuild = ''
+    export HOME=$TMPDIR
   '';
 
   postInstall = ''
