@@ -45,7 +45,7 @@
 
 let
   version = "2.35";
-  patchSuffix = "-163";
+  patchSuffix = "-224";
   sha256 = "sha256-USNzL2tnzNMZMF79OZlx1YWSEivMKmUYob0lEN0M9S4=";
 in
 
@@ -71,9 +71,6 @@ stdenv.mkDerivation ({
           $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
        */
       ./2.35-master.patch.gz
-
-      /* Can be removed after next snapshot update or release update.  */
-      ./2.35-make-4.4.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
