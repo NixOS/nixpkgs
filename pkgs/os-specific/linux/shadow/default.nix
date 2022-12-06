@@ -1,6 +1,7 @@
 { lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
 , libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison, runtimeShell
 , libxcrypt, pam ? null, glibcCross ? null
+, withTcb ? stdenv.isLinux, tcb
 }:
 
 let
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxcrypt ]
-    ++ lib.optional (pam != null && stdenv.isLinux) pam;
+    ++ lib.optional (pam != null && stdenv.isLinux) pam
+    ++ lib.optional withTcb tcb;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
@@ -34,6 +36,7 @@ stdenv.mkDerivation rec {
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
     ./runtime-shell.patch
+    ./fix-install-with-tcb.patch
     # Fix HAVE_SHADOWGRP configure check
     (fetchpatch {
       url = "https://github.com/shadow-maint/shadow/commit/a281f241b592aec636d1b93a99e764499d68c7ef.patch";
@@ -64,7 +67,8 @@ stdenv.mkDerivation rec {
     "--with-group-name-max-length=32"
     "--with-bcrypt"
     "--with-yescrypt"
-  ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
+  ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
+    ++ lib.optional withTcb "--with-tcb";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc")
     ''
