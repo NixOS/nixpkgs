@@ -6635,9 +6635,7 @@ with pkgs;
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
-  the-way = callPackage ../development/tools/the-way {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
+  the-way = callPackage ../development/tools/the-way { };
 
   timeline = callPackage ../applications/office/timeline { };
 
@@ -14694,6 +14692,8 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  jna = callPackage ../development/java-modules/jna { };
+
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
   juniper = callPackage ../development/compilers/juniper { };
@@ -15069,6 +15069,8 @@ with pkgs;
   };
 
   rgbds = callPackage ../development/compilers/rgbds { };
+
+  rml = callPackage ../development/compilers/rml { };
 
   composable_kernel = callPackage ../development/libraries/composable_kernel {
     inherit (llvmPackages) openmp;
@@ -16459,6 +16461,8 @@ with pkgs;
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
 
+  ansible-language-server = callPackage ../development/tools/ansible-language-server { };
+
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
@@ -17626,6 +17630,8 @@ with pkgs;
   };
 
   nailgun = callPackage ../development/tools/nailgun { };
+
+  nap = callPackage ../development/tools/nap { };
 
   nil = callPackage ../development/tools/nil { };
 
@@ -22195,11 +22201,11 @@ with pkgs;
   qt6 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-6) {
       inherit newScope;
-      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
+      inherit lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
       inherit bison cups dconf harfbuzz libGL perl gtk3 ninja;
       inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
-      inherit buildPackages;
-      inherit libglvnd;
+      inherit darwin buildPackages libglvnd;
+      stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       cmake = cmake.overrideAttrs (attrs: {
         patches = attrs.patches ++ [
           ../development/libraries/qt-6/patches/cmake.patch
@@ -31936,6 +31942,8 @@ with pkgs;
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  sniffnet = callPackage ../applications/networking/sniffnet { };
+
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
   snixembed = callPackage ../applications/misc/snixembed { };
@@ -32774,9 +32782,7 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  neovide = callPackage ../applications/editors/neovim/neovide {
-    inherit (darwin.apple_sdk.frameworks) Security ApplicationServices Carbon AppKit;
-  };
+  neovide = callPackage ../applications/editors/neovim/neovide { };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
@@ -36470,7 +36476,7 @@ with pkgs;
 
   cups-kyocera-ecosys-m552x-p502x = callPackage ../misc/cups/drivers/kyocera-ecosys-m552x-p502x {};
 
-  cups-kyodialog3 = callPackage ../misc/cups/drivers/kyodialog3 {};
+  cups-kyodialog = callPackage ../misc/cups/drivers/kyodialog {};
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 

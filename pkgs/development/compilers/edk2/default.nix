@@ -34,7 +34,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202205";
+  version = "202211";
 
   patches = [
     # pass targetPrefix as an env var
@@ -50,7 +50,7 @@ edk2 = buildStdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-5V3gXZoePxRVL0miV/ku/HILT7d06E8UI28XRx8vZjA=";
+    sha256 = "sha256-0jE73xPyenAcgJ1mS35oTc5cYw7jJvVYxhPdhTWpKA0=";
   };
 
   nativeBuildInputs = [ pythonEnv ];

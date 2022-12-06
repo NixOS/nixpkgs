@@ -443,7 +443,7 @@ in {
       virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
           ${cfg.serve.virtualRoot}.extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
-          "${cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
+          "${removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
     };

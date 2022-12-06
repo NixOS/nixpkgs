@@ -33,6 +33,8 @@ with lib;
       ffmpeg_4 = super.ffmpeg_4.override { sdlSupport = false; vdpauSupport = false; };
       ffmpeg_5 = super.ffmpeg_5.override { sdlSupport = false; vdpauSupport = false; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
+      imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
       libva = super.libva-minimal;
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
@@ -42,6 +44,7 @@ with lib;
       networkmanager-sstp = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
+      zbar = super.zbar.override { enableVideo = false; withXorg = false; };
     }));
   };
 }
