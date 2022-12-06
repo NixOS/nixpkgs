@@ -44,5 +44,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bobvanderlinden ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
