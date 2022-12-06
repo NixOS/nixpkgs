@@ -13,9 +13,10 @@
 stdenv.mkDerivation {
   pname = "ucblogo";
   version = "6.2.2";
-  src = fetchTarball {
-    url = "https://github.com/jrincayc/ucblogo-code/archive/refs/tags/version_6.2.2.zip";
-    sha256 = "0vzzic9x1kclc2pn57cjwpb2q71h5pvn8cy2ancwww9l8i8qsb0p";
+  src = builtins.fetchGit {
+    rev = "0ba6ad1629f94a89f98e2bf884c1388c6ee78b6d";
+    ref = "master";
+    url = "https://github.com/jrincayc/ucblogo-code.git";
   };
   nativeBuildInputs = [
         autoreconfHook
