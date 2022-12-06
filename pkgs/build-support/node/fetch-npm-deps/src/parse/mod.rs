@@ -1,6 +1,7 @@
 use anyhow::{anyhow, bail, Context};
 use lock::UrlOrString;
 use rayon::prelude::*;
+use serde_json::{Map, Value};
 use std::{
     fs, io,
     process::{Command, Stdio},
@@ -10,17 +11,51 @@ use url::Url;
 
 mod lock;
 
-pub fn lockfile(lockfile: &str) -> anyhow::Result<Vec<Package>> {
-    let packages = lock::packages(lockfile).context("failed to extract packages from lockfile")?;
-
-    packages
+pub fn lockfile(content: &str) -> anyhow::Result<Vec<Package>> {
+    let packages = lock::packages(content)
+        .context("failed to extract packages from lockfile")?
         .into_par_iter()
         .map(|p| {
             let n = p.name.clone().unwrap();
 
             Package::from_lock(p).with_context(|| format!("failed to parse data for {n}"))
         })
-        .collect()
+        .collect::<anyhow::Result<Vec<_>>>()?;
+
+    for pkg in packages
+        .iter()
+        .filter(|p| matches!(p.specifics, Specifics::Git { .. }))
+    {
+        let dir = match &pkg.specifics {
+            Specifics::Git { workdir } => workdir,
+            Specifics::Registry { .. } => unimplemented!(),
+        };
+
+        let package_json_path = dir.path().join("package/package.json");
+        let mut package_json: Map<String, Value> =
+            serde_json::from_str(&fs::read_to_string(&package_json_path)?)?;
+
+        if let Some(scripts) = package_json
+            .get_mut("scripts")
+            .and_then(Value::as_object_mut)
+        {
+            // https://github.com/npm/pacote/blob/272edc1bac06991fc5f95d06342334bbacfbaa4b/lib/git.js#L166-L172
+            for typ in [
+                "postinstall",
+                "build",
+                "preinstall",
+                "install",
+                "prepack",
+                "prepare",
+            ] {
+                if scripts.contains_key(typ) {
+                    bail!("Git dependency {} contains install scripts, which is currently not supported by Nixpkgs' tooling. If you can't feasibly patch this dependency out, please open an issue.", pkg.name);
+                }
+            }
+        }
+    }
+
+    Ok(packages)
 }
 
 #[derive(Debug)]
