@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CryptoLyzer";
     inherit version;
-    sha256 = "sha256-FbxSjKxhzlpj3IezuLCQvoeZMG1q+OE/yn5vB/XE1rI=";
+    hash = "sha256-FbxSjKxhzlpj3IezuLCQvoeZMG1q+OE/yn5vB/XE1rI=";
   };
 
   propagatedBuildInputs = [
@@ -28,13 +28,17 @@ buildPythonPackage rec {
     requests
   ];
 
-  doCheck = false; # Tests require networking
+  # Tests require networking
+  doCheck = false;
 
-  pythonImportsCheck = [ "cryptolyzer" ];
+  pythonImportsCheck = [
+    "cryptolyzer"
+  ];
 
   meta = with lib; {
     description = "Fast and flexible cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kranzes ];
   };
