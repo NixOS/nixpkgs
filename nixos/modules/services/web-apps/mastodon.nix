@@ -546,7 +546,7 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        EnvironmentFile = "/var/lib/mastodon/.secrets_env";
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
         WorkingDirectory = cfg.package;
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
@@ -574,7 +574,7 @@ in {
         ExecStart = "${cfg.package}/run-streaming.sh";
         Restart = "always";
         RestartSec = 20;
-        EnvironmentFile = "/var/lib/mastodon/.secrets_env";
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
         WorkingDirectory = cfg.package;
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-streaming";
@@ -601,7 +601,7 @@ in {
         ExecStart = "${cfg.package}/bin/puma -C config/puma.rb";
         Restart = "always";
         RestartSec = 20;
-        EnvironmentFile = "/var/lib/mastodon/.secrets_env";
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
         WorkingDirectory = cfg.package;
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-web";
@@ -629,7 +629,7 @@ in {
         ExecStart = "${cfg.package}/bin/sidekiq -c ${toString cfg.sidekiqThreads} -r ${cfg.package}";
         Restart = "always";
         RestartSec = 20;
-        EnvironmentFile = "/var/lib/mastodon/.secrets_env";
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
         WorkingDirectory = cfg.package;
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
@@ -642,7 +642,7 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        EnvironmentFile = "/var/lib/mastodon/.secrets_env";
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
       } // cfgService;
       script = let
         olderThanDays = toString cfg.mediaAutoRemove.olderThanDays;
