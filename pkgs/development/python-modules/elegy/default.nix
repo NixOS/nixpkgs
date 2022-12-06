@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "poets-ai";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-FZmLriYhsX+zyQKCtCjbOy6MH+AvjzHRNUyaDSXGlLI=";
   };
 
@@ -73,9 +73,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    torch
     sh
     tensorflow
+    torch
   ];
 
   disabledTests = [
@@ -89,6 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neural Networks framework based on Jax inspired by Keras and Haiku";
     homepage = "https://github.com/poets-ai/elegy";
+    changelog = "https://github.com/poets-ai/elegy/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

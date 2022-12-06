@@ -103,7 +103,7 @@ in
 
     openFirewall = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = lib.mdDoc ''
         Whether to open the firewall for UDP port 5353.
       '';
