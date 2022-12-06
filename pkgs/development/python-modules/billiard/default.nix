@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "4.0.1";
+  version = "4.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c02V0S9cHb5iVmBudRte6+xm5sMDh0FdqvAbrsGryaA=";
+    hash = "sha256-jUFd+FrDG5dXlxJaxIZJL+TF5OJx07DfdWHrI0YsmwM=";
   };
 
   checkInputs = [
