@@ -40,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/epi052/feroxbuster";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
 
