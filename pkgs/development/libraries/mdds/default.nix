@@ -16,15 +16,17 @@ stdenv.mkDerivation rec {
     cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
-  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
   nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   checkInputs = [ boost ];
 
   meta = with lib; {
-    homepage = "https://gitlab.com/mdds/mdds";
     description = "A collection of multi-dimensional data structure and indexing algorithm";
-    platforms = platforms.all;
+    homepage = "https://gitlab.com/mdds/mdds";
+    maintainers = [];
     license = licenses.mit;
+    platforms = platforms.all;
   };
 }
