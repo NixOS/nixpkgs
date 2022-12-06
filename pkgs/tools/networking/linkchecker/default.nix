@@ -50,7 +50,8 @@ pypkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Check websites for broken links";
     homepage = "https://linkcheck.github.io/linkchecker/";
-    license = licenses.gpl2;
+    changelog = "https://github.com/linkchecker/linkchecker/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg tweber ];
   };
 }
