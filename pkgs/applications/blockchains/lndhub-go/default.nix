@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "lndhub-go";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
     rev = "${version}";
-    sha256 = "sha256-f/CkmO0KHupmi4XZDWRbvesLnYIxT6DlThgX3S/kdJ8=";
+    sha256 = "sha256-UGrIj/0ysU4i6PQVkuIeyGdKNCMa9LxikaIPhSKGvaQ=";
   };
 
-  vendorSha256 = "sha256-SWQudULFRMrKmxY6ZgH0NL8d6UPxowQnovhRx+209D4=";
+  vendorSha256 = "sha256-AiRbUSgMoU8nTzis/7H9HRW2/xZxXFf39JipRbukeiA=";
 
   doCheck = false; # tests require networking
 
