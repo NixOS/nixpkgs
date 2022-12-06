@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  passthru = { inherit enableEGL; };
+
   meta = with lib; {
     description = "An OpenGL extension loading library for C/C++";
     homepage = "http://glew.sourceforge.net/";

@@ -29337,6 +29337,7 @@ with pkgs;
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
+    glew = glew-egl;
   };
 
   haunt = callPackage ../applications/misc/haunt { };

@@ -34,6 +34,10 @@
 , zlib
 }:
 
+# https://www.mail-archive.com/hugin-bug-hunters@lists.launchpad.net/msg07856.html
+assert (wxGTK.passthru.withMesa or false -> glew.passthru.enableEGL)
+  || throw "When hugin is linked against an EGL-enabled wxGTK it must use an EGL-enabled glew; otherwise it will segfault on startup.";
+
 stdenv.mkDerivation rec {
   pname = "hugin";
   version = "2021.0.0";

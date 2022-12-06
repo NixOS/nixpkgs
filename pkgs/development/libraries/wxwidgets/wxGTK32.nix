@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit compat28 compat30 unicode;
+    inherit compat28 compat30 unicode withMesa;
   };
 
   meta = with lib; {
