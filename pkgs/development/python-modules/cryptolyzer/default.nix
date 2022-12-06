@@ -1,22 +1,26 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, certvalidator
 , attrs
+, buildPythonPackage
+, certvalidator
+, cryptoparser
+, fetchPypi
+, pythonOlder
+, requests
 , six
 , urllib3
-, cryptoparser
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.8.1";
+  version = "0.8.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "CryptoLyzer";
     inherit version;
-    hash = "sha256-FbxSjKxhzlpj3IezuLCQvoeZMG1q+OE/yn5vB/XE1rI=";
+    hash = "sha256-Bo8w9ijJu9IWdgr8OQws2iErzmuxUhs9YE6NAydPYgM=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Fast and flexible cryptographic protocol analyzer";
+    description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
