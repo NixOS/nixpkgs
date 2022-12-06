@@ -488,8 +488,8 @@ else let
     assert lib.assertMsg (overlappingNames == [ ])
       "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " overlappingNames}";
     lib.mapAttrs
-      (n: v: assert lib.assertMsg (lib.isString v || lib.isBool v || lib.isInt v)
-        "The ‘env’ attribute set can only contain string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+      (n: v: assert lib.assertMsg (lib.isString v || lib.isBool v || lib.isInt v || lib.isDerivation v)
+        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
       env;
 
 in

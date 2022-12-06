@@ -103,15 +103,12 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit bintools_bin libc_bin libc_dev libc_lib coreutils_bin;
-  shell = getBin shell + shell.shellPath or "";
-  gnugrep_bin = if nativeTools then "" else gnugrep;
-
-  inherit targetPrefix suffixSalt;
+  inherit bintools_bin libc_bin libc_dev libc_lib;
 
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
   passthru = {
+    inherit targetPrefix suffixSalt;
     inherit bintools libc nativeTools nativeLibc nativePrefix;
 
     emacsBufferSetup = pkgs: ''
@@ -366,10 +363,13 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
-  inherit dynamicLinker;
-
-  # for substitution in utils.bash
-  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+  env = {
+    # for substitution in utils.bash
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    shell = getBin shell + shell.shellPath or "";
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+    inherit dynamicLinker suffixSalt coreutils_bin;
+  };
 
   meta =
     let bintools_ = if bintools != null then bintools else {}; in

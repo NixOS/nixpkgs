@@ -131,16 +131,14 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
-  shell = getBin shell + shell.shellPath or "";
-  gnugrep_bin = if nativeTools then "" else gnugrep;
+  inherit cc libc_bin libc_dev libc_lib;
 
-  inherit targetPrefix suffixSalt;
   inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
+    inherit targetPrefix suffixSalt;
     # "cc" is the generic name for a C compiler, but there is no one for package
     # providing the linker and related tools. The two we use now are GNU
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
@@ -538,8 +536,13 @@ stdenv.mkDerivation {
         nixSupport);
 
 
-  # for substitution in utils.bash
-  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+  env = {
+    # for substitution in utils.bash
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    shell = getBin shell + shell.shellPath or "";
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+    inherit suffixSalt coreutils_bin bintools;
+  };
 
   meta =
     let cc_ = if cc != null then cc else {}; in
