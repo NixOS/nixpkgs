@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4qymEc2uYLi+6YDMbW6aUbe3RgOMaj6DT+6EfK3JaKk=";
+    hash = "sha256-4qymEc2uYLi+6YDMbW6aUbe3RgOMaj6DT+6EfK3JaKk=";
   };
 
   vendorSha256 = "sha256-BW3IaF8etjUklX7RpxVWQoTIXSmu+qT7xyQrPKjTbD4=";
@@ -34,6 +34,7 @@ buildGoModule rec {
       CVEs across targets that are known and easily detectable.
     '';
     homepage = "https://github.com/projectdiscovery/nuclei";
+    changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
