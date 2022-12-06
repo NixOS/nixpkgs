@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the GitHub API";
     homepage = "https://github.com/ludeeus/aiogithubapi";
+    changelog = "https://github.com/ludeeus/aiogithubapi/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
