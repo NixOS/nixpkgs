@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , git
-, GitPython
+, gitpython
 , pycryptodomex
 , pytestCheckHook
 , pythonOlder
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     bitcoinlib
-    GitPython
+    gitpython
     pycryptodomex
   ];
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/python-opentimestamps";
+    changelog = "https://github.com/opentimestamps/python-opentimestamps/releases/tag/python-opentimestamps-v${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ erikarvstedt ];
   };

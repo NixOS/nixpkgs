@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , fsspec
 , funcy
-, GitPython
+, gitpython
 , pathspec
 , pygit2
 , pygtrie
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     dulwich
     fsspec
     funcy
-    GitPython
+    gitpython
     pathspec
     pygit2
     pygtrie

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , click
 , fetchPypi
-, GitPython
+, gitpython
 , networkx
 , pydot
 , PyGithub
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     atomicwrites
     click
-    GitPython
+    gitpython
     networkx
     pydot
     PyGithub
