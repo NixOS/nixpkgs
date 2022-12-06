@@ -23615,6 +23615,11 @@ with pkgs;
   cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
+  cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
+    # Effective Cassandra 4.0.2 there is full Java 11 support
+    #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
+    jre = pkgs.jdk11_headless;
+  };
   cassandra = cassandra_3_11;
 
   cassandra-cpp-driver = callPackage ../development/libraries/cassandra-cpp-driver/default.nix { };
@@ -25693,9 +25698,7 @@ with pkgs;
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
-  go-mockery = callPackage ../development/tools/go-mockery {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  go-mockery = callPackage ../development/tools/go-mockery { };
 
   gomacro = callPackage ../development/tools/gomacro { };
 
@@ -26048,6 +26051,8 @@ with pkgs;
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   twa = callPackage ../tools/networking/twa { };
+
+  twingate = callPackage ../applications/networking/twingate { };
 
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
@@ -33423,6 +33428,8 @@ with pkgs;
   yarp = callPackage ../applications/science/robotics/yarp {};
 
   yate = callPackage ../applications/misc/yate { };
+
+  yaup = callPackage ../applications/networking/yaup { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
