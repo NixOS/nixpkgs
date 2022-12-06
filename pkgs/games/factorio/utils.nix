@@ -18,9 +18,9 @@ with lib;
           # NB: there will only ever be a single zip file in each mod derivation's output dir
           ln -s $modDrv/*.zip $out
         done
-      '' + (if modsDatFile != null then ''
+      '' + (lib.optionalString (modsDatFile != null) ''
        cp ${modsDatFile} $out/mod-settings.dat
-      '' else "");
+      '');
     };
 
     modDrv = { allRecommendedMods, allOptionalMods }:

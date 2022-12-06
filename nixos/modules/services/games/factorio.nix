@@ -140,7 +140,9 @@ in
         type = types.nullOr types.path;
         default = null;
         description = lib.mdDoc ''
-        Mods settings can be changed by specifying a dat file.
+          Mods settings can be changed by specifying a dat file, in the [mod
+          settings file
+          format](https://wiki.factorio.com/Mod_settings_file_format).
         '';
       };
       game-name = mkOption {
