@@ -11,7 +11,6 @@ in fetchzip rec {
   sha256 = "sha256-hG6m/zsGoGF5/xhHz9EHVL9Sg9dlQqfXpQ/lqNyI1vU=";
 
   postFetch = ''
-    rm -rf $out/otf
     mkdir -p $out/share/fonts/truetype
     mv $out/*.ttf $out/share/fonts/truetype/
     mkdir -p $out/share/doc/${name}
