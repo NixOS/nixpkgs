@@ -29669,6 +29669,8 @@ with pkgs;
     ghostscriptSupport = true;
   });
 
+  imaginary = callPackage ../servers/imaginary { };
+
   imagination = callPackage ../applications/video/imagination { };
 
   inherit (nodePackages) imapnotify;
