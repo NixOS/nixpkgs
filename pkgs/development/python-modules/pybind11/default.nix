@@ -11,9 +11,18 @@
 , numpy
 , pytestCheckHook
 , libxcrypt
-}:
-
-buildPythonPackage rec {
+, makeSetupHook
+}: let
+  setupHook = makeSetupHook {
+    name = "pybind11-setup-hook";
+    substitutions = {
+      out = placeholder "out";
+      pythonInterpreter = python.pythonForBuild.interpreter;
+      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+      pythonSitePackages = "${python}/${python.sitePackages}";
+    };
+  } ./setup-hook.sh;
+in buildPythonPackage rec {
   pname = "pybind11";
   version = "2.10.4";
 
@@ -30,6 +39,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  propagatedBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;
 
@@ -43,7 +53,6 @@ buildPythonPackage rec {
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
