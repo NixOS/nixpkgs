@@ -1430,7 +1430,7 @@ self: super: with self; {
 
   btrfs = callPackage ../development/python-modules/btrfs { };
 
-  btrfsutil = toPythonModule (pkgs.btrfs-progs.override { python3 = self.python; });
+  btrfsutil = callPackage ../development/python-modules/btrfsutil { };
 
   btsocket = callPackage ../development/python-modules/btsocket { };
 
