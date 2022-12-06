@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.1.0";
   format = "setuptools";
 
-  disabled = python3.pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "EMPRI-DEVOPS";
     repo = pname;
@@ -21,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     click
     git-filter-repo
-    GitPython
+    gitpython
     pynacl
     setuptools
   ];

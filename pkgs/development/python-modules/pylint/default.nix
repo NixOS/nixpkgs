@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , installShellFiles
 , astroid
@@ -9,10 +10,12 @@
 , isort
 , mccabe
 , platformdirs
+, requests
+, setuptools
 , tomli
 , tomlkit
 , typing-extensions
-, GitPython
+, gitpython
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
@@ -20,8 +23,8 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.14.5";
-  format = "setuptools";
+  version = "2.15.5";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7.2";
 
@@ -29,11 +32,25 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JTFGplqIA6WavwzKOkrm1rHBKNRrplBPvAdEkb/fTlI=";
+    hash = "sha256-dchzwMaUhHB1TqcaMZO9tCZ4KA5I1T+tdkGOxikm5AY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-dummy-plugin-tests.patch";
+      url = "https://github.com/PyCQA/pylint/commit/e75089bae209d1b9ca72903c0d65530b02f67fdf.patch";
+      hash = "sha256-4ErlCMLTI5xIu1dCvcJsvo03dwcgLLbFFQ5M7DFdL3o=";
+    })
+    (fetchpatch {
+      name = "fix-pythonpath-tests.patch";
+      url = "https://github.com/PyCQA/pylint/commit/6725f761f2ac7a853e315790b496a2eb4d926694.patch";
+      hash = "sha256-Xaeub7uUaC07BBuusA6+neGiXFWWfVNBkGXmYJe7ot4=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -56,11 +73,12 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    GitPython
+    gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     pytest-timeout
     pytest-xdist
     pytestCheckHook
+    requests
     typing-extensions
   ];
 

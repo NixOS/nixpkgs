@@ -135,10 +135,6 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "12"; };
   });
 
-  deltachat-desktop = prev."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
-  });
-
   eask = prev."@emacs-eask/cli".override {
     name = "eask";
   };

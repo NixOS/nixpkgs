@@ -89,6 +89,7 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
+      patchShebangs $python/bin
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin

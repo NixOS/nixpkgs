@@ -66,14 +66,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    (gi-docgen.overrideAttrs (attrs: {
-      patches = attrs.patches ++ [
-        (fetchpatch {
-          url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/f4ff4787cce962b705fb2588b31f2988c5063c13.patch";
-          sha256 = "11VGFFb2PLVxnX/qUQdLPLfhGQWx4sf4apBP7R2JWjA=";
-        })
-      ];
-    }))
+    gi-docgen
     gobject-introspection
     meson
     ninja

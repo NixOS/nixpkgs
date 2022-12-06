@@ -1,12 +1,12 @@
 { lib
+, stdenv
 , pkgsBuildHost
-, system
 , ...
 }:
 
 let
   pkgs = import ../../../.. {
-    inherit system;
+    inherit (stdenv.hostPlatform) system;
     # Allow python27 with known security issues only for resholve,
     # see issue #201859 for the reasoning
     # In resholve case this should not be a security issue,

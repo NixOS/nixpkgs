@@ -7,16 +7,13 @@
 
 openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
-  version = "17.0.3-b469.37";
+  version = "17.0.5-b653.14";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash =
-     # Upstream issue: https://github.com/JetBrains/JetBrainsRuntime/issues/163
-     if stdenv.isDarwin then "sha256-ExRvjs53rIuhUx4oCgAqu1Av3CNAgmE1ZlN0srEh3XM="
-     else "sha256-O+OIDRJcIsb/vhO2+SYuYdUYWYTGkBcQ9cHTExLIFDE=";
+    hash = "sha256-7Nx7Y12oMfs4zeQMSfnUaDCW1xJYMEkcoTapSpmVCfU=";
   };
 
   meta = with lib; {

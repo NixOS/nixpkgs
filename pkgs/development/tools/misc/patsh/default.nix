@@ -1,30 +1,44 @@
 { lib
+, runCommand
 , rustPlatform
 , fetchFromGitHub
 , stdenv
-, runCommand
-, tree-sitter
+, coreutils
 }:
+
+let
+  # copied from flake.nix
+  # tests require extra setup with nix
+  custom = runCommand "custom" { } ''
+    mkdir -p $out/bin
+    touch $out/bin/{'foo$','foo"`'}
+    chmod +x $out/bin/{'foo$','foo"`'}
+  '';
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "patsh";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KmQVZwZC7KHlzNnL2IKQ76wHUDNUZKz/aFaY4ujvBo4=";
+    sha256 = "sha256-7HXJspebluQeejKYmVA7sy/F3dtU1gc4eAbKiPexMMA=";
   };
 
-  cargoSha256 = "sha256-vozQKBxAVELdqTnqBpgHX0Wyk18EZAtpiRsKjwz8xKE=";
+  cargoSha256 = "sha256-R6ScpLYbEJAu7+CyJsMdljtXq7wsMojHK5O1lH+E/E8=";
 
-  # tests fail on darwin due to rpath issues
-  doCheck = !stdenv.isDarwin;
+  checkInputs = [ custom ];
 
-  TREE_SITTER_BASH = runCommand "tree-sitter-bash" { } ''
-    mkdir $out
-    ln -s ${tree-sitter.builtGrammars.tree-sitter-bash}/parser $out/libtree-sitter-bash.a
+  # see comment on `custom`
+  postPatch = ''
+    for file in tests/fixtures/*-expected.sh; do
+      substituteInPlace $file \
+        --subst-var-by cc ${stdenv.cc} \
+        --subst-var-by coreutils ${coreutils} \
+        --subst-var-by custom ${custom}
+    done
   '';
 
   meta = with lib; {

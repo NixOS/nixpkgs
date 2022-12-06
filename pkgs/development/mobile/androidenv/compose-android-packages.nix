@@ -312,6 +312,12 @@ rec {
           ln -s $i $out/bin
       done
 
+      # the emulator auto-linked from platform-tools does not find its local qemu, while this one does
+      ${lib.optionalString includeEmulator ''
+        rm $out/bin/emulator
+        ln -s $out/libexec/android-sdk/emulator/emulator $out/bin
+      ''}
+
       # Write licenses
       mkdir -p licenses
       ${lib.concatMapStrings (licenseName:

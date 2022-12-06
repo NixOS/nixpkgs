@@ -1,44 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, git
-, gitdb
 , ddt
+, fetchFromGitHub
+, gitdb
+, pkgs
 , pythonOlder
+, substituteAll
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "gitpython";
-  version = "3.1.27";
+  version = "3.1.29";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
     rev = version;
-    sha256 = "sha256-RA+6JFXHUQoXGErV8+aYuJPsfXzNSZK3kTm6eMbQIss=";
+    hash = "sha256-RNDBoGWnkirPZjxn5oqH3zwYqVFLedNrSRpZOHU0j+w=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./hardcode-git-path.patch;
-      inherit git;
-    })
-  ];
-
   propagatedBuildInputs = [
-    gitdb
     ddt
+    gitdb
+    pkgs.gitMinimal
   ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 
+  postPatch = ''
+    substituteInPlace git/cmd.py \
+      --replace 'git_exec_name = "git"' 'git_exec_name = "${pkgs.gitMinimal}/bin/git"'
+  '';
+
   # Tests require a git repo
   doCheck = false;
 
-  pythonImportsCheck = [ "git" ];
+  pythonImportsCheck = [
+    "git"
+  ];
 
   meta = with lib; {
     description = "Python Git Library";

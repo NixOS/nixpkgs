@@ -8,7 +8,7 @@
 , fetchFromGitHub
 , flask
 , git
-, GitPython
+, gitpython
 , jsonref
 , jsonschema
 , matplotlib
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     docker_pycreds
-    GitPython
+    gitpython
     pathtools
     promise
     protobuf
