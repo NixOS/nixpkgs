@@ -33,11 +33,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # requires loopback networking
-    "test_run_local_server"
-    "test_get_user_credentials"
-  ];
+  # some tests require loopback networking
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "google_auth_oauthlib"
