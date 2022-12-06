@@ -55,8 +55,7 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [ perl ]
-    ++ optional (lib.versionAtLeast version "4.14") libelf
+  moduleBuildDependencies = [ perl libelf ]
     ++ optional (lib.versionAtLeast version "5.13") zstd;
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
@@ -100,7 +99,7 @@ let
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (lib.versionAtLeast version "4.13" && lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
         ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
         # Fixes determinism by normalizing metadata for the archive of kheaders
         ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
@@ -353,7 +352,7 @@ let
     };
 in
 
-assert (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") -> libelf != null;
+assert lib.versionOlder version "5.8" -> libelf != null;
 assert lib.versionAtLeast version "5.8" -> elfutils != null;
 
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
@@ -365,7 +364,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
+      ++ optional  (lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
