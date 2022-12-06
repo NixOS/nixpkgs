@@ -127,7 +127,7 @@ in lib.makeExtensible (self: {
     ];
   };
 
-  stable = self.nix_2_11;
+  stable = self.nix_2_12;
 
   unstable = self.stable;
 })
