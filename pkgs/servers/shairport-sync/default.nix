@@ -8,11 +8,11 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  version = "3.3.9";
+  version = "4.1.1";
   pname = "shairport-sync";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-JLgnsLjswj0qus1Vd5ZtPQbbIp3dp2pI7OfQG4JrdW8=";
+    sha256 = "sha256-EKt5mH9GmzeR4zdPDFOt26T9STpG1khVrY4DFIv5Maw=";
     rev = version;
     repo = "shairport-sync";
     owner = "mikebrady";
