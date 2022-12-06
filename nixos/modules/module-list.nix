@@ -135,6 +135,7 @@
   ./programs/bandwhich.nix
   ./programs/bash/bash.nix
   ./programs/bash/bash-completion.nix
+  ./programs/bash/blesh.nix
   ./programs/bash/ls-colors.nix
   ./programs/bash/undistract-me.nix
   ./programs/bash-my-aws.nix
