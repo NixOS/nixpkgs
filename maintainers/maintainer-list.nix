@@ -16208,4 +16208,10 @@
     github = "ziguana";
     githubId = 45833444;
   };
+  spebern = {
+    name = "spebern";
+    email = "sp33cht@googlemail.com";
+    github = "spebern";
+    githubId = 7761511;
+  };
 }
