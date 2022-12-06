@@ -7,7 +7,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
-    rev = "v${version}";
+    # On the next release, go back to `rev = "v${version}";`
+    # The 8.5.3 release appears to have been mysteriously re-tagged:
+    # https://github.com/sharkdp/fd/issues/1184
+    rev = "f6e74407e80a5563a9e4d0530371aed281e05838";
     sha256 = "sha256-7QQHLw+isXtr1FDQr4aiUhvOjJUPbaxFGDwukiWBG9g=";
   };
 
