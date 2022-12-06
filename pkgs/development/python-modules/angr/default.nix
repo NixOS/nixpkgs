@@ -11,7 +11,7 @@
 , cppheaderparser
 , dpkt
 , fetchFromGitHub
-, GitPython
+, gitpython
 , itanium-demangler
 , mulpyplexer
 , nampa
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     cle
     cppheaderparser
     dpkt
-    GitPython
+    gitpython
     itanium-demangler
     mulpyplexer
     nampa
