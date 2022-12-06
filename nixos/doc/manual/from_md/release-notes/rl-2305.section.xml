@@ -37,6 +37,14 @@
           <link linkend="opt-programs.fzf.fuzzyCompletion">programs.fzf</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
+          web GUI client of Project V which supports V2Ray, Xray, SS,
+          SSR, Trojan and Pingtunnel. Available as
+          <link xlink:href="options.html#opt-services.v2raya.enable">services.v2raya</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
