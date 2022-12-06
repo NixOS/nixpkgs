@@ -97,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-base
     gstreamer
   ] ++ lib.optionals (withGstPlugins) [
+    gst-libav
     gst-plugins-bad
     gst-plugins-good
     gst-plugins-ugly
