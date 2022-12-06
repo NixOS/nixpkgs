@@ -13,7 +13,7 @@
 stdenv.mkDerivation {
   pname = "ucblogo";
   version = "6.2.2";
-  src = builtins.fetchGit {
+  src = builtins.fetchgit {
     rev = "0ba6ad1629f94a89f98e2bf884c1388c6ee78b6d";
     ref = "master";
     url = "https://github.com/jrincayc/ucblogo-code.git";
