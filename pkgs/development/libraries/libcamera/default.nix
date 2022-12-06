@@ -1,5 +1,6 @@
 { stdenv
 , fetchgit
+, fetchpatch
 , lib
 , meson
 , ninja
@@ -21,13 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-u5FnfXBCjwSp8QBrH8KIkVGV32/9pff41ZWjWXOwuMI=";
+    hash = "sha256-IpZHiDGkXbVvzo3K1mADWKk2jXwXW7t8rFNt3qZZa9A=";
   };
+
+  patches = [
+    # fix crash of the entire audio system with some faulty cameras
+    (fetchpatch {
+      url = "https://git.libcamera.org/libcamera/libcamera.git/patch/?id=96ed45b9711e5c70afc4f91eab0ed657ccfb9695";
+      sha256 = "sha256-u6THljVnOHB2Az8Icq4sgs5LN0WkO1g6F0r7OQFeFjE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs utils/
