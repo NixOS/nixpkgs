@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , opencv4
-, pytorch
+, torch
 , onnx
 , onnxruntime
 , pillow
@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "invisible-watermark";
   version = "0.1.5";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     opencv4
-    pytorch
+    torch
     onnx
     onnxruntime
     pillow

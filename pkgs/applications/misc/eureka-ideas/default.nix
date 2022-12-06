@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  dontUseCargoParallelTests = true;
+  useNextest = true;
 
   meta = with lib; {
     description = "CLI tool to input and store your ideas without leaving the terminal";

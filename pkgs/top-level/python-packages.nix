@@ -372,6 +372,8 @@ self: super: with self; {
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };
 
+  ale-py = callPackage ../development/python-modules/ale-py { };
+
   alectryon = callPackage ../development/python-modules/alectryon { };
 
   alembic = callPackage ../development/python-modules/alembic { };

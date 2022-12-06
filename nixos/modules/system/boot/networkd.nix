@@ -1902,6 +1902,20 @@ in
     };
 
     systemd.network.wait-online = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = lib.mdDoc ''
+          Whether to enable the systemd-networkd-wait-online service.
+
+          systemd-networkd-wait-online can timeout and fail if there are no network interfaces
+          available for it to manage. When systemd-networkd is enabled but a different service is
+          responsible for managing the system's internet connection (for example, NetworkManager or
+          connman are used to manage WiFi connections), this service is unnecessary and can be
+          disabled.
+        '';
+      };
       anyInterface = mkOption {
         description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
@@ -1983,6 +1997,7 @@ in
       };
 
       systemd.services.systemd-networkd-wait-online = {
+        inherit (cfg.wait-online) enable;
         wantedBy = [ "network-online.target" ];
         serviceConfig.ExecStart = [
           ""
