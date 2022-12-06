@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-dw/KggiZpKaFZMcTIaSBUhR4oQsZI3iSmEj9Sy80wTs=";
   };
 
@@ -65,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
+    changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ staccato ];
   };
