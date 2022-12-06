@@ -13307,6 +13307,7 @@ with pkgs;
   zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
@@ -27000,6 +27001,8 @@ with pkgs;
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
   sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+
+  simp1e-cursors = callPackage ../data/icons/simp1e-cursors { };
 
   sjasmplus = callPackage ../development/compilers/sjasmplus { };
 

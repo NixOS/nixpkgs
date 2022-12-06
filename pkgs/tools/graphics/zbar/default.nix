@@ -22,6 +22,8 @@
   # see https://github.com/mchehab/zbar/issues/104
 , enableDbus ? false
 , libintl
+, libiconv
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +52,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imagemagickBig
     libintl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Foundation
   ] ++ lib.optionals enableDbus [
     dbus
   ] ++ lib.optionals withXorg [
