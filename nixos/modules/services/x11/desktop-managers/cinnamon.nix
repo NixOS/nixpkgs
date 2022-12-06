@@ -67,11 +67,11 @@ in
 
         # Taken from mint-artwork.gschema.override
         theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
-          name = mkDefault "Mint-X";
+          name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
         iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
-          name = mkDefault "Mint-X-Dark";
+          name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-x-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
