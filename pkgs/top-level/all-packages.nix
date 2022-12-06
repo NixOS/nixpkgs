@@ -15316,9 +15316,7 @@ with pkgs;
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-modules = callPackage ../development/tools/rust/cargo-modules {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
-  };
+  cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
