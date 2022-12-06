@@ -69,13 +69,14 @@ in stdenv.mkDerivation (finalAttrs: rec {
   buildInputs = [ polyml veriT vampire eprover-ho nettools ]
     ++ lib.optionals (!stdenv.isDarwin) [ java ];
 
-  sourceRoot = dirname;
+  sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
 
   doCheck = true;
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
-    mv $sourceRoot.app $sourceRoot
+    mv $sourceRoot ${dirname}
+    sourceRoot=${dirname}
   '';
 
   postPatch = ''
