@@ -3190,6 +3190,8 @@ with pkgs;
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
+  ipp-usb = callPackage ../os-specific/linux/ipp-usb { };
+
   itch = callPackage ../games/itch {};
 
   itd = callPackage ../applications/misc/itd { };
