@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.1.0";
+  version = "6.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dw/KggiZpKaFZMcTIaSBUhR4oQsZI3iSmEj9Sy80wTs=";
+    hash = "sha256-6TpDzk0GjIn9AnWadwHoYRc3SNi9nBAM7GyKm338wH8=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = ">=0.7, <0.19"' 'docutils = ">=0.7"' \
-      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"'
-  '';
 
   pythonImportsCheck = [
     "rstcheck"
