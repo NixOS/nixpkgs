@@ -13,6 +13,10 @@ let
     assertMsg
     ;
 
+  inherit (lib.path)
+    commonAncestry
+    ;
+
   inherit (lib.lists)
     length
     head
@@ -33,18 +37,24 @@ let
     concatStringsSep
     ;
 
+  inherit (lib.attrsets)
+    mapAttrsToList
+    ;
+
+  pretty = toPretty { multiline = false; };
+
   validRelativeString = value: errorPrefix:
     if value == "" then
-      throw "${errorPrefix}: The string is empty, which is not a valid path"
+      throw "${errorPrefix}: The string is empty"
     else if substring 0 1 value == "/" then
-      throw "${errorPrefix}: The string starts with a `/`, representing an absolute path. Use a path value for absolute paths instead"
+      throw "${errorPrefix}: The string is an absolute path because it starts with `/`"
     else true;
 
-  # Splits a relative path string into its components
+  # Splits and normalises a relative path string into its components
   # Errors for ".." components, doesn't include "." components
-  normaliseComponents = path: errorPrefix:
-    assert assertMsg (isString path) "${errorPrefix}: Not a relative path string";
-    assert validRelativeString path "${errorPrefix}: Not a valid relative path string";
+  splitRelative = path: errorPrefix:
+    #assert assertMsg (isString path) "${errorPrefix}: Not a relative path string";
+    #assert validRelativeString path "${errorPrefix}: Not a valid relative path string";
     let
       # Split the string into its parts using regex for efficiency. This regex
       # matches patterns like "/", "/./", "/././", with arbitrarily many "/"s
@@ -98,41 +108,94 @@ let
           value
       ) componentCount;
 
-  joinAbsolute = firstPath: relativePaths:
-    let
-      allComponents = concatLists (imap1 (i: el:
-        normaliseComponents el "lib.path.join: Cannot normalise element ${toPretty { multiline = false; } el} at index ${toString i}"
-      ) relativePaths);
-    in
-      if allComponents == [] then firstPath
-      else firstPath + ("/" + concatStringsSep "/" allComponents);
 
-  joinRelative = relativePaths:
+
+  joinRelative = components:
+    # An empty string is not a valid relative path, so we need to return a `.` when we have no components
+    if components == [] then "."
+    else concatStringsSep "/" components;
+
+  isRoot = path: path == dirOf path;
+
+  deconstructPath = path:
     let
-      allComponents = concatLists (imap0 (i: el:
-        normaliseComponents el "lib.path.join: Cannot normalise element ${toPretty { multiline = false; } el} at index ${toString i}"
-      ) relativePaths);
-    in
-      # An empty string is not a valid relative path, so we need to return a `.` when we have no components
-      if allComponents == [] then "."
-      else concatStringsSep "/" allComponents;
+      go = components: path:
+        if isRoot path then { root = path; inherit components; }
+        else go ([ (baseNameOf path) ] ++ components) (dirOf path);
+    in go [] path;
 
 
 in /* No rec! Add dependencies on this file just above */ {
 
-  join = paths:
-    assert assertMsg (paths != []) "lib.path.join: No paths provided";
-    let firstPath = head paths; in
-    if isPath firstPath then joinAbsolute firstPath (tail paths)
-    else if isString firstPath then joinRelative paths
-    else throw "lib.path.join: First passed element ${toPretty { multiline = false; } firstPath} is neither an absolute path value nor a relative path string";
+  append = basePath: subpath:
+    assert assertMsg (isPath basePath) "lib.path.append: First argument ${pretty basePath} is not a path value";
+    assert assertMsg (isString subpath) "lib.path.append: Second argument ${pretty subpath} is not a string";
+    assert validRelativeString subpath "lib.path.append: Second argument ${subpath} is not a valid relative path string";
+    let components = splitRelative subpath "lib.path.append: Second argument ${subpath} can't be normalised";
+    in basePath + ("/" + joinRelative components);
 
-  normalise = path:
-    if isPath path then path
-    else if isString path then
-      let components = normaliseComponents path "lib.path.normalise: Cannot normalise value ${toPretty { multiline = false; } path}";
-      in if components == [] then "."
-      else concatStringsSep "/" components
-    else throw "lib.path.normalise: Passed value ${toPretty { multiline = false; } path} is neither an absolute path value nor a relative path string";
+
+  relative.join = paths:
+    let
+      allComponents = concatLists (imap0 (i: subpath:
+        assert assertMsg (isString subpath) "lib.path.relative.join: Element ${toString subpath} at index ${toString i} is not a string";
+        assert validRelativeString subpath "lib.path.relative.join: Element ${toString subpath} at index ${toString i} is not a valid relative path string";
+        splitRelative subpath "lib.path.relative.join: Element ${toString subpath} at index ${toString i} can't be normalised"
+      ) paths);
+    in joinRelative allComponents;
+
+  relative.normalise = path:
+    assert assertMsg (isString path) "lib.path.relative.normalise: Argument ${toString path} is not a string";
+    assert validRelativeString path "lib.path.relative.normalise: Argument ${toString path} is not a valid relative path string";
+    let components = splitRelative path "lib.path.relative.normalise: Argument ${toString path} can't be normalised";
+    in joinRelative components;
+
+  commonAncestry = paths:
+    let
+      deconstructed = lib.attrValues (lib.mapAttrs (name: value:
+        assert assertMsg (isPath value) "lib.path.commonAncestry: Attribute ${name} = ${pretty value} is not a path data type";
+        deconstructPath value // { inherit name value; }
+      ) paths);
+      pathHead = head deconstructed;
+      pathTail = tail deconstructed;
+
+      go = level:
+        if lib.all (x: length x.components > level) deconstructed
+          && lib.all (x: elemAt x.components level == elemAt pathHead.components level) pathTail
+        then go (level + 1)
+        else level;
+
+      root =
+        # Fast happy path in case all roots are the same
+        if lib.all (x: x.root == pathHead.root) pathTail then pathHead.root
+        # Slow sad path when that's not the case and we need to throw an error
+        else lib.foldl' (result: el:
+          if pathHead.root == el.root then result
+          else throw "lib.path.commonAncestry: Path ${pathHead.name} = ${toString pathHead.value} (root ${toString pathHead.root}) has a different filesystem root than path ${toString el.name} = ${toString el.value} (root ${toString el.root})"
+        ) null pathTail;
+
+      level =
+        # Ensure that we have a common root before trying to find a common ancestor
+        # If we didn't do this one could evaluate `relativePaths` without an error even when there's no common root
+        builtins.seq root
+        (go 0);
+
+      prefix = joinRelative (lib.sublist 0 level pathHead.components);
+      suffices = lib.listToAttrs (map (x: { name = x.name; value = joinRelative (lib.sublist level (lib.length x.components - level) x.components); }) deconstructed);
+    in
+    assert assertMsg (lib.isAttrs paths) "lib.path.commonAncestry: Expecting an attribute set as an argument but got: ${pretty paths}";
+    assert assertMsg (length deconstructed > 0) "lib.path.commonAncestry: No paths passed";
+    {
+      commonPrefix = root + ("/" + prefix);
+      relativePaths = suffices;
+    };
+
+  relativeTo = basePath: subpath:
+    assert assertMsg (isPath basePath) "lib.path.relativeTo: First argument ${pretty basePath} is not a path value";
+    assert assertMsg (isPath subpath) "lib.path.relativeTo: First argument ${pretty subpath} is not a path value";
+    let common = commonAncestry { inherit basePath subpath; }; in
+    assert assertMsg (common.commonPrefix == basePath && common.relativePaths.basePath == ".")
+      "lib.path.relativeTo: First arguments ${toString basePath} needs to be an ancestor of or equal to the second argument ${toString subpath}";
+    common.relativePaths.subpath;
 
 }

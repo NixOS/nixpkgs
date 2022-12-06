@@ -18,6 +18,17 @@ This library is designed to be as safe and intuitive as possible, throwing error
 
 This library is designed to work well as a dependency for the `lib.filesystem` and `lib.sources` library components. Contrary to these library components, `lib.path` is designed to not read any paths from the filesystem.
 
+This library makes only these assumptions about paths and no others:
+- `dirOf path` returns the path to the parent directory of `path`, unless `path` is the filesystem root, in which case `path` is returned
+  - There can be multiple filesystem roots: `p == dirOf p` and `q == dirOf p` does not imply `p == q`
+    - While there's only a single filesystem root in stable Nix, the [lazy trees PR](https://github.com/NixOS/nix/pull/6530) introduces [additional filesystem roots](https://github.com/NixOS/nix/pull/6530#discussion_r1041442173)
+- `path + ("/" + string)` returns the path to the `string` subdirectory in `path`
+  - If `string` contains no `/` characters, then `dirOf (path + ("/" + string)) == path`
+  - If `string` contains no `/` characters, then `baseNameOf (path + ("/" + string)) == string`
+- `path1 == path2` returns true only if `path1` points to the same filesystem path as `path2`
+
+Notably we do not make the assumption that we can turn paths into strings using `toString path`.
+
 ## API
 
 ### `append`
