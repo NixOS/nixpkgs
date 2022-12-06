@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.5.1";
+  version = "12.6.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FjzvFx+A4DS2XeKBZ2DGRqudvH22AUSQJnIxKs2O0AU=";
+    hash = "sha256-g3tXftEoBCJ1pMdLyDBXQvY9haGMQkuY1/UBOtUqrLE=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -43,11 +42,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # darwin console duplicates 3 of 4 lines
-    "test_rich_console_ex"
   ];
 
   pythonImportsCheck = [ "rich" ];

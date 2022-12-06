@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation rec {
   pname = "rsync";
-  version = "3.2.6";
+  version = "3.2.7";
 
   src = fetchurl {
     # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
     url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
-    sha256 = "sha256-+zNlurJ4N9Qf6vQulnxXvTpHvI8Qdlo2ce/Wo4NUVNM=";
+    sha256 = "sha256-Tn2dP27RCHjFjF+3JKZ9rPS2qsc0CxPkiPstxBNG8rs=";
   };
 
   nativeBuildInputs = [ perl ];
