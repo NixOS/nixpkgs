@@ -389,7 +389,7 @@ let
       substituteInPlace Build.PL \
         --replace "gtk+-2.0" "gtk+-3.0"
     '';
-    propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk3 pkgs.wxGTK30-gtk3 ModulePluggable ];
+    propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk3 pkgs.wxGTK30 ModulePluggable ];
     buildInputs = [ LWPProtocolHttps ];
     meta = {
       description = "Building, finding and using wxWidgets binaries";

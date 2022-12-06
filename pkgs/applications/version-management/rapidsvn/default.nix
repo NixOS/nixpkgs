@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wxGTK30-gtk3, subversion, apr, aprutil, python3, fetchpatch }:
+{ lib, stdenv, fetchurl, wxGTK30, subversion, apr, aprutil, python3, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "rapidsvn";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bmcqjc12k5w0z40k7fkk8iysqv4fw33i80gvcmbakby3d4d4i4p";
   };
 
-  buildInputs = [ wxGTK30-gtk3 subversion apr aprutil python3 ];
+  buildInputs = [ wxGTK30 subversion apr aprutil python3 ];
 
   NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
 

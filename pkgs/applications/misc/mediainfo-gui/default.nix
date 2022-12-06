@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libmediainfo, wxGTK30-gtk3
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libmediainfo, wxGTK30
 , desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libmediainfo wxGTK30-gtk3 desktop-file-utils libSM imagemagick ];
+  buildInputs = [ libmediainfo wxGTK30 desktop-file-utils libSM imagemagick ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 
