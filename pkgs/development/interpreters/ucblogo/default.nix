@@ -11,7 +11,7 @@
 ,       lib
 }:
 stdenv.mkDerivation {
-  name = "ucblogo";
+  pname = "ucblogo";
   version = "6.2.2";
   src = fetchTarball {
     url = "https://github.com/jrincayc/ucblogo-code/archive/refs/tags/version_6.2.2.zip";
@@ -29,6 +29,10 @@ stdenv.mkDerivation {
         wrapGAppsHook
       ];
   meta = with lib; {
+      description = "Berkeley Logo interpreter";
       maintainers = with maintainers; [hllizi];
+      license = lib.licenses.gpl3 ;
+      platforms = lib.platforms.linux;
+      homepage = "https://people.eecs.berkeley.edu/~bh/logo.html";
     };
 }
