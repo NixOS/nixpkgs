@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BHrqin+keESzTvJ8GdO2l+hJOdyx/bvrLCBGIbZu6tk=";
   };
 
+  patches = [
+    # committed upstream but unreleased:
+    #   https://sourceforge.net/p/hugin/hugin/ci/edfddc6070ca6d4223d359fb4b38273a5aed2f2d
+    ./dont-crash-if-XDG_DATA_DIRS-not-set-edfddc6070ca6d4223d359fb4b38273a5aed2f2d.patch
+  ];
+
   buildInputs = [
     boost
     cairo
