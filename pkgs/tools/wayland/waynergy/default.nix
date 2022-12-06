@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "waynergy";
-  version = "0.0.13";
+  version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "r-c-f";
     repo = "waynergy";
     rev = "v${version}";
-    hash = "sha256-eTY7tktUmoTZO3w9uP1P8cIz0mmFiWm5YFGVAS6JwwE=";
+    hash = "sha256-LtLZDYZGoKNPRZeceMf/ndbO1QfMLkfxHeAo1YNjmm4=";
   };
 
   depsBuildBuild = [ pkg-config ];
