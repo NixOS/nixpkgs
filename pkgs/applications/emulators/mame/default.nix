@@ -27,7 +27,6 @@
 , qtbase
 , rapidjson
 , sqlite
-, substituteAll
 , utf8proc
 , which
 , writeScript
@@ -108,11 +107,15 @@ stdenv.mkDerivation rec {
     # by default MAME assumes that paths with stock resources are relative and
     # that you run MAME changing to install directory, so we add absolute paths
     # here
-    (substituteAll {
-      mamePath = "$out/opt/mame";
-      src = ./001-use-absolute-paths.diff;
-    })
+    ./001-use-absolute-paths.diff
   ];
+
+  # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
+  # it is not possible to use substituteAll
+  postPatch = ''
+    substituteInPlace src/emu/emuopts.cpp \
+      --subst-var-by mamePath "$out/opt/mame"
+  '';
 
   desktopItems = [
     (makeDesktopItem {
