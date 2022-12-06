@@ -6,7 +6,7 @@ let
 in
 pypkgs.buildPythonApplication rec {
   pname = "linkchecker";
-  version = "10.2.0";
+  version = "10.2.1";
   format = "pyproject";
 
   disabled = pypkgs.pythonOlder "3.7";
@@ -14,8 +14,8 @@ pypkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v" + version;
-    hash = "sha256-wMiKS14fX5mkY1OwxQPFKm7i4WMFQKg3tdZZqD0g0Rw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
