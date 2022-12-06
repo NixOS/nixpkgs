@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irgeek";
     repo = "StrEnum";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-S64YfF+cbefXRWoeJK99ZPTiO9DUcDaT77hVQd7pKDk=";
   };
 
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "MOdule for enum that inherits from str";
     homepage = "https://github.com/irgeek/StrEnum";
+    changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
