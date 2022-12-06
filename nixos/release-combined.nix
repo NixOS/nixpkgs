@@ -49,6 +49,7 @@ in rec {
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
+        (onAllSupported "nixos.iso_minimal_new_kernel")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
         (onFullSupported "nixos.iso_plasma5")
         (onFullSupported "nixos.iso_gnome")
