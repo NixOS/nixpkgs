@@ -31,14 +31,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "offpunk";
-  version = "1.6";
+  version = "1.7.1";
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "ploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    sha256 = "1pfafb96xk7vis26zhfq254waz1ic9p0zdkxwpqs84p3vsmny775";
+    sha256 = "1y1xb1ccsprl0xkn4hlh09j8y5xpdn6r860xlrmk12wfk2xrfbfy";
   };
 
   nativeBuildInputs = [ makeWrapper ];
