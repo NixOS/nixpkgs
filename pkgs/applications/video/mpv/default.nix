@@ -18,6 +18,7 @@
 , libuchardet
 , libiconv
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
+, AVFoundation, CoreMedia
 , xcbuild
 
 , waylandSupport ? stdenv.isLinux
@@ -169,7 +170,8 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals zimgSupport        [ zimg ]
     ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
+    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ]
+    ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
