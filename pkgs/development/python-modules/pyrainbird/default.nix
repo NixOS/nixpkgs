@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "0.6.2";
+  version = "0.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -22,12 +22,15 @@ buildPythonPackage rec {
     owner = "jbarrancos";
     repo = pname;
     rev = version;
-    hash = "sha256-MikJDW5Fo2DNpn9/Hyc1ecIIMEwE8GD5LKpka2t7aCk=";
+    hash = "sha256-yGUBCs1IxbGKBo21gExFIqDawM2EHlO+jiRqonEUnPk=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--cov=pyrainbird --cov-report=term-missing" ""
+
+    substituteInPlace setup.cfg \
+      --replace "pycryptodome>=3.16.0" "pycryptodome"
   '';
 
   propagatedBuildInputs = [
