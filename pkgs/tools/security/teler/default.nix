@@ -11,13 +11,15 @@ buildGoModule rec {
     owner = "kitabisa";
     repo = "teler";
     rev = "v${version}";
-    sha256 = "sha256-GlpQBmJ7HSKPFieM7E5NOnqGlUjQv9Ywe6XF5QIi+c4=";
+    hash = "sha256-GlpQBmJ7HSKPFieM7E5NOnqGlUjQv9Ywe6XF5QIi+c4=";
   };
 
-  vendorSha256 = "sha256-g2YBMyLDGQZKxDBcZ1mca16jxODnJzcmMfFivBn6SdE=";
+  vendorHash = "sha256-g2YBMyLDGQZKxDBcZ1mca16jxODnJzcmMfFivBn6SdE=";
 
   ldflags = [
-    "-s" "-w" "-X ktbs.dev/teler/common.Version=${version}"
+    "-s"
+    "-w"
+    "-X ktbs.dev/teler/common.Version=${version}"
   ];
 
   # test require internet access
@@ -31,6 +33,7 @@ buildGoModule rec {
       we collect and provide by the community.
     '';
     homepage = "https://github.com/kitabisa/teler";
+    changelog = "https://github.com/kitabisa/teler/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
