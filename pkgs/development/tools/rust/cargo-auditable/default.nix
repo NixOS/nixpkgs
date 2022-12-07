@@ -3,16 +3,16 @@
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.5.5";
+    version = "unstable-2022-12-07";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
       repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-mEmTgd7sC2jmYeb5pEO985v/aWWKlq/mSQUAGi32loY=";
+      rev = "246468da22d619c816227797fb176c44026c7105";
+      sha256 = "sha256-tZ6qA20TM+mZa2bYWWdFeM+6104e+hVE9Swst2n6Mx8=";
     };
 
-    cargoSha256 = "sha256-G72UUqvFaTY/GQSkpz1wIzjb7vIWuAjvKMZosUB6YsA=";
+    cargoSha256 = "sha256-LkFP/m/pTIDnIueNDwM89lk7FNXnT4Fl8EIdXgR9oOg=";
 
     meta = with lib; {
       description = "A tool to make production Rust binaries auditable";
