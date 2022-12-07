@@ -121,10 +121,10 @@
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "15";
+        patch = "16";
         suffix = "";
       };
-      sha256 = "sha256-Etr/aAlSjZ9hVCFpUEI8njDw5HM2y1fGqgtDh91etLI=";
+      sha256 = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
     };
     python310 = {
       sourceVersion = {
