@@ -33,7 +33,7 @@ cargoNextestHook() {
 
     (
         set -x
-        ${cargoCommand-cargo} nextest run \
+        cargo nextest run \
               -j ${threads} \
               ${argstr} -- \
               ${checkFlags} \

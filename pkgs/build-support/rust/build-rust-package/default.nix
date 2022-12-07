@@ -12,6 +12,7 @@
 , cargoNextestHook
 , cargoSetupHook
 , cargo-auditable
+, cargo-auditable-cargo-wrapper
 , rustc
 , libiconv
 , windows
@@ -116,11 +117,13 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   cargoCheckFeatures = checkFeatures;
 
-  cargoCommand = if auditable then "cargo auditable" else "cargo";
-
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [
+  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+    (cargo-auditable-cargo-wrapper.override {
+      inherit cargo-auditable;
+    })
+  ] ++ [
     cacert
     git
     cargoBuildHook
@@ -128,8 +131,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     cargoInstallHook
     cargoSetupHook
     rustc
-  ] ++ lib.optionals auditable [
-    cargo-auditable
   ];
 
   buildInputs = buildInputs

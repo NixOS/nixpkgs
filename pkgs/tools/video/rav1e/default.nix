@@ -21,11 +21,11 @@ in rustPlatform.buildRustPackage rec {
   checkType = "debug";
 
   postBuild = ''
-    $cargoCommand cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    $cargoCommand cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {
