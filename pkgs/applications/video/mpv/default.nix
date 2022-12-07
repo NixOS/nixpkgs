@@ -100,20 +100,20 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
   mesonFlags = let
-    mesonFeatureFlag = feature: flag: "-D${feature}=${if flag then "enabled" else "disabled"}";
+    inherit (lib) mesonOption mesonBool mesonEnable;
   in [
-    "-Ddefault_library=shared"
-    "-Dlibmpv=true"
-    (mesonFeatureFlag "libarchive" archiveSupport)
-    (mesonFeatureFlag "manpage-build" true)
-    (mesonFeatureFlag "cdda" cddaSupport)
-    (mesonFeatureFlag "dvbin" dvbinSupport)
-    (mesonFeatureFlag "dvdnav" dvdnavSupport)
-    (mesonFeatureFlag "openal" openalSupport)
-    (mesonFeatureFlag "sdl2" sdl2Support)
+    (mesonOption "default_library" "shared")
+    (mesonBool "libmpv" true)
+    (mesonEnable "libarchive" archiveSupport)
+    (mesonEnable "manpage-build" true)
+    (mesonEnable "cdda" cddaSupport)
+    (mesonEnable "dvbin" dvbinSupport)
+    (mesonEnable "dvdnav" dvdnavSupport)
+    (mesonEnable "openal" openalSupport)
+    (mesonEnable "sdl2" sdl2Support)
     # Disable whilst Swift isn't supported
-    (mesonFeatureFlag "swift-build" swiftSupport)
-    (mesonFeatureFlag "macos-cocoa-cb" swiftSupport)
+    (mesonEnable "swift-build" swiftSupport)
+    (mesonEnable "macos-cocoa-cb" swiftSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -125,10 +125,10 @@ in stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild.xcrun
-  ] ++ lib.optionals swiftSupport [ swift ]
-    ++ lib.optionals waylandSupport [ wayland-scanner ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals swiftSupport [ swift ]
+  ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
