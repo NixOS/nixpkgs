@@ -154,11 +154,7 @@ in {
       ../development/compilers/openjdk/darwin/11.nix
       { openjfx = openjfx11; };
 
-    openjdk12 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/12.nix {
-        /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
-        stdenv = gcc8Stdenv;
-        openjfx = openjfx11;
-    };
+    openjdk12 = throw "openjdk12 was removed since it is EOL"; # added 2022-12-07
 
     openjdk13 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/13.nix {
       inherit openjdk13-bootstrap;
