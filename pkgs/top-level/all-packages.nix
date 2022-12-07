@@ -18097,6 +18097,10 @@ with pkgs;
 
   taoup = callPackage ../tools/misc/taoup { };
 
+  tarmac = callPackage ../development/tools/tarmac {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
