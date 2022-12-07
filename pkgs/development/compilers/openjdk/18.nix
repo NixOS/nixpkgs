@@ -4,7 +4,7 @@
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk18-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
