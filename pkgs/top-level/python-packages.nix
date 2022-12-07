@@ -2885,6 +2885,8 @@ self: super: with self; {
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
+  eigenpy = toPythonModule (callPackage ../development/python-modules/eigenpy { });
+
   einops = callPackage ../development/python-modules/einops { };
 
   eiswarnung = callPackage ../development/python-modules/eiswarnung { };
