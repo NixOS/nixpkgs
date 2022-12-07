@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
-  version = "6.1.1";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "feedback";
     rev = version;
-    sha256 = "sha256-YLYHaFQAAeSt25xHF7xDJWhw+rbH9SpzoRoXaYP42jg=";
+    sha256 = "sha256-vZTc6n7SHtHTCmC/RsCibVHcj67ksbghDosHBZfOIHM=";
   };
 
   patches = [
