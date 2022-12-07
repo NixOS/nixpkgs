@@ -17534,6 +17534,10 @@ with pkgs;
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
+  openai-whisper-cpp = callPackage ../tools/audio/openai-whisper-cpp {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+  };
+
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/embedded/openocd { };
