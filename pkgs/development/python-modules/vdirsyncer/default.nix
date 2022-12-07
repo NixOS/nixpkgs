@@ -17,6 +17,8 @@
 , pytest-asyncio
 , trustme
 , aioresponses
+, vdirsyncer
+, testers
 }:
 
 buildPythonPackage rec {
@@ -71,6 +73,8 @@ buildPythonPackage rec {
     "test_request_ssl"
     "test_verbosity"
   ];
+
+  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";
