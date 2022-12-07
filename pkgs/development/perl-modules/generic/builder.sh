@@ -1,6 +1,4 @@
-if [ -f .attrs.sh ]; then
-    . .attrs.sh
-fi
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
