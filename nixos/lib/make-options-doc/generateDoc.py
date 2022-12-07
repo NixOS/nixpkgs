@@ -40,9 +40,11 @@ def generate_commonmark(options):
         print(value['description'])
         print()
         if 'type' in value:
-            print('*_Type_*:')
+            print('*_Type_*')
+            print ('```')
             print(value['type'])
-            print()
+            print ('```')
+        print()
         print()
         if 'default' in value:
             print('*_Default_*')
