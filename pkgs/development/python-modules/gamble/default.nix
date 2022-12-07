@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "gamble";
-  version = "0.10";
+  version = "0.11";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lb5x076blnnz2hj7k92pyq0drbjwsls6pmnabpvyvs4ddhz5w9w";
+    sha256 = "sha256-zsEBqhKidgO1e0lpKhw+LY75I2Df+IefNLaSkBBFKFU=";
   };
 
   checkInputs = [
