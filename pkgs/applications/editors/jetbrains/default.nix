@@ -93,10 +93,10 @@ let
       };
     });
 
-  buildGateway = { pname, version, src, license, description, wmClass, ... }:
+  buildGateway = { pname, version, src, license, description, wmClass, product, ... }:
     (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "Gateway";
+      inherit pname version src wmClass jdk product;
+      productShort = "Gateway";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/remote-development/gateway/";
         inherit description license platforms;
@@ -328,6 +328,7 @@ in
 
   gateway = buildGateway rec {
     pname = "gateway";
+    product = "JetBrains Gateway";
     version = products.gateway.version;
     description = "Your single entry point to all remote development environments";
     license = lib.licenses.unfree;
