@@ -24,7 +24,7 @@ let
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-      , useRailsExpress ? true
+      , useRailsExpress ? false
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, openssl_1_1, opensslSupport ? true
