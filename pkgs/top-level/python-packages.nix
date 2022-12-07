@@ -3058,6 +3058,11 @@ self: super: with self; {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
+  example-robot-data = toPythonModule (pkgs.example-robot-data.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
+
   exdown = callPackage ../development/python-modules/exdown { };
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
