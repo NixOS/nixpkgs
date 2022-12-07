@@ -9,6 +9,7 @@
 , "@commitlint/config-conventional"
 , "@emacs-eask/cli"
 , "@forge/cli"
+, "@fsouza/prettierd"
 , "@google/clasp"
 , "@medable/mdctl-cli"
 , "@nerdwallet/shepherd"
