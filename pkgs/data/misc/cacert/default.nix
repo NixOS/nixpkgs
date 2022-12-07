@@ -17,7 +17,17 @@
 }:
 
 let
-  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
+  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" (blacklist ++ [
+    # Mozilla does not trust new certificates issued by these CAs after 2022/11/30¹
+    # in their products, but unfortunately we don't have such a fine-grained
+    # solution for most system packages², so we decided to eject these.
+    #
+    # [1] https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/oxX69KFvsm4/m/yLohoVqtCgAJ
+    # [2] https://utcc.utoronto.ca/~cks/space/blog/linux/CARootStoreTrustProblem
+    "TrustCor ECA-1"
+    "TrustCor RootCert CA-1"
+    "TrustCor RootCert CA-2"
+  ]));
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
   srcVersion = "3.83";
