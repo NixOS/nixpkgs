@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
   checkInputs = lib.optionals enablePython [ libxml2 libxml2.dev ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Free implementation of the DWG file format";
     homepage = "https://savannah.gnu.org/projects/libredwg/";
     maintainers = with maintainers; [ tweber ];
