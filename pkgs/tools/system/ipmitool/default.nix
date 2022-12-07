@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, openssl, readline }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, autoreconfHook, openssl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "ipmitool";
@@ -11,12 +11,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-VVYvuldRIHhaIUibed9cLX8Avfy760fdBLNO8MoUKCk=";
   };
 
+  # IANA list of enterprise numbers
+  # Public domain, see: https://www.iana.org/help/licensing-terms
+  enterprise_numbers = fetchurl {
+    url = "https://www.iana.org/assignments/enterprise-numbers.txt";
+    hash = "sha256-aA7FPF3kLDDzeq7lc3n1dnLBaPKY6sdZXf5B7A6/ArI=";
+  };
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl readline ];
 
   postPatch = ''
     substituteInPlace configure.ac \
       --replace 'AC_MSG_WARN([** Neither wget nor curl could be found.])' 'AM_CONDITIONAL([DOWNLOAD], [false])'
+  '';
+
+  # Install the IANA enterprise numbers
+  postInstall = ''
+    install -D ${enterprise_numbers} $out/share/misc/enterprise-numbers
   '';
 
   meta = with lib; {
