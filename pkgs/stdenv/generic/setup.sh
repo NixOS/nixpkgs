@@ -878,6 +878,10 @@ substituteInPlace() {
 }
 
 _allFlags() {
+    # export some local variables for the awk below
+    # so some substitutions such as name don't have to be in the env attrset
+    # when __structuredAttrs is enabled
+    export system pname name version
     for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
         if (( "${NIX_DEBUG:-0}" >= 1 )); then
             printf "@%s@ -> %q\n" "${varName}" "${!varName}"
