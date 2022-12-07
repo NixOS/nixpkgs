@@ -21,11 +21,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   testScript = ''
     machine.require_unit_state("mdcheck_start.timer", "active")
     machine.require_unit_state("mdcheck_start.service", "inactive")
-    # conditional check would not pass since an mdcheck hasn't been started
-    machine.require_unit_state("mdcheck_continue.timer", "inactive")
+    machine.require_unit_state("mdcheck_continue.timer", "active")
     machine.require_unit_state("mdcheck_continue.service", "inactive")
-    # ensure mdadm's unconfigured systemd unit mdmonitor.service isn't sitting around causing confusion
-    assert 'LoadError' in machine.get_unit_info("mdmonitor.service")
 
     # ensure timers don't interfere with test script
     machine.systemctl("disable mdcheck_start.timer")

@@ -7,7 +7,7 @@ let
 in
 {
   options.hardware.raid.swraid.monitor = {
-   enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption (lib.mdDoc ''
       This option enables mdcheck timers that run regular full scrubs of the
       md devices.  These processes can also cause high I/O utilization; the
       configuration option `boot.kernel.sysctl."dev.raid.speed_limit_max"`
@@ -48,49 +48,15 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    systemd.services.mdcheck_start = {
-      description = "MD array scrubbing";
-      wants = [ "mdcheck_continue.timer" ];
-      environment.MDADM_CHECK_DURATION = cfg.checkDuration;
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.mdadm}/bin/mdcheck --duration \${MDADM_CHECK_DURATION}";
-      };
-    };
-
     systemd.timers.mdcheck_start = {
-      description = "MD array scrubbing";
       wantedBy = [ "timers.target" ];
-      partOf = [ "mdcheck_start.service" ];
-      # upstream mdadm has an `Also` to ensure that mdcheck_continue is
-      # installed when this unit is installed; not necessary here because
-      # they're tied together through nix config.
-      timerConfig = {
-        OnCalendar = cfg.checkStart;
-        Unit = "mdcheck_start.service";
-      };
+      timerConfig.OnCalendar = cfg.checkStart;
     };
-
-    systemd.services.mdcheck_continue = {
-      description = "MD array scrubbing - continuation";
-      wants = [ "mdcheck_continue.timer" ];
-      environment.MDADM_CHECK_DURATION = cfg.checkDuration;
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.mdadm}/bin/mdcheck --continue --duration \${MDADM_CHECK_DURATION}";
-      };
-    };
-
     systemd.timers.mdcheck_continue = {
-      description = "MD array scrubbing - continuation";
-      unitConfig.ConditionPathExistsGlob = "/var/lib/mdcheck/MD_UUID_*";
       wantedBy = [ "timers.target" ];
-      partOf = [ "mdcheck_continue.service" ];
-      timerConfig = {
-        OnCalendar = cfg.checkContinue;
-        Unit = "mdcheck_continue.service";
-      };
+      timerConfig.OnCalendar = cfg.checkContinue;
     };
+    systemd.services.mdcheck_start.environment.MDADM_CHECK_DURATION = cfg.checkDuration;
+    systemd.services.mdcheck_continue.environment.MDADM_CHECK_DURATION = cfg.checkDuration;
   };
 }
