@@ -42,9 +42,9 @@ let
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
 
-  libc_bin = if libc == null then null else getBin libc;
-  libc_dev = if libc == null then null else getDev libc;
-  libc_lib = if libc == null then null else getLib libc;
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
   cc_solib = getLib cc
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
@@ -131,10 +131,6 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc libc_bin libc_dev libc_lib;
-
-  inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
-
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
@@ -144,7 +140,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit cc libc nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -267,8 +263,6 @@ stdenv.mkDerivation {
   strictDeps = true;
   propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
-
-  wrapperName = "CC_WRAPPER";
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -541,7 +535,10 @@ stdenv.mkDerivation {
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
     gnugrep_bin = if nativeTools then "" else gnugrep;
-    inherit suffixSalt coreutils_bin bintools;
+    wrapperName = "CC_WRAPPER";
+    inherit suffixSalt coreutils_bin bintools cc;
+    inherit libc_bin libc_dev libc_lib;
+    inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
   };
 
   meta =

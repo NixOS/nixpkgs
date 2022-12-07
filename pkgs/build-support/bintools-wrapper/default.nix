@@ -55,9 +55,9 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
-  libc_bin = if libc == null then null else getBin libc;
-  libc_dev = if libc == null then null else getDev libc;
-  libc_lib = if libc == null then null else getLib libc;
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
   bintools_bin = if nativeTools then "" else getBin bintools;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
@@ -102,8 +102,6 @@ stdenv.mkDerivation {
   version = if bintools == null then null else bintoolsVersion;
 
   preferLocalBuild = true;
-
-  inherit bintools_bin libc_bin libc_dev libc_lib;
 
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
@@ -189,8 +187,6 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
-
-  wrapperName = "BINTOOLS_WRAPPER";
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -368,7 +364,9 @@ stdenv.mkDerivation {
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
     gnugrep_bin = if nativeTools then "" else gnugrep;
-    inherit dynamicLinker suffixSalt coreutils_bin;
+    wrapperName = "BINTOOLS_WRAPPER";
+    inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
+    inherit bintools_bin libc_bin libc_dev libc_lib;
   };
 
   meta =
