@@ -1,5 +1,5 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "swraid";
+  name = "mdcheck";
   meta = { };
 
   nodes.machine = { pkgs, lib, ... }:
@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           '';
         };
       };
-      hardware.raid.swraid.monitor.enable = true;
+      services.mdcheck.enable = true;
     };
 
   testScript = ''

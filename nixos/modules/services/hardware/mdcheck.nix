@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.hardware.raid.swraid.monitor;
+  cfg = config.services.mdcheck;
 in
 {
-  options.hardware.raid.swraid.monitor = {
+  options.services.mdcheck = {
     enable = mkEnableOption (lib.mdDoc ''
       This option enables mdcheck timers that run regular full scrubs of the
       md devices.  These processes can also cause high I/O utilization; the
