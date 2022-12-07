@@ -31078,7 +31078,9 @@ with pkgs;
 
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
-  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
+  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic {
+    jdk11 = openjdk11.override { enableJavaFX = true; };
+  };
 
   mupdf = callPackage ../applications/misc/mupdf { };
   mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };
