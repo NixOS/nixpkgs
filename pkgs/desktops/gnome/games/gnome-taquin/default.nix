@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     description = "Move tiles so that they reach their places";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
