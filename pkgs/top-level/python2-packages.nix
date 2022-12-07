@@ -17,11 +17,7 @@ with self; with super; {
 
   chardet = callPackage ../development/python2-modules/chardet { };
 
-  cheetah = callPackage ../development/python2-modules/cheetah { };
-
   configparser = callPackage ../development/python2-modules/configparser { };
-
-  construct = callPackage ../development/python2-modules/construct { };
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
@@ -37,8 +33,6 @@ with self; with super; {
 
   gtkme = callPackage ../development/python2-modules/gtkme { };
 
-  httpretty = callPackage ../development/python2-modules/httpretty { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
   idna = callPackage ../development/python2-modules/idna { };
@@ -51,30 +45,17 @@ with self; with super; {
     inherit (pkgs) marisa;
   };
 
-  markdown = callPackage ../development/python2-modules/markdown { };
-
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
   mock = callPackage ../development/python2-modules/mock { };
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
-  mutagen = callPackage ../development/python2-modules/mutagen { };
-
-  numpy = callPackage ../development/python2-modules/numpy { };
-
   packaging = callPackage ../development/python2-modules/packaging { };
-
-  pillow = callPackage ../development/python2-modules/pillow {
-    inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
-    inherit (pkgs.xorg) libX11;
-  };
 
   pip = callPackage ../development/python2-modules/pip { };
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
-
-  prettytable = callPackage ../development/python2-modules/prettytable { };
 
   protobuf = callPackage ../development/python2-modules/protobuf {
     disabled = isPyPy;
@@ -113,10 +94,6 @@ with self; with super; {
 
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
 
-  pyyaml = callPackage ../development/python2-modules/pyyaml { };
-
-  qpid-python = callPackage ../development/python2-modules/qpid-python { };
-
   recoll = disabled super.recoll;
 
   rivet = disabled super.rivet;
@@ -136,8 +113,6 @@ with self; with super; {
   sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
 
   sphinx = callPackage ../development/python2-modules/sphinx { };
-
-  TurboCheetah = callPackage ../development/python2-modules/TurboCheetah { };
 
   typing = callPackage ../development/python2-modules/typing { };
 
