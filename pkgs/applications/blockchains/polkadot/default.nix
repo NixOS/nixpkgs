@@ -36,14 +36,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  nativeBuildInputs = [ clang ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   preBuild = ''
     export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
     rm .git_commit
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
