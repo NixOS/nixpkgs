@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rhqML/w8Hp8xZogjc2ZD+Y9C9c/w1e4X7WNoFaLz9Ps=";
+    hash = "sha256-rhqML/w8Hp8xZogjc2ZD+Y9C9c/w1e4X7WNoFaLz9Ps=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Socks4/5 client and server library";
     homepage = "https://github.com/skelsec/asysocks";
+    changelog = "https://github.com/skelsec/asysocks/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
