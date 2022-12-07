@@ -11,11 +11,15 @@
 , mock
 , vcrpy
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "knack";
   version = "0.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,6 +45,10 @@ buildPythonPackage rec {
   checkPhase = ''
     HOME=$TMPDIR pytest .
   '';
+
+  pythonImportsCheck = [
+    "knack"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/knack";
