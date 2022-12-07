@@ -250,6 +250,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openjdk</literal> from version 11 and above is not
+          build with <literal>openjfx</literal> (i.e.: JavaFX) support
+          by default anymore. You can re-enable it by overriding with
+          <literal>enableJavaFX</literal> set to
+          <literal>true</literal>, e.g.:
+          <literal>openjdk11.override { enableJavaFX = true; };</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
