@@ -156,10 +156,7 @@ in {
 
     openjdk12 = throw "openjdk12 was removed since it is EOL"; # added 2022-12-07
 
-    openjdk13 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/13.nix {
-      inherit openjdk13-bootstrap;
-      openjfx = openjfx11;
-    };
+    openjdk13 = throw "openjdk13 was removed since it is EOL"; # added 2022-12-07
 
     openjdk14 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/14.nix {
       inherit openjdk14-bootstrap;
