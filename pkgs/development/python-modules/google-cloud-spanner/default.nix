@@ -69,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
+    changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
