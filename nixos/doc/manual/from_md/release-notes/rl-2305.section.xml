@@ -121,6 +121,16 @@
       </listitem>
       <listitem>
         <para>
+          The module <literal>usbmuxd</literal> now has the ability to
+          change the package used by the daemon. In case you’re
+          experiencing issues with <literal>usbmuxd</literal> you can
+          try an alternative program like <literal>usbmuxd2</literal>.
+          Available as
+          <link linkend="opt-services.usbmuxd.package">services.usbmuxd.package</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mastodon</literal> gained a tootctl wrapped
           named <literal>mastodon-tootctl</literal> similar to
           <literal>nextcloud-occ</literal> which can be executed from
