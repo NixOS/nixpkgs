@@ -96,6 +96,7 @@ let
       hspec = self.hspec_2_7_10;
       hspec-core = self.hspec-core_2_7_10;
       hspec-discover = self.hspec-discover_2_7_10;
+      hspec-meta = self.hspec-meta_2_7_8;
 
       elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
       elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
