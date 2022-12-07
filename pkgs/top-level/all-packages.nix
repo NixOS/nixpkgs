@@ -2788,9 +2788,7 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
-    openjdk11 = openjdk11.override { enableJavaFX = true; };
-  };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
   bic = callPackage ../development/interpreters/bic { };
 
