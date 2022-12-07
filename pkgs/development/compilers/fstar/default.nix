@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
+{ lib, stdenv, writeScript, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "fstar";
@@ -59,6 +59,15 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash .completion/bash/fstar.exe.bash
     installShellCompletion --fish .completion/fish/fstar.exe.fish
     installShellCompletion --zsh --name _fstar.exe .completion/zsh/__fstar.exe
+  '';
+
+  passthru.updateScript = writeScript "update-fstar" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p git gnugrep common-updater-scripts
+      set -eu -o pipefail
+
+      version="$(git ls-remote --tags git@github.com:FStarLang/FStar.git | grep -Po 'v\K\d{4}\.\d{2}\.\d{2}' | sort | tail -n1)"
+      update-source-version fstar "$version"
   '';
 
   meta = with lib; {
