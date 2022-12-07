@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SMB library";
     homepage = "https://github.com/skelsec/aiosmb";
+    changelog = "https://github.com/skelsec/aiosmb/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
