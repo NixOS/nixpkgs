@@ -100,8 +100,7 @@ in buildGo118Module rec {
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
-      --prefix LD_LIBRARY_PATH : ${lib.getLib systemd}/lib
-  '';
+      --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
 
   meta = with lib; {
     description = ''
