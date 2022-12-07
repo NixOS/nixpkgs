@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "teler";
-  version = "1.2.2";
+  version = "2.0.0-dev.2";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "teler";
     rev = "v${version}";
-    sha256 = "sha256-i4106PtoCJt5CY9ahczZYe9GufBkaZS+9Peh0IY9r1M=";
+    sha256 = "sha256-GlpQBmJ7HSKPFieM7E5NOnqGlUjQv9Ywe6XF5QIi+c4=";
   };
 
-  vendorSha256 = "sha256-TQjwPem+RMuoF5T02CL/CTvBS6W7Q786gTvYUFIvxjE=";
+  vendorSha256 = "sha256-g2YBMyLDGQZKxDBcZ1mca16jxODnJzcmMfFivBn6SdE=";
 
   ldflags = [
     "-s" "-w" "-X ktbs.dev/teler/common.Version=${version}"
