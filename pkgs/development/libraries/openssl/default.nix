@@ -87,28 +87,24 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         riscv64-linux = "./Configure linux64-riscv64";
-        mipsel-linux = "./Configure linux-mips32";
-        mips64el-linux =
-          if stdenv.hostPlatform.isMips64n64
-          then "./Configure linux64-mips64"
-          else if stdenv.hostPlatform.isMips64n32
-          then "./Configure linux-mips64"
-          else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
-        else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
-          then "./Configure BSD-x86_64"
-        else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
-          then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
         else if stdenv.hostPlatform.isBSD
-          then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+          then if stdenv.hostPlatform.isx86_64 then "./Configure BSD-x86_64"
+          else if stdenv.hostPlatform.isx86_32
+            then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+          else "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${lib.optionalString
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
-          then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+          then if stdenv.hostPlatform.isx86_64 then "./Configure linux-x86_64"
+          else if stdenv.hostPlatform.isMips32 then "./Configure linux-mips32"
+          else if stdenv.hostPlatform.isMips64n32 then "./Configure linux-mips64"
+          else if stdenv.hostPlatform.isMips64n64 then "./Configure linux64-mips64"
+          else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isiOS
           then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
         else
