@@ -1,6 +1,8 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_6
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby }:
+, ffmpeg_4-headless, python3, ruby
+, withMedia ? true
+, withWebKit ? false }:
 
 let
   major = "15";
@@ -76,8 +78,8 @@ in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = false
+    COMPILE_MEDIA = ${if withMedia then "true" else "false"}
+    COMPILE_WEBKIT = ${if withWebKit then "true" else "false"}
   '';
 
   preBuild = ''
