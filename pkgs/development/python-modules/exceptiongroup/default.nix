@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.0.1";
+  version = "1.0.4";
   format = "flit";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c4Zvf4Qu3myx2qQsSvB44gNeX3YH8OLHYsxRuzG757I=";
+    hash = "sha256-vRSWe3nNm9tU2XMjIW+P31M+J435N6oqkAiefW4G5ew=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Backport of PEP 654 (exception groups)";
     homepage = "https://github.com/agronholm/exceptiongroup";
+    changelog = "https://github.com/agronholm/exceptiongroup/blob/${version}/CHANGES.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
