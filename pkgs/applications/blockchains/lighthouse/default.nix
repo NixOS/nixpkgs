@@ -34,13 +34,11 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "modern" "gnosis" ];
 
-  nativeBuildInputs = [ clang cmake perl protobuf ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook cmake perl protobuf ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
   ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   depositContractSpec = fetchurl {
     url = "https://raw.githubusercontent.com/ethereum/eth2.0-specs/v${depositContractSpecVersion}/deposit_contract/contracts/validator_registration.json";

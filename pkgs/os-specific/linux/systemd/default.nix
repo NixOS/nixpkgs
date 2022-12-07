@@ -122,13 +122,13 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.7";
+  version = "252.1";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1653143108";
+  releaseTimestamp = "1667246393";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -139,7 +139,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-Sa5diyNFyYtREo1xSCcufAW83ZZGZvueoDVuQ2r8wno=";
+    hash = "sha256-G43qbNF7znTITSM78sOL0qi8nqaA7qIhmiqP/rZKjXY=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -406,6 +406,7 @@ stdenv.mkDerivation {
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     "-Dtime-epoch=${releaseTimestamp}"
 
+    "-Dmode=release"
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"

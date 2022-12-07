@@ -6,7 +6,6 @@
 , java
 , scala_3
 , polyml
-, z3
 , veriT
 , vampire
 , eprover-ho
@@ -15,7 +14,6 @@
 , perl
 , makeDesktopItem
 , isabelle-components
-, isabelle
 , symlinkJoin
 , fetchhg
 }:
@@ -46,7 +44,7 @@ let
       cp libsha1.so $out/lib/
     '';
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: rec {
   pname = "isabelle";
   version = "2022";
 
@@ -68,24 +66,21 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ java ];
 
-  buildInputs = [ polyml z3 veriT vampire eprover-ho nettools ]
+  buildInputs = [ polyml veriT vampire eprover-ho nettools ]
     ++ lib.optionals (!stdenv.isDarwin) [ java ];
 
-  sourceRoot = dirname;
+  sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
+
+  doCheck = true;
+  checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
-    mv $sourceRoot.app $sourceRoot
+    mv $sourceRoot ${dirname}
+    sourceRoot=${dirname}
   '';
 
   postPatch = ''
     patchShebangs lib/Tools/ bin/
-
-    cat >contrib/z3*/etc/settings <<EOF
-      Z3_HOME=${z3}
-      Z3_VERSION=${z3.version}
-      Z3_SOLVER=${z3}/bin/z3
-      Z3_INSTALLED=yes
-    EOF
 
     cat >contrib/verit-*/etc/settings <<EOF
       ISABELLE_VERIT=${veriT}/bin/veriT
@@ -122,7 +117,7 @@ in stdenv.mkDerivation rec {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/z3-* contrib/verit-* contrib/vampire-* contrib/e-*; do
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
       rm -rf $comp/x86*
     done
 
@@ -143,15 +138,14 @@ in stdenv.mkDerivation rec {
       --replace 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
   '' + lib.optionalString stdenv.isLinux ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
-    for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
+    for f in contrib/*/$arch/{z3,epclextract,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
-    for f in contrib/*/platform_$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
-    done
+    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/platform_$arch/bash_process
     for d in contrib/kodkodi-*/jni/$arch; do
       patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
     done
+    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib" contrib/z3-*/$arch/z3
   '';
 
   buildPhase = ''
@@ -219,14 +213,15 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.unix;
   };
-} // {
-  withComponents = f:
+
+  passthru.withComponents = f:
     let
+      isabelle = finalAttrs.finalPackage;
       base = "$out/${isabelle.dirname}";
       components = f isabelle-components;
     in symlinkJoin {
       name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ components;
+      paths = [ isabelle ] ++ (builtins.map (c: c.override { inherit isabelle; }) components);
 
       postBuild = ''
         rm $out/bin/*
@@ -244,4 +239,4 @@ in stdenv.mkDerivation rec {
         echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
       '') components;
     };
-}
+})
