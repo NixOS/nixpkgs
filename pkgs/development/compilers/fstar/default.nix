@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2022.01.15";
+  version = "2022.11.19";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "sha256-bK3McF/wTjT9q6luihPaEXjx7Lu6+ZbQ9G61Mc4KoB0=";
+    sha256 = "sha256-IJMzRi335RbK8mEXQaF1UDPC0JVi6zSqcz6RS874m3Q=";
   };
 
   strictDeps = true;
