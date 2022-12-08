@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sconsFlags = "platform=linuxbsd target=editor production=true";
+  sconsFlags = [ "platform=linuxbsd target=editor production=true" ];
   preConfigure = ''
     sconsFlags+=" ${
       lib.concatStringsSep " "

@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     "--enable-pcre"
     "--enable-zprofile=${placeholder "out"}/etc/zprofile"
     "--disable-site-fndir"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
     # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
     "zsh_cv_shared_environ=yes"
     "zsh_cv_shared_tgetent=yes"
