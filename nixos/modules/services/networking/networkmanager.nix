@@ -386,22 +386,7 @@ in {
     (mkRenamedOptionModule
       [ "networking" "networkmanager" ]
       [ "services" "networkmanager" ])
-    (mkRenamedOptionModule
-      [ "networking" "networkmanager" "packages" ]
-      [ "networking" "networkmanager" "plugins" ])
-    (mkRenamedOptionModule
-      [ "networking" "networkmanager" "useDnsmasq" ]
-      [ "networking" "networkmanager" "dns" ])
-    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
-      This option was removed because allowing (multiple) regular users to
-      override host entries affecting the whole system opens up a huge attack
-      vector. There seem to be very rare cases where this might be useful.
-      Consider setting system-wide host entries using networking.hosts, provide
-      them via the DNS server in your network, or use environment.etc
-      to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
-    '')
   ];
-
 
   ###### implementation
 
