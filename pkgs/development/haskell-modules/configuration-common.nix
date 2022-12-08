@@ -1302,7 +1302,7 @@ self: super: {
   # - Deps are required during the build for testing and also during execution,
   #   so add them to build input and also wrap the resulting binary so they're in
   #   PATH.
-  # - Patch can be removed on next package set bump
+  # - Patch can be removed on next package set bump (for v0.2.11)
   update-nix-fetchgit = let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
   in self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ] (overrideCabal
     (drv: {
@@ -1313,12 +1313,18 @@ self: super: {
         }"
       '';
     }) (addTestToolDepends deps (
-        appendPatch (fetchpatch {
-            url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/2a4229b04aaeec025f1400a39f4e6390af760b54.patch";
-            sha256 = "sha256-G3abFWykpvtsh8l3GZhkNUpBo7zRb9Ve4d6mjizysIo=";
-            includes = [ "src/Update/Nix/FetchGit/Prefetch.hs" ];
+      appendPatches [
+        (fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/2a4229b04aaeec025f1400a39f4e6390af760b54.patch";
+          sha256 = "sha256-xzLX7YO5+sjbhTvSAP4JJVPMWn1F5miWX3B6Esz1Lqo=";
+          excludes = [ "nixpkgs.nix" "update-nix-fetchgit.cabal" "package.yaml" ];
         })
-        super.update-nix-fetchgit)));
+        (fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/d3a7ce56a2435832d6172ce57ea7feb2554e48df.patch";
+          sha256 = "sha256-/JqAPlAmLQd58YZXko9eb9rqnx39ggK8AdF9tItdQNc=";
+          excludes = [ "nixpkgs.nix" "update-nix-fetchgit.cabal" "package.yaml" ];
+        })
+      ] super.update-nix-fetchgit)));
 
   # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
   binary-strict = appendPatches [
