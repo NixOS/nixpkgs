@@ -266,6 +266,7 @@ let
     , license
     , readmeFile ? "README_${dictFileName}.txt"
     , sourceRoot ? dictFileName
+    , maintainers ? with maintainers; [ vlaci ]
     }:
     mkDict rec {
       pname = "hunspell-dict-${shortName}-libreoffice";
@@ -284,7 +285,7 @@ let
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
         license = license;
-        maintainers = with maintainers; [ vlaci ];
+        maintainers = maintainers;
         platforms = platforms.all;
       };
     };
