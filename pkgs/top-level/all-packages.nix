@@ -1640,7 +1640,7 @@ with pkgs;
     fetchPypi
     annexremote
     drivelib
-    GitPython
+    gitpython
     tenacity
     humanfriendly;
   };
@@ -15320,9 +15320,7 @@ with pkgs;
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-modules = callPackage ../development/tools/rust/cargo-modules {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
-  };
+  cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -22790,15 +22788,6 @@ with pkgs;
 
   suil = callPackage ../development/libraries/audio/suil { };
 
-  suil-qt5 = suil.override {
-    withQt4 = false;
-    withQt5 = true;
-  };
-  suil-qt4 = suil.override {
-    withQt4 = true;
-    withQt5 = false;
-  };
-
   sundials = callPackage ../development/libraries/sundials {
     python = python3;
   };
@@ -27558,7 +27547,6 @@ with pkgs;
 
   audacity = callPackage ../applications/audio/audacity {
     inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon CoreAudio CoreAudioKit CoreServices;
-    suil = suil-qt5;
   };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
@@ -28946,7 +28934,7 @@ with pkgs;
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
     boost = python3Packages.boost;
     inherit (python3Packages)
-      GitPython
+      gitpython
       matplotlib
       pivy
       ply

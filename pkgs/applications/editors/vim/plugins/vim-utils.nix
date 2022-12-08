@@ -1,8 +1,6 @@
 # tests available at pkgs/test/vim
-{ lib, stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText
+{ lib, stdenv, vim, vimPlugins, buildEnv, writeText
 , runCommand, makeWrapper
-, nix-prefetch-hg, nix-prefetch-git
-, fetchFromGitHub, runtimeShell
 , python3
 , callPackage, makeSetupHook
 , linkFarm
