@@ -1514,7 +1514,8 @@
     email = "baduhai@pm.me";
     github = "baduhai";
     githubId = 31864305;
-    name = "William";
+    name = "William F A Hai";
+    matrix = "@baduhai:matrix.org";
   };
   baitinq = {
     email = "manuelpalenzuelamerino@gmail.com";
