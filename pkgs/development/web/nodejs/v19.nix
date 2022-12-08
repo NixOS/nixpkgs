@@ -5,6 +5,8 @@ let
     inherit openssl;
     python = python3;
   };
+
+  npmPatches = callPackage ./npm-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
@@ -14,5 +16,5 @@ buildNodejs {
     ./revert-arm64-pointer-auth.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
-  ];
+  ] ++ npmPatches;
 }
