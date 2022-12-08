@@ -120,6 +120,9 @@ in makePackage {
     license = licenses.gpl2;
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
+    knownVulnerabilities = [
+      "This OpenJFX version has reached its end of life."
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
