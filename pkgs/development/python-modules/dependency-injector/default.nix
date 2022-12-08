@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "4.35.3";
+  version = "4.40.0";
 
   src = fetchFromGitHub {
     owner = "ets-labs";
     repo = "python-dependency-injector";
     rev = version;
-    sha256 = "sha256-2qe4A2T3EagNCh1zSbPWblVN7p9NH8rNwQQVyESJTdk=";
+    sha256 = "sha256-lcgPFdAgLmv7ILL2VVfqtGSw96aUfPv9oiOhksRtF3k=";
   };
 
   propagatedBuildInputs = [
@@ -40,16 +40,6 @@ buildPythonPackage rec {
     scipy
     pytestCheckHook
     pyyaml
-  ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "six>=1.7.0,<=1.15.0" "six"
-  '';
-
-  disabledTestPaths = [
-    # There is no unique identifier to disable the one failing test
-    "tests/unit/ext/test_aiohttp_py35.py"
   ];
 
   pythonImportsCheck = [ "dependency_injector" ];
