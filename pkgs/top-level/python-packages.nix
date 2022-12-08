@@ -6957,6 +6957,11 @@ self: super: with self; {
 
   pinboard = callPackage ../development/python-modules/pinboard { };
 
+  pinocchio = toPythonModule (pkgs.pinocchio.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
+
   pint = callPackage ../development/python-modules/pint { };
 
   pint-pandas = callPackage ../development/python-modules/pint-pandas { };

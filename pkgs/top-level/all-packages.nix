@@ -22024,6 +22024,8 @@ with pkgs;
 
   pico-sdk = callPackage ../development/libraries/pico-sdk { };
 
+  pinocchio = callPackage ../development/libraries/pinocchio { };
+
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
     wine-staging = pkgsi686Linux.wine-staging;
