@@ -136,7 +136,7 @@ in {
 
   options = {
 
-    networking.networkmanager = {
+    services.networkmanager = {
 
       enable = mkOption {
         type = types.bool;
@@ -384,9 +384,14 @@ in {
 
   imports = [
     (mkRenamedOptionModule
+      [ "networking" "networkmanager" ]
+      [ "services" "networkmanager" ])
+    (mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ])
-    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "useDnsmasq" ]
+      [ "networking" "networkmanager" "dns" ])
     (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
