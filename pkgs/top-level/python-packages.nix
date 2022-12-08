@@ -6006,9 +6006,29 @@ self: super: with self; {
 
   mypy = callPackage ../development/python-modules/mypy { };
 
+  mypy-boto3-batch = callPackage ../development/python-modules/mypy-boto3-batch { };
+
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
 
+  mypy-boto3-dynamodb = callPackage ../development/python-modules/mypy-boto3-dynamodb { };
+
+  mypy-boto3-events = callPackage ../development/python-modules/mypy-boto3-events { };
+
+  mypy-boto3-lambda = callPackage ../development/python-modules/mypy-boto3-lambda { };
+
   mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
+
+  mypy-boto3-s3control = callPackage ../development/python-modules/mypy-boto3-s3control { };
+
+  mypy-boto3-sns = callPackage ../development/python-modules/mypy-boto3-sns { };
+
+  mypy-boto3-sqs = callPackage ../development/python-modules/mypy-boto3-sqs { };
+
+  mypy-boto3-ssm = callPackage ../development/python-modules/mypy-boto3-ssm { };
+
+  mypy-boto3-stepfunctions = callPackage ../development/python-modules/mypy-boto3-stepfunctions { };
+
+  mypy-boto3-sts = callPackage ../development/python-modules/mypy-boto3-sts { };
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
