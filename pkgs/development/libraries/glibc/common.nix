@@ -72,6 +72,9 @@ stdenv.mkDerivation ({
        */
       ./2.35-master.patch.gz
 
+      /* Revert this patch contained in the previous bundle.  For now, until we know more. */
+      ./revert-mktime.patch
+
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
