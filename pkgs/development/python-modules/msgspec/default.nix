@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcrist";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-q7WNVnkvK7MTleHEuClOFJ0Wv6EWu/3ztMi6TYdKgKU=";
   };
 
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to handle JSON/MessagePack";
     homepage = "https://github.com/jcrist/msgspec";
+    changelog = "https://github.com/jcrist/msgspec/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
