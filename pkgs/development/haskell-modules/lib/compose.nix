@@ -485,7 +485,7 @@ rec {
           builtins.genericClosure {
             startSet = builtins.map (drv:
               { key = drv.outPath; val = drv; }
-            ) drvs;
+            ) (builtins.filter (i: !builtins.isNull i) drvs);
             operator = { val, ... }:
               if !lib.isDerivation val
               then [ ]

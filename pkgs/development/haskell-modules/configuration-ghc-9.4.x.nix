@@ -214,4 +214,20 @@ in {
   # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
   gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
 
+  haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
+  haskell-gi = __CabalEagerPkgConfigWorkaround super.haskell-gi;
+  gi-adwaita = __CabalEagerPkgConfigWorkaround super.gi-adwaita;
+  gi-atk = __CabalEagerPkgConfigWorkaround super.gi-atk;
+  gi-cairo = __CabalEagerPkgConfigWorkaround super.gi-cairo;
+  gi-gdk = __CabalEagerPkgConfigWorkaround super.gi-gdk;
+  gi-gdkpixbuf = __CabalEagerPkgConfigWorkaround super.gi-gdkpixbuf;
+  gi-gdk_4_0_5 = __CabalEagerPkgConfigWorkaround super.gi-gdk_4_0_5;
+  gi-gio = __CabalEagerPkgConfigWorkaround super.gi-gio;
+  gi-glib = __CabalEagerPkgConfigWorkaround super.gi-glib;
+  gi-gmodule = __CabalEagerPkgConfigWorkaround (overrideCabal (drv: {libraryPkgconfigDepends = [pkgs.glib];}) super.gi-gmodule);
+  gi-gobject = __CabalEagerPkgConfigWorkaround super.gi-gobject;
+  gi-gtk = __CabalEagerPkgConfigWorkaround super.gi-gtk;
+  gi-gtk_4_0_6 = __CabalEagerPkgConfigWorkaround super.gi-gtk_4_0_6;
+  gi-harfbuzz = __CabalEagerPkgConfigWorkaround super.gi-harfbuzz;
+  gi-pango = __CabalEagerPkgConfigWorkaround super.gi-pango;
 }
