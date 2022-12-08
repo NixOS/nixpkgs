@@ -1,4 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, version
+, hash
 , fetchFromGitHub
 
 , cmake
@@ -11,17 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mbedtls";
-  # Auto updates are disabled due to repology listing dev releases as release
-  # versions. See
-  #  * https://github.com/NixOS/nixpkgs/pull/119838#issuecomment-822100428
-  #  * https://github.com/NixOS/nixpkgs/commit/0ee02a9d42b5fe1825b0f7cee7a9986bb4ba975d
-  version = "2.28.1"; # nixpkgs-update: no auto update
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "ARMmbed";
+    owner = "Mbed-TLS";
     repo = "mbedtls";
     rev = "${pname}-${version}";
-    sha256 = "sha256-brbZB3fINDeVWXf50ct4bxYkoBVyD6bBBijZyFQSnyw=";
+    inherit hash;
   };
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
@@ -40,10 +39,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://tls.mbed.org/";
+    homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
+    changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ raphaelr ];
   };
 }

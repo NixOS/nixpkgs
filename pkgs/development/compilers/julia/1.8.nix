@@ -15,7 +15,7 @@
 , libgit2
 , curl
 , nghttp2
-, mbedtls
+, mbedtls_2
 , libssh2
 , gmp
 , mpfr
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     libgit2
     curl
     nghttp2
-    mbedtls
+    mbedtls_2
     libssh2
     gmp
     mpfr
