@@ -507,7 +507,15 @@ in with passthru; stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://python.org";
+    homepage = "https://www.python.org";
+    changelog = let
+      majorMinor = lib.versions.majorMinor version;
+      dashedVersion = lib.replaceStrings [ "." "a" ] [ "-" "-alpha-" ] version;
+    in
+      if sourceVersion.suffix == "" then
+        "https://docs.python.org/release/${version}/whatsnew/changelog.html"
+      else
+        "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
     description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that
