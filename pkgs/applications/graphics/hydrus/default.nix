@@ -6,6 +6,8 @@
 , enableSwftools ? false
 , swftools
 , python3Packages
+, qtbase
+, qtcharts
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -25,6 +27,11 @@ python3Packages.buildPythonPackage rec {
     python3Packages.mkdocs-material
   ];
 
+  buildInputs = [
+    qtbase
+    qtcharts
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
     cbor2
@@ -38,7 +45,8 @@ python3Packages.buildPythonPackage rec {
     pillow
     psutil
     pyopenssl
-    pyside2
+    pyqt6
+    pyqt6-charts
     pysocks
     python-dateutil
     python3Packages.mpv

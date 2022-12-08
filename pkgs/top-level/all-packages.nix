@@ -29446,7 +29446,7 @@ with pkgs;
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
     inherit miniupnpc swftools;
-    inherit (qt5) wrapQtAppsHook;
+    inherit (qt6) wrapQtAppsHook qtbase qtcharts;
   };
 
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
