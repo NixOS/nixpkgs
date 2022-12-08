@@ -12,9 +12,11 @@
 , tor
 , zip
 , xz
+, javaToolOptsFunc ? x: x
 }:
 
 let
+  javaToolOptions = javaToolOptsFunc [ "-XX:+UseG1GC" "-XX:MaxHeapFreeRatio=10" "-XX:MinHeapFreeRatio=5" "-XX:+UseStringDeduplication" ];
   bisq-launcher = writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
 
@@ -22,8 +24,7 @@ let
     # runtime dependency; The Tor binary is in a *.jar file,
     # whereas Nix only scans for hashes in uncompressed text.
     # ${bisq-tor}
-
-    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication" bisq-desktop-wrapped "$@"
+    JAVA_TOOL_OPTIONS="${toString javaToolOptions}" bisq-desktop-wrapped "$@"
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
