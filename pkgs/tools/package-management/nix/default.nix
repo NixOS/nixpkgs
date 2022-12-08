@@ -119,7 +119,15 @@ in lib.makeExtensible (self: {
     ];
   };
 
-  stable = self.nix_2_11;
+  nix_2_12 = common {
+    version = "2.12.0";
+    sha256 = "sha256-sQ9C101CL/eVN5JgH91ozHFWU4+bXr8/Fi/8NQk6xRI=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+  };
+
+  stable = self.nix_2_12;
 
   unstable = self.stable;
 })
