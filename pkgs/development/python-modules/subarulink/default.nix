@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for interacting with STARLINK-enabled vehicle";
     homepage = "https://github.com/G-Two/subarulink";
+    changelog = "https://github.com/G-Two/subarulink/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
