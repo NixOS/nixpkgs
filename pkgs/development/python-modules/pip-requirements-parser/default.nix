@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pip-requirements-parser";
-  version = "31.2.0";
+  version = "32.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-i4hw3tS4i2ek2JzcDiGo5aFFJ9J2JJ9MB5vxDhOilb0=";
+    hash = "sha256-Wu4C93PWujygKIzXqUjCmKWcllr+hkuvnqDuw6/D9Do=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
