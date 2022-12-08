@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "mecab-python3";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5wPXjIimcau4FwNRZEhQAV2bv6sxUwo7QNEkgaZ3mhE=";
+    sha256 = "sha256-FvOKzkhAIL00RqEAVIKWeMHnuX8XQLWLAKMdWVz/Al4=";
   };
 
   nativeBuildInputs = [
