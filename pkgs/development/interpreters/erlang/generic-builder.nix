@@ -137,9 +137,6 @@ stdenv.mkDerivation ({
 
   postInstall = ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
-  '' + (lib.optionalString stdenv.isLinux ''
-    ln -s $out/lib/erlang/bin/escript $out/bin/escript
-  '') + ''
 
     ${postInstall}
   '';
