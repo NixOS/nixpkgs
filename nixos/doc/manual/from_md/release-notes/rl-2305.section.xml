@@ -22,7 +22,14 @@
   </section>
   <section xml:id="sec-release-23.05-new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/akinomyoga/ble.sh">blesh</link>,
+          a line editor written in pure bash. Available as
+          <link linkend="opt-programs.bash.blesh.enable">programs.bash.blesh</link>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           <link xlink:href="https://github.com/junegunn/fzf">fzf</link>,

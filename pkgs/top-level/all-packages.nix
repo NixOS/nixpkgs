@@ -1640,7 +1640,7 @@ with pkgs;
     fetchPypi
     annexremote
     drivelib
-    GitPython
+    gitpython
     tenacity
     humanfriendly;
   };
@@ -2788,9 +2788,7 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
-    openjdk11 = openjdk11.override { enableJavaFX = true; };
-  };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
   bic = callPackage ../development/interpreters/bic { };
 
@@ -5973,6 +5971,8 @@ with pkgs;
   };
 
   artim-dark = callPackage ../data/themes/artim-dark {};
+
+  bbin = callPackage ../development/tools/bbin {};
 
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
@@ -13363,6 +13363,8 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
+  zinc = callPackage ../servers/search/zinc { };
+
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
   zpaq = callPackage ../tools/archivers/zpaq { };
@@ -15316,9 +15318,7 @@ with pkgs;
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-modules = callPackage ../development/tools/rust/cargo-modules {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
-  };
+  cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -18094,6 +18094,10 @@ with pkgs;
   };
 
   taoup = callPackage ../tools/misc/taoup { };
+
+  tarmac = callPackage ../development/tools/tarmac {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
@@ -22782,15 +22786,6 @@ with pkgs;
 
   suil = callPackage ../development/libraries/audio/suil { };
 
-  suil-qt5 = suil.override {
-    withQt4 = false;
-    withQt5 = true;
-  };
-  suil-qt4 = suil.override {
-    withQt4 = true;
-    withQt5 = false;
-  };
-
   sundials = callPackage ../development/libraries/sundials {
     python = python3;
   };
@@ -23747,6 +23742,8 @@ with pkgs;
   exhibitor = callPackage ../servers/exhibitor { };
 
   hyp = callPackage ../servers/http/hyp { };
+
+  peering-manager = callPackage ../servers/web-apps/peering-manager { };
 
   podgrab = callPackage ../servers/misc/podgrab { };
 
@@ -27548,7 +27545,6 @@ with pkgs;
 
   audacity = callPackage ../applications/audio/audacity {
     inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon CoreAudio CoreAudioKit CoreServices;
-    suil = suil-qt5;
   };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
@@ -28936,7 +28932,7 @@ with pkgs;
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
     boost = python3Packages.boost;
     inherit (python3Packages)
-      GitPython
+      gitpython
       matplotlib
       pivy
       ply

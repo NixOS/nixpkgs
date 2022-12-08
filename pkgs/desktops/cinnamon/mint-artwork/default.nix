@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchurl {
     urls = [
       "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
-      "https://web.archive.org/web/20221203023403/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
+      "https://web.archive.org/web/20221206154838/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
     ];
-    hash = "sha256-I8gLWwwuXZkgc5zZ9QVkSarugcNWLFIz2mU1d4QqJRU=";
+    hash = "sha256-lusYlmTL71VTGSJFssuIZVu7xJMuZQ7wj2rMtO1lhZ8=";
   };
 
   nativeBuildInputs = [

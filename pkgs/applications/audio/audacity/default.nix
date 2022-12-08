@@ -67,7 +67,7 @@
 let
   inherit (lib) optionals;
   pname = "audacity";
-  version = "3.2.1";
+  version = "3.2.2";
 in
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-7rfttp9LnfM2LBT5seupPyDckS7LEzWDZoqtLsGgqgI=";
+    sha256 = "sha256-vDkIBsXINo7g8lbDfXYTaz2AB6HWPc5resITllVNd6o=";
   };
 
   postPatch = ''

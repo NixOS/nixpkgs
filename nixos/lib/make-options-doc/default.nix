@@ -111,14 +111,16 @@ in rec {
   inherit optionsNix;
 
   optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateAsciiDoc.py} \
-      < ${optionsJSON}/share/doc/nixos/options.json \
+    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
+      --format asciidoc \
+      ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
   optionsCommonMark = pkgs.runCommand "options.md" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateCommonMark.py} \
-      < ${optionsJSON}/share/doc/nixos/options.json \
+    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
+      --format commonmark \
+      ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 

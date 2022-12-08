@@ -16,7 +16,6 @@ in
         enable = true;
         listenPort = port;
       };
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ["unrar"];
     };
 
   testScript = ''
