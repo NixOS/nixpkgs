@@ -2020,6 +2020,11 @@ self: super: with self; {
 
   criticality-score = callPackage ../development/python-modules/criticality-score { };
 
+  crocoddyl = toPythonModule (callPackage ../development/libraries/crocoddyl {
+    pythonSupport = true;
+    python3Packages = self;
+  });
+
   cron-descriptor = callPackage ../development/python-modules/cron-descriptor { };
 
   croniter = callPackage ../development/python-modules/croniter { };
