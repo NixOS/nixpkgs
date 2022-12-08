@@ -575,7 +575,7 @@ GEM
       fog-json (~> 1.2.0)
       mime-types
       ms_rest_azure (~> 0.12.0)
-    gitlab-labkit (0.28.0)
+    gitlab-labkit (0.29.0)
       actionpack (>= 5.0.0, < 8.0.0)
       activesupport (>= 5.0.0, < 8.0.0)
       grpc (>= 1.37)
@@ -1668,7 +1668,7 @@ DEPENDENCIES
   gitlab-dangerfiles (~> 3.6.2)
   gitlab-experiment (~> 0.7.1)
   gitlab-fog-azure-rm (~> 1.4.0)
-  gitlab-labkit (~> 0.28.0)
+  gitlab-labkit (~> 0.29.0)
   gitlab-license (~> 2.2.1)
   gitlab-mail_room (~> 0.0.9)
   gitlab-markup (~> 1.8.0)
