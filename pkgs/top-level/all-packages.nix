@@ -23605,6 +23605,8 @@ with pkgs;
 
   hyp = callPackage ../servers/http/hyp { };
 
+  peering-manager = callPackage ../servers/web-apps/peering-manager { };
+
   podgrab = callPackage ../servers/misc/podgrab { };
 
   portunus = callPackage ../servers/portunus { };
@@ -25902,6 +25904,8 @@ with pkgs;
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   twa = callPackage ../tools/networking/twa { };
+
+  twingate = callPackage ../applications/networking/twingate { };
 
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
