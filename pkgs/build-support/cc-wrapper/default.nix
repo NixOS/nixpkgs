@@ -114,6 +114,14 @@ let
 
   darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
     stdenv.targetPlatform.darwinMinVersionVariable;
+
+  # this converts, e.g. [ "fp" "crc" ] to "+fp+crc" which can be
+  # appended to `-march` and `-mcpu`; see
+  #  https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/AArch64-Options.html#g_t-march-and--mcpu-Feature-Modifiers
+  featureModifiersToString = gcc:
+    lib.strings.concatMapStrings
+      (s: "+${s}")
+      (gcc.featureModifiers or []);
 in
 
 # Ensure bintools matches
@@ -438,14 +446,14 @@ stdenv.mkDerivation {
     # TODO: aarch64-darwin has mcpu incompatible with gcc
     + optionalString ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
                       isGccArchSupported targetPlatform.gcc.arch) ''
-      echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+      echo "-march=${targetPlatform.gcc.arch}${featureModifiersToString targetPlatform.gcc}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mcpu is not very useful. You should use mtune and march
     # instead. It’s provided here for backwards compatibility.
     # TODO: aarch64-darwin has mcpu incompatible with gcc
     + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64))) ''
-      echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+      echo "-mcpu=${targetPlatform.gcc.cpu}${featureModifiersToString targetPlatform.gcc}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mfloat-abi only matters on arm32 but we set it here
