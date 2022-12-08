@@ -422,13 +422,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("Ensure correct architecture is present in manifests."):
         docker.succeed(
             "docker load --input='${examples.build-image-with-architecture}'",
-            "docker inspect ${examples.build-image-with-architecture} "
+            "docker inspect build-image-with-architecture "
               + "| ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'",
             "docker rmi build-image-with-architecture",
         )
         docker.succeed(
             "${examples.layered-image-with-architecture} | docker load",
-            "docker inspect ${examples.layered-image-with-architecture} "
+            "docker inspect layered-image-with-architecture "
               + "| ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'",
             "docker rmi layered-image-with-architecture",
         )
