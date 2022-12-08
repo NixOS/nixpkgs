@@ -46,15 +46,11 @@ in {
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkOverride 50 (
-        if cfg.devices != [] then
-          cfg.devices
-        else [
-          "block-blkext rw"
-          "block-sd rw"
-          "char-nvme rw"
-        ]
-      );
+      DeviceAllow = lib.mkOverride 50 [
+        "block-blkext rw"
+        "block-sd rw"
+        "char-nvme rw"
+      ];
       ExecStart = ''
         ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter ${args}
       '';
