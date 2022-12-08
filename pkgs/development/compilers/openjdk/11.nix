@@ -11,8 +11,8 @@
 let
   major = "11";
   minor = "0";
-  update = "15";
-  build = "10";
+  update = "17";
+  build = "8";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,7 +22,7 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "le2JDxPJPSuga4JxLJNRZwCaodptSb2kh4TsJXumTXs=";
+      sha256 = "sha256-kvgLYqQZPqyuigVyzbDHc3TMff0clvzM8IdzYLYcxPU=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
