@@ -107,7 +107,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9093;
         description = lib.mdDoc ''
           Port to listen on for the web interface and API.

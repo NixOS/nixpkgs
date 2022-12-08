@@ -1,20 +1,18 @@
 { lib
-, bleak-retry-connector
 , bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , home-assistant-bluetooth
-, poetry-core
-, pycryptodomex
 , pytestCheckHook
 , pythonOlder
 , sensor-state-data
 }:
 
 buildPythonPackage rec {
-  pname = "xiaomi-ble";
-  version = "0.12.2";
+  pname = "ruuvitag-ble";
+  version = "0.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,20 +20,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MwKhoerfloFT5/x1darfMP/qF5sEy6LiKEogINIUq0c=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WkPYlEkUH1xvGjBVr6JkLx5CfIPvAa9vX50OjCOmTME=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   propagatedBuildInputs = [
-    bleak-retry-connector
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
-    pycryptodomex
     sensor-state-data
   ];
 
@@ -45,16 +41,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=ruuvitag_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
-    "xiaomi_ble"
+    "ruuvitag_ble"
   ];
 
   meta = with lib; {
-    description = "Library for Xiaomi BLE devices";
-    homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
+    description = "Library for Ruuvitag BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/ruuvitag-ble";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
