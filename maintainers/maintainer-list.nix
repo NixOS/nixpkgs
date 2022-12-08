@@ -2287,6 +2287,12 @@
     githubId = 5394722;
     name = "Spencer Baugh";
   };
+  cathalmullan = {
+    email = "contact@cathal.dev";
+    github = "CathalMullan";
+    githubId = 37139470;
+    name = "Cathal Mullan";
+  };
   catouc = {
     email = "catouc@philipp.boeschen.me";
     github = "catouc";
