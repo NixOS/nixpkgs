@@ -1975,6 +1975,8 @@ with pkgs;
 
   emulationstation = callPackage ../applications/emulators/emulationstation { };
 
+  emulationstation-de = callPackage ../applications/emulators/emulationstation-de { };
+
   fceux = callPackage ../applications/emulators/fceux {
     lua = lua5_1;
     inherit (libsForQt5) wrapQtAppsHook;

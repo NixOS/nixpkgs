@@ -1,0 +1,20 @@
+diff --git a/resources/systems/unix/es_find_rules.xml b/resources/systems/unix/es_find_rules.xml
+index 3616bb79..bd08a931 100644
+--- a/resources/systems/unix/es_find_rules.xml
++++ b/resources/systems/unix/es_find_rules.xml
+@@ -40,6 +40,8 @@
+             <entry>/usr/local/lib/libretro</entry>
+             <!-- NetBSD repository -->
+             <entry>/usr/pkg/lib/libretro</entry>
++            <!-- NixOS and nixpkgs repository -->
++            <entry>/run/current-system/sw/lib/retroarch/cores</entry>
+         </rule>
+     </core>
+     <emulator name="ATARI800">
+@@ -554,4 +556,4 @@
+             <entry>~/bin/yuzu*.AppImage</entry>
+         </rule>
+     </emulator>
+-</ruleList>
+\ No newline at end of file
++</ruleList>
