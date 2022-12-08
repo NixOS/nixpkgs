@@ -1243,6 +1243,10 @@ self: super: {
     dependencies = with self; [ vimproc-vim ];
   });
 
+  vim-zettel = super.vim-zettel.overrideAttrs (old: {
+    dependencies = with self; [ vimwiki fzf-vim ];
+  });
+
   YankRing-vim = super.YankRing-vim.overrideAttrs (old: {
     sourceRoot = ".";
   });
