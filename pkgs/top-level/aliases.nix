@@ -729,6 +729,7 @@ mapAliases ({
   kodiPlainWayland = kodi-wayland;
   kodiPlugins = kodiPackages; # Added 2021-03-09;
   kramdown-rfc2629 = rubyPackages.kramdown-rfc2629; # Added 2021-03-23
+  krb5Full = krb5;
   krename-qt5 = throw "'krename-qt5' has been renamed to/replaced by 'krename'"; # Converted to throw 2022-02-22
   krita-beta = krita; # moved from top-level 2021-12-23
   kube-aws = throw "kube-aws is deprecated and archived by upstream"; # Added 2022-04-05

@@ -19989,7 +19989,6 @@ with pkgs;
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
-  krb5Full = krb5;
   libkrb5 = krb5.override { type = "lib"; };
 
   kronosnet = callPackage ../development/libraries/kronosnet { };

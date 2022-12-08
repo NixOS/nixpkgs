@@ -1207,15 +1207,15 @@ let
       url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/Authen-Krb5-Admin-0.17.tar.gz";
       hash = "sha256-XdScrNmD79YajD8aVlcbtzeF6xVZCLXXvsl+7XjfDFQ=";
     };
-    propagatedBuildInputs = [ pkgs.krb5Full.dev AuthenKrb5 ];
+    propagatedBuildInputs = [ pkgs.krb5.dev AuthenKrb5 ];
     # The following ENV variables are required by Makefile.PL to find
-    # programs in krb5Full.dev. It is not enough to just specify the
-    # path to krb5-config as this tool returns the prefix of krb5Full,
+    # programs in krb5.dev. It is not enough to just specify the
+    # path to krb5-config as this tool returns the prefix of krb5,
     # which implies a working value for KRB5_LIBDIR, but not the others.
     perlPreHook = ''
-      export KRB5_CONFTOOL=${pkgs.krb5Full.dev}/bin/krb5-config
-      export KRB5_BINDIR=${pkgs.krb5Full.dev}/bin
-      export KRB5_INCDIR=${pkgs.krb5Full.dev}/include
+      export KRB5_CONFTOOL=${pkgs.krb5.dev}/bin/krb5-config
+      export KRB5_BINDIR=${pkgs.krb5.dev}/bin
+      export KRB5_INCDIR=${pkgs.krb5.dev}/include
     '';
     # Tests require working Kerberos infrastructure so replace with a
     # simple attempt to exercise the module.
@@ -10529,8 +10529,8 @@ let
       url = "mirror://cpan/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz";
       hash = "sha256-fY8se2F2L7TsctLsKBKQ8vh/nH0pgnPaRSVDKmXncNY=";
     };
-    propagatedBuildInputs = [ pkgs.krb5Full.dev ];
-    makeMakerFlags = [ "--gssapiimpl" "${pkgs.krb5Full.dev}" ];
+    propagatedBuildInputs = [ pkgs.krb5.dev ];
+    makeMakerFlags = [ "--gssapiimpl" "${pkgs.krb5.dev}" ];
     meta = {
       description = "Perl extension providing access to the GSSAPIv2 library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
