@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby
+{ stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
 , openjdk11-bootstrap }:
 
 let
   major = "11";
-  update = ".0.11";
+  update = ".0.17";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = (gradle_4.override {
+  gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
   });
 
@@ -24,12 +24,14 @@ let
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
 
-    src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
-      sha256 = "sha256-mbEALUxuwbtlGeZ2Xsm3m3aNDdthLYWd6QHmdkAILxc=";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jfx${major}u";
+      rev = repover;
+      sha256 = "sha256-uKb6k+tIFdwy1BYiHWeGmKNz82X4CZjFlGYqLDpSFY0=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -43,8 +45,6 @@ let
       CONF = Release
       JDK_HOME = ${openjdk11-bootstrap.home}
     '' + args.gradleProperties or "");
-
-    inherit NIX_CFLAGS_COMPILE;
 
     buildPhase = ''
       runHook preBuild
@@ -74,10 +74,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    # Downloaded AWT jars differ by platform.
-    outputHash = {
-      x86_64-linux = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa8=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    outputHash = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa9=";
   };
 
 in makePackage {
@@ -85,7 +82,7 @@ in makePackage {
 
   gradleProperties = ''
     COMPILE_MEDIA = true
-    COMPILE_WEBKIT = true
+    COMPILE_WEBKIT = false
   '';
 
   preBuild = ''
@@ -98,8 +95,6 @@ in makePackage {
   installPhase = ''
     cp -r build/modular-sdk $out
   '';
-
-  inherit NIX_CFLAGS_COMPILE;
 
   stripDebugList = [ "." ];
 
