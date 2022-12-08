@@ -191,6 +191,9 @@ let
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
+      services.udev.extraRules = mkIf ("${name}" == "smartctl") ''
+        SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", GROUP="disk"
+      '';
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
