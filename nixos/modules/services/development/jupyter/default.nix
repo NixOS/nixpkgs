@@ -57,7 +57,7 @@ in {
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8888;
       description = lib.mdDoc ''
         Port number Jupyter will be listening on.
