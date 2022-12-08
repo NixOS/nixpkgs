@@ -92,7 +92,7 @@ rec {
     ];
 
     extraCommands = ''
-      mkdir -p tmp
+      mkdir -p tmp/nginx_client_body
 
       # nginx still tries to read this directory even if error_log
       # directive is specifying another file :/
