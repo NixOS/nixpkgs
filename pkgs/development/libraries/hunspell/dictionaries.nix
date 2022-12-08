@@ -888,7 +888,7 @@ rec {
     readmeFile = "README_pt_PT.txt";
     shortDescription = "Portuguese (Portugal)";
     license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = with maintainers; [ baduhai ];
+    maintainers = with lib.maintainers; [ baduhai ];
   };
 
   pt_BR = pt-br;
@@ -898,6 +898,6 @@ rec {
     readmeFile = "README_pt_BR.txt";
     shortDescription = "Brazilian Portuguese (Brazil)";
     license = with lib.licenses; [ lgpl3 ];
-    maintainers = with maintainers; [ baduhai ];
+    maintainers = with lib.maintainers; [ baduhai ];
   };
 }
