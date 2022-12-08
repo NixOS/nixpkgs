@@ -487,6 +487,8 @@ rec {
           libiconv
           brotli.lib
           file
+          jq.bin
+          oniguruma.lib # dep of jq
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -563,6 +565,8 @@ rec {
           libiconv
           brotli.lib
           file
+          jq.bin
+          oniguruma.lib # dep of jq
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -745,6 +749,8 @@ rec {
         cc.expand-response-params
         libxml2.out
         file
+        jq.bin
+        oniguruma.lib # dep of jq
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

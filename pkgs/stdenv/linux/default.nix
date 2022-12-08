@@ -426,11 +426,11 @@ in
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
+            gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file jq
           ]
         # Library dependencies
         ++ map getLib (
-            [ attr acl zlib pcre libidn2 libunistring ]
+            [ attr acl zlib pcre libidn2 libunistring oniguruma /*dep of jq*/ ]
             ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
           )
         # More complicated cases

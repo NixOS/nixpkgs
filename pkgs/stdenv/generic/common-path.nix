@@ -13,6 +13,8 @@
   pkgs.patch
   pkgs.xz.bin
 
+  pkgs.jq.bin
+
   # The `file` command is added here because an enormous number of
   # packages have a vendored dependency upon `file` in their
   # `./configure` script, due to libtool<=2.4.6, or due to
