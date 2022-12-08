@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
+    changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
