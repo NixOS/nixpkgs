@@ -1275,6 +1275,7 @@
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
+  ./system/boot/systemd/userdbd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/boot/uvesafb.nix
