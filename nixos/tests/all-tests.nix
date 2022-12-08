@@ -637,6 +637,7 @@ in {
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};
+  systemd-homed = handleTest ./systemd-homed.nix {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tayga = handleTest ./tayga.nix {};

@@ -450,7 +450,7 @@ in
         (mkAfter [ "systemd" ])
       ]);
       group = (mkMerge [
-        (mkAfter [ "systemd" ])
+        (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
       ]);
     };
 
