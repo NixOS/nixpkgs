@@ -878,4 +878,26 @@ rec {
     shortDescription = "Norwegian Nynorsk (Norway)";
     license = with lib.licenses; [ gpl2Only ];
   };
+
+  /* PORTUGUESE */
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    readmeFile = "README_pt_PT.txt";
+    shortDescription = "Portuguese (Portugal)";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+    maintainers = with maintainers; [ baduhai ];
+  };
+
+  pt_BR = pt-br;
+  pt-br = mkDictFromLibreOffice {
+    shortName = "pt-br";
+    dictFileName = "pt_BR";
+    readmeFile = "README_pt_BR.txt";
+    shortDescription = "Brazilian Portuguese (Brazil)";
+    license = with lib.licenses; [ lgpl3 ];
+    maintainers = with maintainers; [ baduhai ];
+  };
 }
