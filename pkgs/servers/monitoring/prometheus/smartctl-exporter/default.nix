@@ -16,6 +16,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-lQKuT5dzjDHFpRSmcXpKD1RJDlEv+0kcxENkv3mT4FU=";
 
+  ldflags = [
+    "-X github.com/prometheus/common/version.Version=${version}"
+  ];
+
   meta = with lib; {
     description = "Export smartctl statistics for Prometheus";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
