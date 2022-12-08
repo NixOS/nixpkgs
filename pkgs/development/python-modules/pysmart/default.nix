@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pysmart";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-SMART";
-    rev = "v${version}";
-    sha256 = "sha256-e46ALiYg0Db/gOzqLmVc1vi9ObhfxzqwfQk9/9pz+r0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-slLk4zoW0ht9hiOxyBt0caekjrPgih9G99pRiD2vIxE=";
   };
 
   postPatch = ''
