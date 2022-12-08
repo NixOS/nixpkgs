@@ -28,6 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa Frostman ];
   };
 }
