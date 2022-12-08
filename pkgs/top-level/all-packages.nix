@@ -23831,6 +23831,8 @@ with pkgs;
 
   mimir = callPackage ../servers/monitoring/mimir { };
 
+  phlare = callPackage ../servers/monitoring/phlare { };
+
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
