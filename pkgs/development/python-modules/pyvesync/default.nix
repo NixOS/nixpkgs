@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";
     homepage = "https://github.com/webdjoe/pyvesync";
+    changelog = "https://github.com/webdjoe/pyvesync/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
