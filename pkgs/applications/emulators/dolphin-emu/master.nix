@@ -20,7 +20,7 @@
 , alsa-lib
 , miniupnpc
 , enet
-, mbedtls
+, mbedtls_2
 , soundtouch
 , sfml
 , xz
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     hidapi
     miniupnpc
     enet
-    mbedtls
+    mbedtls_2
     soundtouch
     sfml
     xz

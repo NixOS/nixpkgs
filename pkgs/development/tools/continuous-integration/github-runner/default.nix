@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , fetchurl
 , git
+, glibc
 , icu
 , libkrb5
 , lib
@@ -259,7 +260,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
     substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
       --replace 'source ./env.sh' $out/bin/env.sh
-
+  '' + lib.optionalString stdenv.isLinux ''
+    # Make binary paths absolute
+    substituteInPlace $out/lib/config.sh \
+      --replace 'ldd' '${glibc}/bin/ldd' \
+      --replace '/sbin/ldconfig' '${glibc}/bin/ldconfig'
+  '' + ''
     # Remove uneeded copy for run-helper template
     substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
     substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'

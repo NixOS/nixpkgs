@@ -21487,7 +21487,8 @@ with pkgs;
 
   maxflow = callPackage ../development/libraries/maxflow { };
 
-  mbedtls = callPackage ../development/libraries/mbedtls { };
+  mbedtls_2 = callPackage ../development/libraries/mbedtls/2.nix { };
+  mbedtls = callPackage ../development/libraries/mbedtls/3.nix { };
 
   mdctags = callPackage ../development/tools/misc/mdctags { };
 
@@ -32334,6 +32335,8 @@ with pkgs;
   tanka = callPackage ../applications/networking/cluster/tanka { };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
+
+  teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux { };
 
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
