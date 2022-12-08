@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -19,6 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-X github.com/prometheus/common/version.Version=${version}"
   ];
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) smartctl; };
 
   meta = with lib; {
     description = "Export smartctl statistics for Prometheus";
