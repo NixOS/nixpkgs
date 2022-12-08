@@ -844,7 +844,8 @@ self: super: {
 
   # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
-  vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
+  # dontCheck can be removed on the next package set bump
+  vulkan-utils = dontCheck (addExtraLibrary pkgs.vulkan-headers super.vulkan-utils);
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = doJailbreak (appendPatch ./patches/encoding-Cabal-2.0.patch super.encoding);
