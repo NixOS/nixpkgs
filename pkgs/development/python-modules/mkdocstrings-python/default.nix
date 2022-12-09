@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python handler for mkdocstrings";
     homepage = "https://github.com/mkdocstrings/python";
+    changelog = "https://github.com/mkdocstrings/python/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };
