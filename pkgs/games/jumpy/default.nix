@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-AXaGuRqSFiq+Uiy+UaqPdPVyDhCogC64KZZ0Ah1Yo7A=";
 
+  auditable = true; # TODO: remove when this is the default
+
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config
   ];

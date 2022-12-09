@@ -2,6 +2,7 @@
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , libiconv, CoreFoundation, Security
+, auditable ? false # TODO: change to true when this is the default
 }:
 
 rustPlatform.buildRustPackage {
@@ -11,6 +12,8 @@ rustPlatform.buildRustPackage {
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/cargo";
+
+  inherit auditable;
 
   passthru = {
     rustc = rustc;

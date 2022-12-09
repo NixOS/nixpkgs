@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-KVoMC8ypikABVkIj5dCSHzYZ9CV8UMuAFxSEYLaQTSk=";
 
+  auditable = true; # TODO: remove when this is the default
+
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   # Tests rely on unset 'RUST_LOG' value to emit INFO messages.

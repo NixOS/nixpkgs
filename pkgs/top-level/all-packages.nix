@@ -15245,6 +15245,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-auditable = callPackage ../development/tools/rust/cargo-auditable { };
+  cargo-auditable-cargo-wrapper = callPackage ../development/tools/rust/cargo-auditable/cargo-wrapper.nix { };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
     openssl = openssl_1_1;
