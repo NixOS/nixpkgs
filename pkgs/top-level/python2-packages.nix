@@ -88,8 +88,6 @@ with self; with super; {
 
   rpm = disabled super.rpm;
 
-  s3transfer = callPackage ../development/python2-modules/s3transfer { };
-
   scandir = callPackage ../development/python2-modules/scandir { };
 
   sequoia = disabled super.sequoia;
