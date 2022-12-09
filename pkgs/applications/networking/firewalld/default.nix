@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/firewall/config/__init__.py.in \
-      --replace "/usr/share" "$out/share"
+      --replace "/usr/share" "$out/share" \
+      --replace "/usr/lib/" "$out/lib/"
 
     for file in config/firewall-{applet,config}.desktop.in; do
       substituteInPlace $file \
