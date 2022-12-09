@@ -1397,6 +1397,8 @@ with pkgs;
 
   httm = callPackage ../tools/filesystems/httm { };
 
+  iay = callPackage ../tools/misc/iay { };
+
   kanata = callPackage ../tools/system/kanata { };
 
   kanata-with-cmd = kanata.override { withCmd = true; };
