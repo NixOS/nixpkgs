@@ -4,11 +4,15 @@
 , smartmontools
 , humanfriendly
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysmart";
   version = "1.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "truenas";
