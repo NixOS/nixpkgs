@@ -15485,13 +15485,6 @@ with pkgs;
   clang_17 = llvmPackages_17.clang;
 
   clang-tools = llvmPackages.clang-tools;
-  clang-tools_9 = llvmPackages_9.clang-tools;
-  clang-tools_12 = llvmPackages_12.clang-tools;
-  clang-tools_13 = llvmPackages_13.clang-tools;
-  clang-tools_14 = llvmPackages_14.clang-tools;
-  clang-tools_15 = llvmPackages_15.clang-tools;
-  clang-tools_16 = llvmPackages_16.clang-tools;
-  clang-tools_17 = llvmPackages_17.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_14;
