@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libllvm libxml2 ];
 
+  # workaround https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then "-lgcc" else null;
+
   cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];

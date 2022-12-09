@@ -7,7 +7,6 @@
 , nose
 , coverage
 , wheel
-, unittest2
 , botocore
 , futures ? null
 }:
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     nose
     coverage
     wheel
-    unittest2
   ];
 
   checkPhase = ''

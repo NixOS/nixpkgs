@@ -35,6 +35,9 @@ stdenv.mkDerivation {
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
+  # workaround https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then "-lgcc" else null;
+
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
