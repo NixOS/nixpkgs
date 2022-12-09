@@ -7,12 +7,13 @@
 , httpx
 , mypy-boto3-s3
 , numpy
-, scipy
 , pydantic
+, pytest-asyncio
 , pytestCheckHook
-, pyyaml
-, six
 , pythonOlder
+, pyyaml
+, scipy
+, six
 }:
 
 buildPythonPackage rec {
@@ -33,21 +34,42 @@ buildPythonPackage rec {
     six
   ];
 
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
+    pydantic = [
+      pydantic
+    ];
+    flask = [
+      flask
+    ];
+    yaml = [
+      pyyaml
+    ];
+  };
+
   checkInputs = [
-    aiohttp
     fastapi
-    flask
     httpx
     mypy-boto3-s3
     numpy
-    pydantic
-    scipy
+    pytest-asyncio
     pytestCheckHook
-    pyyaml
-  ];
+    scipy
+  ] ++ passthru.optional-dependencies.aiohttp
+  ++ passthru.optional-dependencies.pydantic
+  ++ passthru.optional-dependencies.yaml
+  ++ passthru.optional-dependencies.flask;
 
   pythonImportsCheck = [
     "dependency_injector"
+  ];
+
+  disabledTestPaths = [
+    # Exclude tests for EOL Python releases
+    "tests/unit/ext/test_aiohttp_py35.py"
+    "tests/unit/wiring/test_*_py36.py"
   ];
 
   meta = with lib; {
