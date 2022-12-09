@@ -22,6 +22,7 @@ rec {
   resholve = callPackage ./resholve.nix {
     inherit (source) rSrc version;
     inherit (deps.oil) oildev;
+    inherit (deps) configargparse;
     inherit resholve-utils;
   };
   # funcs to validate and phrase invocations of resholve
