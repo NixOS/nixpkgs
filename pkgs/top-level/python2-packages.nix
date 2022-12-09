@@ -41,10 +41,6 @@ with self; with super; {
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
-  marisa = callPackage ../development/python2-modules/marisa {
-    inherit (pkgs) marisa;
-  };
-
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
   mock = callPackage ../development/python2-modules/mock { };
