@@ -106,8 +106,6 @@ with self; with super; {
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
 
-  sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
-
   typing = callPackage ../development/python2-modules/typing { };
 
   zeek = disabled super.zeek;
