@@ -12,9 +12,11 @@
 , libnotify
 , libxml2
 , libxslt
+, networkmanager
 , networkmanagerapplet
 , pkg-config
 , python3
+, wrapQtAppsHook
 , wrapGAppsNoGuiHook
 , withGui ? false
 }:
@@ -55,13 +57,14 @@ stdenv.mkDerivation rec {
     done
   '' + lib.optionalString withGui ''
     substituteInPlace src/firewall-applet.in \
-      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-conenction-editor"
+      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [
     autoreconfHook
     docbook_xml_dtd_42
     docbook-xsl-nons
+    gobject-introspection
     glib
     intltool
     libxml2
@@ -69,14 +72,15 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     python3.pkgs.wrapPython
-  ] ++ lib.optionals withGui [
-    gobject-introspection
     wrapGAppsNoGuiHook
+  ] ++ lib.optionals withGui [
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     bash
     glib
+    networkmanager
   ] ++ lib.optionals withGui [
     gtk3
     libnotify
@@ -84,9 +88,12 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
+  dontWrapQtApps = true;
 
-  preFixup = lib.optionalString withGui ''
+  preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '' + lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   postFixup = ''
