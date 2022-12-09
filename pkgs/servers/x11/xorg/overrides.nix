@@ -729,12 +729,15 @@ self: super:
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
-            buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ]; postPatch = ''
-            for i in dri3/*.c
-            do
-              sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
-            done
-          '';}
+            buildInputs = attrs_passed.buildInputs ++
+              lib.optional (libdrm != null) libdrm.dev;
+            postPatch = ''
+              for i in dri3/*.c
+              do
+                sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
+              done
+            '';
+          }
         else if (abiCompat == "1.18") then {
             name = "xorg-server-1.18.4";
             builder = ./builder.sh;
@@ -754,10 +757,8 @@ self: super:
       version = lib.getVersion attrs;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
-        zlib libGL libGLU dbus
-        xorgproto
-        libXext pixman libXfont libxshmfence libunwind
-        libXfont2
+        dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
+        libxshmfence pixman xorgproto zlib
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
@@ -853,7 +854,7 @@ self: super:
           })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -887,7 +888,7 @@ self: super:
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.fontutil ];
+        nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook bootstrap_cmds xorg.utilmacros xorg.fontutil ];
         buildInputs = commonBuildInputs ++ [
           bootstrap_cmds automake autoconf
           Xplugin Carbon Cocoa
@@ -923,6 +924,7 @@ self: super:
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
+          "--disable-glamor"
           "--with-default-font-path="
           "--with-apple-application-name=XQuartz"
           "--with-apple-applications-dir=\${out}/Applications"
@@ -983,7 +985,7 @@ self: super:
   xinit = (super.xinit.override {
     stdenv = if isDarwin then clangStdenv else stdenv;
   }).overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ lib.optional isDarwin bootstrap_cmds;
+    nativeBuildInputs = attrs.nativeBuildInputs ++ lib.optional isDarwin bootstrap_cmds;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     configureFlags = [
       "--with-xserver=${xorg.xorgserver.out}/bin/X"
