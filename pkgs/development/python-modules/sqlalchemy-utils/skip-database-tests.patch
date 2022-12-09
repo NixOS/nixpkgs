@@ -2,13 +2,15 @@ diff --git a/conftest.py b/conftest.py
 index 9e146cd..8dbc9a5 100644
 --- a/conftest.py
 +++ b/conftest.py
-@@ -61,16 +61,12 @@ def mysql_db_user():
+@@ -61,17 +61,12 @@ def mysql_db_user():
  
  @pytest.fixture
- def postgresql_dsn(postgresql_db_user, postgresql_db_password, db_name):
--    return 'postgresql://{0}:{1}@localhost/{2}'.format(
+ def postgresql_dsn(postgresql_db_user, postgresql_db_password, postgresql_db_host,
+                    db_name):
+-    return 'postgresql://{0}:{1}@{2}/{3}'.format(
 -        postgresql_db_user,
 -        postgresql_db_password,
+-        postgresql_db_host,
 -        db_name
 -    )
 +    pytest.skip()
@@ -68,7 +70,7 @@ index 0ad6721..83f208d 100644
                  'TEMPLATE "my-template"') in str(excinfo.value)
  
  
--class TestDatabasePostgresCreateDatabaseCloseConnection(object):
+-class TestDatabasePostgresCreateDatabaseCloseConnection:
 -    def test_create_database_twice(
 -        self,
 -        postgresql_db_user,

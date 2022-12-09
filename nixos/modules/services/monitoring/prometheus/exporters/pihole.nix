@@ -12,7 +12,7 @@ in
       type = types.str;
       default = "";
       example = "580a770cb40511eb85290242ac130003580a770cb40511eb85290242ac130003";
-      description = ''
+      description = lib.mdDoc ''
         pi-hole API token which can be used instead of a password
       '';
     };
@@ -20,7 +20,7 @@ in
       type = types.str;
       default = "10s";
       example = "30s";
-      description = ''
+      description = lib.mdDoc ''
         How often to scrape new data
       '';
     };
@@ -28,7 +28,7 @@ in
       type = types.str;
       default = "";
       example = "password";
-      description = ''
+      description = lib.mdDoc ''
         The password to login into pihole. An api token can be used instead.
       '';
     };
@@ -36,7 +36,7 @@ in
       type = types.str;
       default = "pihole";
       example = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         Hostname or address where to find the pihole webinterface
       '';
     };
@@ -44,7 +44,7 @@ in
       type = types.port;
       default = 80;
       example = 443;
-      description = ''
+      description = lib.mdDoc ''
         The port pihole webinterface is reachable on
       '';
     };
@@ -52,7 +52,7 @@ in
       type = types.enum [ "http" "https" ];
       default = "http";
       example = "https";
-      description = ''
+      description = lib.mdDoc ''
         The protocol which is used to connect to pihole
       '';
     };

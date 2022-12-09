@@ -53,4 +53,4 @@ stdenv.mkDerivation (rec {
 
     runHook postBuild
   '';
-} // args)
+} // builtins.removeAttrs args [ "mvnFetchExtraArgs" ])

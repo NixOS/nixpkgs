@@ -2,24 +2,19 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, asttokens
-, typing-extensions
-, pytestCheckHook
-, yapf
-, docutils
-, pygments
-, dpcontracts
-, tabulate
-, py-cpuinfo
-, typeguard
 , astor
-, numpy
+, asttokens
 , asyncstdlib
+, deal
+, dpcontracts
+, numpy
+, pytestCheckHook
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.6.1";
+  version = "2.6.2";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -27,7 +22,7 @@ buildPythonPackage rec {
     owner = "Parquery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QyuegyjVyRLQS0DjBJXpTDNeBM7LigGJ5cztVOO7e3Y=";
+    hash = "sha256-NUgMt/o9EpSQyOiAhYBVJtQKJn0Pd2lI45bKlo2z7mk=";
   };
 
   preCheck = ''
@@ -37,42 +32,39 @@ buildPythonPackage rec {
     export ICONTRACT_SLOW=1
   '';
 
-
   propagatedBuildInputs = [
     asttokens
     typing-extensions
   ];
 
   checkInputs = [
-    pytestCheckHook
-    yapf
-    docutils
-    pygments
-    dpcontracts
-    tabulate
-    py-cpuinfo
-    typeguard
     astor
-    numpy
     asyncstdlib
+    deal
+    dpcontracts
+    numpy
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
-    # needs an old version of deal to comply with the tests
-    # see https://github.com/Parquery/icontract/issues/244
-    "tests_with_others/test_deal.py"
-    # mypy decorator checks don't pass. For some reaseon mypy
+    # mypy decorator checks don't pass. For some reason mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
   ];
+
+  # Upstream adds some plain text files direct to the package's root directory
+  # https://github.com/Parquery/icontract/blob/master/setup.py#L63
+  postInstall = ''
+    rm -f $out/{LICENSE.txt,README.rst,requirements.txt}
+  '';
 
   pythonImportsCheck = [ "icontract" ];
 
   meta = with lib; {
     description = "Provide design-by-contract with informative violation messages";
     homepage = "https://github.com/Parquery/icontract";
-    changelog = "https://github.com/Parquery/icontract/blob/master/CHANGELOG.rst";
+    changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [ gador thiagokokada ];
   };
 }

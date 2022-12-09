@@ -2,7 +2,7 @@ diff --git a/lib/builtins/CMakeLists.txt b/lib/builtins/CMakeLists.txt
 index 3a66dd9c3fb..7efc85d9f9f 100644
 --- a/lib/builtins/CMakeLists.txt
 +++ b/lib/builtins/CMakeLists.txt
-@@ -345,4 +345,8 @@ if (NOT MSVC)
+@@ -348,4 +348,8 @@ if (NOT MSVC)
  
 +  set(i486_SOURCES ${i386_SOURCES})
 +  set(i586_SOURCES ${i386_SOURCES})
@@ -11,7 +11,7 @@ index 3a66dd9c3fb..7efc85d9f9f 100644
    if (WIN32)
      set(i386_SOURCES
        ${i386_SOURCES}
-@@ -608,6 +612,7 @@ else ()
+@@ -723,6 +723,7 @@ else ()
    endif()
  
    foreach (arch ${BUILTIN_SUPPORTED_ARCH})

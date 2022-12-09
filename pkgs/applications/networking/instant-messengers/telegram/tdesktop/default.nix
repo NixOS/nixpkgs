@@ -23,18 +23,21 @@
 , libopus
 , alsa-lib
 , libpulseaudio
+, pipewire
 , range-v3
 , tl-expected
 , hunspell
-, glibmm
-, webkitgtk
+, glibmm_2_68
+, webkitgtk_4_1
 , jemalloc
 , rnnoise
+, protobuf
 , abseil-cpp
   # Transitive dependencies:
 , util-linuxMinimal
 , pcre
 , libpthreadstubs
+, libXdamage
 , libXdmcp
 , libselinux
 , libsepol
@@ -44,6 +47,7 @@
 , libthai
 , libdatrie
 , xdg-utils
+, xorg
 , libsysprof-capture
 , libpsl
 , brotli
@@ -71,7 +75,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.7.3";
+  version = "4.4.1";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -80,13 +84,10 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "01b3nrhfbxhq4w63nsjnrhyfsdq3fm4l7sfkasbh8ib4qk3c9vwz";
+    sha256 = "0c30kxgp48ha1xv3l59ry21n2c536ax8a15cfk2n1r5n1ns2pfq0";
   };
 
   postPatch = ''
-    substituteInPlace Telegram/CMakeLists.txt \
-      --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
-
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
@@ -94,7 +95,7 @@ env.mkDerivation rec {
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
-      --replace '"libwebkit2gtk-4.0.so.37"' '"${webkitgtk}/lib/libwebkit2gtk-4.0.so.37"'
+      --replace '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -127,18 +128,21 @@ env.mkDerivation rec {
     libopus
     alsa-lib
     libpulseaudio
+    pipewire
     range-v3
     tl-expected
     hunspell
-    glibmm
-    webkitgtk
+    glibmm_2_68
+    webkitgtk_4_1
     jemalloc
     rnnoise
+    protobuf
     tg_owt
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
     pcre
     libpthreadstubs
+    libXdamage
     libXdmcp
     libselinux
     libsepol
@@ -169,7 +173,8 @@ env.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
+      --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
@@ -190,6 +195,6 @@ env.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

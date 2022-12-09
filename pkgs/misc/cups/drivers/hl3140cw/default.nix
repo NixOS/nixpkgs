@@ -72,6 +72,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother hl3140cw printer driver";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=eu_ot&lang=en&prod=hl3140cw_us_eu&os=128";

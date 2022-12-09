@@ -21,15 +21,15 @@
 
 buildPythonPackage rec {
   pname = "mezzanine";
-  version = "5.1.3";
+  version = "6.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6" || isPyPy;
+  disabled = pythonOlder "3.7" || isPyPy;
 
   src = fetchPypi {
     pname = "Mezzanine";
     inherit version;
-    hash = "sha256-G/Oj5g70tFUhnbSVElVk0s9Ka+MEuPsEgj6blcFBOoY=";
+    hash = "sha256-R/PB4PFQpVp6jnCasyPszgC294SKjLzq2oMkR2qV86s=";
   };
 
   buildInputs = [
@@ -50,10 +50,11 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
     tzlocal
-  ];
+  ] ++ bleach.optional-dependencies.css;
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;
+
   # sed calls will be unecessary in v3.1.11+
   preConfigure = ''
     sed -i 's/==/>=/' setup.py

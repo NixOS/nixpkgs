@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.12.3";
+  version = "0.12.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
-    rev = version;
-    sha256 = "sha256-LaSSjqa5BniwOIeCH/oR8vVhy2rCSo2je3rTqB4ifLg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-DwWX8ztqnm/KYkiarG9KXkHcVxYE6Cc285oOMz9gkqc=";
   };
 
   propagatedBuildInputs = [

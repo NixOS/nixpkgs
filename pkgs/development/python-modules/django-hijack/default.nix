@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.2.0";
+  version = "3.2.4";
 
   # the wheel comes with pre-built assets, allowing us to avoid fighting
   # with npm/webpack/gettext to build them ourselves.
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     pname = "django_hijack";
     dist = "py3";
     python = "py3";
-    sha256 = "1ixn7ppmbq1bgqahwv3z57hk80ql7sxpwl8jms7y8w5z1h91cn86";
+    sha256 = "sha256-tSIovIPEszq00Y0PMl/Wlx5YK5MTxLhCpNpHFZDi9rQ=";
   };
 
   propagatedBuildInputs = [ django django_compat ];

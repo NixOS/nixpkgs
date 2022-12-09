@@ -3,18 +3,15 @@ let
   inherit (lib.strings) escapeRegex hasPrefix hasSuffix hasInfix splitString removePrefix removeSuffix;
   targetMachine = poetryLib.getTargetMachine stdenv;
 
-  # The 'cpxy" as determined by `python.version`
-  #
-  # e.g "2.7.17" -> "cp27"
-  #     "3.5.9"  -> "cp35"
-  pythonTag =
+  pythonVer =
     let
       ver = builtins.splitVersion python.version;
       major = builtins.elemAt ver 0;
       minor = builtins.elemAt ver 1;
+      tags = [ "cp" "py" ];
     in
-    "cp${major}${minor}";
-  abiTag = "${pythonTag}m";
+    { inherit major minor tags; };
+  abiTag = "cp${pythonVer.major}${pythonVer.minor}m";
 
   #
   # Parses wheel file returning an attribute set
@@ -50,14 +47,24 @@ let
     then [ ]
     else (builtins.filter (x: hasInfix v x.file) candidates) ++ (findBestMatches vs candidates);
 
-  # pyver = "cpXX"
-  # x     = "cpXX" | "py2" | "py3" | "py2.py3"
-  isPyVersionCompatible = pyver: x:
+  # x = "cpXX" | "py2" | "py3" | "py2.py3"
+  isPyVersionCompatible = pyver@{ major, minor, tags }: x:
     let
-      normalize = y: ''cp${removePrefix "cp" (removePrefix "py" y)}'';
-      isCompat = p: x: hasPrefix (normalize x) p;
+      isCompat = m:
+        builtins.elem m.tag tags
+        && m.major == major
+        && builtins.compareVersions minor m.minor >= 0;
+      parseMarker = v:
+        let
+          tag = builtins.substring 0 2 v;
+          major = builtins.substring 2 1 v;
+          end = builtins.substring 3 3 v;
+          minor = if builtins.stringLength end > 0 then end else "0";
+        in
+        { inherit major minor tag; };
+      markers = splitString "." x;
     in
-    lib.lists.any (isCompat pyver) (splitString "." x);
+    lib.lists.any isCompat (map parseMarker markers);
 
   #
   # Selects the best matching wheel file from a list of files
@@ -95,11 +102,11 @@ let
         let
           f = toWheelAttrs x.file;
         in
-        (withPython pythonTag abiTag f) && (withPlatforms f);
+        (withPython pythonVer abiTag f) && (withPlatforms f);
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
-          osxMatches = [ "12_0" "11_0" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
+          osxMatches = [ "12_0" "11_0" "10_15" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
           linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "manylinux_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);

@@ -17,22 +17,22 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Make the Podman and Docker compatibility API available over the network
         with TLS client certificate authentication.
 
         This allows Docker clients to connect with the equivalents of the Docker
-        CLI <code>-H</code> and <code>--tls*</code> family of options.
+        CLI `-H` and `--tls*` family of options.
 
         For certificate setup, see https://docs.docker.com/engine/security/protect-access/
 
-        This option is independent of <xref linkend="opt-virtualisation.podman.dockerSocket.enable"/>.
+        This option is independent of [](#opt-virtualisation.podman.dockerSocket.enable).
       '';
     };
 
     server = mkOption {
-      type = types.enum [];
-      description = ''
+      type = types.enum [ ];
+      description = lib.mdDoc ''
         Choice of TLS proxy server.
       '';
       example = "ghostunnel";
@@ -41,28 +41,28 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to open the port in the firewall.
       '';
     };
 
     tls.cacert = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to CA certificate to use for client authentication.
       '';
     };
 
     tls.cert = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to certificate describing the server.
       '';
     };
 
     tls.key = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to the private key corresponding to the server certificate.
 
         Use a string for this setting. Otherwise it will be copied to the Nix
@@ -73,14 +73,14 @@ in
     port = mkOption {
       type = types.port;
       default = 2376;
-      description = ''
+      description = lib.mdDoc ''
         TCP port number for receiving TLS connections.
       '';
     };
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Interface address for receiving TLS connections.
       '';
     };

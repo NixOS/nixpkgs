@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jsonnet";
-  version = "0.18.0";
+  version = "0.19.1";
   outputs = ["out" "doc"];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "sha256-RmuvpKv9Dg3JcxsdZDBMehJjG5SvrV0spHgxApFeuJo=";
+    sha256 = "sha256-q1MNdbyrx4vvN5woe0o90pPqaNtsZjI5RQ7KJt7rOpU=";
   };
 
   nativeBuildInputs = [ jekyll ];

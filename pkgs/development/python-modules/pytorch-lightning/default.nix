@@ -6,7 +6,7 @@
 , fsspec
 , packaging
 , pytestCheckHook
-, pytorch
+, torch
 , pyyaml
 , tensorboard
 , torchmetrics
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "1.6.4";
+  version = "1.6.5";
 
   disabled = isPy27;
 
@@ -22,14 +22,14 @@ buildPythonPackage rec {
     owner = "PyTorchLightning";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-X1xPyE53uo/eWPjQdXiObAnjgWc/Y/K+077Ypi5ZzcE=";
+    hash = "sha256-CgD5g5nhz2DI4gOQyPl8/Cq6wWHzL0ALgOB5SgUOgaI=";
   };
 
   propagatedBuildInputs = [
     packaging
     future
     fsspec
-    pytorch
+    torch
     pyyaml
     tensorboard
     torchmetrics

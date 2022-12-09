@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "2.0.194";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    sha256 = "sha256-5dgSBXJIeGXT+jGqT2MFqtsEFcIn+ULjybnyXz+95Gk=";
+    sha256 = "sha256-qmJHCADFqxjnxdDYxGmgZId3pxxgB8kw2UGBwYGauOc=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     rev-prefix = "v";
   };
 

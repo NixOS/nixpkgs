@@ -2,7 +2,7 @@
 #!nix-shell -I nixpkgs=../../../../../../ -i bash -p wget prefetch-yarn-deps yarn
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
-  echo "Regenerates packaging data for the seshat package."
+  echo "Regenerates packaging data for the keytar package."
   echo "Usage: $0 [git release tag]"
   exit 1
 fi

@@ -10,6 +10,10 @@ buildPythonPackage rec {
     sha256 = "1f1bbaac203a23fbc851dc1b5a6e92c50698cc8cefa5873eb5b89eef53d1d82b";
   };
 
+  patches = [
+    ./mapping-import.patch
+  ];
+
   checkInputs = [ nose psutil mock ];
 
   checkPhase = ''

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.10.11";
+  version = "0.10.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scarface-4711";
     repo = pname;
-    rev = version;
-    hash = "sha256-RY1XRGuwSFL429foEjEN93fBucUyyYc6cmpzYmYRorc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QNiDoPjOuwwAgUqDzXHzn0BE9bwXQrQKAIFlHCywl88=";
   };
 
   propagatedBuildInputs = [

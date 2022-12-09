@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iotop-c";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
     rev = "v${version}";
-    sha256 = "sha256-Zzm0EV6baQvKPOC762mnieYe1JM7ZfNovKqFQt20jQ8=";
+    sha256 = "sha256-MHjG14vZsuDrR9/SLotb7Uc3RW8Np9E2X0GXkSM+RxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

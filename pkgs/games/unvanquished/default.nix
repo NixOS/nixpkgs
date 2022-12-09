@@ -2,6 +2,7 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , buildFHSUserEnv
 , cmake
@@ -32,15 +33,15 @@
 }:
 
 let
-  version = "0.52.1";
-  binary-deps-version = "5";
+  version = "0.53.2";
+  binary-deps-version = "6";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-zNysAPPnnWO31K81oFiKHF4IStraveOlYwRqa1yyOLo=";
+    sha256 = "sha256-VqMhA6GEYh/m+dzOgXS+5Jqo4x7RrQf4qIwstdTTU+E=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -50,7 +51,7 @@ let
 
     src = fetchzip {
       url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "sha256-N/zkUhPFnU15QSe4NGmVLmhU7UslYrzz9ZUWuLbydyE=";
+      sha256 = "sha256-ERfg89oTf9JTtv/qRnTRIzFP+zMpHT8W4WAIxqogy9E=";
     };
 
     dontPatchELF = true;
@@ -118,7 +119,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-/dPr3ASNew1naB9FLcZ70jZtqQXWRflUmr4jsnRskiA=";
+    outputHash = "sha256-MPqyqcZGc5KlkftGCspWhISBJ/h+Os29g7ZK6yWz0cQ=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [ aria2 cacert ];
@@ -224,6 +225,10 @@ in stdenv.mkDerivation rec {
     license = with lib.licenses; [
       mit gpl3Plus lib.licenses.zlib bsd3 # engine
       cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
+    ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode  # unvanquished-binary-deps
     ];
     maintainers = with lib.maintainers; [ afontain ];
     platforms = [ "x86_64-linux" ];

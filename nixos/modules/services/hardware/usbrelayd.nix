@@ -5,11 +5,11 @@ let
 in
 {
   options.services.usbrelayd = with types; {
-    enable = mkEnableOption "USB Relay MQTT daemon";
+    enable = mkEnableOption (lib.mdDoc "USB Relay MQTT daemon");
 
     broker = mkOption {
       type = str;
-      description = "Hostname or IP address of your MQTT Broker.";
+      description = lib.mdDoc "Hostname or IP address of your MQTT Broker.";
       default = "127.0.0.1";
       example = [
         "mqtt"
@@ -19,7 +19,7 @@ in
 
     clientName = mkOption {
       type = str;
-      description = "Name, your client connects as.";
+      description = lib.mdDoc "Name, your client connects as.";
       default = "MyUSBRelay";
     };
   };
@@ -34,10 +34,6 @@ in
 
     services.udev.packages = [ pkgs.usbrelayd ];
     systemd.packages = [ pkgs.usbrelayd ];
-    users.users.usbrelay = {
-      isSystemUser = true;
-      group = "usbrelay";
-    };
     users.groups.usbrelay = { };
   };
 

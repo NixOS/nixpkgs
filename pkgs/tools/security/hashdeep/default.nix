@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jessek/hashdeep/commit/6ef69a26126ee4e69a25392fd456b8a66c51dffd.patch";
       sha256 = "sha256-IrqcnrKINeoh56FR25FzSM1YJMkM2yFd/GwOeWGRLFo=";
     })
+    (fetchpatch {
+      # Fix the spacing between the string literals and macros, see https://github.com/jessek/hashdeep/pull/385
+      name = "string-literal-spacing.patch";
+      url = "https://github.com/jessek/hashdeep/commit/18a6b5d57f7a648d2b7dcc6e50ff00a1e4b05fcc.patch";
+      sha256 = "sha256-S6hzC8jPtG3ozsvVq5JfAUMwqKxytLGwBAtNYNr6RJ0=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -30,9 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.karantan ];
     platforms = platforms.all;
-    # Build fails on Darwin:
-    # > ./xml.h:103:82: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
-    # >     void xmlout(const std::string &tag,const int64_t value){ xmlprintf(tag,"","%"PRId64,value); }
-    broken = stdenv.isDarwin;
   };
 }

@@ -9,7 +9,7 @@
 , pkg-config
 , python3
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib
 , gtk4
 , libadwaita
@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.1.2";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = "warp";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-6KWTjfrJr0QkiYHkwy4IKrzQuVUMHc1yILM7ixHBHSQ=";
+    hash = "sha256-0zjtaF0RwI7Sj2D5vRaiBJI+Bp/F17VO9ywMRqZyqxI=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Xy/tn5iUqwlmztmTmqUbISAk1xu9vkbMk4CvK4j2ttM=";
+    hash = "sha256-HotArxXfmT6Gw6ZZZQ4X6bTx0EFb6vZLbXxhddmGID8=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GNOME Online Accounts daemon, a service that provides
           a single sign-on framework for the GNOME desktop.
         '';

@@ -6,11 +6,11 @@ rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "5" "7" "";
 jruby = stdenv.mkDerivation rec {
   pname = "jruby";
 
-  version = "9.3.4.0";
+  version = "9.3.9.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "sha256-UxVE0yeocVXYyATxU6LfPPBPAYJWHLLdLJNy9IYFtlw=";
+    sha256 = "sha256-JR5t2NHS+CkiyMd414V+G++C/lyiz3e8CTVkIdCwWrg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -56,6 +56,7 @@ jruby = stdenv.mkDerivation rec {
     license = with licenses; [ cpl10 gpl2 lgpl21 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.fzakaria ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 };
 in jruby.overrideAttrs (oldAttrs: {

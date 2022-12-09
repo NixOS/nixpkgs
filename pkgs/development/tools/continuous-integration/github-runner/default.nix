@@ -1,4 +1,5 @@
 { autoPatchelfHook
+, autoSignDarwinBinariesHook
 , coreutils
 , curl
 , dotnetCorePackages
@@ -19,20 +20,20 @@
 , zlib
 , writeShellApplication
 , nuget-to-nix
-# Keeping this option until upstream removes support for EoL Node.js 12 entirely
-# Also refer to: https://github.com/actions/runner/pull/1716
-, withNode12 ? false
-, nodejs-12_x
 }:
 let
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
+
+  sdkSource = linkFarmFromDrvs "nuget-sdk-packages" (
+    dotnetSdk.passthru.packages { inherit fetchNuGet; }
+  );
+
   nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix {
-      fetchNuGet = { pname, version, sha256 }: fetchurl {
-        name = "${pname}.${version}.nupkg";
-        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-        inherit sha256;
-      };
-    }
+    import ./deps.nix { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -40,35 +41,43 @@ let
   runtimeIds = {
     "x86_64-linux" = "linux-x64";
     "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "osx-x64";
+    "aarch64-darwin" = "osx-arm64";
   };
   runtimeId = runtimeIds.${stdenv.system};
   fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.292.0";
+  version = "2.299.1";
+
+  inherit sdkSource;
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-vmHUu4coAxFLfi+G4xLjy3+LzFnmGllhWhCXcWuDQnc=";
+    hash = "sha256-o6N7GDfSEWX6QaEga5hQpbpDcBh7Alcy9mK3QlODTbs=";
   };
 
   nativeBuildInputs = [
     dotnetSdk
     dotnetPackages.Nuget
     makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
     curl # libcurl.so.4
     libkrb5 # libgssapi_krb5.so.2
-    lttng-ust # liblttng-ust.so.0
     stdenv.cc.cc.lib # libstdc++.so.6
     zlib # libz.so.1
     icu
+  ] ++ lib.optionals stdenv.isLinux [
+    lttng-ust # liblttng-ust.so.0
   ];
 
   patches = [
@@ -102,6 +111,8 @@ stdenv.mkDerivation rec {
       --replace '/bin/ln' '${coreutils}/bin/ln'
   '';
 
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = stdenv.isDarwin;
+
   configurePhase = ''
     runHook preConfigure
 
@@ -113,6 +124,7 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
+      --source "${sdkSource}" \
       --source "${nugetSource}"
 
     runHook postConfigure
@@ -133,6 +145,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   # Fully qualified name of disabled tests
   disabledTests =
@@ -193,8 +207,12 @@ stdenv.mkDerivation rec {
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     ]
-    ++ lib.optionals (!withNode12) [
+    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
+      "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
+      "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
     ];
   checkInputs = [ git ];
 
@@ -202,7 +220,6 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     mkdir -p _layout/externals
-    ${lib.optionalString withNode12 "ln -s ${nodejs-12_x} _layout/externals/node12"}
     ln -s ${nodejs-16_x} _layout/externals/node16
 
     printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
@@ -232,15 +249,26 @@ stdenv.mkDerivation rec {
 
     # Install the helper scripts to bin/ to resemble the upstream package
     mkdir -p $out/bin
-    install -m755 src/Misc/layoutbin/runsvc.sh        $out/bin/
-    install -m755 src/Misc/layoutbin/RunnerService.js $out/lib/
-    install -m755 src/Misc/layoutroot/run.sh          $out/lib/
-    install -m755 src/Misc/layoutroot/config.sh       $out/lib/
-    install -m755 src/Misc/layoutroot/env.sh          $out/lib/
+    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/bin/
+    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/
+    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/
+    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/run-helper.sh
+    install -m755 src/Misc/layoutroot/config.sh                $out/lib/
+    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/
 
     # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' "$out/lib"
-    substituteInPlace $out/lib/config.sh --replace './bin' "$out/lib"
+    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
+    substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
+      --replace 'source ./env.sh' $out/bin/env.sh
+  '' + lib.optionalString stdenv.isLinux ''
+    # Make binary paths absolute
+    substituteInPlace $out/lib/config.sh \
+      --replace 'ldd' '${glibc}/bin/ldd' \
+      --replace '/sbin/ldconfig' '${glibc}/bin/ldconfig'
+  '' + ''
+    # Remove uneeded copy for run-helper template
+    substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
     substituteInPlace $out/bin/runsvc.sh \
@@ -251,7 +279,6 @@ stdenv.mkDerivation rec {
     # externals/node{12,16}. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/externals
-    ${lib.optionalString withNode12 "ln -s ${nodejs-12_x} $out/externals/node12"}
     ln -s ${nodejs-16_x} $out/externals/node16
 
     # Install Nodejs scripts called from workflows
@@ -265,7 +292,7 @@ stdenv.mkDerivation rec {
   # Stripping breaks the binaries
   dontStrip = true;
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
   '';
 
@@ -273,24 +300,26 @@ stdenv.mkDerivation rec {
     fix_rpath() {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/$1
     }
-
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
-        ''${@:2}
+        "''${@:2}"
     }
-
+  '' + lib.optionalString stdenv.isLinux ''
     fix_rpath Runner.Listener
     fix_rpath Runner.PluginHost
     fix_rpath Runner.Worker
-
+  '' + ''
     wrap Runner.Listener
     wrap Runner.PluginHost
     wrap Runner.Worker
-    wrap run.sh
-    wrap env.sh
+    wrap run.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}'
+    wrap env.sh --run 'cd $RUNNER_ROOT'
 
-    wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
+    wrap config.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}' \
+      --run 'mkdir -p $RUNNER_ROOT' \
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
+      --chdir $out
   '';
 
   # Script to create deps.nix file for dotnet dependencies. Run it with
@@ -301,12 +330,12 @@ stdenv.mkDerivation rec {
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {
     name = "create-deps-file";
-    runtimeInputs = [ dotnetSdk nuget-to-nix ];
+    runtimeInputs = [ coreutils dotnetSdk (nuget-to-nix.override { dotnet-sdk = dotnetSdk; }) ];
     text = ''
       # Disable telemetry data
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      rundir=$(pwd)
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
 
       printf "\n* Setup workdir\n"
       workdir="$(mktemp -d /tmp/${pname}.XXX)"
@@ -323,10 +352,8 @@ stdenv.mkDerivation rec {
       dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
       '') (lib.attrValues runtimeIds)}
 
-      cd "$rundir"
-      deps_file=''${1-"/tmp/${pname}-deps.nix"}
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" "${sdkSource}" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };
@@ -335,7 +362,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
     platforms = attrNames runtimeIds;
   };
 }

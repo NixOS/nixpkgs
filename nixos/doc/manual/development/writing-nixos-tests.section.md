@@ -1,9 +1,9 @@
 # Writing Tests {#sec-writing-nixos-tests}
 
-A NixOS test is a Nix expression that has the following structure:
+A NixOS test is a module that has the following structure:
 
 ```nix
-import ./make-test-python.nix {
+{
 
   # One or more machines:
   nodes =
@@ -21,10 +21,13 @@ import ./make-test-python.nix {
 }
 ```
 
-The attribute `testScript` is a bit of Python code that executes the
+We refer to the whole test above as a test module, whereas the values
+in [`nodes.<name>`](#test-opt-nodes) are NixOS modules themselves.
+
+The option [`testScript`](#test-opt-testScript) is a piece of Python code that executes the
 test (described below). During the test, it will start one or more
 virtual machines, the configuration of which is described by
-the attribute `nodes`.
+the option [`nodes`](#test-opt-nodes).
 
 An example of a single-node test is
 [`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix).
@@ -34,7 +37,54 @@ when switching between consoles, and so on. An interesting multi-node test is
 [`nfs/simple.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix).
 It uses two client nodes to test correct locking across server crashes.
 
-There are a few special NixOS configuration options for test VMs:
+## Calling a test {#sec-calling-nixos-tests}
+
+Tests are invoked differently depending on whether the test is part of NixOS or lives in a different project.
+
+### Testing within NixOS {#sec-call-nixos-test-in-nixos}
+
+Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
+
+```nix
+  hostname = runTest ./hostname.nix;
+```
+
+Overrides can be added by defining an anonymous module in `all-tests.nix`.
+
+```nix
+  hostname = runTest {
+    imports = [ ./hostname.nix ];
+    defaults.networking.firewall.enable = false;
+  };
+```
+
+You can run a test with attribute name `hostname` in `nixos/tests/all-tests.nix` by invoking:
+
+```shell
+cd /my/git/clone/of/nixpkgs
+nix-build -A nixosTests.hostname
+```
+
+### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
+
+Outside the `nixpkgs` repository, you can instantiate the test by first importing the NixOS library,
+
+```nix
+let nixos-lib = import (nixpkgs + "/nixos/lib") { };
+in
+
+nixos-lib.runTest {
+  imports = [ ./test.nix ];
+  hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
+  defaults.services.foo.package = mypkg;
+}
+```
+
+`runTest` returns a derivation that runs the test.
+
+## Configuring the nodes {#sec-nixos-test-nodes}
+
+There are a few special NixOS options for test VMs:
 
 `virtualisation.memorySize`
 
@@ -121,7 +171,7 @@ The following methods are available on machine objects:
     least one will be returned.
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `get_screen_text`
@@ -130,7 +180,7 @@ The following methods are available on machine objects:
     machine\'s screen using optical character recognition.
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `send_monitor_command`
@@ -241,7 +291,7 @@ The following methods are available on machine objects:
     `get_screen_text` and `get_screen_text_variants`).
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `wait_for_console_text`
@@ -304,7 +354,7 @@ For faster dev cycles it\'s also possible to disable the code-linters
 (this shouldn\'t be commited though):
 
 ```nix
-import ./make-test-python.nix {
+{
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -336,7 +386,7 @@ Similarly, the type checking of test scripts can be disabled in the following
 way:
 
 ```nix
-import ./make-test-python.nix {
+{
   skipTypeCheck = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -347,7 +397,7 @@ import ./make-test-python.nix {
 
 ## Failing tests early {#ssec-failing-tests-early}
 
-To fail tests early when certain invariables are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
+To fail tests early when certain invariants are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
 
 ```py
 @polling_condition
@@ -362,7 +412,6 @@ with foo_running:
     ...  # Put `foo` through its paces
 ```
 
-
 `polling_condition` takes the following (optional) arguments:
 
 `seconds_interval`
@@ -370,29 +419,29 @@ with foo_running:
 :
     specifies how often the condition should be polled:
 
-    ```py
-    @polling_condition(seconds_interval=10)
-    def foo_running():
-        machine.succeed("pgrep -x foo")
-    ```
+```py
+@polling_condition(seconds_interval=10)
+def foo_running():
+    machine.succeed("pgrep -x foo")
+```
 
 `description`
 
 :
     is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
 
-    ```py
-    @polling_condition
-    def foo_running():
-        "check that foo is running"
-        machine.succeed("pgrep -x foo")
-    ```
+```py
+@polling_condition
+def foo_running():
+    "check that foo is running"
+    machine.succeed("pgrep -x foo")
+```
 
-    ```py
-    @polling_condition(description="check that foo is running")
-    def foo_running():
-        machine.succeed("pgrep -x foo")
-    ```
+```py
+@polling_condition(description="check that foo is running")
+def foo_running():
+    machine.succeed("pgrep -x foo")
+```
 
 ## Adding Python packages to the test script {#ssec-python-packages-in-test-script}
 
@@ -401,11 +450,13 @@ added using the parameter `extraPythonPackages`. For example, you could add
 `numpy` like this:
 
 ```nix
-import ./make-test-python.nix
 {
   extraPythonPackages = p: [ p.numpy ];
 
   nodes = { };
+
+  # Type checking on extra packages doesn't work yet
+  skipTypeCheck = true;
 
   testScript = ''
     import numpy as np
@@ -415,3 +466,11 @@ import ./make-test-python.nix
 ```
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
+
+## Test Options Reference {#sec-test-options-reference}
+
+The following options can be used when writing tests.
+
+```{=docbook}
+<xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
+```

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "7.8.2";
+  version = "7.14.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZJg7yJS4uODnXwyuwE0uY5CNg1CYyGqSIFYPntAlU5k=";
+    hash = "sha256-4XduybmDmlux3zvjbN1ouaJ1PkNO8h6vHuxgZ3YLBrw=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     datrie
     docutils
     filelock
-    GitPython
+    gitpython
     jinja2
     jsonschema
     nbformat

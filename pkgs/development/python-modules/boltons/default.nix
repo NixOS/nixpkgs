@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "20.2.1";
+  version = "21.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mahmoud";
     repo = "boltons";
     rev = version;
-    hash = "sha256-iCueZsi/gVbko7MW43vaUQMWRVI/YhmdfN29gD6AgG8=";
+    hash = "sha256-8HO7X2PQEbQIQsCa2cMHQI3rlofVT22GYrWNXY34MLk=";
   };
 
   checkInputs = [
@@ -34,11 +34,8 @@ buildPythonPackage rec {
     })
   ];
 
-  disabledTests = [
-    # This test is broken without this PR. Merged but not released
-    # https://github.com/mahmoud/boltons/pull/283
-    "test_frozendict"
-  ];
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "boltons"

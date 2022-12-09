@@ -2,10 +2,12 @@
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
+, exceptiongroup
 , hypothesis
 , immutables
 , motor
 , msgpack
+, orjson
 , poetry-core
 , pytest-xdist
 , pytestCheckHook
@@ -18,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "1.10.0";
+  version = "22.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     owner = "python-attrs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VbfQMMDO03eeUHAACxoX6a3DKmzoF9EfLuTpvaY6bWs=";
+    hash = "sha256-Qnrq/mIA/t0mur6IAen4vTmMIhILWS6v5nuf+Via2hA=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +38,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
   ];
@@ -45,6 +49,7 @@ buildPythonPackage rec {
     immutables
     motor
     msgpack
+    orjson
     pytest-xdist
     pytestCheckHook
     pyyaml

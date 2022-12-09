@@ -7,7 +7,7 @@ in
 
     system.build = mkOption {
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Attribute set of derivations used to set up the system.
       '';
       type = types.submoduleWith {

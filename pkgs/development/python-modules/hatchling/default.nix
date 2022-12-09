@@ -15,13 +15,12 @@
 , build
 , python
 , requests
-, toml
 , virtualenv
 }:
 
 let
   pname = "hatchling";
-  version = "0.25.0";
+  version = "1.11.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -29,7 +28,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k/bjZvGaOjZshVr6w3Jb7XaC1dAOlIaraFQKCth2ZII=";
+    hash = "sha256-n4Q2H3DPOnq5VDsMPsxkIR7SuopganHrakc8HJsI4dA=";
   };
 
   # listed in backend/src/hatchling/ouroboros.py
@@ -38,9 +37,10 @@ buildPythonPackage {
     packaging
     pathspec
     pluggy
-    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   pythonImportsCheck = [
@@ -56,7 +56,6 @@ buildPythonPackage {
     build
     packaging
     requests
-    toml
     virtualenv
   ];
 
@@ -72,7 +71,8 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Modern, extensible Python build backend";
-    homepage = "https://ofek.dev/hatch/latest/";
+    homepage = "https://hatch.pypa.io/latest/";
+    changelog = "https://github.com/pypa/hatch/blob/hatchling-v${version}/docs/history.md#hatchling";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ofek ];
   };

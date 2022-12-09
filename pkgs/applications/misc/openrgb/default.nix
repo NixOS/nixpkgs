@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config, coreutils, mbedtls }:
+{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config, coreutils, mbedtls_2 }:
 
 mkDerivation rec {
   pname = "openrgb";
@@ -12,7 +12,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake pkg-config ];
-  buildInputs = [ libusb1 hidapi mbedtls ];
+  buildInputs = [ libusb1 hidapi mbedtls_2 ];
 
   installPhase = ''
     runHook preInstall

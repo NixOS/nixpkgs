@@ -7,7 +7,7 @@ let
     collect
     concatLists
     concatMap
-    elemAt
+    concatMapStringsSep
     filter
     foldl'
     head
@@ -94,7 +94,10 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description = "Whether to enable ${name}.";
+    description =
+      if name ? _type && name._type == "mdDoc"
+      then lib.mdDoc "Whether to enable ${name.text}."
+      else "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
@@ -120,7 +123,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */
@@ -133,7 +136,7 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = "The ${name} package to use.";
+        description = lib.mdDoc "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
@@ -215,7 +218,7 @@ rec {
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-  optionAttrSetToDocList' = prefix: options:
+  optionAttrSetToDocList' = _: options:
     concatMap (opt:
       let
         docOption = rec {
@@ -231,9 +234,8 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+        // optionalAttrs (opt ? example) { example = renderOptionValue opt.example; }
+        // optionalAttrs (opt ? default) { default = renderOptionValue (opt.defaultText or opt.default); }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
@@ -241,6 +243,8 @@ rec {
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
         subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
+        # To find infinite recursion in NixOS option docs:
+        # builtins.trace opt.loc
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 
@@ -251,6 +255,9 @@ rec {
      efficient: the XML representation of derivations is very large
      (on the order of megabytes) and is not actually used by the
      manual generator.
+
+     This function was made obsolete by renderOptionValue and is kept for
+     compatibility with out-of-tree code.
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -258,6 +265,17 @@ rec {
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
+
+
+  /* Ensures that the given option value (default or example) is a `_type`d string
+     by rendering Nix values to `literalExpression`s.
+  */
+  renderOptionValue = v:
+    if v ? _type && v ? text then v
+    else literalExpression (lib.generators.toPretty {
+      multiline = true;
+      allowPrettyValues = true;
+    } v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
@@ -278,7 +296,25 @@ rec {
   */
   literalDocBook = text:
     if ! isString text then throw "literalDocBook expects a string."
-    else { _type = "literalDocBook"; inherit text; };
+    else
+      lib.warnIf (lib.isInOldestRelease 2211)
+        "literalDocBook is deprecated, use literalMD instead"
+        { _type = "literalDocBook"; inherit text; };
+
+  /* Transition marker for documentation that's already migrated to markdown
+     syntax.
+  */
+  mdDoc = text:
+    if ! isString text then throw "mdDoc expects a string."
+    else { _type = "mdDoc"; inherit text; };
+
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given MD text to be inserted verbatim in the documentation, for when
+     a `literalExpression` would be too hard to read.
+  */
+  literalMD = text:
+    if ! isString text then throw "literalMD expects a string."
+    else { _type = "literalMD"; inherit text; };
 
   # Helper functions.
 
@@ -299,10 +335,16 @@ rec {
   showOption = parts: let
     escapeOptionPart = part:
       let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
+        # We assume that these are "special values" and not real configuration data.
+        # If it is real configuration data, it is rendered incorrectly.
+        specialIdentifiers = [
+          "<name>"          # attrsOf (submodule {})
+          "*"               # listOf (submodule {})
+          "<function body>" # functionTo
+        ];
+      in if builtins.elem part specialIdentifiers
          then part
-         else escaped;
+         else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
@@ -324,6 +366,11 @@ rec {
         else ": " + value;
     in "\n- In `${def.file}'${result}"
   ) defs;
+
+  showOptionWithDefLocs = opt: ''
+      ${showOption opt.loc}, with values defined in:
+      ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
+    '';
 
   unknownModule = "<unknown-file>";
 

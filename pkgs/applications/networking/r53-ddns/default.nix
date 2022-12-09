@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "r53-ddns";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "fleaz";
     repo = "r53-ddns";
     rev = "v${version}";
-    sha256 = "sha256:1pvd1karq1p81rkq2n7mh040n29f7wb8701ax6g2sqm1yz7gxd08";
+    sha256 = "sha256-KJAPhSGaC3upWLfo2eeSD3Vit9Blmbol7s8y3f849N4=";
   };
 
-  vendorSha256 = "sha256:1jhwds57gi548ahnh5m342csrs5rv9ysy7fqmfvg5w2s9slswq77";
+  vendorSha256 = "sha256-KkyMd94cejWkgg/RJudy1lm/M3lsEJXFGqVTzGIX3qM=";
 
   meta = with lib; {
     license = licenses.mit;

@@ -6,6 +6,7 @@
 , gst_all_1
 , lib
 , python3Packages
+, sphinxHook
 , runtimeShell
 , writeScript
 
@@ -23,6 +24,10 @@
 , version
 , pluginOverrides ? { }
 , disableAllPlugins ? false
+
+  # tests
+, runCommand
+, beets
 }@inputs:
 let
   inherit (lib) attrNames attrValues concatMap;
@@ -63,12 +68,21 @@ python3Packages.buildPythonApplication rec {
     unidecode
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
+  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
+  nativeBuildInputs = [
+    gobject-introspection
+    sphinxHook
+  ];
+
   buildInputs = [
   ] ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
   ]);
+
+  outputs = [ "out" "doc" "man" ];
+  sphinxBuilders = [ "html" "man" ];
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -135,6 +149,26 @@ python3Packages.buildPythonApplication rec {
     python $args
 
     runHook postCheck
+  '';
+
+
+  passthru.plugins = allPlugins;
+
+  passthru.tests.gstreamer = runCommand "beets-gstreamer-test" {
+    meta.timeout = 60;
+  }
+  ''
+  set -euo pipefail
+  export HOME=$(mktemp -d)
+  mkdir $out
+
+  cat << EOF > $out/config.yaml
+replaygain:
+  backend: gstreamer
+EOF
+
+  echo $out/config.yaml
+  ${beets}/bin/beet -c $out/config.yaml > /dev/null
   '';
 
   meta = with lib; {

@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.0.0";
+  version = "7.1.0";
 
   outputs = [ "out" "dev" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fuyjQDH3C8qRYuAfQDDeW3aSWVTLtGzMAjcuAHCB1Zw=";
+    sha256 = "sha256-tdZSiIK+BW8uhbRxLUcrGQt71jRfVLOTgFNOqeLK6ig=";
   };
 
   nativeBuildInputs = [

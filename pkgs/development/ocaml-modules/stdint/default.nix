@@ -1,25 +1,17 @@
-{ lib, fetchurl, fetchpatch, buildDunePackage, ocaml, qcheck }:
+{ lib, fetchurl, buildDunePackage, ocaml, qcheck }:
 
 buildDunePackage rec {
   pname = "stdint";
-  version = "0.7.0";
+  version = "0.7.2";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/andrenth/ocaml-stdint/releases/download/${version}/stdint-${version}.tbz";
-    sha256 = "4fcc66aef58e2b96e7af3bbca9d910aa239e045ba5fb2400aaef67d0041252dc";
+    sha256 = "sha256-FWAZjYvJx68+qVLEDavoJmZpQhDsw/35u/60MhHpd+Y=";
   };
-
-  patches = [
-    # fix test bug, remove at next release
-    (fetchpatch {
-      url = "https://github.com/andrenth/ocaml-stdint/commit/fc64293f99f597cdfd4470954da6fb323988e2af.patch";
-      sha256 = "0nxck14vfjfzldsf8cdj2jg1cvhnyh37hqnrcxbdkqmpx4rxkbxs";
-    })
-  ];
 
   # 1. disable remaining broken tests, see
   #    https://github.com/andrenth/ocaml-stdint/issues/59
@@ -30,9 +22,7 @@ buildDunePackage rec {
       --replace 'test "An integer should perform left-shifts correctly"' \
                 'skip "An integer should perform left-shifts correctly"' \
       --replace 'test "Logical shifts must not sign-extend"' \
-                'skip "Logical shifts must not sign-extend"' \
-      --replace 'let pos_int = QCheck.map_same_type abs in_range' \
-                'let pos_int = QCheck.int_range 0 maxi'
+                'skip "Logical shifts must not sign-extend"'
   '';
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";

@@ -1,74 +1,89 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , ansiwrap
+, azure-datalake-store
+, azure-storage-blob
+, boto3
+, buildPythonPackage
 , click
-, future
-, pyyaml
-, nbformat
-, nbconvert
-, nbclient
-, six
-, tqdm
-, jupyter-client
-, requests
 , entrypoints
-, tenacity
-, futures ? null
-, black
-, backports_tempfile
-, isPy27
-, pytest
-, pytest-cov
+, fetchPypi
+, gcsfs
+, nbclient
+, nbformat
+, pyarrow
+, PyGithub
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, tenacity
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.3.4";
+  version = "2.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be12d2728989c0ae17b42fcb05b623500004e94b34f56bd153355ccebb84a59a";
+    hash = "sha256-b4+KmwazlnfyB8CRAMjThrz1kvDLvdqfD1DoFEVpdic=";
   };
 
   propagatedBuildInputs = [
     ansiwrap
     click
-    future
     pyyaml
     nbformat
-    nbconvert
     nbclient
-    six
     tqdm
-    jupyter-client
     requests
     entrypoints
     tenacity
-    black
-  ] ++ lib.optionals isPy27 [
-    futures
-    backports_tempfile
   ];
 
+  passthru.optional-dependencies = {
+    azure = [
+      azure-datalake-store
+      azure-storage-blob
+    ];
+    gcs = [
+      gcsfs
+    ];
+    github = [
+      PyGithub
+    ];
+    hdfs = [
+      pyarrow
+    ];
+    s3 = [
+      boto3
+    ];
+  };
+
   checkInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
     pytest-mock
   ];
 
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
-  # the test suite depends on cloud resources azure/aws
+  # The test suite depends on cloud resources azure/aws
   doCheck = false;
 
+  pythonImportsCheck = [
+    "papermill"
+  ];
+
   meta = with lib; {
-    description = "Parametrize and run Jupyter and nteract Notebooks";
+    description = "Parametrize and run Jupyter and interact with notebooks";
     homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

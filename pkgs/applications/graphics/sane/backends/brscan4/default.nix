@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     description = "Brother brscan4 sane backend driver";
     homepage = "http://www.brother.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };

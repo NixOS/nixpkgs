@@ -12,21 +12,21 @@ in {
         type = with types; either (enum [ "auto" ]) int;
         default = "auto";
         example = 2048;
-        description = ''
+        description = lib.mdDoc ''
           The size of the hyper-v base image in MiB.
         '';
       };
       vmDerivationName = mkOption {
         type = types.str;
         default = "nixos-hyperv-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-        description = ''
+        description = lib.mdDoc ''
           The name of the derivation for the hyper-v appliance.
         '';
       };
       vmFileName = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vhdx";
-        description = ''
+        description = lib.mdDoc ''
           The file name of the hyper-v appliance.
         '';
       };

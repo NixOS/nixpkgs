@@ -20,11 +20,12 @@
 , uvicorn
 , uvloop
 , websockets
+, aioquic
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.3.2";
+  version = "22.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,19 +33,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-4zdPp3X22dfZ5YlW3G5/OqeUxrt+NiFO9dk2XjEKXEg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KbcHnAdr59hk7W36BiTb/hD74ktj/DGzq1vcuZ/lGfQ=";
   };
-
-  postPatch = ''
-    # Loosen dependency requirements.
-    substituteInPlace setup.py \
-      --replace "pytest==6.2.5" "pytest" \
-      --replace "gunicorn==20.0.4" "gunicorn"
-  '';
 
   propagatedBuildInputs = [
     aiofiles
+    aioquic
     httptools
     multidict
     sanic-routing
@@ -84,6 +79,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Require networking
+    "test_full_message"
     # Fails to parse cmdline arguments
     "test_dev"
     "test_auto_reload"
@@ -107,6 +104,16 @@ buildPythonPackage rec {
     "test_keep_alive_client_timeout"
     "test_keep_alive_server_timeout"
     "test_zero_downtime"
+    # TLS tests
+    "test_missing_sni"
+    "test_no_matching_cert"
+    "test_wildcards"
+    # They thtow execptions
+    "test_load_app_simple"
+    "worker/test_loader.py"
+    # broke with ujson 5.4 upgrade
+    # https://github.com/sanic-org/sanic/pull/2504
+    "test_json_response_json"
   ];
 
   disabledTestPaths = [
@@ -123,14 +130,13 @@ buildPythonPackage rec {
   # for the same local port
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "sanic"
-  ];
+  pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc AluisioASG ];
   };

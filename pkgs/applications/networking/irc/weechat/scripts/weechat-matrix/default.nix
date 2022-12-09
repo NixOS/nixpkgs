@@ -2,6 +2,7 @@
 , lib
 , python
 , fetchFromGitHub
+, fetchpatch
 , pyopenssl
 , webcolors
 , future
@@ -33,6 +34,11 @@ in buildPythonPackage {
     hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
   };
 
+  patches = fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
+    sha256 = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
+  };
+
   propagatedBuildInputs = [
     pyopenssl
     webcolors
@@ -50,6 +56,8 @@ in buildPythonPackage {
 
   dontBuild = true;
   doCheck = false;
+
+  format = "other";
 
   installPhase = ''
     mkdir -p $out/share $out/bin

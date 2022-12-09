@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bite-parser";
-  version = "0.1.1";
+  version = "0.1.3";
 
   disabled = pythonOlder "3.7";
 
@@ -18,14 +18,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8021100bfbd6cc6056605361e763a3591efdea38014b3d8aa76c74c74de4ead4";
+    sha256 = "0f246e98a5556d6ed9a33fda1e94c3ab906305729feb30d25e35344b3e1c1fd9";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'python = "^3.7,<=3.10"' 'python = "^3.7,<3.11"' \
-      --replace poetry.masonry.api poetry.core.masonry.api
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -42,6 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous parser taking incremental bites out of your byte input stream";
     homepage = "https://github.com/jgosmann/bite-parser";
+    changelog = "https://github.com/jgosmann/bite-parser/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ib-controller/ib-controller";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

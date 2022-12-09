@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tldr";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tldr-cpp-client";
     rev = "v${version}";
-    sha256 = "sha256-ZNUW2PebRUDLcZ2/dXClXqf8NUjgw6N73h32PJ8iwmM=";
+    sha256 = "sha256-xim5SB9/26FMjLqhiV+lj+Rm5Tk5luSIqwyYb3kXoFY=";
   };
 
   buildInputs = [ curl libzip ];
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
       tldr pages gives common use cases for commands, so you don't need to hunt
       through a man page for the correct flags.
     '';
-    homepage = "http://tldr-pages.github.io";
+    homepage = "https://tldr-pages.github.io";
+    changelog = "https://github.com/tldr-pages/tldr-c-client/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ taeer carlosdagos ];
     platforms = platforms.all;

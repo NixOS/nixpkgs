@@ -11,6 +11,7 @@
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
+, forceDarkMode ? false
 , commandLineArgs ? ""
 , pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
@@ -20,11 +21,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.3.2679.38-1";
+  version = "5.6.2867.36";
 
   src = fetchurl {
-    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "0jsmk12riai8nkj6zqc1frh4fl4w4zj3mncfgrs4niy6dvpasaja";
+    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_amd64.deb";
+    sha256 = "sha256-dTXppRn/bl+HYVzqyrKBXb2YAaw0lRJkwAeukalv3a4=d";
   };
 
   unpackPhase = ''
@@ -79,7 +80,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
     substituteInPlace "$out"/share/applications/*.desktop \
-      --replace vivaldi-stable vivaldi
+      --replace vivaldi-stable "vivaldi ${lib.optionalString forceDarkMode "--force-dark-mode"}"
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
@@ -101,6 +102,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" ];
   };

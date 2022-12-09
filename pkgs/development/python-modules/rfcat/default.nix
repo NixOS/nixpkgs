@@ -8,17 +8,21 @@
 , pyusb
 , hostPlatform
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "rfcat";
-  version = "1.9.5";
+  version = "1.9.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "atlas0fd00m";
     repo = "rfcat";
-    rev = "v${version}";
-    sha256 = "1mmr7g7ma70sk6vl851430nqnd7zxsk7yb0xngwrdx9z7fbz2ck0";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +42,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "rflib" ];
+  pythonImportsCheck = [
+    "rflib"
+  ];
 
   meta = with lib; {
     description = "Swiss Army knife of sub-GHz ISM band radio";

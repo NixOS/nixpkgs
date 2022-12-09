@@ -3,10 +3,12 @@ use std::env;
 use std::ffi::OsStr;
 use std::fs;
 use std::hash::Hash;
-use std::io::{BufReader, BufRead, Error, ErrorKind};
+use std::io::{BufRead, BufReader, Error};
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
+
+use goblin::{elf::Elf, Object};
 
 struct NonRepeatingQueue<T> {
     queue: VecDeque<T>,
@@ -38,42 +40,32 @@ impl<T: Clone + Eq + Hash> NonRepeatingQueue<T> {
     }
 }
 
-fn patch_elf<S: AsRef<OsStr>, P: AsRef<OsStr>>(mode: S, path: P) -> Result<String, Error> {
-    let output = Command::new("patchelf")
-        .arg(&mode)
-        .arg(&path)
-        .output()?;
-    if output.status.success() {
-        Ok(String::from_utf8(output.stdout).expect("Failed to parse output"))
-    } else {
-        Err(Error::new(ErrorKind::Other, format!("failed: patchelf {:?} {:?}", OsStr::new(&mode), OsStr::new(&path))))
-    }
-}
-
-fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
+fn add_dependencies<P: AsRef<Path> + AsRef<OsStr>>(
     source: P,
-    target: S,
+    elf: Elf,
     queue: &mut NonRepeatingQueue<Box<Path>>,
-) -> Result<(), Error> {
-    fs::copy(&source, &target)?;
-
-    if !Command::new("ldd").arg(&source).output()?.status.success() {
-        // Not dynamically linked - no need to recurse
-        return Ok(());
+) {
+    if let Some(interp) = elf.interpreter {
+        queue.push_back(Box::from(Path::new(interp)));
     }
 
-    let rpath_string = patch_elf("--print-rpath", &source)?;
-    let needed_string = patch_elf("--print-needed", &source)?;
-    // Shared libraries don't have an interpreter
-    if let Ok(interpreter_string) = patch_elf("--print-interpreter", &source) {
-        queue.push_back(Box::from(Path::new(&interpreter_string.trim())));
-    }
+    let rpaths = if elf.runpaths.len() > 0 {
+        elf.runpaths
+    } else if elf.rpaths.len() > 0 {
+        elf.rpaths
+    } else {
+        vec![]
+    };
 
-    let rpath = rpath_string.trim().split(":").map(|p| Box::<Path>::from(Path::new(p))).collect::<Vec<_>>();
+    let rpaths_as_path = rpaths
+        .into_iter()
+        .flat_map(|p| p.split(":"))
+        .map(|p| Box::<Path>::from(Path::new(p)))
+        .collect::<Vec<_>>();
 
-    for line in needed_string.lines() {
+    for line in elf.libraries {
         let mut found = false;
-        for path in &rpath {
+        for path in &rpaths_as_path {
             let lib = path.join(line);
             if lib.exists() {
                 // No need to recurse. The queue will bring it back round.
@@ -85,20 +77,45 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
         if !found {
             // glibc makes it tricky to make this an error because
             // none of the files have a useful rpath.
-            println!("Warning: Couldn't satisfy dependency {} for {:?}", line, OsStr::new(&source));
+            println!(
+                "Warning: Couldn't satisfy dependency {} for {:?}",
+                line,
+                OsStr::new(&source)
+            );
         }
     }
+}
 
-    // Make file writable to strip it
-    let mut permissions = fs::metadata(&target)?.permissions();
-    permissions.set_readonly(false);
-    fs::set_permissions(&target, permissions)?;
+fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
+    source: P,
+    target: S,
+    queue: &mut NonRepeatingQueue<Box<Path>>,
+) -> Result<(), Error> {
+    fs::copy(&source, &target)?;
 
-    // Strip further than normal
-    if !Command::new("strip").arg("--strip-all").arg(OsStr::new(&target)).output()?.status.success() {
-        println!("{:?} was not successfully stripped.", OsStr::new(&target));
-    }
+    let contents = fs::read(&source)?;
 
+    if let Ok(Object::Elf(e)) = Object::parse(&contents) {
+        add_dependencies(source, e, queue);
+
+        // Make file writable to strip it
+        let mut permissions = fs::metadata(&target)?.permissions();
+        permissions.set_readonly(false);
+        fs::set_permissions(&target, permissions)?;
+
+        // Strip further than normal
+        if let Ok(strip) = env::var("STRIP") {
+            if !Command::new(strip)
+                .arg("--strip-all")
+                .arg(OsStr::new(&target))
+                .output()?
+                .status
+                .success()
+            {
+                println!("{:?} was not successfully stripped.", OsStr::new(&target));
+            }
+        }
+    };
 
     Ok(())
 }

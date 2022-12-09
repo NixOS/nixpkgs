@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , jinja2
 , markdown
@@ -11,9 +11,9 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "8.3.4";
+  version = "8.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     owner = "squidfunk";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UQGszU1ICundexXSHMdDm15FjlnzK1ifuRn2M5fp1sA=";
+    hash = "sha256-ntArFD/wnoFC2vMS9WjiFP5/I1XklgSPGKGxFXxdNxs=";
   };
 
   propagatedBuildInputs = [

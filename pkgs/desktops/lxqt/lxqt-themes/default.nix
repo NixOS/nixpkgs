@@ -3,18 +3,18 @@
 , fetchFromGitHub
 , cmake
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-themes";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "OEl6ZfMKdqjONRA1LPZ69KyFjp1c21Uib/riYDWSRWE=";
+    sha256 = "c7SGsnF2t2IrQFZODVmZS0ijJ7G1KiLWOLm7Rs2hehs=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ mkDerivation rec {
     lxqt-build-tools
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-themes";

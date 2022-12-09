@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, dbus-glib
-, libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3, glib
-, desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, dbus-glib
+, libxklavier
+, libcanberra-gtk3
+, librsvg
+, libappindicator-gtk3
+, glib
+, desktop-file-utils
+, dconf
+, gtk3
+, polkit
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
 , mateUpdateScript
 }:
 
@@ -52,7 +69,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Utilities to configure the MATE desktop";

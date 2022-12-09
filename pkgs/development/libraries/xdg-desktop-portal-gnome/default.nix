@@ -14,15 +14,17 @@
 , xdg-desktop-portal
 , wayland
 , gnome
+, librsvg
+, webp-pixbuf-loader
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gnome";
-  version = "42.1";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "doW2aVzZi+gjgXECDByXE8RkfSaAAGyYzo5N+FgxLNI=";
+    sha256 = "Ca22bG2RU+bwXfZtqirWKl3g42Zl6dIpUXO7DdxTtM0=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +49,17 @@ stdenv.mkDerivation rec {
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ];
 
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -55,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Backend implementation for xdg-desktop-portal for the GNOME desktop environment";
+    homepage = "https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome";
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;

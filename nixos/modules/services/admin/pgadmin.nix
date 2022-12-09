@@ -28,36 +28,85 @@ let
 in
 {
   options.services.pgadmin = {
-    enable = mkEnableOption "PostgreSQL Admin 4";
+    enable = mkEnableOption (lib.mdDoc "PostgreSQL Admin 4");
 
     port = mkOption {
-      description = "Port for pgadmin4 to run on";
+      description = lib.mdDoc "Port for pgadmin4 to run on";
       type = types.port;
       default = 5050;
     };
 
     initialEmail = mkOption {
-      description = "Initial email for the pgAdmin account.";
+      description = lib.mdDoc "Initial email for the pgAdmin account";
       type = types.str;
     };
 
     initialPasswordFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Initial password file for the pgAdmin account.
-        NOTE: Should be string not a store path, to prevent the password from being world readable.
+        NOTE: Should be string not a store path, to prevent the password from being world readable
       '';
       type = types.path;
     };
 
-    openFirewall = mkEnableOption "firewall passthrough for pgadmin4";
+    emailServer = {
+      enable = mkOption {
+        description = lib.mdDoc ''
+          Enable SMTP email server. This is necessary, if you want to use password recovery or change your own password
+        '';
+        type = types.bool;
+        default = false;
+      };
+      address = mkOption {
+        description = lib.mdDoc "SMTP server for email delivery";
+        type = types.str;
+        default = "localhost";
+      };
+      port = mkOption {
+        description = lib.mdDoc "SMTP server port for email delivery";
+        type = types.port;
+        default = 25;
+      };
+      useSSL = mkOption {
+        description = lib.mdDoc "SMTP server should use SSL";
+        type = types.bool;
+        default = false;
+      };
+      useTLS = mkOption {
+        description = lib.mdDoc "SMTP server should use TLS";
+        type = types.bool;
+        default = false;
+      };
+      username = mkOption {
+        description = lib.mdDoc "SMTP server username for email delivery";
+        type = types.nullOr types.str;
+        default = null;
+      };
+      sender = mkOption {
+        description = lib.mdDoc ''
+          SMTP server sender email for email delivery. Some servers require this to be a valid email address from that server
+        '';
+        type = types.str;
+        example = "noreply@example.com";
+      };
+      passwordFile = mkOption {
+        description = lib.mdDoc ''
+          Password for SMTP email account.
+          NOTE: Should be string not a store path, to prevent the password from being world readable
+        '';
+        type = types.path;
+      };
+    };
+
+    openFirewall = mkEnableOption (lib.mdDoc "firewall passthrough for pgadmin4");
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Settings for pgadmin4.
-        <link xlink:href="https://www.pgadmin.org/docs/pgadmin4/development/config_py.html">Documentation</link>.
+        [Documentation](https://www.pgadmin.org/docs/pgadmin4/development/config_py.html)
       '';
       type = pyType;
-      default= {};
+      default = { };
     };
   };
 
@@ -69,6 +118,13 @@ in
       SERVER_MODE = true;
     } // (optionalAttrs cfg.openFirewall {
       DEFAULT_SERVER = mkDefault "::";
+    }) // (optionalAttrs cfg.emailServer.enable {
+      MAIL_SERVER = cfg.emailServer.address;
+      MAIL_PORT = cfg.emailServer.port;
+      MAIL_USE_SSL = cfg.emailServer.useSSL;
+      MAIL_USE_TLS = cfg.emailServer.useTLS;
+      MAIL_USERNAME = cfg.emailServer.username;
+      SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
     });
 
     systemd.services.pgadmin = {
@@ -115,10 +171,14 @@ in
       group = "pgadmin";
     };
 
-    users.groups.pgadmin = {};
+    users.groups.pgadmin = { };
 
     environment.etc."pgadmin/config_system.py" = {
-      text = formatPy cfg.settings;
+      text = lib.optionalString cfg.emailServer.enable ''
+        with open("${cfg.emailServer.passwordFile}") as f:
+          pw = f.read()
+        MAIL_PASSWORD = pw
+      '' + formatPy cfg.settings;
       mode = "0600";
       user = "pgadmin";
       group = "pgadmin";

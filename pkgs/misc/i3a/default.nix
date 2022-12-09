@@ -9,8 +9,16 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-2k1HYtgJ76qXLvX6RmOSKtMMg+K722n8U9YmBANvQvE=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "python_requires='>=3.7,<3.10'," "python_requires='>=3.7',"
+  '';
+
   nativeBuildInputs = [ python3Packages.setuptools-scm ];
+
   propagatedBuildInputs = [ python3Packages.i3ipc ];
+
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://git.goral.net.pl/mgoral/i3a";

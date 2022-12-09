@@ -46,6 +46,11 @@ let
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
 
+  nixosInitrdRules = ''
+    # Mark dm devices as db_persist so that they are kept active after switching root
+    SUBSYSTEM=="block", KERNEL=="dm-[0-9]*", ACTION=="add|change", OPTIONS+="db_persist"
+  '';
+
   # Perform substitutions in all udev rules files.
   udevRulesFor = { name, udevPackages, udevPath, udev, systemd, binPackages, initrdBin ? null }: pkgs.runCommand name
     { preferLocalBuild = true;
@@ -171,10 +176,10 @@ let
       mv etc/udev/hwdb.bin $out
     '';
 
-  compressFirmware = if config.boot.kernelPackages.kernelAtLeast "5.3" then
-    pkgs.compressFirmwareXz
+  compressFirmware = firmware: if (config.boot.kernelPackages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
+    pkgs.compressFirmwareXz firmware
   else
-    id;
+    id firmware;
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -192,11 +197,10 @@ in
   ###### interface
 
   options = {
-
     boot.hardwareScan = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to try to load kernel modules for all detected hardware.
         Usually this does a good job of providing you with the modules
         you need, but sometimes it can crash the system or cause other
@@ -205,15 +209,18 @@ in
     };
 
     services.udev = {
+      enable = mkEnableOption (lib.mdDoc "udev") // {
+        default = true;
+      };
 
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
-          List of packages containing <command>udev</command> rules.
+        description = lib.mdDoc ''
+          List of packages containing {command}`udev` rules.
           All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          {file}`«pkg»/etc/udev/rules.d` and
+          {file}`«pkg»/lib/udev/rules.d`
           will be included.
         '';
         apply = map getBin;
@@ -222,8 +229,8 @@ in
       path = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
-          Packages added to the <envar>PATH</envar> environment variable when
+        description = lib.mdDoc ''
+          Packages added to the {env}`PATH` environment variable when
           executing programs from Udev rules.
         '';
       };
@@ -234,9 +241,9 @@ in
           ENV{ID_VENDOR_ID}=="046d", ENV{ID_MODEL_ID}=="0825", ENV{PULSE_IGNORE}="1"
         '';
         type = types.lines;
-        description = ''
-          Additional <command>udev</command> rules. They'll be written
-          into file <filename>99-local.rules</filename>. Thus they are
+        description = lib.mdDoc ''
+          Additional {command}`udev` rules. They'll be written
+          into file {file}`99-local.rules`. Thus they are
           read and applied after all other rules.
         '';
       };
@@ -249,9 +256,9 @@ in
             KEYBOARD_KEY_700e2=leftctrl
         '';
         type = types.lines;
-        description = ''
-          Additional <command>hwdb</command> files. They'll be written
-          into file <filename>99-local.hwdb</filename>. Thus they are
+        description = lib.mdDoc ''
+          Additional {command}`hwdb` files. They'll be written
+          into file {file}`99-local.hwdb`. Thus they are
           read after all other files.
         '';
       };
@@ -261,7 +268,7 @@ in
     hardware.firmware = mkOption {
       type = types.listOf types.package;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
         (i.e., when it has detected specific hardware that requires
@@ -281,16 +288,15 @@ in
     networking.usePredictableInterfaceNames = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to assign <link
-        xlink:href='http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames'>predictable
-        names to network interfaces</link>.  If enabled, interfaces
+      description = lib.mdDoc ''
+        Whether to assign [predictable names to network interfaces](http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames).
+        If enabled, interfaces
         are assigned names that contain topology information
-        (e.g. <literal>wlp3s0</literal>) and thus should be stable
+        (e.g. `wlp3s0`) and thus should be stable
         across reboots.  If disabled, names depend on the order in
         which interfaces are discovered by the kernel, which may
         change randomly across reboots; for instance, you may find
-        <literal>eth0</literal> and <literal>eth1</literal> flipping
+        `eth0` and `eth1` flipping
         unpredictably.
       '';
     };
@@ -301,13 +307,13 @@ in
         type = types.listOf types.path;
         default = [];
         visible = false;
-        description = ''
-          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+        description = lib.mdDoc ''
+          *This will only be used when systemd is used in stage 1.*
 
-          List of packages containing <command>udev</command> rules that will be copied to stage 1.
+          List of packages containing {command}`udev` rules that will be copied to stage 1.
           All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          {file}`«pkg»/etc/udev/rules.d` and
+          {file}`«pkg»/lib/udev/rules.d`
           will be included.
         '';
       };
@@ -316,8 +322,8 @@ in
         type = types.listOf types.path;
         default = [];
         visible = false;
-        description = ''
-          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+        description = lib.mdDoc ''
+          *This will only be used when systemd is used in stage 1.*
 
           Packages to search for binaries that are referenced by the udev rules in stage 1.
           This list always contains /bin of the initrd.
@@ -331,10 +337,10 @@ in
           SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
         '';
         type = types.lines;
-        description = ''
-          <command>udev</command> rules to include in the initrd
-          <emphasis>only</emphasis>. They'll be written into file
-          <filename>99-local.rules</filename>. Thus they are read and applied
+        description = lib.mdDoc ''
+          {command}`udev` rules to include in the initrd
+          *only*. They'll be written into file
+          {file}`99-local.rules`. Thus they are read and applied
           after the essential initrd rules.
         '';
       };
@@ -346,7 +352,7 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf cfg.enable {
 
     services.udev.extraRules = nixosRules;
 
@@ -363,8 +369,10 @@ in
         EOF
       '';
 
+    boot.initrd.services.udev.rules = nixosInitrdRules;
+
     boot.initrd.systemd.additionalUpstreamUnits = [
-      # TODO: "initrd-udevadm-cleanup-db.service" is commented out because of https://github.com/systemd/systemd/issues/12953
+      "initrd-udevadm-cleanup-db.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"

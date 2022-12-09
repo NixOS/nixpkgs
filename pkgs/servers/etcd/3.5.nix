@@ -1,15 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
 
 let
-  etcdVersion = "3.5.4";
-  etcdSrc = fetchFromGitHub {
+  version = "3.5.6";
+
+  src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${etcdVersion}";
-    sha256 = "sha256-mTQHxLLfNiihvHg5zaTeVNWKuzvE0KBiJdY3qMJHMCM=";
+    rev = "v${version}";
+    sha256 = "sha256-KQ3N6HBgdLnS/8UprT99gH9ttsy2cgfaWSL/ILX6t1A=";
   };
 
-  commonMeta = with lib; {
+  CGO_ENABLED = 0;
+
+  meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
@@ -19,60 +22,50 @@ let
 
   etcdserver = buildGoModule rec {
     pname = "etcdserver";
-    version = etcdVersion;
 
-    vendorSha256 = "sha256-4djUQvWp9hScua9l1ZTq298zWSeDYRDojEt2AWmarzw=";
+    inherit CGO_ENABLED meta src version;
 
-    src = etcdSrc;
+    vendorSha256 = "sha256-u4N8YXmnVk5flPimdE4olr/1hVZoEDEgUwXRRTlX51o=";
+
     modRoot = "./server";
 
     postBuild = ''
       mv $GOPATH/bin/{server,etcd}
     '';
 
-    CGO_ENABLED = 0;
-
     # We set the GitSHA to `GitNotFound` to match official build scripts when
     # git is unavailable. This is to avoid doing a full Git Checkout of etcd.
     # User facing version numbers are still available in the binary, just not
     # the sha it was built from.
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
-
-    meta = commonMeta;
   };
 
   etcdutl = buildGoModule rec {
     pname = "etcdutl";
-    version = etcdVersion;
 
-    vendorSha256 = "sha256-nk56XGpNsDwcGrTKithKGnPCX0NhpQmzNSXHk3vmdtg=";
+    inherit CGO_ENABLED meta src version;
 
-    src = etcdSrc;
+    vendorSha256 = "sha256-J4qW2Dzpwk85XW3oWvT1F5ec/jzkcLbTC+1CMBztWRw=";
+
     modRoot = "./etcdutl";
-
-    CGO_ENABLED = 0;
-
-    meta = commonMeta;
   };
 
   etcdctl = buildGoModule rec {
     pname = "etcdctl";
-    version = etcdVersion;
 
-    vendorSha256 = "sha256-WIMYrXfay6DMz+S/tIc/X4ffMizxub8GS1DDgIR40D4=";
+    inherit CGO_ENABLED meta src version;
 
-    src = etcdSrc;
+    vendorSha256 = "sha256-+5zWXVErkFAvtkpNQtKn/jLOGUdHkXgeZWI7/RIMgMQ=";
+
     modRoot = "./etcdctl";
-
-    CGO_ENABLED = 0;
-
-    meta = commonMeta;
   };
 in
 symlinkJoin {
-  name = "etcd";
-  version = etcdVersion;
-  meta = commonMeta;
+  name = "etcd-${version}";
+
+  inherit meta version;
+
+  passthru = { inherit etcdserver etcdutl etcdctl; };
 
   paths = [
     etcdserver

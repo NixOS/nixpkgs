@@ -5,11 +5,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "sonixd";
-  version = "0.15.1";
+  version = "0.15.3";
 
   src = fetchurl {
     url = "https://github.com/jeffvli/sonixd/releases/download/v${version}/Sonixd-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-23WU1nwvrzyw0J+Pplm3JbsScjJxu+RhmwVoe/PjozY=";
+    sha256 = "sha256-+4L3XAuR7T/z5a58SXre6yUiVi7TvSAs8vPgEC7hcIw=";
   };
 
   extraInstallCommands = ''

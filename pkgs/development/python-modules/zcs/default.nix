@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "zcs";
-  version = "0.1.17";
+  version = "0.1.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZoQgAaJy3kKHLljyKA0Oo/D1kefE8X9FlsGDSNt1nPw=";
+    sha256 = "sha256-+0lG2OirfXj55IFA9GMERVWtrWwULfVfdbIg8ebH+7M=";
   };
 
   patches = [

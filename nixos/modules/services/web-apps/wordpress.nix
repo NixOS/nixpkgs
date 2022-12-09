@@ -22,6 +22,7 @@ let
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
       # symlink uploads directory
       ln -s ${cfg.uploadsDir} $out/share/wordpress/wp-content/uploads
+      ln -s ${cfg.fontsDir} $out/share/wordpress/wp-content/fonts
 
       # https://github.com/NixOS/nixpkgs/pull/53399
       #
@@ -30,9 +31,10 @@ let
       # requests that look like: https://example.com/wp-content//nix/store/...plugin/path/some-file.js
       # Since hard linking directories is not allowed, copying is the next best thing.
 
-      # copy additional plugin(s) and theme(s)
+      # copy additional plugin(s), theme(s) and language(s)
       ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
       ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
@@ -82,24 +84,36 @@ let
           type = types.package;
           default = pkgs.wordpress;
           defaultText = literalExpression "pkgs.wordpress";
-          description = "Which WordPress package to use.";
+          description = lib.mdDoc "Which WordPress package to use.";
         };
 
         uploadsDir = mkOption {
           type = types.path;
           default = "/var/lib/wordpress/${name}/uploads";
-          description = ''
+          description = lib.mdDoc ''
             This directory is used for uploads of pictures. The directory passed here is automatically
             created and permissions adjusted as required.
+          '';
+        };
+
+        fontsDir = mkOption {
+          type = types.path;
+          default = "/var/lib/wordpress/${name}/fonts";
+          description = lib.mdDoc ''
+            This directory is used to download fonts from a remote location, e.g.
+            to host google fonts locally.
           '';
         };
 
         plugins = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These plugins need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let
@@ -124,9 +138,12 @@ let
         themes = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These themes need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let
@@ -148,51 +165,77 @@ let
           '';
         };
 
+        languages = mkOption {
+          type = types.listOf types.path;
+          default = [];
+          description = lib.mdDoc ''
+            List of path(s) to respective language(s) which are copied from the 'languages' directory.
+          '';
+          example = literalExpression ''
+            [(
+              # Let's package the German language.
+              # For other languages try to replace language and country code in the download URL with your desired one.
+              # Reference https://translate.wordpress.org for available translations and
+              # codes.
+              language-de = pkgs.stdenv.mkDerivation {
+                name = "language-de";
+                src = pkgs.fetchurl {
+                  url = "https://de.wordpress.org/wordpress-''${pkgs.wordpress.version}-de_DE.tar.gz";
+                  # Name is required to invalidate the hash when wordpress is updated
+                  name = "wordpress-''${pkgs.wordpress.version}-language-de"
+                  sha256 = "sha256-dlas0rXTSV4JAl8f/UyMbig57yURRYRhTMtJwF9g8h0=";
+                };
+                installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
+              };
+            )];
+          '';
+        };
+
         database = {
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = "Database host address.";
+            description = lib.mdDoc "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = "Database host port.";
+            description = lib.mdDoc "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "wordpress";
-            description = "Database name.";
+            description = lib.mdDoc "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "wordpress";
-            description = "Database user.";
+            description = lib.mdDoc "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/wordpress-dbpassword";
-            description = ''
+            description = lib.mdDoc ''
               A file containing the password corresponding to
-              <option>database.user</option>.
+              {option}`database.user`.
             '';
           };
 
           tablePrefix = mkOption {
             type = types.str;
             default = "wp_";
-            description = ''
+            description = lib.mdDoc ''
               The $table_prefix is the value placed in the front of your database tables.
               Change the value if you want to use something other than wp_ for your database
               prefix. Typically this is changed if you are installing multiple WordPress blogs
               in the same database.
 
-              See <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
+              See <https://codex.wordpress.org/Editing_wp-config.php#table_prefix>.
             '';
           };
 
@@ -200,13 +243,13 @@ let
             type = types.nullOr types.path;
             default = null;
             defaultText = literalExpression "/run/mysqld/mysqld.sock";
-            description = "Path to the unix socket file to use for authentication.";
+            description = lib.mdDoc "Path to the unix socket file to use for authentication.";
           };
 
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = "Create the database and database user locally.";
+            description = lib.mdDoc "Create the database and database user locally.";
           };
         };
 
@@ -219,8 +262,8 @@ let
               enableACME = true;
             }
           '';
-          description = ''
-            Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
+          description = lib.mdDoc ''
+            Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           '';
         };
 
@@ -234,8 +277,8 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = ''
-            Options for the WordPress PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          description = lib.mdDoc ''
+            Options for the WordPress PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
         };
@@ -243,10 +286,10 @@ let
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Any additional text to be appended to the wp-config.php
             configuration file. This is a PHP script. For configuration
-            settings, see <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php'/>.
+            settings, see <https://codex.wordpress.org/Editing_wp-config.php>.
           '';
           example = ''
             define( 'AUTOSAVE_INTERVAL', 60 ); // Seconds
@@ -265,20 +308,20 @@ in
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
         default = {};
-        description = "Specification of one or more WordPress sites to serve";
+        description = lib.mdDoc "Specification of one or more WordPress sites to serve";
       };
 
       webserver = mkOption {
         type = types.enum [ "httpd" "nginx" "caddy" ];
         default = "httpd";
-        description = ''
+        description = lib.mdDoc ''
           Whether to use apache2 or nginx for virtual host management.
 
-          Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-          See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+          Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
 
-          Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+          Further apache2 configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
 
@@ -366,6 +409,8 @@ in
       "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
+      "d '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
+      "Z '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
     ]) eachSite);
 
     systemd.services = mkMerge [

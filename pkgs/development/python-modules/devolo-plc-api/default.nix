@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "devolo-plc-api";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "2Fake";
     repo = "devolo_plc_api";
     rev = "v${version}";
-    sha256 = "sha256-LMwvIwbP/nRFby295ur6QTgyXLLJ8ip30V9bti27qKQ=";
+    sha256 = "sha256-Gjs4x52LwCsE0zAJjLO1N0w5r1jDJkZoVY1JVZB8bmE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

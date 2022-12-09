@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , wrapGAppsHook
 , gdk-pixbuf
+, glib-networking
 , gobject-introspection
 , imagemagick
 , librsvg
@@ -17,13 +18,13 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "linux-app";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6IRkJKtdQQ9Yixb9CkT3tGNY0MYFZyvz1/6buZo5eYU=";
+    sha256 = "sha256-MPS4d/yNkccsc/j85h7/4k4xL8uSCvhj/9JWPa7ezLY=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    glib-networking # needed for the login captcha
     protonvpn-nm-lib
     psutil
   ];
@@ -68,6 +70,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/ProtonVPN/linux-app";
     maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Plus;
+    mainProgram = "protonvpn";
     platforms = platforms.linux;
   };
 }

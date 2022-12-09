@@ -2,22 +2,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fpyutils
+, pyfakefs
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.1.3";
+  version = "8.1.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/Hi2CW3aqbvCr7xGHD9lAe9U84waSjVfTfWq76NXNT4=";
+    hash = "sha256-jt2ZZV63s7LL0R9ay/tvMH3cIDElYXiNPBuHlxj/Z8E=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pyfakefs
     pytestCheckHook
   ];
 

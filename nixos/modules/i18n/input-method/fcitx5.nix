@@ -15,12 +15,12 @@ in {
         type = with types; listOf package;
         default = [];
         example = literalExpression "with pkgs; [ fcitx5-rime ]";
-        description = ''
+        description = lib.mdDoc ''
           Enabled Fcitx5 addons.
         '';
       };
 
-      enableRimeData = mkEnableOption "default rime-data with fcitx5-rime";
+      enableRimeData = mkEnableOption (lib.mdDoc "default rime-data with fcitx5-rime");
     };
   };
 

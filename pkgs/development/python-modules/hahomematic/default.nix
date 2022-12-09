@@ -7,6 +7,7 @@
 , pytestCheckHook
 , python-slugify
 , pythonOlder
+, setuptools
 , voluptuous
 , websocket-client
 , xmltodict
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "1.8.4";
+  version = "2022.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ZoHH96BliXDTO6+yVs+GFSAxG9wx32tHrr74zTVq1FI=";
+    sha256 = "sha256-4HJ4WCEi94dIr7QTpgA/9O2YAyt30L+6xJihKfbC6rg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -48,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
     homepage = "https://github.com/danielperna84/hahomematic";
+    changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

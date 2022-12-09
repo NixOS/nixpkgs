@@ -5,6 +5,7 @@
 , fetchPypi
 , pillow
 , pytestCheckHook
+, pyyaml
 , setuptools-scm
 , six
 , svgwrite
@@ -13,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "wavedrom";
-  version = "2.0.3.post2";
+  version = "2.0.3.post3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I5s0Nf8RawkAfVUX7tdV/IWRiRtycaHNQNueQAwCRI0=";
+    hash = "sha256-MntNXcpZPIElfCAv6lFvepCHR/sRUnw1nwNPW3r39Hs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrdict
+    pyyaml
     svgwrite
     six
   ];

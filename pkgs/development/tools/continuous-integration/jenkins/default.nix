@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.332.3";
+  version = "2.361.4";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "sha256-0ZPxearfOnzrYa3rw6tRIYrEp4UriJMv8ztE/XvmAQ8=";
+    hash = "sha256-s4/iGK+1RHsMmm+jCNerdirFpY3YmqaLc1BnrWw3wXs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -70,7 +70,8 @@ stdenv.mkDerivation rec {
     homepage = "https://jenkins-ci.org";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
+    maintainers = with maintainers; [ coconnor earldouglas nequissimus ajs124 ];
+    changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;
   };

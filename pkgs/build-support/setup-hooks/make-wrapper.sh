@@ -11,18 +11,20 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0       NAME    : set the name of the executed process to NAME
-#                         (if unset or empty, defaults to EXECUTABLE)
-# --inherit-argv0       : the executable inherits argv0 from the wrapper.
-#                         (use instead of --argv0 '$0')
-# --set         VAR VAL : add VAR with value VAL to the executable's environment
-# --set-default VAR VAL : like --set, but only adds VAR if not already set in
-#                         the environment
-# --unset       VAR     : remove VAR from the environment
-# --chdir       DIR     : change working directory (use instead of --run "cd DIR")
-# --run         COMMAND : run command before the executable
-# --add-flags   FLAGS   : add FLAGS to invocation of executable
-# TODO(@ncfavier): --append-flags
+# --argv0        NAME    : set the name of the executed process to NAME
+#                          (if unset or empty, defaults to EXECUTABLE)
+# --inherit-argv0        : the executable inherits argv0 from the wrapper.
+#                          (use instead of --argv0 '$0')
+# --set          VAR VAL : add VAR with value VAL to the executable's environment
+# --set-default  VAR VAL : like --set, but only adds VAR if not already set in
+#                          the environment
+# --unset        VAR     : remove VAR from the environment
+# --chdir        DIR     : change working directory (use instead of --run "cd DIR")
+# --run          COMMAND : run command before the executable
+# --add-flags    ARGS    : prepend ARGS to the invocation of the executable
+#                          (that is, *before* any arguments passed on the command line)
+# --append-flags ARGS    : append ARGS to the invocation of the executable
+#                          (that is, *after* any arguments passed on the command line)
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -36,7 +38,7 @@ makeShellWrapper() {
     local original="$1"
     local wrapper="$2"
     local params varName value command separator n fileNames
-    local argv0 flagsBefore flags
+    local argv0 flagsBefore flagsAfter flags
 
     assertExecutable "$original"
 
@@ -165,6 +167,10 @@ makeShellWrapper() {
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
             flagsBefore="$flagsBefore $flags"
+        elif [[ "$p" == "--append-flags" ]]; then
+            flags="${params[$((n + 1))]}"
+            n=$((n + 1))
+            flagsAfter="$flagsAfter $flags"
         elif [[ "$p" == "--argv0" ]]; then
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
@@ -177,7 +183,7 @@ makeShellWrapper() {
     done
 
     echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
-         "$flagsBefore" '"$@"' >> "$wrapper"
+         "$flagsBefore" '"$@"' "$flagsAfter" >> "$wrapper"
 
     chmod +x "$wrapper"
 }

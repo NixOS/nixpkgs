@@ -160,10 +160,10 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
-    ] ++ optionals (versionRange "102" "103") [
-      # https://dawn-review.googlesource.com/c/dawn/+/88582
-      # Wrap get_gitHash in try-catch to prevent failures in tarball builds.
-      ./patches/m102-fix-dawn_version_generator-failure.patch
+      # Required to fix the build with a more recent wayland-protocols version
+      # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
+      # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
+      ./patches/angle-wayland-include-protocol.patch
     ];
 
     postPatch = ''
@@ -261,7 +261,7 @@ let
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
       # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
+      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
       # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
       # We aren't compiling with Chrome's Clang (would enable Chrome-specific
@@ -293,6 +293,13 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
+      clang_base_path = "${llvmPackages.clang}";
+      use_qt = false;
+      # The default has changed to false. We'll build with libwayland from
+      # Nixpkgs for now but might want to eventually use the bundled libwayland
+      # as well to avoid incompatibilities (if this continues to be a problem
+      # from time to time):
+      use_system_libwayland = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -325,7 +332,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName

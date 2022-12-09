@@ -9,7 +9,7 @@
 , gtk-doc
 , docbook_xsl
 , glib
-, libsoup
+, libsoup_3
 , libxml2
 , libxslt
 , check
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
     libxslt
   ];
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libosinfo.org/";
     changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

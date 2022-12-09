@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, ordereddict
 , pyyaml
 }:
 
@@ -15,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "03h8wa6pzqjiw25s3jv9gydn77gs444mf31lrgvpgy53kswz0c3z";
   };
 
-  propagatedBuildInputs = [ pyyaml ] ++ lib.optional (isPy27) ordereddict;
+  propagatedBuildInputs = [ pyyaml ];
 
   # no tests
   doCheck = false;

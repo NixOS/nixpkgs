@@ -2,16 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.4.0";
+  version = "8.5.3";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
-    rev = "v${version}";
-    sha256 = "sha256-Vy5ERc4GZVEjNP0z2zZJeNwfhoL0nnOeii+TjRszrFw=";
+    # On the next release, go back to `rev = "v${version}";`
+    # The 8.5.3 release appears to have been mysteriously re-tagged:
+    # https://github.com/sharkdp/fd/issues/1184
+    rev = "f6e74407e80a5563a9e4d0530371aed281e05838";
+    sha256 = "sha256-7QQHLw+isXtr1FDQr4aiUhvOjJUPbaxFGDwukiWBG9g=";
   };
 
-  cargoSha256 = "sha256-Iz8QP9NdjbBL8j/iUV6iS3U1ErPHuC5NYFHUMtR8MZg=";
+  cargoSha256 = "sha256-QFh47Pr+7lIdT++huziKgMJxvsZElTTwu11c7/wjyHE=";
 
   nativeBuildInputs = [ installShellFiles ];
 

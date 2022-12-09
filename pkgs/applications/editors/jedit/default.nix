@@ -58,6 +58,6 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ ];
   };
 }

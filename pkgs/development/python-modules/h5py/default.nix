@@ -1,6 +1,17 @@
-{ lib, fetchPypi, isPy27, buildPythonPackage, pythonOlder
-, numpy, hdf5, cython, six, pkgconfig, unittest2
-, mpi4py ? null, openssh, pytestCheckHook, cached-property }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, numpy
+, hdf5
+, cython
+, pkgconfig
+, mpi4py ? null
+, openssh
+, pytestCheckHook
+, cached-property
+}:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
 
@@ -8,13 +19,15 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.6.0";
+  version = "3.7.0";
   pname = "h5py";
-  disabled = isPy27;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8752d2814a92aba4e2b2a5922d2782d0029102d99caaf3c201a566bc0b40db29";
+    sha256 = "sha256-P883iEODxdpkhGq1EBkHIAJ9ygdo3vNN2Ny2Wdvly/M=";
   };
 
   # avoid strict pinning of numpy
@@ -35,15 +48,22 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  # tests now require pytest-mpi, which isn't available and difficult to package
-  doCheck = false;
-  checkInputs = lib.optional isPy27 unittest2 ++ [ pytestCheckHook openssh ];
-  nativeBuildInputs = [ pkgconfig cython ];
+  nativeBuildInputs = [
+    cython
+    pkgconfig
+    setuptools
+  ];
+
   buildInputs = [ hdf5 ]
     ++ lib.optional mpiSupport mpi;
-  propagatedBuildInputs = [ numpy six]
+
+  propagatedBuildInputs = [ numpy ]
     ++ lib.optionals mpiSupport [ mpi4py openssh ]
     ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+
+  # tests now require pytest-mpi, which isn't available and difficult to package
+  doCheck = false;
+  checkInputs = [ pytestCheckHook openssh ];
 
   pythonImportsCheck = [ "h5py" ];
 

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "duf";
@@ -15,11 +15,17 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage duf.1
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ petabyteboy penguwin SuperSandro2000 ];
+    maintainers = with maintainers; [ penguwin SuperSandro2000 ];
   };
 }

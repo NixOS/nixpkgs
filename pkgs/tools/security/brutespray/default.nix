@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brutespray";
-  version = "1.7.0";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "x90skysn3k";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0lkm3fvx35ml5jh4ykjr2srq8qfajkmxwp4qfcn9xi58khk3asq3";
+    sha256 = "sha256-hlFp2ZQnoydxF2NBCjSKtmNzMj9V14AKrNYKMF/8m70=";
   };
 
   postPatch = ''

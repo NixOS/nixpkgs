@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
     rev = version;
-    sha256 = "sha256-vzcrGRaim1plksmkf8AC6sTl5P+106UG391Cy2yKQhQ=";
+    sha256 = "sha256-1oxkl7MJ2wIhcHlgxnCtj9Cp8o1puzNWs+vlMyi+3RM=";
   };
 
   postPatch = ''

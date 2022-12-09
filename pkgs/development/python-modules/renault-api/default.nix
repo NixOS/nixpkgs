@@ -47,6 +47,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   pythonImportsCheck = [
     "renault_api"
   ];

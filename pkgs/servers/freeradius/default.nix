@@ -24,11 +24,11 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.0.25";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    hash = "sha256-SIOmi7PO5GAlNZqXwWkc5lXour/W3DwCHQDhCaL/TBA=";
+    hash = "sha256-Xw7seQike8dSV6SIAsrK1Sc/HBOyaA8fhHzwrISKyBA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://freeradius.org/";
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ sheenobu willibutz fpletz lheckemann elseym ];
+    maintainers = with maintainers; [ sheenobu willibutz lheckemann ];
     platforms = with platforms; linux;
   };
 }

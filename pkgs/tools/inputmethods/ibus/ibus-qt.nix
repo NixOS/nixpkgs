@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-qt";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus-qt/releases/download/${version}/${pname}-${version}-Source.tar.gz";
-    sha256 = "1q9g7qghpcf07valc2ni7yf994xqx2pmdffknj7scxfidav6p19g";
+    sha256 = "sha256-HnsMy4i8NscCVFF28IcOZ2BoXozZfZzXk4CE9c7bL/E=";
   };
 
   nativeBuildInputs = [ cmake pkg-config doxygen ];

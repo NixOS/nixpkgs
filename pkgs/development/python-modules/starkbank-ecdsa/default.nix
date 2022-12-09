@@ -2,18 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "starkbank-ecdsa";
-  version = "2.0.3";
+  version = "2.2.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "starkbank";
     repo = "ecdsa-python";
-    rev = "v${version}";
-    sha256 = "sha256-UA+UuSxKZZN7Zb23HWsCD6UZK6lROpy3OfLN7MAlMM0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HarlCDE2qOLbyhMLOE++bTC+7srJqwmohM6vrJkJ/gc=";
   };
 
   checkInputs = [

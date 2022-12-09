@@ -7,7 +7,11 @@ weechat:
 let
   wrapper = {
     installManPages ? true
-  , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
+  , configure ? { availablePlugins, ... }: {
+      # Do not include PHP by default, because it bloats the closure, doesn't
+      # build on Darwin, and there are no official PHP scripts.
+      plugins = builtins.attrValues (builtins.removeAttrs availablePlugins [ "php" ]);
+    }
   }:
 
   let
@@ -21,6 +25,7 @@ let
           '';
           withPackages = pkgsFun: (python // {
             extraEnv = ''
+              ${python.extraEnv}
               export PYTHONHOME="${python3Packages.python.withPackages pkgsFun}"
             '';
           });
@@ -40,6 +45,7 @@ let
         ruby = simplePlugin "ruby";
         guile = simplePlugin "guile";
         lua = simplePlugin "lua";
+        php = simplePlugin "php";
       };
 
     config = configure { inherit availablePlugins; };

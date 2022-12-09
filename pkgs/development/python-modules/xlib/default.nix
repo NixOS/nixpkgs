@@ -22,6 +22,10 @@ buildPythonPackage rec {
     sha256 = "155p9xhsk01z9vdml74h07svlqy6gljnx9c6qbydcr14lwghwn06";
   };
 
+  patches = [
+    ./fix-no-protocol-specified.patch
+  ];
+
   nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ xorg.libX11 ];
   propagatedBuildInputs = [ six ];

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, gtk3, libxfce4ui,
-  libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu, xfce
+  libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu, gitUpdater
 }:
 
 let
@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
     "--with-pathnetcat=${netcat-gnu}/bin/netcat"
   ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";

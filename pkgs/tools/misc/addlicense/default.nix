@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "addlicense";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "addlicense";
     rev = "v${version}";
-    sha256 = "sha256-Nv7Az3TDtd1P/QWjH92otSV9rIrc2l/mTbGUXhODi7Q=";
+    sha256 = "sha256-Vi+U0b9tTJitStZr1wSotr82Y2gA4IjvHLAa+rwGH/g=";
   };
 
   vendorSha256 = "sha256-2mncc21ecpv17Xp8PA9GIodoaCxNBacbbya/shU8T9Y=";

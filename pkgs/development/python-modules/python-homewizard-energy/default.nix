@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aresponses
+, awesomeversion
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "1.0.3";
+  version = "1.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ioISqRFZZCojTJ/KYS8QUtoEpBNOPqY9lC9NFbZyh5A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rj3WTDj2ey8unOxXkD4zbqwd0FDcyHPzsDrjtX7myj4=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    awesomeversion
     aiohttp
   ];
 
@@ -45,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to communicate with HomeWizard Energy devices";
     homepage = "https://github.com/DCSBL/python-homewizard-energy";
+    changelog = "https://github.com/DCSBL/python-homewizard-energy/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

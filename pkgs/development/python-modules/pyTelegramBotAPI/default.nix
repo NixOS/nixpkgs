@@ -3,24 +3,26 @@
 , fetchPypi
 , aiohttp
 , requests
+, fastapi
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyTelegramBotAPI";
-  version = "4.5.1";
+  version = "4.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ClzdkvH1uz1qh/q3prfn8n0eosY3y3mUscbb4EKbmJQ=";
+    hash = "sha256-sVu518B+PDSpW6MhYtNWkPpwuT471VfGuDDtpL7Mo/U=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     requests
+    fastapi
   ];
 
   pythonImportsCheck = [

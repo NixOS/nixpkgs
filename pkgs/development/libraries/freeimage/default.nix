@@ -1,7 +1,7 @@
 { lib, stdenv, fetchsvn, darwin, libtiff
 , libpng, zlib, libwebp, libraw, openexr, openjpeg
 , libjpeg, jxrlib, pkg-config
-, fixDarwinDylibNames }:
+, fixDarwinDylibNames, autoSignDarwinBinariesHook }:
 
 stdenv.mkDerivation {
   pname = "freeimage";
@@ -15,8 +15,13 @@ stdenv.mkDerivation {
   sourceRoot = "svn-r1900/FreeImage/trunk";
 
   # Ensure that the bundled libraries are not used at all
-  prePatch = "rm -rf Source/Lib* Source/OpenEXR Source/ZLib";
-  patches = [ ./unbundle.diff ];
+  prePatch = ''
+    rm -rf Source/Lib* Source/OpenEXR Source/ZLib
+  '';
+  patches = [
+    ./unbundle.diff
+    ./libtiff-4.4.0.diff
+  ];
 
   postPatch = ''
     # To support cross compilation, use the correct `pkg-config`.
@@ -34,6 +39,8 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.cctools
     fixDarwinDylibNames
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
   buildInputs = [ libtiff libtiff.dev_private libpng zlib libwebp libraw openexr openjpeg libjpeg libjpeg.dev_private jxrlib ];
 

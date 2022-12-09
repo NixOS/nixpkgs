@@ -1,4 +1,4 @@
-{ lib, fetchurl, mkfontscale }:
+{ lib, fetchurl, xorg }:
 
 let
   pname = "spleen";
@@ -17,7 +17,7 @@ in fetchurl {
     install -m644 fonts.alias-spleen $d/fonts.alias
 
     # create fonts.dir so NixOS xorg module adds to fp
-    ${mkfontscale}/bin/mkfontdir "$d"
+    ${xorg.mkfontscale}/bin/mkfontdir "$d"
   '';
   sha256 = "sha256-6Imsa0ku8On63di0DOo0QxBa0t+tbtPRxM531EIiG94=";
 

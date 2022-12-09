@@ -27,14 +27,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-cR6r9d1mG5sEvp7cms4qe8Ax9r2dN6do0C0O/e8Qj18=";
+    hash = "sha256-Nh1OrkfOkl26DqVpr0DntSxkXEri5l5WIb8bbN2LDp4=";
   };
 
   patches = [
+    # Fix compilation on i686, would not be needed after 1.18.1 releases, https://dev.gnupg.org/T5522
+    ./t-addexistingsubkey-i686.patch
     # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
     ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
@@ -47,6 +49,9 @@ stdenv.mkDerivation rec {
     ./python-310-detection-without-distutils.patch
     # Find correct version string for Python >= 3.10, https://dev.gnupg.org/D546
     ./python-find-version-string-above-310.patch
+    # Fix a test after disallowing compressed signatures in gpg (PR #180336)
+    ./test_t-verify_double-plaintext.patch
+
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
   ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
   # Fix _AC_UNDECLARED_WARNING for autoconf>=2.70
@@ -107,7 +112,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
+  # prevent tests from being run during the buildPhase
+  makeFlags = [ "tests=" ];
+
   doCheck = true;
+
+  checkFlags = [ "-C" "tests" ];
 
   passthru.tests = {
     python = python3.pkgs.gpgme;

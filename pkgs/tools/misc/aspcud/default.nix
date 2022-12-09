@@ -5,19 +5,19 @@
 , catch2
 , clasp
 , cmake
-, gringo
+, clingo
 , re2c
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.5";
+  version = "1.9.6";
   pname = "aspcud";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "aspcud";
     rev = "v${version}";
-    hash = "sha256-d04GPMoz6PMGq6iiul0zT1C9Mljdl9uJJ2C8MIwcmaw=";
+    hash = "sha256-PdRfpmH7zF5dn+feoijtzdSUjaYhjHwyAUfuYoWCL9E=";
   };
 
   postPatch = ''
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost clasp gringo re2c ];
+  buildInputs = [ boost clasp clingo re2c ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DASPCUD_GRINGO_PATH=${gringo}/bin/gringo"
+    "-DASPCUD_GRINGO_PATH=${clingo}/bin/gringo"
     "-DASPCUD_CLASP_PATH=${clasp}/bin/clasp"
   ];
 

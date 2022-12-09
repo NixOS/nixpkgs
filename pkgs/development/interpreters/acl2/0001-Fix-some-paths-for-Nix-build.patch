@@ -1,22 +1,19 @@
-From d0136f350b82ae845d56029db43d153c91d5e494 Mon Sep 17 00:00:00 2001
+From aed1c4b0be7576d20eed81070da2c6f92573df18 Mon Sep 17 00:00:00 2001
 From: Keshav Kini <keshav.kini@gmail.com>
 Date: Sat, 30 May 2020 21:27:47 -0700
 Subject: [PATCH] Fix some paths for Nix build
 
 ---
- books/build/features.sh                       |  1 +
- .../ipasir/load-ipasir-sharedlib-raw.lsp      |  6 +--
- books/projects/smtlink/config.lisp            |  2 +-
- books/projects/smtlink/examples/examples.lisp |  4 +-
- books/projects/smtlink/smtlink-config         |  2 +-
- .../cl+ssl-20200610-git/src/reload.lisp       | 53 +------------------
- 6 files changed, 8 insertions(+), 60 deletions(-)
+ books/build/features.sh                                     | 1 +
+ books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp          | 6 +-----
+ .../bundle/software/cl+ssl-20220707-git/src/reload.lisp     | 3 +++
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/books/build/features.sh b/books/build/features.sh
-index d45a7aa61..27256b7cd 100755
+index feb5b2b59c..4b654e08bc 100755
 --- a/books/build/features.sh
 +++ b/books/build/features.sh
-@@ -122,6 +122,7 @@ EOF
+@@ -125,6 +125,7 @@ EOF
  fi
  
  echo "Determining whether an ipasir shared library is installed" 1>&2
@@ -25,7 +22,7 @@ index d45a7aa61..27256b7cd 100755
      cat >> Makefile-features <<EOF
  export OS_HAS_IPASIR ?= 1
 diff --git a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
-index 762e4ad4c..c9802cb58 100644
+index 762e4ad4c0..c9802cb582 100644
 --- a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
 +++ b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
 @@ -30,11 +30,7 @@
@@ -41,114 +38,20 @@ index 762e4ad4c..c9802cb58 100644
      (error () (er hard? 'load-ipasir-shardlib-raw
                    "Couldn't load ipasir shared library from ~s0."
                    libname))))
-diff --git a/books/projects/smtlink/config.lisp b/books/projects/smtlink/config.lisp
-index c74073174..8d92355f7 100644
---- a/books/projects/smtlink/config.lisp
-+++ b/books/projects/smtlink/config.lisp
-@@ -51,7 +51,7 @@ where the system books are."))
-     (make-smtlink-config :interface-dir interface-dir
-                          :smt-module "ACL2_to_Z3"
-                          :smt-class "ACL22SMT"
--                         :smt-cmd "/usr/bin/env python"
-+                         :smt-cmd "python"
-                          :pythonpath "")))
- 
- ;; -----------------------------------------------------------------
-diff --git a/books/projects/smtlink/examples/examples.lisp b/books/projects/smtlink/examples/examples.lisp
-index 90534892f..4ab98b2f0 100644
---- a/books/projects/smtlink/examples/examples.lisp
-+++ b/books/projects/smtlink/examples/examples.lisp
-@@ -75,7 +75,7 @@ Subgoal 2
- Subgoal 2.2
- Subgoal 2.2'
- Using default SMT-trusted-cp...
--; SMT solver: `/usr/bin/env python /tmp/py_file/smtlink.w59zR`: 0.52 sec, 7,904 bytes
-+; SMT solver: `python /tmp/py_file/smtlink.w59zR`: 0.52 sec, 7,904 bytes
- Proved!
- Subgoal 2.2''
- Subgoal 2.1
-@@ -139,7 +139,7 @@ read back into ACL2.  Below are the outputs from this clause processor called
- 
- @({
- Using default SMT-trusted-cp...
--; SMT solver: `/usr/bin/env python /tmp/py_file/smtlink.w59zR`: 0.52 sec, 7,904 bytes
-+; SMT solver: `python /tmp/py_file/smtlink.w59zR`: 0.52 sec, 7,904 bytes
- Proved!
- })
- 
-diff --git a/books/projects/smtlink/smtlink-config b/books/projects/smtlink/smtlink-config
-index 0d2703545..0f58904ea 100644
---- a/books/projects/smtlink/smtlink-config
-+++ b/books/projects/smtlink/smtlink-config
-@@ -1 +1 @@
--smt-cmd=/usr/bin/env python
-+smt-cmd=python
-diff --git a/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp
-index e5db28645..65eb818a1 100644
---- a/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp
-+++ b/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp
-@@ -37,59 +37,10 @@
+diff --git a/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp
+index d409b4440f..5c65c5b4da 100644
+--- a/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp
++++ b/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp
+@@ -87,6 +87,9 @@ sudo rm /usr/local/lib/libcrypto.dylib /usr/local/lib/libssl.dylib
+ ;;
  ;; These are 32-bit only.
  
- (cffi:define-foreign-library libcrypto
--  (:windows (:or #+(and windows x86-64) "libcrypto-1_1-x64.dll"
--                 #+(and windows x86) "libcrypto-1_1.dll"
--                 "libeay32.dll"))
--  (:openbsd "libcrypto.so")
--  (:darwin (:or "/opt/local/lib/libcrypto.dylib" ;; MacPorts
--                "/sw/lib/libcrypto.dylib"        ;; Fink
--                "/usr/local/opt/openssl/lib/libcrypto.dylib" ;; Homebrew
--                "/usr/local/lib/libcrypto.dylib" ;; personalized install
--                "libcrypto.dylib"                ;; default system libcrypto, which may have insufficient crypto
--                "/usr/lib/libcrypto.dylib"))
--  (:cygwin (:or "cygcrypto-1.1.dll" "cygcrypto-1.0.0.dll")))
-+  (t "@libcrypto@"))
- 
- (cffi:define-foreign-library libssl
--  (:windows (:or #+(and windows x86-64) "libssl-1_1-x64.dll"
--                 #+(and windows x86) "libssl-1_1.dll"
--                 "libssl32.dll"
--                 "ssleay32.dll"))
--  ;; The default OS-X libssl seems have had insufficient crypto algos
--  ;; (missing TLSv1_[1,2]_XXX methods,
--  ;; see https://github.com/cl-plus-ssl/cl-plus-ssl/issues/56)
--  ;; so first try to load possible custom installations of libssl
--  (:darwin (:or "/opt/local/lib/libssl.dylib" ;; MacPorts
--                "/sw/lib/libssl.dylib"        ;; Fink
--                "/usr/local/opt/openssl/lib/libssl.dylib" ;; Homebrew
--                "/usr/local/lib/libssl.dylib" ;; personalized install
--                "libssl.dylib"                ;; default system libssl, which may have insufficient crypto
--                "/usr/lib/libssl.dylib"))
--  (:solaris (:or "/lib/64/libssl.so"
--                 "libssl.so.0.9.8" "libssl.so" "libssl.so.4"))
--  ;; Unlike some other systems, OpenBSD linker,
--  ;; when passed library name without versions at the end,
--  ;; will locate the library with highest macro.minor version,
--  ;; so we can just use just "libssl.so".
--  ;; More info at https://github.com/cl-plus-ssl/cl-plus-ssl/pull/2.
--  (:openbsd "libssl.so")
--  ((and :unix (not :cygwin)) (:or "libssl.so.1.1"
--                                  "libssl.so.1.0.2m"
--                                  "libssl.so.1.0.2k"
--                                  "libssl.so.1.0.2"
--                                  "libssl.so.1.0.1l"
--                                  "libssl.so.1.0.1j"
--                                  "libssl.so.1.0.1f"
--                                  "libssl.so.1.0.1e"
--                                  "libssl.so.1.0.1"
--                                  "libssl.so.1.0.0q"
--                                  "libssl.so.1.0.0"
--                                  "libssl.so.0.9.8ze"
--                                  "libssl.so.0.9.8"
--                                  "libssl.so.10"
--                                  "libssl.so.4"
--                                  "libssl.so"))
--  (:cygwin (:or "cygssl-1.1.dll" "cygssl-1.0.0.dll"))
--  (t (:default "libssl3")))
-+  (t "@libssl@"))
- 
- (unless (member :cl+ssl-foreign-libs-already-loaded
-                 *features*)
++(cl+ssl/config:define-libssl-path "@libssl@")
++(cl+ssl/config:define-libcrypto-path "@libcrypto@")
++
+ (unless cl+ssl/config::*libcrypto-override*
+   (cffi:define-foreign-library libcrypto
+     (:windows (:or #+(and windows x86-64) "libcrypto-1_1-x64.dll"
 -- 
 2.31.1
 

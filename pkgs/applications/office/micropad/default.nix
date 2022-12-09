@@ -11,25 +11,21 @@
 }:
 let
   executableName = "micropad";
-  electron_exec =
-    if stdenv.isDarwin
-    then "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
-    else "${electron}/bin/electron";
 in
   mkYarnPackage rec {
     pname = "micropad";
-    version = "3.30.6";
+    version = "4.2.0";
 
     src = fetchFromGitHub {
       owner = "MicroPad";
       repo = "Micropad-Electron";
       rev = "v${version}";
-      sha256 = "sha256-v3hnHG6FMW2xBU/DnenqjFizQv/OZ9cW99n/3SoENe8=";
+      sha256 = "sha256-XylyQd4AhvrwJzBZXab7rA2IrZcqzEv8BANk+ozYyHk=";
     };
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
-      hash = "sha256-aqshYbVrQg6tYtTlO91FGiH7DuueOA0OU5KGCVc7XvI=";
+      sha256 = "0vddz95c1khalvl2a9zccy36j8s7862gpqcqlrvp1pn4bbp2pm3s";
     };
 
     packageJSON = ./package.json;
@@ -64,9 +60,9 @@ in
       done
 
       # executable wrapper
-      makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+      makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
         --add-flags "$out/share/micropad" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
       runHook postInstall
     '';
@@ -87,6 +83,8 @@ in
         categories = ["Office"];
       })
     ];
+
+    passthru.updateScript = ./update.sh;
 
     meta = with lib; {
       description = "A powerful note-taking app that helps you organise + take notes without restrictions";

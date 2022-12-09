@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # tests require `bgzip` from the htslib package
+  checkInputs = [ htslib ];
+
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib ncurses htslib ];
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-htslib=${htslib}" ]
     ++ lib.optional (ncurses == null) "--without-curses"
-    ++ lib.optional stdenv.hostPlatform.isStatic ["--without-curses" ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic ["--without-curses" ]
     ;
 
   preCheck = ''

@@ -9,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.0.5";
+  version = "2.1.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mlTBFPAsepSA1WVQkyVGo/H+cdigLxvHzNDuPuNc9NU=";
+    hash = "sha256-SqdkAaFRyMxXLZBqrXrqKoQXgINKGdeA9DIcD+G1RjU=";
   };
 
   nativeBuildInputs = [

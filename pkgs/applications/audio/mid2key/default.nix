@@ -7,11 +7,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dnschneid";
     repo = "mid2key";
-    rev = "v${version}";
-    sha256 = "0j2vsjvdgx51nd1qmaa18mcy0yw9pwrhbv2mdwnf913bwsk4y904";
+    rev = "r${version}";
+    sha256 = "Zo0mqdBJ1JKD9ZCA8te3f5opyYslFncYcx9iuXq2B9g=";
   };
-
-  unpackPhase = "tar xvzf $src";
 
   buildInputs = [ alsa-lib libX11 libXi libXtst xorgproto ];
 

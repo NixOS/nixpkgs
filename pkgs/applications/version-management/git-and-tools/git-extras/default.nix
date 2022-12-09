@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, unixtools, which }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, unixtools
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "tj";
     repo = "git-extras";
     rev = version;
-    sha256 = "sha256-Cn7IXMzgg0QIsNIHz+X14Gkmop0UbsSBlGlGkmg71ek=";
+    sha256 = "sha256-7VNkIFjz4stRT48a9uXks84W7/tP3p7esMJKnIe1O+8=";
   };
 
   postPatch = ''

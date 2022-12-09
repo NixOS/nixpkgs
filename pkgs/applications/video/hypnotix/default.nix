@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "2.6";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-9HWr8zjUuhj/GZdrt1WwpwYNLEl34S9IJ7ikGZBSw3s=";
+    hash = "sha256-hCVItxvYTE0G5inI/A4w4FYfSfrACINBSaKXhA1mh4A=";
   };
 
   patches = [
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       src = ./libmpv-path.patch;
       libmpv = "${lib.getLib mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+
+    # Fix launching with mpv 0.35.0 (ubuntu 22.04 doesn't have libmpv.so.2)
+    # https://github.com/linuxmint/hypnotix/issues/254
+    ./fix-deprecated-mpv-detach-destroy.patch
   ];
 
   postPatch = ''
@@ -44,11 +48,11 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    cinnamon.xapps
+    cinnamon.xapp
   ];
 
   pythonPath = with python3.pkgs; [
-    imdbpy
+    cinemagoer
     pygobject3
     requests
     setproctitle
@@ -79,8 +83,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "IPTV streaming application";
     homepage = "https://github.com/linuxmint/hypnotix";
+    changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda bobby285271 ];
     platforms = lib.platforms.linux;
   };
 }

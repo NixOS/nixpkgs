@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   # otherwise fmt breaks evaluation
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest bos rresult ];
 
   meta = {

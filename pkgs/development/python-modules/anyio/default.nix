@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pythonOlder
+, setuptools
 , setuptools-scm
 , idna
 , sniffio
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -53,6 +55,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
+
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   checkInputs = [
     curio

@@ -53,8 +53,9 @@ in stdenv.mkDerivation {
   '';
 
   postFixup = ''
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
-      --prefix PATH : ${xdg-utils}/bin
+      --suffix PATH : ${xdg-utils}/bin
   '';
 
   meta = with lib; {

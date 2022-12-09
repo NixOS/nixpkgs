@@ -1,15 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, testers, runitor }:
+{ lib, buildGoModule, fetchFromGitHub, testers, runitor }:
 
 buildGoModule rec {
   pname = "runitor";
-  version = "0.10.1";
+  version = "1.2.0";
   vendorSha256 = null;
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-qqfaA1WAHkuiyzyQbrSvnmwuRXElArErJ6PtLPOxzsg=";
+    sha256 = "sha256-lL9yfiqPIIfEvjiWcG6e1NrURHJFdk4x/od/w7/i2DE=";
   };
 
   ldflags = [

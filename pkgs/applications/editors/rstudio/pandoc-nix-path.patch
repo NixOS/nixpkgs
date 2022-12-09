@@ -1,0 +1,11 @@
+--- a/src/cpp/session/include/session/SessionConstants.hpp
++++ b/src/cpp/session/include/session/SessionConstants.hpp
+@@ -140,7 +140,7 @@
+ #ifdef QUARTO_ENABLED
+ # define kDefaultPandocPath        "bin/quarto/bin"
+ #else
+-# define kDefaultPandocPath        "bin/pandoc"
++# define kDefaultPandocPath        "@pandoc@"
+ #endif
+ 
+ #define kDefaultQuartoPath         "bin/quarto"

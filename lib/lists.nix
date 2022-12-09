@@ -36,7 +36,7 @@ rec {
   forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
-     `list` with `nul' as the starting value, i.e.,
+     `list` with `nul` as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
 
      Type: foldr :: (a -> b -> b) -> b -> [a] -> b

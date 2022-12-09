@@ -4,19 +4,20 @@
 , sqlalchemy
 , setuptools-scm
 , setuptools
-, tox
 , sphinx
-, pytest
-, pytest-cov
-, pytest-html
+, pytestCheckHook
 , pytest-sugar
-, coverage
 , pymysql
-, psycopg2 }:
+, psycopg2
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
   version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "penguinolog";
@@ -27,18 +28,30 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ sqlalchemy setuptools ];
-  checkInputs = [ tox sphinx pytest pytest-cov pytest-html pytest-sugar coverage pymysql psycopg2 ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    TOX_TESTENV_PASSENV="PYTHONPATH SETUPTOOLS_SCM_PRETEND_VERSION" tox -e functional
-  '';
+  propagatedBuildInputs = [
+    sqlalchemy
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-sugar
+    pymysql
+    psycopg2
+  ];
+
+  pythonImportsCheck = [
+    "sqlalchemy_jsonfield"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
     description = "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivan-tkatchev ];
+    maintainers = with maintainers; [ ivan-tkatchev ];
   };
 }

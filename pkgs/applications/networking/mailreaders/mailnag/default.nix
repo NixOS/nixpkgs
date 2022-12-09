@@ -103,5 +103,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ doronbehar ];
+    broken = true; # at 2022-09-23
   };
 }

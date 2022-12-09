@@ -29,7 +29,7 @@
 , libxkbcommon
 , dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , dbus
-, udevSupport ? false
+, udevSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , udev
 , ibusSupport ? false
 , ibus
@@ -59,13 +59,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.22";
+  version = "2.24.2";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/ny/MSeILj/HJZp1oMtYViAnLFF0XThSq53YeWBpfy4=";
+    sha256 = "sha256-s17wqAKwnZDtOt0NysDpWCCAQgKRT1u3sP63EPGhMp8=";
   };
-  dontDisableStatic = withStatic;
+  dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 

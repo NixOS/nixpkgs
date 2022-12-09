@@ -17,20 +17,20 @@
 , udev
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "128";
+  version = "130.1";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
-    rev = "v${version}";
-    sha256 = "sha256-Ojf1kyColBK0S3DwXjGaAZSl0ljhgiXkfKC11BL2fEc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-q2wDpbNaDyKPBL20FDaHScKQEJYstlQdJ4CzbRoSPlk=";
   };
 
   patches = [
-    ./dont-rebuild-on-install.patch
-    ./fix-ruby.patch
+    ./000-dont-rebuild-on-install.patch
+    ./001-fix-ruby.patch
   ];
 
   nativeBuildInputs = [
@@ -56,20 +56,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makeFlags = [
-    "-C desktop-ui"
+    "hiro=gtk3"
     "local=false"
     "openmp=true"
-    "hiro=gtk3"
     "prefix=$(out)"
+    "-C desktop-ui"
   ];
 
   meta = with lib; {
-    homepage = "https://ares.dev";
+    homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = licenses.isc;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [ Madouura AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+})
 # TODO: select between Qt, GTK2 and GTK3
 # TODO: support Darwin

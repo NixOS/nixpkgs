@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.30";
+  version = "3.33";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-X2B8xlCLSHDgTaH55TUJq4WcaObZy/fvfkQ0j3J9Kzo=";
+    sha256 = "sha256-d4Fx2QdO+frt+gcBzegJ9CW5NJQRLNkML/iD3te/1d0=";
   };
 
   buildInputs = [ python3 zlib ]
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ python3.pkgs.six ];
 
-  makeWrapperArgs = lib.optional withGnuplot [
+  makeWrapperArgs = lib.optionals withGnuplot [
     "--prefix PATH : ${lib.makeBinPath [ gnuplot ]}"
   ];
 

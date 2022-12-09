@@ -2,23 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pixiewps";
-  version = "1.2.2";
+  version = "1.4.2";
   src = fetchFromGitHub {
-    owner = "wiire";
+    owner = "wiire-a";
     repo = "pixiewps";
     rev = "v${version}";
-    sha256 = "09znnj7p8cks7zxzklkdm4zy2qnp92vhngm9r0zfgawnl2b4r2aw";
+    sha256 = "sha256-cJ20Gp6YaSdgUXK/ckK5Yv0rGbGXuFMP5zKZG0c4oOY=";
   };
 
   preBuild = ''
-    cd src
-    substituteInPlace Makefile --replace "\$(DESTDIR)/usr" "$out"
-    substituteInPlace Makefile --replace "/local" ""
+    substituteInPlace Makefile --replace "/usr/local" "$out"
   '';
 
   meta = {
     description = "An offline WPS bruteforce utility";
-    homepage = "https://github.com/wiire/pixiewps";
+    homepage = "https://github.com/wiire-a/pixiewps";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nico202 ];
     platforms = lib.platforms.all;

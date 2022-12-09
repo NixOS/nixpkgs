@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec  {
   pname = "flat-remix-icon-theme";
-  version = "20220304";
+  version = "20220525";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix";
     rev = version;
-    sha256 = "sha256-SE3e3lPGLw6gONVQD8Joj6KNnXC/UygT0fy0AgH8us8=";
+    sha256 = "sha256-JpUa2nxZxrLTd80qdiGpob4Trq41ONthsPA4zFj/6nk=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,6 @@ stdenvNoCC.mkDerivation rec  {
     license = with licenses; [ gpl3Only ];
     # breeze-icons and pantheon.elementary-icon-theme dependencies are restricted to linux
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mschneider ];
+    maintainers = with maintainers; [ ];
   };
 }

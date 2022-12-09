@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pam, xmlsec }:
+{ lib, stdenv, fetchurl, nix-update-script, pam, xmlsec }:
 
 let
   # TODO: Switch to OpenPAM once https://gitlab.com/oath-toolkit/oath-toolkit/-/issues/26 is addressed upstream
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals stdenv.isDarwin [ "--disable-pam" ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     description = "Components for building one-time password authentication systems";

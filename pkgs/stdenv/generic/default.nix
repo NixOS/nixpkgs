@@ -11,6 +11,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
+, disallowedRequisites ? []
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -97,6 +98,7 @@ let
     }
     // {
       inherit name;
+      inherit disallowedRequisites;
 
       # Nix itself uses the `system` field of a derivation to decide where to
       # build it. This is a bit confusing for cross compilation.
@@ -173,6 +175,11 @@ let
       # without running any commands. Because this will also skip `shopt -s extglob`
       # commands and extglob affects the Bash parser, we enable extglob always.
       shellDryRun = "${stdenv.shell} -n -O extglob";
+
+      tests = {
+        succeedOnFailure = import ../tests/succeedOnFailure.nix { inherit stdenv; };
+      };
+      passthru.tests = lib.warn "Use `stdenv.tests` instead. `passthru` is a `mkDerivation` detail." stdenv.tests;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

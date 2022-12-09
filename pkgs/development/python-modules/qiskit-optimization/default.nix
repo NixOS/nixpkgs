@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
-  version = "0.3.2";
+  version = "0.4.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-SWrHNHZjynpWcwwrWzRPpbNWz8EhVujMoY8uIJQeT6U=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-7MksgbCID4x1qW06BCBzcbiS/eNHjZiDKIvKYTPx6cc=";
   };
 
   postPatch = ''

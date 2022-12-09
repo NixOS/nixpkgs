@@ -5,22 +5,22 @@ with lib;
 let
   templateSubmodule = { ... }: {
     options = {
-      enable = mkEnableOption "this template";
+      enable = mkEnableOption (lib.mdDoc "this template");
 
       target = mkOption {
-        description = "Path in the container";
+        description = lib.mdDoc "Path in the container";
         type = types.path;
       };
       template = mkOption {
-        description = ".tpl file for rendering the target";
+        description = lib.mdDoc ".tpl file for rendering the target";
         type = types.path;
       };
       when = mkOption {
-        description = "Events which trigger a rewrite (create, copy)";
+        description = lib.mdDoc "Events which trigger a rewrite (create, copy)";
         type = types.listOf (types.str);
       };
       properties = mkOption {
-        description = "Additional properties";
+        description = lib.mdDoc "Additional properties";
         type = types.attrs;
         default = {};
       };
@@ -58,23 +58,23 @@ in
   options = {
     virtualisation.lxc = {
       templates = mkOption {
-        description = "Templates for LXD";
+        description = lib.mdDoc "Templates for LXD";
         type = types.attrsOf (types.submodule (templateSubmodule));
         default = {};
         example = literalExpression ''
           {
-            # create /etc/hostname on container creation
+            # create /etc/hostname on container creation. also requires networking.hostName = "" to be set
             "hostname" = {
               enable = true;
               target = "/etc/hostname";
-              template = builtins.writeFile "hostname.tpl" "{{ container.name }}";
+              template = builtins.toFile "hostname.tpl" "{{ container.name }}";
               when = [ "create" ];
             };
             # create /etc/nixos/hostname.nix with a configuration for keeping the hostname applied
             "hostname-nix" = {
               enable = true;
               target = "/etc/nixos/hostname.nix";
-              template = builtins.writeFile "hostname-nix.tpl" "{ ... }: { networking.hostName = "{{ container.name }}"; }";
+              template = builtins.toFile "hostname-nix.tpl" "{ ... }: { networking.hostName = \"{{ container.name }}\"; }";
               # copy keeps the file updated when the container is changed
               when = [ "create" "copy" ];
             };
@@ -82,10 +82,20 @@ in
             "configuration-nix" = {
               enable = true;
               target = "/etc/nixos/configuration.nix";
-              template = builtins.writeFile "configuration-nix" "{{ config_get(\"user.user-data\", properties.default) }}";
+              template = builtins.toFile "configuration-nix" "{{ config_get(\"user.user-data\", properties.default) }}";
               when = [ "create" ];
             };
           };
+        '';
+      };
+
+      privilegedContainer = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether this LXC container will be running as a privileged container or not. If set to `true` then
+          additional configuration will be applied to the `systemd` instance running within the container as
+          recommended by [distrobuilder](https://linuxcontainers.org/distrobuilder/introduction/).
         '';
       };
     };
@@ -146,12 +156,31 @@ in
     };
 
     # Add the overrides from lxd distrobuilder
-    systemd.extraConfig = ''
-      [Service]
-      ProtectProc=default
-      ProtectControlGroups=no
-      ProtectKernelTunables=no
-    '';
+    # https://github.com/lxc/distrobuilder/blob/05978d0d5a72718154f1525c7d043e090ba7c3e0/distrobuilder/main.go#L630
+    systemd.packages = [
+      (pkgs.writeTextFile {
+        name = "systemd-lxc-service-overrides";
+        destination = "/etc/systemd/system/service.d/zzz-lxc-service.conf";
+        text = ''
+          [Service]
+          ProcSubset=all
+          ProtectProc=default
+          ProtectControlGroups=no
+          ProtectKernelTunables=no
+          NoNewPrivileges=no
+          LoadCredential=
+        '' + optionalString cfg.privilegedContainer ''
+          # Additional settings for privileged containers
+          ProtectHome=no
+          ProtectSystem=no
+          PrivateDevices=no
+          PrivateTmp=no
+          ProtectKernelLogs=no
+          ProtectKernelModules=no
+          ReadWritePaths=
+        '';
+      })
+    ];
 
     # Allow the user to login as root without password.
     users.users.root.initialHashedPassword = mkOverride 150 "";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
-  version = "1.0.22";
+  version = "1.0.26";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
     rev = "release-${version}";
-    sha256 = "sha256-YaK7scnfXkxhRe/PKZukqHD9X70X0/QUDL0znTPbIBE=";
+    sha256 = "sha256-Ou6IwCvRJE4pB/69Sjmc5fZPMvjaDvPOs0Qgol9rTEA=";
   };
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=ON" ];
 
   outputs = [ "out" "dev" "layers" ];
+
+  # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
+  postPatch = ''
+    substituteInPlace src/loader/openxr.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 
   postInstall = ''
     mkdir -p "$layers/share"

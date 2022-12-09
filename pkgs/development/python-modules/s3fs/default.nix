@@ -1,19 +1,24 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, docutils
+{ lib
+, stdenv
 , aiobotocore
+, aiohttp
+, buildPythonPackage
+, docutils
+, fetchPypi
 , fsspec
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2022.2.0";
+  version = "2022.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RhHQ9+QeW8nawwCQcOCtN9qHpC9t73W0gTwG9+QEpzg=";
+    hash = "sha256-6N64DyC9CyBZFBuHT9udauuMzjUxLqXywCsiWnigBAY=";
   };
 
   buildInputs = [
@@ -22,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiobotocore
+    aiohttp
     fsspec
   ];
 
@@ -30,12 +36,15 @@ buildPythonPackage rec {
   # pythonPackages.
   doCheck = false;
 
-  pythonImportsCheck = [ "s3fs" ];
+  pythonImportsCheck = [
+    "s3fs"
+  ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    homepage = "https://github.com/dask/s3fs/";
+    broken = stdenv.isDarwin;
     description = "A Pythonic file interface for S3";
+    homepage = "https://github.com/fsspec/s3fs";
+    changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

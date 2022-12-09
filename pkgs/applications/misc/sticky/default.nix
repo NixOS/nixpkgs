@@ -7,18 +7,19 @@
 , gspell
 , gtk3
 , gobject-introspection
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sticky";
-  version = "1.8";
+  version = "1.13";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-VSD/QsG7G9hji5m6NSEkCoVM+XK3t4KmCqbocTbZwE4=";
+    hash = "sha256-oirTDIbvG9/iAkYrquX+ciujAnLUmubkBVvTyaiz2g8=";
   };
 
   postPatch = ''
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     glib
     gobject-introspection
-    cinnamon.xapps
+    cinnamon.xapp
     gspell
   ];
 
@@ -73,11 +74,17 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = ''master.*'';
+    };
+  };
+
   meta = with lib; {
     description = "A sticky notes app for the linux desktop";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ linsui bobby285271 ];
   };
 }

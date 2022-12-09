@@ -5,6 +5,7 @@
 , cffi
 , charset-normalizer
 , fetchPypi
+, filelock
 , idna
 , oscrypto
 , pycryptodomex
@@ -14,18 +15,19 @@
 , pytz
 , requests
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.7.8";
+  version = "2.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nPsHsEi8sf5kbQP3SAzLaod+nEUGcwLpC8/3/XL2vC8=";
+    hash = "sha256-JvPnxwi+xOsp+hhXIs0GyYx4oz6aovmvHsgHk9R6z8o=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +35,7 @@ buildPythonPackage rec {
     certifi
     cffi
     charset-normalizer
+    filelock
     idna
     oscrypto
     pycryptodomex
@@ -41,11 +44,13 @@ buildPythonPackage rec {
     pytz
     requests
     setuptools
+    typing-extensions
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL"
+      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL" \
+      --replace "charset-normalizer~=2.0.0" "charset_normalizer>=2"
   '';
 
   # Tests require encrypted secrets, see
@@ -58,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     license = licenses.asl20;

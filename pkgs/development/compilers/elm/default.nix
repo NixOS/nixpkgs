@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs, lib, makeWrapper }:
 
 let
 
@@ -7,7 +7,7 @@ let
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
-  hsPkgs = self: pkgs.haskell.packages.ghc8107.override {
+  hsPkgs = self: pkgs.haskell.packages.ghc810.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
       elm = overrideCabal (drv: {
@@ -18,7 +18,7 @@ let
           elmVersion = drv.version;
           registryDat = ./registry.dat;
         };
-        buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
+        buildTools = drv.buildTools or [] ++ [ makeWrapper ];
         jailbreak = true;
         postInstall = ''
           wrapProgram $out/bin/elm \
@@ -214,7 +214,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       elm-pages = nodePkgs."elm-pages".overrideAttrs (
         old: {
-          buildInputs = old.buildInputs ++ [ pkgs.makeWrapper ];
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
 
           # can't use `patches = [ <patch_file> ]` with a nodePkgs derivation;
           # need to patch in one of the build phases instead.
@@ -238,6 +238,12 @@ in lib.makeScope pkgs.newScope (self: with self; {
         }
       );
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
+      lamdera = callPackage ./packages/lamdera.nix {};
+
+      elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ old.nodejs.pkgs.node-gyp-build ];
+      });
+
+      inherit (nodePkgs) elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })
   )

@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     patchShebangs tools/enumsToPerl.pl
   '';
 
+  postInstall = ''
+    # Move files from $out/ to sub directories to prevent conflicts
+    # with other packages:
+    mkdir -p $out/share/doc/multimarkdown/
+    mv $out/LICENSE.txt $out/README.txt $out/share/doc/multimarkdown/
+  '';
+
   nativeBuildInputs = [
     cmake
     perl

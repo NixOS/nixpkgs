@@ -3,14 +3,12 @@
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio_1, vc, poppler, curl, ilmbase, libmypaint, libwebp
+, openjpeg, opencolorio_1, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
-
 , version
 , kde-channel
 , sha256
-
 , callPackage
 }:
 
@@ -32,7 +30,8 @@ mkDerivation rec {
     openjpeg opencolorio_1 poppler curl ilmbase libmypaint libwebp
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
-  ] ++ lib.optional stdenv.hostPlatform.isx86 vc;
+    xsimd
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ]
     ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy";
@@ -54,16 +53,14 @@ mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
-  postInstall = ''
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
+  preInstall = ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
   meta = with lib; {
     description = "A free and open source painting application";
     homepage = "https://krita.org/";
-    maintainers = with maintainers; [ abbradar sifmelcara ];
+    maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

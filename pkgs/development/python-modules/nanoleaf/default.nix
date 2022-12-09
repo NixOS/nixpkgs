@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "A python interface for Nanoleaf Aurora lighting";
     homepage = "https://github.com/software-2/nanoleaf";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ ];
   };
 }

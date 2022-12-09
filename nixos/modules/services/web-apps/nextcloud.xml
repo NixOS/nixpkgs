@@ -11,7 +11,7 @@
   desktop client is packaged at <literal>pkgs.nextcloud-client</literal>.
  </para>
  <para>
-  The current default by NixOS is <package>nextcloud24</package> which is also the latest
+  The current default by NixOS is <package>nextcloud25</package> which is also the latest
   major version available.
  </para>
  <section xml:id="module-services-nextcloud-basic-usage">
@@ -169,6 +169,20 @@
       </para>
      </listitem>
     </itemizedlist>
+   </listitem>
+   <listitem>
+    <formalpara>
+     <title>Server-side encryption</title>
+     <para>
+      Nextcloud supports <link xlink:href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html">server-side encryption (SSE)</link>.
+      This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
+      to external storage such as S3. Please note that this won't work anymore when using OpenSSL 3
+      for PHP's openssl extension because this is implemented using the legacy cipher RC4.
+      If <xref linkend="opt-system.stateVersion" /> is <emphasis>above</emphasis> <literal>22.05</literal>,
+      this is disabled by default. To turn it on again and for further information please refer to
+      <xref linkend="opt-services.nextcloud.enableBrokenCiphersForSSE" />.
+     </para>
+    </formalpara>
    </listitem>
   </itemizedlist>
  </section>

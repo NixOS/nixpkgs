@@ -3,7 +3,7 @@
 #include <assert.h>
 
 int main(int argc, char **argv) {
-    char **argv_tmp = calloc(5 + argc, sizeof(*argv_tmp));
+    char **argv_tmp = calloc(4 + argc + 2 + 1, sizeof(*argv_tmp));
     assert(argv_tmp != NULL);
     argv_tmp[0] = argv[0];
     argv_tmp[1] = "-x";
@@ -13,7 +13,9 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; ++i) {
         argv_tmp[4 + i] = argv[i];
     }
-    argv_tmp[4 + argc] = NULL;
+    argv_tmp[4 + argc + 0] = "-foo";
+    argv_tmp[4 + argc + 1] = "-bar";
+    argv_tmp[4 + argc + 2] = NULL;
     argv = argv_tmp;
 
     argv[0] = "/send/me/flags";

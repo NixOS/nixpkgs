@@ -11,35 +11,42 @@
 , python3
 , runtimeShell
 , wrapGAppsHook
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
+, fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
+, appindicatorSupport ? true
+, libayatana-appindicator
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.7";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    rev = version;
-    hash = "sha256-OFQiZe8G5v4F8HUJPeEM3ggVWHaALT1txy/aymHZ+jc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Tm8RXn2S/NDUD3JWeCHKqSFkxZPJdNMojPGnU4WEpr0=";
   };
 
   nativeBuildInputs = [
     intltool
     wrapGAppsHook
+    gobject-introspection
   ];
 
-  propagatedBuildInputs = [
-   gexiv2
-   gobject-introspection
-   gtk3
-   hicolor-icon-theme
-   libnotify
-   librsvg
+  buildInputs = [
+    gexiv2
+    gobject-introspection
+    gtk3
+    hicolor-icon-theme
+    libnotify
+    librsvg
   ]
-  ++ (with python3.pkgs; [
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
+
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     configobj
     dbus-python
@@ -51,14 +58,17 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
     requests
     setuptools
-  ])
+  ]
   ++ lib.optional fehSupport feh
   ++ lib.optional imagemagickSupport imagemagick;
 
   doCheck = false;
 
-  postInstall = ''
-    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   prePatch = ''

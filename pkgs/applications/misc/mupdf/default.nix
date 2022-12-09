@@ -2,9 +2,11 @@
 , lib
 , fetchurl
 , fetchpatch
+, fetchFromGitHub
 , copyDesktopItems
 , makeDesktopItem
 , desktopToDarwinBundle
+, buildPackages
 , pkg-config
 , freetype
 , harfbuzz
@@ -32,15 +34,25 @@ let
   openJpegVersion = with stdenv;
     lib.versions.majorMinor (lib.getVersion openjpeg);
 
+  freeglut-mupdf = freeglut.overrideAttrs (old: rec {
+    pname = "freeglut-mupdf";
+    version = "3.0.0-r${src.rev}";
+    src = fetchFromGitHub {
+      owner = "ArtifexSoftware";
+      repo = "thirdparty-freeglut";
+      rev = "13ae6aa2c2f9a7b4266fc2e6116c876237f40477";
+      hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
+    };
+  });
 
 in
 stdenv.mkDerivation rec {
-  version = "1.19.0";
+  version = "1.20.3";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "1vfyhlqq1a0k0drcggly4bgsjasmf6lmpfbdi5xcrwdbzkagrbr1";
+    sha256 = "sha256-a2AHD27sIOjYfStc0iz0kCAxGjzxXuEJmOPl9fmEses=";
   };
 
   patches = [ ./0001-Use-command-v-in-favor-of-which.patch
@@ -49,13 +61,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+    substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
   '';
 
   # Use shared libraries to decrease size
   buildFlags = [ "shared" ];
 
-  makeFlags = [ "prefix=$(out)" "USE_SYSTEM_LIBS=yes" ]
-    ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
+  makeFlags = [
+    "prefix=$(out)"
+    "USE_SYSTEM_LIBS=yes"
+    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
+  ] ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
 
   nativeBuildInputs = [ pkg-config ]
@@ -70,7 +86,7 @@ stdenv.mkDerivation rec {
     if stdenv.isDarwin then
       with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
     else
-      [ freeglut libGLU ]
+      [ freeglut-mupdf libGLU ]
   )
   ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];

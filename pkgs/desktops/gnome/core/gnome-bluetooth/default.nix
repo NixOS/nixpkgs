@@ -3,6 +3,7 @@
 , fetchurl
 , gnome
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gtk4
@@ -13,7 +14,7 @@
 , upower
 , itstool
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 , libnotify
 , gsound
 , gobject-introspection
@@ -26,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
-  version = "42.1";
+  version = "42.4";
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "2f5dZz8npAqGqeI9k8uZNn57Bt9Rhy6KxezJk45Vtes=";
+    sha256 = "HW/PHNtsyZI6szSiwLw3osG7qdGN4VPUhO7cBPPAvNw=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +44,14 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
     python3
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

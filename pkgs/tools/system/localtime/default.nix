@@ -19,6 +19,14 @@ buildGoModule {
 
   nativeBuildInputs = [ m4 ];
 
+  buildPhase = ''
+    runHook preBuild
+    make PREFIX="$out"
+    runHook postBuild
+  '';
+
+  doCheck = false; # no tests
+
   installPhase = ''
     runHook preInstall
     make PREFIX="$out" install

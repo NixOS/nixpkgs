@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i bash -p cacert bundix
+#!nix-shell --pure -i bash -p cacert bundix bundler
 
 # Do these steps before running this script:
 #   1. Copy Gemfile from new Redmine version to this folder
@@ -14,4 +14,6 @@ for file in "gemset.nix" "Gemfile.lock"; do
   fi
 done
 
+bundle lock --add-platform ruby
+bundle lock --remove-platform x86_64-linux
 bundix -l

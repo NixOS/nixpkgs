@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }@host:
 
 with lib;
 
@@ -8,6 +8,10 @@ let
   configurationDirectoryName = "${configurationPrefix}containers";
   configurationDirectory = "/etc/${configurationDirectoryName}";
   stateDirectory = "/var/lib/${configurationPrefix}containers";
+
+  nixos-container = pkgs.nixos-container.override {
+    inherit stateDirectory configurationDirectory;
+  };
 
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
@@ -132,11 +136,13 @@ let
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
-      ${optionalString (config.nixpkgs.localSystem.system == "x86_64-linux") ''
+      ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
         if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
           extraFlags+=" --personality=x86"
         fi
       ''}
+
+      export SYSTEMD_NSPAWN_UNIFIED_HIERARCHY=1
 
       # Run systemd-nspawn without startup notification (we'll
       # wait for the container systemd to signal readiness)
@@ -248,7 +254,7 @@ let
     ExecReload = pkgs.writeScript "reload-container"
       ''
         #! ${pkgs.runtimeShell} -e
-        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+        ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
           bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
       '';
 
@@ -284,7 +290,6 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-  inherit (config.nixpkgs) localSystem;
   kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
@@ -293,18 +298,18 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = types.str;
-        description = "Mount point on the container file system.";
+        description = lib.mdDoc "Mount point on the container file system.";
       };
       hostPath = mkOption {
         default = null;
         example = "/home/alice";
         type = types.nullOr types.str;
-        description = "Location of the host path to be mounted.";
+        description = lib.mdDoc "Location of the host path to be mounted.";
       };
       isReadOnly = mkOption {
         default = true;
         type = types.bool;
-        description = "Determine whether the mounted path will be accessed in read-only mode.";
+        description = lib.mdDoc "Determine whether the mounted path will be accessed in read-only mode.";
       };
     };
 
@@ -319,16 +324,16 @@ let
       node = mkOption {
         example = "/dev/net/tun";
         type = types.str;
-        description = "Path to device node";
+        description = lib.mdDoc "Path to device node";
       };
       modifier = mkOption {
         example = "rw";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Device node access modifier. Takes a combination
-          <literal>r</literal> (read), <literal>w</literal> (write), and
-          <literal>m</literal> (mknod). See the
-          <literal>systemd.resource-control(5)</literal> man page for more
+          `r` (read), `w` (write), and
+          `m` (mknod). See the
+          `systemd.resource-control(5)` man page for more
           information.'';
       };
     };
@@ -346,7 +351,7 @@ let
       type = types.nullOr types.str;
       default = null;
       example = "br0";
-      description = ''
+      description = lib.mdDoc ''
         Put the host-side of the veth-pair into the named bridge.
         Only one of hostAddress* or hostBridge can be given.
       '';
@@ -358,22 +363,22 @@ let
           protocol = mkOption {
             type = types.str;
             default = "tcp";
-            description = "The protocol specifier for port forwarding between host and container";
+            description = lib.mdDoc "The protocol specifier for port forwarding between host and container";
           };
           hostPort = mkOption {
             type = types.int;
-            description = "Source port of the external interface on host";
+            description = lib.mdDoc "Source port of the external interface on host";
           };
           containerPort = mkOption {
             type = types.nullOr types.int;
             default = null;
-            description = "Target port of container";
+            description = lib.mdDoc "Target port of container";
           };
         };
       });
       default = [];
       example = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; } ];
-      description = ''
+      description = lib.mdDoc ''
         List of forwarded ports from host to container. Each forwarded port
         is specified by protocol, hostPort and containerPort. By default,
         protocol is tcp and hostPort and containerPort are assumed to be
@@ -386,7 +391,7 @@ let
       type = types.nullOr types.str;
       default = null;
       example = "10.231.136.1";
-      description = ''
+      description = lib.mdDoc ''
         The IPv4 address assigned to the host interface.
         (Not used when hostBridge is set.)
       '';
@@ -396,7 +401,7 @@ let
       type = types.nullOr types.str;
       default = null;
       example = "fc00::1";
-      description = ''
+      description = lib.mdDoc ''
         The IPv6 address assigned to the host interface.
         (Not used when hostBridge is set.)
       '';
@@ -406,7 +411,7 @@ let
       type = types.nullOr types.str;
       default = null;
       example = "10.231.136.2";
-      description = ''
+      description = lib.mdDoc ''
         The IPv4 address assigned to the interface in the container.
         If a hostBridge is used, this should be given with netmask to access
         the whole network. Otherwise the default netmask is /32 and routing is
@@ -418,7 +423,7 @@ let
       type = types.nullOr types.str;
       default = null;
       example = "fc00::2";
-      description = ''
+      description = lib.mdDoc ''
         The IPv6 address assigned to the interface in the container.
         If a hostBridge is used, this should be given with netmask to access
         the whole network. Otherwise the default netmask is /128 and routing is
@@ -450,7 +455,7 @@ in
     boot.isContainer = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether this NixOS machine is a lightweight container running
         in another NixOS system.
       '';
@@ -459,7 +464,7 @@ in
     boot.enableContainers = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable support for NixOS containers. Defaults to true
         (at no cost if containers are not actually used).
       '';
@@ -471,7 +476,7 @@ in
         {
           options = {
             config = mkOption {
-              description = ''
+              description = lib.mdDoc ''
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
@@ -480,10 +485,13 @@ in
                 merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   modules =
                     let
-                      extraConfig = {
+                      extraConfig = { options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
-                          nixpkgs = { inherit localSystem; };
+                          nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
+                                    then { inherit (host.config.nixpkgs) hostPlatform; }
+                                    else { inherit (host.config.nixpkgs) localSystem; }
+                          ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;
@@ -513,9 +521,9 @@ in
             path = mkOption {
               type = types.path;
               example = "/nix/var/nix/profiles/per-container/webserver";
-              description = ''
+              description = lib.mdDoc ''
                 As an alternative to specifying
-                <option>config</option>, you can specify the path to
+                {option}`config`, you can specify the path to
                 the evaluated NixOS system configuration, typically a
                 symlink to a system profile.
               '';
@@ -525,7 +533,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
-              description = ''
+              description = lib.mdDoc ''
                 Grant additional capabilities to the container.  See the
                 capabilities(7) and systemd-nspawn(1) man pages for more
                 information.
@@ -536,13 +544,13 @@ in
               type = types.path;
               default = pkgs.path;
               defaultText = literalExpression "pkgs.path";
-              description = ''
+              description = lib.mdDoc ''
                 A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
 
-                To only change the <literal>pkgs</literal> argument used inside the container modules,
-                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
-                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
-                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                To only change the `pkgs` argument used inside the container modules,
+                set the `nixpkgs.*` options in the container {option}`config`.
+                Setting `config.nixpkgs.pkgs = pkgs` speeds up the container evaluation
+                by reusing the system pkgs, but the `nixpkgs.config` option in the
                 container config is ignored in this case.
               '';
             };
@@ -550,7 +558,7 @@ in
             ephemeral = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Runs container in ephemeral mode with the empty root filesystem at boot.
                 This way container will be bootstrapped from scratch on each boot
                 and will be cleaned up on shutdown leaving no traces behind.
@@ -558,8 +566,8 @@ in
 
                 Note that this option might require to do some adjustments to the container configuration,
                 e.g. you might want to set
-                <varname>systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier</varname> to "mac"
-                if you use <varname>macvlans</varname> option.
+                {var}`systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier` to "mac"
+                if you use {var}`macvlans` option.
                 This way dhcp client identifier will be stable between the container restarts.
 
                 Note that the container journal will not be linked to the host if this option is enabled.
@@ -569,21 +577,21 @@ in
             enableTun = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Allows the container to create and setup tunnel interfaces
-                by granting the <literal>NET_ADMIN</literal> capability and
-                enabling access to <literal>/dev/net/tun</literal>.
+                by granting the `NET_ADMIN` capability and
+                enabling access to `/dev/net/tun`.
               '';
             };
 
             privateNetwork = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to give the container its own private virtual
                 Ethernet interface.  The interface is called
-                <literal>eth0</literal>, and is hooked up to the interface
-                <literal>ve-<replaceable>container-name</replaceable></literal>
+                `eth0`, and is hooked up to the interface
+                `ve-«container-name»`
                 on the host.  If this option is not set, then the
                 container shares the network interfaces of the host,
                 and can bind to any port on any interface.
@@ -594,7 +602,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "eth1" "eth2" ];
-              description = ''
+              description = lib.mdDoc ''
                 The list of interfaces to be moved into the container.
               '';
             };
@@ -603,7 +611,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "eth1" "eth2" ];
-              description = ''
+              description = lib.mdDoc ''
                 The list of host interfaces from which macvlans will be
                 created. For each interface specified, a macvlan interface
                 will be created and moved to the container.
@@ -613,7 +621,7 @@ in
             extraVeths = mkOption {
               type = with types; attrsOf (submodule { options = networkOptions; });
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Extra veth-pairs to be created for the container.
               '';
             };
@@ -621,7 +629,7 @@ in
             autoStart = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether the container is automatically started at boot-time.
               '';
             };
@@ -629,11 +637,10 @@ in
             timeoutStartSec = mkOption {
               type = types.str;
               default = "1min";
-              description = ''
+              description = lib.mdDoc ''
                 Time for the container to start. In case of a timeout,
                 the container processes get killed.
-                See <citerefentry><refentrytitle>systemd.time</refentrytitle>
-                <manvolnum>7</manvolnum></citerefentry>
+                See {manpage}`systemd.time(7)`
                 for more information about the format.
                '';
             };
@@ -648,7 +655,7 @@ in
               '';
 
               description =
-                ''
+                lib.mdDoc ''
                   An extra list of directories that is bound to the container.
                 '';
             };
@@ -657,7 +664,7 @@ in
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
               example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
-              description = ''
+              description = lib.mdDoc ''
                 A list of device nodes to which the containers has access to.
               '';
             };
@@ -666,7 +673,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "/var" ];
-              description = ''
+              description = lib.mdDoc ''
                 Mounts a set of tmpfs file systems into the container.
                 Multiple paths can be specified.
                 Valid items must conform to the --tmpfs argument
@@ -678,7 +685,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "--drop-capability=CAP_SYS_CHROOT" ];
-              description = ''
+              description = lib.mdDoc ''
                 Extra flags passed to the systemd-nspawn command.
                 See systemd-nspawn(1) for details.
               '';
@@ -721,19 +728,19 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql_10;
+                    services.postgresql.package = pkgs.postgresql_14;
 
                     system.stateVersion = "21.05";
                   };
               };
           }
         '';
-      description = ''
+      description = lib.mdDoc ''
         A set of NixOS system configurations to be run as lightweight
         containers.  Each container appears as a service
-        <literal>container-<replaceable>name</replaceable></literal>
+        `container-«name»`
         on the host system, allowing it to be started and stopped via
-        <command>systemctl</command>.
+        {command}`systemctl`.
       '';
     };
 
@@ -741,12 +748,6 @@ in
 
 
   config = mkIf (config.boot.enableContainers) (let
-
-    warnings = flatten [
-      (optional (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "22.05") ''
-        Enabling both boot.enableContainers & virtualisation.containers on system.stateVersion < 22.05 is unsupported.
-      '')
-    ];
 
     unit = {
       description = "Container '%i'";
@@ -771,6 +772,11 @@ in
       serviceConfig = serviceDirectives dummyConfig;
     };
   in {
+    warnings =
+      (optional (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "22.05") ''
+        Enabling both boot.enableContainers & virtualisation.containers on system.stateVersion < 22.05 is unsupported.
+      '');
+
     systemd.targets.multi-user.wants = [ "machines.target" ];
 
     systemd.services = listToAttrs (filter (x: x.value != null) (
@@ -866,9 +872,7 @@ in
     '';
 
     environment.systemPackages = [
-      (pkgs.nixos-container.override {
-        inherit stateDirectory configurationDirectory;
-      })
+      nixos-container
     ];
 
     boot.kernelModules = [

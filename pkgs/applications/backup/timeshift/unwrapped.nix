@@ -8,20 +8,20 @@
 , gtk3
 , json-glib
 , libgee
-, utillinux
+, util-linux
 , vte
-, xapps
+, xapp
 }:
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "22.06.1";
+  version = "22.11.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
-    rev = "v${version}";
-    sha256 = "XcxwVBKMv2YwbrI3FFWDQFs8hHruhkZq3YqzkptE6KE=";
+    rev = version;
+    sha256 = "JYYiqJzLszaCJSl7fDb9Oz8tdIYAnqEbJoRg4zw3wbg=";
   };
 
   patches = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     while IFS="" read -r -d $'\0' FILE; do
       substituteInPlace "$FILE" \
-        --replace "/sbin/blkid" "${utillinux}/bin/blkid"
+        --replace "/sbin/blkid" "${util-linux}/bin/blkid"
     done < <(find ./src -mindepth 1 -name "*.vala" -type f -print0)
     substituteInPlace ./src/Utility/IconManager.vala \
       --replace "/usr/share" "$out/share"
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     vte
-    xapps
+    xapp
   ];
 
   preBuild = ''
@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/timeshift";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with maintainers; [ ShamrockLee bobby285271 ];
   };
 }

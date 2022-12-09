@@ -9,8 +9,24 @@
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
+  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
+  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
+
+  # forks of each other, azan@faissal.bensefia.id is more recent
+  "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
+  "azan@hatem.masmoudi.org" = null;
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
+  # ####### GNOME 42 #######
+
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
+
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
 
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@noskoski" = "volume-scroller-2";
@@ -18,12 +34,8 @@
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
-  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
-  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
-
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
+  "auto-activities@acedron.github.io" = "auto-activities-2";
+  "auto-activities@CleoMenezesJr.github.io" = "auto-activities";
 
   # ####### GNOME 41 #######
 
@@ -56,9 +68,6 @@
 
   "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
   "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
-
-  "panel-date-format@keiii.github.com" = "panel-date-format";
-  "panel-date-format@atareao.es" = "panel-date-format-2";
 
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug

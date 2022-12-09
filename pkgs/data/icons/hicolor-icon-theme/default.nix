@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "hicolor-icon-theme";
   version = "0.17";
 
@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "Default fallback theme used by implementations of the icon theme specification";
     homepage = "https://icon-theme.freedesktop.org/releases/";
     platforms = platforms.unix;
+    license = licenses.gpl2Only;
   };
 }

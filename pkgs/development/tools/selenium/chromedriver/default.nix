@@ -19,7 +19,7 @@ let
     };
 
     aarch64-darwin = {
-      system = "mac64_m1";
+      system = "mac_arm64";
       sha256 = upstream-info.sha256_darwin_aarch64;
     };
   };
@@ -67,6 +67,7 @@ in stdenv.mkDerivation rec {
       input, JavaScript execution, and more. ChromeDriver is a standalone
       server that implements the W3C WebDriver standard.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu marsam primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and

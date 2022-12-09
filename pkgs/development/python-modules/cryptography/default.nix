@@ -12,7 +12,9 @@
 , isPyPy
 , cffi
 , pytestCheckHook
+, pytest-benchmark
 , pytest-subtests
+, pythonOlder
 , pretend
 , libiconv
 , iso8601
@@ -25,23 +27,22 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "36.0.2"; # Also update the hash in vectors.nix
+  version = "38.0.3"; # Also update the hash in vectors.nix
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cPj097sqyfNAZVy6yJ1oxSevW7Q4dSKoQT6EHj5mKMk=";
+    hash = "sha256-v75u4ZYVsHqYsdIofWpgc/c0c1tJ7kWxEyTYXvxNXL0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "sha256-6C4N445h4Xf2nCc9rJWpSZaNPilR9GfgbmKvNlSIFqg=";
+    hash = "sha256-lzHLW1N4hZj+nn08NZiPVM/X+SEcIsuZDjEOy0OOkSc=";
   };
 
   cargoRoot = "src/rust";
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     iso8601
     pretend
     pytestCheckHook
+    pytest-benchmark
     pytest-subtests
     pytz
   ];

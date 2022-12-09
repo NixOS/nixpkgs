@@ -3,6 +3,7 @@
 , fetchurl
 , ninja
 , meson
+, mesonEmulatorHook
 , pkg-config
 , vala
 , gobject-introspection
@@ -40,8 +41,11 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_43
     dbus
-    xvfb-run
     glib
+  ] ++ lib.optionals stdenv.isLinux [
+    xvfb-run
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -53,11 +57,11 @@ stdenv.mkDerivation rec {
     "-Denable_gtk_doc=true"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 

@@ -1,14 +1,15 @@
-{stdenv, lib, fetchFromGitLab, autoconf, automake, libtool}:
+{ stdenv, lib, fetchFromGitea, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";
-  version = "2.2";
+  version = "2.3.1";
 
-  src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "soundtouch";
+    repo = "soundtouch";
     rev = version;
-    sha256 = "12i6yg8vvqwyk412lxl2krbfby6hnxld8qxy0k4m5xp4g94jiq4p";
+    sha256 = "10znckb8mrnmvwj7vq12732al873qhqw27fpb5f8r0bkjdpcj3vr";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];

@@ -1,60 +1,45 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, go-bindata }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub }:
 
 let
-  version = "1.6.4";
+  version = "1.8.0";
 
   # TODO: must build the extension instead of downloading it. But since it's
   # literally an asset that is indifferent regardless of the platform, this
   # might be just enough.
   webext = fetchurl {
-    url = "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}-an.fx.xpi";
-    sha256 = "1shf1s9s525wns5vrsc4ns21zjxm1si43lx6v0q8ma6vd5x5445l";
+    url = "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}.xpi";
+    sha256 = "sha256-12xWbf4ngYHWLKV9yyxyi0Ny/zHSj2o7Icats+Ef+pA=";
   };
 
-in buildGoPackage rec {
+in
+
+buildGoModule rec {
   inherit version;
 
   pname = "browsh";
 
-  goPackagePath = "browsh";
+  sourceRoot = "source/interfacer";
 
-  # further go package dependencies are defined in deps.nix, see line below.
   src = fetchFromGitHub {
     owner = "browsh-org";
     repo = "browsh";
     rev = "v${version}";
-    sha256 = "0gvf5k1gm81xxg7ha309kgfkgl5357dli0fbc4z01rmfgbl0rfa0";
+    sha256 = "sha256-/tH1w6qi+rimsqtk8Y8AYljU3X4vbmoDtV07piWSBdw=";
   };
 
-  nativeBuildInputs = [ go-bindata ];
+  vendorSha256 = "sha256-eCvV3UuM/JtCgMqvwvqWF3bpOmPSos5Pfhu6ETaS58c=";
 
-  # embed the web extension in a go file and place it where it's supposed to
-  # be. See
-  # https://github.com/browsh-org/browsh/blob/v1.5.0/interfacer/contrib/xpi2bin.sh
   preBuild = ''
-    xpiprefix="$(mktemp -d)"
-    cp "${webext}" "$xpiprefix/browsh.xpi"
-    go-bindata \
-      -prefix "$xpiprefix" \
-      -pkg browsh \
-      -o "$NIX_BUILD_TOP/go/src/${goPackagePath}/interfacer/src/browsh/webextension.go" \
-      "$xpiprefix/browsh.xpi"
-
-    sed \
-      -e 's:Asset("/browsh.xpi"):Asset("browsh.xpi"):g' \
-      -i "$NIX_BUILD_TOP/go/src/${goPackagePath}/interfacer/src/browsh/firefox.go"
+    cp "${webext}" src/browsh/browsh.xpi
   '';
 
-  postBuild = ''
-    mv "$NIX_BUILD_TOP/go/bin/src" "$NIX_BUILD_TOP/go/bin/browsh"
-  '';
-
-  goDeps = ./deps.nix;
+  # Tests require network access
+  doCheck = false;
 
   meta = with lib; {
     description = "A fully-modern text-based browser, rendering to TTY and browsers";
     homepage = "https://www.brow.sh/";
-    maintainers = [ maintainers.kalbasit ];
+    maintainers = with maintainers; [ kalbasit siraben ];
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

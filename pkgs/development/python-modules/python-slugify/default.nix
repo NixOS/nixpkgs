@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 , text-unidecode
@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "python-slugify";
-  version = "6.1.1";
+  version = "6.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AAAzl/TjFBTpIs5WezpNoozxQ2pT0zLJrutRx9jEaf0=";
+  src = fetchFromGitHub {
+    owner = "un33k";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-JGjUNBEMuICsaClQGDSGX4qFRjecVKzmpPNRUTvfwho=";
   };
 
   propagatedBuildInputs = [

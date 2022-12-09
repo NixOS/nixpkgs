@@ -1,10 +1,10 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-writing-nixos-tests">
+<section xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec-writing-nixos-tests">
   <title>Writing Tests</title>
   <para>
-    A NixOS test is a Nix expression that has the following structure:
+    A NixOS test is a module that has the following structure:
   </para>
   <programlisting language="bash">
-import ./make-test-python.nix {
+{
 
   # One or more machines:
   nodes =
@@ -22,10 +22,18 @@ import ./make-test-python.nix {
 }
 </programlisting>
   <para>
-    The attribute <literal>testScript</literal> is a bit of Python code
-    that executes the test (described below). During the test, it will
-    start one or more virtual machines, the configuration of which is
-    described by the attribute <literal>nodes</literal>.
+    We refer to the whole test above as a test module, whereas the
+    values in
+    <link linkend="test-opt-nodes"><literal>nodes.&lt;name&gt;</literal></link>
+    are NixOS modules themselves.
+  </para>
+  <para>
+    The option
+    <link linkend="test-opt-testScript"><literal>testScript</literal></link>
+    is a piece of Python code that executes the test (described below).
+    During the test, it will start one or more virtual machines, the
+    configuration of which is described by the option
+    <link linkend="test-opt-nodes"><literal>nodes</literal></link>.
   </para>
   <para>
     An example of a single-node test is
@@ -38,78 +46,138 @@ import ./make-test-python.nix {
     It uses two client nodes to test correct locking across server
     crashes.
   </para>
-  <para>
-    There are a few special NixOS configuration options for test VMs:
-  </para>
-  <variablelist>
-    <varlistentry>
-      <term>
-        <literal>virtualisation.memorySize</literal>
-      </term>
-      <listitem>
-        <para>
-          The memory of the VM in megabytes.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>virtualisation.vlans</literal>
-      </term>
-      <listitem>
-        <para>
-          The virtual networks to which the VM is connected. See
-          <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix"><literal>nat.nix</literal></link>
-          for an example.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>virtualisation.writableStore</literal>
-      </term>
-      <listitem>
-        <para>
-          By default, the Nix store in the VM is not writable. If you
-          enable this option, a writable union file system is mounted on
-          top of the Nix store to make it appear writable. This is
-          necessary for tests that run Nix operations that modify the
-          store.
-        </para>
-      </listitem>
-    </varlistentry>
-  </variablelist>
-  <para>
-    For more options, see the module
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix"><literal>qemu-vm.nix</literal></link>.
-  </para>
-  <para>
-    The test script is a sequence of Python statements that perform
-    various actions, such as starting VMs, executing commands in the
-    VMs, and so on. Each virtual machine is represented as an object
-    stored in the variable <literal>name</literal> if this is also the
-    identifier of the machine in the declarative config. If you
-    specified a node <literal>nodes.machine</literal>, the following
-    example starts the machine, waits until it has finished booting,
-    then executes a command and checks that the output is more-or-less
-    correct:
-  </para>
-  <programlisting language="python">
+  <section xml:id="sec-calling-nixos-tests">
+    <title>Calling a test</title>
+    <para>
+      Tests are invoked differently depending on whether the test is
+      part of NixOS or lives in a different project.
+    </para>
+    <section xml:id="sec-call-nixos-test-in-nixos">
+      <title>Testing within NixOS</title>
+      <para>
+        Tests that are part of NixOS are added to
+        <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix"><literal>nixos/tests/all-tests.nix</literal></link>.
+      </para>
+      <programlisting language="bash">
+  hostname = runTest ./hostname.nix;
+</programlisting>
+      <para>
+        Overrides can be added by defining an anonymous module in
+        <literal>all-tests.nix</literal>.
+      </para>
+      <programlisting language="bash">
+  hostname = runTest {
+    imports = [ ./hostname.nix ];
+    defaults.networking.firewall.enable = false;
+  };
+</programlisting>
+      <para>
+        You can run a test with attribute name
+        <literal>hostname</literal> in
+        <literal>nixos/tests/all-tests.nix</literal> by invoking:
+      </para>
+      <programlisting>
+cd /my/git/clone/of/nixpkgs
+nix-build -A nixosTests.hostname
+</programlisting>
+    </section>
+    <section xml:id="sec-call-nixos-test-outside-nixos">
+      <title>Testing outside the NixOS project</title>
+      <para>
+        Outside the <literal>nixpkgs</literal> repository, you can
+        instantiate the test by first importing the NixOS library,
+      </para>
+      <programlisting language="bash">
+let nixos-lib = import (nixpkgs + &quot;/nixos/lib&quot;) { };
+in
+
+nixos-lib.runTest {
+  imports = [ ./test.nix ];
+  hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
+  defaults.services.foo.package = mypkg;
+}
+</programlisting>
+      <para>
+        <literal>runTest</literal> returns a derivation that runs the
+        test.
+      </para>
+    </section>
+  </section>
+  <section xml:id="sec-nixos-test-nodes">
+    <title>Configuring the nodes</title>
+    <para>
+      There are a few special NixOS options for test VMs:
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <literal>virtualisation.memorySize</literal>
+        </term>
+        <listitem>
+          <para>
+            The memory of the VM in megabytes.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>virtualisation.vlans</literal>
+        </term>
+        <listitem>
+          <para>
+            The virtual networks to which the VM is connected. See
+            <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix"><literal>nat.nix</literal></link>
+            for an example.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>virtualisation.writableStore</literal>
+        </term>
+        <listitem>
+          <para>
+            By default, the Nix store in the VM is not writable. If you
+            enable this option, a writable union file system is mounted
+            on top of the Nix store to make it appear writable. This is
+            necessary for tests that run Nix operations that modify the
+            store.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>
+      For more options, see the module
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix"><literal>qemu-vm.nix</literal></link>.
+    </para>
+    <para>
+      The test script is a sequence of Python statements that perform
+      various actions, such as starting VMs, executing commands in the
+      VMs, and so on. Each virtual machine is represented as an object
+      stored in the variable <literal>name</literal> if this is also the
+      identifier of the machine in the declarative config. If you
+      specified a node <literal>nodes.machine</literal>, the following
+      example starts the machine, waits until it has finished booting,
+      then executes a command and checks that the output is more-or-less
+      correct:
+    </para>
+    <programlisting language="python">
 machine.start()
 machine.wait_for_unit(&quot;default.target&quot;)
 if not &quot;Linux&quot; in machine.succeed(&quot;uname&quot;):
   raise Exception(&quot;Wrong OS&quot;)
 </programlisting>
-  <para>
-    The first line is technically unnecessary; machines are implicitly
-    started when you first execute an action on them (such as
-    <literal>wait_for_unit</literal> or <literal>succeed</literal>). If
-    you have multiple machines, you can speed up the test by starting
-    them in parallel:
-  </para>
-  <programlisting language="python">
+    <para>
+      The first line is technically unnecessary; machines are implicitly
+      started when you first execute an action on them (such as
+      <literal>wait_for_unit</literal> or <literal>succeed</literal>).
+      If you have multiple machines, you can speed up the test by
+      starting them in parallel:
+    </para>
+    <programlisting language="python">
 start_all()
 </programlisting>
+  </section>
   <section xml:id="ssec-machine-objects">
     <title>Machine objects</title>
     <para>
@@ -194,8 +262,9 @@ start_all()
           </para>
           <note>
             <para>
-              This requires passing <literal>enableOCR</literal> to the
-              test attribute set.
+              This requires
+              <link linkend="test-opt-enableOCR"><literal>enableOCR</literal></link>
+              to be set to <literal>true</literal>.
             </para>
           </note>
         </listitem>
@@ -211,8 +280,9 @@ start_all()
           </para>
           <note>
             <para>
-              This requires passing <literal>enableOCR</literal> to the
-              test attribute set.
+              This requires
+              <link linkend="test-opt-enableOCR"><literal>enableOCR</literal></link>
+              to be set to <literal>true</literal>.
             </para>
           </note>
         </listitem>
@@ -451,8 +521,9 @@ start_all()
           </para>
           <note>
             <para>
-              This requires passing <literal>enableOCR</literal> to the
-              test attribute set.
+              This requires
+              <link linkend="test-opt-enableOCR"><literal>enableOCR</literal></link>
+              to be set to <literal>true</literal>.
             </para>
           </note>
         </listitem>
@@ -563,7 +634,7 @@ machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
       code-linters (this shouldn't be commited though):
     </para>
     <programlisting language="bash">
-import ./make-test-python.nix {
+{
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -595,7 +666,7 @@ import ./make-test-python.nix {
       the following way:
     </para>
     <programlisting language="bash">
-import ./make-test-python.nix {
+{
   skipTypeCheck = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -607,7 +678,7 @@ import ./make-test-python.nix {
   <section xml:id="ssec-failing-tests-early">
     <title>Failing tests early</title>
     <para>
-      To fail tests early when certain invariables are no longer met
+      To fail tests early when certain invariants are no longer met
       (instead of waiting for the build to time out), the decorator
       <literal>polling_condition</literal> is provided. For example, if
       we are testing a program <literal>foo</literal> that should not
@@ -635,12 +706,10 @@ with foo_running:
     <para>
       : specifies how often the condition should be polled:
     </para>
-    <programlisting>
-```py
+    <programlisting language="python">
 @polling_condition(seconds_interval=10)
 def foo_running():
     machine.succeed(&quot;pgrep -x foo&quot;)
-```
 </programlisting>
     <para>
       <literal>description</literal>
@@ -650,19 +719,16 @@ def foo_running():
       provided, the description is pulled from the docstring of the
       function. These two are therefore equivalent:
     </para>
-    <programlisting>
-```py
+    <programlisting language="python">
 @polling_condition
 def foo_running():
     &quot;check that foo is running&quot;
     machine.succeed(&quot;pgrep -x foo&quot;)
-```
-
-```py
+</programlisting>
+    <programlisting language="python">
 @polling_condition(description=&quot;check that foo is running&quot;)
 def foo_running():
     machine.succeed(&quot;pgrep -x foo&quot;)
-```
 </programlisting>
   </section>
   <section xml:id="ssec-python-packages-in-test-script">
@@ -674,11 +740,13 @@ def foo_running():
       <literal>numpy</literal> like this:
     </para>
     <programlisting language="bash">
-import ./make-test-python.nix
 {
   extraPythonPackages = p: [ p.numpy ];
 
   nodes = { };
+
+  # Type checking on extra packages doesn't work yet
+  skipTypeCheck = true;
 
   testScript = ''
     import numpy as np
@@ -690,5 +758,12 @@ import ./make-test-python.nix
       In that case, <literal>numpy</literal> is chosen from the generic
       <literal>python3Packages</literal>.
     </para>
+  </section>
+  <section xml:id="sec-test-options-reference">
+    <title>Test Options Reference</title>
+    <para>
+      The following options can be used when writing tests.
+    </para>
+    <xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
   </section>
 </section>

@@ -1,34 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, jupyter-packaging
 , notebook
 , ipywidgets
 }:
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "3.6.0";
+  version = "4.0.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6Ep6n8ubrz1XEG4YSnOJqPjrk1v3QaXrnWCqGMwCmoA=";
+    hash = "sha256-NIJIZMBisLMDCteCENta5qOWDfth1bJ1YtZjF3TeAoY=";
   };
 
-  # setup.py claims to require notebook, but the source doesn't have any imports
-  # in it.
-  postPatch = ''
-    substituteInPlace setup.py --replace "'notebook>=4.4.1'," ""
-  '';
-
-  propagatedBuildInputs = [ ];
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
 
   # No tests in archive
   doCheck = false;
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://github.com/jupyter-widgets/ipywidgets/tree/master/python/widgetsnbextension";
     license = ipywidgets.meta.license; # Build from same repo
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.6";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HBeH9vzzfY7pG88xyoL+NJ78LMGphCAfyZiOxFSJnnc=";
+    sha256 = "sha256-lSTC/WDwa6WVPd+Tj6XdKpwwENfAweUnE6lCyXQvAXU=";
   };
 
   passthru = {

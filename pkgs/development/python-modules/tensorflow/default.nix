@@ -1,15 +1,15 @@
-{ stdenv, bazel_4, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
+{ stdenv, bazel_5, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch, patchelfUnstable
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
 , numpy, tensorboard, absl-py
-, setuptools, wheel, keras, keras-preprocessing, google-pasta
+, packaging, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
-, git, pybind11, which, binutils, glibcLocales, cython, perl
+, git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp, nsync
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.8.0";
+  version = "2.10.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -94,6 +94,7 @@ let
       keras-preprocessing
       numpy
       opt-einsum
+      packaging
       protobuf-python
       setuptools
       six
@@ -183,13 +184,13 @@ let
     stdenv = llvmPackages_11.stdenv;
   })) {
     name = "${pname}-${version}";
-    bazel = bazel_4;
+    bazel = bazel_5;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-w78ehpsnXElIyYftgZEq3b/+TSrRN1gyWVUVlSZpGFM=";
+      hash = "sha256-AYHUtJEXYZdVDigKZo7mQnV+PDeQg8mi45YH18qXHZA=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -234,6 +235,8 @@ let
 
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
+
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
@@ -307,6 +310,7 @@ let
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
       rm -f .bazelversion
+      patchShebangs .
     '' + lib.optionalString (!withTensorboard) ''
       # Tensorboard pulls in a bunch of dependencies, some of which may
       # include security vulnerabilities. So we make it optional.
@@ -350,7 +354,13 @@ let
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
-    ++ lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "--cxxopt=-x" "--cxxopt=c++"
+      "--host_cxxopt=-x" "--host_cxxopt=c++"
+
+      # workaround for https://github.com/bazelbuild/bazel/issues/15359
+      "--spawn_strategy=sandboxed"
+    ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
@@ -360,14 +370,14 @@ let
     dontAddBazelOpts = true;
 
     fetchAttrs = {
-      # cudaSupport causes fetch of ncclArchive, resulting in different hashes
-      sha256 = if cudaSupport then
-        "sha256-dQEyfueuQPcGvbhuh8Al45np3nRLDw2PCfC2lEqAH50="
-      else
-        if stdenv.isDarwin then
-          "sha256-yfnZVtKWqNQGvlfq2owXhem0LmzDYriVfYgf1ZRlaDo="
-        else
-          "sha256:12i1ix2xwq77f3h8qr4h57g0aazrdsjjqa536cpwx3n1mvl5p6qi";
+      sha256 = {
+      x86_64-linux = if cudaSupport
+        then "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
+        else "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
+      aarch64-linux = "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg=";
+      x86_64-darwin = "sha256-/qPUDgfKsWCZh/pgZM4wm9+4U9U5kxxv7q3Uh7zKSO4=";
+      aarch64-darwin = "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E=";
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
     buildAttrs = {
@@ -414,7 +424,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = !(xlaSupport -> cudaSupport);
+      broken = !(xlaSupport -> cudaSupport) || (stdenv.hostPlatform.system == "x86_64-darwin");
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
@@ -428,17 +438,17 @@ in buildPythonPackage {
   src = bazel-build.python;
 
   # Adjust dependency requirements:
-  # - Relax gast version requirement that doesn't match what we have packaged
-  # - Relax tf-estimator, that would require a nightly version
+  # - Relax flatbuffers and gast version requirements
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
   # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
+      -e "s/'flatbuffers[^']*',/'flatbuffers',/" \
       -e "s/'gast[^']*',/'gast',/" \
-      -e "s/'tf-estimator-nightly[^']*',/'tensorflow-estimator',/" \
       -e "/'libclang[^']*',/d" \
-      -e "/'keras[^']*',/d" \
-      -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
+      -e "/'keras[^']*')\?,/d" \
+      -e "/'tensorflow-io-gcs-filesystem[^']*',/d" \
+      -e "s/'protobuf[^']*',/'protobuf',/" \
   '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
@@ -463,6 +473,7 @@ in buildPythonPackage {
     keras-preprocessing
     numpy
     opt-einsum
+    packaging
     protobuf-python
     six
     tensorflow-estimator
@@ -474,7 +485,7 @@ in buildPythonPackage {
   ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do

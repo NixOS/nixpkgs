@@ -22,11 +22,11 @@
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "3.5.2";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fa9z/y4Enrei8gb48MSS7vzDcttZVO7MJkdEIaDZb0I=";
+    sha256 = "sha256-3fVo+B71SsJs+XF4+FWH2nz0ouTnpC/02fXYr1C9Jrk=";
   };
 
   # Relax requirements from "==" to ">="

@@ -8,27 +8,26 @@ in {
       enable = lib.mkOption {
         type        = types.bool;
         default     = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Shorewall IPv4 Firewall.
-          <warning>
-            <para>
-            Enabling this service WILL disable the existing NixOS
-            firewall! Default firewall rules provided by packages are not
-            considered at the moment.
-            </para>
-          </warning>
+
+          ::: {.warning}
+          Enabling this service WILL disable the existing NixOS
+          firewall! Default firewall rules provided by packages are not
+          considered at the moment.
+          :::
         '';
       };
       package = lib.mkOption {
         type        = types.package;
         default     = pkgs.shorewall;
         defaultText = lib.literalExpression "pkgs.shorewall";
-        description = "The shorewall package to use.";
+        description = lib.mdDoc "The shorewall package to use.";
       };
       configs = lib.mkOption {
         type        = types.attrsOf types.lines;
         default     = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines the Shorewall configs.
           The attribute name defines the name of the config,
           and the attribute value defines the content of the config.

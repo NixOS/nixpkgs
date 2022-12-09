@@ -26,12 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.6.2";
+  version = "1.8.0";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     "devdoc"
   ] ++ lib.optionals enableGlade [
     "glade"
@@ -40,8 +39,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-f6iaqoeWa20PX0700+/a9lTisB6ix84r1wMB0fn0LKM=";
+    sha256 = "sha256-bCVCwFeJJLDCm3rmy0TrJt846wHW1e89fQsIJXYyMOg=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -70,9 +73,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=true"
     "-Dglade_catalog=${if enableGlade then "enabled" else "disabled"}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output
@@ -112,6 +114,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   } // lib.optionalAttrs (!enableGlade) {
     glade =

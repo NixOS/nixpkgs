@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, installShellFiles }:
+{ lib, fetchFromGitHub, python3, installShellFiles, fetchpatch }:
 
 with python3.pkgs;
 
@@ -12,6 +12,15 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
+
+  patches = [
+    # https://github.com/TailorDev/Watson/pull/473
+    (fetchpatch {
+      name = "fix-completion.patch";
+      url = "https://github.com/TailorDev/Watson/commit/43ad061a981eb401c161266f497e34df891a5038.patch";
+      sha256 = "sha256-v8/asP1wooHKjyy9XXB4Rtf6x+qmGDHpRoHEne/ZCxc=";
+    })
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion

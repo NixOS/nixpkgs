@@ -36,7 +36,7 @@
 , pango
 , pipewire
 , pciutils
-, libheimdal
+, heimdal
 , libpulseaudio
 , systemd
 , channel
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       pango
       pipewire
       pciutils
-      libheimdal
+      heimdal
       libpulseaudio
       systemd
       ffmpeg
@@ -144,14 +144,15 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = true;
   dontPatchELF = true;
 
-  patchPhase = ''
+  postPatch = ''
     # Don't download updates from Mozilla directly
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
@@ -199,13 +200,15 @@ stdenv.mkDerivation {
     inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
-        then "http://archive.mozilla.org/pub/devedition/releases/"
-        else "http://archive.mozilla.org/pub/firefox/releases/";
+        then "https://archive.mozilla.org/pub/devedition/releases/"
+        else "https://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with lib; {
+    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = "http://www.mozilla.org/firefox/";
+    homepage = "https://www.mozilla.org/firefox/";
     license = licenses.mpl20;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];

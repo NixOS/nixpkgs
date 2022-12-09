@@ -1,8 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, cmake, irrlichtmt, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
-, leveldb, postgresql, hiredis, libiconv, zlib, libXrandr, libX11, ninja, prometheus-cpp
-, OpenGL, OpenAL ? openal, Carbon, Cocoa, withTouchSupport ? false
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, irrlichtmt
+, coreutils
+, libpng
+, bzip2
+, curl
+, libogg
+, jsoncpp
+, libjpeg
+, libGLU
+, openal
+, libvorbis
+, sqlite
+, luajit
+, freetype
+, gettext
+, doxygen
+, ncurses
+, graphviz
+, xorg
+, gmp
+, libspatialindex
+, leveldb
+, postgresql
+, hiredis
+, libiconv
+, zlib
+, libXrandr
+, libX11
+, ninja
+, prometheus-cpp
+, OpenGL
+, OpenAL ? openal
+, Carbon
+, Cocoa
+, withTouchSupport ? false
 }:
 
 with lib;
@@ -39,7 +73,6 @@ let
       "-DENABLE_GETTEXT=1"
       "-DENABLE_SPATIAL=1"
       "-DENABLE_SYSTEM_JSONCPP=1"
-      "-DIRRLICHT_INCLUDE_DIR=${irrlichtmtInput.dev}/include/irrlichtmt"
 
       # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
       "-DCMAKE_INSTALL_BINDIR=bin"
@@ -49,8 +82,6 @@ let
       "-DCMAKE_INSTALL_MANDIR=share/man"
       "-DCMAKE_INSTALL_LOCALEDIR=share/locale"
 
-    ] ++ optionals buildClient [
-      "-DOpenGL_GL_PREFERENCE=GLVND"
     ] ++ optionals buildServer [
       "-DENABLE_PROMETHEUS=1"
     ] ++ optionals withTouchSupport [
@@ -67,14 +98,21 @@ let
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+      libpng libjpeg libGLU openal libogg libvorbis xorg.libX11
     ] ++ optionals buildServer [
       leveldb postgresql hiredis prometheus-cpp
     ];
 
-    postInstall = ''
+    postPatch = ''
+      substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    '' + lib.optionalString stdenv.isDarwin ''
+      sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
+    '';
+
+    postInstall = lib.optionalString stdenv.isLinux ''
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
+      patchShebangs $out
     '';
 
     meta = with lib; {
@@ -82,21 +120,19 @@ let
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pyrolagus fpletz ];
-      # never built on Hydra
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestclient_4.x86_64-darwin
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestserver_4.x86_64-darwin
-      broken = (lib.versionOlder version "5.0.0") && stdenv.isDarwin;
+      maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
     };
   };
 
   v5 = {
-    version = "5.5.0";
-    sha256 = "sha256-V+ggqvZibSQrJbrtNCEkmRYHhgSKTQsdBh3c8+t6WeA=";
-    dataSha256 = "sha256-6ZS3EET3nm09eL0czCGadwzon35/EBfAg2KjPX3ZP/0=";
+    version = "5.6.1";
+    sha256 = "sha256-1mUmtM09jqJhD2RcLCAjaI+JkqP52QYH3KLkY5MZ860=";
+    dataSha256 = "sha256-Ye8MihrOqjSoy+vNr/CM/C/sNXdexe08dxrmoMxsG/A=";
   };
 
+  mkClient = version: generic (version // { buildClient = true; buildServer = false; });
+  mkServer = version: generic (version // { buildClient = false; buildServer = true; });
 in {
-  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
-  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
+  minetestclient_5 = mkClient v5;
+  minetestserver_5 = mkServer v5;
 }

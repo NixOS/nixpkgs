@@ -27,13 +27,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvscode-server";
-  version = "1.66.0";
+  version = "1.69.2";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${version}";
-    sha256 = "g5QaxZDVXvE/vOe2BjBXlqYLGZ2EG4nTKdUlLdt8H8A=";
+    sha256 = "e2vEEZg2H37oFRN+0kZnWW5RU2ma2JJR66XLFDNEOXc=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-BeVJsruiRLReGMwThfcEm/ez4UFcr0oI4wwevJwxt58=";
+    outputHash = "sha256-5wOR7rKzGLE8EAlGd4CkrFUsUOEJOdwuNWQzEdbAL+g=";
   };
 
   # Extract the Node.js source code which is used to compile packages with

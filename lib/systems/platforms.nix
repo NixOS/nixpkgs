@@ -483,8 +483,8 @@ rec {
   };
 
   # can execute on 32bit chip
-  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
-  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
+  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi =  "32"; }; };
+  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi =  "32"; }; };
   gcc_mips64r2_n32 = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
   gcc_mips64r6_n32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
   gcc_mips64r2_64  = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
@@ -557,7 +557,7 @@ rec {
 
     else if platform.isRiscV then riscv-multiplatform
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
 
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
 

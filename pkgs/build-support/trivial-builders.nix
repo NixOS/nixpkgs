@@ -1,5 +1,12 @@
 { lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
 
+let
+  inherit (lib)
+    optionalAttrs
+    warn
+    ;
+in
+
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
@@ -286,8 +293,10 @@ rec {
         set -o errexit
         set -o nounset
         set -o pipefail
+      '' + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+      '' + ''
 
         ${text}
       '';
@@ -456,8 +465,11 @@ rec {
    *
    * This creates a simple derivation with symlinks to all inputs.
    *
-   * entries is a list of attribute sets like
-   * { name = "name" ; path = "/nix/store/..."; }
+   * entries can be a list of attribute sets like
+   * [ { name = "name" ; path = "/nix/store/..."; } ]
+   *
+   * or an attribute set name -> path like:
+   * { name = "/nix/store/..."; other = "/nix/store/..."; }
    *
    * Example:
    *
@@ -473,14 +485,28 @@ rec {
    *
    * See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
-    ''mkdir -p $out
-      cd $out
-      ${lib.concatMapStrings (x: ''
-          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
-      '') entries}
-    '';
+  linkFarm = name: entries:
+  let
+    entries' =
+      if (lib.isAttrs entries) then entries
+      # We do this foldl to have last-wins semantics in case of repeated entries
+      else if (lib.isList entries) then lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
+      else throw "linkFarm entries must be either attrs or a list!";
+
+    linkCommands = lib.mapAttrsToList (name: path: ''
+      mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
+      ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+    '') entries';
+  in
+  runCommand name {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    passthru.entries = entries';
+   } ''
+    mkdir -p $out
+    cd $out
+    ${lib.concatStrings linkCommands}
+  '';
 
   /*
    * Easily create a linkFarm from a set of derivations.
@@ -523,12 +549,25 @@ rec {
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
    *                 meta.platforms = lib.platforms.linux;
    *               } ./myscript.sh;
+   *
+   * # setup hook with a package test
+   * myhellohookTested = makeSetupHook {
+   *                 deps = [ hello ];
+   *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *                 meta.platforms = lib.platforms.linux;
+   *                 passthru.tests.greeting = callPackage ./test { };
+   *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {} }: script:
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? {} }: script:
     runCommand name
       (substitutions // {
         inherit meta;
         strictDeps = true;
+        # TODO 2023-01, no backport: simplify to inherit passthru;
+        passthru = passthru
+          // optionalAttrs (substitutions?passthru)
+            (warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly."
+              substitutions.passthru);
       })
       (''
         mkdir -p $out/nix-support

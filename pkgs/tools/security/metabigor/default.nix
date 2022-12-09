@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "metabigor";
-  version = "1.10";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "j3ssie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ADpnSsGZQbXaSGidPmxwkQOl+P8ZupqRaDUh7t+XoDw=";
+    sha256 = "sha256-T1P+jAAsKObKRaoxH8c/DMEfXtmSrvnDd5Y3ocKcCSc=";
   };
 
-  vendorSha256 = "sha256-la7bgeimycltFB7l6vNBYdlBIv4kD+HX7f2mo+eZhXM=";
+  vendorSha256 = "sha256-V+72l2TvhEWgDg7kvn5OOjYcyEgWGLgTGnt58Bu+AEQ=";
 
   # Disabled for now as there are some failures ("undefined:")
   doCheck = false;

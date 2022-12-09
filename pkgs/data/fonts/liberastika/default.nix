@@ -26,6 +26,6 @@ in fetchzip rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     hydraPlatforms = [];
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

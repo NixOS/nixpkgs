@@ -5,23 +5,26 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "2.1.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof-bin";
     rev = "v${version}";
-    sha256 = "sha256-/OYYfIJWMT+rBBhSCtHaSWvwRMlReEQ5y4FuMfk5zUg=";
+    sha256 = "sha256-ztewE/8Mc0bbKbxmbJ2sBn3TysuM9hoaSgqrboy77oI=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed
 
+  # There is no proper structure in the upstream repo.
+  # This needs to be adapted by hand for every new release.
   installPhase = ''
     runHook preInstall
-    cd "v${lib.versions.majorMinor version}.x"
-    mkdir -p $out/lib/firmware/intel/
-    cp -a sof-v${version} $out/lib/firmware/intel/sof
-    cp -a sof-tplg-v${version} $out/lib/firmware/intel/sof-tplg
+    cd "v2.2.x"
+    mkdir -p $out/lib/firmware/intel/sof{,-tplg}
+    cp -a sof-v2.2/* $out/lib/firmware/intel/sof
+    cp -a sof-v2.2.2/* $out/lib/firmware/intel/sof
+    cp -a sof-tplg-v2.2.1/* $out/lib/firmware/intel/sof-tplg
     runHook postInstall
   '';
 

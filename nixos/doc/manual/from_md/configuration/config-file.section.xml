@@ -217,7 +217,7 @@ environment.systemPackages =
     pkgs.emacs
   ];
 
-services.postgresql.package = pkgs.postgresql_10;
+services.postgresql.package = pkgs.postgresql_14;
 </programlisting>
         <para>
           The latter option definition changes the default PostgreSQL

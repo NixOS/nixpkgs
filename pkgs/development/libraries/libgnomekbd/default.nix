@@ -1,21 +1,35 @@
-{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, glib
+, gtk3
+, libxklavier
+, wrapGAppsHook
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
-  version = "3.26.1";
+  version = "3.28.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0y962ykn3rr9gylj0pwpww7bi20lmhvsw6qvxs5bisbn2mih5jpp";
+    sha256 = "ItxZVm1zwAZTUPWpc0DmLsx7CMTfGRg4BLuL4kyP6HA=";
   };
 
   nativeBuildInputs = [
-    file
-    intltool
+    meson
+    ninja
     pkg-config
     wrapGAppsHook
+    glib
+    gobject-introspection
   ];
 
   # Requires in libgnomekbd.pc
@@ -24,6 +38,11 @@ stdenv.mkDerivation rec {
     libxklavier
     glib
   ];
+
+  postInstall = ''
+    # Missing post-install script.
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

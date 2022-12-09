@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.5.4";
+  version = "1.5.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MYLAQSz55913fOhRnH+Y9xugOdfO43gkavitazIgeqg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FVV8AKe3PG387jarWYbXWxwVUAX6sM89KM8MuOr5cRw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for shell tab completion of Python CLI applications";
     homepage = "https://docs.iterative.ai/shtab/";
+    changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

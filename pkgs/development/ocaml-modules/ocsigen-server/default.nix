@@ -37,6 +37,8 @@ buildDunePackage rec {
     ocaml_pcre xml-light
   ];
 
+  patches = [ ./cohttp-5.patch ];
+
   configureFlags = [ "--root $(out)" "--prefix /" "--temproot ''" ];
 
   dontAddPrefix = true;

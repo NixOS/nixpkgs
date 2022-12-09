@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, importlib-metadata
 , joblib
 , llvmlite
 , numba
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.7";
+  version = "0.5.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7LOVJV+janSLWHC0ugMA6g99qLGWSGS47dYld6hN/X0=";
+    hash = "sha256-p8VSVpv2BKEB/VS7odJ8EjieBllF3uOmd3pRjGOkbys=";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +29,8 @@ buildPythonPackage rec {
     numba
     scikit-learn
     scipy
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [

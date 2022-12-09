@@ -1,14 +1,14 @@
 { stdenv
 , lib
 , fetchurl
-, python3
+, python39
 , nodePackages
 , wkhtmltopdf
 , nixosTests
 }:
 
 let
-  python = python3.override {
+  python = python39.override {
     packageOverrides = self: super: {
       click = super.click.overridePythonAttrs (old: rec {
         version = "7.1.2";
@@ -120,7 +120,7 @@ in python.pkgs.buildPythonApplication rec {
     pypdf2
     pyserial
     python-dateutil
-    ldap
+    python-ldap
     python-stdnum
     pytz
     pyusb

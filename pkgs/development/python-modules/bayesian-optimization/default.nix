@@ -4,8 +4,9 @@
 , fetchFromGitHub
 , scikit-learn
 , scipy
-, pytest
+, pytestCheckHook
 , isPy27
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -25,15 +26,31 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    # New sklearn broke one test: https://github.com/fmfn/BayesianOptimization/issues/243
-    pytest tests -k "not test_suggest_with_one_observation"
-  '';
+  patches = [
+    # TypeError with scipy >= 1.8
+    # https://github.com/fmfn/BayesianOptimization/issues/300
+    (fetchpatch {
+      url = "https://github.com/fmfn/BayesianOptimization/commit/b4e09a25842985a4a0acea0c0f5c8789b7be125e.patch";
+      sha256 = "sha256-PfcifCFd4GRNTA+4+T+6A760QAgyZxhDCTyzNn2crdM=";
+      name = "scipy_18_fix.patch";
+    })
+  ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # New sklearn broke one test
+    # https://github.com/fmfn/BayesianOptimization/issues/243
+    "test_suggest_with_one_observation"
+  ];
+
+  pythonImportsCheck = [ "bayes_opt" ];
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    description = "A Python implementation of global optimization with gaussian processes";
+    description = ''
+      A Python implementation of global optimization with gaussian processes
+    '';
     homepage = "https://github.com/fmfn/BayesianOptimization";
     license = licenses.mit;
     maintainers = [ maintainers.juliendehos ];

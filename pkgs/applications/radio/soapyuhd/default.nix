@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , uhd, boost, soapysdr
+, libobjc, IOKit, Security
 } :
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ uhd boost soapysdr ];
+  buildInputs = [ uhd boost soapysdr ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
@@ -27,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "SoapySDR plugin for UHD devices";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

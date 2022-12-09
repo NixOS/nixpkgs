@@ -19,7 +19,7 @@ in
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption "miniflux and creates a local postgres database for it";
+      enable = mkEnableOption (lib.mdDoc "miniflux and creates a local postgres database for it");
 
       config = mkOption {
         type = types.attrsOf types.str;
@@ -29,9 +29,9 @@ in
             LISTEN_ADDR = "localhost:8080";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Miniflux, refer to
-          <link xlink:href="https://miniflux.app/docs/configuration.html"/>
+          <https://miniflux.app/docs/configuration.html>
           for documentation on the supported values.
 
           Correct configuration for the database is already provided.
@@ -41,7 +41,7 @@ in
 
       adminCredentialsFile = mkOption  {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
           an EnvironmentFile=, as described by systemd.exec(5).
@@ -116,7 +116,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
 

@@ -11,6 +11,9 @@ let
     optionals
     hasSuffix
     splitString
+    remove
+    optionalString
+    stringLength
   ;
 
   # Used by builds that would otherwise attempt to write into storeDir.
@@ -42,6 +45,11 @@ let
       # Patches are already applied in `build`
       patches = [];
       src = build;
+      # TODO(kasper): handle this with a setup hook
+      LD_LIBRARY_PATH =
+        build.LD_LIBRARY_PATH
+        + (optionalString (stringLength build.LD_LIBRARY_PATH != 0) ":")
+        + "${build}";
     });
 
   # A little hacky
@@ -94,6 +102,7 @@ let
       url = "https://github.com/cffi/cffi/archive/3f842b92ef808900bf20dae92c2d74232c2f6d3a.tar.gz";
       sha256 = "1jilvmbbfrmb23j07lwmkbffc6r35wnvas5s4zjc84i856ccclm2";
     };
+    patches = [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
   });
 
   cl-unicode = build-with-compile-into-pwd {
@@ -107,34 +116,6 @@ let
     lispLibs = with ql; [
       cl-ppcre
       flexi-streams
-    ];
-  };
-
-  quri = build-asdf-system {
-    src = pkgs.stdenv.mkDerivation {
-      pname = "patched";
-      version = "source";
-      src =  pkgs.fetchzip {
-        url = "http://beta.quicklisp.org/archive/quri/2021-04-11/quri-20210411-git.tgz";
-        sha256 = "1pkvpiwwhx2fcknr7x47h7036ypkg8xzsskqbl5z315ipfmi8s2m";
-      };
-
-      # fix build with ABCL
-      buildPhase = ''
-        sed -i "s,[#][.](asdf.*,#P\"$out/data/effective_tld_names.dat\")," src/etld.lisp
-      '';
-      installPhase = ''
-        mkdir -pv $out
-        cp -r * $out
-      '';
-    };
-    version = "20210411";
-    pname = "quri";
-    lispLibs = with ql; [
-      alexandria
-      babel
-      cl-utilities
-      split-sequence
     ];
   };
 
@@ -165,6 +146,15 @@ let
       pkgs.libnotify
     ];
   };
+
+  cl-liballegro-nuklear = build-with-compile-into-pwd {
+    inherit (ql.cl-liballegro-nuklear) pname version src;
+    nativeBuildInputs = [ pkgs.allegro5 ];
+    nativeLibs = [ pkgs.allegro5 ];
+    lispLibs = ql.cl-liballegro-nuklear.lispLibs ++ [ ql.cl-liballegro ];
+    patches = [ ./patches/cl-liballegro-nuklear-missing-dll.patch ];
+  };
+
 
   tuple = build-asdf-system {
     pname = "tuple";
@@ -229,6 +219,35 @@ let
     ];
   };
 
+  lessp = build-asdf-system {
+    pname = "lessp";
+    version = "0.2-f8a9e4664";
+    src = pkgs.fetchzip {
+      url = "https://github.com/facts-db/cl-lessp/archive/632217602b85b679e8d420654a0aa39e798ca3b5.tar.gz";
+      sha256 = "0i3ia14dzqwjpygd0zn785ff5vqnnmkn75psfpyx0ni3jr71lkq9";
+    };
+  };
+
+  rollback = build-asdf-system {
+    pname = "rollback";
+    version = "0.1-5d3f21fda";
+    src = pkgs.fetchzip {
+      url = "https://github.com/facts-db/cl-rollback/archive/5d3f21fda8f04f35c5e9d20ee3b87db767915d15.tar.gz";
+      sha256 = "12dpxsbm2al633y87i8p784k2dn4bbskz6sl40v9f5ljjmjqjzxf";
+    };
+  };
+
+  facts = build-asdf-system {
+    pname = "facts";
+    version = "0.1-632217602";
+    src = pkgs.fetchzip {
+      url = "https://github.com/facts-db/cl-lessp/archive/632217602b85b679e8d420654a0aa39e798ca3b5.tar.gz";
+      sha256 = "09z1vwzjm7hlb529jl3hcjnfd11gh128lmdg51im7ar4jv4746iw";
+    };
+    lispLibs = [ lessp rollback ] ++ [ ql.local-time ];
+  };
+
+
   cl-fuse = build-with-compile-into-pwd {
     inherit (ql.cl-fuse) pname version src lispLibs;
     nativeBuildInputs = [ pkgs.fuse ];
@@ -262,35 +281,6 @@ let
     ];
   };
 
-  mgl = build-asdf-system {
-    pname = "mgl";
-    version = "2021-10-07";
-    src = pkgs.fetchzip {
-      url = "https://github.com/melisgl/mgl/archive/e697791a9bcad3b6e7b3845246a2aa55238cfef7.tar.gz";
-      sha256 = "09sf7nq7nmf9q7bh3a5ygl2i2n0nhrx5fk2kv5ili0ckv7g9x72s";
-    };
-    lispLibs = with ql; [
-      alexandria closer-mop array-operations lla cl-reexport mgl-pax
-      named-readtables pythonic-string-reader
-    ] ++ [ mgl-mat ];
-    systems = [ "mgl" "mgl/test" ];
-  };
-
-  mgl-mat = build-asdf-system {
-    pname = "mgl-mat";
-    version = "2021-10-11";
-    src = pkgs.fetchzip {
-      url = "https://github.com/melisgl/mgl-mat/archive/3710858bc876b1b86e50f1db2abe719e92d810e7.tar.gz";
-      sha256 = "1aa2382mi55rp8pd31dz4d94yhfzh30vkggcvmvdfrr4ngffj0dx";
-    };
-    lispLibs = with ql; [
-      alexandria bordeaux-threads cffi cffi-grovel cl-cuda
-      flexi-streams ieee-floats lla mgl-pax static-vectors
-      trivial-garbage cl-fad
-    ];
-    systems = [ "mgl-mat" "mgl-mat/test" ];
-  };
-
   mathkit = build-asdf-system {
     inherit (ql.mathkit) pname version src asds lisp;
     lispLibs = ql.mathkit.lispLibs ++ [ ql.sb-cga ];
@@ -309,9 +299,8 @@ let
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [
-      pkgs.makeWrapper
-
       # needed for GSETTINGS_SCHEMAS_PATH
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
@@ -352,17 +341,95 @@ let
     version = "f19162e76";
   });
 
-  s-sql_slash_tests = ql.s-sql_slash_tests.overrideLispAttrs (o: {
-    lispLibs = o.lispLibs ++ [
-      ql.cl-postgres_slash_tests
-    ];
-  });
+  qt = let
+    rev = "dffff3ee3dbd0686c85c323f579b8bbf4881e60e";
+  in build-with-compile-into-pwd rec {
+    pname = "commonqt";
+    version = builtins.substring 0 7 rev;
 
-  simple-date_slash_postgres-glue = ql.simple-date_slash_postgres-glue.overrideLispAttrs (o: {
-    lispLibs = o.lispLibs ++ [
-      ql.cl-postgres_slash_tests
+    src = pkgs.fetchFromGitHub {
+      inherit rev;
+      owner = pname;
+      repo = pname;
+      hash = "sha256-GAgwT0D9mIkYPTHfCH/KxxIv7b6QGwcxwZE7ehH5xug=";
+    };
+
+    buildInputs = [ pkgs.qt4 ];
+    nativeBuildInputs = [ pkgs.smokegen pkgs.smokeqt ];
+    nativeLibs = [ pkgs.qt4 pkgs.smokegen pkgs.smokeqt ];
+
+    systems = [ "qt" ];
+
+    lispLibs = with ql; [
+      cffi named-readtables cl-ppcre alexandria
+      closer-mop iterate trivial-garbage bordeaux-threads
     ];
-  });
+  };
+
+  qt-libs = build-with-compile-into-pwd {
+    inherit (ql.qt-libs) pname version src;
+    patches = [ ./patches/qt-libs-dont-download.patch ];
+    prePatch = ''
+      substituteInPlace systems/*.asd --replace ":qt+libs" ":qt"
+      echo "LD Path: $LD_LIBRARY_PATH"
+    '';
+    lispLibs = ql.qt-libs.lispLibs ++ [ qt ];
+    systems = [
+      "qt-libs"
+      "commonqt"
+      # "phonon"
+      # "qimageblitz"
+      # "qsci"
+      "qt3support"
+      "qtcore"
+      "qtdbus"
+      "qtdeclarative"
+      "qtgui"
+      "qthelp"
+      "qtnetwork"
+      "qtopengl"
+      "qtscript"
+      "qtsql"
+      "qtsvg"
+      "qttest"
+      "qtuitools"
+      # "qtwebkit"
+      "qtxml"
+      "qtxmlpatterns"
+      # "qwt"
+      "smokebase"
+    ];
+  };
+  commonqt = qt-libs;
+  qt3support = qt-libs;
+  qtcore = qt-libs;
+  qtdbus = qt-libs;
+  qtdeclarative = qt-libs;
+  qtgui = qt-libs;
+  qthelp = qt-libs;
+  qtnetwork = qt-libs;
+  qtopengl = qt-libs;
+  qtscript = qt-libs;
+  qtsql = qt-libs;
+  qtsvg = qt-libs;
+  qttest = qt-libs;
+  qtuitools = qt-libs;
+  qtxml = qt-libs;
+  qtxmlpatterns = qt-libs;
+  smokebase = qt-libs;
+
+  qtools = build-with-compile-into-pwd {
+    inherit (ql.qtools) pname version src nativeLibs;
+    lispLibs = [ qt ] ++ remove ql.qt_plus_libs ql.qtools.lispLibs ++ [ qt-libs ];
+    patches = [ ./patches/qtools-use-nix-libs.patch ];
+  };
+
+  magicl = build-with-compile-into-pwd {
+    inherit (ql.magicl) pname version src lispLibs;
+    nativeBuildInputs = [ pkgs.gfortran ];
+    nativeLibs = [ pkgs.openblas ];
+    patches = [ ./patches/magicl-dont-build-fortran-twice.patch ];
+  };
 
   };
 

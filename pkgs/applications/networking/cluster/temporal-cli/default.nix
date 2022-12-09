@@ -1,31 +1,28 @@
-{ lib, fetchFromGitHub, fetchpatch, buildGoModule, testers, temporal-cli }:
+{ lib, fetchFromGitHub, buildGoModule, testers, temporal-cli }:
 
 buildGoModule rec {
   pname = "temporal-cli";
-  version = "1.16.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "tctl";
     rev = "v${version}";
-    sha256 = "sha256-WNdu/62/VmxTmzAvzx3zIlcAAlEmpN0yKzQOSUtrL8s=";
+    hash = "sha256-QID0VtARbJiTIQm2JeaejQ5VpJsAIHfZtws7i2UN8dM=";
   };
 
-  patches = [
-    # Fix tests
-    (fetchpatch {
-      name = "fix-tests.patch";
-      url = "https://github.com/temporalio/tctl/pull/203/commits/2b113da137a3a925e8fbd7c18bdaaefc31397db4.patch";
-      sha256 = "sha256-HFPwbmLZ2uPHzaHvYoB4MTZvMVyzvUKggA76/bh50DQ=";
-    })
-  ];
-
-  vendorSha256 = "sha256-WF3T+HNisfR0JoKkHCC77kmHmsGZ9NfQ7UCwOmpCG/o=";
+  vendorHash = "sha256-9bgovXVj+qddfDSI4DTaNYH4H8Uc4DZqeVYG5TWXTNw=";
 
   ldflags = [ "-s" "-w" ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = temporal-cli;
+    # the app writes a default config file at startup
+    command = "HOME=$(mktemp -d) ${meta.mainProgram} --version";
   };
 
   meta = with lib; {

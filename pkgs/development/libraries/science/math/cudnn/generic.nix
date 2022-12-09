@@ -21,12 +21,9 @@
 
 { fullVersion
 , url
-, hash ? null
-, sha256 ? null
+, hash
 , supportedCudaVersions ? [ ]
 }:
-
-assert (hash != null) || (sha256 != null);
 
 assert useCudatoolkitRunfile || (libcublas != null);
 
@@ -46,7 +43,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    inherit url hash sha256;
+    inherit url hash;
   };
 
   # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
@@ -107,6 +104,7 @@ stdenv.mkDerivation {
     broken = !(elem cudaVersion supportedCudaVersions);
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # TODO: consider marking unfreRedistributable when not using runfile
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

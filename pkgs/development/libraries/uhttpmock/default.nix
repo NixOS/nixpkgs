@@ -1,26 +1,51 @@
-{ stdenv, lib, fetchFromGitLab, autoconf, gtk-doc, automake, libtool, pkg-config, glib, libsoup, gobject-introspection }:
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook-xsl-nons
+, glib
+, libsoup
+}:
 
 stdenv.mkDerivation rec {
-  version="0.5.0";
   pname = "uhttpmock";
+  version = "0.5.5";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pwithnall";
     repo = "uhttpmock";
-    owner = "uhttpmock";
     rev = version;
-    sha256 = "0kkf670abkq5ikm3mqls475lydfsd9by1kv5im4k757xrl1br1d4";
+    sha256 = "NuxiVVowZ8ilP9rcgapCe9OzFCpoOfZxZiSyjTeOrts=";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake gtk-doc libtool gobject-introspection ];
-  buildInputs = [ glib libsoup ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+  ];
 
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
+  buildInputs = [
+    glib
+    libsoup
+  ];
 
   meta = with lib; {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
-    homepage = "https://gitlab.com/groups/uhttpmock/";
-    license = licenses.lgpl21;
+    homepage = "https://gitlab.freedesktop.org/pwithnall/uhttpmock/";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

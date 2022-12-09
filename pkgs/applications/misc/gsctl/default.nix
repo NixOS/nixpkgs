@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gsctl";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "giantswarm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P1hJoZ1YSZTCo5ha/Um/nYVVhbYC3dcrQGJYTSnqNu4=";
+    sha256 = "sha256-eemPsrSFwgUR1Jz7283jjwMkoJR38QiaiilI9G0IQuo=";
   };
 
-  vendorSha256 = "sha256-NeRABlKUpD2ZHRid/vu34Dh9uHZ+7IXWFPX8jkexUog=";
+  vendorSha256 = "sha256-6b4H8YAY8d/qIGnnGPYZoXne1LXHLsc0OEq0lCeqivo=";
 
   ldflags = [
     "-s" "-w"

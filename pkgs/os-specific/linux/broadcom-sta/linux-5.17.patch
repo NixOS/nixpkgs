@@ -1,39 +1,80 @@
-diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
---- a/src/wl/sys/wl_linux.c	2022-03-23 00:35:42.930416350 +0000
-+++ b/src/wl/sys/wl_linux.c	2022-03-23 00:40:12.903771013 +0000
-@@ -2980,7 +2980,11 @@
+From 31b7849092c43805c7fbaf7518b99874aa1b310c Mon Sep 17 00:00:00 2001
+From: Joan Bruguera <joanbrugueram@gmail.com>
+Date: Wed, 12 Jan 2022 20:49:20 +0100
+Subject: [PATCH] Tentative fix for broadcom-wl 6.30.223.271 driver for Linux 5.17-rc1
+
+Set netdev->dev_addr through dev_addr_mod + PDE_DATA fix
+
+Since Linux 5.17 netdev->dev_addr is const and must be changed through
+dev_addr_mod, otherwise a warning is logged in dmesg and bad things may happen.
+
+NB: The #if is not wrong, dev_addr_mod is defined since Linux 5.15-rc1
+
+Plus a trivial fix for PDE_DATA.
+
+Applies on top of all the patches applied to broadcom-wl-dkms 6.30.223.271-28 on Arch Linux.
+
+See also: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adeef3e32146a8d2a73c399dc6f5d76a449131b1
+          https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=359745d78351c6f5442435f81549f0207ece28aa
+---
+ src/wl/sys/wl_linux.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+index e491df7..e4614fb 100644
+--- a/src/wl/sys/wl_linux.c
++++ b/src/wl/sys/wl_linux.c
+@@ -93,6 +93,10 @@ struct iw_statistics *wl_get_wireless_stats(struct net_device *dev);
+ 
+ #include <wlc_wowl.h>
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
++#define PDE_DATA pde_data
++#endif
++
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+ static void wl_timer(struct timer_list *tl);
+ #else
+@@ -490,6 +494,12 @@ wl_if_setup(struct net_device *dev)
+ #endif
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
++static inline void eth_hw_addr_set(struct net_device *dev, const void *addr) {
++	memcpy(dev->dev_addr, addr, ETHER_ADDR_LEN);
++}
++#endif
++
+ static wl_info_t *
+ wl_attach(uint16 vendor, uint16 device, ulong regs,
+ 	uint bustype, void *btparam, uint irq, uchar* bar1_addr, uint32 bar1_size)
+@@ -634,7 +644,7 @@ wl_attach(uint16 vendor, uint16 device, ulong regs,
+ 			WL_ERROR(("wl%d: Error setting MAC ADDRESS\n", unit));
+ 	}
+ #endif 
+-	bcopy(&wl->pub->cur_etheraddr, dev->dev_addr, ETHER_ADDR_LEN);
++	eth_hw_addr_set(dev, wl->pub->cur_etheraddr.octet);
+ 
+ 	online_cpus = 1;
+ 
+@@ -1835,7 +1845,7 @@ wl_set_mac_address(struct net_device *dev, void *addr)
+ 
+ 	WL_LOCK(wl);
+ 
+-	bcopy(sa->sa_data, dev->dev_addr, ETHER_ADDR_LEN);
++	eth_hw_addr_set(dev, sa->sa_data);
+ 	err = wlc_iovar_op(wl->wlc, "cur_etheraddr", NULL, 0, sa->sa_data, ETHER_ADDR_LEN,
+ 		IOV_SET, (WL_DEV_IF(dev))->wlcif);
+ 	WL_UNLOCK(wl);
+@@ -3010,7 +3020,7 @@ _wl_add_monitor_if(wl_task_t *task)
  	else
  		dev->type = ARPHRD_IEEE80211_RADIOTAP;
  
-+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
- 	bcopy(wl->dev->dev_addr, dev->dev_addr, ETHER_ADDR_LEN);
-+#else
-+	eth_hw_addr_set(wl->dev, dev->dev_addr);
-+#endif
+-	bcopy(wl->dev->dev_addr, dev->dev_addr, ETHER_ADDR_LEN);
++	eth_hw_addr_set(dev, wl->dev->dev_addr);
  
  #if defined(WL_USE_NETDEV_OPS)
  	dev->netdev_ops = &wl_netdev_monitor_ops;
-@@ -3261,7 +3265,11 @@
- static ssize_t
- wl_proc_read(struct file *filp, char __user *buffer, size_t length, loff_t *offp)
- {
-+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
- 	wl_info_t * wl = PDE_DATA(file_inode(filp));
-+#else
-+	wl_info_t * wl = pde_data(file_inode(filp));
-+#endif
- #endif
- 	int bcmerror, len;
- 	int to_user = 0;
-@@ -3318,7 +3326,11 @@
- static ssize_t
- wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t *offp)
- {
-+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
- 	wl_info_t * wl = PDE_DATA(file_inode(filp));
-+#else
-+	wl_info_t * wl = pde_data(file_inode(filp));
-+#endif
- #endif
- 	int from_user = 0;
- 	int bcmerror;
+-- 
+2.35.1
+

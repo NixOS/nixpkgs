@@ -20,11 +20,10 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
       description = "Official PostgreSQL ODBC Driver";
       homepage = "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 
@@ -47,7 +46,9 @@
 
     preConfigure = ''
       # we don't want to build a .pkg
-      sed -i 's/ADD_SUBDIRECTORY(osxinstall)//g' CMakeLists.txt
+      substituteInPlace CMakeLists.txt \
+        --replace "IF(APPLE)" "IF(0)" \
+        --replace "CMAKE_SYSTEM_NAME MATCHES AIX" "APPLE"
     '';
 
     cmakeFlags = [
@@ -62,7 +63,6 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
@@ -126,11 +126,10 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ vlstill ];
     };
   };
@@ -173,6 +172,7 @@
       broken = stdenv.isDarwin;
       description = "ODBC Driver 17 for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = platforms.linux;
       maintainers = with maintainers; [ spencerjanssen ];
@@ -217,6 +217,7 @@
       broken = stdenv.isDarwin;
       description = "Amazon Redshift ODBC driver";
       homepage = "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = platforms.linux;
       maintainers = with maintainers; [ sir4ur0n ];

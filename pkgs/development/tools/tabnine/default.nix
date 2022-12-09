@@ -1,34 +1,19 @@
 { stdenv, lib, fetchurl, unzip }:
 let
-  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  version = "4.0.60";
-  supportedPlatforms = {
-    "x86_64-linux" = {
-      name = "x86_64-unknown-linux-musl";
-      sha256 = "sha256-v5UxRMDDQxpqIKMe9mYMXcpWiacdXzFfaQ6bgab/WmQ=";
-    };
-    "x86_64-darwin" = {
-      name = "x86_64-apple-darwin";
-      sha256 = "sha256-vFMMzMatuu1TY6dnBXycv0HxvkOj4Axfx8p0VW0hOic=";
-    };
-    "aarch64-darwin" = {
-      name = "aarch64-apple-darwin";
-      sha256 = "sha256-DUeDQLtvSY7W2nG60UunluCSO0ijJP2CYxpRIZA4LTE=";
-    };
-  };
+  sources = builtins.fromJSON (builtins.readFile ./sources.json);
   platform =
-    if (builtins.hasAttr stdenv.hostPlatform.system supportedPlatforms) then
-      builtins.getAttr (stdenv.hostPlatform.system) supportedPlatforms
+    if (builtins.hasAttr stdenv.hostPlatform.system sources.platforms) then
+      builtins.getAttr (stdenv.hostPlatform.system) sources.platforms
     else
       throw "Not supported on ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation {
   pname = "tabnine";
-  inherit version;
+  inherit (sources) version;
 
   src = fetchurl {
-    url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
-    inherit (platform) sha256;
+    url = "https://update.tabnine.com/bundles/${sources.version}/${platform.name}/TabNine.zip";
+    inherit (platform) hash;
   };
 
   dontBuild = true;
@@ -48,13 +33,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.platform = platform.name;
+  passthru = {
+    platform = platform.name;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "https://tabnine.com";
     description = "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
-    platforms = attrNames supportedPlatforms;
+    platforms = attrNames sources.platforms;
     maintainers = with maintainers; [ lovesegfault ];
   };
 }

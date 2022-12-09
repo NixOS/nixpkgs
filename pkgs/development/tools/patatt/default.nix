@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "patatt";
-  version = "0.4.9";
+  version = "0.6.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qHhNxgP43vBSjrHp2Ygzq5J/f6YyBD4VDTp9S1ud6zo=";
+    sha256 = "sha256-WaEq4qWL6xAZ3cJJ/lkJ5XTIrXcOMIESbytvWbsYx2s=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -23,6 +23,6 @@ python3Packages.buildPythonApplication rec {
       DKIM email signature standard to include cryptographic
       signatures via the X-Developer-Signature email header.
     '';
-    maintainers = with maintainers; [ yoctocell ];
+    maintainers = with maintainers; [ qyliss yoctocell ];
   };
 }

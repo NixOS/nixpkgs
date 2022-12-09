@@ -4,13 +4,13 @@
 }:
 buildGoModule rec {
   pname = "litestream";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0Yyx8kbpu3T868hI9tJkBIjplAoQDA4XzhraHhOp61Q=";
+    sha256 = "sha256-zs+Li8ylw+zexxuEkXX4qk7qslk23BLBcoHXRIuQNmU=";
   };
 
   ldflags = [
@@ -19,7 +19,7 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  vendorSha256 = "sha256-zCz9dki87dpZCo+/KuFzwtv/0TlBcvQDTxTuLN2FiHY=";
+  vendorSha256 = "sha256-GiCvifdbWz+hH6aHACzlBpppNC5p24MHRWlbtKLIFhE=";
 
   meta = with lib; {
     description = "Streaming replication for SQLite";

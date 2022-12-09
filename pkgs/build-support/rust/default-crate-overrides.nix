@@ -27,6 +27,8 @@
 , freetype
 , rdkafka
 , udev
+, libevdev
+, alsa-lib
 , ...
 }:
 
@@ -34,6 +36,11 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
+  alsa-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ alsa-lib ];
+  };
+
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };
@@ -63,6 +70,12 @@ in
   dbus = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
+  };
+
+  evdev-sys = attrs: {
+    LIBGIT2_SYS_USE_PKG_CONFIG = true;
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libevdev ];
   };
 
   expat-sys = attrs: {

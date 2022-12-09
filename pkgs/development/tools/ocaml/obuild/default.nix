@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     platforms = ocaml.meta.platforms or [ ];
     description = "Simple package build system for OCaml";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

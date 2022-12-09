@@ -13,11 +13,12 @@
 , spglib
 , castepxbin
 , pytestCheckHook
+, colormath
 }:
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.3.0";
+  version = "2.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-apI5Qt7Wrr4FXKL48iqqIQJDX2BIf3PPz/qIgSO7nuo=";
+    sha256 = "sha256-eGQOFTo/tg1aM/P1la3stE7RLxpACUdcJ7g1z3zSasc=";
   };
 
   nativeBuildInputs = [
@@ -34,30 +35,21 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    spglib
-    numpy
-    scipy
-    h5py
-    pymatgen
-    phonopy
-    matplotlib
-    seekpath
     castepxbin
+    colormath
+    h5py
+    matplotlib
+    numpy
+    phonopy
+    pymatgen
+    scipy
+    seekpath
+    spglib
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
-
-  disabledTests = [
-    # slight disagreement between caastepxbin versions
-    "test_castep_phonon_read_bands"
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "castepxbin==0.1.0" "castepxbin>=0.1.0"
-  '';
 
   pythonImportsCheck = [
     "sumo"

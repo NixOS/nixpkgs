@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.7.0";
+  version = "0.9.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lcRMd+P77emEi7iMqQs4SBX8uoCQ75qfVWWasWOxaBw=";
+    sha256 = "sha256-wDF81fal6z6Vfonb5PwzIqmv3botuEFDVe0qLLkahE4=";
   };
 
   nativeBuildInputs = [

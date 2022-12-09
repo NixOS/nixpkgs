@@ -3,6 +3,8 @@ import ../make-test-python.nix ({ pkgs, ... }:
     name = "conduit";
   in
   {
+    name = "matrix-conduit";
+
     nodes = {
       conduit = args: {
         services.matrix-conduit = {

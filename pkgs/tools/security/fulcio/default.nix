@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b+2M28cI+4UkzrIqI+BioxJsGqT0pqJVPTPmXe+NsZo=";
+    sha256 = "sha256-ZWDvFSx+zH/P0ZfdqxAe+c4jFUH8mfY1vpUXlIxw1sI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +20,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-INPMsSyjFs4GyapOlc/k5fcI2ePUKgp4BtASOKwQhck=";
+  vendorSha256 = "sha256-LLvaaOZzp9b99eYOsfvbPRwZqSNfoinVUfYDmPiw5Mk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,14 +29,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sigstore/fulcio/pkg/api.gitVersion=v${version}"
-    "-X github.com/sigstore/fulcio/pkg/api.gitTreeState=clean"
+    "-X github.com/sigstore/fulcio/pkg/server.gitVersion=v${version}"
+    "-X github.com/sigstore/fulcio/pkg/server.gitTreeState=clean"
   ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
-    ldflags+=" -X github.com/sigstore/fulcio/pkg/api.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X github.com/sigstore/fulcio/pkg/api.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X github.com/sigstore/fulcio/pkg/server.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/sigstore/fulcio/pkg/server.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   preCheck = ''
@@ -44,7 +44,7 @@ buildGoModule rec {
     unset subPackages
 
     # skip test that requires networking
-    substituteInPlace pkg/config/config_test.go \
+    substituteInPlace pkg/config/config_network_test.go \
       --replace "TestLoad" "SkipLoad"
   '';
 

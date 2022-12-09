@@ -137,7 +137,7 @@ foreach my $fn (@oldCopied) {
 
 # Rewrite /etc/.clean.
 close CLEAN;
-write_file("/etc/.clean", map { "$_\n" } @copied);
+write_file("/etc/.clean", map { "$_\n" } sort @copied);
 
 # Create /etc/NIXOS tag if not exists.
 # When /etc is not on a persistent filesystem, it will be wiped after reboot,

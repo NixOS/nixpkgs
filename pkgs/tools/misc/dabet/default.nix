@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "papojari";
+    owner = "annaaurora";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-B5z2RUkvztnGCKeVsjp/yzrI8m/6mjBB0DS1yhFZhM4=";
@@ -16,9 +16,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Print the duration between two times";
-    homepage = "https://codeberg.org/papojari/dabet";
+    homepage = "https://codeberg.org/annaaurora/dabet";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }
 

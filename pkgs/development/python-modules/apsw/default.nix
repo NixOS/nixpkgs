@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , sqlite
@@ -9,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.38.1-r1";
+  version = "3.40.0.0";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -17,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rogerbinns";
     repo = "apsw";
-    rev = version;
-    hash = "sha256-pbb6wCu1T1mPlgoydB1Y1AKv+kToGkdVUjiom2vTqf4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Bi2pW+8vFLcYnatlqsfnwqfCpV2cjannYaTqgIlfNNM=";
   };
 
   buildInputs = [

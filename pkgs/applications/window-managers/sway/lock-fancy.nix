@@ -46,6 +46,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

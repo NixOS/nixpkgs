@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
-  version = "4.9.1";
+  version = "4.10.0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio qtbase ndi ];
@@ -10,27 +10,39 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Palakis";
     repo = "obs-ndi";
-    rev = version;
-    sha256 = "1y3xdqp55jayhg4sinwiwpk194zc4f4jf0abz647x2fprsk9jz7s";
+    rev = "dummy-tag-${version}";
+    sha256 = "sha256-eQ/hQ2AnwyBNOotqlUZq07m4FXoeir2f7cTVq594obc=";
   };
 
-  patches = [ ./fix-search-path.patch ./hardcode-ndi-path.patch ];
-
-  postPatch = "sed -i -e s,@NDI@,${ndi},g src/obs-ndi.cpp";
-
-  cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio}/include/obs"
-    "-DLIBOBS_LIB=${obs-studio}/lib"
-    "-DCMAKE_CXX_FLAGS=-I${obs-studio.src}/UI/obs-frontend-api"
+  patches = [
+    ./hardcode-ndi-path.patch
   ];
+
+  postPatch = ''
+    # Add path (variable added in hardcode-ndi-path.patch)
+    sed -i -e s,@NDI@,${ndi},g src/obs-ndi.cpp
+
+    # Replace bundled NDI SDK with the upstream version
+    # (This fixes soname issues)
+    rm -rf lib/ndi
+    ln -s ${ndi}/include lib/ndi
+  '';
+
+  postInstall = ''
+    mkdir $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    rm -rf $out/obs-plugins
+    mv $out/data $out/share/obs
+  '';
 
   dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Network A/V plugin for OBS Studio";
     homepage = "https://github.com/Palakis/obs-ndi";
-    maintainers = with maintainers; [ jshcmpbll ];
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    maintainers = with maintainers; [ jshcmpbll ];
+    platforms = platforms.linux;
+    hydraPlatforms = ndi.meta.hydraPlatforms;
   };
 }

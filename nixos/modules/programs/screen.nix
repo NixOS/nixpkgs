@@ -13,7 +13,7 @@ in
 
       screenrc = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           The contents of /etc/screenrc file.
         '';
         type = types.lines;

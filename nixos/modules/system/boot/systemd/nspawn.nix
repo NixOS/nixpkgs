@@ -26,12 +26,12 @@ let
     (assertOnlyFields [
       "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystem"
       "Overlay" "OverlayReadOnly" "PrivateUsersChown" "BindUser"
-      "Inaccessible" "PrivateUserOwnership"
+      "Inaccessible" "PrivateUsersOwnership"
     ])
     (assertValueOneOf "ReadOnly" boolValues)
     (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
     (assertValueOneOf "PrivateUsersChown" boolValues)
-    (assertValueOneOf "PrivateUserOwnership" [ "off" "chown" "map" "auto" ])
+    (assertValueOneOf "PrivateUsersOwnership" [ "off" "chown" "map" "auto" ])
   ];
 
   checkNetwork = checkUnitConfig "Network" [
@@ -44,16 +44,17 @@ let
   ];
 
   instanceOptions = {
-    options = sharedOptions // {
+    options =
+    (getAttrs [ "enable" ] sharedOptions)
+    // {
       execConfig = mkOption {
         default = {};
         example = { Parameters = "/bin/sh"; };
         type = types.addCheck (types.attrsOf unitOption) checkExec;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[Exec]</literal> section of this unit. See
-          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[Exec]` section of this unit. See
+          {manpage}`systemd.nspawn(5)` for details.
         '';
       };
 
@@ -61,11 +62,10 @@ let
         default = {};
         example = { Bind = [ "/home/alice" ]; };
         type = types.addCheck (types.attrsOf unitOption) checkFiles;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[Files]</literal> section of this unit. See
-          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[Files]` section of this unit. See
+          {manpage}`systemd.nspawn(5)` for details.
         '';
       };
 
@@ -73,11 +73,10 @@ let
         default = {};
         example = { Private = false; };
         type = types.addCheck (types.attrsOf unitOption) checkNetwork;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[Network]</literal> section of this unit. See
-          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[Network]` section of this unit. See
+          {manpage}`systemd.nspawn(5)` for details.
         '';
       };
 
@@ -139,7 +138,7 @@ in {
     systemd.nspawn = mkOption {
       default = {};
       type = with types; attrsOf (submodule instanceOptions);
-      description = "Definition of systemd-nspawn configurations.";
+      description = lib.mdDoc "Definition of systemd-nspawn configurations.";
     };
 
   };

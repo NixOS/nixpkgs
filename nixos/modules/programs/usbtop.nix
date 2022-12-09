@@ -6,7 +6,7 @@ let
   cfg = config.programs.usbtop;
 in {
   options = {
-    programs.usbtop.enable = mkEnableOption "usbtop and required kernel module";
+    programs.usbtop.enable = mkEnableOption (lib.mdDoc "usbtop and required kernel module");
   };
 
   config = mkIf cfg.enable {

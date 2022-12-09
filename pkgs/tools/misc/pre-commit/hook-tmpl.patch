@@ -1,15 +1,17 @@
 diff --git a/pre_commit/resources/hook-tmpl b/pre_commit/resources/hook-tmpl
-index 53d29f9..66a8ad3 100755
+index 53d29f9..9b5dc2c 100755
 --- a/pre_commit/resources/hook-tmpl
 +++ b/pre_commit/resources/hook-tmpl
-@@ -10,9 +10,7 @@ ARGS=(hook-impl)
+@@ -10,11 +10,4 @@ ARGS=(hook-impl)
  HERE="$(cd "$(dirname "$0")" && pwd)"
  ARGS+=(--hook-dir "$HERE" -- "$@")
  
 -if [ -x "$INSTALL_PYTHON" ]; then
 -    exec "$INSTALL_PYTHON" -mpre_commit "${ARGS[@]}"
 -elif command -v pre-commit > /dev/null; then
-+if command -v pre-commit > /dev/null; then
-     exec pre-commit "${ARGS[@]}"
- else
-     echo '`pre-commit` not found.  Did you forget to activate your virtualenv?' 1>&2
+-    exec pre-commit "${ARGS[@]}"
+-else
+-    echo '`pre-commit` not found.  Did you forget to activate your virtualenv?' 1>&2
+-    exit 1
+-fi
++exec @pre-commit@/bin/pre-commit "${ARGS[@]}"

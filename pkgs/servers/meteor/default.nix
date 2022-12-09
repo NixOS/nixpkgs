@@ -1,18 +1,18 @@
 { stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
 
 let
-  version = "1.12";
+  version = "2.7.3";
 
   inherit (stdenv.hostPlatform) system;
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-      sha256 = "0l3zc76djzypvc0dm5ikv5ybb6574qd6kdbbkarzc2dxx64wkyvb";
+      sha256 = "sha256-ovsE7jUJIKf96WEoITXECUlPo+o1tEKvHzCc7Xgj614=";
     };
     x86_64-darwin = fetchurl {
       url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.x86_64.tar.gz";
-      sha256 = "01gn3m6qacp3ibvp0rcvm2pq7fi1xds02ws0irypldh7vz3930jl";
+      sha256 = "11206dbda50a680fdab7044def7ea68ea8f4a9bca948ca56df91fe1392b2ac16";
     };
   };
 in
@@ -59,41 +59,42 @@ stdenv.mkDerivation {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-      # Patch Meteor to dynamically fixup shebangs and ELF metadata where
-      # necessary.
-      pushd $out
-      patch -p1 < ${./main.patch}
-      popd
-      substituteInPlace $out/tools/cli/main.js \
-        --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
-        --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
+    # Patch Meteor to dynamically fixup shebangs and ELF metadata where
+    # necessary.
+    pushd $out
+    patch -p1 < ${./main.patch}
+    popd
+    substituteInPlace $out/tools/cli/main.js \
+      --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
+      --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
-      # Patch node.
+    # Patch node.
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      --set-rpath "$(patchelf --print-rpath $out/dev_bundle/bin/node):${stdenv.cc.cc.lib}/lib" \
+      $out/dev_bundle/bin/node
+
+    # Patch mongo.
+    for p in $out/dev_bundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$(patchelf --print-rpath $out/dev_bundle/bin/node):${stdenv.cc.cc.lib}/lib" \
-        $out/dev_bundle/bin/node
+        --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
+        $p
+    done
 
-      # Patch mongo.
-      for p in $out/dev_bundle/mongodb/bin/mongo{,d}; do
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
-          $p
-      done
-
-      # Patch node dlls.
-      for p in $(find $out/packages -name '*.node'); do
-        patchelf \
-          --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
-          $p || true
-      done
+    # Patch node dlls.
+    for p in $(find $out/packages -name '*.node'); do
+      patchelf \
+        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
+        $p || true
+    done
   '';
 
   meta = with lib; {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
     homepage = "https://www.meteor.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ cstrahan ];

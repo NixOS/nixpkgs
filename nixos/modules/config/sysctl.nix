@@ -21,21 +21,34 @@ in
   options = {
 
     boot.kernel.sysctl = mkOption {
+      type = types.submodule {
+        freeformType = types.attrsOf sysctlOption;
+        options."net.core.rmem_max" = mkOption {
+          type = types.nullOr types.ints.unsigned // {
+            merge = loc: defs:
+              foldl
+                (a: b: if b.value == null then null else lib.max a b.value)
+                0
+                (filterOverrides defs);
+          };
+          default = null;
+          description = lib.mdDoc "The maximum socket receive buffer size. In case of conflicting values, the highest will be used.";
+        };
+      };
       default = {};
       example = literalExpression ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
-      type = types.attrsOf sysctlOption;
-      description = ''
+      description = lib.mdDoc ''
         Runtime parameters of the Linux kernel, as set by
-        <citerefentry><refentrytitle>sysctl</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
+        {manpage}`sysctl(8)`.  Note that sysctl
         parameters names must be enclosed in quotes
-        (e.g. <literal>"vm.swappiness"</literal> instead of
-        <literal>vm.swappiness</literal>).  The value of each
+        (e.g. `"vm.swappiness"` instead of
+        `vm.swappiness`).  The value of each
         parameter may be a string, integer, boolean, or null
         (signifying the option will not appear at all).
       '';
+
     };
 
   };

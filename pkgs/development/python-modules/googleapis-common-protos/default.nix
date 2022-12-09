@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.56.2";
+  version = "1.56.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sJtW9UYwcMIVN1PvEj8H0uSSNeiRSOmyRZ7I7S9o19M=";
+    sha256 = "sha256-wlhzxHJ5OHz9y9r6NhSYh5AdNiAstkWg5PKWhr9uRBc=";
   };
 
   propagatedBuildInputs = [ grpc protobuf ];

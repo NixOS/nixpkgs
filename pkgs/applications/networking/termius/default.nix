@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "7.41.2";
+  version = "7.45.3";
 
   src = fetchurl {
     # find the latest version with
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_114.snap";
-    sha512 = "298a72858c195fc1d7ac7388ab418876ade32204ce476685da07dee5fd6e19de5e537be45ec01f354e8029d7e5b873988712fa1d31f4d19362712151a7d10b95";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_123.snap";
+    sha512 = "1a43ece6ccb0f5a7b29a3ff0c41f27b0d82bd90214cc3d0b88dbd57ecaf2f59c092906e7ed377e3d04f2fc418027f7a0cb7f2e4458ef619663b84b080581c375";
   };
 
   desktopItem = makeDesktopItem {
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     description = "A cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];

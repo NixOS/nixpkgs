@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://code.google.com/archive/p/reaver-wps/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nico202 volth ];
+    maintainers = with maintainers; [ nico202 ];
   };
 }

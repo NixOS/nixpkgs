@@ -40,6 +40,10 @@
       "transparent-window@pbxqdown.github.com",
       "transparentwindows.mdirshad07"
     ],
+    "azan-islamic-prayer-times": [
+      "azan@faissal.bensefia.id",
+      "azan@hatem.masmoudi.org"
+    ],
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
@@ -137,6 +141,10 @@
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
       "unredirect@aunetx"
@@ -167,6 +175,10 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
@@ -174,6 +186,20 @@
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "auto-activities": [
+      "auto-activities@acedron.github.io",
+      "auto-activities@CleoMenezesJr.github.io"
+    ]
+  },
+  "43": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
     ]
   }
 }

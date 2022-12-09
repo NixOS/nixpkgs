@@ -7,12 +7,14 @@
 , mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
+, openssl_legacy
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , bluez ? null, bluezSupport ? false
 , zlib
 , tzdata ? null
+, libxcrypt
 , self
 , configd
 , autoreconfHook
@@ -75,6 +77,10 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 with lib;
 
 let
+  # some python packages need legacy ciphers, so we're using openssl 3, but with that config
+  # null check for Minimal
+  openssl' = if openssl != null then openssl_legacy else null;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
 
@@ -82,7 +88,7 @@ let
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
-    inputs' = lib.filterAttrs (_: v: ! lib.isDerivation v) inputs;
+    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
     override = attr: let python = attr.override (inputs' // { self = python; }); in python;
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -91,7 +97,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch;
+    inherit hasDistutilsCxxPatch pythonAttr;
     pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
@@ -110,12 +116,12 @@ let
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
-  ] ++ optionals (stdenv.cc.isClang && (enableLTO || enableOptimizations)) [
+  ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
@@ -144,7 +150,19 @@ let
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
     # variants when cross-compiling, but native builds include the version
     # suffix, so we do the same.
-    pythonHostPlatform = "${parsed.kernel.name}-${parsed.cpu.name}";
+    pythonHostPlatform = let
+      cpu = {
+        # According to PEP600, Python's name for the Power PC
+        # architecture is "ppc", not "powerpc".  Without the Rosetta
+        # Stone below, the PEP600 requirement that "${ARCH} matches
+        # the return value from distutils.util.get_platform()" fails.
+        # https://peps.python.org/pep-0600/
+        powerpc = "ppc";
+        powerpcle = "ppcle";
+        powerpc64 = "ppc64";
+        powerpc64le = "ppc64le";
+      }.${parsed.cpu.name} or parsed.cpu.name;
+    in "${parsed.kernel.name}-${cpu}";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
     multiarchCpu =
@@ -225,9 +243,11 @@ in with passthru; stdenv.mkDerivation {
     # * https://bugs.python.org/issue35523
     # * https://github.com/python/cpython/commit/e6b247c8e524
     ./3.7/no-win64-workaround.patch
-  ] ++ optionals (pythonAtLeast "3.7") [
+  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
+  ] ++ optionals (pythonAtLeast "3.11") [
+    ./3.11/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
     # Backport from CPython 3.8 of a good list of tests to run for PGO.
     (
@@ -307,8 +327,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (openssl != null) [
-    "--with-openssl=${openssl.dev}"
+  ] ++ optionals (openssl' != null) [
+    "--with-openssl=${openssl'.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -334,6 +354,9 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
+  ] ++ optionals (libxcrypt != null) [
+    "CFLAGS=-I${libxcrypt}/include"
+    "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
@@ -369,7 +392,7 @@ in with passthru; stdenv.mkDerivation {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out")
+      (placeholder "out") libxcrypt
     ] ++ optionals tzdataSupport [
       tzdata
     ]);
@@ -416,11 +439,6 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
-
-    # debug info can't be separated from a static library and would otherwise be
-    # left in place by a separateDebugInfo build. force its removal here to save
-    # space in output.
-    $STRIP -S $out/lib/${libPrefix}/config-*/libpython*.a || true
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -475,7 +493,7 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    lib.optionals (openssl' != null && !static) [ openssl'.dev ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
@@ -489,7 +507,15 @@ in with passthru; stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://python.org";
+    homepage = "https://www.python.org";
+    changelog = let
+      majorMinor = lib.versions.majorMinor version;
+      dashedVersion = lib.replaceStrings [ "." "a" ] [ "-" "-alpha-" ] version;
+    in
+      if sourceVersion.suffix == "" then
+        "https://docs.python.org/release/${version}/whatsnew/changelog.html"
+      else
+        "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
     description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

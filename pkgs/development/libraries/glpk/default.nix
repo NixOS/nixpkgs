@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/glpk/";
     license = licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ bjg ] ++ teams.sage.members;
+    maintainers = with maintainers; [ ] ++ teams.sage.members;
     mainProgram = "glpsol";
     platforms = platforms.all;
   };

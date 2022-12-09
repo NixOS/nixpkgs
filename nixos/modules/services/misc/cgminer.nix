@@ -31,25 +31,25 @@ in
 
     services.cgminer = {
 
-      enable = mkEnableOption "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin";
+      enable = mkEnableOption (lib.mdDoc "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin");
 
       package = mkOption {
         default = pkgs.cgminer;
         defaultText = literalExpression "pkgs.cgminer";
-        description = "Which cgminer derivation to use.";
+        description = lib.mdDoc "Which cgminer derivation to use.";
         type = types.package;
       };
 
       user = mkOption {
         type = types.str;
         default = "cgminer";
-        description = "User account under which cgminer runs";
+        description = lib.mdDoc "User account under which cgminer runs";
       };
 
       pools = mkOption {
         default = [];  # Run benchmark
         type = types.listOf (types.attrsOf types.str);
-        description = "List of pools where to mine";
+        description = lib.mdDoc "List of pools where to mine";
         example = [{
           url = "http://p2pool.org:9332";
           username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
@@ -60,7 +60,7 @@ in
       hardware = mkOption {
         default = []; # Run without options
         type = types.listOf (types.attrsOf (types.either types.str types.int));
-        description= "List of config options for every GPU";
+        description= lib.mdDoc "List of config options for every GPU";
         example = [
         {
           intensity = 9;
@@ -87,7 +87,7 @@ in
       config = mkOption {
         default = {};
         type = types.attrsOf (types.either types.bool types.int);
-        description = "Additional config";
+        description = lib.mdDoc "Additional config";
         example = {
           auto-fan = true;
           auto-gpu = true;

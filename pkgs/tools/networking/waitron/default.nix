@@ -1,29 +1,39 @@
-{ lib, buildGoPackage, fetchFromGitHub, fetchhg, fetchbzr, fetchsvn }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "waitron";
-  version = "unstable-2020-01-24";
-
-  goPackagePath = "github.com/ns1/waitron";
+  version = "unstable-2020-08-04";
+  rev = "2315857d94e3d1a1e79ac48f8f6a68d59d0ce300";
 
   src = fetchFromGitHub {
     owner = "ns1";
     repo = "waitron";
-    rev = "c96833619cbb0cf2bc71b1d7b534101e139cc6e6";
+    inherit rev;
     sha256 = "sha256-ZkGhEOckIOYGb6Yjr4I4e9cjAHDfksRwHW+zgOMZ/FE=";
   };
+
+  vendorSha256 = null; #vendorSha256 = "";
+
+  subPackages = [ "." ];
 
   patches = [
     ./staticfiles-directory.patch
   ];
 
-  goDeps = ./deps.nix;
-
-  meta = {
+  meta = with lib; {
     description = "A tool to manage network booting of machines";
+    longDescription = ''
+      Waitron is used to build machines (primarily bare-metal, but anything that
+      understands PXE booting will work) based on definitions from any number of
+      specified inventory sources.
+    '';
     homepage = "https://github.com/ns1/waitron";
-    license =  lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ guibert ];
-    platforms = lib.platforms.linux;
+    license =  licenses.asl20;
+    maintainers = with maintainers; [ guibert ];
+    platforms = platforms.linux;
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

@@ -8,7 +8,10 @@
 , ffmpeg
 , file
 , freetype
+, glib
+, gumbo
 , harfbuzz
+, jbig2dec
 , leptonica
 , libGL
 , libX11
@@ -24,11 +27,14 @@
 , libvncserver
 , libxcb
 , libxkbcommon
-, lua
+, lua5_1
 , luajit
 , makeWrapper
 , mesa
+, mupdf
 , openal
+, openjpeg
+, pcre
 , pkg-config
 , sqlite
 , tesseract
@@ -46,15 +52,19 @@
 , useStaticSqlite ? false
 }:
 
-stdenv.mkDerivation rec {
+let
+  cmakeFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "on" else "off"}";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
-  version = "0.6.1.1";
+  version = "0.6.2.1";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = version;
-    hash = "sha256-+dJaBSKGbHOwzA26/jDyh2UF9YRwGUcysJIeAM4kvfc=";
+    rev = finalAttrs.version;
+    hash = "sha256-7H3fVSsW5VANLqwhykY+Q53fPjz65utaGksh/OpZnJM=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +81,10 @@ stdenv.mkDerivation rec {
     ffmpeg
     file
     freetype
+    glib
+    gumbo
     harfbuzz
+    jbig2dec
     leptonica
     libGL
     libX11
@@ -87,10 +100,13 @@ stdenv.mkDerivation rec {
     libvncserver
     libxcb
     libxkbcommon
-    lua
+    lua5_1
     luajit
     mesa
+    mupdf.dev
     openal
+    openjpeg.dev
+    pcre
     sqlite
     tesseract
     valgrind
@@ -144,8 +160,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/CMakeLists.txt --replace "SETUID" "# SETUID"
   '';
 
-  # INFO: According to the source code, the manpages need to be generated before
-  # the configure phase
+  # INFO: Arcan build scripts require the manpages to be generated before the
+  # `configure` phase
   preConfigure = lib.optionalString buildManPages ''
     pushd doc
     ruby docgen.rb mangen
@@ -156,14 +172,14 @@ stdenv.mkDerivation rec {
     "-DBUILD_PRESET=everything"
     # The upstream project recommends tagging the distribution
     "-DDISTR_TAG=Nixpkgs"
-    "-DENGINE_BUILDTAG=${version}"
-    "-DHYBRID_SDL=on"
-    "-DBUILTIN_LUA=${if useBuiltinLua then "on" else "off"}"
-    "-DDISABLE_JIT=${if useBuiltinLua then "on" else "off"}"
-    "-DSTATIC_FREETYPE=${if useStaticFreetype then "on" else "off"}"
-    "-DSTATIC_LIBUVC=${if useStaticLibuvc then "on" else "off"}"
-    "-DSTATIC_OPENAL=${if useStaticOpenAL then "on" else "off"}"
-    "-DSTATIC_SQLite3=${if useStaticSqlite then "on" else "off"}"
+    "-DENGINE_BUILDTAG=${finalAttrs.version}"
+    (cmakeFeatureFlag "HYBRID_SDL" true)
+    (cmakeFeatureFlag "BUILTIN_LUA" useBuiltinLua)
+    (cmakeFeatureFlag "DISABLE_JIT" useBuiltinLua)
+    (cmakeFeatureFlag "STATIC_FREETYPE" useStaticFreetype)
+    (cmakeFeatureFlag "STATIC_LIBUVC" useStaticLibuvc)
+    (cmakeFeatureFlag "STATIC_OPENAL" useStaticOpenAL)
+    (cmakeFeatureFlag "STATIC_SQLite3" useStaticSqlite)
     "../src"
   ];
 
@@ -184,4 +200,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

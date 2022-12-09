@@ -7,7 +7,6 @@
 , hdf5
 , vtkWithQt5
 , qtbase
-, wrapQtAppsHook
 , fparser
 , tinyxml
 , cgal

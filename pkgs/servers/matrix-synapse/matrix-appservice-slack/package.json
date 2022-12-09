@@ -1,0 +1,77 @@
+{
+  "name": "matrix-appservice-slack",
+  "version": "2.0.1",
+  "description": "A Matrix <--> Slack bridge",
+  "engines": {
+    "node": ">=16 <=18"
+  },
+  "main": "app.js",
+  "scripts": {
+    "prepare": "yarn build",
+    "start": "node ./lib/app.js",
+    "build": "tsc --build",
+    "test": "yarn test:unit && yarn test:integration",
+    "test:unit": "mocha --require ts-node/register --recursive tests/unit/*.ts",
+    "test:integration": "mocha --exit --reporter list --ui bdd --require ts-node/register --recursive tests/integration/*.ts",
+    "test:postgres": "SLACKBRIDGE_TEST_ENABLEPG=yes mocha --reporter list --ui bdd --require ts-node/register --recursive tests/integration/PgDatastoreTest.ts",
+    "lint": "eslint -c .eslintrc.js ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matrix-org/matrix-appservice-slack.git"
+  },
+  "keywords": [
+    "matrix-org",
+    "slack"
+  ],
+  "author": "Matrix.org",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/matrix-org/matrix-appservice-slack/issues"
+  },
+  "homepage": "https://github.com/matrix-org/matrix-appservice-slack#readme",
+  "dependencies": {
+    "@alloc/quick-lru": "^5.2.0",
+    "@slack/logger": "^3.0.0",
+    "@slack/rtm-api": "^6.0.0",
+    "@slack/web-api": "^6.7.2",
+    "Slackdown": "git+https://Half-Shot@github.com/half-shot/slackdown.git",
+    "axios": "^0.27.2",
+    "escape-string-regexp": "^4.0.0",
+    "matrix-appservice-bridge": "^5.1.0",
+    "minimist": "^1.2.6",
+    "nedb": "^1.8.0",
+    "node-emoji": "^1.10.0",
+    "nunjucks": "^3.2.3",
+    "p-queue": "^6.0.0",
+    "pg-promise": "^10.11.1",
+    "randomstring": "^1.2.1",
+    "uuid": "^8.3.2",
+    "yargs": "17.5.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
+    "@types/chai": "^4.2.21",
+    "@types/js-yaml": "^4.0.2",
+    "@types/mocha": "^9.1.1",
+    "@types/nedb": "^1.8.12",
+    "@types/node": "^18.6.1",
+    "@types/node-emoji": "^1.8.1",
+    "@types/nunjucks": "^3.1.5",
+    "@types/randomstring": "^1.1.7",
+    "@types/uuid": "^8.3.1",
+    "@types/yargs": "17.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "chai": "^4.3.4",
+    "eslint": "^8.20.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "js-yaml": "^4.1.0",
+    "mocha": "^10.0.0",
+    "prom-client": "^14.0.1",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.4.3"
+  }
+}

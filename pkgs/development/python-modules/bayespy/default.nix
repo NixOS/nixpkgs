@@ -1,5 +1,5 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, nose, glibcLocales
+, pytestCheckHook, nose, glibcLocales, fetchpatch
 , numpy, scipy, matplotlib, h5py }:
 
 buildPythonPackage rec {
@@ -15,15 +15,28 @@ buildPythonPackage rec {
     sha256 = "ed0057dc22bd392df4b3bba23536117e1b2866e3201b12c5a37428d23421a5ba";
   };
 
-  checkInputs = [ pytest nose glibcLocales ];
+  patches = [
+    # Change from scipy to locally defined epsilon
+    # https://github.com/bayespy/bayespy/pull/126
+    (fetchpatch {
+      name = "locally-defined-epsilon.patch";
+      url = "https://github.com/bayespy/bayespy/commit/9be53bada763e19c2b6086731a6aa542ad33aad0.patch";
+      sha256 = "sha256-KYt/0GcaNWR9K9/uS2OXgK7g1Z+Bayx9+IQGU75Mpuo=";
+    })
+  ];
+
+  checkInputs = [ pytestCheckHook nose glibcLocales ];
+
   propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
 
-  checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest -k 'not test_message_to_parents'
-  '';
+  disabledTests = [
+    # Assertion error
+    "test_message_to_parents"
+  ];
+
+  pythonImportsCheck = [ "bayespy" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "http://www.bayespy.org";
     description = "Variational Bayesian inference tools for Python";
     license = licenses.mit;

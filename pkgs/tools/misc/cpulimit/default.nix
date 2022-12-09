@@ -1,27 +1,29 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "cpulimit";
-  version = "2.7";
+  version = "0.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/limitcpu/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HeBApPikDf6MegJf6YB1ZzRo+8P8zMvCMbx0AvYuxKA=";
+  src = fetchFromGitHub {
+    owner = "opsengine";
+    repo = "cpulimit";
+    rev = "v${version}";
+    sha256 = "1dz045yhcsw1rdamzpz4bk8mw888in7fyqk1q1b3m1yk4pd1ahkh";
   };
 
-  buildFlags = with stdenv; [ (
-    if isDarwin then "osx"
-    else if isFreeBSD then "freebsd"
-    else "cpulimit"
-  ) ];
+  patches = [ ./remove-sys-sysctl.h.patch ./get-missing-basename.patch ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp src/cpulimit $out/bin
+  '';
 
   meta = with lib; {
-    homepage = "http://limitcpu.sourceforge.net/";
-    description = "A tool to throttle the CPU usage of programs";
-    platforms = with platforms; linux ++ freebsd;
+    homepage = "https://github.com/opsengine/cpulimit";
+    description = "CPU usage limiter";
+    platforms = platforms.unix;
     license = licenses.gpl2;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.jsoo1 ];
   };
 }

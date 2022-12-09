@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "6.2.0";
+  version = "6.4.1";
 
   outputs = [ "out" "examples" ];
 
   src = fetchurl {
     url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
-    hash = "sha256-GV1Vk3cvxIP2Pwh5TXnkurMMLsWObOSw+2vMDgxI8x0=";
+    hash = "sha256-e/EKjSkgWRrz+6LbklSOka1g63JBqyM1CpsbxR4F6NA=";
   };
 
   nativeBuildInputs = [
@@ -60,21 +60,6 @@ stdenv.mkDerivation rec {
       "-DSUNDIALS_INDEX_SIZE=32"
   )]
   ;
-
-  # disable stackprotector on aarch64-darwin for now
-  # https://github.com/NixOS/nixpkgs/issues/127608
-  #
-  # build error:
-  #
-  # /private/tmp/nix-build-sundials-6.2.0.drv-0/ccD2dUtR.s:21:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x0, [x0, ___stack_chk_guard];momd
-  #                          ^
-  # /private/tmp/nix-build-sundials-6.2.0.drv-0/ccD2dUtR.s:46:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x0, [x0, ___stack_chk_guard];momd
-  #
-  # See also a proposed solution: https://github.com/NixOS/nixpkgs/pull/151983
-
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   doCheck = true;
   checkTarget = "test";

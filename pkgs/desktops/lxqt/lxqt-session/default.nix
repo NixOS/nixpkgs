@@ -15,18 +15,18 @@
 , procps
 , xorg
 , xdg-user-dirs
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-session";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "NOwuHz5SiygE/9cLrYPz24L5v8BE6Hwqp6uKD5SnOBU=";
+    sha256 = "EmaMIoVouC1/B/WrLwynynx3F9A1Ae5kT3uhl5HVQg8=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ mkDerivation rec {
     xdg-user-dirs
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-session";

@@ -11,23 +11,21 @@
 , libgee
 , libhandy
 , granite
-, gettext
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QMh9m6Xc0BeprZHrOgcmSireWb8Ja7Td0COYMgYw+5M=";
+    sha256 = "sha256-2c+anQ17lrdFy+cbjoYY94EFxYUcS+4mZrwbrLohfUg=";
   };
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     pkg-config

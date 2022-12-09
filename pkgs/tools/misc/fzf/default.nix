@@ -1,21 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
-
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, writeText
+, runtimeShell
+, installShellFiles
+, ncurses
+, perl
+}:
 buildGoModule rec {
   pname = "fzf";
-  version = "0.30.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7E6fj/Sjew+zz+iMFkiSJjVn2rymKRvZtEJZH65INxk=";
+    sha256 = "sha256-Zn//z66apkhUd2RvLZSV8PqmocQdVmPngfyK4jmWsfs=";
   };
 
-  vendorSha256 = "sha256-omvCzM5kH3nAE57S33NV0OFRJmU+Ty7hhriaG/Dc0o0=";
+  vendorSha256 = "sha256-EjcOcrADHdwTCGimv2BRvbjqSZxz4isWhGmPbWQ7YDE=";
 
   outputs = [ "out" "man" ];
 
-  fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ ncurses ];
 
@@ -34,28 +41,23 @@ buildGoModule rec {
 
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.zsh \
-      --replace " perl -ne " " ${perl}/bin/perl -ne "
     substituteInPlace shell/key-bindings.bash \
       --replace " perl -n " " ${perl}/bin/perl -n "
   '';
 
-  preInstall = ''
-    mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
-    cp shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    cp ${fishHook} $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-  '';
-
   postInstall = ''
-    cp bin/fzf-tmux $out/bin
+    install bin/fzf-tmux $out/bin
 
-    mkdir -p $man/share/man
-    cp -r man/man1 $man/share/man
+    installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
-    mkdir -p $out/share/vim-plugins/${pname}
-    cp -r plugin $out/share/vim-plugins/${pname}
+    install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
 
-    cp -R shell $out/share/fzf
+    # Install shell integrations
+    install -D shell/* -t $out/share/fzf/
+    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    mkdir -p $out/share/fish/vendor_conf.d
+    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell

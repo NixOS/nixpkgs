@@ -6,11 +6,13 @@
 , pybind11
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyfma";
   version = "0.1.6";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -19,7 +21,10 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "12i68jj9n1qj9phjnj6f0kmfhlsd3fqjlk9p6d4gs008azw5m8yn";
   };
-  format = "pyproject";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pybind11

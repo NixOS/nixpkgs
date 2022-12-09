@@ -34,6 +34,10 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=aiosyncthing --cov-report=html" ""

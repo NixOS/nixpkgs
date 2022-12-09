@@ -324,6 +324,9 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            (docbook-xsl-ns.override {
+              withManOptDedupPatch = true;
+            })
             kmod.dev
             libarchive.dev
             libxml2.bin
@@ -333,6 +336,13 @@ let
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             python3Minimal
+            # make-options-doc/default.nix
+            (let
+                self = (pkgs.python3Minimal.override {
+                  inherit self;
+                  includeSiteCustomize = true;
+                });
+              in self.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
             texinfo
@@ -898,6 +908,27 @@ in {
           # is actually looking up subvolumes
           "mkdir /mnt/boot",
           "mount -o defaults,subvol=badpath/boot LABEL=root /mnt/boot",
+      )
+    '';
+  };
+
+  # Test to see if we can deal with subvols that need to be escaped in fstab
+  btrfsSubvolEscape = makeInstallerTest "btrfsSubvolEscape" {
+    createPartitions = ''
+      machine.succeed(
+          "sgdisk -Z /dev/vda",
+          "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "mkfs.btrfs -L root /dev/vda3",
+          "btrfs device scan",
+          "mount LABEL=root /mnt",
+          "btrfs subvol create '/mnt/nixos in space'",
+          "btrfs subvol create /mnt/boot",
+          "umount /mnt",
+          "mount -o 'defaults,subvol=nixos in space' LABEL=root /mnt",
+          "mkdir /mnt/boot",
+          "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       )
     '';
   };

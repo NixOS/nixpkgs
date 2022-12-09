@@ -9,13 +9,13 @@ in {
     services.journald.console = mkOption {
       default = "";
       type = types.str;
-      description = "If non-empty, write log messages to the specified TTY device.";
+      description = lib.mdDoc "If non-empty, write log messages to the specified TTY device.";
     };
 
     services.journald.rateLimitInterval = mkOption {
       default = "30s";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Configures the rate limiting interval that is applied to all
         messages generated on the system. This rate limiting is applied
         per-service, so that two services which log do not interfere with
@@ -23,7 +23,7 @@ in {
         units: s, min, h, ms, us. To turn off any kind of rate limiting,
         set either value to 0.
 
-        See <option>services.journald.rateLimitBurst</option> for important
+        See {option}`services.journald.rateLimitBurst` for important
         considerations when setting this value.
       '';
     };
@@ -31,7 +31,7 @@ in {
     services.journald.rateLimitBurst = mkOption {
       default = 10000;
       type = types.int;
-      description = ''
+      description = lib.mdDoc ''
         Configures the rate limiting burst limit (number of messages per
         interval) that is applied to all messages generated on the system.
         This rate limiting is applied per-service, so that two services
@@ -39,11 +39,11 @@ in {
 
         Note that the effective rate limit is multiplied by a factor derived
         from the available free disk space for the journal as described on
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/journald.conf.html">
-        journald.conf(5)</link>.
+        [
+        journald.conf(5)](https://www.freedesktop.org/software/systemd/man/journald.conf.html).
 
         Note that the total amount of logs stored is limited by journald settings
-        such as <literal>SystemMaxUse</literal>, which defaults to a 4 GB cap.
+        such as `SystemMaxUse`, which defaults to a 4 GB cap.
 
         It is thus recommended to compute what period of time that you will be
         able to store logs for when an application logs at full burst rate.
@@ -56,7 +56,7 @@ in {
       default = "";
       type = types.lines;
       example = "Storage=volatile";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd-journald. See man journald.conf
         for available options.
       '';
@@ -65,7 +65,7 @@ in {
     services.journald.enableHttpGateway = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the HTTP gateway to the journal.
       '';
     };
@@ -74,7 +74,7 @@ in {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
       defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to forward log messages to syslog.
       '';
     };

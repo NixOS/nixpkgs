@@ -11,14 +11,14 @@ in
     scrapeUri = mkOption {
       type = types.str;
       default = "http://localhost:8081/artifactory";
-      description = ''
+      description = lib.mdDoc ''
         URI on which to scrape JFrog Artifactory.
       '';
     };
 
     artiUsername = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Username for authentication against JFrog Artifactory API.
       '';
     };
@@ -26,7 +26,7 @@ in
     artiPassword = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Password for authentication against JFrog Artifactory API.
         One of the password or access token needs to be set.
       '';
@@ -35,7 +35,7 @@ in
     artiAccessToken = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Access token for authentication against JFrog Artifactory API.
         One of the password or access token needs to be set.
       '';

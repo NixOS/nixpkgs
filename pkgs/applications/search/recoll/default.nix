@@ -35,16 +35,23 @@
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.32.0";
+  version = "1.32.7";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-4kt6g5MVZTyYLSH7q2z72nzAsU6fatC0vTebEKhSA6E=";
+    sha256 = "sha256-ygim9LsLUZv5FaBiqbeq3E80NHPMHweJVwggjWYzfbo=";
   };
 
   configureFlags = [ "--enable-recollq" "--disable-webkit" "--without-systemd" ]
     ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
     ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
+
+  NIX_CFLAGS_COMPILE = [ "-DNIXPKGS" ];
+
+  patches = [
+    # fix "No/bad main configuration file" error
+    ./fix-datadir.patch
+  ];
 
   nativeBuildInputs = [
     file pkg-config python3Packages.setuptools which
@@ -103,6 +110,6 @@ mkDerivation rec {
     homepage = "https://www.lesbonscomptes.com/recoll/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming kiyengar ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }

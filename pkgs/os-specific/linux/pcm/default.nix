@@ -1,22 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ cmake, fetchFromGitHub, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "pcm";
-  version = "202112";
+  version = "202211";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
     rev = version;
-    sha256 = "sha256-uuQvj8BcUmuYDwV4r3oqkT+QTcSFcGjBeGUM2NZRFcA=";
+    hash = "sha256-/OSBzJ81xqw5LfS61DS7M33oDmfxDEzcU0NTVVbwWyI=";
   };
 
+  nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp pcm*.x $out/bin
-  '';
 
   meta = with lib; {
     description = "Processor counter monitor";

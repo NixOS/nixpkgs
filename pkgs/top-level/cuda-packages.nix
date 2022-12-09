@@ -28,15 +28,15 @@ let
       "1.2.2.5" = {
         hash = "sha256-lU7iK4DWuC/U3s1Ct/rq2Gr3w4F2U7RYYgpmF05bibY=";
       };
-      "1.3.1.3" = {
-        hash = "sha256-mNlVnabB2IC3HnYY0mb06RLqQzDxN9ePGVeBy3hkBC8=";
+      "1.5.0.3" = {
+        hash = "sha256-T96+lPC6OTOkIs/z3QWg73oYVSyidN0SVkBWmT9VRx0=";
       };
     };
 
     inherit (final) cudaMajorMinorVersion cudaMajorVersion;
 
     cutensor = buildCuTensorPackage rec {
-      version = if cudaMajorMinorVersion == "10.1" then "1.2.2.5" else "1.3.1.3";
+      version = if cudaMajorMinorVersion == "10.1" then "1.2.2.5" else "1.5.0.3";
       inherit (cuTensorVersions.${version}) hash;
       # This can go into generic.nix
       libPath = "lib/${if cudaMajorVersion == "10" then cudaMajorMinorVersion else cudaMajorVersion}";
@@ -58,15 +58,16 @@ let
 
   };
 
-  composedExtension = composeManyExtensions [
+  composedExtension = composeManyExtensions ([
     extraPackagesExtension
     (import ../development/compilers/cudatoolkit/extension.nix)
     (import ../development/compilers/cudatoolkit/redist/extension.nix)
     (import ../development/compilers/cudatoolkit/redist/overrides.nix)
     (import ../development/libraries/science/math/cudnn/extension.nix)
+    (import ../development/libraries/science/math/tensorrt/extension.nix)
     (import ../test/cuda/cuda-samples/extension.nix)
     (import ../test/cuda/cuda-library-samples/extension.nix)
     cutensorExtension
-  ];
+  ]);
 
 in (scope.overrideScope' composedExtension)

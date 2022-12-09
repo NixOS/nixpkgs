@@ -1,0 +1,14 @@
+{
+  "twentytwentyone": {
+    "path": "twentytwentyone/1.6",
+    "rev": "168450",
+    "sha256": "0wfqdyd59hifnncjv59ywjak050gaggsvjx7r01agh44nzkr84fs",
+    "version": "1.6"
+  },
+  "twentytwentytwo": {
+    "path": "twentytwentytwo/1.2",
+    "rev": "168451",
+    "sha256": "0ry7h5bd9h97q38jmsgymm05dfml0ycdhqn7iskpdlc1nnrjrk04",
+    "version": "1.2"
+  }
+}

@@ -53,13 +53,13 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.3.16";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "aelsabbahy";
     repo = "goss";
     rev = "v${version}";
-    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
+    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
   };
 
   dontConfigure = true;
@@ -75,8 +75,8 @@ resholve.mkDerivation rec {
       scripts = [ "bin/dgoss" ];
       interpreter = "${bash}/bin/bash";
       inputs = [ coreutils which ];
-      fake = {
-        external = [ "docker" ];
+      keep = {
+        "$CONTAINER_RUNTIME" = true;
       };
     };
   };
@@ -94,8 +94,9 @@ resholve.mkDerivation rec {
 
 ## Basic `resholve.writeScript` and `resholve.writeScriptBin` examples
 
-Both of these functions have the same basic API. This example is a little
-trivial for now. If you have a real usage that you find helpful, please PR it.
+Both of these functions have the same basic API. The examples are a little
+trivial, so I'll also link to some real-world examples:
+- [shell.nix from abathur/tdverpy](https://github.com/abathur/tdverpy/blob/e1f956df3ed1c7097a5164e0c85b178772e277f5/shell.nix#L6-L13)
 
 ```nix
 resholvedScript = resholve.writeScript "name" {
@@ -183,6 +184,7 @@ handle any potential problems it encounters with directives. There are currently
      scripts from using the latest current-system symlinks.)
    - resolve commands in a variable definition
    - resolve an absolute command path from inputs as if it were a bare reference
+   - force resholve to resolve known security wrappers
 3. `keep` directives tell resholve not to raise an error (i.e., ignore)
    something it would usually object to. Common examples:
    - variables used as/within the first word of a command
@@ -279,7 +281,7 @@ execer = [
 ];
 
 # --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
-execer = [
+wrapper = [
   /*
     This is the same verdict binlore will
     come up with. It's a no-op just to demo

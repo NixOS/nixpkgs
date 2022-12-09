@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsa-lib, udev, libnotify
+, xorg, gtk3, nss, alsa-lib, udev, libnotify
 , wrapGAppsHook }:
 
 let
@@ -24,6 +24,7 @@ let
   meta = with lib; {
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ ];
     platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];

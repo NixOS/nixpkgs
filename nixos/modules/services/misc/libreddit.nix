@@ -13,26 +13,33 @@ in
 {
   options = {
     services.libreddit = {
-      enable = mkEnableOption "Private front-end for Reddit";
+      enable = mkEnableOption (lib.mdDoc "Private front-end for Reddit");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.libreddit;
+        defaultText = literalExpression "pkgs.libreddit";
+        description = lib.mdDoc "Libreddit package to use.";
+      };
 
       address = mkOption {
         default = "0.0.0.0";
         example = "127.0.0.1";
         type =  types.str;
-        description = "The address to listen on";
+        description = lib.mdDoc "The address to listen on";
       };
 
       port = mkOption {
         default = 8080;
         example = 8000;
         type = types.port;
-        description = "The port to listen on";
+        description = lib.mdDoc "The port to listen on";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the libreddit web interface";
+        description = lib.mdDoc "Open ports in the firewall for the libreddit web interface";
       };
 
     };
@@ -45,7 +52,7 @@ in
         after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${pkgs.libreddit}/bin/libreddit ${args}";
+          ExecStart = "${cfg.package}/bin/libreddit ${args}";
           AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
           Restart = "on-failure";
           RestartSec = "2s";

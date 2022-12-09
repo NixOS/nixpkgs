@@ -3,6 +3,7 @@
 , stdenvNoCC
 , nss
 , wrapPython
+, nix-update-script
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -34,7 +35,10 @@ stdenvNoCC.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/unode/firefox_decrypt";

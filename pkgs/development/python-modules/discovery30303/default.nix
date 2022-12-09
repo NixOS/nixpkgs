@@ -31,6 +31,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=discovery30303" ""

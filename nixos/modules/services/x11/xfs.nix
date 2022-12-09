@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the X Font Server.";
+        description = lib.mdDoc "Whether to enable the X Font Server.";
       };
 
     };

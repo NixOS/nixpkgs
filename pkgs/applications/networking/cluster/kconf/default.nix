@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kconf";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "particledecay";
     repo = "kconf";
     rev = "v${version}";
-    sha256 = "sha256-V+B1vqI/MLASqEy6DZiB71h7EkUfrxVKIMxriRK6pyY=";
+    sha256 = "sha256-aEZTwXccKZDXRNWr4XS2ZpqtEnNGbsIVau8zPvaHTkk=";
   };
 
-  vendorSha256 = "sha256-Fq3V3vYaofB0TWt3t7uW1Dd7MlwMvh8RaRVpdq9XZh4=";
+  vendorSha256 = "sha256-7mzk2OP1p8FfRsbs4B6XP/szBeckm7Q7hf8AkbZUG2Q=";
 
   ldflags = [
       "-s" "-w" "-X github.com/particledecay/kconf/build.Version=${version}"

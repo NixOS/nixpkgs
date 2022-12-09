@@ -6,30 +6,30 @@
 , cffi
 , cryptography
 , ibm-sw-tpm2
-, pkg-config
-, pkgconfig
+, pkgconfig # see nativeBuildInputs
+, pkg-config # see nativeBuildInputs
 , pycparser
 , pytestCheckHook
 , python
+, pyyaml
 , setuptools-scm
 , tpm2-tss
 }:
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-O0d1b99/V8b3embg8veerTrJGSVb/prlPVb7qSHErdQ=";
+    sha256 = "sha256-OgWWTjcj3Qd4dSaCwY+fuRQpLSFn4+9o11kPR9n8a54=";
   };
 
   nativeBuildInputs = [
     cffi
-    pkgconfig
-    # somehow propagating from pkgconfig does not work
-    pkg-config
+    pkgconfig # this is the python module
+    pkg-config # this is the actual pkg-config tool
     setuptools-scm
   ];
 
@@ -41,6 +41,7 @@ buildPythonPackage rec {
     cffi
     asn1crypto
     cryptography
+    pyyaml
   ];
 
   # https://github.com/tpm2-software/tpm2-pytss/issues/341

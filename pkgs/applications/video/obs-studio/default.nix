@@ -1,7 +1,6 @@
 { config
 , lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
 , cmake
@@ -13,7 +12,6 @@
 , libpthreadstubs
 , libXdmcp
 , qtbase
-, qtx11extras
 , qtsvg
 , speex
 , libv4l
@@ -38,27 +36,34 @@
 , pipewireSupport ? stdenv.isLinux
 , pipewire
 , libdrm
+, libajantv2
+, librist
+, srt
+, qtwayland
+, wrapQtAppsHook
+, ...
 }:
 
 let
   inherit (lib) optional optionals;
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "obs-studio";
-  version = "27.2.4";
+  version = "28.1.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "sha256-OiSejQovSmhItrnrQlcVp9PCDRgAhuxTinSpXbH8bo0=";
+    sha256 = "sha256-M5UEOtdzXBVY0UGfwWx3MsM28bJ1EcVPl8acWXWV0lg=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
+    ./Provide-runtime-plugin-destination-as-relative-path.patch
   ];
 
   nativeBuildInputs = [
@@ -66,6 +71,7 @@ mkDerivation rec {
     cmake
     pkg-config
     wrapGAppsHook
+    wrapQtAppsHook
   ]
   ++ optional scriptingSupport swig;
 
@@ -81,7 +87,6 @@ mkDerivation rec {
     libpthreadstubs
     libXdmcp
     qtbase
-    qtx11extras
     qtsvg
     speex
     wayland
@@ -89,6 +94,10 @@ mkDerivation rec {
     libvlc
     mbedtls
     pciutils
+    libajantv2
+    librist
+    srt
+    qtwayland
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -117,6 +126,7 @@ mkDerivation rec {
     # Add support for browser source
     "-DBUILD_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
+    "-DENABLE_JACK=ON"
   ];
 
   dontWrapGApps = true;
@@ -140,7 +150,7 @@ mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V ];
+    maintainers = with maintainers; [ jb55 MP2E V miangraham ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

@@ -25,6 +25,7 @@
 , runCommand
 , writeText
 , nixosTests
+, nix-update-script
 , useOperatingSystemEtc ? true
   # An optional string containing Fish code that initializes the environment.
   # This is run at the very beginning of initialization. If it sets $NIX_PROFILES
@@ -134,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.4.1";
+    version = "3.5.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -144,18 +145,8 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-tvI7OEOwTbawqQ/qH28NDkDMAntKcyCYIAhj8oZKlOo=";
+      sha256 = "sha256-ptRbPcWkXdMXcuf439/sq8BjmG6PZ9YL18pgzIHbaSg=";
     };
-
-    patches = [
-      # merged https://github.com/fish-shell/fish-shell/pull/8978
-      # "create_manpage_completions.py: Do not overstrip commands with dots"
-      (fetchpatch {
-        name = "fix-cmdname-completeion-generator.patch";
-        url = "https://github.com/fish-shell/fish-shell/commit/32d646a5483844e9b1fae4b73f252a34ec0d4c76.patch";
-        sha256 = "sha256-51hqgPHQ7oQbl1i3SfqvGsbkYMe2Jh+sEwCRu2kiv1U=";
-      })
-    ];
 
     # Fix FHS paths in tests
     postPatch = ''
@@ -297,7 +288,7 @@ let
       homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ cole-h ];
+      maintainers = with maintainers; [ cole-h winter srapenne ];
     };
 
     passthru = {
@@ -336,6 +327,7 @@ let
             ${fish}/bin/fish ${fishScript} && touch $out
           '';
       };
+      updateScript = nix-update-script { attrPath = pname; };
     };
   };
 in

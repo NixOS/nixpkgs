@@ -71,6 +71,31 @@ getAttr = builtins.getAttr;
 
 in {")
 
+;; Random compilation errors
+(defparameter +broken-packages+
+  (list
+   ;; no dispatch function defined for #\t
+   "hu.dwim.logger"
+   "hu.dwim.serializer"
+   "hu.dwim.quasi-quote"
+   ;; Tries to write in $HOME
+   "ubiquitous"
+   "math"
+   ;; Upstream bad packaging, multiple systems in clml.blas.asd
+   "clml.blas.hompack"
+   ;; Fails on SBCL due to heap exhaustion
+   "magicl"
+   ;; Probably missing dependency in QL data
+   "mcclim-bezier"
+   ;; Missing dependency on c2ffi cffi extension
+   "hu.dwim.zlib"
+   ;; Missing libgvc.so native library
+   "hu.dwim.graphviz"
+   ;; These require libRmath.so, but I don't know where to get it from
+   "cl-random"
+   "cl-random-tests"
+   ))
+
 (defmethod database->nix-expression ((database sqlite-database) outfile)
   (sqlite:with-open-database (db (database-url database))
     (with-open-file (f outfile
@@ -130,5 +155,8 @@ in {")
                                            (:symbol "pkgs")))
                                        (remove "asdf"
                                                (str:split-omit-nulls #\, deps)
-                                               :test #'string=))))))))))
+                                               :test #'string=))))
+                ,@(when (or (find #\/ name)
+                            (find name +broken-packages+ :test #'string=))
+                    '(("meta" (:attrs ("broken" (:symbol "true"))))))))))))
       (format f "~%}~%"))))

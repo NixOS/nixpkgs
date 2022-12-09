@@ -6,11 +6,12 @@
 , pythonOlder
 , requests
 , requests-oauthlib
+, pyjwt
 }:
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.50.0";
+  version = "0.51.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = pname;
     rev = version;
-    hash = "sha256-O6KEDt+Z1MJUvKXQJILqLRgNj+ZrCZjlb3CJHpRL1Kk=";
+    hash = "sha256-o8EoayMMwxoJTrUA3Jo1Dfu1XFgC+Mcpa8yMwXlKAKY=";
   };
 
   postPatch = ''
@@ -30,9 +31,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     django
     python3-openid
+    pyjwt
     requests
     requests-oauthlib
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   checkPhase = ''
     # test is out of date

@@ -9,14 +9,14 @@
 
 let zipp = buildPythonPackage rec {
   pname = "zipp";
-  version = "3.7.0";
-  format = "setuptools";
+  version = "3.10.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f50f446828eb9d45b267433fd3e9da8d801f614129124863f9c51ebceafb87d";
+    sha256 = "sha256-enJi/ZML0+NsULmmSJeuw/r/89/e7JYjriK0DpP5m7g=";
   };
 
   nativeBuildInputs = [

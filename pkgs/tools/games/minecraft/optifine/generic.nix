@@ -22,6 +22,11 @@ runCommand "optifine-${mcVersion}" {
 
   nativeBuildInputs = [ jre makeWrapper ];
 
+  passthru.updateScript = {
+    command = [ ./update.py ];
+    supportedFeatures = [ "commit" ];
+  };
+
   meta = with lib; {
     homepage = "https://optifine.net/";
     description = "A Minecraft ${mcVersion} optimization mod";

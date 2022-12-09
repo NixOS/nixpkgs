@@ -15,7 +15,7 @@
   <para>
    Litestream service is managed by a dedicated user named <literal>litestream</literal>
    which needs permission to the database file. Here's an example config which gives
-   required permissions to access <link linkend="opt-services.grafana.database.path">
+   required permissions to access <link linkend="opt-services.grafana.settings.database.path">
    grafana database</link>:
 <programlisting>
 { pkgs, ... }:

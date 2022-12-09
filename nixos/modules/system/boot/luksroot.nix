@@ -148,6 +148,7 @@ let
            + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
            + optionalString (dev.header != null) " --header=${dev.header}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
+    fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
@@ -417,7 +418,7 @@ let
     }
     ''}
 
-    ${optionalString (luks.fido2Support && (dev.fido2.credential != null)) ''
+    ${optionalString (luks.fido2Support && fido2luksCredentials != []) ''
 
     open_with_hardware() {
       local passsphrase
@@ -433,7 +434,7 @@ let
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -444,7 +445,7 @@ let
     # commands to run right before we mount our device
     ${dev.preOpenCommands}
 
-    ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && (dev.fido2.credential != null)) then ''
+    ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && fido2luksCredentials != []) then ''
     open_with_hardware
     '' else ''
     open_normally
@@ -480,8 +481,8 @@ let
       ++ optional v.allowDiscards "discard"
       ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
       ++ optional (v.header != null) "header=${v.header}"
-      ++ optional (v.keyFileOffset != null) "keyfile-offset=${v.keyFileOffset}"
-      ++ optional (v.keyFileSize != null) "keyfile-size=${v.keyFileSize}"
+      ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
+      ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
     ;
   in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
 
@@ -496,10 +497,10 @@ in
     boot.initrd.luks.mitigateDMAAttacks = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
         access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-        More information is available at <link xlink:href="http://en.wikipedia.org/wiki/DMA_attack"/>.
+        More information is available at <http://en.wikipedia.org/wiki/DMA_attack>.
 
         This option blacklists FireWire drivers, but doesn't remove them. You can manually
         load the drivers if you need to use a FireWire device, but don't forget to unload them!
@@ -513,7 +514,7 @@ in
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
           "af_alg" "algif_skcipher"
         ];
-      description = ''
+      description = lib.mdDoc ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
         The default includes all common modules.
       '';
@@ -523,7 +524,7 @@ in
       type = types.bool;
       default = false;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure luks support in the initrd, when no luks
         devices are configured.
       '';
@@ -532,15 +533,15 @@ in
     boot.initrd.luks.reusePassphrases = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         When opening a new LUKS device try reusing last successful
         passphrase.
 
         Useful for mounting a number of devices that use the same
         passphrase without retyping it several times.
 
-        Such setup can be useful if you use <command>cryptsetup
-        luksSuspend</command>. Different LUKS devices will still have
+        Such setup can be useful if you use {command}`cryptsetup luksSuspend`.
+        Different LUKS devices will still have
         different master keys even when using the same passphrase.
       '';
     };
@@ -548,11 +549,11 @@ in
     boot.initrd.luks.devices = mkOption {
       default = { };
       example = { luksroot.device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
-      description = ''
+      description = lib.mdDoc ''
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM
         setups are supported. The unencrypted devices can be accessed as
-        <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
+        {file}`/dev/mapper/«name»`.
       '';
 
       type = with types; attrsOf (submodule (
@@ -563,20 +564,20 @@ in
             default = name;
             example = "luksroot";
             type = types.str;
-            description = "Name of the unencrypted device in <filename>/dev/mapper</filename>.";
+            description = lib.mdDoc "Name of the unencrypted device in {file}`/dev/mapper`.";
           };
 
           device = mkOption {
             example = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08";
             type = types.str;
-            description = "Path of the underlying encrypted block device.";
+            description = lib.mdDoc "Path of the underlying encrypted block device.";
           };
 
           header = mkOption {
             default = null;
             example = "/root/header.img";
             type = types.nullOr types.str;
-            description = ''
+            description = lib.mdDoc ''
               The name of the file or block device that
               should be used as header for the encrypted device.
             '';
@@ -586,7 +587,7 @@ in
             default = null;
             example = "/dev/sdb1";
             type = types.nullOr types.str;
-            description = ''
+            description = lib.mdDoc ''
               The name of the file (can be a raw device or a partition) that
               should be used as the decryption key for the encrypted device. If
               not specified, you will be prompted for a passphrase instead.
@@ -597,12 +598,12 @@ in
             default = null;
             example = 4096;
             type = types.nullOr types.int;
-            description = ''
+            description = lib.mdDoc ''
               The size of the key file. Use this if only the beginning of the
               key file should be used as a key (often the case if a raw device
               or partition is used as key file). If not specified, the whole
-              <literal>keyFile</literal> will be used decryption, instead of just
-              the first <literal>keyFileSize</literal> bytes.
+              `keyFile` will be used decryption, instead of just
+              the first `keyFileSize` bytes.
             '';
           };
 
@@ -610,12 +611,12 @@ in
             default = null;
             example = 4096;
             type = types.nullOr types.int;
-            description = ''
+            description = lib.mdDoc ''
               The offset of the key file. Use this in combination with
-              <literal>keyFileSize</literal> to use part of a file as key file
+              `keyFileSize` to use part of a file as key file
               (often the case if a raw device or partition is used as a key file).
               If not specified, the key begins at the first byte of
-              <literal>keyFile</literal>.
+              `keyFile`.
             '';
           };
 
@@ -623,13 +624,13 @@ in
           preLVM = mkOption {
             default = true;
             type = types.bool;
-            description = "Whether the luksOpen will be attempted before LVM scan or after it.";
+            description = lib.mdDoc "Whether the luksOpen will be attempted before LVM scan or after it.";
           };
 
           allowDiscards = mkOption {
             default = false;
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Whether to allow TRIM requests to the underlying device. This option
               has security implications; please read the LUKS documentation before
               activating it.
@@ -641,10 +642,10 @@ in
           bypassWorkqueues = mkOption {
             default = false;
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Whether to bypass dm-crypt's internal read and write workqueues.
               Enabling this should improve performance on SSDs; see
-              <link xlink:href="https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance">here</link>
+              [here](https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance)
               for more information. Needs Linux 5.9 or later.
             '';
           };
@@ -652,7 +653,7 @@ in
           fallbackToPassword = mkOption {
             default = false;
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Whether to fallback to interactive passphrase prompt if the keyfile
               cannot be found. This will prevent unattended boot should the keyfile
               go missing.
@@ -661,7 +662,7 @@ in
 
           gpgCard = mkOption {
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               The option to use this LUKS device with a GPG encrypted luks password by the GPG Smartcard.
               If null (the default), GPG-Smartcard will be disabled for this device.
             '';
@@ -671,17 +672,17 @@ in
                 gracePeriod = mkOption {
                   default = 10;
                   type = types.int;
-                  description = "Time in seconds to wait for the GPG Smartcard.";
+                  description = lib.mdDoc "Time in seconds to wait for the GPG Smartcard.";
                 };
 
                 encryptedPass = mkOption {
                   type = types.path;
-                  description = "Path to the GPG encrypted passphrase.";
+                  description = lib.mdDoc "Path to the GPG encrypted passphrase.";
                 };
 
                 publicKey = mkOption {
                   type = types.path;
-                  description = "Path to the Public Key.";
+                  description = lib.mdDoc "Path to the Public Key.";
                 };
               };
             });
@@ -692,29 +693,40 @@ in
               default = null;
               example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
               type = types.nullOr types.str;
-              description = "The FIDO2 credential ID.";
+              description = lib.mdDoc "The FIDO2 credential ID.";
+            };
+
+            credentials = mkOption {
+              default = [];
+              example = [ "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2" ];
+              type = types.listOf types.str;
+              description = lib.mdDoc ''
+                List of FIDO2 credential IDs.
+
+                Use this if you have multiple FIDO2 keys you want to use for the same luks device.
+              '';
             };
 
             gracePeriod = mkOption {
               default = 10;
               type = types.int;
-              description = "Time in seconds to wait for the FIDO2 key.";
+              description = lib.mdDoc "Time in seconds to wait for the FIDO2 key.";
             };
 
             passwordLess = mkOption {
               default = false;
               type = types.bool;
-              description = ''
+              description = lib.mdDoc ''
                 Defines whatever to use an empty string as a default salt.
 
-                Enable only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+                Enable only when your device is PIN protected, such as [Trezor](https://trezor.io/).
               '';
             };
           };
 
           yubikey = mkOption {
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               The options to use for this LUKS device in YubiKey-PBA.
               If null (the default), YubiKey-PBA will be disabled for this device.
             '';
@@ -724,37 +736,37 @@ in
                 twoFactor = mkOption {
                   default = true;
                   type = types.bool;
-                  description = "Whether to use a passphrase and a YubiKey (true), or only a YubiKey (false).";
+                  description = lib.mdDoc "Whether to use a passphrase and a YubiKey (true), or only a YubiKey (false).";
                 };
 
                 slot = mkOption {
                   default = 2;
                   type = types.int;
-                  description = "Which slot on the YubiKey to challenge.";
+                  description = lib.mdDoc "Which slot on the YubiKey to challenge.";
                 };
 
                 saltLength = mkOption {
                   default = 16;
                   type = types.int;
-                  description = "Length of the new salt in byte (64 is the effective maximum).";
+                  description = lib.mdDoc "Length of the new salt in byte (64 is the effective maximum).";
                 };
 
                 keyLength = mkOption {
                   default = 64;
                   type = types.int;
-                  description = "Length of the LUKS slot key derived with PBKDF2 in byte.";
+                  description = lib.mdDoc "Length of the LUKS slot key derived with PBKDF2 in byte.";
                 };
 
                 iterationStep = mkOption {
                   default = 0;
                   type = types.int;
-                  description = "How much the iteration count for PBKDF2 is increased at each successful authentication.";
+                  description = lib.mdDoc "How much the iteration count for PBKDF2 is increased at each successful authentication.";
                 };
 
                 gracePeriod = mkOption {
                   default = 10;
                   type = types.int;
-                  description = "Time in seconds to wait for the YubiKey.";
+                  description = lib.mdDoc "Time in seconds to wait for the YubiKey.";
                 };
 
                 /* TODO: Add to the documentation of the current module:
@@ -765,7 +777,7 @@ in
                   device = mkOption {
                     default = "/dev/sda1";
                     type = types.path;
-                    description = ''
+                    description = lib.mdDoc ''
                       An unencrypted device that will temporarily be mounted in stage-1.
                       Must contain the current salt to create the challenge for this LUKS device.
                     '';
@@ -774,13 +786,13 @@ in
                   fsType = mkOption {
                     default = "vfat";
                     type = types.str;
-                    description = "The filesystem of the unencrypted device.";
+                    description = lib.mdDoc "The filesystem of the unencrypted device.";
                   };
 
                   path = mkOption {
                     default = "/crypt-storage/default";
                     type = types.str;
-                    description = ''
+                    description = lib.mdDoc ''
                       Absolute path of the salt on the unencrypted device with
                       that device's root directory as "/".
                     '';
@@ -797,7 +809,7 @@ in
               mkdir -p /tmp/persistent
               mount -t zfs rpool/safe/persistent /tmp/persistent
             '';
-            description = ''
+            description = lib.mdDoc ''
               Commands that should be run right before we try to mount our LUKS device.
               This can be useful, if the keys needed to open the drive is on another partion.
             '';
@@ -809,7 +821,7 @@ in
             example = ''
               umount /tmp/persistent
             '';
-            description = ''
+            description = lib.mdDoc ''
               Commands that should be run right after we have mounted our LUKS device.
             '';
           };
@@ -819,7 +831,7 @@ in
             default = [];
             example = [ "_netdev" ];
             visible = false;
-            description = ''
+            description = lib.mdDoc ''
               Only used with systemd stage 1.
 
               Extra options to append to the last column of the generated crypttab file.
@@ -832,7 +844,7 @@ in
     boot.initrd.luks.gpgSupport = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Enables support for authenticating with a GPG encrypted password.
       '';
     };
@@ -840,7 +852,7 @@ in
     boot.initrd.luks.yubikeySupport = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
             Enables support for authenticating with a YubiKey on LUKS devices.
             See the NixOS wiki for information on how to properly setup a LUKS device
             and a YubiKey to work with this feature.
@@ -850,7 +862,7 @@ in
     boot.initrd.luks.fido2Support = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Enables support for authenticating with FIDO2 devices.
       '';
     };
@@ -893,9 +905,11 @@ in
         { assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
           message = "systemd stage 1 does not support GPG smartcards yet.";
         }
-        # TODO
         { assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
-          message = "systemd stage 1 does not support FIDO2 yet.";
+          message = ''
+            systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.devices.<name>.fido2`.
+            Use systemd-cryptenroll(1) to configure FIDO2 support.
+          '';
         }
         # TODO
         { assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;

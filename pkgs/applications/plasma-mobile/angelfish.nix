@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchurl
 , cmake
 , corrosion
 , extra-cmake-modules
@@ -20,8 +19,8 @@
 , srcs
 
 # These must be updated in tandem with package updates.
-, cargoShaForVersion ? "22.04"
-, cargoSha256 ? "RtdZMBKixC3mdHeFXY9u0pHyDv93Z8p4EVY+lz1aISM="
+, cargoShaForVersion ? "22.09"
+, cargoSha256 ? "sha256-uxLvAhRV185srZZ0ZMsLRevAyMmajXERPRYotMcnLJA="
 }:
 
 # Guard against incomplete updates.
@@ -52,10 +51,6 @@ mkDerivation rec {
     rust.cargo
     rust.rustc
   ]);
-
-  cmakeFlags = [
-    "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"
-  ];
 
   buildInputs = [
     kconfig

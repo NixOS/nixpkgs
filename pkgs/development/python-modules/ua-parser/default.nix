@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "0.10.0";
+  version = "0.16.1";
 
   format = "setuptools";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "uap-python";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-kaTAfUtHj2vH7i7eIU61efuB4/XVHoc/z6o3ny+sgrQ=";
+    hash = "sha256-vyzeRi/wYEyezSU+EigJATgrNvABGCWVWlSFhKGipLE=";
   };
 
   patches = [
@@ -26,10 +26,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pyyaml
   ];
-
-  preBuild = ''
-    mkdir -p build/lib/ua_parser
-  '';
 
   checkInputs = [
     pytestCheckHook

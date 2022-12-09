@@ -7,7 +7,7 @@ let
 in
 {
   options = {
-    programs.bash.enableLsColors = mkEnableOption "extra colors in directory listings" // {
+    programs.bash.enableLsColors = mkEnableOption (lib.mdDoc "extra colors in directory listings") // {
       default = true;
     };
   };

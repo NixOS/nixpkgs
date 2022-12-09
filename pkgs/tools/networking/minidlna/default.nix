@@ -1,17 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext, nixosTests }:
+{ lib, stdenv, fetchgit, autoreconfHook, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext, nixosTests, zlib }:
 
 let
   pname = "minidlna";
-  version = "1.3.1";
+  version = "1.3.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  # tarball for 1.3.1 is missing
   src = fetchgit {
     url = "https://git.code.sf.net/p/${pname}/git";
     rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-nbvz/QHSZBTZEqX/utOoOF5vorhrxGqIBA9qfpIZzyU=";
+    hash = "sha256-v+puglrbuLqHIAbrO7bhOA0npc/GYp0Bdi3DnD9qyII=";
   };
 
   preConfigure = ''
@@ -20,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
+  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext zlib ];
 
   postInstall = ''
     mkdir -p $out/share/man/man{5,8}

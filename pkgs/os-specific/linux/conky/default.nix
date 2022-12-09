@@ -15,7 +15,7 @@
                             , docbook_xsl ? null , docbook_xml_dtd_44 ? null
 
 , ncursesSupport      ? true      , ncurses       ? null
-, x11Support          ? true      , xlibsWrapper           ? null
+, x11Support          ? true      , freetype, xorg
 , xdamageSupport      ? x11Support, libXdamage    ? null
 , doubleBufferSupport ? x11Support
 , imlib2Support       ? x11Support, imlib2        ? null
@@ -43,7 +43,6 @@ assert docsSupport         -> docbook2x != null && libxslt != null
 
 assert ncursesSupport      -> ncurses != null;
 
-assert x11Support          -> xlibsWrapper != null;
 assert xdamageSupport      -> x11Support && libXdamage != null;
 assert imlib2Support       -> x11Support && imlib2     != null;
 assert luaSupport          -> lua != null;
@@ -68,13 +67,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.12.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "sha256-x6bR5E5LIvKWiVM15IEoUgGas/hcRp3F/O4MTOhVPb8=";
+    sha256 = "sha256-3eCRzjfHGFiKuxmRHvnzqAg/+ApUKnHhsumWnio/Qxg=";
   };
 
   postPatch = ''
@@ -95,7 +94,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libXinerama ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
-    ++ optional  x11Support         xlibsWrapper
+    ++ optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
     ++ optional  xdamageSupport     libXdamage
     ++ optional  imlib2Support      imlib2
     ++ optional  luaSupport         lua

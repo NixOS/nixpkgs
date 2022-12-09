@@ -68,7 +68,7 @@ buildPythonPackage rec {
     # Requires network access
     "test_service"
     "testGuessFormatForParse"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # Require loopback network access
     "TestGraphHTTP"
   ];

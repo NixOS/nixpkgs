@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , installShellFiles
 , pbr
@@ -18,19 +18,16 @@
 , python-keystoneclient
 , debtcollector
 , callPackage
-, pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "3.4.0";
+  version = "4.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F41/k7NJigwFNw2946sj3dZDKDH+PkgOjkml9t3Mgtw=";
+    hash = "sha256-Hf/U3LFcIsT00lIzvvZaowfMth/zj5WY6UAxYWjC1JA=";
   };
 
   nativeBuildInputs = [

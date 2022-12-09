@@ -19,12 +19,12 @@ in
   options.hardware.logitech = {
 
     lcd = {
-      enable = mkEnableOption "Logitech LCD Devices";
+      enable = mkEnableOption (lib.mdDoc "Logitech LCD Devices");
 
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Only run the service when an actual supported device is plugged.
         '';
       };
@@ -32,22 +32,21 @@ in
       devices = mkOption {
         type = types.listOf types.str;
         default = [ "0a07" "c222" "c225" "c227" "c251" ];
-        description = ''
+        description = lib.mdDoc ''
           List of USB device ids supported by g15daemon.
-          </para>
-          <para>
+
           You most likely do not need to change this.
         '';
       };
     };
 
     wireless = {
-      enable = mkEnableOption "Logitech Wireless Devices";
+      enable = mkEnableOption (lib.mdDoc "Logitech Wireless Devices");
 
       enableGraphical = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable graphical support applications.";
+        description = lib.mdDoc "Enable graphical support applications.";
       };
     };
   };

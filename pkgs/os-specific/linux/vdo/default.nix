@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.1.1.360";  # kvdo uses this!
+  version = "8.2.0.2";  # kvdo uses this!
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = pname;
     rev = version;
-    sha256 = "1zp8aaw0diramnlx5z96jcpbm6x0r204xf1vwq6k21rzcazczkwv";
+    hash = "sha256-IP/nL4jQ+rIWuUxXUiBtlIKTMZCNelvxgTfTcaB1it0=";
   };
 
   nativeBuildInputs = [

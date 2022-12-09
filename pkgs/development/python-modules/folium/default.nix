@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , branca
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-4UseN/3ojZdDUopwZLpHZEBon1qDDvCWfdzxodi/BeA=";
   };
+
+  patches = [
+    # Fix test failures with latest branca
+    (fetchpatch {
+      url = "https://github.com/python-visualization/folium/commit/b410ab21cc46ec6756c2f755e5e81dcdca029c53.patch";
+      hash = "sha256-SVN4wKEep+VnAKnkJTf59rhnzHnbk6dV9XL5ntv4bog=";
+    })
+  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 

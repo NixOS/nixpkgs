@@ -8,11 +8,17 @@
 , pygments
 , typing-extensions
 , pytestCheckHook
+
+# for passthru.tests
+, enrich
+, httpie
+, rich-rst
+, textual
 }:
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.4.4";
+  version = "12.6.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -20,7 +26,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DW6cKJ5bXZdHGzgbYzTS+ryjy71dU9Lcy+egMXL30F8=";
+    hash = "sha256-g3tXftEoBCJ1pMdLyDBXQvY9haGMQkuY1/UBOtUqrLE=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -28,9 +34,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     pygments
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
-  ] ++ lib.optional (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
@@ -40,10 +46,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rich" ];
 
+  passthru.tests = {
+    inherit enrich httpie rich-rst textual;
+  };
+
   meta = with lib; {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ ris jyooru ];
   };
 }

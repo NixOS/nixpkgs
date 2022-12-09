@@ -17,8 +17,8 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to install SpaceFM and create <filename>/etc/spacefm/spacefm.conf</filename>.
+        description = lib.mdDoc ''
+          Whether to install SpaceFM and create {file}`/etc/spacefm/spacefm.conf`.
         '';
       };
 
@@ -34,10 +34,10 @@ in
             terminal_su = "''${pkgs.sudo}/bin/sudo";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           The system-wide spacefm configuration.
-          Parameters to be written to <filename>/etc/spacefm/spacefm.conf</filename>.
-          Refer to the <link xlink:href="https://ignorantguru.github.io/spacefm/spacefm-manual-en.html#programfiles-etc">relevant entry</link> in the SpaceFM manual.
+          Parameters to be written to {file}`/etc/spacefm/spacefm.conf`.
+          Refer to the [relevant entry](https://ignorantguru.github.io/spacefm/spacefm-manual-en.html#programfiles-etc) in the SpaceFM manual.
         '';
       };
 

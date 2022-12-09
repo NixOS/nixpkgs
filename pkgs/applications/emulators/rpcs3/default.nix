@@ -9,10 +9,10 @@
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "13388-4a86638ce";
-  rpcs3Version = "0.0.21-13388-4a86638ce";
-  rpcs3Revision = "4a86638ce898e3bd68ade8e7ba794253782ea411";
-  rpcs3Sha256 = "0bc1n0jy4a869mn1g5i008vb5m2a6qfhyf7lw0d0jiljgsppiys1";
+  rpcs3GitVersion = "14358-a00f9e421";
+  rpcs3Version = "0.0.25-14358-a00f9e421";
+  rpcs3Revision = "a00f9e42115527aa9654870f194cf2c64329f2ef";
+  rpcs3Sha256 = "0avajihbs02nbfqs4kzgckl0v2z4z8h8fgcjs5m4zxvkgj5701nv";
 
   ittapi = fetchFromGitHub {
     owner = "intel";
@@ -69,6 +69,13 @@ gcc11Stdenv.mkDerivation {
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional waylandSupport wayland;
+
+  postInstall = ''
+    # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration
+    install -D ${./99-ds3-controllers.rules} $out/etc/udev/rules.d/99-ds3-controllers.rules
+    install -D ${./99-ds4-controllers.rules} $out/etc/udev/rules.d/99-ds4-controllers.rules
+    install -D ${./99-dualsense-controllers.rules} $out/etc/udev/rules.d/99-dualsense-controllers.rules
+  '';
 
   meta = with lib; {
     description = "PS3 emulator/debugger";

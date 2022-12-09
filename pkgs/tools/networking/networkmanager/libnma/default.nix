@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , gettext
 , gtk-doc
@@ -18,7 +19,7 @@
 , withGtk4 ? false
 , gtk4
 , withGnome ? true
-, gcr
+, gcr_4
 , glib
 , substituteAll
 , lib
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.38";
+  version = "1.10.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Xtk+rhhFb/WopPQIF4we4ZjcjTpGxl+QdbEBkW5k6LQ=";
+    sha256 = "eecw3aGfmzSIb0BkqhcPGiMmsIMp1lXYC2fpBsf3i3w=";
   };
 
   patches = [
@@ -51,6 +52,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     libxml2
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
     gtk4
   ] ++ lib.optionals withGnome [
     # advanced certificate chooser
-    gcr
+    gcr_4
   ];
 
   mesonFlags = [
@@ -72,7 +75,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nma-ws/nma-eap.c --subst-var-by \
-      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "$name"}
   '';
 
   postInstall = ''

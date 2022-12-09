@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , requests
+, setuptools
 , six
 , stone
 , mock
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.31.0";
+  version = "11.35.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,11 +24,12 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mbBVivrpXYNuVbXeHRyy07LxPbtYvaL3JleK7QXOxi0=";
+    hash = "sha256-vrOqsRe2sBsL5CIfGCmoO3geE9G0FJl88HRcP6FzZe0=";
   };
 
   propagatedBuildInputs = [
     requests
+    setuptools
     six
     stone
   ];
@@ -75,6 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
+    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
   };

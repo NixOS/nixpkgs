@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, soapysdr, sdrplay }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "soapysdr-sdrplay3";
-  version = "unstable-2021-04-25";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDRPlay3";
-    rev = "e6fdb719b611b1dfb7f26c56a4df1e241bd10129";
-    sha256 = "0rrylp3ikrva227hjy60v4n6d6yvdavjsad9kszw9s948mwiashi";
+    rev = "soapy-sdrplay3-${version}";
+    sha256 = "sha256-WMcAw0uR2o2SrQR4mBtdVEZlJ/ZXRqwo6zMJNsB/5U4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

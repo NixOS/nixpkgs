@@ -10,7 +10,7 @@
 
 let
   pname = "setuptools";
-  version = "61.2.0";
+  version = "65.3.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -19,8 +19,8 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
-      rev = "v${version}";
-      hash = "sha256-Cgz3uA8U7A1lOZNuj1EYZVViZ3aL6VjcAno8GYQUufk=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-LPguGVWvwEMZpJFuXWLVFzIlzw+/QSMjVi2oYh0cI0s=";
       name = "${pname}-${version}-source";
     };
 
@@ -77,5 +77,6 @@ in buildPythonPackage rec {
     license = with licenses; [ psfl zpl20 ];
     platforms = python.meta.platforms;
     priority = 10;
+    maintainers = teams.python.members;
   };
 }

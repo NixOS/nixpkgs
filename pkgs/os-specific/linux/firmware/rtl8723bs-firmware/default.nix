@@ -1,6 +1,6 @@
-{ lib, stdenv, linuxPackages }:
+{ lib, stdenvNoCC, linuxPackages }:
 with lib;
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "rtl8723bs-firmware";
   version = linuxPackages.rtl8723bs.version;
   inherit (linuxPackages.rtl8723bs) src;

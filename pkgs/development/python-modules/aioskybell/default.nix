@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aioskybell";
-  version = "22.6.1";
+  version = "22.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tkdrob";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VaG8r4ULbjI7LkIPCit3bILZgOi9k7ddRQXwVzplaCM=";
+    hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
   };
 
   propagatedBuildInputs = [

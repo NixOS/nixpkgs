@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
-  version = "5-0-706-0";
+  version = "5-0-745-0";
 
   srcIcon = fetchurl {
     url = "http://static.geogebra.org/images/geogebra-logo.svg";
-    sha256 = "01sy7ggfvck350hwv0cla9ynrvghvssqm3c59x4q5lwsxjsxdpjm";
+    hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
   };
 
   desktopItem = makeDesktopItem {
@@ -29,6 +29,10 @@ let
     homepage = "https://www.geogebra.org/";
     maintainers = with maintainers; [ sikmir imsofi ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode  # some jars include native binaries
+    ];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];
   };
@@ -41,9 +45,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-        "https://web.archive.org/web/20220516130744/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "https://web.archive.org/web/20221126102702/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       ];
-      sha256 = "d18f3d20baff693606331f035fa4bf73e7418d28090f038054da98444b06f69b";
+      hash = "sha256-DhZ9inK/6Cc/vunYNHhyP4tI/9/toUOgV4lZWmFIj3c=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -72,9 +76,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
-        "https://web.archive.org/web/20220516132502/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+        "https://web.archive.org/web/20221126102602/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
       ];
-      sha256 = "0070ec8d8d5f79c921b5d7433048c2c114ec4b812d839bb04e67848fce24ee0a";
+      hash = "sha256-La7NzEoao4ExUw3mBGstvSHm94/JM5LHlhOE9ewJePY=";
     };
 
     dontUnpack = true;

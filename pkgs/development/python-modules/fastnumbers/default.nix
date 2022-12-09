@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   # Tests fail due to numeric precision differences on ARM
   # See https://github.com/SethMMorton/fastnumbers/issues/28
-  doCheck = !(stdenv.isAarch64 || stdenv.isAarch32);
+  doCheck = !stdenv.hostPlatform.isAarch;
 
   checkInputs = [
     hypothesis

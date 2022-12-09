@@ -120,7 +120,6 @@ to set one. The recommended configuration for modern systems is:
 
 ```nix
 services.xserver.videoDrivers = [ "modesetting" ];
-services.xserver.useGlamor = true;
 ```
 
 If you experience screen tearing no matter what, this configuration was

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mbacarella/curses";
     license = licenses.lgpl21Plus;
     changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
     inherit (ocaml.meta) platforms;
   };
 }

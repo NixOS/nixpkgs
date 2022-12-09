@@ -8,7 +8,7 @@ let
   routingFile = pkgs.writeText "mighty-routing" cfg.routing;
 in {
   options.services.mighttpd2 = {
-    enable = mkEnableOption "Mighttpd2 web server";
+    enable = mkEnableOption (lib.mdDoc "Mighttpd2 web server");
 
     config = mkOption {
       default = "";
@@ -42,7 +42,7 @@ in {
         Service: 0 # 0 is HTTP only, 1 is HTTPS only, 2 is both
       '';
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Verbatim config file to use
         (see http://www.mew.org/~kazu/proj/mighttpd/en/config.html)
       '';
@@ -76,7 +76,7 @@ in {
         /                -> /export/www/
       '';
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Verbatim routing file to use
         (see http://www.mew.org/~kazu/proj/mighttpd/en/config.html)
       '';
@@ -85,7 +85,7 @@ in {
     cores = mkOption {
       default = null;
       type = types.nullOr types.int;
-      description = ''
+      description = lib.mdDoc ''
         How many cores to use.
         If null it will be determined automatically
       '';

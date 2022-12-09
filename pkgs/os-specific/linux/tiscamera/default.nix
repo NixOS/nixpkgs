@@ -3,86 +3,111 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, pcre
-, tinyxml
+, runtimeShell
+, catch2
+, elfutils
+, libselinux
+, libsepol
+, libunwind
 , libusb1
+, libuuid
 , libzip
+, orc
+, pcre
+, zstd
 , glib
 , gobject-introspection
 , gst_all_1
-, libwebcam
-, libunwind
-, elfutils
-, orc
-, python3Packages
-, libuuid
 , wrapGAppsHook
-, catch2
+, withDoc ? true
+, sphinx
+, graphviz
+, withAravis ? true
+, aravis
+, meson
+, withAravisUsbVision ? withAravis
+, withGui ? true
+, qt5
 }:
 
 stdenv.mkDerivation rec {
   pname = "tiscamera";
-  version = "0.13.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = pname;
     rev = "v-${pname}-${version}";
-    sha256 = "0hpy9yhc4mn6w8gvzwif703smmcys0j2jqbz2xfghqxcyb0ykplj";
+    sha256 = "0msz33wvqrji11kszdswcvljqnjflmjpk0aqzmsv6i855y8xn6cd";
   };
+
+  patches = [
+    ./0001-tcamconvert-tcamsrc-add-missing-include-lib-dirs.patch
+    ./0001-udev-rules-fix-install-location.patch
+    ./0001-cmake-find-aravis-fix-pkg-cfg-include-dirs.patch
+  ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
+
+    substituteInPlace ./data/udev/80-theimagingsource-cameras.rules.in \
+      --replace "/bin/sh" "${runtimeShell}/bin/sh" \
+      --replace "typically /usr/bin/" "" \
+      --replace "typically /usr/share/theimagingsource/tiscamera/uvc-extension/" ""
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3Packages.wrapPython
     wrapGAppsHook
+  ] ++ lib.optionals withDoc [
+    sphinx
+    graphviz
+  ] ++ lib.optionals withAravis [
+    meson
+  ] ++ lib.optionals withGui [
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    pcre
-    tinyxml
+    elfutils
+    libselinux
+    libsepol
+    libunwind
     libusb1
+    libuuid
     libzip
+    orc
+    pcre
+    zstd
     glib
     gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    libwebcam
-    libunwind
-    elfutils
-    orc
-    libuuid
-    python3Packages.python
-    python3Packages.pyqt5
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+  ] ++ lib.optionals withAravis [
+    aravis
+  ] ++ lib.optionals withGui [
+    qt5.qtbase
   ];
 
-  pythonPath = with python3Packages; [ pyqt5 pygobject3 ];
-
-  propagatedBuildInputs = pythonPath;
+  hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DBUILD_ARAVIS=OFF" # For GigE support. Won't need it as our camera is usb.
-    "-DBUILD_GST_1_0=ON"
-    "-DBUILD_TOOLS=ON"
-    "-DBUILD_V4L2=ON"
-    "-DBUILD_LIBUSB=ON"
-    "-DBUILD_TESTS=ON"
-    "-DTCAM_INSTALL_UDEV=${placeholder "out"}/lib/udev/rules.d"
-    "-DTCAM_INSTALL_UVCDYNCTRL=${placeholder "out"}/share/uvcdynctrl/data/199e"
-    "-DTCAM_INSTALL_GST_1_0=${placeholder "out"}/lib/gstreamer-1.0"
-    "-DTCAM_INSTALL_GIR=${placeholder "out"}/share/gir-1.0"
-    "-DTCAM_INSTALL_TYPELIB=${placeholder "out"}/lib/girepository-1.0"
-    "-DTCAM_INSTALL_SYSTEMD=${placeholder "out"}/etc/systemd/system"
-    "-DTCAM_INSTALL_PYTHON3_MODULES=${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
-    "-DGSTREAMER_1.0_INCLUDEDIR=${placeholder "out"}/include/gstreamer-1.0"
-    # There are gobject introspection commands launched as part of the build. Those have a runtime
-    # dependency on `libtcam` (which itself is built as part of this build). In order to allow
-    # that, we set the dynamic linker's path to point on the build time location of the library.
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DTCAM_BUILD_GST_1_0=ON"
+    "-DTCAM_BUILD_TOOLS=ON"
+    "-DTCAM_BUILD_V4L2=ON"
+    "-DTCAM_BUILD_LIBUSB=ON"
+    "-DTCAM_BUILD_TESTS=ON"
+    "-DTCAM_BUILD_ARAVIS=${if withAravis then "ON" else "OFF"}"
+    "-DTCAM_BUILD_DOCUMENTATION=${if withDoc then "ON" else "OFF"}"
+    "-DTCAM_BUILD_WITH_GUI=${if withGui then "ON" else "OFF"}"
+    "-DTCAM_DOWNLOAD_MESON=OFF"
+    "-DTCAM_INTERNAL_ARAVIS=OFF"
+    "-DTCAM_ARAVIS_USB_VISION=${if withAravis && withAravisUsbVision then "ON" else "OFF"}"
+    "-DTCAM_INSTALL_FORCE_PREFIX=ON"
   ];
 
   doCheck = true;
@@ -90,8 +115,17 @@ stdenv.mkDerivation rec {
   # gstreamer tests requires, besides gst-plugins-bad, plugins installed by this expression.
   checkPhase = "ctest --force-new-ctest-process -E gstreamer";
 
-  postFixup = ''
-    wrapPythonPrograms "$out $pythonPath"
+  # wrapGAppsHook: make sure we add ourselves to the introspection
+  # and gstreamer paths.
+  GI_TYPELIB_PATH = "${placeholder "out"}/lib/girepository-1.0";
+  GST_PLUGIN_SYSTEM_PATH_1_0 = "${placeholder "out"}/lib/gstreamer-1.0";
+
+  QT_PLUGIN_PATH = lib.optionalString withGui "${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}";
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

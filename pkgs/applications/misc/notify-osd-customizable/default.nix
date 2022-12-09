@@ -24,11 +24,10 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --libexecdir=$(out)/bin";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper libtool ];
   buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
+    glib libwnck libnotify dbus-glib
     gsettings-desktop-schemas gnome.gnome-common
-    libtool
   ];
 
   configureFlags = [ "--libexecdir=$(out)/bin" ];

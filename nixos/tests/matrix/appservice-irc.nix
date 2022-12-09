@@ -193,6 +193,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
 
     testScript = ''
       import pathlib
+      import os
 
       start_all()
 
@@ -206,7 +207,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
       with subtest("copy the registration file"):
           appservice.copy_from_vm("/var/lib/matrix-appservice-irc/registration.yml")
           homeserver.copy_from_host(
-              pathlib.Path(os.environ.get("out", os.getcwd())) / "registration.yml", "/"
+              str(pathlib.Path(os.environ.get("out", os.getcwd())) / "registration.yml"), "/"
           )
           homeserver.succeed("chmod 444 /registration.yml")
 

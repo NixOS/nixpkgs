@@ -9,6 +9,7 @@
 , numpy
 , six
 , termcolor
+, packaging
 , protobuf
 , absl-py
 , grpcio
@@ -48,9 +49,6 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
-  # See https://github.com/tensorflow/tensorflow/issues/55581#issuecomment-1101890383
-  disabled = pythonAtLeast "3.10" && !cudaSupport;
-
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
     platform = if stdenv.isDarwin then "mac" else "linux";
@@ -62,6 +60,7 @@ in buildPythonPackage {
     astunparse
     flatbuffers
     typing-extensions
+    packaging
     protobuf
     numpy
     scipy
@@ -83,7 +82,7 @@ in buildPythonPackage {
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = [ wheel ] ++ lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -93,21 +92,27 @@ in buildPythonPackage {
 
     pushd dist
 
+    orig_name="$(echo ./*.whl)"
     wheel unpack --dest unpacked ./*.whl
     rm ./*.whl
     (
       cd unpacked/tensorflow*
       # Adjust dependency requirements:
-      # - Relax tensorflow-estimator version requirement that doesn't match what we have packaged
+      # - Relax flatbuffers, gast, protobuf, tensorboard, and tensorflow-estimator version requirements that don't match what we have packaged
       # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
       # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
       sed -i *.dist-info/METADATA \
-        -e "s/Requires-Dist: tf-estimator-nightly.*/Requires-Dist: tensorflow-estimator/" \
-        -e "/Requires-Dist: libclang/d" \
+        -e "/Requires-Dist: flatbuffers/d" \
+        -e "/Requires-Dist: gast/d" \
         -e "/Requires-Dist: keras/d" \
+        -e "/Requires-Dist: libclang/d" \
+        -e "/Requires-Dist: protobuf/d" \
+        -e "/Requires-Dist: tensorboard/d" \
+        -e "/Requires-Dist: tensorflow-estimator/d" \
         -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
     )
     wheel pack ./unpacked/tensorflow*
+    mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
 
     popd
   '';
@@ -187,9 +192,9 @@ in buildPythonPackage {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

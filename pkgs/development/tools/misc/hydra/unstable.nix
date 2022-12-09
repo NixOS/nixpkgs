@@ -46,7 +46,6 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
@@ -84,6 +83,7 @@ let
         DigestSHA1
         EmailMIME
         EmailSender
+        FileLibMagic
         FileSlurper
         FileWhich
         IOCompress
@@ -126,16 +126,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-05-03";
+  version = "2022-11-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "7c133a98f8e689cdc13f8a1adaaa9cd75d039a35";
-    sha256 = "sha256-LqBLIXYssvDoSp2Hf2+vDDB9O8VSF48HAGwL8pI2WZY=";
+    rev = "14d4624dc20956ec9ff54882e70c5c0bc377921a";
+    sha256 = "sha256-xY3CDFjLG3po2tdaTZToqZmLCQnSwsUqAn8sIXFrybw=";
   };
-
-  patches = [ ./eval.patch ];
 
   buildInputs =
     [
@@ -210,6 +208,12 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    # Change 5s timeout for init to 30s
+    substituteInPlace t/lib/HydraTestContext.pm \
+      --replace 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
+  '';
 
   preCheck = ''
     patchShebangs .

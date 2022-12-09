@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, xapian, perl, pcre, zlib, libmagic }:
+{ lib, stdenv, fetchurl, pkg-config, xapian, perl, pcre2, zlib, libmagic }:
 
 stdenv.mkDerivation rec {
   pname = "xapian-omega";
@@ -6,15 +6,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-omega-${version}.tar.xz";
-    sha256 = "0zji8ckp4h5xdy2wbir3lvk680w1g1l4h5swmaxsx7ah12lkrjcr";
+    hash = "sha256-iKETxVmPyVgz4SEscL5GOrudVgFWTSG4YWNvc3lVqtU=";
   };
 
-  buildInputs = [ xapian perl pcre zlib libmagic ];
+  buildInputs = [ xapian perl pcre2 zlib libmagic ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "Indexer and CGI search front-end built on Xapian library";
     homepage = "https://xapian.org/";
+    changelog = "https://xapian.org/docs/xapian-omega-${version}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

@@ -6,11 +6,13 @@
 , matplotlib
 , numpy
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dufte";
   version = "0.2.29";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -19,7 +21,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256:0ccsmpj160xj6w503a948aw8icj55mw9414xnmijmmjvlwhm0p48";
   };
-  format = "pyproject";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     matplotlib

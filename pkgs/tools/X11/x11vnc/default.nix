@@ -51,10 +51,6 @@ stdenv.mkDerivation rec {
     sed -i -e '/^\tXdummy.c\ \\$/,$d' -e 's/\tx11vnc_loop\ \\/\tx11vnc_loop/' misc/Makefile.am
   '';
 
-  preConfigure = ''
-    configureFlags="--mandir=$out/share/man"
-  '';
-
   meta = with lib; {
     description = "A VNC server connected to a real X11 screen";
     homepage = "https://github.com/LibVNC/x11vnc/";

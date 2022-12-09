@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2022.1.1";
+  version = "2022.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2zvdZkI8nSkHTBwsSfyyJL0Nbwgxn+0bTn6taDkUCD8=";
+    hash = "sha256-WOg62p4Z/+ksH9x4rlRY75GuuJKluPDnN55vph4OZko=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A full-screen, console-based Python debugger";
     homepage = "https://github.com/inducer/pudb";
+    changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

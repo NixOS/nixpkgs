@@ -86,5 +86,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/romkatv/gitstatus";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
+    platforms = platforms.all;
   };
 }

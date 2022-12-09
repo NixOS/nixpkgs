@@ -1,28 +1,31 @@
-{ buildGoPackage
-, lib
+{ lib
+, buildGoModule
 , fetchFromGitHub
+, go
 }:
 
-buildGoPackage rec {
-  pname = "ineffassign-unstable";
-  version = "2018-09-09";
-  rev = "1003c8bd00dc2869cb5ca5282e6ce33834fed514";
-
-  goPackagePath = "github.com/gordonklaus/ineffassign";
+buildGoModule rec {
+  pname = "ineffassign";
+  version = "unstable-2021-09-04";
+  rev = "4cc7213b9bc8b868b2990c372f6fa057fa88b91c";
 
   src = fetchFromGitHub {
-    inherit rev;
-
     owner = "gordonklaus";
     repo = "ineffassign";
-    sha256 = "1rkzqvd3z03vq8q8qi9cghvgggsf02ammj9wq8jvpnx6b2sd16nd";
+    inherit rev;
+    sha256 = "sha256-XLXANN9TOmrNOixWtlqnIC27u+0TW2P3s9MyeyVUcAQ=";
   };
+
+  vendorSha256 = "sha256-QTgWicN2m2ughtLsEBMaQWfpDbmbL0nS5qaIKF3mTJM=";
+
+  allowGoReference = true;
+
+  checkInputs = [ go ];
 
   meta = with lib; {
     description = "Detect ineffectual assignments in Go code";
     homepage = "https://github.com/gordonklaus/ineffassign";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

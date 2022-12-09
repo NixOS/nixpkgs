@@ -78,6 +78,8 @@ let
           gnueabihf = lib.systems.parse.abis.musleabihf;
           gnuabin32 = lib.systems.parse.abis.muslabin32;
           gnuabi64 = lib.systems.parse.abis.muslabi64;
+          gnuabielfv2 = lib.systems.parse.abis.musl;
+          gnuabielfv1 = lib.systems.parse.abis.musl;
           # The following two entries ensure that this function is idempotent.
           musleabi = lib.systems.parse.abis.musleabi;
           musleabihf = lib.systems.parse.abis.musleabihf;
@@ -229,6 +231,18 @@ let
         };
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
+
+    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsx86_64Darwin = super';
+      })] ++ overlays;
+      localSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          cpu = lib.systems.parse.cpuTypes.x86_64;
+        };
+      };
+    } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays

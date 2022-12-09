@@ -1,6 +1,7 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchFromGitHub, pkg-config, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, m4, jansson, gtk2, dbus, gtk3
+, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -43,20 +44,22 @@ in
 stdenv.mkDerivation {
   pname = "nvidia-settings";
   version = nvidia_x11.settingsVersion;
+
   inherit src;
 
-  nativeBuildInputs = [ pkg-config m4 ];
-
-  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
-             ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
-
-  enableParallelBuilding = true;
-  makeFlags = nvidia_x11.makeFlags ++ [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
-  installFlags = [ "PREFIX=$(out)" ];
+  patches = lib.optional (lib.versionOlder nvidia_x11.settingsVersion "440")
+    (fetchpatch {
+      # fixes "multiple definition of `VDPAUDeviceFunctions'" linking errors
+      url = "https://github.com/NVIDIA/nvidia-settings/commit/a7c1f5fce6303a643fadff7d85d59934bd0cf6b6.patch";
+      hash = "sha256-ZwF3dRTYt/hO8ELg9weoz1U/XcU93qiJL2d1aq1Jlak=";
+    });
 
   postPatch = lib.optionalString nvidia_x11.useProfiles ''
     sed -i 's,/usr/share/nvidia/,${nvidia_x11.bin}/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
   '';
+
+  enableParallelBuilding = true;
+  makeFlags = nvidia_x11.makeFlags ++ [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
 
   preBuild = ''
     if [ -e src/libXNVCtrl/libXNVCtrl.a ]; then
@@ -65,6 +68,13 @@ stdenv.mkDerivation {
       )
     fi
   '';
+
+  nativeBuildInputs = [ pkg-config m4 ];
+
+  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
+             ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     ${lib.optionalString (!withGtk2) ''
@@ -87,7 +97,6 @@ stdenv.mkDerivation {
   '';
 
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
-
   postFixup = ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
       $out/bin/$binaryName

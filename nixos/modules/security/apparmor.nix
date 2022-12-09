@@ -7,7 +7,7 @@ let
   inherit (lib) types;
   inherit (config.environment) etc;
   cfg = config.security.apparmor;
-  mkDisableOption = name: mkEnableOption name // {
+  mkDisableOption = name: mkEnableOption (lib.mdDoc name) // {
     default = true;
     example = false;
   };
@@ -24,7 +24,7 @@ in
 
   options = {
     security.apparmor = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         the AppArmor Mandatory Access Control system.
 
         If you're enabling this module on a running system,
@@ -38,11 +38,11 @@ in
         introducing for the first time an AppArmor profile for the executable
         of a running process.
 
-        Enable <xref linkend="opt-security.apparmor.killUnconfinedConfinables"/>
+        Enable [](#opt-security.apparmor.killUnconfinedConfinables)
         if you want this service to do such killing
-        by sending a <literal>SIGTERM</literal> to those running processes'';
+        by sending a `SIGTERM` to those running processes'');
       policies = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           AppArmor policies.
         '';
         type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -50,7 +50,7 @@ in
             enable = mkDisableOption "loading of the profile into the kernel";
             enforce = mkDisableOption "enforcing of the policy or only complain in the logs";
             profile = mkOption {
-              description = "The policy of the profile.";
+              description = lib.mdDoc "The policy of the profile.";
               type = types.lines;
               apply = pkgs.writeText name;
             };
@@ -61,34 +61,34 @@ in
       includes = mkOption {
         type = types.attrsOf types.lines;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           List of paths to be added to AppArmor's searched paths
-          when resolving <literal>include</literal> directives.
+          when resolving `include` directives.
         '';
         apply = mapAttrs pkgs.writeText;
       };
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = "List of packages to be added to AppArmor's include path";
+        description = lib.mdDoc "List of packages to be added to AppArmor's include path";
       };
-      enableCache = mkEnableOption ''
+      enableCache = mkEnableOption (lib.mdDoc ''
         caching of AppArmor policies
-        in <literal>/var/cache/apparmor/</literal>.
+        in `/var/cache/apparmor/`.
 
         Beware that AppArmor policies almost always contain Nix store paths,
         and thus produce at each change of these paths
-        a new cached version accumulating in the cache'';
-      killUnconfinedConfinables = mkEnableOption ''
+        a new cached version accumulating in the cache'');
+      killUnconfinedConfinables = mkEnableOption (lib.mdDoc ''
         killing of processes which have an AppArmor profile enabled
-        (in <xref linkend="opt-security.apparmor.policies"/>)
+        (in [](#opt-security.apparmor.policies))
         but are not confined (because AppArmor can only confine new processes).
 
-        This is only sending a gracious <literal>SIGTERM</literal> signal to the processes,
-        not a <literal>SIGKILL</literal>.
+        This is only sending a gracious `SIGTERM` signal to the processes,
+        not a `SIGKILL`.
 
         Beware that due to a current limitation of AppArmor,
-        only profiles with exact paths (and no name) can enable such kills'';
+        only profiles with exact paths (and no name) can enable such kills'');
     };
   };
 

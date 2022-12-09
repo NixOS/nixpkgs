@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.20.17";
+  version = "0.21.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";
-    rev = "v${version}";
-    hash = "sha256-5YGMBoykMtXZgdHubQJKwRqntDPnR6/qsWJc1cYk8CA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gQow1bNRPhUm4zRu2T5FpcgOTcS2F1TQIz8WP1K0Xww=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/rigetti/qcs-api-client-python/commit/32f0b3c7070a65f4edf5b2552648d88435469e44.patch";
-      sha256 = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
+      hash = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
     })
   ];
 

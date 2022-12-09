@@ -25,12 +25,9 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   checkInputs = with python3Packages; [
+    unittestCheckHook
     pytz
   ];
-
-  checkPhase = ''
-    ${python3Packages.python.interpreter} -m unittest discover
-  '';
 
   meta = {
     description = "XMPP Web hook for Prometheus";

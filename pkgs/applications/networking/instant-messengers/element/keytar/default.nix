@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage, removeReferencesTo
+{ lib, stdenv, fetchFromGitHub, nodejs, python3, callPackage, removeReferencesTo
 , fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit, fetchYarnDeps }:
 
 let
@@ -15,12 +15,12 @@ in stdenv.mkDerivation rec {
     sha256 = pinData.srcHash;
   };
 
-  nativeBuildInputs = [ nodejs-14_x python3 yarn pkg-config ]
+  nativeBuildInputs = [ nodejs python3 yarn pkg-config ]
     ++ lib.optional  stdenv.isDarwin xcbuild;
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
 
-  npm_config_nodedir = nodejs-14_x;
+  npm_config_nodedir = nodejs;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
     mkdir -p $HOME
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
     ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/

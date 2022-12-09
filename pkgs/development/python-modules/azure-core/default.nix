@@ -1,9 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchpatch, fetchPypi, pythonOlder
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , aiodns
 , aiohttp
 , flask
 , mock
-, msrest
 , pytest
 , pytest-asyncio
 , pytest-trio
@@ -11,29 +14,18 @@
 , requests
 , six
 , trio
-, typing-extensions
-}:
+, typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.24.0";
+  version = "1.25.1";
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-NFsbBB+q19AgWyDVaX8dDfNEMC56qoUBkFWA/4e9C+U=";
+    sha256 = "sha256-PBzzaGUOduwAnAfNEXSpXNy0cbJHu3LRgkX31WwYCbI=";
   };
-
-  patches = [
-    # FIXME: fixes tests with new versions of flask/werkzeug
-    # upstream PR: https://github.com/Azure/azure-sdk-for-python/pull/24450
-    (fetchpatch {
-      url = "https://github.com/Azure/azure-sdk-for-python/commit/fb20b0b985f614bb7bcd84f3f5f6f3105de25fd9.patch";
-      stripLen = 3;
-      sha256 = "sha256-Gt5T/UkQT1yml8bqYbeUpimfOPlmzpN1KKKUnbU9xJw=";
-    })
-  ];
 
   propagatedBuildInputs = [
     requests
@@ -46,7 +38,6 @@ buildPythonPackage rec {
     aiohttp
     flask
     mock
-    msrest
     pytest
     pytest-trio
     pytest-asyncio
@@ -72,7 +63,7 @@ buildPythonPackage rec {
   # disable 8 tests failing on some darwin machines with errors:
   # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
   # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "location_polling_fail"
   ];
   disabledTestPaths = [
@@ -83,6 +74,13 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
+    # needs msrest, which cannot be included in checkInputs due to circular dependency new in msrest 0.7.1
+    # azure-core needs msrest which needs azure-core
+    "tests/test_polling.py"
+    "tests/async_tests/test_base_polling_async.py"
+    "tests/async_tests/test_polling_async.py"
   ];
 
   meta = with lib; {

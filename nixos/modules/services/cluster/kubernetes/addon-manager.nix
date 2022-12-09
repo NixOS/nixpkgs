@@ -21,7 +21,7 @@ in
   options.services.kubernetes.addonManager = with lib.types; {
 
     bootstrapAddons = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Bootstrap addons are like regular addons, but they are applied with cluster-admin rigths.
         They are applied at addon-manager startup only.
       '';
@@ -43,7 +43,7 @@ in
     };
 
     addons = mkOption {
-      description = "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
+      description = lib.mdDoc "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
       default = { };
       type = attrsOf (either attrs (listOf attrs));
       example = literalExpression ''
@@ -62,7 +62,7 @@ in
       '';
     };
 
-    enable = mkEnableOption "Kubernetes addon manager.";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes addon manager.");
   };
 
   ###### implementation

@@ -36,35 +36,29 @@ in
   options = {
 
     hardware.bluetooth = {
-      enable = mkEnableOption "support for Bluetooth";
+      enable = mkEnableOption (lib.mdDoc "support for Bluetooth");
 
-      hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
+      hsphfpd.enable = mkEnableOption (lib.mdDoc "support for hsphfpd[-prototype] implementation");
 
       powerOnBoot = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to power up the default Bluetooth controller on boot.";
+        description = lib.mdDoc "Whether to power up the default Bluetooth controller on boot.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.bluez;
         defaultText = literalExpression "pkgs.bluez";
-        example = literalExpression "pkgs.bluezFull";
-        description = ''
+        description = lib.mdDoc ''
           Which BlueZ package to use.
-
-          <note><para>
-            Use the <literal>pkgs.bluezFull</literal> package to enable all
-            bluez plugins.
-          </para></note>
         '';
       };
 
       disabledPlugins = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = "Built-in plugins to disable";
+        description = lib.mdDoc "Built-in plugins to disable";
       };
 
       settings = mkOption {
@@ -75,7 +69,7 @@ in
             ControllerMode = "bredr";
           };
         };
-        description = "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
+        description = lib.mdDoc "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
       };
     };
   };

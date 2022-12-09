@@ -1,6 +1,5 @@
 { fetchFromGitHub
-, fetchpatch
-, libelf
+, elfutils
 , pkg-config
 , stdenv
 , zlib
@@ -10,17 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.7.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-NFVJ8JquWVzu+QoaaOMzhnu6/IqdP1FPhtJFidXA4L4=";
+    sha256 = "sha256-2rzVah+CxCztKnlEWMIQrUS2JJTLiWscfIA1aOBtIzs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libelf zlib ];
+  buildInputs = [ elfutils zlib ];
 
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=$(out)" "-C src" ];

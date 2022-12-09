@@ -1,6 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , go-bindata
 , lib
 , llvmPackages
@@ -12,20 +13,23 @@
 }:
 
 let
-  version = "2.1.1";
-  ui_version = "2.1.2";
-  libflux_version = "0.139.0";
+  version = "2.5.1";
+  # Despite the name, this is not a rolling release. This is the
+  # version of the UI assets for 2.5.1, as specified in
+  # scripts/fetch-ui-assets.sh in the 2.5.1 tag of influxdb.
+  ui_version = "OSS-2022-09-16";
+  libflux_version = "0.188.1";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "sha256-wf01DhB1ampZuWPkHUEOf3KJK4GjeOAPL3LG2+g4NGY=";
+    sha256 = "sha256-AKyuFBja06BuWYliqIGKOb4PIc5G8S9S+cf/dLrEATY=";
   };
 
   ui = fetchurl {
-    url = "https://github.com/influxdata/ui/releases/download/OSS-${ui_version}/build.tar.gz";
-    sha256 = "sha256-fXjShNJfKN/ZQNQHoX9/Ou4XBrXavCN+rcO+8AMc5Ug=";
+    url = "https://github.com/influxdata/ui/releases/download/${ui_version}/build.tar.gz";
+    sha256 = "sha256-YKDp1jLyo4n+YTeMaWl8dhN4Lr3H8FXV7stJ3p3zFe8=";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -35,10 +39,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "sha256-cELeWZXGVLFoPYfBoBP8NeLBVFIb5o+lWyto42BLyXY=";
+      sha256 = "sha256-Xmh7V/o1Gje62kcnTeB9h/fySljhfu+tjbyvryvIGRc=";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "sha256-wFgawxgqZqoPnOXJD3r5t2n7Y2bTAkBbBxeBtFEF7N4=";
+    cargoSha256 = "sha256-9rPW0lgi3lXJARa1KXgSY8LVJsoFjppok5ODGlqYeYw=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -63,14 +67,21 @@ let
 in buildGoModule {
   pname = "influxdb";
   version = version;
-  src = src;
+  inherit src;
 
-  nativeBuildInputs = [ go-bindata pkg-config ];
+  nativeBuildInputs = [ go-bindata pkg-config perl ];
 
-  vendorSha256 = "sha256-GVLAzVJzSsC10ZWDZPP8upydwZG21E+zQ6sMKm1lCY0=";
+  vendorSha256 = "sha256-02x+HsWkng7OnKVSfkQR8LL1Qk42Bdrw0IMtBpS7xQc=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
+
+  postPatch = ''
+    # use go-bindata from environment
+    substituteInPlace static/static.go \
+      --replace 'go run github.com/kevinburke/go-bindata/' ""
+  '';
+
   # Check that libflux and the UI are at the right version, and embed
   # the UI assets into the Go source tree.
   preBuild = ''
@@ -81,7 +92,7 @@ in buildGoModule {
         exit 1
       fi
 
-      ui_ver=$(grep influxdata/ui/releases scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
+      ui_ver=$(egrep 'UI_RELEASE=".*"' scripts/fetch-ui-assets.sh | cut -d'"' -f2)
       if [ "$ui_ver" != "${ui_version}" ]; then
         echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
         exit 1

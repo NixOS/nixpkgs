@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "svt-av1";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${version}";
-    sha256 = "sha256-M5ErWB/klVijsF+GysR0b3m180h+O+10weKr1pTh8ow=";
+    sha256 = "sha256-gK2Yabh9AwAX1AecOPGTOthE4ENCA4NIjwWNJNkXxJc=";
   };
 
   nativeBuildInputs = [ cmake nasm ];

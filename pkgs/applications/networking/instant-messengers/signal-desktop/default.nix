@@ -5,26 +5,11 @@
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio, xdg-utils
-# Unfortunately this also overwrites the UI language (not just the spell
-# checking language!):
-, hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
-# For a full list of available languages:
-# $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
 }:
 
-let
-  customLanguageWrapperArgs = (with lib;
-    let
-      # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
-      spellLangComponents = splitString "_" spellcheckerLanguage;
-      hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in lib.optionalString (spellcheckerLanguage != null) ''
-      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
-      --set LC_MESSAGES "${spellcheckerLanguage}"'');
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.45.1"; # Please backport all updates to the stable channel.
+  version = "6.0.1"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -34,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "sha256-ZkQQL05pz06iszguXkrBt/h4PoZcbybX4CmDXOoMYkw=";
+    sha256 = "sha256-7Cojhz3wBPd/13uVg2MgJXvR9QMPZcwBibk/sCrRMAE=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +67,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     (lib.getLib systemd)
+    libappindicator-gtk3
     libnotify
     libdbusmenu
     xdg-utils
@@ -122,8 +108,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      ${customLanguageWrapperArgs}
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
@@ -149,5 +134,6 @@ in stdenv.mkDerivation rec {
     license     = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mic92 equirosa ];
     platforms   = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

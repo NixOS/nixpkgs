@@ -116,7 +116,7 @@ let
       gptfdisk
       nix
       parted
-      utillinux
+      util-linux
       zfs
     ]
   );
@@ -130,15 +130,6 @@ let
       )
       properties
   );
-
-  featuresToProperties = features:
-    lib.listToAttrs
-      (builtins.map
-        (feature: {
-          name = "feature@${feature}";
-          value = "enabled";
-        })
-        features);
 
   createDatasets =
     let

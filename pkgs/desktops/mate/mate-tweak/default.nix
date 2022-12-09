@@ -14,13 +14,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
-  version = "22.04.4";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
     repo = pname;
     rev = version;
-    sha256 = "ncBN1wjCcMtuasnXk7WMge+9MK7BMmTu89/R+hiY/Ks=";
+    sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };
 
   nativeBuildInputs = [
@@ -73,10 +73,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "mate.${pname}";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Tweak tool for the MATE Desktop";

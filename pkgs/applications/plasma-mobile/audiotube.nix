@@ -16,6 +16,8 @@
 mkDerivation rec {
   pname = "audiotube";
 
+  postPatch = "sed '1i#include <iostream>' -i src/ytmusic.cpp";
+
   nativeBuildInputs = [
     extra-cmake-modules
     gcc11 # doesn't build with GCC 9 from stdenv on aarch64

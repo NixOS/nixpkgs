@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , glib
 , gnome-shell
 , gnome-themes-extra
@@ -32,13 +33,13 @@ lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (sin
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2022-02-21";
+  version = "2022-10-27";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1bqgbkx7qhpj9vbqcxb69p67m8ix3avxr81pdpdi56g9gqbnkpfc";
+    sha256 = "sha256-jOrTasnkNExCgvST+09JOQ0iosjoEu3aoj3C1pNHTgY=";
   };
 
   nativeBuildInputs = [
@@ -83,10 +84,12 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
       --dest $out/share/themes
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "MacOS Big Sur like theme for Gnome desktops";

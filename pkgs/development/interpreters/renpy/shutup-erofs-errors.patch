@@ -1,0 +1,29 @@
+From 1660c8f20ac807fcd0ce65a8b9dc31e646a40711 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=A4=9C=E5=9D=82=E9=9B=85?=
+ <23130178+ShadowRZ@users.noreply.github.com>
+Date: Sat, 13 Aug 2022 19:26:42 +0800
+Subject: [PATCH] Don't print a backtrace on EROFS
+
+This can shut up EROFS errors caused by writing to read-only /nix/store.
+---
+ renpy/script.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/renpy/script.py b/renpy/script.py
+index 3e5dae8..8f103c1 100644
+--- a/renpy/script.py
++++ b/renpy/script.py
+@@ -656,6 +656,10 @@ class Script(object):
+                             rpydigest = hashlib.md5(fullf.read()).digest()
+ 
+                         self.write_rpyc_md5(f, rpydigest)
++                except OSError as e:
++                    if e.errno != 30:
++                        import traceback
++                        traceback.print_exc()
+                 except Exception:
+                     import traceback
+                     traceback.print_exc()
+-- 
+2.37.1
+

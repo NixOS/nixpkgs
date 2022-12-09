@@ -5,12 +5,12 @@ let
 in {
   options = {
     services.sysstat = {
-      enable = mkEnableOption "sar system activity collection";
+      enable = mkEnableOption (lib.mdDoc "sar system activity collection");
 
       collect-frequency = mkOption {
         type = types.str;
         default = "*:00/10";
-        description = ''
+        description = lib.mdDoc ''
           OnCalendar specification for sysstat-collect
         '';
       };
@@ -18,7 +18,7 @@ in {
       collect-args = mkOption {
         type = types.str;
         default = "1 1";
-        description = ''
+        description = lib.mdDoc ''
           Arguments to pass sa1 when collecting statistics
         '';
       };

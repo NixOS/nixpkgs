@@ -1,41 +1,38 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
-, brotli
+{ lib
+, stdenv
+, buildPythonPackage
 , cairosvg
-, flit-core
-, fonttools
-, pydyf
-, pyphen
 , cffi
-, cssselect
-, lxml
-, html5lib
-, tinycss
-, zopfli
+, cssselect2
+, fetchPypi
+, flit-core
+, fontconfig
+, fonttools
+, ghostscript
 , glib
 , harfbuzz
+, html5lib
 , pango
-, fontconfig
-, lib
-, stdenv
-, ghostscript
-, isPy3k
+, pillow
+, pydyf
+, pyphen
+, pytestCheckHook
+, pythonOlder
 , substituteAll
+, tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "54.3";
-  disabled = !isPy3k;
-
+  version = "57.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    sha256 = "sha256-4E2gQGMFZsRMqiAgM/B/hYdl9TZwkEWoCXOfPQSOidY=";
+    hash = "sha256-e29cwTgZ6afYdIwdvw6NJET3pIGKmDOfgtzKqCK/kRs=";
   };
 
   patches = [
@@ -48,12 +45,6 @@ buildPythonPackage rec {
       pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
-    # Disable tests for new Ghostscript
-    # Remove when next version is released
-    (fetchpatch {
-      url = "https://github.com/Kozea/WeasyPrint/commit/e544398b00d76bc0317ea7e2abe40dc46b380910.patch";
-      sha256 = "sha256-oQO3j9Mo1x98WaLPROxsOn0qkeYRJrCx5QWWKoHvabE=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -61,19 +52,15 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    brotli
-    cairosvg
     cffi
-    cssselect
+    cssselect2
     fonttools
     html5lib
-    lxml
-    flit-core
+    pillow
     pydyf
     pyphen
-    tinycss
-    zopfli
-  ];
+    tinycss2
+  ] ++ fonttools.optional-dependencies.woff;
 
   checkInputs = [
     pytestCheckHook
@@ -102,9 +89,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  pythonImportsCheck = [
+    "weasyprint"
+  ];
+
   meta = with lib; {
-    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
+    homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];
   };

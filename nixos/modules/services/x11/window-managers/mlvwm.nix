@@ -8,12 +8,12 @@ in
 {
 
   options.services.xserver.windowManager.mlvwm = {
-    enable = mkEnableOption "Macintosh-like Virtual Window Manager";
+    enable = mkEnableOption (lib.mdDoc "Macintosh-like Virtual Window Manager");
 
     configFile = mkOption {
       default = null;
       type = with types; nullOr path;
-      description = ''
+      description = lib.mdDoc ''
         Path to the mlvwm configuration file.
         If left at the default value, $HOME/.mlvwmrc will be used.
       '';

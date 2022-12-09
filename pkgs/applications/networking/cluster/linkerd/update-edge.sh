@@ -7,7 +7,7 @@ cd $(dirname "$0")
 
 VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} \
     --silent https://api.github.com/repos/linkerd/linkerd2/releases | \
-    jq 'map(.tag_name)' | grep edge | sed 's/["|,| ]//g' | sed 's/edge-//' | sort -V -r | head -n1)
+    jq 'map(.tag_name)' | grep -v -e '-rc' | grep edge | sed 's/["|,| ]//g' | sed 's/edge-//' | sort -V -r | head -n1)
 
 SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/linkerd/linkerd2/archive/refs/tags/edge-${VERSION}.tar.gz)
 

@@ -1,23 +1,32 @@
 { lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pytestCheckHook,
-  libffi, pkg-config, pycparser
+  libffi, pkg-config, pycparser, python, fetchpatch
 }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "920f0d66a896c2d99f0adbb391f990a84091179542c205fa53ce5787aff87954";
+    sha256 = "sha256-1AC/uaN7E1ElPLQCZxzqfom97MKU6AFqcH9tHYrJNPk=";
   };
-
-  outputs = [ "out" "dev" ];
 
   buildInputs = [ libffi ];
 
   nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ pycparser ];
+
+  patches =
+    # Fix test that failed because python seems to have changed the exception format in the
+    # final release. This patch should be included in the next version and can be removed when
+    # it is released.
+    lib.optionals (python.pythonVersion == "3.11") [
+      (fetchpatch {
+        url = "https://foss.heptapod.net/pypy/cffi/-/commit/8a3c2c816d789639b49d3ae867213393ed7abdff.diff";
+        sha256 = "sha256-3wpZeBqN4D8IP+47QDGK7qh/9Z0Ag4lAe+H0R5xCb1E=";
+      })
+    ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove setup.py impurities

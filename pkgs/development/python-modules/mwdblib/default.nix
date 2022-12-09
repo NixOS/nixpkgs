@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , humanize
 , keyring
-, python
+, unittestCheckHook
 , python-dateutil
 , pythonOlder
 , requests
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mwdblib";
-  version = "4.2.1";
+  version = "4.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Wkqvi/buYKDoGi+4C9zkxWEiGynk9Ds8gLsdoaZCdKg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HQzfa5UmPo+Ccs2eRDwQA9EMzDg7+Nd4jIjBt+7qwzE=";
   };
 
   propagatedBuildInputs = [
@@ -36,11 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "mwdblib"

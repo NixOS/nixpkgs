@@ -9,12 +9,12 @@ let
   inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
 in buildPythonPackage rec {
   pname = "cupy";
-  version = "10.3.1";
+  version = "11.2.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c8BOKI1AWU+zN8lhliRus55PUAgvFm+TlxKToYn7jWc=";
+    sha256 = "sha256-wzNh8RejR6Y/aZbql0RtF/HAOPGh9TPlAkZCNQdpI+I=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both

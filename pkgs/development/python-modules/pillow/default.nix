@@ -4,7 +4,7 @@
 , pythonOlder
 , fetchPypi
 , isPyPy
-, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
+, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
 # for passthru.tests
 , imageio, matplotlib, pilkit, pydicom, reportlab
@@ -12,14 +12,15 @@
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "9.1.0";
+  version = "9.3.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Pillow";
     inherit version;
-    sha256 = "f401ed2bbb155e1ade150ccc63db1a4f6c1909d3d378f7d1235a44e90d75fb97";
+    hash = "sha256-yTWiKlV6VgEI14D5oPxCbddFmUDcVPqknYMknI0+dg8=";
   };
 
   passthru.tests = {

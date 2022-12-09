@@ -25,12 +25,16 @@ stdenv.mkDerivation rec {
     bc
   ];
 
+  patches = [
+    ./fix-install-path.patch
+  ];
+
   dontConfigure = true;
 
   # emulating build_all.sh configuration variables
   jplatform =
     if stdenv.isDarwin then "darwin"
-    else if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry"
+    else if stdenv.hostPlatform.isAarch then "raspberry"
     else if stdenv.isLinux then "linux"
     else "unsupported";
 

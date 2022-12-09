@@ -1,8 +1,9 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , fetchurl
 , glib
+, gnome-shell
 , gtk-engine-murrine
 , gtk_engines
 , inkscape
@@ -28,16 +29,16 @@ lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-05-12";
+  version = "2022-10-21";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "sha256-VrrxW16J+S21qBoAeVCWs0Q6bRL1jXAK7MOBpdSMJZY=";
+      sha256 = "sha256-0OqQXyv/fcbKTzvQUVIbUw5Y27hU1bzwx/0DelMEZIs=";
     })
   ]
   ++
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
+    gnome-shell
     inkscape
     jdupes
     optipng
@@ -72,7 +74,10 @@ stdenv.mkDerivation rec {
   dontRewriteSymlinks = true;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs \
+      install.sh \
+      src/main/gtk-3.0/make_gresource_xml.sh \
+      src/main/gtk-4.0/make_gresource_xml.sh
 
     for f in \
       render-assets.sh \
@@ -87,6 +92,7 @@ stdenv.mkDerivation rec {
       src/assets/metacity-1/render-assets.sh \
       src/assets/xfwm4/render-assets.sh
     do
+      patchShebangs $f
       substituteInPlace $f \
         --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng
@@ -108,14 +114,14 @@ stdenv.mkDerivation rec {
       install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
     ''}
 
-    # Replace duplicate files with hardlinks to the first file in each
+    # Replace duplicate files with soft links to the first file in each
     # set of duplicates, reducing the installed size in about 53%
-    jdupes -L -r $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";

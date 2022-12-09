@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
     "DOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl-nons/manpages/docbook.xsl"
   ];
 
+  # https://github.com/AGWA/git-crypt/issues/232
+  CXXFLAGS = [
+    "-DOPENSSL_API_COMPAT=0x30000000L"
+  ];
+
   postFixup = ''
     wrapProgram $out/bin/git-crypt \
       --suffix PATH : ${lib.makeBinPath [ git gnupg ]}

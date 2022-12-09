@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , anyio
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,28 +15,28 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.14.1";
-  format = "setuptools";
+  version = "0.18.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XjmmyL7ZRqkYwGGk6/KkxL7e/JA43tQN4W3knTtc7t0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XEhu6M1hFi3/gAKZcei7KJSrIhhlZhlvZvbfyA6VLR4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-sZMj1HQ37gAG3WM+qBMhcCQ2MuUGom23lF8c4L0RQzM=";
+    hash = "sha256-IWONA3o+2emJ7cKEw5xYSMdWzGuUSwn1B70zUDzj7Cw=";
   };
 
   nativeBuildInputs = [
-    setuptools-rust
   ] ++ (with rustPlatform; [
     cargoSetupHook
+    maturinBuildHook
     rust.cargo
     rust.rustc
   ]);
@@ -52,19 +52,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
+  '';
+
+  preCheck = ''
+    rm -rf watchfiles
+  '';
+
   pythonImportsCheck = [
     "watchfiles"
   ];
 
-  preCheck = ''
-    cd tests
-  '';
-
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "Simple, modern file watching and code reload";
+    description = "File watching and code reload";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.isDarwin;
   };
 }

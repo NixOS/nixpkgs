@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     substituteAllInPlace src/strangle.sh
     substituteAllInPlace src/stranglevk.sh
   '';
+  postInstall = ''
+    substitute $out/share/vulkan/implicit_layer.d/libstrangle_vk.json $out/share/vulkan/implicit_layer.d/libstrangle_vk.x86.json \
+      --replace "libstrangle_vk.so" "$out/lib/libstrangle/lib32/libstrangle_vk.so"
+    substituteInPlace $out/share/vulkan/implicit_layer.d/libstrangle_vk.json \
+      --replace "libstrangle_vk.so" "$out/lib/libstrangle/lib64/libstrangle_vk.so"
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/torkel104/libstrangle";

@@ -9,17 +9,18 @@
 , light            # light
 , pamixer          # pamixer
 , pulseaudio       # pactl
+, libdbusmenu-gtk3 # tray
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.5.7";
+  version = "0.7.11";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    rev = "v${version}";
-    sha256 = "1d3qh42cwayb5d9ymhfs2vrbg5x5x6x73hw77m3xb9y4vyhji85x";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Esr1OPyQCCQIOfgkl6RIn93ZaJkF0O2RM9ObIgBlPi4=";
   };
 
   # No tests
@@ -31,7 +32,10 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango ];
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
-  propagatedBuildInputs = with python3Packages; [ i3ipc netifaces psutil pybluez pygobject3 ];
+  propagatedBuildInputs = (with python3Packages;
+    [ i3ipc netifaces psutil pybluez pygobject3 requests dasbus setuptools ])
+    # Run-time GTK dependency required by the Tray module
+    ++ [ libdbusmenu-gtk3 ];
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}

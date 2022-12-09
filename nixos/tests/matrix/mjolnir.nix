@@ -32,6 +32,7 @@ import ../make-test-python.nix (
     name = "mjolnir";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
+      broken = true; # times out after spending many hours
     };
 
     nodes = {
@@ -45,7 +46,6 @@ import ../make-test-python.nix (
             enable_registration = true;
             enable_registration_without_verification = true;
             registration_shared_secret = "supersecret-registration";
-            enable_registration_without_verification = true;
 
             listeners = [ {
               # The default but tls=false

@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , python
-, isPy3k
+, pythonOlder
 , arrow-cpp
 , cffi
 , cloudpickle
@@ -28,14 +28,28 @@ in
 
 buildPythonPackage rec {
   pname = "pyarrow";
-  disabled = !isPy3k;
-
   inherit (_arrow-cpp) version src;
+
+  disabled = pythonOlder "3.7";
 
   sourceRoot = "apache-arrow-${version}/python";
 
-  nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
-  propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ];
+  nativeBuildInputs = [
+    cmake
+    cython
+    pkg-config
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    cffi
+    cloudpickle
+    fsspec
+    numpy
+    scipy
+    six
+  ];
+
   checkInputs = [
     hypothesis
     pandas
@@ -62,7 +76,10 @@ buildPythonPackage rec {
   ARROW_TEST_DATA = lib.optionalString doCheck _arrow-cpp.ARROW_TEST_DATA;
 
   doCheck = true;
+
   dontUseCmakeConfigure = true;
+
+  __darwinAllowLocalNetworking = true;
 
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
@@ -80,6 +97,9 @@ buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws"
     "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws_region_selection"
     "--deselect=pyarrow/tests/test_fs.py::test_s3_options"
+    # Flaky test
+    "--deselect=pyarrow/tests/test_flight.py::test_roundtrip_errors"
+    "--deselect=pyarrow/tests/test_pandas.py::test_threaded_pandas_import"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
@@ -90,15 +110,20 @@ buildPythonPackage rec {
   ];
 
   dontUseSetuptoolsCheck = true;
+
   preCheck = ''
     shopt -s extglob
-    rm -r pyarrow/!(tests)
-  '' + lib.optionalString stdenv.isDarwin  ''
+    rm -r pyarrow/!(conftest.py|tests)
+    mv pyarrow/conftest.py pyarrow/tests/parent_conftest.py
+    substituteInPlace pyarrow/tests/conftest.py --replace ..conftest .parent_conftest
+  '' + lib.optionalString stdenv.isDarwin ''
     # OSError: [Errno 24] Too many open files
     ulimit -n 1024
   '';
 
-  pythonImportsCheck = [ "pyarrow" ] ++ map (module: "pyarrow.${module}") ([
+  pythonImportsCheck = [
+    "pyarrow"
+  ] ++ map (module: "pyarrow.${module}") ([
     "compute"
     "csv"
     "dataset"
@@ -108,7 +133,9 @@ buildPythonPackage rec {
     "hdfs"
     "json"
     "parquet"
-  ] ++ lib.optionals (!stdenv.isDarwin) [ "plasma" ]);
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "plasma"
+  ]);
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";

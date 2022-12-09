@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, substituteAll
 , qtbase
 , qtwebengine
 , qtdeclarative
@@ -21,15 +22,26 @@
 }:
 
 mkDerivation rec {
-  version = "1.1.20";
+  version = "1.3.0";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-T0ddAROwVSh+IKGZZNDMC7YB2IfQZal2pAQ5ArirtjI=";
+    sha256 = "sha256-uhVRO9aiYJbUmwDp1+LIYF3wNBbVduVpTtVzaS0oUMU=";
   };
+
+  patches = [
+    # Fix Exec= path in runtime-generated
+    # ~/.config/autostart/syncthingtray.desktop file - this is required because
+    # we are wrapping the executable. We can't use `substituteAll` because we
+    # can't use `${placeholder "out"}` because that will produce the $out of
+    # the patch derivation itself, and not of syncthing's "out" placeholder.
+    # Hence we use a C definition with NIX_CFLAGS_COMPILE
+    ./use-nix-path-in-autostart.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
 
   buildInputs = [
     qtbase

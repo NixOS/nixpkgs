@@ -17,13 +17,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "4.0.2";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hHYk7B0+wqmpOmU5wf44MBTuocLM//Oif5SOtNzO++c=";
+    sha256 = "sha256-N5jnjiD3R+uTRgHHocVVxYQ7GzUTz0fZAQGIXzcVTtA=";
   };
 
   nativeBuildInputs = [
@@ -55,9 +55,7 @@ stdenvNoCC.mkDerivation rec {
         name = "${pname}-modules-${version}";
         inherit pname version;
 
-        yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [
-          "--production"
-        ];
+        yarnFlags = [ "--production" ];
 
         pkgConfig = {
           keytar = {
@@ -119,7 +117,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/kylon/Sharedown";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jtojnar
     ];
     platforms = platforms.unix;
   };

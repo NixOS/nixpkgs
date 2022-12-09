@@ -95,8 +95,29 @@ in stdenv.mkDerivation (rec {
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
+  '' + optionalString stdenv.hostPlatform.isRiscV ''
+    rm test/ExecutionEngine/frem.ll
+    rm test/ExecutionEngine/mov64zext32.ll
+    rm test/ExecutionEngine/test-interp-vec-arithm_float.ll
+    rm test/ExecutionEngine/test-interp-vec-arithm_int.ll
+    rm test/ExecutionEngine/test-interp-vec-logical.ll
+    rm test/ExecutionEngine/test-interp-vec-setcond-fp.ll
+    rm test/ExecutionEngine/test-interp-vec-setcond-int.ll
+    substituteInPlace unittests/Support/CMakeLists.txt \
+      --replace "CrashRecoveryTest.cpp" ""
+    rm unittests/Support/CrashRecoveryTest.cpp
+    substituteInPlace unittests/ExecutionEngine/Orc/CMakeLists.txt \
+      --replace "OrcCAPITest.cpp" ""
+    rm unittests/ExecutionEngine/Orc/OrcCAPITest.cpp
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
+  '';
+
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -134,6 +155,7 @@ in stdenv.mkDerivation (rec {
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
     "-DLLVM_BUILD_STATIC=ON"
+    "-DLLVM_LINK_LLVM_DYLIB=off"
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
@@ -202,12 +224,6 @@ in stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
-  ''
-  + optionalString enableSharedLibraries ''
-    mkdir -p $dev/lib
-    mv $lib/lib/*.a $dev/lib
-    sed -i -E "s|$lib/lib/(.*)\.a|$dev/lib/\1\.a|" \
-      "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake"
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native

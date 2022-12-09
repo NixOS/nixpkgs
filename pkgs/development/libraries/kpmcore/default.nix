@@ -6,12 +6,16 @@
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "22.04.0";
+  version = "22.08.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-sO8WUJL6072H1ghMZd7j0xNMwEn4bJF5PXMhfEb2jbs=";
+    hash = "sha256-Ws20hKX2iDdke5yBBKXukVUD4OnLf1OmwlhW+jUXL24=";
   };
+
+  patches = [
+    ./nixostrustedprefix.patch
+  ];
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
@@ -29,6 +33,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/util/CMakeLists.txt \
       --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
+    substituteInPlace src/backend/corebackend.cpp \
+      --replace /usr/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy $out/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy
   '';
 
   meta = with lib; {

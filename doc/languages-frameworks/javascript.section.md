@@ -157,6 +157,61 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 ## Tool specific instructions {#javascript-tool-specific}
 
+### buildNpmPackage {#javascript-buildNpmPackage}
+
+`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+
+```nix
+{ lib, buildNpmPackage, fetchFromGitHub }:
+
+buildNpmPackage rec {
+  pname = "flood";
+  version = "4.7.0";
+
+  src = fetchFromGitHub {
+    owner = "jesec";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
+  };
+
+  patches = [ ./remove-prepack-script.patch ];
+
+  npmDepsHash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
+
+  NODE_OPTIONS = "--openssl-legacy-provider";
+
+  meta = with lib; {
+    description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
+    homepage = "https://flood.js.org";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ winter ];
+  };
+}
+```
+
+#### Arguments {#javascript-buildNpmPackage-arguments}
+
+* `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
+* `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
+* `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmFlags`: Flags to pass to all npm commands.
+* `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
+* `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
+* `npmPackFlags`: Flags to pass to `npm pack`.
+
+#### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
+
+`prefetch-npm-deps` can calculate the hash of the dependencies of an npm project ahead of time.
+
+```console
+$ ls
+package.json package-lock.json index.js
+$ prefetch-npm-deps package-lock.json
+...
+sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+```
+
 ### node2nix {#javascript-node2nix}
 
 #### Preparation {#javascript-node2nix-preparation}
@@ -180,18 +235,27 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 
 #### Preparation {#javascript-yarn2nix-preparation}
 
-You will need at least a yarn.lock and yarn.nix file.
+You will need at least a `yarn.lock` file. If upstream does not have one you need to generate it and reference it in your package definition.
 
-- Generate a yarn.lock in upstream if it is not already there.
-- `yarn2nix > yarn.nix` will generate the dependencies in a Nix format.
+If the downloaded files contain the `package.json` and `yarn.lock` files they can be used like this:
+
+```nix
+offlineCache = fetchYarnDeps {
+  yarnLock = src + "/yarn.lock";
+  hash = "....";
+};
+```
 
 #### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
 
-This will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React...), you will need to explicitly override the build step with your instructions. It's important to use the `--offline` flag. For example if you script is `"build": "something"` in package.json use:
+`mkYarnPackage` will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React, WebPack, ...), you will need to explicitly override the build step with your instructions.
+
+It's important to use the `--offline` flag. For example if you script is `"build": "something"` in `package.json` use:
 
 ```nix
 buildPhase = ''
-  yarn build --offline
+  export HOME=$(mktemp -d)
+  yarn --offline build
 '';
 ```
 
@@ -201,15 +265,27 @@ The dist phase is also trying to build a binary, the only way to override it is 
 distPhase = "true";
 ```
 
-The configure phase can sometimes fail because it tries to be too clever. One common override is:
+The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
 
 ```nix
-configurePhase = "ln -s $node_modules node_modules";
+configurePhase = ''
+  ln -s $node_modules node_modules
+'';
+```
+
+or if you need a writeable node_modules directory:
+
+```nix
+configurePhase = ''
+  cp -r $node_modules node_modules
+  chmod +w node_modules
+'';
 ```
 
 #### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
 
-This will generate a derivation including the node_modules. If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way. [Plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39) offers a good example of how to do this.
+This will generate a derivation including the `node_modules` directory.
+If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
 
 #### Overriding dependency behavior
 

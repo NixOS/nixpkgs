@@ -2,10 +2,11 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 
 # Build dependencies
-, glibcLocales
+, setuptools
 
 # Runtime dependencies
 , appnope
@@ -27,17 +28,28 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.2.0";
+  version = "8.4.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cOXrEyysWUo0tfeZvSUliQCZBfBRBHKK6mpAPsJRncE=";
+    sha256 = "f2db3a10254241d9b447232cec8b424847f338d9d36f9a577a6192c332a46abd";
   };
 
-  buildInputs = [
-    glibcLocales
+  patches = [
+    (fetchpatch {
+      # The original URL might not be very stable, so let's prefer a copy.
+      urls = [
+        "https://raw.githubusercontent.com/bmwiedemann/openSUSE/9b35e4405a44aa737dda623a7dabe5384172744c/packages/p/python-ipython/ipython-pr13714-xxlimited.patch"
+        "https://github.com/ipython/ipython/pull/13714.diff"
+      ];
+      sha256 = "XPOcBo3p8mzMnP0iydns9hX8qCQXTmRgRD0TM+FESCI=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -54,8 +66,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     appnope
   ];
-
-  LC_ALL="en_US.UTF-8";
 
   pythonImportsCheck = [
     "IPython"
@@ -74,7 +84,10 @@ buildPythonPackage rec {
     testpath
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = [
+    # UnboundLocalError: local variable 'child' referenced before assignment
+    "test_system_interrupt"
+  ] ++ lib.optionals (stdenv.isDarwin) [
     # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
     "test_clipboard_get"
   ];
@@ -82,6 +95,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = "https://ipython.org/";
+    changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };

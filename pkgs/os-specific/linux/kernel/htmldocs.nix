@@ -15,7 +15,8 @@ let
     packageOverrides = final: prev: rec {
       docutils_old = prev.docutils.overridePythonAttrs (oldAttrs: rec {
         version = "0.16";
-        src = oldAttrs.src.override {
+        src = final.fetchPypi {
+          pname = "docutils";
           inherit version;
           sha256 = "sha256-wt46YOnn0Hvia38rAMoDCcIH4GwQD5zCqUkx/HWkePw=";
         };
@@ -30,7 +31,7 @@ let
         doCheck = false;
       };
 
-      sphinx_rtd_theme = prev.sphinx_rtd_theme.override {
+      sphinx-rtd-theme = prev.sphinx-rtd-theme.override {
         inherit sphinx;
         docutils = docutils_old;
       };
@@ -58,7 +59,7 @@ stdenv.mkDerivation {
     imagemagick
     perl
     py.pkgs.sphinx
-    py.pkgs.sphinx_rtd_theme
+    py.pkgs.sphinx-rtd-theme
     which
   ];
 

@@ -18,6 +18,7 @@ let
   meta = with lib; {
     description = "User-friendly Desktop Internet GIS";
     homepage = "http://udig.refractions.net/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ epl10 bsd3 ];
     maintainers = with maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;

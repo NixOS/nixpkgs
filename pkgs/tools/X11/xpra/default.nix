@@ -89,6 +89,7 @@ in buildPythonApplication rec {
   INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [
+    gobject-introspection
     pkg-config
     wrapGAppsHook
     pandoc
@@ -119,7 +120,6 @@ in buildPythonApplication rec {
     ffmpeg
     gdk-pixbuf
     glib
-    gobject-introspection
     gtk3
     librsvg
     libvpx
@@ -186,9 +186,14 @@ in buildPythonApplication rec {
     )
   '';
 
-  # append module paths to xorg.conf
   postInstall = ''
+    # append module paths to xorg.conf
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+
+    # make application icon visible to desktop environemnts
+    icon_dir="$out/share/icons/hicolor/64x64/apps"
+    mkdir -p "$icon_dir"
+    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
   '';
 
   doCheck = false;
@@ -206,6 +211,6 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ tstrobel offline numinit mvnetbiz ];
+    maintainers = with maintainers; [ offline numinit mvnetbiz ];
   };
 }

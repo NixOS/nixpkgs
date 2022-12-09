@@ -1,19 +1,18 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "crackmapexec";
-  version = "5.2.2";
+  version = "5.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "byt3bl33d3r";
+    owner = "Porchetta-Industries";
     repo = "CrackMapExec";
-    rev = "v${version}";
-    hash = "sha256-IgD8RjwVEoEXmnHU3DR3wzUdJDWIbFw9sES5qYg30a8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V2n840QyLofTfQE4vtFYGfQwl65sklp+KfNS9RCLvI8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -23,10 +22,12 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aioconsole
+    aardwolf
     beautifulsoup4
     dsinternals
     impacket
     lsassy
+    masky
     msgpack
     neo4j
     paramiko
@@ -40,20 +41,12 @@ python3.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/byt3bl33d3r/CrackMapExec/pull/580
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/byt3bl33d3r/CrackMapExec/commit/e5c6c2b5c7110035b34ea7a080defa6d42d21dd4.patch";
-      hash = "sha256-5SpoQD+uSYLM6Rdq0/NTbyEv4RsBUuawNNsknS71I9M=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '{ git = "https://github.com/mpgn/impacket.git", branch = "master" }' '"x"'
+  '';
 
   pythonRelaxDeps = true;
-
-  pythonRemoveDeps = [
-    "bs4"
-  ];
 
   # Project has no tests
   doCheck = false;
@@ -64,7 +57,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for pentesting networks";
-    homepage = "https://github.com/byt3bl33d3r/CrackMapExec";
+    homepage = "https://github.com/Porchetta-Industries/CrackMapExec";
+    changelog = "https://github.com/Porchetta-Industries/CrackMapExec/releases/tag/v${version}";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "cme";

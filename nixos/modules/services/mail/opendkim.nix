@@ -31,25 +31,25 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the OpenDKIM sender authentication system.";
+        description = lib.mdDoc "Whether to enable the OpenDKIM sender authentication system.";
       };
 
       socket = mkOption {
         type = types.str;
         default = defaultSock;
-        description = "Socket which is used for communication with OpenDKIM.";
+        description = lib.mdDoc "Socket which is used for communication with OpenDKIM.";
       };
 
       user = mkOption {
         type = types.str;
         default = "opendkim";
-        description = "User for the daemon.";
+        description = lib.mdDoc "User for the daemon.";
       };
 
       group = mkOption {
         type = types.str;
         default = "opendkim";
-        description = "Group for the daemon.";
+        description = lib.mdDoc "Group for the daemon.";
       };
 
       domains = mkOption {
@@ -57,15 +57,15 @@ in {
         default = "csl:${config.networking.hostName}";
         defaultText = literalExpression ''"csl:''${config.networking.hostName}"'';
         example = "csl:example.com,mydomain.net";
-        description = ''
-          Local domains set (see <literal>opendkim(8)</literal> for more information on datasets).
+        description = lib.mdDoc ''
+          Local domains set (see `opendkim(8)` for more information on datasets).
           Messages from them are signed, not verified.
         '';
       };
 
       keyPath = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path that opendkim should put its generated private keys into.
           The DNS settings will be found in this directory with the name selector.txt.
         '';
@@ -74,13 +74,13 @@ in {
 
       selector = mkOption {
         type = types.str;
-        description = "Selector to use when signing.";
+        description = lib.mdDoc "Selector to use when signing.";
       };
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "Additional opendkim configuration.";
+        description = lib.mdDoc "Additional opendkim configuration.";
       };
 
     };

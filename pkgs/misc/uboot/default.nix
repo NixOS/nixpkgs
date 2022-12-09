@@ -1,15 +1,18 @@
 { stdenv
 , lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
 , bc
 , bison
 , dtc
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
 , flex
+, gnutls
+, libuuid
+, meson-tools
+, ncurses
 , openssl
 , swig
-, meson-tools
 , which
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
@@ -20,12 +23,12 @@
 }:
 
 let
-  defaultVersion = "2022.01";
+  defaultVersion = "2022.10";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-gbRUMifbIowD+KG/XdvIE7C7j2VVzkYGTvchpvxoBBM=";
+    hash = "sha256-ULRIKlBbwoG6hHDDmaPCbhReKbI1ALw1xQ3r1/pGvfg=";
   };
-  buildUBoot = {
+  buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
   , filesToInstall
@@ -57,6 +60,7 @@ let
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
       dtc
@@ -70,6 +74,12 @@ let
       which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+    ];
 
     hardeningDisable = [ "all" ];
 
@@ -114,7 +124,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
 

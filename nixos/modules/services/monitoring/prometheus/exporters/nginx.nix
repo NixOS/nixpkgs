@@ -11,7 +11,7 @@ in
     scrapeUri = mkOption {
       type = types.str;
       default = "http://localhost/nginx_status";
-      description = ''
+      description = lib.mdDoc ''
         Address to access the nginx status page.
         Can be enabled with services.nginx.statusPage = true.
       '';
@@ -19,14 +19,14 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };
     sslVerify = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to perform certificate verification for https.
       '';
     };
@@ -37,7 +37,7 @@ in
         "label1=value1"
         "label2=value2"
       ];
-      description = ''
+      description = lib.mdDoc ''
         A list of constant labels that will be used in every metric.
       '';
     };

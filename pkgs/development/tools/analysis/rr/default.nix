@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto
+}:
 
 stdenv.mkDerivation rec {
-  version = "5.5.0";
+  version = "5.6.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "sha256-ZZhkmDWGNWejwXZEcFO9p9NG1dopK7kXRj7OrkJCPR0=";
+    sha256 = "H39HPkAQGubXVQV3jCpH4Pz+7Q9n03PrS70utk7Tt2k=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-flexible-array-member.patch";
+      url = "https://github.com/rr-debugger/rr/commit/2979c60ef8bbf7c940afd90172ddc5d8863f766e.diff";
+      sha256 = "cmdCJetQr3ELPOyWl37h1fGfG/xvaiJpywxIAnqb5YY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
@@ -60,6 +70,6 @@ stdenv.mkDerivation rec {
 
     license = with lib.licenses; [ mit bsd2 ];
     maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = lib.platforms.x86;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }

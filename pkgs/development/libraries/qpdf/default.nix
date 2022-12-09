@@ -1,32 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, perl }:
+{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, cmake, perl }:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
-  version = "10.6.2";
+  version = "11.2.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
-    rev = "release-qpdf-${version}";
-    hash = "sha256-+8bH7fKJ5uZRxKX/4nMkoZGFTxm2uJEXkb1wq5FrLWs=";
+    rev = "v${version}";
+    hash = "sha256-AkLuclDm9qjVbpFqenlbgTWt/GAWzOj9d1lqgt6aPNo=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ zlib libjpeg ];
 
-  preCheck = ''
+  preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
+    patchShebangs run-qtest
+    # qtest needs to know where the source code is
+    substituteInPlace CMakeLists.txt --replace "run-qtest" "run-qtest --top $src --code $src --bin $out"
   '';
 
   doCheck = true;
-  enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://qpdf.sourceforge.net/";
+    homepage = "https://qpdf.sourceforge.io/";
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
+    changelog = "https://github.com/qpdf/qpdf/blob/v${version}/ChangeLog";
   };
 }

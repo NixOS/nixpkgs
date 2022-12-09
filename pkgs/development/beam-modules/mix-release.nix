@@ -18,6 +18,7 @@
 , mixNixDeps ? { }
 , elixir ? inputs.elixir
 , hex ? inputs.hex.override { inherit elixir; }
+, stripDebug ? true
 , ...
 }@attrs:
 let
@@ -25,6 +26,8 @@ let
   overridable = builtins.removeAttrs attrs [ "compileFlags" "mixNixDeps" ];
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
+assert stripDebug -> !enableDebugInfo;
+
 stdenv.mkDerivation (overridable // {
   # rg is used as a better grep to search for erlang references in the final release
   nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ripgrep ];
@@ -116,6 +119,10 @@ stdenv.mkDerivation (overridable // {
         substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
       done
     fi
+  '' + lib.optionalString stripDebug ''
+    # strip debug symbols to avoid hardreferences to "foreign" closures actually
+    # not needed at runtime, while at the same time reduce size of BEAM files.
+    erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
   '';
 
   # TODO investigate why the resulting closure still has

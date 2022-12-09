@@ -43,13 +43,13 @@ in {
   ###### interface
 
   options.services.magnetico = {
-    enable = mkEnableOption "Magnetico, Bittorrent DHT crawler";
+    enable = mkEnableOption (lib.mdDoc "Magnetico, Bittorrent DHT crawler");
 
     crawler.address = mkOption {
       type = types.str;
       default = "0.0.0.0";
       example = "1.2.3.4";
-      description = ''
+      description = lib.mdDoc ''
         Address to be used for indexing DHT nodes.
       '';
     };
@@ -57,17 +57,17 @@ in {
     crawler.port = mkOption {
       type = types.port;
       default = 0;
-      description = ''
+      description = lib.mdDoc ''
         Port to be used for indexing DHT nodes.
         This port should be added to
-        <option>networking.firewall.allowedTCPPorts</option>.
+        {option}`networking.firewall.allowedTCPPorts`.
       '';
     };
 
     crawler.maxNeighbors = mkOption {
       type = types.ints.positive;
       default = 1000;
-      description = ''
+      description = lib.mdDoc ''
         Maximum number of simultaneous neighbors of an indexer.
         Be careful changing this number: high values can very
         easily cause your network to be congested or even crash
@@ -78,7 +78,7 @@ in {
     crawler.maxLeeches = mkOption {
       type = types.ints.positive;
       default = 200;
-      description = ''
+      description = lib.mdDoc ''
         Maximum number of simultaneous leeches.
       '';
     };
@@ -86,7 +86,7 @@ in {
     crawler.extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra command line arguments to pass to magneticod.
       '';
     };
@@ -95,7 +95,7 @@ in {
       type = types.str;
       default = "localhost";
       example = "1.2.3.4";
-      description = ''
+      description = lib.mdDoc ''
         Address the web interface will listen to.
       '';
     };
@@ -103,7 +103,7 @@ in {
     web.port = mkOption {
       type = types.port;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         Port the web interface will listen to.
       '';
     };
@@ -116,50 +116,48 @@ in {
           myuser = "$2y$12$YE01LZ8jrbQbx6c0s2hdZO71dSjn2p/O9XsYJpz.5968yCysUgiaG";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         The credentials to access the web interface, in case authentication is
-        enabled, in the format <literal>username:hash</literal>. If unset no
+        enabled, in the format `username:hash`. If unset no
         authentication will be required.
 
         Usernames must start with a lowercase ([a-z]) ASCII character, might
         contain non-consecutive underscores except at the end, and consists of
         small-case a-z characters and digits 0-9.  The
-        <command>htpasswd</command> tool from the <package>apacheHttpd
-        </package> package may be used to generate the hash: <command>htpasswd
-        -bnBC 12 username password</command>
+        {command}`htpasswd` tool from the `apacheHttpd`
+        package may be used to generate the hash:
+        {command}`htpasswd -bnBC 12 username password`
 
-        <warning>
-        <para>
-          The hashes will be stored world-readable in the nix store.
-          Consider using the <literal>credentialsFile</literal> option if you
-          don't want this.
-        </para>
-        </warning>
+        ::: {.warning}
+        The hashes will be stored world-readable in the nix store.
+        Consider using the `credentialsFile` option if you
+        don't want this.
+        :::
       '';
     };
 
     web.credentialsFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The path to the file holding the credentials to access the web
         interface. If unset no authentication will be required.
 
         The file must constain user names and password hashes in the format
-        <literal>username:hash </literal>, one for each line.  Usernames must
+        `username:hash `, one for each line.  Usernames must
         start with a lowecase ([a-z]) ASCII character, might contain
         non-consecutive underscores except at the end, and consists of
         small-case a-z characters and digits 0-9.
-        The <command>htpasswd</command> tool from the <package>apacheHttpd
-        </package> package may be used to generate the hash:
-        <command>htpasswd -bnBC 12 username password</command>
+        The {command}`htpasswd` tool from the `apacheHttpd`
+        package may be used to generate the hash:
+        {command}`htpasswd -bnBC 12 username password`
       '';
     };
 
     web.extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra command line arguments to pass to magneticow.
       '';
     };

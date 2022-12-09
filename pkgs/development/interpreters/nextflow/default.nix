@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nextflow";
-  version = "21.10.6";
+  version = "22.04.5";
 
   src = fetchurl {
     url = "https://github.com/nextflow-io/nextflow/releases/download/v${version}/nextflow-${version}-all";
-    sha256 = "0l9hi51vrhvfx3px2pxw7lp4h21n8ks50x4icfk3hbgl2hwf7fvx";
+    sha256 = "sha256-Lpxb0lGR/oiPzj6j+lySZwiRgkRgPgyjK7FX0BSejm4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

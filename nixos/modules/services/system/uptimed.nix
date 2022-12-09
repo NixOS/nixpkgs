@@ -12,8 +12,8 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Enable <literal>uptimed</literal>, allowing you to track
+        description = lib.mdDoc ''
+          Enable `uptimed`, allowing you to track
           your highest uptimes.
         '';
       };

@@ -1,30 +1,27 @@
 { lib
 , fetchFromGitHub
-, buildPythonApplication
-, pexpect
-, pyyaml
+, python3
 , openssh
 , nixosTests
-, pythonOlder
 }:
 
-buildPythonApplication rec{
+python3.pkgs.buildPythonApplication rec{
   pname = "xxh";
-  version = "0.8.10";
+  version = "0.8.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-2RMzgIAhM//XReCFBGlTlXn9j4WQiM/k2pLxP2iPUy8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3/AU2o72X7FE11NSXC6m9fFhmjzEDZ+OpTXg8yvv62A=";
   };
 
   propagatedBuildInputs = [
-    pexpect
-    pyyaml
+    python3.pkgs.pexpect
+    python3.pkgs.pyyaml
     openssh
   ];
 

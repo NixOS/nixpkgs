@@ -1,6 +1,6 @@
 # Perl {#sec-language-perl}
 
-## Running perl programs on the shell {#ssec-perl-running}
+## Running Perl programs on the shell {#ssec-perl-running}
 
 When executing a Perl script, it is possible you get an error such as `./myscript.pl: bad interpreter: /usr/bin/perl: no such file or directory`. This happens when the script expects Perl to be installed at `/usr/bin/perl`, which is not the case when using Perl from nixpkgs. You can fix the script by changing the first line to:
 
@@ -35,15 +35,16 @@ Perl packages from CPAN are defined in [pkgs/top-level/perl-packages.nix](https:
 
 ```nix
 ClassC3 = buildPerlPackage rec {
-  name = "Class-C3-0.21";
+  pname = "Class-C3";
+  version = "0.21";
   src = fetchurl {
-    url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-    sha256 = "1bl8z095y4js66pwxnm7s853pi9czala4sqc743fdlnk27kq94gz";
+    url = "mirror://cpan/authors/id/F/FL/FLORA/${pname}-${version}.tar.gz";
+    hash = "sha256-/5GE5xHT0uYGOQxroqj6LMU7CtKn2s6vMVoSXxL4iK4=";
   };
 };
 ```
 
-Note the use of `mirror://cpan/`, and the `${name}` in the URL definition to ensure that the name attribute is consistent with the source that we’re actually downloading. Perl packages are made available in `all-packages.nix` through the variable `perlPackages`. For instance, if you have a package that needs `ClassC3`, you would typically write
+Note the use of `mirror://cpan/`, and the `pname` and `version` in the URL definition to ensure that the `pname` attribute is consistent with the source that we’re actually downloading. Perl packages are made available in `all-packages.nix` through the variable `perlPackages`. For instance, if you have a package that needs `ClassC3`, you would typically write
 
 ```nix
 foo = import ../path/to/foo.nix {
@@ -72,11 +73,12 @@ So what does `buildPerlPackage` do? It does the following:
 { buildPerlPackage, fetchurl, db }:
 
 buildPerlPackage rec {
-  name = "BerkeleyDB-0.36";
+  pname = "BerkeleyDB";
+  version = "0.36";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "07xf50riarb60l1h6m2dqmql8q5dij619712fsgw7ach04d8g3z1";
+    url = "mirror://cpan/authors/id/P/PM/PMQS/${pname}-${version}.tar.gz";
+    hash = "sha256-4Y+HGgGQqcOfdiKcFIyMrWBEccVNVAMDBWZlFTMorh8=";
   };
 
   preConfigure = ''
@@ -90,10 +92,11 @@ Dependencies on other Perl packages can be specified in the `buildInputs` and `p
 
 ```nix
 ClassC3Componentised = buildPerlPackage rec {
-  name = "Class-C3-Componentised-1.0004";
+  pname = "Class-C3-Componentised";
+  version = "1.0004";
   src = fetchurl {
-    url = "mirror://cpan/authors/id/A/AS/ASH/${name}.tar.gz";
-    sha256 = "0xql73jkcdbq4q9m0b0rnca6nrlvf5hyzy8is0crdk65bynvs8q1";
+    url = "mirror://cpan/authors/id/A/AS/ASH/${pname}-${version}.tar.gz";
+    hash = "sha256-ASO9rV/FzJYZ0BH572Fxm2ZrFLMZLFATJng1NuU4FHc=";
   };
   propagatedBuildInputs = [
     ClassC3 ClassInspector TestException MROCompat
@@ -108,11 +111,11 @@ On Darwin, if a script has too many `-Idir` flags in its first line (its “sheb
 
 ImageExifTool = buildPerlPackage {
   pname = "Image-ExifTool";
-  version = "11.50";
+  version = "12.50";
 
   src = fetchurl {
-    url = "https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.50.tar.gz";
-    sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
+    url = "https://exiftool.org/${pname}-${version}.tar.gz";
+    hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -139,10 +142,11 @@ This program takes a Perl module name, looks it up on CPAN, fetches and unpacks 
 ```ShellSession
 $ nix-generate-from-cpan XML::Simple
   XMLSimple = buildPerlPackage rec {
-    name = "XML-Simple-2.22";
+    pname = "XML-Simple";
+    version = "2.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRANTM/${name}.tar.gz";
-      sha256 = "b9450ef22ea9644ae5d6ada086dc4300fa105be050a2030ebd4efd28c198eb49";
+      url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.22.tar.gz";
+      hash = "sha256-uUUO8i6pZErl1q2ghtxDAPoQW+BQogMOvU79KMGY60k=";
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
     meta = {

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala
 }:
 
 let
@@ -49,7 +49,9 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    # when cross-compiling ./compiler/valac is valac for host
+    # so add the build vala in nativeBuildInputs
+    preBuild       = lib.optionalString (disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -57,6 +59,7 @@ let
       pkg-config flex bison libxslt
     ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
       ++ extraNativeBuildInputs;
 
     buildInputs = [
@@ -90,18 +93,18 @@ let
 
 in rec {
   vala_0_48 = generic {
-    version = "0.48.24";
-    sha256 = "NknvhFc7aGX8NHBkDuYDcgCZ65FbOfqtGbdJjeGn3yQ=";
+    version = "0.48.25";
+    sha256 = "UMs8Xszdx/1DaL+pZBSlVgReedKxWmiRjHJ7jIOxiiQ=";
   };
 
   vala_0_54 = generic {
-    version = "0.54.8";
-    sha256 = "7fs+eUhqS/SM666pKR5X/HfakyK2lh6VSd9tlz0EvIA=";
+    version = "0.54.9";
+    sha256 = "hXLA6Nd9eMFZfVFgCPBUDH50leA10ou0wlzJk+U85LQ=";
   };
 
   vala_0_56 = generic {
-    version = "0.56.1";
-    sha256 = "xRi4Hf3agtHN9Yaz+bIyMWLLlr08taLANlDOoCXZH7k=";
+    version = "0.56.3";
+    sha256 = "4QZiIb97icsfpzJ6OIhkXLM7YE3jv0WqgRMv0EC2mb8=";
   };
 
   vala = vala_0_56;

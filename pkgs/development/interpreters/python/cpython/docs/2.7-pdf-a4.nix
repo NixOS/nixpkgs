@@ -2,13 +2,13 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "python27-docs-pdf-a4";
-  version = "2.7.16";
+  version = "2.7.18";
 
   src = fetchurl {
-    url = "http://docs.python.org/ftp/python/doc/${version}/python-${version}-docs-pdf-a4.tar.bz2";
-    sha256 = "14ml1ynrlbhg43737bdsb8k5y39wsffqj4iwhylhb8n8l5dplfdq";
+    url = "http://www.python.org/ftp/python/doc/2.7.18/python-2.7.18-docs-pdf-a4.tar.bz2";
+    sha256 = "0rxb2fpxwivjpk5wi2pl1fqibr4khf9s0yq6a49k9b4awi9nkb6v";
   };
   installPhase = ''
     mkdir -p $out/share/doc/python27

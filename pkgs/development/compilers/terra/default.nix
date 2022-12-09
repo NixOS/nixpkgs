@@ -1,15 +1,17 @@
 { lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false }:
+, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
+, libobjc, Cocoa, Foundation
+}:
 
 let
-  luajitRev = "9143e86498436892cb4316550be4d45b68a61224";
+  luajitRev = "50936d784474747b4569d988767f1b5bab8bb6d0";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    sha256 = "1zw1yr0375d6jr5x20zvkvk76hkaqamjynbswpl604w6r6id070b";
+    sha256 = "1g87pl014b5v6z2nnhiwn3wf405skawszfr5wdzyfbx00j3kgxd0";
   };
 
   llvmMerged = symlinkJoin {
@@ -30,17 +32,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "terra";
-  version = "1.0.0-beta5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "bcc5a81649cb91aaaff33790b39c87feb5f7a4c2";
-    sha256 = "0jb147vbvix3zvrq6ln321jdxjgr6z68pdrirjp4zqmx78yqlcx3";
+    rev = "release-${version}";
+    sha256 = "1bs76ibzb469rlqs7slw8pm65csjq1nf0lqh6i9kcvbzavmdfds7";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmMerged ncurses libxml2 ] ++ lib.optional enableCUDA cuda;
+  buildInputs = [ llvmMerged ncurses libxml2 ]
+    ++ lib.optionals enableCUDA [ cuda ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc Cocoa Foundation ];
 
   cmakeFlags = [
     "-DHAS_TERRA_VERSION=0"
@@ -80,10 +84,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A low-level counterpart to Lua";
     homepage = "https://terralang.org/";
-    platforms = platforms.x86_64;
+    platforms = platforms.all;
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];
     license = licenses.mit;
   };

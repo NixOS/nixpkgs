@@ -1,0 +1,41 @@
+From 6145cb9ed935621f1974655fe1ab44cf2f0fbcce Mon Sep 17 00:00:00 2001
+From: Thiago Kenji Okada <thiagokokada@gmail.com>
+Date: Sat, 29 Oct 2022 12:27:55 +0100
+Subject: [PATCH] Use fixed path for libretro_core_info
+
+---
+ configuration.c                  | 2 +-
+ frontend/drivers/platform_unix.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/configuration.c b/configuration.c
+index af3fc8f43c..c6d56308b3 100644
+--- a/configuration.c
++++ b/configuration.c
+@@ -1468,7 +1468,7 @@ static struct config_path_setting *populate_settings_path(
+    SETTING_PATH("core_options_path",
+          settings->paths.path_core_options, false, NULL, true);
+    SETTING_PATH("libretro_info_path",
+-         settings->paths.path_libretro_info, false, NULL, true);
++         settings->paths.path_libretro_info, false, NULL, false);
+    SETTING_PATH("content_database_path",
+          settings->paths.path_content_database, false, NULL, true);
+    SETTING_PATH("cheat_database_path",
+diff --git a/frontend/drivers/platform_unix.c b/frontend/drivers/platform_unix.c
+index fe5f7341c9..c2a91f8c99 100644
+--- a/frontend/drivers/platform_unix.c
++++ b/frontend/drivers/platform_unix.c
+@@ -1799,8 +1799,8 @@ static void frontend_unix_get_env(int *argc,
+    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_CORE_INFO], base_path,
+          "core_info", sizeof(g_defaults.dirs[DEFAULT_DIR_CORE_INFO]));
+ #else
+-   fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_CORE_INFO], base_path,
+-         "cores", sizeof(g_defaults.dirs[DEFAULT_DIR_CORE_INFO]));
++   fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_CORE_INFO], "@libretro_info_path@",
++         "share/libretro/info", sizeof(g_defaults.dirs[DEFAULT_DIR_CORE_INFO]));
+ #endif
+    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_AUTOCONFIG], base_path,
+          "autoconfig", sizeof(g_defaults.dirs[DEFAULT_DIR_AUTOCONFIG]));
+-- 
+2.38.0
+

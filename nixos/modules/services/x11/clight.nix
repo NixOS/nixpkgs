@@ -28,29 +28,23 @@ let
       cfg.settings));
 in {
   options.services.clight = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable clight or not.
-      '';
-    };
+    enable = mkEnableOption (lib.mdDoc "clight");
 
     temperature = {
       day = mkOption {
         type = types.int;
         default = 5500;
-        description = ''
+        description = lib.mdDoc ''
           Colour temperature to use during the day, between
-          <literal>1000</literal> and <literal>25000</literal> K.
+          `1000` and `25000` K.
         '';
       };
       night = mkOption {
         type = types.int;
         default = 3700;
-        description = ''
+        description = lib.mdDoc ''
           Colour temperature to use at night, between
-          <literal>1000</literal> and <literal>25000</literal> K.
+          `1000` and `25000` K.
         '';
       };
     };
@@ -62,9 +56,9 @@ in {
       type = with types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
       default = {};
       example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
-      description = ''
+      description = lib.mdDoc ''
         Additional configuration to extend clight.conf. See
-        <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a
+        <https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf> for a
         sample configuration file.
       '';
     };

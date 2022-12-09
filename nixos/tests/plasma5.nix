@@ -13,7 +13,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.displayManager.defaultSession = "plasma";
-    services.xserver.desktopManager.plasma5.enable = true;
+    services.xserver.desktopManager.plasma5 = {
+      enable = true;
+      excludePackages = [ pkgs.plasma5Packages.elisa ];
+    };
     services.xserver.displayManager.autoLogin = {
       enable = true;
       user = "alice";
@@ -39,6 +42,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     with subtest("Check that logging in has given the user ownership of devices"):
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+
+    with subtest("Ensure Elisa is not installed"):
+        machine.fail("which elisa")
 
     with subtest("Run Dolphin"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin >&2 &'")

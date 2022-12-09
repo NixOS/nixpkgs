@@ -15,14 +15,14 @@ let
 
 in stdenv.mkDerivation {
   pname = "openmolcas";
-  version = "22.02";
+  version = "22.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     # The tag keeps moving, fix a hash instead
-    rev = "f8df69cf87b241a15ebc82d72a8f9a031a385dd4"; # 2022-02-10
-    sha256 = "0p2xj8kgqdk5kb1jv5k77acbiqkbl2sh971jnz9p00cmbh556r6a";
+    rev = "aedb15be52d6dee285dd3e10e9d05f44e4ca969a"; # 2022-10-22
+    sha256 = "sha256-7d2wBIEg/r5bPZXlngTIZxYdMN0UIop7TA+WFZmzCo8=";
   };
 
   patches = [
@@ -31,6 +31,12 @@ in stdenv.mkDerivation {
     # Required for MKL builds
     ./MKL-MPICH.patch
   ];
+
+  postPatch = ''
+    # Using env fails in the sandbox
+    substituteInPlace Tools/pymolcas/export.py --replace \
+      "/usr/bin/env','python3" "python3"
+  '';
 
   nativeBuildInputs = [
     perl

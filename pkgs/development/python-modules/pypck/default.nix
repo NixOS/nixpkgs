@@ -28,6 +28,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_connection_lost"
   ];

@@ -2,38 +2,59 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonAtLeast
+, basemap-data
+, cython
+, geos
 , numpy
 , matplotlib
 , pillow
-, setuptools
 , pyproj
 , pyshp
-, six
-, pkgs
+, python
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.3.2";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
-    rev = "v${version}";
-    sha256 = "sha256-onNdOQL4i6GTcuCRel5yanJ2EQ5iYClp+imuBObXF2I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BSWifzh+Y1f+x89oNYMBvttWY9qZ0IM5QYqSgyVb1fE=";
   };
 
-  propagatedBuildInputs = [ numpy matplotlib pillow pyproj pyshp six ];
-  buildInputs = [ setuptools pkgs.geos ];
+  sourceRoot = "source/packages/basemap";
+
+  nativeBuildInputs = [
+    cython
+    geos
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    basemap-data
+    numpy
+    matplotlib
+    pillow # undocumented optional dependency
+    pyproj
+    pyshp
+  ];
 
   # Standard configurePhase from `buildPythonPackage` seems to break the setup.py script
-  configurePhase = ''
-    export GEOS_DIR=${pkgs.geos}
+  preBuild = ''
+    export GEOS_DIR=${geos}
   '';
 
-  # The 'check' target is not supported by the `setup.py` script.
-  # TODO : do the post install checks (`cd examples && ${python.interpreter} run_all.py`)
+  # test have various problems including requiring internet connection, permissions issues, problems with latest version of pillow
   doCheck = false;
+
+  checkPhase = ''
+    cd ../../examples
+    export HOME=$TEMPDIR
+    ${python.interpreter} run_all.py
+  '';
 
   meta = with lib; {
     homepage = "https://matplotlib.org/basemap/";
@@ -43,8 +64,7 @@ buildPythonPackage rec {
       coastlines, lakes, rivers and political boundaries. See
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
-    license = with licenses; [ mit gpl2 ];
-    broken = pythonAtLeast "3.9";
+    maintainers = with maintainers; [ ];
+    license = with licenses; [ mit lgpl21 ];
   };
-
 }

@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "gomplate";
-  version = "3.10.0";
+  version = "3.11.3";
   owner = "hairyhenderson";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit owner rev;
     repo = pname;
-    sha256 = "0dbi9saxbwcvypxc0s656ln9zq2vysx8dhrcz488nmy6rcpqiiah";
+    sha256 = "sha256-NvTwiGyBHhHiVHdWeXnJONNkHkrvsc1zmHPK8rSHaQw=";
   };
 
-  vendorSha256 = "0rvki8ghlbbaqgnjfsbs1jswj08jfzmnz9ilynv2c6kfkx9zs108";
+  vendorSha256 = "sha256-BIcOErtlcnE70Mo6fjmA/btvSpw95RaKLqNWsgyJgpc=";
 
   postPatch = ''
     # some tests require network access
@@ -22,6 +22,11 @@ buildGoModule rec {
     # some tests rely on external tools we'd rather not depend on
     rm internal/tests/integration/datasources_consul_test.go \
       internal/tests/integration/datasources_vault*_test.go
+  '';
+
+  # TestInputDir_RespectsUlimit
+  preCheck = ''
+    ulimit -n 1024
   '';
 
   ldflags = [

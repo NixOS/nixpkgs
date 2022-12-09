@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "1.5.1";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c411fd7269a49d1c72a964e97de474ec082115777b363aeed98a6595f90b8676";
+    sha256 = "sha256-/b4KrYg0mXoQJ/L+9ol7gD2myB0aLgDj0IWa8sxarKU=";
   };
 
   buildInputs = [

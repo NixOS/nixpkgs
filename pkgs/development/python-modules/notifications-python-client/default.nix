@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "notifications-python-client";
-  version = "6.3.0";
+  version = "6.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "alphagov";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pfOTVgsfXJQ9GIGowra3RAwxCri76RgnA9iyWbjomCk=";
+    sha256 = "sha256-HEHerdwplsPAld23Al8sUARu4T5IJLmY5kucAz2791c=";
   };
 
   propagatedBuildInputs = [

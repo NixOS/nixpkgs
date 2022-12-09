@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     libXtst
     libXv
     libXxf86vm
-    xlibsWrapper
     xorgproto
   ]);
 

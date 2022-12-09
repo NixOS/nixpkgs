@@ -486,6 +486,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -561,6 +562,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -681,7 +683,7 @@ rec {
       __stdenvImpureHostDeps = commonImpureHostDeps;
       __extraImpureHostDeps = commonImpureHostDeps;
 
-      initialPath = import ../common-path.nix { inherit pkgs; };
+      initialPath = import ../generic/common-path.nix { inherit pkgs; };
       shell = "${pkgs.bash}/bin/bash";
 
       cc = pkgs."${finalLlvmPackages}".libcxxClang;
@@ -696,6 +698,11 @@ rec {
         libc = pkgs.darwin.Libsystem;
         shellPackage = pkgs.bash;
         inherit bootstrapTools;
+      } // lib.optionalAttrs useAppleSDKLibs {
+        # This objc4 will be propagated to all builds using the final stdenv,
+        # and we shouldn't mix different builds, because they would be
+        # conflicting LLVM modules. Export it here so we can grab it later.
+        inherit (pkgs.darwin) objc4;
       };
 
       allowedRequisites = (with pkgs; [
@@ -737,6 +744,7 @@ rec {
         brotli.lib
         cc.expand-response-params
         libxml2.out
+        file
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

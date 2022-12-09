@@ -7,6 +7,7 @@
 , pkg-config
 , python3
 , fontconfig
+, installShellFiles
 , openssl
 , libGL
 , libX11
@@ -22,21 +23,30 @@
 , Cocoa
 , Foundation
 , libiconv
+, UserNotifications
 , nixosTests
 , runCommand
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220408-101518-b908e2dd";
+  version = "20221119-145034-49b9839f";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-kuuoD+hqgj7QXFRIxa112oc4idtcK0ptFACDpI0bzGY=";
+    sha256 = "sha256-1gnP2Dn4nkhxelUsXMay2VGvgvMjkdEKhFK5AAST++s=";
   };
+
+  # Rust 1.65 does better at enum packing (according to
+  # 40e08fafe2f6e5b0c70d55996a0814d6813442ef), but Nixpkgs doesn't have 1.65
+  # yet (still in staging), so skip these tests for now.
+  checkFlags = [
+    "--skip=escape::action_size"
+    "--skip=surface::line::storage::test::memory_usage"
+  ];
 
   postPatch = ''
     echo ${version} > .tag
@@ -45,12 +55,13 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-iIb2zLUZpn23ooEiOP+yQMYUUmvef/KqvjzgLOFmjs0=";
+  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
 
   nativeBuildInputs = [
+    installShellFiles
+    ncurses # tic for terminfo
     pkg-config
     python3
-    ncurses # tic for terminfo
   ] ++ lib.optional stdenv.isDarwin perl;
 
   buildInputs = [
@@ -71,19 +82,26 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+    UserNotifications
   ];
+
+  buildFeatures = [ "distro-defaults" ];
 
   postInstall = ''
     mkdir -p $out/nix-support
     echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
-    # desktop icon
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
     install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
 
-    # helper scripts
     install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
+    installShellCompletion --cmd wezterm \
+      --bash assets/shell-completion/bash \
+      --fish assets/shell-completion/fish \
+      --zsh assets/shell-completion/zsh
+
+    install -Dm644 assets/wezterm-nautilus.py -t $out/share/nautilus-python/extensions
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
@@ -119,7 +137,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
-    # Fails on missing UserNotifications framework while linking
-    broken = stdenv.isDarwin;
   };
 }

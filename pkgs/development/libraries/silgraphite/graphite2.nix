@@ -5,7 +5,6 @@
 , freetype
 , cmake
 , static ? stdenv.hostPlatform.isStatic
-, libgcc
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ freetype ]
-    # On aarch64-darwin libgcc won't even build currently, and it doesn't seem needed.
-    ++ lib.optionals (with stdenv; !cc.isGNU && !(isDarwin && isAarch64)) [ libgcc ];
+  buildInputs = [ freetype ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 
@@ -33,11 +30,6 @@ stdenv.mkDerivation rec {
   # freetype symbols)
   postConfigure = lib.optionalString static ''
     sed -e '/freetype freetype.c/d' -i ../tests/examples/CMakeLists.txt
-  '';
-
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src/
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src/
   '';
 
   doCheck = true;

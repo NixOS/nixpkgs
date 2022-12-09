@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20220125";
+  version = "20220506";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Hqbm5+YyCde/6QuyIy4NE/jG4xNDzeNjEefMr60GEZM=";
+    sha256 = "sha256-fK0FBn9e7l1Y/A7taFlaoas6ZPREFhEmskVBqjda6q0=";
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]

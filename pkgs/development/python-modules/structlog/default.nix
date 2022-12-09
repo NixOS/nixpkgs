@@ -1,30 +1,54 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , pytestCheckHook
 , pytest-asyncio
 , pretend
 , freezegun
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
 , simplejson
-, six
+, typing-extensions
 , pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.5.0";
-  format = "flit";
+  version = "22.3.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = version;
-    sha256 = "0bc5lj0732j0hjq89llgrncyzs6k3aaffvg07kr3la44w0hlrb4l";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-+r+M+uTXdNBWQf0TGQuZgsCXg2CBKwH8ZE2+uAe0Dzg=";
   };
 
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-asyncio pretend freezegun simplejson ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [
+    "structlog"
+  ];
+
+  checkInputs = [
+    freezegun
+    pretend
+    pytest-asyncio
+    pytestCheckHook
+    simplejson
+  ];
 
   meta = with lib; {
     description = "Painless structural logging";

@@ -1,22 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, rclone, makeWrapper }:
+{ lib, stdenvNoCC, fetchFromGitHub, rclone, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "git-annex-remote-rclone";
-  version = "0.6";
-  rev = "v${version}";
+  version = "0.7";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "DanielDent";
     repo = "git-annex-remote-rclone";
-    sha256 = "0j0hlxji8d974fq7zd4xc02n0jpi31ylhxc7z4zp8iiwad5mkpxp";
+    rev = "v${version}";
+    sha256 = "sha256-H2C4zjM+kbC9qPl1F+bSnepuqANjZd1sz6XxOTkVVkU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp git-annex-remote-rclone $out/bin
+    install -Dm755 -t $out/bin git-annex-remote-rclone
     wrapProgram "$out/bin/git-annex-remote-rclone" \
       --prefix PATH ":" "${lib.makeBinPath [ rclone ]}"
   '';
@@ -24,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
     description = "Use rclone supported cloud storage providers with git-annex";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
     maintainers = [ maintainers.montag451 ];
   };
 }

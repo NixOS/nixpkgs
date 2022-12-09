@@ -13,6 +13,8 @@
 , gnugrep
 , gnused
 , libtiff
+, libxcrypt
+, openssl
 , psmisc
 , sharutils
 , util-linux
@@ -30,8 +32,8 @@
 let
 
   pname = "hylafaxplus";
-  version = "7.0.5";
-  sha256 = "1blv251r0yhnhxk9wgkjgr35al50q23hiskjkcbs8lmqqrz0cm8f";
+  version = "7.0.6";
+  hash = "sha512-0faeEwF/XQE/85zwUMOnrGzvGanuWRDr53SnrgbX0i/SHjHelzSEd2TK6plVOfV4w8RY7Ox7lSO1gjqEEzfZyw==";
 
   configSite = substituteAll {
     name = "${pname}-config.site";
@@ -65,7 +67,7 @@ stdenv.mkDerivation {
   inherit pname version;
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
   patches = [
     # adjust configure check to work with libtiff > 4.1
@@ -78,6 +80,8 @@ stdenv.mkDerivation {
     file  # for `file` command
     ghostscript
     libtiff
+    libxcrypt
+    openssl
     psmisc  # for `fuser` command
     sharutils  # for `uuencode` command
     util-linux  # for `agetty` command

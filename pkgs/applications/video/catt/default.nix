@@ -39,26 +39,27 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.2";
-
-  disabled = python3.pythonOlder "3.4";
+  version = "0.12.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
+    hash = "sha256-Q9ePWRLwuuTG+oPKFg7xn1gj4uAVlXUxegWdyH3Yd90=";
   };
 
   propagatedBuildInputs = [
     click
     ifaddr
     PyChromecast
+    protobuf
     requests
-    youtube-dl
+    yt-dlp
   ];
 
   doCheck = false; # attempts to access various URLs
 
-  pythonImportsCheck = [ "catt" ];
+  pythonImportsCheck = [
+    "catt"
+  ];
 
   meta = with lib; {
     description = "Tool to send media from online sources to Chromecast devices";

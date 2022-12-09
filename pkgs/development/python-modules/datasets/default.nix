@@ -3,6 +3,7 @@
 , buildPythonPackage
 , dill
 , fetchFromGitHub
+, fetchpatch
 , fsspec
 , huggingface-hub
 , importlib-metadata
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.18.3";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,9 +29,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = version;
-    hash = "sha256-2x6DpsDcVF2O5iJKeMEGw/aJwZPc7gSGaK2947c3B6s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Backport support for dill<3.7
+      url = "https://github.com/huggingface/datasets/pull/5166.patch";
+      hash = "sha256-QigpXKHi2B60M/iIWSqvBU9hW5vBu6IHGML22aCMevo=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "responses<0.19" "responses"
+  '';
 
   propagatedBuildInputs = [
     aiohttp

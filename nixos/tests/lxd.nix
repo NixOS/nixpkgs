@@ -11,8 +11,8 @@ let
     };
   };
 
-  lxd-image-metadata = lxd-image.lxdMeta.${pkgs.system};
-  lxd-image-rootfs = lxd-image.lxdImage.${pkgs.system};
+  lxd-image-metadata = lxd-image.lxdMeta.${pkgs.stdenv.hostPlatform.system};
+  lxd-image-rootfs = lxd-image.lxdImage.${pkgs.stdenv.hostPlatform.system};
 
 in {
   name = "lxd";
@@ -23,7 +23,7 @@ in {
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
-      diskSize = 2048;
+      diskSize = 4096;
 
       # Since we're testing `limits.cpu`, we've gotta have a known number of
       # cores to lean on

@@ -1,8 +1,10 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, dnspython, pyasn1 }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, pythonAtLeast, dnspython, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "sleekxmpp";
   version = "1.3.3";
+
+  disabled = pythonAtLeast "3.10"; # Deprecated in favor of Slixmpp
 
   propagatedBuildInputs = [ dnspython pyasn1 ];
 

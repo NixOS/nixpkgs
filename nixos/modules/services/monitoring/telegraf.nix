@@ -11,12 +11,12 @@ in {
   ###### interface
   options = {
     services.telegraf = {
-      enable = mkEnableOption "telegraf server";
+      enable = mkEnableOption (lib.mdDoc "telegraf server");
 
       package = mkOption {
         default = pkgs.telegraf;
         defaultText = literalExpression "pkgs.telegraf";
-        description = "Which telegraf derivation to use";
+        description = lib.mdDoc "Which telegraf derivation to use";
         type = types.package;
       };
 
@@ -24,17 +24,17 @@ in {
         type = types.listOf types.path;
         default = [];
         example = [ "/run/keys/telegraf.env" ];
-        description = ''
+        description = lib.mdDoc ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
-          syntax: <literal>$ENVIRONMENT</literal> or <literal>''${VARIABLE}</literal>.
+          syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
           This is useful to avoid putting secrets into the nix store.
         '';
       };
 
       extraConfig = mkOption {
         default = {};
-        description = "Extra configuration options for telegraf";
+        description = lib.mdDoc "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
           outputs.influxdb = {

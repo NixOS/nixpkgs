@@ -17,6 +17,11 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     (fetchpatch {
+      # Import Iterable from collections.abc
+      url = "https://github.com/CANToolz/CANToolz/commit/9e818946716a744b3c7356f248e24ea650791d1f.patch";
+      hash = "sha256-BTQ0Io2RF8WpWlLoYfBj8IhL92FRR8ustGClt28/R8c=";
+    })
+    (fetchpatch {
       # Replace time.clock() which was removed, https://github.com/CANToolz/CANToolz/pull/30
       url = "https://github.com/CANToolz/CANToolz/pull/30/commits/d75574523d3b273c40fb714532c4de27f9e6dd3e.patch";
       sha256 = "0g91hywg5q6f2qk1awgklywigclrbhh6a6mwd0kpbkk1wawiiwbc";

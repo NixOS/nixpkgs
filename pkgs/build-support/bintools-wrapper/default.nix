@@ -70,6 +70,7 @@ let
   dynamicLinker =
     /**/ if sharedLibraryLoader == null then null
     else if targetPlatform.libc == "musl"             then "${sharedLibraryLoader}/lib/ld-musl-*"
+    else if targetPlatform.libc == "uclibc"           then "${sharedLibraryLoader}/lib/ld*-uClibc.so.1"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is64bit) then "/system/bin/linker64"
     else if targetPlatform.libc == "nblibc"           then "${sharedLibraryLoader}/libexec/ld.elf_so"
@@ -164,11 +165,13 @@ stdenv.mkDerivation {
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
-    # Create a symlink to as (the assembler).
+    # Create symlinks for rest of the binaries.
     + ''
-      if [ -e $ldPath/${targetPrefix}as ]; then
-        ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
-      fi
+      for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line ranlib readelf elfedit; do
+        if [ -e $ldPath/${targetPrefix}''${binary} ]; then
+          ln -s $ldPath/${targetPrefix}''${binary} $out/bin/${targetPrefix}''${binary}
+        fi
+      done
 
     '' + (if !useMacosReexportHack then ''
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
@@ -362,7 +365,7 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
-  inherit dynamicLinker expand-response-params;
+  inherit dynamicLinker;
 
   # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";

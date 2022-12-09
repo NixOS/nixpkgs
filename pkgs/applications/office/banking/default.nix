@@ -13,38 +13,22 @@
 , gobject-introspection
 , libadwaita
 , librsvg
+, gtk4
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
-  version = "0.4.0";
+  version = "0.5.1";
   format = "other";
 
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "banking";
     rev = version;
-    sha256 = "sha256-VGNCSirQslRfLIFeo375BNlHujoNXm+s55Ty+hB+ZRI=";
+    sha256 = "sha256-tZlBpDcwQ/aWroP2sFQBZcvmBD26PiY7q/8xFA8GnVc=";
   };
 
-  patches = [
-    # Fix build with meson 0.61
-    # https://gitlab.com/tabos/banking/-/merge_requests/90
-    (fetchpatch {
-      url = "https://gitlab.com/tabos/banking/-/commit/c3cc9afc380fe666ae6e331aa8a97659c60397a4.patch";
-      sha256 = "r9n9l47XU4Tg4U5sfiFdGkbG8QB7O4ol9CB1ya06yOc=";
-    })
-    # fix build with libadwaita 1.0.0
-    (fetchpatch {
-      url = "https://gitlab.com/tabos/banking/-/commit/27ac4a89ba6047005d43de71a469ef30d1fda8b5.patch";
-      hash = "sha256-dpDjdYf3gDsyFMTfGes+x27yUxKEnKjLulJxX2encG0=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace meson_post_install.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-
     patchShebangs meson_post_conf.py meson_post_install.py
   '';
 
@@ -57,10 +41,11 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     pkg-config
     wrapGAppsHook4
+    gobject-introspection
+    gtk4 # for gtk4-update-icon-cache
   ];
 
   buildInputs = [
-    gobject-introspection
     libadwaita
     librsvg
   ];
@@ -70,12 +55,15 @@ python3.pkgs.buildPythonApplication rec {
     fints
     mt-940
     pygobject3
+    pysqlitecipher
+    schwifty
   ];
 
   meta = with lib; {
     description = "Banking application for small screens";
     homepage = "https://tabos.gitlab.io/projects/banking/";
     license = licenses.gpl3Plus;
+    mainProgram = "org.tabos.banking";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

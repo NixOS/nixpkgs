@@ -1,8 +1,19 @@
-{ callPackage
+{ lib
+, stdenv
+, pkgsBuildHost
 , ...
 }:
 
 let
+  pkgs = import ../../../.. {
+    inherit (stdenv.hostPlatform) system;
+    # Allow python27 with known security issues only for resholve,
+    # see issue #201859 for the reasoning
+    # In resholve case this should not be a security issue,
+    # since it will only be used during build, not runtime
+    config.permittedInsecurePackages = [ pkgsBuildHost.python27.name ];
+  };
+  callPackage = lib.callPackageWith pkgs;
   source = callPackage ./source.nix { };
   deps = callPackage ./deps.nix { };
 in

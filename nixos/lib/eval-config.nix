@@ -9,12 +9,16 @@
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
 evalConfigArgs@
-{ # !!! system can be set modularly, would be nice to remove
+{ # !!! system can be set modularly, would be nice to remove,
+  #     however, removing or changing this default is too much
+  #     of a breaking change. To set it modularly, pass `null`.
   system ? builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
   # be set modularly anyway.
   pkgs ? null
 , # !!! what do we gain by making this configurable?
+  #     we can add modules that are included in specialisations, regardless
+  #     of inheritParentConfig.
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}
@@ -48,7 +52,7 @@ let
       # this.  Since the latter defaults to the former, the former should
       # default to the argument. That way this new default could propagate all
       # they way through, but has the last priority behind everything else.
-      nixpkgs.system = lib.mkDefault system;
+      nixpkgs.system = lib.mkIf (system != null) (lib.mkDefault system);
 
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, libxml2, pkg-config, gnome, libchamplain, gdl, shared-mime-info, desktop-file-utils, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, intltool, libxml2, pkg-config, gnome, libchamplain, gdl, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gpx-viewer";

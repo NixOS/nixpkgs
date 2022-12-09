@@ -15,15 +15,15 @@ let
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
+  # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
+  # or equivalently, ‘nix-build tests/login.nix’.
   # See also nixosTests in pkgs/top-level/all-packages.nix
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = t: {
-        ${system} = hydraJob t.test;
+      callTest = config: {
+        ${system} = hydraJob config.test;
       };
     } // {
       # for typechecking of the scripts and evaluation of
@@ -32,8 +32,8 @@ let
         import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
-        callTest = t: {
-          ${system} = hydraJob t.test.driver;
+        callTest = config: {
+          ${system} = hydraJob config.driver;
         };
       };
     };
@@ -169,13 +169,13 @@ in rec {
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
-  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;
@@ -221,6 +221,29 @@ in rec {
 
   );
 
+  # KVM image for proxmox in VMA format
+  proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-image.nix
+      ];
+    }).config.system.build.VMA)
+  );
+
+  # LXC tarball for proxmox
+  proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-lxc.nix
+      ];
+    }).config.system.build.tarball)
+  );
 
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
@@ -318,38 +341,11 @@ in rec {
     "mkdir $out; ln -s $toplevel $out/dummy");
 
 
-  # Provide a tarball that can be unpacked into an SD card, and easily
-  # boot that system from uboot (like for the sheevaplug).
-  # The pc variant helps preparing the expression for the system tarball
-  # in a machine faster than the sheevpalug
-  /*
-  system_tarball_pc = forAllSystems (system: makeSystemTarball {
-    module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
-    inherit system;
-  });
-  */
-
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
     module = ./modules/virtualisation/lxc-container.nix;
     inherit system;
   });
-
-  /*
-  system_tarball_fuloong2f =
-    assert builtins.currentSystem == "mips64-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
-      system = "mips64-linux";
-    };
-
-  system_tarball_sheevaplug =
-    assert builtins.currentSystem == "armv5tel-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
-      system = "armv5tel-linux";
-    };
-  */
 
   tests = allTests;
 

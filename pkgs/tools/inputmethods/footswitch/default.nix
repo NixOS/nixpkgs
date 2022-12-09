@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "footswitch";
-  version = "unstable-20201-03-17";
+  version = "unstable-2022-04-12";
 
   src = fetchFromGitHub {
     owner = "rgerganov";
     repo = "footswitch";
-    rev = "aa0b10f00d3e76dac27b55b88c8d44c0c406f7f0";
-    sha256 = "sha256-SikYiBN7jbH5I1x5wPCF+buwFp1dt35cVxAN6lWkTN0=";
+    rev = "1cf63643e18e688e4ebe96451db24edf52338cc0";
+    sha256 = "0gfvi2wgrljndyz889cjjh2q13994fnaf11n7hpdd82c4wgg06kj";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile \
       --replace /usr/local $out \
       --replace /usr/bin/install install \
-      --replace /etc/udev/rules.d $out/lib/udev/rules.d
+      --replace /etc/udev $out/lib/udev
   '';
 
   preInstall = ''

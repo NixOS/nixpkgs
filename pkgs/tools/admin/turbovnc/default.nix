@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "turbovnc";
-  version = "3.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = version;
-    sha256 = "sha256-4/pfKb89ld32LvqTXjVpIJUCCDA+D7CLYMNFYytKVIE=";
+    sha256 = "sha256-GRY6aW6Kvy5sDQRiOVz2cUgKEG0IMveh80S26/rGWdM=";
   };
 
   # TODO:
@@ -137,5 +137,6 @@ stdenv.mkDerivation rec {
     description = "High-speed version of VNC derived from TightVNC";
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = with lib.platforms; linux;
+    changelog = "https://github.com/TurboVNC/turbovnc/blob/${version}/ChangeLog.md";
   };
 }

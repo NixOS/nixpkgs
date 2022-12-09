@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.10.0";
+  version = "2.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nicUpEaPhDBmWU2jP/R01d54xu9tgNUxZVD4gZGAyAw=";
+    hash = "sha256-hJgEFRr65eGuV0xx/4leyBZzdd9jt/SEKm3MApzHCGA=";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
+    changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

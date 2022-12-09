@@ -14,20 +14,20 @@
 , lz4
 , xxHash
 , meson
+, python3
 , cmake
 , ninja
 , capstone
 , tree-sitter
-, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.3.4";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    sha256 = "sha256-7qSbOWOHwJ0ZcFqrAqYXzbFWgvymfxAf8rJ+75SnEOk=";
+    sha256 = "sha256-Zp2Va5l4IKNuQjzzXUgqqZhJJUuWWM72hERZkS39v7g=";
   };
 
   mesonFlags = [
@@ -41,7 +41,15 @@ stdenv.mkDerivation rec {
     "-Duse_sys_tree_sitter=enabled"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja cmake (python3.withPackages (ps: [ ps.setuptools ])) ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    (python3.withPackages (pp: with pp; [
+      pyyaml
+    ]))
+    ninja
+    cmake
+  ];
 
   # meson's find_library seems to not use our compiler wrapper if static parameter
   # is either true/false... We work around by also providing LIBRARY_PATH
@@ -53,6 +61,9 @@ stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace binrz/rizin/macos_sign.sh \
+      --replace 'codesign' '# codesign'
   '';
 
   buildInputs = [
@@ -71,11 +82,19 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
+  postPatch = ''
+    # find_installation without arguments uses Meson’s Python interpreter,
+    # which does not have any extra modules.
+    # https://github.com/mesonbuild/meson/pull/9904
+    substituteInPlace meson.build \
+      --replace "import('python').find_installation()" "find_program('python3')"
+  '';
+
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }

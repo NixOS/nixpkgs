@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, asgiref
 , uvicorn
 , httpx
 , pytest-asyncio
@@ -7,6 +8,8 @@
 , pytest-mock
 , requests
 , trustme
+, watchgod
+, wsproto
 }:
 
 buildPythonPackage rec {
@@ -19,6 +22,7 @@ buildPythonPackage rec {
   dontInstall = true;
 
   checkInputs = [
+    asgiref
     uvicorn
     httpx
     pytestCheckHook
@@ -26,7 +30,12 @@ buildPythonPackage rec {
     pytest-mock
     requests
     trustme
-  ];
+
+    # strictly optional dependencies
+    watchgod
+    wsproto
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   doCheck = !stdenv.isDarwin;
 

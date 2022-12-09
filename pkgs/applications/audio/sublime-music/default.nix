@@ -28,7 +28,14 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3Packages.poetry-core
+    python3Packages.pythonRelaxDepsHook
     wrapGAppsHook
+  ];
+
+  # Can be removed in later versions (probably > 0.11.16)
+  pythonRelaxDeps = [
+    "deepdiff"
+    "python-mpv"
   ];
 
   buildInputs = [

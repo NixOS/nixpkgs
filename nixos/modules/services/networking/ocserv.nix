@@ -10,12 +10,12 @@ in
 
 {
   options.services.ocserv = {
-    enable = mkEnableOption "ocserv";
+    enable = mkEnableOption (lib.mdDoc "ocserv");
 
     config = mkOption {
       type = types.lines;
 
-      description = ''
+      description = lib.mdDoc ''
         Configuration content to start an OCServ server.
 
         For a full configuration reference,please refer to the online documentation

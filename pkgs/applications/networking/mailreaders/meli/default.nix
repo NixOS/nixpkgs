@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = [ file ];
 
-  buildFeatures = lib.optional withNotmuch [ "notmuch" ];
+  buildFeatures = lib.optionals withNotmuch [ "notmuch" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1

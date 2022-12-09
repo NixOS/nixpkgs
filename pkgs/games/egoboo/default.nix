@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     # I take it out of hydra as it does not work as well as I'd like
-    # maintainers = [ lib.maintainers.bjg ];
+    # maintainers = [ ];
     # platforms = lib.platforms.all;
   };
 }

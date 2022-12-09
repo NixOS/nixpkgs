@@ -29,17 +29,28 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/llvm"
     cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
     cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+    cp -r ${monorepoSrc}/third-party "$out"
+    cp -r ${monorepoSrc}/runtimes "$out"
   '';
 
-  sourceRoot = "${src.name}/${basename}";
+  sourceRoot = "${src.name}/runtimes";
 
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
+
+  prePatch = ''
+    cd ../${basename}
+    chmod -R u+w .
+  '';
 
   patches = [
     ./gnu-install-dirs.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
+
+  postPatch = ''
+    cd ../runtimes
+  '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
@@ -50,7 +61,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
 
-  cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
+  cmakeFlags = [
+    "-DLLVM_ENABLE_RUNTIMES=libcxx"
+    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}libcxxabi"
+  ] ++ lib.optional (!headersOnly) "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${libcxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -62,13 +76,18 @@ stdenv.mkDerivation rec {
   buildFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
-  # At this point, cxxabi headers would be installed in the dev output, which
-  # prevents moveToOutput from doing its job later in the build process.
-  postInstall = lib.optionalString (!headersOnly) ''
-    mv "$dev/include/c++/v1/"* "$out/include/c++/v1/"
-    pushd "$dev"
-    rmdir -p include/c++/v1
-    popd
+  preInstall = lib.optionalString (stdenv.isDarwin && !headersOnly) ''
+    for file in lib/*.dylib; do
+      if [ -L "$file" ]; then continue; fi
+
+      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
+      installName="$out/lib/$baseName"
+      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
+
+      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${libcxxabi}/lib/$abiName $file
+      done
+    done
   '';
 
   passthru = {

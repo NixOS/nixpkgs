@@ -2,6 +2,7 @@
 , db
 , fetchurl
 , groff
+, gzip
 , lib
 , libiconv
 , libpipeline
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.10.2";
+  version = "2.11.1";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    sha256 = "sha256-7peVTUkqE3MZA8nQcnubAeUIntvWlfDNtY1AWlr1UU0=";
+    sha256 = "sha256-LquqUlE0mEfenJ5DxjTZhsvMb4dkLR2cuGCOwYSHtsw=";
   };
 
   outputs = [ "out" "doc" ];
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-pager=less"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"
@@ -68,8 +69,7 @@ stdenv.mkDerivation rec {
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
     find "$out/bin" -type f | while read file; do
       wrapProgram "$file" \
-        --prefix PATH : "${lib.getBin groff}/bin" \
-        --prefix PATH : "${lib.getBin zstd}/bin"
+        --prefix PATH : "${lib.makeBinPath [ groff gzip zstd ]}"
     done
   '';
 

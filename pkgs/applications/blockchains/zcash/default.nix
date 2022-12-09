@@ -1,19 +1,17 @@
-{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook
-, makeWrapper, cargo, pkg-config, curl, coreutils, boost179, db62, hexdump
-, libsodium, libevent, testers, utf8cpp, util-linux, withDaemon ? true
-, withMining ? true, withUtils ? true, withWallet ? true, withZmq ? true, zcash
-, zeromq
+{ autoreconfHook, boost180, cargo, coreutils, curl, cxx-rs, db62, fetchFromGitHub
+, hexdump, hostPlatform, lib, libevent, libsodium, makeWrapper, rust, rustPlatform
+, pkg-config, Security, stdenv, testers, utf8cpp, util-linux, zcash, zeromq
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
+rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   pname = "zcash";
-  version = "5.0.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "sha256-5PlqFs2njqNeZgmNz0VKMWcRY5lPaF9oTsoh/uLEWi8=";
+    hash = "sha256-mlABKZDYYC3y+KlXQVFqdcm46m8K9tbOCqk4lM4shp8=";
   };
 
   prePatch = lib.optionalString stdenv.isAarch64 ''
@@ -22,12 +20,20 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
-  cargoSha256 = "sha256-eRRRjUbOieRC88wf+f1jAYvqGFmogBEla67NnImicEc=";
+  cargoHash = "sha256-6uhtOaBsgMw59Dy6yivZYUEWDsYfpInA7VmJrqxDS/4=";
 
-  nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
-  buildInputs = [ boost179 libevent libsodium utf8cpp ]
-    ++ lib.optional withWallet db62
-    ++ lib.optional withZmq zeromq;
+  nativeBuildInputs = [ autoreconfHook cargo cxx-rs hexdump makeWrapper pkg-config ];
+
+  buildInputs = [
+    boost180
+    db62
+    libevent
+    libsodium
+    utf8cpp
+    zeromq
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
@@ -39,18 +45,19 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   postPatch = ''
     # Have to do this here instead of in preConfigure because
     # cargoDepsCopy gets unset after postPatch.
-    configureFlagsArray+=("RUST_VENDORED_SOURCES=$NIX_BUILD_TOP/$cargoDepsCopy")
+    configureFlagsArray+=("RUST_VENDORED_SOURCES=$cargoDepsCopy")
   '';
+
+  CXXFLAGS = [
+    "-I${lib.getDev utf8cpp}/include/utf8cpp"
+    "-I${lib.getDev cxx-rs}/include"
+  ];
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost179}/lib"
-    "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
+    "--with-boost-libdir=${lib.getLib boost180}/lib"
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
-  ] ++ lib.optional (!withWallet) "--disable-wallet"
-    ++ lib.optional (!withDaemon) "--without-daemon"
-    ++ lib.optional (!withUtils) "--without-utils"
-    ++ lib.optional (!withMining) "--disable-mining";
+  ];
 
   enableParallelBuilding = true;
 
@@ -73,6 +80,8 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
     homepage = "https://z.cash/";
     maintainers = with maintainers; [ rht tkerber centromere ];
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+
+    # https://github.com/zcash/zcash/issues/4405
+    broken = hostPlatform.isAarch64 && hostPlatform.isDarwin;
   };
 }

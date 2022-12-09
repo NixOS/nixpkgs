@@ -7,43 +7,44 @@
 , pythonOlder
 , pyyaml
 , requests
+, requests-mock
 , responses
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "0.4.3";
+  version = "0.6.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jbarrancos";
     repo = pname;
     rev = version;
-    hash = "sha256-uRHknWvoPKPu3B5MbSEUlWqBKwAbNMwsgXuf6PZxhkU=";
+    hash = "sha256-yGUBCs1IxbGKBo21gExFIqDawM2EHlO+jiRqonEUnPk=";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--cov=pyrainbird --cov-report=term-missing" ""
+
+    substituteInPlace setup.cfg \
+      --replace "pycryptodome>=3.16.0" "pycryptodome"
+  '';
 
   propagatedBuildInputs = [
     pycryptodome
     pyyaml
     requests
-    setuptools
   ];
 
   checkInputs = [
-    pytestCheckHook
     parameterized
+    pytestCheckHook
+    requests-mock
     responses
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "datetime" ""
-    substituteInPlace pytest.ini \
-      --replace "--cov=pyrainbird --cov-report=term-missing --pep8 --flakes --mccabe" ""
-  '';
 
   pythonImportsCheck = [
     "pyrainbird"

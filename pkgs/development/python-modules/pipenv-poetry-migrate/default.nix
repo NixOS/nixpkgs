@@ -1,32 +1,48 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
-, poetry
-, rich
+, pythonOlder
+, poetry-core
+, tomlkit
+, typer
 , setuptools
 }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "0.2.1";
   pname = "pipenv-poetry-migrate";
   format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
-    rev = "v${version}";
-    hash = "sha256-2/e6uGwpUvzxXlz+51gUriE054bgNeJNyLDCIyiGflM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aP8bzWFUzAZrEsz8pYL2y5c7GaUjWG5GA+cc4/tGPZk=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/yhino/pipenv-poetry-migrate/commit/726ebd823bf6ef982992085bd04e41d178775b98.patch";
+      hash = "sha256-TBVH1MZA0O1/2zLpVgNckLaP4JO3wIJJi0Nst726erk=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
-    poetry
-    rich
-    setuptools
+    setuptools # for pkg_resources
+    tomlkit
+    typer
   ];
 
   postPatch = ''
-  substituteInPlace pyproject.toml --replace 'rich = "^9.6.1"' 'rich = ">9"'
+    substituteInPlace pyproject.toml --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
   '';
 
   checkInputs = [

@@ -9,7 +9,7 @@
 , marshmallow
 , pyschemes
 , wtforms
-, email_validator
+, email-validator
 }:
 
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     marshmallow
     pyschemes
     wtforms
-    email_validator
+    email-validator
   ];
 
   pythonImportsCheck = [ "vaa" ];

@@ -1,9 +1,0 @@
---- a/atk/meson.build
-+++ b/atk/meson.build
-@@ -162,5 +162,6 @@ pkgconfig.generate(libatk,
-   name: 'Atk',
-   description: 'Accessibility Toolkit',
-   subdirs: atk_api_name,
-+  requires: glib_dep,
-   filebase: 'atk',
- )

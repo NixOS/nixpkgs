@@ -2,6 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   inherit (easycrypt) src version;
+  format = "other";
 
   pname = "easycrypt-runtest";
 

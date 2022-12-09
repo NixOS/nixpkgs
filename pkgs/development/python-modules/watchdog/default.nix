@@ -8,17 +8,28 @@
 , pytest-timeout
 , pytestCheckHook
 , CoreServices
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.8";
+  version = "2.1.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bQMUkSaGSr0ycV1OkmfSdUzt4lppBSkBOZNWrTvF7P8=";
+    sha256 = "sha256-Q84g67NqUfIfo3b3bR1GkkUrJSfM1gGVDWntNrniFgk=";
   };
+
+  patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ./force-kqueue.patch
+  ] ++ [
+    (fetchpatch {
+      url = "https://github.com/gorakhargosh/watchdog/commit/255d1e45c17929dd5ba8a6f91aa28771109931cd.patch";
+      sha256 = "sha256-gGgEGuB/0g+4Pv1dXMvIdObjqKruWKkxtufS/dzSlY8=";
+      excludes = [ "changelog.rst" ];
+    })
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
@@ -42,6 +53,9 @@ buildPythonPackage rec {
   disabledTests = [
     # probably failing because of an encoding related issue
     "test_create_wrong_encoding"
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    "test_delete"
+    "test_separate_consecutive_moves"
   ];
 
   disabledTestPaths = [
@@ -58,8 +72,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
-    # error: use of undeclared identifier 'kFSEventStreamEventFlagItemCloned'
-    # builds fine on aarch64-darwin
-    broken = stdenv.isDarwin && !stdenv.isAarch64;
   };
 }

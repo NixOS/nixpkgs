@@ -8,27 +8,32 @@
 , libprom
 , libpromhttp
 , libmicrohttpd
+, sqlite
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.5.2";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = version;
-    sha256 = "1s7ncc82ny4bb3qkn3fqr0144xsr7h2y8xmzsf5037h6j8f7j3v8";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ckqPxG3ieqA0H9g1GfE8hYs6tUsZfzt6/yYR1qlgoxE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
     openssl
     libevent
     libprom
     libpromhttp
     libmicrohttpd
+    sqlite.dev
   ];
 
   patches = [
@@ -45,11 +50,12 @@ stdenv.mkDerivation rec {
   passthru.tests.coturn = nixosTests.coturn;
 
   meta = with lib; {
-    homepage = "https://coturn.net/";
-    license = with licenses; [ bsd3 ];
     description = "A TURN server";
+    homepage = "https://coturn.net/";
+    changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
+    license = with licenses; [ bsd3 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # 2018-10-21
     maintainers = with maintainers; [ ralith _0x4A6F ];
+    broken = stdenv.isDarwin; # 2018-10-21
   };
 }

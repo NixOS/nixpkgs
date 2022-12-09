@@ -49,6 +49,7 @@ buildPythonPackage rec {
     "TestFileTypesDataDriven"
     # AssertionError: assert 'application/x-bytecode.python'...
     "test_compiled_python_1"
+    "test_package_json"
   ];
 
   pythonImportsCheck = [

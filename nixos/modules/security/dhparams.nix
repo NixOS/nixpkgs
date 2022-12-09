@@ -15,7 +15,7 @@ let
       type = bitType;
       default = cfg.defaultBitSize;
       defaultText = literalExpression "config.${opt.defaultBitSize}";
-      description = ''
+      description = lib.mdDoc ''
         The bit size for the prime that is used during a Diffie-Hellman
         key exchange.
       '';
@@ -24,11 +24,11 @@ let
     options.path = mkOption {
       type = types.path;
       readOnly = true;
-      description = ''
+      description = lib.mdDoc ''
         The resulting path of the generated Diffie-Hellman parameters
         file for other services to reference. This could be either a
         store path or a file inside the directory specified by
-        <option>security.dhparams.path</option>.
+        {option}`security.dhparams.path`.
       '';
     };
 
@@ -45,7 +45,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to generate new DH params and clean up old DH params.
         '';
       };
@@ -56,66 +56,74 @@ in {
         in attrsOf (coercedTo int coerce (submodule paramsSubmodule));
         default = {};
         example = lib.literalExpression "{ nginx.bits = 3072; }";
-        description = ''
+        description = lib.mdDoc ''
           Diffie-Hellman parameters to generate.
 
           The value is the size (in bits) of the DH params to generate. The
           generated DH params path can be found in
-          <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>.
+          `config.security.dhparams.params.«name».path`.
 
-          <note><para>The name of the DH params is taken as being the name of
+          ::: {.note}
+          The name of the DH params is taken as being the name of
           the service it serves and the params will be generated before the
-          said service is started.</para></note>
+          said service is started.
+          :::
 
-          <warning><para>If you are removing all dhparams from this list, you
-          have to leave <option>security.dhparams.enable</option> for at
+          ::: {.warning}
+          If you are removing all dhparams from this list, you
+          have to leave {option}`security.dhparams.enable` for at
           least one activation in order to have them be cleaned up. This also
           means if you rollback to a version without any dhparams the
           existing ones won't be cleaned up. Of course this only applies if
-          <option>security.dhparams.stateful</option> is
-          <literal>true</literal>.</para></warning>
+          {option}`security.dhparams.stateful` is
+          `true`.
+          :::
 
-          <note><title>For module implementers:</title><para>It's recommended
+          ::: {.note}
+          **For module implementers:** It's recommended
           to not set a specific bit size here, so that users can easily
           override this by setting
-          <option>security.dhparams.defaultBitSize</option>.</para></note>
+          {option}`security.dhparams.defaultBitSize`.
+          :::
         '';
       };
 
       stateful = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether generation of Diffie-Hellman parameters should be stateful or
           not. If this is enabled, PEM-encoded files for Diffie-Hellman
           parameters are placed in the directory specified by
-          <option>security.dhparams.path</option>. Otherwise the files are
+          {option}`security.dhparams.path`. Otherwise the files are
           created within the Nix store.
 
-          <note><para>If this is <literal>false</literal> the resulting store
+          ::: {.note}
+          If this is `false` the resulting store
           path will be non-deterministic and will be rebuilt every time the
-          <package>openssl</package> package changes.</para></note>
+          `openssl` package changes.
+          :::
         '';
       };
 
       defaultBitSize = mkOption {
         type = bitType;
         default = 2048;
-        description = ''
+        description = lib.mdDoc ''
           This allows to override the default bit size for all of the
           Diffie-Hellman parameters set in
-          <option>security.dhparams.params</option>.
+          {option}`security.dhparams.params`.
         '';
       };
 
       path = mkOption {
         type = types.str;
         default = "/var/lib/dhparams";
-        description = ''
+        description = lib.mdDoc ''
           Path to the directory in which Diffie-Hellman parameters will be
           stored. This only is relevant if
-          <option>security.dhparams.stateful</option> is
-          <literal>true</literal>.
+          {option}`security.dhparams.stateful` is
+          `true`.
         '';
       };
     };

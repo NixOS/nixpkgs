@@ -17,23 +17,22 @@ let
             , platformCanUseHDCPBlob ? false  # set this to true if the platform is able to use hdcp.bin
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.6"
             , ... } @ args:
 
            # delete hdcp.bin if either: the platform is thought to
            # not need it or unfreeIncludeHDCPBlob is false
            let deleteHDCPBlobBeforeBuild = !platformCanUseHDCPBlob || !unfreeIncludeHDCPBlob; in
 
-           stdenv.mkDerivation ({
+           stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    inherit version;
+    version = "2.7";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
+      sha256 = "sha256-WDJMMIWZHNqxxAKeHiZDxtPjfsfQAWsbYv+0o0PiJQs=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -54,6 +53,10 @@ let
 
     makeFlags = [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+      # binutils 2.39 regression
+      # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
+      # See also: https://developer.trustedfirmware.org/T996
+      "LDFLAGS=-no-warn-rwx-segments"
     ] ++ (lib.optional (platform != null) "PLAT=${platform}")
       ++ extraMakeFlags;
 

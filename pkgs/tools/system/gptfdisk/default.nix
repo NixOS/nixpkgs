@@ -2,19 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchurl {
     # https://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
     # page clearly implies a preference for using SourceForge's bandwidth:
     url = "mirror://sourceforge/gptfdisk/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ldGYVvAE2rxLjDQrJhLo0KnuvdUgBClxiDafFS6dxt8=";
+    sha256 = "sha256-2v6tJpP6646Ll4MrI0B/btWzIZvBeE9ILdhVd04tUMI=";
   };
 
   patches = [
-    # fix build failure against ncurses-6.3 (pending upstream inclusion):
-    #  https://sourceforge.net/p/gptfdisk/mailman/message/37392412/
-    ./ncurses-6.3.patch
+    # issues with popt 1.19 (from upstream but not yet released):
+    # https://sourceforge.net/p/gptfdisk/code/ci/5d5e76d369a412bfb3d2cebb5fc0a7509cef878d/
+    # https://github.com/rpm-software-management/popt/issues/80
+    ./popt-1-19.patch
+
+    # fix UUID generation (from upstream but not yet released):
+    # https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f/
+    # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1853985.html
+    ./uuid.patch
   ];
 
   postPatch = ''

@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "4.2.0";
+  version = "4.3.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -18,6 +18,7 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
 in
@@ -30,7 +31,7 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
-    sha256 = "15n6snrs1kgdqkhp4wgs0bxxdz6mzl8dvf8h7s0jzc6r4b74vv3n";
+    sha256 = "1h9r32wdn0p7br36r719x96c8gay83dijw80y2ks951mam16mkkb";
   };
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
@@ -63,7 +64,6 @@ python3.pkgs.buildPythonApplication {
   ];
 
   preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum_grs/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
@@ -74,16 +74,11 @@ python3.pkgs.buildPythonApplication {
   '');
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # Despite setting usr_share above, these files are installed under $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store/*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electrum-grs.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-grs %u"' \
                 "Exec=$out/bin/electrum-grs %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-grs --testnet %u"' \
                 "Exec=$out/bin/electrum-grs --testnet %u"
-
   '';
 
   postFixup = lib.optionalString enableQt ''

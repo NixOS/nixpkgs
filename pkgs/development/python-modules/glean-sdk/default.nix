@@ -11,24 +11,25 @@
 , pythonOlder
 , rustc
 , rustPlatform
+, semver
 , setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "44.0.0";
+  version = "51.2.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gzLsBwq3wrFde5cEb5+oFLW4KrwoiZpr22JbJhNr1yk=";
+    hash = "sha256-4EXCYthMabdmxWYltcnO0UTNeAYXwXQeRfwxt1WD3Ug=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-lWFv8eiA3QHp5bhcg4qon/dvKUbFbtH1Q2oXGkk0Me0=";
+    hash = "sha256-qOGoonutuIY+0UVaVSVVt0NbqEICdNs3qHWG0Epmkl0=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +43,17 @@ buildPythonPackage rec {
     cffi
     glean-parser
     iso8601
+    semver
   ];
 
   checkInputs = [
     pytest-localserver
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: No ping received.
+    "test_client_activity_api"
   ];
 
   postPatch = ''

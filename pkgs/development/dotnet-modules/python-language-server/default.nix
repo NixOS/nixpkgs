@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
+, stdenvNoCC
 , autoPatchelfHook
 , openssl
 , icu
@@ -24,6 +25,8 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
+
+  dotnetRestoreFlags = [ "--runtime ${dotnet-sdk.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [ stdenv.cc.cc.lib ];

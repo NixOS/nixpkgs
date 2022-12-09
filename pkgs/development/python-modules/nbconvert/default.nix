@@ -3,27 +3,45 @@
 , buildPythonPackage
 , defusedxml
 , fetchPypi
+, fetchpatch
+, fetchurl
+, hatchling
+, importlib-metadata
 , ipywidgets
 , jinja2
+, jupyter_core
 , jupyterlab-pygments
 , lib
 , markupsafe
 , mistune
 , nbclient
+, packaging
 , pandocfilters
+, pygments
 , pyppeteer
 , pytestCheckHook
+, pythonOlder
 , tinycss2
+, traitlets
 }:
 
-buildPythonPackage rec {
+let
+  # see https://github.com/jupyter/nbconvert/issues/1896
+  style-css = fetchurl {
+    url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
+    hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
+  };
+in buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.5.0";
-  format = "setuptools";
+  version = "7.2.5";
+
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ij5G4nq+hZa4rtVDAfrbukM7f/6oGWpo/Xsf9Qnu6Z0=";
+    hash = "sha256-j9xE/X2UJNt/3G4eg0oC9rhiD/tlN2c4i+L56xb4QYQ=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -34,19 +52,32 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
+
+    mkdir -p share/templates/classic/static
+    cp ${style-css} share/templates/classic/static/style.css
   '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4
     bleach
     defusedxml
     jinja2
+    jupyter_core
     jupyterlab-pygments
     markupsafe
     mistune
     nbclient
+    packaging
     pandocfilters
+    pygments
     tinycss2
+    traitlets
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   preCheck = ''
@@ -59,15 +90,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # DeprecationWarning: Support for bleach <5 will be removed in a future version of nbconvert
-    "-W ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # Attempts network access (Failed to establish a new connection: [Errno -3] Temporary failure in name resolution)
     "test_export"
     "test_webpdf_with_chromium"
+    # ModuleNotFoundError: No module named 'nbconvert.tests'
+    "test_convert_full_qualified_name"
+    "test_post_processor"
   ];
 
   # Some of the tests use localhost networking.

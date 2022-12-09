@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-secret";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     repo = "git-secret";
     owner = "sobolevn";
     rev = "v${version}";
-    sha256 = "sha256-Mtuj+e/yCDr4XkmYkWUFJB3cqOT5yOMOq9P/QJV1S80=";
+    sha256 = "sha256-Vdlv3H99BZcT1O66ZCpq5olENOaUSubx58B1PQ/OlMU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

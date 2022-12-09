@@ -5,22 +5,14 @@ The list is ordered from more-specific (the user profile) to the
 least specific (the system profile)"
   (reverse (split-string (or (getenv "NIX_PROFILES") ""))))
 
-;;; Extend `load-path' to search for elisp files in subdirectories of
-;;; all folders in `NIX_PROFILES'. Also search for one level of
-;;; subdirectories in these directories to handle multi-file libraries
-;;; like `mu4e'.'
-(require 'seq)
-(let* ((subdirectory-sites (lambda (site-lisp)
-                             (when (file-exists-p site-lisp)
-                               (seq-filter (lambda (f) (file-directory-p (file-truename f)))
-                                           ;; Returns all files in `site-lisp', excluding `.' and `..'
-                                           (directory-files site-lisp 'full "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))))
-       (paths (apply #'append
-                     (mapcar (lambda (profile-dir)
-                               (let ((site-lisp (concat profile-dir "/share/emacs/site-lisp/")))
-                                 (cons site-lisp (funcall subdirectory-sites site-lisp))))
-                             (nix--profile-paths)))))
-  (setq load-path (append paths load-path)))
+;;; Extend `load-path' to search for elisp files in subdirectories of all folders in `NIX_PROFILES'.
+;;; Non-Nix distros have similar logic in /usr/share/emacs/site-lisp/subdirs.el.
+;;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Search.html
+(dolist (profile (nix--profile-paths))
+  (let ((default-directory (expand-file-name "share/emacs/site-lisp/" profile)))
+    (when (file-exists-p default-directory)
+      (setq load-path (cons default-directory load-path))
+      (normal-top-level-add-subdirs-to-load-path))))
 
 ;;; Remove wrapper site-lisp from EMACSLOADPATH so it's not propagated
 ;;; to any other Emacsen that might be started as subprocesses.

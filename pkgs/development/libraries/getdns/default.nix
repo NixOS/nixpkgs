@@ -12,7 +12,7 @@ in rec {
 
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";
-    version = "1.7.0";
+    version = "1.7.2";
     outputs = [ "out" "dev" "lib" "man" ];
 
     src = fetchurl {
@@ -20,12 +20,21 @@ in rec {
           with builtins;
           concatStringsSep "-" (splitVersion version)
         }/${pname}-${version}.tar.gz";
-      sha256 = "sha256-6ocTzl4HesdrFBjOtq/SXm1OOelgD29egdOjoTpg9lI=";
+      sha256 =
+        # upstream publishes hashes in hex format
+        "db89fd2a940000e03ecf48d0232b4532e5f0602e80b592be406fd57ad76fdd17";
     };
 
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ libidn2 openssl unbound ];
+
+    # https://github.com/getdnsapi/getdns/issues/517
+    postPatch = ''
+      substituteInPlace getdns.pc.in \
+        --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    '';
 
     postInstall = "rm -r $out/share/doc";
 
@@ -49,7 +58,7 @@ in rec {
 
   stubby = stdenv.mkDerivation rec {
     pname = "stubby";
-    version = "0.4.0";
+    version = "0.4.2";
     outputs = [ "out" "man" "stubbyExampleJson" ];
 
     inherit (getdns) src;

@@ -185,20 +185,20 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.7.1.201709201439";
+    version = "2.7.2.202006062100";
 
     srcFeature = fetchurl {
-      url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "1wqzl7wq85m9gil8rnvly45ps0a2m0svw613pg6djs5i7amhnayh";
+      url = "https://github.com/iloveeclipse/plugins/blob/latest/features/AnyEditTools_${version}.jar";
+      sha256 = "0dwwwvz8by10f5gnws1ahmg02g6v4xbaqcwc0cydvv1h52cyb40g";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.1/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "03iyb6j2srq74iigmg7dk098c2svyv0ygdfql5jqr44a32n07k8q";
+      url = "https://github.com/iloveeclipse/plugins/blob/latest/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "1ip8dk92ka7bczw1bkbs3zkclmwr28ds5q1wrzh525wb70x8v6fi";
     };
 
     meta = with lib; {
-      homepage = "http://andrei.gmxhome.de/anyedit/";
+      homepage = "https://github.com/iloveeclipse/plugins";
       description = "Adds new tools to the context menu of text-based editors";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
@@ -231,20 +231,20 @@ rec {
 
   bytecode-outline = buildEclipsePlugin rec {
     name = "bytecode-outline-${version}";
-    version = "2.5.0.201711011753-5a57fdf";
+    version = "1.0.1.202006062100";
 
     srcFeature = fetchurl {
-      url = "http://andrei.gmxhome.de/eclipse/features/de.loskutov.BytecodeOutline.feature_${version}.jar";
-      sha256 = "0yciqhcq0n5i326mwy57r4ywmkz2c2jky7r4pcmznmhvks3z65ps";
+      url = "https://github.com/iloveeclipse/plugins/blob/latest/features/org.eclipse.jdt.bcoview.feature_${version}.jar";
+      sha256 = "0zbcph72lgv8cb5n4phcl3qsybc5q5yviwbv8yjv4v12m4l15wpk";
     };
 
     srcPlugin = fetchurl {
-      url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.BytecodeOutline_${version}.jar";
-      sha256 = "1vmsqv32jfl7anvdkw0vir342miv5sr9df7vd1w44lf1yf97vxlw";
+      url = "https://github.com/iloveeclipse/plugins/blob/latest/plugins/org.eclipse.jdt.bcoview_${version}.jar";
+      sha256 = "1bx860k4haqcnhy8825kn4df0pyzd680qbnvjmxfrlxrqhr66fbb";
     };
 
     meta = with lib; {
-      homepage = "http://andrei.gmxhome.de/bytecode/";
+      homepage = "https://github.com/iloveeclipse/plugins";
       description = "Shows disassembled bytecode of current java editor or class file";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd2;
@@ -255,12 +255,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.6.0";
+    version = "10.7.0";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
-      hash = "sha256-eMvZ2UvPpUq1J4DDg6f+R1g217bnRjxmr5zWUAhef/c=";
+      hash = "sha256-/lQ3TLFQ1IgwYM540gxAFiEGOfHQIQQMf/pqCZ29ztQ=";
     };
 
     meta = with lib; {
@@ -433,25 +433,26 @@ rec {
     };
   };
 
-  gnuarmeclipse = buildEclipseUpdateSite rec {
-    name = "gnuarmeclipse-${version}";
-    version = "3.1.1-201606210758";
+  embed-cdt = buildEclipseUpdateSite rec {
+    name = "embed-cdt-${version}";
+    version = "6.3.1";
 
     src = fetchzip {
-      stripRoot = false;
-      url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "1g77jlhfa3csaxxps1z5lasrd9l2p5ajnddnq9ra5syw8ggkdc2h";
+      stripRoot = true;
+      url = "https://github.com/eclipse-embed-cdt/eclipse-plugins/archive/v${version}.zip";
+      sha256 = "sha256-0wHRIls48NGDQzD+wuX79Thgiax+VVYVPJw2Z6NEzsg=";
     };
 
     meta = with lib; {
-      homepage = "http://gnuarmeclipse.livius.net/";
-      description = "GNU ARM Eclipse Plug-ins";
+      homepage = "https://github.com/eclipse-embed-cdt/eclipse-plugins";
+      description = "Embedded C/C++ Development Tools (formerly GNU MCU/ARM Eclipse)";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.epl10;
+      license = licenses.epl20;
       platforms = platforms.all;
       maintainers = [ maintainers.bjornfor ];
     };
   };
+  gnuarmeclipse = embed-cdt; # backward compat alias, added 2022-11-04
 
   jsonedit = buildEclipsePlugin rec {
     name = "jsonedit-${version}";

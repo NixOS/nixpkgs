@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, attrs
 , hypothesis
 , pytest
 , pytest-arraydiff
 , pytest-astropy-header
+, pytest-cov
 , pytest-doctestplus
 , pytest-filter-subpackage
 , pytest-mock
@@ -33,9 +35,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    attrs
     hypothesis
     pytest-arraydiff
     pytest-astropy-header
+    pytest-cov
     pytest-doctestplus
     pytest-filter-subpackage
     pytest-mock

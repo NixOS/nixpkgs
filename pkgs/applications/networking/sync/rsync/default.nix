@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , perl
 , libiconv
 , zlib
@@ -16,23 +15,20 @@
 , xxHash
 , enableZstd ? true
 , zstd
-, enableCopyDevicesPatch ? false
 , nixosTests
 }:
 
-let
-  base = import ./base.nix { inherit lib fetchurl fetchpatch; };
-in
 stdenv.mkDerivation rec {
   pname = "rsync";
-  version = base.version;
+  version = "3.2.7";
 
-  mainSrc = base.src;
+  src = fetchurl {
+    # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
+    url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
+    sha256 = "sha256-Tn2dP27RCHjFjF+3JKZ9rPS2qsc0CxPkiPstxBNG8rs=";
+  };
 
-  patchesSrc = base.upstreamPatchTarball;
-
-  srcs = [ mainSrc ] ++ lib.optional enableCopyDevicesPatch patchesSrc;
-  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ libiconv zlib popt ]
     ++ lib.optional enableACLs acl
@@ -40,7 +36,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableLZ4 lz4
     ++ lib.optional enableOpenSSL openssl
     ++ lib.optional enableXXHash xxHash;
-  nativeBuildInputs = [ perl ];
 
   configureFlags = [
     "--with-nobody-group=nogroup"
@@ -50,10 +45,15 @@ stdenv.mkDerivation rec {
     "--with-included-zlib=no"
   ];
 
+  enableParallelBuilding = true;
+
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
-  meta = base.meta // {
-    description = "A fast incremental file transfer utility";
-    maintainers = with lib.maintainers; [ ehmry kampfschlaefer ];
+  meta = with lib; {
+    description = "Fast incremental file transfer utility";
+    homepage = "https://rsync.samba.org/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
   };
 }

@@ -2,7 +2,7 @@
 
 let
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   xplat = fetchurl {
     url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     dotnet-sdk
     mono
     unzip
+    makeWrapper
   ];
 
   buildInputs = [
     dotnetPackages.Nuget
     glibcLocales
-    makeWrapper
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991
@@ -143,6 +143,10 @@ EOF
   meta = with lib; {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     homepage = "https://github.com/mono/msbuild";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # dependencies
+    ];
     license = licenses.mit;
     maintainers = with maintainers; [ jdanek ];
     platforms = platforms.unix;

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.9.2";
+  version = "1.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IIlEM98RRkgarK434rDzu7/eoCbbL1UGEXC9mCPkCxk=";
+    hash = "sha256-NUZRvwYsAtHwgEHW+/GptL96k6/OZZeb3Ai9xlZTqi4=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cached-property
     pycparser
-  ] ++ lib.optional (!isPyPy) [
+  ] ++ lib.optionals (!isPyPy) [
     cffi
   ];
 
-  propagatedNativeBuildInputs = lib.optional (!isPyPy) [
+  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 

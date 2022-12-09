@@ -65,6 +65,8 @@
 # E           Max relative difference: 255.
 [
   "test_Text2Color"
+  "test_PointCloudDot"
+  "test_Torus"
 ] ++
 
 # failing with:

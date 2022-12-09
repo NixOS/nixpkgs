@@ -4,7 +4,7 @@
 , markupsafe
 , babel
 , pytestCheckHook
-, email_validator
+, email-validator
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    email_validator
+    email-validator
   ];
 
   pythonImportsCheck = [ "wtforms" ];

@@ -33,11 +33,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
     SDL2
     SDL2_mixer
-    makeWrapper
   ] ++ lib.optional stdenv.isDarwin Cocoa;
 
   # Darwin needs a custom installphase since it is excluded from the cmake install

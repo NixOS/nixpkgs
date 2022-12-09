@@ -5,12 +5,12 @@ in {
 
   options.services.owncast = {
 
-    enable = mkEnableOption "owncast";
+    enable = mkEnableOption (lib.mdDoc "owncast");
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/owncast";
-      description = ''
+      description = lib.mdDoc ''
         The directory where owncast stores its data files. If left as the default value this directory will automatically be created before the owncast server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
       '';
     };
@@ -18,7 +18,7 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open the appropriate ports in the firewall for owncast.
       '';
     };
@@ -26,26 +26,26 @@ in {
     user = mkOption {
       type = types.str;
       default = "owncast";
-      description = "User account under which owncast runs.";
+      description = lib.mdDoc "User account under which owncast runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = "owncast";
-      description = "Group under which owncast runs.";
+      description = lib.mdDoc "Group under which owncast runs.";
     };
 
     listen = mkOption {
       type = types.str;
       default = "127.0.0.1";
       example = "0.0.0.0";
-      description = "The IP address to bind the owncast web server to.";
+      description = lib.mdDoc "The IP address to bind the owncast web server to.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         TCP port where owncast web-gui listens.
       '';
     };
@@ -53,7 +53,7 @@ in {
     rtmp-port = mkOption {
       type = types.port;
       default = 1935;
-      description = ''
+      description = lib.mdDoc ''
         TCP port where owncast rtmp service listens.
       '';
     };

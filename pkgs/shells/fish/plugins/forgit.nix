@@ -2,7 +2,7 @@
 
 buildFishPlugin rec {
   pname = "forgit";
-  version = "unstable-2021-12-05";
+  version = "unstable-2022-10-14";
 
   preFixup = ''
     substituteInPlace $out/share/fish/vendor_conf.d/forgit.plugin.fish \
@@ -13,8 +13,8 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = "7b26cd46ac768af51b8dd4b84b6567c4e1c19642";
-    sha256 = "sha256-S/alL3CiyedJ8aGhC2Vg9fmLJYcLxDe4EjQns5dZkKM=";
+    rev = "2872548075e63bc83a0b960e2813b16571998563";
+    sha256 = "sha256-NKL4c4k9Nath8NQ3sWUTGUzp517jRX4v0qVaKMJSMrw=";
   };
 
   meta = with lib; {

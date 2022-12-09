@@ -25,7 +25,7 @@ mkCoqDerivation rec {
 
   propagatedBuildInputs = [ zorns-lemma ];
 
-  useDune2ifVersion = versions.isGe "9.0";
+  useDuneifVersion = versions.isGe "9.0";
 
   meta = {
     description = "General topology in Coq";

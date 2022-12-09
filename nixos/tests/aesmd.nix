@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }: {
   name = "aesmd";
   meta = {
     maintainers = with lib.maintainers; [ veehaitch ];
@@ -59,4 +59,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       assert aesmd_config == "whitelist url = http://nixos.org\nproxy type = direct\ndefault quoting type = ecdsa_256\n", "aesmd.conf differs"
   '';
-})
+}

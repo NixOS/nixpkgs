@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
 
 buildGoModule rec {
   pname = "go-mtpfs";
@@ -18,12 +18,17 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
-  checkFlags = [ "-short" ];
+  preCheck = ''
+    # Only run tests under mtp/encoding_test.go
+    # Other tests require an Android deviced attached over USB.
+    buildFlagsArray+=("-run" "Test(Encode|Decode|Variant).*")
+  '';
 
   meta = with lib; {
     description = "A simple FUSE filesystem for mounting Android devices as a MTP device";
     homepage = "https://github.com/hanwen/go-mtpfs";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aaronjheng ];
+    broken = stdenv.isDarwin;
   };
 }

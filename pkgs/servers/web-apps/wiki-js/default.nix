@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.283";
+  version = "2.5.292";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-dQ1FWZ+WysdsRkbNapKm1psZx35biKrRvTfNklC89e8=";
+    sha256 = "sha256-45s/XvZx6WvxsxazwLpYjg6vlC07mBBxv6xNThpPFFA=";
   };
 
   sourceRoot = ".";

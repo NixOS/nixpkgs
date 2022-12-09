@@ -1,5 +1,8 @@
 { lib
+, aiohttp
+, aioresponses
 , buildPythonPackage
+, callee
 , fetchPypi
 , mock
 , pyjwt
@@ -10,28 +13,32 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.22.0";
+  version = "3.24.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-05yJbF6eXz+vJx+plY5gqzRRYL2SjDnF7gSfX6WIS4E=";
+    hash = "sha256-iNe86UcjQud/LyX9iwYIGbNVcADjpD4mGM16D+UhLHE=";
   };
 
   propagatedBuildInputs = [
     requests
     pyjwt
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   checkInputs = [
+    aiohttp
+    aioresponses
+    callee
     mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # tries to ping websites (e.g. google.com)
+    # Tries to ping websites (e.g. google.com)
     "can_timeout"
     "test_options_are_created_by_default"
     "test_options_are_used_and_override"

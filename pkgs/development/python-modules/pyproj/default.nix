@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.3.0";
+  version = "3.4.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
-    rev = version;
-    hash = "sha256-crLYNACS9I0WGOdkYCJNoyxeAYsR41ZszzKRZsYHCLY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-EXPeDNGr6eAAsLXCkV9mmkNDO1KScjZYgmBPzt+A1OU=";
   };
 
   # force pyproj to use ${proj}
@@ -53,14 +53,13 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    # We need to build extensions locally to run tests
-    ${python.interpreter} setup.py build_ext --inplace
-    cd test
+    # import from $out
+    rm -r pyproj
   '';
 
   disabledTestPaths = [
-    "test_doctest_wrapper.py"
-    "test_datadir.py"
+    "test/test_doctest_wrapper.py"
+    "test/test_datadir.py"
   ];
 
   disabledTests = [
@@ -86,9 +85,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Python interface to PROJ.4 library";
+    description = "Python interface to PROJ library";
     homepage = "https://github.com/pyproj4/pyproj";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ lsix ];
+    changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lsix dotlambda ];
   };
 }

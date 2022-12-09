@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libidn";
-  version = "1.38";
+  version = "1.41";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3gC4QPdXzTuxTdmiDVk2RzI13cugbUvC2oBGVLi78PY=";
+    sha256 = "sha256-iE1wY2S4Gr3Re+6Whtj/KudDHFoUZRBHxorfizH9iUU=";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];

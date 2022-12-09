@@ -1,17 +1,19 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "civo";
-  version = "1.0.28";
+  version = "1.0.41";
 
   src = fetchFromGitHub {
     owner  = "civo";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-PuLmjX7ps0pdfaDpshWrc67OW83/jpB4HkNCi1fzpAU=";
+    sha256 = "sha256-dvbxxW+UyTA+EzBV6g9JRao8D6ZE5hhXLX4q/mmPIQg=";
   };
 
-  vendorSha256 = "sha256-VMBMiwBFXKe+E4Xzcmhu2Ge5JzS+jIbUtxTfp+B0EWE=";
+  vendorSha256 = "sha256-gBVSpjoAfbxlJnlrFrsBupJgVQ59sh1ipOry0Mgppig=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
@@ -20,15 +22,19 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X github.com/civo/cli/cmd.VersionCli=${version}"
-    "-X github.com/civo/cli/cmd.CommitCli=${src.rev}"
-    "-X github.com/civo/cli/cmd.DateCli=unknown"
+    "-X github.com/civo/cli/common.VersionCli=${version}"
+    "-X github.com/civo/cli/common.CommitCli=${src.rev}"
+    "-X github.com/civo/cli/common.DateCli=unknown"
   ];
 
   doInstallCheck = false;
 
   postInstall = ''
     mv $out/bin/cli $out/bin/civo
+    installShellCompletion --cmd civo \
+      --bash <($out/bin/civo completion bash) \
+      --fish <($out/bin/civo completion fish) \
+      --zsh <($out/bin/civo completion zsh)
   '';
 
   meta = with lib; {

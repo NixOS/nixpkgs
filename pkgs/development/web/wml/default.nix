@@ -23,8 +23,9 @@ perlPackages.buildPerlPackage {
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = with perlPackages;
-    [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
+    [ perl TermReadKey GD BitVector ncurses lynx ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
 

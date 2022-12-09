@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luakit";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = pname;
     rev = version;
-    hash = "sha256-5YeJkbWk1wHxWXqWOvhEDeScWPU/aRVhuOWRHLSHVZM=";
+    hash = "sha256-6baN3e5ZJ8hw6mhQ0AapyVIYFSdmXcfo45ReQNliIPw=";
   };
 
   nativeBuildInputs = [

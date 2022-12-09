@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.37.6";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "docker-slim";
     repo = "docker-slim";
     rev = version;
-    sha256 = "sha256-Jzi6JC6DRklZhNqmFx6eHx6qR8/fb/JuSpgwtPThcc4=";
+    sha256 = "sha256-CN3mvXjI6c10yvXM2owWASngsU2PjgLhd1N55vxubw0=";
   };
 
   vendorSha256 = null;

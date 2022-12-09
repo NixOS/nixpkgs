@@ -1,17 +1,41 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoPatchelfHook, makeWrapper
-, bash, coreutils, dosfstools, exfat, gawk, gnugrep, gnused, hexdump, parted
-, procps, util-linux, which, xz
-, withCryptsetup ? false, cryptsetup
-, withXfs ? false, xfsprogs
-, withExt4 ? false, e2fsprogs
-, withNtfs ? false, ntfs3g
-, withGtk3 ? false, gtk3
-, withQt5 ? false, qt5
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoPatchelfHook
+, bash
+, copyDesktopItems
+, coreutils
+, cryptsetup
+, dosfstools
+, e2fsprogs
+, exfat
+, gawk
+, gnugrep
+, gnused
+, gtk3
+, hexdump
+, makeDesktopItem
+, makeWrapper
+, ntfs3g
+, parted
+, procps
+, qtbase
+, util-linux
+, which
+, wrapQtAppsHook
+, xfsprogs
+, xz
 , defaultGuiType ? ""
+, withCryptsetup ? false
+, withXfs ? false
+, withExt4 ? false
+, withNtfs ? false
+, withGtk3 ? false
+, withQt5 ? false
 }:
 
-assert lib.elem defaultGuiType ["" "gtk3" "qt5"];
+assert lib.elem defaultGuiType [ "" "gtk3" "qt5" ];
 assert defaultGuiType == "gtk3" -> withGtk3;
 assert defaultGuiType == "qt5" -> withQt5;
 
@@ -21,37 +45,25 @@ let
     i686-linux = "i386";
     aarch64-linux = "aarch64";
     mipsel-linux = "mips64el";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-in stdenv.mkDerivation rec {
+  }.${stdenv.hostPlatform.system}
+    or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+  inherit (lib) optional optionalString;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.75";
+  version = "1.0.84";
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional withQt5 qt5.wrapQtAppsHook;
-  buildInputs = [
-    bash coreutils dosfstools exfat gawk gnugrep gnused hexdump parted procps
-    util-linux which xz
-  ] ++ lib.optional withCryptsetup cryptsetup
-    ++ lib.optional withXfs xfsprogs
-    ++ lib.optional withExt4 e2fsprogs
-    ++ lib.optional withNtfs ntfs3g
-    ++ lib.optional withGtk3 gtk3
-    ++ lib.optional withQt5 qt5.qtbase;
-
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    sha256 = "64487c11da3be1aa95ae5631c12fcfefbabf3d27c80d8992145e572c5e44a535";
+    hash = "sha256-ygIAw270Px5nRrSrsD3yLBRFBKGwzdxXzQ6udS9g2ZI=";
   };
+
   patches = [
-    (fetchpatch {
-      name = "sanitize.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=057f2d1eb496c7a3aaa8229e99a7f709428fa4c5";
-      sha256 = "sha256-iAtLtM+Q4OsXDK83eCnPNomeNSEqdRLFfK2x7ybPSpk=";
-    })
-    ./fix-for-read-only-file-system.patch
-    ./add-mips64.patch
+    ./000-nixos-sanitization.patch
   ];
-  patchFlags = [ "-p0" ];
+
   postPatch = ''
     # Fix permissions.
     find -type f -name \*.sh -exec chmod a+x '{}' \;
@@ -60,12 +72,59 @@ in stdenv.mkDerivation rec {
     sed -i 's:log\.txt:/var/log/ventoy\.log:g' \
         WebUI/static/js/languages.js tool/languages.json
   '';
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ]
+  ++ optional (withQt5 || withGtk3) copyDesktopItems
+  ++ optional withQt5 wrapQtAppsHook;
+
+  buildInputs = [
+    bash
+    coreutils
+    dosfstools
+    exfat
+    gawk
+    gnugrep
+    gnused
+    hexdump
+    parted
+    procps
+    util-linux
+    which
+    xz
+  ]
+  ++ optional withCryptsetup cryptsetup
+  ++ optional withExt4 e2fsprogs
+  ++ optional withGtk3 gtk3
+  ++ optional withNtfs ntfs3g
+  ++ optional withXfs xfsprogs
+  ++ optional withQt5 qtbase;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Ventoy";
+      desktopName = "Ventoy";
+      comment = "Tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
+      icon = "VentoyLogo";
+      exec = "ventoy-gui";
+      terminal = false;
+      categories = [ "Utility" ];
+      startupNotify = true;
+    })];
+
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
-    # Setup variables.
+    runHook preInstall
+
+    # Setup variables
     local VENTOY_PATH="$out"/share/ventoy
     local ARCH='${arch}'
 
-    # Prepare.
+    # Prepare
     cd tool/"$ARCH"
     rm ash* hexdump* mkexfatfs* mount.exfat-fuse* xzcat*
     for archive in *.xz; do
@@ -85,58 +144,66 @@ in stdenv.mkDerivation rec {
     rm README
     rm tool/"$ARCH"/Ventoy2Disk.gtk2 || true  # For aarch64 and mips64el.
 
-    # Copy from "$src" to "$out".
+    # Copy from "$src" to "$out"
     mkdir -p "$out"/bin "$VENTOY_PATH"
     cp -r . "$VENTOY_PATH"
 
-    # Fill bin dir.
+    # Fill bin dir
     for f in Ventoy2Disk.sh_ventoy VentoyWeb.sh_ventoy-web \
              CreatePersistentImg.sh_ventoy-persistent \
              ExtendPersistentImg.sh_ventoy-extend-persistent \
              VentoyPlugson.sh_ventoy-plugson; do
         local bin="''${f%_*}" wrapper="''${f#*_}"
         makeWrapper "$VENTOY_PATH/$bin" "$out/bin/$wrapper" \
-                    --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                    --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
                     --chdir "$VENTOY_PATH"
     done
-  '' + lib.optionalString (withGtk3 || withQt5) ''
-    # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
-    # See <https://github.com/ventoy/Ventoy/blob/471432fc50ffad80bde5de0b22e4c30fa3aac41b/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1044>.
+  ''
+  # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
+  # See: https://github.com/ventoy/Ventoy/blob/v1.0.78/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1096
+  + optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
-                --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
                 --chdir "$VENTOY_PATH"
     mkdir "$out"/share/{applications,pixmaps}
     ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
-    cp ${./ventoy-gui.desktop} "$out"/share/applications/
-  '' + lib.optionalString (!withGtk3) ''
+  ''
+  + optionalString (!withGtk3) ''
     rm "$VENTOY_PATH"/tool/{"$ARCH"/Ventoy2Disk.gtk3,VentoyGTK.glade}
-  '' + lib.optionalString (!withQt5) ''
+  ''
+  + optionalString (!withQt5) ''
     rm "$VENTOY_PATH/tool/$ARCH/Ventoy2Disk.qt5"
-  '' + lib.optionalString (!withGtk3 && !withQt5) ''
+  ''
+  + optionalString (!withGtk3 && !withQt5) ''
     rm "$VENTOY_PATH"/VentoyGUI.*
+  '' +
+  ''
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "An open source tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
+    homepage = "https://www.ventoy.net";
+    description = "A New Bootable USB Solution";
     longDescription = ''
-      An open source tool to create bootable USB drive for
+      Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the
-      disk over and over, you just need to copy the ISO/WIM/IMG/VHD(x)/EFI
-      files to the USB drive and boot them directly.  You can copy many files
-      at a time and ventoy will give you a boot menu to select them.  You can
-      also browse ISO/WIM/IMG/VHD(x)/EFI files in local disk and boot them.
-      x86 Legacy BIOS, IA32 UEFI, x86_64 UEFI, ARM64 UEFI and MIPS64EL UEFI are
-      supported in the same way.  Most type of OS supported
+      disk over and over, you just need to copy the ISO/WIM/IMG/VHD(x)/EFI files
+      to the USB drive and boot them directly. You can copy many files at a time
+      and ventoy will give you a boot menu to select them. You can also browse
+      ISO/WIM/IMG/VHD(x)/EFI files in local disk and boot them. x86 Legacy
+      BIOS, IA32 UEFI, x86_64 UEFI, ARM64 UEFI and MIPS64EL UEFI are supported
+      in the same way.  Most type of OS supported
       (Windows/WinPE/Linux/ChromeOS/Unix/VMware/Xen...).  With ventoy you can
       also browse ISO/WIM/IMG/VHD(x)/EFI files in local disk and boot them.
-      800+ image files are tested.  90%+ distros in <distrowatch.com>
-      supported.
+      800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
-    homepage = "https://www.ventoy.net";
     changelog = "https://www.ventoy.net/doc_news.html";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
-    maintainers = with maintainers; [ k4leg ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "ventoy";
   };
-}
+})

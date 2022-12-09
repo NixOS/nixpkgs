@@ -2,23 +2,29 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, pkg-config
+, openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mpd-discord-rpc";
-  version = "1.4.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CdgR9G598LmxA9lhY6yppP3ZZUhTqgMcWccEhSuCcJQ=";
+    sha256 = "sha256-Iw4n3xcc+589/42SfnAklEWTkgwZKAk84dS8fXXLcvs=";
   };
 
-  cargoSha256 = "sha256-WhlVWQCUGP+K9md0yp6ZD6mGYMso1fUYKDuXXrC2FeI=";
+  cargoSha256 = "sha256-Ss6UUznt9g3XWdeCuMG0y9NxWpGOmHbKsQqOMGOK2jo=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Rust application which displays your currently playing song / album / artist from MPD in Discord using Rich Presence";
     homepage = "https://github.com/JakeStanger/mpd-discord-rpc";
     license = licenses.mit;

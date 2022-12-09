@@ -1,7 +1,6 @@
 { lib
 , aws-sdk-cpp
 , boehmgc
-, curl
 , callPackage
 , fetchFromGitHub
 , fetchurl
@@ -32,7 +31,7 @@ let
 
   common = args:
     callPackage
-      (import ./common.nix ({ inherit lib fetchFromGitHub curl; } // args))
+      (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
       {
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
@@ -47,20 +46,13 @@ in lib.makeExtensible (self: {
     };
   }).override { boehmgc = boehmgc-nix_2_3; };
 
-  nix_2_4 = common {
-    version = "2.4";
-    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    # https://github.com/NixOS/nix/pull/5537
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
-  nix_2_5 = common {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
+  # This is the last version of nix where https://github.com/NixOS/nix/issues/6572
+  # is not an unsolved breaking bug. Please keep it until the issue is fixed
+  # and in latest stable nix.
   nix_2_6 = common {
     version = "2.6.1";
     sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
@@ -87,19 +79,55 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_9 = common {
-    version = "2.9.1";
-    sha256 = "sha256-qNL3lQPBsnStkru3j1ajN/H+knXI+X3dku8/dBfSw3g=";
+    version = "2.9.2";
+    sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
     patches = [
-      # add missing --git-dir flags
-      # remove once 2.9.2 is out
       (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/1a994cc35b33dcfd484e7a96be0e76e23bfb9029.patch";
-        sha256 = "sha256-7rDlqWRSVPijbvrTm4P+YykbMWyJryorXqGLEgg8/Wo=";
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
       })
     ];
   };
 
-  stable = self.nix_2_9;
+  nix_2_10 = common {
+    version = "2.10.3";
+    sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
+  };
+
+  nix_2_11 = common {
+    version = "2.11.1";
+    sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
+  };
+
+  nix_2_12 = common {
+    version = "2.12.0";
+    sha256 = "sha256-sQ9C101CL/eVN5JgH91ozHFWU4+bXr8/Fi/8NQk6xRI=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+  };
+
+  stable = self.nix_2_12;
 
   unstable = self.stable;
 })

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, buildGoModule, git
-, asciidoctor, ruby
+{ lib, fetchurl, buildGoModule, asciidoctor, ruby
 }:
 
 buildGoModule rec {

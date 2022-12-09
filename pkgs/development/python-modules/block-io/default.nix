@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "block-io";
-  version = "2.0.5";
+  version = "2.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af70c3be444f2f2d07c0603cef547b51bbd9f4fbd4aadebd8f1e8ee73ccbc5e5";
+    sha256 = "sha256-M7czfpagXqoWWSu4enB3Z2hc2GtAaskI6cnJzJdpC8I=";
   };
 
   propagatedBuildInputs = [

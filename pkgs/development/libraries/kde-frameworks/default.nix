@@ -32,7 +32,7 @@ let
   broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [
-    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12Plus
   ];
 
   srcs = import ./srcs.nix {
@@ -40,7 +40,7 @@ let
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+  mkDerivation = libsForQt5.callPackage ({ stdenv, mkDerivation ? stdenv.mkDerivation }: mkDerivation) {};
 
   packages = self: with self;
     # SUPPORT
@@ -152,14 +152,13 @@ let
     # TIER 3
       baloo = callPackage ./baloo.nix {};
       kbookmarks = callPackage ./kbookmarks.nix {};
-      kcmutils = callPackage ./kcmutils {};
-      kconfigwidgets = callPackage ./kconfigwidgets {};
+      kcmutils = callPackage ./kcmutils.nix {};
+      kconfigwidgets = callPackage ./kconfigwidgets.nix {};
       kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
       kdesu = callPackage ./kdesu {};
-      kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};

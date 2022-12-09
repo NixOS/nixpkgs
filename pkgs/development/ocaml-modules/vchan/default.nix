@@ -1,19 +1,18 @@
 { lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_sexp_conv, ounit, io-page-unix
+, ppx_cstruct, ppx_sexp_conv, ounit
 , lwt, cstruct, io-page, mirage-flow, xenstore, xenstore_transport
 , sexplib, cmdliner
 }:
 
 buildDunePackage rec {
   pname = "vchan";
-  version = "6.0.0";
+  version = "6.0.1";
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-vchan/releases/download/v${version}/vchan-v${version}.tbz";
-    sha256 = "7a6cc89ff8ba7144d6cef3f36722f40deedb3cefff0f7be1b2f3b7b2a2b41747";
+    url = "https://github.com/mirage/ocaml-vchan/releases/download/v${version}/vchan-${version}.tbz";
+    sha256 = "sha256-5E7dITMVirYoxUkp8ZamRAolyhA6avXGJNAioxeBuV0=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     cmdliner
-    io-page-unix
     ounit
   ];
 

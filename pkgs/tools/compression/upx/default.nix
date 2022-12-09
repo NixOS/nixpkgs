@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ucl, zlib, perl }:
+{ lib, stdenv, fetchurl, ucl, zlib, perl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "upx";
@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ucl zlib perl ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/upx/upx/commit/13bc031163863cb3866aa6cdc018dff0697aa5d4.patch";
+      sha256 = "sha256-7uazgx1lOgHh2J7yn3yb1q9lTJsv4BbexdGlWRiAG/M=";
+      name = "CVE-2021-20285.patch";
+    })
+  ];
 
   preConfigure = ''
     export UPX_UCLDIR=${ucl}

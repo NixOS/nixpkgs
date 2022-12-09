@@ -1,13 +1,18 @@
 { stdenv
 , lib
-, fetchurl
+, callPackage
+, fetchFromGitHub
 , fetchpatch
 , makeWrapper
 , cmake
+, coreutils
 , git
+, davix
 , ftgl
 , gl2ps
 , glew
+, gnugrep
+, gnused
 , gsl
 , lapack
 , libX11
@@ -16,15 +21,21 @@
 , libXext
 , libGLU
 , libGL
+, libxcrypt
 , libxml2
 , llvm_9
+, lsof
 , lz4
 , xz
+, man
 , openblas
+, openssl
 , pcre
 , nlohmann_json
 , pkg-config
+, procps
 , python
+, which
 , xxHash
 , zlib
 , zstd
@@ -33,6 +44,9 @@
 , libjpeg
 , libtiff
 , libpng
+, patchRcPathCsh
+, patchRcPathFish
+, patchRcPathPosix
 , tbb
 , Cocoa
 , CoreSymbolication
@@ -40,17 +54,38 @@
 , noSplash ? false
 }:
 
+let
+
+  _llvm_9 = llvm_9.overrideAttrs (prev: {
+    patches = (prev.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
+        stripLen = 3;
+        hash = "sha256-LH2RipJICEDWOr7JzX5s0QiUhEwXNMFEJihYKy9qWpo=";
+      })
+    ];
+  });
+
+in
+
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.24.06";
+  version = "6.26.08";
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "sha256-kH9p9LrKHk8w7rSXlZjKdZm2qoA8oEboDiW2u6oO9SI=";
+  passthru = {
+    tests = import ./tests { inherit callPackage; };
+  };
+
+  src = fetchFromGitHub {
+    owner = "root-project";
+    repo = "root";
+    rev = "v${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "sha256-cNd1GvEbO/a+WdDe8EHYGmdlw3TrOT2fWaSk+s7fw7U=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
   buildInputs = [
+    davix
     ftgl
     gl2ps
     glew
@@ -58,12 +93,14 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     lapack
+    libxcrypt
     libxml2
-    llvm_9
+    _llvm_9
     lz4
     xz
     gsl
     openblas
+    openssl
     xxHash
     libAfterImage
     giflib
@@ -71,6 +108,9 @@ stdenv.mkDerivation rec {
     libtiff
     libpng
     nlohmann_json
+    patchRcPathCsh
+    patchRcPathFish
+    patchRcPathPosix
     python.pkgs.numpy
     tbb
   ]
@@ -80,13 +120,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-
-    # Fix builtin_llvm=OFF support
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/0cddef5d3562a89fe254e0036bb7d5ca8a5d34d2.diff";
-      excludes = [ "interpreter/cling/tools/plugins/clad/CMakeLists.txt" ];
-      sha256 = "sha256-VxWUbxRHB3O6tERFQdbGI7ypDAZD3sjSi+PYfu1OAbM=";
-    })
   ];
 
   # Fix build against vanilla LLVM 9
@@ -116,6 +149,8 @@ stdenv.mkDerivation rec {
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/CMakeLists.txt \
       --replace "-F/System/Library/PrivateFrameworks" ""
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
   cmakeFlags = [
@@ -131,7 +166,7 @@ stdenv.mkDerivation rec {
     "-Dcastor=OFF"
     "-Dchirp=OFF"
     "-Dclad=OFF"
-    "-Ddavix=OFF"
+    "-Ddavix=ON"
     "-Ddcache=OFF"
     "-Dfail-on-missing=ON"
     "-Dfftw3=OFF"
@@ -155,7 +190,7 @@ stdenv.mkDerivation rec {
     "-Drfio=OFF"
     "-Droot7=OFF"
     "-Dsqlite=OFF"
-    "-Dssl=OFF"
+    "-Dssl=ON"
     "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
@@ -172,12 +207,53 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
         --set PYTHONPATH "$out/lib" \
         --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
+
+    # Make ldd and sed available to the ROOT executable
+    wrapProgram "$out/bin/root" --prefix PATH : "${lib.makeBinPath [
+      gnused # sed
+      stdenv.cc # c++ ld etc.
+      stdenv.cc.libc # ldd
+    ]}"
+
+    # Patch thisroot.{sh,csh,fish}
+
+    # The main target of `thisroot.sh` is "bash-like shells",
+    # but it also need to support Bash-less POSIX shell like dash,
+    # as they are mentioned in `thisroot.sh`.
+
+    # `thisroot.sh` would include commands `lsof` and `procps` since ROOT 6.28.
+    # See https://github.com/root-project/root/pull/10332
+
+    patchRcPathPosix "$out/bin/thisroot.sh" "${lib.makeBinPath [
+      coreutils # dirname tail
+      gnugrep # grep
+      gnused # sed
+      lsof # lsof # for ROOT (>=6.28)
+      man # manpath
+      procps # ps # for ROOT (>=6.28)
+      which # which
+    ]}"
+    patchRcPathCsh "$out/bin/thisroot.csh" "${lib.makeBinPath [
+      coreutils
+      gnugrep
+      gnused
+      lsof # lsof # for ROOT (>=6.28)
+      man
+      which
+    ]}"
+    patchRcPathFish "$out/bin/thisroot.fish" "${lib.makeBinPath [
+      coreutils
+      man
+      which
+    ]}"
   '';
 
   setupHook = ./setup-hook.sh;

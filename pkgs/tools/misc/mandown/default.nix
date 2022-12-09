@@ -15,6 +15,6 @@ rustPlatform.buildRustPackage rec {
     description = "Markdown to groff (man page) converter";
     homepage = "https://gitlab.com/kornelski/mandown";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ ];
   };
 }

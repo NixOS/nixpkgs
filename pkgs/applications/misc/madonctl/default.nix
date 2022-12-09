@@ -1,31 +1,38 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, madonctl }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "madonctl";
-  version = "1.1.0";
-
-  goPackagePath = "github.com/McKael/madonctl";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "McKael";
     repo = "madonctl";
-    rev  = "v${version}";
-    sha256 = "1dnc1xaafhwhhf5afhb0wc2wbqq0s1r7qzj5k0xzc58my541gadc";
+    rev = "v${version}";
+    sha256 = "sha256-mo185EKjLkiujAKcAFM1XqkXWvcfYbnv+r3dF9ywaf8=";
   };
 
-  # How to update:
-  # go get -u github.com/McKael/madonctl
-  # cd $GOPATH/src/github.com/McKael/madonctl
-  # git checkout v<version-number>
-  # go2nix save
+  vendorSha256 = null;
 
-  goDeps = ./deps.nix;
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    installShellCompletion --cmd madonctl \
+      --bash <($out/bin/madonctl completion bash) \
+      --zsh <($out/bin/madonctl completion zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = madonctl;
+    command = "madonctl version";
+  };
 
   meta = with lib; {
     description = "CLI for the Mastodon social network API";
     homepage = "https://github.com/McKael/madonctl";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

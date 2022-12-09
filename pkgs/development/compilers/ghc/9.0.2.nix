@@ -99,6 +99,9 @@ let
   # build the haddock program (removing the `enableHaddockProgram` option).
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
+
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
@@ -184,6 +187,14 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
+
     # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
     (fetchpatch {

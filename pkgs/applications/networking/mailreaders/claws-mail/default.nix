@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
@@ -11,7 +11,7 @@
 , enableSpellcheck ? true
 
 # Arguments to include external libraries
-, enableLibSM ? true, libSM
+, enableLibSM ? true, xorg
 , enableGnuTLS ? true, gnutls
 , enableEnchant ? enableSpellcheck, enchant
 , enableDbus ? true, dbus, dbus-glib
@@ -76,7 +76,7 @@ let
     { flags = [ "ldap" ]; enabled = enableLdap; deps = [ openldap ]; }
     { flags = [ "libetpan" ]; enabled = enableLibetpan; deps = [ libetpan ]; }
     { flags = [ "libravatar-plugin" ]; enabled = enablePluginLibravatar; }
-    { flags = [ "libsm" ]; enabled = enableLibSM; deps = [ libSM ]; }
+    { flags = [ "libsm" ]; enabled = enableLibSM; deps = [ xorg.libSM ]; }
     { flags = [ "litehtml_viewer-plugin" ]; enabled = enablePluginLitehtmlViewer; deps = [ gumbo ]; }
     { flags = [ "mailmbox-plugin" ]; enabled = enablePluginMailmbox; }
     { flags = [ "managesieve-plugin" ]; enabled = enablePluginManageSieve; }
@@ -98,12 +98,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "4.1.0";
+  version = "4.1.1";
 
-  src = fetchgit {
-    rev = version;
-    url = "git://git.claws-mail.org/claws.git";
-    sha256 = "1pgl7z87qs3ksh1pazq9cml3h0vb7kr9b97gkkrzgsgfg1vbx390";
+  src = fetchurl {
+    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    hash = "sha256-sYnnAMGJb14N6wt21L+oIOt6wZNe4Qqpr7raPPU6A0Q=";
   };
 
   outputs = [ "out" "dev" ];
@@ -120,6 +119,8 @@ in stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'm4_esyscmd([./get-git-version])' '${version}'
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
@@ -159,6 +160,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 ];
+    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 srapenne ];
   };
 }

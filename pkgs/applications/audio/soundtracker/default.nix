@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "soundtracker";
-  version = "1.0.2.1";
+  version = "1.0.3";
 
   src = fetchurl {
     # Past releases get moved to the "old releases" directory.
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
     url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.xz";
-    sha256 = "0nh0dwz8nldc040q6n06vlazhss8ms42r2dffhjcrqj3hbrvfx82";
+    sha256 = "sha256-k+TB1DIauOIeQSCVV5uYu69wwRx7vCRAlSCTAtDguKo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

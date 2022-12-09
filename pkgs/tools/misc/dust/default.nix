@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, AppKit }:
 
 rustPlatform.buildRustPackage rec {
   pname = "du-dust";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    sha256 = "sha256-qC8AlLyg8MU9ZON0hITTaM5AmRFZMOqJVt7PJ5fCtus=";
+    sha256 = "sha256-+YcHiW4kR4JeIY6zv1WJ97dCIakvtbn8+b9tLFH+aLE=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -16,7 +16,9 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-XW6SIeEmHzicq8pbKJCPYZ5s6jl+kp6Bsjh2WIre4yo=";
+  cargoSha256 = "sha256-yKj9CBoEC6UJf4L+XO2qi69//45lSqblMe8ofnLctEw=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 
   doCheck = false;
 

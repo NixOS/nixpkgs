@@ -17,7 +17,7 @@ in
   };
 
   options = {
-    programs.cfs-zen-tweaks.enable = mkEnableOption "CFS Zen Tweaks";
+    programs.cfs-zen-tweaks.enable = mkEnableOption (lib.mdDoc "CFS Zen Tweaks");
   };
 
   config = mkIf cfg.enable {

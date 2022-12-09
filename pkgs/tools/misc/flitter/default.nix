@@ -20,11 +20,17 @@ ocamlPackages.buildDunePackage rec {
     sha256 = "1k3m7bjq5yrrq7vhnbdykni65dsqhq6knnv9wvwq3svb3n07z4w3";
   };
 
+  # compatibility with core >= 0.15
+  patches = [ ./flitter.patch ];
+
   # https://github.com/alexozer/flitter/issues/28
   postPatch = ''
-    for f in src/colors.ml src/duration.ml src/event_loop.ml src/splits.ml; do
+    for f in src/*.ml; do
       substituteInPlace "$f" \
-        --replace 'Unix.gettimeofday' 'Caml_unix.gettimeofday'
+        --replace 'Unix.gettimeofday' 'Caml_unix.gettimeofday' \
+        --replace 'Core_kernel' 'Core' \
+        --replace 'sexp_option' 'option[@sexp.option]' \
+        --replace 'sexp_list' 'list[@sexp.list]'
     done
   '';
 
@@ -33,7 +39,7 @@ ocamlPackages.buildDunePackage rec {
   ];
 
   buildInputs = with ocamlPackages; [
-    core
+    core_unix
     lwt_ppx
     sexp_pretty
     color

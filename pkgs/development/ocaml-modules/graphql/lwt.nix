@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "graphql-lwt";
 
-  inherit (graphql) version useDune2 src;
+  inherit (graphql) version src;
 
   propagatedBuildInputs = [ graphql ocaml_lwt ];
 

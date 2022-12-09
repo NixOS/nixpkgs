@@ -321,7 +321,6 @@ let
       license = with licenses; [ upl gpl2Classpath bsd3 ];
       maintainers = with maintainers; [
         bandresen
-        volth
         hlolli
         glittershark
         babariviere

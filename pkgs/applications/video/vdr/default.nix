@@ -50,7 +50,7 @@
     homepage = "http://www.tvdr.de/";
     description = "Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
 }

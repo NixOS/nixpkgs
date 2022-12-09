@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , coreutils
 , pbr
@@ -18,16 +18,16 @@
 , requests-mock
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-glanceclient";
-  version = "4.0.0";
+  version = "4.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a3tFLmSKuaKbBQy32EkU7sPIEQtN5gaDqoGT03gka+w=";
+    hash = "sha256-+CmOh9Dr6Gx8MLkR1u/YNpScOxIO7OUIbJAio+omOpg=";
   };
 
   postPatch = ''

@@ -10,18 +10,21 @@
 , mysql-connector
 , withPostgres ? false
 , psycopg2
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.14.10";
+  version = "3.15.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = pname;
-    rev = version;
-    hash = "sha256-k3kKAImE1aVlmsSPXpaIkAVspAsAo5Hz6/n7u6+zTzA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6s+JTUYmuP6Y6D+mi8YTznHbPYUS7yk259MuPpm9H/s=";
   };
 
   buildInputs = [
@@ -31,9 +34,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     apsw
-  ] ++ lib.optional withPostgres [
+  ] ++ lib.optionals withPostgres [
     psycopg2
-  ] ++ lib.optional withMysql [
+  ] ++ lib.optionals withMysql [
     mysql-connector
   ];
 

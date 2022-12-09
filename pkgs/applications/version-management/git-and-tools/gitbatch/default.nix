@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git }:
 
 buildGoModule rec {
   pname = "gitbatch";
@@ -15,7 +15,15 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  checkFlags = [ "-short" ];
+  nativeBuildInputs = [
+    git # required by unit tests
+  ];
+
+  preCheck = ''
+    HOME=$(mktemp -d)
+    # Disable tests requiring network access to gitlab.com
+    buildFlagsArray+=("-run" "[^(Test(Run|Start|(Fetch|Pull)With(Go|)Git))]")
+  '';
 
   meta = with lib; {
     description = "Running git UI commands";

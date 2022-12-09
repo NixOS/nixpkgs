@@ -41,6 +41,8 @@
 , pciutils
 , tre
 , unixODBC
+, xcbutilimage
+, xcbutilkeysyms
 , xkeyboard_config
 , xorg
 , zlib
@@ -94,6 +96,8 @@ in stdenv.mkDerivation {
     pciutils
     tre
     unixODBC
+    xcbutilimage
+    xcbutilkeysyms
     xkeyboard_config
   ] ++ (with xorg; [
     libICE
@@ -121,6 +125,8 @@ in stdenv.mkDerivation {
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
     # Fix xkeyboard config path for Qt
     "--set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
+    # wayland isn't supported
+    "--set QT_QPA_PLATFORM xcb"
   ] ++ lib.optionals cudaSupport [
     "--set CUDA_PATH ${cudaEnv}"
     "--set NVIDIA_DRIVER_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libnvidia-tls.so"

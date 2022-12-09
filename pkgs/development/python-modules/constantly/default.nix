@@ -9,6 +9,8 @@ buildPythonPackage rec {
     sha256 = "0dgwdla5kfpqz83hfril716inm41hgn9skxskvi77605jbmp4qsq";
   };
 
+  pythonImportsCheck = [ "constantly" ];
+
   meta = with lib; {
     homepage = "https://github.com/twisted/constantly";
     description = "symbolic constant support";

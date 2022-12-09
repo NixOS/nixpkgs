@@ -11,38 +11,38 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI.";
+        description = lib.mdDoc "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI.";
       };
 
       preforkProcesses = mkOption {
         type = types.int;
         default = 1;
-        description = "Number of processes to prefork.";
+        description = lib.mdDoc "Number of processes to prefork.";
       };
 
       socketType = mkOption {
         type = types.enum [ "unix" "tcp" "tcp6" ];
         default = "unix";
-        description = "Socket type: 'unix', 'tcp' or 'tcp6'.";
+        description = lib.mdDoc "Socket type: 'unix', 'tcp' or 'tcp6'.";
       };
 
       socketAddress = mkOption {
         type = types.str;
         default = "/run/fcgiwrap.sock";
         example = "1.2.3.4:5678";
-        description = "Socket address. In case of a UNIX socket, this should be its filesystem path.";
+        description = lib.mdDoc "Socket address. In case of a UNIX socket, this should be its filesystem path.";
       };
 
       user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "User permissions for the socket.";
+        description = lib.mdDoc "User permissions for the socket.";
       };
 
       group = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Group permissions for the socket.";
+        description = lib.mdDoc "Group permissions for the socket.";
       };
     };
   };

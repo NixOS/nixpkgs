@@ -8,24 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol-db";
-  version = "20220414";
+  version = "20220903";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
     rev = version;
-    sha256 = "sha256-HlzwtcrnPnAAa3C1AwfS6P13mfXKXlwdlDDtVLcHPCA=";
+    sha256 = "sha256-OmroJ2AEQdELE2Wuk1qPXzp+/9RUUULrEAdEpmXrJxw=";
   };
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [ autoconf automake intltool ];
   buildInputs =
     [
       libtool
-      intltool
     ];
 
   meta = with lib; {

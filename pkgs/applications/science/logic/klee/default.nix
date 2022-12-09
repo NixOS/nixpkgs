@@ -1,10 +1,10 @@
 { lib
+, stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , cmake
-, llvmPackages_9
-, clang_9
+, clang
+, llvm
 , python3
 , zlib
 , z3
@@ -41,26 +41,34 @@ let
 
   # The klee-uclibc derivation.
   kleeuClibc = callPackage ./klee-uclibc.nix {
-    inherit clang_9 llvmPackages_9 extraKleeuClibcConfig debugRuntime runtimeAsserts;
+    inherit stdenv clang llvm extraKleeuClibcConfig debugRuntime runtimeAsserts;
   };
-in
-clang_9.stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "klee";
-  version = "2.2";
+  version = "2.3";
+
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
     rev = "v${version}";
-    sha256 = "Ar3BKfADjJvvP0dI9+x/l3RDs8ncx4jmO7ol4MgOr4M=";
+    sha256 = "sha256-E1c6K6Q+LAWm342W8I00JI6+LMvqmULHZLkv9Kj5RmY=";
   };
+
   buildInputs = [
-    llvmPackages_9.llvm
-    z3 stp cryptominisat
-    gperftools sqlite
+    cryptominisat
+    gperftools
+    lit # Configure phase checking for lit
+    llvm
+    sqlite
+    stp
+    z3
   ];
+
   nativeBuildInputs = [
-    cmake clang_9
+    clang
+    cmake
   ];
+
   checkInputs = [
     gtest
 
@@ -94,34 +102,7 @@ clang_9.stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  patches = map fetchpatch [
-    /* This patch is currently necessary for the unit test suite to run correctly.
-     * See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03136.html
-     * and https://github.com/klee/klee/pull/1458 for more information.
-     */
-    {
-      name = "fix-gtest";
-      sha256 = "F+/6videwJZz4sDF9lnV4B8lMx6W11KFJ0Q8t1qUDf4=";
-      url = "https://github.com/klee/klee/pull/1458.patch";
-    }
-
-    # This patch fixes test compile issues with glibc 2.33+.
-    {
-      name = "fix-glibc-2.33";
-      sha256 = "PzxqtFyLy9KF1eA9AAKg1tu+ggRdvu7leuvXifayIcc=";
-      url = "https://github.com/klee/klee/pull/1385.patch";
-    }
-
-    # /etc/mtab doesn't exist in the Nix build sandbox.
-    {
-      name = "fix-etc-mtab-in-tests";
-      sha256 = "2Yb/rJA791esNNqq8uAXV+MML4YXIjPKkHBOufvyRoQ=";
-      url = "https://github.com/klee/klee/pull/1471.patch";
-    }
-  ];
-
   doCheck = true;
-  checkTarget = "check";
 
   passthru = {
     # Let the user depend on `klee.uclibc` for klee-uclibc

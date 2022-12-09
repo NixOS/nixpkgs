@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchFromGitHub
+, appdirs
 , lxml
 , packaging
 , py
@@ -11,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyshark";
-  version = "0.4.6";
+  version = "0.5.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,37 +21,42 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = pname;
-    # 0.4.5 was the last release which was tagged
-    # https://github.com/KimiNewt/pyshark/issues/541
     rev = "refs/tags/v${version}";
-    hash = "sha256-yEpUFihETKta3+Xb8eSyTZ1uSi7ao4OqWzsCgDLLhe8=";
+    hash = "sha256-byll2GWY2841AAf8Xh+KfaCOtMGVKabTsLCe3gCdZ1o=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-mapping.patch";
+      url =
+        "https://github.com/KimiNewt/pyshark/pull/608/commits/c2feb17ef621390481d6acc29dbf807d6851ed4c.patch";
+      hash = "sha256-TY09HPxqJP3zI8+ugm518aMuBgog7wrXs5uoReHHaEI=";
+    })
+  ];
+
+  # `stripLen` does not seem to work here
+  patchFlags = [ "-p2" ];
 
   sourceRoot = "${src.name}/src";
 
-  propagatedBuildInputs = [
-    py
-    lxml
-    packaging
-  ];
+  # propagate wireshark, so pyshark can find it when used
+  propagatedBuildInputs = [ appdirs py lxml packaging wireshark-cli ];
 
-  checkInputs = [
-    pytestCheckHook
-    wireshark-cli
-  ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
-  pythonImportsCheck = [
-    "pyshark"
-  ];
+  checkInputs = [ pytestCheckHook wireshark-cli ];
 
-  pytestFlagsArray = [
-    "../tests/"
-  ];
+  pythonImportsCheck = [ "pyshark" ];
+
+  pytestFlagsArray = [ "../tests/" ];
 
   meta = with lib; {
-    description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
+    description =
+      "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

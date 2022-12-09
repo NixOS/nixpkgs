@@ -5,12 +5,12 @@
 in {
 
   options.boot.initrd.services.swraid = {
-    enable = (lib.mkEnableOption "swraid support using mdadm") // {
+    enable = (lib.mkEnableOption (lib.mdDoc "swraid support using mdadm")) // {
       visible = false; # only has effect when the new stage 1 is in place
     };
 
     mdadmConf = lib.mkOption {
-      description = "Contents of <filename>/etc/mdadm.conf</filename> in initrd.";
+      description = lib.mdDoc "Contents of {file}`/etc/mdadm.conf` in initrd.";
       type = lib.types.lines;
       default = "";
     };

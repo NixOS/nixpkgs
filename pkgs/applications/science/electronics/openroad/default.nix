@@ -8,7 +8,7 @@
 , git
 , python3
 , swig4
-, boost172
+, boost17x
 , cimg
 , eigen
 , lcov
@@ -27,14 +27,14 @@
 
 mkDerivation rec {
   pname = "openroad";
-  version = "2.0";
+  version = "unstable-2022-07-19";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
-    rev = "v${version}";
+    rev = "2610b3953ef62651825d89fb96917cf5d20af0f1";
     fetchSubmodules = true;
-    sha256 = "1p677xh16wskfj06jnplhpc3glibhdaqxmk0j09832chqlryzwyx";
+    sha256 = "sha256-BP0JSnxl1XyqHzDY4eITaGHevqd+rbjWZy/LAfDfELs=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    boost172
+    boost17x
     cimg
     eigen
     lcov
@@ -70,7 +70,11 @@ mkDerivation rec {
   '';
 
   # Enable output images from the placer.
-  cmakeFlags = [ "-DUSE_CIMG_LIB=ON" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_BOOST=ON"
+    "-DUSE_CIMG_LIB=ON"
+    "-DOPENROAD_VERSION=${src.rev}"
+  ];
 
   # Resynthesis needs access to the Yosys binaries.
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
@@ -82,6 +86,12 @@ mkDerivation rec {
     # Regression tests must be run from the project root not from within the CMake build directory.
     cd ..
     test/regression
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/openroad -version
+    $out/bin/sta -version
   '';
 
   meta = with lib; {

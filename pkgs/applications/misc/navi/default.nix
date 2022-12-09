@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.19.0";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
     rev = "v${version}";
-    sha256 = "sha256-tbnhbjtrVlxx21L15UocUSwvUesl5D/QoM/2r55rwOo=";
+    sha256 = "sha256-uu82KG2RHEP0PstoYB4eWZWFjlousT40A1XAaBfkjFE=";
   };
 
-  cargoSha256 = "sha256-X5t5mJoda8xTIVw3+u6yOvp78lS4rW3Ud6d/4ttsNbc=";
+  cargoSha256 = "sha256-gpHeyxLcDqwi96BWF6Hwlb27JG2LSUgfsE4FTB1vIoQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 

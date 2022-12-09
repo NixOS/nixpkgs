@@ -26,13 +26,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the diod 9P file server.";
+        description = lib.mdDoc "Whether to enable the diod 9P file server.";
       };
 
       listen = mkOption {
         type = types.listOf types.str;
         default = [ "0.0.0.0:564" ];
-        description = ''
+        description = lib.mdDoc ''
           [ "IP:PORT" [,"IP:PORT",...] ]
           List the interfaces and ports that diod should listen on.
         '';
@@ -41,7 +41,7 @@ in
       exports = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List the file systems that clients will be allowed to mount. All paths should
           be fully qualified. The exports table can include two types of element:
           a string element (as above),
@@ -57,7 +57,7 @@ in
       exportall = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Export all file systems listed in /proc/mounts. If new file systems are mounted
           after diod has started, they will become immediately mountable. If there is a
           duplicate entry for a file system in the exports list, any options listed in
@@ -68,7 +68,7 @@ in
       exportopts = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Establish a default set of export options. These are overridden, not appended
           to, by opts attributes in an "exports" entry.
         '';
@@ -77,7 +77,7 @@ in
       nwthreads = mkOption {
         type = types.int;
         default = 16;
-        description = ''
+        description = lib.mdDoc ''
           Sets the (fixed) number of worker threads created to handle 9P
           requests for a unique aname.
         '';
@@ -86,7 +86,7 @@ in
       authRequired = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Allow clients to connect without authentication, i.e. without a valid MUNGE credential.
         '';
       };
@@ -94,7 +94,7 @@ in
       userdb = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option disables password/group lookups. It allows any uid to attach and
           assumes gid=uid, and supplementary groups contain only the primary gid.
         '';
@@ -103,7 +103,7 @@ in
       allsquash = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Remap all users to "nobody". The attaching user need not be present in the
           password file.
         '';
@@ -112,7 +112,7 @@ in
       squashuser = mkOption {
         type = types.str;
         default = "nobody";
-        description = ''
+        description = lib.mdDoc ''
           Change the squash user. The squash user must be present in the password file.
         '';
       };
@@ -120,7 +120,7 @@ in
       logdest = mkOption {
         type = types.str;
         default = "syslog:daemon:err";
-        description = ''
+        description = lib.mdDoc ''
           Set the destination for logging.
           The value has the form of "syslog:facility:level" or "filename".
         '';
@@ -130,7 +130,7 @@ in
       statfsPassthru = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option configures statfs to return the host file system's type
           rather than V9FS_MAGIC.
         '';
@@ -139,7 +139,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration options for diod.conf.";
+        description = lib.mdDoc "Extra configuration options for diod.conf.";
       };
     };
   };

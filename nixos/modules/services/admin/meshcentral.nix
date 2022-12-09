@@ -5,23 +5,21 @@ let
   configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
 in with lib; {
   options.services.meshcentral = with types; {
-    enable = mkEnableOption "MeshCentral computer management server";
+    enable = mkEnableOption (lib.mdDoc "MeshCentral computer management server");
     package = mkOption {
-      description = "MeshCentral package to use. Replacing this may be necessary to add dependencies for extra functionality.";
+      description = lib.mdDoc "MeshCentral package to use. Replacing this may be necessary to add dependencies for extra functionality.";
       type = types.package;
       default = pkgs.meshcentral;
       defaultText = literalExpression "pkgs.meshcentral";
     };
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Settings for MeshCentral. Refer to upstream documentation for details:
 
-        <itemizedlist>
-          <listitem><para><link xlink:href="https://github.com/Ylianst/MeshCentral/blob/master/meshcentral-config-schema.json">JSON Schema definition</link></para></listitem>
-          <listitem><para><link xlink:href="https://github.com/Ylianst/MeshCentral/blob/master/sample-config.json">simple sample configuration</link></para></listitem>
-          <listitem><para><link xlink:href="https://github.com/Ylianst/MeshCentral/blob/master/sample-config-advanced.json">complex sample configuration</link></para></listitem>
-          <listitem><para><link xlink:href="https://www.meshcommander.com/meshcentral2">Old homepage) with documentation link</link></para></listitem>
-        </itemizedlist>
+        - [JSON Schema definition](https://github.com/Ylianst/MeshCentral/blob/master/meshcentral-config-schema.json)
+        - [simple sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config.json)
+        - [complex sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config-advanced.json)
+        - [Old homepage with documentation link](https://www.meshcommander.com/meshcentral2)
       '';
       type = types.submodule {
         freeformType = configFormat.type;

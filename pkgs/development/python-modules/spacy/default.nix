@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.3.1";
+  version = "3.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f4fb2xBNhRrmul/Tp2ouFOIuBIE1kD6YuvCFcaOqgcA=";
+    hash = "sha256-WcXPXTSKbA5kpZrFz+bNhdCOhmM3hwyV0exhYdUx5GM=";
   };
 
   propagatedBuildInputs = [
@@ -63,13 +63,13 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic~=1.2"
+      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
 
   checkInputs = [

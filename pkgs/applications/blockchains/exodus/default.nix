@@ -1,24 +1,18 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
+{ stdenv, lib, fetchzip, glib, systemd, nss, nspr, gtk3-x11, pango,
 atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "22.2.25";
+  version = "22.8.12";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "sha256-YbApI9rIk1653Hp3hsXJrxBMpaGn6Wv3WhZiQWAfPQM=";
+    sha256 = "sha256-jNzHh4zYhFzpFZAC9rHmwjTdFkbpROSEN3qpL7geiOU=";
   };
-
-  sourceRoot = ".";
-  unpackCmd = ''
-      ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
-  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/applications
-    cd Exodus-linux-x64
     cp -r . $out
     ln -s $out/Exodus $out/bin/Exodus
     ln -s $out/bin/Exodus $out/bin/exodus
@@ -76,8 +70,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut rople380 ];
+    maintainers = with maintainers; [ mmahut rople380 Crafter ];
   };
 }

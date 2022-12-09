@@ -2,10 +2,9 @@
 , stdenv
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
-, GitPython
+, gitpython
 , boost
 , coin3d
 , eigen
@@ -42,19 +41,20 @@
 , swig
 , vtk
 , wrapQtAppsHook
+, wrapGAppsHook
 , xercesc
 , zlib
 }:
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.19.2";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-XZ+fRl3CPCIFu3nHeMTLibwwFBlG/cWpKJlI58hTAuU=";
+    hash = "sha256-v8hanhy0UE0o+XqqIH3ZUtVom3q0KGELcfXFRSDr0TA=";
   };
 
   nativeBuildInputs = [
@@ -64,10 +64,11 @@ mkDerivation rec {
     pyside2-tools
     gfortran
     wrapQtAppsHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    GitPython # for addon manager
+    gitpython # for addon manager
     boost
     coin3d
     eigen

@@ -38,8 +38,8 @@ in
         type        = types.bool;
         default     = config.services.tor.enable && config.services.tor.client.enable;
         defaultText = literalExpression "config.services.tor.enable && config.services.tor.client.enable";
-        description = ''
-          Whether to build <literal>/etc/tor/torsocks.conf</literal>
+        description = lib.mdDoc ''
+          Whether to build `/etc/tor/torsocks.conf`
           containing the specified global torsocks configuration.
         '';
       };
@@ -48,7 +48,7 @@ in
         type    = types.str;
         default = "127.0.0.1:9050";
         example = "192.168.0.20:1234";
-        description = ''
+        description = lib.mdDoc ''
           IP/Port of the Tor SOCKS server. Currently, hostnames are
           NOT supported by torsocks.
         '';
@@ -58,7 +58,7 @@ in
         type    = types.str;
         default = "127.0.0.1:9063";
         example = "192.168.0.20:1234";
-        description = ''
+        description = lib.mdDoc ''
           IP/Port of the Tor SOCKS server for torsocks-faster wrapper suitable for HTTP.
           Currently, hostnames are NOT supported by torsocks.
         '';
@@ -67,7 +67,7 @@ in
       onionAddrRange = mkOption {
         type    = types.str;
         default = "127.42.42.0/24";
-        description = ''
+        description = lib.mdDoc ''
           Tor hidden sites do not have real IP addresses. This
           specifies what range of IP addresses will be handed to the
           application as "cookies" for .onion names.  Of course, you
@@ -81,8 +81,8 @@ in
         type    = types.nullOr types.str;
         default = null;
         example = "bob";
-        description = ''
-          SOCKS5 username. The <literal>TORSOCKS_USERNAME</literal>
+        description = lib.mdDoc ''
+          SOCKS5 username. The `TORSOCKS_USERNAME`
           environment variable overrides this option if it is set.
         '';
       };
@@ -91,8 +91,8 @@ in
         type    = types.nullOr types.str;
         default = null;
         example = "sekret";
-        description = ''
-          SOCKS5 password. The <literal>TORSOCKS_PASSWORD</literal>
+        description = lib.mdDoc ''
+          SOCKS5 password. The `TORSOCKS_PASSWORD`
           environment variable overrides this option if it is set.
         '';
       };
@@ -100,9 +100,9 @@ in
       allowInbound = mkOption {
         type    = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Set Torsocks to accept inbound connections. If set to
-          <literal>true</literal>, listen() and accept() will be
+          `true`, listen() and accept() will be
           allowed to be used with non localhost address.
         '';
       };

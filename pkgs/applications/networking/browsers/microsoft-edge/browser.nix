@@ -30,6 +30,7 @@
 , at-spi2-core
 , libuuid
 , systemd
+, wayland
 }:
 
 let
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
         xorg.libXcomposite xorg.libXdamage xorg.libXext
         xorg.libXfixes xorg.libXrandr libxkbcommon
         gtk3 pango cairo gdk-pixbuf mesa
-        alsa-lib at-spi2-core xorg.libxshmfence systemd
+        alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
       ];
       naclHelper = lib.makeLibraryPath [
         glib nspr atk libdrm xorg.libxcb mesa xorg.libX11
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
         glib nss nspr
       ];
       libGLESv2 = lib.makeLibraryPath [
-        xorg.libX11 xorg.libXext xorg.libxcb
+        xorg.libX11 xorg.libXext xorg.libxcb wayland
       ];
       libsmartscreen = lib.makeLibraryPath [
         libuuid stdenv.cc.cc.lib
@@ -185,6 +186,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.microsoft.com/en-us/edge";
     description = "The web browser from Microsoft";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zanculmarktum kuwii ];
   };

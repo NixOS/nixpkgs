@@ -113,6 +113,7 @@ let
     tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
     scipy
     ipywidgets
+    notebook # for "sage -n"
     rpy2
     sphinx
     pillow

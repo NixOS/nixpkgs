@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.38.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-Sy8DpCZEFps6Z4x57ESofNm2EZsPUCHzLz1icl1MOVE=";
+    sha256 = "sha256-wt1BEa8ir8i4VWW03opfy7cSNqCPzQoHgtJz+i8iaLw=";
   };
 
-  vendorSha256 = "sha256-RA2KgUjYB3y6sOQdnLSZjr52VosZSaRrVU0BXZvjB1M=";
+  vendorSha256 = "sha256-2i7NKf/VJduBec4rEBJqFt1cb6ODqOviSY+flGekN4w=";
 
   subPackages = ["cmd/skaffold"];
 

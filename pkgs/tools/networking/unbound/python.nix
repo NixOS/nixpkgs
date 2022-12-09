@@ -6,6 +6,7 @@ in
 stdenv.mkDerivation rec {
   pname = "pyunbound";
   inherit (unbound) version src;
+  patches = unbound.patches or null;
 
   nativeBuildInputs = [ swig ];
 

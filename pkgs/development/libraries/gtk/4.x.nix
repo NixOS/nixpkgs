@@ -42,6 +42,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , cups
@@ -62,7 +63,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.6.5";
+  version = "4.8.2";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -74,8 +75,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "+kLDcfSckJFnEeFVkdh9S+5EOMJ78GknFVgYB2KL6cI=";
+    sha256 = "hbehYLbgLq+k59OPBG+HIPq1N9P+c8AchkMzqYOmkqk=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -88,6 +93,8 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ] ++ setupHooks;
 
   buildInputs = [
@@ -172,7 +179,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     files=(
-      build-aux/meson/post-install.py
       build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
@@ -183,6 +189,7 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+
   '';
 
   preInstall = ''

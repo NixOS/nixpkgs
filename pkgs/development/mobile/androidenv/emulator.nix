@@ -2,9 +2,9 @@
 
 deployAndroidPackage {
   inherit package os;
-  buildInputs = [ makeWrapper ]
-    ++ lib.optionals (os == "linux") (with pkgs; [
-      autoPatchelfHook
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optionals (os == "linux") (with pkgs; [
       glibc
       libcxx
       libGL
@@ -13,7 +13,7 @@ deployAndroidPackage {
       zlib
       ncurses5
       stdenv.cc.cc
-      i686.glibc
+      pkgs_i686.glibc
       expat
       freetype
       nss

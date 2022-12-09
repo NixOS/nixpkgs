@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
-  version = "5.0.6";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
-    sha256 = "0nbr22sxfmk48ngk9gb1vcwv3fkd5m0v208xx6vl00nlnbh4kms4";
+    sha256 = "sha256-RIjdNfX4jsMwpgbE1aTzT6bysIFGUi33o5m030fF6mg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

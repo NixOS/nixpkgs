@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cock";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d9021c2d9ce0dbf495a3c5ef960a9996a0681bb96ff6099f37302a3813a184e";
+    sha256 = "sha256-Hi8aFxATsYcEO6qNzZnF73V8WLTQjb6Dw2xF4VgT2o4=";
   };
 
   propagatedBuildInputs = [ click sortedcontainers pyyaml ];

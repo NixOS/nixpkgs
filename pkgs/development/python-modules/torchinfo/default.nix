@@ -3,13 +3,13 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, pytorch
+, torch
 , torchvision
 }:
 
 buildPythonPackage rec {
   pname = "torchinfo";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,11 +18,11 @@ buildPythonPackage rec {
     owner = "TylerYep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SfhFyv5ISbOG3srOK3m9BeSIkA7M8qJTm95GyfdqzcA=";
+    hash = "sha256-jiQ24gx3N9djvTTB6IthzxcuGWX2/php0Up3IdEDvm8=";
   };
 
   propagatedBuildInputs = [
-    pytorch
+    torch
     torchvision
   ];
 

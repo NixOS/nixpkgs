@@ -85,7 +85,7 @@ let
         (lib.overrideDerivation
           (fetchurl {
             inherit name url sha256;
-            curlOpts = [
+            curlOptsList = [
               "--get"
               "--data-urlencode" "username@username"
               "--data-urlencode" "token@token"
@@ -166,6 +166,7 @@ let
         version 1.0 in mid 2020.
       '';
       homepage = "https://www.factorio.com/";
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
       platforms = [ "x86_64-linux" ];

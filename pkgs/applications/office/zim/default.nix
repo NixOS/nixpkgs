@@ -7,18 +7,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zim";
-  version = "0.74.2";
+  version = "0.75.1";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
-    sha256 = "sha256-tZxBlpps2nLThSOq3WJ42iUQ4NG1Lb463bvDQ+djZJA=";
+    sha256 = "sha256-iOF11/fhQYlvnpWJidJS1yJVavF7xLxvBl59VCh9A4U=";
   };
 
-  buildInputs = [ gtk3 gobject-introspection wrapGAppsHook gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gobject-introspection gnome.adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
+  # see https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   preFixup = ''
-    export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share)
+    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # RuntimeError: could not create GtkClipboard object
@@ -31,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "A desktop wiki";
     homepage = "https://zim-wiki.org/";
+    changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790

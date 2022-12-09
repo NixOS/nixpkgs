@@ -100,7 +100,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable sddm as the display manager.
         '';
       };
@@ -108,7 +108,7 @@ in
       enableHidpi = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable automatic HiDPI mode.
         '';
       };
@@ -122,7 +122,7 @@ in
             Session = "plasma.desktop";
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Extra settings merged in and overwritting defaults in sddm.conf.
         '';
       };
@@ -130,7 +130,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Greeter theme to use.
         '';
       };
@@ -138,7 +138,7 @@ in
       autoNumlock = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable numlock at login.
         '';
       };
@@ -151,16 +151,16 @@ in
           xrandr --setprovideroutputsource modesetting NVIDIA-0
           xrandr --auto
         '';
-        description = ''
+        description = lib.mdDoc ''
           A script to execute when starting the display server. DEPRECATED, please
-          use <option>services.xserver.displayManager.setupCommands</option>.
+          use {option}`services.xserver.displayManager.setupCommands`.
         '';
       };
 
       stopScript = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           A script to execute when stopping the display server.
         '';
       };
@@ -170,7 +170,7 @@ in
         relogin = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             If true automatic login will kick in again on session exit (logout), otherwise it
             will only log in automatically when the display-manager is started.
           '';
@@ -179,7 +179,7 @@ in
         minimumUid = mkOption {
           type = types.ints.u16;
           default = 1000;
-          description = ''
+          description = lib.mdDoc ''
             Minimum user ID for auto-login user.
           '';
         };
@@ -269,20 +269,5 @@ in
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;
     services.xserver.display = null;
-
-    systemd.tmpfiles.rules = [
-      # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
-      # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
-      # will segfault without explanation. We really tore our hair out for awhile
-      # before finding the bug:
-      # https://bugreports.qt.io/browse/QTBUG-62302
-      # We work around the problem by deleting the QML cache before startup.
-      # This was supposedly fixed in Qt 5.9.2 however it has been reported with
-      # 5.10 and 5.11 as well. The initial workaround was to delete the directory
-      # in the Xsetup script but that doesn't do anything.
-      # Instead we use tmpfiles.d to ensure it gets wiped.
-      # This causes a small but perceptible delay when SDDM starts.
-      "e ${config.users.users.sddm.home}/.cache - - - 0"
-    ];
   };
 }

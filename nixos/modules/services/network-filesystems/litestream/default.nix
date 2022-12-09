@@ -8,18 +8,18 @@ let
 in
 {
   options.services.litestream = {
-    enable = mkEnableOption "litestream";
+    enable = mkEnableOption (lib.mdDoc "litestream");
 
     package = mkOption {
-      description = "Package to use.";
+      description = lib.mdDoc "Package to use.";
       default = pkgs.litestream;
       defaultText = literalExpression "pkgs.litestream";
       type = types.package;
     };
 
     settings = mkOption {
-      description = ''
-        See the <link xlink:href="https://litestream.io/reference/config/">documentation</link>.
+      description = lib.mdDoc ''
+        See the [documentation](https://litestream.io/reference/config/).
       '';
       type = settingsFormat.type;
       example = {
@@ -40,10 +40,8 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/litestream";
-      description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the
         world-readable Nix store, by specifying placeholder variables as
@@ -56,11 +54,11 @@ in
         variable values. If no value is set then it will be replaced with an
         empty string.
 
-        <programlisting>
+        ```
           # Content of the environment file
           LITESTREAM_ACCESS_KEY_ID=AKIAxxxxxxxxxxxxxxxx
           LITESTREAM_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxx
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
         this exporter is running.

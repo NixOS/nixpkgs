@@ -1,23 +1,31 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "taskwarrior-tui";
-  version = "0.22.0";
+  version = "0.23.7";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
     rev = "v${version}";
-    sha256 = "sha256-121TfmaWrWppsOiuF+8gxy+3J5YzbliYj88nw4aLt9w=";
+    sha256 = "sha256-D7+C02VlE42wWQSOkeTJVDS4rWnGB06RTZ7tzdpYmZw=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Because there's a test that requires terminal access
   doCheck = false;
 
-  cargoSha256 = "sha256-oTb1pSA9g9cExCXKaQjNm+h5WB4bWuqODkU7MvvspGQ=";
+  cargoSha256 = "sha256-b+bncWx7Z4GG2vwImRYeywc77THGMYVXlm4v/9YKCMI=";
+
+  postInstall = ''
+    installManPage docs/taskwarrior-tui.1
+    installShellCompletion completions/taskwarrior-tui.{bash,fish} --zsh completions/_taskwarrior-tui
+  '';
 
   meta = with lib; {
     description = "A terminal user interface for taskwarrior ";

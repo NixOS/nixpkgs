@@ -1,10 +1,10 @@
 { lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libX11
+, glib, gtk3, gettext, libxkbfile, libX11, python3
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, libsoup, spice-protocol, spice-gtk, libepoxy, at-spi2-core
-, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
+, libsecret, libsoup_3, spice-protocol, spice-gtk, libepoxy, at-spi2-core
+, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
 , withLibsecret ? true
@@ -15,13 +15,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.25";
+  version = "1.4.28";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-1val/KCClEtw1prVWuXJe8DmmQ7e7oqwAfAnT9G9iHI=";
+    sha256 = "sha256-w0z7teful/sdp7/f4X8eqF9Ny3bhP542V0tutQi/yXI=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -31,9 +31,11 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsoup spice-protocol spice-gtk libepoxy at-spi2-core
-    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
-    harfbuzz
+    libsoup_3 spice-protocol
+    spice-gtk
+    libepoxy at-spi2-core
+    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk_4_1
+    harfbuzz python3
   ] ++ optionals withLibsecret [ libsecret ]
     ++ optionals withVte [ vte ];
 

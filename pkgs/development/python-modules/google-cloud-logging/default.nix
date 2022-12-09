@@ -9,22 +9,24 @@
 , google-cloud-core
 , google-cloud-testutils
 , mock
+, pandas
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.1.2";
+  version = "3.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PtAKi9IHb+56HcBTiA/LPJcxhIB+JA+MPAkp3XSOr38=";
+    hash = "sha256-bxFBWi6cx7TeeofMP59XVRX9aDpCP2N5lAkUpWYW1wU=";
   };
 
   propagatedBuildInputs = [
@@ -40,8 +42,10 @@ buildPythonPackage rec {
     flask
     google-cloud-testutils
     mock
+    pandas
     pytestCheckHook
     pytest-asyncio
+    rich
   ];
 
   disabledTests = [
@@ -64,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
+    changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
