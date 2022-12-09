@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "trino-cli";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     install -D "$src" "$out/share/java/${jarfilename}"
 
-    makeWrapper ${jre}/bin/java $out/bin/trino \
+    makeWrapper ${jre_headless}/bin/java $out/bin/trino \
       --add-flags "-jar $out/share/java/${jarfilename}"
 
     runHook postInstall
