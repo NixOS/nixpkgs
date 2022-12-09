@@ -30,9 +30,7 @@ rustPlatform.buildRustPackage rec {
     install -D -m 444 plugin/skim.vim -t $vim/plugin
 
     install -D -m 444 shell/* -t $out/share/skim
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/sk_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    echo sk_key_bindings > $out/share/fish/vendor_conf.d/load-sk-key-bindings.fish
+
     installManPage man/man1/*
 
     cat <<SCRIPT > $out/bin/sk-share

@@ -2433,6 +2433,8 @@ with pkgs;
 
   twine = with python3Packages; toPythonApplication twine;
 
+  accelergy = callPackage ../applications/science/computer-architecture/accelergy { };
+
   aldo = callPackage ../applications/radio/aldo { };
 
   alglib = callPackage ../development/libraries/alglib { };
@@ -27532,7 +27534,7 @@ with pkgs;
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
-    vim = vim_configurable.override { features = "normal"; };
+    vim = vim-full.override { features = "normal"; };
   };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
@@ -32738,14 +32740,12 @@ with pkgs;
 
   macvim = callPackage ../applications/editors/vim/macvim-configurable.nix { stdenv = clangStdenv; };
 
-  vimHugeX = vim_configurable;
-
-  vim_configurable = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
+  vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc;
   });
 
-  vim-darwin = (vim_configurable.override {
+  vim-darwin = (vim-full.override {
     config = {
       vim = {
         gui = "none";
@@ -34736,6 +34736,7 @@ with pkgs;
   };
 
   scummvm = callPackage ../games/scummvm {
+    stdenv = if (stdenv.isDarwin && stdenv.isAarch64) then llvmPackages_14.stdenv else stdenv;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) Cocoa AudioToolbox Carbon CoreMIDI AudioUnit;
   };
@@ -37230,6 +37231,8 @@ with pkgs;
   shc = callPackage ../tools/security/shc { };
 
   shellz = callPackage ../tools/security/shellz { };
+
+  timeloop = pkgs.darwin.apple_sdk_11_0.callPackage ../applications/science/computer-architecture/timeloop { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 

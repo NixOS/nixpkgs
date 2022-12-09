@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.5.2";
+  version = "4.5.5";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-hrmH4DDNzc7iMa5YJUQEb3Ng4QekPG+CoGWoHtv9e58=";
+    hash = "sha256-3R8TAhOxnwKfA/Nc+R9JrLGMkZu9vGqCLbXUa8QGadA=";
   };
 
-  cargoSha256 = "sha256-7JOy5mKkP021+tx8a579WvmqQewEkjFgcwD/f7gzDt8=";
+  cargoSha256 = "sha256-FHyKGLELX6xpPCAc/m2mqbfXcka35q0fGjeaE57g70M=";
 
   postPatch = ''
     files="

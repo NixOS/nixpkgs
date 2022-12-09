@@ -23,7 +23,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.supergfxctl ];
 
-    environment.etc."supergfxd.conf".source = lib.mkIf (cfg.settings != null) (json.generate "supergfxd.conf" cfg.settings);
+    environment.etc."supergfxd.conf" = lib.mkIf (cfg.settings != null) { source = json.generate "supergfxd.conf" cfg.settings; };
 
     services.dbus.enable = true;
 

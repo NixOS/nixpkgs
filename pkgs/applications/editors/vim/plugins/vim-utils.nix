@@ -14,7 +14,7 @@ USAGE EXAMPLE
 Install Vim like this eg using nixos option environment.systemPackages which will provide
 vim-with-plugins in PATH:
 
-  vim_configurable.customize {
+  vim-full.customize {
     name = "vim-with-plugins"; # optional
 
     # add custom .vimrc lines like this:
@@ -105,7 +105,7 @@ fitting the vimrcConfig.vam.pluginDictionaries option.
 Thus the most simple usage would be:
 
   vim_with_plugins =
-    let vim = vim_configurable;
+    let vim = vim-full;
         inherit (vimUtil.override {inherit vim}) rtpPath addRtp buildVimPlugin vimHelpTags;
         vimPlugins = [
           # the derivation list from the buffer created by nix#ExportPluginsForNix

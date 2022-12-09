@@ -62,6 +62,11 @@ in
         configuration.  For instance, if you use the NVIDIA X driver,
         then it also needs to contain an attribute
         {var}`nvidia_x11`.
+
+        Please note that we strictly support kernel versions that are
+        maintained by the Linux developers only. More information on the
+        availability of kernel versions is documented
+        [in the Linux section of the manual](https://nixos.org/manual/nixos/unstable/index.html#sec-kernel-config).
       '';
     };
 
