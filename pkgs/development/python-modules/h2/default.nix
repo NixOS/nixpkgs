@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , hpack
 , hyperframe
 , pytestCheckHook
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-qDrKCPvnqst5/seIycC6yTY0NWDtnsGLgqE6EsKNKrs=";
   };
+
+  patches = [
+    # https://github.com/python-hyper/h2/pull/1274
+    (fetchpatch {
+      name = "fix-tests-in-python-3.11.patch";
+      url = "https://github.com/python-hyper/h2/commit/8952c91606cd014720ccf202a25b5ee1fbed1591.patch";
+      hash = "sha256-skAdAVHMZo1xJEqqKa6FOKPvoQQbGUgGsQjE11jIjtw=";
+    })
+  ];
 
   propagatedBuildInputs = [
     hpack
