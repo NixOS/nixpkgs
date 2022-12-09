@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, libsamplerate
+, alsa-lib
+, AppKit
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
@@ -25,6 +33,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # disable some tests that won't work in nix's build environment
+    # (but have been checked to work outside it). not all parts of the
+    # tests have simple ways to skip
+
+    sed -i \
+      -e '/^static int perform_test(/{:x; n; s@{@{ if(strstr(title,"srflx")) { PJ_LOG(3,(THIS_FILE, INDENT "SKIP")); return 0;}@; Tx;}' \
+      -e '/Iterate each test item/{:y; n; s@{@{ if(strstr(sess_cfg[i].title,"all candidates")||strstr(sess_cfg[i].title,"srflx")) { PJ_LOG(3,(THIS_FILE, INDENT "SKIP")); continue;}@; Ty;}' \
+      -e '/^static int perform_trickle_test(/{:z; n; s@{@{ if(strstr(title,"host+turn")) { PJ_LOG(3,(THIS_FILE, INDENT "SKIP")); return 0;}@; Tz;}' \
+      pjnath/src/pjnath-test/ice_test.c
+    sed -i \
+      -e '/^#define INCLUDE_CONCUR_TEST/c#define INCLUDE_CONCUR_TEST 0' \
+      pjnath/src/pjnath-test/test.h
+    sed -i \
+      -e '/^#define INCLUDE_TCP_TEST/c#define INCLUDE_TCP_TEST 0' \
+      -e '/^#define INCLUDE_TSX_DESTROY_TEST/c#define INCLUDE_TSX_DESTROY_TEST 0' \
+      pjsip/src/test/test.h
+  '';
+
   buildInputs = [ openssl libsamplerate ]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AppKit;
@@ -32,6 +59,16 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export LD=$CC
   '';
+
+  doCheck = true;
+  checkTarget = [
+    "pjlib-test"
+    "pjlib-util-test"
+    "pjnath-test"
+    "pjmedia-test"
+    "pjsip-test"
+  ];
+  enableParallelChecking = true;
 
   postInstall = ''
     mkdir -p $out/bin
