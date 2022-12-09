@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, cln, gmp, git, swig, pkg-config
-, readline, libantlr3c, boost, jdk, python3, antlr3_4
+, readline, libantlr3c, boost, jdk, python3, antlr3_4, symfpu
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ gmp git python3.pkgs.toml readline swig libantlr3c antlr3_4 boost jdk python3 ]
     ++ lib.optionals (!stdenv.isDarwin) [ cln ];
+  propagatedBuildInputs = [ symfpu ];
 
   prePatch = ''
     patch -p1 -i ${./minisat-fenv.patch} -d src/prop/minisat
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SWIG_BINDINGS_PYTHON=ON"
     "-DENABLE_GPL=ON"
     "-DUSE_READLINE=ON"
+    "-DUSE_SYMFPU=ON"
   ] ++  lib.optionals (!stdenv.isDarwin) [
     "-DUSE_CLN=ON"
   ];
