@@ -72,6 +72,7 @@ npmConfigHook() {
     npm config set cache "$cachePath"
     npm config set offline true
     npm config set progress false
+    npm config set node_gyp "$(dirname node)/../lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js"
 
     echo "Installing dependencies"
 

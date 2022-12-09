@@ -37,12 +37,45 @@ let
     hash = npmDepsHash;
   };
 
+  patchNode =
+    let
+      npmNodeModules = "lib/node_modules/npm/node_modules";
+      setPath = "${npmNodeModules}/@npmcli/run-script/lib/set-path.js";
+    in
+    nodejs: stdenv.mkDerivation {
+      pname = "nodejs-gyp-patched";
+      inherit (nodejs) version;
+
+      src = nodejs;
+
+      patchPhase = ''
+        runHook prePatch
+
+        sed -i "s|const pathArr = \[\]|const pathArr = \[nodeGypPath\]; pathArr.push(PATH)|" ${setPath}
+        sed -i "/pathArr.push(nodeGypPath, PATH)/d" ${setPath}
+
+        sed -i "s|node-gyp rebuild|$out/${npmNodeModules}/node-gyp/bin/node-gyp.js rebuild|" ${npmNodeModules}/@npmcli/node-gyp/lib/index.js
+
+        runHook postPatch
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        cp -a . $out
+
+        runHook postInstall
+      '';
+
+      dontFixup = true;
+    };
+
   inherit (npmHooks.override { inherit nodejs; }) npmConfigHook npmBuildHook npmInstallHook;
 in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook ];
+  nativeBuildInputs = nativeBuildInputs ++ [ (patchNode nodejs) npmConfigHook npmBuildHook npmInstallHook ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;
