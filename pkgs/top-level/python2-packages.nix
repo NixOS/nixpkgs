@@ -47,11 +47,6 @@ with self; with super; {
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  protobuf = callPackage ../development/python2-modules/protobuf {
-    disabled = isPyPy;
-    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
-  };
-
   pycairo = callPackage ../development/python2-modules/pycairo {
     inherit (pkgs.buildPackages) meson;
   };
