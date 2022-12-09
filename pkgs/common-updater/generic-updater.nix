@@ -1,4 +1,4 @@
-{ stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
+{ lib, stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
 
 { name ? null
 , pname ? null
@@ -9,11 +9,23 @@
 , rev-prefix ? ""
 , odd-unstable ? false
 , patchlevel-unstable ? false
+# Path to the .nix file to update - this file must contain the version and hash
+, file ? null
 }:
 
 let
   # where to print git commands and debugging messages
   fileForGitCommands = "update-git-commits.txt";
+
+  scriptVars = lib.toShellVars {
+    inherit name pname version file;
+    attr_path = attrPath;
+    version_lister = versionLister;
+    ignored_versions = ignoredVersions;
+    rev_prefix = rev-prefix;
+    odd_unstable = odd-unstable;
+    patchlevel_unstable = patchlevel-unstable;
+  };
 
   # shell script to update package
   updateScript = writeScript "generic-update-script.sh" ''
@@ -21,15 +33,7 @@ let
     set -o errexit
     set -x
 
-    name="$1"
-    pname="$2"
-    version="$3"
-    attr_path="$4"
-    version_lister="$5"
-    ignored_versions="$6"
-    rev_prefix="$7"
-    odd_unstable="$8"
-    patchlevel_unstable="$9"
+    ${scriptVars}
 
     [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
     [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
@@ -105,7 +109,11 @@ let
       fi
 
       # update the nix expression
-      ${common-updater-scripts}/bin/update-source-version "$attr_path" "$latest_tag"
+      update_source_args=("$attr_path" "$latest_tag")
+      if [ -n "$file" ]; then
+        update_source_args+=("--file=$file")
+      fi
+      ${common-updater-scripts}/bin/update-source-version "''${update_source_args[@]}"
     fi
 
     echo "" >> ${fileForGitCommands}
@@ -113,5 +121,5 @@ let
 
 in {
   name = "generic-update-script";
-  command = [ updateScript name pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ];
+  command = [ updateScript ];
 }

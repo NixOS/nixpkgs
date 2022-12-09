@@ -13,9 +13,11 @@
 # an explicit url is needed when src.meta.homepage or src.url don't
 # point to a git repo (eg. when using fetchurl, fetchzip, ...)
 , url ? null
+# Path to the .nix file to update - this file must contain the version and hash
+, file ? null
 }:
 
 genericUpdater {
-  inherit pname version attrPath ignoredVersions rev-prefix odd-unstable patchlevel-unstable;
+  inherit pname version attrPath ignoredVersions rev-prefix odd-unstable patchlevel-unstable file;
   versionLister = "${common-updater-scripts}/bin/list-git-tags ${lib.optionalString (url != null) "--url=${url}"}";
 }
