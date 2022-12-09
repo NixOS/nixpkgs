@@ -5,6 +5,7 @@
 , SDL2_image
 , SDL2_mixer
 , SDL2_ttf
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,12 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
+
+  passthru.updateScript = directoryListingUpdater {
+    inherit pname version;
+    url = "https://lgames.sourceforge.io/LBreakoutHD/";
+    extraRegex = "(?!.*-win(32|64)).*";
+  };
 
   meta = with lib; {
     broken = stdenv.isDarwin;
