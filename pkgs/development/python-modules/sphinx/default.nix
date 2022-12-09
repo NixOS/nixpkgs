@@ -95,9 +95,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
-
-    # Unset dummy cert file path set in stdenv, that confuses certifi
-    unset NIX_SSL_CERT_FILE
   '';
 
   disabledTests = [
