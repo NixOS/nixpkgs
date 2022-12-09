@@ -60,10 +60,6 @@ let
         };
 
         passAsFile = [ "buildCommand" ] ++ lib.optionals (extraAttrs ? extraTest) [ "extraTest" ];
-        # FIXME: with structuredAttrs string is converted to a indexed array
-        # should a/pToVar check if the passed variable is a array or a string?
-        # declare -x string="testing-string"
-        # declare -ax string=([0]="world" [1]="testing-string" [2]="hello")
         buildCommand = ''
           declare -p string
           appendToVar string hello
@@ -71,7 +67,22 @@ let
           prependToVar string "world"
           declare -p string
 
+          declare -A associativeArray=(["X"]="Y")
+          [[ $(appendToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not catch prepending associativeArray" && false)
+          [[ $(prependToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not catch prepending associativeArray" && false)
+
           [[ $string == "world testing-string hello" ]] || (echo "'\$string' was not 'world testing-string hello'" && false)
+
+          # test appending to a unset variable
+          appendToVar nonExistant created hello
+          typeset -p nonExistant
+          if [[ -n $__structuredAttrs ]]; then
+            [[ "''${nonExistant[@]}" == "created hello" ]]
+          else
+            # there's a extra " " in front here and a extra " " in the end of prependToVar
+            # shouldn't matter because these functions will mostly be used for $*Flags and the Flag variable will in most cases already exit
+            [[ "$nonExistant" == " created hello" ]]
+          fi
 
           eval "$extraTest"
 

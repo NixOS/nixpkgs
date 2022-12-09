@@ -209,8 +209,31 @@ addToSearchPath() {
 # Expressions for individual packages should simply switch to array
 # syntax when they switch to setting __structuredAttrs = true.
 prependToVar() {
-    local -n nameref="$1"; shift
+    local -n nameref="$1"
+
+    useArray=
     if [ -n "$__structuredAttrs" ]; then
+        useArray=true
+    else
+        useArray=false
+    fi
+
+    # check if variable already exist and if it does then do extra checks
+    if declare -p "$1" 2> /dev/null | grep -q '^'; then
+        type="$(declare -p "$1")"
+        if [[ "$type" =~ "declare -A" ]]; then
+            echo "prependToVar(): ERROR: trying to use prependToVar on an associative array." >&2
+            return 1
+        elif [[ "$type" =~ "declare -a" ]]; then
+            useArray=true
+        else
+            useArray=false
+        fi
+    fi
+
+    shift
+
+    if $useArray; then
         nameref=( "$@" ${nameref+"${nameref[@]}"} )
     else
         nameref="$* ${nameref-}"
@@ -219,8 +242,31 @@ prependToVar() {
 
 # Same as above
 appendToVar() {
-    local -n nameref="$1"; shift
+    local -n nameref="$1"
+
+    useArray=
     if [ -n "$__structuredAttrs" ]; then
+        useArray=true
+    else
+        useArray=false
+    fi
+
+    # check if variable already exist and if it does then do extra checks
+    if declare -p "$1" 2> /dev/null | grep -q '^'; then
+        type="$(declare -p "$1")"
+        if [[ "$type" =~ "declare -A" ]]; then
+            echo "appendToVar(): ERROR: trying to use appendToVar on an associative array, use variable+=([\"X\"]=\"Y\") instead." >&2
+            return 1
+        elif [[ "$type" =~ "declare -a" ]]; then
+            useArray=true
+        else
+            useArray=false
+        fi
+    fi
+
+    shift
+
+    if $useArray; then
         nameref=( ${nameref+"${nameref[@]}"} "$@" )
     else
         nameref="${nameref-} $*"
