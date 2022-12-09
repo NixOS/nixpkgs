@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Modulefor phonon calculations at harmonic and quasi-harmonic levels";
     homepage = "https://phonopy.github.io/phonopy/";
+    changelog = "https://github.com/phonopy/phonopy/blob/v${version}/doc/changelog.md";
     license = licenses.bsd0;
     maintainers = with maintainers; [ psyanticy ];
   };
