@@ -5,8 +5,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-spoiler-alert";
-    rev = "a1e4d543e1bafeb11cbb9d09a887ce210b7eecb8";
-    sha256 = "sha256-lZUT+ix1mLomeIdYIOz1vgY6sLVSPOhM85/FkXZFfWc=";
+    rev = "827e2e987c59362c9f80ace4d8d4fc44fae0860a";
+    sha256 = "sha256-p4YgVQX2lgcuBBN7F5xnGyhgQ1g/FibdCgJGEUJy/dA=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-spoiler-alert";
