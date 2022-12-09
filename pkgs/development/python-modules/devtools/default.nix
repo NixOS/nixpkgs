@@ -2,6 +2,7 @@
 , asttokens
 , buildPythonPackage
 , executing
+, hatchling
 , fetchFromGitHub
 , pygments
 , pytest-mock
@@ -11,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.10.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -20,8 +21,12 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "0yavcbxzxi1nfa1k326gsl03y8sadi5z5acamwd8b1bsiv15p757";
+    sha256 = "sha256-x9dL/FE94OixMAmjnmfzZUcYJBqE5P2AAIFsNJF0Fxo=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     asttokens
