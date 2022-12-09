@@ -56,8 +56,6 @@ with self; with super; {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygments = callPackage ../development/python2-modules/Pygments { };
-
   pygobject3 = callPackage ../development/python2-modules/pygobject {
     inherit (pkgs) meson;
   };
