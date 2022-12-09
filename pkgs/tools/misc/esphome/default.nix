@@ -52,6 +52,7 @@ with python.pkgs; buildPythonApplication rec {
     kconfiglib
     paho-mqtt
     pillow
+    platformio
     protobuf
     pyserial
     pyyaml
