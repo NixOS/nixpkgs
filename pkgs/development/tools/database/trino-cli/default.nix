@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "trino-cli";
-  version = "392";
+  version = "403";
 
   jarfilename = "${pname}-${version}-executable.jar";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/trino/${pname}/${version}/${jarfilename}";
-    sha256 = "sha256-yqTKXmcRgsSSr4KAZ2NV7FrCGIxCU/V14XFEZmUTj1s=";
+    sha256 = "sha256-Yo7WQoY99gbXflcms0v3r9w+GXSNOP+CdKDnUZXEs8Q=";
   };
 
   dontUnpack = true;
