@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   mesonFlags = [
-    "-Dlibraries=${lib.boolToString withLibraries}"
     "-Ddocumentation=${lib.boolToString withDocumentation}"
+    "-Dlibraries=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withLibraries}"
   ];
 
   depsBuildBuild = [
