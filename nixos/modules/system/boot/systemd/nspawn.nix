@@ -16,7 +16,7 @@ let
       "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
       "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"
       "OOMScoreAdjust" "CPUAffinity" "Hostname" "ResolvConf" "Timezone"
-      "LinkJournal" "Ephemeral" "AmbientCapability"
+      "LinkJournal" "Ephemeral" "AmbientCapability" "X-ActivationStrategy"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
