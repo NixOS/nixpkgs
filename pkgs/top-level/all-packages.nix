@@ -15484,35 +15484,14 @@ with pkgs;
   clang_16 = llvmPackages_16.clang;
   clang_17 = llvmPackages_17.clang;
 
-  clang-tools = callPackage ../development/tools/clang-tools { };
-
-  clang-tools_9 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_9;
-  };
-
-  clang-tools_12 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_12;
-  };
-
-  clang-tools_13 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_13;
-  };
-
-  clang-tools_14 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_14;
-  };
-
-  clang-tools_15 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_15;
-  };
-
-  clang-tools_16 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_16;
-  };
-
-  clang-tools_17 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_17;
-  };
+  clang-tools = llvmPackages.clang-tools;
+  clang-tools_9 = llvmPackages_9.clang-tools;
+  clang-tools_12 = llvmPackages_12.clang-tools;
+  clang-tools_13 = llvmPackages_13.clang-tools;
+  clang-tools_14 = llvmPackages_14.clang-tools;
+  clang-tools_15 = llvmPackages_15.clang-tools;
+  clang-tools_16 = llvmPackages_16.clang-tools;
+  clang-tools_17 = llvmPackages_17.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_14;
@@ -23042,6 +23021,8 @@ with pkgs;
   libptytty = callPackage ../development/libraries/libptytty { };
 
   libpulsar = callPackage ../development/libraries/libpulsar {
+    # Use the clang-tools with the same LLVM version as llvmPackages
+    clang-tools = llvmPackages.clang-tools;
     protobuf = protobuf_21;
   };
 
