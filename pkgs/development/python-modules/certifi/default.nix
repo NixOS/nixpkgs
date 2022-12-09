@@ -30,15 +30,14 @@ buildPythonPackage rec {
     ln -snvf "${cacert}/etc/ssl/certs/ca-bundle.crt" "certifi/cacert.pem"
   '';
 
+  propagatedNativeBuildInputs = [
+    # propagate cacerts setup-hook to set up `NIX_SSL_CERT_FILE`
+    cacert
+  ];
+
   checkInputs = [
     pytestCheckHook
   ];
-
-  preCheck = ''
-    # NIX_SSL_CERT_FILE is set to /no-cert-file.crt during build, which
-    # breaks the tests
-    unset NIX_SSL_CERT_FILE
-  '';
 
   pythonImportsCheck = [
     "certifi"
