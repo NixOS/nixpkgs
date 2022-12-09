@@ -2828,6 +2828,8 @@ with pkgs;
     wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
    };
 
+  authelia = callPackage ../servers/authelia { };
+
   autoflake = with python3.pkgs; toPythonApplication autoflake;
 
   autospotting = callPackage ../applications/misc/autospotting { };
