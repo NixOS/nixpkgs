@@ -43,10 +43,6 @@ with self; with super; {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygobject3 = callPackage ../development/python2-modules/pygobject {
-    inherit (pkgs) meson;
-  };
-
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
