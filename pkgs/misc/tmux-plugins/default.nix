@@ -119,6 +119,29 @@ in rec {
     };
   };
 
+  copy-toolkit = mkTmuxPlugin rec {
+    pluginName = "copy-toolkit";
+    rtpFilePath = "copytk.tmux";
+    version = "1.1";
+    src = fetchFromGitHub {
+      owner = "CrispyConductor";
+      repo = "tmux-copy-toolkit";
+      rev = "v${version}";
+      sha256 = "MEMC9klm+PH66UHwrB2SqdCaZX0LAujL+Woo/hV84m4=";
+    };
+    postInstall = ''
+      sed -i -e 's|python3 |${pkgs.python3}/bin/python3 |g' $target/copytk.tmux
+      sed -i -e 's|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
+    '';
+    meta = {
+      homepage = "https://github.com/CrispyConductor/tmux-copy-toolkit";
+      description = "Various copy-mode tools";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ deejayem ];
+    };
+  };
+
   copycat = mkTmuxPlugin {
     pluginName = "copycat";
     version = "unstable-2020-01-09";

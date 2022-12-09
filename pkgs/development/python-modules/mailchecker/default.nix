@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "mailchecker";
-  version = "5.0.3";
+  version = "5.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D8xyXBUDRaXLempcJ7G/Ybe7A3FiAaZ8kgm4jgKhkSI=";
+    hash = "sha256-CTeZ63hOBUHuuIJgWRNttBRgrHSsuL78zo6MW8VwEDE=";
   };
 
   # Module has no tests

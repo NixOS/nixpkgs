@@ -265,6 +265,15 @@ with lib.maintainers; {
     shortName = "GCC";
   };
 
+  geospatial = {
+    members = [
+      imincik
+      sikmir
+    ];
+    scope = "Maintain geospatial packages.";
+    shortName = "Geospatial";
+  };
+
   golang = {
     members = [
       c00w
@@ -494,6 +503,18 @@ with lib.maintainers; {
     ];
     scope = "Maintain nixpkgs module system internals.";
     shortName = "NixOS Modules / internals";
+    enableFeatureFreezePing = true;
+  };
+
+  node = {
+    members = [
+      lilyinstarlight
+      marsam
+      winter
+      yuka
+    ];
+    scope = "Maintain Node.js runtimes and build tooling.";
+    shortName = "Node.js";
     enableFeatureFreezePing = true;
   };
 

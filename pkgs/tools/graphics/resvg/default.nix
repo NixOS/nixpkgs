@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
-  version = "0.26.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1UZWX+8hH5DyjFb70wFtnp2RUCmgUKxOGv/yIaLz+30=";
+    sha256 = "sha256-OEknK4uLINui6U+mz0P9K36pEzfx+TevGvLqM0RXkSM=";
   };
 
-  cargoSha256 = "sha256-b1jDJod/pDmtm2i4YKNTm8to3YIIkbjkVKnE3sG32H4=";
+  cargoSha256 = "sha256-L3Km+VIoIun1wjKyJ3dscK5PSfQVR7qyjU6y1j9quSg=";
 
   meta = with lib; {
     description = "An SVG rendering library";

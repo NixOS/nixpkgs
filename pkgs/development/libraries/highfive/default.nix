@@ -12,13 +12,13 @@ assert mpiSupport -> mpi != null;
 
 stdenv.mkDerivation rec {
   pname = "highfive${lib.optionalString mpiSupport "-mpi"}";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "BlueBrain";
     repo = "HighFive";
     rev = "v${version}";
-    sha256 = "sha256-jo/yGcDnT/L/CMU3XpuhyzlBgvMxgNm9Y1qSVwZJihA=";
+    sha256 = "sha256-rUuhhoVH4Jdve7eY0M5THWtoHoIluiujfQwfTYULEiQ=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils }:
+{ lib, buildGoModule, fetchFromGitHub, coreutils, runtimeShell, testers, skeema }:
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    sha256 = "sha256-PyQ5nLoJl3N/ewmHTZZHRLj9WV3EsUjL6fyESc8POss=";
+    hash = "sha256-mzxoA5oWX94EdiapSCgyC62RCffuutWzC1YKkGfJSEU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   CGO_ENABLED = 0;
 
@@ -36,9 +36,13 @@ buildGoModule rec {
       --replace /bin/echo "${coreutils}/bin/echo" \
       --replace /usr/bin/printf "${coreutils}/bin/printf"
 
-    substituteInPlace internal/util/shellout_unix_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo"
+    substituteInPlace internal/util/shellout_unix.go \
+      --replace /bin/sh "${runtimeShell}"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = skeema;
+  };
 
   meta = with lib; {
     description = "Declarative pure-SQL schema management for MySQL and MariaDB";

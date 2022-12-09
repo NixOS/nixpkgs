@@ -51,7 +51,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5432;
         description = lib.mdDoc ''
           The port on which PostgreSQL listens.

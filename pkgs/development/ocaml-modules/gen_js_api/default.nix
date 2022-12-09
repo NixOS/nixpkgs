@@ -10,6 +10,7 @@
 buildDunePackage rec {
   pname = "gen_js_api";
   version = "1.1.1";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "LexiFi";

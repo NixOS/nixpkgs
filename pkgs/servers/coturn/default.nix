@@ -14,16 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = version;
-    sha256 = "sha256-QXApGJme/uteeKS8oiVLPOYUKzxTKdSC4WMlKS0VW5Q=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ckqPxG3ieqA0H9g1GfE8hYs6tUsZfzt6/yYR1qlgoxE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
     openssl
     libevent
@@ -47,11 +50,12 @@ stdenv.mkDerivation rec {
   passthru.tests.coturn = nixosTests.coturn;
 
   meta = with lib; {
-    homepage = "https://coturn.net/";
-    license = with licenses; [ bsd3 ];
     description = "A TURN server";
+    homepage = "https://coturn.net/";
+    changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
+    license = with licenses; [ bsd3 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # 2018-10-21
     maintainers = with maintainers; [ ralith _0x4A6F ];
+    broken = stdenv.isDarwin; # 2018-10-21
   };
 }

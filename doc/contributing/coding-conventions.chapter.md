@@ -426,9 +426,10 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 
   ```nix
   src = fetchgit {
+    url = "git@github.com:NixOS/nix.git"
     url = "git://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -438,7 +439,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   src = fetchgit {
     url = "https://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -449,14 +450,14 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
     owner = "NixOS";
     repo = "nix";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1i2yxndxb6yc9l6c99pypbd92lfq5aac4klq7y2v93c9qvx2cgpc";
+    hash = "ha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=;
   }
   ```
 
 When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
 It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
 
-Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
+Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
 
 ## Obtaining source hash {#sec-source-hashes}
 
@@ -519,7 +520,7 @@ patches = [
   (fetchpatch {
     name = "fix-check-for-using-shared-freetype-lib.patch";
     url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
+    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
   })
 ];
 ```

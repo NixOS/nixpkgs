@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "-Dintrospection=enabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://source.puri.sm/Librem5/libhandy";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

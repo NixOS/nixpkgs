@@ -372,6 +372,8 @@ self: super: with self; {
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };
 
+  ale-py = callPackage ../development/python-modules/ale-py { };
+
   alectryon = callPackage ../development/python-modules/alectryon { };
 
   alembic = callPackage ../development/python-modules/alembic { };
@@ -1428,7 +1430,7 @@ self: super: with self; {
 
   btrfs = callPackage ../development/python-modules/btrfs { };
 
-  btrfsutil = toPythonModule (pkgs.btrfs-progs.override { python3 = self.python; });
+  btrfsutil = callPackage ../development/python-modules/btrfsutil { };
 
   btsocket = callPackage ../development/python-modules/btsocket { };
 
@@ -2834,6 +2836,8 @@ self: super: with self; {
 
   easygui = callPackage ../development/python-modules/easygui { };
 
+  easyocr = callPackage ../development/python-modules/easyocr { };
+
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easysnmp = callPackage ../development/python-modules/easysnmp { };
@@ -3540,8 +3544,6 @@ self: super: with self; {
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 
-  functorch = callPackage ../development/python-modules/functorch { };
-
   funcy = callPackage ../development/python-modules/funcy { };
 
   furl = callPackage ../development/python-modules/furl { };
@@ -3734,18 +3736,19 @@ self: super: with self; {
 
   git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
 
-  gitdb = callPackage ../development/python-modules/gitdb { };
+  git-revise = callPackage ../development/python-modules/git-revise { };
 
-  github3_py = callPackage ../development/python-modules/github3_py { };
+  git-sweep = callPackage ../development/python-modules/git-sweep { };
+
+  gitdb = callPackage ../development/python-modules/gitdb { };
 
   github-to-sqlite = callPackage ../development/python-modules/github-to-sqlite { };
 
   github-webhook = callPackage ../development/python-modules/github-webhook { };
-  GitPython = callPackage ../development/python-modules/GitPython { };
 
-  git-revise = callPackage ../development/python-modules/git-revise { };
+  github3_py = callPackage ../development/python-modules/github3_py { };
 
-  git-sweep = callPackage ../development/python-modules/git-sweep { };
+  gitpython = callPackage ../development/python-modules/gitpython { };
 
   glad =  callPackage ../development/python-modules/glad { };
 
@@ -4043,7 +4046,7 @@ self: super: with self; {
   gspread = callPackage ../development/python-modules/gspread { };
 
   gssapi = callPackage ../development/python-modules/gssapi {
-    inherit (pkgs) krb5Full;
+    inherit (pkgs) krb5;
     inherit (pkgs.darwin.apple_sdk.frameworks) GSS;
   };
 
@@ -4565,6 +4568,8 @@ self: super: with self; {
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
+  invisible-watermark = callPackage ../development/python-modules/invisible-watermark { };
+
   invocations = callPackage ../development/python-modules/invocations { };
 
   invoke = callPackage ../development/python-modules/invoke { };
@@ -4935,7 +4940,7 @@ self: super: with self; {
   jxmlease = callPackage ../development/python-modules/jxmlease { };
 
   k5test = callPackage ../development/python-modules/k5test {
-    inherit (pkgs) krb5Full findutils which;
+    inherit (pkgs) krb5 findutils which;
   };
 
   kaa-base = callPackage ../development/python-modules/kaa-base { };
@@ -5408,7 +5413,7 @@ self: super: with self; {
 
   logilab_astng = callPackage ../development/python-modules/logilab_astng { };
 
-  logilab_common = callPackage ../development/python-modules/logilab/common.nix { };
+  logilab-common = callPackage ../development/python-modules/logilab/common.nix { };
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix { };
 
@@ -6541,6 +6546,8 @@ self: super: with self; {
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
+
+  opytimark = callPackage ../development/python-modules/opytimark { };
 
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
@@ -7813,8 +7820,6 @@ self: super: with self; {
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
-  pyext = callPackage ../development/python-modules/pyext { };
-
   pyezviz = callPackage ../development/python-modules/pyezviz { };
 
   pyface = callPackage ../development/python-modules/pyface { };
@@ -8263,6 +8268,8 @@ self: super: with self; {
   pynzb = callPackage ../development/python-modules/pynzb { };
 
   pyobihai = callPackage ../development/python-modules/pyobihai { };
+
+  pyocd = callPackage ../development/python-modules/pyocd { };
 
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
@@ -8970,6 +8977,8 @@ self: super: with self; {
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
+
+  python-arango = callPackage ../development/python-modules/python-arango { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
 
@@ -9954,6 +9963,8 @@ self: super: with self; {
 
   runway-python = callPackage ../development/python-modules/runway-python { };
 
+  ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
+
   ruyaml = callPackage ../development/python-modules/ruyaml { };
 
   rx = callPackage ../development/python-modules/rx { };
@@ -10250,6 +10261,8 @@ self: super: with self; {
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
 
   sievelib = callPackage ../development/python-modules/sievelib { };
+
+  signalslot = callPackage ../development/python-modules/signalslot { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
 
@@ -12035,7 +12048,7 @@ self: super: with self; {
 
   wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
     inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL;
-    wxGTK = pkgs.wxGTK30-gtk3.override {
+    wxGTK = pkgs.wxGTK30.override {
       withWebKit = true;
     };
   };
@@ -12064,6 +12077,7 @@ self: super: with self; {
   };
 
   xapp = callPackage ../development/python-modules/xapp {
+    inherit (pkgs.buildPackages) meson;
     inherit (pkgs) gtk3 gobject-introspection polkit;
     inherit (pkgs.cinnamon) xapp;
   };
@@ -12395,4 +12409,6 @@ self: super: with self; {
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
+
+  zxing_cpp = callPackage ../development/python-modules/zxing_cpp { };
 }

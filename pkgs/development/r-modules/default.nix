@@ -321,13 +321,13 @@ let
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2.dev ];
-    Cairo = with pkgs; [ libtiff libjpeg cairo.dev xlibsWrapper fontconfig.lib ];
+    Cairo = with pkgs; [ libtiff libjpeg cairo.dev xorg.libXt.dev fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
-    devEMF = with pkgs; [ xorg.libXft.dev xlibsWrapper ];
+    devEMF = with pkgs; [ xorg.libXft.dev ];
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
@@ -346,7 +346,7 @@ let
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
-    imager = [ pkgs.xlibsWrapper ];
+    imager = [ pkgs.xorg.libX11.dev ];
     iBMQ = [ pkgs.gsl ];
     igraph = with pkgs; [ gmp libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
@@ -518,7 +518,7 @@ let
     RcppEigen = [ pkgs.libiconv ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
-    rgl = with pkgs; [ libGLU libGLU.dev libGL xlibsWrapper ];
+    rgl = with pkgs; [ libGLU libGLU.dev libGL xorg.libX11.dev freetype.dev libpng.dev ];
     RGtk2 = [ pkgs.pkg-config ];
     RProtoBuf = [ pkgs.pkg-config ];
     Rpoppler = [ pkgs.pkg-config ];

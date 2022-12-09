@@ -3,8 +3,10 @@
 { ... }:
 
 {
-  imports =
-    [ ./netboot-base.nix
-      ../../profiles/minimal.nix
-    ];
+  imports = [
+    ./netboot-base.nix
+    ../../profiles/minimal.nix
+  ];
+
+  documentation.man.enable = lib.mkOverride 500 true;
 }

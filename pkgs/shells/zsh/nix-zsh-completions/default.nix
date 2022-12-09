@@ -11,6 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "1n9whlys95k4wc57cnz3n07p7zpkv796qkmn68a50ygkx6h3afqf";
   };
 
+  # https://github.com/spwhitt/nix-zsh-completions/issues/42
+  #
+  # _nix completion is broken. Remove it; _nix provided by the nix
+  # package will be used instead. It is not sufficient to set low
+  # meta.priority below if nix is installed in the system profile and
+  # nix-zsh-completions in an user profile. In that case, the broken
+  # version takes precedence over the good one.
+  postPatch = ''
+    rm _nix
+  '';
+
   strictDeps = true;
   installPhase = ''
     mkdir -p $out/share/zsh/{site-functions,plugins/nix}

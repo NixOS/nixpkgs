@@ -59,6 +59,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [
+    "bincopy"
+    "bitstring"
     "cmsis-pack-manager"
     "cryptography"
     "deepmerge"

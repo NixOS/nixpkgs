@@ -3,8 +3,6 @@
 , fetchFromGitHub
 , cchardet
 , chardet
-, cleo
-, clikit
 , pandas
 , regex
 , tabview
@@ -27,8 +25,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cchardet
     chardet
-    cleo
-    clikit
     pandas
     regex
     tabview

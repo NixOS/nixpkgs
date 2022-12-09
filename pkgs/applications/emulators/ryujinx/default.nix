@@ -29,14 +29,17 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.327"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.373"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "9719b6a1129c017d96532ff026e2bb933c0b2d0b";
-    sha256 = "1vm1zwjm02jp64gjcfn923lxc4hqwgw44w9rspjy97q2z6r9vwjh";
+    rev = "567c64e149f1ec3487dea34abdffc7bfa2f55400";
+    sha256 = "0b4c3dmvnx4m7mzhm3kzw3bjnw53rwi3qr2p4i9kyxbb2790bmsb";
   };
+
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   nugetDeps = ./deps.nix;
 
@@ -88,7 +91,7 @@ buildDotnetModule rec {
     "/p:ExtraDefineConstants=DISABLE_UPDATER"
   ];
 
-  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.sdk_6_0.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
+  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.sdk_7_0.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
 
   executables = [
     "Ryujinx.Headless.SDL2"

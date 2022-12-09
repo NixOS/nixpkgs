@@ -6,23 +6,24 @@
 , pkg-config
 , intel-gmmlib
 , intel-graphics-compiler
+, level-zero
 , libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "22.43.24558";
+  version = "22.43.24595.35";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-/hiDJLtEOLbnFjT697yLie5E7819fZM3xricPwe4xN0=";
+    sha256 = "sha256-CWiWkv3CmHhXAk2M92voeQ06ximSOnT9hgIA4rIxWmM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
+  buildInputs = [ intel-gmmlib intel-graphics-compiler libva level-zero ];
 
   cmakeFlags = [
     "-DSKIP_UNIT_TESTS=1"
@@ -32,9 +33,14 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  outputs = [ "out" "drivers" ];
+
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
+
+    mkdir -p $drivers/lib
+    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''

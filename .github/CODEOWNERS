@@ -146,6 +146,11 @@
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
 
+# Certificate Authorities
+pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
+pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
+pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
+
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
 
@@ -284,11 +289,8 @@
 # Matrix
 /pkgs/servers/heisenbridge                                 @piegamesde
 /pkgs/servers/matrix-conduit                               @piegamesde
-/pkgs/servers/matrix-synapse/matrix-appservice-irc         @piegamesde
 /nixos/modules/services/misc/heisenbridge.nix              @piegamesde
-/nixos/modules/services/misc/matrix-appservice-irc.nix     @piegamesde
 /nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
-/nixos/tests/matrix-appservice-irc.nix                     @piegamesde
 /nixos/tests/matrix-conduit.nix                            @piegamesde
 
 # Dotnet

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "oralb-ble";
-  version = "0.14.2";
+  version = "0.14.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LPVNxdmKaOfUcnLVSH1kANW7Zz6bPPEyCemsau5YyHA=";
+    hash = "sha256-L6i/XnsPsxO1qltfWOoGV/NpPpZj73w95ScdcBTkdlo=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Oral B BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
+    changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

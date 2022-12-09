@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "v${version}";
-    hash = "sha256-7PfrI4bNz0XtBa/cb8T43j06BJ3B2S5zIyBZsEusyXc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DLm/8bye8p2fhs36CW5PQAxm3uhJq1L+DT1Zn2uJhqE=";
   };
 
   nativeBuildInputs = [

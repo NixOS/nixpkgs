@@ -126,6 +126,15 @@ in
       '';
     };
 
+    hardware.sane.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open ports needed for discovery of scanners on the local network, e.g.
+        needed for Canon scanners (BJNP protocol).
+      '';
+    };
+
     services.saned.enable = mkOption {
       type = types.bool;
       default = false;
@@ -163,6 +172,7 @@ in
       services.udev.packages = backends;
 
       users.groups.scanner.gid = config.ids.gids.scanner;
+      networking.firewall.allowedUDPPorts = mkIf config.hardware.sane.openFirewall [ 8612 ];
     })
 
     (mkIf config.services.saned.enable {

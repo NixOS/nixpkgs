@@ -62,6 +62,8 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
+- `architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
+
 - `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
 
 - `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
@@ -140,6 +142,8 @@ Create a Docker image with many of the store paths being on their own layer to i
     *Default:* `[]`
 
 `config` _optional_
+
+`architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
 
 : Run-time configuration of the container. A full list of the options are available at in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
@@ -245,10 +249,10 @@ Its parameters are described in the example below:
 pullImage {
   imageName = "nixos/nix";
   imageDigest =
-    "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
+    "sha256:473a2b527958665554806aea24d0131bacec46d23af09fef4598eeab331850fa";
   finalImageName = "nix";
-  finalImageTag = "1.11";
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+  finalImageTag = "2.11.1";
+  sha256 = "sha256-qvhj+Hlmviz+KEBVmsyPIzTB3QlVAFzwAY1zDPIBGxc=";
   os = "linux";
   arch = "x86_64";
 }

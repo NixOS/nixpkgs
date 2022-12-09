@@ -541,7 +541,7 @@ let
 
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "sha256-YninUGU5VBgoP4h958O+r7OqaNraXKy+SyFOjSbaSZs=";
+          hash = "sha256-YninUGU5VBgoP4h958O+r7OqaNraXKy+SyFOjSbaSZs=";
         };
       });
 

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "soft-serve";
-  version = "0.4.1";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
     rev = "v${version}";
-    sha256 = "sha256-xlfAmAU9u4pI3q8EZm4c7BF/lPAHMjLYa/57VWq067M=";
+    sha256 = "sha256-MziobrOqEUsg/XhzLChNker3OU9YAH0LmQ+i+UYoPkE=";
   };
 
-  vendorSha256 = "sha256-XSAMKR5WPG/6ix5T0e9jtHJXQ6HNkh7li+BDFyIhATQ=";
+  vendorSha256 = "sha256-YmAPZtGq2wWqrmTwFOPvSZ3pXa3hUFd+TQfU+Nzhlvs=";
 
   doCheck = false;
 

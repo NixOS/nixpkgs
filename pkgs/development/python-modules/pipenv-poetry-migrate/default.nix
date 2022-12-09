@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
-, poetry
+, poetry-core
+, tomlkit
 , typer
 , setuptools
 }:
@@ -21,17 +23,26 @@ buildPythonPackage rec {
     hash = "sha256-aP8bzWFUzAZrEsz8pYL2y5c7GaUjWG5GA+cc4/tGPZk=";
   };
 
-    nativeBuildInputs = [
-    setuptools
+  patches = [
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/yhino/pipenv-poetry-migrate/commit/726ebd823bf6ef982992085bd04e41d178775b98.patch";
+      hash = "sha256-TBVH1MZA0O1/2zLpVgNckLaP4JO3wIJJi0Nst726erk=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    poetry-core
   ];
 
   propagatedBuildInputs = [
-    poetry
+    setuptools # for pkg_resources
+    tomlkit
     typer
   ];
 
   postPatch = ''
-  substituteInPlace pyproject.toml --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
+    substituteInPlace pyproject.toml --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
   '';
 
   checkInputs = [

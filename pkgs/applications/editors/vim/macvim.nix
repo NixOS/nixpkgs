@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkg-config, cscope, ruby, tcl, perl, luajit
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, ncurses
+, gettext
+, pkg-config
+, cscope
+, ruby
+, tcl
+, perl
+, luajit
 , darwin
-
-, usePython27 ? false
-, python27 ? null, python37 ? null
+, python37
 }:
-
-let
-  python = if usePython27
-           then { pkg = python27; name = "python"; }
-           else { pkg = python37; name = "python3"; };
-in
-assert python.pkg != null;
 
 let
   # Building requires a few system tools to be in PATH.
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python.pkg
+    gettext ncurses cscope luajit ruby tcl perl python37
   ];
 
   patches = [ ./macvim.patch ];
@@ -53,14 +54,14 @@ stdenv.mkDerivation {
       "--enable-multibyte"
       "--enable-nls"
       "--enable-luainterp=dynamic"
-      "--enable-${python.name}interp=dynamic"
+      "--enable-python3interp=dynamic"
       "--enable-perlinterp=dynamic"
       "--enable-rubyinterp=dynamic"
       "--enable-tclinterp=yes"
       "--without-local-dir"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
-      "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
+      "--with-python3-command=${python37}/bin/python3"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
@@ -158,7 +159,7 @@ stdenv.mkDerivation {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
-    install_name_tool -add_rpath ${python.pkg}/lib $exe
+    install_name_tool -add_rpath ${python37}/lib $exe
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
 

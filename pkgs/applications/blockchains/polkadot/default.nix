@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.32";
+  version = "0.9.33";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-bE7PzvkHKAP/nqNkoBMTGvZZwmf8YY+cGnJ2EM/2xAs=";
+    sha256 = "sha256-vAFGLcsbGuoaNtxtEIHSeX00nsULJROCEhaMv5IEcp4=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -32,18 +32,17 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-NI50KFXvQgUV+G1l5D2gnAo1EohnCpQWlFCZ0iP2CVQ=";
+  cargoSha256 = "sha256-SZUkgtI/4kA5iWzalmGo5KXRHXKgdeCo2SSCVF66p5E=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  nativeBuildInputs = [ clang ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   preBuild = ''
     export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
     rm .git_commit
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
 
   # NOTE: We don't build the WASM runtimes since this would require a more

@@ -6,7 +6,7 @@
 , zip
 , gettext
 , perl
-, wxGTK30-gtk3
+, wxGTK30
 , libXext
 , libXi
 , libXt
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libXi
     libXt
     libXtst
-    wxGTK30-gtk3
+    wxGTK30
     curl
     qrencode
     libuuid

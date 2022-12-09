@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.10";
+  version = "1.0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-CnZHR5JyZm4T6Fm5VumZJujQvEdw59c7GSwcyO7EXXY=";
+    hash = "sha256-bNVvQbwtef7Q0OBtR/8vsDDPkgGQgzdBC3QyoxLW3Wo=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
     # Assert issues with datetime
     "test_contact_interface_device"
     "test_dimmer"
+    "test_external_device"
     "test_heating_failure_alert_group"
     "test_heating"
     "test_humidity_warning_rule_group"

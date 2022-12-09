@@ -76,7 +76,7 @@ in
         '';
       };
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         example = 80;
         description = lib.mdDoc ''
@@ -449,7 +449,7 @@ in
               '';
             };
             port = mkOption {
-              type = types.int;
+              type = types.port;
               default = 9000;
               description = lib.mdDoc ''
                 Minio listen port.

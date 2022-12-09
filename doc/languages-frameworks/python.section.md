@@ -356,7 +356,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
   doCheck = false;
@@ -401,7 +401,7 @@ with import <nixpkgs> {};
 
       src = python39.pkgs.fetchPypi {
         inherit pname version;
-        sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+        hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
       doCheck = false;
@@ -450,7 +450,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+    hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
   checkInputs = [ pytest ];
@@ -484,7 +484,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
+    hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
   buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
@@ -517,7 +517,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
+    hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
   buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
@@ -855,7 +855,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
   meta = with lib; {
@@ -988,7 +988,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
+    hash = "sha256-z4Q23FnYaVNG/NOrKW3kZCXsqwDWQJbOvnn7Ueyy65M=";
   };
 
   postPatch = ''
@@ -1098,7 +1098,7 @@ with import <nixpkgs> {};
         src =  super.fetchPypi {
           pname = "pandas";
           inherit version;
-          sha256 = "08blshqj9zj1wyjhhw3kl2vas75vhhicvv72flvf1z3jvapgw295";
+          hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
         };
       });
     };
@@ -1158,7 +1158,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
+    hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ tornado python-daemon ];
@@ -1674,9 +1674,9 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
       packageOverrides = python-self: python-super: {
         twisted = python-super.twisted.overridePythonAttrs (oldAttrs: {
           src = super.fetchPypi {
-            pname = "twisted";
+            pname = "Twisted";
             version = "19.10.0";
-            sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+            hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
             extension = "tar.bz2";
           };
         });
@@ -1712,9 +1712,9 @@ self: super: {
     packageOverrides = python-self: python-super: {
       twisted = python-super.twisted.overrideAttrs (oldAttrs: {
         src = super.fetchPypi {
-          pname = "twisted";
+          pname = "Twisted";
           version = "19.10.0";
-          sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+          hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
           extension = "tar.bz2";
         };
       });

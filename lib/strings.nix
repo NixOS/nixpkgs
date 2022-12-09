@@ -510,7 +510,7 @@ rec {
   toUpper = replaceChars lowerChars upperChars;
 
   /* Appends string context from another string.  This is an implementation
-     detail of Nix.
+     detail of Nix and should be used carefully.
 
      Strings in Nix carry an invisible `context` which is a list of strings
      representing store paths.  If the string is later used in a derivation
@@ -533,13 +533,11 @@ rec {
        splitString "/" "/usr/local/bin"
        => [ "" "usr" "local" "bin" ]
   */
-  splitString = _sep: _s:
+  splitString = sep: s:
     let
-      sep = builtins.unsafeDiscardStringContext _sep;
-      s = builtins.unsafeDiscardStringContext _s;
-      splits = builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
+      splits = builtins.filter builtins.isString (builtins.split (escapeRegex (toString sep)) (toString s));
     in
-      map (v: addContextFrom _sep (addContextFrom _s v)) splits;
+      map (addContextFrom s) splits;
 
   /* Return a string without the specified prefix, if the prefix matches.
 
@@ -660,6 +658,61 @@ rec {
       filename = lib.last components;
       name = head (splitString sep filename);
     in assert name != filename; name;
+
+  /* Create a -D<feature>=<value> string that can be passed to typical Meson
+     invocations.
+
+    Type: mesonOption :: string -> string -> string
+
+     @param feature The feature to be set
+     @param value The desired value
+
+     Example:
+       mesonOption "engine" "opengl"
+       => "-Dengine=opengl"
+  */
+  mesonOption = feature: value:
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    "-D${feature}=${value}";
+
+  /* Create a -D<condition>={true,false} string that can be passed to typical
+     Meson invocations.
+
+    Type: mesonBool :: string -> bool -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       mesonBool "hardened" true
+       => "-Dhardened=true"
+       mesonBool "static" false
+       => "-Dstatic=false"
+  */
+  mesonBool = condition: flag:
+    assert (lib.isString condition);
+    assert (lib.isBool flag);
+    mesonOption condition (lib.boolToString flag);
+
+  /* Create a -D<feature>={enabled,disabled} string that can be passed to
+     typical Meson invocations.
+
+    Type: mesonEnable :: string -> bool -> string
+
+     @param feature The feature to be enabled or disabled
+     @param flag The controlling flag
+
+     Example:
+       mesonEnable "docs" true
+       => "-Ddocs=enabled"
+       mesonEnable "savage" false
+       => "-Dsavage=disabled"
+  */
+  mesonEnable = feature: flag:
+    assert (lib.isString feature);
+    assert (lib.isBool flag);
+    mesonOption feature (if flag then "enabled" else "disabled");
 
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.

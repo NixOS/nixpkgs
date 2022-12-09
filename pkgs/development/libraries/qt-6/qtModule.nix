@@ -83,6 +83,6 @@ stdenv.mkDerivation (args // {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   } // (args.meta or { });
 })

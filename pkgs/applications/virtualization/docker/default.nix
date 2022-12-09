@@ -15,10 +15,10 @@ rec {
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
-      , withSystemd ? true, systemd
-      , withBtrfs ? true, btrfs-progs
-      , withLvm ? true, lvm2
-      , withSeccomp ? true, libseccomp
+      , withSystemd ? stdenv.isLinux, systemd
+      , withBtrfs ? stdenv.isLinux, btrfs-progs
+      , withLvm ? stdenv.isLinux, lvm2
+      , withSeccomp ? stdenv.isLinux, libseccomp
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -48,7 +48,7 @@ rec {
       };
 
       buildInputs = oldAttrs.buildInputs
-        ++ lib.optional withSeccomp [ libseccomp ];
+        ++ lib.optionals withSeccomp [ libseccomp ];
     });
 
     docker-tini = tini.overrideAttrs (oldAttrs: {
@@ -139,8 +139,8 @@ rec {
       '';
 
       DOCKER_BUILDTAGS = lib.optional withSystemd "journald"
-        ++ lib.optional withBtrfs "exclude_graphdriver_btrfs"
-        ++ lib.optional withLvm "exclude_graphdriver_devicemapper"
+        ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
+        ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
     });
 

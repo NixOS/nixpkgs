@@ -1086,13 +1086,8 @@ let
         ];
       };
       exporterTest = ''
-        wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port(9633)
         wait_until_succeeds(
-          "curl -sSf 'localhost:9633/metrics'"
-        )
-        wait_until_succeeds(
-            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Device unavailable"'
         )
       '';
     };
@@ -1244,15 +1239,15 @@ let
       '';
     };
 
-    unifi-poller = {
-      nodeName = "unifi_poller";
+    unpoller = {
+      nodeName = "unpoller";
       exporterConfig.enable = true;
       exporterConfig.controllers = [{ }];
       exporterTest = ''
-        wait_for_unit("prometheus-unifi-poller-exporter.service")
+        wait_for_unit("prometheus-unpoller-exporter.service")
         wait_for_open_port(9130)
         succeed(
-            "curl -sSf localhost:9130/metrics | grep 'unifipoller_build_info{.\\+} 1'"
+            "curl -sSf localhost:9130/metrics | grep 'unpoller_build_info{.\\+} 1'"
         )
       '';
     };

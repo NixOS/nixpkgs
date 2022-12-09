@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
 
   dontWrapGApps = true;
-  postFixup = ''
+  preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 

@@ -29,15 +29,24 @@ lib.recurseIntoAttrs {
     happy = runCommand "testBuildFailure-happy" {
       failed = testers.testBuildFailure (runCommand "fail" {} ''
         echo ok-ish >$out
+
         echo failing though
         echo also stderr 1>&2
+        echo 'line\nwith-\bbackslashes'
+        printf "incomplete line - no newline"
+
         exit 3
       '');
     } ''
+      grep -F 'ok-ish' $failed/result
+
       grep -F 'failing though' $failed/testBuildFailure.log
       grep -F 'also stderr' $failed/testBuildFailure.log
-      grep -F 'ok-ish' $failed/result
+      grep -F 'line\nwith-\bbackslashes' $failed/testBuildFailure.log
+      grep -F 'incomplete line - no newline' $failed/testBuildFailure.log
+
       [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+
       touch $out
     '';
 

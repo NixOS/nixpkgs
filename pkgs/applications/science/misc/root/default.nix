@@ -207,6 +207,8 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
@@ -262,9 +264,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.veprbl ];
     license = licenses.lgpl21;
-
-    # See https://github.com/NixOS/nixpkgs/pull/192581#issuecomment-1256860426
-    # for some context on issues on aarch64.
-    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }
