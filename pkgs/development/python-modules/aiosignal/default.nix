@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python list of registered asynchronous callbacks";
     homepage = "https://github.com/aio-libs/aiosignal";
+    changelog = "https://github.com/aio-libs/aiosignal/blob/v${version}/CHANGES.rst";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
