@@ -154,9 +154,14 @@ $SIG{PIPE} = "IGNORE";
 # dependencies on perlPackages in baseSystem
 sub busctl_call_systemd1_mgr {
     my (@args) = @_;
+    return call_systemd_dbus_api("systemd1", @args);
+}
+
+sub call_systemd_dbus_api {
+    my ($api_name, @args) = @_;
     my $cmd = [
-        "$cur_systemd/busctl", "--json=short", "call", "org.freedesktop.systemd1",
-        "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager",
+        "$cur_systemd/busctl", "--json=short", "call", "org.freedesktop.${api_name}",
+        "/org/freedesktop/${api_name}", "org.freedesktop.${api_name}.Manager",
         @args
     ];
 
@@ -326,10 +331,17 @@ sub record_unit {
 sub unrecord_unit {
     my ($fn, $unit) = @_;
     if ($action ne "dry-activate") {
-        edit_file(sub { s/^$unit\n//msx }, $fn);
+        if (index($unit, "systemd-nspawn@") == -1) {
+            edit_file(sub { s/^$unit\n//msx }, $fn);
+        }
     }
     return;
 }
+
+sub comp_array {
+    my ($a, $b) = @_;
+    return join("\0", @{$a}) eq join("\0", @{$b});
+};
 
 # Compare the contents of two unit files and return whether the unit
 # needs to be restarted or reloaded. If the units differ, the service
@@ -354,11 +366,6 @@ sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
         AllowIsolate CollectMode
         SourcePath
     );
-
-    my $comp_array = sub {
-      my ($a, $b) = @_;
-      return join("\0", @{$a}) eq join("\0", @{$b});
-    };
 
     # Comparison hash for the sections
     my %section_cmp = map { $_ => 1 } keys(%{$new_unit});
@@ -403,7 +410,7 @@ sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
             }
             my @new_value = @{$new_unit->{$section_name}{$ini_key}};
             # If the contents are different, the units are different
-            if (not $comp_array->(\@cur_value, \@new_value)) {
+            if (not comp_array(\@cur_value, \@new_value)) {
                 # Check if only the reload triggers changed or one of the ignored keys
                 if ($section_name eq "Unit") {
                     if ($ini_key eq "X-Reload-Triggers") {
@@ -454,6 +461,79 @@ sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
     }
 
     return $ret;
+}
+
+
+sub compare_nspawn_units {
+    # Intentionally trying to keep this similar to compare_units.
+    my ($cur_unit, $new_unit) = @_;
+
+    # Keys to ignore
+    my %ignored_keys = map { $_ => 1 } qw(
+        Parameters
+        X-ActivationStrategy
+    );
+
+    # Comparison hash for the sections
+    my %section_cmp = map { $_ => 1 } keys(%{$new_unit});
+
+    # Iterate over the sections
+    foreach my $section_name (keys(%{$cur_unit})) {
+        # Missing section in the new unit.
+        if (not exists($section_cmp{$section_name})) {
+            return 1;
+        }
+
+        # Delete the key from the hashmap. Used later to determine
+        # if some sections exist in new unit but not in current unit.
+        delete $section_cmp{$section_name};
+
+        # Comparison hash for the section contents
+        my %ini_cmp = map { $_ => 1 } keys(%{$new_unit->{$section_name}});
+
+        # Iterate over the keys of the section
+        foreach my $ini_key (keys(%{$cur_unit->{$section_name}})) {
+            # Check that the key exists in the new unit, matches in value or is ignored.
+            if (
+                exists($ini_cmp{$ini_key}) and (
+                    defined($ignored_keys{$ini_key})
+                    or comp_array(
+                        \@{$cur_unit->{$section_name}{$ini_key}},
+                        \@{$new_unit->{$section_name}{$ini_key}}
+                    )
+                )
+            ) {
+                # Delete the key from the hashmap. Used later to determine
+                # if some keys exist in new unit but not in current unit,
+                # or they differ.
+                delete $ini_cmp{$ini_key};
+
+            } else {
+                # Key is missing or differs to the new unit.
+                return 1;
+            }
+        }
+
+        # Missing key(s) in the current unit.
+        # If they are not ignorable, a restart is required.
+        foreach my $ini_key (keys(%ini_cmp)) {
+            if (not defined($ignored_keys{$ini_key})) {
+                return 1;
+            }
+        }
+    }
+
+    # Missing section(s) in the current unit.
+    if (%section_cmp) {
+        return 1;
+    }
+    return 0;
+}
+
+sub list_running_nspawn_machines {
+    my $raw = call_systemd_dbus_api("machine1", qw/ListMachines/)->{data}->[0];
+    my %running_machines = map { $_->[0] => 1 } grep { $_->[0] ne ".host" } @{$raw};
+    return %running_machines;
 }
 
 # Called when a unit exists in both the old systemd and the new system and the units
@@ -544,6 +624,11 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
                     }
                 }
 
+                # Skip the following logic for systemd-nspawn units
+                if (index($unit, "systemd-nspawn@") ne -1) {
+                    return;
+                }
+
                 if (parse_systemd_bool(\%new_unit_info, "Service", "X-NotSocketActivated", 0)) {
                     # If the unit explicitly opts out of socket
                     # activation, restart it as if it weren't (but do
@@ -589,6 +674,65 @@ my %units_to_filter; # units not shown
 
 %units_to_reload = map { $_ => 1 }
     split(/\n/msx, read_file($reload_list_file, err_mode => "quiet") // "");
+
+# Handle nspawn unit changes
+my @current_nspawn_units = glob("/etc/systemd/nspawn/*.nspawn");
+my @new_nspawn_units = glob("$toplevel/etc/systemd/nspawn/*.nspawn");
+my %current_units_cmp = map { $_ => 1 } @current_nspawn_units;
+my %running_containers = list_running_nspawn_machines();
+foreach my $new_unit_file (@new_nspawn_units) {
+    my $container_name = basename($new_unit_file);
+    $container_name =~ s/\.nspawn//;
+    my $unit_name = "systemd-nspawn\@$container_name.service";
+
+    my $cur_unit_file = $new_unit_file;
+    $cur_unit_file =~ s/^$toplevel//;
+    if (exists($current_units_cmp{$cur_unit_file})) {
+        my %new_unit_info = parse_unit($new_unit_file, $new_unit_file);
+        my $strategy = $new_unit_info{"Exec"}{"X-ActivationStrategy"}[0] // "dynamic";
+
+        # Skip comparison logic/restart check if ActivationStrategy is "none"
+        next if $strategy eq "none";
+
+        my %cur_unit_info = parse_unit($cur_unit_file, $cur_unit_file);
+        my $changed = compare_nspawn_units(\%cur_unit_info, \%new_unit_info);
+
+=pod Truth table for restarts
+|Strategy|Changed|Reload|Restart|
+|--------|-------|------|-------|
+|Dynamic |0      |Y     |-      |
+|Dynamic |1      |-     |Y      |
+|Restart |0      |-     |-      |
+|Restart |1      |-     |Y      |
+|Reload  |0      |Y     |-      |
+|Reload  |1      |Y     |-      |
+=cut
+        if ($strategy ne "restart" and ($changed == 0 or $strategy eq "reload")) {
+            if (exists($running_containers{$container_name})) {
+                $units_to_reload{$unit_name} = 1;
+            }
+        } elsif ($changed == 1) {
+            $units_to_restart{$unit_name} = 1;
+        }
+    } else {
+        # Start the unit if it didn't exist before
+        $units_to_start{$unit_name} = 1;
+    }
+}
+
+# Stop all now removed nspawn containers
+foreach my $cur_unit_file (@current_nspawn_units) {
+    # Determine if imperative by checking for the data.json file.
+    # This contains essential information for nixos-nspawn and is guaranteed
+    # to exist for imperative containers only.
+    my $imperative_data_file = dirname(readlink($cur_unit_file) || "/var/empty/x") . "/data.json";
+    unless (-f "$toplevel$cur_unit_file" || -f "$imperative_data_file") {
+        my $container_svc = basename($cur_unit_file);
+        $container_svc =~ s/\.nspawn$/.service/;
+        my $unit_name = "systemd-nspawn\@$container_svc";
+        $units_to_stop{$unit_name} = 1;
+    }
+}
 
 my $active_cur = get_active_units();
 while (my ($unit, $state) = each(%{$active_cur})) {
@@ -937,8 +1081,10 @@ if (scalar(keys(%units_to_reload)) > 0) {
             # Figure out if we need to start the unit
             my %unit_info = parse_unit("$toplevel/etc/systemd/system/$unit", "$toplevel/etc/systemd/system/$unit");
             if (!(parse_systemd_bool(\%unit_info, "Unit", "RefuseManualStart", 0) || parse_systemd_bool(\%unit_info, "Unit", "X-OnlyManualStart", 0))) {
-                $units_to_start{$unit} = 1;
-                record_unit($start_list_file, $unit);
+                if (index($unit, "systemd-nspawn@") == -1) {
+                    $units_to_start{$unit} = 1;
+                    record_unit($start_list_file, $unit);
+                }
             }
             # Don't reload the unit, reloading would fail
             delete %units_to_reload{$unit};
@@ -949,8 +1095,27 @@ if (scalar(keys(%units_to_reload)) > 0) {
 # Reload units that need it. This includes remounting changed mount
 # units.
 if (scalar(keys(%units_to_reload)) > 0) {
-    print STDERR "reloading the following units: ", join(", ", sort(keys(%units_to_reload))), "\n";
-    system("$new_systemd/bin/systemctl", "reload", "--", sort(keys(%units_to_reload))) == 0 or $res = 4;
+    my @to_reload = sort(keys(%units_to_reload));
+    print STDERR "reloading the following units: ", join(", ", @to_reload), "\n";
+
+    # Reloading containers & dbus.service in the same transaction causes
+    # the system to stall for about 1 minute.
+    my (@services, @containers);
+    foreach my $s (@to_reload) {
+        if (index($s, "systemd-nspawn@") == 0) {
+            push @containers, $s;
+        } else {
+            push @services, $s;
+        }
+    }
+
+    if (scalar(@services) > 0) {
+        system("$new_systemd/bin/systemctl", "reload", "--", @services) == 0 or $res = 4;
+    }
+    if (scalar(@containers) > 0) {
+        system("$new_systemd/bin/systemctl", "reload", "--", @containers) == 0 or $res = 4;
+    }
+
     unlink($reload_list_file);
 }
 
