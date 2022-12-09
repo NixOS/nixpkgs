@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, flit-core
+, fetchFromGitHub
+, flit-scm
 , pytestCheckHook
 , pythonOlder
 }:
@@ -9,22 +9,26 @@
 buildPythonPackage rec {
   pname = "exceptiongroup";
   version = "1.0.4";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vRSWe3nNm9tU2XMjIW+P31M+J435N6oqkAiefW4G5ew=";
+  src = fetchFromGitHub {
+    owner = "agronholm";
+    repo = "exceptiongroup";
+    rev = version;
+    hash = "sha256-csyDWVvcsAMzgomb0xq0NbVP7qYQpDv9obBGANlwiVI=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    flit-scm
   ];
 
-  # Tests are only in the source available but tagged releases
-  # are incomplete as files are generated during the release process
-  doCheck = false;
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "exceptiongroup"
