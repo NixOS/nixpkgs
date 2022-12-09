@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple, minimal and powerful logger for Python";
     homepage = "https://github.com/deepjyoti30/simber";
+    changelog = "https://github.com/deepjyoti30/simber/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
   };
