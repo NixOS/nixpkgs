@@ -25,8 +25,6 @@ with self; with super; {
 
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
-  idna = callPackage ../development/python2-modules/idna { };
-
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
