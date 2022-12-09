@@ -13,6 +13,7 @@
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
+, enableIcu ? stdenv.hostPlatform == stdenv.buildPlatform
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , boostBuildPatches ? []
@@ -226,7 +227,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ which boost-build ]
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
+    ++ optional enableIcu icu
     ++ optionals enablePython [ libxcrypt python ]
     ++ optional enableNumpy python.pkgs.numpy;
 
@@ -239,7 +240,7 @@ stdenv.mkDerivation {
     "--libdir=$(out)/lib"
     "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
   ] ++ optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ];
+    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild

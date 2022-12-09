@@ -6,7 +6,7 @@ in
 {
   options = {
     programs.skim = {
-      fuzzyCompletion = mkEnableOption (mdDoc "fuzzy Completion with skim");
+      fuzzyCompletion = mkEnableOption (mdDoc "fuzzy completion with skim");
       keybindings = mkEnableOption (mdDoc "skim keybindings");
       package = mkPackageOption pkgs "skim" {};
     };
@@ -25,6 +25,10 @@ in
       source ${cfg.package}/share/skim/completion.zsh
     '' + optionalString cfg.keybindings ''
       source ${cfg.package}/share/skim/key-bindings.zsh
+    '';
+
+    programs.fish.interactiveShellInit = optionalString cfg.keybindings ''
+      source ${cfg.package}/share/skim/key-bindings.fish && skim_key_bindings
     '';
   };
 }
