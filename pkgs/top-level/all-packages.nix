@@ -20308,8 +20308,7 @@ with pkgs;
   };
 
   libdevil-nox = libdevil.override {
-    libX11 = null;
-    libGL = null;
+    withXorg = false;
   };
 
   libdecor = callPackage ../development/libraries/libdecor { };
