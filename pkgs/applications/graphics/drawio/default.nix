@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "20.3.0";
+  version = "20.6.1";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
-    sha256 = "bfcd363f549ce8dc13ae2287cec5099e4bf1d0d4b6f8deef40a81279f78817e1";
+    sha256 = "8d1e3d44e53e62dd6dc7f231af5b682c9ff0e798a6480528444ba52cce02b4c9";
   };
 
   nativeBuildInputs = [
