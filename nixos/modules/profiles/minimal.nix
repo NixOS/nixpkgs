@@ -3,29 +3,25 @@
 
 { config, lib, ... }:
 
-with lib;
-
 {
-  environment.noXlibs = mkDefault true;
+  documentation.enable = lib.mkDefault false;
 
-  documentation.enable = mkDefault false;
+  documentation.doc.enable = lib.mkDefault false;
 
-  documentation.doc.enable = mkDefault false;
+  documentation.info.enable = lib.mkDefault false;
 
-  documentation.info.enable = mkDefault false;
+  documentation.man.enable = lib.mkDefault false;
 
-  documentation.man.enable = mkDefault false;
+  documentation.nixos.enable = lib.mkDefault false;
 
-  documentation.nixos.enable = mkDefault false;
+  programs.command-not-found.enable = lib.mkDefault false;
 
-  programs.command-not-found.enable = mkDefault false;
+  services.logrotate.enable = lib.mkDefault false;
 
-  services.logrotate.enable = mkDefault false;
+  services.udisks2.enable = lib.mkDefault false;
 
-  services.udisks2.enable = mkDefault false;
-
-  xdg.autostart.enable = mkDefault false;
-  xdg.icons.enable = mkDefault false;
-  xdg.mime.enable = mkDefault false;
-  xdg.sounds.enable = mkDefault false;
+  xdg.autostart.enable = lib.mkDefault false;
+  xdg.icons.enable = lib.mkDefault false;
+  xdg.mime.enable = lib.mkDefault false;
+  xdg.sounds.enable = lib.mkDefault false;
 }
