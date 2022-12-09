@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "clash-geoip";
-  version = "20220912";
+  version = "20221112";
 
-  src = ./.;
-
-  data = fetchurl {
+  src = fetchurl {
     url = "https://github.com/Dreamacro/maxmind-geoip/releases/download/${version}/Country.mmdb";
     sha256 = "sha256-YIQjuWbizheEE9kgL+hBS1GAGf2PbpaW5mu/lim9Q9A";
   };
 
+  dontUnpack = true;
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/etc/clash
-    install -Dm 0644 $data -D $out/etc/clash/Country.mmdb
+    install -Dm 0644 $src -D $out/etc/clash/Country.mmdb
     runHook postInstall
   '';
 
