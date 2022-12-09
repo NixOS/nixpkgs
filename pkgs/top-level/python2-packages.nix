@@ -79,6 +79,10 @@ with self; with super; {
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
 
+  six = super.six.overridePythonAttrs (_: {
+    doCheck = false;  # circular dependency with pytest
+  });
+
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };
