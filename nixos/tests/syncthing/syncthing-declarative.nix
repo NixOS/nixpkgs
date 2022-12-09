@@ -8,6 +8,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     idA = genNodeId "a";
     idB = genNodeId "b";
     idC = genNodeId "c";
+    testPasswordFile = pkgs.writeText "syncthing-test-password" "it's a secret";
   in
   {
     name = "syncthing";
@@ -27,6 +28,13 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
               path = "/var/lib/syncthing/foo";
               devices = [ "b" "c" ];
             };
+            bar = {
+              path = "/var/lib/syncthing/bar";
+              devices = [ "c" ];
+              encryptionPasswordFiles = {
+                c = "${testPasswordFile}";
+              };
+            };
           };
         };
       };
@@ -43,6 +51,13 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
               path = "/var/lib/syncthing/foo";
               devices = [ "a" "c" ];
             };
+            bar = {
+              path = "/var/lib/syncthing/bar";
+              devices = [ "c" ];
+              encryptionPasswordFiles = {
+                c = "${testPasswordFile}";
+              };
+            };
           };
         };
       };
@@ -58,6 +73,11 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
             foo = {
               path = "/var/lib/syncthing/foo";
               devices = [ "a" "b" ];
+            };
+            bar = {
+              path = "/var/lib/syncthing/bar";
+              devices = [ "a" "b" ];
+              type = "receiveencrypted";
             };
           };
         };
@@ -89,5 +109,15 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
       # Foo on C is trusted, check content of file matches
       c.succeed("grep a2bc /var/lib/syncthing/foo/a2bc")
       c.succeed("grep b2ac /var/lib/syncthing/foo/b2ac")
+
+      # Write something in Bar
+      a.succeed("echo plaincontent > /var/lib/syncthing/bar/plainname")
+
+      # B should be able to decrypt, check that content of file matches
+      b.wait_for_file("/var/lib/syncthing/bar/plainname")
+      b.succeed("grep plaincontent /var/lib/syncthing/bar/plainname")
+
+      # Bar on C is untrusted, check that content is not in cleartext
+      c.fail("grep -R plaincontent /var/lib/syncthing/bar")
     '';
   })
