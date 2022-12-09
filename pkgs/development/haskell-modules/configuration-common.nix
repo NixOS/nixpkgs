@@ -66,10 +66,6 @@ self: super: {
   # > https://github.com/roelvandijk/numerals
   numerals = doJailbreak (dontCheck super.numerals);
 
-  # Too strict upper bound on bytestring
-  # 2022-12-07: emailed maintainer about this
-  jack = doJailbreak super.jack;
-
   # Too stricut upper bound on time
   # https://github.com/acw/rate-limit/issues/9
   rate-limit = doJailbreak super.rate-limit;
