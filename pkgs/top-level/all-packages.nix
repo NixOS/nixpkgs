@@ -29598,6 +29598,8 @@ with pkgs;
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
+  slweb = callPackage ../applications/misc/slweb { };
+
   singularity = callPackage ../applications/virtualization/singularity { };
 
   sonixd = callPackage ../applications/audio/sonixd { };
