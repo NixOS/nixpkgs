@@ -222,13 +222,8 @@ let
       azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
         "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
 
-      azure-mgmt-msi = super.azure-mgmt-msi.overridePythonAttrs (old: rec {
-        version = "6.0.1";
-        src = old.src.override {
-          inherit version;
-          sha256 = "sha256-PPkQmUoBkJ8Su7h9G2/t8dVy/PT3uCYZjlf70fnY2vU=";
-        };
-      });
+      azure-mgmt-msi = overrideAzureMgmtPackage super.azure-mgmt-msi "6.0.1" "zip"
+        "sha256-PPkQmUoBkJ8Su7h9G2/t8dVy/PT3uCYZjlf70fnY2vU=";
 
       azure-mgmt-privatedns = overrideAzureMgmtPackage super.azure-mgmt-privatedns "1.0.0" "zip"
         "b60f16e43f7b291582c5f57bae1b083096d8303e9d9958e2c29227a55cc27c45";
@@ -499,7 +494,8 @@ let
       jsondiff = super.jsondiff.overridePythonAttrs(oldAttrs: rec {
         version = "2.0.0";
 
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           sha256 = "sha256-J5WETvB17IorjThcTVn16kiwjnGA/OPLJ4e+DbALH7Q=";
         };
@@ -539,7 +535,8 @@ let
       websocket-client = super.websocket-client.overridePythonAttrs(oldAttrs: rec {
         version = "1.3.1";
 
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-YninUGU5VBgoP4h958O+r7OqaNraXKy+SyFOjSbaSZs=";
         };
