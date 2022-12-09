@@ -1,0 +1,13 @@
+diff --git a/py/nftables.py b/py/nftables.py
+index 6daeafc2..07e2c048 100644
+--- a/py/nftables.py
++++ b/py/nftables.py
+@@ -64,7 +64,7 @@ class Nftables:
+ 
+     validator = None
+ 
+-    def __init__(self, sofile="libnftables.so.1"):
++    def __init__(self, sofile="@out@/lib/libnftables.so.1"):
+         """Instantiate a new Nftables class object.
+ 
+         Accepts a shared object file to open, by default standard search path
