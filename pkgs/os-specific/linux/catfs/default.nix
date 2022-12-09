@@ -15,6 +15,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OvmtU2jpewP5EqPwEFAf67t8UCI1WuzUO2QQj4cH1Ak=";
   };
 
+  patches = [
+    # monitor https://github.com/kahing/catfs/issues/71
+    ./fix-for-rust-1.65.diff
+  ];
+
   cargoHash = "sha256-xF1J2Pr4qtNFcd2kec4tnbdYxoLK+jRnzp8p+cmNOcI=";
 
   nativeBuildInputs = [ pkg-config ];
