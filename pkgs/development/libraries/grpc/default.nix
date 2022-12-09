@@ -54,22 +54,26 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
-  cmakeFlags = [
-    "-DgRPC_ZLIB_PROVIDER=package"
-    "-DgRPC_CARES_PROVIDER=package"
-    "-DgRPC_RE2_PROVIDER=package"
-    "-DgRPC_SSL_PROVIDER=package"
-    "-DgRPC_PROTOBUF_PROVIDER=package"
-    "-DgRPC_ABSL_PROVIDER=package"
-    "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
-    # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
-    # only an issue with the useLLVM stdenv, not the darwin stdenv…
-    # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    "-DCMAKE_CXX_STANDARD=11"
-  ];
+  cmakeFlags =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      cxxStandard = if useLLVMAndOldCC then "11" else "17";
+    in
+    [
+      "-DgRPC_ZLIB_PROVIDER=package"
+      "-DgRPC_CARES_PROVIDER=package"
+      "-DgRPC_RE2_PROVIDER=package"
+      "-DgRPC_SSL_PROVIDER=package"
+      "-DgRPC_PROTOBUF_PROVIDER=package"
+      "-DgRPC_ABSL_PROVIDER=package"
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DCMAKE_CXX_STANDARD=${cxxStandard}"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.

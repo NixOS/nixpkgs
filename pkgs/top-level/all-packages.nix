@@ -2932,6 +2932,8 @@ with pkgs;
     buildGoModule = buildGo118Module; # tests fail with 1.19
   };
 
+  writeCueValidator = callPackage ../development/tools/cue/validator.nix { };
+
   cuelsp = callPackage ../development/tools/cuelsp {};
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
@@ -7588,9 +7590,7 @@ with pkgs;
 
   google-guest-oslogin = callPackage ../tools/virtualization/google-guest-oslogin { };
 
-  google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp {
-    openssl = openssl_1_1;
-  };
+  google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
   google-java-format = callPackage ../development/tools/google-java-format { };
 
@@ -11720,6 +11720,7 @@ with pkgs;
 
   suricata = callPackage ../applications/networking/ids/suricata {
     python = python3;
+    libbpf = libbpf_0;
   };
 
   sof-firmware = callPackage ../os-specific/linux/firmware/sof-firmware { };
@@ -12344,9 +12345,7 @@ with pkgs;
 
   tracebox = callPackage ../tools/networking/tracebox { stdenv = gcc10StdenvCompat; };
 
-  tracee = callPackage ../tools/security/tracee {
-    libbpf = libbpf_1; # keep inline with their submodule
-  };
+  tracee = callPackage ../tools/security/tracee { };
 
   tracefilegen = callPackage ../development/tools/analysis/garcosim/tracefilegen { };
 
@@ -16774,10 +16773,8 @@ with pkgs;
 
   bump = callPackage ../development/tools/github/bump { };
 
-  libbpf_1 = callPackage ../os-specific/linux/libbpf { };
+  libbpf = callPackage ../os-specific/linux/libbpf { };
   libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
-  # until more issues are fixed default to libbpf 0.x
-  libbpf = libbpf_0;
 
   bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
 
@@ -16785,12 +16782,10 @@ with pkgs;
 
   bcc = callPackage ../os-specific/linux/bcc {
     python = python3;
-    libbpf = libbpf_1;
     llvmPackages = llvmPackages_14;
   };
 
   bpftrace = callPackage ../os-specific/linux/bpftrace {
-    libbpf = libbpf_1;
     llvmPackages = llvmPackages_14;
   };
 
@@ -17699,9 +17694,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pahole = callPackage ../development/tools/misc/pahole {
-    libbpf = libbpf_1;
-  };
+  pahole = callPackage ../development/tools/misc/pahole { };
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
 
@@ -19477,9 +19470,9 @@ with pkgs;
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
   grpc = callPackage ../development/libraries/grpc {
-    # grpc builds with c++14 so abseil must also be built that way
+    # grpc builds with c++17 so abseil must also be built that way
     abseil-cpp = abseil-cpp_202206.override {
-      cxxStandard = "14";
+      cxxStandard = "17";
     };
   };
 
@@ -19996,7 +19989,6 @@ with pkgs;
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
-  krb5Full = krb5;
   libkrb5 = krb5.override { type = "lib"; };
 
   kronosnet = callPackage ../development/libraries/kronosnet { };
@@ -25976,7 +25968,6 @@ with pkgs;
       enableMinimal = true;
       guiSupport = false;
     };
-    libbpf = libbpf_1;
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
