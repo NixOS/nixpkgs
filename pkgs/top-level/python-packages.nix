@@ -11367,6 +11367,8 @@ self: super: with self; {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ttach = callPackage ../development/python-modules/ttach { };
+
   ttls = callPackage ../development/python-modules/ttls { };
 
   ttp = callPackage ../development/python-modules/ttp { };
