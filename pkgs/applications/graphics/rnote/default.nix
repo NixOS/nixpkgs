@@ -6,7 +6,6 @@
 , clang
 , cmake
 , desktop-file-utils
-, gio-sharp
 , glib
 , gstreamer
 , gtk4
@@ -24,20 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-w4y+t8idcaNwvC2Wp9SRjcd4m23Zt+yHG2fjOA2rBU8=";
+    hash = "sha256-Sy8EHl4UuDMwRAKDkl7njD9GSzKpy1Cfsgw53On+nxo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Hybbbokru4vz5ly3oZuNGdBa+lYbhdYjESUpRxIUqJc=";
+    hash = "sha256-Pe4lNcvJNELAitaGY56EUJ8iN7Dkh8DoUpA/t+aRuqk=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +59,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
-    gio-sharp
     glib
     gstreamer
     gtk4
@@ -81,6 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/flxzt/rnote";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda yrd ];

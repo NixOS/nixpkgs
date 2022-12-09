@@ -32,9 +32,9 @@ buildPythonPackage rec {
   disabledTests = [
     # timming sensitive
     "test_dummy_verify"
-  ]
-  # These tests fail because they don't expect support for algorithms provided through libxcrypt
-  ++ lib.optionals stdenv.isDarwin [
+    "test_encrypt_cost_timing"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # These tests fail because they don't expect support for algorithms provided through libxcrypt
     "test_82_crypt_support"
   ];
 

@@ -506,6 +506,18 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  node = {
+    members = [
+      lilyinstarlight
+      marsam
+      winter
+      yuka
+    ];
+    scope = "Maintain Node.js runtimes and build tooling.";
+    shortName = "Node.js";
+    enableFeatureFreezePing = true;
+  };
+
   numtide = {
     members = [
       mic92

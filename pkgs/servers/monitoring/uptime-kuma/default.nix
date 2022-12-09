@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, substituteAll, nixosTests, iputils }:
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, nixosTests, iputils, nodejs, makeWrapper }:
 let
   deps = import ./composition.nix { inherit pkgs; };
 in
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/sbin/ping" "${iputils}/bin/ping"
   '';
 
-  buildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share/
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    makeWrapper ${pkgs.nodejs}/bin/node $out/bin/uptime-kuma-server \
+    makeWrapper ${nodejs}/bin/node $out/bin/uptime-kuma-server \
       --add-flags $out/share/server/server.js \
       --chdir $out/share/
   '';

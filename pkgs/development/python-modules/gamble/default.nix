@@ -7,12 +7,14 @@
 
 buildPythonPackage rec {
   pname = "gamble";
-  version = "0.10";
-  disabled = pythonOlder "3.6";
+  version = "0.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lb5x076blnnz2hj7k92pyq0drbjwsls6pmnabpvyvs4ddhz5w9w";
+    hash = "sha256-zsEBqhKidgO1e0lpKhw+LY75I2Df+IefNLaSkBBFKFU=";
   };
 
   checkInputs = [
@@ -26,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of gambling classes/tools";
     homepage = "https://github.com/jpetrucciani/gamble";
+    changelog = "https://github.com/jpetrucciani/gamble/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };

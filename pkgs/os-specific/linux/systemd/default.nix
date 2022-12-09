@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
+, applyPatches
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -79,7 +80,7 @@
 , withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi
+, withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
 , withFido2 ? true
 , withHomed ? false
 , withHostnamed ? true
@@ -169,10 +170,20 @@ stdenv.mkDerivation {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-86a33f98a7c0d6f2c2b51d02ba9e01b63062cf98.tar.bz2";
-        sha256 = "081j01sw21hl405l7g9z4bavvq0q0k4g80365677m0ykhiqlx3am";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-d43ec090ceb2bf0016a065103a4c34d0c43cb906.tar.gz";
+        sha256 = "sha256-e5rHmz0uyNgJwrAj96VGWWu9YHhZtJXoDpCtj17eC5w=";
       };
-      musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
+      oe-core-patched = applyPatches {
+        src = oe-core;
+        patches = [
+          (fetchpatch {
+            url = "https://lore.kernel.org/all/20221109002306.853567-1-raj.khem@gmail.com/raw";
+            includes = [ "meta/recipes-core/systemd/systemd/*" ];
+            sha256 = "sha256-aPJjN4vesZwFzgY4Nb6uaIuHz/quH1HccSVEof32IOU=";
+          })
+        ];
+      };
+      musl-patches = oe-core-patched + "/meta/recipes-core/systemd/systemd";
     in
     [
       (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
@@ -194,6 +205,8 @@ stdenv.mkDerivation {
       (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
+      (musl-patches + "/0001-networkd-ipv4acd.c-Use-net-if.h-for-getting-IFF_LOOP.patch")
+      (musl-patches + "/0001-test-compile-test-utmp.c-only-if-UTMP-is-enabled.patch")
     ]
   );
 

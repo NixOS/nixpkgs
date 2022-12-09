@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, GitPython
+, gitpython
 , boost
 , coin3d
 , eigen
@@ -68,7 +68,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    GitPython # for addon manager
+    gitpython # for addon manager
     boost
     coin3d
     eigen

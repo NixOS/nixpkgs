@@ -1204,6 +1204,9 @@
   "autobahn": [
     "setuptools"
   ],
+  "autoflake": [
+    "hatchling"
+  ],
   "autograd": [
     "setuptools"
   ],
@@ -1262,6 +1265,27 @@
     "poetry-core",
     "setuptools"
   ],
+  "aws-cdk-asset-awscli-v1": [
+    "setuptools"
+  ],
+  "aws-cdk-asset-kubectl-v20": [
+    "setuptools"
+  ],
+  "aws-cdk-asset-node-proxy-agent": [
+    "setuptools"
+  ],
+  "aws-cdk-asset-node-proxy-agent-v5": [
+    "setuptools"
+  ],
+  "aws-cdk-aws-batch-alpha": [
+    "setuptools"
+  ],
+  "aws-cdk-aws-lambda-python-alpha": [
+    "setuptools"
+  ],
+  "aws-cdk-lib": [
+    "setuptools"
+  ],
   "aws-error-utils": [
     "poetry"
   ],
@@ -1278,6 +1302,9 @@
     "setuptools"
   ],
   "awscli-cwlogs": [
+    "setuptools"
+  ],
+  "awscli-local": [
     "setuptools"
   ],
   "awscrt": [
@@ -2995,6 +3022,9 @@
   "construct": [
     "setuptools"
   ],
+  "constructs": [
+    "setuptools"
+  ],
   "consul": [
     "setuptools"
   ],
@@ -3707,6 +3737,9 @@
   "django-4": [
     "setuptools"
   ],
+  "django-admin-sortable2": [
+    "setuptools"
+  ],
   "django-allauth": [
     "setuptools"
   ],
@@ -3761,6 +3794,9 @@
     "setuptools"
   ],
   "django-cors-headers": [
+    "setuptools"
+  ],
+  "django-countries": [
     "setuptools"
   ],
   "django-crispy-forms": [
@@ -3848,6 +3884,9 @@
     "setuptools-scm"
   ],
   "django-modelcluster": [
+    "setuptools"
+  ],
+  "django-modeltranslation": [
     "setuptools"
   ],
   "django-mptt": [
@@ -4704,6 +4743,9 @@
     "setuptools"
   ],
   "fabric": [
+    "setuptools"
+  ],
+  "fabric2": [
     "setuptools"
   ],
   "fabulous": [
@@ -7168,6 +7210,9 @@
     "pbr",
     "setuptools"
   ],
+  "jsii": [
+    "setuptools"
+  ],
   "jsmin": [
     "setuptools"
   ],
@@ -8882,6 +8927,15 @@
   "mypy-boto3-sqs": [
     "setuptools"
   ],
+  "mypy-boto3-ssm": [
+    "setuptools"
+  ],
+  "mypy-boto3-stepfunctions": [
+    "setuptools"
+  ],
+  "mypy-boto3-sts": [
+    "setuptools"
+  ],
   "mypy-extensions": [
     "setuptools"
   ],
@@ -8983,7 +9037,11 @@
     "setuptools"
   ],
   "nbclient": [
-    "setuptools"
+    "setuptools",
+    {
+      "buildSystem": "hatchling",
+      "from": "0.7.1"
+    }
   ],
   "nbconflux": [
     "setuptools"
@@ -9520,6 +9578,9 @@
   ],
   "openapi-core": [
     "setuptools"
+  ],
+  "openapi-python-client": [
+    "poetry-core"
   ],
   "openapi-schema-validator": [
     "poetry-core",
@@ -12038,7 +12099,8 @@
     "setuptools"
   ],
   "pymssql": [
-    "cython"
+    "cython",
+    "setuptools"
   ],
   "pymsteams": [
     "setuptools"
@@ -12771,6 +12833,9 @@
   "pyssim": [
     "setuptools"
   ],
+  "pystac": [
+    "setuptools"
+  ],
   "pystache": [
     "setuptools"
   ],
@@ -12931,6 +12996,9 @@
   "pytest-django": [
     "setuptools",
     "setuptools-scm"
+  ],
+  "pytest-docker": [
+    "setuptools"
   ],
   "pytest-doctestplus": [
     "setuptools",
@@ -13638,6 +13706,9 @@
     "setuptools"
   ],
   "python-uinput": [
+    "setuptools"
+  ],
+  "python-ulid": [
     "setuptools"
   ],
   "python-unshare": [
@@ -15995,6 +16066,9 @@
   "streamlabswater": [
     "setuptools"
   ],
+  "streamlink": [
+    "setuptools"
+  ],
   "streamz": [
     "setuptools"
   ],
@@ -16702,6 +16776,9 @@
   "tornado": [
     "setuptools"
   ],
+  "tornado-utils": [
+    "setuptools"
+  ],
   "torpy": [
     "setuptools"
   ],
@@ -16982,6 +17059,9 @@
     "flit-core",
     "setuptools"
   ],
+  "types-aioboto3": [
+    "setuptools"
+  ],
   "types-aiobotocore": [
     "setuptools"
   ],
@@ -16992,6 +17072,9 @@
     "setuptools"
   ],
   "types-aiobotocore-elbv2": [
+    "setuptools"
+  ],
+  "types-aiobotocore-resourcegroupstaggingapi": [
     "setuptools"
   ],
   "types-aiobotocore-ssm": [
@@ -17039,7 +17122,13 @@
   "types-markdown": [
     "setuptools"
   ],
+  "types-pkg-resources": [
+    "setuptools"
+  ],
   "types-protobuf": [
+    "setuptools"
+  ],
+  "types-python-dateutil": [
     "setuptools"
   ],
   "types-pytz": [
@@ -17058,6 +17147,9 @@
     "poetry-core"
   ],
   "types-setuptools": [
+    "setuptools"
+  ],
+  "types-six": [
     "setuptools"
   ],
   "types-tabulate": [

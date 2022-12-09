@@ -63,9 +63,9 @@ let
 
     } else rec {
       python = scons.python.withPackages (ps: with ps; [
-        pyyaml
+        setuptools
         typing
-        cheetah
+        cheetah3
       ]);
 
       scons = sconsPackages.scons_3_1_2;

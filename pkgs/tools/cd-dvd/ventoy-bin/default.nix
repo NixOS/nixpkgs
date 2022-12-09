@@ -51,13 +51,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.82";
+  version = "1.0.84";
 
   src = let
     inherit (finalAttrs) version;
   in fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-NN36gg2rUZgAxyMoYhMc7IbWgQLrPvuWERDF7JVsFfw=";
+    hash = "sha256-ygIAw270Px5nRrSrsD3yLBRFBKGwzdxXzQ6udS9g2ZI=";
   };
 
   patches = [
@@ -120,11 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    # Setup variables.
+    # Setup variables
     local VENTOY_PATH="$out"/share/ventoy
     local ARCH='${arch}'
 
-    # Prepare.
+    # Prepare
     cd tool/"$ARCH"
     rm ash* hexdump* mkexfatfs* mount.exfat-fuse* xzcat*
     for archive in *.xz; do
@@ -144,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm README
     rm tool/"$ARCH"/Ventoy2Disk.gtk2 || true  # For aarch64 and mips64el.
 
-    # Copy from "$src" to "$out".
+    # Copy from "$src" to "$out"
     mkdir -p "$out"/bin "$VENTOY_PATH"
     cp -r . "$VENTOY_PATH"
 
-    # Fill bin dir.
+    # Fill bin dir
     for f in Ventoy2Disk.sh_ventoy VentoyWeb.sh_ventoy-web \
              CreatePersistentImg.sh_ventoy-persistent \
              ExtendPersistentImg.sh_ventoy-extend-persistent \
@@ -184,9 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
+    homepage = "https://www.ventoy.net";
     description = "A New Bootable USB Solution";
     longDescription = ''
-    homepage = "https://www.ventoy.net";
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the
       disk over and over, you just need to copy the ISO/WIM/IMG/VHD(x)/EFI files

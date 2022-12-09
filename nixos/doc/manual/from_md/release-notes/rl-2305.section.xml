@@ -22,7 +22,14 @@
   </section>
   <section xml:id="sec-release-23.05-new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/akinomyoga/ble.sh">blesh</link>,
+          a line editor written in pure bash. Available as
+          <link linkend="opt-programs.bash.blesh.enable">programs.bash.blesh</link>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           <link xlink:href="https://github.com/junegunn/fzf">fzf</link>,
@@ -166,6 +173,15 @@
           <literal>nextcloud-occ</literal> which can be executed from
           any user and switches to the configured mastodon user with
           sudo and sources the environment variables.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>dnsmasq</literal> service now takes configuration
+          via the <literal>services.dnsmasq.settings</literal> attribute
+          set. The option
+          <literal>services.dnsmasq.extraConfig</literal> will be
+          deprecated when NixOS 22.11 reaches end of life.
         </para>
       </listitem>
       <listitem>

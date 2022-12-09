@@ -2,20 +2,22 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, testers
+, d2
 }:
 
 buildGoModule rec {
   pname = "d2";
-  version = "0.0.13";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "terrastruct";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2abGQmgwqxWFk7NScdgfEjRYZF2rw8kxTKRwcl2LRg0=";
+    hash = "sha256-QRgHmQOrw1ZdZffjVnqY3epNkVvCNtR06fyQgKVXoRk=";
   };
 
-  vendorSha256 = "sha256-/BEl4UqOL4Ux7I2eubNH2YGGl4DxntpI5WN9ggvYu80=";
+  vendorHash = "sha256-SO3ZeAJu4XOPDlJ2gUSYFPNG8RcOHfCsn2RKPT+FZy4=";
 
   ldflags = [
     "-s"
@@ -29,7 +31,9 @@ buildGoModule rec {
     installManPage ci/release/template/man/d2.1
   '';
 
-  subPackages = [ "cmd/d2" ];
+  subPackages = [ "." ];
+
+  passthru.tests.version = testers.testVersion { package = d2; };
 
   meta = with lib; {
     description = "A modern diagram scripting language that turns text to diagrams";

@@ -21,10 +21,10 @@
 , fetchFromGitHub
 , libusb1
 , libevdev
-, wxGTK30-gtk3
+, wxGTK30
 , soundtouch
 , miniupnpc
-, mbedtls
+, mbedtls_2
 , curl
 , lzo
 , sfml
@@ -101,10 +101,10 @@ stdenv.mkDerivation rec {
     portaudio
     libusb1
     libpulseaudio
-    wxGTK30-gtk3
+    wxGTK30
     soundtouch
     miniupnpc
-    mbedtls
+    mbedtls_2
     curl
     lzo
     sfml

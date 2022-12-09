@@ -24,7 +24,7 @@
 , flask-caching
 , flask-session
 , flask-wtf
-, GitPython
+, gitpython
 , graphviz
 , gunicorn
 , httpx
@@ -160,7 +160,7 @@ buildPythonPackage rec {
     flask-session
     flask-wtf
     flask-login
-    GitPython
+    gitpython
     graphviz
     gunicorn
     httpx

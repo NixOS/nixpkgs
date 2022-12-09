@@ -92,7 +92,7 @@ rec {
     ];
 
     extraCommands = ''
-      mkdir -p tmp
+      mkdir -p tmp/nginx_client_body
 
       # nginx still tries to read this directory even if error_log
       # directive is specifying another file :/
@@ -697,6 +697,21 @@ rec {
   layered-image-with-path = pkgs.dockerTools.streamLayeredImage {
     name = "layered-image-with-path";
     tag = "latest";
+    contents = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
+  build-image-with-architecture = buildImage {
+    name = "build-image-with-architecture";
+    tag = "latest";
+    architecture = "arm64";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
+  layered-image-with-architecture = pkgs.dockerTools.streamLayeredImage {
+    name = "layered-image-with-architecture";
+    tag = "latest";
+    architecture = "arm64";
     contents = [ pkgs.bashInteractive ./test-dummy ];
   };
 
