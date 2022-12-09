@@ -7918,8 +7918,6 @@ self: super: with self; {
 
   pygmt = callPackage ../development/python-modules/pygmt { };
 
-  pygobject2 = callPackage ../development/python-modules/pygobject { };
-
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix {
     # inherit (pkgs) meson won't work because it won't be spliced
     inherit (pkgs.buildPackages) meson;

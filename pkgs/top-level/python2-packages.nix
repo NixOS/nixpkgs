@@ -21,11 +21,7 @@ with self; with super; {
 
   futures = callPackage ../development/python2-modules/futures { };
 
-  gtkme = callPackage ../development/python2-modules/gtkme { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
-
-  idna = callPackage ../development/python2-modules/idna { };
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
@@ -47,9 +43,7 @@ with self; with super; {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygobject3 = callPackage ../development/python2-modules/pygobject {
-    inherit (pkgs) meson;
-  };
+  pygobject2 = callPackage ../development/python2-modules/pygobject { };
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
