@@ -2433,6 +2433,8 @@ with pkgs;
 
   twine = with python3Packages; toPythonApplication twine;
 
+  accelergy = callPackage ../applications/science/computer-architecture/accelergy { };
+
   aldo = callPackage ../applications/radio/aldo { };
 
   alglib = callPackage ../development/libraries/alglib { };
@@ -37228,6 +37230,8 @@ with pkgs;
   shc = callPackage ../tools/security/shc { };
 
   shellz = callPackage ../tools/security/shellz { };
+
+  timeloop = pkgs.darwin.apple_sdk_11_0.callPackage ../applications/science/computer-architecture/timeloop { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
