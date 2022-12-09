@@ -23,6 +23,11 @@
       name = "npm-build-hook";
     } ./npm-build-hook.sh;
 
+  npmCheckHook = makeSetupHook
+    {
+      name = "npm-check-hook";
+    } ./npm-check-hook.sh;
+
   npmInstallHook = makeSetupHook
     {
       name = "npm-install-hook";
