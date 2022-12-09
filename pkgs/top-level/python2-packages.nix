@@ -55,8 +55,6 @@ with self; with super; {
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
-  pysqlite = callPackage ../development/python2-modules/pysqlite { };
-
   pytest = pytest_4;
 
   pytest_4 = callPackage
