@@ -1,6 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildNpmPackage rec {
@@ -29,7 +30,7 @@ buildNpmPackage rec {
     sed -i '/"prepack"/d' package.json
   '';
 
-  passthru.updateScript = {
+  passthru.updateScript = nix-update-script {
     attrPath = pname;
   };
 

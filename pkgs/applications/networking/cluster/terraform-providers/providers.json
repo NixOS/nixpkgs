@@ -112,13 +112,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-g38aJ8JN/0PZ0ArSti1/5nzflIlkz/qhn5Qz4yXCie8=",
+    "hash": "sha256-5eqUaO8XRPh2wkltGu7D3GToNAq1zSpQ1LS/h0W/CQA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.45.0",
+    "rev": "v4.46.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-C3wr/3huORBacbe0+Z0qqH+iSaJCxQwLq9wqLSirDiM="
+    "vendorHash": "sha256-xo9Z50jK8dWxQ8DeGLjB8ppnGuUmGlQLhzRHpKs8hYg="
   },
   "azuread": {
     "hash": "sha256-itaFeOEnoTIJfACvJZCIe9RWNVgewdVFZzXUK7yGglQ=",
@@ -167,13 +167,13 @@
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-eU8vA2fxtdsObgh2dTExGLzzBnfSc2DSGdFHrLXR3SA=",
+    "hash": "sha256-tT5JSiUPeezQFn4tnKrsUxfm/llaBk8R2eOGqGIbEH4=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.22.0",
+    "rev": "v2.23.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Qkla3OEcyiMn6eqBj+4LB8JwpIwceLAASI1qvOcUBD0="
+    "vendorHash": "sha256-CFRZSdQnbhV7n10r2R1+cGxn7nKD+GvXWf85rYFRPVI="
   },
   "brightbox": {
     "hash": "sha256-F/AQq45ADM0+PbFpMPtpMvbYw8F41GDBzk7LoY/L/Qg=",
@@ -861,13 +861,13 @@
     "vendorHash": "sha256-hHwFm+gSMjN4YQEFd/dd50G0uZsxzqi21tHDf4mPBLY="
   },
   "opentelekomcloud": {
-    "hash": "sha256-H1X+wWxdP7MwUtUaQiw0usOO6jwAAVLYMoG5Ut2OcqM=",
+    "hash": "sha256-vmsnpu4FThMY0OfCAj0DnI4fpOwVGvJXpQ3u+kAieFc=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.31.9",
+    "rev": "v1.32.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-n7Ez596JnRwsKYPuR8lCLo6ez/TFch2kMgoScg7pPUI="
+    "vendorHash": "sha256-TCeAqQLdeCS3NPDAppinRv4qBPBWtG/qAUKc+4acqEE="
   },
   "opsgenie": {
     "hash": "sha256-6lbJyBppfRqqmYpPgyzUTvnvHPSWjE3SJULqliZ2iUI=",
@@ -1232,11 +1232,11 @@
     "vendorHash": "sha256-160GDEQfymeCJpjYOoWP5sGQ0PJHw9kKPaefmbF5Ig4="
   },
   "vultr": {
-    "hash": "sha256-6NiVW6kqUCeit6Dc9GbP4mV03UJkqo+UwHsDE4xMwzQ=",
+    "hash": "sha256-DfiJgN1R7qW3c13hBabsMizY3mYamIq8AGms1q9kdVU=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.11.4",
+    "rev": "v2.12.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
