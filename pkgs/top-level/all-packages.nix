@@ -21645,6 +21645,7 @@ with pkgs;
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
     ogre = ogre1_9;
   };
 
