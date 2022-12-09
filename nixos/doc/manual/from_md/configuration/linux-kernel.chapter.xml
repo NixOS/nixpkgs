@@ -171,9 +171,15 @@ $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox module
     <title>ZFS</title>
     <para>
       It’s a common issue that the latest stable version of ZFS doesn’t
-      support the latest available Linux kernel. It’s possible to pin
-      the system to the latest available kernel version <emphasis>that
-      is supported by ZFS</emphasis> like this:
+      support the latest available Linux kernel. It is recommended to
+      use the latest available LTS that’s compatible with ZFS. Usually
+      this is the default kernel provided by nixpkgs (i.e.
+      <literal>pkgs.linuxPackages</literal>).
+    </para>
+    <para>
+      Alternatively, it’s possible to pin the system to the latest
+      available kernel version <emphasis>that is supported by
+      ZFS</emphasis> like this:
     </para>
     <programlisting language="bash">
 {
