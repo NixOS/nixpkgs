@@ -7,7 +7,7 @@ buildPythonPackage rec {
   disabled = pythonAtLeast "3.9";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pygobject/2.28/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0nkam61rsn7y3wik3vw46wk5q2cjfh2iph57hl9m39rc8jijb7dv";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # used to select a specific version, in our setup it should have no
   # effect, but we leave it in case somebody expects and calls it.
   postInstall = lib.optionalString (!isPy3k) ''
-    mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${pname}-${version}.pth}
+    mv $out/${python.sitePackages}/{pygtk.pth,${pname}-${version}.pth}
 
     # Prevent wrapping of codegen files as these are meant to be
     # executed by the python program
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for GLib";
-    platforms = platforms.unix;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
 }
