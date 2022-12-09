@@ -15,8 +15,6 @@ with self; with super; {
 
   certifi = callPackage ../development/python2-modules/certifi { };
 
-  chardet = callPackage ../development/python2-modules/chardet { };
-
   configparser = callPackage ../development/python2-modules/configparser { };
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
