@@ -32,3 +32,11 @@ mypkg = let
   }});
 in callPackage { inherit cudaPackages; };
 ```
+
+cudaPackages also provides a default set of cudaCapabilites for cards based on the
+CUDA version.  You may provide capabilities to add support or reduce
+binary size through `config` using `cudaCapabilities = [ "6.0" "7.0" ];` and
+`cudaForwardCompat = true;` if you want PTX support for future hardware.
+
+You may further reduce final size by dropping static library output using
+`cudaRemoveStatic` in `config`.

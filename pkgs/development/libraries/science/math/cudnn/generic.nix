@@ -2,6 +2,7 @@
 , lib
 , zlib
 , useCudatoolkitRunfile ? false
+, config
 , cudaVersion
 , cudaMajorVersion
 , cudatoolkit # if cuda>=11: only used for .cc
@@ -9,14 +10,14 @@
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
 , fetchurl
-, # The distributed version of CUDNN includes both dynamically liked .so files,
+, # The distributed version of CUDNN includes both dynamically linked .so files,
   # as well as statically linked .a files.  However, CUDNN is quite large
   # (multiple gigabytes), so you can save some space in your nix store by
   # removing the statically linked libraries if you are not using them.
   #
   # Setting this to true removes the statically linked .a files.
   # Setting this to false keeps these statically linked .a files.
-  removeStatic ? false
+  removeStatic ? config.cudaRemoveStatic or false
 }:
 
 { fullVersion
