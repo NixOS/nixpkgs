@@ -9,8 +9,6 @@ with self; with super; {
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  boto3 = callPackage ../development/python2-modules/boto3 {};
-
   botocore = callPackage ../development/python2-modules/botocore {};
 
   certifi = callPackage ../development/python2-modules/certifi { };
