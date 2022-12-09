@@ -23,8 +23,6 @@ with self; with super; {
 
   futures = callPackage ../development/python2-modules/futures { };
 
-  google-apputils = callPackage ../development/python2-modules/google-apputils { };
-
   gtkme = callPackage ../development/python2-modules/gtkme { };
 
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
