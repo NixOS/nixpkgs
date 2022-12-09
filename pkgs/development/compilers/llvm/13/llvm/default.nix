@@ -17,10 +17,9 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+# broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+# broken for the armv7l builder
+, enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? false
 }:
 
