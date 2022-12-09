@@ -37,6 +37,7 @@ let
       */
       elm-format = justStaticExecutables (overrideCabal (drv: {
         jailbreak = true;
+        doCheck = assert (drv.version == "0.8.5"); false; # golden tests fail with optparse-applicative 0.17
 
         description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
         homepage = "https://github.com/avh4/elm-format";
