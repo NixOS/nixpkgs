@@ -21,8 +21,6 @@ with self; with super; {
 
   futures = callPackage ../development/python2-modules/futures { };
 
-  gtkme = callPackage ../development/python2-modules/gtkme { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
