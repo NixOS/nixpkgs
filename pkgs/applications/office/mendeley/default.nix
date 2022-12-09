@@ -20,7 +20,6 @@
 , qtdeclarative
 , qtwebchannel
 , qtquickcontrols
-, qtwebkit
 , qtwebengine
 , sqlite
 , xorg
@@ -57,7 +56,6 @@ let
     qtdeclarative
     qtwebchannel
     qtquickcontrols
-    qtwebkit
     qtwebengine
     alsa-lib
     dbus
