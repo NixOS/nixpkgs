@@ -17,6 +17,8 @@
 , CoreFoundation
 , CoreServices
 , Security
+
+, enableMinimal ? false
 }:
 
 let
@@ -129,10 +131,17 @@ let
     # 1) This applies on all systems (so no conditional a la postFixup)
     # 2) This doesn't require any kind of fixup itself, so we leave it out
     #    of postFixup for that reason, too
+    # 3) If asked, we optionally patch in a hardcoded path to the 'nodejs' package,
+    #    so that 'sl web' always works
+    # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
     preFixup = ''
       sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
       chmod +w $sitepackages
       cp -r ${isl} $sitepackages/edenscm-isl
+    '' + lib.optionalString (!enableMinimal) ''
+      chmod +w $sitepackages/edenscm-isl/run-isl
+      substituteInPlace $sitepackages/edenscm-isl/run-isl \
+        --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
     '';
 
     postFixup = lib.optionalString stdenv.isLinux ''
