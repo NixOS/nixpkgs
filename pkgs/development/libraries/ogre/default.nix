@@ -1,29 +1,34 @@
-{ fetchFromGitHub
+{ lib
 , stdenv
-, lib
+, fetchFromGitHub
 , cmake
-, libGLU
-, libGL
-, freetype
-, freeimage
-, zziplib
-, xorgproto
-, libXrandr
-, libXaw
-, freeglut
-, libXt
-, libpng
-, boost
-, ois
-, libX11
-, libXmu
-, libSM
 , pkg-config
-, libXxf86vm
-, libICE
 , unzip
-, libXrender
 , SDL2
+, boost
+, freeimage
+, freetype
+, libpng
+, ois
+, pugixml
+, zziplib
+  # linux
+, freeglut
+, libGL
+, libGLU
+, libICE
+, libSM
+, libX11
+, libXaw
+, libXmu
+, libXrandr
+, libXrender
+, libXt
+, libXxf86vm
+, xorgproto
+  # darwin
+, Cocoa
+  # optional
 , withNvidiaCg ? false
 , nvidia_cg_toolkit
 , withSamples ? false
@@ -31,59 +36,63 @@
 
 stdenv.mkDerivation rec {
   pname = "ogre";
-  version = "1.12.1";
+  version = "13.5.3";
 
   src = fetchFromGitHub {
     owner = "OGRECave";
     repo = "ogre";
     rev = "v${version}";
-    sha256 = "sha256-FHW0+DZhw6MLlhjh4DRYhA+6vBBXMN9K6GEVoR6P5kM=";
+    sha256 = "sha256-fjgMAuIA7rm3Gt2z//kPkc7LOcfddoFgY38B7bs6zZo=";
   };
 
-  # fix for ARM. sys/sysctl.h has moved in later glibcs, and
-  # https://github.com/OGRECave/ogre-next/issues/132 suggests it isn't
-  # needed anyway.
-  postPatch = ''
-    substituteInPlace OgreMain/src/OgrePlatformInformation.cpp \
-      --replace '#include <sys/sysctl.h>' ""
-  '';
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    unzip
+  ];
 
-  cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
-    ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-    ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
+  buildInputs = [
+    SDL2
+    boost
+    freeimage
+    freetype
+    libpng
+    ois
+    pugixml
+    zziplib
+  ] ++ lib.optionals stdenv.isLinux [
+    freeglut
+    libGL
+    libGLU
+    libICE
+    libSM
+    libX11
+    libXaw
+    libXmu
+    libXrandr
+    libXrender
+    libXt
+    libXxf86vm
+    xorgproto
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals withNvidiaCg [
+    nvidia_cg_toolkit
+  ];
 
-
-  nativeBuildInputs = [ cmake unzip pkg-config ];
-  buildInputs =
-    [
-      libGLU
-      libGL
-      freetype
-      freeimage
-      zziplib
-      xorgproto
-      libXrandr
-      libXaw
-      freeglut
-      libXt
-      libpng
-      boost
-      ois
-      libX11
-      libXmu
-      libSM
-      libXxf86vm
-      libICE
-      libXrender
-      SDL2
-    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+  cmakeFlags = [
+    "-DOGRE_BUILD_COMPONENT_OVERLAY_IMGUI=FALSE"
+    "-DOGRE_BUILD_DEPENDENCIES=OFF"
+    "-DOGRE_BUILD_SAMPLES=${toString withSamples}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DOGRE_BUILD_LIBS_AS_FRAMEWORKS=FALSE"
+  ];
 
   meta = {
-    description = "A 3D engine";
+    description = "3D Object-Oriented Graphics Rendering Engine";
     homepage = "https://www.ogre3d.org/";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin wegank ];
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
 }

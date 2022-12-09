@@ -171,7 +171,7 @@ in
       port = mkOption {
         description = lib.mdDoc "Kubernetes kubelet healthz port.";
         default = 10248;
-        type = int;
+        type = port;
       };
     };
 
@@ -204,7 +204,7 @@ in
     port = mkOption {
       description = lib.mdDoc "Kubernetes kubelet info server listening port.";
       default = 10250;
-      type = int;
+      type = port;
     };
 
     seedDockerImages = mkOption {

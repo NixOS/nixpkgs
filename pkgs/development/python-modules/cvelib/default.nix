@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cvelib";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
     rev = "tags/${version}";
-    hash = "sha256-MZzCTUleEddIlZBRhxD8ZgaWAOFcpa5hvNuIjrBJRzk=";
+    hash = "sha256-8qlXwEbgLRZ1qYtBJ1c0nv6qfIOW5zAK9eOS+n+afWQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";

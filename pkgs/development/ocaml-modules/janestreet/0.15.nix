@@ -283,7 +283,8 @@ with self;
 
   core_unix = janePackage {
     pname = "core_unix";
-    hash = "1xzxqzg23in5ivz0v3qshzpr4w92laayscqj9im7jylh2ar1xi0a";
+    version = "0.15.2";
+    hash = "sha256-9f2PiLo+4Bjnfvh3scvIiPHj0wPZozmMMiCTe7vC1EA=";
     meta.description = "Unix-specific portions of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ core_kernel expect_test_helpers_core ocaml_intrinsics ppx_jane timezone spawn ];
@@ -294,7 +295,8 @@ with self;
 
   csvfields = janePackage {
     pname = "csvfields";
-    hash = "0z47pq17bw776hzvk48ypbd92ps9vlvl86mnhw3j6cqx4ahbjik3";
+    version = "0.15.1";
+    hash = "sha256-bBupsarwjte2NCncNDFSkrrmMR3EYPn+D7xI9zQOhFA=";
     propagatedBuildInputs = [ core num ];
     meta.description = "Runtime support for ppx_xml_conv and ppx_csv_conv";
   };
@@ -904,7 +906,8 @@ with self;
 
   sexp_pretty = janePackage {
     pname = "sexp_pretty";
-    hash = "1p1jspwjvrhm8li22xl0n8wngs12d9g7nc1svk6xc32jralnxblg";
+    version = "0.15.1";
+    hash = "sha256-UJEO2P4C7ZaD110MEfkG4FXfGDVAAW2TAK489faV6SM=";
     minimumOCamlVersion = "4.07";
     meta.description = "S-expression pretty-printer";
     propagatedBuildInputs = [ ppx_base re sexplib ];

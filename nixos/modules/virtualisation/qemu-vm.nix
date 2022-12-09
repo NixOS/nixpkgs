@@ -580,7 +580,7 @@ in
     virtualisation.host.pkgs = mkOption {
       type = options.nixpkgs.pkgs.type;
       default = pkgs;
-      defaultText = "pkgs";
+      defaultText = literalExpression "pkgs";
       example = literalExpression ''
         import pkgs.path { system = "x86_64-darwin"; }
       '';
@@ -595,7 +595,8 @@ in
         mkOption {
           type = types.package;
           default = cfg.host.pkgs.qemu_kvm;
-          example = "pkgs.qemu_test";
+          defaultText = literalExpression "config.virtualisation.host.pkgs.qemu_kvm";
+          example = literalExpression "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
 
@@ -721,7 +722,7 @@ in
       firmware = mkOption {
         type = types.path;
         default = pkgs.OVMF.firmware;
-        defaultText = "pkgs.OVMF.firmware";
+        defaultText = literalExpression "pkgs.OVMF.firmware";
         description =
           lib.mdDoc ''
             Firmware binary for EFI implementation, defaults to OVMF.
@@ -731,7 +732,7 @@ in
       variables = mkOption {
         type = types.path;
         default = pkgs.OVMF.variables;
-        defaultText = "pkgs.OVMF.variables";
+        defaultText = literalExpression "pkgs.OVMF.variables";
         description =
           lib.mdDoc ''
             Platform-specific flash binary for EFI variables, implementation-dependent to the EFI firmware.

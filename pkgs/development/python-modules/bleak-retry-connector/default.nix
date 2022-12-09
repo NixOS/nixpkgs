@@ -1,6 +1,7 @@
 { lib
 , async-timeout
 , bleak
+, bluetooth-adapters
 , dbus-fast
 , buildPythonPackage
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "2.9.0";
+  version = "2.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-U9Urxu7BdTTecONcb2d6jg9oE6fmdNMEVSayLNQiyvY=";
+    hash = "sha256-QAQQ53T3MTNNaK0rzsBb2F1/qMvMHtr6/+3k1CAKXi0=";
   };
 
   postPatch = ''
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     async-timeout
     bleak
+    bluetooth-adapters
     dbus-fast
   ];
 

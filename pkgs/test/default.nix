@@ -77,6 +77,8 @@ with pkgs;
 
   dhall = callPackage ./dhall { };
 
+  cue-validation = callPackage ./cue {};
+
   coq = callPackage ./coq {};
 
   makeWrapper = callPackage ./make-wrapper { };

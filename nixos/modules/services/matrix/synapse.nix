@@ -286,6 +286,7 @@ in {
             log_config = mkOption {
               type = types.path;
               default = ./synapse-log_config.yaml;
+              defaultText = lib.literalExpression "nixos/modules/services/matrix/synapse-log_config.yaml";
               description = lib.mdDoc ''
                 The file that holds the logging configuration.
               '';
