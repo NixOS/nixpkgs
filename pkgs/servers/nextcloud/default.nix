@@ -4,7 +4,9 @@ let
   generic = {
     version, sha256,
     eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
+  }: let
+    major = lib.versions.major version;
+  in stdenv.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
@@ -13,7 +15,7 @@ let
       inherit sha256;
     };
 
-    patches = [ ./0001-Setup-remove-custom-dbuser-creation-behavior.patch ];
+    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
 
     passthru.tests = nixosTests.nextcloud;
 
@@ -53,8 +55,8 @@ in {
   };
 
   nextcloud25 = generic {
-    version = "25.0.1";
-    sha256 = "72d4076924caf19139c40178597af6211799e20440ce196fb43b9c4e47d77515";
+    version = "25.0.2";
+    sha256 = "d6ab40faa108937bda42395f570ff111f4c97343b55be1420024da3177e37d59";
   };
 
   # tip: get the sha with:
