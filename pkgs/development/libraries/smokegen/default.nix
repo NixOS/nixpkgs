@@ -1,18 +1,16 @@
-{ stdenv, lib, cmake, qt4, fetchzip }:
+{ pkgs, lib, ... }:
 
-stdenv.mkDerivation rec {
+pkgs.stdenv.mkDerivation rec {
   pname = "smokegen";
-  version = "4.14.3";
-
-  src = fetchzip {
-    url = "https://invent.kde.org/unmaintained/${pname}/-/archive/v${version}/${pname}-v${version}.tar.gz";
+  version = "v4.14.3";
+  src = pkgs.fetchzip {
+    url = "https://invent.kde.org/unmaintained/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-finsoruPeJZLawIjNUJ25Pq54eaCByfALVraNQJPk7c=";
   };
-
-  strictDeps = true;
-  nativeBuildInputs = [ cmake qt4 ];
-  buildInputs = [ qt4 ];
-
+  buildInputs = [ pkgs.cmake pkgs.qt4 ];
+  buildPhase = ''
+      cmake .
+    '';
   meta = with lib; {
     description = "A general purpose C++ parser with a plugin infrastructure";
     homepage = "https://invent.kde.org/unmaintained/smokegen";
