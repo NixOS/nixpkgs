@@ -8,7 +8,8 @@
 , vulkan-loader, glslang
 , galliumDrivers ? ["auto"]
 # upstream Mesa defaults to only enabling swrast (aka lavapipe) on aarch64 for some reason, so force building the others
-, vulkanDrivers ? [ "auto" ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "broadcom" "freedreno" "panfrost" ]
+# Auto cannot be combined with other options, mesa will ignore those options
+, vulkanDrivers ? if stdenv.isLinux && stdenv.isAarch64 then [ "swrast" "broadcom" "freedreno" "panfrost" ] else [ "auto" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
