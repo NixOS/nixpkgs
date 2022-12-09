@@ -84,8 +84,6 @@ with self; with super; {
       };
     };
 
-  pytest-runner = callPackage ../development/python2-modules/pytest-runner { };
-
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
 
   recoll = disabled super.recoll;
