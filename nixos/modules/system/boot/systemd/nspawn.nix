@@ -55,6 +55,7 @@ let
       "LinkJournal"
       "Ephemeral"
       "AmbientCapability"
+      "X-ActivationStrategy"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
