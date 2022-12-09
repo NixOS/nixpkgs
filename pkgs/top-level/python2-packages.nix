@@ -108,8 +108,6 @@ with self; with super; {
 
   sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
 
-  sphinx = callPackage ../development/python2-modules/sphinx { };
-
   typing = callPackage ../development/python2-modules/typing { };
 
   zeek = disabled super.zeek;
