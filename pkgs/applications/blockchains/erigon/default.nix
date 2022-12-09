@@ -1,18 +1,21 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
+let
+  pinData = lib.importJSON ./pin.json;
+in
 buildGoModule rec {
   pname = "erigon";
-  version = "2.30.0";
+  version = pinData.version;
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s5D+Ps5S95AyNh7tt2SnTvUxNHzOothsMZA7NW3x0yM=";
+    sha256 = pinData.sha256;
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-ICoThps7c4+9NQPeaASQ88YVbczJD/MgF2ldOmKjgvc=";
+  vendorSha256 = pinData.vendorSha256;
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
