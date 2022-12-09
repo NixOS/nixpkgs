@@ -36674,6 +36674,11 @@ with pkgs;
     x11Support = true;
   };
 
+  ghostscript_headless = ghostscript.override {
+    cupsSupport = false;
+    x11Support = false;
+  };
+
   glava = callPackage ../applications/misc/glava {};
 
   gnuk = callPackage ../misc/gnuk {
