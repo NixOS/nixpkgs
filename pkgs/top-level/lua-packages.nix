@@ -95,6 +95,7 @@ in
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs.gnome) zenity;
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
   vicious = (callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
