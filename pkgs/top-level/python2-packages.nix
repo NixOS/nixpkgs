@@ -70,8 +70,6 @@ with self; with super; {
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
-  pyroma = callPackage ../development/python2-modules/pyroma { };
-
   pysqlite = callPackage ../development/python2-modules/pysqlite { };
 
   pytest = pytest_4;
