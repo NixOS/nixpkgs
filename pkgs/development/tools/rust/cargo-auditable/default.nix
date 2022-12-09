@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-auditable";
-  version = "0.5.5";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mEmTgd7sC2jmYeb5pEO985v/aWWKlq/mSQUAGi32loY=";
+    sha256 = "sha256-mSiEC+9QtRjWmywJnGgUqp+q8fhY0qUYrgjrAVaY114=";
   };
 
-  cargoSha256 = "sha256-G72UUqvFaTY/GQSkpz1wIzjb7vIWuAjvKMZosUB6YsA=";
+  cargoSha256 = "sha256-Wz5My/QxPpZVsPBUe3KHT3ttD6CTU8NCY8rhFEC+UlA=";
 
   meta = with lib; {
     description = "A tool to make production Rust binaries auditable";
