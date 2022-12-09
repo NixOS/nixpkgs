@@ -252,6 +252,20 @@ in {
               '';
             };
 
+            encryptionPasswordFiles = mkOption {
+              type = types.attrsOf types.path;
+              default = {};
+              description = mdDoc ''
+                The untrusted devices for this folder and the file that contains
+                the encryption password. Each device must be defined in the
+                [devices](#opt-services.syncthing.devices) option.
+                See https://docs.syncthing.net/users/untrusted.html
+              '';
+              example = {
+                bigbox = "/home/user/bigbox_shared_password";
+              };
+            };
+
             versioning = mkOption {
               default = null;
               description = mdDoc ''
