@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "6.9.12-26";
+  version = "6.9.12-68";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = version;
-    sha256 = "sha256-oNorY/93jk1v5BS1T3wqctXuzV4o8JlyZtHnsNYmO4U=";
+    sha256 = "sha256-slQcA0cblxtG/1DiJx5swUh7Kfwgz5HG70eqJFLaQJI=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       [ libX11 libXext libXt libwebp ]
     ;
 
-  doCheck = false; # fails 6 out of 76 tests
+  doCheck = false; # fails 2 out of 76 tests
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
