@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , autoreconfHook
 , bash
 , docbook_xml_dtd_42
@@ -102,6 +103,8 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/bin" "$out ${pythonPath}"
     wrapPythonProgramsIn "$out/share/firewalld/testsuite/python" "$out ${pythonPath}"
   '';
+
+  passthru.tests = nixosTests.firewalld;
 
   meta = with lib; {
     description = "Firewall daemon with D-Bus interface";
