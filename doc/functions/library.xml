@@ -8,13 +8,13 @@
   Nixpkgs provides a standard library at <varname>pkgs.lib</varname>, or through <code>import &lt;nixpkgs/lib&gt;</code>.
  </para>
 
- <xi:include href="./library/asserts.xml" />
-
- <xi:include href="./library/attrsets.xml" />
-
 <!-- These docs are generated via nixdoc. To add another generated
       library function file to this list, the file
       `lib-function-docs.nix` must also be updated. -->
+
+ <xi:include href="./library/generated/asserts.xml" />
+
+ <xi:include href="./library/generated/attrsets.xml" />
 
  <xi:include href="./library/generated/strings.xml" />
 

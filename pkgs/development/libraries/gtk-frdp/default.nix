@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
   ];

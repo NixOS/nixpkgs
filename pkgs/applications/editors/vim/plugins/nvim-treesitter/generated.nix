@@ -338,14 +338,14 @@
   };
   erlang = buildGrammar {
     language = "erlang";
-    version = "3a9c769";
+    version = "a8b8b0e";
     source = fetchFromGitHub {
-      owner = "AbstractMachinesLab";
+      owner = "WhatsApp";
       repo = "tree-sitter-erlang";
-      rev = "3a9c769444f08bbccce03845270efac0c641c5e7";
-      hash = "sha256-ZsjHTNUfTEPo3Wb1ihW0M2YTWK6mpNhxQG/nLfMaG4I=";
+      rev = "a8b8b0e16c4f5552f5e85af3dec976a5d16af8b9";
+      hash = "sha256-6eiRiTTPdMBRsxVHIHYuw0sIfRDvP4pZIEyckoo304Q=";
     };
-    meta.homepage = "https://github.com/AbstractMachinesLab/tree-sitter-erlang";
+    meta.homepage = "https://github.com/WhatsApp/tree-sitter-erlang";
   };
   fennel = buildGrammar {
     language = "fennel";
@@ -471,12 +471,12 @@
   };
   glimmer = buildGrammar {
     language = "glimmer";
-    version = "abcc997";
+    version = "fee3427";
     source = fetchFromGitHub {
       owner = "alexlafroscia";
       repo = "tree-sitter-glimmer";
-      rev = "abcc9970da0ed0645741bf52ea70232374bc9e52";
-      hash = "sha256-kkNnyaAXeZJ770Jl4mmOdyXvq6bQd/9Q6eVyr+JV2jY=";
+      rev = "fee34278dc212869dcfc92fce3007ee79a752867";
+      hash = "sha256-a3goK+QSkrdsKvimT8vpsJ1bt8FhLf1bws0aqjncv3A=";
     };
     meta.homepage = "https://github.com/alexlafroscia/tree-sitter-glimmer";
   };
@@ -493,12 +493,12 @@
   };
   go = buildGrammar {
     language = "go";
-    version = "e34b8a4";
+    version = "64457ea";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-go";
-      rev = "e34b8a418c33bba8bdf3375e8e55903dff7c68b9";
-      hash = "sha256-Bfp2XsT83x+VPMPB5rHAbSpEkHD7lG0iDq2Yt63Ug8I=";
+      rev = "64457ea6b73ef5422ed1687178d4545c3e91334a";
+      hash = "sha256-38pkqR9iEIEf9r3IHJPIYgKfWBlb9aQWi1kij04Vo5k=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-go";
   };
@@ -1016,12 +1016,12 @@
   };
   php = buildGrammar {
     language = "php";
-    version = "ab2e721";
+    version = "b4a8a60";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-php";
-      rev = "ab2e72179ceb8bb0b249c8ac9162a148e911b3dc";
-      hash = "sha256-Lg4gEi6bCYosakr2McmgOwGHsmsVSjD+oyG6XNTd0j0=";
+      rev = "b4a8a6048d66fcda4e8e4988bd0d9095980e303a";
+      hash = "sha256-Pm0FuY34eMhX4K7pbYpNAY1WYBOO+9cFCx/j992fsg8=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-php";
   };
@@ -1082,12 +1082,12 @@
   };
   python = buildGrammar {
     language = "python";
-    version = "b14614e";
+    version = "9e53981";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-python";
-      rev = "b14614e2144b8f9ee54deed5a24f3c6f51f9ffa8";
-      hash = "sha256-4TDEK3v7hqinisXtAi/iJL0rUKqII07oVg/Jz3IV2yA=";
+      rev = "9e53981ec31b789ee26162ea335de71f02186003";
+      hash = "sha256-D2++Xg7dRfjGM2r4cxaXGQnBOAX5JBREcEAJeNa7Y9M=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-python";
   };
@@ -1291,12 +1291,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "54b363b";
+    version = "a4dd131";
     source = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "54b363b87c22787f9dcfabb5d8aa221cb65ace42";
-      hash = "sha256-ku4t3IyPNIIXVt3RvUoCG+TUbe62m7EFtXLUiAPb+pQ=";
+      rev = "a4dd131eeb9fe7f3c9c2ca0f506f6d58d9986a97";
+      hash = "sha256-Z1x1XPecXt3a4mL40Fyt5+1wrD+0L3Hh9aWjI0vIhIc=";
     };
     generate = true;
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
@@ -1336,12 +1336,12 @@
   };
   swift = buildGrammar {
     language = "swift";
-    version = "cff1c9a";
+    version = "4443b12";
     source = fetchFromGitHub {
       owner = "alex-pinkus";
       repo = "tree-sitter-swift";
-      rev = "cff1c9a62df89e8900d53ff48bc42862e6522dcf";
-      hash = "sha256-tfpqnutY8uLzhPWPsDzsvwaRWOS8vIxAOPlcyPoSwNU=";
+      rev = "4443b125240d7ae7e50d35d8415fae5be61bdaf2";
+      hash = "sha256-Hym56WVG5QIic+pd6Hvae5ETM6UNaTo4Sr9mTUVFt0Q=";
     };
     generate = true;
     meta.homepage = "https://github.com/alex-pinkus/tree-sitter-swift";

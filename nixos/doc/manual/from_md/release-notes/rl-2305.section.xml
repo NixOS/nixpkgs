@@ -160,6 +160,17 @@
     <itemizedlist>
       <listitem>
         <para>
+          <literal>vim_configurable</literal> has been renamed to
+          <literal>vim-full</literal> to avoid confusion:
+          <literal>vim-full</literal>’s build-time features are
+          configurable, but both <literal>vim</literal> and
+          <literal>vim-full</literal> are
+          <emphasis>customizable</emphasis> (in the sense of user
+          configuration, like vimrc).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The module for the application firewall
           <literal>opensnitch</literal> got the ability to configure
           rules. Available as
@@ -182,6 +193,21 @@
           set. The option
           <literal>services.dnsmasq.extraConfig</literal> will be
           deprecated when NixOS 22.11 reaches end of life.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          To reduce closure size in
+          <literal>nixos/modules/profiles/minimal.nix</literal> profile
+          disabled installation documentations and manuals. Also
+          disabled <literal>logrotate</literal> and
+          <literal>udisks2</literal> services.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The minimal ISO image now use
+          <literal>nixos/modules/profiles/minimal.nix</literal> profile.
         </para>
       </listitem>
       <listitem>

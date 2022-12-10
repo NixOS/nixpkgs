@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon cmake libressl ];
   nativeBuildInputs = [ meson ninja ];
+  buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon libressl ];
 
   postPatch = ''
     substituteInPlace waynergy.desktop --replace "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"

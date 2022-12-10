@@ -22,6 +22,19 @@ boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
     date with new versions.
   </para>
   <para>
+    Please note that the current convention in NixOS is to only keep
+    actively maintained kernel versions on both unstable and the
+    currently supported stable release(s) of NixOS. This means that a
+    non-longterm kernel will be removed after it’s abandoned by the
+    kernel developers, even on stable NixOS versions. If you pin your
+    kernel onto a non-longterm version, expect your evaluation to fail
+    as soon as the version is out of maintenance.
+  </para>
+  <para>
+    Longterm versions of kernels will be removed before the next stable
+    NixOS that will exceed the maintenance period of the kernel version.
+  </para>
+  <para>
     The default Linux kernel configuration should be fine for most
     users. You can see the configuration of your current kernel with the
     following command:
@@ -153,5 +166,39 @@ $ cd linux-*
 $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
 # insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
 </programlisting>
+  </section>
+  <section xml:id="sec-linux-zfs">
+    <title>ZFS</title>
+    <para>
+      It’s a common issue that the latest stable version of ZFS doesn’t
+      support the latest available Linux kernel. It is recommended to
+      use the latest available LTS that’s compatible with ZFS. Usually
+      this is the default kernel provided by nixpkgs (i.e.
+      <literal>pkgs.linuxPackages</literal>).
+    </para>
+    <para>
+      Alternatively, it’s possible to pin the system to the latest
+      available kernel version <emphasis>that is supported by
+      ZFS</emphasis> like this:
+    </para>
+    <programlisting language="bash">
+{
+  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
+}
+</programlisting>
+    <para>
+      Please note that the version this attribute points to isn’t
+      monotonic because the latest kernel version only refers to kernel
+      versions supported by the Linux developers. In other words, the
+      latest kernel version that ZFS is compatible with may decrease
+      over time.
+    </para>
+    <para>
+      An example: the latest version ZFS is compatible with is 5.19
+      which is a non-longterm version. When 5.19 is out of maintenance,
+      the latest supported kernel version is 5.15 because it’s longterm
+      and the versions 5.16, 5.17 and 5.18 are already out of
+      maintenance because they’re non-longterm.
+    </para>
   </section>
 </chapter>
