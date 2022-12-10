@@ -33,7 +33,7 @@ let
 
   };
 
-  cudaNames = {
+  cudaMicroarchitectureNames = {
     "3" = "Kepler";
     "5" = "Maxwell";
     "6" = "Pascal";
@@ -54,7 +54,7 @@ let
   cudaPTXArchs = archMapper "compute" cudaRealCapabilities;
   cudaArchs = cudaRealArchs ++ [ (lib.last cudaPTXArchs) ];
 
-  cudaArchNames = lib.unique (map (v: cudaNames.${lib.versions.major v}) cudaRealCapabilities);
+  cudaArchNames = lib.unique (map (v: cudaMicroarchitectureNames.${lib.versions.major v}) cudaRealCapabilities);
   cudaCapabilities = cudaRealCapabilities ++ lib.optional (config.cudaForwardCompat or true) capabilitiesForward;
   cudaGencode = gencodeMapper "sm" cudaRealCapabilities ++ lib.optionals (config.cudaForwardCompat or true) (gencodeMapper "compute" [ (lib.last cudaPTXArchs) ]);
 
