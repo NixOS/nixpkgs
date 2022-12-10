@@ -30966,6 +30966,8 @@ with pkgs;
 
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
+  river-tag-overlay = callPackage ../applications/misc/river-tag-overlay { };
+
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
 
   rofi-bluetooth = callPackage ../applications/misc/rofi-bluetooth { };
