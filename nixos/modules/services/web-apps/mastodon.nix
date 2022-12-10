@@ -658,8 +658,9 @@ in {
       recommendedProxySettings = true; # required for redirections to work
       virtualHosts."${cfg.localDomain}" = {
         root = "${cfg.package}/public/";
-        forceSSL = true; # mastodon only supports https
-        enableACME = true;
+        # mastodon only supports https, but you can override this if you offload tls elsewhere.
+        forceSSL = lib.mkDefault true;
+        enableACME = lib.mkDefault true;
 
         locations."/system/".alias = "/var/lib/mastodon/public-system/";
 
