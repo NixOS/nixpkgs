@@ -1,6 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, ansible-lint
 , nix-update-script
 }:
 
@@ -28,6 +29,15 @@ buildNpmPackage rec {
   postPatch = ''
     sed -i '/"prepare"/d' package.json
     sed -i '/"prepack"/d' package.json
+  '';
+
+  # Tests currently fail, see https://github.com/ansible/ansible-language-server/issues/518
+  doCheck = false;
+
+  checkInputs = [ ansible-lint ];
+
+  preCheck = ''
+    patchShebangs bin
   '';
 
   passthru.updateScript = nix-update-script {
