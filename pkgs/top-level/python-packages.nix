@@ -2425,6 +2425,8 @@ self: super: with self; {
 
   dissect-target = callPackage ../development/python-modules/dissect-target { };
 
+  dissect-thumbcache = callPackage ../development/python-modules/dissect-thumbcache { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
