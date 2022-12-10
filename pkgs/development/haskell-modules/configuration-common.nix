@@ -1485,6 +1485,10 @@ self: super: {
     })
   ] super.pipes-aeson;
 
+  # Needs bytestring 0.11
+  # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/pull/17
+  pipes-http = doJailbreak super.pipes-http;
+
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
     (fetchpatch {
