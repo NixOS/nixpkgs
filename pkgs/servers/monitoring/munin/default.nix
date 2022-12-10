@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   # needs to find a local perl module during build
-  PERL_USE_UNSAFE_INC = "1";
+  env.PERL_USE_UNSAFE_INC = "1";
 
   # TODO: tests are failing https://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass

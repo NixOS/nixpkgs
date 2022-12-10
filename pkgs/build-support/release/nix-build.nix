@@ -124,7 +124,7 @@ stdenv.mkDerivation (
       echo "$system" > $out/nix-support/system
 
       if [ -z "${toString doingAnalysis}" ]; then
-          for i in $outputs; do
+          for i in $(getAllOutputNames); do
               if [ "$i" = out ]; then j=none; else j="$i"; fi
               mkdir -p ''${!i}/nix-support
               echo "nix-build $j ''${!i}" >> ''${!i}/nix-support/hydra-build-products
