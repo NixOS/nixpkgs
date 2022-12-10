@@ -33,11 +33,16 @@
 , systemd
 , which
 , callPackage
+, darwin
 }:
 let
   drvName = "flutter-${version}";
   flutter = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
+
+    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+    ];
 
     buildInputs = [ git ];
 
@@ -151,12 +156,19 @@ let
 self = (self:
 runCommand drvName
 {
-  startScript = ''
+  startScript = lib.optionalString stdenv.hostPlatform.isLinux ''
     #!${bash}/bin/bash
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
     export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
     ${fhsEnv}/bin/${drvName}-fhs-env ${flutter}/bin/flutter --no-version-check "$@"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    #!${bash}/bin/bash
+    export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
+    export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
+    ${flutter}/bin/flutter --no-version-check "$@"
   '';
+
   preferLocalBuild = true;
   allowSubstitutes = false;
   passthru = {
@@ -174,7 +186,7 @@ runCommand drvName
     '';
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ] ++ optionals (versionOlder "3.0.0" version) [ "aarch64-darwin" ];
     maintainers = with maintainers; [ babariviere ericdallo h7x4 ];
   };
 } ''
