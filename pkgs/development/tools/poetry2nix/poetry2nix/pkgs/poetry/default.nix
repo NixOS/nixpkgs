@@ -52,5 +52,8 @@ poetry2nix.mkPoetryApplication {
   meta = with lib; {
     inherit (python.meta) platforms;
     maintainers = with maintainers; [ adisbladis jakewaksbaum ];
+    knownVulnerabilities = [
+      "CVE-2022-42966"  # cleo version in poetry.lock is vulnerable
+    ];
   };
 }

@@ -9,15 +9,7 @@ with self; with super; {
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  boto3 = callPackage ../development/python2-modules/boto3 {};
-
-  botocore = callPackage ../development/python2-modules/botocore {};
-
-  certifi = callPackage ../development/python2-modules/certifi { };
-
   cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
-
-  chardet = callPackage ../development/python2-modules/chardet { };
 
   configparser = callPackage ../development/python2-modules/configparser { };
 
@@ -31,21 +23,11 @@ with self; with super; {
 
   futures = callPackage ../development/python2-modules/futures { };
 
-  google-apputils = callPackage ../development/python2-modules/google-apputils { };
-
-  gtkme = callPackage ../development/python2-modules/gtkme { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
-
-  idna = callPackage ../development/python2-modules/idna { };
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
-
-  marisa = callPackage ../development/python2-modules/marisa {
-    inherit (pkgs) marisa;
-  };
 
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
@@ -59,28 +41,15 @@ with self; with super; {
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  protobuf = callPackage ../development/python2-modules/protobuf {
-    disabled = isPyPy;
-    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
-  };
-
   pycairo = callPackage ../development/python2-modules/pycairo {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygments = callPackage ../development/python2-modules/Pygments { };
-
-  pygobject3 = callPackage ../development/python2-modules/pygobject {
-    inherit (pkgs) meson;
-  };
+  pygobject2 = callPackage ../development/python2-modules/pygobject { };
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
-
-  pyroma = callPackage ../development/python2-modules/pyroma { };
-
-  pysqlite = callPackage ../development/python2-modules/pysqlite { };
 
   pytest = pytest_4;
 
@@ -92,8 +61,6 @@ with self; with super; {
       };
     };
 
-  pytest-runner = callPackage ../development/python2-modules/pytest-runner { };
-
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
 
   recoll = disabled super.recoll;
@@ -102,21 +69,11 @@ with self; with super; {
 
   rpm = disabled super.rpm;
 
-  s3transfer = callPackage ../development/python2-modules/s3transfer { };
-
-  scandir = callPackage ../development/python2-modules/scandir { };
-
   sequoia = disabled super.sequoia;
 
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
-
-  sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
-
-  sphinx = callPackage ../development/python2-modules/sphinx { };
-
-  typing = callPackage ../development/python2-modules/typing { };
 
   zeek = disabled super.zeek;
 
