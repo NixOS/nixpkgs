@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
+    changelog = "https://github.com/lepture/authlib/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ flokli ];
   };
