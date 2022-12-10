@@ -32,13 +32,17 @@ with lib;
       dbus = super.dbus.override { x11Support = false; };
       ffmpeg_4 = super.ffmpeg_4-headless;
       ffmpeg_5 = super.ffmpeg_5-headless;
+      # dep of graphviz, libXpm is optional for Xpm support
+      gd = super.gd.override { libXpm = null; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      gpsd = super.gpsd.override { guiSupport = false; };
+      graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
         gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableX11 = false; };
       };
-      gpsd = super.gpsd.override { guiSupport = false; };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
+      libdevil = super.libdevil-nox;
       libextractor = super.libextractor.override { gtkSupport = false; };
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
@@ -51,9 +55,13 @@ with lib;
       networkmanager-openvpn = super.networkmanager-openvpn.override { withGnome = false; };
       networkmanager-sstp = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
+      pango = super.pango.override { x11Support = false; };
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
+      stoken = super.stoken.override { withGTK3 = false; };
+      # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11
+      util-linux = super.util-linux.override { translateManpages = false; };
       zbar = super.zbar.override { enableVideo = false; withXorg = false; };
     }));
   };
