@@ -127,6 +127,17 @@ rec {
     # List of input strings
     list: concatStringsSep sep (lib.imap1 f list);
 
+  /* Concatenate a list of strings, adding a newline at the end of each one.
+     Defined as `concatMapStrings (s: s + "\n")`.
+
+     Type: concatLines :: [string] -> string
+
+     Example:
+       concatLines [ "foo" "bar" ]
+       => "foo\nbar\n"
+  */
+  concatLines = concatMapStrings (s: s + "\n");
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 
