@@ -5,8 +5,8 @@ let
     version = "3.1.6";
     sha256 = "1lnmrb5kgq8lbhjs48j3wwhqgk44pnqb1yjq4b5r6ysv9l5wlkjm";
   } else {
-    version = "3.2.0RC2";
-    sha256 = "dQgXDP3Ifg+D0niWxaJ4ec71Vfr8KH40jv6QbxSyY+4=";
+    version = "3.2.0";
+    sha256 = "1drj00z8ididm2iw7a7pnrsvakrr1g0i49aqkyz5zpysxh7b4sbp";
   };
 in
 buildPecl {
