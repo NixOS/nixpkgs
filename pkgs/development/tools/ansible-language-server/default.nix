@@ -18,7 +18,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-8FP6hF85w1Zbhiwi2V350ZWFAykAfvsXRGL8bvGk1XE=";
   npmBuildScript = "compile";
 
-  # We remove the prepare and prepack scripts because they run the
+  # We remove/ignore the prepare and prepack scripts because they run the
   # build script, and therefore are redundant.
   #
   # Additionally, the prepack script runs npm ci in addition to the
@@ -27,8 +27,9 @@ buildNpmPackage rec {
   # wiping out node_modules, which causes a mysterious error stating that tsc isn't installed.
   postPatch = ''
     sed -i '/"prepare"/d' package.json
-    sed -i '/"prepack"/d' package.json
   '';
+
+  npmPackFlags = [ "--ignore-scripts" ];
 
   passthru.updateScript = nix-update-script {
     attrPath = pname;
