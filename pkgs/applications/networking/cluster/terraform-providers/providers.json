@@ -507,11 +507,11 @@
     "vendorHash": null
   },
   "heroku": {
-    "hash": "sha256-GmrzvE1Wc1dQSlEL4mLYHIkAVxKwElx2fCWkrnZra18=",
+    "hash": "sha256-6SNBi4hSGD6XhUSmIOjmPVzo2HnvRBGFW1jMHJLDhuI=",
     "homepage": "https://registry.terraform.io/providers/heroku/heroku",
     "owner": "heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.1.8",
+    "rev": "v5.1.9",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
