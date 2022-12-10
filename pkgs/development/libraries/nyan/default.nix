@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       Nyan stores hierarchical objects with key-value pairs in a database with the key idea that changes in a parent affect all children. We created nyan because there existed no suitable language to properly represent the enormous complexity of storing the data for openage.
     '';
     homepage = "https://openage.sft.mx";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ Grubben ];
     platforms = platforms.unix;
   };
