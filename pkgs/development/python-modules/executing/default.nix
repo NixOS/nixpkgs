@@ -2,11 +2,12 @@
 , asttokens
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
 , littleutils
+, pytestCheckHook
 , pythonAtLeast
+, pythonOlder
 , rich
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -14,25 +15,25 @@ buildPythonPackage rec {
   version = "1.2.0";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3M3uSJ5xQ5Ciy8Lz21u9zjju/7SBSFHobCqSiJ6AP8M=";
+    hash = "sha256-3M3uSJ5xQ5Ciy8Lz21u9zjju/7SBSFHobCqSiJ6AP8M=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
-
   checkInputs = [
-    pytestCheckHook
     asttokens
     littleutils
+    pytestCheckHook
   ] ++ lib.optionals (pythonAtLeast "3.11") [
     rich
   ];
