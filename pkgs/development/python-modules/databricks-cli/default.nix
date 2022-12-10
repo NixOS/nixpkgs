@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.17.3";
+  version = "0.17.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LwDz5w6FmAnwWViF7Hb8c7pgrQzM1pVk999dlbbJAGY=";
+    sha256 = "sha256-vAxN0ILwM8tteXjKyspSYWmO/jpMcPUvmHYsONuSXOA=";
   };
 
   checkInputs = [
