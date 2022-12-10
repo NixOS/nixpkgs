@@ -12,14 +12,20 @@ buildGoModule rec {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FxOgddgwehzrteMBjTrdksKpTR43VZV7PHI7NClZ3OU=";
+    hash = "sha256-FxOgddgwehzrteMBjTrdksKpTR43VZV7PHI7NClZ3OU=";
   };
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  vendorSha256 = "sha256-fL12Rx/0TF2jjciSHgfIDfrqdQxxm2JiGfgO3Dgz81M=";
+  vendorHash = "sha256-fL12Rx/0TF2jjciSHgfIDfrqdQxxm2JiGfgO3Dgz81M=";
 
   doCheck = false;
 
@@ -35,6 +41,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A simple and flexible scheduler and orchestrator to manage non-containerized applications";
     homepage = "https://github.com/F1bonacc1/process-compose";
+    changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ thenonameguy ];
   };
