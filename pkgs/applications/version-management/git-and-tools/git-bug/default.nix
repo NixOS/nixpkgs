@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "git-bug";
-  version = "0.7.2"; # the `rev` below pins the version of the source to get
-  rev = "cc4a93c8ce931b1390c61035b888ad17110b7bd6";
+  version = "0.8.0"; # the `rev` below pins the version of the source to get
+  rev = "v0.8.0";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "MichaelMure";
     repo = "git-bug";
-    sha256 = "0r6wh0y1fj3d3fbbrzq5n9k6z94xvwqww3xfbslkgyrin5bmziiq";
+    sha256 = "12byf6nsamwz0ssigan1z299s01cyh8bhgj86bibl90agd4zs9n8";
   };
 
-  vendorSha256 = "15hhsrwwjc4krfc2d0r15lys3vr9rb9xk62pan4jr9ycbv0dny90";
+  vendorSha256 = "sha256-32kNDoBE50Jx1Ef9YwhDk7nd3CaTSnHPlu7PgWPUGfE=";
 
   doCheck = false;
 
@@ -23,9 +23,14 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    install -D -m 0644 misc/bash_completion/git-bug "$out/share/bash-completion/completions/git-bug"
-    install -D -m 0644 misc/zsh_completion/git-bug "$out/share/zsh/site-functions/git-bug"
+    install -D -m 0644 misc/completion/bash/git-bug "$out/share/bash-completion/completions/git-bug"
+    install -D -m 0644 misc/completion/zsh/git-bug "$out/share/zsh/site-functions/git-bug"
     install -D -m 0644 -t "$out/share/man/man1" doc/man/*
+
+    # not sure why the following executables are in $out/bin/
+    rm -f $out/bin/cmd
+    rm -f $out/bin/completion
+    rm -f $out/bin/doc
   '';
 
   meta = with lib; {

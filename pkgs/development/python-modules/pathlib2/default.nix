@@ -3,7 +3,6 @@
 , fetchPypi
 , six
 , pythonOlder
-, scandir ? null
 , glibcLocales
 , mock
 , typing
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ]
-    ++ lib.optionals (pythonOlder "3.5") [ scandir typing ];
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
   checkInputs = [ glibcLocales ]
     ++ lib.optional (pythonOlder "3.3") mock;
 
