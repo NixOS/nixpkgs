@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://primesieve.org/";
+    changelog = "https://github.com/kimwalisch/primesieve/blob/v${version}/ChangeLog";
     description = "Fast C/C++ prime number generator";
     longDescription = ''
       primesieve is a command-line program and C/C++ library for quickly
