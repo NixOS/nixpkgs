@@ -34367,7 +34367,9 @@ with pkgs;
 
   gweled = callPackage ../games/gweled { };
 
-  gzdoom = callPackage ../games/gzdoom { };
+  gzdoom = callPackage ../games/gzdoom {
+    inherit (llvmPackages) openmp;
+  };
 
   harmonist = callPackage ../games/harmonist { };
 
