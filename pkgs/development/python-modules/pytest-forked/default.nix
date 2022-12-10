@@ -31,6 +31,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "Run tests in isolated forked subprocesses";
     homepage = "https://github.com/pytest-dev/pytest-forked";
