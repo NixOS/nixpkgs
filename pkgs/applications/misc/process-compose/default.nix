@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "process-compose";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "7UVCGyFay0yQAcO1NKb1+vsNqX1v9Hf5NUgjnHlgnG0=";
+    sha256 = "sha256-FxOgddgwehzrteMBjTrdksKpTR43VZV7PHI7NClZ3OU=";
   };
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = "IsO1B6z1/HoGQ8xdNKQqZ/eZd90WikDbU9XiP0z28mU=";
+  vendorSha256 = "sha256-fL12Rx/0TF2jjciSHgfIDfrqdQxxm2JiGfgO3Dgz81M=";
 
   doCheck = false;
 
