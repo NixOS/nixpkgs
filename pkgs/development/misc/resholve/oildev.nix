@@ -13,6 +13,8 @@
 , cmark
 , file
 , glibcLocales
+, six
+, typing
 }:
 
 rec {
@@ -95,7 +97,7 @@ rec {
 
     nativeBuildInputs = [ re2c file makeWrapper ];
 
-    propagatedBuildInputs = with python27.pkgs; [ six typing ];
+    propagatedBuildInputs = [ six typing ];
 
     doCheck = true;
 
