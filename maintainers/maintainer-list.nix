@@ -5269,6 +5269,12 @@
     githubId = 31556469;
     name = "Prem Netsuwan";
   };
+  Grubben = {
+    email = "antoniomsprc@gmail.com";
+    github = "Grubben";
+    githubId = 63401009;
+    name = "Antonio Maria Ribeiro da Cunha";
+  };
   gruve-p = {
     email = "groestlcoin@gmail.com";
     github = "gruve-p";
