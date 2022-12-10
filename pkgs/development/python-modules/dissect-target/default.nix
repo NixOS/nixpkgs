@@ -16,6 +16,7 @@
 , dissect-ntfs
 , dissect-regf
 , dissect-sql
+, dissect-thumbcache
 , dissect-util
 , dissect-volume
 , dissect-xfs
@@ -79,6 +80,7 @@ buildPythonPackage rec {
       dissect-fat
       dissect-ffs
       dissect-sql
+      dissect-thumbcache
       dissect-xfs
       fusepy
       ipython
