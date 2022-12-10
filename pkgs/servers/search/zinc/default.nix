@@ -26,6 +26,12 @@ let
       mkdir -p $out/share
       mv dist $out/share/zinc-ui
     '';
+
+    doCheck = false; # tests fail, see https://github.com/zinclabs/zinc/issues/687
+
+    checkPhase = ''
+      npm run test-once
+    '';
   };
 in
 buildGoModule rec {
