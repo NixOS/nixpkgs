@@ -3,24 +3,24 @@
 , dissect-cstruct
 , dissect-util
 , fetchFromGitHub
-, setuptools
-, setuptools-scm
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  pname = "dissect-ffs";
-  version = "3.2";
+  pname = "dissect-thumbcache";
+  version = "1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
-    repo = "dissect.ffs";
+    repo = "dissect.thumbcache";
     rev = version;
-    hash = "sha256-kcYSoY3a8ljY9LWzOUekLBzokE+wJrG1KEr0p5CCj0U=";
+    hash = "sha256-4yUVJwIQniE9AAtAgzHczOZfyWZly86JKc0Qh3byYf4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -40,12 +40,17 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "dissect.ffs"
+    "dissect.thumbcache"
+  ];
+
+  disabledTests = [
+    # Don't run Windows related tests
+    "windows"
   ];
 
   meta = with lib; {
-    description = "Dissect module implementing a parser for the FFS file system";
-    homepage = "https://github.com/fox-it/dissect.ffs";
+    description = "Dissect module implementing a parser for the Windows thumbcache";
+    homepage = "https://github.com/fox-it/dissect.thumbcache";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

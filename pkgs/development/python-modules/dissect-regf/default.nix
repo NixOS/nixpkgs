@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-regf";
-  version = "3.1";
+  version = "3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.regf";
     rev = version;
-    hash = "sha256-88qG90jza0EVP5dgz09ZA8Z+zFwqanOODlUgsvkMxGo=";
+    hash = "sha256-hSMdgGkSmFDAiO6C1xTJDmKClHwrGc887wqO3/5NZn4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
