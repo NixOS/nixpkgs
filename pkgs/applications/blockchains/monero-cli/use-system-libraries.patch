@@ -1,0 +1,52 @@
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 5b7f69a56..5536debe8 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -36,22 +36,9 @@
+ # others.
+ 
+ find_package(Miniupnpc REQUIRED)
+-
+-message(STATUS "Using in-tree miniupnpc")
+-set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
+-add_subdirectory(miniupnp/miniupnpc)
+-set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
+-set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
+-if(MSVC)
+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -wd4244 -wd4267")
+-elseif(NOT MSVC)
+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-undef -Wno-unused-result -Wno-unused-value")
+-endif()
+-if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+-	set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -D_NETBSD_SOURCE")
+-endif()
+-
+-set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
++set(UPNP_STATIC false PARENT_SCOPE)
++set(UPNP_INCLUDE ${MINIUPNP_INCLUDE_DIR} PARENT_SCOPE)
++set(UPNP_LIBRARIES ${MINIUPNP_LIBRARY} PARENT_SCOPE)
+ 
+ find_package(Unbound)
+ 
+@@ -69,4 +56,3 @@ endif()
+ add_subdirectory(db_drivers)
+ add_subdirectory(easylogging++)
+ add_subdirectory(qrcodegen)
+-add_subdirectory(randomx EXCLUDE_FROM_ALL)
+diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
+index d4b39869c..13071d898 100644
+--- a/src/p2p/net_node.inl
++++ b/src/p2p/net_node.inl
+@@ -61,9 +61,9 @@
+ #include "cryptonote_core/cryptonote_core.h"
+ #include "net/parse.h"
+ 
+-#include <miniupnp/miniupnpc/miniupnpc.h>
+-#include <miniupnp/miniupnpc/upnpcommands.h>
+-#include <miniupnp/miniupnpc/upnperrors.h>
++#include <miniupnpc/miniupnpc.h>
++#include <miniupnpc/upnpcommands.h>
++#include <miniupnpc/upnperrors.h>
+ 
+ #undef MONERO_DEFAULT_LOG_CATEGORY
+ #define MONERO_DEFAULT_LOG_CATEGORY "net.p2p"

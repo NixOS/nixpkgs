@@ -1,0 +1,48 @@
+diff --git a/buildconfig/config_darwin.py b/buildconfig/config_darwin.py
+index c785e183..37d5cea4 100644
+--- a/buildconfig/config_darwin.py
++++ b/buildconfig/config_darwin.py
+@@ -146,16 +146,8 @@ def main():
+     ])
+ 
+     print ('Hunting dependencies...')
+-    incdirs = ['/usr/local/include', '/opt/homebrew/include']
+-    incdirs.extend(['/usr/local/include/SDL2', '/opt/homebrew/include/SDL2', '/opt/local/include/SDL2'])
+-
+-    incdirs.extend([
+-       #'/usr/X11/include',
+-       '/opt/local/include',
+-       '/opt/local/include/freetype2/freetype']
+-    )
+-    #libdirs = ['/usr/local/lib', '/usr/X11/lib', '/opt/local/lib']
+-    libdirs = ['/usr/local/lib', '/opt/local/lib', '/opt/homebrew/lib']
++    incdirs = @buildinputs_include@
++    libdirs = @buildinputs_lib@
+ 
+     for d in DEPS:
+         if isinstance(d, (list, tuple)):
+diff --git a/buildconfig/config_unix.py b/buildconfig/config_unix.py
+index 5c50bcdc..2fd69e2d 100644
+--- a/buildconfig/config_unix.py
++++ b/buildconfig/config_unix.py
+@@ -210,18 +210,8 @@ def main():
+     if not DEPS[0].found:
+         raise RuntimeError('Unable to run "sdl-config". Please make sure a development version of SDL is installed.')
+ 
+-    incdirs = []
+-    libdirs = []
+-    for extrabase in extrabases:
+-        incdirs += [extrabase + d for d in origincdirs]
+-        libdirs += [extrabase + d for d in origlibdirs]
+-    incdirs += ["/usr"+d for d in origincdirs]
+-    libdirs += ["/usr"+d for d in origlibdirs]
+-    incdirs += ["/usr/local"+d for d in origincdirs]
+-    libdirs += ["/usr/local"+d for d in origlibdirs]
+-    if localbase:
+-        incdirs = [localbase+d for d in origincdirs]
+-        libdirs = [localbase+d for d in origlibdirs]
++    incdirs = @buildinputs_include@
++    libdirs = @buildinputs_lib@
+ 
+     for arg in DEPS[0].cflags.split():
+         if arg[:2] == '-I':

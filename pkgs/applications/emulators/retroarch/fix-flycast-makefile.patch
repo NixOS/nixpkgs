@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 01d99c30..8c2dd248 100644
+--- a/Makefile
++++ b/Makefile
+@@ -440,7 +440,6 @@ else ifeq ($(platform), arm64)
+ 	CPUFLAGS += -DTARGET_LINUX_ARMv8 -frename-registers
+ 	CFLAGS += $(CPUFLAGS)
+ 	CXXFLAGS += $(CPUFLAGS)
+-	ASFLAGS += $(CFLAGS) -c -frename-registers -fno-strict-aliasing -ffast-math -ftree-vectorize
+ 	PLATFORM_EXT := unix
+ 	WITH_DYNAREC=arm64
+ 	HAVE_GENERIC_JIT = 0

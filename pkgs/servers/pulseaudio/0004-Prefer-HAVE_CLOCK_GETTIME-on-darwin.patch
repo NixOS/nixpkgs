@@ -1,0 +1,13 @@
+diff --git a/src/pulsecore/core-rtclock.c b/src/pulsecore/core-rtclock.c
+index 2c2e28631..b946a3fb1 100644
+--- a/src/pulsecore/core-rtclock.c
++++ b/src/pulsecore/core-rtclock.c
+@@ -65,7 +65,7 @@ pa_usec_t pa_rtclock_age(const struct timeval *tv) {
+ 
+ struct timeval *pa_rtclock_get(struct timeval *tv) {
+ 
+-#if defined(OS_IS_DARWIN)
++#if defined(OS_IS_DARWIN) && !defined(HAVE_CLOCK_GETTIME)
+     uint64_t val, abs_time = mach_absolute_time();
+     Nanoseconds nanos;
+ 

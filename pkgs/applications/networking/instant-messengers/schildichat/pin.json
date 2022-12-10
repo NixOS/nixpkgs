@@ -1,0 +1,9 @@
+{
+  "version": "1.11.13-sc.1",
+  "rev": "v1.11.13-sc.1",
+  "srcHash": "1yvd0mzw4qz03nf6im2msi1lp1v4ca9zknvb3ls6va11nxr01h3g",
+  "webYarnHash": "0bmjg9qhd89bdnh398lp257mxdgdd88wj5g3fmc3cavyd6hmgzbn",
+  "jsSdkYarnHash": "0j0jhbfhq0zabnc4glk2kypn53mi5s09l39i41p0zv7g1riwz7al",
+  "reactSdkYarnHash": "195ck2k5fhzi1b8grh5c88aiq4i3baqanjx48dam76li2msfxxfn",
+  "desktopYarnHash": "1scp9y2lmah3n20f1kpc9paspd3qgslg129diis7g11cz4h0wyi5"
+}

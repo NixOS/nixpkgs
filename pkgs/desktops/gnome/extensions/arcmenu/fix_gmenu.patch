@@ -1,0 +1,11 @@
+--- a/extension.js
++++ b/extension.js
+@@ -23,6 +23,8 @@
+
+ const Me = imports.misc.extensionUtils.getCurrentExtension();
+
++imports.gi.GIRepository.Repository.prepend_search_path('@gmenu_path@');
++
+ const {GLib, Gio, St} = imports.gi;
+ const Constants = Me.imports.constants;
+ const Controller = Me.imports.controller;

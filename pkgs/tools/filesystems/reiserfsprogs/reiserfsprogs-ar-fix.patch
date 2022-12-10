@@ -1,0 +1,10 @@
+--- reiserfsprogs-3.6.24/configure.ac.orig	2018-11-29 17:16:52.313624894 +0300
++++ reiserfsprogs-3.6.24/configure.ac	2018-11-29 17:16:54.480669132 +0300
+@@ -21,6 +21,7 @@
+ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
+ AC_PROG_RANLIB
++AM_PROG_AR
+ 
+ dnl Checks for libraries.
+ 

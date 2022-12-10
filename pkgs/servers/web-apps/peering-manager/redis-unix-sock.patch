@@ -1,0 +1,47 @@
+commit 1e64a7f6ca456249305f6a3c90f9acf84af194db
+Author: Yureka <yuka@yuka.dev>
+Date:   Tue Nov 29 14:03:08 2022 +0100
+
+    support unix sockets for redis connections
+
+diff --git a/peering_manager/settings.py b/peering_manager/settings.py
+index 739d6ff..b5edf4d 100644
+--- a/peering_manager/settings.py
++++ b/peering_manager/settings.py
+@@ -270,6 +270,7 @@ TASKS_REDIS_PASSWORD = TASKS_REDIS.get("PASSWORD", "")
+ TASKS_REDIS_DATABASE = TASKS_REDIS.get("DATABASE", 0)
+ TASKS_REDIS_DEFAULT_TIMEOUT = TASKS_REDIS.get("DEFAULT_TIMEOUT", 300)
+ TASKS_REDIS_SSL = TASKS_REDIS.get("SSL", False)
++TASKS_REDIS_UNIX_SOCKET_PATH = TASKS_REDIS.get("UNIX_SOCKET_PATH", "")
+ if "DEFAULT_TIMEOUT" in TASKS_REDIS:
+     warnings.warn(
+         "DEFAULT_TIMEOUT is no longer supported under REDIS configuration. Set RQ_DEFAULT_TIMEOUT instead."
+@@ -294,6 +295,7 @@ CACHING_REDIS_PASSWORD = CACHING_REDIS.get("PASSWORD", "")
+ CACHING_REDIS_DATABASE = CACHING_REDIS.get("DATABASE", 0)
+ CACHING_REDIS_DEFAULT_TIMEOUT = CACHING_REDIS.get("DEFAULT_TIMEOUT", 300)
+ CACHING_REDIS_SSL = CACHING_REDIS.get("SSL", False)
++CACHING_REDIS_UNIX_SOCKET_PATH = CACHING_REDIS.get("UNIX_SOCKET_PATH", "")
+ 
+ if CACHING_REDIS_USING_SENTINEL:
+     CACHEOPS_SENTINEL = {
+@@ -301,6 +303,8 @@ if CACHING_REDIS_USING_SENTINEL:
+         "service_name": CACHING_REDIS_SENTINEL_SERVICE,
+         "db": CACHING_REDIS_DATABASE,
+     }
++elif CACHING_REDIS_UNIX_SOCKET_PATH != "":
++    CACHEOPS_REDIS = f"unix://{CACHING_REDIS_UNIX_SOCKET_PATH}?db={CACHING_REDIS_DATABASE}"
+ else:
+     REDIS_CACHE_CON_STRING = "rediss://" if CACHING_REDIS_SSL else "redis://"
+     if CACHING_REDIS_PASSWORD:
+@@ -334,6 +338,11 @@ if TASKS_REDIS_USING_SENTINEL:
+         "SOCKET_TIMEOUT": None,
+         "CONNECTION_KWARGS": {"socket_connect_timeout": TASKS_REDIS_DEFAULT_TIMEOUT},
+     }
++elif TASKS_REDIS_UNIX_SOCKET_PATH != "":
++    RQ_PARAMS = {
++        "UNIX_SOCKET_PATH": TASKS_REDIS_UNIX_SOCKET_PATH,
++        "DB": TASKS_REDIS_DATABASE,
++    }
+ else:
+     RQ_PARAMS = {
+         "HOST": TASKS_REDIS_HOST,
