@@ -13,16 +13,25 @@ in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "v${version}";
-    sha256 = "sha256-kxANzEORvR+BJDfLUD1FLorBuYjnUQixgD2jDoX6jrg=";
+    hash = "sha256-kxANzEORvR+BJDfLUD1FLorBuYjnUQixgD2jDoX6jrg=";
   };
-  cargoSha256 = "sha256-IYNIr7PBNNloPizaauFYR9/NPnBMS8kQi+RNsKsNjLE=";
+
+  cargoHash = "sha256-IYNIr7PBNNloPizaauFYR9/NPnBMS8kQi+RNsKsNjLE=";
+
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
-  buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    DiskArbitration
+    Foundation
+  ];
+
   passthru.tests = {
     meilisearch = nixosTests.meilisearch;
   };
@@ -33,6 +42,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = "https://docs.meilisearch.com/";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
