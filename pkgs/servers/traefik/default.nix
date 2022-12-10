@@ -12,9 +12,10 @@ buildGoModule rec {
 
   patches = [
     ./2.6.3-CVE-2022-39271.patch
+    ./2.6.3-CVE-2022-41717.patch
   ];
 
-  vendorSha256 = "sha256-6JFCd1DtJfCG3b4LpuvOyK77YhZz9qyv6OotpXOPB1Q=";
+  vendorSha256 = "sha256-dKN6hYotSzuD0LUnXYEVk6n7tGlCrbLPEee/QopMt8M=";
 
   subPackages = [ "cmd/traefik" ];
 
