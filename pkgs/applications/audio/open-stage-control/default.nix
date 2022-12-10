@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3 }:
+{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, xvfb-run }:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
@@ -32,6 +32,8 @@ buildNpmPackage rec {
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
+
+  checkInputs = [ xvfb-run ];
 
   # Override installPhase so we can copy the only folders that matter (app and node_modules)
   installPhase = ''
