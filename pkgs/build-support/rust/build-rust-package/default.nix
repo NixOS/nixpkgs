@@ -43,7 +43,6 @@
 , checkFeatures ? buildFeatures
 , useNextest ? false
 , depsExtraArgs ? {}
-, cargoPurityFlag ? "--frozen"
 
 # You must use "--offline" instead of "--frozen" if `Cargo.lock` is
 # valid-but-outdated, for example when adding a `[patch]` stanza to
