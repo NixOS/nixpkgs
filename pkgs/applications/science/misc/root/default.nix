@@ -216,12 +216,13 @@ stdenv.mkDerivation rec {
         --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
 
-    # Make ldd and sed available to the ROOT executable
-    wrapProgram "$out/bin/root" --prefix PATH : "${lib.makeBinPath [
-      gnused # sed
-      stdenv.cc # c++ ld etc.
-      stdenv.cc.libc # ldd
-    ]}"
+    # Make ldd and sed available to the ROOT executable by prefixing PATH.
+    wrapProgram "$out/bin/root" \
+      --prefix PATH : "${lib.makeBinPath [
+        gnused # sed
+        stdenv.cc # c++ ld etc.
+        stdenv.cc.libc # ldd
+      ]}"
 
     # Patch thisroot.{sh,csh,fish}
 
