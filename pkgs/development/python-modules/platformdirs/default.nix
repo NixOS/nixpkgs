@@ -2,16 +2,16 @@
 , appdirs
 , buildPythonPackage
 , fetchFromGitHub
+, hatch-vcs
+, hatchling
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, hatchling
-, hatch-vcs
 }:
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "2.5.3";
+  version = "2.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OAvhbgmwGhElszUPksXkOgB5Dp/Wcf4s8807CcT7eyM=";
+    hash = "sha256-H+pcIv9ABwQioe6U24JNo6OyqoQ367lmAm+SQMUM4Kk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
