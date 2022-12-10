@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , click
 , oauthlib
 , requests
@@ -14,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vAxN0ILwM8tteXjKyspSYWmO/jpMcPUvmHYsONuSXOA=";
+    hash = "sha256-vAxN0ILwM8tteXjKyspSYWmO/jpMcPUvmHYsONuSXOA=";
   };
 
   checkInputs = [
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/databricks/databricks-cli";
     description = "A command line interface for Databricks";
+    changelog = "https://github.com/databricks/databricks-cli/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
   };
