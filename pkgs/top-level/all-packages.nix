@@ -37724,6 +37724,8 @@ with pkgs;
 
   zxing-cpp = callPackage ../development/libraries/zxing-cpp { };
 
+  nyan = callPackage ../development/libraries/nyan { };
+
   bullet = callPackage ../development/libraries/bullet {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
