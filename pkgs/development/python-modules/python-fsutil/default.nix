@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with file-system utilities";
     homepage = "https://github.com/fabiocaccamo/python-fsutil";
+    changelog = "https://github.com/fabiocaccamo/python-fsutil/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
