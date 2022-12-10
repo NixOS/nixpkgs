@@ -27739,6 +27739,8 @@ with pkgs;
 
   avocode = callPackage ../applications/graphics/avocode {};
 
+  ax25-tools = callPackage ../applications/radio/ax25-tools {};
+
   azpainter = callPackage ../applications/graphics/azpainter { };
 
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
