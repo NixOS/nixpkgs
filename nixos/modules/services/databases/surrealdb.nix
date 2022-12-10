@@ -37,6 +37,20 @@ in {
         default = 8000;
         example = 8000;
       };
+
+      userNamePath = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to read the username from.
+        '';
+      };
+
+      passwordPath = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to read the password from.
+        '';
+      };
     };
   };
 
@@ -50,8 +64,19 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      script = ''
+        ${pkgs.surrealdb}/bin/surreal start \
+          --user $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_USERNAME) \
+          --pass $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_PASSWORD) \
+          --bind ${cfg.host}:${toString cfg.port} \
+          -- ${cfg.dbPath}
+      '';
       serviceConfig = {
-        ExecStart = "${pkgs.surrealdb}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${optionalString (cfg.dbPath != null) "-- ${cfg.dbPath}"}";
+        LoadCredential = [
+          "SURREALDB_USERNAME:${cfg.userNamePath}"
+          "SURREALDB_PASSWORD:${cfg.passwordPath}"
+        ];
+
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";
