@@ -1516,6 +1516,8 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  camel-converter = callPackage ../development/python-modules/camel-converter { };
+
   can = callPackage ../development/python-modules/can { };
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
