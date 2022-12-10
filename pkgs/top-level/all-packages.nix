@@ -1449,6 +1449,8 @@ with pkgs;
 
   smbscan = callPackage ../tools/security/smbscan { };
 
+  spdx-to-osv  = callPackage ../tools/security/spdx-to-osv { };
+
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch {};
