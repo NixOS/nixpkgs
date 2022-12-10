@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , callPackage
-, fetchFromGitHub
+, fetchurl
 , fetchpatch
 , makeWrapper
 , cmake
@@ -71,17 +71,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.08";
+  version = "6.26.10";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
-  src = fetchFromGitHub {
-    owner = "root-project";
-    repo = "root";
-    rev = "v${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-cNd1GvEbO/a+WdDe8EHYGmdlw3TrOT2fWaSk+s7fw7U=";
+  src = fetchurl {
+    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
+    hash = "sha256-jla+w5cQQBeqVPnrVU3noaE0R0/gs7sPQ6cPxPq9Yl8=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
