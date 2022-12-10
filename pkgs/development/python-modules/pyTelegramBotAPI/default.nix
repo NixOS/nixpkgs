@@ -3,6 +3,7 @@
 , fetchPypi
 , aiohttp
 , requests
+, fastapi
 , pythonOlder
 }:
 
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     requests
+    fastapi
   ];
 
   pythonImportsCheck = [
