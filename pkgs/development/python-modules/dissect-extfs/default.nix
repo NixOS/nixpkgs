@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-extfs";
-  version = "3.1";
+  version = "3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.extfs";
     rev = version;
-    hash = "sha256-i52hlTh0uJJcprA6oVlFQ3v6BpOtSnQAQ0p6BHt56Ac=";
+    hash = "sha256-KGqmguKwCSQw2USKuWFMQCz+D8XMv5W12eJfUxgz324=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

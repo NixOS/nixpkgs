@@ -1514,6 +1514,8 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  camel-converter = callPackage ../development/python-modules/camel-converter { };
+
   can = callPackage ../development/python-modules/can { };
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
@@ -2416,6 +2418,8 @@ self: super: with self; {
   dissect-sql = callPackage ../development/python-modules/dissect-sql { };
 
   dissect-target = callPackage ../development/python-modules/dissect-target { };
+
+  dissect-thumbcache = callPackage ../development/python-modules/dissect-thumbcache { };
 
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
