@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchurl
-, cmake
+, which
+, cctools
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jrc84lkc7xb53rb8dbswxrxj21ndj1iiclmk3r9wkp6xm55w6j8";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ which cctools ];
 
   patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
