@@ -95,6 +95,9 @@ let
 in
 
 {
+  # tests for hooks in `stdenv.defaultNativeBuildInputs`
+  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; });
+
   test-env-attrset = testEnvAttrset { name = "test-env-attrset"; stdenv' = bootStdenv; };
 
   test-prepend-append-to-var = testPrependAndAppendToVar {
@@ -114,6 +117,9 @@ in
   };
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
+
+    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; });
+
     test-cc-wrapper-substitutions = ccWrapperSubstitutionsTest {
       name = "test-cc-wrapper-substitutions-structuredAttrsByDefault";
       stdenv' = bootStdenvStructuredAttrsByDefault;
