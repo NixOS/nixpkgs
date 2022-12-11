@@ -263,8 +263,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     # Make binary paths absolute
     substituteInPlace $out/lib/config.sh \
-      --replace 'ldd' '${glibc}/bin/ldd' \
-      --replace '/sbin/ldconfig' '${glibc}/bin/ldconfig'
+      --replace 'ldd' '${glibc.bin}/bin/ldd' \
+      --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
   '' + ''
     # Remove uneeded copy for run-helper template
     substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
