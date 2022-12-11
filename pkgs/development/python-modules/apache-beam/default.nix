@@ -62,6 +62,13 @@ buildPythonPackage rec {
       hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
       stripLen = 2;
     })
+    (fetchpatch {
+      # https://github.com/apache/beam/pull/24573
+      name = "relax-httplib2-version.patch";
+      url = "https://github.com/apache/beam/commit/4045503575ae5ccef3de8d7b868c54e37fef658b.patch";
+      hash = "sha256-YqT+sHaa1R9vLQnEQN2K0lYoCdnGoPY9qduGBpXPaek=";
+      stripLen = 2;
+    })
   ];
 
   pythonRelaxDeps = [
