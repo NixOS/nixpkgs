@@ -103,11 +103,11 @@
     "vendorHash": "sha256-yDkox74g0N8iniWHSNk6KjfM0HJa8H2HUxm6RxrdhkE="
   },
   "aviatrix": {
-    "hash": "sha256-1zHaSdDcGynLhgLMDRbRgRzt0IvQI25TDZrYzZwwQ34=",
+    "hash": "sha256-2KJVXIThZ3g1++y5fhKLQjeXZ9r685B8stmWfs2MAs0=",
     "homepage": "https://registry.terraform.io/providers/AviatrixSystems/aviatrix",
     "owner": "AviatrixSystems",
     "repo": "terraform-provider-aviatrix",
-    "rev": "v2.24.1",
+    "rev": "v3.0.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -130,11 +130,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-2RjraGiMtITdBJ47crqlqFR51WbKpk4U6fkGHCTNXuo=",
+    "hash": "sha256-GNp4Am/ooMm//LGMMxJlMxQIh4rHmQdnpVEYZn3Hjb8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.34.0",
+    "rev": "v3.35.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -424,11 +424,11 @@
     "vendorHash": "sha256-cStVmI58V46I3MYYYrbCY3llnOx2pyuM2Ku+rhe5DVQ="
   },
   "github": {
-    "hash": "sha256-1C/GG3VhQfnU71rucYefpRsfrS//lpPXHqT/QAHM2z0=",
+    "hash": "sha256-o7Sge0rCfP6Yueq+DP7siBsEinawgGe+nEu0/Olu8uQ=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v5.11.0",
+    "rev": "v5.12.0",
     "spdx": "MIT",
     "vendorHash": null
   },
@@ -507,11 +507,11 @@
     "vendorHash": null
   },
   "heroku": {
-    "hash": "sha256-GmrzvE1Wc1dQSlEL4mLYHIkAVxKwElx2fCWkrnZra18=",
+    "hash": "sha256-6SNBi4hSGD6XhUSmIOjmPVzo2HnvRBGFW1jMHJLDhuI=",
     "homepage": "https://registry.terraform.io/providers/heroku/heroku",
     "owner": "heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.1.8",
+    "rev": "v5.1.9",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -734,13 +734,13 @@
     "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
   },
   "minio": {
-    "hash": "sha256-mtguRBSa+XrpUqEXb9voDHraae9fOaayX1nQpaeAlo4=",
+    "hash": "sha256-QMaK/c4Rv7rChiVVGY8JizqTfLY98HwONyu5qU/LPGQ=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v1.9.1",
+    "rev": "v1.10.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-VxISNcWEnBAa+8WsmqxcT+DPF74X8rLlvdSNJtx0++I="
+    "vendorHash": "sha256-w/1eNrXK4Zpt80J1FidnhMAD0lhSskHMt/hrdrgfSYw="
   },
   "mongodbatlas": {
     "hash": "sha256-QMwsVD1RZwL9DPF0gnio4quqUa1b4G0SK73yd6BYnG4=",

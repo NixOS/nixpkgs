@@ -3302,6 +3302,8 @@ with pkgs;
 
   plausible = callPackage ../servers/web-apps/plausible { };
 
+  pam-reattach = callPackage ../os-specific/darwin/pam-reattach {};
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   skhd = callPackage ../os-specific/darwin/skhd {
@@ -15372,9 +15374,7 @@ with pkgs;
   };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
-  cargo-tally = callPackage ../development/tools/rust/cargo-tally {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
-  };
+  cargo-tally = callPackage ../development/tools/rust/cargo-tally { };
   cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
@@ -30640,7 +30640,7 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
-  nbstripout = callPackage ../applications/version-management/nbstripout { python = python3; };
+  nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
@@ -32804,7 +32804,7 @@ with pkgs;
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
     CoreServices =  darwin.apple_sdk.frameworks.CoreServices;
-    lua = luajit;
+    lua = if (stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isRiscV64) then lua5_1 else luajit;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
@@ -34818,8 +34818,7 @@ with pkgs;
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
 
-  spring = callPackage ../games/spring
-    { stdenv = gcc10StdenvCompat; asciidoc = asciidoc-full; };
+  spring = callPackage ../games/spring { asciidoc = asciidoc-full; };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 

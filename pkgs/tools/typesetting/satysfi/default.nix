@@ -17,6 +17,7 @@ let
       rev = "v0.3.7+satysfi";
       sha256 = "0y8s0ij1vp1s4h5y1hn3ns76fzki2ba5ysqdib33akdav9krbj8p";
     };
+    propagatedBuildInputs = o.propagatedBuildInputs ++ [ ocamlPackages.result ];
   });
   yojson-with-position = ocamlPackages.buildDunePackage {
     pname = "yojson-with-position";

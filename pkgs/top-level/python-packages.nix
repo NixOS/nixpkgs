@@ -1512,9 +1512,13 @@ self: super: with self; {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  calver = callPackage ../development/python-modules/calver { };
+
   callee = callPackage ../development/python-modules/callee { };
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
+
+  camel-converter = callPackage ../development/python-modules/camel-converter { };
 
   can = callPackage ../development/python-modules/can { };
 
@@ -2422,6 +2426,8 @@ self: super: with self; {
   dissect-sql = callPackage ../development/python-modules/dissect-sql { };
 
   dissect-target = callPackage ../development/python-modules/dissect-target { };
+
+  dissect-thumbcache = callPackage ../development/python-modules/dissect-thumbcache { };
 
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
@@ -6886,8 +6892,6 @@ self: super: with self; {
   overpy = callPackage ../development/python-modules/overpy { };
 
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
-
-  parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 

@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control SwitchBee smart home device";
     homepage = "https://github.com/jafar-atili/pySwitchbee/";
+    changelog = "https://github.com/jafar-atili/pySwitchbee/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
