@@ -1,4 +1,5 @@
-{ alsa-lib
+{ callPackage
+, alsa-lib
 , alsa-utils
 , autoPatchelfHook
 , fetchurl
@@ -55,10 +56,6 @@ stdenv.mkDerivation {
       runHook preInstall
       mkdir -p $out
       mv * $out
-
-      rm $out/check.sh
-      rm $out/start.sh
-      rm $out/VERSION
 
       ${fixBin "${placeholder "out"}/Bridge/RAATServer"}
       ${fixBin "${placeholder "out"}/Bridge/RoonBridge"}
