@@ -14,6 +14,7 @@
 , libebur128
 , libGLU
 , libid3tag
+, libjack2
 , libkeyfinder
 , libmad
 , libmodplug
@@ -63,6 +64,11 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+  # Can be removed when #157561 is merged
+  portaudio-with-jack = portaudio.overrideAttrs (oldPortaudioAttrs: {
+    buildInputs = oldPortaudioAttrs.buildInputs ++ [ libjack2 ];
+  });
+
   buildInputs = [
     chromaprint
     faad2
@@ -90,7 +96,7 @@ mkDerivation rec {
     mp4v2
     opusfile
     pcre
-    portaudio
+    portaudio-with-jack
     portmidi
     protobuf
     qtbase
