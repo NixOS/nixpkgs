@@ -860,9 +860,9 @@ rec {
   */
   toInt = str:
     let
-      # RegEx: Match any leading whitespace, then any digits, and finally match any trailing
-      # whitespace.
-      strippedInput = match "[[:space:]]*([[:digit:]]+)[[:space:]]*" str;
+      # RegEx: Match any leading whitespace, possibly a '-', one or more digits,
+      # and finally match any trailing whitespace.
+      strippedInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*" str;
 
       # RegEx: Match a leading '0' then one or more digits.
       isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
@@ -911,9 +911,10 @@ rec {
   */
   toIntBase10 = str:
     let
-      # RegEx: Match any leading whitespace, then match any zero padding, capture any remaining
-      # digits after that, and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*0*([[:digit:]]+)[[:space:]]*" str;
+      # RegEx: Match any leading whitespace, then match any zero padding,
+      # capture possibly a '-' followed by one or more digits,
+      # and finally match any trailing whitespace.
+      strippedInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*" str;
 
       # RegEx: Match at least one '0'.
       isZero = match "0+" (head strippedInput) == [];
