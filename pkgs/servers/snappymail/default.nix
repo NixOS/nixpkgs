@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, writeText
-, dataPath ? "/var/lib/snappymail" }:
+{ lib
+, stdenv
+, fetchurl
+, writeText
+, dataPath ? "/var/lib/snappymail"
+}:
+
 stdenv.mkDerivation rec {
   pname = "snappymail";
   version = "2.23.0";
@@ -27,8 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple, modern & fast web-based email client";
-
     homepage = "https://snappymail.eu";
+    changelog = "https://github.com/the-djmaze/snappymail/blob/v${version}/CHANGELOG.md";
     downloadPage = "https://github.com/the-djmaze/snappymail/releases";
     license = licenses.agpl3;
     platforms = platforms.all;
