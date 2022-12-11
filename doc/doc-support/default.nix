@@ -3,8 +3,20 @@ let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
 
-  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
-  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
+  libsets = {
+    asserts = "Assert functions";
+    attrsets = "Attribute-set functions";
+    strings = "String manipulation functions";
+    trivial = "Miscellaneous functions";
+    lists = "List manipulation functions";
+    debug = "Debugging functions";
+    options = "NixOS / nixpkgs option handling";
+    filesystem = "Filesystem functions";
+    sources = "Source filtering functions";
+  };
+
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
+  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs libsets; };
   version = pkgs.lib.version;
 
   epub-xsl = pkgs.writeText "epub.xsl" ''
