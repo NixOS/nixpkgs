@@ -1898,7 +1898,8 @@
       pylitterbot
     ];
     "livisi" = ps: with ps; [
-    ]; # missing inputs: aiolivisi
+      aiolivisi
+    ];
     "llamalab_automate" = ps: with ps; [
     ];
     "local_calendar" = ps: with ps; [
@@ -4396,6 +4397,7 @@
     "lifx"
     "light"
     "litterrobot"
+    "livisi"
     "local_calendar"
     "local_file"
     "local_ip"
