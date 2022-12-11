@@ -18888,6 +18888,7 @@ with pkgs;
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
       amdvlk
+      intel-media-driver
       mesa
       vaapiIntel
       libvdpau-va-gl
