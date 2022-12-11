@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, makeWrapper
 , pkg-config
 , docutils
 , libuuid
@@ -18,6 +19,9 @@
 , nixosTests
 , fuse3
 , fuseSupport ? false
+, util-linux
+, coreutils
+, gawk
 }:
 
 stdenv.mkDerivation {
@@ -43,7 +47,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
-    zstd lz4 python3Packages.pytest udev valgrind
+    zstd lz4 python3Packages.pytest udev valgrind makeWrapper
   ] ++ lib.optional fuseSupport fuse3;
 
   doCheck = false; # needs bcachefs module loaded on builder
@@ -52,6 +56,11 @@ stdenv.mkDerivation {
 
   preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/mount.bcachefs.sh \
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ util-linux coreutils gawk ]}"
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
