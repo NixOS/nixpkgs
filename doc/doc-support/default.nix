@@ -7,12 +7,14 @@ let
     asserts = "Assert functions";
     attrsets = "Attribute-set functions";
     strings = "String manipulation functions";
+    versions = "Version string functions";
     trivial = "Miscellaneous functions";
     lists = "List manipulation functions";
     debug = "Debugging functions";
     options = "NixOS / nixpkgs option handling";
     filesystem = "Filesystem functions";
     sources = "Source filtering functions";
+    cli = "Command-line serialization functions";
   };
 
   locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
