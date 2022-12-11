@@ -54,7 +54,7 @@ let
 
   createConfig = pkgs.writeShellScriptBin "create-resilio-config" ''
     ${pkgs.jq}/bin/jq \
-      '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
+      '.shared_folders |= if . == null then empty else map(.secret = $ARGS.named[.dir]) end' \
       ${
         lib.concatMapStringsSep " \\\n  "
         (entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"'')
