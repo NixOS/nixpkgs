@@ -11060,6 +11060,18 @@ final: prev:
     meta.homepage = "https://github.com/phanviet/vim-monokai-pro/";
   };
 
+  vim-monokai-tasty = buildVimPluginFrom2Nix {
+    pname = "vim-monokai-tasty";
+    version = "2022-11-25";
+    src = fetchFromGitHub {
+      owner = "patstockwell";
+      repo = "vim-monokai-tasty";
+      rev = "55dcb855be754178967b860b0fa63621c319ce0a";
+      sha256 = "0yll7qm014ydfa2svx3zaskv8g65scw6mw8m5fsjsi9g2v3369g8";
+    };
+    meta.homepage = "https://github.com/patstockwell/vim-monokai-tasty/";
+  };
+
   vim-move = buildVimPluginFrom2Nix {
     pname = "vim-move";
     version = "2022-07-01";
