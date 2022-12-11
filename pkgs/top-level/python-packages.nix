@@ -546,6 +546,8 @@ self: super: with self; {
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
+  aranet4 = callPackage ../development/python-modules/aranet4 { };
+
   arc4 = callPackage ../development/python-modules/arc4 { };
 
   arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
