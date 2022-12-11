@@ -96,7 +96,7 @@ in
 
 {
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
-  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; });
+  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; });
 
   test-env-attrset = testEnvAttrset { name = "test-env-attrset"; stdenv' = bootStdenv; };
 
@@ -118,7 +118,7 @@ in
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
 
-    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; });
+    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; });
 
     test-cc-wrapper-substitutions = ccWrapperSubstitutionsTest {
       name = "test-cc-wrapper-substitutions-structuredAttrsByDefault";
