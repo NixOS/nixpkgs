@@ -71,11 +71,11 @@ let
         owner = "googlefonts";
         repo = "noto-cjk";
         inherit rev sha256;
-        sparseCheckout = [ "${typeface}/Variable/OTC" ];
+        sparseCheckout = [ "${typeface}/OTC" ];
       };
 
       installPhase = ''
-        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/Variable/OTC/*.otf.ttc
+        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/OTC/*.ttc
       '';
 
       passthru.tests.noto-fonts = nixosTests.noto-fonts;
@@ -117,14 +117,14 @@ in
     typeface = "Sans";
     version = "2.004";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-PWpcTBnBRK87ZuRI/PsGp2UMQgCCyfkLHwvB1mOl5K0=";
+    sha256 = "sha256-i2edZ7Ge0Z3z7KRiozOUhwqU9OoZbhDIDq/5ZN1nmYQ=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
     version = "2.000";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-1w66Ge7DZjbONGhxSz69uFhfsjMsDiDkrGl6NsoB7dY=";
+    sha256 = "sha256-ajqVn+HUfqvc30bbWYnzkj0z/VD3jX+U/Rxepad6vKI=";
   };
 
   noto-fonts-emoji = let
