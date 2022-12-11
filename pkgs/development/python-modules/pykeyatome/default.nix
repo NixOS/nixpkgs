@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "jugla";
     repo = "pyKeyAtome";
     rev = "refs/tags/V${version}";
-    sha256 = "sha256-DUnER/Vom5Yc3syx4kPP1WbI7FpC+XGK9X4c1RrJJFk=";
+    hash = "sha256-DUnER/Vom5Yc3syx4kPP1WbI7FpC+XGK9X4c1RrJJFk=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to get data from Atome Key";
     homepage = "https://github.com/jugla/pyKeyAtome";
+    changelog = "https://github.com/jugla/pyKeyAtome/releases/tag/V${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
