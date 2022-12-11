@@ -1,22 +1,29 @@
 { lib
-, paho-mqtt
-, buildPythonPackage
-, fetchPypi
 , aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, paho-mqtt
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyeconet";
-  version = "0.1.15";
-  format = "setuptools";
+  version = "0.1.16";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zxD2sjKWB/bmxwpVFgkKTngMhr4bVuW+qkSt+pbxqPY=";
+  src = fetchFromGitHub {
+    owner = "w1ll1am23";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nwbihYxDs7v3g0fy9W3qOC7Sa/Y+BF+qNgqnNF7puHI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     paho-mqtt
