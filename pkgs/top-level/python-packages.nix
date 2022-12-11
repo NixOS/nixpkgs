@@ -8997,6 +8997,8 @@ self: super: with self; {
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 
+  python-decouple = callPackage ../development/python-modules/python-decouple { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
