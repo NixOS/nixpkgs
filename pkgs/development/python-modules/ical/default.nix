@@ -42,6 +42,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # https://github.com/allenporter/ical/issues/136
+  disabledTests = [ "test_all_zoneinfo" ];
+
   pythonImportsCheck = [
     "ical"
   ];
