@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "insync";
-  version = "3.3.5.40925";
+  version = "3.8.3.50473";
 
   src = fetchurl {
-    url = "http://s.insynchq.com/builds/${pname}_${version}-focal_amd64.deb";
-    sha256 = "sha256-lYlG/8d7teX98F5eDxm4EdBfFs7Sz3Td4kKLC6KZqnQ=";
+    url = "https://cdn.insynchq.com/builds/linux/${pname}_${version}-kinetic_amd64.deb";
+    sha256 = "9f78abea40ca899a2bd1e7439abc93ff3c7b7e791d48b45ea6fb1e17f16f5cfa";
   };
 
   postPatch = ''
@@ -78,7 +78,5 @@ stdenv.mkDerivation rec {
 
      There is a 15-day free trial, and it is a paid application after that.
     '';
-    # download URL removed
-    broken = true;
   };
 }
