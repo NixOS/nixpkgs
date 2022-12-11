@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, python3
+, python39
 , radicale3
 }:
 
 let
-  python = python3.override {
+  python = python39.override {
     packageOverrides = self: super: {
       flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
         version = "0.15.1";
