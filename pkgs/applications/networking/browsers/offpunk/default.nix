@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromSourcehut,
   less,
   lib,
   makeWrapper,
@@ -33,9 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "offpunk";
   version = "1.7.1";
 
-  src = fetchFromGitea {
-    domain = "notabug.org";
-    owner = "ploum";
+  src = fetchFromSourcehut {
+    owner = "~lioploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
     sha256 = "1y1xb1ccsprl0xkn4hlh09j8y5xpdn6r860xlrmk12wfk2xrfbfy";
@@ -60,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";
-    homepage = "https://notabug.org/ploum/offpunk";
+    homepage = finalAttrs.src.meta.homepage;
     maintainers = with maintainers; [ DamienCassou ];
     platforms = platforms.linux;
     license = licenses.bsd2;
