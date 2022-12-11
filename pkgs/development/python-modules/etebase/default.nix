@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, buildPythonPackage
+, python39
 , rustPlatform
 , pkg-config
 , rustfmt
@@ -11,7 +11,7 @@
 , msgpack
 }:
 
-buildPythonPackage rec {
+python39.pkgs.buildPythonPackage rec {
   pname = "etebase";
   version = "0.31.6";
 
