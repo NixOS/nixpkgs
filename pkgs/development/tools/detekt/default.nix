@@ -1,23 +1,30 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchFromGitHub, unzip, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
   pname = "detekt";
   version = "1.22.0";
 
-  src = fetchurl {
-    url = "https://github.com/detekt/detekt/releases/download/v${version}/detekt-cli-${version}.zip";
-    sha256 = "0gj16k9hf20iwk91lf058b0yqd6bdqc702h5brjfp4wlp3ichfvw";
+  src = fetchFromGitHub {
+    owner = "detekt";
+    repo = "detekt";
+    rev = "v${version}";
+    sha256 = "08jbnn3q3c7vp6jmj3gz67d5v9jlgd9f3dr706cbk8q2v9719gqh";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
-  dontUnpack = true;
+  preBuild = ''
+    export JAVA_HOME=${jre_headless}
+  '';
 
   installPhase = ''
+    pwd
+    ./gradlew :detekt-cli:distZip
     mkdir $out
-    unzip $src -d $out
-    mv $out/detekt-cli-$version/* $out
-    rm -rf $out/detekt-cli-$version
+    unzip detekt-cli/build/distributions/detekt-cli-1.22.0.zip -d $out
+    mv $out/detekt-cli-${version}/* $out
+    rm -rf $out/detekt-cli-${version}
+    rm -rf *
   '';
 
   postFixup = ''
@@ -29,6 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://detekt.dev/";
     license = licenses.asl20;
     platforms = jre_headless.meta.platforms;
+    changelog = "https://github.com/detekt/detekt/releases";
     maintainers = with maintainers; [ SubhrajyotiSen ];
   };
 }
