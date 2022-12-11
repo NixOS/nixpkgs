@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.1.1";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "graphene";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-04ocm/Q/CDi5dRNhReuvr5nAiowMZUJrZol/wJOjG50=";
+    sha256 = "sha256-2o/IR6XjnS57D4ZjADrcI18acfJ+Q0zdnXeb5ZeCpM4=";
   };
 
   propagatedBuildInputs = [
