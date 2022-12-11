@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://www.etebase.com/";
     description = "A Python client library for Etebase";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ _3699n ];
+    maintainers = with maintainers; [ _3699n thyol ];
   };
 }
