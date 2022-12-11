@@ -197,6 +197,36 @@
       </listitem>
       <listitem>
         <para>
+          CoreDNS can now be built with external plugins by overriding
+          <literal>externalPlugins</literal> and
+          <literal>vendorSha256</literal> arguments like this:
+        </para>
+      </listitem>
+    </itemizedlist>
+    <programlisting>
+services.coredns = {
+  enable = true;
+  package = pkgs.coredns.override {
+    externalPlugins = [&quot;fanout&quot;];
+    vendorSha256 = &quot;&lt;sha256 hash&gt;&quot;;
+  };
+};
+</programlisting>
+    <para>
+      To get the necessary sha256 hash, set
+      <literal>vendorSha256 = lib.fakeHash;</literal>. The build will
+      fail and produce your sha256 hash in the error message. You should
+      copy that hash and use it for your
+      <literal>vendorSha256</literal>. Please note! If you use this
+      feature, you will not receive updates to CoreDNS when you upgrade
+      your system. To update CoreDNS, you’ll have to update
+      <literal>vendorSha256</literal>; for that, set
+      <literal>vendorSha256 = lib.fakeHash;</literal> again and follow
+      the steps above.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
           To reduce closure size in
           <literal>nixos/modules/profiles/minimal.nix</literal> profile
           disabled installation documentations and manuals. Also
