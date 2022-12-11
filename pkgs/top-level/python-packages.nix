@@ -11213,6 +11213,8 @@ self: super: with self; {
 
   todoist = callPackage ../development/python-modules/todoist { };
 
+  todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
+
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
   token-bucket = callPackage ../development/python-modules/token-bucket { };
