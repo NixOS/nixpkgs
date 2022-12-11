@@ -10375,6 +10375,8 @@ self: super: with self; {
 
   scrapy-splash = callPackage ../development/python-modules/scrapy-splash { };
 
+  screed = callPackage ../development/python-modules/screed { };
+
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
   screenlogicpy = callPackage ../development/python-modules/screenlogicpy { };
