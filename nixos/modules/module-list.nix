@@ -997,6 +997,7 @@
   ./services/video/rtsp-simple-server.nix
   ./services/networking/uptermd.nix
   ./services/networking/v2ray.nix
+  ./services/networking/v2raya.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
