@@ -1,8 +1,8 @@
 { lib, stdenv, makeWrapper, fetchurl, which, pkg-config
 , libjpeg
 , ocamlPackages
-, awscli2, curl, ffmpeg, youtube-dl
-, runtimePackages ? [ awscli2 curl ffmpeg youtube-dl ]
+, awscli2, curl, ffmpeg
+, runtimePackages ? [ awscli2 curl ffmpeg ]
 }:
 
 let
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Swiss-army knife for multimedia streaming";
     homepage = "https://www.liquidsoap.info/";
-    maintainers = with maintainers; [ dandellion ehmry ];
+    maintainers = with maintainers; [ dandellion ehmry lassulus ];
     license = licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [];
   };
