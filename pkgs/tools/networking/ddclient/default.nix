@@ -2,13 +2,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "ddclient";
     repo = "ddclient";
     rev = "v${version}";
-    sha256 = "0hf377g4j9r9sac75xp17nk2h58mazswz4vkg4g2gl2yyhvzq91w";
+    sha256 = "wWUkjXwVNZRJR1rXPn3IkDRi9is9vsRuNC/zq8RpB1E=";
   };
 
   # perl packages by default get devdoc which isn't present
@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
   # Use iproute2 instead of ifconfig
   preConfigure = ''
     touch Makefile.PL
-    substituteInPlace ddclient \
+    substituteInPlace ddclient.in \
       --replace 'in the output of ifconfig' 'in the output of ip addr show' \
       --replace 'ifconfig -a' '${iproute2}/sbin/ip addr show' \
       --replace 'ifconfig $arg' '${iproute2}/sbin/ip addr show $arg' \
@@ -29,8 +29,8 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 ddclient $out/bin/ddclient
-    install -Dm644 -t $out/share/doc/ddclient COP* ChangeLog README.* RELEASENOTE
+    install -Dm755 ddclient.in $out/bin/ddclient
+    install -Dm644 -t $out/share/doc/ddclient COP* ChangeLog.md README.*
 
     runHook postInstall
   '';
