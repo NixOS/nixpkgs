@@ -115,6 +115,5 @@ crystal.buildCrystalPackage rec {
     homepage = "https://invidious.io/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ infinisil sbruder ];
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
