@@ -23,6 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to convert a Python dictionary into an XML string";
     homepage = "https://github.com/delfick/python-dict2xml";
+    changelog = "https://github.com/delfick/python-dict2xml/releases/tag/release-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ johnazoidberg ];
   };
