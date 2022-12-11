@@ -1,7 +1,7 @@
 { lib
 , bleak
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "aranet4";
-  version = "2.1.2";
+  version = "2.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nuxj/rNuwAy1DXaJs0Qrl9GffiZqFkWxT/0TYRxg92s=";
+  src = fetchFromGitHub {
+    owner = "Anrijs";
+    repo = "Aranet4-Python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5q4eOC9iuN8pUmDsiQ7OwEXkxi4KdL+bhGVjlQlTBAg=";
   };
 
   propagatedBuildInputs = [
@@ -24,8 +26,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  # https://github.com/Anrijs/Aranet4-Python/issues/31
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "aranet4"
