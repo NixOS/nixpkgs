@@ -62,8 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp pdf_viewer/keys_user.config sioyek.app/Contents/MacOS/
     cp tutorial.pdf sioyek.app/Contents/MacOS/
 
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r sioyek.app $out/Applications
+    ln -s $out/Applications/sioyek.app/Contents/MacOS/sioyek $out/bin/sioyek
   '' else ''
     install -Dm644 tutorial.pdf $out/share/tutorial.pdf
     cp -r pdf_viewer/shaders $out/share/
