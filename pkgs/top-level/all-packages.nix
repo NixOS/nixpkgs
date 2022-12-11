@@ -801,10 +801,20 @@ with pkgs;
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
 
-  fetchpatch = callPackage ../build-support/fetchpatch { }
-    // {
-      tests = pkgs.tests.fetchpatch;
-    };
+  fetchpatch = callPackage ../build-support/fetchpatch {
+    # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
+    patchutils = buildPackages.patchutils_0_3_3;
+  } // {
+    tests = pkgs.tests.fetchpatch;
+    version = 1;
+  };
+
+  fetchpatch2 = callPackage ../build-support/fetchpatch {
+    patchutils = buildPackages.patchutils_0_4_2;
+  } // {
+    tests = pkgs.tests.fetchpatch2;
+    version = 2;
+  };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
@@ -2906,6 +2916,8 @@ with pkgs;
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
   plausible = callPackage ../servers/web-apps/plausible { };
+
+  pam-reattach = callPackage ../os-specific/darwin/pam-reattach {};
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
