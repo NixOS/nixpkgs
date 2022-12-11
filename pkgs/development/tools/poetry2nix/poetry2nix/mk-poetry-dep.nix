@@ -165,6 +165,7 @@ pythonPackages.callPackage
           (
             builtins.fetchGit ({
               inherit (source) url;
+              submodules = true;
               rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or (if sourceSpec ? tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             } // (

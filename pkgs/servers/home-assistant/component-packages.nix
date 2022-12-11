@@ -2889,8 +2889,9 @@
       pillow
       pyserial
       pyudev
+      ruuvitag-ble
       sqlalchemy
-    ]; # missing inputs: ruuvitag-ble
+    ];
     "sabnzbd" = ps: with ps; [
       pysabnzbd
     ];
@@ -4568,6 +4569,7 @@
     "rss_feed_template"
     "rtsp_to_webrtc"
     "ruckus_unleashed"
+    "ruuvitag_ble"
     "sabnzbd"
     "safe_mode"
     "samsungtv"
