@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "graphene";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2o/IR6XjnS57D4ZjADrcI18acfJ+Q0zdnXeb5ZeCpM4=";
+    hash = "sha256-2o/IR6XjnS57D4ZjADrcI18acfJ+Q0zdnXeb5ZeCpM4=";
   };
 
   propagatedBuildInputs = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL Framework for Python";
     homepage = "https://github.com/graphql-python/graphene";
+    changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
