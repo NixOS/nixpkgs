@@ -70,6 +70,7 @@ let
       mauiman = callPackage ./mauiman.nix { };
 
       # applications
+      bonsai = callPackage ./bonsai.nix { };
       booth = callPackage ./booth.nix { };
       buho = callPackage ./buho.nix { };
       clip = callPackage ./clip.nix { };
