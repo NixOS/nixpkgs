@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "offpunk";
-  version = "1.7.1";
+  version = "1.8";
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    sha256 = "1y1xb1ccsprl0xkn4hlh09j8y5xpdn6r860xlrmk12wfk2xrfbfy";
+    sha256 = "0xv7b3qkwyq55sz7c0v0pknrpikhzyqgr5y4y30cwa7jd8sn423f";
   };
 
   nativeBuildInputs = [ makeWrapper ];
