@@ -74,6 +74,7 @@ let
       buho = callPackage ./buho.nix { };
       clip = callPackage ./clip.nix { };
       communicator = callPackage ./communicator.nix { };
+      fiery = callPackage ./fiery.nix { };
       index = callPackage ./index.nix { };
       nota = callPackage ./nota.nix { };
       pix = callPackage ./pix.nix { };
