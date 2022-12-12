@@ -10679,6 +10679,8 @@ self: super: with self; {
 
   sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
 
+  sphinx-markdown-tables = callPackage ../development/python-modules/sphinx-markdown-tables { };
+
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
