@@ -214,7 +214,10 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
-  patches = [
+  patches = optionals (version == "3.10.9") [
+    # https://github.com/python/cpython/issues/100160
+    ./3.10/asyncio-deprecation.patch
+  ] ++ [
     # Disable the use of ldconfig in ctypes.util.find_library (since
     # ldconfig doesn't work on NixOS), and don't use
     # ctypes.util.find_library during the loading of the uuid module
