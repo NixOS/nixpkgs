@@ -2938,6 +2938,8 @@ with pkgs;
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
+  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
+
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
   dcap = callPackage ../tools/networking/dcap { };
