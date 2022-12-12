@@ -2938,6 +2938,8 @@ with pkgs;
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
+  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
+
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
   dcap = callPackage ../tools/networking/dcap { };
@@ -30080,6 +30082,8 @@ with pkgs;
   kile-wl = callPackage ../applications/misc/kile-wl { };
 
   kiln = callPackage ../applications/misc/kiln { };
+
+  kubernetes-code-generator = callPackage ../development/tools/kubernetes-code-generator {};
 
   kubernetes-controller-tools = callPackage ../development/tools/kubernetes-controller-tools { };
 
