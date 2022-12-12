@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, khard, testers }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.18.0";
@@ -32,6 +32,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [ "khard" ];
+
+  passthru.tests.version = testers.testVersion { package = khard; };
 
   meta = {
     homepage = "https://github.com/scheibler/khard";
