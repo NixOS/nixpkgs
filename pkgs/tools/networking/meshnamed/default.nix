@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Doomsday DNS";
+    description = "A universal naming system for all IPv6-based mesh networks, including CJDNS and Yggdrasil";
     homepage = "https://github.com/zhoreeq/meshname";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ DomesticMoth ];
