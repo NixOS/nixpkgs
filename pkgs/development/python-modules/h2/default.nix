@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hypothesis
   ];
 
+  disabledTests = [
+    # timing sensitive
+    "test_changing_max_frame_size"
+  ];
+
   pythonImportsCheck = [
     "h2.connection"
     "h2.config"
