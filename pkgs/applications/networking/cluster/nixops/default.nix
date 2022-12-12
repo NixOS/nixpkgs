@@ -69,6 +69,14 @@ let
           };
         })
 
+        (self: super: {
+          certifi = super.certifi.overridePythonAttrs (old: {
+            meta = old.meta // {
+              knownVulnerabilities = [ "CVE-2022-23491" ];
+            };
+          });
+        })
+
       ];
     }
   ).python;

@@ -238,12 +238,12 @@
   };
   diff = buildGrammar {
     language = "diff";
-    version = "330eb64";
+    version = "1d63cd4";
     source = fetchFromGitHub {
       owner = "the-mikedavis";
       repo = "tree-sitter-diff";
-      rev = "330eb648bbc257b4e91621e82a85372be7dde27a";
-      hash = "sha256-WK6pEUvIu6Xwsy5RuuUyNWLuSKkNkWh5R0hmyksIu8k=";
+      rev = "1d63cd49529ef3153393cf8f620718b274bba715";
+      hash = "sha256-nAU3IFUsxcqgx/2cFoqNJXtJ7v7KRHVrfKYIVQEJCEk=";
     };
     meta.homepage = "https://github.com/the-mikedavis/tree-sitter-diff";
   };
@@ -1016,12 +1016,12 @@
   };
   php = buildGrammar {
     language = "php";
-    version = "b4a8a60";
+    version = "64a2abb";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-php";
-      rev = "b4a8a6048d66fcda4e8e4988bd0d9095980e303a";
-      hash = "sha256-Pm0FuY34eMhX4K7pbYpNAY1WYBOO+9cFCx/j992fsg8=";
+      rev = "64a2abb98a0cbf2bce23e4af6c05c78f06068886";
+      hash = "sha256-iAi+Cr7bW4mEbFHba+rv0afhY4v1suPGhsCK4IhcMLo=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-php";
   };
