@@ -173,7 +173,9 @@ stdenv.mkDerivation rec {
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
     # Should be fixed past 2.1.10 release.
     "-fcommon"
-  ];
+  ]
+    # Fails to find `O_LARGEFILE` otherwise.
+    ++ [ "-D_GNU_SOURCE" ];
 
   buildPhase = ''
     runHook preBuild
