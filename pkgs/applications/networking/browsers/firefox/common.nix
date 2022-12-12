@@ -234,7 +234,7 @@ buildStdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-    patchShebangs mach
+    patchShebangs mach build
   ''
   + extraPostPatch;
 
