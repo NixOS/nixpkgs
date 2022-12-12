@@ -147,6 +147,16 @@ in {
       default = "/var/lib/etcd";
       description = lib.mdDoc "Etcd data directory.";
     };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.etcd;
+      defaultText = literalExpression "pkgs.etcd";
+      description = lib.mdDoc ''
+        The etcd package to use. Users of coredns and similar may
+        wish to more recent version here, such as pkgs.etcd_3_5.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -186,13 +196,13 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd}/bin/etcd";
+        ExecStart = "${cfg.package}/bin/etcd";
         User = "etcd";
         LimitNOFILE = 40000;
       };
     };
 
-    environment.systemPackages = [ pkgs.etcd ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.etcd = {
       isSystemUser = true;
