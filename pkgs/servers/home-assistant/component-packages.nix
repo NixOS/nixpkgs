@@ -181,6 +181,7 @@
     ]; # missing inputs: sharp_aquos_rc
     "aranet" = ps: with ps; [
       aiohttp-cors
+      aranet4
       bleak-retry-connector
       bleak
       bluetooth-adapters
@@ -194,7 +195,7 @@
       pyserial
       pyudev
       sqlalchemy
-    ]; # missing inputs: aranet4
+    ];
     "arcam_fmj" = ps: with ps; [
       arcam-fmj
     ];
@@ -4116,6 +4117,7 @@
     "application_credentials"
     "apprise"
     "aprs"
+    "aranet"
     "arcam_fmj"
     "aseko_pool_live"
     "asuswrt"
