@@ -5,7 +5,6 @@
 , stdenv
 , callPackage
 , cacert
-, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
@@ -125,7 +124,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     })
   ] ++ [
     cacert
-    git
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
