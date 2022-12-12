@@ -16,7 +16,7 @@ let
         subsetname = subsetname;
         functions = libDefPos toplib.${subsetname};
       })
-      (builtins.attrNames libsets);
+      (builtins.map (x: x.name) libsets);
 
   nixpkgsLib = pkgs.lib;
 
