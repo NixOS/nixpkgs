@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "nyan";
-  version = "0.2.0";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "SFTtech";
