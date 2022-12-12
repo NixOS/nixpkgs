@@ -185,6 +185,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   passthru = {
     inherit pkgArches;
+    inherit (src) updateScript;
     tests = { inherit (nixosTests) wine; };
   };
   meta = {
