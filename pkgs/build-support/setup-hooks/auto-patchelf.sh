@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 declare -a autoPatchelfLibs
 declare -a extraAutoPatchelfLibs
