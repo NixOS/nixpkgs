@@ -57,19 +57,20 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
-    [ ../../build-support/setup-hooks/move-docs.sh
-      ../../build-support/setup-hooks/make-symlinks-relative.sh
-      ../../build-support/setup-hooks/compress-man-pages.sh
-      ../../build-support/setup-hooks/strip.sh
-      ../../build-support/setup-hooks/patch-shebangs.sh
-      ../../build-support/setup-hooks/prune-libtool-files.sh
+    [
       ../../build-support/setup-hooks/audit-tmpdir.sh
+      ../../build-support/setup-hooks/compress-man-pages.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
+      ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/move-lib64.sh
+      ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-systemd-user-units.sh
       ../../build-support/setup-hooks/multiple-outputs.sh
-      ../../build-support/setup-hooks/move-sbin.sh
-      ../../build-support/setup-hooks/move-lib64.sh
-      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+      ../../build-support/setup-hooks/patch-shebangs.sh
+      ../../build-support/setup-hooks/prune-libtool-files.sh
       ../../build-support/setup-hooks/reproducible-builds.sh
+      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+      ../../build-support/setup-hooks/strip.sh
     ] ++ lib.optionals hasCC [ cc ];
 
   defaultBuildInputs = extraBuildInputs;
