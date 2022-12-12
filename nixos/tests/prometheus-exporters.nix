@@ -6,7 +6,7 @@
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix replaceChars singleton splitString;
+    removeSuffix replaceStrings singleton splitString;
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -182,7 +182,7 @@ let
         enable = true;
         extraFlags = [ "--web.collectd-push-path /collectd" ];
       };
-      exporterTest = let postData = replaceChars [ "\n" ] [ "" ] ''
+      exporterTest = let postData = replaceStrings [ "\n" ] [ "" ] ''
         [{
           "values":[23],
           "dstypes":["gauge"],
