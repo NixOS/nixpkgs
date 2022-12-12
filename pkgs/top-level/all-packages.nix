@@ -11056,8 +11056,6 @@ with pkgs;
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
-  rambox-pro = callPackage ../applications/networking/instant-messengers/rambox/pro.nix { };
-
   rar = callPackage ../tools/archivers/rar { };
 
   rarcrack = callPackage ../tools/security/rarcrack { };
