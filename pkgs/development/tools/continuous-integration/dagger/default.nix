@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "dagger";
-  version = "0.2.36";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "dagger";
