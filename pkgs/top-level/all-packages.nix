@@ -1395,6 +1395,8 @@ with pkgs;
 
   httm = callPackage ../tools/filesystems/httm { };
 
+  jobber = callPackage ../tools/system/jobber {};
+
   kanata = callPackage ../tools/system/kanata { };
 
   kanata-with-cmd = kanata.override { withCmd = true; };
@@ -11056,8 +11058,6 @@ with pkgs;
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
-  rambox-pro = callPackage ../applications/networking/instant-messengers/rambox/pro.nix { };
-
   rar = callPackage ../tools/archivers/rar { };
 
   rarcrack = callPackage ../tools/security/rarcrack { };
@@ -11587,7 +11587,7 @@ with pkgs;
 
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
-  signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
+  inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
 
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
@@ -24151,6 +24151,8 @@ with pkgs;
 
   oauth2-proxy = callPackage ../servers/oauth2-proxy { };
 
+  olaris-server = callPackage ../servers/olaris {};
+
   onlyoffice-documentserver = callPackage ../servers/onlyoffice-documentserver { };
 
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
@@ -28375,6 +28377,8 @@ with pkgs;
   emacsPackages = emacs.pkgs;
 
   inherit (gnome) empathy;
+
+  emptty = callPackage ../applications/display-managers/emptty {};
 
   endeavour = callPackage ../applications/office/endeavour { };
 
