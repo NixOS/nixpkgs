@@ -1,24 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
+, pretend
+, pytestCheckHook
 }:
-let
+
+buildPythonPackage rec {
   pname = "calver";
-  version = "2022.6.26";
+  version = "2022.06.26";
 
-in
-buildPythonPackage {
-  inherit pname version;
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4FSTo7F1F+8XSPvmENoR8QSF+qfEFrnTP9SlLXSJT4s=";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "di";
+    repo = "calver";
+    rev = version;
+    hash = "sha256-YaXTkeUazwzghCX96Wfx39hGvukWKtHMLLeyF9OeiZI=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=calver_version(True)" 'version="${version}"'
+  '';
+
+  checkInputs = [
+    pretend
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "calver" ];
 
   meta = {
     description = "Setuptools extension for CalVer package versions";
     homepage = "https://github.com/di/calver";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

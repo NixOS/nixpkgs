@@ -836,6 +836,7 @@ mapAliases ({
   linuxPackages_5_19 = linuxKernel.packages.linux_5_19;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_6_0 = linuxKernel.packages.linux_6_0;
+  linuxPackages_6_1 = linuxKernel.packages.linux_6_1;
   linuxPackages_hardkernel_4_14 = linuxKernel.packages.hardkernel_4_14;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
@@ -855,6 +856,7 @@ mapAliases ({
   linux_5_19 = linuxKernel.kernels.linux_5_19;
   linux_5_4 = linuxKernel.kernels.linux_5_4;
   linux_6_0 = linuxKernel.kernels.linux_6_0;
+  linux_6_1 = linuxKernel.kernels.linux_6_1;
   linuxPackages_mptcp = throw "'linuxPackages_mptcp' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04
   linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04
   linux_mptcp_95 = throw "'linux_mptcp_95' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04
@@ -1293,6 +1295,7 @@ mapAliases ({
 
   radare2-cutter = cutter; # Added 2021-03-30
   railcar = throw "'railcar' has been removed, as the upstream project has been abandoned"; # Added 2022-06-27
+  rambox-pro = rambox; # Added 2022-12-12
   raspberrypi-tools = throw "raspberrypi-tools has been removed in favor of identical 'libraspberrypi'"; # Added 2020-12-24
   rawdog = throw "rawdog has been removed from nixpkgs as it still requires python2"; # Added 2022-01-01
   rdiff_backup = throw "'rdiff_backup' has been renamed to/replaced by 'rdiff-backup'"; # Converted to throw 2022-02-22

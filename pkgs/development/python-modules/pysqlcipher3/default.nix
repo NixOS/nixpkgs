@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, sqlcipher }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, sqlcipher }:
 
 buildPythonPackage rec {
   pname = "pysqlcipher3";
   version = "1.1.0";
 
-  disabled = pythonAtLeast "3.9";
+  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
