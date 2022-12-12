@@ -6,14 +6,10 @@
 , pkg-config
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
-, rocm-opencl-runtime
 , rocblas
 , rocmlir
 , hip
-, clang
+, clang-tools-extra
 , clang-ocl
 , llvm
 , miopengemm
@@ -84,15 +80,11 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     rocm-cmake
     hip
-    clang
-    llvm
+    clang-tools-extra
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-    rocm-opencl-runtime
+    llvm
     rocblas
     rocmlir
     clang-ocl
@@ -126,8 +118,6 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-DMIOPEN_BACKEND=HIP"
   ] ++ lib.optionals useOpenCL [
-    "-DCMAKE_C_COMPILER=${clang}/bin/clang"
-    "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
     "-DMIOPEN_BACKEND=OpenCL"
   ] ++ lib.optionals buildTests [
     "-DBUILD_TESTS=ON"
@@ -148,8 +138,7 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "3 REQUIRED PATHS /opt/rocm)" "3 REQUIRED PATHS ${hip})" \
       --replace "hip REQUIRED PATHS /opt/rocm" "hip REQUIRED PATHS ${hip}" \
       --replace "rocblas REQUIRED PATHS /opt/rocm" "rocblas REQUIRED PATHS ${rocblas}" \
-      --replace "miopengemm PATHS /opt/rocm" "miopengemm PATHS ${miopengemm}" \
-      --replace "set(MIOPEN_TIDY_ERRORS ALL)" "" # Fix clang-tidy at some point
+      --replace "miopengemm PATHS /opt/rocm" "miopengemm PATHS ${miopengemm}"
   '' + lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(test)" ""
@@ -180,7 +169,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
-    patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])}:$out/lib $test/bin/*
+    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])} $test/bin/*
   '';
 
   passthru.updateScript = rocmUpdateScript {

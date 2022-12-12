@@ -6,6 +6,7 @@
 , rocm-cmake
 , hip
 , openmp
+, clang-tools-extra
 , gtest
 , buildTests ? false
 , buildExamples ? false
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     rocm-cmake
     hip
+    clang-tools-extra
   ];
 
   buildInputs = [
@@ -85,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    # Several tests seem to either not compile or have a race condition
-    # Undefined reference to symbol '_ZTIN7testing4TestE'
+    # Well, at least we're getting something that makes sense now
+    # undefined symbol: testing::Message::Message()
     # Try removing this next update
     broken = buildTests;
   };

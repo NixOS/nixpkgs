@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/Tensile";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
+    broken = version != stdenv.cc.version;
   };
 }

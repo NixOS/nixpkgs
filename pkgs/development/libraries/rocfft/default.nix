@@ -4,17 +4,14 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , hip
+, openmp
 , sqlite
 , python3
 , gtest
 , boost
 , fftw
 , fftwFloat
-, llvmPackages
 , buildTests ? false
 , buildBenchmarks ? false
 }:
@@ -45,9 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     sqlite
     python3
   ] ++ lib.optionals buildTests [
@@ -56,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fftw
     fftwFloat
-    llvmPackages.openmp
+    openmp
   ];
 
   propogatedBuildInputs = lib.optionals buildTests [

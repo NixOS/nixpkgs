@@ -4,9 +4,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , hip
 , gtest
 , gbenchmark
@@ -40,11 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hip
   ];
 
-  buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-  ] ++ lib.optionals buildTests [
+  buildInputs = lib.optionals buildTests [
     gtest
   ] ++ lib.optionals buildBenchmarks [
     gbenchmark

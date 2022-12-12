@@ -5,7 +5,6 @@
 , cmake
 , rocm-cmake
 , rocm-device-libs
-, clang
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,17 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    clang
   ];
 
-  buildInputs = [
-    rocm-device-libs
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_C_COMPILER=clang"
-    "-DCMAKE_CXX_COMPILER=clang++"
-  ];
+  buildInputs = [ rocm-device-libs ];
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -45,6 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != clang.version;
+    broken = finalAttrs.version != stdenv.cc.cc.version;
   };
 })
