@@ -86,6 +86,7 @@ in stdenv.mkDerivation {
       nspr
       nss
       pango
+      udev
       systemd
     ] + ":${stdenv.cc.cc.lib}/lib64";
     in ''
