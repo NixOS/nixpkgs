@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "git-team";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "hekmekk";
     repo = "git-team";
     rev = "v${version}";
-    hash = "sha256-LZR30zqwit/xydQbpGm1LXd/tno/sTCaftgjVkVS6ZY=";
+    hash = "sha256-+j5d1tImVHaTx63uzLdh2YNCFa1ErAVv4OMwxOutBQ4=";
   };
 
   vendorHash = "sha256-NTOUL1oE2IhgLyYYHwRCMW5yCxIRxUwqkfuhSSBXf6A=";
