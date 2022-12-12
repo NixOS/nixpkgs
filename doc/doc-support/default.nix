@@ -4,17 +4,17 @@ let
   inherit (lib) hasPrefix removePrefix;
 
   libsets = [
-    { name = "asserts"; description = "Assert functions"; }
-    { name = "attrsets"; description = "Attribute-set functions"; }
-    { name = "strings"; description = "String manipulation functions"; }
-    { name = "versions"; description = "Version string functions"; }
-    { name = "trivial"; description = "Miscellaneous functions"; }
-    { name = "lists"; description = "List manipulation functions"; }
-    { name = "debug"; description = "Debugging functions"; }
+    { name = "asserts"; description = "assertion functions"; }
+    { name = "attrsets"; description = "attribute set functions"; }
+    { name = "strings"; description = "string manipulation functions"; }
+    { name = "versions"; description = "version string functions"; }
+    { name = "trivial"; description = "miscellaneous functions"; }
+    { name = "lists"; description = "list manipulation functions"; }
+    { name = "debug"; description = "debugging functions"; }
     { name = "options"; description = "NixOS / nixpkgs option handling"; }
-    { name = "filesystem"; description = "Filesystem functions"; }
-    { name = "sources"; description = "Source filtering functions"; }
-    { name = "cli"; description = "Command-line serialization functions"; }
+    { name = "filesystem"; description = "filesystem functions"; }
+    { name = "sources"; description = "source filtering functions"; }
+    { name = "cli"; description = "command-line serialization functions"; }
   ];
 
   locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
