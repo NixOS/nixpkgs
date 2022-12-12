@@ -1,10 +1,14 @@
 { lib, stdenv, fetchFromGitHub
 , fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools
 , perl # For building web manuals
 , which, ed
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit Metal QuartzCore;
+  inherit (darwin) DarwinTools;
+in
 stdenv.mkDerivation rec {
   pname = "plan9port";
   version = "2022-09-12";
