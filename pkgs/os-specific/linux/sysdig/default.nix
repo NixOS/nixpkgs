@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, kernel, installShellFiles, pkg-config
 , luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, libyamlcpp, nlohmann_json
+, libyamlcpp, nlohmann_json, re2
 }:
 
 with lib;
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "e5c53d648f3c4694385bbe488e7d47eaa36c229a";
-  libsSha256 = "sha256-pG10y5PpDqaF/cq8oAvax5B/ls2UTRQd7tCfBjWVf0U=";
+  libsRev = "0.9.1";
+  libsSha256 = "sha256-X+zLEnage8AuGdGn9sl1RN9b1CKTA1ErrdPNbYKY0s0=";
 
   # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
   valijson = fetchFromGitHub {
@@ -17,16 +17,23 @@ let
     sha256 = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
   };
 
+  driver = fetchFromGitHub {
+    owner = "falcosecurity";
+    repo = "libs";
+    rev = "3.0.1+driver";
+    sha256 = "sha256-bK9wv17bVl93rOqw7JICnMOM0fDtPIErfMmUmNKOD5c=";
+  };
+
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.29.3";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-dMLeroOd9CgvmgQdPfX8oBxQSyksZi/hP4vO03JhlF0=";
+    sha256 = "sha256-bDlrnTfm43zpYBIiP2MGB+LM5jtalmeUNtWHgxe81HM=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
@@ -40,6 +47,8 @@ stdenv.mkDerivation rec {
     gcc
     elfutils
     tbb
+    libb64
+    re2
     protobuf
     grpc
     libyamlcpp
@@ -57,12 +66,21 @@ stdenv.mkDerivation rec {
       sha256 = libsSha256;
     }} libs
     chmod -R +w libs
-    cmakeFlagsArray+=("-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs" "-DVALIJSON_INCLUDE=${valijson}/include")
+    cp -r ${driver} driver-src
+    chmod -R +w driver-src
+    cmakeFlagsArray+=(
+      "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
+      "-DVALIJSON_INCLUDE=${valijson}/include"
+      "-DDRIVER_SOURCE_DIR=$(pwd)/driver-src/driver"
+    )
   '';
 
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
     "-DSYSDIG_VERSION=${version}"
+    "-DUSE_BUNDLED_B64=OFF"
+    "-DUSE_BUNDLED_TBB=OFF"
+    "-DUSE_BUNDLED_RE2=OFF"
     "-DCREATE_TEST_TARGETS=OFF"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
