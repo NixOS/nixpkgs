@@ -713,7 +713,7 @@ self: super: {
   };
 
   skim-vim = super.skim-vim.overrideAttrs (old: {
-    dependencies = with self; [ skim ];
+    dependencies = [ self.skim ];
   });
 
   sniprun =
