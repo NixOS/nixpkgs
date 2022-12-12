@@ -9416,6 +9416,8 @@ with pkgs;
 
   mars-mips = callPackage ../development/tools/mars-mips { };
 
+  maui-shell = libsForQt5.callPackage ../applications/window-managers/maui-shell { };
+
   mawk = callPackage ../tools/text/mawk { };
 
   mb2md = callPackage ../tools/text/mb2md { };
