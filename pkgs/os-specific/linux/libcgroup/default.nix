@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-x2yBqpr3LedtWmpZ4K1ipZxIualNJuDtC4FVGzzcQn8=";
   };
 
-  buildInputs = [ pam bison flex ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook bison flex ];
+  buildInputs = [ pam ];
 
   postPatch = ''
     substituteInPlace src/tools/Makefile.am \
