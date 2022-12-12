@@ -2490,7 +2490,6 @@ broken-packages:
   - HTicTacToe
   - htiled
   - htlset
-  - html-charset
   - html-parse
   - html-rules
   - html-tokenizer
