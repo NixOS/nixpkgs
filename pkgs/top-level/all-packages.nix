@@ -21287,6 +21287,8 @@ with pkgs;
 
   libversion = callPackage ../development/libraries/libversion { };
 
+  libverto = callPackage ../development/libraries/libverto { };
+
   libvgm = callPackage ../development/libraries/libvgm {
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
