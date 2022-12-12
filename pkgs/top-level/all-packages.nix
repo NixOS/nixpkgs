@@ -13478,6 +13478,8 @@ with pkgs;
 
   zmap = callPackage ../tools/security/zmap { };
 
+  zmusic = callPackage ../development/libraries/zmusic { };
+
   zpool-iostat-viz = callPackage ../tools/filesystems/zpool-iostat-viz { };
 
 
