@@ -387,7 +387,7 @@ self: super: {
   });
 
   forms = super.forms.overrideAttrs (old: {
-    dependencies = with self; [ self.self ];
+    dependencies = [ self.self ];
   });
 
   fruzzy =
