@@ -46,5 +46,6 @@ buildGoModule rec {
     homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
     license = licenses.mit;
+    mainProgram = "dlv";
   };
 }
