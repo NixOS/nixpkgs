@@ -63,14 +63,8 @@ let
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
       ../../build-support/setup-hooks/prune-libtool-files.sh
-    ]
-      # FIXME this on Darwin; see
-      # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
-    ++ lib.optionals hostPlatform.isLinux [
       ../../build-support/setup-hooks/audit-tmpdir.sh
       ../../build-support/setup-hooks/move-systemd-user-units.sh
-    ]
-    ++ [
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
