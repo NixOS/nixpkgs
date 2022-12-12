@@ -244,6 +244,8 @@ self: super: with self; {
 
   aiolip = callPackage ../development/python-modules/aiolip { };
 
+  aiolivisi = callPackage ../development/python-modules/aiolivisi { };
+
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomisc = callPackage ../development/python-modules/aiomisc { };
