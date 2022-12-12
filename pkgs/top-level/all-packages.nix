@@ -30078,6 +30078,8 @@ with pkgs;
 
   kiln = callPackage ../applications/misc/kiln { };
 
+  kubernetes-code-generator = callPackage ../development/tools/kubernetes-code-generator {};
+
   kubernetes-controller-tools = callPackage ../development/tools/kubernetes-controller-tools { };
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
