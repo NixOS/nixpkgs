@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.12.0";
+  version = "2022.12.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2889,8 +2889,9 @@
       pillow
       pyserial
       pyudev
+      ruuvitag-ble
       sqlalchemy
-    ]; # missing inputs: ruuvitag-ble
+    ];
     "sabnzbd" = ps: with ps; [
       pysabnzbd
     ];
@@ -4568,6 +4569,7 @@
     "rss_feed_template"
     "rtsp_to_webrtc"
     "ruckus_unleashed"
+    "ruuvitag_ble"
     "sabnzbd"
     "safe_mode"
     "samsungtv"

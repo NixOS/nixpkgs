@@ -339,6 +339,8 @@ runTests {
     (0 == toInt " 0")
     (0 == toInt "0 ")
     (0 == toInt " 0 ")
+    (-1 == toInt "-1")
+    (-1 == toInt " -1 ")
   ];
 
   testToIntFails = testAllTrue [
@@ -383,6 +385,8 @@ runTests {
     (0 == toIntBase10 " 000000")
     (0 == toIntBase10 "000000 ")
     (0 == toIntBase10 " 000000 ")
+    (-1 == toIntBase10 "-1")
+    (-1 == toIntBase10 " -1 ")
   ];
 
   testToIntBase10Fails = testAllTrue [

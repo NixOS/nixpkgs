@@ -487,12 +487,12 @@ Preferred source hash type is sha256. There are several ways to get it.
    - `lib.fakeHash`
    - `lib.fakeSha256`
    - `lib.fakeSha512`
-   
+
    in the package expression, attempt build and extract correct hash from error messages.
 
    ::: {.warning}
    You must use one of these four fake hashes and not some arbitrarily-chosen hash.
-   
+
    See [](#sec-source-hashes-security).
    :::
 
@@ -670,3 +670,18 @@ stdenv.mkDerivation {
   ...
 }
 ```
+
+### Import From Derivation {#ssec-import-from-derivation}
+
+Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
+
+[Hydra]: https://github.com/NixOS/hydra
+
+Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
+
+<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
+
+See also [NixOS Wiki: Import From Derivation].
+
+[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation

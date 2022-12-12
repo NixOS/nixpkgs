@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , runCommand
 , rustPlatform
 , openssl
@@ -32,6 +33,16 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "sha256-OVJr+usN+47yBHFAy94rIVlU2F+Klo6xdrV2MwUoKUE=";
   };
+
+  patches = [
+    # https://github.com/nushell/nushell/pull/7423: make tests
+    # more resilient (less dependent on env).
+    # Already merged upstream, so can be dropped in the next version
+    (fetchpatch {
+      url = "https://github.com/nushell/nushell/commit/87631e7068bfc6635d5b31413856f0a791994527.patch";
+      hash = "sha256-9vrcmBe5gXLLodynb3jyarwi/a0YiurJ6WsDxXl2vjo=";
+    })
+  ];
 
   cargoSha256 = "sha256-v6mPr+gOT64rKYuog+hS7/AqUZDailoOBXX3Sfeo+sk=";
 
@@ -66,9 +77,7 @@ rustPlatform.buildRustPackage rec {
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
   # outside of TMPDIR
-  # doCheck = ! stdenv.isDarwin;
-  # TODO tests are not guaranteed while package is in beta
-  doCheck = false;
+  doCheck = ! stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
