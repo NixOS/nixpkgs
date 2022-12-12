@@ -214,7 +214,7 @@
       </listitem>
       <listitem>
         <para>
-          The minimal ISO image now use
+          The minimal ISO image now uses the
           <literal>nixos/modules/profiles/minimal.nix</literal> profile.
         </para>
       </listitem>

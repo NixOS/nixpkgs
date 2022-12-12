@@ -181,6 +181,7 @@
     ]; # missing inputs: sharp_aquos_rc
     "aranet" = ps: with ps; [
       aiohttp-cors
+      aranet4
       bleak-retry-connector
       bleak
       bluetooth-adapters
@@ -194,7 +195,7 @@
       pyserial
       pyudev
       sqlalchemy
-    ]; # missing inputs: aranet4
+    ];
     "arcam_fmj" = ps: with ps; [
       arcam-fmj
     ];
@@ -1898,7 +1899,8 @@
       pylitterbot
     ];
     "livisi" = ps: with ps; [
-    ]; # missing inputs: aiolivisi
+      aiolivisi
+    ];
     "llamalab_automate" = ps: with ps; [
     ];
     "local_calendar" = ps: with ps; [
@@ -4115,6 +4117,7 @@
     "application_credentials"
     "apprise"
     "aprs"
+    "aranet"
     "arcam_fmj"
     "aseko_pool_live"
     "asuswrt"
@@ -4396,6 +4399,7 @@
     "lifx"
     "light"
     "litterrobot"
+    "livisi"
     "local_calendar"
     "local_file"
     "local_ip"

@@ -4,16 +4,16 @@
 }:
 buildGoModule rec {
   pname = "hysteria";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "HyNetwork";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-va/2eCi7wu8YMKf/I0ZiDFAY/shaHA/boF1PCYFolwM=";
+    sha256 = "sha256-9ib/29yCfI4oS2yZQUePzZ+5FVTevvJCPjpTXmKnKeA=";
   };
 
-  vendorSha256 = "sha256-a24NyJDatyM+j29vyY5zbPRhRTOGfa2c1FkZdKpDvxk=";
+  vendorSha256 = "sha256-sRPnPKVuvcUHEldKVpgmGFGpwOSK5qh4EfeUQMFdMw8=";
   proxyVendor = true;
 
   ldflags = [
