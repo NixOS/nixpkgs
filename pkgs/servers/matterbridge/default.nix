@@ -11,6 +11,8 @@ buildGoModule rec {
     sha256 = "sha256-VqVrAmbKTfDhcvgayEE1wUeFBSTGczBrntIJQ5/uWzM=";
   };
 
+  subPackages = [ "." ];
+
   vendorSha256 = null;
 
   meta = with lib; {
