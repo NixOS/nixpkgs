@@ -78,6 +78,7 @@ let
       nota = callPackage ./nota.nix { };
       pix = callPackage ./pix.nix { };
       shelf = callPackage ./shelf.nix { };
+      strike = callPackage ./strike.nix { };
       vvave = callPackage ./vvave.nix { };
     };
 
