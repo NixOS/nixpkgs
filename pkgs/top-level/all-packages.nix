@@ -28373,6 +28373,8 @@ with pkgs;
 
   inherit (gnome) empathy;
 
+  emptty = callPackage ../applications/display-managers/emptty {};
+
   endeavour = callPackage ../applications/office/endeavour { };
 
   enhanced-ctorrent = callPackage ../applications/networking/p2p/enhanced-ctorrent { };
