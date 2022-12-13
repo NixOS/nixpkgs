@@ -198,6 +198,7 @@ buildNpmPackage rec {
 * `npmFlags`: Flags to pass to all npm commands.
 * `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
+* `npmTestFlags`: Flags to pass to `npm test`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}

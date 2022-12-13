@@ -24,6 +24,24 @@ buildNpmPackage rec {
     python3
   ];
 
+  # Clean up test artifacts.
+  postCheck = ''
+    rm -r spec-db
+  '';
+
+  # We need the crypto SDK to be in place for tests...
+  preCheck = ''
+    rm -r node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r --no-preserve=mode ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs node_modules/@matrix-org/
+  '';
+
+  # ...but `npm pack` also checks its integrity/version...
+  preInstall = ''
+    touch node_modules/.package-lock.json
+    sed -i "s/0.1.0-beta.2/0.1.0-beta.1/g" node_modules/@matrix-org/matrix-sdk-crypto-nodejs/package.json
+  '';
+
+  # ...and we would rather symlink it in the end.
   postInstall = ''
     rm -rv $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     ln -sv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/

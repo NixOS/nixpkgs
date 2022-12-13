@@ -25,6 +25,8 @@
 , npmRebuildFlags ? [ ]
   # Flags to pass to `npm run ${npmBuildScript}`.
 , npmBuildFlags ? [ ]
+  # Flags to pass to `npm test`.
+, npmTestFlags ? [ ]
   # Flags to pass to `npm pack`.
 , npmPackFlags ? [ ]
 , ...
@@ -37,15 +39,17 @@ let
     hash = npmDepsHash;
   };
 
-  inherit (npmHooks.override { inherit nodejs; }) npmConfigHook npmBuildHook npmInstallHook;
+  inherit (npmHooks.override { inherit nodejs; }) npmConfigHook npmBuildHook npmCheckHook npmInstallHook;
 in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook ];
+  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmCheckHook npmInstallHook ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;
+
+  doCheck = args.doCheck or true;
 
   # Stripping takes way too long with the amount of files required by a typical Node.js project.
   dontStrip = args.dontStrip or true;

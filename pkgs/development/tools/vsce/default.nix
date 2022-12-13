@@ -7,6 +7,8 @@
 , python3
 , testers
 , vsce
+, nodePackages
+, git
 }:
 
 buildNpmPackage rec {
@@ -32,6 +34,8 @@ buildNpmPackage rec {
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
+
+  checkInputs = [ nodePackages.yarn git ];
 
   passthru.tests.version = testers.testVersion {
     package = vsce;
