@@ -66,6 +66,12 @@ in
         description = lib.mdDoc "User account under which gitea runs.";
       };
 
+      group = mkOption {
+        type = types.str;
+        default = "gitea";
+        description = lib.mdDoc "Group under which gitea runs.";
+      };
+
       database = {
         type = mkOption {
           type = types.enum [ "sqlite3" "mysql" "postgres" ];
@@ -457,29 +463,29 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.dump.backupDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.lfs.contentDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/data' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/data' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.dump.backupDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
 
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
@@ -565,7 +571,7 @@ in
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
-        Group = "gitea";
+        Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${exe} web --pid /run/gitea/gitea.pid";
         Restart = "always";
@@ -614,12 +620,14 @@ in
         description = "Gitea Service";
         home = cfg.stateDir;
         useDefaultShell = true;
-        group = "gitea";
+        group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups.gitea = {};
+    users.groups = mkIf (cfg.group == "gitea") {
+      gitea = {};
+    };
 
     warnings =
       optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
