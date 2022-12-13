@@ -349,6 +349,7 @@ in {
           captions = lib.mkDefault "/var/lib/peertube/storage/captions/";
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
+          well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
         };
         import = {
