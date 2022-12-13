@@ -1,37 +1,40 @@
 { lib
 , stdenv
+, fetchurl
 , buildPackages
 , bzip2
 , curlMinimal
 , expat
-, fetchurl
 , libarchive
 , libuv
 , ncurses
 , openssl
 , pkg-config
-, qtbase
+, ps
 , rhash
 , sphinx
 , texinfo
-, wrapQtAppsHook
 , xz
 , zlib
-, SystemConfiguration
-, ps
 , isBootstrap ? false
 , useOpenSSL ? !isBootstrap
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , uiToolkits ? [] # can contain "ncurses" and/or "qt5"
 , buildDocs ? !(isBootstrap || (uiToolkits == []))
+, darwin
+, libsForQt5
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
 in
 # Accepts only "ncurses" and "qt5" as possible uiToolkits
 assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
+# Minimal, bootstrap cmake does not have toolkits
+assert isBootstrap -> (uiToolkits == []);
 stdenv.mkDerivation rec {
   pname = "cmake"
     + lib.optionalString isBootstrap "-boot"
