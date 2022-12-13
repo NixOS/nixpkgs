@@ -75,6 +75,8 @@ with self; with super; {
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
 
+  typing = callPackage ../development/python2-modules/typing { };
+
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };
