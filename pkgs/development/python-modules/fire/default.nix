@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, hypothesis
+, mock
+, python-Levenshtein
+, pytest
+, termcolor
+, isPy27
+, enum34
+}:
 
 buildPythonPackage rec {
   pname = "fire";
@@ -9,7 +19,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "python-fire";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cwY1RRNtpAn6LnBASQLTNf4XXSPnfhOa1WgglGEM2/s=";
+    hash = "sha256-cwY1RRNtpAn6LnBASQLTNf4XXSPnfhOa1WgglGEM2/s=";
   };
 
   propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
@@ -42,6 +52,8 @@ buildPythonPackage rec {
         REPL with the modules and variables you'll need already imported
         and created.
     '';
+    homepage "https://github.com/google/python-fire";
+    changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ leenaars ];
   };
