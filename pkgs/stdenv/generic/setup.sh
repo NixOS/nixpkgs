@@ -383,10 +383,13 @@ printWords() {
 ######################################################################
 # Initialisation.
 
-# export all vars that should be in the ENV
-for envVar in "${!env[@]}"; do
-    declare -x "${envVar}=${env[${envVar}]}"
-done
+# If using structured attributes, export variables from `env` to the environment.
+# When not using structured attributes, those variables are already exported.
+if [[ -n $__structuredAttrs ]]; then
+    for envVar in "${!env[@]}"; do
+        declare -x "${envVar}=${env[${envVar}]}"
+    done
+fi
 
 
 # Set a fallback default value for SOURCE_DATE_EPOCH, used by some build tools

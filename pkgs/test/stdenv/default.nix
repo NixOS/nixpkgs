@@ -95,6 +95,25 @@ in
 {
   test-env-attrset = testEnvAttrset { name = "test-env-attrset"; stdenv' = bootStdenv; };
 
+  # Test compatibility with derivations using `env` as a regular variable.
+  test-env-derivation = bootStdenv.mkDerivation rec {
+    name = "test-env-derivation";
+    env = bootStdenv.mkDerivation {
+      name = "foo";
+      buildCommand = ''
+        mkdir "$out"
+        touch "$out/bar"
+      '';
+    };
+
+    passAsFile = [ "buildCommand" ];
+    buildCommand = ''
+      declare -p env
+      [[ $env == "${env}" ]]
+      touch "$out"
+    '';
+  };
+
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
     stdenv' = bootStdenv;
