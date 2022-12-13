@@ -468,6 +468,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ea = callPackage ../tools/misc/ea { };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
@@ -1962,7 +1964,9 @@ with pkgs;
 
   dlx = callPackage ../applications/emulators/dlx { };
 
-  dosbox = callPackage ../applications/emulators/dosbox { };
+  dosbox = callPackage ../applications/emulators/dosbox {
+    SDL = if stdenv.isDarwin then SDL else SDL_compat;
+  };
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
@@ -12199,6 +12203,8 @@ with pkgs;
 
   threema-desktop = callPackage ../applications/networking/instant-messengers/threema-desktop { };
 
+  thumbdrives = callPackage ../applications/system/thumbdrives { };
+
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
@@ -18780,6 +18786,8 @@ with pkgs;
 
   croaring = callPackage ../development/libraries/croaring { };
 
+  crocoddyl = callPackage ../development/libraries/crocoddyl { };
+
   crossguid = callPackage ../development/libraries/crossguid { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
@@ -18950,6 +18958,8 @@ with pkgs;
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
   liberasurecode = callPackage ../applications/misc/liberasurecode { };
+
+  example-robot-data = callPackage ../development/libraries/example-robot-data { };
 
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
@@ -22045,6 +22055,8 @@ with pkgs;
 
   pico-sdk = callPackage ../development/libraries/pico-sdk { };
 
+  pinocchio = callPackage ../development/libraries/pinocchio { };
+
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
     wine-staging = pkgsi686Linux.wine-staging;
@@ -22927,6 +22939,8 @@ with pkgs;
   tomlc99 = callPackage ../development/libraries/tomlc99 { };
 
   tomlcpp = callPackage ../development/libraries/tomlcpp { };
+
+  toml11 = callPackage ../development/libraries/toml11 { };
 
   tomlplusplus = callPackage ../development/libraries/tomlplusplus { };
 
@@ -29291,6 +29305,8 @@ with pkgs;
   hactool = callPackage ../tools/compression/hactool { };
 
   hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
+
+  headlines = callPackage ../applications/networking/headlines { };
 
   hedgedoc-cli = callPackage ../tools/admin/hedgedoc-cli { };
 
@@ -37135,6 +37151,8 @@ with pkgs;
   sticky = callPackage ../applications/misc/sticky { };
 
   stork = callPackage ../applications/misc/stork { };
+
+  superd = callPackage ../misc/superd { };
 
   oclgrind = callPackage ../development/tools/analysis/oclgrind { };
 
