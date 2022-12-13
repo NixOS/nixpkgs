@@ -1,6 +1,4 @@
-# This setup hook moves $out/{man,doc,info} to $out/share; moves
-# $out/share/man to $man/share/man; and moves $out/share/doc to
-# $man/share/doc.
+# This setup hook moves $out/{man,doc,info} to $out/share.
 
 preFixupHooks+=(_moveToShare)
 
