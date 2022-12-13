@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s4s2kd31yc65rfvl4xhy8xx806xhy59kc7668h6b6wq88xgrn5p";
+    sha256 = "sha256-H66jZxeAPlJFiNbBCdJtINOzRCLo1qloEnWJd9ygF4I=";
   };
 
   nativeBuildInputs = [
