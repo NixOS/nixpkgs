@@ -1,9 +1,9 @@
 { lib
-, trivial-build
+, trivialBuild
 , fetchurl
 }:
 
-trivial-build {
+trivialBuild {
   name = "perl-completion";
 
   src = fetchurl {
