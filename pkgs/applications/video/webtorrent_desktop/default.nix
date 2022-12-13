@@ -6,7 +6,7 @@
 }:
 let
   pname = "webtorrent-desktop";
-  version = "0.21.0";
+  version = "0.24.0";
 in
 runCommand "${pname}-${version}" rec {
   inherit (stdenv) shell;
@@ -14,15 +14,19 @@ runCommand "${pname}-${version}" rec {
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
-        url = "https://github.com/webtorrent/webtorrent-desktop/releases/download/v${version}/WebTorrent-v${version}-linux.zip";
-        sha256 = "13gd8isq2l10kibsc1bsc15dbgpnwa7nw4cwcamycgx6pfz9a852";
+        url = "https://github.com/webtorrent/webtorrent-desktop/releases/download/v${version}/WebTorrent-v${version}-linux-x64.zip";
+        sha256 = "sha256-SzWvdbd/sURKVXrXuC6GtSTe5S1/dmdoxIa/bxYQWI8=";
       }
     else
       throw "Webtorrent is not currently supported on ${stdenv.hostPlatform.system}";
 
   fhs = buildFHSUserEnvBubblewrap rec {
     name = "fhsEnterWebTorrent";
-    runScript = "${src}/WebTorrent";
+    ## --in-process-gpu fixes electron library mismatch
+    runScript = writeScript "WebTorrent" ''
+      #!/bin/sh
+      exec ${src}/WebTorrent --in-process-gpu "$@"
+    '';
     ## use the trampoline, if you need to shell into the fhsenv
     # runScript = writeScript "trampoline" ''
     #   #!/bin/sh
@@ -33,7 +37,7 @@ runCommand "${pname}-${version}" rec {
       fontconfig freetype gdk-pixbuf glib gtk3 pango libuuid libX11
       libXScrnSaver libXcomposite libXcursor libXdamage libXext
       libXfixes libXi libXrandr libXrender libXtst libxcb nspr nss
-      stdenv.cc.cc udev
+      stdenv.cc.cc udev libdrm mesa
     ];
     # extraBwrapArgs = [
     #   "--ro-bind /run/user/$(id -u)/pulse /run/user/$(id -u)/pulse"
@@ -72,5 +76,5 @@ runCommand "${pname}-${version}" rec {
   cp $icon256File $out/share/icons/hicolor/256x256/apps/webtorrent-desktop.png
   ## Fix the desktop link
   substitute $desktopFile $out/share/applications/webtorrent-desktop.desktop \
-    --replace /opt/webtorrent-desktop $out/libexec
+    --replace /opt/webtorrent-desktop $out/bin
 ''
