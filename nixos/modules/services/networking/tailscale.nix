@@ -7,6 +7,7 @@ let
   firewallOn = config.networking.firewall.enable;
   rpfMode = config.networking.firewall.checkReversePath;
   isNetworkd = config.networking.useNetworkd;
+  httpsProxy = config.networking.proxy.httpsProxy;
   rpfIsStrict = rpfMode == true || rpfMode == "strict";
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
@@ -60,6 +61,8 @@ in {
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+      ]) ++ (lib.optionals (httpsProxy != null) [
+        "HTTPS_PROXY=${httpsProxy}"
       ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
