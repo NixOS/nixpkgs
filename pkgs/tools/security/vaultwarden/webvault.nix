@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
-  pname = "vaultwarden-vault";
+  pname = "vaultwarden-webvault";
   version = "2022.6.2";
 
   src = fetchurl {
