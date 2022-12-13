@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar nviets ];
   };
 }

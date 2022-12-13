@@ -13486,6 +13486,8 @@ with pkgs;
 
   zmap = callPackage ../tools/security/zmap { };
 
+  zmusic = callPackage ../development/libraries/zmusic { };
+
   zpool-iostat-viz = callPackage ../tools/filesystems/zpool-iostat-viz { };
 
 
@@ -15163,7 +15165,9 @@ with pkgs;
 
   rocminfo = callPackage ../development/tools/rocminfo { };
 
-  rocmlir = callPackage ../development/libraries/rocmlir { };
+  rocmlir = callPackage ../development/libraries/rocmlir {
+    inherit (llvmPackages_rocm) clang;
+  };
 
   rocprim = callPackage ../development/libraries/rocprim { };
 
@@ -15201,6 +15205,8 @@ with pkgs;
   miopen-opencl = miopen.override {
     useOpenCL = true;
   };
+
+  rocmUpdateScript = callPackage ../development/rocm-modules/update-script { };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;

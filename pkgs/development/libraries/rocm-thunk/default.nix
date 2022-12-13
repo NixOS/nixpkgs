@@ -1,6 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , pkg-config
 , libdrm
@@ -9,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-cM78Bx6uYsxhvdqSVNgmqOUYQnUJVCA7mNpRNNSFv6k=";
+    hash = "sha256-EU5toaKzVeZpdm/YhaQ0bXq0eoYwYQ5qGLUJzxgZVjE=";
   };
 
   preConfigure = ''
@@ -37,12 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src/include $out
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/ROCT-Thunk-Interface/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocm-thunk "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Radeon open compute thunk interface";
