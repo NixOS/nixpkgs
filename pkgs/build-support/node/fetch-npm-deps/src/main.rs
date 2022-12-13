@@ -97,7 +97,7 @@ fn main() -> anyhow::Result<()> {
         (out_tempdir.path(), true)
     };
 
-    let packages = parse::lockfile(&lock_content)?;
+    let packages = parse::lockfile(&lock_content, env::var("FORCE_GIT_DEPS").is_ok())?;
 
     let cache = Cache::new(out.join("_cacache"));
 
