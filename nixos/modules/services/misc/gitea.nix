@@ -57,7 +57,14 @@ in
       stateDir = mkOption {
         default = "/var/lib/gitea";
         type = types.str;
-        description = lib.mdDoc "gitea data directory.";
+        description = lib.mdDoc "Gitea data directory.";
+      };
+
+      customDir = mkOption {
+        default = "${cfg.stateDir}/custom";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
+        type = types.str;
+        description = lib.mdDoc "Gitea custom directory. Used for config, custom templates and other options.";
       };
 
       user = mkOption {
@@ -470,15 +477,15 @@ in
       "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
       "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
@@ -507,12 +514,12 @@ in
       # lfs_jwt_secret.
       # We have to consider this to stay compatible with older installations.
       preStart = let
-        runConfig = "${cfg.stateDir}/custom/conf/app.ini";
-        secretKey = "${cfg.stateDir}/custom/conf/secret_key";
-        oauth2JwtSecret = "${cfg.stateDir}/custom/conf/oauth2_jwt_secret";
-        oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
-        lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
-        internalToken = "${cfg.stateDir}/custom/conf/internal_token";
+        runConfig = "${cfg.customDir}/conf/app.ini";
+        secretKey = "${cfg.customDir}/conf/secret_key";
+        oauth2JwtSecret = "${cfg.customDir}/conf/oauth2_jwt_secret";
+        oldLfsJwtSecret = "${cfg.customDir}/conf/jwt_secret"; # old file for LFS_JWT_SECRET
+        lfsJwtSecret = "${cfg.customDir}/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
+        internalToken = "${cfg.customDir}/conf/internal_token";
         replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
@@ -585,7 +592,7 @@ in
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
         # Access write directories
-        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
+        ReadWritePaths = [ cfg.customDir cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
         # Capabilities
         CapabilityBoundingSet = "";
@@ -618,6 +625,7 @@ in
         USER = cfg.user;
         HOME = cfg.stateDir;
         GITEA_WORK_DIR = cfg.stateDir;
+        GITEA_CUSTOM = cfg.customDir;
       };
     };
 
