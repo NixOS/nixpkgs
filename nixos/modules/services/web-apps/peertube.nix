@@ -161,6 +161,18 @@ in {
       description = lib.mdDoc "Configure nginx as a reverse proxy for peertube.";
     };
 
+    secrets = {
+      secretsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/run/secrets/peertube";
+        description = lib.mdDoc ''
+          Secrets to run PeerTube.
+          Generate one using `openssl rand -hex 32`
+        '';
+      };
+    };
+
     database = {
       createLocally = lib.mkOption {
         type = lib.types.bool;
@@ -280,6 +292,11 @@ in {
             <option>services.peertube.serviceEnvironmentFile</option> points to
             a file in the Nix store. You should use a quoted absolute path to
             prevent this.
+          '';
+      }
+      { assertion = cfg.secrets.secretsFile != null;
+          message = ''
+            <option>services.peertube.secrets.secretsFile</option> needs to be set.
           '';
       }
       { assertion = !(cfg.redis.enableUnixSocket && (cfg.redis.host != null || cfg.redis.port != null));
@@ -418,6 +435,10 @@ in {
         #!/bin/sh
         umask 077
         cat > /var/lib/peertube/config/local.yaml <<EOF
+        ${lib.optionalString (cfg.secrets.secretsFile != null) ''
+        secrets:
+          peertube: '$(cat ${cfg.secrets.secretsFile})'
+        ''}
         ${lib.optionalString ((!cfg.database.createLocally) && (cfg.database.passwordFile != null)) ''
         database:
           password: '$(cat ${cfg.database.passwordFile})'
