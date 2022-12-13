@@ -112,6 +112,8 @@ mkYarnPackage rec {
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
+  dontPatchShebangs = true;
+
   passthru = {
     updateScript = ./update.sh;
 
