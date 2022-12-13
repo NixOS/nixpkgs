@@ -123,7 +123,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       inherit cargo-auditable;
     })
   ] ++ [
-    cacert
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
@@ -132,6 +131,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   ];
 
   buildInputs = buildInputs
+    ++ [ cacert ] # FIXME Is this actually needed?
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
