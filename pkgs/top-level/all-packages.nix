@@ -26079,6 +26079,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  trust-dns = callPackage ../servers/dns/trust-dns { };
+
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   twa = callPackage ../tools/networking/twa { };
