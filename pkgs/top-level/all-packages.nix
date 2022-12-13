@@ -1485,6 +1485,8 @@ with pkgs;
 
   balena-cli = callPackage ../tools/admin/balena-cli { };
 
+  basez = callPackage ../tools/misc/basez { };
+
   butler = callPackage ../games/itch/butler.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
