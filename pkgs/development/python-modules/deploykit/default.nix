@@ -5,12 +5,16 @@
 , bash
 , openssh
 , pytestCheckHook
+, pythonOlder
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "deploykit";
   version = "1.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "numtide";
@@ -33,6 +37,10 @@ buildPythonPackage rec {
 
   # don't swallow stdout/stderr
   pytestFlagsArray = [ "-s" ];
+
+  pythonImportsCheck = [
+    "deploykit"
+  ];
 
   meta = with lib; {
     description = "Execute commands remote via ssh and locally in parallel with python";
