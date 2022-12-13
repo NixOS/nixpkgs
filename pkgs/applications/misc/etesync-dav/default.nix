@@ -13,26 +13,8 @@ let
           inherit version;
           sha256 = "ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc";
         };
-        disabledTests = [
-          "test_outside_request"
-        ];
-      });
-      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
-        version = "2.0.3";
-        src = old.src.override {
-          inherit version;
-          sha256 = "b863f8ff057c522164b6067c9e28b041161b4be5ba4d0daceeaa50a163822d3c";
-        };
-      });
-      wtforms = super.wtforms.overridePythonAttrs (old: rec {
-        version = "2.3.3";
-        src = old.src.override {
-          inherit version;
-          sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c";
-        };
-        checkPhase = ''
-          ${self.python.interpreter} tests/runtests.py
-        '';
+        doCheck = false;
+        patches = [];
       });
     };
   };
@@ -54,6 +36,7 @@ in python.pkgs.buildPythonApplication rec {
     msgpack
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
     requests
+    setuptools
   ] ++ requests.optional-dependencies.socks;
 
   doCheck = false;
