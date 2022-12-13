@@ -7,17 +7,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.31.0";
+  version = "0.32.0";
   pname = "geckodriver";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "geckodriver";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-sUu1D3HAxUTQFas4ylQ9LYC0dcKPyljoU+keENg17os=";
+    sha256 = "sha256-gYDfCPA2zsscZ4r4FcNgCvIMMm13/HACTvNoiK/c+LA=";
   };
 
-  cargoSha256 = "sha256-alwsxC1xDAAhqMTkgmUO4iDDUAK0lisXn3Yxgo7ZBhg=";
+  cargoSha256 = "sha256-FlttmNHh0UVQ6xbo1eID+Ys34xp6zvKab4eoKIGujCU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
