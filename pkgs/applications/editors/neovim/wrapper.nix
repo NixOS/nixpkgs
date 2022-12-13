@@ -14,6 +14,7 @@ let
       extraName ? ""
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
+    # a limited RC script used only to generate the manifest for remote plugins
     , manifestRc ? null
     , withPython2 ? false
     , withPython3 ? true,  python3Env ? python3
@@ -27,12 +28,29 @@ let
     # set to false if you want to control where to save the generated config
     # (e.g., in ~/.config/init.vim or project/.nvimrc)
     , wrapRc ? true
+    # if yes, pass startupCommands as `--cmd` arguments to neovim
+    # if false, inline the commands in the generated initrc
+    , wrapStartupCommands ? true
+    # startup commands are passed separately, they can be passed as neovim positional arguments
+    # or prepend to the init.vim
+    # these are lua commands that for instance set packpath, rtp, or the paths towars interpreters
+    , startupCommands ? []
+    # content of the init.vim if wrapped.
     , neovimRcContent ? ""
     , ...
-  }@args:
+  }:
   let
 
-    wrapperArgsStr = if isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
+    # deprecated: remove after 23.05
+    wrapperArgsStr = lib.optionalString (isString wrapperArgs) wrapperArgs;
+
+    # wrapper args used both when generating the manifest and in the final neovim executable
+    commonWrapperArgs = optionals (isList wrapperArgs) wrapperArgs;
+
+    finalRcContent = let
+      startupCommands' = optionals (!wrapStartupCommands) startupCommands;
+    in
+      (lib.concatStringsSep "\n" (startupCommands' ++ [ neovimRcContent ]));
 
     # If configure != {}, we can't generate the rplugin.vim file with e.g
     # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -40,10 +58,13 @@ let
     # when postBuild is evaluated), we call makeWrapper once to generate a
     # wrapper with most arguments we need, excluding those that cause problems to
     # generate rplugin.vim, but still required for the final wrapper.
-    finalMakeWrapperArgs =
+    finalMakeWrapperArgs = let
+      startupFlags = (lib.foldl' (x: y: x ++ ["--cmd" "lua ${y}" ]) [] startupCommands);
+    in
       [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
+      ++ optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" finalRcContent}" ]
+      ++ optionals wrapStartupCommands [ "--add-flags" (lib.escapeShellArgs startupFlags)]
       ;
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
@@ -74,7 +95,7 @@ let
       ''
       + optionalString (manifestRc != null) (let
         manifestWrapperArgs =
-          [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ];
+          [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ] ++ commonWrapperArgs;
       in ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim

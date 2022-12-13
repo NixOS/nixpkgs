@@ -89,6 +89,18 @@ let
         python3 = withPython3;
         ruby = withRuby;
       };
+
+      # a bunch of commands that might be used at the start of init.lua or
+      # as wrapper arguments
+      startupCommands = [
+        "vim.opt.packpath:prepend('${vimUtils.packDir packDirArgs}')"
+        "vim.opt.rtp:prepend('${vimUtils.packDir packDirArgs}')"
+      ] ++
+        lib.mapAttrsToList genProviderSettings hostprog_check_table;
+
+      # as expected by packdir
+      packDirArgs.myNeovimPackages = myVimPackage;
+
       ## Here we calculate all of the arguments to the 1st call of `makeWrapper`
       # We start with the executable itself NOTE we call this variable "initial"
       # because if configure != {} we need to call makeWrapper twice, in order to
@@ -96,21 +108,9 @@ let
       makeWrapperArgs =
         let
           binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
-
-          hostProviderViml = lib.mapAttrsToList genProviderSettings hostprog_check_table;
-
-          # as expected by packdir
-          packDirArgs.myNeovimPackages = myVimPackage;
-
-          # vim accepts a limited number of commands so we join them all
-          flags = [
-            "--cmd" (lib.intersperse "|" hostProviderViml)
-            "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
-            "--cmd" "set rtp^=${vimUtils.packDir packDirArgs}"
-            ];
         in
         [
-          "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
+          "--inherit-argv0"
         ] ++ lib.optionals withRuby [
           "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
@@ -131,6 +131,7 @@ let
 
     builtins.removeAttrs args ["plugins"] // {
       wrapperArgs = makeWrapperArgs;
+      inherit startupCommands;
       inherit neovimRcContent;
       inherit manifestRc;
       inherit python3Env;
@@ -142,14 +143,14 @@ let
 
     genProviderSettings = prog: withProg:
       if withProg then
-        "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
+        "vim.g.${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
       else
-        "let g:loaded_${prog}_provider=0"
+        "vim.g.loaded_${prog}_provider=0"
     ;
 
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper = neovim: {
-    extraMakeWrapperArgs ? ""
+      extraMakeWrapperArgs ? ""
     /* the function you would have passed to python.withPackages */
     , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
