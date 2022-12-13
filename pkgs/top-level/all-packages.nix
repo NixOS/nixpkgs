@@ -34514,6 +34514,8 @@ with pkgs;
 
   minecraft = callPackage ../games/minecraft { };
 
+  minecraft-server-hibernation = callPackage ../tools/games/minecraft/minecraft-server-hibernation { };
+
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
 
