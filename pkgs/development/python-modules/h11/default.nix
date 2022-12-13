@@ -4,6 +4,7 @@
 , pytestCheckHook
 , pythonOlder
 , httpcore
+, httpx
 , wsproto
 }:
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit httpcore wsproto;
+    inherit httpcore httpx wsproto;
   };
 
   meta = with lib; {
