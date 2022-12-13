@@ -359,7 +359,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
+      { assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
