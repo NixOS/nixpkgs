@@ -5,15 +5,17 @@
 , hypothesis
 , mock
 , python-Levenshtein
-, pytest
+, pytestCheckHook
 , termcolor
-, isPy27
-, enum34
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fire";
   version = "0.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -22,15 +24,21 @@ buildPythonPackage rec {
     hash = "sha256-cwY1RRNtpAn6LnBASQLTNf4XXSPnfhOa1WgglGEM2/s=";
   };
 
-  propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
+  propagatedBuildInputs = [
+    six
+    termcolor
+  ];
 
-  checkInputs = [ hypothesis mock python-Levenshtein pytest ];
+  checkInputs = [
+    hypothesis
+    mock
+    python-Levenshtein
+    pytestCheckHook
+  ];
 
-  # ignore test which asserts exact usage statement, default behavior
-  # changed in python3.8. This can likely be remove >=0.3.1
-  checkPhase = ''
-    py.test -k 'not testInitRequiresFlag'
-  '';
+  pythonImportsCheck = [
+    "fire"
+  ];
 
   meta = with lib; {
     description = "A library for automatically generating command line interfaces";
@@ -52,7 +60,7 @@ buildPythonPackage rec {
         REPL with the modules and variables you'll need already imported
         and created.
     '';
-    homepage "https://github.com/google/python-fire";
+    homepage = "https://github.com/google/python-fire";
     changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ leenaars ];
