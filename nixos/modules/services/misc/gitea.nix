@@ -26,9 +26,18 @@ in
   imports = [
     (mkRenamedOptionModule [ "services" "gitea" "cookieSecure" ] [ "services" "gitea" "settings" "session" "COOKIE_SECURE" ])
     (mkRenamedOptionModule [ "services" "gitea" "disableRegistration" ] [ "services" "gitea" "settings" "service" "DISABLE_REGISTRATION" ])
+    (mkRenamedOptionModule [ "services" "gitea" "domain" ] [ "services" "gitea" "settings" "server" "DOMAIN" ])
+    (mkRenamedOptionModule [ "services" "gitea" "httpAddress" ] [ "services" "gitea" "settings" "server" "HTTP_ADDR" ])
+    (mkRenamedOptionModule [ "services" "gitea" "httpPort" ] [ "services" "gitea" "settings" "server" "HTTP_PORT" ])
     (mkRenamedOptionModule [ "services" "gitea" "log" "level" ] [ "services" "gitea" "settings" "log" "LEVEL" ])
     (mkRenamedOptionModule [ "services" "gitea" "log" "rootPath" ] [ "services" "gitea" "settings" "log" "ROOT_PATH" ])
+    (mkRenamedOptionModule [ "services" "gitea" "rootUrl" ] [ "services" "gitea" "settings" "server" "ROOT_URL" ])
     (mkRenamedOptionModule [ "services" "gitea" "ssh" "clonePort" ] [ "services" "gitea" "settings" "server" "SSH_PORT" ])
+    (mkRenamedOptionModule [ "services" "gitea" "staticRootPath" ] [ "services" "gitea" "settings" "server" "STATIC_ROOT_PATH" ])
+
+    (mkChangedOptionModule [ "services" "gitea" "enableUnixSocket" ] [ "services" "gitea" "settings" "server" "PROTOCOL" ] (
+      config: if config.services.gitea.enableUnixSocket then "http+unix" else "http"
+    ))
 
     (mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ] "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted")
   ];
@@ -229,44 +238,6 @@ in
         description = lib.mdDoc "Path to the git repositories.";
       };
 
-      domain = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = lib.mdDoc "Domain name of your server.";
-      };
-
-      rootUrl = mkOption {
-        type = types.str;
-        default = "http://localhost:3000/";
-        description = lib.mdDoc "Full public URL of gitea server.";
-      };
-
-      httpAddress = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = lib.mdDoc "HTTP listen address.";
-      };
-
-      httpPort = mkOption {
-        type = types.port;
-        default = 3000;
-        description = lib.mdDoc "HTTP listen port.";
-      };
-
-      enableUnixSocket = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Configure Gitea to listen on a unix socket instead of the default TCP port.";
-      };
-
-      staticRootPath = mkOption {
-        type = types.either types.str types.path;
-        default = cfg.package.data;
-        defaultText = literalExpression "package.data";
-        example = "/var/lib/gitea/data";
-        description = lib.mdDoc "Upper level of template and static files path.";
-      };
-
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -298,7 +269,7 @@ in
             };
           }
         '';
-        type = with types; submodule {
+        type = types.submodule {
           freeformType = format.type;
           options = {
             log = {
@@ -316,6 +287,46 @@ in
             };
 
             server = {
+              PROTOCOL = mkOption {
+                type = types.enum [ "http" "https" "fcgi" "http+unix" "fcgi+unix" ];
+                default = "http";
+                description = lib.mdDoc ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
+              };
+
+              HTTP_ADDR = mkOption {
+                type = types.either types.str types.path;
+                default = if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0";
+                defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
+                description = lib.mdDoc "Listen address. Must be a path when using a unix socket.";
+              };
+
+              HTTP_PORT = mkOption {
+                type = types.port;
+                default = 3000;
+                description = lib.mdDoc "Listen port. Ignored when using a unix socket.";
+              };
+
+              DOMAIN = mkOption {
+                type = types.str;
+                default = "localhost";
+                description = lib.mdDoc "Domain name of your server.";
+              };
+
+              ROOT_URL = mkOption {
+                type = types.str;
+                default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
+                defaultText = literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
+                description = lib.mdDoc "Full public URL of gitea server.";
+              };
+
+              STATIC_ROOT_PATH = mkOption {
+                type = types.either types.str types.path;
+                default = cfg.package.data;
+                defaultText = literalExpression "config.${opt.package}.data";
+                example = "/var/lib/gitea/data";
+                description = lib.mdDoc "Upper level of template and static files path.";
+              };
+
               DISABLE_SSH = mkOption {
                 type = types.bool;
                 default = false;
@@ -402,25 +413,10 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = mkMerge [
-        {
-          DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = toString cfg.staticRootPath;
-          ROOT_URL = cfg.rootUrl;
-        }
-        (mkIf cfg.enableUnixSocket {
-          PROTOCOL = "http+unix";
-          HTTP_ADDR = "/run/gitea/gitea.sock";
-        })
-        (mkIf (!cfg.enableUnixSocket) {
-          HTTP_ADDR = cfg.httpAddress;
-          HTTP_PORT = cfg.httpPort;
-        })
-        (mkIf cfg.lfs.enable {
-          LFS_START_SERVER = true;
-          LFS_JWT_SECRET = "#lfsjwtsecret#";
-        })
-      ];
+      server = mkIf cfg.lfs.enable {
+        LFS_START_SERVER = true;
+        LFS_JWT_SECRET = "#lfsjwtsecret#";
+      };
 
       session = {
         COOKIE_NAME = lib.mkDefault "session";
@@ -522,7 +518,7 @@ in
         internalToken = "${cfg.customDir}/conf/internal_token";
         replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
-        # copy custom configuration and generate a random secret key if needed
+        # copy custom configuration and generate random secrets if needed
         ${optionalString (!cfg.useWizard) ''
           function gitea_setup {
             cp -f '${configFile}' '${runConfig}'
