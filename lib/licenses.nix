@@ -969,6 +969,11 @@ in mkLicense lset) ({
     fullName = "wxWindows Library Licence, Version 3.1";
   };
 
+  x11 = {
+    spdxId = "X11";
+    fullName = "X11 License";
+  };
+
   xfig = {
     fullName = "xfig";
     url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken

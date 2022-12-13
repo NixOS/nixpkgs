@@ -26587,6 +26587,8 @@ with pkgs;
 
   freepats = callPackage ../data/misc/freepats { };
 
+  garamond-libre = callPackage ../data/fonts/garamond-libre { };
+
   g15daemon = callPackage ../os-specific/linux/g15daemon {};
 
   galatia-sil = callPackage ../data/fonts/galatia-sil { };
