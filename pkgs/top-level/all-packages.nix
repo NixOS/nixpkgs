@@ -30652,6 +30652,8 @@ with pkgs;
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  pms = callPackage ../applications/audio/pms { };
+
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
