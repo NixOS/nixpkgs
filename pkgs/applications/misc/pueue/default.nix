@@ -1,36 +1,41 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, Libsystem
 , SystemConfiguration
 , installShellFiles
-, libiconv
 , rustPlatform
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-xUTkjj/PdlgDEp2VMwBuRtF/9iGGiN4FZizdOdcbTag=";
+    hash = "sha256-hKdGFfsCU8PHVNjEKF1UTccV3faGrmEvNtZVYg7VH/A=";
   };
 
-  cargoSha256 = "sha256-7VdPu+9RYoj4Xfb3J6GLOji7Fqxkk+Fswi4C4q33+jk=";
+  cargoHash = "sha256-xoyGhVhfk1SQJKjxgxQSbWD2oUY57A3D841Nci+GjMY=";
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    SystemConfiguration
-    libiconv
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.isDarwin [
+    # used by libproc-rs, which pueue only uses on darwin
+    rustPlatform.bindgenHook
   ];
 
-  checkFlags = [
-    "--test client_tests"
-    "--skip=test_single_huge_payload"
-    "--skip=test_create_unix_socket"
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Libsystem
+    SystemConfiguration
+  ];
+
+  useNextest = true;
+
+  cargoTestFlags = [
+    "--workspace"
   ];
 
   postInstall = ''
