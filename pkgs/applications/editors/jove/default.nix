@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jove";
-  version = "4.17.4.7";
+  version = "4.17.4.8";
 
   src = fetchFromGitHub {
     owner = "jonmacs";
     repo = "jove";
     rev = finalAttrs.version;
-    sha256 = "sha256-a8amp8JAI25XIeL8MzvJEAvv6B0oIaQvUOQlAaS3PeI=";
+    sha256 = "sha256-/n/TgVqyG/WeK+/DZqFZCdkQR4SD5+YmljLlzAehMvw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
