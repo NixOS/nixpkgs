@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zadnegoale";
-  version = "0.6.5";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ubBN4jvueNgReNbS+RXNDNHID0MF/rvQnb0+F4/DZaU=";
+    hash = "sha256-ij8xou8LXC4/BUTApIV6xSgb7ethwLyrHNJvBgxSBYM=";
   };
 
   propagatedBuildInputs = [
