@@ -7961,6 +7961,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  luizirber = {
+    email = "nixpkgs@luizirber.org";
+    github = "luizirber";
+    githubId = 6642;
+    name = "Luiz Irber";
+  };
   luizribeiro = {
     email = "nixpkgs@l9o.dev";
     matrix = "@luizribeiro:matrix.org";

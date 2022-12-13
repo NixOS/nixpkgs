@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A simple read-only sequence database, designed for short reads";
     homepage = "https://pypi.org/project/screed/";
+    maintainers = with maintainers; [ luizirber ];
     license = licenses.bsd3;
   };
 }
