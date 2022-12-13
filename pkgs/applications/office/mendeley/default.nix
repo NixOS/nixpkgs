@@ -38,7 +38,7 @@ in appimageTools.wrapType2 rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers  = with maintainers; [ dtzWill ];
+    maintainers  = with maintainers; [ dtzWill atila ];
   };
 
 }
