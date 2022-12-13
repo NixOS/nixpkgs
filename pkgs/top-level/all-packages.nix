@@ -24651,6 +24651,8 @@ with pkgs;
 
   sambaFull = samba4Full;
 
+  scrypted = callPackage ../servers/scrypted { };
+
   sampler = callPackage ../applications/misc/sampler { };
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
