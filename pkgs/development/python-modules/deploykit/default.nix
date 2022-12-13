@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "deploykit";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = pname;
     rev = version;
-    hash = "sha256-eKyqsGgnJmF2wUYa7HjC1Jwsh03qVTJEP1MtL7JL4Ts=";
+    hash = "sha256-I1vAefWQBBRNykDw38LTNwdiPFxpPkLzCcevYAXO+Zo=";
   };
 
   buildInputs = [
