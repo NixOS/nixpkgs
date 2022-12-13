@@ -525,29 +525,29 @@ in
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (!cfg.useWizard) ''
           function gitea_setup {
-            cp -f ${configFile} ${runConfig}
+            cp -f '${configFile}' '${runConfig}'
 
-            if [ ! -s ${secretKey} ]; then
-                ${exe} generate secret SECRET_KEY > ${secretKey}
+            if [ ! -s '${secretKey}' ]; then
+                ${exe} generate secret SECRET_KEY > '${secretKey}'
             fi
 
             # Migrate LFS_JWT_SECRET filename
-            if [[ -s ${oldLfsJwtSecret} && ! -s ${lfsJwtSecret} ]]; then
-                mv ${oldLfsJwtSecret} ${lfsJwtSecret}
+            if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
+                mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
             fi
 
-            if [ ! -s ${oauth2JwtSecret} ]; then
-                ${exe} generate secret JWT_SECRET > ${oauth2JwtSecret}
+            if [ ! -s '${oauth2JwtSecret}' ]; then
+                ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
             fi
 
             ${lib.optionalString cfg.lfs.enable ''
-            if [ ! -s ${lfsJwtSecret} ]; then
-                ${exe} generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
+            if [ ! -s '${lfsJwtSecret}' ]; then
+                ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
             fi
             ''}
 
-            if [ ! -s ${internalToken} ]; then
-                ${exe} generate secret INTERNAL_TOKEN > ${internalToken}
+            if [ ! -s '${internalToken}' ]; then
+                ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
             fi
 
             chmod u+w '${runConfig}'
