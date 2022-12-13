@@ -17684,6 +17684,8 @@ with pkgs;
 
   nmrpflash = callPackage ../development/embedded/nmrpflash { };
 
+  norminette = callPackage ../development/tools/norminette { };
+
   nwjs = callPackage ../development/tools/nwjs { };
 
   nwjs-sdk = callPackage ../development/tools/nwjs {
