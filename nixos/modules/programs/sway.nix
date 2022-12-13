@@ -32,6 +32,7 @@ let
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
     isNixOS = true;
+    useSetcapWrapper = true;
   };
 in {
   options.programs.sway = {
@@ -133,8 +134,17 @@ in {
         '';
       };
     };
-    security.polkit.enable = true;
-    security.pam.services.swaylock = {};
+    security = {
+      wrappers.sway = {
+        program = "sway-setcap";
+        source = "${swayPackage.unwrapped}/bin/sway";
+        capabilities = "cap_sys_nice+ep";
+        owner = "root";
+        group = "root";
+      };
+      polkit.enable = true;
+      pam.services.swaylock = {};
+    };
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;

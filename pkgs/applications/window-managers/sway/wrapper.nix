@@ -7,6 +7,7 @@
 # Used by the NixOS module:
 , isNixOS ? false
 
+, useSetcapWrapper ? false
 , enableXWayland ? true
 , dbusSupport ? true
 }:
@@ -17,6 +18,7 @@ with lib;
 
 let
   sway = sway-unwrapped.override { inherit isNixOS enableXWayland; };
+  swayBinary = if useSetcapWrapper then "sway-setcap" else "${sway}/bin/sway";
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
@@ -26,9 +28,9 @@ let
      fi
      if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
        export DBUS_SESSION_BUS_ADDRESS
-       exec ${sway}/bin/sway "$@"
+       exec ${swayBinary} "$@"
      else
-       exec ${if !dbusSupport then "" else "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
+       exec ${if !dbusSupport then "" else "${dbus}/bin/dbus-run-session"} ${swayBinary} "$@"
      fi
    '';
 in symlinkJoin {
@@ -55,6 +57,7 @@ in symlinkJoin {
   '';
 
   passthru = {
+    unwrapped = sway;
     inherit (sway.passthru) tests;
     providedSessions = [ "sway" ];
   };
