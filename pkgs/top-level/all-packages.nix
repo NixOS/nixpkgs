@@ -37138,6 +37138,8 @@ with pkgs;
 
   stork = callPackage ../applications/misc/stork { };
 
+  superd = callPackage ../misc/superd { };
+
   oclgrind = callPackage ../development/tools/analysis/oclgrind { };
 
   opkg = callPackage ../tools/package-management/opkg { };
