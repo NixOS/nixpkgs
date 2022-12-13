@@ -818,6 +818,8 @@ self: super: with self; {
   awkward0 = callPackage ../development/python-modules/awkward0 { };
   awkward = callPackage ../development/python-modules/awkward { };
 
+  awkward-cpp = callPackage ../development/python-modules/awkward-cpp { };
+
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
