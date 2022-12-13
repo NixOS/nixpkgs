@@ -11462,6 +11462,8 @@ with pkgs;
 
   skim = callPackage ../tools/misc/skim { };
 
+  seashells = callPackage ../applications/misc/seashells { };
+
   seaweedfs = callPackage ../applications/networking/seaweedfs { };
 
   sec = callPackage ../tools/admin/sec { };
