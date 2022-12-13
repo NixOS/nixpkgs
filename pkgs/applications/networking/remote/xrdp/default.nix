@@ -100,6 +100,20 @@ let
       license = licenses.asl20;
       maintainers = [ ];
       platforms = platforms.linux;
+      knownVulnerabilities = [
+        "CVE-2020-4044"
+        "CVE-2022-23468"
+        "CVE-2022-23477"
+        "CVE-2022-23478"
+        "CVE-2022-23479"
+        "CVE-2022-23480"
+        "CVE-2022-23481"
+        "CVE-2022-23482"
+        "CVE-2022-23483"
+        "CVE-2022-23484"
+        "CVE-2022-23493"
+        "CVE-2022-23613"
+      ];
     };
   };
 in xrdp
