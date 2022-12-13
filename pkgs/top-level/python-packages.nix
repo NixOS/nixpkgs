@@ -244,6 +244,8 @@ self: super: with self; {
 
   aiolip = callPackage ../development/python-modules/aiolip { };
 
+  aiolivisi = callPackage ../development/python-modules/aiolivisi { };
+
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomisc = callPackage ../development/python-modules/aiomisc { };
@@ -545,6 +547,8 @@ self: super: with self; {
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
+
+  aranet4 = callPackage ../development/python-modules/aranet4 { };
 
   arc4 = callPackage ../development/python-modules/arc4 { };
 
@@ -5418,8 +5422,6 @@ self: super: with self; {
   logi-circle = callPackage ../development/python-modules/logi-circle { };
 
   logical-unification = callPackage ../development/python-modules/logical-unification { };
-
-  logilab_astng = callPackage ../development/python-modules/logilab_astng { };
 
   logilab-common = callPackage ../development/python-modules/logilab/common.nix { };
 
@@ -11218,6 +11220,8 @@ self: super: with self; {
   tmb = callPackage ../development/python-modules/tmb { };
 
   todoist = callPackage ../development/python-modules/todoist { };
+
+  todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 

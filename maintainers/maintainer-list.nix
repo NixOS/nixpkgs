@@ -3847,12 +3847,6 @@
     githubId = 15128988;
     name = "Maksim Dzabraev";
   };
-  e-user = {
-    email = "nixos@sodosopa.io";
-    github = "outergod";
-    githubId = 93086;
-    name = "Alexander Kahl";
-  };
   eadwu = {
     email = "edmund.wu@protonmail.com";
     github = "eadwu";
