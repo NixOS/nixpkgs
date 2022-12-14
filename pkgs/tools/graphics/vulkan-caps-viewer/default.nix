@@ -55,5 +55,7 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     license     = licenses.gpl2Only;
     maintainers = with maintainers; [ pedrohlc ];
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }
