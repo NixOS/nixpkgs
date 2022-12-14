@@ -1760,6 +1760,8 @@ self: super: with self; {
 
   clickclick = callPackage ../development/python-modules/clickclick { };
 
+  click-command-tree = callPackage ../development/python-modules/click-command-tree { };
+
   click-completion = callPackage ../development/python-modules/click-completion { };
 
   click-configfile = callPackage ../development/python-modules/click-configfile { };
@@ -2027,6 +2029,11 @@ self: super: with self; {
   credstash = callPackage ../development/python-modules/credstash { };
 
   criticality-score = callPackage ../development/python-modules/criticality-score { };
+
+  crocoddyl = toPythonModule (callPackage ../development/libraries/crocoddyl {
+    pythonSupport = true;
+    python3Packages = self;
+  });
 
   cron-descriptor = callPackage ../development/python-modules/cron-descriptor { };
 
@@ -2897,6 +2904,8 @@ self: super: with self; {
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
+  eigenpy = toPythonModule (callPackage ../development/python-modules/eigenpy { });
+
   einops = callPackage ../development/python-modules/einops { };
 
   eiswarnung = callPackage ../development/python-modules/eiswarnung { };
@@ -3067,6 +3076,11 @@ self: super: with self; {
   evtx = callPackage ../development/python-modules/evtx { };
 
   ewmh = callPackage ../development/python-modules/ewmh { };
+
+  example-robot-data = toPythonModule (pkgs.example-robot-data.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
 
   exdown = callPackage ../development/python-modules/exdown { };
 
@@ -6962,6 +6976,11 @@ self: super: with self; {
   pims = callPackage ../development/python-modules/pims { };
 
   pinboard = callPackage ../development/python-modules/pinboard { };
+
+  pinocchio = toPythonModule (pkgs.pinocchio.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
 
   pint = callPackage ../development/python-modules/pint { };
 

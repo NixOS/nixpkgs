@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;
+    # never built on x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

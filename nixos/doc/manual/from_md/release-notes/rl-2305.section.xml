@@ -240,6 +240,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.fwupd</literal> module now allows
+          arbitrary daemon settings to be configured in a structured
+          manner
+          (<link linkend="opt-services.fwupd.daemonSettings"><literal>services.fwupd.daemonSettings</literal></link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>unifi-poller</literal> package and corresponding
           NixOS module have been renamed to <literal>unpoller</literal>
           to match upstream.
