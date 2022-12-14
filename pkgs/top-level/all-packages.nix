@@ -15147,8 +15147,28 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  hip-common = callPackage ../development/compilers/hip-common {
+    inherit (llvmPackages_rocm) llvm;
+    stdenv = rocmClangStdenv;
+  };
+
+  hipcc = callPackage ../development/compilers/hipcc {
+    inherit (llvmPackages_rocm) llvm;
+    stdenv = rocmClangStdenv;
+  };
+
   hip = callPackage ../development/compilers/hip {
-    inherit (llvmPackages_rocm) clang llvm;
+    inherit (llvmPackages_rocm) llvm;
+    inherit (cudaPackages) cudatoolkit;
+    stdenv = rocmClangStdenv;
+  };
+
+  hip-amd = hip.override {
+    useNVIDIA = false;
+  };
+
+  hip-nvidia = hip.override {
+    useNVIDIA = true;
   };
 
   hipcub = callPackage ../development/libraries/hipcub {

@@ -12,7 +12,7 @@
 , swig
 , lua5_3
 , gtest
-, hipcc
+, hip
 , rocm-comgr
 , vulkan-loader
 , vulkan-headers
@@ -471,7 +471,7 @@ in rec {
     buildMan = false; # No man pages to build
     targetName = "mlir";
     targetDir = targetName;
-    extraNativeBuildInputs = [ hipcc ];
+    extraNativeBuildInputs = [ hip ];
 
     extraBuildInputs = [
       rocm-comgr
