@@ -4,8 +4,9 @@
 , hatchling
 , ipykernel
 , jedi
-, pexpect
 , jupyter_core
+, pexpect
+, pythonOlder
 }:
 
 buildPythonPackage rec {
