@@ -5787,6 +5787,8 @@ self: super: with self; {
     inherit (pkgs.darwin) cctools;
   };
 
+  mirakuru = callPackage ../development/python-modules/mirakuru { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
