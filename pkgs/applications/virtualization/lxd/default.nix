@@ -4,34 +4,17 @@
 , lxc
 , buildGoModule
 , fetchurl
-, makeWrapper
 , acl
-, rsync
-, gnutar
-, xz
-, btrfs-progs
-, gzip
-, dnsmasq
-, attr
-, squashfsTools
-, iproute2
-, iptables
 , libcap
 , dqlite
 , raft-canonical
 , sqlite-replication
 , udev
-, writeShellScriptBin
-, apparmor-profiles
-, apparmor-parser
-, criu
-, bash
 , installShellFiles
-, nixosTests
 }:
 
 buildGoModule rec {
-  pname = "lxd";
+  pname = "lxd-unwrapped";
   version = "5.8";
 
   src = fetchurl {
@@ -51,7 +34,7 @@ buildGoModule rec {
 
   excludedPackages = [ "test" "lxd/db/generate" ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [
     lxc
     acl
@@ -84,20 +67,8 @@ buildGoModule rec {
     '';
 
   postInstall = ''
-    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
-      [ iptables ]
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
-      ++ [ (writeShellScriptBin "apparmor_parser" ''
-             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-           '') ]
-      )
-    }
-
     installShellCompletion --bash --name lxd ./scripts/bash/lxd-client
   '';
-
-  passthru.tests.lxd = nixosTests.lxd;
-  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
