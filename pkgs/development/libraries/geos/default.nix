@@ -1,8 +1,10 @@
 { lib
-, fetchurl
-, fetchpatch
 , stdenv
+, callPackage
+, fetchpatch
+, fetchurl
 , testers
+
 , cmake
 }:
 
@@ -29,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
