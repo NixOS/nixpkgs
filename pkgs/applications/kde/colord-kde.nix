@@ -7,12 +7,6 @@
 
 mkDerivation rec {
   pname = "colord-kde";
-  version = "0.5.0";
-
-  src = fetchurl {
-    url = "http://download.kde.org/stable/colord-kde/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "0brdnpflm95vf4l41clrqxwvjrdwhs859n7401wxcykkmw4m0m3c";
-  };
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
