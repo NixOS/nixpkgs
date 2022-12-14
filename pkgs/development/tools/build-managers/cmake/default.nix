@@ -40,20 +40,18 @@ stdenv.mkDerivation rec {
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.24.3";
+  version = "3.25.1";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    sha256 = "sha256-tTqhD6gr/4TM21kGWSe3LTvuSfTYYmEkn8CYSzs2cpE=";
+    sha256 = "sha256-HFEdCVFq9JNpTtm68TxVlHo2OJZ01lei1eDM7caykdg=";
   };
 
   patches = [
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
-    # Don't depend on frameworks.
-    ./002-application-services.diff
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
-    ./003-libuv-application-services.diff
+    ./002-libuv-application-services.diff
   ]
   ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
