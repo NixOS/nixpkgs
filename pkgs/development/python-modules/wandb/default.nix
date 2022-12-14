@@ -114,6 +114,7 @@ buildPythonPackage rec {
     "tests/unit_tests_old/test_footer.py"
     "tests/unit_tests_old/test_internal_api.py"
     "tests/unit_tests_old/test_keras.py"
+    "tests/unit_tests_old/test_logging.py"
     "tests/unit_tests_old/test_metric_internal.py"
     "tests/unit_tests_old/test_public_api.py"
     "tests/unit_tests_old/test_report_api.py"
