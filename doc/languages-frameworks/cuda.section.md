@@ -33,10 +33,21 @@ mypkg = let
 in callPackage { inherit cudaPackages; };
 ```
 
-cudaPackages also provides a default set of cudaCapabilites for cards based on the
-CUDA version.  You may provide capabilities to add support or reduce
-binary size through `config` using `cudaCapabilities = [ "6.0" "7.0" ];` and
+The CUDA NVCC compiler requires flags to determine which hardware you
+want to target for in terms of SASS (real hardware) or PTX (JIT kernels).
+
+Nixpkgs tries to target support real architecture defaults based on the
+CUDA toolkit version with PTX support for future hardware.  Experienced
+users may optmize this configuration for a variety of reasons such as
+reducing binary size and compile time, supporting legacy hardware, or
+optimizing for specific hardware.
+
+You may provide capabilities to add support or reduce binary size through
+`config` using `cudaCapabilities = [ "6.0" "7.0" ];` and
 `cudaForwardCompat = true;` if you want PTX support for future hardware.
 
-You may further reduce final size by dropping static library output using
-`cudaRemoveStatic` in `config`.
+Please consult [GPUs supported](https://en.wikipedia.org/wiki/CUDA#GPUs_supported)
+for your specific card(s).
+
+Library maintainers should consult [NVCC Docs](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/)
+and release notes for their software package.
