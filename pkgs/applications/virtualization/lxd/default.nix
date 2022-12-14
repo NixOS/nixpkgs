@@ -104,7 +104,7 @@ buildGoModule rec {
     homepage = "https://linuxcontainers.org/lxd/";
     changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ marsam adamcstephens ];
     platforms = platforms.linux;
   };
 }
