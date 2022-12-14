@@ -41,6 +41,8 @@ buildGoModule rec {
     DISABLE_ESLINT_PLUGIN=true npm_config_offline=true make web-build docs-build
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Send push notifications to your phone or desktop via PUT/POST";
     homepage = "https://ntfy.sh";
