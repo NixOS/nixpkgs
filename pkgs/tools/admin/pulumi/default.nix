@@ -43,6 +43,11 @@ buildGoModule rec {
 
   doCheck = true;
 
+  disabledTests = [
+    # Flaky test
+    "TestPendingDeleteOrder"
+  ];
+
   checkInputs = [
     git
   ];
@@ -63,6 +68,9 @@ buildGoModule rec {
     # Code generation tests also download dependencies from network
     rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
     rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
+
+    # Only run tests not marked as disabled
+    buildFlagsArray+=("-run" "[^(${lib.concatStringsSep "|" disabledTests})]")
   '' + lib.optionalString stdenv.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
