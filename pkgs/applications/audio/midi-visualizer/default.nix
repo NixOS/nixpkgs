@@ -1,5 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, glfw, makeWrapper,
-  libXrandr, libXinerama, libXcursor, gtk3, ffmpeg-full, ...}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libX11
+, glfw
+, makeWrapper
+, libXrandr
+, libXinerama
+, libXcursor
+, gtk3
+, ffmpeg-full
+, AppKit
+, Carbon
+, Cocoa
+, CoreAudio
+, CoreMIDI
+, CoreServices
+, Kernel
+}:
 
 stdenv.mkDerivation rec {
   pname = "MIDIVisualizer";
@@ -15,16 +34,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config makeWrapper];
 
   buildInputs = [
-    libX11
     glfw
+    ffmpeg-full
+  ] ++ lib.optionals stdenv.isLinux [
+    libX11
     libXrandr
     libXinerama
     libXcursor
     gtk3
-    ffmpeg-full
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Carbon
+    Cocoa
+    CoreAudio
+    CoreMIDI
+    CoreServices
+    Kernel
   ];
 
-  installPhase = ''
+  installPhase = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications $out/bin
+    cp -r MIDIVisualizer.app $out/Applications/
+    ln -s ../Applications/MIDIVisualizer.app/Contents/MacOS/MIDIVisualizer $out/bin/
+  '' else ''
     mkdir -p $out/bin
     cp MIDIVisualizer $out/bin
 
@@ -36,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "A small MIDI visualizer tool, using OpenGL";
     homepage = "https://github.com/kosua20/MIDIVisualizer";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.ericdallo ];
   };
 }
