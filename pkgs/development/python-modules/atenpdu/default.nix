@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "atenpdu";
-  version = "0.3.5";
+  version = "0.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MGxlzAEcd2EzIjAjY7/1xg1ZQhyL7dcFmCzfY9+jGJ4=";
+    hash = "sha256-cl7PZdIdLGvoYd5x7QyjkTBc+pVB9F7En9sxcUoX34Q=";
   };
 
   propagatedBuildInputs = [
