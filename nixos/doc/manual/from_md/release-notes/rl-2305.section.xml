@@ -39,6 +39,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/slurdge/goeland">goeland</link>,
+          an alternative to rss2email written in golang with many
+          filters. Available as
+          <link linkend="opt-services.goeland.enable">services.goeland</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
