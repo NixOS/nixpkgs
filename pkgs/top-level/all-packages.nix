@@ -23930,6 +23930,8 @@ with pkgs;
 
   inspircdMinimal = inspircd.override { extraModules = []; };
 
+  imaginary = callPackage ../servers/imaginary {};
+
   imgproxy = callPackage ../servers/imgproxy { };
 
   irccat = callPackage ../servers/irc/irccat { };
