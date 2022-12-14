@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbee";
-  version = "1.6.2";
+  version = "1.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jafar-atili";
     repo = "pySwitchbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-MDutpeHI6MW1VwCRTPJK/y08ee4eidOHluMf6lPQfEk=";
+    hash = "sha256-M3sxxBp4IoqZLX9Lyw35Z0zkV6fDT7AkeDOcdPN5k7w=";
   };
 
   postPatch = ''
