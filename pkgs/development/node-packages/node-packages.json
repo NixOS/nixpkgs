@@ -33,6 +33,7 @@
 , "audiosprite"
 , "autoprefixer"
 , "auto-changelog"
+, "awk-language-server"
 , "aws-azure-login"
 , "aws-cdk"
 , "awesome-lint"
