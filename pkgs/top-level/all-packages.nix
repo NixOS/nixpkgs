@@ -376,6 +376,8 @@ with pkgs;
 
   cewl = callPackage ../tools/security/cewl { };
 
+  checkexec = callPackage ../tools/misc/checkexec { };
+
   checkov = callPackage ../development/tools/analysis/checkov {};
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
