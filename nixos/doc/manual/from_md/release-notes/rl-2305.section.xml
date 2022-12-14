@@ -85,6 +85,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/slurdge/goeland">goeland</link>,
+          an alternative to rss2email written in golang with many
+          filters. Available as
+          <link linkend="opt-services.goeland.enable">services.goeland</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ellie/atuin">atuin</link>,
           a sync server for shell history. Available as
           <link linkend="opt-services.atuin.enable">services.atuin</link>.
