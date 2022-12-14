@@ -1,4 +1,5 @@
 import ./make-test-python.nix {
+  name = "ntfy-sh";
 
   nodes.machine = { ... }: {
     services.ntfy-sh.enable = true;
