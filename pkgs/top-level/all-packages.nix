@@ -9323,7 +9323,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
-  lxd = callPackage ../tools/admin/lxd { };
+  lxd = callPackage ../applications/virtualization/lxd { };
 
   lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
 
