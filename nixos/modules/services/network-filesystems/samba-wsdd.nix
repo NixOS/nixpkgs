@@ -15,10 +15,16 @@ in {
         ::: {.note}
         If you use the firewall consider adding the following:
 
-            networking.firewall.allowedTCPPorts = [ 5357 ];
-            networking.firewall.allowedUDPPorts = [ 3702 ];
+            services.samba-wsdd.openFirewall = true;
         :::
       '');
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to automatically open the necessary ports in the firewall.
+        '';
+      };
       interface = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -68,6 +74,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = optional
+      (config.services.samba.openFirewall && !cfg.openFirewall)
+      "If samba.openFirewall is true, then samba-wsdd.openFirewall should also be true.";
 
     environment.systemPackages = [ pkgs.wsdd ];
 
@@ -120,5 +129,8 @@ in {
         SystemCallFilter = "~@cpu-emulation @debug @mount @obsolete @privileged @resources";
       };
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 5357 ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 3702 ];
   };
 }
