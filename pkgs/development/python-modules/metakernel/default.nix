@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.29.2";
+  version = "0.29.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-A++uLR4hhOQYmA6o9wBTejFju3CpbK0hwIs7XFscddQ=";
+    sha256 = "sha256-kxrF/Msxjht7zGs0aEcL/Sf0qwcLiSoDPDUlE7Lrcmg=";
   };
 
   nativeBuildInputs = [
