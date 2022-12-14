@@ -49,7 +49,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.299.1";
+  version = "2.300.0";
 
   inherit sdkSource;
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-o6N7GDfSEWX6QaEga5hQpbpDcBh7Alcy9mK3QlODTbs=";
+    hash = "sha256-pEBudX285qMz0W8Sog0ph2CA5UclBItQ+ixaBi6dl8I=";
   };
 
   nativeBuildInputs = [
