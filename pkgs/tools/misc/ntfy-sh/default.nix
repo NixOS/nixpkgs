@@ -1,4 +1,6 @@
-{ lib, pkgs, nodejs, stdenv, buildGoModule, fetchFromGitHub, debianutils, mkdocs, python3, python3Packages }:
+{ lib, pkgs, stdenv, buildGoModule, fetchFromGitHub, nixosTests
+, nodejs, debianutils, mkdocs, python3, python3Packages }:
+
 
 let
   nodeDependencies = (import ./node-composition.nix {
@@ -41,12 +43,15 @@ buildGoModule rec {
     DISABLE_ESLINT_PLUGIN=true npm_config_offline=true make web-build docs-build
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.ntfy-sh = nixosTests.ntfy-sh;
+  };
 
   meta = with lib; {
     description = "Send push notifications to your phone or desktop via PUT/POST";
     homepage = "https://ntfy.sh";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arjan-s ];
+    maintainers = with maintainers; [ arjan-s fpletz ];
   };
 }
