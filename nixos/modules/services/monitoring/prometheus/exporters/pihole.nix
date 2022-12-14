@@ -12,6 +12,7 @@ in
     (mkRemovedOptionModule [ "interval" ] ''
       As of prometheus-pihole-exporter 0.3.0 this option no-longer exists.
     '')
+     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
   ];
   extraOpts = {
     apiToken = mkOption {
