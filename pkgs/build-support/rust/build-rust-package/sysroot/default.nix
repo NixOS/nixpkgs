@@ -14,9 +14,13 @@ in rustPlatform.buildRustPackage {
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;
-  cargoSha256 = "0y6dqfhsgk00y3fv5bnjzk0s7i30nwqc1rp0xlrk83hkh80x81mw";
+  cargoLock.lockFile = ../../sysroot/Cargo.lock;
 
   doCheck = false;
+
+  buildPhase = ''
+    cargo build --frozen --release --target ${target}
+  '';
 
   installPhase = ''
     export LIBS_DIR=$out/lib/rustlib/${shortTarget}/lib
@@ -27,6 +31,6 @@ in rustPlatform.buildRustPackage {
 
     export RUST_SYSROOT=$(rustc --print=sysroot)
     host=${rust.toRustTarget stdenv.buildPlatform}
-    cp -r $RUST_SYSROOT/lib/rustlib/$host $out
+    ln -s $RUST_SYSROOT/lib/rustlib/$host $out/lib/rustlib/
   '';
 }

@@ -74,9 +74,10 @@ let
       sha256 = args.cargoSha256;
     } // depsExtraArgs);
 
-  target = rust.toRustTargetSpec stdenv.hostPlatform;
+  hostTarget = rust.toRustTargetSpec stdenv.hostPlatform;
+  target = args.target or hostTarget;
   targetIsJSON = lib.hasSuffix ".json" target;
-  useSysroot = targetIsJSON && !__internal_dontAddSysroot;
+  useSysroot = target != hostTarget && targetIsJSON && !__internal_dontAddSysroot;
 
   # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
   # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
