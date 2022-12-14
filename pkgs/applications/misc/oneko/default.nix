@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ publicDomain ];
     maintainers = with maintainers; [ xaverdh irenes ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
