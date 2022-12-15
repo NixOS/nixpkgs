@@ -34282,9 +34282,7 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
-  jumpy = callPackage ../games/jumpy {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-  };
+  jumpy = callPackage ../games/jumpy { };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
