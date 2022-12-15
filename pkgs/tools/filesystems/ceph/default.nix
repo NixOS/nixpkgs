@@ -22,6 +22,7 @@
 , graphviz
 , fmt
 , python39
+, kmod
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -168,7 +169,7 @@ in rec {
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
-      cryptsetup sqlite lua icu bzip2
+      cryptsetup sqlite lua icu bzip2 kmod
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
       # ceph 14
