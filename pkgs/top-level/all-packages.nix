@@ -1502,6 +1502,8 @@ with pkgs;
     wine = wineWowPackages.staging;
   };
 
+  wtwitch = callPackage ../tools/video/wtwitch {};
+
   wwcd = callPackage ../tools/misc/wwcd { };
 
   writedisk = callPackage ../tools/misc/writedisk { };
@@ -18769,6 +18771,8 @@ with pkgs;
     boost = boost169; # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
   };
 
+  cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
+
   ubus = callPackage ../development/libraries/ubus { };
 
   uci = callPackage ../development/libraries/uci { };
@@ -23931,6 +23935,8 @@ with pkgs;
 
   inspircdMinimal = inspircd.override { extraModules = []; };
 
+  imaginary = callPackage ../servers/imaginary {};
+
   imgproxy = callPackage ../servers/imgproxy { };
 
   irccat = callPackage ../servers/irc/irccat { };
@@ -24996,6 +25002,8 @@ with pkgs;
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
+
+  below = callPackage ../os-specific/linux/below { };
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
@@ -27413,6 +27421,8 @@ with pkgs;
       buildPythonApplication appdirs colorama python-dateutil
       requests requests-toolbelt setuptools sqlalchemy fusepy;
   };
+
+  acorn = callPackage ../applications/networking/cluster/acorn {};
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 

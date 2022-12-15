@@ -98,16 +98,6 @@
       <listitem>
         <para>
           The
-          <link linkend="opt-services.avahi.openFirewall">services.avahi.openFirewall</link>
-          module option default value has been changed from
-          <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The
           <link linkend="opt-services.tmate-ssh-server.openFirewall">services.tmate-ssh-server.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
