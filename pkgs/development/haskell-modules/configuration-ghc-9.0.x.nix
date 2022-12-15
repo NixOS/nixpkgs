@@ -92,6 +92,7 @@ self: super: {
   split = doJailbreak super.split;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
+  tuple = addBuildDepend self.base-orphans super.tuple;
   vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
@@ -106,11 +107,19 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   }) (doJailbreak super.language-haskell-extract);
 
-  haskell-language-server = super.haskell-language-server.overrideScope (lself: lsuper: {
+  haskell-language-server = let
+    # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
+    additionalDeps = with super.haskell-language-server.scope; [ hls-haddock-comments-plugin hls-splice-plugin hls-tactics-plugin ];
+  in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     # Needed for modern ormolu and fourmolu.
     # Apply this here and not in common, because other ghc versions offer different Cabal versions.
     Cabal = lself.Cabal_3_6_3_0;
-  });
+  }));
+
+  # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
+  hls-haddock-comments-plugin = addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
+    ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
+  ]) super.hls-haddock-comments-plugin;
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
@@ -157,4 +166,8 @@ self: super: {
 
   # Restrictive upper bound on base and containers
   sv2v = doJailbreak super.sv2v;
+
+  # Later versions only support GHC >= 9.2
+  ghc-exactprint = self.ghc-exactprint_0_6_4;
+  apply-refact = self.apply-refact_0_9_3_0;
 }

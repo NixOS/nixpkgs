@@ -2338,4 +2338,6 @@ self: super: {
       sha256 = "sha256-ceSPBH+lzGU1OwjolcaE1BCpkKCJrvMU5G8TPeaJesM=";
     };
   } super.postgrest));
+
+  html-charset = dontCheck super.html-charset;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
