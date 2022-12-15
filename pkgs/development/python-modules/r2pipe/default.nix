@@ -5,11 +5,15 @@
 , fetchPypi
 , radare2
 , coreutils
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "r2pipe";
   version = "1.7.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   postPatch = let
     r2lib = "${lib.getOutput "lib" radare2}/lib";
