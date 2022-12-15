@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitLab
-, python3
+, python
 , cmake
 
 , sqlite
@@ -48,7 +48,7 @@
 }:
 
 let
-  pythonEnv = python3.withPackages (ps:
+  pythonEnv = python.withPackages (ps:
     lib.optional withManual ps.sphinx
     ++ lib.optionals pythonSupport (with ps;[ pybindgen pygccxml cppyy ])
   );
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Oj3u2P98dl2Lvyg51F/6XBdLr+8PcmT00TCVgGb30Xc=";
   };
 
-  nativeBuildInputs = [ python3 cmake ];
+  nativeBuildInputs = [ python cmake ];
 
   buildInputs = [ gtk3 sqlite cmake-format harfbuzz libxml2 sphinx gsl ]
     ++ lib.optionals pythonSupport [ castxml ncurses ]
