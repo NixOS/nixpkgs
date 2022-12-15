@@ -37,7 +37,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.2.5";
+  version = "22.3.1";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -52,7 +52,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "sha256-hQ8GMUb467JirsBPZmwsHlYj8qGYfdok5DYbF7kSxzs=";
+    sha256 = "sha256-PJzWEcCFnTB6ugZZgzOGq9ykyGFi08J1ulvmLRbPMes=";
   };
 
   # TODO:
@@ -105,7 +105,6 @@ self = stdenv.mkDerivation {
 
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
-    "-Dxvmc-libs-path=${placeholder "drivers"}/lib"
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
@@ -127,7 +126,7 @@ self = stdenv.mkDerivation {
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
-    libffi libvdpau libelf libXvMC
+    libffi libvdpau libelf
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
@@ -263,10 +262,10 @@ self = stdenv.mkDerivation {
       The Mesa project began as an open-source implementation of the OpenGL
       specification - a system for rendering interactive 3D graphics. Over the
       years the project has grown to implement more graphics APIs, including
-      OpenGL ES (versions 1, 2, 3), OpenCL, OpenMAX, VDPAU, VA API, XvMC, and
-      Vulkan.  A variety of device drivers allows the Mesa libraries to be used
-      in many different environments ranging from software emulation to
-      complete hardware acceleration for modern GPUs.
+      OpenGL ES (versions 1, 2, 3), OpenCL, OpenMAX, VDPAU, VA API and Vulkan.
+      A variety of device drivers allows the Mesa libraries to be used in many
+      different environments ranging from software emulation to complete
+      hardware acceleration for modern GPUs.
     '';
     homepage = "https://www.mesa3d.org/";
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
