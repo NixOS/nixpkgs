@@ -13,8 +13,8 @@
 , libevent
 , nixosTests
 , gtk3Support ? false
-, gtk3 ? null
-, qt5 ? null
+, gtk3
+, qt5
 , qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null

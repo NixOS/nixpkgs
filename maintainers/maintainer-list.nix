@@ -11013,6 +11013,12 @@
       fingerprint = "D03B 218C AE77 1F77 D7F9  20D9 823A 6154 4264 08D3";
     }];
   };
+  piperswe = {
+    email = "contact@piperswe.me";
+    github = "piperswe";
+    githubId = 1830959;
+    name = "Piper McCorkle";
+  };
   pjbarnoy = {
     email = "pjbarnoy@gmail.com";
     github = "pjbarnoy";

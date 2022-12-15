@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
       --replace   /bin/false ${coreutils}/bin/false
   '';
 
-  postConfigure = lib.optionalString (!stdenv.hostPlatform.isMusl) ''
+  postConfigure = lib.optionalString doCheck ''
     # Unpacked by meson
     chmod +x subprojects/mocklibc-1.0/bin/mocklibc
     patchShebangs subprojects/mocklibc-1.0/bin/mocklibc

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, attrs
 , django
 , pytestCheckHook
 , parso
@@ -10,20 +11,23 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.18.1";
+  version = "0.18.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
     rev = "v${version}";
-    sha256 = "sha256-wWNPNi16WtefvB7GcQBnWMbHVlVzxSFs4TKRqEasuR0=";
+    hash = "sha256-hNRmUFpRzVKJQAtfsSNV4jeTR8vVj1+mGBIPO6tUGto=";
     fetchSubmodules = true;
   };
 
   propagatedBuildInputs = [ parso ];
 
   checkInputs = [
+    attrs
     django
     pytestCheckHook
   ];
@@ -44,8 +48,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
+    homepage = "https://github.com/davidhalter/jedi";
+    changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

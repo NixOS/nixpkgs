@@ -11,7 +11,15 @@ buildGoModule rec {
     sha256 = "sha256-244o+QZ0BGVe8t8AWf1wU6VHgYyzkATpr5ZTbZezk10=";
   };
 
+  patches = [ ./version.patch ];
+
   vendorSha256 = "sha256-sVdSKu6TDGIDV2o+kuCvGCItbFe9MwlM2Qjiz8n2rZU=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X sigs.k8s.io/controller-tools/pkg/version.version=v${version}"
+  ];
 
   doCheck = false;
 
