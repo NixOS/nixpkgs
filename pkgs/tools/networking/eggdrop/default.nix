@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eggdrop";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "eggheads";
     repo = "eggdrop";
     rev = "v${version}";
-    sha256 = "sha256-BYPDIPn1nuVhnPjs2vZ6KC6pjBVYDWsRjB8c1Z6UUdE=";
+    sha256 = "sha256-QmArhPp4m9XTTAkbqNIffZT//gt3pk8NJef7C2BdxxA=";
   };
 
   buildInputs = [ tcl ];
