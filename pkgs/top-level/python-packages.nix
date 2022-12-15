@@ -4214,6 +4214,8 @@ self: super: with self; {
 
   here-routing = callPackage ../development/python-modules/here-routing { };
 
+  here-transit = callPackage ../development/python-modules/here-transit { };
+
   herepy = callPackage ../development/python-modules/herepy { };
 
   hetzner = callPackage ../development/python-modules/hetzner { };
