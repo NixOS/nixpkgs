@@ -1,0 +1,6 @@
+[package]
+name = "nixpkgs-sysroot-test"
+version = "0.0.0"
+
+[lib]
+crate-type = ["staticlib"]
