@@ -1,30 +1,38 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , qemu
+, xcbuild
+, sigtool
 , makeWrapper
 }:
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-alE7fUVxJRkLMtdia5ruHxh9nlWIubM0J6iIrmpreRM=";
+    sha256 = "sha256-C1qJ3SAxtFSxbGrDlLvYDzUwdiJDcegzx5uXCSYNVJQ=";
   };
 
-  vendorSha256 = "sha256-Kb2R8USWOWRFMjQO3tjdl5UHOzzb2B3ld+5vO2gF3KY=";
+  vendorSha256 = "sha256-MaAdX7TKfBzvzz8r+cfKCSul/QZ0/AgHnBwhu0ZR0gY=";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];
 
   # clean fails with read only vendor dir
   postPatch = ''
     substituteInPlace Makefile --replace 'binaries: clean' 'binaries:'
   '';
+
+  # It attaches entitlements with codesign and strip removes those,
+  # voiding the entitlements and making it non-operational.
+  dontStrip = stdenv.isDarwin;
 
   buildPhase = ''
     runHook preBuild
