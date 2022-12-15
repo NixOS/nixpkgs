@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.4.7";
+  version = "1.4.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FTDbQ9RZs1XleferFS8BAioWP0iWyHrDbytY68q/0tQ=";
+    hash = "sha256-A4SqDEArnRG9SJTqU/C9TOQO2vjot+hfj2/PKB/JMfw=";
   };
 
   pythonRelaxDeps = true;
