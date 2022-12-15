@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
-    libevent
+    (libevent.override { inherit openssl; })
     libprom
     libpromhttp
     libmicrohttpd
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
+
+    # fix build against openssl 3.x
+    (fetchpatch {
+      url = "https://github.com/coturn/coturn/commit/4ce784a8781ab086c150e2b9f5641b1a37fd9b31.patch";
+      hash = "sha256-Jx8XNXrgq0ockm1zjwRzfvSS3fVrVyVvQY1l0CpcR3Q=";
+    })
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream
