@@ -51,6 +51,7 @@ in
     schemaIdToVariableMapping = {
       "org.gnome.evolution-data-server.addressbook" = "EDS";
       "org.gnome.evolution.calendar" = "EVO";
+      "org.gnome.seahorse.nautilus.window" = "SEANAUT";
     };
     expected = ./fixtures/example-project-patched;
   };
