@@ -1,7 +1,7 @@
 ---
 name: Missing or incorrect documentation
 about: Help us improve the Nixpkgs and NixOS reference manuals
-title: 'Documentation request: '
+title: 'Documentation: '
 labels: '9.needs: documentation'
 assignees: ''
 
