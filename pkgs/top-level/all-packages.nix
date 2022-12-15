@@ -9455,9 +9455,7 @@ with pkgs;
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
-  mcron = callPackage ../tools/system/mcron {
-    guile = guile_1_8;
-  };
+  mcron = callPackage ../tools/system/mcron { };
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
