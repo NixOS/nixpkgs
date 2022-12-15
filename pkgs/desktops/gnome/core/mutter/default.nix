@@ -49,13 +49,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "43.1";
+  version = "43.2";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "8vCLJSeDlIpezILwDp6TWmHrv4VkhEvdkniKtEqngmQ=";
+    sha256 = "/S63B63DM8wnevhoXlzzkTXhxNeYofnQXojkU9w+u4Q=";
   };
 
   patches = [
@@ -74,13 +74,6 @@ let self = stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/7e7a639cc5132cf3355e861235f325540fe56548.patch";
       sha256 = "NYoKCRh5o1Q15c11a79Hk5tGKq/jOa+e6GpgBjPEepo=";
       revert = true;
-    })
-
-    # Backport edge resistance fix (should be part of 43.2)
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2687
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/accf532a29ea9a1d70880dfaa1834050aa3ae7be.patch";
-      sha256 = "XAHcPGQFWfZujlqO/cvUryojPCMBBSxeIG06BesDQQw=";
     })
   ];
 
