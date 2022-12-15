@@ -605,6 +605,21 @@ let
         };
       };
 
+      bmewburn.vscode-intelephense-client = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-intelephense-client";
+          publisher = "bmewburn";
+          version = "1.8.2";
+          sha256 = "OvWdDQfhprQNve017pNSksMuCK3Ccaar5Ko5Oegdiuo=";
+        };
+        meta = with lib; {
+          description = "PHP code intelligence for Visual Studio Code";
+          license = licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client";
+          maintainers = with maintainers; [ drupol ];
+        };
+      };
+
       catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "catppuccin-vsc";

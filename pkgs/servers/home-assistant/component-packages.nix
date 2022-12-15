@@ -1349,7 +1349,9 @@
       pyheos
     ];
     "here_travel_time" = ps: with ps; [
-    ]; # missing inputs: here_routing here_transit
+      here-routing
+      here-transit
+    ];
     "hexaom" = ps: with ps; [
     ];
     "hi_kumo" = ps: with ps; [
@@ -4315,6 +4317,7 @@
     "hddtemp"
     "hdmi_cec"
     "heos"
+    "here_travel_time"
     "hisense_aehw4a1"
     "history"
     "history_stats"
