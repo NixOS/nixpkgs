@@ -315,7 +315,7 @@ let
 
   peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
+      keyToUnitName = replaceStrings
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
       unitName = keyToUnitName publicKey;
