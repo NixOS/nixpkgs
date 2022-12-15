@@ -47,6 +47,7 @@ let
           declare -p string
           echo "env.string = $string"
           [[ $string == "testing-string" ]] || (echo "'\$string' was not 'testing-string'" && false)
+          [[ "$(declare -p string)" == 'declare -x string="testing-string"' ]] || (echo "'\$string' was not exported" && false)
           touch $out
         '';
       } // extraAttrs);
