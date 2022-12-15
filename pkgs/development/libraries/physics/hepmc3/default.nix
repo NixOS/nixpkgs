@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "http://hepmc.web.cern.ch/hepmc/";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

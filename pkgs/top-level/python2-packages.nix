@@ -67,11 +67,15 @@ with self; with super; {
 
   rpm = disabled super.rpm;
 
+  scandir = callPackage ../development/python2-modules/scandir { };
+
   sequoia = disabled super.sequoia;
 
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
+
+  typing = callPackage ../development/python2-modules/typing { };
 
   zeek = disabled super.zeek;
 

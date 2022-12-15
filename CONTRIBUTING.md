@@ -53,9 +53,9 @@ In addition to writing properly formatted commit messages, it's important to inc
 
 Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
 
-We prefer not to use the "squash merge" feature in nixpkgs: in order to keep as much information as possible in the commit history, we expect pull requests to consist of self-contained commits as described above.
-This means that, after addressing review comments and before the PR is merged, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
-Useful commands to be comfortable with are `git commit --amend`, `git commit --fixup` and `git rebase -i` (and don't forget that git lets you define aliases!).
+Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
+This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
+Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive @~3`. For more details consult the git man pages.
 
 ## Rebasing between branches (i.e. from master to staging)
 

@@ -387,7 +387,7 @@ self: super: {
   });
 
   forms = super.forms.overrideAttrs (old: {
-    dependencies = with self; [ self.self ];
+    dependencies = [ self.self ];
   });
 
   fruzzy =
@@ -713,7 +713,7 @@ self: super: {
   };
 
   skim-vim = super.skim-vim.overrideAttrs (old: {
-    dependencies = with self; [ skim ];
+    dependencies = [ self.skim ];
   });
 
   sniprun =

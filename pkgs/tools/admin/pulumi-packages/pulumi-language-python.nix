@@ -10,7 +10,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk";
 
-  vendorHash = "sha256-IZIdLmNGMFjRdkLPoE9UyON3pX/GBIgz/rv108v8iLY=";
+  vendorHash = "sha256-gM3VpX6r/BScUyvk/XefAfbx0qYzdzSBGaWZN+89BS8=";
 
   postPatch = ''
     # Requires network
