@@ -7,16 +7,7 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+, callPackage
 }:
 
 let
@@ -125,20 +116,7 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
     description = "Lightweight Bitcoin wallet";
