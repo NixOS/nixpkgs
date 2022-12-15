@@ -9320,6 +9320,8 @@ with pkgs;
 
   loki = callPackage ../development/libraries/loki { stdenv = gcc10StdenvCompat; };
 
+  lomiri = libsForQt5.callPackage ../desktops/lomiri { };
+
   longview = callPackage ../servers/monitoring/longview { };
 
   lorien = callPackage ../applications/graphics/lorien { };
