@@ -4212,6 +4212,8 @@ self: super: with self; {
 
   hepunits = callPackage ../development/python-modules/hepunits { };
 
+  here-routing = callPackage ../development/python-modules/here-routing { };
+
   herepy = callPackage ../development/python-modules/herepy { };
 
   hetzner = callPackage ../development/python-modules/hetzner { };
