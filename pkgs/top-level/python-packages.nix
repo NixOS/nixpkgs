@@ -4542,6 +4542,8 @@ self: super: with self; {
 
   infinity = callPackage ../development/python-modules/infinity { };
 
+  inflate64 = callPackage ../development/python-modules/inflate64 { };
+
   inflect = callPackage ../development/python-modules/inflect { };
 
   inflection = callPackage ../development/python-modules/inflection { };
@@ -5994,6 +5996,8 @@ self: super: with self; {
 
   multitasking = callPackage ../development/python-modules/multitasking { };
 
+  multivolumefile = callPackage ../development/python-modules/multivolumefile { };
+
   munch = callPackage ../development/python-modules/munch { };
 
   munkres = callPackage ../development/python-modules/munkres { };
@@ -6391,6 +6395,8 @@ self: super: with self; {
   nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
+
+  py7zr = callPackage ../development/python-modules/py7zr { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
@@ -7181,6 +7187,8 @@ self: super: with self; {
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
+  pyzstd = callPackage ../development/python-modules/pyzstd { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -7600,6 +7608,8 @@ self: super: with self; {
   pybalboa = callPackage ../development/python-modules/pybalboa { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
+
+  pybcj = callPackage ../development/python-modules/pybcj { };
 
   pybids = callPackage ../development/python-modules/pybids { };
 
@@ -8402,6 +8412,10 @@ self: super: with self; {
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
+
+  pyppmd = callPackage ../development/python-modules/pyppmd { };
+
+  pyppmd-018 = callPackage ../development/python-modules/pyppmd/018.nix { };
 
   pypresence = callPackage ../development/python-modules/pypresence { };
 
@@ -11101,6 +11115,8 @@ self: super: with self; {
 
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
+  text2digits = callPackage ../development/python-modules/text2digits { };
+
   textfsm = callPackage ../development/python-modules/textfsm { };
 
   textile = callPackage ../development/python-modules/textile { };
@@ -11157,6 +11173,8 @@ self: super: with self; {
     cudaSupport = false;
     cudnnSupport = false;
   };
+
+  thefuzz = callPackage ../development/python-modules/thefuzz { };
 
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
@@ -11655,6 +11673,8 @@ self: super: with self; {
 
   unrardll = callPackage ../development/python-modules/unrardll { };
 
+  unrar-cffi = callPackage ../development/python-modules/unrar-cffi { };
+
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   untangle = callPackage ../development/python-modules/untangle { };
@@ -12048,6 +12068,8 @@ self: super: with self; {
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
+
+  wordninja = callPackage ../development/python-modules/wordninja { };
 
   worldengine = callPackage ../development/python-modules/worldengine { };
 
