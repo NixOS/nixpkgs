@@ -274,7 +274,7 @@ else let
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
        "sandboxProfile" "propagatedSandboxProfile"]
-       ++ lib.optionals envIsExportable [ "env" ]))
+       ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
@@ -298,7 +298,7 @@ else let
           then attrs.name + hostSuffix
           else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // lib.optionalAttrs (envIsExportable && __structuredAttrs) { env = checkedEnv; } // {
+    }) // lib.optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -485,6 +485,8 @@ else let
     let
       overlappingNames = lib.intersectLists (lib.attrNames env) (lib.attrNames derivationArg);
     in
+    assert lib.assertMsg envIsExportable
+      "When using structured attributes, `env` must be an attribute set of environment variables.";
     assert lib.assertMsg (overlappingNames == [ ])
       "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " overlappingNames}";
     lib.mapAttrs
