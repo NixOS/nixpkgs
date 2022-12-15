@@ -62,7 +62,13 @@ stripDirs() {
     if [ -n "${paths}" ]; then
         echo "stripping (with command $cmd and flags $stripFlags) in $paths"
         # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
-        find $paths -type f -a '!' -wholename "$prefix/lib/debug/*" -exec $cmd $stripFlags '{}' \; 2>/dev/null
+        find $paths -type f -a '!' -path "$prefix/lib/debug/*" -print0 |
+            xargs -r -0 -n1 -P "$NIX_BUILD_CORES" $cmd $stripFlags || [[ $? -eq 123 ]]
+            #                                                               ^
+            # xargs exits with status code 123 if some but not all of the
+            # processes fail. We don't care if some of the files couldn't
+            # be stripped, so ignore specifically this code.
+
         # 'strip' does not normally preserve archive index in .a files.
         # This usually causes linking failures against static libs like:
         #   ld: ...-i686-w64-mingw32-stage-final-gcc-13.0.0-lib/i686-w64-mingw32/lib/libstdc++.dll.a:
