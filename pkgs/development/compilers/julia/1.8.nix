@@ -95,6 +95,12 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   postPatch = ''
+    # The test compares against exact mpfr version.
+    # It usually breaks even when mpfr version change is minor.
+    # Let's drop version check to avoid consistent breakages.
+    substituteInPlace stdlib/MPFR_jll/test/runtests.jl \
+      --replace '@test vn == v' '@test true skip=true #'
+
     patchShebangs .
   '';
 
