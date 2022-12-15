@@ -68,41 +68,45 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (
+    let
+      allConfigs = [mopidyConf] ++ cfg.extraConfigFiles;
+    in
+    {
+      systemd.tmpfiles.rules = [
+        "d '${cfg.dataDir}' - mopidy mopidy - -"
+      ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - mopidy mopidy - -"
-    ];
-
-    systemd.services.mopidy = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "sound.target" ];
-      description = "mopidy music player daemon";
-      serviceConfig = {
-        ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";
-        User = "mopidy";
+      systemd.services.mopidy = {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "sound.target" ];
+        description = "mopidy music player daemon";
+        restartTriggers = allConfigs;
+        serviceConfig = {
+          ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" allConfigs}";
+          User = "mopidy";
+        };
       };
-    };
 
-    systemd.services.mopidy-scan = {
-      description = "mopidy local files scanner";
-      serviceConfig = {
-        ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)} local scan";
-        User = "mopidy";
-        Type = "oneshot";
+      systemd.services.mopidy-scan = {
+        description = "mopidy local files scanner";
+        serviceConfig = {
+          ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" allConfigs} local scan";
+          User = "mopidy";
+          Type = "oneshot";
+        };
       };
-    };
 
-    users.users.mopidy = {
-      inherit uid;
-      group = "mopidy";
-      extraGroups = [ "audio" ];
-      description = "Mopidy daemon user";
-      home = cfg.dataDir;
-    };
+      users.users.mopidy = {
+        inherit uid;
+        group = "mopidy";
+        extraGroups = [ "audio" ];
+        description = "Mopidy daemon user";
+        home = cfg.dataDir;
+      };
 
-    users.groups.mopidy.gid = gid;
+      users.groups.mopidy.gid = gid;
 
-  };
-
+    }
+  );
 }
