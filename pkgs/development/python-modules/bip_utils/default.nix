@@ -47,5 +47,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ebellocchia/bip_utils";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ prusnak stargate01 ];
+    # requires coincurve < 18.0.0
+    broken = true;
   };
 }
