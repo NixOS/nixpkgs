@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta =  with lib; {
     description = "A merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [ lassulus netali ];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
     badPlatforms = [ "aarch64-linux" ];
