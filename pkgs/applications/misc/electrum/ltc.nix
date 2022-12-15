@@ -134,5 +134,7 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ lourkeur ];
+    # requires libsecp256k1 < 0.2.0
+    broken = true;
   };
 }
