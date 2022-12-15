@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "1.0.5";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-mp9U46H03NTMumUkx5kjsh9LnbPBrvlhh3yCH6FYdbE=";
+    rev = "tauri-v${version}";
+    sha256 = "sha256-RBaIF9vWQwQAdqN3p3JS1WO6u3IMxi8CuCkrwQbd2gI=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   sourceRoot = "source/tooling/cli";
 
-  cargoSha256 = "sha256-iFXuVrxE/QmM+TAZmN8Ivt6Le19NWYIfVn1PNPvmhZo=";
+  cargoSha256 = "sha256-8sdCVOtPwIjW2x1yh1B0oybVi2kz3LQoK3OcaJvUsxQ=";
 
   buildInputs = [ glibc libsoup cairo gtk3 webkitgtk ];
   nativeBuildInputs = [ pkg-config ];
