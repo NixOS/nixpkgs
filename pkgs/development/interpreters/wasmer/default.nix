@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wasmer";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-os1TvqDTn+WJjX0fREFlNsd8bASdnOOvnCyAkplTVrA=";
+    hash = "sha256-t/ObsvUSNGFvHkVH2nl8vLFI+5GUQx6niCgeH4ykk/0=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-MUlwhf8MOcXAysKtVotvafovGpBt4Z4ctHDKZRCUPxM=";
+    hash = "sha256-wXVHxEPmHPeRnNytxl7bghxEp/WYOqAKMt5OCpxGcOA=";
   };
 
   nativeBuildInputs = [
