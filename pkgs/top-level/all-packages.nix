@@ -2458,7 +2458,7 @@ with pkgs;
     ammonite_2_12
     ammonite_2_13
     ammonite_3_2;
-  ammonite = if scala == scala_2_13 then ammonite_2_13 else ammonite_3_2;
+  ammonite = ammonite_3_2;
 
   amp = callPackage ../applications/editors/amp {};
 
@@ -15428,7 +15428,7 @@ with pkgs;
   # deprecated
   dotty = scala_3;
 
-  scala = scala_2_13;
+  scala = scala_3;
   scala-runners = callPackage ../development/compilers/scala-runners {
     coursier = coursier.override { jre = jdk8; };
   };
