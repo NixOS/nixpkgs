@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , clang
-, pkgconfig
+, pkg-config
 , elfutils
 , rustfmt
 , zlib
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   # bpf code compilation
   hardeningDisable = [ "stackprotector" ];
 
-  nativeBuildInputs = [ clang pkgconfig rustfmt ];
+  nativeBuildInputs = [ clang pkg-config rustfmt ];
   buildInputs = [ elfutils zlib ];
 
   # needs /sys/fs/cgroup

@@ -7,11 +7,11 @@
     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
   }),
   pkgs ? import nixpkgsSource {},
-  pkgs_i686 ? import nixpkgsSource { system = "i686-linux"; },*/
+  pkgsi686Linux ? import nixpkgsSource { system = "i686-linux"; },*/
 
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {},
-  pkgs_i686 ? import ../../../../.. { system = "i686-linux"; },
+  pkgsi686Linux ? import ../../../../.. { system = "i686-linux"; },
 
   config ? pkgs.config
 }:
@@ -46,13 +46,13 @@ let
   };
 
   androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-    inherit config pkgs pkgs_i686;
+    inherit config pkgs pkgsi686Linux;
     licenseAccepted = true;
   };*/
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs pkgs_i686;
+    inherit config pkgs pkgsi686Linux;
     licenseAccepted = true;
   };
 
