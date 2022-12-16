@@ -31191,6 +31191,8 @@ with pkgs;
     vm = callPackage ../applications/audio/open-music-kontrollers/vm.nix { };
   };
 
+  openrsync = darwin.apple_sdk_11_0.callPackage ../applications/networking/sync/openrsync { };
+
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
   open-stage-control = callPackage ../applications/audio/open-stage-control { };
