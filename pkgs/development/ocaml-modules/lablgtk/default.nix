@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview
-, camlp-streams
+, camlp-streams, gnumake42
 }:
 
 let param =
@@ -32,7 +32,8 @@ stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-lablgtk";
   inherit (param) version src NIX_CFLAGS_COMPILE;
 
-  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  # gnumake42: https://github.com/garrigue/lablgtk/issues/162
+  nativeBuildInputs = [ pkg-config ocaml findlib gnumake42 ];
   buildInputs = [ gtk2 libgnomecanvas gtksourceview ]
   ++ param.buildInputs or [];
 
