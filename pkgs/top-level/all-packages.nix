@@ -15229,18 +15229,22 @@ with pkgs;
   };
 
   rocwmma = callPackage ../development/libraries/rocwmma {
-    inherit (llvmPackages) openmp;
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
   };
 
   rocblas = callPackage ../development/libraries/rocblas {
-    inherit (llvmPackages_rocm) llvm;
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
   };
 
   miopengemm = callPackage ../development/libraries/miopengemm {
     stdenv = rocmClangStdenv;
   };
 
-  rocthrust = callPackage ../development/libraries/rocthrust { };
+  rocthrust = callPackage ../development/libraries/rocthrust {
+    stdenv = rocmClangStdenv;
+  };
 
   miopen = callPackage ../development/libraries/miopen {
     inherit (llvmPackages_rocm) llvm clang-tools-extra;
