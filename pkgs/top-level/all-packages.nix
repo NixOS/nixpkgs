@@ -2969,9 +2969,7 @@ with pkgs;
 
   anbox = callPackage ../os-specific/linux/anbox { };
 
-  androidenv = callPackage ../development/mobile/androidenv {
-    pkgs_i686 = pkgsi686Linux;
-  };
+  androidenv = callPackage ../development/mobile/androidenv { };
 
   androidndkPkgs = androidndkPkgs_21;
   androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs {})."21";
@@ -3657,9 +3655,7 @@ with pkgs;
 
   cot = with python3Packages; toPythonApplication cot;
 
-  coturn = callPackage ../servers/coturn {
-    openssl = openssl_1_1;
-  };
+  coturn = callPackage ../servers/coturn { };
 
   coursier = callPackage ../development/tools/coursier {};
 
