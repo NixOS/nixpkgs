@@ -18,13 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    pwd
     ./gradlew :detekt-cli:distZip
     mkdir $out
     unzip detekt-cli/build/distributions/detekt-cli-1.22.0.zip -d $out
     mv $out/detekt-cli-${version}/* $out
     rm -rf $out/detekt-cli-${version}
-    rm -rf *
   '';
 
   postFixup = ''
