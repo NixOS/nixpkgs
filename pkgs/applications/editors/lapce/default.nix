@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 , rustPlatform
 , cmake
 , pkg-config
@@ -76,8 +76,8 @@ rustPlatform.buildRustPackage rec {
     categories = [ "Development" "Utility" "TextEditor" ];
   }) ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 
   meta = with lib; {
