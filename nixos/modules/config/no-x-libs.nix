@@ -35,6 +35,7 @@ with lib;
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
+      libextractor = super.libextractor.override { gstreamerSupport = false; gtkSupport = false; };
       libva = super.libva-minimal;
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
