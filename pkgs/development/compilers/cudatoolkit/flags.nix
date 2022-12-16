@@ -4,6 +4,15 @@
 }:
 let
 
+  # Flags are determined based on your CUDA toolkit by default.  You may benefit
+  # from improved performance, reduced file size, or greater hardware suppport by
+  # passing a configuration based on your specific GPU environment.
+  #
+  # config.cudaCapabilities: list of hardware generations to support (e.g., "8.0")
+  # config.cudaForwardCompat: bool for compatibility with future GPU generations
+  #
+  # Please see the accompanying documentation or https://github.com/NixOS/nixpkgs/pull/205351
+
   defaultCudaCapabilities = rec {
     cuda9 = [
       "3.0"
