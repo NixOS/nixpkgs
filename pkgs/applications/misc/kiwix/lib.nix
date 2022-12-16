@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Common code base for all Kiwix ports";
     homepage = "https://kiwix.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ colinsane ];
   };

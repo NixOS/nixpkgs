@@ -40,7 +40,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "An offline reader for Web content";
     homepage = "https://kiwix.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 ];
   };

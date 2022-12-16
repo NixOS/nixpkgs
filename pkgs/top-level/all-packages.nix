@@ -29952,6 +29952,8 @@ with pkgs;
 
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
+  kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
+
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
   klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
