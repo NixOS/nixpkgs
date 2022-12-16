@@ -15203,6 +15203,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  rocsolver = callPackage ../development/libraries/rocsolver {
+    stdenv = rocmClangStdenv;
+  };
+
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
     stdenv = rocmClangStdenv;
   };
