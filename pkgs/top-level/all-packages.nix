@@ -15287,6 +15287,11 @@ with pkgs;
 
   rocmUpdateScript = callPackage ../development/rocm-modules/update-script { };
 
+  # Requires GCC
+  roctracer = callPackage ../development/libraries/roctracer {
+    inherit (llvmPackages_rocm) clang;
+  };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
