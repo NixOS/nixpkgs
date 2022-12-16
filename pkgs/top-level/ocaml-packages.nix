@@ -1648,7 +1648,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_5_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.0.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_14;
+  ocamlPackages_latest = ocamlPackages_5_0;
 
   ocamlPackages = ocamlPackages_4_14;
 }
