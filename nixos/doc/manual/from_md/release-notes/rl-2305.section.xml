@@ -247,6 +247,13 @@
       </listitem>
       <listitem>
         <para>
+          The new option <literal>users.motdFile</literal> allows
+          configuring a Message Of The Day that can be updated
+          dynamically.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
