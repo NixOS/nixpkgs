@@ -780,6 +780,8 @@ self: super: with self; {
 
   autocommand = callPackage ../development/python-modules/autocommand { };
 
+  autofaiss = callPackage ../development/python-modules/autofaiss { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
