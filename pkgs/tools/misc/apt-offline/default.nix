@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apt-offline";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "RBf/QG0ewLS6gnQTBXi0I18z8QrxoBAqEXZ7dro9z5A=";
+    sha256 = "sha256-KkJwQ9EpOSJK9PaM747l6Gqp8Z8SWvuo3TJ+Ry6d0l4=";
   };
 
   postPatch = ''
