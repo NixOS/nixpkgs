@@ -140,7 +140,10 @@ let
         else if config.fsType == "reiserfs" then "-q"
         else null;
     in {
-      options = mkIf config.autoResize [ "x-nixos.autoresize" ];
+      options = mkMerge [
+        (mkIf config.autoResize [ "x-nixos.autoresize" ])
+        (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+      ];
       formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
     };
 
@@ -165,7 +168,7 @@ let
       + (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
-      + " " + escape (rootPrefix + fs.mountPoint)
+      + " " + escape fs.mountPoint
       + " " + fs.fsType
       + " " + escape (builtins.concatStringsSep "," (fs.options ++ (extraOpts fs)))
       + " " + (optionalString (!excludeChecks)
@@ -328,7 +331,9 @@ in
         )}
       '';
 
-    boot.initrd.systemd.contents."/etc/fstab".source = initrdFstab;
+    boot.initrd.systemd.storePaths = [initrdFstab];
+    boot.initrd.systemd.managerEnvironment.SYSTEMD_SYSROOT_FSTAB = initrdFstab;
+    boot.initrd.systemd.services.initrd-parse-etc.environment.SYSTEMD_SYSROOT_FSTAB = initrdFstab;
 
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =

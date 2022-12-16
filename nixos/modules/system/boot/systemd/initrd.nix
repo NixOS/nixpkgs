@@ -460,21 +460,6 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
-      # The unit in /run/systemd/generator shadows the unit in
-      # /etc/systemd/system, but will still apply drop-ins from
-      # /etc/systemd/system/foo.service.d/
-      #
-      # We need IgnoreOnIsolate, otherwise the Requires dependency of
-      # a mount unit on its makefs unit causes it to be unmounted when
-      # we isolate for switch-root. Use a dummy package so that
-      # generateUnits will generate drop-ins instead of unit files.
-      packages = [(pkgs.runCommand "dummy" {} ''
-        mkdir -p $out/etc/systemd/system
-        touch $out/etc/systemd/system/systemd-{makefs,growfs}@.service
-      '')];
-      services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
-      services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
-
       # make sure all the /dev nodes are set up
       services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
 
