@@ -153,6 +153,11 @@ let
           --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
       '';
 
+      # Fix strange issue where the dylib path is doubled
+      postFixup = lib.optionalString stdenv.isDarwin ''
+        install_name_tool -change ${fluidsynth}/${fluidsynth}/lib/libfluidsynth.3.dylib ${fluidsynth}/lib/libfluidsynth.3.dylib $out/bin/mpd
+      '';
+
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
