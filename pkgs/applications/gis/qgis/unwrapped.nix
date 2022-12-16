@@ -7,7 +7,6 @@
 , bison
 , proj
 , geos
-, xlibsWrapper
 , sqlite
 , gsl
 , qwt
@@ -92,7 +91,6 @@ in mkDerivation rec {
     openssl
     proj
     geos
-    xlibsWrapper
     sqlite
     gsl
     qwt

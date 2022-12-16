@@ -1347,6 +1347,8 @@ self: super: with self; {
 
   bond-async = callPackage ../development/python-modules/bond-async { };
 
+  bonsai = callPackage ../development/python-modules/bonsai { };
+
   booleanoperations = callPackage ../development/python-modules/booleanoperations { };
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
@@ -4209,6 +4211,10 @@ self: super: with self; {
   });
 
   hepunits = callPackage ../development/python-modules/hepunits { };
+
+  here-routing = callPackage ../development/python-modules/here-routing { };
+
+  here-transit = callPackage ../development/python-modules/here-transit { };
 
   herepy = callPackage ../development/python-modules/herepy { };
 
