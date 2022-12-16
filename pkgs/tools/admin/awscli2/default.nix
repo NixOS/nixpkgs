@@ -73,10 +73,10 @@ with py.pkgs; buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "distro>=1.5.0,<1.6.0" "distro" \
-      --replace "cryptography>=3.3.2,<=38.0.1" "cryptography>=3.3.2,<=38.0.3"
+    sed -i pyproject.toml \
+      -e 's/colorama.*/colorama",/' \
+      -e 's/cryptography.*/cryptography",/' \
+      -e 's/distro.*/distro",/'
   '';
 
   postInstall = ''
