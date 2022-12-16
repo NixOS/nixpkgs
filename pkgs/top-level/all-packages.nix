@@ -22851,6 +22851,8 @@ with pkgs;
 
   tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
 
+  ta-lib = callPackage ../development/libraries/ta-lib { };
+
   taglib = callPackage ../development/libraries/taglib { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
