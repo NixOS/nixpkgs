@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxker";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-kMomzIViN7ooBsjUfCIk0XRi4WtXtiaHWHT2pECx//k=";
+    sha256 = "sha256-3J3Xe9LT4bHatU/wWsF0Gq9gGRcSdCzyQnIIfLXE8KA=";
   };
 
-  cargoSha256 = "sha256-ASBu4p8+/Donmynnyryktc6dXA3yiOb9w5XpmN4PotY=";
+  cargoSha256 = "sha256-TWpshqvWMRk2A6RvjWWQc7Nu6tOrctUBZmzyjEFKPRw=";
 
   meta = with lib; {
     description = "A simple tui to view & control docker containers";

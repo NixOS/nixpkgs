@@ -1,7 +1,43 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, fetchurl, sd, curl, pkg-config, openssl, rustPlatform, fetchYarnDeps, yarn, nodejs, fixup_yarn_lock, glibcLocales }:
+{ lib
+, stdenv
+, python38Packages
+, fetchFromGitHub
+, fetchurl
+, sd
+, curl
+, pkg-config
+, openssl
+, rustPlatform
+, fetchYarnDeps
+, yarn
+, nodejs
+, fixup_yarn_lock
+, glibcLocales
+, libiconv
+, CoreFoundation
+, CoreServices
+, Security
+
+, enableMinimal ? false
+}:
 
 let
   inherit (lib.importJSON ./deps.json) links version versionHash;
+  # Sapling sets a Cargo config containing lines like so:
+  # [target.aarch64-apple-darwin]
+  # rustflags = ["-C", "link-args=-Wl,-undefined,dynamic_lookup"]
+  #
+  # The default cargo config that's set by the build hook will set
+  # unstable.host-config and unstable.target-applies-to-host which seems to
+  # result in the link arguments above being ignored and thus link failures.
+  # All it is there to do anyway is just to do stuff with musl and cross
+  # compilation, which doesn't work on macOS anyway so we can just stub it
+  # on macOS.
+  #
+  # See https://github.com/NixOS/nixpkgs/pull/198311#issuecomment-1326894295
+  myCargoSetupHook = rustPlatform.cargoSetupHook.overrideAttrs (old: {
+    cargoConfig = if stdenv.isDarwin then "" else old.cargoConfig;
+  });
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -54,7 +90,11 @@ let
   };
 
   # Builds the main `sl` binary and its Python extensions
-  sapling = python3Packages.buildPythonPackage {
+  #
+  # FIXME(lf-): when next updating this package, delete the python 3.8 override
+  # here, since the fix for https://github.com/facebook/sapling/issues/279 that
+  # required it will be in the next release.
+  sapling = python38Packages.buildPythonPackage {
     pname = "sapling-main";
     inherit src version;
 
@@ -85,7 +125,26 @@ let
       sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
     '';
 
-    postFixup = ''
+    # Now, copy the "sl web" (aka edenscm-isl) results into the output of this
+    # package, so that the command can actually work. NOTES:
+    #
+    # 1) This applies on all systems (so no conditional a la postFixup)
+    # 2) This doesn't require any kind of fixup itself, so we leave it out
+    #    of postFixup for that reason, too
+    # 3) If asked, we optionally patch in a hardcoded path to the 'nodejs' package,
+    #    so that 'sl web' always works
+    # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
+    preFixup = ''
+      sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
+      chmod +w $sitepackages
+      cp -r ${isl} $sitepackages/edenscm-isl
+    '' + lib.optionalString (!enableMinimal) ''
+      chmod +w $sitepackages/edenscm-isl/run-isl
+      substituteInPlace $sitepackages/edenscm-isl/run-isl \
+        --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
+    '';
+
+    postFixup = lib.optionalString stdenv.isLinux ''
       wrapProgram $out/bin/sl \
         --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
     '';
@@ -94,13 +153,19 @@ let
       curl
       pkg-config
     ] ++ (with rustPlatform; [
-      cargoSetupHook
+      myCargoSetupHook
       rust.cargo
       rust.rustc
     ]);
 
     buildInputs = [
       openssl
+    ] ++ lib.optionals stdenv.isDarwin [
+      curl
+      libiconv
+      CoreFoundation
+      CoreServices
+      Security
     ];
 
     doCheck = false;
@@ -121,12 +186,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-
     cp -r ${sapling}/* $out
-
-    sitepackages=$out/lib/${python3Packages.python.libPrefix}/site-packages
-    chmod +w $sitepackages
-    cp -r ${isl} $sitepackages/edenscm-isl
 
     runHook postInstall
   '';
@@ -145,7 +205,7 @@ stdenv.mkDerivation {
     homepage = "https://sapling-scm.com";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pbar thoughtpolice ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "sl";
   };
 }

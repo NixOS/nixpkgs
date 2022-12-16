@@ -45,8 +45,8 @@ let
   initDBDir = "share/doc/gammu/examples/sql";
 
   gammuPackage = with cfg.backend; (pkgs.gammu.override {
-    dbiSupport = (service == "sql" && sql.driver == "sqlite");
-    postgresSupport = (service == "sql" && sql.driver == "native_pgsql");
+    dbiSupport = service == "sql" && sql.driver == "sqlite";
+    postgresSupport = service == "sql" && sql.driver == "native_pgsql";
   });
 
 in {

@@ -278,8 +278,11 @@ rec {
         mapAny 0;
 
   /* Pretty print a value, akin to `builtins.trace`.
-    * Should probably be a builtin as well.
-    */
+   * Should probably be a builtin as well.
+   * The pretty-printed string should be suitable for rendering default values
+   * in the NixOS manual. In particular, it should be as close to a valid Nix expression
+   * as possible.
+   */
   toPretty = {
     /* If this option is true, attrsets like { __pretty = fn; val = …; }
        will use fn to convert val to a pretty printed representation.
@@ -294,20 +297,25 @@ rec {
             introSpace = if multiline then "\n${indent}  " else " ";
             outroSpace = if multiline then "\n${indent}" else " ";
     in if   isInt      v then toString v
-    else if isFloat    v then "~${toString v}"
+    # toString loses precision on floats, so we use toJSON instead. This isn't perfect
+    # as the resulting string may not parse back as a float (e.g. 42, 1e-06), but for
+    # pretty-printing purposes this is acceptable.
+    else if isFloat    v then builtins.toJSON v
     else if isString   v then
       let
-        # Separate a string into its lines
-        newlineSplits = filter (v: ! isList v) (builtins.split "\n" v);
-        # For a '' string terminated by a \n, which happens when the closing '' is on a new line
-        multilineResult = "''" + introSpace + concatStringsSep introSpace (lib.init newlineSplits) + outroSpace + "''";
-        # For a '' string not terminated by a \n, which happens when the closing '' is not on a new line
-        multilineResult' = "''" + introSpace + concatStringsSep introSpace newlineSplits + "''";
-        # For single lines, replace all newlines with their escaped representation
-        singlelineResult = "\"" + libStr.escape [ "\"" ] (concatStringsSep "\\n" newlineSplits) + "\"";
-      in if multiline && length newlineSplits > 1 then
-        if lib.last newlineSplits == "" then multilineResult else multilineResult'
-      else singlelineResult
+        lines = filter (v: ! isList v) (builtins.split "\n" v);
+        escapeSingleline = libStr.escape [ "\\" "\"" "\${" ];
+        escapeMultiline = libStr.replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
+        singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
+        multilineResult = let
+          escapedLines = map escapeMultiline lines;
+          # The last line gets a special treatment: if it's empty, '' is on its own line at the "outer"
+          # indentation level. Otherwise, '' is appended to the last line.
+          lastLine = lib.last escapedLines;
+        in "''" + introSpace + concatStringsSep introSpace (lib.init escapedLines)
+                + (if lastLine == "" then outroSpace else introSpace + lastLine) + "''";
+      in
+        if multiline && length lines > 1 then multilineResult else singlelineResult
     else if true  ==   v then "true"
     else if false ==   v then "false"
     else if null  ==   v then "null"
@@ -326,11 +334,11 @@ rec {
                          else "<function, args: {${showFnas}}>"
     else if isAttrs    v then
       # apply pretty values if allowed
-      if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
+      if allowPrettyValues && v ? __pretty && v ? val
          then v.__pretty v.val
       else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
-        "<derivation ${v.drvPath or "???"}>"
+        "<derivation ${v.name or "???"}>"
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:

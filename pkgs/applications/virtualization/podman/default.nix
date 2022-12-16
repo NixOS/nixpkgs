@@ -27,6 +27,11 @@ buildGoModule rec {
     sha256 = "sha256-UOAQtGDoZe+Av4+9RQCJiV3//B/pdF0pEsca4FonGxY=";
   };
 
+  patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ];
+
   vendorSha256 = null;
 
   doCheck = false;

@@ -133,7 +133,7 @@ buildPythonPackage rec {
     # https://github.com/python-lsp/python-lsp-server/issues/243
     "test_numpy_completions"
     "test_workspace_loads_pycodestyle_config"
-  ] ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # pyqt5 is broken on aarch64-darwin
     "test_pyqt_completion"
   ];

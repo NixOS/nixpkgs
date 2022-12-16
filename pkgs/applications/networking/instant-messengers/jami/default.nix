@@ -12,11 +12,11 @@
 }:
 
 let
-  version = "20220825.0828.c10f01f";
+  version = "20221031.1308.130cc26";
 
   src = fetchzip {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
-    hash = "sha256-axQYU7+kOFE9SnI8fR4F6NFvD9ITZ85UJhg5OVniSlg=";
+    hash = "sha256-+xpSoSsG+G+w8+g0FhXx+6Phroj83ijW8xWvYO+kdqY=";
 
     stripRoot = false;
     postFetch = ''
@@ -63,13 +63,13 @@ rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
-      version = "513a3f14c44b2c2652f9219ec20dea64b236b713";
+      version = "eae25732568e600d248aa8c226271ff6b81df170";
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "pjproject";
         rev = version;
-        sha256 = "sha256-93AlJGMnlzJMrJquelpHQQKjhEgfpTFXTMqkBnm87u8=";
+        sha256 = "sha256-N7jn4qen+PgFiVkTFi2HSWhx2QPHwAYMtnrpE/ptDVc=";
       };
 
       patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
@@ -87,7 +87,7 @@ rec {
     inherit version src udev jack jami-meta ffmpeg-jami pjsip-jami opendht-jami;
   };
 
-  jami-client-qt = qt6Packages.callPackage ./client-qt.nix {
+  jami-client = qt6Packages.callPackage ./client.nix {
     inherit version src jami-meta ffmpeg-jami;
   };
 }

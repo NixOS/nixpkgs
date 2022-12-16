@@ -38,6 +38,7 @@ mapAliases ({
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   argon2_cffi = argon2-cffi; # added 2022-05-09
   asyncio-nats-client = nats-py; # added 2022-02-08
+  awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
   Babel = babel; # added 2022-05-06
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
@@ -83,9 +84,11 @@ mapAliases ({
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
+  functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
   garminconnect-ha = garminconnect; # added 2022-02-05
   gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
+  GitPython = gitpython; # added 2022-10-28
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   google_api_python_client = google-api-python-client; # added 2021-03-19
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
@@ -107,6 +110,7 @@ mapAliases ({
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
   Markups = markups; # added 2022-02-14
@@ -214,8 +218,11 @@ mapAliases ({
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
+  uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
+  uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
   Wand = wand; # added 2022-11-13
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
+  weakrefmethod = throw "weakrefmethod was removed since it's not needed in Python >= 3.4"; # added 2022-12-01
   webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31

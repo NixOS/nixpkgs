@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, zlib, readline, ncurses
 
 # for tests
-, python3Packages, sqldiff, sqlite-analyzer
+, python3Packages, sqldiff, sqlite-analyzer, tracker
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${optionalString interactive "-interactive"}";
-  version = "3.39.4";
+  version = "3.40.0";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "sha256-8x1EW0jmfihM8gZxfMFwq2PL5P1/eagnk7dyKF54/bs=";
+    sha256 = "sha256-AzNVIHbScAx1NSJW6Rx4v1zWJJFYm6DGmu0KgYaJgOc=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3Packages) sqlalchemy;
-    inherit sqldiff sqlite-analyzer;
+    inherit sqldiff sqlite-analyzer tracker;
   };
 
   meta = {

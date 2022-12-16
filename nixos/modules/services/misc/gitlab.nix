@@ -560,7 +560,7 @@ in {
           description = lib.mdDoc "GitLab container registry host name.";
         };
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 4567;
           description = lib.mdDoc "GitLab container registry port.";
         };
@@ -613,7 +613,7 @@ in {
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 25;
           description = lib.mdDoc "Port of the SMTP server for GitLab.";
         };

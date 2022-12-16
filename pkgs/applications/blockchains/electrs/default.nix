@@ -24,8 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-p4t+G13XaCl7+IbX5YyBFF0PmARbw4XlRvnA0PRcjvQ=";
 
   # needed for librocksdb-sys
-  nativeBuildInputs = [ llvmPackages.clang ];
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   # link rocksdb dynamically
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";

@@ -164,6 +164,13 @@ in {
       ];
     };
 
+    linux_6_1 = callPackage ../os-specific/linux/kernel/linux-6.1.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -254,6 +261,7 @@ in {
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
     inherit (pkgs) bcc bpftrace; # added 2021-12
+    inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -421,8 +429,6 @@ in {
 
     netatop = callPackage ../os-specific/linux/netatop { };
 
-    oci-seccomp-bpf-hook = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/oci-seccomp-bpf-hook { } else null;
-
     perf = callPackage ../os-specific/linux/kernel/perf { };
 
     phc-intel = if lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
@@ -521,6 +527,7 @@ in {
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = throw "linux 5.19 was removed because it reached its end of life upstream"; # Added 2022-11-01
     linux_6_0 = recurseIntoAttrs (packagesFor kernels.linux_6_0);
+    linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
   };
 
   rtPackages = {
@@ -579,7 +586,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_5_15;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_0;
+    linux_latest = packages.linux_6_1;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;

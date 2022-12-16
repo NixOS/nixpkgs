@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.20.5";
+  version = "0.23.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
-    hash = "sha256-3yOZyCoCKNP0xgOFBb1d9jC3rvtiFMCCN7R+tQk+/6o=";
+    hash = "sha256-vBXOZ+AhhqWUD6XukmkHF4wjjJxXbK7r0V+qCuZGc6s=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to control Switchbot IoT devices";
     homepage = "https://github.com/Danielhiversen/pySwitchbot";
+    changelog = "https://github.com/Danielhiversen/pySwitchbot/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

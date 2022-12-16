@@ -13,6 +13,7 @@
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
+, enableIcu ? stdenv.hostPlatform == stdenv.buildPlatform
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , boostBuildPatches ? []
@@ -207,6 +208,15 @@ stdenv.mkDerivation {
         <ranlib>$RANLIB
       ;
     EOF
+  ''
+  # b2 needs to be explicitly told how to find Python when cross-compiling
+  + optionalString enablePython ''
+    cat << EOF >> user-config.jam
+    using python : : ${python.interpreter}
+      : ${python}/include/python${python.pythonVersion}
+      : ${python}/lib
+      ;
+    EOF
   '';
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
@@ -217,7 +227,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ which boost-build ]
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
+    ++ optional enableIcu icu
     ++ optionals enablePython [ libxcrypt python ]
     ++ optional enableNumpy python.pkgs.numpy;
 
@@ -229,9 +239,8 @@ stdenv.mkDerivation {
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
     "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-  ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ];
+  ] ++ optional (toolset != null) "--with-toolset=${toolset}"
+    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild

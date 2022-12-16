@@ -13,7 +13,6 @@
 , rresult
 , tls
 , uri
-, bigarray-compat
 , bigstringaf
 , domain-name
 , httpaf
@@ -43,7 +42,6 @@ buildDunePackage {
     mirage-time
     tls
     uri
-    bigarray-compat
     bigstringaf
     domain-name
     httpaf

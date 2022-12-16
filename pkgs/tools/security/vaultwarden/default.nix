@@ -1,7 +1,11 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
 , pkg-config, openssl
 , libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
+
+let
+  webvault = callPackage ./webvault.nix {};
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
@@ -34,7 +38,11 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = dbBackend;
 
-  passthru.tests = nixosTests.vaultwarden;
+  passthru = {
+    inherit webvault;
+    tests = nixosTests.vaultwarden;
+    updateScript = callPackage ./update.nix {};
+  };
 
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";

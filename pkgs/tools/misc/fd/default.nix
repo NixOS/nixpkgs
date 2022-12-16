@@ -1,24 +1,31 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.5.3";
+  version = "8.6.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "sha256-7QQHLw+isXtr1FDQr4aiUhvOjJUPbaxFGDwukiWBG9g=";
+    sha256 = "sha256-RVGCSUYyWo2wKRIrnci+aWEAPW9jHhMfYkYJkCgd7f8=";
   };
 
-  cargoSha256 = "sha256-QFh47Pr+7lIdT++huziKgMJxvsZElTTwu11c7/wjyHE=";
+  cargoSha256 = "sha256-PT95U1l+BVX7sby3GKktZMmbNNQoPYR8nL+H90EnqZY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preFixup = ''
+  # skip flaky test
+  checkFlags = [
+    "--skip=test_owner_current_group"
+  ];
+
+  postInstall = ''
     installManPage doc/fd.1
 
-    installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
     installShellCompletion --zsh contrib/completion/_fd
   '';
 
@@ -31,7 +38,8 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
+    changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ma27 zowoq ];
+    maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
   };
 }

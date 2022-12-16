@@ -26,7 +26,7 @@ in {
       };
 
       services.dnsmasq.enable = true;
-      services.dnsmasq.servers = [ "127.0.0.1#${toString localProxyPort}" ];
+      services.dnsmasq.settings.server = [ "127.0.0.1#${toString localProxyPort}" ];
     };
   };
 

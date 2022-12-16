@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-8LLhrAArqa7t9vPe9TE2F0eTfScHFtfolfcXcfboKZQ=";
+    sha256 = "sha256-RdkGwhSx/zluCtBj8hGjkvJ11ZgPRMM9wWoE+/ynnDc=";
   };
 
   patches = [

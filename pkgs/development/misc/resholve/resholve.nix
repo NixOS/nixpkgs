@@ -1,16 +1,17 @@
 { lib
 , stdenv
 , callPackage
-, python27Packages
+, python27
 , installShellFiles
 , rSrc
 , version
 , oildev
+, configargparse
 , binlore
 , resholve-utils
 }:
 
-python27Packages.buildPythonApplication {
+python27.pkgs.buildPythonApplication {
   pname = "resholve";
   inherit version;
   src = rSrc;
@@ -19,7 +20,7 @@ python27Packages.buildPythonApplication {
 
   propagatedBuildInputs = [
     oildev
-    python27Packages.configargparse
+    configargparse
   ];
 
   postPatch = ''
@@ -40,7 +41,7 @@ python27Packages.buildPythonApplication {
 
   passthru = {
     inherit (resholve-utils) mkDerivation phraseSolution writeScript writeScriptBin;
-    tests = callPackage ./test.nix { inherit rSrc binlore; };
+    tests = callPackage ./test.nix { inherit rSrc binlore python27; };
   };
 
   meta = with lib; {

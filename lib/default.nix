@@ -101,6 +101,7 @@ let
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
+      mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt toIntBase10 readPathsFromFile fileContents;

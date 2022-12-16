@@ -1,13 +1,17 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "fnotifystat";
-  version = "0.02.07";
+  version = "0.02.08";
+
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    sha256 = "sha256-5oYM1t+vmWywYRbgXI2RGQlOuNJluj2gwCMf3pTpDC0=";
+    hash = "sha256-+vNBufCrXfMinEZhXDZJCwoI9zxrcTy0fOEdswoaNkw=";
   };
 
   installFlags = [

@@ -51,8 +51,8 @@ in
 {
   imports = [
     ../installer/cd-dvd/channel.nix
-    ../profiles/minimal.nix
     ../profiles/clone-config.nix
+    ../profiles/minimal.nix
   ];
 
   options = {
@@ -199,5 +199,11 @@ in
     # Containers should be light-weight, so start sshd on demand.
     services.openssh.enable = mkDefault true;
     services.openssh.startWhenNeeded = mkDefault true;
+
+    # As this is intended as a standalone image, undo some of the minimal profile stuff
+    environment.noXlibs = false;
+    documentation.enable = true;
+    documentation.nixos.enable = true;
+    services.logrotate.enable = true;
   };
 }

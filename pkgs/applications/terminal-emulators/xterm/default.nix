@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       # No nicer place to find latest release.
       url = "https://github.com/ThomasDickey/xterm-snapshots.git";
       rev-prefix = "xterm-";
-      # # Tags that end in letters are unstable
+      # Tags that end in letters are unstable
       ignoredVersions = "[a-z]$";
     };
   };

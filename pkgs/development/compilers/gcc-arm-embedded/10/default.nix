@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , ncurses5
-, python27
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python27 ]} "$f" || true
+      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 ]} "$f" || true
     done
   '';
 

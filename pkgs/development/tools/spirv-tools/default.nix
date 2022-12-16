@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
+    homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.ralith ];

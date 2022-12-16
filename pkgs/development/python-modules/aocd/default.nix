@@ -1,18 +1,35 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
-, pytestCheckHook, tzlocal, pytest-mock, pytest-freezegun, pytest-raisin
-, pytest-socket, requests-mock, pebble, python-dateutil, termcolor
-, beautifulsoup4, setuptools
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, pytestCheckHook
+, tzlocal
+, pytest-mock
+, pytest-freezegun
+, pytest-raisin
+, pytest-socket
+, requests-mock
+, pebble
+, python-dateutil
+, termcolor
+, beautifulsoup4
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "1.2.1";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Oz1sy+BHekI0ApDKn7hNMDvQrog6EB0JPry7SV5fxig=";
+    hash = "sha256-xns//QAAYw9+Md0THUxFUxnqCDoS1qGslX6CFbIALng=";
   };
 
   propagatedBuildInputs = [
@@ -46,11 +63,14 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "aocd" ];
+  pythonImportsCheck = [
+    "aocd"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/wimglenn/advent-of-code-data";
     description = "Get your Advent of Code data with a single import statement";
+    homepage = "https://github.com/wimglenn/advent-of-code-data";
+    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aadibajpai ];
     platforms = platforms.unix;

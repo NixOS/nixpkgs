@@ -52,9 +52,13 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.etc."man_db.conf".text =
       let
+        mandbForBuild = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+                          cfg.package
+                        else
+                          pkgs.buildPackages.man-db;
         manualCache = pkgs.runCommand "man-cache" { } ''
           echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-          ${cfg.package}/bin/mandb -C man.conf -psc >/dev/null 2>&1
+          ${mandbForBuild}/bin/mandb -C man.conf -psc >/dev/null 2>&1
         '';
       in
       ''

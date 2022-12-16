@@ -25,5 +25,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ahuzik ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

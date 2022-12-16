@@ -48,7 +48,7 @@ rec {
       };
 
       buildInputs = oldAttrs.buildInputs
-        ++ lib.optional withSeccomp [ libseccomp ];
+        ++ lib.optionals withSeccomp [ libseccomp ];
     });
 
     docker-tini = tini.overrideAttrs (oldAttrs: {
@@ -139,8 +139,8 @@ rec {
       '';
 
       DOCKER_BUILDTAGS = lib.optional withSystemd "journald"
-        ++ lib.optional withBtrfs "exclude_graphdriver_btrfs"
-        ++ lib.optional withLvm "exclude_graphdriver_devicemapper"
+        ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
+        ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
     });
 

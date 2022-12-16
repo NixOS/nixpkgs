@@ -9,6 +9,7 @@
 , lib
 , pango
 , pkg-config
+, wrapGAppsHook4
 }:
 
 buildGoModule rec {
@@ -25,6 +26,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -42,6 +44,6 @@ buildGoModule rec {
     description = "GTK4 Discord client in Go, attempt #4.";
     homepage = "https://github.com/diamondburned/gtkcord4";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = with maintainers; [ hmenke urandom ];
   };
 }

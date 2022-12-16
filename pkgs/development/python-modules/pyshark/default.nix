@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   # `stripLen` does not seem to work here
-  patchFlags = "-p2";
+  patchFlags = [ "-p2" ];
 
   sourceRoot = "${src.name}/src";
 

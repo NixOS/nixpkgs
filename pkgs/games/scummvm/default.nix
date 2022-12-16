@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace config.mk --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib
+    substituteInPlace config.mk \
+      --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
+      --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
   '';
 
   meta = with lib; {
@@ -45,5 +47,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.peterhoeg ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

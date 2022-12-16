@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.2";
+  version = "43.4";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "dzIhF6ERsnR7zOitYFeKZ5wgIeSGkRz29OY0FjKKuzM=";
+    sha256 = "Hg1tZ4RcGb7J463VlpX5pTHXKg5UKyA6zJD7OBInwrw=";
   };
 
   patches = [
@@ -66,14 +66,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    (gi-docgen.overrideAttrs (attrs: {
-      patches = attrs.patches ++ [
-        (fetchpatch {
-          url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/f4ff4787cce962b705fb2588b31f2988c5063c13.patch";
-          sha256 = "11VGFFb2PLVxnX/qUQdLPLfhGQWx4sf4apBP7R2JWjA=";
-        })
-      ];
-    }))
+    gi-docgen
     gobject-introspection
     meson
     ninja

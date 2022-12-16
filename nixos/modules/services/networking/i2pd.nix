@@ -495,7 +495,7 @@ in
       ntcp2.enable = mkEnableTrueOption "NTCP2";
       ntcp2.published = mkEnableOption (lib.mdDoc "NTCP2 publication");
       ntcp2.port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 0;
         description = lib.mdDoc ''
           Port to listen for incoming NTCP2 connections (0=auto).

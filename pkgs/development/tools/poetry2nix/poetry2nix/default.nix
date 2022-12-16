@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.36.0";
+  version = "1.39.1";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -221,6 +221,16 @@ lib.makeScope pkgs.newScope (self: {
         getFunctorFn
         (
           [
+            # Remove Python packages aliases with non-normalized names to avoid issues with infinite recursion (issue #750).
+            (self: super: lib.attrsets.mapAttrs
+              (
+                name: value:
+                  if lib.isDerivation value && self.hasPythonModule value && (normalizePackageName name) != name
+                  then null
+                  else value
+              )
+              super)
+
             (
               self: super:
                 {

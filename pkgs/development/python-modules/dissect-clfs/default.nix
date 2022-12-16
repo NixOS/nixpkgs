@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
-  version = "1.1";
+  version = "1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.clfs";
     rev = version;
-    hash = "sha256-5rG8YiVBU4ETLgQoFnMaeXHttIB26+OhIdYjKDKmPBc=";
+    hash = "sha256-1nh81ppJpYre3y7hJ9xS+TNU1NfTH+9NMHdV55kPEXI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
