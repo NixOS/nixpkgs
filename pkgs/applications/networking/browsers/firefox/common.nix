@@ -35,6 +35,7 @@
 , python3
 , runCommand
 , rustPackages_1_61
+, rustPackages_1_64
 , rust-cbindgen
 , unzip
 , which
@@ -142,7 +143,8 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
-  inherit (rustPackages_1_61) cargo rustc rustPlatform;
+  inherit (if lib.versionAtLeast version "108" then rustPackages_1_64 else rustPackages_1_61)
+    cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
