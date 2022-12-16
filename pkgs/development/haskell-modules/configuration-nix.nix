@@ -1102,7 +1102,6 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-module-name-plugin
-    hls-pragmas-plugin
     hls-splice-plugin
     hls-refactor-plugin
     hls-code-range-plugin
@@ -1113,6 +1112,7 @@ self: super: builtins.intersectAttrs super {
 
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
   hls-class-plugin = dontCheck super.hls-class-plugin;
   hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
