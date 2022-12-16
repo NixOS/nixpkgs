@@ -17758,6 +17758,8 @@ with pkgs;
 
   lurk = callPackage ../development/tools/lurk { };
 
+  lv_font_conv = callPackage ../development/tools/misc/lv_font_conv { };
+
   malt = callPackage ../development/tools/profiling/malt {};
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
