@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "unstable-2022-08-30";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "8d0a63484334e2cb2b0571a07a3875e6ab6c8916";
-    sha256 = "sha256-29Wxg/VVQPDDzzxKcvMa1+rtiP4bDkPAB/JJsj+F+WQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-GFZaTXJhoBB+rSe7Qk6H6FZJVXr3nO9XgM+LAbS4te4=";
   };
 
   buildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://sioyek.info/";
     description = "A PDF viewer designed for research papers and technical books";
-    changelog = "https://github.com/ahrm/sioyek/releases/tag/v1.5.0";
+    changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ podocarp ];
     platforms = platforms.unix;
