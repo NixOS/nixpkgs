@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , fetchFromGitLab
+, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -124,6 +125,11 @@ in stdenv.mkDerivation (finalAttrs: {
     # the correct directory at the moment. There is a MR against isocodes to fix that:
     # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
     ./fix-isocodes-paths.patch
+
+    (fetchpatch {
+      url = "https://github.com/GNOME/gimp/commit/a61299ddb184babca015a846c72bf3e1a57faf2a.patch";
+      sha256 = "I4p2LFUW69es/gWsqbyp7cdAVzHSZOMfHGXca+nPERU=";
+    })
   ];
 
   nativeBuildInputs = [
