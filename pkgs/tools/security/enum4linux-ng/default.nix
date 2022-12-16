@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "cddmp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-9J7MiSxfAuzp1M9v4MMWOnK0/lg/X7I4pC6C2yMpMr0=";
+    hash = "sha256-9J7MiSxfAuzp1M9v4MMWOnK0/lg/X7I4pC6C2yMpMr0=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonApplication rec {
       enumerating information from Windows and Samba systems.
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
+    changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
