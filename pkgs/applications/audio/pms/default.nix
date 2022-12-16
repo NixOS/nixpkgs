@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "pms";
   version = "unstable-2022-11-12";
 
