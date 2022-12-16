@@ -32,6 +32,9 @@ with lib;
 
 let
 
+  moduleNames = map (mod: mod.name or (throw "The nginx module with source ${toString mod.src} does not have a `name` attribute. This prevents duplicate module detection and is no longer supported."))
+    modules;
+
   mapModules = attrPath: flip concatMap modules
     (mod:
       let supports = mod.supports or (_: true);
@@ -40,6 +43,9 @@ let
         else throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!");
 
 in
+
+assert assertMsg (unique moduleNames == moduleNames)
+  "nginx: duplicate modules: ${concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
 stdenv.mkDerivation {
   inherit pname;
