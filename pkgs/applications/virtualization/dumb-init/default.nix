@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
   };
 
-  buildInputs = [ glibc.static ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc.static ];
 
   installPhase = ''
     runHook preInstall
