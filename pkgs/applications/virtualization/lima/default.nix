@@ -36,6 +36,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
+    rm -rf _output
     make "VERSION=v${version}" binaries
     runHook postBuild
   '';
