@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config
 , python3
 , curl
@@ -51,4 +51,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs scripts
   '';
+
+  meta = with lib; {
+    description = "Common code base for all Kiwix ports";
+    homepage = "https://kiwix.org";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ colinsane ];
+  };
 }

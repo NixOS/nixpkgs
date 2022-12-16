@@ -30172,6 +30172,8 @@ with pkgs;
 
   leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
 
+  libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
+
   libowfat = callPackage ../development/libraries/libowfat { };
 
   libowlevelzs = callPackage ../development/libraries/libowlevelzs { };

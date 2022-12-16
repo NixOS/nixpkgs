@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub
-, callPackage
+, libkiwix
 , pkg-config
 , qmake
 , qtbase
@@ -26,11 +26,11 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    libkiwix
     qtbase
     qtwebengine
     qtsvg
     qtimageformats
-    (callPackage ./lib.nix {})
   ];
 
   qtWrapperArgs = [
