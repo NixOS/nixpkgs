@@ -351,8 +351,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.7.8";
-      sha256 = "sha256-jsR8EOeW8tAo2utKznuUaCG4hK0oU0ZJSnnGmI5HUDk=";
+      rev = "0.7.9";
+      sha256 = "sha256-5OFOmnBHJd3JpUiV9y0RSzOdYQ26UuUME3j1BbLQ1Xs=";
       name = "nginx-njs";
     };
 
