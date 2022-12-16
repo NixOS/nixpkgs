@@ -48,7 +48,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"

@@ -31,7 +31,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"

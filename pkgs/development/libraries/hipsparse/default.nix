@@ -15,7 +15,7 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"

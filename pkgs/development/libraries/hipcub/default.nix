@@ -15,7 +15,7 @@
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"
