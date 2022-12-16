@@ -109,7 +109,8 @@ self: super: {
 
   haskell-language-server = let
     # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
-    additionalDeps = with super.haskell-language-server.scope; [ hls-haddock-comments-plugin hls-splice-plugin hls-tactics-plugin ];
+    # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
+    additionalDeps = with self.haskell-language-server.scope; [ hls-haddock-comments-plugin hls-splice-plugin hls-tactics-plugin ];
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     # Needed for modern ormolu and fourmolu.
     # Apply this here and not in common, because other ghc versions offer different Cabal versions.
@@ -117,6 +118,7 @@ self: super: {
   }));
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
+  # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
   hls-haddock-comments-plugin = addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
     ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
   ]) super.hls-haddock-comments-plugin;
