@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Volatile memory extraction frameworks";
     homepage = "https://www.volatilityfoundation.org/";
+    changelog = "https://github.com/volatilityfoundation/volatility3/releases/tag/v${version}";
     license = {
       # Volatility Software License 1.0
       free = false;
