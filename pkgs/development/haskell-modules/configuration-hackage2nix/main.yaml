@@ -211,6 +211,8 @@ package-maintainers:
     - pava
     - slynx
     - tlynx
+    - xmonad
+    - xmonad-contrib
   expipiplus1:
     - VulkanMemoryAllocator
     - autoapply
@@ -272,6 +274,9 @@ package-maintainers:
     - wstunnel
   gridaphobe:
     - located-base
+  ivanbrennan:
+    - xmonad
+    - xmonad-contrib
   jb55:
     # - bson-lens
     - cased

@@ -31,10 +31,10 @@
 , wxGTK31
 , xorg
 , fetchpatch
-, wxGTK31-override ? null
+, withSystemd ? stdenv.isLinux
 }:
 let
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
+  wxGTK-prusa = wxGTK31.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
     src = fetchFromGitHub {
@@ -45,7 +45,6 @@ let
       fetchSubmodules = true;
     };
   });
-  wxGTK31-override' = if wxGTK31-override == null then wxGTK31-prusa else wxGTK31-override;
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
@@ -78,10 +77,11 @@ stdenv.mkDerivation rec {
     opencascade-occt
     openvdb
     pcre
-    systemd
     tbb
-    wxGTK31-override'
+    wxGTK-prusa
     xorg.libX11
+  ] ++ lib.optionals withSystemd [
+    systemd
   ] ++ checkInputs;
 
   patches = [
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = "-ludev";
+  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
 
   prePatch = ''
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
@@ -139,6 +139,13 @@ stdenv.mkDerivation rec {
       substituteInPlace src/libslic3r/Format/STEP.cpp \
         --replace 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
     fi
+
+    # Fix resources folder location on macOS
+    substituteInPlace src/PrusaSlicer.cpp \
+      --replace "#ifdef __APPLE__" "#if 0"
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # Disable segfault tests
+    sed -i '/libslic3r/d' tests/CMakeLists.txt
   '';
 
   src = fetchFromGitHub {
@@ -149,6 +156,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
+    "-DSLIC3R_STATIC=0"
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
   ];
@@ -157,7 +165,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"
 
     mkdir -p "$out/lib"
-    mv -v $out/bin/*.so $out/lib/
+    mv -v $out/bin/*.* $out/lib/
 
     mkdir -p "$out/share/pixmaps/"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"

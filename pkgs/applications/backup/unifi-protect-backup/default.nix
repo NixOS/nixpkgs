@@ -2,7 +2,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.7.4";
+  version = "0.8.7";
 
   format = "pyproject";
 
@@ -10,12 +10,14 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ep1cman";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Kpz89yqKmxHmnaPYpvJ2hx46yfcaCYjOioyya+38vE=";
+    hash = "sha256-VIA7/jWMuAWYle3tBDgKU5PJ9wkHChEjNns8lhYr1K8=";
   };
 
   preBuild = ''
     sed -i 's_click = "8.0.1"_click = "^8"_' pyproject.toml
     sed -i 's_pyunifiprotect = .*_pyunifiprotect = "*"_' pyproject.toml
+    sed -i 's_aiorun = .*_aiorun = "*"_' pyproject.toml
+    sed -i '/pylint/d' pyproject.toml
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -24,6 +26,8 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aiocron
+    aiorun
+    aiosqlite
     click
     pyunifiprotect
   ];

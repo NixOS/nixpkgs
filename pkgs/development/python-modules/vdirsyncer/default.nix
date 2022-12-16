@@ -7,25 +7,30 @@
 , click-threading
 , requests-toolbelt
 , requests
-, requests-oauthlib
 , atomicwrites
 , hypothesis
 , pytestCheckHook
-, pytest-localserver
 , pytest-subtesthack
 , setuptools-scm
+, aiostream
+, aiohttp
+, pytest-asyncio
+, trustme
+, aioresponses
+, vdirsyncer
+, testers
 }:
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.18.0";
+  version = "0.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
+    hash = "sha256:0995bavlv8s9j0127ncq3yzy5p72lam9qgpswyjfanc6l01q87lf";
   };
 
   postPatch = ''
@@ -41,8 +46,9 @@ buildPythonPackage rec {
     click-log
     click-threading
     requests
-    requests-oauthlib
     requests-toolbelt
+    aiostream
+    aiohttp
   ];
 
   nativeBuildInputs = [
@@ -52,8 +58,10 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     pytestCheckHook
-    pytest-localserver
     pytest-subtesthack
+    pytest-asyncio
+    trustme
+    aioresponses
   ];
 
   preCheck = ''
@@ -65,6 +73,8 @@ buildPythonPackage rec {
     "test_request_ssl"
     "test_verbosity"
   ];
+
+  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";

@@ -1,6 +1,6 @@
 { lib, stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
 , self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
@@ -53,7 +53,7 @@ in with passthru; stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
+    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl libX11 gdbm db
   ]  ++ optionals isPy3k [
     xz
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [

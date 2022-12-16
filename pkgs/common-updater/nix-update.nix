@@ -1,5 +1,7 @@
 { nix-update }:
 
-{ attrPath }:
+{ attrPath
+, extraArgs ? []
+}:
 
-[ "${nix-update}/bin/nix-update" attrPath ]
+[ "${nix-update}/bin/nix-update" ] ++ extraArgs ++ [ attrPath ]

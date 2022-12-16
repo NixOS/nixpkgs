@@ -200,6 +200,11 @@
     sha256 = "18nxx13fz3i7kmigijnynvrbx2i5cb3v4m89nvnxl38vcw7w5jys";
   })
   (fetchNuGet {
+    pname = "NBitcoin";
+    version = "7.0.18";
+    sha256 = "02kkgymdb80cidibrs6qpy1zjwcfbkwv9zqz9s0swf5zp7qvcakn";
+  })
+  (fetchNuGet {
     pname = "NETStandard.Library";
     version = "1.6.1";
     sha256 = "1z70wvsx2d847a2cjfii7b83pjfs34q05gb037fdjikv5kbagml8";

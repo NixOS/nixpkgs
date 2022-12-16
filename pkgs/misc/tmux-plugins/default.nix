@@ -119,6 +119,29 @@ in rec {
     };
   };
 
+  copy-toolkit = mkTmuxPlugin rec {
+    pluginName = "copy-toolkit";
+    rtpFilePath = "copytk.tmux";
+    version = "1.1";
+    src = fetchFromGitHub {
+      owner = "CrispyConductor";
+      repo = "tmux-copy-toolkit";
+      rev = "v${version}";
+      sha256 = "MEMC9klm+PH66UHwrB2SqdCaZX0LAujL+Woo/hV84m4=";
+    };
+    postInstall = ''
+      sed -i -e 's|python3 |${pkgs.python3}/bin/python3 |g' $target/copytk.tmux
+      sed -i -e 's|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
+    '';
+    meta = {
+      homepage = "https://github.com/CrispyConductor/tmux-copy-toolkit";
+      description = "Various copy-mode tools";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ deejayem ];
+    };
+  };
+
   copycat = mkTmuxPlugin {
     pluginName = "copycat";
     version = "unstable-2020-01-09";
@@ -232,6 +255,32 @@ in rec {
     postInstall = ''
       sed -i -e 's|fpp |${pkgs.fpp}/bin/fpp |g' $target/fpp.tmux
     '';
+  };
+
+  fuzzback = mkTmuxPlugin {
+    pluginName = "fuzzback";
+    version = "unstable-2022-11-21";
+    src = fetchFromGitHub {
+      owner = "roosta";
+      repo = "tmux-fuzzback";
+      rev = "bfd9cf0ef1c35488f0080f0c5ca4fddfdd7e18ec";
+      sha256 = "w788xDBkfiLdUVv1oJi0YikFPqVk6LiN6PDfHu8on5E=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in fuzzback.sh preview.sh supported.sh; do
+        chmod +x $target/scripts/$f
+        wrapProgram $target/scripts/$f \
+          --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils fzf gawk gnused ]}
+      done
+    '';
+    meta = {
+      homepage = "https://github.com/roosta/tmux-fuzzback";
+      description = "Fuzzy search for terminal scrollback";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ deejayem ];
+    };
   };
 
   fzf-tmux-url = mkTmuxPlugin {

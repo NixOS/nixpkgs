@@ -305,7 +305,7 @@ rec {
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          ${shellcheck}/bin/shellcheck "$target"
+          ${shellcheck.unwrapped}/bin/shellcheck "$target"
           runHook postCheck
         ''
         else checkPhase;

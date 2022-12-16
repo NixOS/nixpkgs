@@ -9,7 +9,7 @@
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
-, git, pybind11, which, binutils, glibcLocales, cython, perl
+, git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp, nsync
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.10.0";
+  version = "2.10.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -168,7 +168,7 @@ let
     '';
   };
   bazel-build = if stdenv.isDarwin then _bazel-build.overrideAttrs (prev: {
-    bazelBuildFlags = prev.bazelBuildFlags ++ [
+    bazelFlags = prev.bazelFlags ++ [
       "--override_repository=rules_cc=${rules_cc_darwin_patched}"
       "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
     ];
@@ -190,7 +190,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-Y6cujiMoQXKQlsLBr7d0T278ltdd00IfsTRycJbRVN4=";
+      hash = "sha256-AYHUtJEXYZdVDigKZo7mQnV+PDeQg8mi45YH18qXHZA=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -235,6 +235,8 @@ let
 
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
+
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
@@ -308,6 +310,9 @@ let
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
       rm -f .bazelversion
+      patchShebangs .
+    '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+      cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
     '' + lib.optionalString (!withTensorboard) ''
       # Tensorboard pulls in a bunch of dependencies, some of which may
       # include security vulnerabilities. So we make it optional.
@@ -367,15 +372,14 @@ let
     dontAddBazelOpts = true;
 
     fetchAttrs = {
-      # cudaSupport causes fetch of ncclArchive, resulting in different hashes
-      sha256 = if cudaSupport then
-        "sha256-KtVReqHL3zxE8TPrqIerSOt59Mgke/ftoFZKMzgX/u8="
-      else
-        if stdenv.isDarwin then
-          # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
-          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
-        else
-          "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
+      sha256 = {
+      x86_64-linux = if cudaSupport
+        then "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
+        else "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
+      aarch64-linux = "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg=";
+      x86_64-darwin = "sha256-ZfZQjLdqo8VVlfKfkdolvSHQvKe4IbQSLc/4cNzHr3E=";
+      aarch64-darwin = "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E=";
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
     buildAttrs = {

@@ -8,14 +8,14 @@
 
 buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wivScgtcdapf5bfXR1sjuBIPQEgi6QGH/f+Aucc3CEQ=";
+    sha256 = "sha256-BChN92gZ1Ga7hIPWmdzkrg31S0iqWwXGkWb3mmRugY8=";
   };
 
   makeWrapperArgs = [

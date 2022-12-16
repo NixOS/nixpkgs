@@ -1,4 +1,4 @@
-{ lib, stdenv, rocm-opencl-runtime }:
+{ lib, callPackage, stdenv, rocm-opencl-runtime }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-icd";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc/OpenCL/vendors
     echo "${rocm-opencl-runtime}/lib/libamdocl64.so" > $out/etc/OpenCL/vendors/amdocl64.icd
   '';
+
+  passthru.impureTests = { rocm-opencl = callPackage ./test.nix {}; };
 
   meta = with lib; {
     description = "OpenCL ICD definition for AMD GPUs using the ROCm stack";

@@ -1377,12 +1377,12 @@ in
       # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
       "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (forEach interfaces
-        (i: nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" i.proxyARP))
+        (i: nameValuePair "net.ipv4.conf.${replaceStrings ["."] ["/"] i.name}.proxy_arp" i.proxyARP))
       // listToAttrs (forEach interfaces
         (i: let
           opt = i.tempAddress;
           val = tempaddrValues.${opt}.sysctl;
-         in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
+         in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
     security.wrappers = {
       ping = {
@@ -1411,9 +1411,10 @@ in
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
     # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname =
-      optionalString (cfg.hostName != "") ''
-        hostname "${cfg.hostName}"
+    system.activationScripts.hostname = let
+        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
+      in optionalString (effectiveHostname != "") ''
+        hostname "${effectiveHostname}"
       '';
     system.activationScripts.domain =
       optionalString (cfg.domain != null) ''
@@ -1494,7 +1495,7 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${val}"
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

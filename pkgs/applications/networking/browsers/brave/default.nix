@@ -90,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.43.89";
+  version = "1.46.133";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-eqwqn4cvVzoEmh206ybG6PWWg56ct53wYyRBOQ8wN5g=";
+    sha256 = "sha256-362XVFFsVWR/H0mcn1XQh3tsemksEnqR5quOIwf2QQE=";
   };
 
   dontConfigure = true;
@@ -180,8 +180,8 @@ stdenv.mkDerivation rec {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       ${optionalString vulkanSupport ''
       --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
-      --add-flags ${escapeShellArg commandLineArgs}
       ''}
+      --add-flags ${escapeShellArg commandLineArgs}
     )
   '';
 

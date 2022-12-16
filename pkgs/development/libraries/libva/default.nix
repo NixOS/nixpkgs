@@ -3,7 +3,13 @@
 , minimal ? false, libva-minimal
 , libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
+# for passthru.tests
+, intel-compute-runtime
 , intel-media-driver
+, ffmpeg
+, mpv
+, vaapiIntel
+, vlc
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +37,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    inherit intel-media-driver;
+    # other drivers depending on libva and selected application users.
+    # Please get a confirmation from the maintainer before adding more applications.
+    inherit intel-compute-runtime intel-media-driver vaapiIntel mpv vlc;
   };
 
   meta = with lib; {

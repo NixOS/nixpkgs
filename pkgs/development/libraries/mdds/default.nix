@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, boost, llvmPackages }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, boost, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "mdds";
   version = "2.0.2";
 
-  src = fetchurl {
-    url = "https://kohei.us/files/${pname}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-EyEfLy44fvO3TXOh3O5Soa1c4G34+OZkdnnfknijEWo=";
+  src = fetchFromGitLab {
+    owner = "mdds";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-jCzF0REocpnP56LfY42zlGTXyKyz4GPovDshhrh4jyo=";
   };
 
   postInstall = ''
@@ -14,14 +16,17 @@ stdenv.mkDerivation rec {
     cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   checkInputs = [ boost ];
 
   meta = with lib; {
-    homepage = "https://gitlab.com/mdds/mdds";
     description = "A collection of multi-dimensional data structure and indexing algorithm";
-    platforms = platforms.all;
+    homepage = "https://gitlab.com/mdds/mdds";
+    maintainers = [];
     license = licenses.mit;
+    platforms = platforms.all;
   };
 }

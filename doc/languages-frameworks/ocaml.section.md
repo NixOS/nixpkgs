@@ -79,7 +79,7 @@ buildDunePackage rec {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
+    hash   = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
   checkInputs = [ alcotest ppx_let ];
@@ -110,7 +110,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
+    hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
   meta = with lib; {

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2022.11.2";
+  version = "2022.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-m28UDaBk2EFwulkjvuT6zpLEeVL/oofHUVSop+AKYvc=";
+    sha256 = "sha256-6xCPkB2QydoJrvwgGGJqmGaw38HCAUs2jPBuXoIBC2Q=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
     homepage = "https://github.com/danielperna84/hahomematic";
+    changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

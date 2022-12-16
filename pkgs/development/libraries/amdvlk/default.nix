@@ -1,4 +1,5 @@
 { stdenv
+, callPackage
 , lib
 , fetchRepoProject
 , writeScript
@@ -101,6 +102,8 @@ in stdenv.mkDerivation rec {
     hash="$(nix to-base64 $(nix-build -A amdvlk 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"
     setHash "$hash"
   '';
+
+  passthru.impureTests = { amdvlk = callPackage ./test.nix {}; };
 
   meta = with lib; {
     description = "AMD Open Source Driver For Vulkan";

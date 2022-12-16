@@ -1,20 +1,20 @@
 { lib, stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , clang
 , llvm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
-    rev = "rocm-${version}";
-    hash = "sha256-rKMe0B/pkDek/ZU37trnJNa8aqvlwxobPb1+VTx/bJU=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-8gxvgy2GlROxM5qKtZVu5Lxa1FmTIVlBTpfp8rxhNhk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,18 +29,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cmake.patch ];
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-Device-Libs/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocm-device-libs "$version"
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-Device-Libs";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault Flakebi ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

@@ -108,7 +108,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
-    daemon = dbus.out;
   };
 
   meta = with lib; {

@@ -7,7 +7,7 @@
 , ncurses
 , pkg-config
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
-, utf8proc
+, withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
 , withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ncurses
     libevent
   ] ++ lib.optionals withSystemd [ systemd ]
-  ++ lib.optionals stdenv.isDarwin [ utf8proc ]
+  ++ lib.optionals withUtf8proc [ utf8proc ]
   ++ lib.optionals withUtempter [ libutempter ];
 
   configureFlags = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
   ++ lib.optionals withUtempter [ "--enable-utempter" ]
-  ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
+  ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 

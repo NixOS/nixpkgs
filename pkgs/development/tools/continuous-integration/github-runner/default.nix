@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , fetchurl
 , git
+, glibc
 , icu
 , libkrb5
 , lib
@@ -48,7 +49,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.299.1";
+  version = "2.300.0";
 
   inherit sdkSource;
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-o6N7GDfSEWX6QaEga5hQpbpDcBh7Alcy9mK3QlODTbs=";
+    hash = "sha256-pEBudX285qMz0W8Sog0ph2CA5UclBItQ+ixaBi6dl8I=";
   };
 
   nativeBuildInputs = [
@@ -259,7 +260,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
     substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
       --replace 'source ./env.sh' $out/bin/env.sh
-
+  '' + lib.optionalString stdenv.isLinux ''
+    # Make binary paths absolute
+    substituteInPlace $out/lib/config.sh \
+      --replace 'ldd' '${glibc.bin}/bin/ldd' \
+      --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
+  '' + ''
     # Remove uneeded copy for run-helper template
     substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
     substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'

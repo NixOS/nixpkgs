@@ -1,26 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , rocm-cmake
 , hip
 , openmp
-, gtest ? null
+, gtest
 , buildTests ? false
 , buildExamples ? false
-, gpuTargets ? null # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
+, gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
 }:
 
-assert buildTests -> gtest != null;
-
-# Several tests seem to either not compile or have a race condition
-# Undefined reference to symbol '_ZTIN7testing4TestE'
-# Try removing this next update
-assert buildTests == false;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
-  version = "unstable-2022-11-02";
+  version = "unstable-2022-12-08";
 
   outputs = [
     "out"
@@ -30,11 +24,13 @@ stdenv.mkDerivation rec {
     "example"
   ];
 
+  # There is now a release, but it's cpu-only it seems to be for a very specific purpose
+  # Thus, we're sticking with the develop branch for now...
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "composable_kernel";
-    rev = "79aa3fb1793c265c59d392e916baa851a55521c8";
-    hash = "sha256-vIfMdvRYCTqrjMGSb7gQfodzLw2wf3tGoCAa5jtfbvw=";
+    rev = "d58b7f5155b44c8b608f3edc6a6eab314493ec1a";
+    hash = "sha256-4nzyaWhPnY/0TygcoJAqVzdgfXOkf+o/BE2V9N+Bm7Q=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +48,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-  ] ++ lib.optionals (gpuTargets != null) [
-    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
   # No flags to build selectively it seems...
@@ -82,10 +78,16 @@ stdenv.mkDerivation rec {
     mv bin/example_* $example/bin
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
+    # Several tests seem to either not compile or have a race condition
+    # Undefined reference to symbol '_ZTIN7testing4TestE'
+    # Try removing this next update
+    broken = buildTests;
   };
-}
+})

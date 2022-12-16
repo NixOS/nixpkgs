@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchCrate, rustPlatform }:
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
@@ -8,6 +13,8 @@ rustPlatform.buildRustPackage rec {
     inherit pname version;
     sha256 = "sha256-LkPkwYsaSLfaZktHF23Fgaks+fDlbB1S6SRgXtJRBqQ=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   outputs = [ "out" "vim" ];
 
@@ -19,9 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 555 bin/sk-tmux -t $out/bin
-    install -D -m 644 man/man1/* -t $out/man/man1
-    install -D -m 444 shell/* -t $out/share/skim
+
     install -D -m 444 plugin/skim.vim -t $vim/plugin
+
+    install -D -m 444 shell/* -t $out/share/skim
+
+    installManPage man/man1/*
 
     cat <<SCRIPT > $out/bin/sk-share
     #! ${stdenv.shell}

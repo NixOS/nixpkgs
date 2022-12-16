@@ -20,12 +20,13 @@
 , tomli
 , types-setuptools
 , types-typed-ast
+, types-psutil
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.981";
+  version = "0.991";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -33,13 +34,14 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CkRK/j5DRUZU2enpZtqX4l+89E7ODDG9MeRYFQp9kSs=";
+    hash = "sha256-ljnMlQUlz4oiZqlqOlqJOumrP6wKLDGiDtT3Y5OEQog=";
   };
 
   nativeBuildInputs = [
     setuptools
     types-typed-ast
     types-setuptools
+    types-psutil
   ];
 
   propagatedBuildInputs = [

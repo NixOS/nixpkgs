@@ -20,19 +20,20 @@
 , ladspa-sdk
 , gitUpdater
 , ladspaPlugins
+, rubberband
 , mkDerivation
 , which
 }:
 
 mkDerivation rec {
   pname = "mlt";
-  version = "7.8.0";
+  version = "7.12.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "sha256-r8lvzz083WWlDtjvlsPwvOgplx2lPPkDDf3t0G9PqAQ=";
+    sha256 = "sha256-Y7lbfwA0lkQB3PjYQIQaQ0BeXGcgyCmMnDqqZJ8zUaA=";
   };
 
   buildInputs = [
@@ -53,6 +54,7 @@ mkDerivation rec {
     opencv3
     ladspa-sdk
     ladspaPlugins
+    rubberband
   ];
 
   nativeBuildInputs = [ cmake which pkg-config ];

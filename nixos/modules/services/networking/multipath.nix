@@ -28,7 +28,7 @@ in {
       type = package;
       description = lib.mdDoc "multipath-tools package to use";
       default = pkgs.multipath-tools;
-      defaultText = "pkgs.multipath-tools";
+      defaultText = lib.literalExpression "pkgs.multipath-tools";
     };
 
     devices = mkOption {

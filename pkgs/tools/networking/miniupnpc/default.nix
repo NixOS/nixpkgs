@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, which
-, cctools
+, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -14,16 +13,24 @@ stdenv.mkDerivation rec {
     sha256 = "0jrc84lkc7xb53rb8dbswxrxj21ndj1iiclmk3r9wkp6xm55w6j8";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ which cctools ];
+  nativeBuildInputs = [ cmake ];
 
   patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
   doCheck = !stdenv.isFreeBSD;
 
-  makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    chmod +x "$out"/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
+    chmod +x $out/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
+
+    # for some reason cmake does not install binaries and manpages
+    # https://github.com/miniupnp/miniupnp/issues/637
+    mkdir -p $out/bin
+    cp -a upnpc-static $out/bin/upnpc
+    cp -a ../external-ip.sh $out/bin/external-ip
+    mkdir -p $out/share/man
+    cp -a ../man3 $out/share/man
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle, openjdk11, git, perl, cmake }:
+{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle, openjdk17, git, perl, cmake }:
 let
   pname = "fastddsgen";
   version = "2.2.0";
@@ -15,7 +15,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle openjdk11 perl ];
+    nativeBuildInputs = [ gradle openjdk17 perl ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -39,7 +39,7 @@ in
 stdenv.mkDerivation {
   inherit pname src version;
 
-  nativeBuildInputs = [ gradle openjdk11 ];
+  nativeBuildInputs = [ gradle openjdk17 ];
 
   # use our offline deps
   postPatch = ''
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     # Override the default start script to use absolute java path
     cat  <<EOF >$out/bin/fastddsgen
     #!${runtimeShell}
-    exec ${openjdk11}/bin/java -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
+    exec ${openjdk17}/bin/java -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
     EOF
     chmod a+x "$out/bin/fastddsgen"
 
@@ -92,6 +92,6 @@ stdenv.mkDerivation {
       used to publish or subscribe.
     '';
     maintainers = with maintainers; [ wentasah ];
-    platforms = openjdk11.meta.platforms;
+    platforms = openjdk17.meta.platforms;
   };
 }

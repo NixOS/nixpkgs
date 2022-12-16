@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A set of utilities for visualization and conversion of scientific data in the free, portable HDF5 format";
     homepage = "https://github.com/stevengj/h5utils";
+    changelog = "https://github.com/NanoComp/h5utils/releases/tag/${version}";
     license = with licenses; [ mit gpl2 ];
     maintainers = with maintainers; [ sfrijters ];
   };

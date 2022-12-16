@@ -94,7 +94,7 @@ in {
       port = mkOption {
         description = lib.mdDoc "Graphite web frontend port.";
         default = 8080;
-        type = types.int;
+        type = types.port;
       };
 
       extraConfig = mkOption {
@@ -225,7 +225,7 @@ in {
       port = mkOption {
         description = lib.mdDoc "Seyren listening port.";
         default = 8081;
-        type = types.int;
+        type = types.port;
       };
 
       seyrenUrl = mkOption {

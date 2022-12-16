@@ -1,17 +1,9 @@
 { callPackage, lib, stdenv, fetchurl, ... }@_args:
 
 let
-  hash = "sha256-sbT8sIwle3OugXxqLZO3jKXlrOQsX1iH7WRH8G+nv8Y=";
-
   base = callPackage ./generic.nix (_args // {
     version = "8.2.0";
-    phpAttrsOverrides = attrs: attrs // {
-      src = fetchurl {
-        url = "https://downloads.php.net/~sergey/php-8.2.0RC6.tar.xz";
-        inherit hash;
-      };
-    };
-    inherit hash;
+    hash = "sha256-G/T8pmP5PZ4LSQm9bq4Fg6HOOD5/Bd8Sbyjycvof1Ro=";
   });
 
 in

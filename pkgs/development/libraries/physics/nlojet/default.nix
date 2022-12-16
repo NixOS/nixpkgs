@@ -19,5 +19,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of calculation of the hadron jet cross sections";
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

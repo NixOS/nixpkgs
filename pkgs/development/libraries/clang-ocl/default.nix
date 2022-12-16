@@ -1,21 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-device-libs
 , clang
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clang-ocl";
-  rocmVersion = "5.3.1";
-  version = rocmVersion;
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "clang-ocl";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-uMSvcVJj+me2E+7FsXZ4l4hTcK6uKEegXpkHGcuist0=";
   };
 
@@ -34,11 +34,17 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_COMPILER=clang++"
   ];
 
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
+
   meta = with lib; {
     description = "OpenCL compilation with clang compiler";
     homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != clang.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.version != clang.version;
   };
-}
+})

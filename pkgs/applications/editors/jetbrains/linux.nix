@@ -21,7 +21,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   desktopItem = makeDesktopItem {
     name = pname;
     exec = pname;
-    comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
+    comment = lib.replaceStrings ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
     categories = [ "Development" ];
@@ -63,7 +63,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
     mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname}}
     cp -a . $out/$pname
-    ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
+    [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
+    [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg
     mv bin/fsnotifier* $out/libexec/${pname}/.
 
     jdk=${jdk.home}

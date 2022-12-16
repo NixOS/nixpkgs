@@ -95,7 +95,7 @@ buildPythonPackage rec {
     changelog = let
       major = versions.major version;
       minor = versions.minor version;
-      dashVer = replaceChars ["."] ["-"] version;
+      dashVer = replaceStrings ["."] ["-"] version;
     in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";

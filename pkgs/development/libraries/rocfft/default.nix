@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -9,25 +10,18 @@
 , hip
 , sqlite
 , python3
-, gtest ? null
-, boost ? null
-, fftw ? null
-, fftwFloat ? null
-, llvmPackages ? null
+, gtest
+, boost
+, fftw
+, fftwFloat
+, llvmPackages
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> fftw != null;
-assert buildBenchmarks -> fftwFloat != null;
-assert (buildTests || buildBenchmarks) -> boost != null;
-assert (buildTests || buildBenchmarks) -> llvmPackages != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
-  rocmVersion = "5.3.1";
-  version = "1.0.18-${rocmVersion}";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -40,8 +34,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocFFT";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-jb2F1fRe+YLloYJ/KtzrptUDhmdBDBtddeW/g55owKM=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-XlpWT6PS+VpJjA4iG8yaiFRxE63kugNG1ZyQXoQVJL8=";
   };
 
   nativeBuildInputs = [
@@ -104,12 +98,18 @@ stdenv.mkDerivation rec {
     mv $out/rocfft_rtc_helper $out/bin
   '';
 
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
+
   meta = with lib; {
     description = "FFT implementation for ROCm ";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.version != hip.version;
     hydraPlatforms = [ ]; # rocFFT produces an extremely large output
   };
-}
+})

@@ -7,11 +7,12 @@
 , pyric
 , pytestCheckHook
 , pythonOlder
+, usb-devices
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "0.4.0";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-juGrrUqPgg1bJsMZP0iitp0NW/XrCxNq/+/fx5QNkQ4=";
+    hash = "sha256-TkTWF8Ljt2cLIuz2FnktrZFAlpvTVkFh6evE8TSzJhk=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     async-timeout
     btsocket
     pyric
+    usb-devices
   ];
 
   checkInputs = [

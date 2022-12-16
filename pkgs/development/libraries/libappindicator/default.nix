@@ -2,17 +2,15 @@
 
 { stdenv, fetchgit, lib
 , pkg-config, autoreconfHook
-, glib, dbus-glib, gtkVersion ? "3"
-, gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
-, gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
+, glib, dbus-glib
+, gtkVersion ? "3"
+, gtk2, libindicator-gtk2, libdbusmenu-gtk2
+, gtk3, libindicator-gtk3, libdbusmenu-gtk3
 , gtk-doc, vala, gobject-introspection
-, monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
+, monoSupport ? false, mono, gtk-sharp-2_0
  }:
 
-with lib;
-
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}";
   version = "12.10.1+20.10.20200706.1";
@@ -35,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib dbus-glib
   ] ++ (if gtkVersion == "2"
-    then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
+    then [ libindicator-gtk2 ] ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
 
   preAutoreconf = ''
@@ -56,7 +54,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
     homepage = "https://launchpad.net/libappindicator";
     license = with licenses; [ lgpl21 lgpl3 ];

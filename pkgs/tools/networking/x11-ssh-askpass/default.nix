@@ -30,5 +30,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight passphrase dialog for OpenSSH or other open variants of SSH";
     license = licenses.mit;
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

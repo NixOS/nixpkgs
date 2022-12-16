@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubernetes-helm";
-  version = "3.10.2";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-ly48zSsi+dV4te68LX8NtaJ9eLC46sSakExR2a+3b5U=";
+    sha256 = "sha256-SUPa6bbops2rrzzzYM5fH0l4DT7/rIkOqc396lTesao=";
   };
   vendorSha256 = "sha256-vyHT/N5lat/vqM2jK4Q+jJOtZpS52YCYGcJqfa5e0KM=";
 

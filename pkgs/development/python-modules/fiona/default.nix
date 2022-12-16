@@ -58,6 +58,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Some tests access network, others test packaging
     "http" "https" "wheel"
+    # https://github.com/Toblerity/Fiona/issues/1164
+    "test_no_append_driver_cannot_append"
   ];
 
   meta = with lib; {

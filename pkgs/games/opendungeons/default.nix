@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     ./fix_link_date_time.patch
   ];
 
+  # source/utils/StackTraceUnix.cpp:122:2: error: #error Unsupported architecture.
+  postPatch = lib.optionalString (!stdenv.isx86_64) ''
+    cp source/utils/StackTrace{Stub,Unix}.cpp
+  '';
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ogre cegui boost sfml openal ois ];
 
@@ -24,5 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://opendungeons.github.io";
     license = with licenses; [ gpl3Plus zlib mit cc-by-sa-30 cc0 ofl cc-by-30 ];
     platforms = platforms.linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

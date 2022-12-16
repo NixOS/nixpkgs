@@ -648,8 +648,6 @@ let
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
-    js_of_ocaml-camlp4 = callPackage ../development/tools/ocaml/js_of_ocaml/camlp4.nix {};
-
     js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix {};
 
     js_of_ocaml-lwt = callPackage ../development/tools/ocaml/js_of_ocaml/lwt.nix {};
@@ -1055,12 +1053,6 @@ let
     ocp-ocamlres = callPackage ../development/ocaml-modules/ocp-ocamlres { };
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
-
-    ocplib-json-typed = callPackage ../development/ocaml-modules/ocplib-json-typed { };
-
-    ocplib-json-typed-browser = callPackage ../development/ocaml-modules/ocplib-json-typed/browser.nix { };
-
-    ocplib-json-typed-bson = callPackage ../development/ocaml-modules/ocplib-json-typed/bson.nix { };
 
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
@@ -1562,10 +1554,6 @@ let
     zmq = callPackage ../development/ocaml-modules/zmq { };
 
     zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
-
-    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
-      oasis = ocaml_oasis;
-    };
 
     # Jane Street
 

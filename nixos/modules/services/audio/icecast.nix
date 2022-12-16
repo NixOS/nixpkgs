@@ -74,7 +74,7 @@ in {
 
       listen = {
         port = mkOption {
-          type = types.int;
+          type = types.port;
           description = lib.mdDoc "TCP port that will be used to accept client connections.";
           default = 8000;
         };

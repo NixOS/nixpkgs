@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     for pythonBin in git-cinnabar git-remote-hg; do
         makeWrapper $out/libexec/$pythonBin $out/bin/$pythonBin \
             --prefix PATH : ${lib.getBin python3}/bin \
-            --prefix GIT_CINNABAR_EXPERIMENTS , python3 \
             --set PYTHONPATH ${mercurial}/${python3.sitePackages}
     done
 

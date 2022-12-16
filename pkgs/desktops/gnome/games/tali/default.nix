@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "Sort of poker with dice and less money";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,31 +1,37 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , pycodestyle
 , glibcLocales
-, toml
+, tomli
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.7.1";
+  version = "2.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-8AWCIOTMDvYSGZb8jsHDLwc15Ea+I8Th9pLeC/IxdN0=";
+  src = fetchFromGitHub {
+    owner = "hhatto";
+    repo = "autopep8";
+    rev = "v${version}";
+    sha256 = "sha256-77ZVprACHUP8BmylTtvHvJMjb70E1YFKKdQDigAZG6s=";
   };
 
-  propagatedBuildInputs = [ pycodestyle toml ];
+  patches = [
+    (fetchpatch {
+      name = "fix-pycodestyle-2.10.0.patch";
+      url = "https://github.com/hhatto/autopep8/pull/659.patch";
+      hash = "sha256-ulvQqJ3lUm8/9QZwH+whzrxbz8c11/ntc8zH2zfmXiE=";
+    })
+  ];
+
+  propagatedBuildInputs = [ pycodestyle tomli ];
 
   checkInputs = [
     glibcLocales
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # missing tox.ini file from pypi package
-    "test_e101_skip_innocuous"
   ];
 
   LC_ALL = "en_US.UTF-8";

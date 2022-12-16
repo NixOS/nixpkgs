@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "hydra";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "facebookresearch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
+    hash = "sha256-0Wl1TaWZTD6y/SC+7CWKoBfe80lJLmg6DbFJsccSO4M=";
   };
 
   nativeBuildInputs = [

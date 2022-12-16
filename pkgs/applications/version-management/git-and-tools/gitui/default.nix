@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZLGA0LHdGPqIoNG2k4nunVWYlOnwRT8nqTSwUWGkfCU=";
+    sha256 = "sha256-K6xWTPu2a5NKYAYBt/sCWQOmuw9TCoKPA4ZxkoLWmeY=";
   };
 
-  cargoSha256 = "sha256-ArJerq3gLzPm66RWDCvkpPFyh7ZyaoqLO/3zSjFTL04=";
+  cargoSha256 = "sha256-MZrx72poA6uOIulWIQkfOr9gy5qr5f61UtLITfES/rk=";
 
   nativeBuildInputs = [ pkg-config ];
 

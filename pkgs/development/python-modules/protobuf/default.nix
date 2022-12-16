@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , protobuf
-, pyext
 , isPyPy
 }:
 
@@ -31,8 +30,6 @@ buildPythonPackage {
     fi
   '';
 
-  nativeBuildInputs = [ pyext ];
-
   buildInputs = [ protobuf ];
 
   propagatedNativeBuildInputs = [
@@ -40,7 +37,7 @@ buildPythonPackage {
     buildPackages."protobuf${lib.versions.major protobuf.version}_${lib.versions.minor protobuf.version}"
   ];
 
-  setupPyGlobalFlags = "--cpp_implementation";
+  setupPyGlobalFlags = [ "--cpp_implementation" ];
 
   pythonImportsCheck = [
     "google.protobuf"

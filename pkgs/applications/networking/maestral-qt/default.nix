@@ -56,9 +56,11 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
+    homepage = "https://maestral.app";
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg sfrijters ];
     platforms = platforms.linux;
-    homepage = "https://maestral.app";
+    mainProgram = "maestral_qt";
   };
 }

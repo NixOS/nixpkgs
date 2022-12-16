@@ -5,7 +5,6 @@
 , dj-search-url
 , django
 , django-cache-url
-, django-discover-runner
 , fetchPypi
 , importlib-metadata
 , mock
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    django-discover-runner
     mock
     dj-database-url
     dj-email-url

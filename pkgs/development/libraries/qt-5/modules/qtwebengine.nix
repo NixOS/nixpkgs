@@ -1,7 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
-, bison, flex, git, gperf, ninja, pkg-config, python2, which
+, bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
@@ -24,13 +24,14 @@
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux
 , pipewire_0_2
+, postPatch ? ""
 }:
 
 qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison flex git gperf ninja pkg-config python2 which gn nodejs
+    bison flex git gperf ninja pkg-config python which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -102,7 +103,7 @@ qtModule {
   '' else ''
   substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
     --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-  ''));
+  '')) + postPatch;
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit

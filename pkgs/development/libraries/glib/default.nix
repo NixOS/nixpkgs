@@ -68,6 +68,19 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
+
+    # Fix error about missing sentinel in glib/tests/cxx.cpp
+    # These two commits are part of already merged glib MRs 3033 and 3031:
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3033
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/0ca5254c5d92aec675b76b4bfa72a6885cde6066.patch";
+      sha256 = "OfD5zO/7JIgOMLc0FAgHV9smWugFJuVPHCn9jTsMQJg=";
+    })
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3031
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7dc19632f3115e3f517c6bc80436fe72c1dcdeb4.patch";
+      sha256 = "v28Yk+R0kN9ssIcvJudRZ4vi30rzQEE8Lsd1kWp5hbM=";
+    })
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
@@ -152,12 +165,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     python3
     gettext
+    libxslt
+    docbook_xsl
   ] ++ lib.optionals buildDocs [
     gtk-doc
-    docbook_xsl
     docbook_xml_dtd_45
     libxml2
-    libxslt
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -244,7 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
     export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
   '';

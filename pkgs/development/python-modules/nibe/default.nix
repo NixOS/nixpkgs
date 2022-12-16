@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "1.2.1";
+  version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-y1/yZE5Gfj2XPscZ27TNXOM/VGy/iIFkvg2TCNsh4tI=";
+    hash = "sha256-X2WcyBjJbS2WuaaYeBpWM+Tw4mmFOjNX/s070u8LN/4=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the communication with Nibe heatpumps";
     homepage = "https://github.com/yozik04/nibe";
+    changelog = "https://github.com/yozik04/nibe/releases/tag/${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

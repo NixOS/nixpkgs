@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , bison
 , cmake
 , doxygen
@@ -61,14 +62,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.5.2";
+  version = "3.6.0.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "sha256-jtAFI1J64ZaTqIljqQL1xOiTGC79AZWcIgidozWczMM=";
+    hash = "sha256-Yx7tmj2Y26FE5rzN+w1gg/7yRckNo6gLudrAPRoCro4=";
   };
+
+  patches = [
+    # https://github.com/OSGeo/gdal/pull/6754
+    (fetchpatch {
+      name = "skip-test-failing-on-macos.patch";
+      url = "https://github.com/OSGeo/gdal/commit/65b2b12fa6638653f54d3ca0f8066225597832b9.patch";
+      hash = "sha256-zpj4jMp01Oz+Zk1b59qdoVxhkwWmTN9bwoKwbau2ADY=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison

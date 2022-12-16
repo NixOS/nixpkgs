@@ -5,6 +5,10 @@ let
     url = "https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage";
     sha256 =  "04ws94q71bwskmhizhwmaf41ma4wabvfgjgkagr8wf3vakgv866r";
   };
+  owdtest = fetchurl {
+    url = "https://github.com/NixOS/nixpkgs/files/10099048/owdtest.AppImage.gz";
+    sha256 = "sha256-EEp9dxz/+l5XkNaVBFgv5v64sizQILnljRAzwXv/yV8=";
+  };
 in
   runCommand "appimage-run-tests" {
     buildInputs = [ appimage-run glibcLocales file ];
@@ -18,6 +22,9 @@ in
     # regression test for #108426
     cp ${sample-appImage} foo.appImage
     LANG=fr_FR appimage-run ${sample-appImage} --list foo.appImage
+    cp ${owdtest} owdtest.AppImage.gz
+    gunzip owdtest.AppImage.gz
+    appimage-run owdtest.AppImage
     set +x
     touch $out
   ''

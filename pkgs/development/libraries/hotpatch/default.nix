@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$(pwd)/src make test
   '';
 
+  patches = [ ./no-loader-test.patch ];
+
   meta = with lib; {
     description = "Hot patching executables on Linux using .so file injection";
     homepage = src.meta.homepage;

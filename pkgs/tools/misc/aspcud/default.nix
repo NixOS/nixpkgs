@@ -5,7 +5,7 @@
 , catch2
 , clasp
 , cmake
-, gringo
+, clingo
 , re2c
 }:
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost clasp gringo re2c ];
+  buildInputs = [ boost clasp clingo re2c ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DASPCUD_GRINGO_PATH=${gringo}/bin/gringo"
+    "-DASPCUD_GRINGO_PATH=${clingo}/bin/gringo"
     "-DASPCUD_CLASP_PATH=${clasp}/bin/clasp"
   ];
 

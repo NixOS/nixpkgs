@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.5.2";
+  version = "0.6.0";
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
     rev = "v${version}";
-    sha256 = "sha256-/GjxdB3Nt+XuKKQWjU12mS91U4FFoeP+9t0L+HsB/o8=";
+    sha256 = "sha256-2nyjI6z6W959/Yc8EwdQVmGnG0PKwsndPLmeDlNpj18=";
   };
   nativeBuildInputs = [ bison flex pkg-config ];
   buildInputs = [ libpng ];

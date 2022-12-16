@@ -1,6 +1,5 @@
 [
   "@angular/cli"
-, "@ansible/ansible-language-server"
 , "@antfu/ni"
 , "@antora/cli"
 , "@antora/site-generator-default"
@@ -117,7 +116,6 @@
 , "csslint"
 , "dat"
 , "degit"
-, {"deltachat-desktop": "../../applications/networking/instant-messengers/deltachat-desktop"}
 , "dhcp"
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"

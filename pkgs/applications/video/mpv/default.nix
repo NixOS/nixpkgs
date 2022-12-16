@@ -4,11 +4,10 @@
 , fetchFromGitHub
 , addOpenGLRunpath
 , docutils
-, perl
+, meson
+, ninja
 , pkg-config
 , python3
-, wafHook
-, which
 , ffmpeg
 , freefont_ttf
 , freetype
@@ -18,7 +17,7 @@
 , lua
 , libuchardet
 , libiconv
-, CoreFoundation, Cocoa, CoreAudio, MediaPlayer
+, xcbuild
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -75,11 +74,12 @@
 , xineramaSupport    ? stdenv.isLinux, libXinerama
 , xvSupport          ? stdenv.isLinux, libXv
 , zimgSupport        ? true,           zimg
+, darwin
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-
 in stdenv.mkDerivation rec {
   pname = "mpv";
   version = "0.35.0";
@@ -97,42 +97,38 @@ in stdenv.mkDerivation rec {
     patchShebangs version.* ./TOOLS/
   '';
 
-  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
-    + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
-  # These flags are not supported and cause the build
-  # to fail, even when cross compilation itself works.
-  dontAddWafCrossFlags = true;
+  mesonFlags = let
+    inherit (lib) mesonOption mesonBool mesonEnable;
+  in [
+    (mesonOption "default_library" "shared")
+    (mesonBool "libmpv" true)
+    (mesonEnable "libarchive" archiveSupport)
+    (mesonEnable "manpage-build" true)
+    (mesonEnable "cdda" cddaSupport)
+    (mesonEnable "dvbin" dvbinSupport)
+    (mesonEnable "dvdnav" dvdnavSupport)
+    (mesonEnable "openal" openalSupport)
+    (mesonEnable "sdl2" sdl2Support)
+    # Disable whilst Swift isn't supported
+    (mesonEnable "swift-build" swiftSupport)
+    (mesonEnable "macos-cocoa-cb" swiftSupport)
+  ];
 
-  wafConfigureFlags = [
-    "--enable-libmpv-shared"
-    "--enable-manpage-build"
-    "--disable-libmpv-static"
-    "--disable-static-build"
-    "--disable-build-date" # Purity
-    (lib.enableFeature archiveSupport  "libarchive")
-    (lib.enableFeature cddaSupport     "cdda")
-    (lib.enableFeature dvdnavSupport   "dvdnav")
-    (lib.enableFeature javascriptSupport "javascript")
-    (lib.enableFeature openalSupport   "openal")
-    (lib.enableFeature sdl2Support     "sdl2")
-    (lib.enableFeature sixelSupport    "sixel")
-    (lib.enableFeature vaapiSupport    "vaapi")
-    (lib.enableFeature waylandSupport  "wayland")
-    (lib.enableFeature dvbinSupport  "dvbin")
-  ] # Disable whilst Swift isn't supported
-    ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
+  mesonAutoFeatures = "auto";
 
   nativeBuildInputs = [
     addOpenGLRunpath
     docutils # for rst2man
-    perl
+    meson
+    ninja
     pkg-config
     python3
-    wafHook
-    which
-  ] ++ lib.optionals swiftSupport [ swift ]
-    ++ lib.optionals waylandSupport [ wayland-scanner ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals swiftSupport [ swift ]
+  ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
@@ -175,10 +171,10 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
     ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
 
-  enableParallelBuilding = true;
-
   postBuild = lib.optionalString stdenv.isDarwin ''
+    pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
+    popd
   '';
 
   postInstall = ''
@@ -186,16 +182,13 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
-    cp TOOLS/mpv_identify.sh $out/bin
-    cp TOOLS/umpv $out/bin
+    cp ../TOOLS/mpv_identify.sh $out/bin
+    cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
     sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
-
-    substituteInPlace $out/lib/pkgconfig/mpv.pc \
-      --replace "$out/include" "$dev/include"
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    cp -r build/mpv.app $out/Applications
+    cp -r mpv.app $out/Applications
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
@@ -227,6 +220,6 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.unix;
   };
 }

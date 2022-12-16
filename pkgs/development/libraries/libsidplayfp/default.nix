@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-o9VPOX50QTp3gVNv2MEizrm4WxW6mOBi8eiuyoe2XZQ=";
+    sha256 = "sha256-stfpyJC1AVmDh1Nk5c5Lv0j6ic2AU6mwY02L/IDr8tE=";
   };
 
   postPatch = ''

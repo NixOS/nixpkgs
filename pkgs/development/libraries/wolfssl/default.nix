@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    hash = "sha256-d8DDyEsK35WK7c0udZI5HxQLO+mbod8hlbSoa3IWWS0=";
+    hash = "sha256-36L7kZ9Dqp3pDjodqELBdSBFwrf+GnRP7KNFYrRUCuU=";
   };
 
   postPatch = ''

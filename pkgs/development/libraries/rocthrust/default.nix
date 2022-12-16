@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -8,22 +9,14 @@
 , rocm-comgr
 , rocprim
 , hip
-, gtest ? null
+, gtest
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildTests -> gtest != null;
-
-# Doesn't seem to work, thousands of errors compiling with no clear fix
-# Is this an upstream issue? We don't seem to be missing dependencies
-assert buildTests == false;
-assert buildBenchmarks == false;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  rocmVersion = "5.3.1";
-  version = "2.16.0-${rocmVersion}";
+  version = "5.4.0";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -37,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-cT0VyEVz86xR6qubAY2ncTxtCRTwXrNTWcFyf3mV+y0=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-3OcJUL6T1HJz6TQb1//lumsTxqfwbWbQ4lGuZoKmqbY=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +74,19 @@ stdenv.mkDerivation rec {
   #   rmdir $out/bin
   # '';
 
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
+
   meta = with lib; {
     description = "ROCm parallel algorithm library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    # Tests/Benchmarks don't seem to work, thousands of errors compiling with no clear fix
+    # Is this an upstream issue? We don't seem to be missing dependencies
+    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
   };
-}
+})

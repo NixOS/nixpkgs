@@ -76,7 +76,7 @@ in
         '';
       };
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         example = 80;
         description = lib.mdDoc ''
@@ -449,7 +449,7 @@ in
               '';
             };
             port = mkOption {
-              type = types.int;
+              type = types.port;
               default = 9000;
               description = lib.mdDoc ''
                 Minio listen port.
@@ -999,8 +999,8 @@ in
 
         ```
           # snippet of HedgeDoc-related config
-          services.hedgedoc.configuration.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
-          services.hedgedoc.configuration.minio.secretKey = "$MINIO_SECRET_KEY";
+          services.hedgedoc.settings.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
+          services.hedgedoc.settings.minio.secretKey = "$MINIO_SECRET_KEY";
         ```
 
         ```

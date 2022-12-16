@@ -1,44 +1,38 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, fetchurl, autoPatchelfHook, matrix-sdk-crypto-nodejs }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, python3
+, matrix-sdk-crypto-nodejs
+, nixosTests
+, nix-update-script
+}:
 
-let
-  ourNodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-  version = (lib.importJSON ./package.json).version;
-  srcInfo = lib.importJSON ./src.json;
-in
-ourNodePackages.package.override {
+buildNpmPackage rec {
   pname = "matrix-appservice-irc";
-  inherit version;
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
-    rev = version;
-    inherit (srcInfo) sha256;
+    rev = "refs/tags/${version}";
+    hash = "sha256-8/jLONqf+0JRAK/SLj3qlG6Dm0VRl4h6YWeZnz4pVXc=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.node-gyp-build ];
+  npmDepsHash = "sha256-fGft7au5js9DRoXYccBPdJyaZ3zfsuCwUwWPOxwAodo=";
 
-  dontAutoPatchelf = true;
-
-  postRebuild = ''
-    npm run build
-  '';
+  nativeBuildInputs = [
+    python3
+  ];
 
   postInstall = ''
-    # Compile typescript
-    npm run build
-
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
-      --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
-
-      cp -rv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/
+    rm -rv $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    ln -sv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";

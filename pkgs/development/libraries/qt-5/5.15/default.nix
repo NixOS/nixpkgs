@@ -9,7 +9,7 @@ Check for any minor version changes.
 
 { newScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl
+, bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
 , buildPackages
@@ -63,7 +63,18 @@ let
     ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = lib.optionals stdenv.isDarwin [
+    qtwebengine = [
+      (fetchpatch {
+        url = "https://github.com/archlinux/svntogit-packages/raw/372ae3de526f783bdcb5d51b997fbf511055466a/trunk/qt5-webengine-python3.patch";
+        hash = "sha256-rUSDwTucXVP3Obdck7LRTeKZ+JYQSNhQ7+W31uHZ9yM=";
+      })
+      (fetchpatch {
+        url = "https://github.com/archlinux/svntogit-packages/raw/372ae3de526f783bdcb5d51b997fbf511055466a/trunk/qt5-webengine-chromium-python3.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+        hash = "sha256-BODOw1ksPPns2fmMrk6KC5Po513xB0f1ycbsIL9MmHE=";
+      })
+    ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
     ];
@@ -164,6 +175,12 @@ let
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {
         inherit (srcs.qtwebengine) version;
+        python = python3;
+        postPatch = ''
+          # update catapult for python3 compatibility
+          rm -r src/3rdparty/chromium/third_party/catapult
+          cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
+        '';
         inherit (darwin) cctools libobjc libunwind xnu;
         inherit (darwin.apple_sdk.libs) sandbox;
         inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit

@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
+    hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
-  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
+  cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
 
   meta = with lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
@@ -97,10 +97,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1mqaynrqaas82f5957lx31x80v74zwmwmjxxlbywajb61vh00d38";
+    sha256 = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
-  cargoHash = "sha256-JmBZcDVYJaK1cK05cxx5BrnGWp4t8ca6FLUbvIot67s=";
+  cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
   cargoDepsName = pname;
 
   # ...
@@ -331,6 +331,20 @@ rustPlatform.buildRustPackage {
 }
 ```
 
+#### Using `cargo-nextest` {#using-cargo-nextest}
+
+Tests can be run with [cargo-nextest](https://github.com/nextest-rs/nextest)
+by setting `useNextest = true`. The same options still apply, but nextest
+accepts a different set of arguments and the settings might need to be
+adapted to be compatible with cargo-nextest.
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  useNextest = true;
+}
+```
+
 #### Setting `test-threads` {#setting-test-threads}
 
 `buildRustPackage` will use parallel test threads by default,
@@ -403,8 +417,8 @@ cargoDeps = rustPlatform.fetchCargoTarball {
 ```
 
 The `src` attribute is required, as well as a hash specified through
-one of the `sha256` or `hash` attributes. The following optional
-attributes can also be used:
+one of the `hash` attribute. The following optional attributes can
+also be used:
 
 * `name`: the name that is used for the dependencies tarball.  If
   `name` is not specified, then the name `cargo-deps` will be used.
@@ -474,6 +488,9 @@ you of the correct hash.
   flags can be passed to the tests using `checkFlags` and
   `checkFlagsArray`. By default, tests are run in parallel. This can
   be disabled by setting `dontUseCargoParallelTests`.
+* `cargoNextestHook`: run tests using
+  [cargo-nextest](https://github.com/nextest-rs/nextest). The same
+  options for `cargoCheckHook` also applies to `cargoNextestHook`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
 * `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
@@ -514,7 +531,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+    hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
   sourceRoot = "source/bindings/python";
@@ -551,7 +568,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i1mx5y9hkyfi9jrrkcw804hmkcglxi6rmf7vin7jfnbr2bf4q64";
+    hash = "sha256-xGDilsjLOnls3MfVbGKnj80KCUCczZxlis5PmHzpNcQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -591,7 +608,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "retworkx";
     rev = version;
-    sha256 = "11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20";
+    hash = "sha256-11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -665,7 +682,7 @@ let src = fetchFromGitHub {
       repo = "nixpkgs-mozilla";
       # commit from: 2019-05-15
       rev = "9f35c4b09fd44a77227e79ff0c1b4b6a69dff533";
-      sha256 = "18h0nvh55b5an4gmlgfbvwbyqj91bklf1zymis6lbdh75571qaz0";
+      hash = "sha256-18h0nvh55b5an4gmlgfbvwbyqj91bklf1zymis6lbdh75571qaz0=";
    };
 in
 with import "${src.out}/rust-overlay.nix" pkgs pkgs;
@@ -756,7 +773,7 @@ rustPlatform.buildRustPackage rec {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = version;
-    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
+    hash = "sha256-1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps=";
   };
 
   cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";

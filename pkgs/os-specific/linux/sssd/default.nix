@@ -101,6 +101,6 @@ stdenv.mkDerivation rec {
     changelog = "https://sssd.io/release-notes/sssd-${version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ e-user illustris ];
+    maintainers = with maintainers; [ illustris ];
   };
 }

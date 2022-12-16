@@ -1,6 +1,7 @@
 { lib
 , python-dateutil
 , buildPythonPackage
+, emoji
 , fetchFromGitHub
 , freezegun
 , tzdata
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.1.1";
+  version = "4.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -24,10 +25,11 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yPFFOhAscLvhKo7sgXtH1HwcDYq8kWKHzrr3ep857Io=";
+    hash = "sha256-YvBcfrZiHTornCEAFhNLN/siNvl119pD+o+0yNsRBA8=";
   };
 
   propagatedBuildInputs = [
+    emoji
     python-dateutil
     tzdata
     pydantic

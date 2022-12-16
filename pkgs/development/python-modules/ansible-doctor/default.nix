@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.4.6";
+  version = "1.4.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-76IYH9IWeHU+PAtpLFGT5f8oG2roY3raW0NC3KUnFls=";
+    hash = "sha256-FTDbQ9RZs1XleferFS8BAioWP0iWyHrDbytY68q/0tQ=";
   };
 
   pythonRelaxDeps = true;
@@ -69,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Annotation based documentation for your Ansible roles";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
+    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/v${version}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ tboerger ];
   };

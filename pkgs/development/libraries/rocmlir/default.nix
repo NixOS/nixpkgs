@@ -1,42 +1,57 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
-, hip
+, clang
+, git
+, libxml2
+, libedit
 , python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir";
-  rocmVersion = "5.3.1";
-  # For some reason they didn't add a tag for 5.3.1, should be compatible, change to rocmVersion later
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocMLIR";
-    rev = "rocm-${version}"; # change to rocmVersion later
-    hash = "sha256-s/5gAH5vh2tgATZemPP66juQFDg8BR2sipzX2Q6pOOQ=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-MokE7Ej8mLHTQeLYvKr7PPlsNG6ul91fqfXDlGu5JpI=";
   };
 
   nativeBuildInputs = [
     cmake
-    hip
+    clang
   ];
 
   buildInputs = [
+    git
+    libxml2
+    libedit
     python3
   ];
 
   cmakeFlags = [
-    "-DBUILD_FAT_LIBMLIRMIOPEN=ON"
+    "-DCMAKE_C_COMPILER=clang"
+    "-DCMAKE_CXX_COMPILER=clang++"
+    "-DBUILD_FAT_LIBROCKCOMPILER=ON"
   ];
+
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+    page = "tags?per_page=2";
+    filter = ".[1].name | split(\"-\") | .[1]";
+  };
 
   meta = with lib; {
     description = "MLIR-based convolution and GEMM kernel generator";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.version != clang.version;
   };
-}
+})

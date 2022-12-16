@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "5.2.3";
+  version = "5.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pynamodb";
     repo = "PynamoDB";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-3Si0BCMofr38OuXoX8Tj9n3ITv3rH5hNfDQZvZWk79o=";
+    hash = "sha256-qg/aFK7rt2a/ZcLm+VSlq8UYBh6zS0/VVLqRAN7kLus=";
   };
 
   propagatedBuildInputs = [
@@ -66,6 +66,7 @@ buildPythonPackage rec {
       verbose. PynamoDB presents you with a simple, elegant API.
     '';
     homepage = "http://jlafon.io/pynamodb.html";
+    changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

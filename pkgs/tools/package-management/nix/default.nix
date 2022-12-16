@@ -106,8 +106,8 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_11 = common {
-    version = "2.11.0";
-    sha256 = "sha256-9+rpYzI+SmxJn+EbYxjGv68Ucp22bdFUSy/4LkHkkDQ=";
+    version = "2.11.1";
+    sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
     patches = [
       ./patches/flaky-tests.patch
       (fetchpatch {
@@ -119,7 +119,15 @@ in lib.makeExtensible (self: {
     ];
   };
 
-  stable = self.nix_2_11;
+  nix_2_12 = common {
+    version = "2.12.0";
+    sha256 = "sha256-sQ9C101CL/eVN5JgH91ozHFWU4+bXr8/Fi/8NQk6xRI=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+  };
+
+  stable = self.nix_2_12;
 
   unstable = self.stable;
 })

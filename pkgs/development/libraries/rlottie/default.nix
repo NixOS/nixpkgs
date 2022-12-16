@@ -34,5 +34,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit bsd3 mpl11 ftl ];
     platforms = platforms.all;
     maintainers = with maintainers; [ CRTified ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

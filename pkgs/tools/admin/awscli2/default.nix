@@ -34,14 +34,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.0"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.9.6"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-kPMoGOn6ws4DjA9fR9gci7vHPIqOSsgMXa1wCiwN8yU=";
+    hash = "sha256-3zB0Uy2pmkrOLb+/mXZGs/pnzo6zi2zVPyeNPGPVQJM=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,6 @@ with py.pkgs; buildPythonApplication rec {
     pyyaml
     rsa
     ruamel-yaml
-    wcwidth
     python-dateutil
     jmespath
     urllib3
@@ -77,8 +76,7 @@ with py.pkgs; buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
       --replace "distro>=1.5.0,<1.6.0" "distro" \
-      --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "wcwidth<0.2.0" "wcwidth"
+      --replace "cryptography>=3.3.2,<=38.0.1" "cryptography>=3.3.2,<=38.0.3"
   '';
 
   postInstall = ''

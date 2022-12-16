@@ -9,6 +9,10 @@ let
     name = "configuration.py";
     text = ''
       STATIC_ROOT = '${staticDir}'
+      MEDIA_ROOT = '${cfg.dataDir}/media'
+      REPORTS_ROOT = '${cfg.dataDir}/reports'
+      SCRIPTS_ROOT = '${cfg.dataDir}/scripts'
+
       ALLOWED_HOSTS = ['*']
       DATABASE = {
         'NAME': 'netbox',
@@ -42,11 +46,10 @@ let
     installPhase = old.installPhase + ''
       ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
     '' + optionalString cfg.enableLdap ''
-      ln -s ${ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
+      ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
     '';
   })).override {
-    plugins = ps: ((cfg.plugins ps)
-      ++ optionals cfg.enableLdap [ ps.django-auth-ldap ]);
+    inherit (cfg) plugins;
   };
   netboxManageScript = with pkgs; (writeScriptBin "netbox-manage" ''
     #!${stdenv.shell}
@@ -139,6 +142,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    services.netbox.plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+
     services.redis.servers.netbox.enable = true;
 
     services.postgresql = {

@@ -1,8 +1,6 @@
 { stdenv, fetchurl, lib, file
 , pkg-config
-, gtkVersion ? "3", gtk2 ? null, gtk3 ? null }:
-
-with lib;
+, gtkVersion ? "3", gtk2, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "libindicator-gtk${gtkVersion}";
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 8 out of 8 tests
 
-  meta = {
+  meta = with lib; {
     description = "A set of symbols and convenience functions for Ayatana indicators";
     homepage = "https://launchpad.net/libindicator";
     license = licenses.gpl3;

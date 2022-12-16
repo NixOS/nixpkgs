@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hakari";
-  version = "0.9.16";
+  version = "0.9.17";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-V4rCtqt3HmvAtanithYAJv9FMt/g2R5JCJUwKITnoV4=";
+    sha256 = "sha256-FgG9sdXZhSlX4p3I9WL5ORN7FCg4Zgt/Y+GRCWhIoP8=";
   };
 
-  cargoHash = "sha256-IGxKIgV7UtPrNAFEzKNJfPiSZ8lW2S2M7AJ7sigCWzQ=";
+  cargoHash = "sha256-pYjjiQUnBfZ9wQgXhm4c+A7zMAF9k/Mzl5ccPX407/A=";
 
   meta = with lib; {
     description = "Manage workspace-hack packages to speed up builds in large workspaces.";

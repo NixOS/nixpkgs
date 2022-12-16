@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-m8PKigVm46PN55hchc5a1OUUuhxoGn3e2sMRqqvkPgs=";
+    sha256 = "sha256-jdJD7AW4IrzVl4BPdsFFrRSdCWX9l4nFM+DWIuxLiJ8=";
   };
 
-  vendorSha256 = "sha256-hSZCYSV7nMGd5KQsV+Z4ig7vk4j8cZnOvsg0DqPiEvg=";
+  vendorSha256 = "sha256-ufvWgusTMbM88F3BkJ61KM2wRSdqPOlMKqDSYf7tZQA=";
 
   subPackages = [ "." ];
 

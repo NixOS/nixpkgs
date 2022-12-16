@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tz";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "oz";
     repo = "tz";
     rev = "v${version}";
-    sha256 = "sha256-D0rakLZ+swrDwBMcr+EJPgaYsQTWob50QteW1PoIdNk=";
+    sha256 = "sha256-fl+Q6HNMSIo6E5SMBkTr6/hJN9akfJRBwSPaq7FcYDY=";
   };
 
-  vendorSha256 = "sha256-PGsj7pLtd+xpy9Dhv6qJX5sHin4YAOdXaYj4QCSFte4=";
+  vendorSha256 = "sha256-lcCra4LyebkmelvBs0Dd2mn6R64Q5MaUWc5AP8V9pec=";
 
   meta = with lib; {
     description = "A time zone helper";

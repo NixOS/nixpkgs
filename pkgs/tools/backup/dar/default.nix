@@ -1,27 +1,39 @@
-{ lib, gccStdenv, fetchurl
-, which
-, attr, e2fsprogs
-, curl, libargon2, librsync, libthreadar
-, gpgme, libgcrypt, openssl
-, bzip2, lz4, lzo, xz, zlib
-, CoreFoundation
+args @ {
+  lib,
+  stdenv,
+  llvmPackages_12, # Anything newer than 11
+  fetchzip,
+  which,
+  attr,
+  e2fsprogs,
+  curl,
+  libargon2,
+  librsync,
+  libthreadar,
+  gpgme,
+  libgcrypt,
+  openssl,
+  bzip2,
+  lz4,
+  lzo,
+  xz,
+  zlib,
+  CoreFoundation,
 }:
 
-with lib;
-
 let
-  # Fails to build with clang on Darwin:
+  # Fails to build with clang-11 on Darwin:
   # error: exception specification of overriding function is more lax than base version
-  stdenv = gccStdenv;
+  stdenv = if args.stdenv.isDarwin then llvmPackages_12.stdenv else args.stdenv;
 in
 
 stdenv.mkDerivation rec {
-  version = "2.7.7";
+  version = "2.7.8";
   pname = "dar";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-wD4vUu/WWi8Ee2C77aJGDLUlFl4b4y8RC2Dgzs4/LMk=";
+    sha256 = "sha256-W/6kSkIaeHumE2yGGbU4Z2lk1d2toQ1AM012TUI1EZw=";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,13 +41,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
 
   buildInputs = [
-    curl librsync libthreadar
-    gpgme libargon2 libgcrypt openssl
-    bzip2 lz4 lzo xz zlib
-  ] ++ optionals stdenv.isLinux [
+    curl
+    librsync
+    libthreadar
+    gpgme
+    libargon2
+    libgcrypt
+    openssl
+    bzip2
+    lz4
+    lzo
+    xz
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
     attr
     e2fsprogs
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
   ];
 
@@ -47,20 +68,20 @@ stdenv.mkDerivation rec {
     "--enable-threadar"
   ];
 
+  hardeningDisable = [ "format" ];
+
+  enableParallelBuilding = true;
+
   postInstall = ''
     # Disable html help
     rm -r "$out"/share/dar
   '';
 
-  enableParallelBuilding = true;
-
-  hardeningDisable = [ "format" ];
-
-  meta = {
+  meta = with lib; {
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
     maintainers = with maintainers; [ izorkin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
   };
 }

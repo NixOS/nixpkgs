@@ -19,15 +19,15 @@
 }:
 
 let
-  buildNum = "2022-08-01-115";
+  buildNum = "2022-12-12-1037";
 in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.13.1";
+  version = "1.14";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-e88vk+ZtDPB/1HrDKXbzkDaMESNE+qIW7ERwrqe+ZN8=";
+    hash = "sha256-T13SOy+77lLxmlcczXEFZAnyx9Lm52G/WiCcC1Py4HA=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];

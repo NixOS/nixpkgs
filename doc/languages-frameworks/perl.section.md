@@ -39,7 +39,7 @@ ClassC3 = buildPerlPackage rec {
   version = "0.21";
   src = fetchurl {
     url = "mirror://cpan/authors/id/F/FL/FLORA/${pname}-${version}.tar.gz";
-    sha256 = "1bl8z095y4js66pwxnm7s853pi9czala4sqc743fdlnk27kq94gz";
+    hash = "sha256-/5GE5xHT0uYGOQxroqj6LMU7CtKn2s6vMVoSXxL4iK4=";
   };
 };
 ```
@@ -78,7 +78,7 @@ buildPerlPackage rec {
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/P/PM/PMQS/${pname}-${version}.tar.gz";
-    sha256 = "07xf50riarb60l1h6m2dqmql8q5dij619712fsgw7ach04d8g3z1";
+    hash = "sha256-4Y+HGgGQqcOfdiKcFIyMrWBEccVNVAMDBWZlFTMorh8=";
   };
 
   preConfigure = ''
@@ -96,7 +96,7 @@ ClassC3Componentised = buildPerlPackage rec {
   version = "1.0004";
   src = fetchurl {
     url = "mirror://cpan/authors/id/A/AS/ASH/${pname}-${version}.tar.gz";
-    sha256 = "0xql73jkcdbq4q9m0b0rnca6nrlvf5hyzy8is0crdk65bynvs8q1";
+    hash = "sha256-ASO9rV/FzJYZ0BH572Fxm2ZrFLMZLFATJng1NuU4FHc=";
   };
   propagatedBuildInputs = [
     ClassC3 ClassInspector TestException MROCompat
@@ -111,11 +111,11 @@ On Darwin, if a script has too many `-Idir` flags in its first line (its “sheb
 
 ImageExifTool = buildPerlPackage {
   pname = "Image-ExifTool";
-  version = "11.50";
+  version = "12.50";
 
   src = fetchurl {
-    url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${pname}-${version}.tar.gz";
-    sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
+    url = "https://exiftool.org/${pname}-${version}.tar.gz";
+    hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -146,7 +146,7 @@ $ nix-generate-from-cpan XML::Simple
     version = "2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.22.tar.gz";
-      sha256 = "b9450ef22ea9644ae5d6ada086dc4300fa105be050a2030ebd4efd28c198eb49";
+      hash = "sha256-uUUO8i6pZErl1q2ghtxDAPoQW+BQogMOvU79KMGY60k=";
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
     meta = {

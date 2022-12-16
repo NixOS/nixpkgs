@@ -70,5 +70,7 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

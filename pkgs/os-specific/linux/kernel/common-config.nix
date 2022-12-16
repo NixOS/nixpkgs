@@ -54,7 +54,6 @@ let
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = option no;
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
@@ -76,7 +75,7 @@ let
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
-      X86_AMD_PSTATE                   = whenAtLeast "5.17" module;
+      X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
     };
 
     external-firmware = {
@@ -304,6 +303,8 @@ let
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
+      # Enable Hyper-V Synthetic DRM Driver
+      DRM_HYPERV = whenAtLeast "5.14" module;
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
@@ -389,7 +390,7 @@ let
 
       TMPFS           = yes;
       TMPFS_POSIX_ACL = yes;
-      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else whenAtLeast "4.9" (option module);
+      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else option module;
 
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -400,7 +401,7 @@ let
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY  = yes;
-      EXT4_ENCRYPTION   = option yes;
+      EXT4_ENCRYPTION   = whenOlder "5.1" yes;
 
       NTFS_FS            = whenAtLeast "5.15" no;
       NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
@@ -426,7 +427,7 @@ let
 
       F2FS_FS             = module;
       F2FS_FS_SECURITY    = option yes;
-      F2FS_FS_ENCRYPTION  = option yes;
+      F2FS_FS_ENCRYPTION  = whenOlder "5.1" yes;
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
@@ -507,7 +508,7 @@ let
       MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
-      SECURITY_LOCKDOWN_LSM = option no;
+      SECURITY_LOCKDOWN_LSM = whenAtLeast "5.4" no;
 
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS              = yes;
@@ -620,16 +621,13 @@ let
       XEN_PVH                     = option yes;
       XEN_PVHVM                   = option yes;
       XEN_SAVE_RESTORE            = option yes;
-      XEN_SCRUB_PAGES             = option yes;
-      XEN_SELFBALLOONING          = option yes;
-      XEN_STUB                    = option yes;
-      XEN_TMEM                    = option yes;
+      XEN_SCRUB_PAGES             = whenOlder "4.19" yes;
+      XEN_SELFBALLOONING          = whenOlder "5.3" yes;
     };
 
     media = {
       MEDIA_DIGITAL_TV_SUPPORT = yes;
       MEDIA_CAMERA_SUPPORT     = yes;
-      MEDIA_RC_SUPPORT         = whenOlder "4.14" yes;
       MEDIA_CONTROLLER         = yes;
       MEDIA_PCI_SUPPORT        = yes;
       MEDIA_USB_SUPPORT        = yes;
@@ -709,7 +707,8 @@ let
       LOCK_TORTURE_TEST        = option no;
       MTD_TESTS                = option no;
       NOTIFIER_ERROR_INJECTION = option no;
-      RCU_PERF_TEST            = option no;
+      RCU_PERF_TEST            = whenOlder "5.9" no;
+      RCU_SCALE_TEST           = whenAtLeast "5.10" no;
       RCU_TORTURE_TEST         = option no;
       TEST_ASYNC_DRIVER_PROBE  = option no;
       WW_MUTEX_SELFTEST        = option no;

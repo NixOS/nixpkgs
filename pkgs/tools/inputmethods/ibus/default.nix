@@ -52,7 +52,7 @@ let
     nativeBuildInputs = [ makeWrapper ];
   } ''
       makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
+        --add-flags --config-file=${dbus}/share/dbus-1/session.conf
   '';
 in
 

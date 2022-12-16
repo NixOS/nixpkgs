@@ -57,11 +57,11 @@
     "mps": {
       "update-channel": "MPS RELEASE",
       "url-template": "https://download.jetbrains.com/mps/{versionMajorMinor}/MPS-{version}.tar.gz",
-      "version": "2021.3.1",
-      "sha256": "b7d41c4362e71f30adeaed9f0ec30afd5ac0e6eea9650ee4a19d70a5783db3e6",
-      "url": "https://download.jetbrains.com/mps/2021.3.1/MPS-2021.3.1.tar.gz",
-      "version-major-minor": "2021.3",
-      "build_number": "213.7172.958"
+      "version": "2022.2",
+      "sha256": "aaee4d2bb9bc34d0b4bc62c7ef08139cc6144b433ba1675ef306e6d3d95e37a1",
+      "url": "https://download.jetbrains.com/mps/2022.2/MPS-2022.2.tar.gz",
+      "version-major-minor": "2022.2",
+      "build_number": "222.3345.1295"
     },
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
@@ -176,11 +176,11 @@
     "mps": {
       "update-channel": "MPS RELEASE",
       "url-template": "https://download.jetbrains.com/mps/{versionMajorMinor}/MPS-{version}-macos.dmg",
-      "version": "2021.3.1",
-      "sha256": "2c5517518fec31ac960e4309fa848ad831f9048ef15df1b362e12aa8f41d9dbd",
-      "url": "https://download.jetbrains.com/mps/2021.3.1/MPS-2021.3.1-macos.dmg",
-      "version-major-minor": "2021.3",
-      "build_number": "213.7172.958"
+      "version": "2022.2",
+      "sha256": "4e36c60d281596c220287ab2191165be37ef01c3c54ab5f5e4e535c8b81bc754",
+      "url": "https://download.jetbrains.com/mps/2022.2/MPS-2022.2-macos.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.3345.1295"
     },
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
@@ -295,11 +295,11 @@
     "mps": {
       "update-channel": "MPS RELEASE",
       "url-template": "https://download.jetbrains.com/mps/{versionMajorMinor}/MPS-{version}-macos-aarch64.dmg",
-      "version": "2021.3.1",
-      "url": "https://download.jetbrains.com/mps/2021.3.1/MPS-2021.3.1-macos-aarch64.dmg",
-      "sha256": "3ace6d45db718dffd80bf126a76735fb65099de292112a01cc078aa61c475a70",
-      "version-major-minor": "2021.3",
-      "build_number": "213.7172.958"
+      "version": "2022.2",
+      "url": "https://download.jetbrains.com/mps/2022.2/MPS-2022.2-macos-aarch64.dmg",
+      "sha256": "bdc83d9c7a3430cc2b0b0361a9e4eab82e951bfe87f0e4754106d09850947077",
+      "version-major-minor": "2022.2",
+      "build_number": "222.3345.1295"
     },
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",

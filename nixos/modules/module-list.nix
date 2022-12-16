@@ -46,6 +46,7 @@
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
+  ./hardware/cpu/amd-sev.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/corectrl.nix
@@ -134,6 +135,7 @@
   ./programs/bandwhich.nix
   ./programs/bash/bash.nix
   ./programs/bash/bash-completion.nix
+  ./programs/bash/blesh.nix
   ./programs/bash/ls-colors.nix
   ./programs/bash/undistract-me.nix
   ./programs/bash-my-aws.nix
@@ -164,6 +166,7 @@
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/fzf.nix
   ./programs/gamemode.nix
   ./programs/geary.nix
   ./programs/git.nix
@@ -209,10 +212,12 @@
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
+  ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
   ./programs/seahorse.nix
+  ./programs/skim.nix
   ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/spacefm.nix
@@ -448,6 +453,7 @@
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/argonone.nix
+  ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
@@ -475,6 +481,7 @@
   ./services/hardware/sane_extra_backends/brscan5.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
   ./services/hardware/spacenavd.nix
+  ./services/hardware/supergfxd.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
@@ -722,7 +729,7 @@
   ./services/monitoring/thanos.nix
   ./services/monitoring/tremor-rs.nix
   ./services/monitoring/tuptime.nix
-  ./services/monitoring/unifi-poller.nix
+  ./services/monitoring/unpoller.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vmagent.nix
@@ -780,6 +787,7 @@
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/cloudflare-dyndns.nix
+  ./services/networking/cloudflared.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
   ./services/networking/consul.nix
@@ -966,6 +974,7 @@
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncplay.nix
   ./services/networking/tailscale.nix
+  ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
@@ -981,6 +990,7 @@
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
+  ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -988,6 +998,7 @@
   ./services/video/rtsp-simple-server.nix
   ./services/networking/uptermd.nix
   ./services/networking/v2ray.nix
+  ./services/networking/v2raya.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
@@ -1008,6 +1019,7 @@
   ./services/networking/zerotierone.nix
   ./services/networking/znc/default.nix
   ./services/printing/cupsd.nix
+  ./services/printing/ipp-usb.nix
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
@@ -1132,6 +1144,7 @@
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/peertube.nix
+  ./services/web-apps/peering-manager.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
@@ -1329,6 +1342,7 @@
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
   ./virtualisation/qemu-guest-agent.nix
+  ./virtualisation/rosetta.nix
   ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix

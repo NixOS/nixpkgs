@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , fetchpatch
 , cmake
 , rocm-cmake
@@ -9,13 +10,13 @@
 , rocm-comgr
 , hip
 , python3
-, tensile ? null
-, msgpack ? null
-, libxml2 ? null
-, llvm ? null
-, python3Packages ? null
-, gtest ? null
-, gfortran ? null
+, tensile
+, msgpack
+, libxml2
+, llvm
+, gtest
+, gfortran
+, python3Packages
 , buildTensile ? true
 , buildTests ? false
 , buildBenchmarks ? false
@@ -27,29 +28,15 @@
 , gpuTargets ? [ "all" ]
 }:
 
-assert buildTensile -> tensile != null;
-assert buildTensile -> msgpack != null;
-assert buildTensile -> libxml2 != null;
-assert buildTensile -> llvm != null;
-assert buildTensile -> python3Packages != null;
-assert buildTests -> gtest != null;
-assert buildTests -> gfortran != null;
-
-# Tests and benchmarks are a can of worms that I will tackle in a different PR
-# It involves completely rewriting the amd-blis derivation
-assert buildTests == false;
-assert buildBenchmarks == false;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
-  rocmVersion = "5.3.1";
-  version = "2.45.0-${rocmVersion}";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocBLAS";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-GeeICEI1dNE6D+nUUlBtUncLkPowAa5n+bsy160EtaU=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-4art8/KwH2KDLwSYcyzn/m/xwdg5wQQvgHks73aB+60=";
   };
 
   # We currently need this patch due to faulty toolchain includes
@@ -88,7 +75,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-Dpython=python3"
-    "-DAMDGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     "-DBUILD_WITH_TENSILE=${if buildTensile then "ON" else "OFF"}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
@@ -126,11 +113,19 @@ stdenv.mkDerivation rec {
       --replace "virtualenv_install(\''${Tensile_TEST_LOCAL_PATH})" ""
   '';
 
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
+
   meta = with lib; {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    # Tests and benchmarks are a can of worms that I will tackle in a different PR
+    # It involves completely rewriting the amd-blis derivation
+    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
   };
-}
+})

@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchFromGitHub, lib, pythonOlder
-, clang_12, python2, python
+, clang_12, python
 , graphviz, matplotlib, numpy, pandas, plotly, scipy, six
 , withCuda ? false, cudatoolkit }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "ILemeZUBI9jPb9G6F7QX/T1HaVhQ+g6y7YmsT6DFCJk=";
   };
 
-  nativeBuildInputs = [ clang_12 python2 ];
+  nativeBuildInputs = [ clang_12 ];
 
   propagatedBuildInputs = [ graphviz matplotlib numpy pandas scipy plotly six ]
     ++ lib.optionals withCuda [ cudatoolkit ];
