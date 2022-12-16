@@ -1,16 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
-  pname = "evmdis-unstable";
-  version = "2018-03-23";
-  goPackagePath = "github.com/Arachnid/evmdis";
+buildGoModule {
+  pname = "evmdis";
+  version = "unstable-2022-05-09";
 
   src = fetchFromGitHub {
     owner = "Arachnid";
     repo = "evmdis";
-    rev = "0d1406905c5fda6224651fa53260a21c907eb986";
-    sha256 = "09y4j7ipgv8yd99g3xk3f079w8fqfj7kl1y7ry81ainysn0qlqrg";
+    rev = "7fad4fbee443262839ce9f88111b417801163086";
+    hash = "sha256-jfbjXoGT8RtwLlqX13kcKdiFlhrVwA7Ems6abGJVRbA=";
   };
+
+  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  preBuild = ''
+    # Add go modules support
+    cp ${./go.mod} go.mod
+  '';
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/Arachnid/evmdis";
