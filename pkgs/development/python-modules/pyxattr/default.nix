@@ -10,16 +10,21 @@ buildPythonPackage rec {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-e/QM7FrpPdZWEocX29Joz8Ozso2VU214hndslPomeFU=";
+      hash = "sha256-e/QM7FrpPdZWEocX29Joz8Ozso2VU214hndslPomeFU=";
     };
+
+    buildInputs = with pkgs; [
+      attr
+    ];
 
     # IOError: [Errno 95] Operation not supported (expected)
     doCheck = false;
 
-    buildInputs = with pkgs; [ attr ];
-
     meta = with lib; {
-      description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
+      description = "Module which gives access to the extended attributes for filesystem objects available in some operating systems";
+      homepage = "https://github.com/iustin/pyxattr";
+      changelog = "https://github.com/iustin/pyxattr/releases/tag/v${version}";
       license = licenses.lgpl21Plus;
+      maintainers = with maintainers; [ ];
     };
 }
