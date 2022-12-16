@@ -817,8 +817,9 @@ self: super: with self; {
 
   awesomeversion = callPackage ../development/python-modules/awesomeversion { };
 
-  awkward0 = callPackage ../development/python-modules/awkward0 { };
   awkward = callPackage ../development/python-modules/awkward { };
+
+  awkward-cpp = callPackage ../development/python-modules/awkward-cpp { };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
@@ -10088,6 +10089,8 @@ self: super: with self; {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikit-build-core = callPackage ../development/python-modules/scikit-build-core { };
+
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
   scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
@@ -11678,10 +11681,6 @@ self: super: with self; {
   upnpy = callPackage ../development/python-modules/upnpy { };
 
   uproot = callPackage ../development/python-modules/uproot { };
-
-  uproot3 = callPackage ../development/python-modules/uproot3 { };
-
-  uproot3-methods = callPackage ../development/python-modules/uproot3-methods { };
 
   uptime = callPackage ../development/python-modules/uptime { };
 
