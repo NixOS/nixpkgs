@@ -25,6 +25,8 @@
 , zarchive
 
 , vulkan-loader
+
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -112,6 +114,10 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
     )
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Cemu is a Wii U emulator";
