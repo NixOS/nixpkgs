@@ -1356,6 +1356,9 @@ self: super: {
     hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
   });
 
+  # Tests fail on Hydra sometimes: https://github.com/NixOS/nixpkgs/pull/205902#issuecomment-1354727975
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
