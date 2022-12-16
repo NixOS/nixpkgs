@@ -2,17 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "most";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "008537ns659pw2aag15imwjrxj73j26aqq90h285is6kz8gmv06v";
+    sha256 = "00wrdligdipj9fx3yhn3ndlr1kr21yzj5p2hr22q7yi6z2wawmcl";
   };
-
-  patches = [
-    # Upstream patch to fix parallel build failure
-    ./parallel-make.patch
-  ];
 
   outputs = [ "out" "doc" ];
 
