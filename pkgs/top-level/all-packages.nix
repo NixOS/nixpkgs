@@ -15137,6 +15137,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  rocprofiler = callPackage ../development/libraries/rocprofiler {
+    stdenv = rocmClangStdenv;
+  };
+
   clang-ocl = callPackage ../development/libraries/clang-ocl {
     stdenv = rocmClangStdenv;
   };
