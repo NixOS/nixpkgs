@@ -15195,6 +15195,11 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  rocalution = callPackage ../development/libraries/rocalution {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
+  };
+
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
     stdenv = rocmClangStdenv;
   };
