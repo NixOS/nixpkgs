@@ -2253,11 +2253,6 @@ self: super: {
   # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
   tzdata = dontCheck super.tzdata;
 
-  # 2022-11-04: The situation around heist-emanote is quite terrible.
-  # It‘s simply a heist fork because heist is unmaintained.
-  # Upstream jailbreak is unreleased: https://github.com/srid/heist/commit/988692ea850b3cbe966c7dc4dd26ba1d49647706
-  heist-emanote = doJailbreak (dontCheck super.heist-emanote);
-
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
@@ -2317,6 +2312,10 @@ self: super: {
 
   # multiple bounds too strict
   snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
+
+  emanote = super.emanote.overrideScope (lself: lsuper: {
+    commonmark-extensions = lself.commonmark-extensions_0_2_3_2;
+  });
 
   # doctest <0.19
   polysemy = doJailbreak super.polysemy;
