@@ -180,6 +180,48 @@ environment.variables.VK_ICD_FILENAMES =
 </programlisting>
     </section>
   </section>
+  <section xml:id="sec-gpu-accel-va-api">
+    <title>VA-API</title>
+    <para>
+      <link xlink:href="https://www.intel.com/content/www/us/en/developer/articles/technical/linuxmedia-vaapi.html">VA-API
+      (Video Acceleration API)</link> is an open-source library and API
+      specification, which provides access to graphics hardware
+      acceleration capabilities for video processing.
+    </para>
+    <para>
+      VA-API drivers are loaded by <literal>libva</literal>. The version
+      in nixpkgs is built to search the opengl driver path, so drivers
+      can be installed in
+      <xref linkend="opt-hardware.opengl.extraPackages" />.
+    </para>
+    <para>
+      VA-API can be tested using:
+    </para>
+    <programlisting>
+$ nix-shell -p libva-utils --run vainfo
+</programlisting>
+    <section xml:id="sec-gpu-accel-va-api-intel">
+      <title>Intel</title>
+      <para>
+        Modern Intel GPUs use the iHD driver, which can be installed
+        with:
+      </para>
+      <programlisting language="bash">
+hardware.opengl.extraPackages = [
+  intel-media-driver
+];
+</programlisting>
+      <para>
+        Older Intel GPUs use the i965 driver, which can be installed
+        with:
+      </para>
+      <programlisting language="bash">
+hardware.opengl.extraPackages = [
+  vaapiIntel
+];
+</programlisting>
+    </section>
+  </section>
   <section xml:id="sec-gpu-accel-common-issues">
     <title>Common issues</title>
     <section xml:id="sec-gpu-accel-common-issues-permissions">

@@ -60,7 +60,9 @@ stdenv.mkDerivation rec {
       # only an issue with the useLLVM stdenv, not the darwin stdenv…
       # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
       useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
-      cxxStandard = if useLLVMAndOldCC then "11" else "17";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+      cxxStandard = if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17";
     in
     [
       "-DgRPC_ZLIB_PROVIDER=package"
