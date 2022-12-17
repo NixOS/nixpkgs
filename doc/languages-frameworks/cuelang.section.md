@@ -37,9 +37,9 @@ pkgs.writeCueValidator
 ```
 
 - The first parameter is the Cue schema file.
-- The second paramter is an options parameter, currently, only: `document` can be passed.
+- The second parameter is an options parameter, currently, only: `document` can be passed.
 
-`document` : match your input data against this fragment of structure or definition, e.g. you may use the same schema file but differents documents based on the data you are validating.
+`document` : match your input data against this fragment of structure or definition, e.g. you may use the same schema file but different documents based on the data you are validating.
 
 Another example, given the following `validator.nix` :
 ```

@@ -38,7 +38,7 @@ want to target for in terms of SASS (real hardware) or PTX (JIT kernels).
 
 Nixpkgs tries to target support real architecture defaults based on the
 CUDA toolkit version with PTX support for future hardware.  Experienced
-users may optmize this configuration for a variety of reasons such as
+users may optimize this configuration for a variety of reasons such as
 reducing binary size and compile time, supporting legacy hardware, or
 optimizing for specific hardware.
 
