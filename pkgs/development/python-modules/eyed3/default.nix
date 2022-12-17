@@ -1,13 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , python
 , isPyPy
 , six
 , filetype
 , deprecation
-, dataclasses
 }:
 
 buildPythonPackage rec {
@@ -25,8 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    six filetype deprecation
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
+    deprecation
+    filetype
+    six
+  ];
 
   postInstall = ''
     for prog in "$out/bin/"*; do

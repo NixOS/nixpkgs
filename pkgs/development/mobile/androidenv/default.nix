@@ -1,21 +1,17 @@
-{ config, pkgs ? import <nixpkgs> {}, pkgsHostHost ? pkgs.pkgsHostHost
-, pkgs_i686 ? import <nixpkgs> { system = "i686-linux"; }
+{ config, pkgs ? import <nixpkgs> {}
 , licenseAccepted ? config.android_sdk.accept_license or false
 }:
 
 rec {
-  composeAndroidPackages = import ./compose-android-packages.nix {
-    inherit (pkgs) requireFile autoPatchelfHook;
-    inherit pkgs pkgsHostHost pkgs_i686 licenseAccepted;
+  composeAndroidPackages = pkgs.callPackage ./compose-android-packages.nix {
+    inherit licenseAccepted;
   };
 
-  buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv lib jdk ant gnumake gawk;
+  buildApp = pkgs.callPackage ./build-app.nix {
     inherit composeAndroidPackages;
   };
 
-  emulateApp = import ./emulate-app.nix {
-    inherit (pkgs) stdenv lib runtimeShell;
+  emulateApp = pkgs.callPackage ./emulate-app.nix {
     inherit composeAndroidPackages;
   };
 

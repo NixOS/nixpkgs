@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy36, flake8, click, pyyaml, six, pytestCheckHook, pytest-cov }:
+{ lib, buildPythonPackage, fetchFromGitHub, flake8, click, pyyaml, six, pytestCheckHook, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "clickclick";
@@ -17,8 +17,6 @@ buildPythonPackage rec {
   # test_cli asserts on exact quoting style of output
   disabledTests = [
     "test_cli"
-  ] ++ lib.optionals isPy36 [
-    "test_choice_default"
   ];
 
   meta = with lib; {

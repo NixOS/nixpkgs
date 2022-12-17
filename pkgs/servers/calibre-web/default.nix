@@ -18,7 +18,6 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     APScheduler
     advocate
-    backports_abc
     chardet
     flask-babel
     flask-login
@@ -53,6 +52,8 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p src/calibreweb
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
+
+    sed -i "/backports_abc/d" setup.cfg
 
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
