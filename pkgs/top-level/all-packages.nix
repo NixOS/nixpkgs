@@ -30577,6 +30577,8 @@ with pkgs;
 
   mmsd = callPackage ../tools/networking/mmsd { };
 
+  mmsd-tng = callPackage ../tools/networking/mmsd-tng { };
+
   mmtc = callPackage ../applications/audio/mmtc { };
 
   mnamer = callPackage ../applications/misc/mnamer { };
