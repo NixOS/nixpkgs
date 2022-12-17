@@ -1414,6 +1414,8 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+  mbidled = callPackage ../tools/networking/mbidled { };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   midimonster = callPackage ../tools/audio/midimonster { };
@@ -11463,6 +11465,8 @@ with pkgs;
   senpai = callPackage ../applications/networking/irc/senpai { };
 
   skim = callPackage ../tools/misc/skim { };
+
+  seashells = callPackage ../applications/misc/seashells { };
 
   seaweedfs = callPackage ../applications/networking/seaweedfs { };
 
@@ -30674,6 +30678,8 @@ with pkgs;
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  pms = callPackage ../applications/audio/pms { };
+
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
@@ -34931,7 +34937,7 @@ with pkgs;
 
   tengine = callPackage ../servers/http/tengine {
     openssl = openssl_1_1;
-    modules = with nginxModules; [ rtmp dav moreheaders modsecurity-nginx ];
+    modules = with nginxModules; [ rtmp dav moreheaders modsecurity ];
   };
 
   tennix = callPackage ../games/tennix { };

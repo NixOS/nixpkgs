@@ -19,7 +19,8 @@ let
     concatStringsSep " "
       (mapAttrsToList (x: y: "--keep-${x}=${toString y}") cfg.prune.keep);
 
-  mkBackupScript = cfg: ''
+  mkBackupScript = name: cfg: pkgs.writeShellScript "${name}-script" (''
+    set -e
     on_exit()
     {
       exitStatus=$?
@@ -61,7 +62,7 @@ let
       ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
       $extraPruneArgs
     ${cfg.postPrune}
-  '';
+  '');
 
   mkPassEnv = cfg: with cfg.encryption;
     if passCommand != null then
@@ -73,12 +74,19 @@ let
   mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
-    in nameValuePair "borgbackup-job-${name}" {
+      backupJobName = "borgbackup-job-${name}";
+      backupScript = mkBackupScript backupJobName cfg;
+    in nameValuePair backupJobName {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
         borgbackup openssh
       ];
-      script = mkBackupScript cfg;
+      script = "exec " + optionalString cfg.inhibitsSleep ''\
+        ${pkgs.systemd}/bin/systemd-inhibit \
+            --who="borgbackup" \
+            --what="sleep" \
+            --why="Scheduled backup" \
+        '' + backupScript;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -338,6 +346,15 @@ in {
               {manpage}`systemd.timer(5)`
               which triggers the backup immediately if the last trigger
               was missed (e.g. if the system was powered down).
+            '';
+          };
+
+          inhibitsSleep = mkOption {
+            default = false;
+            type = types.bool;
+            example = true;
+            description = lib.mdDoc ''
+              Prevents the system from sleeping while backing up.
             '';
           };
 
