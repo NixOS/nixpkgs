@@ -17740,6 +17740,8 @@ with pkgs;
     libiberty_static = libiberty.override { staticBuild = true; };
   };
 
+  package-project-cmake = callPackage ../development/tools/package-project-cmake { };
+
   pactorio = callPackage ../development/tools/pactorio {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
