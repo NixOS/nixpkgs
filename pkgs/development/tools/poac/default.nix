@@ -90,9 +90,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake git cacert ];
   buildInputs = [
-    (if stdenv.isDarwin
-      then boost179
-      else (boost179.override { enableShared = false; enableStatic = true; }))
+    (boost179.override {
+      enableShared = stdenv.isDarwin;
+      enableStatic = !stdenv.isDarwin;
+    })
     fmt_8
     git2Cpp
     glob
