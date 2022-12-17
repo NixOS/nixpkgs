@@ -7305,6 +7305,8 @@ with pkgs;
 
   free42 = callPackage ../applications/misc/free42 { };
 
+  forgejo = callPackage ../applications/version-management/forgejo { };
+
   galen = callPackage ../development/tools/galen {};
 
   gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
