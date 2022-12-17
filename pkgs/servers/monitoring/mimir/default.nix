@@ -1,5 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
-let 
+let
   pinData = lib.importJSON ./pin.json;
 in
 buildGoModule rec {
