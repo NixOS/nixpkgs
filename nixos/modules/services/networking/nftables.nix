@@ -2,6 +2,35 @@
 with lib;
 let
   cfg = config.networking.nftables;
+
+  tableSubmodule = { name, ... }: {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc "Enable this table.";
+      };
+
+      name = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Table name.";
+      };
+
+      content = mkOption {
+        type = types.lines;
+        description = lib.mdDoc "The table content.";
+      };
+
+      family = mkOption {
+        description = lib.mdDoc "Table family.";
+        type = types.enum [ "ip" "ip6" "inet" "arp" "bridge" "netdev" ];
+      };
+    };
+
+    config = {
+      name = mkDefault name;
+    };
+  };
 in
 {
   ###### interface
@@ -116,6 +145,62 @@ in
           This option conflicts with ruleset and nftables based firewall.
         '';
     };
+    networking.nftables.tables = mkOption {
+      type = types.attrsOf (types.submodule tableSubmodule);
+
+      default = {};
+
+      description = lib.mdDoc ''
+        Tables to be added to ruleset.
+        Tables will be added together with delete statements to clean up the table before every update.
+      '';
+
+      example = {
+        filter = {
+          family = "inet";
+          content = ''
+            # Check out https://wiki.nftables.org/ for better documentation.
+            # Table for both IPv4 and IPv6.
+            # Block all incoming connections traffic except SSH and "ping".
+            chain input {
+              type filter hook input priority 0;
+
+              # accept any localhost traffic
+              iifname lo accept
+
+              # accept traffic originated from us
+              ct state {established, related} accept
+
+              # ICMP
+              # routers may also want: mld-listener-query, nd-router-solicit
+              ip6 nexthdr icmpv6 icmpv6 type { destination-unreachable, packet-too-big, time-exceeded, parameter-problem, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+              ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
+
+              # allow "ping"
+              ip6 nexthdr icmpv6 icmpv6 type echo-request accept
+              ip protocol icmp icmp type echo-request accept
+
+              # accept SSH connections (required for a server)
+              tcp dport 22 accept
+
+              # count and drop any other traffic
+              counter drop
+            }
+
+            # Allow all outgoing connections.
+            chain output {
+              type filter hook output priority 0;
+              accept
+            }
+
+            chain forward {
+              type filter hook forward priority 0;
+              accept
+            }
+          '';
+        };
+      };
+    };
   };
 
   ###### implementation
@@ -131,12 +216,19 @@ in
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
+        enabledTables = filterAttrs (_: table: table.enable) cfg.tables;
         rulesScript = pkgs.writeTextFile {
           name =  "nftables-rules";
           executable = true;
           text = ''
             #! ${pkgs.nftables}/bin/nft -f
-            flush ruleset
+            ${concatStringsSep "\n" (mapAttrsToList (_: table: ''
+              table ${table.family} ${table.name}
+              delete table ${table.family} ${table.name}
+              table ${table.family} ${table.name} {
+                ${table.content}
+              }
+            '') enabledTables)}
             ${if cfg.rulesetFile != null then ''
               include "${cfg.rulesetFile}"
             '' else cfg.ruleset}
