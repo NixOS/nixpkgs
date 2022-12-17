@@ -1,9 +1,6 @@
 { lib
 , python3
-# , groff
-# , less
-# , nix-update-script
-# , testers
+, fetchFromGitHub
 }:
 
 let
@@ -18,133 +15,88 @@ let
         };
       });
 
-      # awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-      #   version = "0.14.0";
-      #   src = self.fetchPypi {
-      #     inherit (oldAttrs) pname;
-      #     inherit version;
-      #     hash = "sha256-MGLTFcsWVC/gTdgjny6LwyOO6QRc1QcLkVzy677Lqqw=";
-      #   };
-      # });
+      configparser = super.configparser.overridePythonAttrs (oldAttrs: rec {
+        version = "3.8.1";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-vDeFDwzEKhclp5bvfZJpBlG/GvN9dEzGMWHaxiyr7hc=";
+        };
+        doCheck = false;
+      });
 
-      # prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-      #   version = "3.0.28";
-      #   src = self.fetchPypi {
-      #     pname = "prompt_toolkit";
-      #     inherit version;
-      #     hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
-      #   };
-      # });
+      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.8.1";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-c+v+nb8i6DIoba+mBHPkzSOfhZL2mapa2vEAUObhgjw=";
+        };
+      });
+
+      okta = super.okta.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.4";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-U+eSxo02hP9BQLTLHAKvOCEJA2j4EQ/eVMC9tjhEkzI=";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          self.python-dateutil
+          self.requests
+        ];
+        pythonImportsCheck = [ "okta" ];
+        doCheck = false;
+      });
     };
   };
-
-  # py = python3;
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "gimme-aws-creds";
   version = "2.4.4"; # N.B: if you change this, check if overrides are still up-to-date
-  format = "wheel";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit version format;
-    pname = "gimme_aws_creds";
-    hash = "sha256-twD/hb1kPBKegNLifdH1Kk6f8Cf0bsvP/tkQNTccSEg=";
+  src = fetchFromGitHub {
+    owner = "Nike-Inc";
+    repo = "gimme-aws-creds";
+    rev = "v${version}";
+    hash = "sha256-XjxJhcvwmtoufsjoDaFHKMJaogVN/j29BXwdBd5GAAc=";
   };
-
-  nativeBuildInputs = [
-    # flit-core
-  ];
 
   propagatedBuildInputs = [
     boto3
     python-dateutil
     fido2
     beautifulsoup4
-    # awscrt
-    # bcdoc
-    # colorama
-    # cryptography
-    # distro
-    # docutils
-    # groff
-    # less
-    # prompt-toolkit
-    # pyyaml
-    # rsa
-    # ruamel-yaml
-    # python-dateutil
-    # jmespath
-    # urllib3
+    ctap-keyring-device
+    configparser
+    requests
+    okta
   ];
 
   checkInputs = [
-    # jsonschema
-    # mock
-    # pytestCheckHook
+    nose
+    responses
   ];
 
-  # postPatch = ''
-  #   substituteInPlace pyproject.toml \
-  #     --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-  #     --replace "distro>=1.5.0,<1.6.0" "distro" \
-  #     --replace "cryptography>=3.3.2,<=38.0.1" "cryptography>=3.3.2,<=38.0.3"
-  # '';
+  checkPhase = ''
+    nosetests --exclude="test_build_factor_name_webauthn_registered" tests/
+  '';
 
-  # postInstall = ''
-  #   mkdir -p $out/${python3.sitePackages}/awscli/data
-  #   ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
+  pythonImportsCheck = [
+    "gimme_aws_creds"
+  ];
 
-  #   mkdir -p $out/share/bash-completion/completions
-  #   echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/aws
-
-  #   mkdir -p $out/share/zsh/site-functions
-  #   mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
-
-  #   rm $out/bin/aws.cmd
-  # '';
-
-  # doCheck = true;
-
-  # preCheck = ''
-  #   export PATH=$PATH:$out/bin
-  #   export HOME=$(mktemp -d)
-  # '';
-
-  # pytestFlagsArray = [
-  #   "-Wignore::DeprecationWarning"
-  # ];
-
-  # disabledTestPaths = [
-  #   # Integration tests require networking
-  #   "tests/integration"
-
-  #   # Disable slow tests (only run unit tests)
-  #   "tests/backends"
-  #   "tests/functional"
-  # ];
-
-  # pythonImportsCheck = [
-  #   "awscli"
-  # ];
-
-  # passthru = {
-  #   python = py; # for aws_shell
-  #   updateScript = nix-update-script {
-  #     attrPath = pname;
-  #   };
-  #   tests.version = testers.testVersion {
-  #     package = awscli2;
-  #     command = "aws --version";
-  #     version = version;
-  #   };
-  # };
+  postInstall = ''
+    rm $out/bin/gimme-aws-creds.cmd
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Nike-Inc/gimme-aws-creds";
     changelog = "https://github.com/Nike-Inc/gimme-aws-creds/releases";
     description = "A CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    maintainers = with maintainers; [ dennajort ];
     mainProgram = "gimme-aws-creds";
   };
 }
