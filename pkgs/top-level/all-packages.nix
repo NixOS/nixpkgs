@@ -17305,6 +17305,8 @@ with pkgs;
 
   github-release = callPackage ../development/tools/github/github-release { };
 
+  glob-cpp = callPackage ../development/libraries/glob-cpp { };
+
   global = callPackage ../development/tools/misc/global { };
 
   gnatcoll-db2ada = callPackage ../development/libraries/ada/gnatcoll/db.nix {
