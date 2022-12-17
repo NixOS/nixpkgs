@@ -98,13 +98,22 @@ in {
         #   - services.matrix-synapse.database_user
         #
         # The values used here represent the default values of the module.
-        initialScript = pkgs.writeText "synapse-init.sql" ''
-          CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
-          CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
-            TEMPLATE template0
-            LC_COLLATE = "C"
-            LC_CTYPE = "C";
-        '';
+        ensureUsers = [
+          {
+            name = "matrix-synapse";
+            passwordFile = builtins.toFile "pwd" "synapse";
+          }
+        ];
+
+        ensureDatabases = [
+          {
+            name = "matrix-synapse";
+            owner = "matrix-synapse";
+            template = "template0";
+            lcCollate = "C";
+            lcCtype = "C";
+          }
+        ];
       };
 
       networking.extraHosts = ''

@@ -123,7 +123,88 @@ in
       };
 
       ensureDatabases = mkOption {
-        type = types.listOf types.str;
+        type = let
+          databaseType = types.submodule {
+            options = {
+              name = mkOption {
+                type = types.str;
+                description = lib.mdDoc ''
+                  Name of the database to ensure.
+                '';
+              };
+
+              owner = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "db_user";
+                description = lib.mdDoc ''
+                  Name of the user that should own the new database.
+                '';
+              };
+
+              template = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "template0";
+                description = lib.mdDoc ''
+                  Name of the template to use for the new database.
+                '';
+              };
+
+              encoding = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "UTF8";
+                description = lib.mdDoc ''
+                  Name of the encoding to use for the new database.
+                '';
+              };
+
+              lcCollate = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "sv_SE.utf8";
+                description = lib.mdDoc ''
+                  Collation order to use for the new database.
+                '';
+              };
+
+              lcCtype = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "sv_SE.utf8";
+                description = lib.mdDoc ''
+                  Character classification to use for the new database.
+                '';
+              };
+
+              allowConnections = mkOption {
+                type = types.nullOr types.bool;
+                default = null;
+                description = lib.mdDoc ''
+                  Whether connections are allowed to the new database.
+                '';
+              };
+
+              connectionLimit = mkOption {
+                type = types.nullOr types.ints.unsigned;
+                default = null;
+                description = lib.mdDoc ''
+                  The number of connections that are allowed to the new
+                  database. The value `null` indicates no limit.
+                '';
+              };
+
+              isTemplate = mkOption {
+                type = types.nullOr types.bool;
+                default = null;
+                description = lib.mdDoc ''
+                  Whether this database is a template.
+                '';
+              };
+            };
+          };
+        in types.listOf (types.coercedTo types.str (n: { name = n; }) databaseType);
         default = [];
         description = lib.mdDoc ''
           Ensures that the specified databases exist.
@@ -146,6 +227,16 @@ in
                 Name of the user to ensure.
               '';
             };
+
+            passwordFile = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = lib.mdDoc ''
+                Absolute path to file that contains the desired user password.
+                If `null` then no password is assigned to the user.
+              '';
+            };
+
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
@@ -360,7 +451,58 @@ in
           '';
 
         # Wait for PostgreSQL to be ready to accept connections.
-        postStart =
+        postStart = let
+          createDatabase = ps: let
+            addS = n: p: optional (p != null) "${n} '${p}'";
+            addL = n: p: optional (p != null) "${n} ${toString p}";
+          in
+            concatStringsSep " " (
+              [ "CREATE DATABASE \"${ps.name}\"" ]
+              ++ addS "OWNER" ps.owner
+              ++ addS "TEMPLATE" ps.template
+              ++ addS "ENCODING" ps.encoding
+              ++ addS "LC_COLLATE" ps.lcCollate
+              ++ addS "LC_CTYPE" ps.lcCtype
+              ++ addL "ALLOW_CONNECTIONS" ps.allowConnections
+              ++ addL "CONNECTION LIMIT" ps.connectionLimit
+              ++ addL "IS_TEMPLATE" ps.isTemplate);
+
+          # Run a single SQL command using psql with a list of additional
+          # command line options.
+          psqlCmd = cmd: args: concatStringsSep " " (
+            [ "$PSQL -tA" ]
+            ++ args
+            ++ [ "<<<" (escapeShellArg cmd)]);
+
+          ensureDatabases = map (database: ''
+              ${psqlCmd "SELECT 1 FROM pg_database WHERE datname = '${database.name}'" []} \
+                | grep -q 1 \
+                || ${psqlCmd (createDatabase database) []}
+            '') cfg.ensureDatabases;
+
+          ensureUsers = map (user: ''
+              ${psqlCmd "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" []} \
+                | grep -q 1 \
+                || ${psqlCmd "CREATE USER \"${user.name}\"" []}
+            '' + optionalString (user.passwordFile != null) ''
+              ${psqlCmd "ALTER USER \"${user.name}\" PASSWORD :'passwd'"
+                [
+                  "-v" ''"passwd=$(< "${user.passwordFile}")"''
+                ]}
+            '') cfg.ensureUsers;
+
+          ensureUserGrant = user: mapAttrsToList (database: permission: ''
+              ${psqlCmd "GRANT ${permission} ON ${database} TO \"${user.name}\"" []}
+            '') user.ensurePermissions;
+
+          ensureUserGrants = concatMap ensureUserGrant cfg.ensureUsers;
+
+          # Makes sure the specified users and databases are available. Note, we
+          # first create the users then the databases to be able to set the
+          # database owner to the newly created user. Finally we set user grants
+          # so that we can refer to both newly created users and databases.
+          ensures = concatStrings (ensureUsers ++ ensureDatabases ++ ensureUserGrants);
+        in
           ''
             PSQL="psql --port=${toString cfg.port}"
 
@@ -375,18 +517,7 @@ in
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi
-          '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-            '') cfg.ensureDatabases}
-          '' + ''
-            ${concatMapStrings (user: ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
-              '') user.ensurePermissions)}
-            '') cfg.ensureUsers}
-          '';
+          '' + ensures;
 
         serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
