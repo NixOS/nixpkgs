@@ -2,13 +2,13 @@
 
 mkYarnPackage rec {
   pname = "matrix-alertmanager";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "jaywink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "M3/8viRCRiVJGJSHidP6nG8cr8wOl9hMFY/gzdSRN+4=";
+    hash = "sha256-oywQWR9T+EA3SSvnSd5qxj7BLzv2pb7wfI9Jgafqv3k=";
   };
 
   packageJSON = ./package.json;

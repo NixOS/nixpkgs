@@ -11,7 +11,7 @@ writeShellScript "update-matrix-alertmanager" ''
 
   owner="jaywink"
   repo="matrix-alertmanager"
-  version=`curl -s "https://api.github.com/repos/$owner/$repo/tags" | jq -r .[0].name | grep -oP "^v\K.*"`
+  version=$(curl -s ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/$owner/$repo/tags" | jq -r .[0].name | grep -oP "^v\K.*")
   url="https://raw.githubusercontent.com/$owner/$repo/v$version/"
 
   (
@@ -22,7 +22,7 @@ writeShellScript "update-matrix-alertmanager" ''
   rm -f package.json package-lock.json yarn.lock
   wget "$url/package.json" "$url/package-lock.json"
 
-  yarn import
+  yarn
   echo $(prefetch-yarn-deps) > yarn-hash
 
   jq '. + { bin: .main }' package.json > package.json.tmp

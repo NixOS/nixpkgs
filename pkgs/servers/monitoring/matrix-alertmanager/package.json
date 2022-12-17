@@ -1,16 +1,23 @@
 {
-  "name": "matrix-alertmanager",
-  "version": "0.5.0",
-  "description": "Prometheus Alertmanager bot for Matrix",
-  "main": "src/app.js",
-  "scripts": {
-    "dev": "node_modules/.bin/nodemon src/app.js localhost 3000",
-    "test": "node_modules/.bin/mocha tests/",
-    "start": "node src/app.js"
+  "author": "Jason Robinson",
+  "bin": "src/app.js",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.3",
+    "matrix-js-sdk": "^22.0.0",
+    "striptags": "^3.2.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jaywink/matrix-alertmanager"
+  "description": "Prometheus Alertmanager bot for Matrix",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.32.0",
+    "mocha": "^9.2.2",
+    "nodemon": "^2.0.20",
+    "npm-check-updates": "^16.4.3",
+    "sinon": "^11.1.2"
+  },
+  "engines": {
+    "node": ">= 18"
   },
   "keywords": [
     "matrix",
@@ -18,24 +25,17 @@
     "prometheus",
     "bot"
   ],
-  "engines": {
-    "node": ">= 14"
-  },
-  "author": "Jason Robinson",
   "license": "MIT",
-  "devDependencies": {
-    "chai": "^4.3.4",
-    "eslint": "^7.32.0",
-    "mocha": "^9.1.1",
-    "nodemon": "^2.0.12",
-    "npm-check-updates": "^11.8.5",
-    "sinon": "^11.1.2"
+  "main": "src/app.js",
+  "name": "matrix-alertmanager",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaywink/matrix-alertmanager"
   },
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "matrix-js-sdk": "^12.5.0",
-    "striptags": "^3.2.0"
+  "scripts": {
+    "dev": "node_modules/.bin/nodemon src/app.js localhost 3000",
+    "start": "node src/app.js",
+    "test": "node_modules/.bin/mocha tests/"
   },
-  "bin": "src/app.js"
+  "version": "0.6.0"
 }
