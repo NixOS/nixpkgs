@@ -197,6 +197,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
     maintainers = with maintainers; [ pSub AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }
