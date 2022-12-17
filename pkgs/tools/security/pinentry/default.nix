@@ -1,6 +1,6 @@
 { fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkg-config, autoreconfHook, wrapGAppsHook
 , libgpg-error, libassuan, qtbase, wrapQtAppsHook
-, ncurses, gtk2, gcr, libcap
+, ncurses, gtk2, gcr
 , withLibsecret ? true, libsecret
 , enabledFlavors ? [ "curses" "tty" "gtk2" "emacs" ]
   ++ lib.optionals stdenv.isLinux [ "gnome3" ]
@@ -35,18 +35,18 @@ in
 
 pinentryMkDerivation rec {
   pname = "pinentry";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-EAcgRaPgQ9BYH5HNVnb8rH/+6VehZjat7apPWDphZHA=";
+    sha256 = "sha256-RXoYXlqFI4+5RalV3GNSq5YtyLSHILYvyfpIx1QKQGc=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
     ++ lib.concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
+
   buildInputs = [ libgpg-error libassuan ]
     ++ lib.optional withLibsecret libsecret
-    ++ lib.optional (!stdenv.isDarwin) libcap
     ++ lib.concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
 
   dontWrapGApps = true;
@@ -62,8 +62,7 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.withFeature   (libcap != null) "libcap")
-    (lib.enableFeature withLibsecret    "libsecret")
+    (lib.enableFeature withLibsecret "libsecret")
   ] ++ (map enableFeaturePinentry (lib.attrNames flavorInfo));
 
   postInstall =
