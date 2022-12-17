@@ -8935,6 +8935,8 @@ self: super: with self; {
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
 
+  pytest-recording = callPackage ../development/python-modules/pytest-recording { };
+
   pytest-regressions = callPackage ../development/python-modules/pytest-regressions { };
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
