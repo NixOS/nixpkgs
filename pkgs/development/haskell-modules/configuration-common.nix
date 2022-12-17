@@ -1312,19 +1312,7 @@ self: super: {
           lib.makeBinPath deps
         }"
       '';
-    }) (addTestToolDepends deps (
-      appendPatches [
-        (fetchpatch {
-          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/2a4229b04aaeec025f1400a39f4e6390af760b54.patch";
-          sha256 = "sha256-xzLX7YO5+sjbhTvSAP4JJVPMWn1F5miWX3B6Esz1Lqo=";
-          excludes = [ "nixpkgs.nix" "update-nix-fetchgit.cabal" "package.yaml" ];
-        })
-        (fetchpatch {
-          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/d3a7ce56a2435832d6172ce57ea7feb2554e48df.patch";
-          sha256 = "sha256-/JqAPlAmLQd58YZXko9eb9rqnx39ggK8AdF9tItdQNc=";
-          excludes = [ "nixpkgs.nix" "update-nix-fetchgit.cabal" "package.yaml" ];
-        })
-      ] super.update-nix-fetchgit)));
+    }) (addTestToolDepends deps super.update-nix-fetchgit));
 
   # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
   binary-strict = appendPatches [
