@@ -7159,6 +7159,12 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  k1aymore = {
+    email = "klaymorer@protonmail.com";
+    name = "Carl Klay";
+    github = "K1aymore";
+    githubId = 75699983;
+  };
   k3a = {
     email = "git+nix@catmail.app";
     name = "Mario Hros";

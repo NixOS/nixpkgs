@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1 }:
+{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1, modloader }:
 stdenv.mkDerivation {
-  pname = "minecraft-server";
+  pname = "minecraft-server-${modloader}";
   inherit version;
 
   src = fetchurl { inherit url sha1; };
@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru ];
+    maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru k1aymore ];
   };
 }
