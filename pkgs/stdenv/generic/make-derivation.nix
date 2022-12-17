@@ -418,6 +418,7 @@ else let
       outputHashAlgo = attrs.outputHashAlgo or "sha256";
       outputHashMode = attrs.outputHashMode or "recursive";
     } // lib.optionalAttrs (enableParallelBuilding) {
+      inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
