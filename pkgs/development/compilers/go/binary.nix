@@ -37,4 +37,10 @@ stdenv.mkDerivation rec {
     ln -s $out/share/go/bin/go $out/bin/go
     runHook postInstall
   '';
+
+  # The official Go binary distribution does not provide a musl version.
+  # But `pkgsCross.musl64.go` can bootstrap a Go compiler by using glibc.
+  # Consider using `pkgsCross.musl64.go` instead of `pkgsMusl.go`.
+  # https://github.com/NixOS/nixpkgs/issues/196111#issuecomment-1355879744
+  meta.broken = stdenv.buildPlatform.isMusl;
 }
