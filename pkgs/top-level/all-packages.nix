@@ -10718,6 +10718,10 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
+  poac = callPackage ../development/tools/poac {
+    inherit (llvmPackages_14) stdenv;
+  };
+
   podiff = callPackage ../tools/text/podiff { };
 
   pocketbase = callPackage ../servers/pocketbase { };
@@ -22150,7 +22154,11 @@ with pkgs;
   prospector = callPackage ../development/tools/prospector { };
 
   # https://github.com/protocolbuffers/protobuf/issues/10418
-  protobuf = if stdenv.hostPlatform.is32bit then protobuf3_20 else
+  # protobuf versions have to match between build-time and run-time
+  # Using "targetPlatform" in the check makes sure that the version of
+  # pkgsCross.armv7l-hf-multiplatform.buildPackages.protobuf matches the
+  # version of pkgsCross.armv7l-hf-multiplatform.protobuf
+  protobuf = if stdenv.targetPlatform.is32bit then protobuf3_20 else
     protobuf3_21;
 
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };

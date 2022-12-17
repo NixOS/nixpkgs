@@ -282,6 +282,20 @@
           to match upstream.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The new option
+          <literal>services.tailscale.useRoutingFeatures</literal>
+          controls various settings for using Tailscale features like
+          exit nodes and subnet routers. If you wish to use your machine
+          as an exit node, you can set this setting to
+          <literal>server</literal>, otherwise if you wish to use an
+          exit node you can set this setting to
+          <literal>client</literal>. The strict RPF warning has been
+          removed as the RPF will be loosened automatically based on the
+          value of this setting.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
