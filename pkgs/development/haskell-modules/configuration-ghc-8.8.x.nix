@@ -128,10 +128,6 @@ self: super: {
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_7;
 
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
-  # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
-
   ormolu = super.ormolu_0_2_0_0;
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
@@ -146,24 +142,22 @@ self: super: {
     # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
     additionalDeps = with self.haskell-language-server.scope; [ hls-brittany-plugin hls-haddock-comments-plugin hls-splice-plugin hls-tactics-plugin ];
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
-    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
-    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
     # Pick old ormolu and fourmolu because ghc-lib-parser is not compatible
     ormolu = doJailbreak lself.ormolu_0_1_4_1;
     fourmolu = doJailbreak lself.fourmolu_0_3_0_0;
-    hlint = lself.hlint_3_2_8;
     aeson = lself.aeson_1_5_6_0;
     lens-aeson = lself.lens-aeson_1_1_3;
     stylish-haskell = doJailbreak lself.stylish-haskell_0_13_0_0;
     lsp-types = doJailbreak lsuper.lsp-types;
   }));
 
-  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
-    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-    hlint = lself.hlint_3_2_8;
-    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
-    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
-  });
+  hlint = self.hlint_3_2_8;
+
+  ghc-lib-parser = self.ghc-lib-parser_8_10_7_20220219;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24;
 
   hls-brittany-plugin = addBuildDepends (with self.hls-brittany-plugin.scope; [
     brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
