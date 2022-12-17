@@ -40,10 +40,35 @@ in
           only be used if they are unchanged.
         '';
       };
+
+      datadir = mkOption {
+        type = types.str;
+        default = "/var/lib/jellyfin";
+        description = "Path to use for the data folder (database files, etc.).";
+      };
+
+      cachedir = mkOption {
+        type = types.str;
+        default = "/var/cache/jellyfin";
+        description = "Path to use for caching.";
+      };
+
+      logdir = mkOption {
+        type = types.str;
+        default = "/var/log/jellyfin";
+        description = "Path to use for writing log files.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules =
+      map (dir: "d ${dir} 0770 ${cfg.user} ${cfg.group} -") [
+        cfg.datadir
+        cfg.cachedir
+        cfg.logdir
+      ];
+
     systemd.services.jellyfin = {
       description = "Jellyfin Media Server";
       after = [ "network.target" ];
@@ -55,13 +80,11 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "jellyfin";
-        StateDirectoryMode = "0700";
-        CacheDirectory = "jellyfin";
-        CacheDirectoryMode = "0700";
-        UMask = "0077";
-        WorkingDirectory = "/var/lib/jellyfin";
-        ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
+        StateDirectory = cfg.datadir;
+        CacheDirectory = cfg.cachedir;
+        LogsDirectory = cfg.logdir;
+        WorkingDirectory = cfg.datadir;
+        ExecStart = "${cfg.package}/bin/jellyfin --datadir '${cfg.datadir}' --cachedir '${cfg.cachedir}' --logdir '${cfg.logdir}'";
         Restart = "on-failure";
         TimeoutSec = 15;
         SuccessExitStatus = ["0" "143"];
@@ -83,7 +106,6 @@ in
         PrivateTmp = !config.boot.isContainer;
         # needed for hardware accelaration
         PrivateDevices = false;
-        PrivateUsers = true;
         RemoveIPC = true;
 
         SystemCallFilter = [
@@ -111,6 +133,7 @@ in
       jellyfin = {
         group = cfg.group;
         isSystemUser = true;
+        home = cfg.datadir;
       };
     };
 
