@@ -483,7 +483,7 @@ else let
 
   checkedEnv =
     let
-      overlappingNames = lib.intersectLists (lib.attrNames env) (lib.attrNames derivationArg);
+      overlappingNames = lib.attrNames (builtins.intersectAttrs env derivationArg);
     in
     assert lib.assertMsg envIsExportable
       "When using structured attributes, `env` must be an attribute set of environment variables.";
