@@ -83,6 +83,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
+  propagatedBuildInputs = [
+    nlohmann_json
+  ];
   buildInputs = [
     davix
     ftgl
@@ -106,7 +109,6 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    nlohmann_json
     patchRcPathCsh
     patchRcPathFish
     patchRcPathPosix
