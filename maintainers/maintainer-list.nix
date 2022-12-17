@@ -15923,6 +15923,12 @@
     github = "kuwii";
     githubId = 10705175;
   };
+  kkharji = {
+    name = "kkharji";
+    email = "kkharji@protonmail.com";
+    github = "kkharji";
+    githubId = 65782666;
+  };
   melias122 = {
     name = "Martin Elias";
     email = "martin+nixpkgs@elias.sx";
