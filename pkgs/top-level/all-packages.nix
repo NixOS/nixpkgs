@@ -24193,6 +24193,8 @@ with pkgs;
 
   openxr-loader = callPackage ../development/libraries/openxr-loader { };
 
+  openxr-hpp = callPackage ../development/libraries/openxr-hpp { };
+
   osrm-backend = callPackage ../servers/osrm-backend { };
 
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
