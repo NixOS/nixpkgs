@@ -1419,4 +1419,15 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+
+  testApply = {
+    expr = apply ( { x, y }: x + y ) { x = 1; y = 2; z = -1; };
+    expected = 3;
+  };
+
+  testCallWith = {
+    expr = callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y ) { x = 3; };
+    expected = 5;
+  };
+
 }

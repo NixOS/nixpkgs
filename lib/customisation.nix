@@ -296,4 +296,32 @@ rec {
       };
     in self;
 
+
+
+  /* Apply a function to an attrset or potential args, automatically filtering
+     the set to those the function can accept.
+     NOTE: This is strictly meant to be used with functions that accept attrsets
+     as their argument, and is best suited for use with `setFunctionArgs'.
+
+     nix-repl> lib.apply ( { x, y }: x + y ) { x = 1; y = 2; z = -1; }
+     3
+  */
+  apply = x: args: let
+    f = if lib.isFunction x then x else import x;
+  in f ( builtins.intersectAttrs ( lib.functionArgs f ) args );
+
+
+  /* Non-overridable form of `callPackageWith'.
+     In the example below, the "thunk" attr `z' is ignored, `y' uses the "thunk"
+     value, and the "thunk" `x' is ignored in favor of the explicit `x = 3'.
+
+     nix-repl> thunk = lib.callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y )
+     nix-repl> thunk { x = 3; }
+     5
+  */
+  callWith = auto: x: let
+    f = if lib.isFunction x then x else import x;
+  in args:
+     f ( ( builtins.intersectAttrs ( lib.functionArgs f ) auto ) // args );
+
 }
