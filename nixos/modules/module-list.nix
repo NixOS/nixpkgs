@@ -594,6 +594,7 @@
   ./services/misc/etesync-dav.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
+  ./services/misc/forgejo.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix

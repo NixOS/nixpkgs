@@ -99,6 +99,14 @@
           <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://forgejo.org">Forgejo</link>, a
+          self-hosted lightweight software forge, forked from Gitea.
+          Available as
+          <link xlink:href="options.html#opt-services.forgejo.enable">services.forgejo</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
