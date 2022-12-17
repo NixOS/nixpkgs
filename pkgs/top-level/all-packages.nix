@@ -8505,6 +8505,8 @@ with pkgs;
 
   katana = callPackage ../tools/security/katana { };
 
+  katriawm = callPackage ../applications/window-managers/katriawm { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
@@ -31034,7 +31036,7 @@ with pkgs;
 
   sndpeek = callPackage ../applications/audio/sndpeek { };
 
-  sxhkd = callPackage ../applications/window-managers/sxhkd { };
+  sxhkd = callPackage ../tools/X11/sxhkd { };
 
   mpop = callPackage ../applications/networking/mpop {
     inherit (darwin.apple_sdk.frameworks) Security;
