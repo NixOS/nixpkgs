@@ -12835,19 +12835,11 @@ let
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.6";
+    version = "0.8.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      hash = "sha256-lSnGUbZ/Xo3e8f0YUvl051ahe3EcRtQRjwZ3rQ5um7E=";
+      hash = "sha256-JdqdlEB3newNrdTMLUIn6Oq4dDfAcZh3J03PuQakzHk=";
     };
-    patches = [
-      (fetchpatch {
-        # https://github.com/brucemiller/LaTeXML/issues/1669
-        name = "downgrade-security-FileTemp.patch";
-        url = "https://github.com/brucemiller/LaTeXML/commit/c3d6b9b88f9eafce6eee52b1634ea33085ba9ec6.patch";
-        hash = "sha256-p+boNhshvSZtygVZUawjeN38bJsfM95JrkLOBbazhos=";
-      })
-    ];
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
