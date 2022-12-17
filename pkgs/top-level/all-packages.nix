@@ -14961,6 +14961,8 @@ with pkgs;
 
   mint = callPackage ../development/compilers/mint { };
 
+  mitama-cpp-result = callPackage ../development/libraries/mitama-cpp-result { };
+
   mitscheme = callPackage ../development/compilers/mit-scheme
     { stdenv = gcc10StdenvCompat; texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; }; };
 
