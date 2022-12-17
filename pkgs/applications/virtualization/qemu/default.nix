@@ -112,6 +112,18 @@ stdenv.mkDerivation rec {
       revert = true;
     })
   ]
+  ++ lib.optionals stdenv.isi686 [
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/37656470f67398dd10101d7d940d660053f60ff5.diff";
+      sha256 = "sha256-JNldXdtKYbyH+ctT7EWru7wwQV2FjqfBbt5DTEUsmkY=";
+      revert = true;
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/62a44fddb24fec35a6baf7e2c52b0e935a5bfa90.diff";
+      sha256 = "sha256-psLSDpT+hv2rCrivOXQrXXr05qoWEn1Fsh8K7tBtfO0=";
+      revert = true;
+    })
+  ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
