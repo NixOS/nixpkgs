@@ -410,6 +410,8 @@ else let
       inherit doCheck doInstallCheck;
 
       inherit outputs;
+
+      NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // lib.optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
       # Provide default values for outputHashMode and outputHashAlgo because
@@ -420,8 +422,6 @@ else let
       inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
       enableParallelInstalling = attrs.enableParallelInstalling or true;
-    } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
-      NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
     } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
