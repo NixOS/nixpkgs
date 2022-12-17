@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, undmg }:
 
 let
-  versionComponents = [ "3" "6" "2" "548020600" ];
+  versionComponents = [ "4" "0" "0" ];
   appName = "MuseScore ${builtins.head versionComponents}";
 in
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "${appName}.app";
 
   src = fetchurl {
-    url =  "https://github.com/musescore/MuseScore/releases/download/v${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
-    sha256 = "sha256-lHckfhTTrDzaGwlbnZ5w0O1gMPbRmrmgATIGMY517l0=";
+    url =  "https://github.com/musescore/MuseScore/releases/download/v${concatStringsSep "." (take 2 versionComponents)}/MuseScore-${version}.dmg";
+    hash = "sha256-9WSVJFZdA5IFH2KR3JJcTfsIIA/aGnHXPLRv4gMyjhw=";
   };
 
   buildInputs = [ undmg ];
