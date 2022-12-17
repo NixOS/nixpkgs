@@ -1,36 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-# , six
-# , cryptography
-# , mock
-# , pyfakefs
-# , unittestCheckHook
+, fido2
+, keyring
+, cryptography
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "ctap-keyring-device";
   version = "1.0.6";
-  format = "wheel";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit version format;
-    pname = "ctap_keyring_device";
-    sha256 = "sha256-EsCKq9YDGL1CI+69EkY+l5uOv+w2xZQwWbLsoibtFCc=";
+    inherit version pname;
+    sha256 = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
   };
 
-  # propagatedBuildInputs = [ six cryptography ];
+  # removing optional dependency needing pyobjc
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "pyobjc-framework-LocalAuthentication >= 7.1; platform_system=='Darwin'" ""
+  '';
 
-  # checkInputs = [ unittestCheckHook mock pyfakefs ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # unittestFlagsArray = [ "-v" ];
+  propagatedBuildInputs = [
+    keyring
+    fido2
+    cryptography
+  ];
 
-  # pythonImportsCheck = [ "fido2" ];
+  pythonImportsCheck = [ "ctap_keyring_device" ];
 
   meta = with lib; {
     description = "CTAP (client-to-authenticator-protocol) device backed by python's keyring library";
     homepage = "https://github.com/dany74q/ctap-keyring-device";
     license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [ dennajort ];
   };
 }
