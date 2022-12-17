@@ -1199,6 +1199,9 @@ with pkgs;
     pleroma-fe = callPackage ../servers/akkoma/pleroma-fe { };
     admin-fe = callPackage ../servers/akkoma/admin-fe { };
   };
+  akkoma-emoji = recurseIntoAttrs {
+    blobs_gg = callPackage ../servers/akkoma/emoji/blobs_gg.nix { };
+  };
 
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
