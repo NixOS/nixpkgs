@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "sha256-IG12bMjwGJ951pr2TY2TfsxhpNE+jqZZTXj+MOYUBfI=";
+    sha256 = "IG12bMjwGJ951pr2TY2TfsxhpNE+jqZZTXj+MOYUBfI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
