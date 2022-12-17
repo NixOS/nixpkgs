@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ztx3Y+n9Bpzuz06mbkis3kdlM/0JrOaMDbRF5glzkDE=";
   };
 
+  patches = [
+    # Don't populate nemo actions from /run/current-system/sw/share
+    # They should only be loaded exactly once from $out/share
+    # https://github.com/NixOS/nixpkgs/issues/190781
+    ./fix-nemo-actions-duplicate-menu-items.patch
+  ];
+
   outputs = [ "out" "dev" ];
 
   buildInputs = [
