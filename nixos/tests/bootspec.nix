@@ -19,6 +19,7 @@ let
   uefi = {
     virtualisation.useEFIBoot = true;
     boot.loader.efi.canTouchEfiVariables = true;
+    boot.loader.grub.efiSupport = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
   };
   standard = {
