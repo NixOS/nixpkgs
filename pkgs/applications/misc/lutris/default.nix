@@ -48,6 +48,7 @@
 , fluidsynth
 , xorgserver
 , xorg
+, util-linux
 }:
 
 let
@@ -68,6 +69,8 @@ let
     xorgserver
     xorg.setxkbmap
     xorg.xkbcomp
+    # bypass mount suid wrapper which does not work in fhsenv
+    util-linux
   ];
 
   binPath = lib.makeBinPath requiredTools;
