@@ -511,7 +511,7 @@ sub addEntry {
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("NixOS - Default", $defaultConfig, $entryOptions);
+addEntry("@distroName@ - Default", $defaultConfig, $entryOptions);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
@@ -536,7 +536,7 @@ foreach my $link (@links) {
         my $linkname = basename($link);
         $entryName = "($linkname - $date - $version)";
     }
-    addEntry("NixOS - $entryName", $link);
+    addEntry("@distroName@ - $entryName", $link);
 }
 
 my $grubBootPath = $grubBoot->path;
@@ -568,19 +568,19 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions);
+        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions);
     }
 
     $conf .= "}\n" if $grubVersion == 2;
 }
 
-addProfile "/nix/var/nix/profiles/system", "NixOS - All configurations";
+addProfile "/nix/var/nix/profiles/system", "@distroName@ - All configurations";
 
 if ($grubVersion == 2) {
     for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
         my $name = basename($profile);
         next unless $name =~ /^\w+$/;
-        addProfile $profile, "NixOS - Profile '$name'";
+        addProfile $profile, "@distroName@ - Profile '$name'";
     }
 }
 

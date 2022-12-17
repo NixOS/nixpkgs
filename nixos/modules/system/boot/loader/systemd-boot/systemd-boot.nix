@@ -30,6 +30,8 @@ let
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
+    inherit (config.system.nixos) distroName;
+
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
 
     netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
