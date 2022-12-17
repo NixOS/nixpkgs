@@ -2705,6 +2705,8 @@ with pkgs;
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
 
+  bootspec = callPackage ../tools/misc/bootspec { };
+
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
