@@ -459,6 +459,11 @@ runTests {
     expected = [2 30 40 42];
   };
 
+  testReplicate = {
+    expr = replicate 3 "a";
+    expected = ["a" "a" "a"];
+  };
+
   testToIntShouldConvertStringToInt = {
     expr = toInt "27";
     expected = 27;

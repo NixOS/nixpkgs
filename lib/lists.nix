@@ -303,6 +303,18 @@ rec {
     else
       genList (n: first + n) (last - first + 1);
 
+  /* Return a list with `n` copies of an element.
+
+    Type: replicate :: int -> a -> [a]
+
+    Example:
+      replicate 3 "a"
+      => [ "a" "a" "a" ]
+      replicate 2 true
+      => [ true true ]
+  */
+  replicate = n: elem: genList (_: elem) n;
+
   /* Splits the elements of a list in two lists, `right` and
      `wrong`, depending on the evaluation of a predicate.
 
