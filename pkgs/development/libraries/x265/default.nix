@@ -34,6 +34,8 @@ let
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+    # Potentially riscv cross could be fixed by providing the correct CMAKE_SYSTEM_PROCESSOR flag
+    (mkFlag (with stdenv; !(isCross && hostPlatform.isRiscV || isDarwin && isAarch64)) "ENABLE_ASSEMBLY")
   ];
 
   cmakeStaticLibFlags = [

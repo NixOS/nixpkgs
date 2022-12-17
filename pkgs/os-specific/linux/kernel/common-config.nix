@@ -523,6 +523,15 @@ let
       X86_SGX     = whenAtLeast "5.11" yes;
       # Allow KVM guests to load SGX enclaves
       X86_SGX_KVM = whenAtLeast "5.13" yes;
+
+      # AMD Cryptographic Coprocessor (CCP)
+      CRYPTO_DEV_CCP  = yes;
+      # AMD SME
+      AMD_MEM_ENCRYPT = yes;
+      # AMD SEV and AMD SEV-SE
+      KVM_AMD_SEV     = whenAtLeast "4.16" yes;
+      # AMD SEV-SNP
+      SEV_GUEST       = whenAtLeast "5.19" module;
     };
 
     microcode = {

@@ -57,6 +57,10 @@ let
     "2.2.10" = {
       sha256 = "sha256-jMPDqHYSI63vFEqIcwsmdQg6Oyb6FV1wz5GruTXpCDM=";
     };
+
+    "2.2.11" = {
+      sha256 = "sha256-NgfWgBZzGICEXO1dXVXGBUzEnxkSGhUCfmxWB66Elt8=";
+    };
   };
 
 in with versionMap.${version};
@@ -169,7 +173,9 @@ stdenv.mkDerivation rec {
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
     # Should be fixed past 2.1.10 release.
     "-fcommon"
-  ];
+  ]
+    # Fails to find `O_LARGEFILE` otherwise.
+    ++ [ "-D_GNU_SOURCE" ];
 
   buildPhase = ''
     runHook preBuild
