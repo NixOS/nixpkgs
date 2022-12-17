@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
 , pytestCheckHook
 , pythonOlder
 }:
@@ -17,10 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-If59UQZC8rYamZ1Fw9l0X5UOEf5rokl1Vbj2N4K3jkU=";
   };
-
-  propagatedBuildInputs = [
-    six
-  ];
 
   checkInputs = [
     pytestCheckHook
@@ -38,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for parsing Dockerfile files";
     homepage = "https://github.com/DBuildService/dockerfile-parse";
+    changelog = "https://github.com/containerbuildsystem/dockerfile-parse/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ leenaars ];
   };
