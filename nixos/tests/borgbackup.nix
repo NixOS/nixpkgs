@@ -99,6 +99,18 @@ in {
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
         };
 
+        sleepInhibited = {
+          inhibitsSleep = true;
+          # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
+          dumpCommand = pkgs.writeScript "sleepInhibited" ''
+            cat /dev/zero
+          '';
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
       };
     };
 
@@ -204,5 +216,13 @@ in {
         client.wait_for_unit("network.target")
         client.systemctl("start --wait borgbackup-job-commandFail")
         client.succeed("systemctl is-failed borgbackup-job-commandFail")
+
+    with subtest("sleepInhibited"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.fail("systemd-inhibit --list | grep -q borgbackup")
+        client.systemctl("start borgbackup-job-sleepInhibited")
+        client.wait_until_succeeds("systemd-inhibit --list | grep -q borgbackup")
+        client.systemctl("stop borgbackup-job-sleepInhibited")
   '';
 })
