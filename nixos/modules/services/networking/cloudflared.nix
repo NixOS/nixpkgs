@@ -263,7 +263,7 @@ in
       mapAttrs'
         (name: tunnel:
           nameValuePair "cloudflared-tunnel-${name}" ({
-            description = lib.mdDoc "Cloudflare tunnel '${name}' target";
+            description = "Cloudflare tunnel '${name}' target";
             requires = [ "cloudflared-tunnel-${name}.service" ];
             after = [ "cloudflared-tunnel-${name}.service" ];
             unitConfig.StopWhenUnneeded = true;
