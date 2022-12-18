@@ -193,9 +193,7 @@ in (buildEnv {
   '' +
   # texlive post-install actions
   ''
-    for tool in updmap; do
-      ln -sf "$out/share/texmf/scripts/texlive/$tool."* "$out/bin/$tool"
-    done
+    ln -sf "$out"/share/texmf/scripts/texlive/updmap.pl "$out"/bin/updmap
   '' +
     # now hack to preserve "$0" for mktexfmt
   ''
