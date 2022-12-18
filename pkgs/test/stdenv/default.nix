@@ -667,3 +667,39 @@ in
       };
   };
 }
+// (
+  let
+    testBuild =
+      hello:
+      runCommand "test-devshell-build-hello" { } ''
+        runShell() {
+            NIX_DEVSHELL_PHASE="$1" bash ${hello.devShell}/bin/run-shell
+        }
+        runShell unpack
+        export NIX_DEVSHELL_PHASE_SRCPATH=${hello.name}
+        runShell configure
+        runShell build
+        runShell install
+        ./outputs/out/bin/hello | grep "Hello, world!"
+        touch $out
+      '';
+  in
+  {
+    test-devshell-build-hello = testBuild pkgs.hello;
+
+    test-devshell-build-hello-unstructured = testBuild (
+      pkgs.hello.overrideAttrs (prev: {
+        __structuredAttrs = false;
+      })
+    );
+
+    test-devshell-command = runCommand "test-devshell-command" { } ''
+      runShell() {
+          NIX_DEVSHELL_COMMAND="$1" bash ${pkgs.hello.devShell}/bin/run-shell
+      }
+      runShell "'echo' 'foo  bar'" | grep "foo  bar"
+      ! runShell "'false'" || exit 1
+      touch $out
+    '';
+  }
+)
