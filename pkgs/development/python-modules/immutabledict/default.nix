@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "immutabledict";
-  version = "2.2.2";
+  version = "2.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "corenting";
     repo = "immutabledict";
     rev = "v${version}";
-    hash = "sha256-YqUxkpFl2G/LFLtFWqocXbFvgVhqqiquoWNIIO9c/6o=";
+    hash = "sha256-GeQ1BEBt+66YhohyaXt7rIVNpEk6mINwsC3JrmYNjRI=";
   };
 
   nativeBuildInputs = [
