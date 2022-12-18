@@ -1,7 +1,6 @@
 { stdenv
 , lib
-, buildPythonApplication
-, dataclasses
+, buildPythonPackage
 , fetchFromGitHub
 , libX11
 , libXinerama
@@ -11,12 +10,12 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "screeninfo";
   version = "0.8.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rr-";
@@ -27,10 +26,6 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     poetry-core
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   postPatch = ''

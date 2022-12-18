@@ -1,7 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub
 , callPackage
 , pkg-config
-, makeWrapper
 , qmake
 , qtbase
 , qtwebengine

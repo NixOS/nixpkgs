@@ -161,17 +161,13 @@ let
     src    = "${component}/${name}.cabal";
   };
 
-  # Adds a nix file as an input to the haskell derivation it
-  # produces. This is useful for callHackage / callCabal2nix to
-  # prevent the generated default.nix from being garbage collected
-  # (requiring it to be frequently rebuilt), which can be an
-  # annoyance.
+  # Adds a nix file derived from cabal2nix in the passthru of the derivation it
+  # produces. This is useful to debug callHackage / callCabal2nix by looking at
+  # the content of the nix file pointed by `cabal2nixDeriver`.
+  # However, it does not keep a reference to that file, which may be garbage
+  # collected, which may be an annoyance.
   callPackageKeepDeriver = src: args:
     overrideCabal (orig: {
-      preConfigure = ''
-        # Generated from ${src}
-        ${orig.preConfigure or ""}
-      '';
       passthru = orig.passthru or {} // {
         # When using callCabal2nix or callHackage, it is often useful
         # to debug a failure by inspecting the Nix expression
@@ -596,5 +592,35 @@ in package-set { inherit pkgs lib callPackage; } self // {
           version = pkg.version;
         }
         pkg;
+
+    /*
+      Modify a Haskell package to add shell completion scripts for the
+      given executables produced by it. These completion scripts will be
+      picked up automatically if the resulting derivation is installed,
+      e.g. by `nix-env -i`.
+
+      This depends on the `--*-completion` flag `optparse-applicative` provides
+      automatically. Since we need to invoke installed executables, completions
+      are not generated if we are cross-compiling.
+
+       commands: names of the executables built by the derivation
+            pkg: Haskell package that builds the executables
+
+      Example:
+        generateOptparseApplicativeCompletions [ "exec1" "exec2" ] pkg
+
+       Type: [str] -> drv -> drv
+    */
+    generateOptparseApplicativeCompletions =
+      self.callPackage (
+        { stdenv }:
+
+        commands:
+        pkg:
+
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform
+        then lib.foldr haskellLib.__generateOptparseApplicativeCompletion pkg commands
+        else pkg
+      ) { };
 
   }

@@ -1,6 +1,4 @@
 { lib
-, a2jmidid
-, coreutils
 , libjack2
 , fetchpatch
 , fetchFromGitHub
@@ -8,7 +6,6 @@
 , pkg-config
 , pulseaudioFull
 , qtbase
-, makeWrapper
 , mkDerivation
 , python3
 }:

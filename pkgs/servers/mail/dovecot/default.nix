@@ -63,6 +63,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dovecot/core/compare/7bad6a24%5E..a1022072.patch";
       hash = "sha256-aSyRcQreyA9j8QwkODHqPpRuS3vzouVatEWCqhh+r+8=";
     })
+    # fix openssl 3.0 compatibility
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
+      hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
+    })
   ];
 
   configureFlags = [

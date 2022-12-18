@@ -7,7 +7,7 @@
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python27, python3, writeScript
+, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -103,10 +103,6 @@ let
     #            "@bison//:bin/bison",
     #        ],
     #     )
-    #
-    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
-    # default to using python3. Therefore, both python27 and python3 are
-    # runtime dependencies.
     [
       bash
       coreutils
@@ -117,7 +113,6 @@ let
       gnused
       gnutar
       gzip
-      python27
       python3
       unzip
       which
@@ -414,8 +409,6 @@ stdenv.mkDerivation rec {
       grep -rlZ /bin/ src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
-        # We default to python3 where possible. See also `postFixup` where
-        # python3 is added to $out/nix-support
         substituteInPlace "$path" \
           --replace /bin/bash ${bash}/bin/bash \
           --replace "/usr/bin/env bash" ${bash}/bin/bash \
@@ -426,7 +419,7 @@ stdenv.mkDerivation rec {
 
       grep -rlZ /bin/ tools/python | while IFS="" read -r -d "" path; do
         substituteInPlace "$path" \
-          --replace "/usr/bin/env python2" ${python27}/bin/python \
+          --replace "/usr/bin/env python2" ${python3.interpreter} \
           --replace "/usr/bin/env python3" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env
       done

@@ -5,7 +5,7 @@
 , fetchpatch
 , python3
 , substituteAll
-, ffmpeg
+, ffmpeg-headless
 , inetutils
 , nixosTests
 
@@ -31,44 +31,32 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
-        version = "1.11.1";
+      # https://github.com/postlund/pyatv/issues/1879
+      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
+        pname = "aiohttp";
+        version = "3.8.1";
+        src = self.fetchPypi {
+          inherit pname version;
+          hash = "sha256-/FRx4aVN4V73HBvG6+gNTcaB6mAOaL/Ry85AQn8LdXg=";
+        };
+      });
+
+      caldav = super.caldav.overridePythonAttrs (old: rec {
+        version = "0.9.1";
         src = fetchFromGitHub {
-          owner = "litl";
-          repo = "backoff";
+          owner = "python-caldav";
+          repo = "caldav";
           rev = "v${version}";
-          hash = "sha256-87IMcLaoCn0Vns8Ub/AFmv0gXtS0aPZX0cSt7+lOPm4=";
+          hash = "sha256-Gil0v4pGyp5+TnYPjb8Vk0xTqnQKaeD8Ko/ZWhvkbUk=";
         };
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace ", 'xandikos<0.2.4'" "" \
+            --replace ", 'radicale'" ""
+        '';
+        checkInputs = old.checkInputs ++ [ self.nose ];
       });
-    })
 
-    (self: super: {
-      bsblan = super.bsblan.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.0";
-        postPatch = null;
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.cattrs ];
-        src = fetchFromGitHub {
-          owner = "liudger";
-          repo = "python-bsblan";
-          rev = "v.${version}";
-          hash = "sha256-yzlHcIb5QlG+jAgEtKlAcY7rESiUY7nD1YwqK63wgcg=";
-        };
-      });
-    })
-
-    (self: super: {
-      blebox-uniapi = super.blebox-uniapi.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.2";
-        src = fetchFromGitHub {
-          owner = "blebox";
-          repo = "blebox_uniapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-0Yiooy7YSUFjqqcyH2fPQ6AWuR0EJxfRRZTw/6JGcMA=";
-        };
-      });
-    })
-
-    (self: super: {
       gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
         version = "4.0.0";
         src = fetchFromGitHub {
@@ -78,58 +66,19 @@ let
           hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
         };
       });
-    })
 
-    # pytest-aiohttp>0.3.0 breaks home-assistant tests
-    (self: super: {
-      pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.0";
-        src = self.fetchPypi {
-          inherit version;
-          pname = "pytest-aiohttp";
-          hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
+      hap-python = super.hap-python.overridePythonAttrs (oldAtrs: rec {
+        pname = "ha-hap-python";
+        version = "4.5.2";
+        src = fetchFromGitHub {
+          owner = "bdraco";
+          repo = "ha-HAP-python";
+          rev = "refs/tags/v4.5.2";
+          hash = "sha256-xCmx5QopNShKIuXewT+T86Bxyi4P0ddh8r2UlJ48Wig=";
         };
-        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
-        doCheck = false;
-        patches = [];
       });
-      aioecowitt = super.aioecowitt.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      aioopenexchangerates = super.aioopenexchangerates.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      pylitterbot = super.pylitterbot.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires pytest-aiohttp>=1.0.0
-      });
-      pynws = super.pynws.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires pytest-aiohttp>=1.0.0
-      });
-      pytomorrowio = super.pytomorrowio.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires pytest-aiohttp>=1.0.0
-      });
-      rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires pytest-aiohttp>=1.0.0
-      });
-      snitun = super.snitun.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-    })
 
-    # Pinned due to API changes in 0.1.0
-    (self: super: {
+      # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
         src = super.fetchPypi {
@@ -138,10 +87,8 @@ let
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
         };
       });
-    })
 
-    # Pinned due to API changes >0.3.5.3
-    (self: super: {
+      # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
         src = fetchFromGitHub {
@@ -151,15 +98,7 @@ let
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
-    })
 
-    (self: super: {
-      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
-        doCheck = false; # requires pytest-aiohttp>=1.0.0
-      });
-    })
-
-    (self: super: {
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
@@ -168,9 +107,7 @@ let
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
         };
       });
-    })
 
-    (self: super: {
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.0";
         src = fetchFromGitHub {
@@ -180,9 +117,7 @@ let
           hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
         };
       });
-    })
 
-    (self: super: {
       pysoma = super.pysoma.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.10";
         src = super.fetchPypi {
@@ -191,10 +126,8 @@ let
           hash = "sha256-sU1qHbAjdIUu0etjate8+U1zvunbw3ddBtDVUU10CuE=";
         };
       });
-    })
 
-    # Pinned due to API changes in 0.3.0
-    (self: super: {
+      # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
         src = fetchFromGitHub {
@@ -204,10 +137,8 @@ let
           hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
         };
       });
-    })
 
-    # Pinned due to API changes in 0.4.0
-    (self: super: {
+      # Pinned due to API changes in 0.4.0
       vilfo-api-client = super.vilfo-api-client.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.3";
         src = fetchFromGitHub {
@@ -217,10 +148,8 @@ let
           sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
         };
       });
-    })
 
-    # Pinned due to API changes ~1.0
-    (self: super: {
+      # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
         src = fetchFromGitHub {
@@ -230,10 +159,8 @@ let
           sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
         };
       });
-    })
 
-    # home-assistant-frontend does not exist in python3.pkgs
-    (self: super: {
+      # home-assistant-frontend does not exist in python3.pkgs
       home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
@@ -261,7 +188,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.10.3";
+  hassVersion = "2022.12.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,19 +206,20 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-5ffMs6gXOyg0hhB0Wx4bRmSqkr0uRhNcLhLo1PI2UqE=";
+    hash = "sha256-9dukY04sh35kj5vUbNmqnN+MPGqJT/YUuHC64pHzWjw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
-      ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
+      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
     })
   ];
 
   postPatch = let
     relaxedConstraints = [
+      "aiohttp"
       "attrs"
       "awesomeversion"
       "bcrypt"

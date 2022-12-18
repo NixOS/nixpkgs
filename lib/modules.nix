@@ -284,7 +284,18 @@ rec {
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let
             firstDef = head merged.unmatchedDefns;
-            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' does not exist. Definition values:${showDefs [ firstDef ]}";
+            baseMsg =
+              let
+                optText = showOption (prefix ++ firstDef.prefix);
+                defText =
+                  builtins.addErrorContext
+                    "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
+                    (builtins.addErrorContext
+                      "while evaluating a definition from `${firstDef.file}'"
+                      ( showDefs [ firstDef ])
+                    );
+              in
+                "The option `${optText}' does not exist. Definition values:${defText}";
           in
             if attrNames options == [ "_module" ]
               then
@@ -833,7 +844,7 @@ rec {
 
   filterOverrides' = defs:
     let
-      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPriority;
+      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in {
@@ -842,7 +853,7 @@ rec {
     };
 
   /* Sort a list of properties.  The sort priority of a property is
-     1000 by default, but can be overridden by wrapping the property
+     defaultOrderPriority by default, but can be overridden by wrapping the property
      using mkOrder. */
   sortProperties = defs:
     let
@@ -851,7 +862,7 @@ rec {
         then def // { value = def.value.content; inherit (def.value) priority; }
         else def;
       defs' = map strip defs;
-      compare = a: b: (a.priority or 1000) < (b.priority or 1000);
+      compare = a: b: (a.priority or defaultOrderPriority) < (b.priority or defaultOrderPriority);
     in sort compare defs';
 
   # This calls substSubModules, whose entire purpose is only to ensure that
@@ -887,9 +898,12 @@ rec {
 
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  defaultOverridePriority = 100;
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
 
   mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -899,10 +913,8 @@ rec {
     };
 
   mkBefore = mkOrder 500;
+  defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
-
-  # The default priority for things that don't have a priority specified.
-  defaultPriority = 100;
 
   # Convenient property used to transfer all definitions and their
   # properties from one option to another. This property is useful for
@@ -930,10 +942,10 @@ rec {
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
   #
-  # If a priority is not set, it assumes a priority of defaultPriority.
+  # If a priority is not set, it assumes a priority of defaultOverridePriority.
   mkAliasAndWrapDefsWithPriority = wrap: option:
     let
-      prio = option.highestPrio or defaultPriority;
+      prio = option.highestPrio or defaultOverridePriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in mkAliasIfDef option (wrap (mkMerge defsWithPrio));
 
@@ -1115,7 +1127,7 @@ rec {
   # to definitions.
   mkDerivedConfig = opt: f:
     mkOverride
-      (opt.highestPrio or defaultPriority)
+      (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
   doRename = { from, to, visible, warn, use, withPriority ? true }:
@@ -1135,10 +1147,10 @@ rec {
         type = toType;
       });
       config = mkMerge [
-        {
+        (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
-        }
+        })
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
           else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)

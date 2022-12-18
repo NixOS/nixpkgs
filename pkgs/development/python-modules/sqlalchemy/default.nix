@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.41";
+  version = "1.4.41"; # TODO: check python3Packages.fastapi when updating to >= 1.4.42
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

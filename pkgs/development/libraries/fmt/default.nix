@@ -53,7 +53,7 @@ in
   };
 
   fmt_9 = generic {
-    version = "9.0.0";
-    sha256 = "sha256-nwlAzMkY1JdhLtes48VaNH9LS7GzqtPCwk2dZA/bGmQ=";
+    version = "9.1.0";
+    sha256 = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
   };
 }

@@ -76,7 +76,7 @@ in
 
   nativeBuildInputs = [makeInitrdNGTool cpio] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 
-  STRIP = if strip then "${(binutils.nativeDrv or binutils).targetPrefix}strip" else null;
+  STRIP = if strip then "${pkgsBuildHost.binutils.targetPrefix}strip" else null;
 }) ''
   mkdir ./root
   make-initrd-ng "$contentsPath" ./root

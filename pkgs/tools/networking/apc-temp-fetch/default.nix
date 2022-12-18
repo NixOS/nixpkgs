@@ -7,7 +7,7 @@
 
 buildPythonApplication rec {
   pname = "apc-temp-fetch";
-  version = "0.0.1";
+  version = "0.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchPypi {
     pname = "APC-Temp-fetch";
     inherit version;
-    hash = "sha256-2hNrTrYQadNJWzj7/dDou+a6uI+Ksyrbru9rBqIHXaM=";
+    hash = "sha256-lXGj/xrOkdMMYvuyVVSCojjQlzISFUT14VTn//iOARo=";
   };
 
   propagatedBuildInputs = [

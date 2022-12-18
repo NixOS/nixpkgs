@@ -56,8 +56,10 @@ let
         default = null;
         description = mdDoc ''
           Specifies the hashed password for the MQTT User.
-          To generate hashed password install `mosquitto`
-          package and use `mosquitto_passwd`.
+          To generate hashed password install the `mosquitto`
+          package and use `mosquitto_passwd`, then extract
+          the second field (after the `:`) from the generated
+          file.
         '';
       };
 
@@ -68,8 +70,9 @@ let
         description = mdDoc ''
           Specifies the path to a file containing the
           hashed password for the MQTT user.
-          To generate hashed password install `mosquitto`
-          package and use `mosquitto_passwd`.
+          To generate hashed password install the `mosquitto`
+          package and use `mosquitto_passwd`, then remove the
+          `username:` prefix from the generated file.
         '';
       };
 

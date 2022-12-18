@@ -53,17 +53,12 @@ in
 {
   # EOL TBA
   varnish60 = common {
-    version = "6.0.10";
-    hash = "sha256-a4W/dI7jeaoI43UE+G6tS6fgzEDqsXI8CUv+Wh4HJus=";
-  };
-  # EOL 2023-03-15. TODO: remove ahead of 22.11 release? if not, remove for 23.05
-  varnish71 = common {
-    version = "7.1.1";
-    hash = "sha256-LK++JZDn1Yp7rIrZm+kuRA/k04raaBbdiDbyL6UToZA=";
+    version = "6.0.11";
+    hash = "sha256-UVkA2+tH/9MOs5BlyuAzFnmD7Pm9A6lDWic2B+HRKNs=";
   };
   # EOL 2023-09-15
   varnish72 = common {
-    version = "7.2.0";
-    hash = "sha256-HaipftX3t9TV4E/FyW/JqFyzog0HbrorGJUfSzBsloY=";
+    version = "7.2.1";
+    hash = "sha256-TZN9FyCo7BnFM/ly2TA6HJiJt7/KdDeJOuXCfPIEqUA=";
   };
 }

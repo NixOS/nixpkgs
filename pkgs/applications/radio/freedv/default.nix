@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.3.1";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-LPCY5gPinxJkfPfumKggI/JQorcW+Qw/ZAP6XQmPkeA=";
+    hash = "sha256-BkxEg4vQ943QyDo9V1hG2XimguGn8XpO9aIz5si0PKU=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -58,11 +58,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
+    "-DUNITTEST=ON"
   ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
 
   NIX_CFLAGS_COMPILE = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DAPPLE_OLD_XCODE"
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://freedv.org/";

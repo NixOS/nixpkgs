@@ -123,7 +123,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */
@@ -218,7 +218,7 @@ rec {
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-  optionAttrSetToDocList' = prefix: options:
+  optionAttrSetToDocList' = _: options:
     concatMap (opt:
       let
         docOption = rec {
@@ -234,9 +234,8 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+        // optionalAttrs (opt ? example) { example = renderOptionValue opt.example; }
+        // optionalAttrs (opt ? default) { default = renderOptionValue (opt.defaultText or opt.default); }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
@@ -256,6 +255,9 @@ rec {
      efficient: the XML representation of derivations is very large
      (on the order of megabytes) and is not actually used by the
      manual generator.
+
+     This function was made obsolete by renderOptionValue and is kept for
+     compatibility with out-of-tree code.
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -263,6 +265,17 @@ rec {
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
+
+
+  /* Ensures that the given option value (default or example) is a `_type`d string
+     by rendering Nix values to `literalExpression`s.
+  */
+  renderOptionValue = v:
+    if v ? _type && v ? text then v
+    else literalExpression (lib.generators.toPretty {
+      multiline = true;
+      allowPrettyValues = true;
+    } v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
@@ -322,10 +335,16 @@ rec {
   showOption = parts: let
     escapeOptionPart = part:
       let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
+        # We assume that these are "special values" and not real configuration data.
+        # If it is real configuration data, it is rendered incorrectly.
+        specialIdentifiers = [
+          "<name>"          # attrsOf (submodule {})
+          "*"               # listOf (submodule {})
+          "<function body>" # functionTo
+        ];
+      in if builtins.elem part specialIdentifiers
          then part
-         else escaped;
+         else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 

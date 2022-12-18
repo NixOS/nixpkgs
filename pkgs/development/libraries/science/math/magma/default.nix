@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
 
 let
-  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages) cudatoolkit cudaFlags;
 in
 
 assert let majorIs = lib.versions.major cudatoolkit.version;
@@ -9,36 +9,6 @@ assert let majorIs = lib.versions.major cudatoolkit.version;
 
 let
   version = "2.6.2";
-
-  # We define a specific set of CUDA compute capabilities here,
-  # because CUDA 11 does not support compute capability 3.0. Also,
-  # we use it to enable newer capabilities that are not enabled
-  # by magma by default. The list of supported architectures
-  # can be found in magma's top-level CMakeLists.txt.
-  cudaCapabilities = rec {
-    cuda9 = [
-      "Kepler"  # 3.0, 3.5
-      "Maxwell" # 5.0
-      "Pascal"  # 6.0
-      "Volta"   # 7.0
-    ];
-
-    cuda10 = [
-      "Turing"  # 7.5
-    ] ++ cuda9;
-
-    cuda11 = [
-      "sm_35"   # sm_30 is not supported by CUDA 11
-      "Maxwell" # 5.0
-      "Pascal"  # 6.0
-      "Volta"   # 7.0
-      "Turing"  # 7.5
-      "Ampere"  # 8.0
-    ];
-  };
-
-  capabilityString = lib.strings.concatStringsSep ","
-    cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
 in stdenv.mkDerivation {
   pname = "magma";
@@ -53,7 +23,9 @@ in stdenv.mkDerivation {
 
   buildInputs = [ cudatoolkit libpthreadstubs lapack blas ];
 
-  cmakeFlags = [ "-DGPU_TARGET=${capabilityString}" ];
+  cmakeFlags = [
+    "-DGPU_TARGET=${builtins.concatStringsSep "," cudaFlags.cudaRealArchs}"
+  ];
 
   doCheck = false;
 

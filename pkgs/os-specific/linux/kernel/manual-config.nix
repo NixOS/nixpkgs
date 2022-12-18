@@ -55,8 +55,7 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [ perl ]
-    ++ optional (lib.versionAtLeast version "4.14") libelf
+  moduleBuildDependencies = [ perl libelf ]
     ++ optional (lib.versionAtLeast version "5.13") zstd;
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
@@ -100,12 +99,12 @@ let
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (lib.versionAtLeast version "4.13" && lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
         ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
         # Fixes determinism by normalizing metadata for the archive of kheaders
         ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
-      prePatch = ''
+      postPatch = ''
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
         # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
@@ -118,14 +117,9 @@ let
         # See also https://kernelnewbies.org/BuildId
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        # Some linux-hardened patches now remove certain files in the scripts directory, so we cannot
-        # patch all scripts until after patches are applied.
-        # However, scripts/ld-version.sh is still ran when generating a configfile for a kernel, so it needs
-        # to be patched prior to patchPhase
-        patchShebangs scripts/ld-version.sh
-      '';
+        # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
+        [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
 
-      postPatch = ''
         # Set randstruct seed to a deterministic but diversified value. Note:
         # we could have instead patched gen-random-seed.sh to take input from
         # the buildFlags, but that would require also patching the kernel's
@@ -135,7 +129,7 @@ let
           if [ -f "$file" ]; then
             substituteInPlace "$file" \
               --replace NIXOS_RANDSTRUCT_SEED \
-              $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+              $(echo ${randstructSeed}${src} ${placeholder "configfile"} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
             break
           fi
         done
@@ -358,7 +352,7 @@ let
     };
 in
 
-assert (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") -> libelf != null;
+assert lib.versionOlder version "5.8" -> libelf != null;
 assert lib.versionAtLeast version "5.8" -> elfutils != null;
 
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
@@ -370,7 +364,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
+      ++ optional  (lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
@@ -384,6 +378,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "O=$(buildRoot)"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"

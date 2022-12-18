@@ -1,14 +1,15 @@
 { lib
 , callPackage
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , mkdocs
 , csscompressor
 , htmlmin
 , jsmin
+, pytestCheckHook
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-minify";
   version = "0.5.0";
 
@@ -24,6 +25,11 @@ buildPythonApplication rec {
     htmlmin
     jsmin
     mkdocs
+  ];
+
+  checkInputs = [
+    mkdocs
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "mkdocs" ];

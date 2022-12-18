@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgs
-, autoconf, automake, curl, iprange, iproute2, iptables, iputils
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, curl, iprange, iproute2, iptables, iputils
 , kmod, nettools, procps, tcpdump, traceroute, util-linux, whois
 
 # If true, just install FireQOS without FireHOL
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--localstatedir=/var"
                      "--disable-doc" "--disable-man"
                      "--disable-update-ipsets" ] ++
-                   lib.optional onlyQOS [ "--disable-firehol" ];
+                   lib.optionals onlyQOS [ "--disable-firehol" ];
 
   meta = with lib; {
     description = "A firewall for humans";

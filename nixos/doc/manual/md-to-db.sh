@@ -19,6 +19,7 @@ pandoc_flags=(
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua"
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/link-unix-man-references.lua"
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua"
+  "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/html-elements.lua"
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/labelless-link-is-xref.lua"
   -f "commonmark${pandoc_commonmark_enabled_extensions}+smart"
   -t docbook

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.76";
+  version = "0.79";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "sha256-05VUIHUqXnES4CmgopzQ2LQ0uldSffsGF5ExedEO+yA=";
+    sha256 = "sha256-eL4cCpBRhO0ctQZGg1n6+H5O6GhRKRsWcEOcRr+z2Hw=";
   };
 
   nativeBuildInputs = [ pkg-config bison ];
@@ -46,5 +46,7 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ abbe afh ];
+    # never built on x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

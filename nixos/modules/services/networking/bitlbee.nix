@@ -68,7 +68,7 @@ in
 
       portNumber = mkOption {
         default = 6667;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc ''
           Number of the port BitlBee will be listening to.
         '';

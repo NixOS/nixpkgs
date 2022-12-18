@@ -1,5 +1,5 @@
---- a/locale.c	2018-06-11 14:39:06.449762000 -0400
-+++ b/locale.c	2018-06-11 14:42:28.461122899 -0400
+--- a/usr.bin/locale/locale.c	2018-06-11 14:39:06.449762000 -0400
++++ b/usr.bin/locale/locale.c	2018-06-11 14:42:28.461122899 -0400
 @@ -56,14 +56,8 @@
  #include <stringlist.h>
  #include <unistd.h>

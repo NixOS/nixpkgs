@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.14";
+  version = "13.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6TkdQ+sRI94md6nSTqh4qdUyfWWyQZr7plP0dtJq7MM=";
+    hash = "sha256-tAR2BrgIG2K71qo2H3yh7+h/qPGIHsnZMtNYRL9XoVQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace "tornado==6.1" "tornado"
   '';
 
-  setupPyGlobalFlags = "--with-upstream-urllib3";
+  setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
 
   # tests not included with release
   doCheck = false;

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , gtk3
+, gdk-pixbuf
 , withWayland ? false
 , gtk-layer-shell
 , stdenv
@@ -25,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk3 ] ++ lib.optional withWayland gtk-layer-shell;
+  buildInputs = [ gtk3 gdk-pixbuf ] ++ lib.optional withWayland gtk-layer-shell;
 
   buildNoDefaultFeatures = withWayland;
   buildFeatures = lib.optional withWayland "wayland";

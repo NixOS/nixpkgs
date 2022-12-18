@@ -1,7 +1,9 @@
 {
     "owner": "netlify",
     "repo": "cli",
-    "rev": "a50e410fddda92d3f3f256321eddefb8cb8ba6e1",
-    "sha256": "sisX58I5UxxEPGCh5JGtQHw72A4+pLuENpBB9WKRTZc=",
-    "fetchSubmodules": false
+    "rev": "6c7e8c9a4db4e2e408f65e6098a194497944e306",
+    "sha256": "YMnQrurZDJtfeHBCIzy6vToGHnqtdRGvWFPX5RcWyPg=",
+    "fetchSubmodules": false,
+    "leaveDotGit": false,
+    "deepClone": false
 }

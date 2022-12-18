@@ -18,6 +18,10 @@ buildGoModule rec {
     sha256 = "sha256-6g0tzI6ZW+wwbPrNTdj0t2H0/M8+M9ioJl6iPL0mAtY=";
   };
 
+  patches = [
+    ./go119.patch
+  ];
+
   vendorSha256 = null;
 
   subPackages = [

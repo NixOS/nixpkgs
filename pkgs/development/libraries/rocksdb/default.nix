@@ -11,17 +11,18 @@
 , enableJemalloc ? false, jemalloc
 , enableLite ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "7.7.2";
+  version = "7.7.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Cla2yat/xCrzx53mYRKjcvH9cCY0MVD8RSMjGfxVDUM=";
+    sha256 = "sha256-Np3HPTZYzyoPOKL0xgsLzcvOkceFiEQd+1nyGbg4BHo=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -48,9 +49,7 @@ stdenv.mkDerivation rec {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional
-        (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
-        "-DFORCE_SSE42=1")
+    (lib.optional sse42Support "-DFORCE_SSE42=1")
     (lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";

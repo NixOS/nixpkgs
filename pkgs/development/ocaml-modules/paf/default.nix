@@ -25,11 +25,11 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    sha256 = "sha256-JIJjECEbajauowbXot19vtiDhTpGAQiSCBY0AHZOyZM=";
+    sha256 = "sha256-TzhRxFTPkLMAsLPl0ONC8DRhJRGstF58+QRKbGuJZVE=";
   };
 
   minimalOCamlVersion = "4.08";

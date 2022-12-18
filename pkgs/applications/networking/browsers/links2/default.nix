@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
     ++ optionals stdenv.isLinux [ gpm ]
     ++ optionals enableX11 [ libX11 libXau libXt ]
-    ++ optional enableDirectFB [ directfb ];
+    ++ optionals enableDirectFB [ directfb ];
 
   nativeBuildInputs = [ pkg-config bzip2 ];
 

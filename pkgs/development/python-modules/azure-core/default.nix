@@ -21,6 +21,8 @@ buildPythonPackage rec {
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
@@ -63,7 +65,7 @@ buildPythonPackage rec {
   # disable 8 tests failing on some darwin machines with errors:
   # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
   # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "location_polling_fail"
   ];
   disabledTestPaths = [

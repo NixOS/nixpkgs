@@ -25,14 +25,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.4.4";
+  version = "2.4.10";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xOcBOk+ac1djfCLKqrCTS+WnOXFf1niRUWN5hItO0v0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/NkV5KNjJfzLhAJEjePHOXqaGIwRJrD0ewe/vpFEYts=";
   };
 
   nativeBuildInputs = [
@@ -84,6 +84,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for scanning Python environments for known vulnerabilities";
     homepage = "https://github.com/trailofbits/pip-audit";
+    changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

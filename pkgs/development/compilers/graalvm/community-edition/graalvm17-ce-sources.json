@@ -1,42 +1,42 @@
 {
   "darwin-aarch64": {
-    "graalvm-ce|java17|22.2.0": {
-      "sha256": "cfbeb38cd707a330048ab2140cb185176201c5cb654df752fcb4bd95e899b4ec",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-darwin-aarch64-22.2.0.tar.gz"
+    "graalvm-ce|java17|22.3.0": {
+      "sha256": "dfc0c8998b8d00fcca87ef1c866c6e4985fd20b0beba3021f9677f9b166dfaf8",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-darwin-aarch64-22.3.0.tar.gz"
     },
-    "native-image-installable-svm|java17|22.2.0": {
-      "sha256": "c6584429fe443f5415a7ec0545072b069f2e10bef1dbd6e7cb7fdec6ddb89b62",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java17-darwin-aarch64-22.2.0.jar"
+    "native-image-installable-svm|java17|22.3.0": {
+      "sha256": "b6e44cb03f560bb43db1fd0aa862af36ba1df6717765920d91c18519712adfe9",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java17-darwin-aarch64-22.3.0.jar"
     }
   },
   "darwin-amd64": {
-    "graalvm-ce|java17|22.2.0": {
-      "sha256": "b92b6f5f7f11282f20c8f8b94ea1c16d776cbadd7b254119836a7ace9f513b0d",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-darwin-amd64-22.2.0.tar.gz"
+    "graalvm-ce|java17|22.3.0": {
+      "sha256": "422cd6abecfb8b40238460c09c42c5a018cb92fab4165de9691be2e3c3d0e8d1",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz"
     },
-    "native-image-installable-svm|java17|22.2.0": {
-      "sha256": "a751d0c0dcdc7e06dd0166d731a482a6937f36a1b69ef62f9e9f443922e85861",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java17-darwin-amd64-22.2.0.jar"
+    "native-image-installable-svm|java17|22.3.0": {
+      "sha256": "9ce13874e62877d3bbe3faa4a57fbbffc766fdc8191971e7b25de0226fe86598",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java17-darwin-amd64-22.3.0.jar"
     }
   },
   "linux-aarch64": {
-    "graalvm-ce|java17|22.2.0": {
-      "sha256": "3025cc887bdaa088c89601b42931abc61dfd108aaad386abee8c1e08c913504d",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-linux-aarch64-22.2.0.tar.gz"
+    "graalvm-ce|java17|22.3.0": {
+      "sha256": "e27249d9eef4504deb005cf14c6a028aad1adfa37209e12e9d7407710c08ed90",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-aarch64-22.3.0.tar.gz"
     },
-    "native-image-installable-svm|java17|22.2.0": {
-      "sha256": "eeac78046e059e77542eec1fac7c0423bf5fa73eb6fb01b25100d8a6f81eecc0",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java17-linux-aarch64-22.2.0.jar"
+    "native-image-installable-svm|java17|22.3.0": {
+      "sha256": "d5b833c44d37fbe4df75906f73144e2db01e683bca3386fe185f4abbc8fbc798",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java17-linux-aarch64-22.3.0.jar"
     }
   },
   "linux-amd64": {
-    "graalvm-ce|java17|22.2.0": {
-      "sha256": "cd903566d030bf44a8c5c0f50914fc9c9d89cb2954e1f90512b137a0bfedc3ca",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-linux-amd64-22.2.0.tar.gz"
+    "graalvm-ce|java17|22.3.0": {
+      "sha256": "3473d8b3b1bc682e95adfb3ac1d9a59b51b0f43e2b752f2a5b550e4ebfa2fd17",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz"
     },
-    "native-image-installable-svm|java17|22.2.0": {
-      "sha256": "74656070429f8b24dd6770c2d274f272542116e3963291de74abed74c38ed08a",
-      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java17-linux-amd64-22.2.0.jar"
+    "native-image-installable-svm|java17|22.3.0": {
+      "sha256": "d1f5c58b65c57ad8a0c7da0c4569ce815ebf1ae503b0741ba1facf27b816d398",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java17-linux-amd64-22.3.0.jar"
     }
   }
 }

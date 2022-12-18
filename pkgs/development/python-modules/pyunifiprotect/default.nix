@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.3.3";
+  version = "4.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -38,13 +38,12 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-77vBKca4S0XEa5O4ntuBW8uEwVig7IBH6BX3QEmvHWc=";
+    hash = "sha256-xYDt/vvzI7qIK/8XE6mhcI5GPDKyHRj73Lagn0QOOz0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" "" \
-      --replace "pydantic!=1.9.1" "pydantic"
+      --replace "--cov=pyunifiprotect --cov-append" ""
   '';
 
   nativeBuildInputs = [
@@ -94,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";
     homepage = "https://github.com/briis/pyunifiprotect";
+    changelog = "https://github.com/AngellusMortis/pyunifiprotect/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

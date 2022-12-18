@@ -43,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2022.4";
+  version = "2022.5";
 
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "sha256-OwTtWzlZjHNFSN5/UjFJbcrPCv9+ucWYEL2idYjeozU=";
+    sha256 = "sha256-G3B4kb+ugukYtCVH3HHI43u3n9G0dX6WyYUA3X/sZ+o=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,6 @@ stdenv.mkDerivation rec {
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
-    ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
     wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
@@ -92,7 +91,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 
 }

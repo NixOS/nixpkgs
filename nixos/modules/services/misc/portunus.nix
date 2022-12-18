@@ -29,7 +29,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.portunus;
-      defaultText = "pkgs.portunus";
+      defaultText = lib.literalExpression "pkgs.portunus";
       description = lib.mdDoc "The Portunus package to use.";
     };
 
@@ -108,7 +108,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.openldap;
-        defaultText = "pkgs.openldap";
+        defaultText = lib.literalExpression "pkgs.openldap";
         description = lib.mdDoc "The OpenLDAP package to use.";
       };
 
@@ -212,9 +212,9 @@ in
 
         staticClients = forEach cfg.dex.oidcClients (client: {
           inherit (client) id;
-          redirectURIs = [ client.callbackURI ];
+          redirectURIs = [ client.callbackURL ];
           name = "OIDC for ${client.id}";
-          secret = "$DEX_CLIENT_${client.id}";
+          secretEnv = "DEX_CLIENT_${client.id}";
         });
       };
     };

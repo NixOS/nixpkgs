@@ -11,12 +11,12 @@
 , gtk4
 , glib
 , gtksourceview5
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , gnome
 , mpfr
 , gmp
-, libsoup
+, libsoup_3
 , libmpc
 , libadwaita
 , gsettings-desktop-schemas
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "42.2";
+  version = "43.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M9qxvKQ2WNZlIJWLD2dMsK0xhc/TDBLkWef2lIHFxqA=";
+    sha256 = "AsEt7Tz1BT0XU32V7GlYf0uRmJnXcm7O7NtLR/+xyQ8=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection # for finding vapi files
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     gmp
     libgee
     gsettings-desktop-schemas
-    libsoup
+    libsoup_3
     libmpc
     libadwaita
   ];

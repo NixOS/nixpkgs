@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "oras";
-  version = "0.14.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     rev = "v${version}";
-    sha256 = "sha256-SE79SQtQT+HRHjxRXnu2bWNKj56P5Szhdo+CpvQRwlI=";
+    sha256 = "sha256-8QmMC4eB7WNxfEsVRUzv/gb7QmNBvcgDEENa1XxpCug=";
   };
-  vendorSha256 = "sha256-ufTQlqMRIFgyH+xO+fPKBTQ9blqM9thiYrVlQDmgUqQ=";
+  vendorSha256 = "sha256-THqrGnJnNDL6BJpRxeNLPjWB+SEUMUhiVOcJZDTM6n8=";
 
   ldflags = [
     "-s"

@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ws20hKX2iDdke5yBBKXukVUD4OnLf1OmwlhW+jUXL24=";
   };
 
+  patches = [
+    ./nixostrustedprefix.patch
+  ];
+
   nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [
@@ -29,6 +33,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/util/CMakeLists.txt \
       --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
+    substituteInPlace src/backend/corebackend.cpp \
+      --replace /usr/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy $out/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy
   '';
 
   meta = with lib; {

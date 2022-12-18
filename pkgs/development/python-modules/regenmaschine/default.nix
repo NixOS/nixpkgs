@@ -10,11 +10,12 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2022.09.2";
+  version = "2022.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-lpmytE2WkZuLcONm/kvtmXnHaimzaKOre9S5hIqDNVE=";
+    hash = "sha256-0ih0qlN9NxkYkcRl990gVyZF33ymSNUJoNFzpcnqu1o=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    typing-extensions
   ];
 
   checkInputs = [
@@ -57,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with RainMachine smart sprinkler controllers";
     homepage = "https://github.com/bachya/regenmaschine";
+    changelog = "https://github.com/bachya/regenmaschine/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

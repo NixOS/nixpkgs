@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.2.5";
+  version = "3.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wbB4AD+PwsCGSvBGUeK+EhPltzjqgykeX/VlJSm8Xlg=";
+    hash = "sha256-bxFBWi6cx7TeeofMP59XVRX9aDpCP2N5lAkUpWYW1wU=";
   };
 
   propagatedBuildInputs = [
@@ -68,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
+    changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

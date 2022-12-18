@@ -1,7 +1,6 @@
 { mkDerivation
 , async, base, bytestring, containers, fetchFromGitLab, mtl
-, parallel-io, parsec, lib, stm, transformers, sbv_7_13, z3
-}:
+, parallel-io, parsec, lib, stm, transformers, sbv_7_13}:
 
 mkDerivation rec {
   pname = "petrinizer";

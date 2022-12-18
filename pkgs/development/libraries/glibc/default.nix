@@ -2,6 +2,7 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
+, withLibcrypt? false
 , buildPackages
 }:
 
@@ -16,7 +17,7 @@ in
 callPackage ./common.nix { inherit stdenv; } {
     pname = "glibc" + lib.optionalString withGd "-gd";
 
-    inherit withLinuxHeaders profilingLibraries withGd;
+    inherit withLinuxHeaders profilingLibraries withGd withLibcrypt;
 
     # Note:
     # Things you write here override, and do not add to,
@@ -38,6 +39,9 @@ callPackage ./common.nix { inherit stdenv; } {
 
       # Apparently --bindir is not respected.
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
+    '' + lib.optionalString stdenv.buildPlatform.isDarwin ''
+      # ld-wrapper will otherwise attempt to inject CoreFoundation into ld-linux's RUNPATH
+      export NIX_COREFOUNDATION_RPATH=
     '';
 
     # The pie, stackprotector and fortify hardening flags are autodetected by

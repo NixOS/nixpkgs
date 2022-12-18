@@ -10,13 +10,13 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.55.1";
+  version = "0.57.5";
 
   desktopSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  desktopSource.sha256 = "0c12azw0hrax392ymn25nqszdhsy8p5cf970rfq9d98qp0i8ywf0";
+  desktopSource.sha256 = "0zm16g30bz9xm2z1x7w7knm352hpb8n301gcr8kwab79qrhszwl2";
 
   serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-  serverSource.sha256 = "04yjkmz2ck6r0c2593w2ck4w66x9wjzma0vaddx29b9anh9vrln3";
+  serverSource.sha256 = "0l53kps7rhf8rx9zx29psvjl3611y7pymfkh2yb13h6iv1c77gdf";
 
 in {
 
@@ -48,6 +48,11 @@ in {
         categories = [ "Office" ];
       })
     ];
+
+    # Remove trilium-portable.sh, so trilium knows it is packaged making it stop auto generating a desktop item on launch
+    postPatch = ''
+      rm ./trilium-portable.sh
+    '';
 
     installPhase = ''
       runHook preInstall

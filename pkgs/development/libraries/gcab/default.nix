@@ -8,7 +8,6 @@
 , pkg-config
 , meson
 , ninja
-, git
 , vala
 , glib
 , zlib
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcab";
-  version = "1.4";
+  version = "1.5";
 
   outputs = [ "bin" "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13q43iqld4l50yra45lhvkd376pn6qpk7rkx374zn8y9wsdzm9b7";
+    sha256 = "Rr90QkkfqkFIJCuewqB4al9unv+xsFZuUpDozIbwDww=";
   };
 
   patches = [
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    git
     pkg-config
     vala
     gettext

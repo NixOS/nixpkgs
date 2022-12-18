@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.12.1";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "sha256-HIDL4xzzTu3irzrIOf8qSNCAvHGOMpi8EDeqZb8mMnc=";
+    sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
   };
 
   patches = [

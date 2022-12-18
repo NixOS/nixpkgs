@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, python27Packages
+, python27
 , callPackage
 , fetchFromGitHub
 , makeWrapper
@@ -13,6 +13,8 @@
 , cmark
 , file
 , glibcLocales
+, six
+, typing
 }:
 
 rec {
@@ -32,7 +34,7 @@ rec {
     '';
   };
 
-  py-yajl = python27Packages.buildPythonPackage rec {
+  py-yajl = python27.pkgs.buildPythonPackage rec {
     pname = "oil-pyyajl-unstable";
     version = "2019-12-05";
     src = fetchFromGitHub {
@@ -51,7 +53,7 @@ rec {
     (or accepting all of the patches we need to do so).
     This creates one without disturbing upstream too much.
   */
-  oildev = python27Packages.buildPythonPackage rec {
+  oildev = python27.pkgs.buildPythonPackage rec {
     pname = "oildev-unstable";
     version = "2021-07-14";
 
@@ -95,7 +97,7 @@ rec {
 
     nativeBuildInputs = [ re2c file makeWrapper ];
 
-    propagatedBuildInputs = with python27Packages; [ six typing ];
+    propagatedBuildInputs = [ six typing ];
 
     doCheck = true;
 

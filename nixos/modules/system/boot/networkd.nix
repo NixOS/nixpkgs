@@ -501,7 +501,6 @@ let
           "LinkLocalAddressing"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
-          "IPv6Token"
           "LLMNR"
           "MulticastDNS"
           "DNSOverTLS"
@@ -526,7 +525,7 @@ let
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6SendRA"
-          "DHCPv6PrefixDelegation"
+          "DHCPPrefixDelegation"
           "IPv6MTUBytes"
           "Bridge"
           "Bond"
@@ -569,12 +568,11 @@ let
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
-        (assertValueOneOf "DHCPv6PrefixDelegation" boolValues)
+        (assertValueOneOf "DHCPPrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
         (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
-        (assertValueOneOf "IgnoreCarrierLoss" boolValues)
         (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
       ];
 
@@ -586,6 +584,7 @@ let
           "Label"
           "PreferredLifetime"
           "Scope"
+          "RouteMetric"
           "HomeAddress"
           "DuplicateAddressDetection"
           "ManageTemporaryAddress"
@@ -594,6 +593,7 @@ let
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
+        (assertInt "RouteMetric")
         (assertValueOneOf "HomeAddress" boolValues)
         (assertValueOneOf "DuplicateAddressDetection" ["ipv4" "ipv6" "both" "none"])
         (assertValueOneOf "ManageTemporaryAddress" boolValues)
@@ -619,6 +619,7 @@ let
           "User"
           "SuppressPrefixLength"
           "Type"
+          "SuppressInterfaceGroup"
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
@@ -632,6 +633,7 @@ let
         (assertInt "SuppressPrefixLength")
         (assertRange "SuppressPrefixLength" 0 128)
         (assertValueOneOf "Type" ["blackhole" "unreachable" "prohibit"])
+        (assertRange "SuppressInterfaceGroup" 0 2147483647)
       ];
 
       sectionRoute = checkUnitConfig "Route" [
@@ -711,6 +713,9 @@ let
           "BlackList"
           "RequestOptions"
           "SendOption"
+          "FallbackLeaseLifetimeSec"
+          "Label"
+          "Use6RD"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -733,6 +738,8 @@ let
         (assertPort "ListenPort")
         (assertValueOneOf "SendRelease" boolValues)
         (assertValueOneOf "SendDecline" boolValues)
+        (assertValueOneOf "FallbackLeaseLifetimeSec" ["forever" "infinity"])
+        (assertValueOneOf "Use6RD" boolValues)
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
@@ -745,7 +752,6 @@ let
           "MUDURL"
           "RequestOptions"
           "SendVendorOption"
-          "ForceDHCPv6PDOtherInformation"
           "PrefixDelegationHint"
           "WithoutRA"
           "SendOption"
@@ -754,27 +760,33 @@ let
           "DUIDType"
           "DUIDRawData"
           "IAID"
+          "UseDelegatedPrefix"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
-        (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
-        (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
+        (assertValueOneOf "WithoutRA" ["no" "solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
+        (assertValueOneOf "UseDelegatedPrefix" boolValues)
       ];
 
-      sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
+      sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
         (assertOnlyFields [
+          "UplinkInterface"
           "SubnetId"
           "Announce"
           "Assign"
           "Token"
+          "ManageTemporaryAddress"
+          "RouteMetric"
         ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
+        (assertValueOneOf "ManageTemporaryAddress" boolValues)
+        (assertRange "RouteMetric" 0 4294967295)
       ];
 
       sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
@@ -792,6 +804,10 @@ let
           "RouteAllowList"
           "DHCPv6Client"
           "RouteMetric"
+          "UseMTU"
+          "UseGateway"
+          "UseRoutePrefix"
+          "Token"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -799,6 +815,9 @@ let
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
         (assertValueOneOf "UseOnLinkPrefix" boolValues)
         (assertValueOneOf "DHCPv6Client" (boolValues ++ ["always"]))
+        (assertValueOneOf "UseMTU" boolValues)
+        (assertValueOneOf "UseGateway" boolValues)
+        (assertValueOneOf "UseRoutePrefix" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -874,6 +893,7 @@ let
           "Prefix"
           "PreferredLifetimeSec"
           "ValidLifetimeSec"
+          "Token"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
@@ -908,6 +928,8 @@ let
       type = types.bool;
       description = lib.mdDoc ''
         Whether to manage network configuration using {command}`systemd-network`.
+
+        This also enables {option}`systemd.networkd.enable`.
       '';
     };
 
@@ -1338,12 +1360,17 @@ let
     };
 
     dhcpV6PrefixDelegationConfig = mkOption {
+      visible = false;
+      apply = _: throw "The option `systemd.network.networks.<name>.dhcpV6PrefixDelegationConfig` has been renamed to `systemd.network.networks.<name>.dhcpPrefixDelegationConfig`.";
+    };
+
+    dhcpPrefixDelegationConfig = mkOption {
       default = {};
       example = { SubnetId = "auto"; Announce = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6PrefixDelegation;
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPPrefixDelegation;
       description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        `[DHCPv6PrefixDelegation]` section of the unit. See
+        `[DHCPPrefixDelegation]` section of the unit. See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -1789,9 +1816,9 @@ let
           [DHCPv6]
           ${attrsToSection def.dhcpV6Config}
         ''
-        + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
-          [DHCPv6PrefixDelegation]
-          ${attrsToSection def.dhcpV6PrefixDelegationConfig}
+        + optionalString (def.dhcpPrefixDelegationConfig != { }) ''
+          [DHCPPrefixDelegation]
+          ${attrsToSection def.dhcpPrefixDelegationConfig}
         ''
         + optionalString (def.ipv6AcceptRAConfig != { }) ''
           [IPv6AcceptRA]
@@ -1875,6 +1902,20 @@ in
     };
 
     systemd.network.wait-online = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = lib.mdDoc ''
+          Whether to enable the systemd-networkd-wait-online service.
+
+          systemd-networkd-wait-online can timeout and fail if there are no network interfaces
+          available for it to manage. When systemd-networkd is enabled but a different service is
+          responsible for managing the system's internet connection (for example, NetworkManager or
+          connman are used to manage WiFi connections), this service is unnecessary and can be
+          disabled.
+        '';
+      };
       anyInterface = mkOption {
         description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
@@ -1956,6 +1997,7 @@ in
       };
 
       systemd.services.systemd-networkd-wait-online = {
+        inherit (cfg.wait-online) enable;
         wantedBy = [ "network-online.target" ];
         serviceConfig.ExecStart = [
           ""

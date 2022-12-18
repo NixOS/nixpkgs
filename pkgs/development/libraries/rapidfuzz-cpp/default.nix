@@ -7,18 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidfuzz-cpp";
-  version = "1.3.0";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
     rev = "v${version}";
-    hash = "sha256-LhMubYSq5EO4Pup+mVPQpcXwur/bPz+NZ1CcyqDt6lM=";
+    hash = "sha256-I7MdeLs+J5a57ypgUJIW0/pSFPzK4nZA4ZrVRdKX7J4=";
   };
-
-  patches = [
-    ./dont-fetch-project-options.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -26,6 +22,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals doCheck [
     "-DRAPIDFUZZ_BUILD_TESTING=ON"
+  ];
+
+  CXXFLAGS = lib.optionals stdenv.cc.isClang [
+    # error: no member named 'fill' in namespace 'std'
+    "-include algorithm"
   ];
 
   checkInputs = [

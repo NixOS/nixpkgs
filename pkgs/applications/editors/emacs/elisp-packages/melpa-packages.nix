@@ -277,9 +277,10 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = true;
+          doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
+          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -506,6 +507,16 @@ let
           packageRequires = with self; [ evil highlight ];
         });
 
+        hamlet-mode = super.hamlet-mode.overrideAttrs (attrs: {
+          patches = [
+            # Fix build; maintainer email fails to parse
+            (pkgs.fetchpatch {
+              url = "https://github.com/lightquake/hamlet-mode/commit/253495d1330d6ec88d97fac136c78f57c650aae0.patch";
+              sha256 = "dSxS5yuXzCW96CUyvJWwjkhf1FMGBfiKKoBxeDVdz9Y=";
+            })
+          ];
+        });
+
         helm-rtags = fix-rtags super.helm-rtags;
 
         # tries to write to $HOME
@@ -552,6 +563,13 @@ let
                 'defcustom w3m-command "${w3m}"'
               '';
           });
+        });
+
+        wordnut = super.wordnut.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace wordnut.el \
+              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+          '';
         });
 
         mozc = super.mozc.overrideAttrs (attrs: {

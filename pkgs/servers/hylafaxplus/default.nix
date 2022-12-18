@@ -13,6 +13,7 @@
 , gnugrep
 , gnused
 , libtiff
+, libxcrypt
 , openssl
 , psmisc
 , sharutils
@@ -79,6 +80,7 @@ stdenv.mkDerivation {
     file  # for `file` command
     ghostscript
     libtiff
+    libxcrypt
     openssl
     psmisc  # for `fuser` command
     sharutils  # for `uuencode` command

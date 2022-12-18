@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       enable = true;
       # Also will add a unix domain socket socket API address, see module.
       startWhenNeeded = true;
-      apiAddress = "/ip4/127.0.0.1/tcp/2324";
+      settings.Addresses.API = "/ip4/127.0.0.1/tcp/2324";
       dataDir = "/mnt/ipfs";
     };
   };
@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes.fuse = { ... }: {
     services.kubo = {
       enable = true;
-      apiAddress = "/ip4/127.0.0.1/tcp/2324";
+      settings.Addresses.API = "/ip4/127.0.0.1/tcp/2324";
       autoMount = true;
     };
   };

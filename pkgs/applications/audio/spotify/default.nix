@@ -2,6 +2,9 @@
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
+  # High-DPI support: Spotify's --force-device-scale-factor argument
+  # not added if `null`, otherwise, should be a number.
+, deviceScaleFactor ? null
 }:
 
 let
@@ -67,7 +70,7 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "spotify-unwrapped";
+  pname = "spotify";
   inherit version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
@@ -143,6 +146,9 @@ stdenv.mkDerivation {
       librarypath="${lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         ''${gappsWrapperArgs[@]} \
+        ${lib.optionalString (deviceScaleFactor != null) ''
+          --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
+        ''} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${gnome.zenity}/bin"
 

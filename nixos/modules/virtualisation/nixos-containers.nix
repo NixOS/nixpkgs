@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }@host:
 
 with lib;
 
@@ -8,6 +8,10 @@ let
   configurationDirectoryName = "${configurationPrefix}containers";
   configurationDirectory = "/etc/${configurationDirectoryName}";
   stateDirectory = "/var/lib/${configurationPrefix}containers";
+
+  nixos-container = pkgs.nixos-container.override {
+    inherit stateDirectory configurationDirectory;
+  };
 
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
@@ -138,6 +142,8 @@ let
         fi
       ''}
 
+      export SYSTEMD_NSPAWN_UNIFIED_HIERARCHY=1
+
       # Run systemd-nspawn without startup notification (we'll
       # wait for the container systemd to signal readiness)
       # Kill signal handling means systemd-nspawn will pass a system-halt signal
@@ -248,7 +254,7 @@ let
     ExecReload = pkgs.writeScript "reload-container"
       ''
         #! ${pkgs.runtimeShell} -e
-        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+        ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
           bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
       '';
 
@@ -284,7 +290,6 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-  inherit (config.nixpkgs) localSystem;
   kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
@@ -480,10 +485,13 @@ in
                 merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   modules =
                     let
-                      extraConfig = {
+                      extraConfig = { options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
-                          nixpkgs = { inherit localSystem; };
+                          nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
+                                    then { inherit (host.config.nixpkgs) hostPlatform; }
+                                    else { inherit (host.config.nixpkgs) localSystem; }
+                          ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;
@@ -720,7 +728,7 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql_10;
+                    services.postgresql.package = pkgs.postgresql_14;
 
                     system.stateVersion = "21.05";
                   };
@@ -864,9 +872,7 @@ in
     '';
 
     environment.systemPackages = [
-      (pkgs.nixos-container.override {
-        inherit stateDirectory configurationDirectory;
-      })
+      nixos-container
     ];
 
     boot.kernelModules = [

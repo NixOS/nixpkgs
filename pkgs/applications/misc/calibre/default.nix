@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calibre";
-  version = "6.6.1";
+  version = "6.10.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-jJMHliPTRqiI4Wx5N9qbSryoARcGBisSq6awXIaTk5g=";
+    hash = "sha256-JE5AnaCMfe9mI+qLe1LdbbHAdC5X5wLo/zFhcJLLAhk=";
   };
 
   # https://sources.debian.org/patches/calibre/${version}+dfsg-1
@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
       pycryptodome
       # the following are distributed with calibre, but we use upstream instead
       odfpy
-    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqtwebengine.meta.platforms) [
+    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
       # much of calibre's functionality is usable without a web
       # browser, so we enable building on platforms which qtwebengine
       # does not support by simply omitting qtwebengine.
-      pyqtwebengine
+      pyqt6-webengine
     ] ++ lib.optional (unrarSupport) unrardll
   );
 

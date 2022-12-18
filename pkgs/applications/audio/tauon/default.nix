@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.4.2";
+  version = "7.4.6";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    sha256 = "sha256-fEEu7GqK1leOop3kd1Ci9BAH2bP31jvTOg3DEL8lIF4=";
+    sha256 = "sha256-G3DDr2ON35ctjPkRMJDjnfDHMHMhR3tlTgJ65DXvzwk=";
   };
 
   postUnpack = ''
@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
+    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${version}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.linux;

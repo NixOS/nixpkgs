@@ -11,6 +11,7 @@
 , pam
 , libevent
 , libcap_ng
+, libxcrypt
 , curl
 , nspr
 , bash
@@ -44,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-gEy5EX1/tBGYE7FVrJF+NFZY41ehOBim9t/Oikch4gs=";
+    sha256 = "sha256-9kLctjXpCVZMqP2Z6kSrQ/YHI7TXbBWO2BKXjEWzmLk=";
   };
 
   strictDeps = true;
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     systemd coreutils
     gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    libcap_ng libxcrypt curl nspr nss ldns
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;

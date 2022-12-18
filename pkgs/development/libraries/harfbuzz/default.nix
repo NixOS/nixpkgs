@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , fetchpatch
 , pkg-config
 , glib
@@ -31,28 +31,28 @@
 }:
 
 let
-  version = "5.1.0";
+  version = "5.3.1";
   inherit (lib) optional optionals optionalString;
-  mesonFeatureFlag = opt: b:
-    "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 
 stdenv.mkDerivation {
   pname = "harfbuzz${optionalString withIcu "-icu"}";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "harfbuzz";
-    repo = "harfbuzz";
-    rev = version;
-    sha256 = "sha256-K6iScmg1vNfwb1UYqtXsnijLVpcC+am2ZL+W5bLFzsI=";
+  src = fetchurl {
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    sha256 = "sha256-Smzgl7dagSH6zEuoO1sIO/7GV/RbADzVo0JPKua0Q00=";
   };
 
   patches = [
+    # Pick upstream patch for exported symbol test failing on darwin
+    # https://github.com/harfbuzz/harfbuzz/issues/3850
     (fetchpatch {
-      name = "aarch64-test-narrowing.diff";
-      url = "https://github.com/harfbuzz/harfbuzz/commit/04d28d94e576aab099891e6736fd0088dfac3366.diff";
-      sha256 = "sha256-099GP8t1G0kyYl79A6xJhfyrs3WXYitvn+He7sEz+Oo=";
+      name = "harfbuzz-fix-check-symbol-tests-lto-and-darwin.patch";
+      url = "https://github.com/harfbuzz/harfbuzz/commit/b0b7a65388da25ae3fa01e969ad6abc67eed4f49.patch";
+      sha256 = "0my064r88pikw6q70hbgf6hwfkw544b9f5ai73qhn2a3c83jqn06";
     })
   ];
 

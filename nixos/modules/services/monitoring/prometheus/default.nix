@@ -3,15 +3,13 @@
 with lib;
 
 let
-  json = pkgs.formats.json { };
+  yaml = pkgs.formats.yaml { };
   cfg = config.services.prometheus;
   checkConfigEnabled =
     (lib.isBool cfg.checkConfig && cfg.checkConfig)
       || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
-
-  prometheusYmlOut = "${workingDir}/prometheus-substituted.yaml";
 
   triggerReload = pkgs.writeShellScriptBin "trigger-reload-prometheus" ''
     PATH="${makeBinPath (with pkgs; [ systemd ])}"
@@ -38,7 +36,7 @@ let
         promtool ${what} $out
       '' else file;
 
-  generatedPrometheusYml = json.generate "prometheus.yml" promConfig;
+  generatedPrometheusYml = yaml.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
@@ -73,7 +71,8 @@ let
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
   ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
-    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
+    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
+    ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
@@ -1563,13 +1562,7 @@ in
 
   options.services.prometheus = {
 
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Enable the Prometheus monitoring daemon.
-      '';
-    };
+    enable = mkEnableOption (lib.mdDoc "Prometheus monitoring daemon");
 
     package = mkOption {
       type = types.package;
@@ -1725,6 +1718,15 @@ in
       '';
     };
 
+    webConfigFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = lib.mdDoc ''
+        Specifies which file should be used as web.config.file and be passed on startup.
+        See https://prometheus.io/docs/prometheus/latest/configuration/https/ for valid options.
+      '';
+    };
+
     checkConfig = mkOption {
       type = with types; either bool (enum [ "syntax-only" ]);
       default = true;
@@ -1796,6 +1798,33 @@ in
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
+        # Hardening
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        DeviceAllow = [ "/dev/null rw" ];
+        DevicePolicy = "strict";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
       };
     };
     # prometheus-config-reload will activate after prometheus. However, what we

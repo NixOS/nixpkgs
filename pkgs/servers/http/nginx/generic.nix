@@ -32,6 +32,9 @@ with lib;
 
 let
 
+  moduleNames = map (mod: mod.name or (throw "The nginx module with source ${toString mod.src} does not have a `name` attribute. This prevents duplicate module detection and is no longer supported."))
+    modules;
+
   mapModules = attrPath: flip concatMap modules
     (mod:
       let supports = mod.supports or (_: true);
@@ -40,6 +43,9 @@ let
         else throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!");
 
 in
+
+assert assertMsg (unique moduleNames == moduleNames)
+  "nginx: duplicate modules: ${concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
 stdenv.mkDerivation {
   inherit pname;
@@ -79,11 +85,11 @@ stdenv.mkDerivation {
     "--http-log-path=/var/log/nginx/access.log"
     "--error-log-path=/var/log/nginx/error.log"
     "--pid-path=/var/log/nginx/nginx.pid"
-    "--http-client-body-temp-path=/var/cache/nginx/client_body"
-    "--http-proxy-temp-path=/var/cache/nginx/proxy"
-    "--http-fastcgi-temp-path=/var/cache/nginx/fastcgi"
-    "--http-uwsgi-temp-path=/var/cache/nginx/uwsgi"
-    "--http-scgi-temp-path=/var/cache/nginx/scgi"
+    "--http-client-body-temp-path=/tmp/nginx_client_body"
+    "--http-proxy-temp-path=/tmp/nginx_proxy"
+    "--http-fastcgi-temp-path=/tmp/nginx_fastcgi"
+    "--http-uwsgi-temp-path=/tmp/nginx_uwsgi"
+    "--http-scgi-temp-path=/tmp/nginx_scgi"
   ] ++ optionals withDebug [
     "--with-debug"
   ] ++ optionals withKTLS [
@@ -170,7 +176,7 @@ stdenv.mkDerivation {
   passthru = {
     modules = modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;

@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
-, libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libjpeg
+, imake
+, gccmakedep
+, libXaw
+, libXext
+, libXmu
+, libXp
+, libXpm
+, perl
+, xauth
+, fontDirectories
+, openssh
+}:
 
 stdenv.mkDerivation rec {
   pname = "tightvnc";
@@ -22,8 +37,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
-                  libXpm libXp xauth openssh ];
+  buildInputs = [
+    zlib
+    libjpeg
+    imake
+    gccmakedep
+    libXaw
+    libXext
+    libXmu
+    libXp
+    libXpm
+    xauth
+    openssh
+  ];
 
   postPatch = ''
     fontPath=

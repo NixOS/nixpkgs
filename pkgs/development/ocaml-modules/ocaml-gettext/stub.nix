@@ -4,7 +4,7 @@ buildDunePackage rec {
 
   pname = "gettext-stub";
 
-  inherit (ocaml_gettext) src version useDune2;
+  inherit (ocaml_gettext) src version;
 
   buildInputs = [ dune-configurator ];
 

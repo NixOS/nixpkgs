@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "0.1.88";
+  version = "0.1.89";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-VnVyTUOtoplt0Zd5VkCe/h85/Mqcz7lgeIiZVD+Vrxk=";
+    sha256 = "sha256-xPF8HW4QFXLLjg2HO5Pl+uQ44XCdAHc6koVpVXxN6dE=";
   };
 
-  cargoSha256 = "sha256-4D63OEz7/2pJGPXiFEwl6ggaV2DNZcoN//BM7H0Sp7I=";
+  cargoSha256 = "sha256-dDSmiMwDbVDfStXamQvOMBBO5MiuDFhgzWPx0oYwzcM=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -7,7 +7,7 @@
 
   # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin
-, readline81 ? null
+, readline ? null
 , withDocs ? false
 , texinfo ? null
 , forFHSEnv ? false
@@ -15,7 +15,7 @@
 
 with lib;
 
-assert interactive -> readline81 != null;
+assert interactive -> readline != null;
 assert withDocs -> texinfo != null;
 assert stdenv.hostPlatform.isDarwin -> binutils != null;
 let
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
     ++ optional withDocs texinfo
     ++ optional stdenv.hostPlatform.isDarwin binutils;
 
-  buildInputs = optional interactive readline81;
+  buildInputs = optional interactive readline;
 
   enableParallelBuilding = true;
 
-  makeFlags = optional stdenv.hostPlatform.isCygwin [
+  makeFlags = optionals stdenv.hostPlatform.isCygwin [
     "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
     "SHOBJ_LIBS=-lbash"
   ];

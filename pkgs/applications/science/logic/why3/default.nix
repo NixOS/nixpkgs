@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, fetchpatch, lib, stdenv
+{ callPackage, fetchurl, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation rec {

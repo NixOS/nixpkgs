@@ -31,6 +31,7 @@ with pkgs;
 
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
+  fetchpatch2 = callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; };
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
@@ -67,6 +68,7 @@ with pkgs;
     references = callPackage ../build-support/trivial-builders/test/references.nix {};
     overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
     concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
+    linkFarm = callPackage ../build-support/trivial-builders/test/link-farm.nix {};
   };
 
   writers = callPackage ../build-support/writers/test.nix {};
@@ -74,6 +76,8 @@ with pkgs;
   testers = callPackage ../build-support/testers/test/default.nix {};
 
   dhall = callPackage ./dhall { };
+
+  cue-validation = callPackage ./cue {};
 
   coq = callPackage ./coq {};
 

@@ -7,6 +7,7 @@
 , libpng
 , libjpeg
 , dav1d
+, libyuv
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     dav1d
+    libyuv
   ];
 
   meta = with lib; {

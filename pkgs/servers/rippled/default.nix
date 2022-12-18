@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
-, openssl, boost, grpc, abseil-cpp, protobuf, libnsl }:
+, openssl, boost, grpc, protobuf, libnsl }:
 
 let
   sqlite3 = fetchurl rec {
@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
 
   nativeBuildInputs = [ pkg-config cmake git ];
-  buildInputs = [ openssl openssl.dev boostSharedStatic grpc abseil-cpp protobuf libnsl ];
+  buildInputs = [ openssl openssl.dev boostSharedStatic grpc protobuf libnsl ];
 
   preConfigure = ''
     export HOME=$PWD

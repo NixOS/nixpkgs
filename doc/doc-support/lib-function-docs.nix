@@ -17,11 +17,14 @@ with pkgs; stdenv.mkDerivation {
     mkdir -p $out
     ln -s ${locationsXml} $out/locations.xml
 
+    docgen asserts 'Assert functions'
+    docgen attrsets 'Attribute-set functions'
     docgen strings 'String manipulation functions'
     docgen trivial 'Miscellaneous functions'
     docgen lists 'List manipulation functions'
     docgen debug 'Debugging functions'
     docgen options 'NixOS / nixpkgs option handling'
+    docgen filesystem 'Filesystem functions'
     docgen sources 'Source filtering functions'
   '';
 }

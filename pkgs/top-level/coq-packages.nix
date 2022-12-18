@@ -1,6 +1,7 @@
 { lib, stdenv, fetchzip
 , callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
-, ocamlPackages_4_10, ocamlPackages_4_12, fetchpatch, makeWrapper, coq2html
+, ocamlPackages_4_10, ocamlPackages_4_12, ocamlPackages_4_14
+, fetchpatch, makeWrapper, coq2html
 }@args:
 let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
@@ -81,6 +82,7 @@ let
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
       metacoq-template-coq = self.metacoq.template-coq;
@@ -130,6 +132,7 @@ let
       ocamlPackages_4_09
       ocamlPackages_4_10
       ocamlPackages_4_12
+      ocamlPackages_4_14
     ;
   };
 in rec {
@@ -171,7 +174,7 @@ in rec {
   coqPackages_8_14 = mkCoqPackages coq_8_14;
   coqPackages_8_15 = mkCoqPackages coq_8_15;
   coqPackages_8_16 = mkCoqPackages coq_8_16;
-  coqPackages = recurseIntoAttrs coqPackages_8_15;
+  coqPackages = recurseIntoAttrs coqPackages_8_16;
   coq = coqPackages.coq;
 
 }

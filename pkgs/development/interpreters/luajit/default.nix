@@ -127,6 +127,8 @@ stdenv.mkDerivation rec {
     homepage = "http://luajit.org";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
+    # See https://github.com/LuaJIT/LuaJIT/issues/628
+    badPlatforms = [ "riscv64-linux" "riscv64-linux" ];
     maintainers = with maintainers; [ thoughtpolice smironov vcunat lblasc ];
   } // extraMeta;
 }

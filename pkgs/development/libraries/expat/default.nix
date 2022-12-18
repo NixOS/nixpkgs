@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.4.9";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bowHKP5cfNP5OmrM5DBGxeRzbHtLaOAy6TUNqg78A1Q=";
+    sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
   };
 
   strictDeps = true;

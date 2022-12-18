@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyx";
-  version = "0.15";
+  version = "0.16";
   disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "PyX";
     inherit version;
-    sha256 = "0xs9brmk9fvfmnsvi0haf13xwz994kv9afznzfpg9dkzbq6b1hqg";
+    sha256 = "sha256-TY4+RxzT6am9E9UIbN98CvGww/PhledPX2MxjcQKZtg=";
   };
 
   # No tests in archive

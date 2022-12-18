@@ -1,25 +1,32 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "jsonnet-language-server";
-  version = "0.9.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "jsonnet-language-server";
-    rev = "v${version}";
-    sha256 = "sha256-JNRMV52sSA45lp1UdJ4wBGrhlGIFhYHhgZU0lop1HcI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oPItt1v4wK0W0lSots3hoq5A1ooCRwzJV8cNYV+SBb4=";
   };
 
-  vendorSha256 = "sha256-tsVevkMHuCv70A9Ohg9L+ghH5+v52X4sToI4bMlDzzo=";
+  vendorHash = "sha256-ZyTo79M5nqtqrtTOGanzgHcnSvqCKACacNBWzhYG5nY=";
 
   ldflags = [
-    "-s -w -X 'main.version=${version}'"
+    "-s"
+    "-w"
+    "-X 'main.version=${version}'"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/grafana/jsonnet-language-server";
     description = "Language Server Protocol server for Jsonnet";
+    homepage = "https://github.com/grafana/jsonnet-language-server";
+    changelog = "https://github.com/grafana/jsonnet-language-server/releases/tag/v${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ hardselius ];
   };

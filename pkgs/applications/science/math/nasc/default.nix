@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, fetchpatch
 , python3
 , meson
 , ninja

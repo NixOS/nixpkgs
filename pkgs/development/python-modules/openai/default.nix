@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.23.1";
+  version = "0.25.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.1";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "v${version}";
-    hash = "sha256-4RdER6ecvHGXTLZ1GnBNI1hIETI8O/t+kuOXiQhMigs=";
+    hash = "sha256-bwv7lpdDYlk+y3KBjv7cSvaGr3v02riNCUfPFh6yv1I=";
   };
 
   propagatedBuildInputs = [
@@ -72,7 +72,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires a real API key
     "openai/tests/test_endpoints.py"
+    # openai: command not found
     "openai/tests/test_file_cli.py"
+    "openai/tests/test_long_examples_validator.py"
   ];
 
   meta = with lib; {

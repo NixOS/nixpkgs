@@ -113,7 +113,7 @@ self = stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     boehmgc
-  ] ++ lib.optional (atLeast27) [
+  ] ++ lib.optionals (atLeast27) [
     nlohmann_json
   ];
 

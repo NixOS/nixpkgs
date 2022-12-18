@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
-    ++ lib.optional lessSecure [ "--with-secure" ];
+    ++ lib.optionals lessSecure [ "--with-secure" ];
 
   buildInputs = [ ncurses ];
 

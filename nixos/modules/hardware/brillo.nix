@@ -8,12 +8,11 @@ in
   options = {
     hardware.brillo = {
       enable = mkEnableOption (lib.mdDoc ''
-        Enable brillo in userspace.
-        This will allow brightness control from users in the video group.
+        brillo in userspace.
+        This will allow brightness control from users in the video group
       '');
     };
   };
-
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.brillo ];

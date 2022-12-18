@@ -2,7 +2,7 @@
 , python3
 , fetchFromGitHub
 , platformio
-, esptool
+, esptool_3
 , git
 }:
 
@@ -15,14 +15,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.9.3";
+  version = "2022.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xrfNdJD8c0PbtipGTQNSCcXaWu4TEyER6lHtREdVcFI=";
+    hash = "sha256-gDAwZhfkXMqU4dbowpPhNl52Kg3Kx9lgBNzhzkQPrN0=";
   };
 
   postPatch = ''
@@ -55,6 +55,7 @@ with python.pkgs; buildPythonApplication rec {
     protobuf
     pyserial
     pyyaml
+    requests
     tornado
     tzdata
     tzlocal
@@ -65,7 +66,7 @@ with python.pkgs; buildPythonApplication rec {
     # platformio is used in esphomeyaml/platformio_api.py
     # esptool is used in esphomeyaml/__main__.py
     # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool_3 git ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 

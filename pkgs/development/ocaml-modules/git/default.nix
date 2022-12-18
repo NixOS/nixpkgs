@@ -8,13 +8,13 @@
 
 buildDunePackage rec {
   pname = "git";
-  version = "3.9.1";
+  version = "3.10.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
-    sha256 = "sha256-OyeMW5gsq4fMEWRmhzPq2qardFZtMjoQk6mMKz5+Ds4=";
+    sha256 = "sha256-slUzAT4qwPzUNzHMbib/ArxaGzcMFl8tg0ynq1y5U1M=";
   };
 
   # remove changelog for the carton package

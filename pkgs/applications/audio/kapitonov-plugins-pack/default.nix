@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, gnome, ladspa-sdk, libxcb, lv2, xcbutilwm
+, boost, cairo, fftw, ladspa-sdk, libxcb, lv2, xcbutilwm
 , zita-convolver, zita-resampler
  }:
 

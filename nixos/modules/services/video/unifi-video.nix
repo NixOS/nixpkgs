@@ -148,7 +148,7 @@ in
 
     openFirewall = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = lib.mdDoc ''
         Whether or not to open the required ports on the firewall.
       '';

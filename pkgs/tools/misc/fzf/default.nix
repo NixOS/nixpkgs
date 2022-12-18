@@ -1,21 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
-
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, writeText
+, runtimeShell
+, installShellFiles
+, ncurses
+, perl
+}:
 buildGoModule rec {
   pname = "fzf";
-  version = "0.34.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xM2X+X4qR5H1MqtsQK34Omyt35kEUntn3TqlJ2vWcwg=";
+    sha256 = "sha256-Zn//z66apkhUd2RvLZSV8PqmocQdVmPngfyK4jmWsfs=";
   };
 
   vendorSha256 = "sha256-EjcOcrADHdwTCGimv2BRvbjqSZxz4isWhGmPbWQ7YDE=";
 
   outputs = [ "out" "man" ];
 
-  fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ ncurses ];
 
@@ -38,22 +45,19 @@ buildGoModule rec {
       --replace " perl -n " " ${perl}/bin/perl -n "
   '';
 
-  preInstall = ''
-    mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
-    cp shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    cp ${fishHook} $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-  '';
-
   postInstall = ''
-    cp bin/fzf-tmux $out/bin
+    install bin/fzf-tmux $out/bin
 
-    mkdir -p $man/share/man
-    cp -r man/man1 $man/share/man
+    installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
-    mkdir -p $out/share/vim-plugins/${pname}
-    cp -r plugin $out/share/vim-plugins/${pname}
+    install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
 
-    cp -R shell $out/share/fzf
+    # Install shell integrations
+    install -D shell/* -t $out/share/fzf/
+    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    mkdir -p $out/share/fish/vendor_conf.d
+    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell

@@ -71,6 +71,7 @@ buildPythonPackage rec {
     "test_truesendall_after_mocket_session"
     "test_real_request_session"
     "test_asyncio_record_replay"
+    "test_gethostbyname"
   ];
 
   pythonImportsCheck = [ "mocket" ];

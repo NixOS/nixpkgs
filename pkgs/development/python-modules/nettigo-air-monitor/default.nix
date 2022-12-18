@@ -1,10 +1,11 @@
 { lib
 , aiohttp
 , aioresponses
+, aqipy-atmotech
 , buildPythonPackage
 , dacite
 , fetchFromGitHub
-, aqipy-atmotech
+, orjson
 , pytest-asyncio
 , pytest-error-for-skips
 , pytestCheckHook
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "1.4.2";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,13 +23,14 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    hash = "sha256-UbknJ+dX+4kzfe6/gg/Nj1Ay8YXtIRj203B6NkhGVys=";
+    hash = "sha256-86YEpn3rI6Y4v0pcNk+/4tHCUzXpXZN5xwV9M/1gZ8U=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    dacite
     aqipy-atmotech
+    dacite
+    orjson
   ];
 
   checkInputs = [
@@ -45,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";
     homepage = "https://github.com/bieniu/nettigo-air-monitor";
+    changelog = "https://github.com/bieniu/nettigo-air-monitor/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

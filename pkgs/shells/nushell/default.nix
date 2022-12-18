@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , runCommand
 , rustPlatform
 , openssl
@@ -24,16 +25,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.68.1";
+  version = "0.72.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-PE6UewAE7z0Ie5aFocDK3Qu0Y4ppuPtpD6tDnYfM11Y=";
+    sha256 = "sha256-OVJr+usN+47yBHFAy94rIVlU2F+Klo6xdrV2MwUoKUE=";
   };
 
-  cargoSha256 = "sha256-7guFkR/paL8jk5YwiRNMbWCyA6DqOaLGTmbWHAWDxRw=";
+  patches = [
+    # https://github.com/nushell/nushell/pull/7423: make tests
+    # more resilient (less dependent on env).
+    # Already merged upstream, so can be dropped in the next version
+    (fetchpatch {
+      url = "https://github.com/nushell/nushell/commit/87631e7068bfc6635d5b31413856f0a791994527.patch";
+      hash = "sha256-9vrcmBe5gXLLodynb3jyarwi/a0YiurJ6WsDxXl2vjo=";
+    })
+  ];
+
+  cargoSha256 = "sha256-v6mPr+gOT64rKYuog+hS7/AqUZDailoOBXX3Sfeo+sk=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];

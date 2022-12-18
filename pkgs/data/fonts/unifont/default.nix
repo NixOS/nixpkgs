@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, mkfontscale
-, libfaketime, fonttosfnt
+{ lib, stdenv, fetchurl, xorg
+, libfaketime
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-77rkcU0YajAVugWHnGscaFvcFTgWm+1WPLknQZvTjN0=";
   };
 
-  nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
+  nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
 
   dontUnpack = true;
 

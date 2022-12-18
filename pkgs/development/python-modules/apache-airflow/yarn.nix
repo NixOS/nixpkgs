@@ -7122,14 +7122,6 @@
       };
     }
     {
-      name = "json5___json5_2.2.0.tgz";
-      path = fetchurl {
-        name = "json5___json5_2.2.0.tgz";
-        url  = "https://registry.yarnpkg.com/json5/-/json5-2.2.0.tgz";
-        sha512 = "f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==";
-      };
-    }
-    {
       name = "json5___json5_2.2.1.tgz";
       path = fetchurl {
         name = "json5___json5_2.2.1.tgz";
@@ -7242,11 +7234,11 @@
       };
     }
     {
-      name = "loader_utils___loader_utils_1.4.0.tgz";
+      name = "loader_utils___loader_utils_1.4.1.tgz";
       path = fetchurl {
-        name = "loader_utils___loader_utils_1.4.0.tgz";
-        url  = "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.4.0.tgz";
-        sha512 = "qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA==";
+        name = "loader_utils___loader_utils_1.4.1.tgz";
+        url  = "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.4.1.tgz";
+        sha512 = "1Qo97Y2oKaU+Ro2xnDMR26g1BwMT29jNbem1EvcujW2jqt+j5COXyscjM7bLQkM9HaxI7pkWeW7gnI072yMI9Q==";
       };
     }
     {
@@ -7671,6 +7663,14 @@
         name = "minimist_options___minimist_options_4.1.0.tgz";
         url  = "https://registry.yarnpkg.com/minimist-options/-/minimist-options-4.1.0.tgz";
         sha512 = "Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==";
+      };
+    }
+    {
+      name = "minimist___minimist_1.2.7.tgz";
+      path = fetchurl {
+        name = "minimist___minimist_1.2.7.tgz";
+        url  = "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz";
+        sha512 = "bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==";
       };
     }
     {

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitea
+, fetchFromGitHub
 , rustPlatform
 , pkg-config
 , asciidoctor
@@ -12,21 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.28.0";
+  version = "0.30.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "flausch";
+  src = fetchFromGitHub {
+    owner = "lunaryorn";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-l64gRoWYYLbPA0n6vNQf14CCUtnkfMnQdqbetIbWvBU=";
+    sha256 = "sha256-tVkRHyWTpl6dubSDtVJVYkHQOfZDR75vUWmI0lp9tI0=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-MCldDRleFfl4UrITuMEmLo0JyR+eoi6S6zGvFOMnIBE=";
+  cargoSha256 = "sha256-cinO426Q6TO6a1i63ff892kicnPxNrs6tJFpqPYuVWc=";
 
   checkInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "cat for markdown";
-    homepage = "https://codeberg.org/flausch/mdcat";
+    homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

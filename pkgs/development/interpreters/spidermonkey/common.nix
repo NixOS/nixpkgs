@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     inherit hash;
   };
 
-  patches = lib.optional (lib.versionOlder version "91") [
+  patches = lib.optionals (lib.versionOlder version "91") [
     # Fix build failure on armv7l using Debian patch
     # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
     (fetchpatch {

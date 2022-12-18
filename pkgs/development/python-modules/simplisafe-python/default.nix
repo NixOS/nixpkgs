@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2022.07.1";
+  version = "2022.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-mbdL1fX86OPMw6I7Lk7NDhm2kE6/iamYbyvYvJrkwLQ=";
+    hash = "sha256-oajFn/aMZvDpagLKadQ0Ez1uJhfUaJK4Rv6IUq3lRVE=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
     license = with licenses; [ mit ];

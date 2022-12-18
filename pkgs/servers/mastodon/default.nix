@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "sha256-2NSibx026ENAqphGGhNoLwUldWTEPbDBrYu3hgeRlnM=";
+      sha256 = "sha256-fuU92fydoazSXBHwA+DG//gRgWVYQ1M3m2oNS2iwv4I=";
     };
 
     nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
@@ -121,6 +121,6 @@ stdenv.mkDerivation rec {
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ happy-river erictapen izorkin ];
+    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
   };
 }

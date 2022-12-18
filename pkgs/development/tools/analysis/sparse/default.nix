@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 libxml2 llvm perl sqlite ];
   doCheck = true;
-  buildFlags = "GCC_BASE:=${GCC_BASE}";
+  buildFlags = [ "GCC_BASE:=${GCC_BASE}" ];
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };

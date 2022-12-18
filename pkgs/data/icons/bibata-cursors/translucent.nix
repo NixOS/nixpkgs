@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Silicasandwhich";
     repo = "Bibata_Cursor_Translucent";
     rev = "v${version}";
-    sha256 = "1ddnwqkxricnd731blckcxvksbgql8k4pfiz65591p81n5095k8y";
+    sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
   };
 
   installPhase = ''

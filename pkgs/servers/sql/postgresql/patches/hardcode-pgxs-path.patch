@@ -1,17 +1,14 @@
---- a/src/bin/pg_config/pg_config.c
-+++ b/src/bin/pg_config/pg_config.c
-@@ -220,11 +220,13 @@ show_sysconfdir(bool all)
- static void
- show_pgxs(bool all)
- {
--	char		path[MAXPGPATH];
-+	char		path[MAXPGPATH] = "HARDCODED_PGXS_PATH";
- 
- 	if (all)
- 		printf("PGXS = ");
-+  /* commented out to be able to point to nix $out path
- 	get_pkglib_path(mypath, path);
-+  */
+diff -Naur postgresql-9.6.1-orig/src/common/config_info.c postgresql-9.6.1/src/common/config_info.c
+--- postgresql-9.6.1-orig/src/common/config_info.c	2016-11-22 21:39:29.231929261 +0100
++++ postgresql-9.6.1/src/common/config_info.c	2016-11-22 23:36:53.685163543 +0100
+@@ -118,7 +118,10 @@
+ 	i++;
+
+ 	configdata[i].name = pstrdup("PGXS");
++	strlcpy(path, "HARDCODED_PGXS_PATH", sizeof(path));
++/* commented out to be able to point to nix $out path
+ 	get_pkglib_path(my_exec_path, path);
++*/
  	strlcat(path, "/pgxs/src/makefiles/pgxs.mk", sizeof(path));
  	cleanup_path(path);
- 	printf("%s\n", path);
+ 	configdata[i].setting = pstrdup(path);

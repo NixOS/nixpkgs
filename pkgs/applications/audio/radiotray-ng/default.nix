@@ -93,6 +93,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

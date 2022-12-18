@@ -30,7 +30,7 @@ in
 {
   pdfstudioviewer = callPackage ./common.nix rec {
     inherit desktopName pname program year;
-    version = "${year}.0.2";
+    version = "${year}.1.0";
     longDescription = ''
       PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
     '';
@@ -56,10 +56,10 @@ in
 
   pdfstudio2022 = callPackage ./common.nix rec {
     inherit desktopName longDescription pname program year;
-    version = "${year}.0.2";
+    version = "${year}.1.1";
     src = fetchurl {
-      url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64_adoptium17.deb";
-      sha256 = "sha256-fWZXCyizP++pkmC+UpgCzGvb0QrNs4RI6iC4ZBL8hLE=";
+      url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
+      sha256 = "sha256-OPmNhnkeSvHZZbh4SaMU/vDSLrDdTmMmuSGP2HyzVm4=";
     };
     extraBuildInputs = [
       libgccjit #for libstdc++.so.6 and libgomp.so.1

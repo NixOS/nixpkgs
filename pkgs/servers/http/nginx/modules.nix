@@ -1,8 +1,9 @@
-{ fetchFromGitHub, fetchFromGitLab, lib, pkgs }:
+{ config, fetchFromGitHub, fetchFromGitLab, fetchhg, lib, pkgs }:
 
 let
 
   http_proxy_connect_module_generic = patchName: rec {
+    name = "http_proxy_connect";
     src = fetchFromGitHub {
       name = "http_proxy_connect_module_generic";
       owner = "chobits";
@@ -10,7 +11,6 @@ let
       rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
       sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
     };
-
     patches = [
       "${src}/patch/${patchName}.patch"
     ];
@@ -18,11 +18,12 @@ let
 
 in
 
-{
+let self = {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
   akamai-token-validate = {
+    name = "akamai-token-validate";
     src = fetchFromGitHub {
       name = "akamai-token-validate";
       owner = "kaltura";
@@ -34,6 +35,7 @@ in
   };
 
   auth-a2aclr = {
+    name = "auth-a2aclr";
     src = fetchFromGitLab {
       name = "auth-a2aclr";
       owner = "arpa2";
@@ -57,6 +59,7 @@ in
   };
 
   aws-auth = {
+    name = "aws-auth";
     src = fetchFromGitHub {
       name = "aws-auth";
       owner = "anomalizer";
@@ -67,6 +70,7 @@ in
   };
 
   brotli = {
+    name = "brotli";
     src = let gitsrc = pkgs.fetchFromGitHub {
       name = "brotli";
       owner = "google";
@@ -83,6 +87,7 @@ in
   };
 
   cache-purge = {
+    name = "cache-purge";
     src = fetchFromGitHub {
       name = "cache-purge";
       owner = "nginx-modules";
@@ -93,6 +98,7 @@ in
   };
 
   coolkit = {
+    name = "coolkit";
     src = fetchFromGitHub {
       name = "coolkit";
       owner = "FRiCKLE";
@@ -103,6 +109,7 @@ in
   };
 
   dav = {
+    name = "dav";
     src = fetchFromGitHub {
       name = "dav";
       owner = "arut";
@@ -114,6 +121,7 @@ in
   };
 
   develkit = {
+    name = "develkit";
     src = fetchFromGitHub {
       name = "develkit";
       owner = "vision5";
@@ -124,6 +132,7 @@ in
   };
 
   echo = {
+    name = "echo";
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
@@ -134,6 +143,7 @@ in
   };
 
   fancyindex = {
+    name = "fancyindex";
     src = fetchFromGitHub {
       name = "fancyindex";
       owner = "aperezdc";
@@ -147,6 +157,7 @@ in
   };
 
   fluentd = {
+    name = "fluentd";
     src = fetchFromGitHub {
       name = "fluentd";
       owner = "fluent";
@@ -157,6 +168,7 @@ in
   };
 
   geoip2 = {
+    name = "geoip2";
     src = fetchFromGitHub {
       name = "geoip2";
       owner = "leev";
@@ -180,6 +192,7 @@ in
   };
 
   ipscrub = {
+    name = "ipscrub";
     src = fetchFromGitHub
       {
         name = "ipscrub";
@@ -192,6 +205,7 @@ in
   };
 
   limit-speed = {
+    name = "limit-speed";
     src = fetchFromGitHub {
       name = "limit-speed";
       owner = "yaoweibin";
@@ -202,6 +216,7 @@ in
   };
 
   live = {
+    name = "live";
     src = fetchFromGitHub {
       name = "live";
       owner = "arut";
@@ -212,6 +227,7 @@ in
   };
 
   lua = {
+    name = "lua";
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
@@ -228,6 +244,7 @@ in
   };
 
   lua-upstream = {
+    name = "lua-upstream";
     src = fetchFromGitHub {
       name = "lua-upstream";
       owner = "openresty";
@@ -240,14 +257,7 @@ in
   };
 
   modsecurity = {
-    src = "${pkgs.modsecurity_standalone.nginx}/nginx/modsecurity";
-    inputs = [ pkgs.curl pkgs.apr pkgs.aprutil pkgs.apacheHttpd pkgs.yajl ];
-    preConfigure = ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.aprutil.dev}/include/apr-1 -I${pkgs.apacheHttpd.dev}/include -I${pkgs.apr.dev}/include/apr-1 -I${pkgs.yajl}/include"
-    '';
-  };
-
-  modsecurity-nginx = {
+    name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
       owner = "SpiderLabs";
@@ -260,6 +270,7 @@ in
   };
 
   moreheaders = {
+    name = "moreheaders";
     src = fetchFromGitHub {
       name = "moreheaders";
       owner = "openresty";
@@ -270,6 +281,7 @@ in
   };
 
   mpeg-ts = {
+    name = "mpeg-ts";
     src = fetchFromGitHub {
       name = "mpeg-ts";
       owner = "arut";
@@ -280,17 +292,41 @@ in
   };
 
   naxsi = {
-    src = fetchFromGitHub
-      {
-        name = "naxsi";
-        owner = "nbs-system";
-        repo = "naxsi";
-        rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
-        sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
-      } + "/naxsi_src";
+    name = "naxsi";
+    src = fetchFromGitHub {
+      name = "naxsi";
+      owner = "nbs-system";
+      repo = "naxsi";
+      rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
+      sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
+    } + "/naxsi_src";
+  };
+
+  njs = rec {
+    name = "njs";
+    src = fetchhg {
+      url = "https://hg.nginx.org/njs";
+      rev = "0.7.8";
+      sha256 = "sha256-jsR8EOeW8tAo2utKznuUaCG4hK0oU0ZJSnnGmI5HUDk=";
+      name = "nginx-njs";
+    };
+
+    # njs module sources have to be writable during nginx build, so we copy them
+    # to a temporary directory and change the module path in the configureFlags
+    preConfigure = ''
+      NJS_SOURCE_DIR=$(readlink -m "$TMPDIR/${src}")
+      mkdir -p "$(dirname "$NJS_SOURCE_DIR")"
+      cp --recursive "${src}" "$NJS_SOURCE_DIR"
+      chmod -R u+rwX,go+rX "$NJS_SOURCE_DIR"
+      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"}"
+      unset NJS_SOURCE_DIR
+    '';
+
+    inputs = [ pkgs.which ];
   };
 
   opentracing = {
+    name = "opentracing";
     src =
       let src' = fetchFromGitHub {
         name = "opentracing";
@@ -331,12 +367,14 @@ in
         '';
     in
     {
+      name = "pagespeed";
       src = ngx_pagespeed;
       inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
       allowMemoryWriteExecute = true;
     };
 
   pam = {
+    name = "pam";
     src = fetchFromGitHub {
       name = "pam";
       owner = "sto";
@@ -348,6 +386,7 @@ in
   };
 
   pinba = {
+    name = "pinba";
     src = fetchFromGitHub {
       name = "pinba";
       owner = "tony2001";
@@ -358,6 +397,7 @@ in
   };
 
   push-stream = {
+    name = "push-stream";
     src = fetchFromGitHub {
       name = "push-stream";
       owner = "wandenberg";
@@ -368,6 +408,7 @@ in
   };
 
   rtmp = {
+    name = "rtmp";
     src = fetchFromGitHub {
       name = "rtmp";
       owner = "arut";
@@ -378,6 +419,7 @@ in
   };
 
   secure-token = {
+    name = "secure-token";
     src = fetchFromGitHub {
       name = "secure-token";
       owner = "kaltura";
@@ -389,6 +431,7 @@ in
   };
 
   set-misc = {
+    name = "set-misc";
     src = fetchFromGitHub {
       name = "set-misc";
       owner = "openresty";
@@ -399,6 +442,7 @@ in
   };
 
   shibboleth = {
+    name = "shibboleth";
     src = fetchFromGitHub {
       name = "shibboleth";
       owner = "nginx-shib";
@@ -409,6 +453,7 @@ in
   };
 
   sla = {
+    name = "sla";
     src = fetchFromGitHub {
       name = "sla";
       owner = "goldenclone";
@@ -419,6 +464,7 @@ in
   };
 
   slowfs-cache = {
+    name = "slowfs-cache";
     src = fetchFromGitHub {
       name = "slowfs-cache";
       owner = "FRiCKLE";
@@ -429,6 +475,7 @@ in
   };
 
   sorted-querystring = {
+    name = "sorted-querystring";
     src = fetchFromGitHub {
       name = "sorted-querystring";
       owner = "wandenberg";
@@ -439,6 +486,7 @@ in
   };
 
   spnego-http-auth = {
+    name = "spnego-http-auth";
     src = fetchFromGitHub {
       name = "spnego-http-auth";
       owner = "stnoonan";
@@ -449,6 +497,7 @@ in
   };
 
   statsd = {
+    name = "statsd";
     src = fetchFromGitHub {
       name = "statsd";
       owner = "harvesthq";
@@ -459,6 +508,7 @@ in
   };
 
   stream-sts = {
+    name = "stream-sts";
     src = fetchFromGitHub {
       name = "stream-sts";
       owner = "vozlt";
@@ -469,6 +519,7 @@ in
   };
 
   sts = {
+    name = "sts";
     src = fetchFromGitHub {
       name = "sts";
       owner = "vozlt";
@@ -479,6 +530,7 @@ in
   };
 
   subsFilter = {
+    name = "subsFilter";
     src = fetchFromGitHub {
       name = "subsFilter";
       owner = "yaoweibin";
@@ -489,6 +541,7 @@ in
   };
 
   sysguard = {
+    name = "sysguard";
     src = fetchFromGitHub {
       name = "sysguard";
       owner = "vozlt";
@@ -499,6 +552,7 @@ in
   };
 
   upload = {
+    name = "upload";
     src = fetchFromGitHub {
       name = "upload";
       owner = "fdintino";
@@ -509,6 +563,7 @@ in
   };
 
   upstream-check = {
+    name = "upstream-check";
     src = fetchFromGitHub {
       name = "upstream-check";
       owner = "yaoweibin";
@@ -519,6 +574,7 @@ in
   };
 
   upstream-tarantool = {
+    name = "upstream-tarantool";
     src = fetchFromGitHub {
       name = "upstream-tarantool";
       owner = "tarantool";
@@ -530,6 +586,7 @@ in
   };
 
   url = {
+    name = "url";
     src = fetchFromGitHub {
       name = "url";
       owner = "vozlt";
@@ -540,6 +597,7 @@ in
   };
 
   video-thumbextractor = {
+    name = "video-thumbextractor";
     src = fetchFromGitHub {
       name = "video-thumbextractor";
       owner = "wandenberg";
@@ -551,6 +609,7 @@ in
   };
 
   vod = {
+    name = "vod";
     src = fetchFromGitHub {
       name = "vod";
       owner = "kaltura";
@@ -562,6 +621,7 @@ in
   };
 
   vts = {
+    name = "vts";
     src = fetchFromGitHub {
       name = "vts";
       owner = "vozlt";
@@ -570,4 +630,7 @@ in
       sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
     };
   };
+}; in self // lib.optionalAttrs config.allowAliases {
+  # deprecated or renamed packages
+  modsecurity-nginx = self.modsecurity;
 }

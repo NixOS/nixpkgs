@@ -59,7 +59,7 @@ let
         ${mkKeyValuePairs cfg.settings}
         ${cfg.extraOptions}
       '';
-      checkPhase =
+      checkPhase = lib.optionalString cfg.checkConfig (
         if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
           echo "Ignoring validation for cross-compilation"
         ''
@@ -72,9 +72,9 @@ let
             ${cfg.package}/bin/nix show-config ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
               ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
             |& sed -e 's/^warning:/error:/' \
-            | (! grep '${if cfg.checkConfig then "^error:" else "^error: unknown setting"}')
+            | (! grep '${if cfg.checkAllErrors then "^error:" else "^error: unknown setting"}')
           set -o pipefail
-        '';
+        '');
     };
 
   legacyConfMappings = {
@@ -115,6 +115,7 @@ in
     (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
     (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
     (mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" "daemonIONiceLevel" ]; to = [ "nix" "daemonIOSchedPriority" ]; })
+    (mkRenamedOptionModuleWith { sinceRelease = 2211; from = [ "nix" "readOnlyStore" ]; to = [ "boot" "readOnlyNixStore" ]; })
     (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
   ] ++ mapAttrsToList (oldConf: newConf: mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" oldConf ]; to = [ "nix" "settings" newConf ]; }) legacyConfMappings;
 
@@ -206,7 +207,7 @@ in
 
       daemonIOSchedPriority = mkOption {
         type = types.int;
-        default = 0;
+        default = 4;
         example = 1;
         description = lib.mdDoc ''
           Nix daemon process I/O scheduling priority. This priority propagates
@@ -366,17 +367,6 @@ in
         '';
       };
 
-      readOnlyStore = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          If set, NixOS will enforce the immutability of the Nix store
-          by making {file}`/nix/store` a read-only bind
-          mount.  Nix will automatically make the store writable when
-          needed.
-        '';
-      };
-
       nixPath = mkOption {
         type = types.listOf types.str;
         default = [
@@ -395,8 +385,15 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          If enabled (the default), checks for data type mismatches and that Nix
-          can parse the generated nix.conf.
+          If enabled, checks that Nix can parse the generated nix.conf.
+        '';
+      };
+
+      checkAllErrors = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          If enabled, checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
         '';
       };
 
@@ -407,6 +404,7 @@ in
               str
               int
               bool
+              path
               package
             ]);
           in

@@ -1,13 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
+let
+  pinData = lib.importJSON ./pin.json;
+in
 buildGoModule rec {
   pname = "mimir";
-  version = "2.3.1";
+  version = pinData.version;
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    sha256 = "sha256-2Gg2SYH2cqSKXePEfUAwW4AXpiMGso3FeGTmHRNxtaU=";
+    sha256 = pinData.sha256;
   };
 
   vendorSha256 = null;
@@ -17,8 +20,11 @@ buildGoModule rec {
     "cmd/mimirtool"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) mimir;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) mimir;
+    };
   };
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";

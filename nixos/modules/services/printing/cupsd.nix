@@ -134,6 +134,15 @@ in
         '';
       };
 
+      stateless = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          If set, all state directories relating to CUPS will be removed on
+          startup of the service.
+        '';
+      };
+
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
@@ -343,8 +352,9 @@ in
 
         path = [ cups.out ];
 
-        preStart =
-          ''
+        preStart = lib.optionalString cfg.stateless ''
+          rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
+        '' + ''
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}

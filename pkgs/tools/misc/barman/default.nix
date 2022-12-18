@@ -1,5 +1,6 @@
 { fetchFromGitHub
 , lib
+, stdenv
 , python3Packages
 }:
 python3Packages.buildPythonApplication rec {
@@ -36,6 +37,9 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Assertion error
     "test_help_output"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # FsOperationFailed
+    "test_get_file_mode"
   ];
 
   meta = with lib; {

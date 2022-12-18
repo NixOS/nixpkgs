@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.3";
+  version = "9.4";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-SzbaU52IXw5+ztN/GKD6Ki6/cx2icoZEzLHBu/J8sk0=";
+    sha256 = "sha256-+UkMJmIUIt/yTGY07Q4nu1zbWQq5chTvMNQSh5U/fTU=";
   };
 
   postPatch = let
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
-    badPlatforms = platforms.darwin; # fails to build since v9.3
+    badPlatforms = platforms.darwin; # fails to build since v9.4
   };
 }

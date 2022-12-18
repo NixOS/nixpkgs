@@ -1,6 +1,5 @@
 { mkDerivation
 , extra-cmake-modules
-, fetchpatch
 , kcmutils
 , kconfigwidgets
 , kdbusaddons

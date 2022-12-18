@@ -34,13 +34,7 @@ in {
 
     services.couchdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to run CouchDB Server.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "CouchDB Server");
 
       package = mkOption {
         type = types.package;
@@ -128,7 +122,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5984;
         description = lib.mdDoc ''
           Defined the port number to listen.

@@ -1,18 +1,16 @@
 { lib
 , rustPlatform
 , fetchCrate
-, cmake
 , pkg-config
 , makeWrapper
+, libgit2
 , openssl
 , stdenv
+, expat
 , fontconfig
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+, xorg
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,20 +22,34 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-IL7BxiJg6eTuFM0pJ3qLxYCVofE/RjmgQjvOW96QF9A=";
   };
 
-  cargoSha256 = "sha256-16mgp7GsjbizzCWN3MDpl6ps9CK1zdIpLiyNiKYjDI4=";
+  # update dependencies so it is compatible with libgit2 1.5
+  # libgit2-sys 0.14.3 is only compatible with libgit2 1.4
+  cargoPatches = [ ./update-git2.patch ];
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals stdenv.isLinux [
+  cargoSha256 = "sha256-i/ERVPzAWtN4884051VoA/ItypyURpHb/Py6w3KDOAo=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isLinux [
     makeWrapper
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [
+    libgit2
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [
+    expat
     fontconfig
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
+  ] ++ lib.optionals stdenv.isDarwin [
+    # dark-light doesn't build on apple sdk < 10.14
+    # see https://github.com/frewsxcv/rust-dark-light/issues/14
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
@@ -51,7 +63,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 gpl3Only ];
     maintainers = with maintainers; [ figsoda ];
-    # figsoda: I can't figure how to make it build on darwin
-    broken = stdenv.isDarwin;
   };
 }

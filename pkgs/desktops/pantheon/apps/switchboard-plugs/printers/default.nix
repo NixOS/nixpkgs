@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NY52surcvhUtyP+T4RMZ0cd+H7fSwo1V0qEGY//oXGs=";
+    sha256 = "sha256-RJYyCKTcTiHNhwZBrgyMacoKREg5+sfZ0oB4H+lL76Y=";
   };
 
   nativeBuildInputs = [

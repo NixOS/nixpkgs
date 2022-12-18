@@ -6,7 +6,6 @@
 , pkg-config
 , which
 , libapparmor
-, apparmor-parser
 , libseccomp
 , libselinux
 , makeWrapper

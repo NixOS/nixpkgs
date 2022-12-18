@@ -29,7 +29,7 @@ in
       enable = mkEnableOption (lib.mdDoc "Ostinato agent-controller (Drone)");
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 7878;
         description = lib.mdDoc ''
           Port to listen on.

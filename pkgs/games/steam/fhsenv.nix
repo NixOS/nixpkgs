@@ -294,5 +294,10 @@ in buildFHSUserEnv rec {
       ${fixBootstrap}
       exec -- "$run" "$@"
     '';
+
+    meta = steam.meta // {
+      description = "Run commands in the same FHS environment that is used for Steam";
+      name = "steam-run";
+    };
   };
 }

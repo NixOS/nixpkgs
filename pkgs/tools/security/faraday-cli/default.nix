@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
-  version = "2.1.7";
+  version = "2.1.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kZqJVJ6XrCC3iDSTJP8AmIs4WkxiAFimFIexl0L/HT0=";
+    hash = "sha256-b2vFejsksLcEchUqo+kw01S+dT2UMD5MPAzSWmpREgQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Command Line Interface for Faraday";
     homepage = "https://github.com/infobyte/faraday-cli";
+    changelog = "https://github.com/infobyte/faraday-cli/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

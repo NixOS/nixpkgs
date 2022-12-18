@@ -6,7 +6,7 @@
 , jinja2
 , lib
 , packaging
-, poetry
+, poetry-core
 , pytest-freezegun
 , pytest-mock
 , pytest-regressions
@@ -17,23 +17,24 @@
 , tomlkit
 , typing-extensions
 , argcomplete
+, nix-update-script
 }:
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.35.0";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9ek6m5k01sGVHwqWXjWYDsPmIeAgK+H23D9sF5hjrf0=";
+    hash = "sha256-wo1I6QDWLxByHISmkPdass+BcKh0oxR5hD31UN/5+WQ=";
     deepClone = true;
   };
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     termcolor
@@ -80,9 +81,14 @@ buildPythonApplication rec {
     "test_get_commits_with_signature"
   ];
 
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };

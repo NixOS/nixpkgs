@@ -9,7 +9,6 @@
 , msgpack
 , pytestCheckHook
 , python
-, gcc8
 }:
 
 buildPythonPackage rec {
@@ -25,7 +24,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
     cython
-    gcc8
   ];
 
   propagatedBuildInputs = [

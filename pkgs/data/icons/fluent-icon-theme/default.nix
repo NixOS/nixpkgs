@@ -9,20 +9,19 @@
 , colorVariants ? [ ]
 ,
 }:
-let
-  pname = "Fluent-icon-theme";
+let pname = "Fluent-icon-theme";
 in
 lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "grey" "orange" "pink" "purple" "red" "yellow" "teal" "all" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-09-20";
+  version = "2022-11-30";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "Ce8LTIxKabeqV9QVK68DqUVwtwG5lyxDPDQx0mLIr5o=";
+    hash = "sha256-sxs2GrPuUoitZtiIU7SWFSLGXOTitS41MGt17TeuICE=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
-, fetchFromGitHub
-, buildGoModule
-, fetchYarnDeps
-, nixosTests
-, fixup_yarn_lock
-, jq
-, nodejs
-, which
-, yarn
+{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
+, brotli, fixup_yarn_lock, jq, nodejs, which, yarn
 }:
 let
   arch =
@@ -25,13 +14,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-1QpJtonn/mWGcTv2mSeGKAHwPAqOV6VBAYFZH1/jAH8=";
+    hash = "sha256-r3Bi7QLzDKo3/idEY7fYIxTJPULNvAS6hy19Hko2qHE=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
@@ -49,7 +38,7 @@ in stdenv.mkDerivation rec {
     hash = "sha256-IKMu+gQa+d30+yXjHCu/oQOQXL6kTN9WxDI/Y5IL1E8=";
   };
 
-  nativeBuildInputs = [ fixup_yarn_lock jq nodejs which yarn ];
+  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
@@ -105,6 +94,12 @@ in stdenv.mkDerivation rec {
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
     mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
+
+    # Create static gzip and brotli files
+    find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
+      gzip -9 -n -c $file > $file.gz
+      brotli --best -f $file -o $file.br
+    done
   '';
 
   passthru.tests.peertube = nixosTests.peertube;

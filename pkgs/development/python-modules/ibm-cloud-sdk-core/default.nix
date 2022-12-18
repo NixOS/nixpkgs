@@ -7,7 +7,6 @@
 , pythonOlder
 , requests
 , responses
-, tox
 }:
 
 buildPythonPackage rec {
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     responses
-    tox
   ];
 
   disabledTests = [

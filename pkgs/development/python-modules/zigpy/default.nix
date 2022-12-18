@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.51.3";
+  version = "0.52.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-IfYWuJfmQtJnVANyiBE3AurhucqZ8qzYXBV3jprS5qw=";
+    hash = "sha256-axk6C8RLuoKWUdJ3sOklWqnlYTWKTaQh51eWZm2Dy+0=";
   };
 
   propagatedBuildInputs = [
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;

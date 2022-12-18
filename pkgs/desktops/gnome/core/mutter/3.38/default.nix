@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , substituteAll
 , runCommand
 , lib
@@ -36,12 +37,12 @@
 , python3
 , wrapGAppsHook
 , sysprof
+, libsysprof-capture
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
 , graphene
 , wayland-protocols
-, pantheon
 }:
 
 let self = stdenv.mkDerivation rec {
@@ -64,6 +65,20 @@ let self = stdenv.mkDerivation rec {
     # https://github.com/elementary/gala/issues/605
     # https://gitlab.gnome.org/GNOME/mutter/issues/536
     ./fix-glitches-in-gala.patch
+
+    # Stop using source_root()/build_root().
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1957
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/6288763671692edbc953a2b80225e9a7c7fc87e7.patch";
+      sha256 = "immnfZiY+Cgu7xTbo5y8xs0olTa6UGsKgDJ1Xhkhns0=";
+    })
+
+    # Fix build with separate sysprof.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
+      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
+    })
 
     (substituteAll {
       src = ./fix-paths.patch;
@@ -122,7 +137,8 @@ let self = stdenv.mkDerivation rec {
     libXdamage
     pango
     pipewire
-    sysprof
+    sysprof # for D-Bus interfaces
+    libsysprof-capture
     xkeyboard_config
     xwayland
     wayland-protocols

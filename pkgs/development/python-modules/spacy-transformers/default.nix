@@ -2,7 +2,6 @@
 , callPackage
 , fetchPypi
 , buildPythonPackage
-, dataclasses
 , torch
 , pythonOlder
 , spacy
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "1.1.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,13 +28,11 @@ buildPythonPackage rec {
     spacy-alignments
     srsly
     transformers
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "transformers>=3.4.0,<4.18.0" "transformers>=3.4.0 # ,<4.18.0"
+      --replace "transformers>=3.4.0,<4.22.0" "transformers>=3.4.0 # ,<4.22.0"
   '';
 
   # Test fails due to missing arguments for trfs2arrays().

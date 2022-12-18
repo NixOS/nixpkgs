@@ -32,9 +32,11 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  # Can be removed in later versions
-  # https://gitlab.com/sublime-music/sublime-music/-/issues/343
-  pythonRelaxDeps = [ "python-mpv" ];
+  # Can be removed in later versions (probably > 0.11.16)
+  pythonRelaxDeps = [
+    "deepdiff"
+    "python-mpv"
+  ];
 
   buildInputs = [
     gtk3

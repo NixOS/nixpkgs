@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "2.2.1";
+  version = "2.2.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-egEnU6CgLasvIrDldOPnsAOZ9mBgYVRHT/4lYh+oDTs=";
+    sha256 = "sha256-KMfFRf1g75wwWc+y/v0n+S2wkf9rWGj4PxIc614f4bU=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "A python package containing functions that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

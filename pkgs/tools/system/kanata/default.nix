@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2gGFAz0zXea+27T4ayDj6KdoI0ThwXV7U0CspHduTiQ=";
+    sha256 = "sha256-/v3P5C0F/FVPJqJ38dzSnAc7ua2fOs3BeX9BDoQ8bDw=";
   };
 
-  cargoHash = "sha256-0NvZATdPABIboL5xvmBmDbqPPWvO4mM6wVB3FrOVHIQ=";
+  cargoHash = "sha256-KXsW0fgbBy0tf/He0vH9Xq8yGuz77H/jeIabgw3ppy8=";
 
   buildFeatures = lib.optional withCmd "cmd";
 

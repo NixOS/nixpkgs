@@ -49,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.6"; # always change at once with ./minimal.nix
+  version = "8.7"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-Lv8+l7x6EM+gMg2psH8NSIZTsLW4SQMiyC84SuD6Gig=";
+    sha256 = "sha256-dqfmbUfnPrDcP8on/IGONuHUv/502iY8Xv47iAGjCgE=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -128,15 +128,14 @@ stdenv.mkDerivation rec {
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ lib.optional disableDocs [ "--disable-docs" ]
-                   ++ lib.optional stdenv.isDarwin [ "--enable-xonx" ];
+                   ++ lib.optionals disableDocs [ "--disable-docs" ]
+                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
   enableParallelBuilding = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A programmable programming language";
     longDescription = ''
       Racket is a full-spectrum programming language. It goes beyond

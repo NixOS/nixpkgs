@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
 , substituteAll
 , imageio-ffmpeg
@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.22.0";
-  disabled = isPy27;
+  version = "2.22.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    sha256 = "sha256-ozLRJ+w4ey09ypZ/0GWpDxwaS6I0NXCwP+LOu27QZOo=";
+    sha256 = "sha256-D64Cet3wK8icc6VswVethFV/i4uEqhm0y3Bv78otiP8=";
     inherit pname version;
   };
 

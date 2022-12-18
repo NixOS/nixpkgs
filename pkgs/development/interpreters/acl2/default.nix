@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchFromGitHub, runCommandLocal, makeWrapper, substituteAll
 , sbcl, bash, which, perl, hostname
-, openssl, glucose, minisat, abc-verifier, z3, python2
+, openssl, glucose, minisat, abc-verifier, z3, python3
 , certifyBooks ? true
 } @ args:
 
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     which perl hostname
     # Some of the books require one or more of these external tools:
     glucose minisat abc-verifier libipasir
-    z3 (python2.withPackages (ps: [ ps.z3 ]))
+    z3 (python3.withPackages (ps: [ ps.z3 ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = "mkdir -p $HOME";
-  makeFlags = "LISP=${sbcl}/bin/sbcl ACL2_MAKE_LOG=NONE";
+  makeFlags = [ "LISP=${sbcl}/bin/sbcl" "ACL2_MAKE_LOG=NONE" ];
 
   doCheck = true;
   checkTarget = "mini-proveall";

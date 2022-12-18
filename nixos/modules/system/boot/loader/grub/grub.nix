@@ -38,7 +38,7 @@ let
   grubConfig = args:
     let
       efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
-      efiSysMountPoint' = replaceChars [ "/" ] [ "-" ] efiSysMountPoint;
+      efiSysMountPoint' = replaceStrings [ "/" ] [ "-" ] efiSysMountPoint;
     in
     pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
@@ -747,6 +747,11 @@ in
       ];
 
       boot.loader.supportsInitrdSecrets = true;
+
+      system.systemBuilderArgs.configurationName = cfg.configurationName;
+      system.systemBuilderCommands = ''
+        echo -n "$configurationName" > $out/configuration-name
+      '';
 
       system.build.installBootLoader =
         let

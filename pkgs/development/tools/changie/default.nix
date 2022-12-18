@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.9.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "miniscruff";
     repo = pname;
-    sha256 = "sha256-3AGz84z0YmDiLxlbDO0f9ny75hyLB4fnYQSICElJVK4=";
+    sha256 = "sha256-c7QEDyxk3Y/niQtVNQiS4OS/nHkldtjEcaXXR7rx/QI=";
   };
 
-  vendorSha256 = "sha256-9Cpyemq/f62rVMvGwOtgDGd9XllvICXL2dqNwUoFQmg=";
+  vendorSha256 = "sha256-AoQdOw5Yw54mGmwfozkxtfo3ZhWGUbBoHc3Iqy80x38=";
 
   patches = [ ./skip-flaky-test.patch ];
 

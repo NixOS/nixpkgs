@@ -481,8 +481,8 @@ let
       ++ optional v.allowDiscards "discard"
       ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
       ++ optional (v.header != null) "header=${v.header}"
-      ++ optional (v.keyFileOffset != null) "keyfile-offset=${v.keyFileOffset}"
-      ++ optional (v.keyFileSize != null) "keyfile-size=${v.keyFileSize}"
+      ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
+      ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
     ;
   in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
 
@@ -905,9 +905,11 @@ in
         { assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
           message = "systemd stage 1 does not support GPG smartcards yet.";
         }
-        # TODO
         { assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
-          message = "systemd stage 1 does not support FIDO2 yet.";
+          message = ''
+            systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.devices.<name>.fido2`.
+            Use systemd-cryptenroll(1) to configure FIDO2 support.
+          '';
         }
         # TODO
         { assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;

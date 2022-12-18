@@ -9,23 +9,32 @@
 , pytestCheckHook
 , pytest-asyncio
 , google-cloud-testutils
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.8.3";
+  version = "2.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JtSY/mQ7BAatBiq9XCO9O0x6nnyPpECnlSYNq9brxp8=";
+    hash = "sha256-8/gmeLpdheW7M9nhM0uTlxrpeRcODSgLVOVKPj9O870=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
-    libcst
     proto-plus
   ];
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   checkInputs = [
     google-cloud-testutils

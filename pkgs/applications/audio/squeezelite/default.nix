@@ -34,13 +34,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "1.9.9.1403";
+  version = "1.9.9.1414";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "bc72c0de3fff771540a2a45aaafafed539387b3c";
-    hash = "sha256-205i61mbeQG2MzSE9NtPHSuNeyMbjZzbZVCFFzjqKqQ=";
+    rev = "dbe69eb8aa88f644cfb46541d6cef72fa666570d";
+    hash = "sha256-BN6eBHMMecucfHwzmho3xi1l2O3YnYcBUE321Rl6xrc=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
-    maintainers = with maintainers; [ samdoshi ];
+    maintainers = with maintainers; [ adamcstephens ];
     platforms = platforms.linux;
   };
 }

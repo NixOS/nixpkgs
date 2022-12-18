@@ -4,16 +4,30 @@ with lib;
 
 let
   cfg = config.programs.steam;
-
-  steam = pkgs.steam.override {
-    extraLibraries = pkgs: with config.hardware.opengl;
-      if pkgs.hostPlatform.is64bit
-      then [ package ] ++ extraPackages
-      else [ package32 ] ++ extraPackages32;
-  };
 in {
   options.programs.steam = {
     enable = mkEnableOption (lib.mdDoc "steam");
+
+    package = mkOption {
+      type        = types.package;
+      default     = pkgs.steam.override {
+        extraLibraries = pkgs: with config.hardware.opengl;
+          if pkgs.hostPlatform.is64bit
+          then [ package ] ++ extraPackages
+          else [ package32 ] ++ extraPackages32;
+      };
+      defaultText = literalExpression ''
+        pkgs.steam.override {
+          extraLibraries = pkgs: with config.hardware.opengl;
+            if pkgs.hostPlatform.is64bit
+            then [ package ] ++ extraPackages
+            else [ package32 ] ++ extraPackages32;
+        }
+      '';
+      description = lib.mdDoc ''
+        steam package to use.
+      '';
+    };
 
     remotePlay.openFirewall = mkOption {
       type = types.bool;
@@ -44,7 +58,10 @@ in {
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = [ steam steam.run ];
+    environment.systemPackages = [
+      cfg.package
+      cfg.package.run
+    ];
 
     networking.firewall = lib.mkMerge [
       (mkIf cfg.remotePlay.openFirewall {

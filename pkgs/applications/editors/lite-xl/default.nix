@@ -3,7 +3,7 @@
 , Foundation
 , freetype
 , lib
-, lua5_2
+, lua5_4
 , meson
 , ninja
 , pcre2
@@ -15,26 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    sha256 = "sha256-7ppO5ITijhJ37OL6xlQgu1SaQ/snXDH5xJOwuXZNUVA=";
+    sha256 = "sha256-9nQFdii6SY14Cul7Ki0DUEsu75HWTCeEZtXaU6KGRiM=";
   };
-
-  patches = [
-    # Fixes compatibility with Lua5.2, remove patch when a new release covers this
-    ./0001-replace-unpack-with-table-unpack.patch
-  ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
     agg
     freetype
-    lua5_2
+    lua5_4
     pcre2
     reproc
     SDL2

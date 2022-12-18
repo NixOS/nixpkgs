@@ -18,14 +18,14 @@ let
 in
 buildPythonPackage rec {
   pname = "deepwave";
-  version = "0.0.14";
+  version = "0.0.17";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ar4";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k1MUrnIkllxGIpkEScTZBEDBBNHgJHxau1e/L8TOEKc=";
+    sha256 = "sha256-4B3V87/voYs61pXhqmydLe48JsnRGuJlUYOOdmJlroA=";
   };
 
   # unable to find ninja although it is available, most likely because it looks for its pip version

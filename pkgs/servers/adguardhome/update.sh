@@ -13,6 +13,11 @@ version=$(jq -r '.tag_name' <<<"$latest_release")
 
 echo "got version $version"
 
+schema_version=$(curl --silent "https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/${version}/internal/home/upgrade.go" \
+    | grep -Po '(?<=const currentSchemaVersion = )[[:digit:]]+$')
+
+echo "got schema_version $schema_version"
+
 declare -A systems
 systems[linux_386]=i686-linux
 systems[linux_amd64]=x86_64-linux
@@ -37,3 +42,4 @@ done
 echo '}' >> "$bins"
 
 sed -i -r -e "s/version\s*?=\s*?.*?;/version = \"${version#v}\";/" "$dirname/default.nix"
+sed -i -r -e "s/schema_version\s*?=\s*?.*?;/schema_version = ${schema_version};/" "$dirname/default.nix"

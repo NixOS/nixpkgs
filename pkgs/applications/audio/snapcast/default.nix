@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
   ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optional stdenv.isDarwin [darwin.apple_sdk.frameworks.IOKit darwin.apple_sdk.frameworks.AudioToolbox];
+  ++ lib.optionals stdenv.isDarwin [darwin.apple_sdk.frameworks.IOKit darwin.apple_sdk.frameworks.AudioToolbox];
 
   TARGET=lib.optionalString stdenv.isDarwin "MACOS";
 
@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;
+    # never built on x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

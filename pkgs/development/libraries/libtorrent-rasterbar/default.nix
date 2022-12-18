@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "2.0.7";
+  version = "2.0.8";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-ikDtx1BIikVEL5jf37byNbuS+ft1lDtHUlFqegndapw=";
+    sha256 = "sha256-mMY3NiSL/lYuYmV/KWgfKbs8XukSV4PvQ87tpgBid6M=";
     fetchSubmodules = true;
   };
 

@@ -48,7 +48,7 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeWrapper, buildRubyGem, defaultGemConfig
-      , baseRuby ? buildPackages.ruby.override {
+      , baseRuby ? buildPackages.ruby_3_1.override {
           useRailsExpress = false;
           docSupport = false;
           rubygemsSupport = false;
@@ -188,10 +188,11 @@ let
             ''
           }
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
+          find "$out/${passthru.gemPath}" -name gem_make.out -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF

@@ -10,7 +10,7 @@ let
   slug = lib.concatStringsSep "/" ((lib.optional (group != null) group) ++ [ owner repo ]);
   escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
   escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
-  passthruAttrs = removeAttrs args [ "protocol" "domain" "owner" "group" "repo" "rev" ];
+  passthruAttrs = removeAttrs args [ "protocol" "domain" "owner" "group" "repo" "rev" "fetchSubmodules" "leaveDotGit" "deepClone" ];
 
   useFetchGit = deepClone || fetchSubmodules || leaveDotGit;
   fetcher = if useFetchGit then fetchgit else fetchzip;

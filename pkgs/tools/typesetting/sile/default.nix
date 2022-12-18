@@ -1,4 +1,5 @@
 { lib, stdenv
+, gnumake42
 , darwin
 , fetchurl
 , makeWrapper
@@ -43,11 +44,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.14.3";
+  version = "0.14.5";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1n7nlrvhdp6ilpx6agb5w6flss5vbflbldv0495h19fy5fxkb5vz";
+    sha256 = "01wf0rihksk2ldxgci5vzl3j575vnp6wgk12yd28mwzxkss6n39g";
   };
 
   configureFlags = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     gitMinimal
     pkg-config
     makeWrapper
+    gnumake42
   ];
   buildInputs = [
     luaEnv

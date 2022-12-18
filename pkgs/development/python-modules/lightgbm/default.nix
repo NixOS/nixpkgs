@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optional stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
   propagatedBuildInputs = [
     numpy
     scipy

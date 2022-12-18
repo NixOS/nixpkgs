@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , mkDerivation
 , SDL2
 , frei0r

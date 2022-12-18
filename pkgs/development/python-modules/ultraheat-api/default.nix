@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ultraheat-api";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ultraheat_api";
     inherit version;
-    hash = "sha256-fXTv4rWMkAOBYwKeb0MCC9mwEfeYT/YFYW0OpwXN4OQ=";
+    hash = "sha256-7yZATv0cgjRnvD9u34iZtsdsfEkdbAoVWJ19+HHlrzI=";
   };
 
   propagatedBuildInputs = [

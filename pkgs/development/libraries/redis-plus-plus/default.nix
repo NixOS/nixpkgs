@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DREDIS_PLUS_PLUS_BUILD_TEST=OFF"
-  ] ++ lib.optional (!enableShared) [
+  ] ++ lib.optionals (!enableShared) [
     "-DREDIS_PLUS_PLUS_BUILD_SHARED=OFF"
-  ] ++ lib.optional (!enableStatic) [
+  ] ++ lib.optionals (!enableStatic) [
     "-DREDIS_PLUS_PLUS_BUILD_STATIC=OFF"
   ];
 

@@ -12,7 +12,7 @@ options = {
     type = type specification;
     default = default value;
     example = example value;
-    description = &quot;Description for use in the NixOS manual.&quot;;
+    description = lib.mdDoc &quot;Description for use in the NixOS manual.&quot;;
   };
 };
 </programlisting>
@@ -98,9 +98,11 @@ options = {
           A textual description of the option, in
           <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-contributing-markup">Nixpkgs-flavored
           Markdown</link> format, that will be included in the NixOS
-          manual. During the migration process from DocBook to
-          CommonMark the description may also be written in DocBook, but
-          this is discouraged.
+          manual. During the migration process from DocBook it is
+          necessary to mark descriptions written in CommonMark with
+          <literal>lib.mdDoc</literal>. The description may still be
+          written in DocBook (without any marker), but this is
+          discouraged and will be deprecated in the future.
         </para>
       </listitem>
     </varlistentry>
@@ -132,7 +134,7 @@ lib.mkOption {
   type = lib.types.bool;
   default = false;
   example = true;
-  description = &quot;Whether to enable magic.&quot;;
+  description = lib.mdDoc &quot;Whether to enable magic.&quot;;
 }
 </programlisting>
       <section xml:id="sec-option-declarations-util-mkPackageOption">
@@ -182,7 +184,7 @@ lib.mkOption {
   type = lib.types.package;
   default = pkgs.hello;
   defaultText = lib.literalExpression &quot;pkgs.hello&quot;;
-  description = &quot;The hello package to use.&quot;;
+  description = lib.mdDoc &quot;The hello package to use.&quot;;
 }
 </programlisting>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-ghc" />
@@ -197,7 +199,7 @@ lib.mkOption {
   default = pkgs.ghc;
   defaultText = lib.literalExpression &quot;pkgs.ghc&quot;;
   example = lib.literalExpression &quot;pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
-  description = &quot;The GHC package to use.&quot;;
+  description = lib.mdDoc &quot;The GHC package to use.&quot;;
 }
 </programlisting>
         <section xml:id="sec-option-declarations-eot">

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.48.1"; # N.B: if you change this, please update:
+  version = "1.51.1"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-It9oFenKoPDCOVxiKCGJc8i18zdDZCceR22HR5Tu1sw=";
+    hash = "sha256-o1C35mtA2lTGgugCKAQyRDNlCnutoJ1ol/DInJNobnc=";
     fetchSubmodules = true;
   };
 
@@ -51,25 +51,31 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf ]
+  buildInputs = [ openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
-  cmakeFlags = [
-    "-DgRPC_ZLIB_PROVIDER=package"
-    "-DgRPC_CARES_PROVIDER=package"
-    "-DgRPC_RE2_PROVIDER=package"
-    "-DgRPC_SSL_PROVIDER=package"
-    "-DgRPC_PROTOBUF_PROVIDER=package"
-    "-DgRPC_ABSL_PROVIDER=package"
-    "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
-    # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
-    # only an issue with the useLLVM stdenv, not the darwin stdenv…
-    # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    "-DCMAKE_CXX_STANDARD=11"
-  ];
+  cmakeFlags =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+      cxxStandard = if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17";
+    in
+    [
+      "-DgRPC_ZLIB_PROVIDER=package"
+      "-DgRPC_CARES_PROVIDER=package"
+      "-DgRPC_RE2_PROVIDER=package"
+      "-DgRPC_SSL_PROVIDER=package"
+      "-DgRPC_PROTOBUF_PROVIDER=package"
+      "-DgRPC_ABSL_PROVIDER=package"
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DCMAKE_CXX_STANDARD=${cxxStandard}"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.

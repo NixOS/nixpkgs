@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [

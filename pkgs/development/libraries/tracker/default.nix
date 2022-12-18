@@ -13,7 +13,6 @@
 , libxml2
 , glib
 , wrapGAppsNoGuiHook
-, vala
 , sqlite
 , libxslt
 , libstemmer
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.3.2";
+  version = "3.4.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "DtK5iRiVbW8WQpxgfdihTIT02gpIlw/S64yTq6PPmRM=";
+    sha256 = "Tm3xQqT3BIePypjrtaIkdQ5epUaqKqq6pyanNUC9FzE=";
   };
 
   postPatch = ''
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
     pkg-config
     asciidoc
     gettext
@@ -119,7 +117,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test \
         --timeout-multiplier 2 \
         --print-errorlogs

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libX11, bzip2, zlib
+{ lib, stdenv, fetchFromGitHub, ncurses, libX11, bzip2, zlib
 , brotli, zstd, xz, openssl, autoreconfHook, gettext, pkg-config, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2

@@ -18,13 +18,13 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "linux-app";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-aov7Mkb3bGlS3q9zIWkeuWbrvfP1Gm2DhaeTprQNbeI=";
+    sha256 = "sha256-MPS4d/yNkccsc/j85h7/4k4xL8uSCvhj/9JWPa7ezLY=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/ProtonVPN/linux-app";
     maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Plus;
+    mainProgram = "protonvpn";
     platforms = platforms.linux;
   };
 }

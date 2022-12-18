@@ -1,20 +1,16 @@
-{ lib, buildDunePackage, fetchFromGitLab, ff-sig, zarith
-, zarith_stubs_js, integers_stubs_js, integers, hex
-, ff-pbt, bisect_ppx, alcotest
-}:
+{ lib, buildDunePackage, fetchFromGitLab
+, ff-sig, zarith, zarith_stubs_js, integers_stubs_js, integers, hex
+, alcotest, ff-pbt }:
 
 buildDunePackage rec {
   pname = "bls12-381";
-  version = "3.0.0";
-
+  version = "5.0.0";
   src = fetchFromGitLab {
     owner = "dannywillems";
     repo = "ocaml-bls12-381";
-    rev = "4bbc7818e9ccd025c5e32006f8a9de370739bc43";
-    sha256 = "/Rw0mQvTfHyPqosWFPv+1FoY5Dwuwv9mB8UYjjHxodE=";
+    rev = version;
+    sha256 = "sha256-Hy/I+743HSToZgGPFFiAbx7nrybHsE2PwycDsu3DuHM=";
   };
-
-  useDune2 = true;
 
   minimalOCamlVersion = "4.08";
 
@@ -27,11 +23,7 @@ buildDunePackage rec {
     hex
   ];
 
-  checkInputs = [
-    ff-pbt
-    bisect_ppx
-    alcotest
-  ];
+  checkInputs = [ alcotest ff-pbt ];
 
   doCheck = true;
 

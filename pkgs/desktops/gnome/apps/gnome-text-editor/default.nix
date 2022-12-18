@@ -15,6 +15,7 @@
 , icu
 , itstool
 , libadwaita
+, editorconfig-core-c
 , libxml2
 , pcre
 , appstream-glib
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "42.2";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5W1KjNy86KjxwIgbRd55n4slIF7Ay/ImnlMgJXYcxdo=";
+    sha256 = "sha256-lzpLDeto+fkaVKTdQVtq/em1rj7mhLx2FHH5QpD59ss=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
+    editorconfig-core-c
     pcre
   ];
 

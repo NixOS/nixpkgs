@@ -1,34 +1,18 @@
 { stdenv, lib, fetchurl, unzip }:
 let
-  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  # There's a handy prefetch script in ./fetch-latest.sh
-  version = "4.4.139";
-  supportedPlatforms = {
-    "x86_64-linux" = {
-      name = "x86_64-unknown-linux-musl";
-      hash = "sha256-CXm9WR77SMvv+9w+8QUBNHKPhe4otquLyHAwzd+jbNk=";
-    };
-    "x86_64-darwin" = {
-      name = "x86_64-apple-darwin";
-      hash = "sha256-01lotn9DzgwIj1n9GCUuGmwgtS4DtK+XOl/wduI+QyI=";
-    };
-    "aarch64-darwin" = {
-      name = "aarch64-apple-darwin";
-      hash = "sha256-RQBBsp48Xhxi3WQKsYzSiiSEW8W7UikKAyFf4sJ2JqQ=";
-    };
-  };
+  sources = builtins.fromJSON (builtins.readFile ./sources.json);
   platform =
-    if (builtins.hasAttr stdenv.hostPlatform.system supportedPlatforms) then
-      builtins.getAttr (stdenv.hostPlatform.system) supportedPlatforms
+    if (builtins.hasAttr stdenv.hostPlatform.system sources.platforms) then
+      builtins.getAttr (stdenv.hostPlatform.system) sources.platforms
     else
       throw "Not supported on ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation {
   pname = "tabnine";
-  inherit version;
+  inherit (sources) version;
 
   src = fetchurl {
-    url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
+    url = "https://update.tabnine.com/bundles/${sources.version}/${platform.name}/TabNine.zip";
     inherit (platform) hash;
   };
 
@@ -49,13 +33,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.platform = platform.name;
+  passthru = {
+    platform = platform.name;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "https://tabnine.com";
     description = "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
-    platforms = attrNames supportedPlatforms;
+    platforms = attrNames sources.platforms;
     maintainers = with maintainers; [ lovesegfault ];
   };
 }

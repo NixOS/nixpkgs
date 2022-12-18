@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, clusterctl }:
 
 buildGoModule rec {
   pname = "clusterctl";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cluster-api";
     rev = "v${version}";
-    sha256 = "sha256-QVzhRaNLFhH+5x+/X/Nc3bW/09txurhVd0yDU9LYhAo=";
+    sha256 = "sha256-Qaq0I7ZCXRXIWtUN3fcpoN4SURq/OfH+u73nyWYmJOY=";
   };
 
-  vendorSha256 = "sha256-jPIrUW4el8sAO+4j20qMYVXqvov6Ac0cENd7gOrYj+U=";
+  vendorSha256 = "sha256-VDSMXE+Vlgmo7T1b+A7uW9BqSDBDyhrneJX1yH+XfDc=";
 
   subPackages = [ "cmd/clusterctl" ];
 
@@ -31,6 +31,12 @@ buildGoModule rec {
       --bash <($out/bin/clusterctl completion bash) \
       --zsh <($out/bin/clusterctl completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = clusterctl;
+    command = "HOME=$TMPDIR clusterctl version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Kubernetes cluster API tool";

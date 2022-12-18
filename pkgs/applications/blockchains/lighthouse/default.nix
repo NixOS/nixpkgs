@@ -10,6 +10,7 @@
 , protobuf
 , rustPlatform
 , Security
+, CoreFoundation
 , stdenv
 , testers
 , unzip
@@ -17,7 +18,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.1.2";
+  version = "3.3.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -27,20 +28,20 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-EJFg6ZjxxijxJNMwKRh0cYeqwujUV3OJgXBvBRsnbVI=";
+    hash = "sha256-py64CWY3k5Z2mm9WduJ4Fh7lQ8b3sF6iIFsYYjndU5I=";
   };
 
-  cargoHash = "sha256-iXqRtBqvM9URQsL8qGmpr3CNX2fpbtDOaluibAX/lWo=";
+  cargoHash = "sha256-0gWTniLkhuPpgdUkE6gpF9uHYT6BeWWgH6Mu7KpFx9w=";
 
   buildFeatures = [ "modern" "gnosis" ];
 
-  nativeBuildInputs = [ clang cmake perl protobuf ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook cmake perl protobuf ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    CoreFoundation
   ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   depositContractSpec = fetchurl {
     url = "https://raw.githubusercontent.com/ethereum/eth2.0-specs/v${depositContractSpecVersion}/deposit_contract/contracts/validator_registration.json";

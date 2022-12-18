@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , python3
@@ -13,7 +12,6 @@
 , gettext
 , gtkd
 , libsecret
-, glib
 , wrapGAppsHook
 , libunwind
 , appstream

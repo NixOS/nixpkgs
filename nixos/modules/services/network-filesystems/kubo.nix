@@ -3,6 +3,8 @@ with lib;
 let
   cfg = config.services.kubo;
 
+  settingsFormat = pkgs.formats.json {};
+
   kuboFlags = utils.escapeSystemdExecArgs (
     optional cfg.autoMount "--mount" ++
     optional cfg.enableGC "--enable-gc" ++
@@ -117,29 +119,6 @@ in
         description = lib.mdDoc "Where to mount the IPNS namespace to";
       };
 
-      gatewayAddress = mkOption {
-        type = types.str;
-        default = "/ip4/127.0.0.1/tcp/8080";
-        description = lib.mdDoc "Where the IPFS Gateway can be reached";
-      };
-
-      apiAddress = mkOption {
-        type = types.str;
-        default = "/ip4/127.0.0.1/tcp/5001";
-        description = lib.mdDoc "Where Kubo exposes its API to";
-      };
-
-      swarmAddress = mkOption {
-        type = types.listOf types.str;
-        default = [
-          "/ip4/0.0.0.0/tcp/4001"
-          "/ip6/::/tcp/4001"
-          "/ip4/0.0.0.0/udp/4001/quic"
-          "/ip6/::/udp/4001/quic"
-        ];
-        description = lib.mdDoc "Where Kubo listens for incoming p2p connections";
-      };
-
       enableGC = mkOption {
         type = types.bool;
         default = false;
@@ -152,11 +131,38 @@ in
         description = lib.mdDoc "If set to true, the repo won't be initialized with help files";
       };
 
-      extraConfig = mkOption {
-        type = types.attrs;
+      settings = mkOption {
+        type = lib.types.submodule {
+          freeformType = settingsFormat.type;
+
+          options = {
+            Addresses.API = mkOption {
+              type = types.str;
+              default = "/ip4/127.0.0.1/tcp/5001";
+              description = lib.mdDoc "Where Kubo exposes its API to";
+            };
+
+            Addresses.Gateway = mkOption {
+              type = types.str;
+              default = "/ip4/127.0.0.1/tcp/8080";
+              description = lib.mdDoc "Where the IPFS Gateway can be reached";
+            };
+
+            Addresses.Swarm = mkOption {
+              type = types.listOf types.str;
+              default = [
+                "/ip4/0.0.0.0/tcp/4001"
+                "/ip6/::/tcp/4001"
+                "/ip4/0.0.0.0/udp/4001/quic"
+                "/ip6/::/udp/4001/quic"
+              ];
+              description = lib.mdDoc "Where Kubo listens for incoming p2p connections";
+            };
+          };
+        };
         description = lib.mdDoc ''
           Attrset of daemon configuration to set using {command}`ipfs config`, every time the daemon starts.
-          These are applied last, so may override configuration set by other options in this module.
+          See [https://github.com/ipfs/kubo/blob/master/docs/config.md](https://github.com/ipfs/kubo/blob/master/docs/config.md) for reference.
           Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
         '';
         default = { };
@@ -244,6 +250,12 @@ in
       then [ cfg.package.systemd_unit ]
       else [ cfg.package.systemd_unit_hardened ];
 
+    services.kubo.settings = mkIf cfg.autoMount {
+      Mounts.FuseAllowOther = lib.mkDefault true;
+      Mounts.IPFS = lib.mkDefault cfg.ipfsMountDir;
+      Mounts.IPNS = lib.mkDefault cfg.ipnsMountDir;
+    };
+
     systemd.services.ipfs = {
       path = [ "/run/wrappers" cfg.package ];
       environment.IPFS_PATH = cfg.dataDir;
@@ -259,22 +271,10 @@ in
       '' + ''
           ipfs --offline config profile apply ${profile} >/dev/null
         fi
-      '' + optionalString cfg.autoMount ''
-        ipfs --offline config Mounts.FuseAllowOther --json true
-        ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
-        ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
       '' + ''
         ipfs --offline config show \
-          | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${
-              escapeShellArg (builtins.toJSON (
-                recursiveUpdate
-                  {
-                    Addresses.API = cfg.apiAddress;
-                    Addresses.Gateway = cfg.gatewayAddress;
-                    Addresses.Swarm = cfg.swarmAddress;
-                  }
-                  cfg.extraConfig
-              ))
+          | ${pkgs.jq}/bin/jq '. * $settings' --argjson settings ${
+              escapeShellArg (builtins.toJSON cfg.settings)
             } \
           | ipfs --offline config replace -
       '';
@@ -294,12 +294,12 @@ in
       socketConfig = {
         ListenStream =
           let
-            fromCfg = multiaddrToListenStream cfg.gatewayAddress;
+            fromCfg = multiaddrToListenStream cfg.settings.Addresses.Gateway;
           in
           [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
         ListenDatagram =
           let
-            fromCfg = multiaddrToListenDatagram cfg.gatewayAddress;
+            fromCfg = multiaddrToListenDatagram cfg.settings.Addresses.Gateway;
           in
           [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
       };
@@ -311,7 +311,7 @@ in
       # in the multiaddr.
       socketConfig.ListenStream =
         let
-          fromCfg = multiaddrToListenStream cfg.apiAddress;
+          fromCfg = multiaddrToListenStream cfg.settings.Addresses.API;
         in
         [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
@@ -332,15 +332,19 @@ in
     (mkRenamedOptionModule [ "services" "ipfs" "autoMigrate" ] [ "services" "kubo" "autoMigrate" ])
     (mkRenamedOptionModule [ "services" "ipfs" "ipfsMountDir" ] [ "services" "kubo" "ipfsMountDir" ])
     (mkRenamedOptionModule [ "services" "ipfs" "ipnsMountDir" ] [ "services" "kubo" "ipnsMountDir" ])
-    (mkRenamedOptionModule [ "services" "ipfs" "gatewayAddress" ] [ "services" "kubo" "gatewayAddress" ])
-    (mkRenamedOptionModule [ "services" "ipfs" "apiAddress" ] [ "services" "kubo" "apiAddress" ])
-    (mkRenamedOptionModule [ "services" "ipfs" "swarmAddress" ] [ "services" "kubo" "swarmAddress" ])
+    (mkRenamedOptionModule [ "services" "ipfs" "gatewayAddress" ] [ "services" "kubo" "settings" "Addresses" "Gateway" ])
+    (mkRenamedOptionModule [ "services" "ipfs" "apiAddress" ] [ "services" "kubo" "settings" "Addresses" "API" ])
+    (mkRenamedOptionModule [ "services" "ipfs" "swarmAddress" ] [ "services" "kubo" "settings" "Addresses" "Swarm" ])
     (mkRenamedOptionModule [ "services" "ipfs" "enableGC" ] [ "services" "kubo" "enableGC" ])
     (mkRenamedOptionModule [ "services" "ipfs" "emptyRepo" ] [ "services" "kubo" "emptyRepo" ])
-    (mkRenamedOptionModule [ "services" "ipfs" "extraConfig" ] [ "services" "kubo" "extraConfig" ])
+    (mkRenamedOptionModule [ "services" "ipfs" "extraConfig" ] [ "services" "kubo" "settings" ])
     (mkRenamedOptionModule [ "services" "ipfs" "extraFlags" ] [ "services" "kubo" "extraFlags" ])
     (mkRenamedOptionModule [ "services" "ipfs" "localDiscovery" ] [ "services" "kubo" "localDiscovery" ])
     (mkRenamedOptionModule [ "services" "ipfs" "serviceFdlimit" ] [ "services" "kubo" "serviceFdlimit" ])
     (mkRenamedOptionModule [ "services" "ipfs" "startWhenNeeded" ] [ "services" "kubo" "startWhenNeeded" ])
+    (mkRenamedOptionModule [ "services" "kubo" "extraConfig" ] [ "services" "kubo" "settings" ])
+    (mkRenamedOptionModule [ "services" "kubo" "gatewayAddress" ] [ "services" "kubo" "settings" "Addresses" "Gateway" ])
+    (mkRenamedOptionModule [ "services" "kubo" "apiAddress" ] [ "services" "kubo" "settings" "Addresses" "API" ])
+    (mkRenamedOptionModule [ "services" "kubo" "swarmAddress" ] [ "services" "kubo" "settings" "Addresses" "Swarm" ])
   ];
 }

@@ -166,7 +166,7 @@ Packages
         pkgs.emacs
       ];
 
-    services.postgresql.package = pkgs.postgresql_10;
+    services.postgresql.package = pkgs.postgresql_14;
     ```
 
     The latter option definition changes the default PostgreSQL package

@@ -11,6 +11,7 @@
 , libtool
 , openssl
 , systemdMinimal
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -37,12 +38,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
     db
     libsodium
     libtool
     openssl
   ] ++ lib.optionals (stdenv.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
     systemdMinimal
   ];
 

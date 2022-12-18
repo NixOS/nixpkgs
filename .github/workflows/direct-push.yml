@@ -21,7 +21,7 @@ jobs:
       id: ismerge
       run: |
         ISMERGE=$(curl -H 'Accept: application/vnd.github.groot-preview+json' -H "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }}/commits/${{ env.GITHUB_SHA }}/pulls | jq -r '.[] | select(.merge_commit_sha == "${{ env.GITHUB_SHA }}") | any')
-        echo "::set-output name=ismerge::$ISMERGE"
+        echo "ismerge=$ISMERGE" >> $GITHUB_OUTPUT
     # github events are eventually consistent, so wait until changes propagate to thier DB
     - run: sleep 60
       if: steps.ismerge.outputs.ismerge != 'true'

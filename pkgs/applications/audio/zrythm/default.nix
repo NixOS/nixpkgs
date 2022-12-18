@@ -4,7 +4,6 @@
 , SDL2
 , alsa-lib
 , libaudec
-, bash
 , bash-completion
 , breeze-icons
 , carla

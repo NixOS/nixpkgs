@@ -1,20 +1,21 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab
 , file, cmake
+, libxcrypt
 , nixosTests, writeText
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-x8j/2Eot/EEHsedgZntB5MPxlYMNDlFyZtmiMdhcS7U=";
+    sha256 = "sha256-0I1Hh2KDpUsjRe/qwIWhQBMWPr/c2RkUQk/Mxti+6ZU=";
   };
   stripDebug = false;
 
@@ -50,6 +51,8 @@ beamPackages.mixRelease rec {
           sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
         };
         beamDeps = with final; [ ];
+
+        postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
       };
       remote_ip = beamPackages.buildMix rec {
         name = "remote_ip";
@@ -119,16 +122,20 @@ beamPackages.mixRelease rec {
         name = "crypt";
         version = "0.4.3";
 
-        src = fetchFromGitHub {
-          owner = "msantos";
+        src = fetchFromGitLab {
+          domain = "git.pleroma.social";
+          group = "pleroma";
+          owner = "elixir-libraries";
           repo = "crypt";
-          rev = "f75cd55325e33cbea198fb41fe41871392f8fb76";
-          sha256 = "sha256-ZYhZTe7cTITkl8DZ4z2IOlxTX5gnbJImu/lVJ2ZjR1o=";
+          rev = "cf2aa3f11632e8b0634810a15b3e612c7526f6a3";
+          sha256 = "sha256-48QIsgyEaDzvnihdsFy7pYURLFcb9G8DXIrf5Luk3zo=";
         };
 
         postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
 
         beamDeps = with final; [ elixir_make ];
+
+        buildInputs = [ libxcrypt ];
       };
       web_push_encryption = beamPackages.buildMix rec {
         name = "web_push_encryption";

@@ -121,7 +121,7 @@ with lib.maintainers; {
       bobby285271
       mkg20001
     ];
-    scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
+    scope = "Maintain Cinnamon desktop environment and applications made by the Linux Mint team.";
     shortName = "Cinnamon";
     enableFeatureFreezePing = true;
   };
@@ -182,6 +182,8 @@ with lib.maintainers; {
     members = [
       cole-h
       grahamc
+      hoverbear
+      lheckemann
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
@@ -261,6 +263,15 @@ with lib.maintainers; {
     ];
     scope = "Maintain GCC (GNU Compiler Collection) compilers";
     shortName = "GCC";
+  };
+
+  geospatial = {
+    members = [
+      imincik
+      sikmir
+    ];
+    scope = "Maintain geospatial packages.";
+    shortName = "Geospatial";
   };
 
   golang = {
@@ -495,6 +506,18 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  node = {
+    members = [
+      lilyinstarlight
+      marsam
+      winter
+      yuka
+    ];
+    scope = "Maintain Node.js runtimes and build tooling.";
+    shortName = "Node.js";
+    enableFeatureFreezePing = true;
+  };
+
   numtide = {
     members = [
       mic92
@@ -629,6 +652,18 @@ with lib.maintainers; {
     shortName = "Release";
   };
 
+  rocm = {
+    members = [
+      Madouura
+      Flakebi
+    ];
+    githubTeams = [
+      "rocm-maintainers"
+    ];
+    scope = "Maintain ROCm and related packages.";
+    shortName = "ROCm";
+  };
+
   ruby = {
     members = [
       marsam
@@ -673,7 +708,6 @@ with lib.maintainers; {
     # Verify additions by approval of an already existing member of the team.
     members = [
       balsoft
-      mkaito
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";
@@ -709,6 +743,7 @@ with lib.maintainers; {
 
   vim = {
     members = [
+      figsoda
       jonringer
       softinio
       teto

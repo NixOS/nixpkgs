@@ -63,7 +63,7 @@ luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,http://luarocks.org/dev,,,
-luafilesystem,,,,1.7.0-2,,flosse
+luafilesystem,,,,1.8.0-1,,flosse
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
@@ -87,7 +87,7 @@ mediator_lua,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
-nvim-cmp,,,,,,
+nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,

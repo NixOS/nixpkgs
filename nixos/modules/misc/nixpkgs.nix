@@ -23,12 +23,12 @@ let
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "packageOverrides" ] { } rhs) pkgs;
     } //
     optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
     };
 
   configType = mkOptionType {
@@ -55,6 +55,11 @@ let
     check = builtins.isAttrs;
   };
 
+  # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or
+  # _module.args.pkgs is set. However, determining whether _module.args.pkgs
+  # is defined elsewhere does not seem feasible.
+  constructedByMe = !opt.pkgs.isDefined;
+
   hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
   hasPlatform = hasHostPlatform || hasBuildPlatform;
@@ -62,11 +67,6 @@ let
   # Context for messages
   hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
   buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
-  platformLines = optionalString hasPlatform ''
-    Your system configuration configures nixpkgs with platform parameters:
-    ${hostPlatformLine
-    }${buildPlatformLine
-    }'';
 
   legacyOptionsDefined =
     optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
@@ -302,7 +302,7 @@ in
           ''
         else
           throw ''
-            Neither ${opt.hostPlatform} nor or the legacy option ${opt.system} has been set.
+            Neither ${opt.hostPlatform} nor the legacy option ${opt.system} has been set.
             You can set ${opt.hostPlatform} in hardware-configuration.nix by re-running
             a recent version of nixos-generate-config.
             The option ${opt.system} is still fully supported for NixOS 22.05 interoperability,
@@ -353,12 +353,12 @@ in
             else "nixpkgs.localSystem";
           pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
         in {
-          assertion = !hasPlatform -> nixosExpectedSystem == pkgsSystem;
+          assertion = constructedByMe -> !hasPlatform -> nixosExpectedSystem == pkgsSystem;
           message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
         }
       )
       {
-        assertion = hasPlatform -> legacyOptionsDefined == [];
+        assertion = constructedByMe -> hasPlatform -> legacyOptionsDefined == [];
         message = ''
           Your system configures nixpkgs with the platform parameter${optionalString hasBuildPlatform "s"}:
           ${hostPlatformLine

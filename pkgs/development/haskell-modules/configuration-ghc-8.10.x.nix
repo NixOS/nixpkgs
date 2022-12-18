@@ -52,12 +52,12 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
   cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   # Pick right versions for GHC-specific packages
@@ -90,7 +90,7 @@ self: super: {
   }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
-  hnix = generateOptparseApplicativeCompletion "hnix"
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
     (overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];

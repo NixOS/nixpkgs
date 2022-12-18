@@ -34,7 +34,7 @@ let
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ magnetophon pmahoney ];
   };
 

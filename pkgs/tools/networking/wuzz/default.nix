@@ -11,12 +11,13 @@ buildGoModule rec {
     sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
-  vendorSha256 = "sha256-omeAIq8KBYXRnldiGKDF1g+aOKYc+B4grusmfg5wOuA=";
+  vendorSha256 = null; #vendorSha256 = "";
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
     license = licenses.agpl3;
     maintainers = with maintainers; [ pradeepchhetri ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

@@ -2,7 +2,7 @@
 
 let
   pname = "chrysalis";
-  version = "0.11.5";
+  version = "0.12.0";
 in appimageTools.wrapAppImage rec {
   name = "${pname}-${version}-binary";
 
@@ -10,7 +10,7 @@ in appimageTools.wrapAppImage rec {
     inherit name;
     src = fetchurl {
       url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
-      sha256 = "sha256-3GdObGW91nDqOAlHcaI/4wnbl2EG2RGGzpwY+XYQ0u4=";
+      sha256 = "sha256-sQoEO1UII4Gbp7UbHCCyejsd94lkBbi93TH325EamFc=";
     };
   };
 

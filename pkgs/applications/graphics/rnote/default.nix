@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , alsa-lib
 , appstream-glib
+, clang
+, cmake
 , desktop-file-utils
-, gio-sharp
 , glib
 , gstreamer
 , gtk4
@@ -22,24 +23,26 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.4";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-CZLZblC10k5ynzDDXi/bOe6Rc6M94eywXjyu0ABOVq4=";
+    hash = "sha256-Sy8EHl4UuDMwRAKDkl7njD9GSzKpy1Cfsgw53On+nxo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Udat35KqrMWR0Ckx34BWoF0HiJHZ5CP2CGFD6FNCWRA=";
+    hash = "sha256-Pe4lNcvJNELAitaGY56EUJ8iN7Dkh8DoUpA/t+aRuqk=";
   };
 
   nativeBuildInputs = [
     appstream-glib # For appstream-util
+    clang
+    cmake
     desktop-file-utils # For update-desktop-database
     meson
     ninja
@@ -52,9 +55,10 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
     alsa-lib
-    gio-sharp
     glib
     gstreamer
     gtk4
@@ -62,6 +66,8 @@ stdenv.mkDerivation rec {
     libxml2
     poppler
   ];
+
+  LIBCLANG_PATH = "${clang.cc.lib}/lib";
 
   postPatch = ''
     pushd build-aux
@@ -73,6 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/flxzt/rnote";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda yrd ];

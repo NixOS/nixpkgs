@@ -13,18 +13,24 @@
 , systemd
 , go-md2man
 , nixosTests
+, python3
 }:
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-e3MC7doAC2jpHWI+DX5+m+sbGxFpz7JDheGn+Yp7CF4=";
+    sha256 = "sha256-UOAQtGDoZe+Av4+9RQCJiV3//B/pdF0pEsca4FonGxY=";
   };
+
+  patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ];
 
   vendorSha256 = null;
 
@@ -32,7 +38,7 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles python3 ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs

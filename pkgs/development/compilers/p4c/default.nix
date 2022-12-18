@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
     flex
     cmake
   ]
-  ++ lib.optional enableDocumentation [ doxygen graphviz ]
-  ++ lib.optional enableBPF [ libllvm libbpf ];
+  ++ lib.optionals enableDocumentation [ doxygen graphviz ]
+  ++ lib.optionals enableBPF [ libllvm libbpf ];
 
   buildInputs = [
     protobuf

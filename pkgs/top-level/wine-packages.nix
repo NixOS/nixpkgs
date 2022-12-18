@@ -12,8 +12,7 @@ rec {
     fontconfigSupport = stdenv.isLinux;
     alsaSupport = stdenv.isLinux;
     openglSupport = true;
-    # Works on Darwin but disabled by default to prevent Hydra build failures due to MoltenVK.
-    vulkanSupport = stdenv.isLinux;
+    vulkanSupport = true;
     tlsSupport = true;
     cupsSupport = true;
     dbusSupport = stdenv.isLinux;
@@ -41,7 +40,6 @@ rec {
     gphoto2Support = true;
     krb5Support = true;
     ldapSupport = true;
-    # Works on Darwin but disabled by default to prevent Hydra build failures due to MoltenVK.
     vkd3dSupport = stdenv.isLinux;
     embedInstallers = true;
   };

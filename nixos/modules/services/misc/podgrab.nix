@@ -36,7 +36,7 @@ in
       };
       serviceConfig = {
         DynamicUser = true;
-        EnvironmentFile = lib.optional (cfg.passwordFile != null) [
+        EnvironmentFile = lib.optionals (cfg.passwordFile != null) [
           cfg.passwordFile
         ];
         ExecStart = "${pkgs.podgrab}/bin/podgrab";

@@ -20,6 +20,9 @@ in
   ###### interface
 
   options = {
+    boot.kernel.enable = mkEnableOption (lib.mdDoc "the Linux kernel. This is useful for systemd-like containers which do not require a kernel.") // {
+      default = true;
+    };
 
     boot.kernel.features = mkOption {
       default = {};
@@ -59,6 +62,11 @@ in
         configuration.  For instance, if you use the NVIDIA X driver,
         then it also needs to contain an attribute
         {var}`nvidia_x11`.
+
+        Please note that we strictly support kernel versions that are
+        maintained by the Linux developers only. More information on the
+        availability of kernel versions is documented
+        [in the Linux section of the manual](https://nixos.org/manual/nixos/unstable/index.html#sec-kernel-config).
       '';
     };
 
@@ -258,7 +266,7 @@ in
           ];
       })
 
-      (mkIf (!config.boot.isContainer) {
+      (mkIf config.boot.kernel.enable {
         system.build = { inherit kernel; };
 
         system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;

@@ -8,6 +8,7 @@
 , cudaCapabilities ? [ "60" "70" "80" "86" ]
 , pythonSupport ? true
 , pythonPackages
+, llvmPackages
 , blas
 , swig
 , addOpenGLRunpath
@@ -47,6 +48,8 @@ stdenv.mkDerivation {
     pythonPackages.setuptools
     pythonPackages.pip
     pythonPackages.wheel
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   propagatedBuildInputs = lib.optionals pythonSupport [
@@ -56,7 +59,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
     cudatoolkit
     addOpenGLRunpath
-  ] ++ lib.optional pythonSupport [
+  ] ++ lib.optionals pythonSupport [
     pythonPackages.python
   ];
 

@@ -174,6 +174,8 @@ in
         };
       };
 
+      package = mkPackageOption pkgs "transmission" {};
+
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -287,7 +289,7 @@ in
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
         '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart="${cfg.package}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
@@ -385,7 +387,7 @@ in
     };
 
     # It's useful to have transmission in path, e.g. for remote control
-    environment.systemPackages = [ pkgs.transmission ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users = optionalAttrs (cfg.user == "transmission") ({
       transmission = {
@@ -431,7 +433,7 @@ in
       # https://trac.transmissionbt.com/browser/trunk/libtransmission/tr-udp.c?rev=11956.
       # at least up to the values hardcoded here:
       (mkIf cfg.settings.utp-enabled {
-        "net.core.rmem_max" = mkDefault "4194304"; # 4MB
+        "net.core.rmem_max" = mkDefault 4194304; # 4MB
         "net.core.wmem_max" = mkDefault "1048576"; # 1MB
       })
       (mkIf cfg.performanceNetParameters {
@@ -457,7 +459,7 @@ in
     ];
 
     security.apparmor.policies."bin.transmission-daemon".profile = ''
-      include "${pkgs.transmission.apparmor}/bin.transmission-daemon"
+      include "${cfg.package.apparmor}/bin.transmission-daemon"
     '';
     security.apparmor.includes."local/bin.transmission-daemon" = ''
       r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},

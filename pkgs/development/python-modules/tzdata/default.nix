@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2022.2";
+  version = "2022.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IfTw1yQVcu+n96T9q7BS5htV3EgnTmhCaXzN9SU+VFE=";
+    hash = "sha256-/l+Gbt3YuW6fy6l4+OUDyQmxnqfv2hHlLjlJS606e/o=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-subtests
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ];
 

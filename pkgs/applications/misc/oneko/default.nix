@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, imake, gccmakedep, xlibsWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, imake
+, gccmakedep
+, libX11
+, libXext
+}:
 
 stdenv.mkDerivation rec {
   version_name = "1.2.hanami.6";
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vx12v5fm8ar3f1g6jbpmd3b1q652d32nc67ahkf28djbqjgcbnc";
   };
   nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ xlibsWrapper ];
+  buildInputs = [ libX11 libXext ];
 
   makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
   installTargets = [ "install" "install.man" ];
@@ -28,5 +35,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ publicDomain ];
     maintainers = with maintainers; [ xaverdh irenes ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

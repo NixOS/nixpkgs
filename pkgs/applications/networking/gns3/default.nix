@@ -3,7 +3,7 @@
 }:
 
 let
-  stableVersion = "2.2.31";
+  stableVersion = "2.2.35.1";
   previewVersion = stableVersion;
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
@@ -12,23 +12,19 @@ let
   extraArgs = rec {
     mkOverride = attrname: version: sha256:
       self: super: {
-        ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+        "${attrname}" = super."${attrname}".overridePythonAttrs (oldAttrs: {
           inherit version;
           src = oldAttrs.src.override {
             inherit version sha256;
           };
         });
       };
-    commonOverrides = [
-      (self: super: {
-        jsonschema = super.jsonschema_3;
-      })
-    ];
   };
   mkGui = args: libsForQt5.callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
-  guiSrcHash = "sha256-o9j/avuapiUKIDO6aO/uWFF/5gu+xdfhL7ZSDSaQ858=";
-  serverSrcHash = "sha256-8r8nWNqbHUDtJ6x+/SxHxaw1isSuWF/5as3YXLB6LFw=";
+  guiSrcHash = "sha256-iVvADwIp01HeZoDayvH1dilYRHRkRBTBR3Fh395JBq0=";
+  serverSrcHash = "sha256-41dbiSjvmsDNYr9/rRkeQVOnPSVND34xx1SNknCgHfc=";
+
 in {
   guiStable = mkGui {
     stable = true;

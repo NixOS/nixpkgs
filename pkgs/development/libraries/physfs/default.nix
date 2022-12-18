@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, doxygen, zlib, Foundation, Carbon }:
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen, zlib, Foundation }:
 
 let
   generic = version: sha256:
@@ -6,19 +6,17 @@ let
     pname = "physfs";
     inherit version;
 
-    src = fetchurl {
-      url = "${meta.homepage}/downloads/${pname}-${version}.tar.bz2";
+    src = fetchFromGitHub {
+      owner = "icculus";
+      repo = "physfs";
+      rev = "release-${version}";
       inherit sha256;
     };
 
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ zlib ]
-      ++ lib.optionals stdenv.isDarwin [ Foundation Carbon ];
-
-    patchPhase = ''
-      sed s,-Werror,, -i CMakeLists.txt
-    '';
+      ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
     doInstallCheck = true;
 
@@ -27,14 +25,15 @@ let
     '';
 
     meta = with lib; {
-      homepage = "http://icculus.org/physfs/";
+      homepage = "https://icculus.org/physfs/";
       description = "Library to provide abstract access to various archives";
-      license = licenses.free;
-      platforms = platforms.unix;
+      changelog = "https://github.com/icculus/physfs/releases/tag/release-${version}";
+      license = licenses.zlib;
+      platforms = platforms.all;
     };
   };
 
 in {
-  physfs_2 = generic "2.0.3" "0sbbyqzqhyf0g68fcvvv20n3928j0x6ik1njmhn1yigvq2bj11na";
-  physfs   = generic "3.0.2" "0qzqz4r88gvd8m7sh2z5hvqcr0jfr4wb2f77c19xycyn0rigfk9h";
+  physfs_2 = generic "2.1.1" "sha256-hmS/bfszit3kD6B2BjnuV50XKueq2GcRaqyAKLkvfLc=";
+  physfs   = generic "3.2.0" "sha256-FhFIshX7G3uHEzvHGlDIrXa7Ux6ThQNzVssaENs+JMw=";
 }

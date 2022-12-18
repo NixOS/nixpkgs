@@ -10,7 +10,6 @@ in
 
 with haskellLib;
 self: super: let
-  doctest_0_20_broken = p: checkAgainAfter self.doctest "0.20.0" "doctest broken on 9.4" (dontCheck p);
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 in {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -62,36 +61,8 @@ in {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  # Too strict bound on base
-  # https://github.com/haskell/cabal/issues/8509
-  # Requested versions of Cabal, Cabal-syntax and process match GHC 9.4's for now
-  cabal-install = doJailbreak super.cabal-install;
-  cabal-install-solver = doJailbreak super.cabal-install-solver;
-
-  # Test failure due to new Cabal 3.8 version. Since the failure only pertains
-  # to a change in how Cabal internally represents some platforms and we depend
-  # on the type of representation anywhere, this failure is harmless. Can be
-  # removed after https://github.com/NixOS/cabal2nix/pull/571 is merged.
-  # TODO(@sternenseemann): merge and release a fixed version
-  distribution-nixpkgs = dontCheck super.distribution-nixpkgs;
-  cabal2nix = dontCheck super.cabal2nix;
-  cabal2nix-unstable = dontCheck super.cabal2nix-unstable;
-
-  # build fails on due to ghc api changes
-  # unfinished PR that doesn't yet compile:
-  # https://github.com/sol/doctest/pull/375
-  doctest = markBroken super.doctest_0_20_0;
+  doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
-  http-types = doctest_0_20_broken super.http-types;
-  iproute = doctest_0_20_broken super.iproute;
-  foldl = doctest_0_20_broken super.foldl;
-  prettyprinter-ansi-terminal = doctest_0_20_broken super.prettyprinter-ansi-terminal;
-  pretty-simple = doctest_0_20_broken super.pretty-simple;
-  http-date = doctest_0_20_broken super.http-date;
-  network-byte-order = doctest_0_20_broken super.network-byte-order;
-  co-log-core = doctest_0_20_broken (doJailbreak super.co-log-core);
-  xml-conduit = doctest_0_20_broken (dontCheck super.xml-conduit);
-  validation-selective = doctest_0_20_broken (dontCheck super.validation-selective);
 
   double-conversion = markBroken super.double-conversion;
   blaze-textual = checkAgainAfter super.double-conversion "2.0.4.1" "double-conversion fails to build; required for testsuite" (dontCheck super.blaze-textual);
@@ -109,7 +80,6 @@ in {
   # Jailbreaks & Version Updates
 
   aeson = self.aeson_2_1_1_0;
-  aeson-diff = doctest_0_20_broken (dontCheck super.aeson-diff);
   lens-aeson = self.lens-aeson_1_2_2;
 
   assoc = doJailbreak super.assoc;
@@ -125,8 +95,8 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib_9_4_2_20220822;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_2_20220822;
+  ghc-lib = doDistribute self.ghc-lib_9_4_3_20221104;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_3_20221104;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_1_0;
@@ -148,7 +118,7 @@ in {
 
   # 2022-09-02: Too strict bounds on lens
   # https://github.com/GetShopTV/swagger2/pull/242
-  swagger2 = doctest_0_20_broken (dontCheck (doJailbreak super.swagger2));
+  swagger2 = doJailbreak super.swagger2;
 
   base-orphans = dontCheck super.base-orphans;
 
@@ -224,4 +194,38 @@ in {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
+  ghc-check = dontHaddock super.ghc-check;
+
+  # 2022-11-06: Override override from common, because Cabal-syntax is included since ghc 9.4.
+  implicit-hie = super.implicit-hie.override {
+    Cabal-syntax = null;
+  };
+
+  # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
+  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
+  haskell-language-server = super.haskell-language-server.override {
+    hls-refactor-plugin = null;
+    hls-class-plugin = null;
+    hls-eval-plugin = null;
+    hls-floskell-plugin = null;
+    hls-fourmolu-plugin = null;
+    hls-gadt-plugin = null;
+    hls-hlint-plugin = null;
+    hls-ormolu-plugin = null;
+    hls-rename-plugin = null;
+    hls-stylish-haskell-plugin = null;
+    hls-tactics-plugin = null;
+    hls-haddock-comments-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+  };
+
+  # https://github.com/tweag/ormolu/issues/941
+  ormolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu);
+  fourmolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu);
 }

@@ -26,8 +26,8 @@ let
     Type = "oneshot";
     User = user;
     Group = mkDefault "acme";
-    UMask = 0022;
-    StateDirectoryMode = 750;
+    UMask = "0022";
+    StateDirectoryMode = "750";
     ProtectSystem = "strict";
     ReadWritePaths = [
       "/var/lib/acme"
@@ -62,9 +62,9 @@ let
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       # 1. allow a reasonable set of syscalls
-      "@system-service"
+      "@system-service @resources"
       # 2. and deny unreasonable ones
-      "~@privileged @resources"
+      "~@privileged"
       # 3. then allow the required subset within denied groups
       "@chown"
     ];
@@ -85,7 +85,7 @@ let
     serviceConfig = commonServiceConfig // {
       StateDirectory = "acme/.minica";
       BindPaths = "/var/lib/acme/.minica:/tmp/ca";
-      UMask = 0077;
+      UMask = "0077";
     };
 
     # Working directory will be /tmp
@@ -243,7 +243,7 @@ let
 
       serviceConfig = commonServiceConfig // {
         Group = data.group;
-        UMask = 0027;
+        UMask = "0027";
 
         StateDirectory = "acme/${cert}";
 

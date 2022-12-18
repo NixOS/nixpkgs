@@ -20,7 +20,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_x()
       machine.execute("domination >&2 &")
       machine.wait_for_window("Menu")
-      machine.wait_for_text("New Game")
+      machine.wait_for_text(r"(New Game|Start Server|Load Game|Help Manual|Join Game|About|Play Online)")
       machine.screenshot("screen")
     '';
 })

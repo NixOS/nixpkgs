@@ -15,7 +15,7 @@
 }:
 
 let
-  inherit (torch.cudaPackages) cudatoolkit cudnn;
+  inherit (torch.cudaPackages) cudatoolkit cudaFlags cudnn;
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -24,13 +24,13 @@ let
   cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" torch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QlUAFAG6zEDCDSXR5n2CznspU3fT0kbqySzofGLPgK4=";
+    hash = "sha256-uoy9okPvFH89FJPRRFseHQisw42mWCSuPNADoGa39fc=";
   };
 
   nativeBuildInputs = [ libpng ninja which ]
@@ -45,7 +45,7 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pillow torch scipy ];
 
   preBuild = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${cudaArchStr}"
+    export TORCH_CUDA_ARCH_LIST="${cudaFlags.cudaCapabilitiesSemiColonString}"
     export FORCE_CUDA=1
   '';
 

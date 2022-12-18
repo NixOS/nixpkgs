@@ -8,13 +8,13 @@
 , freetype
 , glib
 , gtk3
-, jdk
+, jdk17
 , libX11
 , libXrender
 , libXtst
 , zlib
 , maven
-, webkitgtk
+, webkitgtk_4_1
 , glib-networking
 , javaPackages
 }:
@@ -46,13 +46,13 @@
     freetype
     glib
     gtk3
-    jdk
+    jdk17
     libX11
     libXrender
     libXtst
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    webkitgtk
+    webkitgtk_4_1
     glib-networking
   ];
 
@@ -92,8 +92,8 @@
       ln -s $out/Applications/DBeaver.app/Contents/MacOS/dbeaver $out/bin/dbeaver
 
       wrapProgram $out/Applications/DBeaver.app/Contents/MacOS/dbeaver \
-        --prefix JAVA_HOME : ${jdk.home} \
-        --prefix PATH : ${jdk}/bin
+        --prefix JAVA_HOME : ${jdk17.home} \
+        --prefix PATH : ${jdk17}/bin
 
       runHook postInstall
     '' else ''
@@ -107,8 +107,8 @@
       patchelf --set-interpreter $interpreter $out/dbeaver/dbeaver
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
-        --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
+        --prefix PATH : ${jdk17}/bin \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk_4_1 glib-networking ])} \
         --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 

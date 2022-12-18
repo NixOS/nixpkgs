@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.24.0";
+  version = "0.25.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hylang";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-PmnYOniYqNHGTxpWuAc+zBhOsgRgMMbERHq81KpHheg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-V+ZtPm17ESxCGpRieGvEeO2bkwHfZQ6k9lsnDWr6pqo=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
@@ -61,7 +61,14 @@ buildPythonPackage rec {
     # For backwards compatibility with removed pkgs/development/interpreters/hy
     # Example usage:
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
-    withPackages = python-packages: python.withPackages (ps: (python-packages ps) ++ [ ps.hy ]);
+    withPackages = python-packages:
+      (python.withPackages
+        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+          name = "${hy.name}-env";
+          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
+            mainProgram = "hy";
+          };
+        });
   };
 
   meta = with lib; {

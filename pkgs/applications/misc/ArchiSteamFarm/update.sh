@@ -15,10 +15,9 @@ if [[ "$new_version" == "$old_version" ]]; then
   fi
 fi
 
-asf_path=$(pwd)
+asf_path=$PWD
 cd ../../../..
 
-nixpkgs_path=$(pwd)
 if [[ "${1:-}" != "--deps-only" ]]; then
     update-source-version ArchiSteamFarm "$new_version"
 fi
@@ -26,4 +25,4 @@ fi
 $(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link) "$deps_file"
 
 cd "$asf_path"
-./web-ui/update.sh
+exec "$asf_path/web-ui/update.sh"

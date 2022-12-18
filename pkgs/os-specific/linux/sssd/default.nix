@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "sha256-i2RRvIFQLuFw9Q3pLOgomvCH9j8h3JAailoIww1dnLs=";
+    sha256 = "sha256-TbeofUQAQNM/Nxzgl8GP2+Y4iR7bVXm4dQaPkYMSdqc=";
   };
 
   postPatch = ''
@@ -101,6 +101,6 @@ stdenv.mkDerivation rec {
     changelog = "https://sssd.io/release-notes/sssd-${version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ e-user illustris ];
+    maintainers = with maintainers; [ illustris ];
   };
 }

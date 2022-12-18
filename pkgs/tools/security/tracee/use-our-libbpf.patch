@@ -1,0 +1,129 @@
+diff --git a/Makefile b/Makefile
+index c72cf63d..e96b7eed 100644
+--- a/Makefile
++++ b/Makefile
+@@ -50,6 +50,7 @@ CMD_STATICCHECK ?= staticcheck
+ # libs
+ #
+ 
++LIB_BPF ?= libbpf
+ LIB_ELF ?= libelf
+ LIB_ZLIB ?= zlib
+ 
+@@ -172,10 +173,6 @@ env:
+ 	@echo "KERN_BUILD_PATH          $(KERN_BUILD_PATH)"
+ 	@echo "KERN_SRC_PATH            $(KERN_SRC_PATH)"
+ 	@echo ---------------------------------------
+-	@echo "LIBBPF_CFLAGS            $(LIBBPF_CFLAGS)"
+-	@echo "LIBBPF_LDLAGS            $(LIBBPF_LDFLAGS)"
+-	@echo "LIBBPF_SRC               $(LIBBPF_SRC)"
+-	@echo ---------------------------------------
+ 	@echo "STATIC                   $(STATIC)"
+ 	@echo ---------------------------------------
+ 	@echo "BPF_VCPU                 $(BPF_VCPU)"
+@@ -274,8 +271,6 @@ OUTPUT_DIR = ./dist
+ $(OUTPUT_DIR):
+ #
+ 	@$(CMD_MKDIR) -p $@
+-	@$(CMD_MKDIR) -p $@/libbpf
+-	@$(CMD_MKDIR) -p $@/libbpf/obj
+ 
+ #
+ # embedded btfhub
+@@ -286,37 +281,6 @@ $(OUTPUT_DIR)/btfhub:
+ 	@$(CMD_MKDIR) -p $@
+ 	@$(CMD_TOUCH) $@/.place-holder # needed for embed.FS
+ 
+-#
+-# libbpf
+-#
+-
+-LIBBPF_CFLAGS = "-fPIC"
+-LIBBPF_LDLAGS =
+-LIBBPF_SRC = ./3rdparty/libbpf/src
+-
+-$(OUTPUT_DIR)/libbpf/libbpf.a: \
+-	$(LIBBPF_SRC) \
+-	$(wildcard $(LIBBPF_SRC)/*.[ch]) \
+-	| .checkver_$(CMD_CLANG) $(OUTPUT_DIR)
+-#
+-	CC="$(CMD_CLANG)" \
+-		CFLAGS="$(LIBBPF_CFLAGS)" \
+-		LD_FLAGS="$(LIBBPF_LDFLAGS)" \
+-		$(MAKE) \
+-		-C $(LIBBPF_SRC) \
+-		BUILD_STATIC_ONLY=1 \
+-		DESTDIR=$(abspath ./$(OUTPUT_DIR)/libbpf/) \
+-		OBJDIR=$(abspath ./$(OUTPUT_DIR)/libbpf/obj) \
+-		INCLUDEDIR= LIBDIR= UAPIDIR= prefix= libdir= \
+-		install install_uapi_headers
+-
+-$(LIBBPF_SRC): \
+-	| .check_$(CMD_GIT)
+-#
+-ifeq ($(wildcard $@), )
+-	@$(CMD_GIT) submodule update --init --recursive
+-endif
+-
+ #
+ # non co-re ebpf
+ #
+@@ -333,7 +297,6 @@ BPF_NOCORE_TAG = $(subst .,_,$(KERN_RELEASE)).$(subst .,_,$(VERSION))
+ bpf-nocore: $(OUTPUT_DIR)/tracee.bpf.$(BPF_NOCORE_TAG).o
+ 
+ $(OUTPUT_DIR)/tracee.bpf.$(BPF_NOCORE_TAG).o: \
+-	$(OUTPUT_DIR)/libbpf/libbpf.a \
+ 	$(TRACEE_EBPF_OBJ_SRC)
+ #
+ 	MAKEFLAGS="--no-print-directory"
+@@ -351,7 +314,6 @@ $(OUTPUT_DIR)/tracee.bpf.$(BPF_NOCORE_TAG).o: \
+ 		-I $(KERN_SRC_PATH)/include/uapi \
+ 		-I $(KERN_BUILD_PATH)/include/generated \
+ 		-I $(KERN_BUILD_PATH)/include/generated/uapi \
+-		-I $(OUTPUT_DIR)/libbpf \
+ 		-I ./3rdparty/include \
+ 		-Wunused \
+ 		-Wall \
+@@ -412,7 +374,6 @@ TRACEE_EBPF_OBJ_CORE_HEADERS = $(shell find pkg/ebpf/c -name *.h)
+ bpf-core: $(OUTPUT_DIR)/tracee.bpf.core.o
+ 
+ $(OUTPUT_DIR)/tracee.bpf.core.o: \
+-	$(OUTPUT_DIR)/libbpf/libbpf.a \
+ 	$(TRACEE_EBPF_OBJ_SRC) \
+ 	$(TRACEE_EBPF_OBJ_CORE_HEADERS)
+ #
+@@ -421,7 +382,6 @@ $(OUTPUT_DIR)/tracee.bpf.core.o: \
+ 		-D__BPF_TRACING__ \
+ 		-DCORE \
+ 		-I./pkg/ebpf/c/ \
+-		-I$(OUTPUT_DIR)/libbpf/ \
+ 		-I ./3rdparty/include \
+ 		-target bpf \
+ 		-O2 -g \
+@@ -447,8 +407,8 @@ ifeq ($(STATIC), 1)
+     GO_TAGS_EBPF := $(GO_TAGS_EBPF),netgo
+ endif
+ 
+-CUSTOM_CGO_CFLAGS = "-I$(abspath $(OUTPUT_DIR)/libbpf)"
+-CUSTOM_CGO_LDFLAGS = "$(shell $(call pkg_config, $(LIB_ELF))) $(shell $(call pkg_config, $(LIB_ZLIB))) $(abspath $(OUTPUT_DIR)/libbpf/libbpf.a)"
++CUSTOM_CGO_CFLAGS = ""
++CUSTOM_CGO_LDFLAGS = "$(shell $(call pkg_config, $(LIB_BPF))) $(shell $(call pkg_config, $(LIB_ELF))) $(shell $(call pkg_config, $(LIB_ZLIB)))"
+ 
+ GO_ENV_EBPF =
+ GO_ENV_EBPF += GOOS=linux
+@@ -468,6 +428,7 @@ $(OUTPUT_DIR)/tracee-ebpf: \
+ 	$(TRACEE_EBPF_SRC) \
+ 	./embedded-ebpf.go \
+ 	| .checkver_$(CMD_GO) \
++	.checklib_$(LIB_BPF) \
+ 	.checklib_$(LIB_ELF) \
+ 	.checklib_$(LIB_ZLIB) \
+ 	btfhub
+@@ -658,7 +619,6 @@ test-rules: \
+ .PHONY: test-upstream-libbpfgo
+ test-upstream-libbpfgo: \
+ 	.checkver_$(CMD_GO) \
+-	$(OUTPUT_DIR)/libbpf/libbpf.a
+ #
+ 	./tests/libbpfgo.sh $(GO_ENV_EBPF)
+ 

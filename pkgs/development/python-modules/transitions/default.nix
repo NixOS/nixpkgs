@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     export HOME=$TMPDIR
   '';
+
+  # upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [
+    "--deselect=tests/test_pygraphviz.py::PygraphvizTest::test_binary_stream"
+    "--deselect=tests/test_pygraphviz.py::PygraphvizTest::test_diagram"
+    "--deselect=tests/test_pygraphviz.py::TestPygraphvizNested::test_binary_stream"
+    "--deselect=tests/test_pygraphviz.py::TestPygraphvizNested::test_diagram"
+  ];
 
   pythonImportsCheck = [
     "transitions"

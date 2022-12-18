@@ -41,6 +41,7 @@ pythonPackages.callPackage
         in
         builtins.filter (f: matchesVersion f.file && hasSupportedExtension f.file && isCompatibleEgg f.file) files;
       toPath = s: pwd + "/${s}";
+      isLocked = lib.length fileCandidates > 0;
       isSource = source != null;
       isGit = isSource && source.type == "git";
       isUrl = isSource && source.type == "url";
@@ -89,6 +90,8 @@ pythonPackages.callPackage
         };
 
       format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
+
+      hooks = python.pkgs.callPackage ./hooks { };
     in
     buildPythonPackage {
       pname = normalizePackageName name;
@@ -103,22 +106,22 @@ pythonPackages.callPackage
       dontStrip = format == "wheel";
 
       nativeBuildInputs = [
-        pythonPackages.poetry2nixFixupHook
+        hooks.poetry2nixFixupHook
       ]
-      ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
+      ++ lib.optional (isLocked && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
       ++ lib.optionals (format == "wheel") [
-        pythonPackages.wheelUnpackHook
+        hooks.wheelUnpackHook
         pythonPackages.pipInstallHook
         pythonPackages.setuptools
       ]
       ++ lib.optionals (format == "pyproject") [
-        pythonPackages.removePathDependenciesHook
-        pythonPackages.removeGitDependenciesHook
-        pythonPackages.pipBuildHook
+        hooks.removePathDependenciesHook
+        hooks.removeGitDependenciesHook
+        hooks.pipBuildHook
       ];
 
       buildInputs = (
-        lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
+        lib.optional (isLocked) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isDirectory buildSystemPkgs
         ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
       );
@@ -162,6 +165,7 @@ pythonPackages.callPackage
           (
             builtins.fetchGit ({
               inherit (source) url;
+              submodules = true;
               rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or (if sourceSpec ? tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             } // (

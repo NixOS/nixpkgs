@@ -1,9 +1,9 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
   version = "unstable-2022-04-03";
 

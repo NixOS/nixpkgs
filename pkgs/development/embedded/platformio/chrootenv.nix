@@ -3,11 +3,8 @@
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python3.override {
-        packageOverrides = self: super: {
-          platformio = self.callPackage ./core.nix { inherit version src; };
-        };
-      };
+      python = pkgs.python3;
+      platformio = python.pkgs.callPackage ./core.nix { inherit version src; };
     in
     (with pkgs; [
       zlib

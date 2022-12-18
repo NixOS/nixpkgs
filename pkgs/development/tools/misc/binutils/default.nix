@@ -93,6 +93,10 @@ stdenv.mkDerivation {
     ./gas-dwarf-zero-PR29451.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
+  # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
+  # Patch from arch-community
+  # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
+  ++ lib.optional targetPlatform.isAvr ./avr-size.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++ lib.optional stdenv.targetPlatform.isMips64n64
      # this patch is from debian:

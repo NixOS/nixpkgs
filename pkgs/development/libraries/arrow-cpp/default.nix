@@ -3,7 +3,6 @@
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
-, abseil-cpp
 , autoconf
 , aws-sdk-cpp
 , boost
@@ -147,10 +146,9 @@ stdenv.mkDerivation rec {
     protobuf
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
   ++ lib.optionals enableGcs [
-    abseil-cpp
     crc32c
     curl
-    google-cloud-cpp
+    google-cloud-cpp grpc
     nlohmann_json
   ];
 
@@ -207,7 +205,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF"
-  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h";
+  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h"
+  ++ lib.optionals enableGcs [ "-DCMAKE_CXX_STANDARD=17" ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";

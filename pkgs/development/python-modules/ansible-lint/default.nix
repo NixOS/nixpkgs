@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.8.1";
+  version = "6.9.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-E/ci0+AyOwzjoQc1jA4eIWnbWpO2j/zyDhAwu6Fv1w0=";
+    sha256 = "sha256-FO+RmSDErMmAVH3tC9Qjp6J6CyMnc45ZM0P0RvOxJsY=";
   };
 
   postPatch = ''
@@ -101,6 +101,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
     license = licenses.mit;
-    maintainers = with maintainers; [ sengaya SuperSandro2000 ];
+    maintainers = with maintainers; [ sengaya ];
   };
 }
