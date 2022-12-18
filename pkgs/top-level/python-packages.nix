@@ -780,6 +780,8 @@ self: super: with self; {
 
   autocommand = callPackage ../development/python-modules/autocommand { };
 
+  autofaiss = callPackage ../development/python-modules/autofaiss { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
@@ -2934,6 +2936,8 @@ self: super: with self; {
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
   email-validator = callPackage ../development/python-modules/email-validator { };
+
+  embedding-reader = callPackage ../development/python-modules/embedding-reader { };
 
   embrace = callPackage ../development/python-modules/embrace { };
 
