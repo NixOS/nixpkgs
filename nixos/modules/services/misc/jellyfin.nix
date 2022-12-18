@@ -81,7 +81,7 @@ in
         ProtectKernelTunables = !config.boot.isContainer;
         LockPersonality = true;
         PrivateTmp = !config.boot.isContainer;
-        # needed for hardware accelaration
+        # needed for hardware acceleration
         PrivateDevices = false;
         PrivateUsers = true;
         RemoveIPC = true;

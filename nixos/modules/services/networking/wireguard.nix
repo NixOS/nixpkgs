@@ -303,7 +303,7 @@ let
           set -e
 
           # If the parent dir does not already exist, create it.
-          # Otherwise, does nothing, keeping existing permisions intact.
+          # Otherwise, does nothing, keeping existing permissions intact.
           mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
 
           if [ ! -f "${values.privateKeyFile}" ]; then
