@@ -1,24 +1,20 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "smiley-sans";
   version = "1.0.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/atelier-anchor/smiley-sans/releases/download/v${version}/smiley-sans-v${version}.zip";
-    sha256 = "sha256-gpPJuf1Eye5rP6tpaGJEUFnk2Ys0GhSNRUT5HQE2P8E=";
+    sha256 = "sha256-LE0CZkWiXjyuiEk316ABCNQL9n5GID8CipjBIu2o6uk=";
+    stripRoot = false;
   };
-
-  unpackPhase = ''
-    ${unzip}/bin/unzip $src
-  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/fonts
     install -Dm644 -t $out/share/fonts/opentype *.otf
     install -Dm644 -t $out/share/fonts/truetype *.ttf
-    install -Dm644 -t $out/share/fonts/smiley-sans *.woff2
+    install -Dm644 -t $out/share/fonts/woff2 *.woff2
     runHook postInstall
   '';
 
