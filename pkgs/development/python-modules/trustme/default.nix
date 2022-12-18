@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -21,10 +20,9 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    service-identity
-    pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [
     pyopenssl
+    pytestCheckHook
+    service-identity
   ];
 
   propagatedBuildInputs = [
@@ -33,17 +31,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [
     futures
   ];
-
-  # aarch64-darwin forbids W+X memory, but this tests depends on it:
-  # * https://github.com/pyca/pyopenssl/issues/873
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    "test_pyopenssl_end_to_end"
-  ];
-
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-    substituteInPlace "tests/test_trustme.py" \
-      --replace "import OpenSSL.SSL" ""
-  '';
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
