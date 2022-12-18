@@ -71,6 +71,16 @@ self: super: {
     }
   );
 
+  nixops-hetznercloud = super.nixops-hetznercloud.overridePythonAttrs (
+    _: {
+      src = pkgs.fetchgit {
+        url = "https://github.com/lukebfox/nixops-hetznercloud.git";
+        rev = "386f8b7cfe724308a9c1e97e76d238498a279495";
+        sha256 = "0ig9maxcprxvz0fgriyzgcqz990s1pspizzsqj7x3xg0w0dpx853";
+      };
+    }
+  );
+
   nixops-virtd = super.nixops-virtd.overridePythonAttrs (
     _: {
       src = pkgs.fetchgit {
