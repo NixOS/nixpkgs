@@ -59,6 +59,19 @@ let
   */
 
   exporterTests = {
+    aggregate = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.prometheus.exporters.node.enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-aggregate-exporter.service")
+        wait_for_open_port(9999)
+        succeed("curl -sSf http://localhost:9999/metrics | grep 'node_procs_running'")
+      '';
+    };
     apcupsd = {
       exporterConfig = {
         enable = true;
