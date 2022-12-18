@@ -12,7 +12,7 @@ let
 
   namePrefix = python.libPrefix + "-";
 
-  # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
+  # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
   makeOverridablePythonPackage = f: origArgs:
     let

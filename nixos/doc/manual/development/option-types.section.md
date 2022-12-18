@@ -345,7 +345,7 @@ that are handled like a separate module.
 It takes a parameter *`o`*, that should be a set, or a function returning
 a set with an `options` key defining the sub-options. Submodule option
 definitions are type-checked accordingly to the `options` declarations.
-Of course, you can nest submodule option definitons for even higher
+Of course, you can nest submodule option definitions for even higher
 modularity.
 
 The option set can be defined directly

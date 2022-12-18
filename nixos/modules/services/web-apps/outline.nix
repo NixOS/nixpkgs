@@ -465,7 +465,7 @@ in
         options = {
           host = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "Host name or IP adress of the SMTP server.";
+            description = lib.mdDoc "Host name or IP address of the SMTP server.";
           };
           port = lib.mkOption {
             type = lib.types.port;

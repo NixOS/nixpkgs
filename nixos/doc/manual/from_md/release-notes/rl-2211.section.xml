@@ -1280,9 +1280,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          Option descriptions, examples, and defaults writting in
-          DocBook are now deprecated. Using CommonMark is preferred and
-          will become the default in a future release.
+          Option descriptions, examples, and defaults writing in DocBook
+          are now deprecated. Using CommonMark is preferred and will
+          become the default in a future release.
         </para>
       </listitem>
       <listitem>

@@ -27,13 +27,13 @@ in {
       fastcgi.shibAuthorizerPort = mkOption {
         type = types.int;
         default = 9100;
-        description = lib.mdDoc "Port for shibauthorizer FastCGI proccess to bind to";
+        description = lib.mdDoc "Port for shibauthorizer FastCGI process to bind to";
       };
 
       fastcgi.shibResponderPort = mkOption {
         type = types.int;
         default = 9101;
-        description = lib.mdDoc "Port for shibauthorizer FastCGI proccess to bind to";
+        description = lib.mdDoc "Port for shibauthorizer FastCGI process to bind to";
       };
     };
   };

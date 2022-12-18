@@ -170,7 +170,7 @@ in
         type = types.attrs;
         default = { };
         description = lib.mdDoc ''
-          Addtional configuration options as Nix attribute set in config.json schema.
+          Additional configuration options as Nix attribute set in config.json schema.
         '';
       };
 
