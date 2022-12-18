@@ -2195,6 +2195,8 @@ with pkgs;
 
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
+  retroarch-assets = callPackage ../applications/emulators/retroarch/retroarch-assets.nix { };
+
   libretro = recurseIntoAttrs
     (callPackage ../applications/emulators/retroarch/cores.nix {
       retroarch = retroarchBare;
