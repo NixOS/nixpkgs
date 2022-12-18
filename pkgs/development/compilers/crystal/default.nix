@@ -150,7 +150,7 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder version "1.3.0") ''
+      '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
@@ -161,7 +161,7 @@ let
         export CRYSTAL_WORKERS=$NIX_BUILD_CORES
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
-        export MACOSX_DEPLOYMENT_TARGET="10.11"
+        export MACOSX_DEPLOYMENT_TARGET=10.11
       '';
 
 
