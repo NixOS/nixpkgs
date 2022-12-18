@@ -94,6 +94,7 @@ let
     "allowedReferences"
     "allowedRequisites"
     "allowedImpureDLLs"
+    "mkDevShell"
   ];
 
   referenceCheckingAttrsToRemove = [
@@ -193,7 +194,7 @@ let
     inherit lib config;
   };
 in
-stdenv:
+mkStdenvDevShell: stdenv:
 
 let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
@@ -1059,6 +1060,10 @@ let
             ];
           }
         );
+
+        devShell = attrs.mkDevShell or mkStdenvDevShell {
+          drvAttrs = derivationArg // checkedEnv;
+        };
 
         inherit passthru overrideAttrs;
         inherit meta;

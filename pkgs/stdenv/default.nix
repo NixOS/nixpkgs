@@ -13,6 +13,8 @@
   config,
   overlays,
   crossOverlays,
+  mkStdenvDevShell,
+  mkBootstrapDevShell,
 }:
 
 let
@@ -23,6 +25,8 @@ let
       crossSystem
       config
       overlays
+      mkStdenvDevShell
+      mkBootstrapDevShell
       ;
   };
   # The native (i.e., impure) build environment.  This one uses the

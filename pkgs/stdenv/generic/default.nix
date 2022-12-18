@@ -98,9 +98,15 @@ let
       mkDerivationFromStdenv ?
         let
           makeDerivationWithConfig' =
-            if argsStdenv ? config then makeDerivationFile config else makeDerivationFileWithConfig;
+            if argsStdenv ? config then
+              makeDerivationFile config mkStdenvDevShell
+            else
+              makeDerivationFileWithConfig mkStdenvDevShell;
         in
         stdenv: (makeDerivationWithConfig' stdenv).mkDerivation,
+
+      # See ./make-derivation.nix
+      mkStdenvDevShell ? _: null,
     }:
 
     let
