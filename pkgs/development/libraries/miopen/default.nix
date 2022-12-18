@@ -23,17 +23,11 @@
 , doxygen
 , sphinx
 , zlib
+, gtest
 , python3Packages
 , buildDocs ? true
 , buildTests ? false
-# LFS isn't working, so we will manually fetch these
-# This isn't strictly required, but is recommended to enable
-# https://github.com/ROCmSoftwarePlatform/MIOpen/issues/1373
-#
-# MIOpen will produce a very large output due to KDBs fetched
-# Also possibly in the future because of KDB generation
-# This is disabled by default so we can cache on hydra
-, fetchKDBs ? false
+, fetchKDBs ? true
 , useOpenCL ? false
 }:
 
@@ -127,36 +121,35 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DMIOPEN_TEST_GFX908=ON"
     "-DMIOPEN_TEST_GFX90A=ON"
     "-DMIOPEN_TEST_GFX103X=ON"
+    "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "enable_testing()" "" \
       --replace "MIOPEN_HIP_COMPILER MATCHES \".*clang\\\\+\\\\+$\"" "true" \
-      --replace "/opt/rocm/hip" "${hip}" \
-      --replace "/opt/rocm/llvm" "${llvm}" \
-      --replace "3 REQUIRED PATHS /opt/rocm)" "3 REQUIRED PATHS ${hip})" \
-      --replace "hip REQUIRED PATHS /opt/rocm" "hip REQUIRED PATHS ${hip}" \
-      --replace "rocblas REQUIRED PATHS /opt/rocm" "rocblas REQUIRED PATHS ${rocblas}" \
-      --replace "miopengemm PATHS /opt/rocm" "miopengemm PATHS ${miopengemm}"
+      --replace "set(MIOPEN_TIDY_ERRORS ALL)" "" # error: missing required key 'key'
+  '' + lib.optionalString buildTests ''
+    substituteInPlace test/gtest/CMakeLists.txt \
+      --replace "enable_testing()" ""
   '' + lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(test)" ""
   '' + lib.optionalString fetchKDBs ''
-    cp -a ${kdbs.gfx1030_36} src/kernels/gfx1030_36.kdb
-    cp -a ${kdbs.gfx900_56} src/kernels/gfx900_56.kdb
-    cp -a ${kdbs.gfx900_64} src/kernels/gfx900_64.kdb
-    cp -a ${kdbs.gfx906_60} src/kernels/gfx906_60.kdb
-    cp -a ${kdbs.gfx906_64} src/kernels/gfx906_64.kdb
-    cp -a ${kdbs.gfx90878} src/kernels/gfx90878.kdb
-    cp -a ${kdbs.gfx90a68} src/kernels/gfx90a68.kdb
-    cp -a ${kdbs.gfx90a6e} src/kernels/gfx90a6e.kdb
+    ln -sf ${kdbs.gfx1030_36} src/kernels/gfx1030_36.kdb
+    ln -sf ${kdbs.gfx900_56} src/kernels/gfx900_56.kdb
+    ln -sf ${kdbs.gfx900_64} src/kernels/gfx900_64.kdb
+    ln -sf ${kdbs.gfx906_60} src/kernels/gfx906_60.kdb
+    ln -sf ${kdbs.gfx906_64} src/kernels/gfx906_64.kdb
+    ln -sf ${kdbs.gfx90878} src/kernels/gfx90878.kdb
+    ln -sf ${kdbs.gfx90a68} src/kernels/gfx90a68.kdb
+    ln -sf ${kdbs.gfx90a6e} src/kernels/gfx90a6e.kdb
   '';
 
   # Unfortunately, it seems like we have to call make on these manually
   postBuild = lib.optionalString buildDocs ''
     export HOME=$(mktemp -d)
-    make doc
+    make -j$NIX_BUILD_CORES doc
   '' + lib.optionalString buildTests ''
     make -j$NIX_BUILD_CORES check
   '';
@@ -170,6 +163,10 @@ in stdenv.mkDerivation (finalAttrs: {
     mkdir -p $test/bin
     mv bin/test_* $test/bin
     patchelf --set-rpath $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])} $test/bin/*
+  '' + lib.optionalString fetchKDBs ''
+    # Apparently gfx1030_40 wasn't generated so the developers suggest just renaming gfx1030_36 to it
+    # Should be fixed in the next miopen kernel generation batch
+    ln -s ${kdbs.gfx1030_36} $out/share/miopen/db/gfx1030_40.kdb
   '';
 
   passthru.updateScript = rocmUpdateScript {
