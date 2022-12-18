@@ -31,48 +31,58 @@
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.All";
-    version = "1.4.9";
-    sha256 = "0r9ssz00d0zbbszs1ypc9jvbwg5myh9jmw46wvzk0jhp5xfz5mip";
+    version = "1.4.12";
+    sha256 = "1n7yv6q8fbk02d334a19zyicvlammjhfrg9rf18jyb3szj8g36k7";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Charge";
-    version = "1.3.14";
-    sha256 = "1frhj5jmncsdcb1x5jy733l40bqifdwirmq6mjdn3596fmgjvh9b";
+    version = "1.3.16";
+    sha256 = "050wh5gw3hgql8191z0yv7sj06wg5da6kvkbcg9hq3ildj0fdj67";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.CLightning";
+    version = "1.3.19";
+    sha256 = "1jx9233apry0kb54df7k0p7vrsp3hp27f5d0j2802gry04sihrl7";
+  })
+  (fetchNuGet {
+    pname = "BTCPayServer.Lightning.Common";
     version = "1.3.16";
-    sha256 = "0nh1fcjpkl6l2par60p0w7nwc45za28iagmdsq6czz68kpvfx83c";
+    sha256 = "1g37736b4k0ncpyy2qycbk4l85fqvgwac3k98nbdj0dvhfghp1dn";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Common";
-    version = "1.3.15";
-    sha256 = "1axmdn6qdzxljdvidw8s68sfgy5ykmxv0nkzcdsgdmhisahaz2pa";
-  })
-  (fetchNuGet {
-    pname = "BTCPayServer.Lightning.Common";
-    version = "1.3.7";
-    sha256 = "1hsn51zx34fswjph1dgplwj92045d4ymallryjxbm5gl1wgnvqvz";
+    version = "1.3.17";
+    sha256 = "1bb8q57lnqnp3wijw41vvbwgz8rgg4g9pw8qhd4iiqi1w94q1bkz";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Eclair";
-    version = "1.3.14";
-    sha256 = "1ld5diahj75jbnqmvvsc0h65sbd4i73k7sik325yw4gvz4jmw2ih";
+    version = "1.3.16";
+    sha256 = "1q109kmzj99axk35l68z3gi29ww1xd62zaxj1f39myvlcv9ncb41";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.LNBank";
-    version = "1.3.16";
-    sha256 = "0nq36jg0qfj93djk5b9i42v8gm2zqkf8a2ddb69z52gsg8ixvcm6";
+    version = "1.3.18";
+    sha256 = "166v6mhmy47fgny55c4mzqb2x7anqyxnd0g409vfgyg5fq4gc15v";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.LND";
-    version = "1.4.7";
-    sha256 = "144wlnlvkmn1hrl7kwsqfvlla3lknd599rmp6zf1nv0n4jsj15l4";
+    version = "1.4.9";
+    sha256 = "0ya365w3i3sjv7wafm6wmasf9mpfsh0fcbhawsv5br7m7lpppwhh";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.LNDhub";
-    version = "1.0.10";
-    sha256 = "12c5gmd62vik0ar786jlhzf0gid4smi5ysl12mxpx1i0dndgapbh";
+    version = "1.0.12";
+    sha256 = "1gb61a5mdmyigy7ps2c8n4iig6i32rdsif9kwn35yxx25zbnmbk2";
+  })
+  (fetchNuGet {
+    pname = "BTCPayServer.NETCore.Plugins.Mvc";
+    version = "1.4.4";
+    sha256 = "1kmmj5m7s41wc1akpqw1b1j7pp4c0vn6sqxb487980ibpj6hyisl";
+  })
+  (fetchNuGet {
+    pname = "BTCPayServer.NETCore.Plugins";
+    version = "1.4.4";
+    sha256 = "0rk0prmb0539ji5fd33cqy3yvw51i5i8m5hb43admr5z8960dd6l";
   })
   (fetchNuGet {
     pname = "CsvHelper";
@@ -171,23 +181,13 @@
   })
   (fetchNuGet {
     pname = "LNURL";
-    version = "0.0.26";
-    sha256 = "0gb6n5zvf3mnmychbv3hmzbfllxamq26y1c18ql6y02wy2asrwff";
+    version = "0.0.27";
+    sha256 = "126rhls5yxxw4i419w59762cq3zmjccjd8x42qmb4nhqmbgybkzm";
   })
   (fetchNuGet {
     pname = "MailKit";
     version = "3.3.0";
     sha256 = "18l0jkrc4d553kiw4vdjzzpafpvsgjs1n19kjbi8isnhzidmsl4j";
-  })
-  (fetchNuGet {
-    pname = "McMaster.NETCore.Plugins.Mvc";
-    version = "1.4.0";
-    sha256 = "07i0p6236hyh1c3cb5v6zkayq5807rd6msc341v2jh6yd5radasy";
-  })
-  (fetchNuGet {
-    pname = "McMaster.NETCore.Plugins";
-    version = "1.4.0";
-    sha256 = "1k2qz0qnf2b1kfwbzcynivy93jm7dcwl866d0fl7qlgq5vql7niy";
   })
   (fetchNuGet {
     pname = "Microsoft.AspNet.SignalR.Client";
@@ -363,11 +363,6 @@
     pname = "Microsoft.DotNet.PlatformAbstractions";
     version = "2.0.4";
     sha256 = "1fdzln4im9hb55agzwchbfgm3vmngigmbpci5j89b0gqcxixmv8j";
-  })
-  (fetchNuGet {
-    pname = "Microsoft.DotNet.PlatformAbstractions";
-    version = "3.1.6";
-    sha256 = "0b9myd7gqbpaw9pkd2bx45jhik9mwj0f1ss57sk2cxmag2lkdws5";
   })
   (fetchNuGet {
     pname = "Microsoft.EntityFrameworkCore.Abstractions";
@@ -553,11 +548,6 @@
     pname = "Microsoft.Extensions.DependencyModel";
     version = "2.0.4";
     sha256 = "041i1vlcibpzgalxxzdk81g5pgmqvmz2g61k0rqa2sky0wpvijx9";
-  })
-  (fetchNuGet {
-    pname = "Microsoft.Extensions.DependencyModel";
-    version = "5.0.0";
-    sha256 = "1mma1zxi0b40972cwfvkj9y0w9r7vjbi74784jzcb22pric00k5x";
   })
   (fetchNuGet {
     pname = "Microsoft.Extensions.DependencyModel";
@@ -816,8 +806,13 @@
   })
   (fetchNuGet {
     pname = "NBitcoin";
-    version = "7.0.14";
-    sha256 = "18nxx13fz3i7kmigijnynvrbx2i5cb3v4m89nvnxl38vcw7w5jys";
+    version = "7.0.18";
+    sha256 = "02kkgymdb80cidibrs6qpy1zjwcfbkwv9zqz9s0swf5zp7qvcakn";
+  })
+  (fetchNuGet {
+    pname = "NBitcoin";
+    version = "7.0.20";
+    sha256 = "0gl39v1mvnhdrqn8dmmslsyj4w4yc4l447zp62bfnwm5ppcwda9z";
   })
   (fetchNuGet {
     pname = "NBitpayClient";
@@ -826,8 +821,8 @@
   })
   (fetchNuGet {
     pname = "NBXplorer.Client";
-    version = "4.2.1";
-    sha256 = "0sizhzz6ry40fphd3lqqj8r9ik103jzrq1ql57rl1zfh1490zq5y";
+    version = "4.2.2";
+    sha256 = "0a8zy9iasgmr7mqhjrbxa2shnygpp97pbg5qnk7ix50y01k9blyw";
   })
   (fetchNuGet {
     pname = "NETStandard.Library";
@@ -1036,8 +1031,8 @@
   })
   (fetchNuGet {
     pname = "Selenium.WebDriver.ChromeDriver";
-    version = "105.0.5195.5200";
-    sha256 = "0vna0mnd2zay6gpgjkd0c4haf2ga8l6grbbhjb6ffzhglyz14993";
+    version = "108.0.5359.7100";
+    sha256 = "13yy6j8vccwv0cd6idhb0hf4asbx9fypag9fj0ldx2rir02a5vxj";
   })
   (fetchNuGet {
     pname = "Selenium.WebDriver";
