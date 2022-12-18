@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitLab, stdenv, darwin }:
+{ lib, rustPlatform, fetchFromGitLab, stdenv, darwin, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+
+  passthru.tests = {
+    inherit (nixosTests) matrix-conduit;
+  };
 
   meta = with lib; {
     description = "A Matrix homeserver written in Rust";
