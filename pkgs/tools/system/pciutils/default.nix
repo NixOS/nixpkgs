@@ -2,6 +2,7 @@
 , hwdata
 , static ? stdenv.hostPlatform.isStatic
 , IOKit
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,12 @@ stdenv.mkDerivation rec {
     # full closure of hwdata)
     cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
   '';
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/pciutils/pciutils.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://mj.ucw.cz/sw/pciutils/";
