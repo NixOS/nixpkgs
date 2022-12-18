@@ -3,8 +3,6 @@
 , fetchPypi
 , pythonOlder
 , python
-
-  # python dependencies
 , typing-extensions
 }:
 
@@ -27,12 +25,15 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  pythonImportsCheck = [ "awacs" ];
+  pythonImportsCheck = [
+    "awacs"
+  ];
 
   meta = with lib; {
     description = "AWS Access Policy Language creation library";
-    maintainers = with maintainers; [ jlesquembre ];
-    license = licenses.bsd2;
     homepage = "https://github.com/cloudtools/awacs";
+    changelog = "https://github.com/cloudtools/awacs/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jlesquembre ];
   };
 }
