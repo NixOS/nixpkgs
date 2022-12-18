@@ -43,8 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openmp
-  ] ++ lib.optionals buildTests [
-    gtest
   ];
 
   cmakeFlags = [
@@ -52,16 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_CXX_COMPILER=hipcc"
   ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals buildTests [
+    "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
   # No flags to build selectively it seems...
-  postPatch = ''
-    substituteInPlace test/CMakeLists.txt \
-      --replace "include(googletest)" ""
-
-    substituteInPlace CMakeLists.txt \
-      --replace "enable_testing()" ""
-  '' + lib.optionalString (!buildTests) ''
+  postPatch = lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(test)" ""
   '' + lib.optionalString (!buildExamples) ''
@@ -69,15 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "add_subdirectory(example)" ""
   '';
 
-  postInstall = ''
-    mkdir -p $out/bin
-    mv bin/ckProfiler $out/bin
-  '' + lib.optionalString buildTests ''
+  postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
-    mv bin/test_* $test/bin
+    mv $out/bin/test_* $test/bin
   '' + lib.optionalString buildExamples ''
     mkdir -p $example/bin
-    mv bin/example_* $example/bin
+    mv $out/bin/example_* $example/bin
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -87,9 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    # Well, at least we're getting something that makes sense now
-    # undefined symbol: testing::Message::Message()
-    # Try removing this next update
-    broken = buildTests;
+    broken = buildExamples; # bin/example_grouped_gemm_xdl_bfp16] Error 139
   };
 })
