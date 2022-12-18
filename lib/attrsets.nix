@@ -757,7 +757,7 @@ rec {
        matchAttrs :: AttrSet -> AttrSet -> Bool
   */
   matchAttrs =
-    # Attribute set strucutre to match
+    # Attribute set structure to match
     pattern:
     # Attribute set to find patterns in
     attrs:

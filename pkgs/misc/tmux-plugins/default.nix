@@ -101,7 +101,7 @@ in rec {
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
-      description = "continous saving of tmux environment";
+      description = "continuous saving of tmux environment";
       longDescription =
       ''
         Features:

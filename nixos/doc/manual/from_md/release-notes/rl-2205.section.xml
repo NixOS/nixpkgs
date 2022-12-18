@@ -328,7 +328,7 @@
       <listitem>
         <para>
           <link xlink:href="https://maddy.email/">Maddy</link>, a free
-          an open source mail server. Availabe as
+          an open source mail server. Available as
           <link linkend="opt-services.maddy.enable">services.maddy</link>.
         </para>
       </listitem>
@@ -1422,7 +1422,7 @@
               derivation if <literal>name</literal> is
               <literal>&quot;vim&quot;</literal> (the default). This
               makes the <literal>wrapManual</literal> argument obsolete,
-              but this behavior can be overriden by setting the
+              but this behavior can be overridden by setting the
               <literal>standalone</literal> argument.
             </para>
           </listitem>

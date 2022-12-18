@@ -162,7 +162,7 @@ network manually, disable NetworkManager with
 `systemctl stop NetworkManager`.
 
 On the minimal installer, NetworkManager is not available, so
-configuration must be perfomed manually. To configure the wifi, first
+configuration must be performed manually. To configure the wifi, first
 start wpa_supplicant with `sudo systemctl start wpa_supplicant`, then
 run `wpa_cli`. For most home networks, you need to type in the following
 commands:

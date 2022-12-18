@@ -82,7 +82,7 @@ in {
       type = types.lines;
       default = "";
       description = lib.mdDoc ''
-        The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completly.
+        The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completely.
       '';
     };
   };

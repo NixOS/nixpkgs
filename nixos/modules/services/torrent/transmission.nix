@@ -44,7 +44,7 @@ in
           (each time the service starts).
 
           See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
-          for documentation of settings not explicitely covered by this module.
+          for documentation of settings not explicitly covered by this module.
         '';
         default = {};
         type = types.submodule {
@@ -355,7 +355,7 @@ in
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
-        # ProtectHome=true would not allow BindPaths= to work accross /home,
+        # ProtectHome=true would not allow BindPaths= to work across /home,
         # and ProtectHome=tmpfs would break statfs(),
         # preventing transmission-daemon to report the available free space.
         # However, RootDirectory= is used, so this is not a security concern

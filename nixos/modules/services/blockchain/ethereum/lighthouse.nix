@@ -51,7 +51,7 @@ in {
               type = types.bool;
               default = false;
               description = lib.mdDoc ''
-                Explictly disables syncing of deposit logs from the execution node.
+                Explicitly disables syncing of deposit logs from the execution node.
                 This overrides any previous option that depends on it.
                 Useful if you intend to run a non-validating beacon node.
               '';

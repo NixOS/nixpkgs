@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~sircmpwn/wev";
     description = "Wayland event viewer";
     longDescription = ''
-      This is a tool for debugging events on a Wayland window, analagous to the
+      This is a tool for debugging events on a Wayland window, analogous to the
       X11 tool xev.
     '';
     license = licenses.mit;

@@ -309,7 +309,7 @@ let
         type = types.int;
         default = 300;
         description = lib.mdDoc ''
-          Timout after which the room is destroyed or unlocked if not
+          Timeout after which the room is destroyed or unlocked if not
           configured, in seconds
        '';
       };
@@ -489,7 +489,7 @@ in
 
           Setting this option to true will prevent you from building a
           NixOS configuration which won't comply with this standard.
-          You can explicitely decide to ignore this standard if you
+          You can explicitly decide to ignore this standard if you
           know what you are doing by setting this option to false.
 
           [1] https://xmpp.org/extensions/xep-0423.html
@@ -649,7 +649,7 @@ in
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc "Addtional path in which to look find plugins/modules";
+        description = lib.mdDoc "Additional path in which to look find plugins/modules";
       };
 
       uploadHttp = mkOption {
@@ -733,7 +733,7 @@ in
 
           Having a server not XEP-0423-compliant might make your XMPP
           experience terrible. See the NixOS manual for further
-          informations.
+          information.
 
           If you know what you're doing, you can disable this warning by
           setting config.services.prosody.xmppComplianceSuite to false.
