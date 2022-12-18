@@ -246,9 +246,9 @@ in (buildEnv {
     #  * Copy is done to have a correct "$0" so that epstopdf enables the restricted mode
     #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
   ''
-    if [[ -e ./bin/epstopdf ]]; then
-      cp $(realpath ./bin/epstopdf) ./share/texmf/scripts/repstopdf
-      ln -s "$out"/share/texmf/scripts/repstopdf ./bin/repstopdf
+    if [[ -e "$out"/bin/epstopdf ]]; then
+      cp "$out"/bin/epstopdf "$out"/share/texmf/scripts/repstopdf
+      ln -s "$out"/share/texmf/scripts/repstopdf "$out"/bin/repstopdf
     fi
   '' +
     # finish up the wrappers
