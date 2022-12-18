@@ -143,7 +143,7 @@ in (buildEnv {
       [[ -e "$fname" ]] && sed -E -n -f '${script}' -i "$fname"
     done
     [[ -e "$out"/share/texmf/tex/generic/config/language.dat.lua ]] && sed -E -n -f '${scriptLua}' -i "$out"/share/texmf/tex/generic/config/language.dat.lua
-    [[ -e "$out"/share/texmf/web2c/fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i "$out"/share/texmf/web2c/fmtutil.cnf
+    [[ -e "$TEXMFCNF"/fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i "$TEXMFCNF"/fmtutil.cnf
   '') +
 
   # function to wrap created executables with required env vars
@@ -207,13 +207,13 @@ in (buildEnv {
 
     # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    if [[ -f "$out"/share/texmf-var/web2c/tex/tex.fmt ]]
+    if [[ -f "$TEXMFSYSVAR"/web2c/tex/tex.fmt ]]
     then
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -output-directory "$out"/share/texmf-var/web2c/tex -ini -jobname=tex -progname=tex tex.ini
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -output-directory "$TEXMFSYSVAR"/web2c/tex -ini -jobname=tex -progname=tex tex.ini
     fi
-    if [[ -f "$out"/share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
+    if [[ -f "$TEXMFSYSVAR"/web2c/luahbtex/lualatex.fmt ]]
     then
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="out"/share/texmf-var/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="$TEXMFSYSVAR"/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
     fi
 
     # Disable unavailable map files
