@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, pkg-config, expat, ncurses, pciutils, numactl
-, x11Support ? false, libX11, cairo
+, x11Support ? false
+, libX11
+, cairo
+, enableCuda ? false
+, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat ncurses ]
     ++ lib.optionals x11Support [ cairo libX11 ]
-    ++ lib.optionals stdenv.isLinux [ numactl ];
+    ++ lib.optionals stdenv.isLinux [ numactl ]
+    ++ lib.optional enableCuda cudaPackages.cudatoolkit;
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
   propagatedBuildInputs = lib.optional stdenv.isLinux pciutils;
