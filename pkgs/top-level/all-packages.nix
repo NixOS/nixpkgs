@@ -112,6 +112,10 @@ with pkgs;
 
   tests = callPackages ../test {};
 
+  stdenvDevShell = import ../stdenv/devShell.nix { inherit pkgs; };
+
+  defaultDevShell = stdenvDevShell;
+
   ### Nixpkgs maintainer tools
 
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };

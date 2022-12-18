@@ -8,6 +8,7 @@
   lib
   # Args to pass on to the pkgset builder, too
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+, defaultDevShell
 } @ args:
 
 let

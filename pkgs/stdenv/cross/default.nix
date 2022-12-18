@@ -1,5 +1,6 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+, defaultDevShell
 }:
 
 let
@@ -11,6 +12,8 @@ let
 
     # Ignore custom stdenvs when cross compiling for compatability
     config = builtins.removeAttrs config [ "replaceStdenv" ];
+
+    inherit defaultDevShell;
   };
 
 in lib.init bootStages ++ [

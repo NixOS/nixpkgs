@@ -1,4 +1,8 @@
-{ lib, config }:
+{ lib,
+  config,
+  # Function to construct the default devShell attribute; when not set via passthru.
+  defaultDevShell ? _: null,
+}:
 
 stdenv:
 
@@ -473,6 +477,8 @@ else let
                    else true);
     };
 
+  drv = derivation derivationArg;
+
 in
 
 lib.extendDerivation
@@ -503,13 +509,18 @@ lib.extendDerivation
        args = [ "-c" "export > $out" ];
      });
 
+     devShell = defaultDevShell {
+       # TODO bring `finalPackage` into scope here.
+       drv = overrideAttrs (o: {});
+     };
+
      inherit meta passthru overrideAttrs;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation derivationArg);
+  drv;
 
 in
   fnOrAttrs:

@@ -124,6 +124,7 @@ in let
 
   stages = stdenvStages {
     inherit lib localSystem crossSystem config overlays crossOverlays;
+    inherit (pkgs) defaultDevShell;
   };
 
   pkgs = boot stages;

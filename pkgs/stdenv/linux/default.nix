@@ -40,6 +40,7 @@
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
     else (abort "unsupported platform for the pure Linux stdenv"));
   in files
+, defaultDevShell
 }:
 
 assert crossSystem == localSystem;
@@ -461,6 +462,8 @@ in
         inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;
       };
+
+      inherit defaultDevShell;
     };
   })
 
