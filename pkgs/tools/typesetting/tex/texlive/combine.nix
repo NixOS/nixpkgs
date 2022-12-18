@@ -57,16 +57,15 @@ in (buildEnv {
   passthru.packages = pkgList.all;
 
   postBuild = ''
-    cd "$out"
-    mkdir -p ./bin
+    mkdir -p "$out"/bin
   '' +
     lib.concatMapStrings
       (path: ''
         for f in '${path}'/bin/*; do
           if [[ -L "$f" ]]; then
-            cp -d "$f" ./bin/
+            cp -d "$f" "$out"/bin/
           else
-            ln -s "$f" ./bin/
+            ln -s "$f" "$out"/bin/
           fi
         done
       '')
@@ -151,7 +150,7 @@ in (buildEnv {
   # function to wrap created executables with required env vars
   ''
     wrapBin() {
-    for link in ./bin/*; do
+    for link in "$out"/bin/*; do
       [ -L "$link" -a -x "$link" ] || continue # if not link, assume OK
       local target=$(readlink "$link")
 
@@ -209,17 +208,13 @@ in (buildEnv {
 
     # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    if [[ -d share/texmf-var/web2c/tex ]]
+    if [[ -f "$out"/share/texmf-var/web2c/tex/tex.fmt ]]
     then
-      cd share/texmf-var/web2c/tex
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -ini -jobname=tex -progname=tex tex.ini
-      cd -
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -output-directory "$out"/share/texmf-var/web2c/tex -ini -jobname=tex -progname=tex tex.ini
     fi
-    if [[ -f share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
+    if [[ -f "$out"/share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
     then
-      cd share/texmf-var/web2c/luahbtex
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
-      cd -
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="out"/share/texmf-var/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
     fi
 
     # Disable unavailable map files
@@ -259,7 +254,7 @@ in (buildEnv {
     # Perform a small test to verify that the restricted mode get enabled when
     # needed (detected by checking if it disallows --gscmd)
   ''
-    if [[ -e ./bin/epstopdf ]]; then
+    if [[ -e "$out"/bin/epstopdf ]]; then
       echo "Testing restricted mode for {,r}epstopdf"
       ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
       (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
