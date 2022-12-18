@@ -74,9 +74,8 @@ in (buildEnv {
   ''
     export PATH="$out/bin:$out/share/texmf/scripts/texlive:$PATH"
     export TEXMFCNF="$out/share/texmf/web2c"
-    export TEXMFDIST="$out/share/texmf"
-    export TEXMFSYSCONFIG="$out/share/texmf-config"
-    export TEXMFSYSVAR="$out/share/texmf-var"
+    TEXMFSYSCONFIG="$out/share/texmf-config"
+    TEXMFSYSVAR="$out/share/texmf-var"
     export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
   '' +
     # patch texmf-dist  -> $out/share/texmf
