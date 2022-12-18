@@ -1420,14 +1420,32 @@ runTests {
     expected = "signed integer or list of (boolean or string)";
   };
 
-  testApply = {
-    expr = apply ( { x, y }: x + y ) { x = 1; y = 2; z = -1; };
+  testApplyArgsFormal = {
+    expr = applyArgs ( { x, y }: x + y ) { x = 1; y = 2; z = -1; };
     expected = 3;
   };
 
-  testCallWith = {
+  testApplyArgsInformal = {
+    expr = applyArgs ( args: ( args.x or 1 ) + ( args.y or 2 ) ) {
+      x = 3;
+      y = 4;
+      z = -1;
+    };
+    expected = 3;
+  };
+
+  testCallWithFormal = {
     expr = callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y ) { x = 3; };
     expected = 5;
+  };
+
+  testCallWithInformal = {
+    expr = callWith { x = 1; y = 2; z = -1; } ( args: args.x + args.y ) {
+      x = 3;
+      y = 4;
+      z = -1;
+    };
+    expected = 7;
   };
 
 }

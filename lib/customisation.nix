@@ -298,30 +298,29 @@ rec {
 
 
 
-  /* Apply a function to an attrset or potential args, automatically filtering
+  /* Apply a function to an attrset of potential args, automatically filtering
      the set to those the function can accept.
      NOTE: This is strictly meant to be used with functions that accept attrsets
      as their argument, and is best suited for use with `setFunctionArgs'.
 
-     nix-repl> lib.apply ( { x, y }: x + y ) { x = 1; y = 2; z = -1; }
+     nix-repl> lib.applyArgs ( { x, y }: x + y ) { x = 1; y = 2; z = -1; }
      3
   */
-  apply = x: args: let
-    f = if lib.isFunction x then x else import x;
-  in f ( builtins.intersectAttrs ( lib.functionArgs f ) args );
+  applyArgs = f: args: let
+    fn = if lib.isFunction f then f else import f;
+  in fn ( builtins.intersectAttrs ( lib.functionArgs fn ) args );
 
 
   /* Non-overridable form of `callPackageWith'.
-     In the example below, the "thunk" attr `z' is ignored, `y' uses the "thunk"
-     value, and the "thunk" `x' is ignored in favor of the explicit `x = 3'.
+     Applying matching args from `auto' and unconditionallly applying `args' to
+     function/file `f'.
 
-     nix-repl> thunk = lib.callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y )
-     nix-repl> thunk { x = 3; }
+     nix-repl> f = lib.callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y )
+     nix-repl> f { x = 3; }
      5
   */
-  callWith = auto: x: let
-    f = if lib.isFunction x then x else import x;
-  in args:
-     f ( ( builtins.intersectAttrs ( lib.functionArgs f ) auto ) // args );
+  callWith = auto: f: args: let
+    fn = if lib.isFunction f then f else import f;
+  in fn ( ( builtins.intersectAttrs ( lib.functionArgs fn ) auto ) // args );
 
 }
