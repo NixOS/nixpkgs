@@ -312,8 +312,7 @@ rec {
 
 
   /* Non-overridable form of `callPackageWith'.
-     Applying matching args from `auto' and unconditionallly applying `args' to
-     function/file `f'.
+     Applying matching args from `auto' and with `args' to function/file `f'.
 
      nix-repl> f = lib.callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y )
      nix-repl> f { x = 3; }

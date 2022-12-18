@@ -1443,7 +1443,7 @@ runTests {
     expr = callWith { x = 1; y = 2; z = -1; } ( args: args.x + args.y ) {
       x = 3;
       y = 4;
-      z = -1;
+      z = -2;
     };
     expected = 7;
   };
