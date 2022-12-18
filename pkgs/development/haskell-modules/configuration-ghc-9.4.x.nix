@@ -175,11 +175,6 @@ in {
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
-  # 2022-11-06: Override override from common, because Cabal-syntax is included since ghc 9.4.
-  implicit-hie = super.implicit-hie.override {
-    Cabal-syntax = null;
-  };
-
   # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
