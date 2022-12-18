@@ -149,6 +149,11 @@ let
         # See https://github.com/crystal-lang/crystal/issues/8629
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+
+      '' + lib.optionalString (stdenv.isDarwin && versionOlder version "1.3.0") ''
+        # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
+        substituteInPlace spec/compiler/loader/unix_spec.cr \
+          --replace 'it "parses file paths"' 'pending "parses file paths"'
       '';
 
       # Defaults are 4
@@ -156,6 +161,7 @@ let
         export CRYSTAL_WORKERS=$NIX_BUILD_CORES
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
+        export MACOSX_DEPLOYMENT_TARGET="10.11"
       '';
 
 
