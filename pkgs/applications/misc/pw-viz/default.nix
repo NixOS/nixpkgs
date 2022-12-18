@@ -1,15 +1,15 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, cmake
 , pkg-config
-, expat
-, fontconfig
-, freetype
 , libGL
-, libxkbcommon
 , pipewire
-, wayland
+, freetype
+, fontconfig
 , xorg
+, libxkbcommon
+, wayland
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ax9d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lw4whdh8tNoS5XUlamQCq8f8z8K59uD90PSSo3skeyo=";
+    hash = "sha256-lw4whdh8tNoS5XUlamQCq8f8z8K59uD90PSSo3skeyo=";
   };
 
   cargoLock = {
@@ -30,26 +30,27 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [
-    expat
-    fontconfig
-    freetype
     libGL
-    libxkbcommon
+    freetype
+    fontconfig
     pipewire
     rustPlatform.bindgenHook
-    wayland
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
-    xorg.libXrandr
+    xorg.libxcb
+    libxkbcommon
+    wayland
   ];
 
   postFixup = ''
-    patchelf $out/bin/pw-viz \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+    patchelf $out/bin/pw-viz --add-rpath ${lib.makeLibraryPath [
+      libGL xorg.libXrandr wayland
+      libxkbcommon
+    ]}
   '';
 
   # enables pipewire API deprecated in 0.3.64
