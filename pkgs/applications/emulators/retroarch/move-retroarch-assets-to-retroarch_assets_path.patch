@@ -1,0 +1,60 @@
+From b3ccf05014f4a79800d8bed05b0dcfdc010e191c Mon Sep 17 00:00:00 2001
+From: Thiago Kenji Okada <thiagokokada@gmail.com>
+Date: Sun, 18 Dec 2022 22:06:48 +0000
+Subject: [PATCH 2/2] Move retroarch assets path to @retroarch_assets_path@
+
+---
+ configuration.c                  |  2 +-
+ frontend/drivers/platform_unix.c | 16 ++++++++--------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/configuration.c b/configuration.c
+index 06a99236c2..15b575d8a2 100644
+--- a/configuration.c
++++ b/configuration.c
+@@ -1539,7 +1539,7 @@ static struct config_path_setting *populate_settings_path(
+    SETTING_PATH("core_assets_directory",
+          settings->paths.directory_core_assets, true, NULL, true);
+    SETTING_PATH("assets_directory",
+-         settings->paths.directory_assets, true, NULL, true);
++         settings->paths.directory_assets, true, NULL, false);
+    SETTING_PATH("dynamic_wallpapers_directory",
+          settings->paths.directory_dynamic_wallpapers, true, NULL, true);
+    SETTING_PATH("thumbnails_directory",
+diff --git a/frontend/drivers/platform_unix.c b/frontend/drivers/platform_unix.c
+index 43ea5f80c9..01b6cccbcc 100644
+--- a/frontend/drivers/platform_unix.c
++++ b/frontend/drivers/platform_unix.c
+@@ -1778,21 +1778,21 @@ static void frontend_unix_get_env(int *argc,
+    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_AUTOCONFIG], base_path,
+          "autoconfig", sizeof(g_defaults.dirs[DEFAULT_DIR_AUTOCONFIG]));
+ 
+-   if (path_is_directory("/usr/local/share/retroarch/assets"))
++   if (path_is_directory("@retroarch_assets_path@/local/share/retroarch/assets"))
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_ASSETS],
+-            "/usr/local/share/retroarch",
++            "@retroarch_assets_path@/local/share/retroarch",
+             "assets", sizeof(g_defaults.dirs[DEFAULT_DIR_ASSETS]));
+-   else if (path_is_directory("/usr/share/retroarch/assets"))
++   else if (path_is_directory("@retroarch_assets_path@/share/retroarch/assets"))
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_ASSETS],
+-            "/usr/share/retroarch",
++            "@retroarch_assets_path@/share/retroarch",
+             "assets", sizeof(g_defaults.dirs[DEFAULT_DIR_ASSETS]));
+-   else if (path_is_directory("/usr/local/share/games/retroarch/assets"))
++   else if (path_is_directory("@retroarch_assets_path@/local/share/games/retroarch/assets"))
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_ASSETS],
+-            "/usr/local/share/games/retroarch",
++            "@retroarch_assets_path@/local/share/games/retroarch",
+             "assets", sizeof(g_defaults.dirs[DEFAULT_DIR_ASSETS]));
+-   else if (path_is_directory("/usr/share/games/retroarch/assets"))
++   else if (path_is_directory("@retroarch_assets_path@/share/games/retroarch/assets"))
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_ASSETS],
+-            "/usr/share/games/retroarch",
++            "@retroarch_assets_path@/share/games/retroarch",
+             "assets", sizeof(g_defaults.dirs[DEFAULT_DIR_ASSETS]));
+    else
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_ASSETS], base_path,
+-- 
+2.38.1
+

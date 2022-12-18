@@ -2,6 +2,8 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
+, withAssets ? false
+, withCoreInfo ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
 , withWayland ? stdenv.isLinux
@@ -30,6 +32,7 @@
 , nvidia_cg_toolkit
 , pkg-config
 , python3
+, retroarch-assets
 , SDL2
 , substituteAll
 , udev
@@ -54,12 +57,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  patches = [
+  patches = lib.optional withAssets
+    (substituteAll {
+      src = ./move-retroarch-assets-to-retroarch_assets_path.patch;
+      retroarch_assets_path = retroarch-assets;
+    })
+  ++ lib.optional withCoreInfo
     (substituteAll {
       src = ./use-fixed-path-for-libretro_core_info.patch;
       libretro_info_path = libretro-core-info;
-    })
-  ];
+    });
 
   nativeBuildInputs = [ pkg-config ] ++
     lib.optional withWayland wayland ++
@@ -102,6 +109,12 @@ stdenv.mkDerivation rec {
     "--disable-builtinmbedtls"
     "--disable-builtinzlib"
     "--disable-builtinflac"
+  ] ++
+  lib.optionals withAssets [
+    "--disable-update_assets"
+    # TODO: investigate why we also need this patch:
+    # ./move-retroarch-assets-to-retroarch_assets_path.patch
+    "--with-assets_dir=${retroarch-assets}"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"

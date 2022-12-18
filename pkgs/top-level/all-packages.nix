@@ -2193,7 +2193,12 @@ with pkgs;
     callPackage ../applications/emulators/retroarch/wrapper.nix
       { inherit retroarch; };
 
-  retroarch = wrapRetroArch { retroarch = retroarchBare; };
+  retroarch = wrapRetroArch {
+    retroarch = retroarchBare.override {
+      withAssets = true;
+      withCoreInfo = true;
+    };
+  };
 
   retroarch-assets = callPackage ../applications/emulators/retroarch/retroarch-assets.nix { };
 
