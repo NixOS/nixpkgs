@@ -349,9 +349,9 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.networks != { }) {
-
-    environment.etc = foldr (a: b: a // b) { }
+  config = mkIf (cfg.networks != { }) (
+    let
+      etcConfig = foldr (a: b: a // b) { }
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")
@@ -366,6 +366,9 @@ in
           };
         }
       ));
+    in {
+
+    environment.etc = etcConfig;
 
     systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
       ("tinc.${network}")
@@ -373,7 +376,7 @@ in
         description = "Tinc Daemon - ${network}";
         wantedBy = [ "multi-user.target" ];
         path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
+        reloadTriggers = [ (builtins.toJSON etcConfig) ];
         serviceConfig = {
           Type = "simple";
           Restart = "always";
@@ -433,7 +436,7 @@ in
     users.groups = flip mapAttrs' cfg.networks (network: _:
       nameValuePair "tinc.${network}" {}
     );
-  };
+  });
 
   meta.maintainers = with maintainers; [ minijackson mic92 ];
 }
