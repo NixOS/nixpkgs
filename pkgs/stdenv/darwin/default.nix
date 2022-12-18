@@ -34,6 +34,7 @@
       cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
       tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kRC/bhCmlD4L7KAvJQgcukk7AinkMz4IwmG1rqlh5tA="; executable = false; };
     }
+, defaultDevShell
 }:
 
 assert crossSystem == localSystem;
@@ -149,7 +150,7 @@ rec {
       thisStdenv = import ../generic {
         name = "${name}-stdenv-darwin";
 
-        inherit config shell extraBuildInputs;
+        inherit config shell extraBuildInputs defaultDevShell;
 
         extraNativeBuildInputs = extraNativeBuildInputs ++ lib.optionals doUpdateAutoTools [
           last.pkgs.updateAutotoolsGnuConfigScriptsHook
@@ -668,7 +669,7 @@ rec {
     import ../generic rec {
       name = "stdenv-darwin";
 
-      inherit config;
+      inherit config defaultDevShell;
       inherit (pkgs.stdenv) fetchurlBoot;
 
       buildPlatform = localSystem;
