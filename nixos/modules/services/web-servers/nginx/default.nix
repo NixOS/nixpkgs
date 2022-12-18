@@ -318,7 +318,9 @@ let
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
-            return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            location / {
+              return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};

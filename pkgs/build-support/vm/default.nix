@@ -1156,7 +1156,7 @@ rec {
      of the default image parameters can be given.  In particular,
      `extraPackages' specifies the names of additional packages from
      the distribution that should be included in the image; `packages'
-     allows the entire set of packages to be overriden; and `size'
+     allows the entire set of packages to be overridden; and `size'
      sets the size of the disk in megabytes.  E.g.,
      `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
      size = 8192; }' builds an 8 GiB image containing Firefox in

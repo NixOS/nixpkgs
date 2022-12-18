@@ -17,7 +17,7 @@ in {
       default = null;
       example = "/root/wiki-js.env";
       description = lib.mdDoc ''
-        Environment fiel to inject e.g. secrets into the configuration.
+        Environment file to inject e.g. secrets into the configuration.
       '';
     };
 

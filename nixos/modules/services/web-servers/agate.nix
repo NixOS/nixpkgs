@@ -43,7 +43,7 @@ in
         type = types.listOf types.str;
         description = lib.mdDoc ''
           Domain name of this Gemini server, enables checking hostname and port
-          in requests. (multiple occurences means basic vhosts)
+          in requests. (multiple occurrences means basic vhosts)
         '';
       };
 

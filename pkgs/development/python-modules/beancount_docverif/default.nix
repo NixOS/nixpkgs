@@ -39,7 +39,7 @@ buildPythonPackage rec {
         Docverif is the "Document Verification" plugin for beancount, fulfilling the following functions:
 
         - Require that every transaction touching an account have an accompanying document on disk.
-        - Explictly declare the name of a document accompanying a transaction.
+        - Explicitly declare the name of a document accompanying a transaction.
         - Explicitly declare that a transaction is expected not to have an accompanying document.
         - Look for an "implicit" PDF document matching transaction data.
         - Associate (and require) a document with any type of entry, including open entries themselves.
