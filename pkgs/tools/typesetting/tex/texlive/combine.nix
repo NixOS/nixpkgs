@@ -202,9 +202,9 @@ in (buildEnv {
     sed "1s|$| -I $out/share/texmf/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
-    perl `type -P mktexlsr.pl` --sort ./share/texmf
+    perl "$out"/share/texmf/scripts/texlive/mktexlsr.pl --sort "$out"/share/texmf
     texlinks "$out/bin" && wrapBin
-    FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
+    FORCE_SOURCE_DATE=1 fmtutil --sys --all | grep '^fmtutil' # too verbose
     #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
@@ -223,14 +223,14 @@ in (buildEnv {
     fi
 
     # Disable unavailable map files
-    echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    echo y | updmap --sys --syncwithtrees --force
     # Regenerate the map files (this is optional)
-    perl `type -P updmap.pl` --sys --force
+    updmap --sys --force
 
     # sort entries to improve reproducibility
     [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
 
-    perl `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
+    perl "$out"/share/texmf/scripts/texlive/mktexlsr.pl --sort "$out"/share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
