@@ -50,7 +50,7 @@ in (buildEnv {
     "/tex/generic/config" # make it a real directory for scheme-infraonly
   ];
 
-  nativeBuildInputs = [ makeWrapper libfaketime ];
+  nativeBuildInputs = [ makeWrapper libfaketime perl bin.texlinks ];
   buildInputs = pkgList.extraInputs;
 
   # This is set primarily to help find-tarballs.nix to do its job
@@ -73,7 +73,7 @@ in (buildEnv {
       pkgList.bin
     +
   ''
-    export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
+    export PATH="$out/bin:$out/share/texmf/scripts/texlive:$PATH"
     export TEXMFCNF="$out/share/texmf/web2c"
     export TEXMFDIST="$out/share/texmf"
     export TEXMFSYSCONFIG="$out/share/texmf-config"
@@ -224,9 +224,9 @@ in (buildEnv {
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     perl `type -P mktexlsr.pl` --sort ./share/texmf
-    ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
+    texlinks "$out/bin" && wrapBin
     FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
-    #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
+    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
