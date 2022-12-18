@@ -14,6 +14,7 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  mkStdenvDevShell,
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
   bootstrapFiles ? (config.replaceBootstrapFiles or lib.id) (
     if localSystem.isAarch64 then
@@ -21,6 +22,7 @@
     else
       import ./bootstrap-files/x86_64-apple-darwin.nix
   ),
+  ...
 }:
 
 assert crossSystem == localSystem;
@@ -111,7 +113,7 @@ let
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        inherit config;
+        inherit config mkStdenvDevShell;
 
         extraBuildInputs = [ prevStage.apple-sdk ];
         inherit extraNativeBuildInputs;
@@ -991,7 +993,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        inherit config;
+        inherit config mkStdenvDevShell;
 
         preHook = ''
           ${commonPreHook}

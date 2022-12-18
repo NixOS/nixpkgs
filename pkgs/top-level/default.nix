@@ -212,6 +212,7 @@ let
       overlays
       crossOverlays
       ;
+    inherit (pkgs) mkStdenvDevShell mkBootstrapDevShell;
   };
 
   pkgs = boot stages;

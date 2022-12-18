@@ -13,6 +13,8 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  mkStdenvDevShell,
+  mkBootstrapDevShell,
 }@args:
 
 let

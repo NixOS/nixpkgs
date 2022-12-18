@@ -64,7 +64,10 @@ let
       # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
       # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
-        stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+        stdenv: (import ./make-derivation.nix { inherit lib config mkStdenvDevShell; } stdenv).mkDerivation,
+
+      # See ./make-derivation.nix
+      mkStdenvDevShell ? _: null,
     }:
 
     let

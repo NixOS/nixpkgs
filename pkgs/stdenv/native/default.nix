@@ -5,6 +5,8 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  mkStdenvDevShell,
+  ...
 }:
 
 assert crossSystem == localSystem;
@@ -146,6 +148,7 @@ let
         cc
         overrides
         config
+        mkStdenvDevShell
         ;
     };
 
