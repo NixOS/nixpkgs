@@ -397,6 +397,9 @@
   "sec-darwin-libcxx-versions": [
     "index.html#sec-darwin-libcxx-versions"
   ],
+  "sec-devshells": [
+    "index.html#sec-devshells"
+  ],
   "sec-functions-library-treefmt": [
     "index.html#sec-functions-library-treefmt"
   ],

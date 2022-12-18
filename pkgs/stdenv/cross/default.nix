@@ -5,6 +5,8 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  mkStdenvDevShell,
+  mkBootstrapDevShell,
 }:
 
 let
@@ -17,6 +19,8 @@ let
     # Ignore custom stdenvs when cross compiling for compatibility
     # Use replaceCrossStdenv instead.
     config = removeAttrs config [ "replaceStdenv" ];
+
+    inherit mkStdenvDevShell mkBootstrapDevShell;
   };
 
 in

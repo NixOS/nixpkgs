@@ -5,8 +5,20 @@
   hostPlatform,
   fetchurl,
   checkMeta,
+  devShell,
 }:
 
+let
+  addDevShells =
+    pkgs:
+    lib.attrsets.mapAttrs (
+      name: value:
+      if value.type or null != "derivation" then
+        value
+      else
+        value // { devShell = devShell { inherit (value) drvAttrs; }; }
+    ) pkgs;
+in
 lib.makeScope
   # Prevent using top-level attrs to protect against introducing dependency on
   # non-bootstrap packages by mistake. Any top-level inputs must be explicitly
@@ -30,7 +42,7 @@ lib.makeScope
   (
     self:
     with self;
-    (
+    addDevShells (
       {
         supportedSystems = [
           "i686-linux"

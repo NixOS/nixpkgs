@@ -3,6 +3,7 @@
   config,
   lib,
   bootstrapFiles,
+  mkBootstrapDevShell,
 }:
 let
   minbootSupportedSystems = [
@@ -24,6 +25,7 @@ if minbootSupported then
           inherit (config) rewriteURL;
         };
         checkMeta = callPackage ../generic/check-meta.nix { hostPlatform = localSystem; };
+        devShell = mkBootstrapDevShell;
       }
     );
     compilerPackage =
