@@ -27,7 +27,7 @@ updateNightly() {
     OLD_NIGHTLY_VERSION="$(getLocalVersion "citra-nightly")"
     OLD_NIGHTLY_HASH="$(getLocalHash "citra-nightly")"
 
-    NEW_NIGHTLY_VERSION="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+    NEW_NIGHTLY_VERSION="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
         "https://api.github.com/repos/citra-emu/citra-nightly/releases?per_page=1" | jq -r '.[0].name' | cut -d"-" -f2 | cut -d" " -f2)"
 
     if [[ "${OLD_NIGHTLY_VERSION}" = "${NEW_NIGHTLY_VERSION}" ]]; then
@@ -52,7 +52,7 @@ updateCanary() {
     OLD_CANARY_VERSION="$(getLocalVersion "citra-canary")"
     OLD_CANARY_HASH="$(getLocalHash "citra-canary")"
 
-    NEW_CANARY_VERSION="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+    NEW_CANARY_VERSION="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
         "https://api.github.com/repos/citra-emu/citra-canary/releases?per_page=1" | jq -r '.[0].name' | cut -d"-" -f2 | cut -d" " -f1)"
 
     if [[ "${OLD_CANARY_VERSION}" = "${NEW_CANARY_VERSION}" ]]; then
