@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
+    changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
   };
