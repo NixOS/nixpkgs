@@ -270,6 +270,14 @@
       </listitem>
       <listitem>
         <para>
+          Enabling global redirect in
+          <literal>services.nginx.virtualHosts</literal> now allows one
+          to add exceptions with the <literal>locations</literal>
+          option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
