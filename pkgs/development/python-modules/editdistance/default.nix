@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of the edit distance (Levenshtein distance)";
     homepage = "https://github.com/roy-ht/editdistance";
+    changelog = "https://github.com/roy-ht/editdistance/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
