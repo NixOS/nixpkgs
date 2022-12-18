@@ -320,6 +320,21 @@ let
       '';
     };
 
+    ipsec = {
+      metricProvider = {
+        services.libreswan.enable = true;
+      };
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ipsec-exporter.service")
+        wait_for_open_port(9536)
+        succeed(
+          "curl -sSf http://localhost:9536/metrics | grep 'ipsec_up'"
+        )
+      '';
+    };
     jitsi = {
       exporterConfig = {
         enable = true;

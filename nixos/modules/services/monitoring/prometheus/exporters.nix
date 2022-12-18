@@ -37,6 +37,7 @@ let
     "fritzbox"
     "influxdb"
     "ipmi"
+    "ipsec"
     "json"
     "jitsi"
     "kea"

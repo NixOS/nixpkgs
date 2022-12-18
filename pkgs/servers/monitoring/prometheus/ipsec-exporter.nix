@@ -26,6 +26,8 @@ buildGoModule rec {
     wrapProgram $out/bin/ipsec_exporter --prefix PATH : ${lib.makeBinPath [ libreswan ]}
   '';
 
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) ipsec; };
+
   meta = with lib; {
     description = "Prometheus exporter for IPsec metrics.";
     homepage = "https://github.com/dennisstritzke/ipsec_exporter";
