@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ldapdomaindump";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10cis8cllpa9qi5qil9k7521ag3921mxwg2wj9nyn0lk41rkjagc";
+    sha256 = "sha256-mdzaFwUKllSZZuU7yJ5x2mcAlNU9lUKzsNAZfQNeb1I=";
   };
 
   propagatedBuildInputs = [ dnspython future ldap3 ];
