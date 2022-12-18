@@ -16279,6 +16279,8 @@ with pkgs;
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
+  smiley-sans = callPackage ../data/fonts/smiley-sans { };
+
   inherit (callPackages ../applications/networking/cluster/spark { })
     spark_3_2
     spark_3_1
