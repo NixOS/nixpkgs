@@ -48,7 +48,7 @@ let
       };
     in buildPackages.nixosOptionsDoc {
       inherit (eval) options;
-      inherit (revision);
+      inherit revision;
       transformOptions = opt: opt // {
         # Clean up declaration sites to not refer to the NixOS source tree.
         declarations =
