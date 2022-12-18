@@ -72,6 +72,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };
