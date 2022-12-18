@@ -265,6 +265,21 @@ in
         '';
       };
 
+      realmImportsDirectory = mkOption {
+        type = lib.types.nullOr lib.types.path;
+        example = "/run/keycloak/data/import/";
+        default = null;
+        description = lib.mdDoc ''
+          A directory of realm json file configurations.
+
+          Each file in this directory should contain a single realm
+          configuration. Only regular files using the name
+          `{realm-name}-realm.json` are read from this directory,
+          sub-directories are ignored. If a realm already exists in
+          the server, it is overriden.
+        '';
+      };
+
       themes = mkOption {
         type = attrsOf package;
         default = { };
@@ -661,6 +676,9 @@ in
             '' + ''
               export KEYCLOAK_ADMIN=admin
               export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
+            '' + optionalString (cfg.realmImportsDirectory != null) ''
+                kc.sh import --dir ${cfg.realmImportsDirectory} --override true || true
+            '' + ''
               kc.sh start --optimized
             '';
           };
