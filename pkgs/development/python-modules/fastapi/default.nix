@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.85.2";
+  version = "0.88.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-j3Set+xWNcRqbn90DJOJQhMrJYI3msvWHlFvN1habP0=";
+    hash = "sha256-2rjKmQcehqkL5OnmtLRTvsyUSpK2aUgyE9VLvz+oWNw=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +77,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_get_custom_response"
+    "test_warn_duplicate_operation_id"
     # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
     "test_websocket_invalid_data"
     "test_websocket_no_credentials"
