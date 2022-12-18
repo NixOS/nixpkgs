@@ -85,41 +85,28 @@ in (buildEnv {
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
-    patchCnfLua() {
-      local cnfLua="$1"
-
-      if [ -e "$cnfLua" ]; then
-        local cnfLuaOrig="$(realpath "$cnfLua")"
-        rm ./texmfcnf.lua
-        sed \
-          -e 's,texmf-dist,texmf,g' \
-          -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
-          -e "s,\$SELFAUTOLOC,$out,g" \
-          -e "s,selfautodir:/,$out/share/,g" \
-          -e "s,selfautodir:,$out/share/,g" \
-          -e "s,selfautoparent:/,$out/share/,g" \
-          -e "s,selfautoparent:,$out/share/,g" \
-          "$cnfLuaOrig" > "$cnfLua"
-      fi
-    }
-
-    (
-      cd ./share/texmf/web2c/
-      local cnfOrig="$(realpath ./texmf.cnf)"
-      rm ./texmf.cnf
+    if [ -e "$TEXMFCNF/texmfcnf.lua" ]; then
       sed \
         -e 's,texmf-dist,texmf,g' \
+        -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
         -e "s,\$SELFAUTOLOC,$out,g" \
-        -e "s,\$SELFAUTODIR,$out/share,g" \
-        -e "s,\$SELFAUTOPARENT,$out/share,g" \
-        -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
-        -e "/^mpost,/d" `# CVE-2016-10243` \
-        "$cnfOrig" > ./texmf.cnf
+        -e "s,selfautodir:/,$out/share/,g" \
+        -e "s,selfautodir:,$out/share/,g" \
+        -e "s,selfautoparent:/,$out/share/,g" \
+        -e "s,selfautoparent:,$out/share/,g" \
+        -i "$TEXMFCNF/texmfcnf.lua"
+    fi
 
-      patchCnfLua "./texmfcnf.lua"
+    sed \
+      -e 's,texmf-dist,texmf,g' \
+      -e "s,\$SELFAUTOLOC,$out,g" \
+      -e "s,\$SELFAUTODIR,$out/share,g" \
+      -e "s,\$SELFAUTOPARENT,$out/share,g" \
+      -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
+      -e "/^mpost,/d" `# CVE-2016-10243` \
+      -i "$TEXMFCNF/texmf.cnf"
 
-      mkdir $out/share/texmf-local
-    )
+    mkdir "$out/share/texmf-local"
   '' +
     # now filter hyphenation patterns and formats
   (let
@@ -154,17 +141,11 @@ in (buildEnv {
         + lib.concatMapStrings (pname: section "^# from ${pname}:$" "^# from") formatPNames
       );
   in ''
-    (
-      cd ./share/texmf/tex/generic/config/
-      for fname in language.{dat,def}; do
-        [[ -e "$fname" ]] && sed -E -n -f '${script}' -i "$fname"
-      done
-      [[ -e language.dat.lua ]] && sed -E -n -f '${scriptLua}' -i language.dat.lua
-    )
-    (
-      cd ./share/texmf/web2c/
-      [[ -e fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i fmtutil.cnf
-    )
+    for fname in "$out"/share/texmf/tex/generic/config/language.{dat,def}; do
+      [[ -e "$fname" ]] && sed -E -n -f '${script}' -i "$fname"
+    done
+    [[ -e "$out"/share/texmf/tex/generic/config/language.dat.lua ]] && sed -E -n -f '${scriptLua}' -i "$out"/share/texmf/tex/generic/config/language.dat.lua
+    [[ -e "$out"/share/texmf/web2c/fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i "$out"/share/texmf/web2c/fmtutil.cnf
   '') +
 
   # function to wrap created executables with required env vars
@@ -255,16 +236,13 @@ in (buildEnv {
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
-    (
-      cd "$out/share/texmf/scripts"
-      source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
-      for s in $texmf_scripts; do
-        [[ -x "./$s" ]] || continue
-        tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
-        [[ ! -e "$out/bin/$tName" ]] || continue
-        ln -sv "$(realpath $s)" "$out/bin/$tName" # wrapped below
-      done
-    )
+    source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
+    for s in $texmf_scripts; do
+      [[ -x "$out/share/texmf/scripts/$s" ]] || continue
+      tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
+      [[ ! -e "$out/bin/$tName" ]] || continue
+      ln -sv "$(realpath $out/share/texmf/scripts/$s)" "$out/bin/$tName" # wrapped below
+    done
   '' +
     # A hacky way to provide repstopdf
     #  * Copy is done to have a correct "$0" so that epstopdf enables the restricted mode
@@ -297,11 +275,9 @@ in (buildEnv {
     #   note: it's possible we might need deepen the work-around to man/*.
   ''
     for d in {man,info}; do
-      [[ -e "./share/texmf/doc/$d" ]] || continue;
-      (
-        mkdir -p "./share/$d" && cd "./share/$d"
-        ln -s -t . ../texmf/doc/"$d"/*
-      )
+      [[ -e "$out/share/texmf/doc/$d" ]] || continue;
+      mkdir -p "$out/share/$d"
+      ln -s -t "$out/share/$d" "$out/share/texmf/doc/$d"/*
     done
   '' +
   # MkIV uses its own lookup mechanism and we need to initialize
