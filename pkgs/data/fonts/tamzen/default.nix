@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Bitmapped programming font based on Tamsyn";
     longDescription = ''
-    Tamzen is a monospace bitmap font. It is programatically forked
+    Tamzen is a monospace bitmap font. It is programmatically forked
     from Tamsyn version 1.11, which backports glyphs from older
     versions while deleting deliberately empty glyphs to allow
     secondary/fallback fonts to provide real glyphs at those codepoints.

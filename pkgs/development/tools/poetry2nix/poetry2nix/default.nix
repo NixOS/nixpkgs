@@ -482,7 +482,7 @@ lib.makeScope pkgs.newScope (self: {
   /*
     The default list of poetry2nix override overlays
 
-    Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
+    Can be overridden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
   defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib poetryLib; });
 

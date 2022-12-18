@@ -33,7 +33,7 @@
   # `self` as second, and returns a set of haskell packages
   package-set
 
-, # The final, fully overriden package set usable with the nixpkgs fixpoint
+, # The final, fully overridden package set usable with the nixpkgs fixpoint
   # overriding functionality
   extensible-self
 }:
@@ -73,7 +73,7 @@ let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
+  # manualArgs are the arguments that were explicitly passed to `callPackage`, like:
   #
   # callPackage foo { bar = null; };
   #
