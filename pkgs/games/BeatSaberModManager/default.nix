@@ -7,6 +7,8 @@
   buildDotnetModule,
   fetchFromGitHub,
 
+  dotnetCorePackages,
+
   libX11,
   libICE,
   libSM,
@@ -15,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "BeatSaberModManager";
-  version = "0.0.2";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "affederaffe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6+9pWr8jJzs430Ai2ddh/2DK3C2bQA1e1+BNDrKhyzY=";
+    sha256 = "sha256-XeyOWg4Wa4hiorLPnbnBrLSjnxheAGGMPTqBleulDGw=";
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 
@@ -35,6 +37,9 @@ buildDotnetModule rec {
       runtimeIdentifier = dotnet-sdk.passthru.systemToDotnetRid targetPlatform.system;
     })
   ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   nugetDeps = ./deps.nix;
 

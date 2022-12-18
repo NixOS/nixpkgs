@@ -1,4 +1,4 @@
-From c0e587f4c50bd7bedfe6e5102e9b47c9704fac9b Mon Sep 17 00:00:00 2001
+From 4bd87f2f3151ad07d311f7d33c2b890977aca93d Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 20 Sep 2022 18:43:15 +0800
 Subject: [PATCH 4/4] ignore absolute path when loading library

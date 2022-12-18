@@ -1,4 +1,5 @@
 { lib, stdenv
+, gnumake42
 , darwin
 , fetchurl
 , makeWrapper
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     gitMinimal
     pkg-config
     makeWrapper
+    gnumake42
   ];
   buildInputs = [
     luaEnv

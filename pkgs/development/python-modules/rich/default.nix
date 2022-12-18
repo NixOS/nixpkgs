@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , CommonMark
-, dataclasses
 , poetry-core
 , pygments
 , typing-extensions
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   pname = "rich";
   version = "12.6.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Textualize";
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     pygments
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];

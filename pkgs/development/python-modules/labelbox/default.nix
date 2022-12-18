@@ -2,7 +2,6 @@
 , backoff
 , backports-datetime-fromisoformat
 , buildPythonPackage
-, dataclasses
 , fetchFromGitHub
 , google-api-core
 , jinja2
@@ -20,7 +19,7 @@
 buildPythonPackage rec {
   pname = "labelbox";
   version = "3.24.1";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     backoff
     backports-datetime-fromisoformat
-    dataclasses
     google-api-core
     jinja2
     ndjson

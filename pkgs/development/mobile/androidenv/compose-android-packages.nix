@@ -123,7 +123,7 @@ rec {
 
   build-tools = map (version:
     callPackage ./build-tools.nix {
-      inherit deployAndroidPackage;
+      inherit deployAndroidPackage os;
       package = packages.build-tools.${version};
     }
   ) buildToolsVersions;

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, dataclasses
 , fetchPypi
 , jedi
 , pygments
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "2022.1.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,8 +27,6 @@ buildPythonPackage rec {
     pygments
     urwid
     urwid-readline
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [

@@ -134,7 +134,7 @@
    </arg>
    <arg>
     <option>-I</option>
-    <replaceable>path</replaceable>
+    <replaceable>NIX_PATH</replaceable>
    </arg>
    <arg>
     <group choice='req'>
@@ -624,7 +624,7 @@
 
   <para>
    In addition, <command>nixos-rebuild</command> accepts various Nix-related
-   flags, including <option>--max-jobs</option> / <option>-j</option>,
+   flags, including <option>--max-jobs</option> / <option>-j</option>, <option>-I</option>,
    <option>--show-trace</option>, <option>--keep-failed</option>,
    <option>--keep-going</option>, <option>--impure</option>, and <option>--verbose</option> /
    <option>-v</option>. See the Nix manual for details.
@@ -643,6 +643,20 @@
      <para>
       Path to the main NixOS configuration module. Defaults to
       <filename>/etc/nixos/configuration.nix</filename>.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <envar>NIX_PATH</envar>
+    </term>
+    <listitem>
+     <para>
+      A colon-separated list of directories used to look up Nix expressions enclosed in angle brackets (e.g &lt;nixpkgs&gt;). Example
+      <screen>
+          nixpkgs=./my-nixpkgs
+      </screen>
      </para>
     </listitem>
    </varlistentry>

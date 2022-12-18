@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       a common set of abstractions that can be used by standard GUI and text
       mode package managers.
     '';
-    homepage = "http://www.packagekit.org/";
+    homepage = "https://github.com/PackageKit/PackageKit";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
