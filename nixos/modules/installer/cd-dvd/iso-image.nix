@@ -235,7 +235,7 @@ let
   #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
   #    will get white-on-black console-like text on sub-menus. *sigh*
   efiDir = pkgs.runCommand "efi-directory" {
-    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+    nativeBuildInputs = with pkgs; [ grub2_efi ];
     strictDeps = true;
   } ''
     mkdir -p $out/EFI/boot/
@@ -398,7 +398,7 @@ let
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" {
-    nativeBuildInputs = [ pkgs.buildPackages.mtools pkgs.buildPackages.libfaketime pkgs.buildPackages.dosfstools ];
+    nativeBuildInputs = with pkgs; [ mtools libfaketime dosfstools ];
     strictDeps = true;
   }
     # Be careful about determinism: du --apparent-size,

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, autoreconfHook, zlib, gtest, buildPackages
+, autoreconfHook, zlib, gtest, which
 , version, sha256
 , ...
 }:
@@ -30,10 +30,10 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc buildProtobuf ];
+  nativeBuildInputs = [ autoreconfHook which stdenv.cc buildProtobuf ];
 
   buildInputs = [ zlib ];
-  configureFlags = if buildProtobuf == null then [] else [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
+  configureFlags = lib.optionals (buildProtobuf == null) [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
 
   enableParallelBuilding = true;
 

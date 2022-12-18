@@ -744,7 +744,7 @@ in
 
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
-      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
+      nativeBuildInputs = with pkgs; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
