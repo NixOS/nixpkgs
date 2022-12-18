@@ -110,9 +110,7 @@ self: super: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
-  # Too strict upper bound on hedgehog
-  # https://github.com/erikd/wide-word/issues/71
-  wide-word = doJailbreak super.wide-word;
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] super.cachix;
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
