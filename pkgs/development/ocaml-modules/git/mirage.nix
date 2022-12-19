@@ -43,6 +43,7 @@ buildDunePackage {
   inherit (git) version src;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   buildInputs = [
     dns
