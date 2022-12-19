@@ -965,6 +965,8 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch ./patches/xattr-fix-build.patch super.xattr;
 
+  patch = dontCheck super.patch;
+
   esqueleto =
     overrideCabal
       (drv: {
@@ -1131,23 +1133,40 @@ self: super: {
     });
   };
 
+  jsaddle-webkit2gtk = overrideCabal (old: {
+    postPatch = old.postPatch or "" + ''
+      sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
+    '';
+  }) super.jsaddle-webkit2gtk;
+
+
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
       sed -i 's/lens.*4.20/lens/' jsaddle-dom.cabal
     '';
-  }) super.jsaddle-dom;
+  }) (doJailbreak super.jsaddle-dom);
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   # 2022-03-16: Pullrequest for ghc 9 compat https://github.com/reflex-frp/reflex-dom/pull/433
-  reflex-dom-core = doDistribute (unmarkBroken (dontCheck
-    (appendPatch
+  reflex-dom-core = overrideCabal (old: {
+    postPatch = old.postPatch or "" + ''
+      sed -i 's/template-haskell.*2.17/template-haskell/' reflex-dom-core.cabal
+    '';
+    }) 
+    ((appendPatches [
       (fetchpatch {
-        url = "https://github.com/reflex-frp/reflex-dom/compare/a0459deafd296656b3e99db01ea7f65b89b0948c...56fa8a484ccfc7d3365d07fea3caa430155dbcac.patch";
-        sha256 = "sha256-azMF3uX7S1rKKRAVjY+xP2XbQKHvEY/9nU7cH81KKPA=";
+        url = "https://github.com/reflex-frp/reflex-dom/commit/1814640a14c6c30b1b2299e74d08fb6fcaadfb94.patch";
+        sha256 = "sha256-QyX2MLd7Tk0M1s0DU0UV3szXs8ngz775i3+KI62Q3B8=";
         relative = "reflex-dom-core";
       })
-      super.reflex-dom-core)));
+      (fetchpatch {
+        url = "https://github.com/reflex-frp/reflex-dom/commit/56fa8a484ccfc7d3365d07fea3caa430155dbcac.patch";
+        sha256 = "sha256-IogAYJZac17Bg99ZnnFX/7I44DAnHo2PRBWD0iVHbNA=";
+        relative = "reflex-dom-core";
+      })
+    ]
+          (doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core))))));
 
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
@@ -1382,7 +1401,7 @@ self: super: {
   dependent-sum = doJailbreak super.dependent-sum;
 
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
-  reflex = dontCheck super.reflex;
+  reflex = doJailbreak (dontCheck super.reflex);
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
@@ -1704,6 +1723,7 @@ self: super: {
     postPatch = ''
       sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
       sed -i 's/attoparsec.*,/attoparsec,/' jsaddle.cabal
+      sed -i 's/time.*,/time,/' jsaddle.cabal
       sed -i 's/(!name)/(! name)/' src/Language/Javascript/JSaddle/Object.hs
     '' + (drv.postPatch or "");
   }) (doJailbreak super.jsaddle);
