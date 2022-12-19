@@ -1381,22 +1381,6 @@ self: super: {
   # https://github.com/obsidiansystems/dependent-sum/issues/55
   dependent-sum = doJailbreak super.dependent-sum;
 
-  # 2022-03-16 upstream is not updating bounds: https://github.com/srid/rib/issues/169
-  rib-core = doJailbreak (super.rib-core.override { relude = doJailbreak super.relude_0_7_0_0; });
-  neuron = assert super.neuron.version == "1.0.0.0"; overrideCabal {
-    # neuron is soon to be deprecated
-    # Fixing another ghc 9.0 bug here
-    postPatch = ''
-      sed -i 's/asks routeConfigRouteLink/asks (\\x -> routeConfigRouteLink x)/' src/lib/Neuron/Web/Route.hs
-    '';
-  }
-  (doJailbreak (super.neuron.override {
-    clay = dontCheck self.clay_0_13_3;
-    relude = doJailbreak self.relude_0_7_0_0;
-  }));
-
-  reflex-dom-pandoc = super.reflex-dom-pandoc.override { clay = dontCheck self.clay_0_13_3; };
-
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = dontCheck super.reflex;
 

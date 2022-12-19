@@ -219,7 +219,6 @@ let
         matterhorn
         mueval
         naproche
-        neuron-notes
         niv
         nix-delegate
         nix-deploy
