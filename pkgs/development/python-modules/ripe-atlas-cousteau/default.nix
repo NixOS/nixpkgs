@@ -33,7 +33,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     python-socketio
-  ];
+  ] ++ python-socketio.optional-dependencies.client;
 
   checkInputs = [
     pytestCheckHook
