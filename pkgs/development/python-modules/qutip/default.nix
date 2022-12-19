@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "4.7.0";
+  version = "4.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wGr6uTM6pFL2nvN4zdqPdEO8O3kjrRtKWx8luL1t9Sw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W5iqRWAB6D1Dnxz0Iyl7ZmP3yrXvLyV7BdBdIgFCiQY=";
   };
 
   nativeBuildInputs = [
