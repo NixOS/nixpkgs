@@ -1,10 +1,12 @@
 { lib
+, aiodns
 , buildPythonPackage
 , c-ares
 , cffi
 , fetchPypi
 , idna
 , pythonOlder
+, tornado
 }:
 
 buildPythonPackage rec {
@@ -34,6 +36,10 @@ buildPythonPackage rec {
 
   # Requires network access
   doCheck = false;
+
+  passthru.tests = {
+    inherit aiodns tornado;
+  };
 
   pythonImportsCheck = [
     "pycares"
