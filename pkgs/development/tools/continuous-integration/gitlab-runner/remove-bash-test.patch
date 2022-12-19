@@ -1,25 +1,23 @@
 diff --git a/shells/bash_test.go b/shells/bash_test.go
-index b8a48f85e..0e3173fc3 100644
+index 9ed9e65ff..02b6e6d5f 100644
 --- a/shells/bash_test.go
 +++ b/shells/bash_test.go
-@@ -4,12 +4,9 @@
- package shells
+@@ -4,11 +4,9 @@ package shells
  
  import (
+ 	"path"
 -	"runtime"
  	"testing"
  
  	"github.com/stretchr/testify/assert"
 -	"github.com/stretchr/testify/require"
--	"gitlab.com/gitlab-org/gitlab-runner/common"
+ 	"gitlab.com/gitlab-org/gitlab-runner/common"
  )
  
- func TestBash_CommandShellEscapesLegacy(t *testing.T) {
-@@ -84,62 +81,3 @@ func TestBash_CheckForErrors(t *testing.T) {
- 		})
+@@ -90,65 +88,6 @@ func TestBash_CheckForErrors(t *testing.T) {
  	}
  }
--
+ 
 -func TestBash_GetConfiguration(t *testing.T) {
 -	tests := map[string]struct {
 -		info common.ShellScriptInfo
@@ -78,3 +76,7 @@ index b8a48f85e..0e3173fc3 100644
 -		})
 -	}
 -}
+-
+ func Test_BashWriter_isTmpFile(t *testing.T) {
+ 	tmpDir := "/foo/bar"
+ 	bw := BashWriter{TemporaryPath: tmpDir}
