@@ -56,10 +56,10 @@ in
 
   pdfstudio2022 = callPackage ./common.nix rec {
     inherit desktopName longDescription pname program year;
-    version = "${year}.1.1";
+    version = "${year}.1.3";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
-      sha256 = "sha256-OPmNhnkeSvHZZbh4SaMU/vDSLrDdTmMmuSGP2HyzVm4=";
+      sha256 = "sha256-B3RrftuKsPWUWP9hwnq4i311hgZgwZLqG1pJLdilfQI=";
     };
     extraBuildInputs = [
       libgccjit #for libstdc++.so.6 and libgomp.so.1
