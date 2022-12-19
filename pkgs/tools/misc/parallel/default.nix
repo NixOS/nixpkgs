@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl procps ];
 
+  preInstall = ''
+    patchShebangs ./src/parallel
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/parallel \
       --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}"
