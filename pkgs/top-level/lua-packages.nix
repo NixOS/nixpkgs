@@ -59,6 +59,27 @@ rec {
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
+ lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
+    pname = "lua-resty-core";
+    version = "0.1.24";
+
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-resty-core";
+      rev = "v${version}";
+      sha256 = "sha256-obwyxHSot1Lb2c1dNqJor3inPou+UIBrqldbkNBCQQk=";
+    };
+
+    propagatedBuildInputs = [ lua-resty-lrucache ];
+
+    meta = with lib; {
+      description = "New FFI-based API for lua-nginx-module";
+      homepage = "https://github.com/openresty/lua-resty-core";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ SuperSandro2000 ];
+    };
+  }) {};
+
  lua-resty-lrucache = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-lrucache";
     version = "0.13";
