@@ -15,6 +15,8 @@ with self; with super; {
 
   certifi = callPackage ../development/python2-modules/certifi { };
 
+  cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
+
   chardet = callPackage ../development/python2-modules/chardet { };
 
   cheetah = callPackage ../development/python2-modules/cheetah { };
