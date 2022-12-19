@@ -200,6 +200,18 @@ let
                                           max_size=${cfg.proxyCache.maxSize};
       ''}
 
+      ${let
+        # TODO: can luaEnv.pkgs.libLua.genLuaPathAbsStr be used when lib paths are added to luaPathList?
+        genLuaPath = drv: lib.concatMapStringsSep ";" (x: "${drv}/${x}") [
+          "lib/lua/${luaEnv.luaversion}/?.lua"
+          "lib/lua/?.lua" # for openresty
+        ];
+        luaEnv = pkgs.luajit_openresty.withPackages (p: with p; [ lua-resty-core ] ++ cfg.lua-module.extraLuaPackages p);
+      in optionalString cfg.lua-module.enable ''
+        lua_package_path '${genLuaPath luaEnv};';
+        lua_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+      ''}
+
       ${cfg.commonHttpConfig}
 
       ${vhosts}
@@ -781,6 +793,23 @@ in
         description = lib.mdDoc "Configure proxy cache";
       };
 
+      lua-module = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkEnableOption (lib.mdDoc "Enable the lua module");
+
+            extraLuaPackages = mkOption {
+              type = with types; functionTo (listOf package);
+              default = p: [ ];
+              example = p: with p; [ lua-resty-http lua-resty-jwt lua-resty-openidc lua-resty-openssl lua-resty-session ];
+              description = lib.mdDoc "Extra lua packages to add to lua_package_path";
+            };
+          };
+        };
+        description = lib.mdDoc "Configure nginx lua module.";
+        default = {};
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
@@ -953,6 +982,8 @@ in
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
     }) dependentCertNames;
+
+    services.nginx.additionalModules = lib.optional cfg.lua-module.enable (pkgs.nginxModules.override { luajit = pkgs.luajit_openresty; }).lua;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
