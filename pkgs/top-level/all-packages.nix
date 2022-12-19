@@ -38865,6 +38865,8 @@ with pkgs;
 
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
 
+  flac2all = callPackage ../applications/audio/flac2all {};
+
   tuner = callPackage ../applications/audio/tuner { };
 
   locate-dominating-file = callPackage ../tools/misc/locate-dominating-file { };
