@@ -1,20 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, setuptools
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "versioneer";
-  version = "0.26";
-  format = "setuptools";
+  version = "0.27";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hPxymqKW0dJmRaj2LxeAGYhf9vmhBzsppKIoJwrFJXs=";
+  src = fetchFromGitHub {
+    owner = "python-versioneer";
+    repo = "python-versioneer";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yCO9dqqEUdvLDLAfHkYUA+dHwn2OLrFlubWeGbvlAbA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
 
   # Couldn't get tests to work because, for instance, they used virtualenv and pip
   doCheck = false;
