@@ -1,22 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "2.0.1";
+  version = "2.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E98V+MF7Fj3g/V+qiSwa0UPhkN/L25hTS7l16zfGx9Y=";
+    hash = "sha256-DhGY8bdFGVtrPdGkzWYBH7+C8wpNnauu4fnlyG8CAnQ=";
   };
-
-  propagatedBuildInputs = [
-    six
-  ];
 
   checkInputs = [
     pytestCheckHook
