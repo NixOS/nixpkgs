@@ -15180,6 +15180,7 @@ with pkgs;
   };
 
   hipsparse = callPackage ../development/libraries/hipsparse {
+    inherit (llvmPackages_rocm) openmp;
     stdenv = rocmClangStdenv;
   };
 
