@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "1.2.0";
+  version = "2.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OgWWTjcj3Qd4dSaCwY+fuRQpLSFn4+9o11kPR9n8a54=";
+    sha256 = "sha256-iN5ePKMnYh1VzGbKtwdIx1tG74T+8ax/AqDGgermr90=";
   };
 
   nativeBuildInputs = [
