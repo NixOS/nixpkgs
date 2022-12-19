@@ -20,7 +20,8 @@ symlinkJoin {
   postBuild = ''
     for f in $(find $out/bin/ $out/libexec/ -type l -not -path "*/.*"); do
       wrapProgram "$f" \
-        --set "NEMO_EXTENSION_DIR" "$out/${nemo.extensiondir}"
+        --set "NEMO_EXTENSION_DIR" "$out/${nemo.extensiondir}" \
+        --set "NEMO_PYTHON_EXTENSION_DIR" "$out/share/nemo-python/extensions"
     done
 
     # Point to wrapped binary in all service files

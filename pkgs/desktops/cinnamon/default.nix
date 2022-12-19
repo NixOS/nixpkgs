@@ -15,6 +15,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Extensions added here will be shipped by default
   nemoExtensions = [
     nemo-fileroller
+    nemo-python
   ];
 
   # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
@@ -31,6 +32,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cjs = callPackage ./cjs { };
   nemo = callPackage ./nemo { };
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
+  nemo-python = callPackage ./nemo-extensions/nemo-python { };
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   mint-artwork = callPackage ./mint-artwork { };
   mint-cursor-themes = callPackage ./mint-cursor-themes { };
