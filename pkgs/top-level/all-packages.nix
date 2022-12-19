@@ -14975,6 +14975,8 @@ with pkgs;
 
   mint = callPackage ../development/compilers/mint { };
 
+  mitama-cpp-result = callPackage ../development/libraries/mitama-cpp-result { };
+
   mitscheme = callPackage ../development/compilers/mit-scheme
     { stdenv = gcc10StdenvCompat; texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; }; };
 
@@ -17710,6 +17712,8 @@ with pkgs;
   };
 
   nmrpflash = callPackage ../development/embedded/nmrpflash { };
+
+  norminette = callPackage ../development/tools/norminette { };
 
   nwjs = callPackage ../development/tools/nwjs { };
 
@@ -21705,6 +21709,7 @@ with pkgs;
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
     ogre = ogre1_9;
   };
 
@@ -26138,6 +26143,7 @@ with pkgs;
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
+    ubootLibreTechCC
     ubootNanoPCT4
     ubootNovena
     ubootOdroidC2
@@ -38246,4 +38252,6 @@ with pkgs;
   widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
+
+  tuner = callPackage ../applications/audio/tuner { };
 }

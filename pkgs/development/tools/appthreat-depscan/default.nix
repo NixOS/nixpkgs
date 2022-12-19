@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "appthreat-depscan";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "AppThreat";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gp0JXjtU8TZl/k6HHWvMvdggIgyn4zqLyyBqiPtlkA8=";
+    hash = "sha256-kwur74jaAjGch4Jruq6OX1lWqX8b3NZYvxxNsp+n/TI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
