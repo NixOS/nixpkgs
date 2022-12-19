@@ -907,7 +907,32 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
-  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
+  cachix = overrideCabal (drv: {
+    version = "1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.1";
+      sha256 = "sha256-lML+E5RR5Pk2Do85+8Qs7mMVqp7ImlCIqEYjUAS08W4=";
+    };
+    buildDepends = [ self.conduit-zstd ];
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+    postPatch = ''
+      sed -i 's/1.0.1/1.1/' cachix.cabal
+    '';
+  }) (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
+  cachix-api = overrideCabal (drv: {
+    version = "1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.1";
+      sha256 = "sha256-lML+E5RR5Pk2Do85+8Qs7mMVqp7ImlCIqEYjUAS08W4=";
+    };
+    buildDepends = [ self.stm-chans ];
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+  }) super.cachix-api;
+
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
   hercules-ci-cnix-expr =

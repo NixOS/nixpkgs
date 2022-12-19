@@ -11,7 +11,11 @@ let
 
   mkExcludeFile = cfg:
     # Write each exclude pattern to a new line
-    pkgs.writeText "excludefile" (concatStringsSep "\n" cfg.exclude);
+    pkgs.writeText "excludefile" (concatMapStrings (s: s + "\n") cfg.exclude);
+
+  mkPatternsFile = cfg:
+    # Write each pattern to a new line
+    pkgs.writeText "patternsfile" (concatMapStrings (s: s + "\n") cfg.patterns);
 
   mkKeepArgs = cfg:
     # If cfg.prune.keep e.g. has a yearly attribute,
@@ -46,6 +50,7 @@ let
       borg create $extraArgs \
         --compression ${cfg.compression} \
         --exclude-from ${mkExcludeFile cfg} \
+        --patterns-from ${mkPatternsFile cfg} \
         $extraCreateArgs \
         "::$archiveName$archiveSuffix" \
         ${if cfg.paths == null then "-" else escapeShellArgs cfg.paths}
@@ -58,7 +63,7 @@ let
   '' + optionalString (cfg.prune.keep != { }) ''
     borg prune $extraArgs \
       ${mkKeepArgs cfg} \
-      ${optionalString (cfg.prune.prefix != null) "--prefix ${escapeShellArg cfg.prune.prefix} \\"}
+      ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
       $extraPruneArgs
     ${cfg.postPrune}
   '';
@@ -421,6 +426,21 @@ in {
             example = [
               "/home/*/.cache"
               "/nix"
+            ];
+          };
+
+          patterns = mkOption {
+            type = with types; listOf str;
+            description = lib.mdDoc ''
+              Include/exclude paths matching the given patterns. The first
+              matching patterns is used, so if an include pattern (prefix `+`)
+              matches before an exclude pattern (prefix `-`), the file is
+              backed up. See [{command}`borg help patterns`](https://borgbackup.readthedocs.io/en/stable/usage/help.html#borg-patterns) for pattern syntax.
+            '';
+            default = [ ];
+            example = [
+              "+ /home/susan"
+              "- /home/*"
             ];
           };
 
