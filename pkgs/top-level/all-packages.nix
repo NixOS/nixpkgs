@@ -23578,7 +23578,7 @@ with pkgs;
   R = callPackage ../applications/science/math/R {
     # TODO: split docs into a separate output
     texLive = texlive.combine {
-      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
+      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super rsfs;
     };
     withRecommendedPackages = false;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
