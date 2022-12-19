@@ -2423,6 +2423,13 @@
     githubId = 89596;
     name = "Florian Friesdorf";
   };
+  chaoticryptidz = {
+    email = "chaoticryptidz@owo.monster";
+    matrix = "@chaos:barr0w.net";
+    github = "ChaotiCryptidz";
+    githubId = 29613512;
+    name = "Chaos";
+  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
