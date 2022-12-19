@@ -15377,6 +15377,9 @@ with pkgs;
   };
 
   # Best just use GCC here
+  rdc = callPackage ../development/tools/misc/rdc { };
+
+  # Best just use GCC here
   rocgdb = callPackage ../development/tools/misc/rocgdb {
     elfutils = elfutils.override { enableDebuginfod = true; };
   };
