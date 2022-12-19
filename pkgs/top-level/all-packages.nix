@@ -416,10 +416,6 @@ with pkgs;
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
-  commitlint = nodePackages."@commitlint/cli";
-
-  commit-formatter = callPackage ../applications/version-management/commit-formatter { };
-
   commix = callPackage ../tools/security/commix { };
 
   conserver = callPackage ../tools/misc/conserver { };
@@ -447,8 +443,6 @@ with pkgs;
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
-
-  datalad = callPackage ../applications/version-management/datalad { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
@@ -1587,7 +1581,13 @@ with pkgs;
 
   cgit-pink = callPackage ../applications/version-management/cgit/pink.nix { };
 
+  commit-formatter = callPackage ../applications/version-management/commit-formatter { };
+
+  commitlint = nodePackages."@commitlint/cli";
+
   conform = callPackage ../applications/version-management/conform { };
+
+  datalad = callPackage ../applications/version-management/datalad { };
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
