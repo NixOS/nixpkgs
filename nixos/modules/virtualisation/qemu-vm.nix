@@ -108,9 +108,9 @@ let
 
       set -e
 
-      NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}")
+      NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
-      if ! test -e "$NIX_DISK_IMAGE"; then
+      if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
           ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
             ${toString config.virtualisation.diskSize}M
       fi
@@ -346,7 +346,7 @@ in
 
     virtualisation.diskImage =
       mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = "./${config.system.name}.qcow2";
         defaultText = literalExpression ''"./''${config.system.name}.qcow2"'';
         description =
@@ -354,6 +354,9 @@ in
             Path to the disk image containing the root filesystem.
             The image will be created on startup if it does not
             exist.
+
+            If null, a tmpfs will be used as the root filesystem and
+            the VM's state will not be persistent.
           '';
       };
 
@@ -975,12 +978,12 @@ in
     ];
 
     virtualisation.qemu.drives = mkMerge [
-      [{
+      (mkIf (cfg.diskImage != null) [{
         name = "root";
         file = ''"$NIX_DISK_IMAGE"'';
         driveExtraOpts.cache = "writeback";
         driveExtraOpts.werror = "report";
-      }]
+      }])
       (mkIf cfg.useNixStoreImage [{
         name = "nix-store";
         file = ''"$TMPDIR"/store.img'';
@@ -1030,6 +1033,10 @@ in
         "/".device = cfg.bootDevice;
         "/".fsType = "ext4";
         "/".autoFormat = true;
+      } //
+      optionalAttrs (cfg.diskImage == null) {
+        "/".device = "tmpfs";
+        "/".fsType = "tmpfs";
       } //
       optionalAttrs config.boot.tmpOnTmpfs {
         "/tmp" = {
