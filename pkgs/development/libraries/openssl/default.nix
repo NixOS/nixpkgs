@@ -7,6 +7,8 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+# path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
+, conf ? null
 , removeReferencesTo
 }:
 
@@ -189,6 +191,8 @@ let
       rm -r $etc/etc/ssl/misc
 
       rmdir $etc/etc/ssl/{certs,private}
+
+      ${lib.optionalString (conf != null) "cat ${conf} > $etc/etc/ssl/openssl.cnf"}
     '';
 
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -237,6 +241,9 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
+
+       # Remove with 3.0.8 release
+       ./3.0/CVE-2022-3996.patch
     ];
 
     withDocs = true;

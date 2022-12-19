@@ -27,6 +27,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ bootstrapped-pip ];
 
+  postPatch = ''
+    # Remove vendored Windows PE binaries
+    # Note: These are unused but make the package unreproducible.
+    find -type f -name '*.exe' -delete
+  '';
+
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
   pipInstallFlags = [ "--ignore-installed" ];
