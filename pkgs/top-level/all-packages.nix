@@ -24756,6 +24756,8 @@ with pkgs;
 
   thttpd = callPackage ../servers/http/thttpd { };
 
+  static-web-server = callPackage ../servers/static-web-server { };
+
   storm = callPackage ../servers/computing/storm { };
 
   surrealdb = callPackage ../servers/nosql/surrealdb {
