@@ -478,6 +478,19 @@ in
 lib.extendDerivation
   validity.handled
   ({
+     # a recreation in Nix of the derivation produced by the cli when calling `nix develop`
+     # one can call `nix print-dev-env` from a script on this derivations output to enter shell
+     # in a non-interactive script, and is also a way to guarantee we capture the devshell as a
+     # a build dependency for such a script.
+     developDerivation = let
+       argContext = builtins.getContext (toString derivationArg.args);
+       getEnvSh = import ./get-env.sh.nix;
+    in
+      derivation (derivationArg // {
+        name = "${derivationArg.name}-env";
+        args = [(builtins.appendContext getEnvSh argContext)];
+      });
+
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
