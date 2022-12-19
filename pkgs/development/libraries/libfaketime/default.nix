@@ -2,17 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "wolfcw";
     repo = "libfaketime";
     rev = "v${version}";
-    sha256 = "sha256-P1guVggteGtoq8+eeE966hDPkRwsn0m7oLCohyPrIb4=";
+    sha256 = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
   };
 
   patches = [
-    ./no-date-in-gzip-man-page.patch
     ./nix-store-date.patch
   ] ++ (lib.optionals stdenv.cc.isClang [
     # https://github.com/wolfcw/libfaketime/issues/277
