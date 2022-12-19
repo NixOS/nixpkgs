@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3 }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, nixosTests, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9cwzkF2mg6yOIsurLMXTLoEIOsKbPIWMicpWBQ0XVhE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   buildInputs = [ python3 ];
 
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -Dm0755 src/wsdd.py $out/bin/wsdd
+    install -Dm0555 src/wsdd.py $out/bin/wsdd
+    installManPage man/wsdd.1
     wrapProgram $out/bin/wsdd --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
