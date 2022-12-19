@@ -64,6 +64,7 @@ buildPythonPackage rec {
       ad-hoc command execution, service deployment, configuration management and more.
     '';
     homepage = "https://github.com/Fizzadar/pyinfra";
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ totoroot ];
     license = licenses.mit;
   };
