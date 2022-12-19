@@ -34,14 +34,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.6"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.9.8"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-3zB0Uy2pmkrOLb+/mXZGs/pnzo6zi2zVPyeNPGPVQJM=";
+    hash = "sha256-Q1iHGwkFg0rkunwEgWQIqLEPAGfOLfqA1UpjmCe2x8M=";
   };
 
   nativeBuildInputs = [
@@ -120,6 +120,8 @@ with py.pkgs; buildPythonApplication rec {
     python = py; # for aws_shell
     updateScript = nix-update-script {
       attrPath = pname;
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(2\.(.*))" ];
     };
     tests.version = testers.testVersion {
       package = awscli2;
