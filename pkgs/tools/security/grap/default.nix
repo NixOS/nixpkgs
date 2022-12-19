@@ -12,16 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    boost.all
-    libseccomp
-    flex
-    python3Packages.pefile
-    python3Packages.pyelftools
-    python3Packages.capstone
-    swig4
     bison
     cmake
+    flex
+    python3
   ];
+  
+  buildInputs = [
+    boost.all
+    libseccomp
+    swig4
+  ];
+  
+  strictDeps = true;
 
   cmakeFlags = [
     "-DPYTHON_SITE_DIR=$out/${python3.sitePackages}"
