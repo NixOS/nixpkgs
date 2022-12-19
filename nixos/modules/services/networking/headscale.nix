@@ -268,7 +268,7 @@ in
           type = types.attrsOf types.str;
           default = { };
           description = lib.mdDoc ''
-            Domain map is used to map incomming users (by their email) to
+            Domain map is used to map incoming users (by their email) to
             a namespace. The key can be a string, or regex.
           '';
           example = {
@@ -326,7 +326,7 @@ in
         type = types.nullOr types.path;
         default = null;
         description = lib.mdDoc ''
-          Path to a file containg ACL policies.
+          Path to a file containing ACL policies.
         '';
       };
 

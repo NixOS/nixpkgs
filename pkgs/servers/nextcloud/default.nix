@@ -46,7 +46,7 @@ in {
     in your NixOS config.
 
     WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades accross multiple major versions!
+    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
   nextcloud24 = generic {

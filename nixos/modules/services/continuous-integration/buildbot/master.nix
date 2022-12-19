@@ -1,4 +1,4 @@
-# NixOS module for Buildbot continous integration server.
+# NixOS module for Buildbot continuous integration server.
 
 { config, lib, options, pkgs, ... }:
 

@@ -111,7 +111,7 @@ let
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
-  # this contains all the nuget packages that are implictly referenced by the dotnet
+  # this contains all the nuget packages that are implicitly referenced by the dotnet
   # build system. having them as separate deps allows us to avoid having to regenerate
   # a packages dependencies when the dotnet-sdk version changes
   sdkDeps = mkNugetDeps {

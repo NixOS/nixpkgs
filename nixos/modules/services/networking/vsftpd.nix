@@ -168,7 +168,7 @@ in
 
           The default is a file containing the users from {option}`userlist`.
 
-          If explicitely set to null userlist_file will not be set in vsftpd's config file.
+          If explicitly set to null userlist_file will not be set in vsftpd's config file.
         '';
       };
 

@@ -135,7 +135,7 @@ in {
       type = types.path;
       default = "";
       description = lib.mdDoc ''
-        Path to the Configuration-File for LDAP-Authentification, will be loaded as `ldap_config.py`.
+        Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration) for possible options.
       '';
     };

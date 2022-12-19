@@ -256,7 +256,7 @@ $ sudo -i
       </para>
       <para>
         On the minimal installer, NetworkManager is not available, so
-        configuration must be perfomed manually. To configure the wifi,
+        configuration must be performed manually. To configure the wifi,
         first start wpa_supplicant with
         <literal>sudo systemctl start wpa_supplicant</literal>, then run
         <literal>wpa_cli</literal>. For most home networks, you need to
