@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation rec {
     find scripts -type f -exec install -Dm644 {} "$out/lib/spaceship-prompt/{}" \;
     find sections -type f -exec install -Dm644 {} "$out/lib/spaceship-prompt/{}" \;
     install -Dm644 spaceship.zsh "$out/lib/spaceship-prompt/spaceship.zsh"
+    install -Dm644 async.zsh "$out/lib/spaceship-prompt/async.zsh"
     install -d "$out/share/zsh/themes/"
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/themes/spaceship.zsh-theme"
     install -d "$out/share/zsh/site-functions/"
