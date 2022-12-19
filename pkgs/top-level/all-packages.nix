@@ -4409,6 +4409,8 @@ with pkgs;
 
   eternal-terminal = callPackage ../tools/networking/eternal-terminal {};
 
+  extism-cli = callPackage ../development/tools/extism-cli {};
+
   extrude = callPackage ../tools/security/extrude { };
 
   fastly = callPackage ../misc/fastly {
