@@ -221,9 +221,10 @@ rec {
   optionAttrSetToDocList' = _: options:
     concatMap (opt:
       let
+        name = showOption opt.loc;
         docOption = rec {
           loc = opt.loc;
-          name = showOption opt.loc;
+          inherit name;
           description = opt.description or null;
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
@@ -234,8 +235,18 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
-        // optionalAttrs (opt ? example) { example = renderOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = renderOptionValue (opt.defaultText or opt.default); }
+        // optionalAttrs (opt ? example) {
+          example =
+            builtins.addErrorContext "while evaluating the example of option `${name}`" (
+              renderOptionValue opt.example
+            );
+        }
+        // optionalAttrs (opt ? default) {
+          default =
+            builtins.addErrorContext "while evaluating the default value of option `${name}`" (
+              renderOptionValue (opt.defaultText or opt.default)
+            );
+        }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
