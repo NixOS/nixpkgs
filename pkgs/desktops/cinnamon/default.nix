@@ -14,6 +14,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   # Extensions added here will be shipped by default
   nemoExtensions = [
+    folder-color-switcher
     nemo-fileroller
     nemo-python
   ];
@@ -30,6 +31,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-session = callPackage ./cinnamon-session { };
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
+  folder-color-switcher = callPackage ./folder-color-switcher { };
   nemo = callPackage ./nemo { };
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
   nemo-python = callPackage ./nemo-extensions/nemo-python { };
