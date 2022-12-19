@@ -18,9 +18,11 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , src ? null # defaults to upstream nginx ${version}
 , sha256 ? null # when not specifying src
 , configureFlags ? []
+, nativeBuildInputs ? []
 , buildInputs ? []
 , extraPatches ? []
 , fixPatch ? p: p
+, postPatch ? ""
 , preConfigure ? ""
 , postInstall ? ""
 , meta ? null
@@ -48,9 +50,7 @@ assert assertMsg (unique moduleNames == moduleNames)
   "nginx: duplicate modules: ${concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
 stdenv.mkDerivation {
-  inherit pname;
-  inherit version;
-  inherit nginxVersion;
+  inherit pname version nginxVersion;
 
   outputs = ["out" "doc"];
 
@@ -58,6 +58,9 @@ stdenv.mkDerivation {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
     inherit sha256;
   };
+
+  nativeBuildInputs = [ removeReferencesTo ]
+    ++ nativeBuildInputs;
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
     ++ buildInputs
@@ -155,6 +158,8 @@ stdenv.mkDerivation {
   ] ++ mapModules "patches")
     ++ extraPatches;
 
+  inherit postPatch;
+
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
   enableParallelBuilding = true;
@@ -163,8 +168,6 @@ stdenv.mkDerivation {
     mkdir -p $doc
     cp -r ${nginx-doc}/* $doc
   '';
-
-  nativeBuildInputs = [ removeReferencesTo ];
 
   disallowedReferences = map (m: m.src) modules;
 
