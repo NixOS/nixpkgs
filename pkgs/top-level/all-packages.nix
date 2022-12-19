@@ -15376,6 +15376,11 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  # Best just use GCC here
+  rocgdb = callPackage ../development/tools/misc/rocgdb {
+    elfutils = elfutils.override { enableDebuginfod = true; };
+  };
+
   rocdbgapi = callPackage ../development/libraries/rocdbgapi {
     stdenv = rocmClangStdenv;
   };
