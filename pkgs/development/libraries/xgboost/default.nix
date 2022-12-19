@@ -7,8 +7,12 @@
 , doCheck ? true
 , cudaSupport ? config.cudaSupport or false
 , ncclSupport ? false
+, fedmlSupport ? true
 , cudaPackages
 , llvmPackages
+, grpc
+, protobuf
+, openssl
 }:
 
 assert ncclSupport -> cudaSupport;
@@ -31,6 +35,8 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
+  ] ++ lib.optionals fedmlSupport [
+    grpc openssl protobuf
   ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
@@ -39,7 +45,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc" ]
     ++ lib.optionals (cudaSupport && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
-    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
+    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
+    ++ lib.optionals fedmlSupport [ "-DPLUGIN_FEDERATED=ON" ];
 
   inherit doCheck;
 
