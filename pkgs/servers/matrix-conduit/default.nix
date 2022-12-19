@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, rustPlatform, pkg-config, rocksdb }:
+{ lib, rustPlatform, fetchFromGitLab, stdenv, darwin, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
@@ -15,20 +15,24 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    pkg-config
   ];
 
-  buildInputs = [
-    rocksdb
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
-  cargoBuildFlags = [ "--bin" "conduit" ];
+  # tests failed on x86_64-darwin with SIGILL: illegal instruction
+  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+
+  passthru.tests = {
+    inherit (nixosTests) matrix-conduit;
+  };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pstn piegames pimeys ];
+    mainProgram = "conduit";
   };
 }
