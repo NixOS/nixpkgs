@@ -1,4 +1,35 @@
-{ config, fetchFromGitHub, fetchFromGitLab, fetchhg, lib, pkgs }:
+{ lib
+, config
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchhg
+, fetchpatch
+, runCommand
+
+, arpa2common
+, brotli
+, curl
+, expat
+, fdk_aac
+, ffmpeg
+, geoip
+, libbsd
+, libiconv
+, libmaxminddb
+, libmodsecurity
+, libuuid
+, libxml2
+, lmdb
+, luajit
+, msgpuck
+, openssl
+, opentracing-cpp
+, pam
+, psol
+, which
+, yajl
+, zlib
+}:
 
 let
 
@@ -31,7 +62,7 @@ let self = {
       rev = "34fd0c94d2c43c642f323491c4f4a226cd83b962";
       sha256 = "0yf34s11vgkcl03wbl6gjngm3p9hs8vvm7hkjkwhjh39vkk2a7cy";
     };
-    inputs = [ pkgs.openssl ];
+    inputs = [ openssl ];
   };
 
   auth-a2aclr = {
@@ -44,7 +75,7 @@ let self = {
       sha256 = "sha256-h2LgMhreCgod+H/bNQzY9BvqG9ezkwikwWB3T6gHH04=";
     };
     inputs = [
-      (pkgs.arpa2common.overrideAttrs
+      (arpa2common.overrideAttrs
         (old: rec {
           version = "0.7.1";
 
@@ -71,19 +102,19 @@ let self = {
 
   brotli = {
     name = "brotli";
-    src = let gitsrc = pkgs.fetchFromGitHub {
+    src = let gitsrc = fetchFromGitHub {
       name = "brotli";
       owner = "google";
       repo = "ngx_brotli";
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
       sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
     }; in
-      pkgs.runCommand "ngx_brotli-src" { } ''
+      runCommand "ngx_brotli-src" { } ''
         cp -a ${gitsrc} $out
         substituteInPlace $out/filter/config \
-          --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
+          --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev brotli}
       '';
-    inputs = [ pkgs.brotli ];
+    inputs = [ brotli ];
   };
 
   cache-purge = {
@@ -117,7 +148,7 @@ let self = {
       rev = "v3.0.0";
       sha256 = "000dm5zk0m1hm1iq60aff5r6y8xmqd7djrwhgnz9ig01xyhnjv9w";
     };
-    inputs = [ pkgs.expat ];
+    inputs = [ expat ];
   };
 
   develkit = {
@@ -176,7 +207,7 @@ let self = {
       rev = "3.3";
       sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
     };
-    inputs = [ pkgs.libmaxminddb ];
+    inputs = [ libmaxminddb ];
 
     meta = {
       maintainers = with lib.maintainers; [ pinpox ];
@@ -201,7 +232,7 @@ let self = {
         rev = "v1.0.1";
         sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
       } + "/ipscrub";
-    inputs = [ pkgs.libbsd ];
+    inputs = [ libbsd ];
   };
 
   limit-speed = {
@@ -235,10 +266,10 @@ let self = {
       rev = "v0.10.15";
       sha256 = "1j216isp0546hycklbr5wi8mlga5hq170hk7f2sm16sfavlkh5gz";
     };
-    inputs = [ pkgs.luajit ];
+    inputs = [ luajit ];
     preConfigure = ''
-      export LUAJIT_LIB="${pkgs.luajit}/lib"
-      export LUAJIT_INC="${pkgs.luajit}/include/luajit-2.0"
+      export LUAJIT_LIB="${luajit}/lib"
+      export LUAJIT_INC="${luajit}/include/luajit-2.0"
     '';
     allowMemoryWriteExecute = true;
   };
@@ -252,7 +283,7 @@ let self = {
       rev = "v0.07";
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
-    inputs = [ pkgs.luajit ];
+    inputs = [ luajit ];
     allowMemoryWriteExecute = true;
   };
 
@@ -265,7 +296,7 @@ let self = {
       rev = "v1.0.3";
       sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
     };
-    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+    inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
     disableIPC = true;
   };
 
@@ -322,7 +353,7 @@ let self = {
       unset NJS_SOURCE_DIR
     '';
 
-    inputs = [ pkgs.which ];
+    inputs = [ which ];
   };
 
   opentracing = {
@@ -336,7 +367,7 @@ let self = {
         sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
       };
       in "${src'}/opentracing";
-    inputs = [ pkgs.opentracing-cpp ];
+    inputs = [ opentracing-cpp ];
   };
 
   pagespeed =
@@ -382,7 +413,7 @@ let self = {
       rev = "v1.5.3";
       sha256 = "sha256:09lnljdhjg65643bc4535z378lsn4llbq67zcxlln0pizk9y921a";
     };
-    inputs = [ pkgs.pam ];
+    inputs = [ pam ];
   };
 
   pinba = {
@@ -427,7 +458,7 @@ let self = {
       rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
       sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
     };
-    inputs = [ pkgs.openssl ];
+    inputs = [ openssl ];
   };
 
   set-misc = {
@@ -582,7 +613,7 @@ let self = {
       rev = "v2.7.1";
       sha256 = "0ya4330in7zjzqw57djv4icpk0n1j98nvf0f8v296yi9rjy054br";
     };
-    inputs = [ pkgs.msgpuck.dev pkgs.yajl ];
+    inputs = [ msgpuck.dev yajl ];
   };
 
   url = {
@@ -605,7 +636,7 @@ let self = {
       rev = "92b80642538eec4cfc98114dec5917b8d820e912";
       sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg ];
+    inputs = [ ffmpeg ];
   };
 
   vod = {
@@ -617,7 +648,7 @@ let self = {
       rev = "1.29";
       sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
   };
 
   vts = {
