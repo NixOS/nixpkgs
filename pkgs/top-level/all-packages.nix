@@ -30161,9 +30161,7 @@ with pkgs;
 
   lame = callPackage ../development/libraries/lame { };
 
-  labwc = callPackage ../applications/window-managers/labwc {
-    wlroots = wlroots_0_15;
-  };
+  labwc = callPackage ../applications/window-managers/labwc { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
