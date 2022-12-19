@@ -15323,6 +15323,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  hipfort = callPackage ../development/libraries/hipfort {
+    stdenv = rocmClangStdenv;
+  };
+
   rccl = callPackage ../development/libraries/rccl {
     stdenv = rocmClangStdenv;
   };
