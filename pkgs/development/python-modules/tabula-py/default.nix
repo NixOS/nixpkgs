@@ -65,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to extract table from PDF into pandas DataFrame";
     homepage = "https://github.com/chezou/tabula-py";
+    changelog = "https://github.com/chezou/tabula-py/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
