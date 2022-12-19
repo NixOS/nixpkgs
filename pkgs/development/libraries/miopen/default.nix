@@ -24,6 +24,7 @@
 , sphinx
 , zlib
 , gtest
+, rocm-comgr
 , python3Packages
 , buildDocs ? true
 , buildTests ? false
@@ -162,7 +163,8 @@ in stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
-    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])} $test/bin/*
+    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++
+      [ hip rocm-comgr ])} $test/bin/*
   '' + lib.optionalString fetchKDBs ''
     # Apparently gfx1030_40 wasn't generated so the developers suggest just renaming gfx1030_36 to it
     # Should be fixed in the next miopen kernel generation batch
