@@ -59,19 +59,19 @@ in
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  luxio = callPackage ({ fetchurl, which, pkg-config }: buildLuaPackage {
+  luxio = callPackage ({ fetchurl, which, pkg-config }: buildLuaPackage rec {
     pname = "luxio";
     version = "13";
 
     src = fetchurl {
-      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-${version}.tar.bz2";
       sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
     };
 
     nativeBuildInputs = [ which pkg-config ];
 
     postPatch = ''
-      patchShebangs .
+      patchShebangs const-proc.lua
     '';
 
     preBuild = ''
@@ -80,7 +80,7 @@ in
         INST_LUADIR="$out/share/lua/${lua.luaversion}"
         LUA_BINDIR="$out/bin"
         INSTALL=install
-        );
+      );
     '';
 
     meta = with lib; {
@@ -91,14 +91,14 @@ in
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
-  });
+  }) {};
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs.gnome) zenity;
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
-  vicious = (callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
+  vicious = callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.5.1";
 
@@ -124,6 +124,5 @@ in
       maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms = platforms.linux;
     };
-  }) {});
-
+  }) {};
 }
