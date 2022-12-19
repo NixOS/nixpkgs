@@ -15385,6 +15385,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  rocr-debug-agent = callPackage ../development/libraries/rocr-debug-agent {
+    stdenv = rocmClangStdenv;
+  };
+
   rocmlir-rock = rocmlir.override {
     buildRockCompiler = true;
   };
