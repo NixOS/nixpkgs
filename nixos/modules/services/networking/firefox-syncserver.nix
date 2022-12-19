@@ -256,7 +256,6 @@ in
         User = defaultUser;
         Group = defaultUser;
         ExecStart = "${cfg.package}/bin/syncserver --config ${configFile}";
-        Stderr = "journal";
         EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
 
         # hardening
