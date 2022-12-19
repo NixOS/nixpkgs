@@ -14,24 +14,18 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.9";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q84g67NqUfIfo3b3bR1GkkUrJSfM1gGVDWntNrniFgk=";
+    hash = "sha256-g8+Lxg2cYTtmpMAYBRhz1ic9nkXQQO7QbWqWJBvY7AE=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     ./force-kqueue.patch
-  ] ++ [
-    (fetchpatch {
-      url = "https://github.com/gorakhargosh/watchdog/commit/255d1e45c17929dd5ba8a6f91aa28771109931cd.patch";
-      sha256 = "sha256-gGgEGuB/0g+4Pv1dXMvIdObjqKruWKkxtufS/dzSlY8=";
-      excludes = [ "changelog.rst" ];
-    })
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
