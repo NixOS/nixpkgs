@@ -37,6 +37,7 @@ with lib;
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
       libextractor = super.libextractor.override { gstreamerSupport = false; gtkSupport = false; };
       libva = super.libva-minimal;
+      msmtp = super.msmtp.override { withKeyring = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
       networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
