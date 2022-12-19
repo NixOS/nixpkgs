@@ -257,19 +257,33 @@ let self = {
     };
   };
 
-  lua = {
+  lua = rec {
     name = "lua";
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.15";
-      sha256 = "1j216isp0546hycklbr5wi8mlga5hq170hk7f2sm16sfavlkh5gz";
+      rev = "v0.10.22";
+      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
     };
     inputs = [ luajit ];
-    preConfigure = ''
+    preConfigure = let
+      # fix compilation against nginx 1.23.0
+      nginx-1-23-patch = fetchpatch {
+        url = "https://github.com/openresty/lua-nginx-module/commit/b6d167cf1a93c0c885c28db5a439f2404874cb26.patch";
+        sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
+      };
+    in ''
       export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="${luajit}/include/luajit-2.0"
+      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+
+      # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
+      lua_src=$TMPDIR/lua-src
+      cp -r "${src}/" "$lua_src"
+      chmod -R +w "$lua_src"
+      patch -p1 -d $lua_src -i ${nginx-1-23-patch}
+      export configureFlags="''${configureFlags/"${src}"/"$lua_src"}"
+      unset lua_src
     '';
     allowMemoryWriteExecute = true;
   };
