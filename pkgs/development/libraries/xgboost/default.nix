@@ -7,7 +7,7 @@
 , doCheck ? true
 , cudaSupport ? config.cudaSupport or false
 , ncclSupport ? false
-, fedmlSupport ? true
+, fedmlSupport ? false
 , cudaPackages
 , llvmPackages
 , grpc
