@@ -370,39 +370,30 @@ let self = {
     inputs = [ opentracing-cpp ];
   };
 
-  pagespeed =
-    let
-      version = pkgs.psol.version;
-
+  pagespeed = {
+    name = "pagespeed";
+    src = let
       moduleSrc = fetchFromGitHub {
         name = "pagespeed";
         owner = "pagespeed";
         repo = "ngx_pagespeed";
-        rev = "v${version}-stable";
+        rev = "v${psol.version}-stable";
         sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
-
-      ngx_pagespeed = pkgs.runCommand
-        "ngx_pagespeed"
-        {
-          meta = {
-            description = "PageSpeed module for Nginx";
-            homepage = "https://developers.google.com/speed/pagespeed/module/";
-            license = pkgs.lib.licenses.asl20;
-          };
-        }
-        ''
-          cp -r "${moduleSrc}" "$out"
-          chmod -R +w "$out"
-          ln -s "${pkgs.psol}" "$out/psol"
-        '';
-    in
-    {
-      name = "pagespeed";
-      src = ngx_pagespeed;
-      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
-      allowMemoryWriteExecute = true;
-    };
+    in runCommand "ngx_pagespeed" {
+      meta = {
+        description = "PageSpeed module for Nginx";
+        homepage = "https://developers.google.com/speed/pagespeed/module/";
+        license = lib.licenses.asl20;
+      };
+    } ''
+      cp -r "${moduleSrc}" "$out"
+      chmod -R +w "$out"
+      ln -s "${psol}" "$out/psol"
+    '';
+    inputs = [ zlib libuuid ]; # psol deps
+    allowMemoryWriteExecute = true;
+  };
 
   pam = {
     name = "pam";
