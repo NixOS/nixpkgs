@@ -15376,6 +15376,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  rocdbgapi = callPackage ../development/libraries/rocdbgapi {
+    stdenv = rocmClangStdenv;
+  };
+
   rocmlir-rock = rocmlir.override {
     buildRockCompiler = true;
   };
