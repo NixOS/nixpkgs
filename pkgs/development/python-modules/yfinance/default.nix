@@ -1,6 +1,7 @@
 { lib
 , appdirs
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , multitasking
 , numpy
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.90";
+  version = "0.1.91";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,11 +22,12 @@ buildPythonPackage rec {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iXgvHfS1/mbyORA8r2NN/nm17EeG+kin83nZTEXp5QU=";
+    hash = "sha256-/jNqd/cYtcapzAafIFoLqxCYcxrnmGuqtuquPowNtlM=";
   };
 
   propagatedBuildInputs = [
     appdirs
+    cryptography
     multitasking
     numpy
     pandas
