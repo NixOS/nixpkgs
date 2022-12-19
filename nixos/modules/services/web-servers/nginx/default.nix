@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nginx;
-  certs = config.security.acme.certs;
+  inherit (config.security.acme) certs;
   vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
   acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null) vhostsConfigs;
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
@@ -27,7 +27,7 @@ let
                               else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
-  enableIPv6 = config.networking.enableIPv6;
+  inherit (config.networking) enableIPv6;
 
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
@@ -149,7 +149,7 @@ let
       ''}
       ${upstreamConfig}
 
-      ${optionalString (cfg.recommendedOptimisation) ''
+      ${optionalString cfg.recommendedOptimisation ''
         # optimisation
         sendfile on;
         tcp_nopush on;
@@ -161,7 +161,7 @@ let
       ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-      ${optionalString (cfg.recommendedTlsSettings) ''
+      ${optionalString cfg.recommendedTlsSettings ''
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
         ssl_session_timeout 1d;
@@ -177,7 +177,7 @@ let
         ssl_stapling_verify on;
       ''}
 
-      ${optionalString (cfg.recommendedBrotliSettings) ''
+      ${optionalString cfg.recommendedBrotliSettings ''
         brotli on;
         brotli_static on;
         brotli_comp_level 5;
@@ -187,7 +187,7 @@ let
         brotli_buffers 32 8k;
       ''}
 
-      ${optionalString (cfg.recommendedGzipSettings) ''
+      ${optionalString cfg.recommendedGzipSettings ''
         gzip on;
         gzip_proxied any;
         gzip_comp_level 5;
@@ -205,7 +205,7 @@ let
         gzip_vary on;
       ''}
 
-      ${optionalString (cfg.recommendedProxySettings) ''
+      ${optionalString cfg.recommendedProxySettings ''
         proxy_redirect          off;
         proxy_connect_timeout   ${cfg.proxyTimeout};
         proxy_send_timeout      ${cfg.proxyTimeout};
@@ -239,7 +239,7 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
-      ${optionalString (cfg.proxyCache.enable) ''
+      ${optionalString cfg.proxyCache.enable ''
         proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
                                           levels=${cfg.proxyCache.levels}
                                           use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
@@ -993,8 +993,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    # TODO: test user supplied config file pases syntax test
-
     warnings =
     let
       deprecatedSSL = name: config: optional config.enableSSL
@@ -1142,14 +1140,14 @@ in
       sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
       sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
     in mkIf (cfg.enableReload || sslServices != []) {
-      wants = optionals (cfg.enableReload) [ "nginx.service" ];
+      wants = optionals cfg.enableReload [ "nginx.service" ];
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
-      restartTriggers = optionals (cfg.enableReload) [ finalConfigFile ];
+      restartTriggers = optionals cfg.enableReload [ finalConfigFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);
