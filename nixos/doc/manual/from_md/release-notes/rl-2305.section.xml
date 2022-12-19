@@ -140,6 +140,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>llvmPackages_rocm.llvm</literal> will not contain
+          <literal>clang</literal> or <literal>compiler-rt</literal>.
+          <literal>llvmPackages_rocm.clang</literal> will not contain
+          <literal>llvm</literal>.
+          <literal>llvmPackages_rocm.clangNoCompilerRt</literal> has
+          been removed in favor of using
+          <literal>llvmPackages_rocm.clang-unwrapped</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and automatically
           mounted ext3-formatted instance store devices and partitions
           in stage-1 (initramfs), storing <literal>/tmp</literal> on the
@@ -284,6 +295,13 @@
           <literal>services.nginx.virtualHosts</literal> now allows one
           to add exceptions with the <literal>locations</literal>
           option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>hip</literal> has been separated into
+          <literal>hip</literal>, <literal>hip-common</literal> and
+          <literal>hipcc</literal>.
         </para>
       </listitem>
       <listitem>

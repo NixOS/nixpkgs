@@ -13845,6 +13845,7 @@ with pkgs;
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv buildPackages.clang-sierraHack;
   libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
+  rocmClangStdenv = llvmPackages_rocm.rocmClangStdenv;
 
   clasp-common-lisp = callPackage ../development/compilers/clasp {
     llvmPackages = llvmPackages_6;
@@ -15136,83 +15137,157 @@ with pkgs;
   rml = callPackage ../development/compilers/rml { };
 
   composable_kernel = callPackage ../development/libraries/composable_kernel {
-    inherit (llvmPackages) openmp;
+    inherit (llvmPackages_rocm) openmp clang-tools-extra;
+    stdenv = rocmClangStdenv;
+  };
+
+  rocprofiler = callPackage ../development/libraries/rocprofiler {
+    stdenv = rocmClangStdenv;
   };
 
   clang-ocl = callPackage ../development/libraries/clang-ocl {
-    inherit (llvmPackages_rocm) clang;
+    stdenv = rocmClangStdenv;
   };
 
   rgxg = callPackage ../tools/text/rgxg { };
 
-  rocclr = callPackage ../development/libraries/rocclr { };
-
-  hip = callPackage ../development/compilers/hip {
-    inherit (llvmPackages_rocm) clang llvm;
+  rocclr = callPackage ../development/libraries/rocclr {
+    stdenv = rocmClangStdenv;
   };
 
-  hipcub = callPackage ../development/libraries/hipcub { };
+  hip-common = callPackage ../development/compilers/hip-common {
+    inherit (llvmPackages_rocm) llvm;
+    stdenv = rocmClangStdenv;
+  };
 
-  hipsparse = callPackage ../development/libraries/hipsparse { };
+  hipcc = callPackage ../development/compilers/hipcc {
+    inherit (llvmPackages_rocm) llvm;
+    stdenv = rocmClangStdenv;
+  };
 
-  rccl = callPackage ../development/libraries/rccl { };
+  hip = callPackage ../development/compilers/hip {
+    inherit (llvmPackages_rocm) llvm;
+    inherit (cudaPackages) cudatoolkit;
+    stdenv = rocmClangStdenv;
+  };
 
-  rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
+  hip-amd = hip.override {
+    useNVIDIA = false;
+  };
+
+  hip-nvidia = hip.override {
+    useNVIDIA = true;
+  };
+
+  hipcub = callPackage ../development/libraries/hipcub {
+    stdenv = rocmClangStdenv;
+  };
+
+  hipsparse = callPackage ../development/libraries/hipsparse {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
+  };
+
+  rccl = callPackage ../development/libraries/rccl {
+    stdenv = rocmClangStdenv;
+  };
+
+  rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake {
+    stdenv = rocmClangStdenv;
+  };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
-    inherit (llvmPackages_rocm) clang llvm;
+    stdenv = rocmClangStdenv;
+  };
+
+  rocalution = callPackage ../development/libraries/rocalution {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
   };
 
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
-    inherit (llvmPackages_rocm) clang llvm;
+    stdenv = rocmClangStdenv;
   };
 
-  rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd { };
+  rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd {
+    stdenv = rocmClangStdenv;
+  };
+
+  rocsolver = callPackage ../development/libraries/rocsolver {
+    stdenv = rocmClangStdenv;
+  };
 
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
-    inherit (llvmPackages_rocm) clang llvm;
+    stdenv = rocmClangStdenv;
   };
 
   rocm-runtime = callPackage ../development/libraries/rocm-runtime {
-    inherit (llvmPackages_rocm) llvm;
+    stdenv = rocmClangStdenv;
   };
 
-  rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi { };
+  rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi {
+    stdenv = rocmClangStdenv;
+  };
 
-  rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
+  rocm-thunk = callPackage ../development/libraries/rocm-thunk {
+    stdenv = rocmClangStdenv;
+  };
 
-  rocminfo = callPackage ../development/tools/rocminfo { };
+  rocminfo = callPackage ../development/tools/rocminfo {
+    stdenv = rocmClangStdenv;
+  };
 
   rocmlir = callPackage ../development/libraries/rocmlir {
-    inherit (llvmPackages_rocm) clang;
+    stdenv = rocmClangStdenv;
   };
 
-  rocprim = callPackage ../development/libraries/rocprim { };
+  rocmlir-rock = rocmlir.override {
+    buildRockCompiler = true;
+  };
 
-  rocsparse = callPackage ../development/libraries/rocsparse { };
+  rocprim = callPackage ../development/libraries/rocprim {
+    stdenv = rocmClangStdenv;
+  };
 
-  rocfft = callPackage ../development/libraries/rocfft { };
+  rocsparse = callPackage ../development/libraries/rocsparse {
+    stdenv = rocmClangStdenv;
+  };
 
-  rocrand = callPackage ../development/libraries/rocrand { };
+  rocfft = callPackage ../development/libraries/rocfft {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
+  };
 
-  tensile = python3Packages.callPackage ../development/libraries/tensile { };
+  rocrand = callPackage ../development/libraries/rocrand {
+    stdenv = rocmClangStdenv;
+  };
+
+  tensile = python3Packages.callPackage ../development/libraries/tensile {
+    stdenv = rocmClangStdenv;
+  };
 
   rocwmma = callPackage ../development/libraries/rocwmma {
-    inherit (llvmPackages) openmp;
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
   };
 
   rocblas = callPackage ../development/libraries/rocblas {
-    inherit (llvmPackages_rocm) llvm;
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
   };
 
   miopengemm = callPackage ../development/libraries/miopengemm {
-    inherit (llvmPackages_rocm) clang;
+    stdenv = rocmClangStdenv;
   };
 
-  rocthrust = callPackage ../development/libraries/rocthrust { };
+  rocthrust = callPackage ../development/libraries/rocthrust {
+    stdenv = rocmClangStdenv;
+  };
 
   miopen = callPackage ../development/libraries/miopen {
-    inherit (llvmPackages_rocm) clang llvm;
+    inherit (llvmPackages_rocm) llvm clang-tools-extra;
+    stdenv = rocmClangStdenv;
+    rocmlir = rocmlir-rock;
     boost = boost.override { enableStatic = true; };
   };
 
@@ -15225,6 +15300,11 @@ with pkgs;
   };
 
   rocmUpdateScript = callPackage ../development/rocm-modules/update-script { };
+
+  # Requires GCC
+  roctracer = callPackage ../development/libraries/roctracer {
+    inherit (llvmPackages_rocm) clang;
+  };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;

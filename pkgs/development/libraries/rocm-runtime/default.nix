@@ -1,36 +1,46 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , rocmUpdateScript
-, addOpenGLRunpath
-, cmake
 , pkg-config
+, cmake
 , xxd
-, elfutils
-, libdrm
-, llvm
-, numactl
 , rocm-device-libs
-, rocm-thunk }:
+, rocm-thunk
+, libelf
+, libdrm
+, numactl
+, valgrind
+, libxml2
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-M9kv1Oe5ZZfd9H/+KUJUoK9L1EdyS2qRp2mJDK0dnPE=";
+    hash = "sha256-JkTXTQmdESHSFbA6HZdMK3pYEApz9aoAlMzdXayzdyY=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  nativeBuildInputs = [ cmake pkg-config xxd ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    xxd
+  ];
 
-  buildInputs = [ elfutils libdrm llvm numactl ];
-
-  cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${rocm-thunk}" ];
+  buildInputs = [
+    rocm-thunk
+    libelf
+    libdrm
+    numactl
+    valgrind
+    libxml2
+  ];
 
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
@@ -45,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   fixupPhase = ''
-    rm -rf $out/hsa
+    rm -rf $out/hsa/*
+    ln -s $out/{include,lib} $out/hsa
   '';
 
   passthru.updateScript = rocmUpdateScript {
@@ -59,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    broken = finalAttrs.version != stdenv.cc.version;
   };
 })

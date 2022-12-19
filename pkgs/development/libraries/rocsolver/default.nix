@@ -4,15 +4,19 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocprim
+, rocblas
 , hip
+, fmt
 , gtest
+, gfortran
+, lapack-reference
 , buildTests ? false
 , buildBenchmarks ? false
+, gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx906:xnack-" ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocthrust";
+  pname = "rocsolver";
   version = "5.4.1";
 
   outputs = [
@@ -25,46 +29,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
-    repo = "rocThrust";
+    repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-3OcJUL6T1HJz6TQb1//lumsTxqfwbWbQ4lGuZoKmqbY=";
+    hash = "sha256-UHUcA9CVPuYFpE2DTvRrRMMj51yNPo5wMTKnByL2RTg=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    rocprim
     hip
+  ] ++ lib.optionals (buildTests || buildBenchmarks) [
+    gfortran
   ];
 
-  buildInputs = lib.optionals buildTests [
+  buildInputs = [
+    rocblas
+    fmt
+  ] ++ lib.optionals buildTests [
     gtest
+  ] ++ lib.optionals (buildTests || buildBenchmarks) [
+    lapack-reference
   ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DHIP_ROOT_DIR=${hip}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
-    "-DBUILD_TEST=ON"
+    "-DBUILD_CLIENTS_TESTS=ON"
   ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_BENCHMARKS=ON"
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    "-DCMAKE_CXX_FLAGS=-Wno-deprecated-builtins" # Too much spam
+    "-DBUILD_CLIENTS_BENCHMARKS=ON"
   ];
 
   postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
-    mv $out/bin/{test_*,*.hip} $test/bin
+    mv $out/bin/rocsolver-test $test/bin
   '' + lib.optionalString buildBenchmarks ''
     mkdir -p $benchmark/bin
-    mv $out/bin/benchmark_* $benchmark/bin
+    mv $out/bin/rocsolver-bench $benchmark/bin
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
-    rm -rf $out/bin
+    rmdir $out/bin
   '';
 
   passthru.updateScript = rocmUpdateScript {
@@ -74,9 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "ROCm parallel algorithm library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
-    license = with licenses; [ asl20 ];
+    description = "ROCm LAPACK implementation";
+    homepage = "https://github.com/ROCmSoftwarePlatform/rocSOLVER";
+    license = with licenses; [ bsd2 ];
     maintainers = teams.rocm.members;
     broken = finalAttrs.version != hip.version;
   };

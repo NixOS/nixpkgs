@@ -2,15 +2,17 @@
 , stdenv
 , fetchFromGitHub
 , rocmUpdateScript
-, cmake
 , pkg-config
+, cmake
+, rocm-cmake
 , libdrm
 , numactl
+, valgrind
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -19,24 +21,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-EU5toaKzVeZpdm/YhaQ0bXq0eoYwYQ5qGLUJzxgZVjE=";
   };
 
-  preConfigure = ''
-    export cmakeFlags="$cmakeFlags "
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rocm-cmake
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    libdrm
+    numactl
+    valgrind
+  ];
 
-  buildInputs = [ libdrm numactl ];
-
-  # https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface/issues/75
-  postPatch = ''
-    substituteInPlace libhsakmt.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
-
-  postInstall = ''
-    cp -r $src/include $out
-  '';
+  cmakeFlags = [
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ];
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -49,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface";
     license = with licenses; [ bsd2 mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    broken = finalAttrs.version != stdenv.cc.version;
   };
 })

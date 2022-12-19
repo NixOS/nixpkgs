@@ -3,14 +3,19 @@
 , fetchFromGitHub
 , rocmUpdateScript
 , cmake
-, clang
+, rocm-cmake
 , rocm-device-libs
-, llvm
+, libxml2
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  llvmNativeTarget =
+    if stdenv.isx86_64 then "X86"
+    else if stdenv.isAarch64 then "AArch64"
+    else throw "Unsupported ROCm LLVM platform";
+in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -19,21 +24,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qLsrBTeSop7lIQv8gZDwgpvGZJOAq90zsvMi1QpfbAs=";
   };
 
-  sourceRoot = "source/lib/comgr";
+  patches = [ ./cmake.patch ];
+  sourceRoot = "${finalAttrs.src.name}/lib/comgr";
 
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = [ clang rocm-device-libs llvm ];
-
-  cmakeFlags = [
-    "-DCMAKE_C_COMPILER=${clang}/bin/clang"
-    "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
-    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm"
-    "-DLLD_INCLUDE_DIRS=${llvm}/include"
-    "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
   ];
 
-  patches = [ ./cmake.patch ];
+  buildInputs = [
+    rocm-device-libs
+    libxml2
+  ];
+
+  cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;X86" ];
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -47,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken = finalAttrs.version != stdenv.cc.version;
   };
 })

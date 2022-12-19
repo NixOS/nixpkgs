@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , rocmUpdateScript
@@ -7,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocclr";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
@@ -26,18 +27,19 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace device/comgrctx.cpp \
       --replace "libamd_comgr.so" "${rocm-comgr}/lib/libamd_comgr.so"
   '';
 
-  buildPhase = "";
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out
-    cp -r * $out/
+    cp -a * $out/
 
     runHook postInstall
   '';
@@ -57,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     # to be supported yet by the build infrastructure. Recheck in
     # the future.
     platforms = [ "x86_64-linux" ];
+    broken = finalAttrs.version != stdenv.cc.version;
   };
 })
