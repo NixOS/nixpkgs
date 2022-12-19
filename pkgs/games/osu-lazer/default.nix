@@ -28,10 +28,6 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  dotnetFlags = [
-    "--runtime linux-x64"
-  ];
-
   runtimeDeps = [
     ffmpeg
     alsa-lib
