@@ -1630,11 +1630,17 @@ self: super: {
   trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
 
   # 2021-04-02: iCalendar is basically unmaintained.
-  # There are PRs for bumping the bounds: https://github.com/chrra/iCalendar/pull/46
-  iCalendar = overrideCabal {
-      # Overriding bounds behind a cabal flag
-      preConfigure = ''substituteInPlace iCalendar.cabal --replace "network >=2.6 && <2.7" "network -any"'';
-  } (doJailbreak super.iCalendar);
+  # There is a PR for fixing the build: https://github.com/chrra/iCalendar/pull/50
+  iCalendar = appendPatches [
+    (fetchpatch {
+      url = "https://github.com/chrra/iCalendar/commit/66b408f10b2d87929ecda715109b26093c711823.patch";
+      sha256 = "sha256-MU5OHUx3L8CaX+xAmoQhAAOMxT7u9Xk1OcOaUHBwK3Y=";
+    })
+    (fetchpatch {
+      url = "https://github.com/chrra/iCalendar/commit/76f5d2e8328cb985f1ee5176e86a5cdd05a17934.patch";
+      sha256 = "sha256-Z5V8VTA5Ml9YIRANQn2aD7dljAbR9dq13N11Y3LZdoE=";
+    })
+   ] super.iCalendar;
 
   ginger = doJailbreak super.ginger;
 
