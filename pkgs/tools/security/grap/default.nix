@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     flex
     python3
   ];
-  
+
   buildInputs = [
     boost.all
     libseccomp
     swig4
   ];
-  
+
   strictDeps = true;
 
   cmakeFlags = [
