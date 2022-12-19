@@ -1,0 +1,30 @@
+diff '--color=auto' -ur a/product/localRepository/pom.xml b/product/localRepository/pom.xml
+--- a/product/localRepository/pom.xml	2022-12-19 16:48:43.677839089 -0300
++++ b/product/localRepository/pom.xml	2022-12-19 13:56:10.608836334 -0300
+@@ -46,21 +46,21 @@
+ 								<artifact><id>org.eclipse.gef3.plugins:org.eclipse.gef3:3.12.100-SNAPSHOT</id></artifact>
+ 
+ 								<!-- POI and dependencies -->
+-								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.apache.poi:LATEST</id></artifact>
++								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.apache.poi:4.1.1</id></artifact>
+ 
+ 								<!-- GIS -->
+-								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.gis:LATEST</id></artifact>
++								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.gis:2.0.5</id></artifact>
+ 
+ 								<!-- JFreeChart -->
+-								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.jfreechart:LATEST</id></artifact>
++								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.jfreechart:1.0.23</id></artifact>
+ 
+ 								<!-- SSH and BouncyCastle -->
+-								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.sshj:LATEST</id></artifact>
++								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.sshj:0.34.0</id></artifact>
+ 								<!-- Ant minimized -->
+ 								<artifact><id>org.jkiss.bundle:org.apache.ant:1.10.0</id></artifact>
+ 
+ 								<!-- Batik -->
+-								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.apache.batik:LATEST</id></artifact>
++								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.apache.batik:1.14.0</id></artifact>
+ 								<!-- GraphQL -->
+ 								<artifact><id>org.jkiss.bundle:org.jkiss.bundle.graphql.java:LATEST</id></artifact>
+ 								<!-- DBCP -->

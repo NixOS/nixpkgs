@@ -19,20 +19,25 @@
 , javaPackages
 }:
 
-(javaPackages.mavenfod.override {
-  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
-}) rec {
+javaPackages.mavenfod rec {
   pname = "dbeaver";
-  version = "22.2.2"; # When updating also update mvnSha256
+  version = "22.3.0"; # When updating also update mvnHash and ./pin-deps.diff
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+    hash = "sha256-ynIpgecJy8mtywpNVTC6+Ws+uFcJC5xcPsjrMZtBxLo=";
   };
 
-  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
+  mvnPatches = [
+    # https://github.com/NixOS/nixpkgs/pull/198222#pullrequestreview-1190679686
+    ./pin-deps.diff
+    # https://github.com/dbeaver/dbeaver/issues/18481
+    ./fix-api-mismatch.diff
+  ];
+
+  mvnHash = "sha256-cvSk/yUYNwWK5jaoxzUB562swMcnZY6rTIDCoAaKIi0=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
@@ -134,5 +139,6 @@
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
+    changelog = "https://github.com/dbeaver/dbeaver/releases/tag/${version}";
   };
 }

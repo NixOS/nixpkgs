@@ -5,6 +5,7 @@
 
 { src
 , patches ? []
+, mvnPatches ? []
 , pname
 , version
 , mvnSha256 ? "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
@@ -25,6 +26,8 @@ stdenv.mkDerivation (rec {
     buildInputs = [
       maven
     ];
+
+    patches = mvnPatches;
 
     buildPhase = ''
       mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
