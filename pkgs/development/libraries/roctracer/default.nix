@@ -10,6 +10,8 @@
 , libxml2
 , doxygen
 , graphviz
+, gcc-unwrapped
+, rocm-runtime
 , python3Packages
 , buildDocs ? false # Nothing seems to be generated, so not making the output
 , buildTests ? false
@@ -77,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Not sure why this is an install target
     find $out/test -executable -type f -exec mv {} $test/bin \;
     rm $test/bin/{*.sh,*.py}
-    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])} $test/bin/*
+    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (
+      finalAttrs.buildInputs ++ [ hip gcc-unwrapped.lib rocm-runtime ])} $test/bin/*
     rm -rf $out/test
   '';
 
