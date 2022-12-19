@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ AndersonTorres ];
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # failing tests
   };
 })
