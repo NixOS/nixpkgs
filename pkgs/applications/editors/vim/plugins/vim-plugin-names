@@ -1,6 +1,7 @@
 repo,branch,alias
 https://github.com/euclidianAce/BetterLua.vim/,,
 https://github.com/vim-scripts/BufOnly.vim/,,
+https://github.com/jackMort/ChatGPT.nvim/,HEAD,
 https://github.com/chrisbra/CheckAttach/,,
 https://github.com/vim-scripts/Colour-Sampler-Pack/,,
 https://github.com/whonore/Coqtail/,,
