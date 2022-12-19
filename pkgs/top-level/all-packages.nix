@@ -15811,7 +15811,13 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  clisp = callPackage ../development/interpreters/clisp { };
+  clisp = callPackage ../development/interpreters/clisp {
+    # On newer readline8 fails as:
+    #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
+    #   does not have the required size or alignment
+    readline = readline6;
+  };
+
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
