@@ -16,8 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-hPxymqKW0dJmRaj2LxeAGYhf9vmhBzsppKIoJwrFJXs=";
   };
 
-  # Couldn't get tests to work because, for instance, they used virtualenv and
-  # pip.
+  # Couldn't get tests to work because, for instance, they used virtualenv and pip
   doCheck = false;
 
   pythonImportsCheck = [
@@ -27,6 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
     homepage = "https://github.com/warner/python-versioneer";
+    changelog = "https://github.com/python-versioneer/python-versioneer/blob/${version}/NEWS.md";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jluttine ];
   };
