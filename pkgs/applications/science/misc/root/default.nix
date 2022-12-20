@@ -171,6 +171,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
+    "-Dgnuinstall=ON"
     "-Dimt=ON"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
