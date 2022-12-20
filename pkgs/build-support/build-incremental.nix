@@ -44,9 +44,8 @@ rec {
       set +e
       diff -ur ${previousBuildArtifacts}/sources ./ > sourceDifference.patch
       set -e
-      shopt -s extglob
+      shopt -s extglob dotglob
       rm -r !("sourceDifference.patch")
-      ls -al .
       ${pkgs.rsync}/bin/rsync -cutU --chown=$USER:$USER --chmod=+w -r ${previousBuildArtifacts}/outputs/* .
       patch -p 1 -i sourceDifference.patch
     '';
