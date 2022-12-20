@@ -1286,6 +1286,8 @@ self: super: with self; {
 
   black-macchiato = callPackage ../development/python-modules/black-macchiato { };
 
+  blaze = callPackage ../development/python-modules/blaze { };
+
   blaze-odo = callPackage ../development/python-modules/blaze-odo { };
 
   bleach = callPackage ../development/python-modules/bleach { };
