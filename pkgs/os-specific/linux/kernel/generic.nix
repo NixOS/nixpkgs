@@ -206,6 +206,15 @@ let
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
+
+    # Adds dependencies needed to edit the config:
+    # nix-shell '<nixpkgs>' -A linux.configEnv --command 'make nconfig'
+    configEnv = kernel.overrideAttrs (old: {
+      nativeBuildInputs = old.nativeBuildInputs or [] ++ (with buildPackages; [
+        pkg-config ncurses
+      ]);
+    });
+
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
       overridableKernel = finalKernel // {
