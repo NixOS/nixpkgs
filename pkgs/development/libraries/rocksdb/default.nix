@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enableJemalloc jemalloc;
 
+  outputs = [
+    "out"
+    "tools"
+  ];
+
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
     + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field -faligned-allocation";
 
@@ -41,6 +46,7 @@ stdenv.mkDerivation rec {
     "-DWITH_BENCHMARK_TOOLS=0"
     "-DWITH_TESTS=1"
     "-DWITH_TOOLS=0"
+    "-DWITH_CORE_TOOLS=1"
     "-DWITH_BZ2=1"
     "-DWITH_LZ4=1"
     "-DWITH_SNAPPY=1"
@@ -56,6 +62,15 @@ stdenv.mkDerivation rec {
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
+
+  preInstall = ''
+    mkdir -p $tools/bin
+    cp tools/{ldb,sst_dump} $tools/bin/
+  '' + lib.optionalString stdenv.isDarwin ''
+    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
+  '' + lib.optionalString (stdenv.isLinux && enableShared) ''
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
+  '';
 
   # Old version doesn't ship the .pc file, new version puts wrong paths in there.
   postFixup = ''
