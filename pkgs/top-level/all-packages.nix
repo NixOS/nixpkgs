@@ -990,6 +990,7 @@ with pkgs;
 
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
+  mkShellMinimal = callPackage ../build-support/mkshell/minimal.nix { };
 
   mokutil = callPackage ../tools/security/mokutil { };
 
