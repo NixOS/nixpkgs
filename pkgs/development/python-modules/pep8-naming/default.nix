@@ -41,8 +41,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/PyCQA/pep8-naming";
     description = "Check PEP-8 naming conventions, plugin for flake8";
+    homepage = "https://github.com/PyCQA/pep8-naming";
+    changelog = "https://github.com/PyCQA/pep8-naming/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];
   };
