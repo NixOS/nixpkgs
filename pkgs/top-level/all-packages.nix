@@ -29287,9 +29287,7 @@ with pkgs;
 
   gollum = callPackage ../applications/misc/gollum { };
 
-  gonic = callPackage ../servers/gonic {
-    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox;
-  };
+  gonic = callPackage ../servers/gonic { };
 
   goodvibes = callPackage ../applications/audio/goodvibes { };
 
