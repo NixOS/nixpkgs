@@ -244,6 +244,10 @@ let
     copyChannel = false;
   };
 
+  OVMF_fd = (pkgs.OVMF.override {
+    secureBoot = cfg.useSecureBoot;
+  }).fd;
+
 in
 
 {
