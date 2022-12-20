@@ -217,6 +217,7 @@ let
   # a boot partition and root partition.
   systemImage = import ../../lib/make-disk-image.nix {
     inherit pkgs config lib;
+    inherit (cfg.efi) systemManagementModeEnforcement;
     additionalPaths = [ regInfo ];
     format = "qcow2";
     onlyNixStore = false;
@@ -243,11 +244,6 @@ let
     additionalSpace = "0M";
     copyChannel = false;
   };
-
-  OVMF_fd = (pkgs.OVMF.override {
-    secureBoot = cfg.useSecureBoot;
-  }).fd;
-
 in
 
 {
@@ -716,13 +712,15 @@ in
       OVMF = mkOption {
         type = types.package;
         default = (pkgs.OVMF.override {
+          systemManagementModeSupport = cfg.efi.systemManagementModeEnforcement;
           secureBoot = cfg.useSecureBoot;
         }).fd;
         defaultText = ''(pkgs.OVMF.override {
+          systemManagementModeSupport = cfg.efi.systemManagementModeEnforcement;
           secureBoot = cfg.useSecureBoot;
         }).fd;'';
         description =
-        lib.mdDoc "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";
+        lib.mdDoc "OVMF firmware package, defaults to OVMF configured with secure boot and system management mode if needed.";
       };
 
       firmware = mkOption {
@@ -743,6 +741,18 @@ in
           lib.mdDoc ''
             Platform-specific flash binary for EFI variables, implementation-dependent to the EFI firmware.
             Defaults to OVMF.
+          '';
+        };
+
+      systemManagementModeEnforcement = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            Enable system management mode enforcement for QEMU which prevent the OS from arbitrary accessing the UEFI variables memory.
+            It enforces to use the SMM API to perform any changes, useful in SecureBoot contexts.
+
+            WARNING: OVMF implementation seems broken.
           '';
       };
     };
@@ -809,6 +819,20 @@ in
         ]));
 
     warnings =
+      optional (cfg.efi.systemManagementModeEnforcement)
+        ''
+          You have enabled ${opt.efi.systemManagementModeEnforcement} = true.
+
+          This will enable system management mode for QEMU (cfi.pflash01, secure=on)
+          and if you're using the default OVMF image, it will build a SMM-enabled firmware
+          for UEFI.
+
+          This will lock down UEFI authenticated variables to ensure an actually secure
+          SecureBoot for example.
+
+          WARNING: currently, SMM seems to be broken and will cause boot failures and silent hung tasks.
+        ''
+      ++
       optional (
         cfg.writableStore &&
         cfg.useNixStoreImage &&
@@ -948,6 +972,12 @@ in
       (mkIf cfg.useEFIBoot [
         "-drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
         "-drive if=pflash,format=raw,unit=1,readonly=off,file=$NIX_EFI_VARS"
+      ])
+      (mkIf cfg.efi.systemManagementModeEnforcement [
+        # SMM requires Q35 machine.
+        "-machine type=q35,accel=kvm,smm=on"
+        # Enforce SMM usage for authenticated variables in UEFI
+        "-global driver=cfi.pflash01,property=secure,value=on"
       ])
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
