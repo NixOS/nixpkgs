@@ -1,14 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , odfpy
 , openpyxl
 , pandas
-, setuptools-scm
 , pytestCheckHook
-, pytest-cov
+, pythonOlder
 , pyyaml
+, setuptools-scm
+, tabulate
 , unicodecsv
 , xlrd
 , xlwt
@@ -35,13 +35,40 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    odfpy
-    openpyxl
-    pyyaml
-    xlrd
-    xlwt
-  ];
+  passthru.optional-dependencies = {
+    all = [
+      # markuppy
+      odfpy
+      openpyxl
+      pandas
+      pyyaml
+      tabulate
+      xlrd
+      xlwt
+    ];
+    cli = [
+      tabulate
+    ];
+    html = [
+      # markuppy
+    ];
+    ods = [
+      odfpy
+    ];
+    pandas = [
+      pandas
+    ];
+    xls = [
+      xlrd
+      xlwt
+    ];
+    xlsx = [
+      openpyxl
+    ];
+    yaml = [
+      pyyaml
+    ];
+  };
 
   checkInputs = [
     pandas
