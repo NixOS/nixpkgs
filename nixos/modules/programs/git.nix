@@ -32,6 +32,14 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = lib.mdDoc ''
+          Extra configuration text appended to {file}`/etc/gitconfig`.
+        '';
+      };
+
       lfs = {
         enable = mkEnableOption (lib.mdDoc "git-lfs");
 
@@ -49,7 +57,7 @@ in
     (mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
       environment.etc.gitconfig = mkIf (cfg.config != {}) {
-        text = generators.toGitINI cfg.config;
+        text = ((generators.toGitINI cfg.config) + cfg.extraConfig);
       };
     })
     (mkIf (cfg.enable && cfg.lfs.enable) {
