@@ -2667,6 +2667,8 @@ with pkgs;
 
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
 
+  azure-static-sites-client = callPackage ../development/tools/azure-static-sites-client { };
+
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
   bashblog = callPackage ../tools/text/bashblog { };
