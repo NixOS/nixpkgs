@@ -20,11 +20,21 @@ rec {
   prepareIncrementalBuild = drv: drv.overrideAttrs (old: {
     outputs = [ "out" ];
     name = drv.name + "-incrementalBuildArtifacts";
+    # To determine differences between the state of the build directory
+    # from an earlier build and  a later one we store the state of the build
+    # directory before build, but after patch phases.
+    # This way, the same derivation can be used multiple times and only changes are detected.
+    # Additionally Removed files are handled correctly in later builds.
     preBuild = (old.preBuild or "") + ''
       mkdir -p $out/sources
       cp -r ./* $out/sources/
     '';
 
+    # After the build the build directory is copied again
+    # to get the output files.
+    # We copy the complete build folder, to take care for
+    # Build tools, building in the source directory, instead of
+    # having a build root directory, e.G the Linux kernel.
     installPhase = ''
       mkdir -p $out/outputs
       cp -r ./* $out/outputs/
@@ -40,6 +50,10 @@ rec {
     * in mkIncrementalBuild drv incrementalBuildArtifacts
   */
   mkIncrementalBuild = drv: previousBuildArtifacts: drv.overrideAttrs (old: {
+    # The actual incremental build phase.
+    # We compare the changed sources from a previous build with the current and create a patch
+    # Afterwards we clean the build directory to copy the previous output files (Including the sources)
+    # The source difference patch is applied to get the latest changes again to allow short build times.
     preBuild = (old.preBuild or "") + ''
       set +e
       diff -ur ${previousBuildArtifacts}/sources ./ > sourceDifference.patch
