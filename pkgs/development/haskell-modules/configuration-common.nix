@@ -1153,7 +1153,7 @@ self: super: {
     postPatch = old.postPatch or "" + ''
       sed -i 's/template-haskell.*2.17/template-haskell/' reflex-dom-core.cabal
     '';
-    }) 
+    })
     ((appendPatches [
       (fetchpatch {
         url = "https://github.com/reflex-frp/reflex-dom/commit/1814640a14c6c30b1b2299e74d08fb6fcaadfb94.patch";
