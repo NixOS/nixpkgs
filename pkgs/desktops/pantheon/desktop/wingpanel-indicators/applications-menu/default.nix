@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "applications-menu";
     rev = version;
-    sha256 = "sha256-pEBvFN+zYsF8CbB29rTNclwAYhw/Hb0HhLzXtijfI4M=";
+    sha256 = "sha256-WlRrEkX0DGIHYWvUc9G4BbvofzWJwqkiJaJFwQ43GPE=";
   };
 
   patches = [
