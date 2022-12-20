@@ -934,6 +934,8 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
+
     mustache =  callPackage ../development/ocaml-modules/mustache { };
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
