@@ -205,6 +205,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
+  # See doc/builders/special/darwin-builder.section.md
   builder =
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
