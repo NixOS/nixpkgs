@@ -4,13 +4,13 @@ let
 in
 buildGoModule rec {
   pname = "mimir";
-  version = pinData.version;
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    sha256 = pinData.sha256;
+    sha256 = "sha256-OpQxVp4Q2+r3Tqrqw3SrBsJDU5KJqChxsuYneT0PvYQ=";
   };
 
   vendorSha256 = null;
@@ -20,11 +20,8 @@ buildGoModule rec {
     "cmd/mimirtool"
   ];
 
-  passthru = {
-    updateScript = ./update.sh;
-    tests = {
-      inherit (nixosTests) mimir;
-    };
+  passthru.tests = {
+    inherit (nixosTests) mimir;
   };
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";
