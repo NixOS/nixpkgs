@@ -610,6 +610,8 @@ let
 
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
+    httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
     index = callPackage ../development/ocaml-modules/index { };
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
