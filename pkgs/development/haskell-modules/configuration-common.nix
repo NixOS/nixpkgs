@@ -12,7 +12,7 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) fetchpatch fetchpatch2 lib;
   inherit (lib) throwIfNot versionOlder;
 in
 
