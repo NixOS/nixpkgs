@@ -1,4 +1,4 @@
-{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, modDirVersionArg ? null, ... } @ args:
+{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, ... } @ args:
 
 with lib;
 
@@ -18,4 +18,3 @@ buildLinux (args // rec {
   extraMeta.hydraPlatforms = [];
 
 } // (args.argsOverride or {}))
-  // lib.optionalAttrs (modDirVersionArg != null) { modDirVersion = modDirVersionArg; } # legacy

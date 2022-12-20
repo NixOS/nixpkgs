@@ -1,4 +1,4 @@
-{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, modDirVersionArg ? null, ... } @ args:
+{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, ... } @ args:
 
 with lib;
 
@@ -16,4 +16,3 @@ buildLinux (args // rec {
     sha256 = "1wvzfhzqq9dps508wmp2gblfz93ipppnjzqm0n8pi1acq11hhna0";
   };
 } // (args.argsOverride or { }))
-  // lib.optionalAttrs (modDirVersionArg != null) { modDirVersion = modDirVersionArg; } # legacy
