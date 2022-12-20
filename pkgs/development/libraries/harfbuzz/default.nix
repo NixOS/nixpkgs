@@ -32,22 +32,12 @@
 
 stdenv.mkDerivation rec {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "5.3.1";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
-    sha256 = "sha256-Smzgl7dagSH6zEuoO1sIO/7GV/RbADzVo0JPKua0Q00=";
+    sha256 = "HRAQoXUdB21SkeQzwThQKnlNZ5p0mNEmjuIeLUoUDrQ=";
   };
-
-  patches = [
-    # Pick upstream patch for exported symbol test failing on darwin
-    # https://github.com/harfbuzz/harfbuzz/issues/3850
-    (fetchpatch {
-      name = "harfbuzz-fix-check-symbol-tests-lto-and-darwin.patch";
-      url = "https://github.com/harfbuzz/harfbuzz/commit/b0b7a65388da25ae3fa01e969ad6abc67eed4f49.patch";
-      sha256 = "0my064r88pikw6q70hbgf6hwfkw544b9f5ai73qhn2a3c83jqn06";
-    })
-  ];
 
   postPatch = ''
     patchShebangs src/*.py test
