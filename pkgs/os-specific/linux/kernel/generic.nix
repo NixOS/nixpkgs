@@ -195,8 +195,8 @@ let
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) (basicArgs // {
-    inherit kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
+  kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (basicArgs // {
+    inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile;
     pos = builtins.unsafeGetAttrPos "version" args;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
