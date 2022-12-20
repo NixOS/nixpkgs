@@ -10274,6 +10274,8 @@ with pkgs;
 
   opae = callPackage ../development/libraries/opae { };
 
+  open-pdf-sign = callPackage ../tools/misc/open-pdf-sign { };
+
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
