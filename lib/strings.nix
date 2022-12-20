@@ -281,7 +281,7 @@ rec {
        => [ ]
        stringToCharacters "abc"
        => [ "a" "b" "c" ]
-       stringToCharacters "💩"
+       stringToCharacters "🦄"
        => [ "�" "�" "�" "�" ]
   */
   stringToCharacters = s:
