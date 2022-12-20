@@ -125,6 +125,26 @@ rec {
   */
   concatMapAttrs = f: flip pipe [ (mapAttrs f) attrValues (foldl' mergeAttrs { }) ];
 
+  /* Same as concatMapAttrs but merges the attrsets recurisvely.
+
+     Type:
+       concatMapAttrs ::
+         (String -> a -> AttrSet)
+         -> AttrSet
+         -> AttrSet
+
+     Example:
+       concatMapAttrsRecursive
+         (name: value: {
+           inherit (value) a b;
+         })
+         {
+           foo = { a = { q = null; }; b = { q = null; };};
+           bar = { a = { p = null; }; b = { p = null; };};
+          }
+       => { a = { p = null; q = null; }; b = { p = null; q = null; }; }
+  */
+  concatMapAttrsRecursive = f: flip pipe [ (mapAttrs f) attrValues (foldl' recursiveUpdate { }) ];
 
   /* Update or set specific paths of an attribute set.
 
