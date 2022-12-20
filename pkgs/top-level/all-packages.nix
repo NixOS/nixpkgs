@@ -15336,6 +15336,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  hipblas = callPackage ../development/libraries/hipblas {
+    stdenv = rocmClangStdenv;
+  };
+
   rccl = callPackage ../development/libraries/rccl {
     stdenv = rocmClangStdenv;
   };
