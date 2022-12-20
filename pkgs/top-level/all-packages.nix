@@ -15327,6 +15327,11 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  hipfft = callPackage ../development/libraries/hipfft {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
+  };
+
   rccl = callPackage ../development/libraries/rccl {
     stdenv = rocmClangStdenv;
   };
