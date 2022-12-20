@@ -313,6 +313,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nixos/lib/make-disk-image.nix</literal> can now
+          mutate EFI variables, run user-provided EFI firmware or
+          variable templates. This is now extensively documented in the
+          NixOS manual.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
