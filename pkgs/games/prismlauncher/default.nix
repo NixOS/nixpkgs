@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , jdk8
-, jdk
+, jdk17
 , zlib
 , file
 , wrapQtAppsHook
@@ -20,7 +20,7 @@
 , tomlplusplus
 , ghc_filesystem
 , msaClientID ? ""
-, jdks ? [ jdk jdk8 ]
+, jdks ? [ jdk17 jdk8 ]
 }:
 
 let
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aIBaenSnssv0/r2+UT5R4nBwo2QBGZ1Zp0CWOeiaeDE=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake file jdk wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 wrapQtAppsHook ];
   buildInputs = [
     qtbase
     qtsvg

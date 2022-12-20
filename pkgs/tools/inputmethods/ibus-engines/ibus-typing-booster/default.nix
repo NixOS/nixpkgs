@@ -13,16 +13,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
-  version = "2.7.5";
+  version = "2.19.10";
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
-    sha256 = "072mi8r10v78sfs81zxdwfabf87fp872c99c5iral1ywwa4iynpl";
+    sha256 = "Ie3cQ1YC+LB5I5LtKyJ0RO+dyjFbVsemW110t3gPmCM=";
   };
-
-  patches = [ ./hunspell-dirs.patch ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook gobject-introspection ];
   buildInputs = [ python ibus gtk3 m17n_lib ];
@@ -34,8 +32,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
     license = licenses.gpl3Plus;
-    description = "A typing booster engine for the IBus platform";
-    maintainers = with maintainers; [ ];
+    description = "A completion input method for faster typing";
+    maintainers = with maintainers; [ ncfavier ];
     isIbusEngine = true;
   };
 }
