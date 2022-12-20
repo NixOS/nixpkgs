@@ -37,6 +37,7 @@
 , wayland
 , xdg-utils
 , xorg
+, wayland
 }:
 
 let
