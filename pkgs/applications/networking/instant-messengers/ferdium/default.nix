@@ -1,4 +1,4 @@
-{ lib, mkFranzDerivation, fetchurl, xorg }:
+{ lib, mkFranzDerivation, fetchurl, xorg, commandLineArgs ? "" }:
 
 mkFranzDerivation rec {
   pname = "ferdium";
@@ -8,6 +8,8 @@ mkFranzDerivation rec {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
     sha256 = "sha256-lb3dvEaKgOnT5+YAJcYmro71soqkT/jpTjE0YMVMRUA=";
   };
+
+  inherit commandLineArgs;
 
   extraBuildInputs = [ xorg.libxshmfence ];
 
