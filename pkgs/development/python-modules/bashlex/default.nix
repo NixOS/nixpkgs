@@ -1,33 +1,31 @@
-{ enum-compat
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
 , python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bashlex";
-  version = "0.15";
+  version = "0.16";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "idank";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kKVorAIKlyC9vUzLOlaZ/JrG1kBBRIvLwBmHNj9nx84=";
+    hash = "sha256-vpcru/ax872WK3XuRQWTmTD9zRdObn2Bit6kY9ZIQaI=";
   };
-
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ enum-compat ];
 
   # workaround https://github.com/idank/bashlex/issues/51
   preBuild = ''
     ${python.interpreter} -c 'import bashlex'
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m nose --with-doctest
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bashlex" ];
 

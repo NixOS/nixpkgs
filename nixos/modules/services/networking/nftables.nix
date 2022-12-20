@@ -37,7 +37,7 @@ in
         # Check out https://wiki.nftables.org/ for better documentation.
         # Table for both IPv4 and IPv6.
         table inet filter {
-          # Block all incomming connections traffic except SSH and "ping".
+          # Block all incoming connections traffic except SSH and "ping".
           chain input {
             type filter hook input priority 0;
 

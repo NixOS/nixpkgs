@@ -34,7 +34,7 @@ read which is set to `dry-activate` when a dry activation is done.
 
 An activation script can write to special files instructing
 `switch-to-configuration` to restart/reload units. The script will take these
-requests into account and will incorperate the unit configuration as described
+requests into account and will incorporate the unit configuration as described
 above. This means that the activation script will "fake" a modified unit file
 and `switch-to-configuration` will act accordingly. By doing so, configuration
 like [systemd.services.\<name\>.restartIfChanged](#opt-systemd.services) is
@@ -49,7 +49,7 @@ dry activation being `/run/nixos/dry-activation-restart-list` and
 `/run/nixos/dry-activation-reload-list`. Those files can contain
 newline-separated lists of unit names where duplicates are being ignored. These
 files are not create automatically and activation scripts must take the
-possiblility into account that they have to create them first.
+possibility into account that they have to create them first.
 
 ## NixOS snippets {#sec-activation-script-nixos-snippets}
 

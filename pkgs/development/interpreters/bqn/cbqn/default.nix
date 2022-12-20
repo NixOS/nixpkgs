@@ -56,12 +56,7 @@ stdenv.mkDerivation rec {
     ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
     cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} build/bytecodeLocal/gen/
-  '')
-  # Need to adjust ld flags for darwin manually
-  # https://github.com/dzaima/CBQN/issues/26
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeFlagsArray+=(LD_LIBS="-ldl -lffi")
-  '';
+  '');
 
   installPhase = ''
      runHook preInstall

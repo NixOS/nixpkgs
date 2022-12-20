@@ -712,7 +712,7 @@
       <literal>options</literal> key defining the sub-options. Submodule
       option definitions are type-checked accordingly to the
       <literal>options</literal> declarations. Of course, you can nest
-      submodule option definitons for even higher modularity.
+      submodule option definitions for even higher modularity.
     </para>
     <para>
       The option set can be defined directly

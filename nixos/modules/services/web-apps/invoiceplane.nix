@@ -74,7 +74,7 @@ let
           type = types.path;
           default = "/var/lib/invoiceplane/${name}";
           description = lib.mdDoc ''
-            This directory is used for uploads of attachements and cache.
+            This directory is used for uploads of attachments and cache.
             The directory passed here is automatically created and permissions
             adjusted as required.
           '';

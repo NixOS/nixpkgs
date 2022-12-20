@@ -536,7 +536,7 @@ start_all()
           <para>
             Wait until the supplied regular expressions match a line of
             the serial console output. This method is useful when OCR is
-            not possibile or accurate enough.
+            not possible or accurate enough.
           </para>
         </listitem>
       </varlistentry>
@@ -631,7 +631,7 @@ machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
     </para>
     <para>
       For faster dev cycles it's also possible to disable the
-      code-linters (this shouldn't be commited though):
+      code-linters (this shouldn't be committed though):
     </para>
     <programlisting language="bash">
 {

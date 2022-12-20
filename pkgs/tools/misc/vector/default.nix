@@ -103,7 +103,10 @@ rustPlatform.buildRustPackage {
     ''}
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    inherit features;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "A high-performance logs, metrics, and events router";

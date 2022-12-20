@@ -7,10 +7,12 @@
 , pango
 , pkg-config
 , wxGTK
-# darwin deps
-, Cocoa
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation rec {
   pname = "wxSVG";
   version = "1.5.24";

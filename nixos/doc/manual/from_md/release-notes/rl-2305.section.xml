@@ -39,6 +39,21 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/ellie/atuin">atuin</link>,
+          a sync server for shell history. Available as
+          <link linkend="opt-services.atuin.enable">services.atuin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://gitlab.com/kop316/mmsd">mmsd</link>,
+          a lower level daemon that transmits and recieves MMSes.
+          Available as
+          <link linkend="opt-services.mmsd.enable">services.mmsd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
@@ -59,6 +74,14 @@
           and
           <link xlink:href="https://github.com/kolloch/crate2nix">crate2nix</link>
           instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>borgbackup</literal> module now has an option for
+          inhibiting system sleep while backups are running, defaulting
+          to off (not inhibiting sleep), available as
+          <link linkend="opt-services.borgbackup.jobs._name_.inhibitsSleep"><literal>services.borgbackup.jobs.&lt;name&gt;.inhibitsSleep</literal></link>.
         </para>
       </listitem>
       <listitem>
@@ -91,18 +114,8 @@
           <link linkend="opt-services.snapserver.openFirewall">services.snapserver.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The
-          <link linkend="opt-services.avahi.openFirewall">services.avahi.openFirewall</link>
-          module option default value has been changed from
-          <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
         </para>
       </listitem>
       <listitem>
@@ -111,8 +124,8 @@
           <link linkend="opt-services.tmate-ssh-server.openFirewall">services.tmate-ssh-server.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
         </para>
       </listitem>
       <listitem>
@@ -121,8 +134,18 @@
           <link linkend="opt-services.unifi-video.openFirewall">services.unifi-video.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Nginx module now validates the syntax of config files at
+          build time. For more complex configurations (using
+          <literal>include</literal> with out-of-store files notably)
+          you may need to disable this check by setting
+          <link linkend="opt-services.nginx.validateConfig">services.nginx.validateConfig</link>
+          to <literal>false</literal>.
         </para>
       </listitem>
       <listitem>
@@ -156,6 +179,17 @@
       </listitem>
       <listitem>
         <para>
+          In <literal>mastodon</literal> it is now necessary to specify
+          location of file with <literal>PostgreSQL</literal> database
+          password. In
+          <literal>services.mastodon.database.passwordFile</literal>
+          parameter default value
+          <literal>/var/lib/mastodon/secrets/db-password</literal> has
+          been changed to <literal>null</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>nix.readOnlyStore</literal> option has been
           renamed to <literal>boot.readOnlyNixStore</literal> to clarify
           that it configures the NixOS boot process, not the Nix daemon.
@@ -183,6 +217,16 @@
           <literal>opensnitch</literal> got the ability to configure
           rules. Available as
           <link linkend="opt-services.opensnitch.rules">services.opensnitch.rules</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The module <literal>usbmuxd</literal> now has the ability to
+          change the package used by the daemon. In case you’re
+          experiencing issues with <literal>usbmuxd</literal> you can
+          try an alternative program like <literal>usbmuxd2</literal>.
+          Available as
+          <link linkend="opt-services.usbmuxd.package">services.usbmuxd.package</link>
         </para>
       </listitem>
       <listitem>
@@ -220,6 +264,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>mastodon</literal> now supports connection to a
+          remote <literal>PostgreSQL</literal> database.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -233,6 +283,21 @@
       </listitem>
       <listitem>
         <para>
+          The new option <literal>users.motdFile</literal> allows
+          configuring a Message Of The Day that can be updated
+          dynamically.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Enabling global redirect in
+          <literal>services.nginx.virtualHosts</literal> now allows one
+          to add exceptions with the <literal>locations</literal>
+          option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
@@ -240,9 +305,31 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.fwupd</literal> module now allows
+          arbitrary daemon settings to be configured in a structured
+          manner
+          (<link linkend="opt-services.fwupd.daemonSettings"><literal>services.fwupd.daemonSettings</literal></link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>unifi-poller</literal> package and corresponding
           NixOS module have been renamed to <literal>unpoller</literal>
           to match upstream.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The new option
+          <literal>services.tailscale.useRoutingFeatures</literal>
+          controls various settings for using Tailscale features like
+          exit nodes and subnet routers. If you wish to use your machine
+          as an exit node, you can set this setting to
+          <literal>server</literal>, otherwise if you wish to use an
+          exit node you can set this setting to
+          <literal>client</literal>. The strict RPF warning has been
+          removed as the RPF will be loosened automatically based on the
+          value of this setting.
         </para>
       </listitem>
     </itemizedlist>

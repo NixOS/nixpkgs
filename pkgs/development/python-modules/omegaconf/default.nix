@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "omegaconf";
-  version = "2.2.3";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "omry";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sJUYi0M/6SBSeKVSJoNY7IbVmzRZVTlek8AyL2cOPAM=";
+    hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";
+    changelog = "https://github.com/omry/omegaconf/blob/v${version}/NEWS.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

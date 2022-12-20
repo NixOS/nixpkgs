@@ -20,7 +20,7 @@ rec {
   # necessary.
   #
   # `parsed` is inferred from args, both because there are two options with one
-  # clearly prefered, and to prevent cycles. A simpler fixed point where the RHS
+  # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
   elaborate = args': let
     args = if lib.isString args' then { system = args'; }
@@ -62,7 +62,7 @@ rec {
       linker =
         /**/ if final.useLLVM or false      then "lld"
         else if final.isDarwin              then "cctools"
-        # "bfd" and "gold" both come from GNU binutils. The existance of Gold
+        # "bfd" and "gold" both come from GNU binutils. The existence of Gold
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";

@@ -13,7 +13,7 @@ NIXPKGS_CRC_FOLDER=$(
 cd ${NIXPKGS_CRC_FOLDER}
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
-curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/code-ready/crc/releases >${LATEST_TAG_RAWFILE}
 
 LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} |
@@ -21,7 +21,7 @@ LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} |
 
 CRC_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
-CRC_COMMIT=$(curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+CRC_COMMIT=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/code-ready/crc/tags |
     jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
 

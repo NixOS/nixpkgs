@@ -71,7 +71,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
   // manualPackages // { inherit manualPackages; }
   // {
 
-    # Propagate overriden scope
+    # Propagate overridden scope
     emacs = emacs'.overrideAttrs(old: {
       passthru = (old.passthru or {}) // {
         pkgs = dontRecurseIntoAttrs self;

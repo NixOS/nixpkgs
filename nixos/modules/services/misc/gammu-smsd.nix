@@ -192,7 +192,7 @@ in {
           password = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = lib.mdDoc "User password used for connetion to the database";
+            description = lib.mdDoc "User password used for connection to the database";
           };
         };
       };

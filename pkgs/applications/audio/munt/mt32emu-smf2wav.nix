@@ -8,7 +8,7 @@
 }:
 
 let
-  char2underscore = char: str: lib.replaceChars [ char ] [ "_" ] str;
+  char2underscore = char: str: lib.replaceStrings [ char ] [ "_" ] str;
 in
 stdenv.mkDerivation rec {
   pname = "mt32emu-smf2wav";

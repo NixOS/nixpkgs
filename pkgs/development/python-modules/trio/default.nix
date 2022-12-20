@@ -4,7 +4,6 @@
 , async_generator
 , idna
 , outcome
-, contextvars
 , pytestCheckHook
 , pyopenssl
 , trustme
@@ -19,7 +18,7 @@
 buildPythonPackage rec {
   pname = "trio";
   version = "0.21.0";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,7 +32,7 @@ buildPythonPackage rec {
     idna
     outcome
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
+  ];
 
   # tests are failing on Darwin
   doCheck = !stdenv.isDarwin;

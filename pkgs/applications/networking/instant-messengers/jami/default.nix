@@ -63,13 +63,13 @@ rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
-      version = "513a3f14c44b2c2652f9219ec20dea64b236b713";
+      version = "eae25732568e600d248aa8c226271ff6b81df170";
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "pjproject";
         rev = version;
-        sha256 = "sha256-93AlJGMnlzJMrJquelpHQQKjhEgfpTFXTMqkBnm87u8=";
+        sha256 = "sha256-N7jn4qen+PgFiVkTFi2HSWhx2QPHwAYMtnrpE/ptDVc=";
       };
 
       patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));

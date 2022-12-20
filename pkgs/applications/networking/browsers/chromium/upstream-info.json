@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "108.0.5359.98",
-    "sha256": "07jnhd5y7k4zp2ipz052isw7llagxn8l8rbz8x3jkjz3f5wi7dk0",
-    "sha256bin64": "1hx49932g8abnb5f3a4ly7kjbrkh5bs040dh96zpxvfqx7dn6vrs",
+    "version": "108.0.5359.124",
+    "sha256": "0x9ac6m4xdccjdrk2bmq4y7bhfpgf2dv0q7lsbbsa50vlv1gm3fl",
+    "sha256bin64": "00c11svz9dzkg57484jg7c558l0jz8jbgi5zyjs1w7xp24vpnnpg",
     "deps": {
       "gn": {
         "version": "2022-10-05",
@@ -19,9 +19,9 @@
     }
   },
   "beta": {
-    "version": "109.0.5414.25",
-    "sha256": "1yl8bxbxnlvypqvnb0kd4z3c793m375pwza43gab35kc1azxfnrg",
-    "sha256bin64": "1rld29mq6dvd85nvsrxj155m79hylxknhphlmw82i74fa7r6lxhm",
+    "version": "109.0.5414.46",
+    "sha256": "17wzll9024c80fhgxi33ix1rpmqh9sbpx6qvw9cvhdlmhn0b5017",
+    "sha256bin64": "199n8a7pjnhbgkm2dwh9hq7pzf39x932bh6b056jqp032d5c00ns",
     "deps": {
       "gn": {
         "version": "2022-11-10",
@@ -32,9 +32,9 @@
     }
   },
   "dev": {
-    "version": "110.0.5449.0",
-    "sha256": "1zims8jw7k53qpv4kml3n15hy587jgg0sai7j4zrv3i3lk8jr6g7",
-    "sha256bin64": "1ykgxr3jxbqdgrq6g6vzbxnig05vljzdx800j6hn3kxwr9cdqwxn",
+    "version": "110.0.5464.2",
+    "sha256": "18k4rrwszk4xz416xi6li9b5pdajlscfgg4cyv67y10z7f28qwby",
+    "sha256bin64": "0hzv55bba4041400zjysgzz1n8svzvi156xyrayfr5ynapf7g2rd",
     "deps": {
       "gn": {
         "version": "2022-11-29",
@@ -45,8 +45,8 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "108.0.5359.99",
-    "sha256": "0v5ynal3s28s4f9s4s95hblnjxiy6498qmk04s0vf2ixqwi7rivn",
+    "version": "108.0.5359.125",
+    "sha256": "0n8aigw7qv6dzd8898xz435kj79z73v916amfaxyz69g57pnpqhn",
     "sha256bin64": null,
     "deps": {
       "gn": {
@@ -56,8 +56,8 @@
         "sha256": "1rhadb6qk867jafr85x2m3asis3jv7x06blhmad2d296p26d5w6x"
       },
       "ungoogled-patches": {
-        "rev": "108.0.5359.99-1",
-        "sha256": "0qibibgi54mdwmmcmz613qk9mgjczspvq09bz5m0wpkxbx7hla0i"
+        "rev": "108.0.5359.125-1",
+        "sha256": "1dacvzi6j4xyjjnrsb79mhhj7jc992z1di9acl4appfydlqadgv3"
       }
     }
   }

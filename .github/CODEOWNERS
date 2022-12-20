@@ -78,6 +78,8 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 /nixos/modules/system                                 @dasJ
+/nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
+/nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -224,10 +226,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @jonringer @teto
+/pkgs/applications/editors/neovim      @figsoda @jonringer @teto
 
 # VimPlugins
-/pkgs/applications/editors/vim/plugins         @jonringer
+/pkgs/applications/editors/vim/plugins         @figsoda @jonringer
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions   @jonringer

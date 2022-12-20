@@ -31,6 +31,11 @@
 , rebuildBytecode ? true
 , reproducibleBuild ? false
 , enableOptimizations ? false
+, strip2to3 ? false
+, stripConfig ? false
+, stripIdlelib ? false
+, stripTests ? false
+, stripLibs ? [ ]
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
@@ -318,7 +323,25 @@ in with passthru; stdenv.mkDerivation ({
     postFixup = ''
       # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
       cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-    '';
+    '' + optionalString strip2to3 ''
+      rm -R $out/bin/2to3 $out/lib/python*/lib2to3
+    '' + optionalString stripConfig ''
+      rm -R $out/bin/python*-config $out/lib/python*/config*
+    '' + optionalString stripIdlelib ''
+      # Strip IDLE
+      rm -R $out/bin/idle* $out/lib/python*/idlelib
+    '' + optionalString stripTests ''
+      # Strip tests
+      rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
+    '' + (concatStringsSep "\n"
+          (map
+            (lib:
+              ''
+                rm -vR $out/lib/python*/${lib}
+                # libraries in dynload (C libraries) may not exist,
+                # but when they exist they may be prefixed with _
+                rm -vfR $out/lib/python*/lib-dynload/{,_}${lib}
+              '') stripLibs));
 
     enableParallelBuilding = true;
 

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
-, writeScript
+, rocmUpdateScript
 , pkg-config
 , cmake
 , rocm-cmake
@@ -22,6 +22,7 @@
 , boost
 , sqlite
 , bzip2
+, nlohmann_json
 , texlive
 , doxygen
 , sphinx
@@ -30,9 +31,13 @@
 , buildDocs ? true
 , buildTests ? false
 # LFS isn't working, so we will manually fetch these
-# This isn't strictly required, but is recommended
+# This isn't strictly required, but is recommended to enable
 # https://github.com/ROCmSoftwarePlatform/MIOpen/issues/1373
-, fetchKDBs ? true
+#
+# MIOpen will produce a very large output due to KDBs fetched
+# Also possibly in the future because of KDB generation
+# This is disabled by default so we can cache on hydra
+, fetchKDBs ? false
 , useOpenCL ? false
 }:
 
@@ -57,7 +62,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopen";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -71,7 +76,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpen";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-5/JitdGJ0afzK4pGOOywRLsB3/Thc6/71sRkKIxf2Lg=";
+    hash = "sha256-EOe3LUafOeVLzRoahPdS6DMZ/+6WWeVI7jG25zfPrx8=";
   };
 
   nativeBuildInputs = [
@@ -97,6 +102,7 @@ in stdenv.mkDerivation (finalAttrs: {
     boost
     sqlite
     bzip2
+    nlohmann_json
   ] ++ lib.optionals buildDocs [
     latex
     doxygen
@@ -177,13 +183,11 @@ in stdenv.mkDerivation (finalAttrs: {
     patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])}:$out/lib $test/bin/*
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version miopen "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Machine intelligence library for ROCm";
@@ -191,8 +195,5 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     broken = finalAttrs.version != hip.version;
-    # MIOpen will produce a very large output due to KDBs fetched
-    # Also possibly in the future because of KDB generation
-    hydraPlatforms = [ ];
   };
 })

@@ -58,5 +58,7 @@ stdenv.mkDerivation rec {
     description = "An image loading and rendering library for X11";
     platforms = platforms.unix;
     license = with licenses; [ gpl2Only lgpl2Only ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

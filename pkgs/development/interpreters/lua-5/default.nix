@@ -31,7 +31,7 @@ let
           generatedPackages = if (builtins.pathExists ../../lua-modules/generated-packages.nix) then
             (final: prev: callPackage ../../lua-modules/generated-packages.nix { inherit (final) callPackage; } final prev)
           else (final: prev: {});
-          overridenPackages = callPackage ../../lua-modules/overrides.nix { };
+          overriddenPackages = callPackage ../../lua-modules/overrides.nix { };
 
           otherSplices = {
             selfBuildBuild = luaOnBuildForBuild.pkgs;
@@ -44,7 +44,7 @@ let
           extra = spliced0: {};
           extensions = lib.composeManyExtensions [
             generatedPackages
-            overridenPackages
+            overriddenPackages
             overrides
           ];
         in lib.makeScopeWithSplicing

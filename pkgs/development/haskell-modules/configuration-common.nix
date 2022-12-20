@@ -12,7 +12,7 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) fetchpatch fetchpatch2 lib;
   inherit (lib) throwIfNot versionOlder;
 in
 
@@ -132,8 +132,7 @@ self: super: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
-  # https://github.com/cachix/cachix/pull/451
-  cachix = appendPatch ./patches/cachix.patch super.cachix;
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] super.cachix;
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
@@ -1733,6 +1732,14 @@ self: super: {
         url = "https://github.com/hercules-ci/hercules-ci-agent/commit/99afac77ddb84122a5321494a08e6fe2e95548a1.patch";
         sha256 = "sha256-0dtmNL1rqzeXvXWinfANc57a5LIM3uNnhR3A+p8mH0A=";
         stripLen = 1;
+      })
+      # haskell-updates branch, will be merged in 0.9.10
+      (fetchpatch2 {
+        name = "hercules-ci-agent-cachix-1.1";
+        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/b76d888548da37a96ae47f1be871de6605d38edd.patch";
+        sha256 = "sha256-kqEkDHbatcYS8LuQlGV/1j/6LXWviQoDQAHDr6DBbDU=";
+        stripLen = 1;
+        includes = [ "*.hs" ];
       })
     ])
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])

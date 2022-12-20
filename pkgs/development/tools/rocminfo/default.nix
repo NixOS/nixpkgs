@@ -1,14 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, writeScript, fetchpatch, cmake, rocm-runtime, python3, rocm-cmake, busybox, gnugrep
+{ stdenv
+, lib
+, fetchFromGitHub
+, rocmUpdateScript
+, fetchpatch
+, cmake
+, rocm-runtime
+, python3
+, rocm-cmake
+, busybox
+, gnugrep
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
   # rocminfo's output, then it, too, has those requirements. Instead,
   # we can specify the GPU targets for this system (e.g. "gfx803" for
   # Polaris) such that no system call is needed for downstream
   # compilers to determine the desired target.
-, defaultTargets ? []}:
+, defaultTargets ? []
+}:
+
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.3.3";
+  version = "5.4.0";
   pname = "rocminfo";
+
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocminfo";
@@ -19,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ];
   buildInputs = [ rocm-cmake rocm-runtime ];
+
   cmakeFlags = [
     "-DROCM_DIR=${rocm-runtime}"
     "-DROCRTST_BLD_TYPE=Release"
@@ -37,12 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     echo '${lib.concatStringsSep "\n" defaultTargets}' > $out/bin/target.lst
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/rocminfo/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocminfo "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "ROCm Application for Reporting System Info";

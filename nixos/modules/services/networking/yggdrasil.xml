@@ -30,7 +30,7 @@ An annotated example of a simple configuration:
     settings = {
       Peers = [
         # Yggdrasil will automatically connect and "peer" with other nodes it
-        # discovers via link-local multicast annoucements. Unless this is the
+        # discovers via link-local multicast announcements. Unless this is the
         # case (it probably isn't) a node needs peers within the existing
         # network that it can tunnel to.
         "tcp://1.2.3.4:1024"
@@ -78,7 +78,7 @@ in {
   }];
 
   services.radvd = {
-    # Annouce the 300::/8 prefix to eth0.
+    # Announce the 300::/8 prefix to eth0.
     enable = true;
     config = ''
       interface eth0

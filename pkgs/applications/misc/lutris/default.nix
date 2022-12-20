@@ -22,16 +22,16 @@
 , flake8
 
   # python dependencies
+, certifi
 , dbus-python
 , distro
 , evdev
 , lxml
 , pillow
 , pygobject3
+, pypresence
 , pyyaml
 , requests
-, keyring
-, python-magic
 
   # commands that lutris needs
 , xrandr
@@ -84,13 +84,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.11";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-D2qMKYmi5TC8jEAECcz2V0rUrmp5kjXJ5qyW6C4re3w=";
+    sha256 = "sha256-rsiXm7L/M85ot6NrTyy//lMRFlLPJYve9y6Erg9Ugxg=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -104,20 +104,20 @@ buildPythonApplication rec {
     libnotify
     pango
     webkitgtk
-    python-magic
   ] ++ gstDeps;
 
+  # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
   propagatedBuildInputs = [
-    evdev
-    distro
-    lxml
-    pyyaml
-    pygobject3
-    requests
-    pillow
+    certifi
     dbus-python
-    keyring
-    python-magic
+    distro
+    evdev
+    lxml
+    pillow
+    pygobject3
+    pypresence
+    pyyaml
+    requests
   ];
 
   postPatch = ''

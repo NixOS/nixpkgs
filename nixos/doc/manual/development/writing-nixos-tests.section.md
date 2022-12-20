@@ -298,7 +298,7 @@ The following methods are available on machine objects:
 
 :   Wait until the supplied regular expressions match a line of the
     serial console output. This method is useful when OCR is not
-    possibile or accurate enough.
+    possible or accurate enough.
 
 `wait_for_window`
 
@@ -351,7 +351,7 @@ This applies to `systemctl`, `get_unit_info`, `wait_for_unit`,
 `start_job` and `stop_job`.
 
 For faster dev cycles it\'s also possible to disable the code-linters
-(this shouldn\'t be commited though):
+(this shouldn\'t be committed though):
 
 ```nix
 {

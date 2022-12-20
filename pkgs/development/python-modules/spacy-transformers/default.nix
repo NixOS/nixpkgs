@@ -2,7 +2,6 @@
 , callPackage
 , fetchPypi
 , buildPythonPackage
-, dataclasses
 , torch
 , pythonOlder
 , spacy
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "1.1.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,8 +28,6 @@ buildPythonPackage rec {
     spacy-alignments
     srsly
     transformers
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   postPatch = ''

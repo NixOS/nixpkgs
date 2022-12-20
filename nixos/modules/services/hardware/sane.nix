@@ -141,7 +141,7 @@ in
       description = lib.mdDoc ''
         Enable saned network daemon for remote connection to scanners.
 
-        saned would be runned from `scanner` user; to allow
+        saned would be run from `scanner` user; to allow
         access to hardware that doesn't have `scanner` group
         you should add needed groups to this user.
       '';

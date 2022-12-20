@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

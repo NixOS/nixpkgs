@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  patches = [ ./gtest.patch ];
+
   # Same as vulkan-validation-layers
   dontPatchELF = true;
 

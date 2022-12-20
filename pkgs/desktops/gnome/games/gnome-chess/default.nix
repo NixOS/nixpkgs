@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     description = "Play the classic two-player boardgame of chess";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

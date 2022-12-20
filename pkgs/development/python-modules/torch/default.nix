@@ -3,7 +3,6 @@
   mklDnnSupport ? true, useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
-  cudaArchList ? null,
 
   # Native build inputs
   cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
@@ -33,7 +32,7 @@
   isPy3k, pythonOlder }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
@@ -51,64 +50,6 @@ let
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
     paths = [ cudatoolkit.out cudatoolkit.lib nccl.dev nccl.out ];
   };
-
-  # Give an explicit list of supported architectures for the build, See:
-  # - pytorch bug report: https://github.com/pytorch/pytorch/issues/23573
-  # - pytorch-1.2.0 build on nixpks: https://github.com/NixOS/nixpkgs/pull/65041
-  #
-  # This list was selected by omitting the TORCH_CUDA_ARCH_LIST parameter,
-  # observing the fallback option (which selected all architectures known
-  # from cudatoolkit_10_0, pytorch-1.2, and python-3.6), and doing a binary
-  # searching to find offending architectures.
-  #
-  # NOTE: Because of sandboxing, this derivation can't auto-detect the hardware's
-  # cuda architecture, so there is also now a problem around new architectures
-  # not being supported until explicitly added to this derivation.
-  #
-  # FIXME: CMake is throwing the following warning on python-1.2:
-  #
-  # ```
-  # CMake Warning at cmake/public/utils.cmake:172 (message):
-  #   In the future we will require one to explicitly pass TORCH_CUDA_ARCH_LIST
-  #   to cmake instead of implicitly setting it as an env variable.  This will
-  #   become a FATAL_ERROR in future version of pytorch.
-  # ```
-  # If this is causing problems for your build, this derivation may have to strip
-  # away the standard `buildPythonPackage` and use the
-  # [*Adjust Build Options*](https://github.com/pytorch/pytorch/tree/v1.2.0#adjust-build-options-optional)
-  # instructions. This will also add more flexibility around configurations
-  # (allowing FBGEMM to be built in pytorch-1.1), and may future proof this
-  # derivation.
-  brokenArchs = [ "3.0" ]; # this variable is only used as documentation.
-
-  cudaCapabilities = rec {
-    cuda9 = [
-      "3.5"
-      "5.0"
-      "5.2"
-      "6.0"
-      "6.1"
-      "7.0"
-      "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-                 # which leads me to believe this is the final cuda-9-compatible architecture.
-    ];
-
-    cuda10 = cuda9 ++ [
-      "7.5"
-      "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
-    ];
-
-    cuda11 = cuda10 ++ [
-      "8.0"
-      "8.0+PTX"  # < CUDA toolkit 11.0
-      "8.6"
-      "8.6+PTX"  # < CUDA toolkit 11.1
-    ];
-  };
-  final_cudaArchList =
-    if !cudaSupport || cudaArchList != null
-    then cudaArchList
-    else cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
@@ -153,7 +94,7 @@ in buildPythonPackage rec {
   ];
 
   preConfigure = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
+    export TORCH_CUDA_ARCH_LIST="${cudaFlags.cudaCapabilitiesSemiColonString}"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
@@ -308,7 +249,6 @@ in buildPythonPackage rec {
 
   passthru = {
     inherit cudaSupport cudaPackages;
-    cudaArchList = final_cudaArchList;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
   };

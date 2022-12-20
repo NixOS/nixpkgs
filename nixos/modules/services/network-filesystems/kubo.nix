@@ -54,7 +54,7 @@ in
 
     services.kubo = {
 
-      enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degredation)");
+      enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
 
       package = mkOption {
         type = types.package;

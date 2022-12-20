@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "Test your logic skills in this number grid puzzle";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

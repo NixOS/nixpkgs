@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "22.6.3";
+  version = "22.6.4";
 
   outputs = [ "out" "dev" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "sha256-lQg+L64DW2ZIBeJRimNkba7EL+SM4jSnX9PWIx4j2AY=";
+    sha256 = "sha256-0Il51cWqgJwtsnsltHey5Sp+7RYUpqo4GtTRzrzw09A=";
   };
 
   patches = [
@@ -33,9 +33,6 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
       sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
     })
-    # fix compilation on 32bit
-    # https://github.com/intel/media-driver/pull/1557
-    ./32bit.patch
   ];
 
   cmakeFlags = [
@@ -43,6 +40,7 @@ stdenv.mkDerivation rec {
     "-DLIBVA_DRIVERS_PATH=${placeholder "out"}/lib/dri"
     # Works only on hosts with suitable CPUs.
     "-DMEDIA_RUN_TEST_SUITE=OFF"
+    "-DMEDIA_BUILD_FATAL_WARNINGS=OFF"
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";

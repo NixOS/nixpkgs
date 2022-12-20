@@ -1,4 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
+let
+  pinData = lib.importJSON ./pin.json;
+in
 buildGoModule rec {
   pname = "mimir";
   version = "2.4.0";

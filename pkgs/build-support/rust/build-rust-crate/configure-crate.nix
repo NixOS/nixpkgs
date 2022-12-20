@@ -32,7 +32,7 @@ let version_ = lib.splitString "-" crateVersion;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
     envFeatures = lib.concatStringsSep " " (
-      map (f: lib.replaceChars ["-"] ["_"] (lib.toUpper f)) crateFeatures
+      map (f: lib.replaceStrings ["-"] ["_"] (lib.toUpper f)) crateFeatures
     );
 in ''
   ${echo_colored colors}

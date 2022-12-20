@@ -277,7 +277,7 @@ in {
           };
         };
 
-      # Test compatiblity with Caddy
+      # Test compatibility with Caddy
       # It only supports useACMEHost, hence not using mkServerConfigs
       } // (let
         baseCaddyConfig = { nodes, config, ... }: {

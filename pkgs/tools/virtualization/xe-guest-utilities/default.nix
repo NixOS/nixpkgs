@@ -9,6 +9,8 @@ stdenv.mkDerivation (rec {
     maintainers = with lib.maintainers; [ benwbooth ];
     platforms = lib.platforms.linux;
     license = [ lib.licenses.gpl2 lib.licenses.lgpl21 ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
   src = fetchurl {
     url = "https://sources.archlinux.org/other/community/xe-guest-utilities/xe-guest-utilities_${version}-1120.tar.gz";

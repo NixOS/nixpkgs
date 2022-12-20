@@ -41,7 +41,6 @@
 , zlib
 
   # CUDA flags:
-, cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , cudaSupport ? false
 , cudaPackages ? {}
 
@@ -50,7 +49,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
   version = "0.3.22";
@@ -165,7 +164,7 @@ let
       build --action_env TF_CUDA_PATHS="${cudatoolkit_joined},${cudnn},${nccl}"
       build --action_env TF_CUDA_VERSION="${lib.versions.majorMinor cudatoolkit.version}"
       build --action_env TF_CUDNN_VERSION="${lib.versions.major cudnn.version}"
-      build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${lib.concatStringsSep "," cudaCapabilities}"
+      build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${cudaFlags.cudaRealCapabilitiesCommaString}"
     '' + ''
       CFG
     '';

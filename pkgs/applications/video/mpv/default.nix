@@ -17,7 +17,6 @@
 , lua
 , libuchardet
 , libiconv
-, CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 , xcbuild
 
 , waylandSupport ? stdenv.isLinux
@@ -75,11 +74,12 @@
 , xineramaSupport    ? stdenv.isLinux, libXinerama
 , xvSupport          ? stdenv.isLinux, libXv
 , zimgSupport        ? true,           zimg
+, darwin
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-
 in stdenv.mkDerivation rec {
   pname = "mpv";
   version = "0.35.0";

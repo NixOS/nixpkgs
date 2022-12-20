@@ -16,7 +16,7 @@
   #   };
   # }
   config
-  # GraalVM version that will be used unless overriden by `config.<platform>.version`
+  # GraalVM version that will be used unless overridden by `config.<platform>.version`
 , defaultVersion
   # Java version used by GraalVM
 , javaVersion

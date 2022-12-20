@@ -11,7 +11,6 @@
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
-, forceDarkMode ? false
 , commandLineArgs ? ""
 , pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
@@ -80,7 +79,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
     substituteInPlace "$out"/share/applications/*.desktop \
-      --replace vivaldi-stable "vivaldi ${lib.optionalString forceDarkMode "--force-dark-mode"}"
+      --replace vivaldi-stable vivaldi
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps

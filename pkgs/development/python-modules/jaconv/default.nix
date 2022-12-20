@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "jaconv";
-  version = "0.3";
+  version = "0.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ikegami-yukino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "rityHi1JWWlV7+sAxNrlbcmfHmORZWrMZqXTRlsclhQ=";
+    hash = "sha256-uzGHvklFHVoNloZauczgITeHQIgYQAfI9cjLWgG/vyI=";
   };
 
   checkInputs = [
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Japanese character interconverter for Hiragana, Katakana, Hankaku and Zenkaku";
     homepage = "https://github.com/ikegami-yukino/jaconv";
+    changelog = "https://github.com/ikegami-yukino/jaconv/blob/v${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

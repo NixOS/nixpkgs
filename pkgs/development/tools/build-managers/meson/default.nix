@@ -9,11 +9,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.63.1";
+  version = "0.64.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "Bv4TKXIT1v8BIcXVqrJaVu+Tj/7FdBTtYIb9onLLZek=";
+    sha256 = "sha256-Oo4DDCM094IIX4FicGLMbUpnce3zHgVf/jdPnmsImrk=";
   };
 
   patches = [
@@ -51,15 +51,6 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
-
-    # Prevent Meson from passing -O0 in buildtype=plain.
-    # Nixpkgs enables fortifications which do not work without optimizations.
-    # https://github.com/mesonbuild/meson/pull/10593
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/f9bfeb2add70973113ab4a98454a5c5d7e3a26ae.patch";
-      revert = true;
-      sha256 = "VKXUwdS+zMp1y+5GrV2inESUpUUp+OL3aI4wOXHxOeo=";
-    })
 
     # Fix passing multiple --define-variable arguments to pkg-config.
     # https://github.com/mesonbuild/meson/pull/10670
