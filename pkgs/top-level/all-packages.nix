@@ -15332,6 +15332,10 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  hipsolver = callPackage ../development/libraries/hipsolver {
+    stdenv = rocmClangStdenv;
+  };
+
   rccl = callPackage ../development/libraries/rccl {
     stdenv = rocmClangStdenv;
   };
