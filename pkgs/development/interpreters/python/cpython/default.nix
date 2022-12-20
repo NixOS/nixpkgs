@@ -171,11 +171,22 @@ let
       else if isx86_32 then "i386"
       else parsed.cpu.name;
     pythonAbiName =
-      # python's build doesn't differentiate between musl and glibc in its
-      # abi detection, our wrapper should match.
-      if stdenv.hostPlatform.isMusl then
-        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
-        else parsed.abi.name;
+      # python's build doesn't support every gnu<extension>, and doesn't
+      # differentiate between musl and glibc, so we list those supported in
+      # here:
+      # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
+      # Note: this is an approximation, as it doesn't take into account the CPU
+      # family, or the nixpkgs abi naming conventions.
+      if elem parsed.abi.name [
+        "gnux32"
+        "gnueabihf"
+        "gnueabi"
+        "gnuabin32"
+        "gnuabi64"
+        "gnuspe"
+      ]
+      then parsed.abi.name
+      else "gnu";
     multiarch =
       if isDarwin then "darwin"
       else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
