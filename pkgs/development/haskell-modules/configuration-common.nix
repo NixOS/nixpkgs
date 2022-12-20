@@ -1733,6 +1733,14 @@ self: super: {
         sha256 = "sha256-0dtmNL1rqzeXvXWinfANc57a5LIM3uNnhR3A+p8mH0A=";
         stripLen = 1;
       })
+      # haskell-updates branch, will be merged in 0.9.10
+      (fetchpatch2 {
+        name = "hercules-ci-agent-cachix-1.1";
+        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/b76d888548da37a96ae47f1be871de6605d38edd.patch";
+        sha256 = "sha256-kqEkDHbatcYS8LuQlGV/1j/6LXWviQoDQAHDr6DBbDU=";
+        stripLen = 1;
+        includes = [ "*.hs" ];
+      })
     ])
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
