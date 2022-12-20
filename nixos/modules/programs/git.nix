@@ -49,7 +49,22 @@ in
     (mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
       environment.etc.gitconfig = mkIf (cfg.config != {}) {
-        text = generators.toGitINI cfg.config;
+        text =
+        let
+          # this is a function that takes a set of includes { includeIf."gitdir:~/path" = { path = ...; _content = {}; } }
+          # optionally with a _content subattribute and returns a list
+          # that contains each individual include statement and (if _content was set) the value of _content merged into
+          flatGit = f: flatten (mapAttrsToList (type: s: mapAttrsToList (key: value: { "${type}"."${key}" = (removeAttrs value [ "_content" ]); } // (if value ? "_content" then value._content else {})) s) f);
+        in
+          (
+            # filter out all the rules that aren't includes, make an ini
+            generators.toGitINI (filterAttrs (type: _: type != "include" && type != "includeIf") cfg.config)
+          ) + "\n" +
+          (
+            # iterate over all includes, runs the flatGit function over each include individually
+            # and turn each into it's own ini then concat the whole thing
+            concatMapStringsSep "\n" generators.toGitINI (flatGit (filterAttrs (type: _: type == "include" || type == "includeIf") cfg.config))
+          );
       };
     })
     (mkIf (cfg.enable && cfg.lfs.enable) {
