@@ -429,7 +429,7 @@ with pkgs;
 
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
 
-  incrementalBuildTools = callPackage ../build-support/build-incremental.nix {};
+  checkpointBuildTools = callPackage ../build-support/checkpoint-build.nix {};
 
   caroline = callPackage ../development/libraries/caroline { };
 

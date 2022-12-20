@@ -1,6 +1,6 @@
-{ hello, incrementalBuildTools, runCommandNoCC, texinfo, stdenv, rsync }:
+{ hello, checkpointBuildTools, runCommandNoCC, texinfo, stdenv, rsync }:
 let
-  baseHelloArtifacts = incrementalBuildTools.prepareIncrementalBuild hello;
+  baseHelloArtifacts = checkpointBuildTools.prepareCheckpointBuild hello;
   patchedHello = hello.overrideAttrs (old: {
     buildInputs = [ texinfo ];
     src = runCommandNoCC "patch-hello-src" { } ''
@@ -10,9 +10,9 @@ let
       patch -p1 < ${./hello.patch}
     '';
   });
-  incrementalBuiltHello = incrementalBuildTools.mkIncrementalBuild patchedHello baseHelloArtifacts;
+  checkpointBuiltHello = checkpointBuildTools.mkCheckpointedBuild patchedHello baseHelloArtifacts;
 
-  incrementalBuiltHelloWithCheck = incrementalBuiltHello.overrideAttrs (old: {
+  checkpointBuiltHelloWithCheck = checkpointBuiltHello.overrideAttrs (old: {
     doCheck = true;
     checkPhase = ''
       echo "checking if unchanged source file is not recompiled"
@@ -20,7 +20,7 @@ let
     '';
   });
 
-  baseHelloRemoveFileArtifacts = incrementalBuildTools.prepareIncrementalBuild (hello.overrideAttrs (old: {
+  baseHelloRemoveFileArtifacts = checkpointBuildTools.prepareCheckpointBuild (hello.overrideAttrs (old: {
     patches = [ ./hello-additionalFile.patch ];
   }));
 
@@ -41,7 +41,7 @@ let
     '';
   });
 
-  incrementalBuiltHelloWithRemovedFile = incrementalBuildTools.mkIncrementalBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
+  checkpointBuiltHelloWithRemovedFile = checkpointBuildTools.mkCheckpointedBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
 in
 stdenv.mkDerivation {
   name = "patched-hello-returns-correct-output";
@@ -49,9 +49,9 @@ stdenv.mkDerivation {
     touch $out
 
     echo "testing output of hello binary"
-    [ "$(${incrementalBuiltHelloWithCheck}/bin/hello)" = "Hello, incremental world!" ]
+    [ "$(${checkpointBuiltHelloWithCheck}/bin/hello)" = "Hello, incremental world!" ]
     echo "testing output of hello with removed file"
-    [ "$(${incrementalBuiltHelloWithRemovedFile}/bin/hello)" = "Hello, incremental world!" ]
+    [ "$(${checkpointBuiltHelloWithRemovedFile}/bin/hello)" = "Hello, incremental world!" ]
   '';
 }
 

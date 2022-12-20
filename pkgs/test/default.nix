@@ -113,7 +113,7 @@ with pkgs;
 
   install-shell-files = callPackage ./install-shell-files {};
 
-  incremental-build = callPackage ./incrementalBuild {};
+  checkpoint-build = callPackage ./checkpointBuild {};
 
   kernel-config = callPackage ./kernel.nix {};
 

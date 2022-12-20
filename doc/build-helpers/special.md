@@ -7,5 +7,5 @@ special/fhs-environments.section.md
 special/makesetuphook.section.md
 special/mkshell.section.md
 special/vm-tools.section.md
-special/incremental-build.section.md
+special/checkpoint-build.section.md
 ```
