@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "mimir";
   version = "2.5.0";
@@ -17,8 +17,14 @@ buildGoModule rec {
     "cmd/mimirtool"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) mimir;
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+      extraArgs = [ "--version-regex" "mimir-([0-9.]+)" ];
+    };
+    tests = {
+      inherit (nixosTests) mimir;
+    };
   };
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";
