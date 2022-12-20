@@ -6,6 +6,7 @@
 , httpSupport ? false
 , tpmSupport ? false
 , tlsSupport ? false
+, systemManagementModeSupport ? false
 , debug ? false
 # Usually, this option is broken, do not use it except if you know what you are
 # doing.
@@ -54,6 +55,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     ++ lib.optionals debug [ "-D DEBUG_ON_SERIAL_PORT=TRUE" ]
     ++ lib.optionals sourceDebug [ "-D SOURCE_DEBUG_ENABLE=TRUE" ]
     ++ lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
+    ++ lib.optionals systemManagementModeSupport [ "-D SMM_REQUIRE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" ]
     ++ lib.optionals fdSize2MB ["-D FD_SIZE_2MB"]
     ++ lib.optionals fdSize4MB ["-D FD_SIZE_4MB"]
