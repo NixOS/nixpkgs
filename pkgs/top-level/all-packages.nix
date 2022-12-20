@@ -15253,6 +15253,8 @@ with pkgs;
     stdenv = llvmPackages_9.stdenv;
   };
 
+  blaze = callPackage ../development/libraries/blaze { };
+
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
 
   qbe = callPackage ../development/compilers/qbe { };
