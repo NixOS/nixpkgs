@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
+    fuse
     libkrb5
     libuuid
     libxcrypt
@@ -56,7 +57,6 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ lib.optionals stdenv.isLinux [
-    fuse
     systemd
     voms
   ]
