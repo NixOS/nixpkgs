@@ -250,7 +250,7 @@ rec {
 
     by setting nixpkgs config option 'android_sdk.accept_license = true;'.
   '' else callPackage ./tools.nix {
-    inherit deployAndroidPackage packages toolsVersion;
+    inherit deployAndroidPackage packages toolsVersion os;
 
     postInstall = ''
       # Symlink all requested plugins
