@@ -12,7 +12,7 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) fetchpatch fetchpatch2 lib;
   inherit (lib) throwIfNot versionOlder;
 in
 
@@ -1444,7 +1444,19 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] super.hercules-ci-agent;
+  hercules-ci-agent = lib.pipe super.hercules-ci-agent [
+    (appendPatches [
+      # haskell-updates branch, will be merged in 0.9.10
+      (fetchpatch2 {
+        name = "hercules-ci-agent-cachix-1.1";
+        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/b76d888548da37a96ae47f1be871de6605d38edd.patch";
+        sha256 = "sha256-kqEkDHbatcYS8LuQlGV/1j/6LXWviQoDQAHDr6DBbDU=";
+        stripLen = 1;
+        includes = [ "*.hs" ];
+      })
+    ])
+    (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
+  ];
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
