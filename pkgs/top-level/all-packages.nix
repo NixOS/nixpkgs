@@ -15342,6 +15342,12 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  migraphx = callPackage ../development/libraries/migraphx {
+    inherit (llvmPackages_rocm) clang-tools-extra openmp;
+    stdenv = rocmClangStdenv;
+    rocmlir = rocmlir-rock;
+  };
+
   rccl = callPackage ../development/libraries/rccl {
     stdenv = rocmClangStdenv;
   };
