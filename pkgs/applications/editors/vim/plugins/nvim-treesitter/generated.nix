@@ -27,12 +27,12 @@
   };
   astro = buildGrammar {
     language = "astro";
-    version = "947e930";
+    version = "22697b0";
     source = fetchFromGitHub {
       owner = "virchau13";
       repo = "tree-sitter-astro";
-      rev = "947e93089e60c66e681eba22283f4037841451e7";
-      hash = "sha256-q1ni++SPbq5y+47fPb6TryMw86gpULwNcXwi5yjXCWI=";
+      rev = "22697b0e2413464b7abaea9269c5e83a59e39a83";
+      hash = "sha256-vp2VjkfBEYEUwUCjBlbVjPIB49QIikdFAITzzFLZX+U=";
     };
     meta.homepage = "https://github.com/virchau13/tree-sitter-astro";
   };
@@ -104,12 +104,12 @@
   };
   c_sharp = buildGrammar {
     language = "c_sharp";
-    version = "8e4ec08";
+    version = "d83b3c6";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-c-sharp";
-      rev = "8e4ec08f1dae1d72f082df0f7e1176772f553d47";
-      hash = "sha256-BIqfaFFwco3aE65N9tRtawxFEXvaVwQvoMgM3cg10/k=";
+      rev = "d83b3c661db34fde4dcd80e79ce1653d4524998d";
+      hash = "sha256-JWDtJeTPc9kQVMXXWmZ/TVJ9P/rIGlPA+1TfF0U7uNM=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-c-sharp";
   };
@@ -593,12 +593,12 @@
   };
   help = buildGrammar {
     language = "help";
-    version = "ce20f13";
+    version = "61c7505";
     source = fetchFromGitHub {
       owner = "neovim";
       repo = "tree-sitter-vimdoc";
-      rev = "ce20f13c3f12506185754888feaae3f2ad54c287";
-      hash = "sha256-XklORrP4ToX4klXFYxMv2s63INWugDyjl3mtLDdUHlg=";
+      rev = "61c75058299f3d1cf565697e4073d7b2cc6a6d6c";
+      hash = "sha256-MTossQzmBoHqXu933suYUUyDbmb20uO5oZlV31BYqIA=";
     };
     meta.homepage = "https://github.com/neovim/tree-sitter-vimdoc";
   };
@@ -813,12 +813,12 @@
   };
   lua = buildGrammar {
     language = "lua";
-    version = "f5e84ff";
+    version = "0fc8996";
     source = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "tree-sitter-lua";
-      rev = "f5e84ffc2b06858401e0d2edf5dce009efbe34b3";
-      hash = "sha256-9ig+F2W6MB5uSS3XFUL2OCW9PKYkb4KPpGN2DWKEdhY=";
+      rev = "0fc89962b7ff5c7d676b8592c1cbce1ceaa806fd";
+      hash = "sha256-MbNP1/NKdSkUTydmK819o8vMKUZFan1yE7d227xMsh4=";
     };
     meta.homepage = "https://github.com/MunifTanjim/tree-sitter-lua";
   };
@@ -1336,12 +1336,12 @@
   };
   swift = buildGrammar {
     language = "swift";
-    version = "693411c";
+    version = "f94e1d6";
     source = fetchFromGitHub {
       owner = "alex-pinkus";
       repo = "tree-sitter-swift";
-      rev = "693411cb5a1167311ccd84708348281630562726";
-      hash = "sha256-KNmRR2Od2uTOHiENeCXoTKAp2jvzSsEhzqf9WmiL3Vo=";
+      rev = "f94e1d6dd8f4df6c7c8aa07da625e498ebb27d09";
+      hash = "sha256-DtcGcywpwCZoGNllZEetE+s1bwMNrRdooGdttAG3Ra0=";
     };
     generate = true;
     meta.homepage = "https://github.com/alex-pinkus/tree-sitter-swift";
