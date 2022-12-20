@@ -123,6 +123,10 @@ self: super: {
     };
   });
 
+  ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nui-nvim plenary-nvim telescope-nvim ];
+  });
+
   clang_complete = super.clang_complete.overrideAttrs (old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
