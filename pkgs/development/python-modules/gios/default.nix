@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "gios";
   version = "2.1.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WjuDsu0EA+KtErusw5VADyvleVegXHCTEkuQ1lU/SRU=";
+    hash = "sha256-WjuDsu0EA+KtErusw5VADyvleVegXHCTEkuQ1lU/SRU=";
   };
 
   propagatedBuildInputs = [
@@ -47,11 +48,14 @@ buildPythonPackage rec {
     "test_invalid_station_id"
   ];
 
-  pythonImportsCheck = [ "gios" ];
+  pythonImportsCheck = [
+    "gios"
+  ];
 
   meta = with lib; {
     description = "Python client for getting air quality data from GIOS";
     homepage = "https://github.com/bieniu/gios";
+    changelog = "https://github.com/bieniu/gios/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
