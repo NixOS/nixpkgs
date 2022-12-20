@@ -59,5 +59,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pennae ];
+    platforms = lib.platforms.linux;
   };
 }
