@@ -1204,6 +1204,8 @@ let
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
+    rock = callPackage ../development/ocaml-modules/rock { };
+
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
