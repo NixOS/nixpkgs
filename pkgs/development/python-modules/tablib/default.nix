@@ -1,7 +1,7 @@
-{ buildPythonPackage
-, lib
+{ lib
+, buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , odfpy
 , openpyxl
 , pandas
@@ -16,27 +16,53 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.3.0";
-  disabled = isPy27;
+  version = "3.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EeAqb4HSVuBmaHfYOXly0QMCMHpUwE/XFX6S+vdAyxA=";
+    hash = "sha256-pX8ncLjCJf6+wcseZQEqac8w3Si+gQ4P+Y0CR2jH0PE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];
-  checkInputs = [ pytestCheckHook pytest-cov unicodecsv pandas ];
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
+  '';
 
-  # test_tablib needs MarkupPy, which isn't packaged yet
-  pytestFlagsArray = [ "--ignore=tests/test_tablib.py" ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  pythonImportsCheck = [ "tablib" ];
+  propagatedBuildInputs = [
+    odfpy
+    openpyxl
+    pyyaml
+    xlrd
+    xlwt
+  ];
+
+  checkInputs = [
+    pandas
+    pytestCheckHook
+    unicodecsv
+  ];
+
+  disabledTestPaths = [
+    # test_tablib needs MarkupPy, which isn't packaged yet
+    "tests/test_tablib.py"
+  ];
+
+  pythonImportsCheck = [
+    "tablib"
+  ];
 
   meta = with lib; {
     description = "Format-agnostic tabular dataset library";
     homepage = "https://tablib.readthedocs.io/";
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
