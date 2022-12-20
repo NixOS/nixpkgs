@@ -72,6 +72,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
+    changelog = "https://github.com/PyCQA/prospector/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kamadorueda ];
   };
