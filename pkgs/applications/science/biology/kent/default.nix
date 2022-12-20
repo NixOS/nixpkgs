@@ -10,6 +10,7 @@
 , bash
 , fetchFromGitHub
 , which
+, fetchpatch
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
@@ -24,13 +25,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
 
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace ./src/checkUmask.sh \
       --replace "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
       --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
+
   '';
+  patches = [(fetchpatch { url = "https://github.com/ucscGenomeBrowser/kent/commit/316e4fd40f53c96850128fd65097a42623d1e736.patch"; sha256 = "sha256-wr3NP5qoSonKz1TLKtQyrTPErCOk2gC1RimcX0tE7cM="; })];
 
   buildPhase = ''
     export MACHTYPE=$(uname -m)
