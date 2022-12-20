@@ -14628,6 +14628,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  iay = callPackage ../tools/misc/iay {
+    inherit (darwin.apple_sdk.frameworks) AppKit Security Foundation Cocoa;
+  };
+
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
   });
