@@ -49,8 +49,8 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "16.2.3";
-  build = "19376536";
+  version = "16.2.4";
+  build = "20089737";
 
   buildInputs = [
     libxslt
@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableInstaller [ sqlite bzip2 ];
 
   src = fetchurl {
-    url = "https://download3.vmware.com/software/WKST-1623-LX-New/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-+JE1KnRfawcaBannIyEr1TNZTF7YXRYYaFMVq0/erbM=";
+    url = "https://download3.vmware.com/software/WKST-1624-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
+    sha256 = "sha256-LkZwjbRmMO3JbNsRUU1eM49TAMRvUakBMumkzRHD88A=";
   };
 
   unpackPhase = ''
