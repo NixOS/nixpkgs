@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "man" ];
 
-  passthru.tests = lib.optionalAttrs enableTests {
+  passthru.tests = lib.optionalAttrs enableTests && stdenv.isLinux {
     test-runner = callPackage ./test-runner.nix { };
   };
 
