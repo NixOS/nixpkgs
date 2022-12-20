@@ -36,7 +36,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "man" ];
 
-  passthru.tests = lib.optionalAttrs enableTests && stdenv.isLinux {
+  passthru.tests = lib.optionalAttrs enableTests {
+    test-xrdcp = callPackage ./test-xrdcp.nix {
+      url = "root://eospublic.cern.ch//eos/opendata/alice/2010/LHC10h/000138275/ESD/0000/AliESDs.root";
+      hash = "sha256-tIcs2oi+8u/Qr+P7AAaPTbQT+DEt26gEdc4VNerlEHY=";
+    };
+  } // lib.optionalAttrs stdenv.isLinux {
     test-runner = callPackage ./test-runner.nix { };
   };
 
