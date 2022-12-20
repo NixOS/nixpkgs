@@ -132,6 +132,9 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 , # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
   touchEFIVars ? false
 
+, # Whether to enforce SMM in QEMU for EFI variables manipulation - this can break authenticated variables manipulation such as bootloader installation.
+  systemManagementModeEnforcement ? false
+
 , # OVMF firmware derivation
   OVMF ? pkgs.OVMF.fd
 
@@ -536,6 +539,11 @@ let format' = format; in let
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ]
+        ++ lib.optionals systemManagementModeEnforcement [
+          "-machine type=q35,accel=kvm,smm=on"
+          # Ensure we require EFI firmware to go through SMM to touch secureboot variables (once setup is done)
+          "-global driver=cfi.pflash01,property=secure,value=on"
         ]
       );
       inherit memSize;
