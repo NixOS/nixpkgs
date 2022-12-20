@@ -158,6 +158,16 @@ in {
       '';
     };
 
+    managerEnvironment = mkOption {
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+      default = {};
+      example = { SYSTEMD_LOG_LEVEL = "debug"; };
+      description = lib.mdDoc ''
+        Environment variables of PID 1. These variables are
+        *not* passed to started units.
+      '';
+    };
+
     contents = mkOption {
       description = lib.mdDoc "Set of files that have to be linked into the initrd";
       example = literalExpression ''
@@ -357,6 +367,8 @@ in {
         umount = "${cfg.package.util-linux}/bin/umount";
       };
 
+      managerEnvironment.PATH = "/bin:/sbin";
+
       contents = {
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
@@ -365,6 +377,7 @@ in {
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
           ${cfg.extraConfig}
+          ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
