@@ -27,17 +27,17 @@ buildGoModule rec {
   vendorSha256 = null;
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ btrfs-progs gpgme lvm2.dev ];
+  buildInputs = [ btrfs-progs gpgme lvm2 ];
 
   doCheck = true;
 
   postInstall = ''
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/prometheus-podman-exporter \
       --prefix PATH : ${lib.makeBinPath [ runc crun conmon ]}
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/containers/prometheus-podman-exporter";
     description = "A Prometheus exporter for podman environments";
     license = licenses.asl20;
     maintainers = with maintainers; [ mfenniak ];
