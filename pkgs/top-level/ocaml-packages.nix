@@ -1108,8 +1108,6 @@ let
 
     opium = callPackage ../development/ocaml-modules/opium { };
 
-    opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
-
     opti = callPackage ../development/ocaml-modules/opti { };
 
     optint = callPackage ../development/ocaml-modules/optint { };
