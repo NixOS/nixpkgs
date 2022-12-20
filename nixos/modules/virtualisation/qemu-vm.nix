@@ -1006,20 +1006,21 @@ in
       }) cfg.emptyDiskImages)
     ];
 
+    fileSystems = mkVMOverride cfg.fileSystems;
+
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to
     # allow this module to be applied to "normal" NixOS system
     # configuration, where the regular value for the `fileSystems'
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
-    fileSystems =
-    let
+    virtualisation.fileSystems = let
       mkSharedDir = tag: share:
         {
           name =
             if tag == "nix-store" && cfg.writableStore
-              then "/nix/.ro-store"
-              else share.target;
+            then "/nix/.ro-store"
+            else share.target;
           value.device = tag;
           value.fsType = "9p";
           value.neededForBoot = true;
@@ -1027,48 +1028,42 @@ in
             [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
             ++ lib.optional (tag == "nix-store") "cache=loose";
         };
-    in
-      mkVMOverride (cfg.fileSystems //
-      optionalAttrs cfg.useDefaultFilesystems {
-        "/".device = cfg.bootDevice;
-        "/".fsType = "ext4";
-        "/".autoFormat = true;
-      } //
-      optionalAttrs (cfg.diskImage == null) {
-        "/".device = "tmpfs";
-        "/".fsType = "tmpfs";
-      } //
-      optionalAttrs config.boot.tmpOnTmpfs {
-        "/tmp" = {
+    in lib.mkMerge [
+      (lib.mapAttrs' mkSharedDir cfg.sharedDirectories)
+      {
+        "/" = lib.mkIf cfg.useDefaultFilesystems (if cfg.diskImage == null then {
+          device = "tmpfs";
+          fsType = "tmpfs";
+        } else {
+          device = cfg.bootDevice;
+          fsType = "ext4";
+          autoFormat = true;
+        });
+        "/tmp" = lib.mkIf config.boot.tmpOnTmpfs {
           device = "tmpfs";
           fsType = "tmpfs";
           neededForBoot = true;
           # Sync with systemd's tmp.mount;
           options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
         };
-      } //
-      optionalAttrs cfg.useNixStoreImage {
-        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = {
+        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = lib.mkIf cfg.useNixStoreImage {
           device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
           neededForBoot = true;
           options = [ "ro" ];
         };
-      } //
-      optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs) {
-        "/nix/.rw-store" = {
+        "/nix/.rw-store" = lib.mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs) {
           fsType = "tmpfs";
           options = [ "mode=0755" ];
           neededForBoot = true;
         };
-      } //
-      optionalAttrs cfg.useBootLoader {
         # see note [Disk layout with `useBootLoader`]
-        "/boot" = {
+        "/boot" = lib.mkIf cfg.useBootLoader {
           device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
           fsType = "vfat";
           noCheck = true; # fsck fails on a r/o filesystem
         };
-      } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
+      }
+    ];
 
     boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
       mounts = [{
