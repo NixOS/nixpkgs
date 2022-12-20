@@ -1,0 +1,140 @@
+Read the shared library cache relative to $ORIGIN instead of reading
+from /etc/ld.so.cache.  Also arrange so that this cache takes
+precedence over RUNPATH.
+
+diff --git a/elf/dl-cache.c b/elf/dl-cache.c
+index 93d185e788..e0760a1f40 100644
+--- a/elf/dl-cache.c
++++ b/elf/dl-cache.c
+@@ -171,6 +171,51 @@ _dl_cache_libcmp (const char *p1, const char *p2)
+   return *p1 - *p2;
+ }
+ 
++/* Special value representing the lack of an ld.so cache.  */
++static const char ld_so_cache_lacking[] = "/ld.so cache is lacking";
++
++/* Return the per-application ld.so cache, relative to $ORIGIN, or NULL if
++   that fails for some reason.  Do not return the system-wide LD_SO_CACHE
++   since on a foreign distro it would contain invalid information.  */
++static const char *
++ld_so_cache (void)
++{
++  static const char *loader_cache;
++
++  if (loader_cache == NULL)
++    {
++      static const char store[] = @STORE_DIRECTORY@;
++      const char *origin = _dl_get_origin ();
++
++      /* Check whether ORIGIN is something like "/gnu/store/…-foo/bin".  */
++      if (strncmp (store, origin, strlen (store)) == 0
++	  && origin[sizeof store - 1] == '/')
++	{
++	  char *store_item_end = strchr (origin + sizeof store, '/');
++
++	  if (store_item_end != NULL)
++	    {
++	      static const char suffix[] = "/etc/ld.so.cache";
++	      size_t store_item_len = store_item_end - origin;
++
++	      /* Note: We can't use 'malloc' because it can be interposed.
++		 Likewise, 'strncpy' is not available.  */
++	      char *cache = alloca (strlen (origin) + sizeof suffix);
++
++	      strcpy (cache, origin);
++	      strcpy (cache + store_item_len, suffix);
++
++	      loader_cache = __strdup (cache) ?: ld_so_cache_lacking;
++	    }
++	  else
++	    loader_cache = ld_so_cache_lacking;
++	}
++      else
++	loader_cache = ld_so_cache_lacking;
++    }
++
++  return loader_cache;
++}
+ 
+ /* Look up NAME in ld.so.cache and return the file name stored there, or null
+    if none is found.  The cache is loaded if it was not already.  If loading
+@@ -190,12 +235,15 @@ _dl_load_cache_lookup (const char *name)
+ 
+   /* Print a message if the loading of libs is traced.  */
+   if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
+-    _dl_debug_printf (" search cache=%s\n", LD_SO_CACHE);
++    _dl_debug_printf (" search cache=%s\n", ld_so_cache ());
++
++  if (__glibc_unlikely (ld_so_cache () == ld_so_cache_lacking))
++    return NULL;
+ 
+   if (cache == NULL)
+     {
+       /* Read the contents of the file.  */
+-      void *file = _dl_sysdep_read_whole_file (LD_SO_CACHE, &cachesize,
++      void *file = _dl_sysdep_read_whole_file (ld_so_cache (), &cachesize,
+ 					       PROT_READ);
+ 
+       /* We can handle three different cache file formats here:
+diff --git a/elf/dl-load.c b/elf/dl-load.c
+index f3201e7c14..a69aec3428 100644
+--- a/elf/dl-load.c
++++ b/elf/dl-load.c
+@@ -2152,28 +2152,6 @@ _dl_map_object (struct link_map *loader, const char *name,
+ 			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
+ 			LA_SER_LIBPATH, &found_other_class);
+ 
+-      /* Look at the RUNPATH information for this binary.  */
+-      if (fd == -1 && loader != NULL
+-	  && cache_rpath (loader, &loader->l_runpath_dirs,
+-			  DT_RUNPATH, "RUNPATH"))
+-	fd = open_path (name, namelen, mode,
+-			&loader->l_runpath_dirs, &realname, &fb, loader,
+-			LA_SER_RUNPATH, &found_other_class);
+-
+-      if (fd == -1)
+-        {
+-          realname = _dl_sysdep_open_object (name, namelen, &fd);
+-          if (realname != NULL)
+-            {
+-              fd = open_verify (realname, fd,
+-                                &fb, loader ?: GL(dl_ns)[nsid]._ns_loaded,
+-                                LA_SER_CONFIG, mode, &found_other_class,
+-                                false);
+-              if (fd == -1)
+-                free (realname);
+-            }
+-        }
+-
+ #ifdef USE_LDCONFIG
+       if (fd == -1
+ 	  && (__glibc_likely ((mode & __RTLD_SECURE) == 0)
+@@ -2232,6 +2210,28 @@ _dl_map_object (struct link_map *loader, const char *name,
+ 	}
+ #endif
+ 
++      /* Look at the RUNPATH information for this binary.  */
++      if (fd == -1 && loader != NULL
++	  && cache_rpath (loader, &loader->l_runpath_dirs,
++			  DT_RUNPATH, "RUNPATH"))
++	fd = open_path (name, namelen, mode,
++			&loader->l_runpath_dirs, &realname, &fb, loader,
++			LA_SER_RUNPATH, &found_other_class);
++
++      if (fd == -1)
++        {
++          realname = _dl_sysdep_open_object (name, namelen, &fd);
++          if (realname != NULL)
++            {
++              fd = open_verify (realname, fd,
++                                &fb, loader ?: GL(dl_ns)[nsid]._ns_loaded,
++                                LA_SER_CONFIG, mode, &found_other_class,
++                                false);
++              if (fd == -1)
++                free (realname);
++            }
++        }
++
+       /* Finally, try the default path.  */
+       if (fd == -1
+ 	  && ((l = loader ?: GL(dl_ns)[nsid]._ns_loaded) == NULL
