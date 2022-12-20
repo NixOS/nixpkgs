@@ -30384,6 +30384,8 @@ with pkgs;
 
   lscolors = callPackage ../applications/misc/lscolors { };
 
+  lswt = callPackage ../applications/misc/lswt { };
+
   luddite = with python3Packages; toPythonApplication luddite;
 
   goobook = with python3Packages; toPythonApplication goobook;
