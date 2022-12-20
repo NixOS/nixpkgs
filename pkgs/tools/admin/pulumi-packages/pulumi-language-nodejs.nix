@@ -4,13 +4,13 @@
 , nodejs
 }:
 buildGoModule rec {
-  inherit (pulumi) version src;
+  inherit (pulumi) version src sdkVendorHash;
 
   pname = "pulumi-language-nodejs";
 
   sourceRoot = "${src.name}/sdk";
 
-  vendorHash = "sha256-IZIdLmNGMFjRdkLPoE9UyON3pX/GBIgz/rv108v8iLY=";
+  vendorHash = sdkVendorHash;
 
   subPackages = [
     "nodejs/cmd/pulumi-language-nodejs"

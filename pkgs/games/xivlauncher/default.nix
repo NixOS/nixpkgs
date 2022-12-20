@@ -23,12 +23,8 @@ in
     nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
     dotnetFlags = [
-      "--runtime linux-x64"
       "-p:BuildHash=${rev}"
-    ];
-
-    dotnetBuildFlags = [
-      "--no-self-contained"
+      "-p:PublishSingleFile=false"
     ];
 
     postPatch = ''

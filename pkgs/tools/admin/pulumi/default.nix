@@ -16,6 +16,9 @@ buildGoModule rec {
   pname = "pulumi";
   version = "3.49.0";
 
+  # Used in pulumi-language packages, which inherit this prop
+  sdkVendorHash = "sha256-gM3VpX6r/BScUyvk/XefAfbx0qYzdzSBGaWZN+89BS8=";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
