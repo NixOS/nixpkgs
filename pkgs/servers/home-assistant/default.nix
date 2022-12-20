@@ -188,7 +188,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.12.6";
+  hassVersion = "2022.12.7";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
