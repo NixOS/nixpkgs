@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "php-cs-fixer";
-  version = "3.11.0";
+  version = "3.13.1";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-    sha256 = "sha256-hnSHR/tDX1w/4SV6fafvUHg4JwTQJxfwKaKvEbUWJjs=";
+    sha256 = "4bQrCjuaWN4Dbs1tkk4m1WxSb510ue7G59HA+gQ52yk=";
   };
 
   dontUnpack = true;
@@ -29,5 +29,6 @@ mkDerivation {
     license = licenses.mit;
     homepage = "https://cs.symfony.com/";
     maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
