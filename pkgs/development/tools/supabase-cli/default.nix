@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -32,6 +33,10 @@ buildGoModule rec {
       --fish <($out/bin/supabase completion fish) \
       --zsh <($out/bin/supabase completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = "supabase-cli";
+  };
 
   meta = with lib; {
     description = "A CLI for interacting with supabase";
