@@ -74,7 +74,7 @@ in mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Performance software for cyclists, runners and triathletes";
+    description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
     platforms = platforms.linux;
     maintainers = [ ];
     license = licenses.gpl2Plus;
