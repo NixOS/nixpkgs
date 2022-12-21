@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/caio";
+    changelog = "https://github.com/mosquito/caio/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
