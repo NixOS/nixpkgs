@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Rainbird controllers";
     homepage = "https://github.com/jbarrancos/pyrainbird/";
+    changelog = "https://github.com/jbarrancos/pyrainbird/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
