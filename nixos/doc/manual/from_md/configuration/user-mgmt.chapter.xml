@@ -36,7 +36,7 @@ users.users.alice = {
     <xref linkend="opt-users.users" /> and run nixos-rebuild, the user
     account will cease to exist. Also, imperative commands for managing
     users and groups, such as useradd, are no longer available.
-    Passwords may still be assigned by setting the user's
+    Passwords may still be assigned by setting the user’s
     <link linkend="opt-users.users._name_.hashedPassword">hashedPassword</link>
     option. A hashed password can be generated using
     <literal>mkpasswd</literal>.

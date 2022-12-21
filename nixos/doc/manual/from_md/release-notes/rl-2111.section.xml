@@ -723,7 +723,7 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
-          The <literal>erigon</literal> ethereum node has moved it’s
+          The <literal>erigon</literal> ethereum node has moved its
           database location in <literal>2021-08-03</literal>, users
           upgrading must manually move their chaindata (see
           <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release

@@ -36,8 +36,8 @@ services.picom = {
       <xref linkend="opt-environment.systemPackages" />.
     </para>
     <para>
-      If you'd like to add extra plugins to Thunar, add them to
-      <xref linkend="opt-programs.thunar.plugins" />. You shouldn't just
+      If you’d like to add extra plugins to Thunar, add them to
+      <xref linkend="opt-programs.thunar.plugins" />. You shouldn’t just
       add them to <xref linkend="opt-environment.systemPackages" />.
     </para>
   </section>

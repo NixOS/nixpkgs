@@ -237,7 +237,7 @@
           installs the upstream-provided 80-iwd.link file, which sets
           the NamePolicy= for all wlan devices to &quot;keep
           kernel&quot;, to avoid race conditions between iwd and
-          networkd. If you don't want this, you can set
+          networkd. If you don’t want this, you can set
           <literal>systemd.network.links.&quot;80-iwd&quot; = lib.mkForce {}</literal>.
         </para>
       </listitem>
@@ -245,7 +245,7 @@
         <para>
           <literal>rubyMinimal</literal> was removed due to being unused
           and unusable. The default ruby interpreter includes JIT
-          support, which makes it reference it's compiler. Since JIT
+          support, which makes it reference it’s compiler. Since JIT
           support is probably needed by some Gems, it was decided to
           enable this feature with all cc references by default, and
           allow to build a Ruby derivation without references to cc, by
@@ -427,7 +427,7 @@
         <para>
           <link xlink:href="options.html#opt-networking.wireguard.interfaces">networking.wireguard.interfaces.&lt;name&gt;.generatePrivateKeyFile</link>,
           which is off by default, had a <literal>chmod</literal> race
-          condition fixed. As an aside, the parent directory's
+          condition fixed. As an aside, the parent directory’s
           permissions were widened, and the key files were made
           owner-writable. This only affects newly created keys. However,
           if the exact permissions are important for your setup, read
@@ -527,7 +527,7 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
             this directory are guarded to only run if the files they
             want to manipulate do not already exist, and so will not
             re-apply their changes if the IMDS response changes.
-            Examples: <literal>root</literal>'s SSH key is only added if
+            Examples: <literal>root</literal>’s SSH key is only added if
             <literal>/root/.ssh/authorized_keys</literal> does not
             exist, and SSH host keys are only set from user data if they
             do not exist in <literal>/etc/ssh</literal>.
@@ -550,7 +550,7 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
           configures Privoxy, and the
           <literal>services.tor.client.privoxy.enable</literal> option
           has been removed. To enable Privoxy, and to configure it to
-          use Tor's faster port, use the following configuration:
+          use Tor’s faster port, use the following configuration:
         </para>
         <programlisting language="bash">
 {
@@ -628,7 +628,7 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
           exporter no longer accepts a fixed command-line parameter to
           specify the URL of the endpoint serving JSON. It now expects
           this URL to be passed as an URL parameter, when scraping the
-          exporter's <literal>/probe</literal> endpoint. In the
+          exporter’s <literal>/probe</literal> endpoint. In the
           prometheus scrape configuration the scrape target might look
           like this:
         </para>
@@ -790,7 +790,7 @@ self: super:
           for any device that the kernel recognises as an hardware RNG,
           as it will automatically run the krngd task to periodically
           collect random data from the device and mix it into the
-          kernel's RNG.
+          kernel’s RNG.
         </para>
         <para>
           The default SMTP port for GitLab has been changed to
@@ -893,7 +893,7 @@ self: super:
           <literal>services.minio.dataDir</literal> changed type to a
           list of paths, required for specifiyng multiple data
           directories for using with erasure coding. Currently, the
-          service doesn't enforce nor checks the correct number of paths
+          service doesn’t enforce nor checks the correct number of paths
           to correspond to minio requirements.
         </para>
       </listitem>
@@ -910,7 +910,7 @@ self: super:
           <literal>dvorak-programmer</literal> in
           <literal>console.keyMap</literal> now instead of
           <literal>dvp</literal>. In
-          <literal>services.xserver.xkbVariant</literal> it's still
+          <literal>services.xserver.xkbVariant</literal> it’s still
           <literal>dvp</literal>.
         </para>
       </listitem>
@@ -954,7 +954,7 @@ self: super:
           supported.
         </para>
         <para>
-          Furthermore, Radicale's systemd unit was hardened which might
+          Furthermore, Radicale’s systemd unit was hardened which might
           break some deployments. In particular, a non-default
           <literal>filesystem_folder</literal> has to be added to
           <literal>systemd.services.radicale.serviceConfig.ReadWritePaths</literal>
@@ -991,7 +991,7 @@ self: super:
       <listitem>
         <para>
           <link xlink:href="https://www.gnuradio.org/">GNURadio</link>
-          has a <literal>pkgs</literal> attribute set, and there's a
+          has a <literal>pkgs</literal> attribute set, and there’s a
           <literal>gnuradio.callPackage</literal> function that extends
           <literal>pkgs</literal> with a
           <literal>mkDerivation</literal>, and a
@@ -1098,9 +1098,9 @@ self: super:
       <listitem>
         <para>
           The default-version of <literal>nextcloud</literal> is
-          nextcloud21. Please note that it's <emphasis>not</emphasis>
+          nextcloud21. Please note that it’s <emphasis>not</emphasis>
           possible to upgrade <literal>nextcloud</literal> across
-          multiple major versions! This means that it's e.g. not
+          multiple major versions! This means that it’s e.g. not
           possible to upgrade from nextcloud18 to nextcloud20 in a
           single deploy and most <literal>20.09</literal> users will
           have to upgrade to nextcloud20 first.
@@ -1122,7 +1122,7 @@ self: super:
       </listitem>
       <listitem>
         <para>
-          NixOS now emits a deprecation warning if systemd's
+          NixOS now emits a deprecation warning if systemd’s
           <literal>StartLimitInterval</literal> setting is used in a
           <literal>serviceConfig</literal> section instead of in a
           <literal>unitConfig</literal>; that setting is deprecated and
@@ -1255,8 +1255,8 @@ self: super:
       <listitem>
         <para>
           The <literal>services.dnscrypt-proxy2</literal> module now
-          takes the upstream's example configuration and updates it with
-          the user's settings. An option has been added to restore the
+          takes the upstream’s example configuration and updates it with
+          the user’s settings. An option has been added to restore the
           old behaviour if you prefer to declare the configuration from
           scratch.
         </para>
@@ -1317,7 +1317,7 @@ self: super:
           now always ensures home directory permissions to be
           <literal>0700</literal>. Permissions had previously been
           ignored for already existing home directories, possibly
-          leaving them readable by others. The option's description was
+          leaving them readable by others. The option’s description was
           incorrect regarding ownership management and has been
           simplified greatly.
         </para>

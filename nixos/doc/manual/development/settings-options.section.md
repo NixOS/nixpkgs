@@ -9,10 +9,10 @@ can be declared. File formats can be separated into two categories:
     `{ foo = { bar = 10; }; }`. Other examples are INI, YAML and TOML.
     The following section explains the convention for these settings.
 
--   Non-nix-representable ones: These can\'t be trivially mapped to a
+-   Non-nix-representable ones: These can't be trivially mapped to a
     subset of Nix syntax. Most generic programming languages are in this
     group, e.g. bash, since the statement `if true; then echo hi; fi`
-    doesn\'t have a trivial representation in Nix.
+    doesn't have a trivial representation in Nix.
 
     Currently there are no fixed conventions for these, but it is common
     to have a `configFile` option for setting the configuration file

@@ -152,13 +152,13 @@
           <warning>
             <para>
               This type will be deprecated in the future because it
-              doesn't recurse into attribute sets, silently drops
-              earlier attribute definitions, and doesn't discharge
+              doesn’t recurse into attribute sets, silently drops
+              earlier attribute definitions, and doesn’t discharge
               <literal>lib.mkDefault</literal>,
               <literal>lib.mkIf</literal> and co. For allowing arbitrary
               attribute sets, prefer
               <literal>types.attrsOf types.anything</literal> instead
-              which doesn't have these problems.
+              which doesn’t have these problems.
             </para>
           </warning>
         </listitem>
@@ -453,7 +453,7 @@
                 <literal>_module.args</literal> should be used instead
                 for most arguments since it allows overriding.
                 <emphasis><literal>specialArgs</literal></emphasis>
-                should only be used for arguments that can't go through
+                should only be used for arguments that can’t go through
                 the module fixed-point, because of infinite recursion or
                 other problems. An example is overriding the
                 <literal>lib</literal> argument, because
@@ -477,7 +477,7 @@
                 instead of requiring
                 <literal>the-submodule.config.config = &quot;value&quot;</literal>.
                 This is because only when modules
-                <emphasis>don't</emphasis> set the
+                <emphasis>don’t</emphasis> set the
                 <literal>config</literal> or <literal>options</literal>
                 keys, all keys are interpreted as option definitions in
                 the <literal>config</literal> section. Enabling this

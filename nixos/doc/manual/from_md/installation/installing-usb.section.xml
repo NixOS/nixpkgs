@@ -116,9 +116,9 @@ sudo dd if=&lt;path-to-image&gt; of=/dev/rdiskX bs=4m
     </para>
     <note>
       <para>
-        Using the 'raw' <literal>rdiskX</literal> device instead of
-        <literal>diskX</literal> with dd completes in minutes instead of
-        hours.
+        Using the <quote>raw</quote> <literal>rdiskX</literal> device
+        instead of <literal>diskX</literal> with dd completes in minutes
+        instead of hours.
       </para>
     </note>
     <orderedlist numeration="arabic" spacing="compact">

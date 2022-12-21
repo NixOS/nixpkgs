@@ -31,8 +31,8 @@ enabled. To enable Thunar without enabling Xfce, use the configuration
 option [](#opt-programs.thunar.enable) instead of simply adding
 `pkgs.xfce.thunar` to [](#opt-environment.systemPackages).
 
-If you\'d like to add extra plugins to Thunar, add them to
-[](#opt-programs.thunar.plugins). You shouldn\'t just add them to
+If you'd like to add extra plugins to Thunar, add them to
+[](#opt-programs.thunar.plugins). You shouldn't just add them to
 [](#opt-environment.systemPackages).
 
 ## Troubleshooting {#sec-xfce-troubleshooting .unnumbered}

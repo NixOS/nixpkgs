@@ -61,7 +61,7 @@ select the image, select the USB flash drive and click "Write".
   be ignored.
 
   ::: {.note}
-  Using the \'raw\' `rdiskX` device instead of `diskX` with dd completes in
+  Using the 'raw' `rdiskX` device instead of `diskX` with dd completes in
   minutes instead of hours.
   :::
 

@@ -19,10 +19,10 @@
     </listitem>
     <listitem>
       <para>
-        Non-nix-representable ones: These can't be trivially mapped to a
+        Non-nix-representable ones: These can’t be trivially mapped to a
         subset of Nix syntax. Most generic programming languages are in
         this group, e.g. bash, since the statement
-        <literal>if true; then echo hi; fi</literal> doesn't have a
+        <literal>if true; then echo hi; fi</literal> doesn’t have a
         trivial representation in Nix.
       </para>
       <para>

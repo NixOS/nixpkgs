@@ -54,7 +54,7 @@ nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     running Linux Distribution.
   </para>
   <para>
-    Note it’s symlinks pointing elsewhere, so <literal>cd</literal> in,
+    Note its symlinks pointing elsewhere, so <literal>cd</literal> in,
     and use <literal>scp * root@$destination</literal> to copy it over,
     rather than rsync.
   </para>
