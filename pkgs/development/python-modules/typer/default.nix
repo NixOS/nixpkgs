@@ -53,12 +53,15 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
-  disabledTests = lib.optionals stdenv.isDarwin [
+
+  disabledTests = [
+    # This test changes the same file as test_completion_install_bash,
+    # reading to a race condition that causes the build to fail on
+    # builders with enough parallelism.
+    "test_install_completion"
+  ] ++ lib.optionals stdenv.isDarwin [
     # likely related to https://github.com/sarugaku/shellingham/issues/35
     "test_show_completion"
-    "test_install_completion"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    "test_install_completion"
   ];
 
   pythonImportsCheck = [
