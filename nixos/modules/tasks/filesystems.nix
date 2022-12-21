@@ -158,12 +158,41 @@ let
 
   makeFstabEntries =
     let
-      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "nfs4" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
+      fsToSkipCheck = [
+        "none"
+        "auto"
+        "overlay"
+        "iso9660"
+        "bindfs"
+        "udf"
+        "btrfs"
+        "zfs"
+        "tmpfs"
+        "bcachefs"
+        "nfs"
+        "nfs4"
+        "nilfs2"
+        "vboxsf"
+        "squashfs"
+        "glusterfs"
+        "apfs"
+        "9p"
+        "cifs"
+        "prl_fs"
+        "vmhgfs"
+      ] ++ lib.optionals (!config.boot.initrd.checkJournalingFS) [
+        "ext3"
+        "ext4"
+        "reiserfs"
+        "xfs"
+        "jfs"
+        "f2fs"
+      ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
       escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
-    in fstabFileSystems: { rootPrefix ? "", excludeChecks ? false, extraOpts ? (fs: []) }: concatMapStrings (fs:
+    in fstabFileSystems: { rootPrefix ? "", extraOpts ? (fs: []) }: concatMapStrings (fs:
       (optionalString (isBindMount fs) (escape rootPrefix))
       + (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
@@ -171,14 +200,12 @@ let
       + " " + escape fs.mountPoint
       + " " + fs.fsType
       + " " + escape (builtins.concatStringsSep "," (fs.options ++ (extraOpts fs)))
-      + " " + (optionalString (!excludeChecks)
-        ("0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")))
+      + " 0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")
       + "\n"
     ) fstabFileSystems;
 
     initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
       rootPrefix = "/sysroot";
-      excludeChecks = true;
       extraOpts = fs:
         (optional fs.autoResize "x-systemd.growfs")
         ++ (optional fs.autoFormat "x-systemd.makefs");

@@ -365,6 +365,7 @@ in {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
         umount = "${cfg.package.util-linux}/bin/umount";
+        fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
       managerEnvironment.PATH = "/bin:/sbin";
