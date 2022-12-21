@@ -8,6 +8,8 @@
 , ffmpeg-headless
 , inetutils
 , nixosTests
+, home-assistant
+, testers
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -359,6 +361,10 @@ in python.pkgs.buildPythonApplication rec {
     tests = {
       nixos = nixosTests.home-assistant;
       components = callPackage ./tests.nix { };
+      version = testers.testVersion {
+        package = home-assistant;
+        command = "hass --version";
+      };
     };
   };
 
