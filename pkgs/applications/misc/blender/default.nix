@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libXi, libX11, libXext, libXrender
+, ilmbase, libepoxy, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       pugixml
       potrace
       libharu
+      libepoxy
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
