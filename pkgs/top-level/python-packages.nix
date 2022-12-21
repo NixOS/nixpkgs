@@ -10286,6 +10286,8 @@ self: super: with self; {
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
+  show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
+
   showit = callPackage ../development/python-modules/showit { };
 
   shtab = callPackage ../development/python-modules/shtab { };
