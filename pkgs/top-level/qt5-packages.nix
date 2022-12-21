@@ -208,6 +208,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  qtmir = callPackage ../development/libraries/qtmir { };
+
   qtmpris = callPackage ../development/libraries/qtmpris { };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
