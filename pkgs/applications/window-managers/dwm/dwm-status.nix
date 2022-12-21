@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Highly performant and configurable DWM status service";
     homepage = "https://github.com/Gerschtli/dwm-status";
+    changelog = "https://github.com/Gerschtli/dwm-status/blob/master/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
     mainProgram = pname;
