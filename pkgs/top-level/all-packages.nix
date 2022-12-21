@@ -1915,9 +1915,7 @@ with pkgs;
 
   thicket = callPackage ../applications/version-management/thicket { };
 
-  tig = callPackage ../applications/version-management/tig {
-    readline = readline81;
-  };
+  tig = callPackage ../applications/version-management/tig { };
 
   top-git = callPackage ../applications/version-management/topgit { };
 
@@ -22536,14 +22534,14 @@ with pkgs;
 
   raylib = callPackage ../development/libraries/raylib { };
 
-  readline = readline81;
+  readline = readline82;
   readline6 = readline63;
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
-  readline81 = callPackage ../development/libraries/readline/8.1.nix { };
+  readline82 = callPackage ../development/libraries/readline/8.2.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
 
@@ -25337,9 +25335,7 @@ with pkgs;
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
-  dropwatch = callPackage ../os-specific/linux/dropwatch {
-    readline = readline81;
-  };
+  dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
   dsd = callPackage ../applications/radio/dsd { };
 
