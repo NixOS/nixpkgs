@@ -213,7 +213,7 @@ in {
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = "/run/keys/peertube/password-posgressql-db";
+        example = "/run/keys/peertube/password-postgresql";
         description = lib.mdDoc "Password for PostgreSQL database.";
       };
     };
