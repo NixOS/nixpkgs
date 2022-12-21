@@ -29,7 +29,8 @@
  structuredExtraConfig ? {}
 
 , # The version number used for the module directory
-  modDirVersion ? version
+  # If unspecified, this is determined automatically from the version.
+  modDirVersion ? null
 
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
@@ -195,15 +196,15 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) (basicArgs // {
-    inherit modDirVersion kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
+    inherit kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
     pos = builtins.unsafeGetAttrPos "version" args;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
-  });
+  } // lib.optionalAttrs (modDirVersion != null) { inherit modDirVersion; });
 
   passthru = basicArgs // {
     features = kernelFeatures;
-    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
+    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let

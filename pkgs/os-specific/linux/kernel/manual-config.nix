@@ -22,8 +22,9 @@ in {
   pos ? null,
   # Additional kernel make flags
   extraMakeFlags ? [],
-  # The version of the kernel module directory
-  modDirVersion ? version,
+  # The name of the kernel module directory
+  # Needs to be X.Y.Z[-extra], so pad with zeros if needed.
+  modDirVersion ? lib.versions.pad 3 version,
   # The kernel source (tarball, git checkout, etc.)
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
@@ -36,7 +37,7 @@ in {
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
-  # Use defaultMeta // extraMeta
+  # Extra meta attributes
   extraMeta ? {},
 
   # for module compatibility
