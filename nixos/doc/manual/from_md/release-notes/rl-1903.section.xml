@@ -342,7 +342,7 @@
           preserved when also setting interface specific rules such as
           <literal>networking.firewall.interfaces.en0.allow*</literal>.
           These rules continue to use the pseudo device
-          &quot;default&quot;
+          <quote>default</quote>
           (<literal>networking.firewall.interfaces.default.*</literal>),
           and assigning to this pseudo device will override the
           (<literal>networking.firewall.allow*</literal>) options.

@@ -201,10 +201,10 @@ The first steps to all these are the same:
 
     ::: {.note}
     Support for `NIXOS_LUSTRATE` was added in NixOS 16.09. The act of
-    \"lustrating\" refers to the wiping of the existing distribution.
+    "lustrating" refers to the wiping of the existing distribution.
     Creating `/etc/NIXOS_LUSTRATE` can also be used on NixOS to remove
     all mutable files from your root partition (anything that's not in
-    `/nix` or `/boot` gets \"lustrated\" on the next boot.
+    `/nix` or `/boot` gets "lustrated" on the next boot.
 
     lustrate /ˈlʌstreɪt/ verb.
 

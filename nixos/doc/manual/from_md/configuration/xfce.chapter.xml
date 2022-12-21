@@ -54,9 +54,10 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
 </programlisting>
     <para>
       This is caused by some needed GNOME services not running. This is
-      all fixed by enabling &quot;Launch GNOME services on startup&quot;
-      in the Advanced tab of the Session and Startup settings panel.
-      Alternatively, you can run this command to do the same thing.
+      all fixed by enabling <quote>Launch GNOME services on
+      startup</quote> in the Advanced tab of the Session and Startup
+      settings panel. Alternatively, you can run this command to do the
+      same thing.
     </para>
     <programlisting>
 $ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true

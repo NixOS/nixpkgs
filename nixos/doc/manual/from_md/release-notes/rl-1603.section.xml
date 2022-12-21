@@ -632,8 +632,8 @@ error: path ‘/nix/store/*-broadcom-sta-*’ does not exist and cannot be creat
         The <literal>services.xserver.startGnuPGAgent</literal> option
         has been removed. GnuPG 2.1.x changed the way the gpg-agent
         works, and that new approach no longer requires (or even
-        supports) the &quot;start everything as a child of the
-        agent&quot; scheme we’ve implemented in NixOS for older
+        supports) the <quote>start everything as a child of the
+        agent</quote> scheme we’ve implemented in NixOS for older
         versions. To configure the gpg-agent for your X session, add the
         following code to <literal>~/.bashrc</literal> or some file
         that’s sourced when your shell is started:
@@ -670,7 +670,7 @@ export GPG_TTY
 </programlisting>
       <para>
         The <literal>gpg-agent(1)</literal> man page has more details
-        about this subject, i.e. in the &quot;EXAMPLES&quot; section.
+        about this subject, i.e. in the <quote>EXAMPLES</quote> section.
       </para>
     </listitem>
   </itemizedlist>

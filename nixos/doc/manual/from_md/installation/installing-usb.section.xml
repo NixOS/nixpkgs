@@ -110,9 +110,9 @@ diskutil unmountDisk diskX
 sudo dd if=&lt;path-to-image&gt; of=/dev/rdiskX bs=4m
 </programlisting>
     <para>
-      After <literal>dd</literal> completes, a GUI dialog &quot;The disk
-      you inserted was not readable by this computer&quot; will pop up,
-      which can be ignored.
+      After <literal>dd</literal> completes, a GUI dialog <quote>The
+      disk you inserted was not readable by this computer</quote> will
+      pop up, which can be ignored.
     </para>
     <note>
       <para>

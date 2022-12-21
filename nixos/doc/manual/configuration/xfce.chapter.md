@@ -46,7 +46,7 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
 ```
 
 This is caused by some needed GNOME services not running. This is all
-fixed by enabling \"Launch GNOME services on startup\" in the Advanced
+fixed by enabling "Launch GNOME services on startup" in the Advanced
 tab of the Session and Startup settings panel. Alternatively, you can
 run this command to do the same thing.
 

@@ -1472,8 +1472,8 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
 </programlisting>
         <para>
           The base package has also been upgraded to the 2020-07-29
-          &quot;Hogfather&quot; release. Plugins might be incompatible
-          or require upgrading.
+          <quote>Hogfather</quote> release. Plugins might be
+          incompatible or require upgrading.
         </para>
       </listitem>
       <listitem>
@@ -1736,11 +1736,11 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       </listitem>
       <listitem>
         <para>
-          The cc- and binutils-wrapper’s &quot;infix salt&quot; and
+          The cc- and binutils-wrapper’s <quote>infix salt</quote> and
           <literal>_BUILD_</literal> and <literal>_TARGET_</literal>
-          user infixes have been replaced with with a &quot;suffix
-          salt&quot; and suffixes and <literal>_FOR_BUILD</literal> and
-          <literal>_FOR_TARGET</literal>. This matches the autotools
+          user infixes have been replaced with with a <quote>suffix
+          salt</quote> and suffixes and <literal>_FOR_BUILD</literal>
+          and <literal>_FOR_TARGET</literal>. This matches the autotools
           convention for env vars which standard for these things,
           making interfacing with other tools easier.
         </para>

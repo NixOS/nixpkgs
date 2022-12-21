@@ -21,8 +21,8 @@ services.kubernetes = {
 };
 </programlisting>
   <para>
-    Another way is to assign cluster roles (&quot;master&quot; and/or
-    &quot;node&quot;) to the host. This enables apiserver,
+    Another way is to assign cluster roles (<quote>master</quote> and/or
+    <quote>node</quote>) to the host. This enables apiserver,
     controllerManager, scheduler, addonManager, kube-proxy and etcd:
   </para>
   <programlisting language="bash">

@@ -9,7 +9,7 @@
       <para>
         The <link xlink:href="http://haskell.org/">Haskell</link>
         packages infrastructure has been re-designed from the ground up
-        (&quot;Haskell NG&quot;). NixOS now distributes the latest
+        (<quote>Haskell NG</quote>). NixOS now distributes the latest
         version of every single package registered on
         <link xlink:href="http://hackage.haskell.org/">Hackage</link> --
         well in excess of 8,000 Haskell packages. Detailed instructions
@@ -23,8 +23,8 @@
         Haskell</link> release since version 0.0 as well as the most
         recent <link xlink:href="http://www.stackage.org/">Stackage
         Nightly</link> snapshot. The announcement
-        <link xlink:href="https://nixos.org/nix-dev/2015-September/018138.html">&quot;Full
-        Stackage Support in Nixpkgs&quot;</link> gives additional
+        <link xlink:href="https://nixos.org/nix-dev/2015-September/018138.html"><quote>Full
+        Stackage Support in Nixpkgs</quote></link> gives additional
         details.
       </para>
     </listitem>
@@ -534,9 +534,9 @@
   <itemizedlist spacing="compact">
     <listitem>
       <para>
-        &quot;<literal>nix-env -qa</literal>&quot; no longer discovers
-        Haskell packages by name. The only packages visible in the
-        global scope are <literal>ghc</literal>,
+        <quote><literal>nix-env -qa</literal></quote> no longer
+        discovers Haskell packages by name. The only packages visible in
+        the global scope are <literal>ghc</literal>,
         <literal>cabal-install</literal>, and <literal>stack</literal>,
         but all other packages are hidden. The reason for this
         inconvenience is the sheer size of the Haskell package set.

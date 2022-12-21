@@ -290,12 +290,12 @@ $ sudo chown -R 0:0 /nix
       <note>
         <para>
           Support for <literal>NIXOS_LUSTRATE</literal> was added in
-          NixOS 16.09. The act of &quot;lustrating&quot; refers to the
-          wiping of the existing distribution. Creating
+          NixOS 16.09. The act of <quote>lustrating</quote> refers to
+          the wiping of the existing distribution. Creating
           <literal>/etc/NIXOS_LUSTRATE</literal> can also be used on
           NixOS to remove all mutable files from your root partition
           (anything that’s not in <literal>/nix</literal> or
-          <literal>/boot</literal> gets &quot;lustrated&quot; on the
+          <literal>/boot</literal> gets <quote>lustrated</quote> on the
           next boot.
         </para>
         <para>

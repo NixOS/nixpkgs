@@ -495,11 +495,11 @@
         <para>
           The propagation logic has been changed. The new logic, along
           with new types of dependencies that go with, is thoroughly
-          documented in the &quot;Specifying dependencies&quot; section
-          of the &quot;Standard Environment&quot; chapter of the nixpkgs
-          manual. The old logic isn’t but is easy to describe:
-          dependencies were propagated as the same type of dependency no
-          matter what. In practice, that means that many
+          documented in the <quote>Specifying dependencies</quote>
+          section of the <quote>Standard Environment</quote> chapter of
+          the nixpkgs manual. The old logic isn’t but is easy to
+          describe: dependencies were propagated as the same type of
+          dependency no matter what. In practice, that means that many
           <literal>propagatedNativeBuildInputs</literal> should instead
           be <literal>propagatedBuildInputs</literal>. Thankfully, that
           was and is the least used type of dependency. Also, it means

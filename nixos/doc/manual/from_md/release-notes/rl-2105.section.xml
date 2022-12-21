@@ -235,8 +235,8 @@
         <para>
           The <literal>networking.wireless.iwd</literal> module now
           installs the upstream-provided 80-iwd.link file, which sets
-          the NamePolicy= for all wlan devices to &quot;keep
-          kernel&quot;, to avoid race conditions between iwd and
+          the NamePolicy= for all wlan devices to <quote>keep
+          kernel</quote>, to avoid race conditions between iwd and
           networkd. If you don’t want this, you can set
           <literal>systemd.network.links.&quot;80-iwd&quot; = lib.mkForce {}</literal>.
         </para>
@@ -1027,7 +1027,7 @@ self: super:
       <listitem>
         <para>
           <link xlink:href="https://kodi.tv/">Kodi</link> has been
-          updated to version 19.1 &quot;Matrix&quot;. See the
+          updated to version 19.1 <quote>Matrix</quote>. See the
           <link xlink:href="https://kodi.tv/article/kodi-19-0-matrix-release">announcement</link>
           for further details.
         </para>
@@ -1298,7 +1298,8 @@ self: super:
         <para>
           The zookeeper package does not provide
           <literal>zooInspector.sh</literal> anymore, as that
-          &quot;contrib&quot; has been dropped from upstream releases.
+          <quote>contrib</quote> has been dropped from upstream
+          releases.
         </para>
       </listitem>
       <listitem>

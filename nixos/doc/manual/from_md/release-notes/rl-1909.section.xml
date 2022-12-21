@@ -746,9 +746,9 @@
           <literal>services.gitlab.secrets.jwsFile</literal>). This was
           done so that secrets aren’t stored in the world-readable nix
           store, but means that for each option you’ll have to create a
-          file with the same exact string, add &quot;File&quot; to the
-          end of the option name, and change the definition to a string
-          pointing to the corresponding file; e.g.
+          file with the same exact string, add <quote>File</quote> to
+          the end of the option name, and change the definition to a
+          string pointing to the corresponding file; e.g.
           <literal>services.gitlab.databasePassword = &quot;supersecurepassword&quot;</literal>
           becomes
           <literal>services.gitlab.databasePasswordFile = &quot;/path/to/secret_file&quot;</literal>
