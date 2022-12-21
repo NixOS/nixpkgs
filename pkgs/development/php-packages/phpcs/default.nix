@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "phpcs";
-  version = "3.6.0";
+  version = "3.7.1";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-    sha256 = "0sdi78hrwd3r5p1b38qmp89m41kfszh2qn4n5zhq2dmhsjdhjziz";
+    sha256 = "ehQyOhSvn1gwLRVEJJLuEHaozXLAGKgWy0SWW/OpsBU=";
   };
 
   dontUnpack = true;
@@ -29,5 +29,6 @@ mkDerivation {
     license = licenses.bsd3;
     homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
     maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
