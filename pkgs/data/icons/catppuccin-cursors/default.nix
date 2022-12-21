@@ -1,9 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, inkscape
-, xcursorgen
-, makeFontsConf
+, unzip
 }:
 
 let
@@ -15,37 +13,24 @@ let
   variantName = { palette, color }: (lib.strings.toLower palette) + color;
   variants = map variantName product;
 in
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "catppuccin-cursors";
-  version = "unstable-2022-08-23";
+  version = "0.2.0";
+  dontBuild = true;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "cursors";
-    rev = "3d3023606939471c45cff7b643bffc5d5d4ff29c";
-    sha256 = "1z9cjxxsj3vrmhsw1k05b31zmncz1ksaswc4r1k3vd2mmpigq1nk";
+    rev = "v${version}";
+    sha256 = "sha256-TgV5f8+YWR+h61m6WiBMg3aBFnhqShocZBdzZHSyU2c=";
+    sparseCheckout = [ "cursors" ];
   };
+
+  nativeBuildInputs = [ unzip ];
 
   outputs = variants ++ [ "out" ]; # dummy "out" output to prevent breakage
 
   outputsToInstall = [];
-
-  nativeBuildInputs = [
-    inkscape
-    xcursorgen
-  ];
-
-  postPatch = ''
-    patchShebangs ./build.sh
-  '';
-
-  # Make fontconfig stop warning about being unable to load config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
-
-  # Make inkscape stop warning about being unable to create profile directory
-  preBuild = ''
-    export HOME="$NIX_BUILD_ROOT"
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -61,7 +46,7 @@ stdenvNoCC.mkDerivation {
         local variant=$(sed 's/\([A-Z]\)/-\1/g' <<< "$output")
         local variant=''${variant^}
 
-        cp -r dist/Catppuccin-"$variant"-Cursors "$iconsDir"
+        unzip "cursors/Catppuccin-$variant-Cursors.zip" -d "$iconsDir"
       fi
     done
 
