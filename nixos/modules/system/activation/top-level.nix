@@ -81,7 +81,7 @@ let
 
       ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
-        ${config.boot.bootspec.validator} "$out/bootspec/${config.boot.bootspec.filename}"
+        ${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"
       ''}
 
       ${config.system.extraSystemBuilderCmds}
