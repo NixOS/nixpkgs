@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Tools for maintaining UEFI signature databases";
     homepage    = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
     maintainers = with maintainers; [ hmenke raitobezarius ];
-    platforms   = [ "x86_64-linux" ]; # Broken on i686
+    platforms   = [ "x86_64-linux" "aarch64-linux" ]; # Broken on i686
     license     = licenses.gpl3;
   };
 }
