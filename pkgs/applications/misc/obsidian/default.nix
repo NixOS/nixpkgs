@@ -12,20 +12,20 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "1.0.3";
+  version = "1.1.8";
   appname = "Obsidian";
   meta = with lib; {
-    description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
+    description = "A powerful and extensible knowledge base that works on top of your local folder of plain text files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     license = licenses.obsidian;
-    maintainers = with maintainers; [ atila conradmearns zaninime opeik ];
+    maintainers = with maintainers; [ atila conradmearns zaninime opeik berryp ];
   };
 
   filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    sha256 = if stdenv.isDarwin then "sha256-DYF9fEpZaP4tD/eeZAegDahR7UZyroqNB9bn2U7sgXs=" else "sha256-MpQk5g4184ZkCAjLU5Ug0ReWgVADskS1QuMcnPdNofs=";
+    sha256 = if stdenv.isDarwin then "sha256-eq8xJCYAmKPM4AZYSUbPFCXklXHvqF3ccX3owzzF7BA=" else "sha256-EGSftd1APwLnCu05sYd2LSe7mGi2nEv8PI9mxS5MFN0=";
   };
 
   icon = fetchurl {
