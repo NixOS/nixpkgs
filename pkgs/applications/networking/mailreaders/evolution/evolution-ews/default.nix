@@ -17,6 +17,7 @@
 , substituteAll
 , _experimental-update-script-combinators
 , glib
+, makeHardcodeGsettingsPatch
 }:
 
 stdenv.mkDerivation rec {
@@ -64,9 +65,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
       inherit src;
-      glib-schema-to-var = {
+      schemaIdToVariableMapping = {
         "org.gnome.evolution.mail" = "evo";
         "org.gnome.evolution.calendar" = "evo";
       };
