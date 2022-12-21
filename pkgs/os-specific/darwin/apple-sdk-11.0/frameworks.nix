@@ -159,7 +159,7 @@
   ScreenSaver                      = {};
   ScreenTime                       = {};
   ScriptingBridge                  = {};
-  Security                         = { inherit IOKit libDER; };
+  Security                         = { inherit IOKit libDER xpc; };
   SecurityFoundation               = { inherit Security; };
   SecurityInterface                = { inherit Security SecurityFoundation; };
   SensorKit                        = {};
