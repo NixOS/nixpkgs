@@ -7995,6 +7995,8 @@ self: super: with self; {
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
+  pyheif = callPackage ../development/python-modules/pyheif { };
+
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
 
   pyialarm = callPackage ../development/python-modules/pyialarm { };
