@@ -6,6 +6,7 @@
 , mock
 , sqlalchemy
 , pytestCheckHook
+, nix-update-script
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,10 @@ buildPythonPackage rec {
     # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
     "test_persist_selectable"
   ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = "python3Packages.flask-sqlalchemy";
+  };
 
   meta = with lib; {
     description = "SQLAlchemy extension for Flask";
