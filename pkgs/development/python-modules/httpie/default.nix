@@ -64,10 +64,9 @@ buildPythonPackage rec {
 
   postInstall = ''
     # install completions
-    installShellCompletion --bash \
-      --name http.bash extras/httpie-completion.bash
-    installShellCompletion --fish \
-      --name http.fish extras/httpie-completion.fish
+    installShellCompletion --cmd http \
+      --bash extras/httpie-completion.bash \
+      --fish extras/httpie-completion.fish
 
     # convert the docs/README.md file
     pandoc --standalone -f markdown -t man docs/README.md -o docs/http.1
@@ -100,6 +99,6 @@ buildPythonPackage rec {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];
+    maintainers = with maintainers; [ antono relrod schneefux ];
   };
 }
