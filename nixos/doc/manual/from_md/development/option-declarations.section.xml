@@ -222,7 +222,7 @@ lib.mkOption {
             As an example, we will take the case of display managers.
             There is a central display manager module for generic
             display manager options and a module file per display
-            manager backend (sddm, gdm ...).
+            manager backend (sddm, gdm …).
           </para>
           <para>
             There are two approaches we could take with this module

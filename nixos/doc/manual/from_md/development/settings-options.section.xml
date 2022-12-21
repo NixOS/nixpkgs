@@ -42,8 +42,7 @@
     </listitem>
   </itemizedlist>
   <section xml:id="sec-settings-nix-representable">
-    <title>Nix-representable Formats (JSON, YAML, TOML, INI,
-    ...)</title>
+    <title>Nix-representable Formats (JSON, YAML, TOML, INI, …)</title>
     <para>
       By convention, formats like this are handled with a generic
       <literal>settings</literal> option, representing the full program

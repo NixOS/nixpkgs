@@ -313,7 +313,7 @@ prefer to keep the layout definitions inside the NixOS configuration.
 
 Unfortunately, the Xorg server does not (currently) support setting a
 keymap directly but relies instead on XKB rules to select the matching
-components (keycodes, types, \...) of a layout. This means that
+components (keycodes, types, ...) of a layout. This means that
 components other than symbols won't be loaded by default. As a
 workaround, you can set the keymap using `setxkbmap` at the start of the
 session with:

@@ -324,7 +324,7 @@ Composed types are types that take a type as parameter. `listOf
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
     Multiple definitions cannot be merged.
 
-`types.oneOf` \[ *`t1 t2`* \... \]
+`types.oneOf` \[ *`t1 t2`* ... \]
 
 :   Type *`t1`* or type *`t2`* and so forth, e.g.
     `with types; oneOf [ int str bool ]`. Multiple definitions cannot be

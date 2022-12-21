@@ -668,7 +668,7 @@
       <varlistentry>
         <term>
           <literal>types.oneOf</literal> [
-          <emphasis><literal>t1 t2</literal></emphasis> ... ]
+          <emphasis><literal>t1 t2</literal></emphasis> … ]
         </term>
         <listitem>
           <para>
