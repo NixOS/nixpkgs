@@ -465,6 +465,7 @@ in {
         RestartSec = 20;
         TimeoutSec = 60;
         WorkingDirectory = cfg.package;
+        SyslogIdentifier = "peertube";
         # User and group
         User = cfg.user;
         Group = cfg.group;
