@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, pkg-config
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_4, libiconv, openssl, python2
+, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_4, libiconv, openssl, python3
 , v4l-utils, which, zlib }:
 
 let
@@ -40,11 +40,11 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    avahi dbus gettext git gnutar gzip bzip2 ffmpeg_4 libiconv openssl python2
+    avahi dbus gettext git gnutar gzip bzip2 ffmpeg_4 libiconv openssl
     which zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config python3 ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
 
