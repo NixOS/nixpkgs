@@ -13,6 +13,7 @@
 , avahi
 , bzip2
 , dbus
+, dtv-scan-tables
 , ffmpeg
 , gettext
 , gnutar
@@ -25,19 +26,6 @@
 
 let
   version = "4.2.8";
-
-  dtv-scan-tables = stdenv.mkDerivation {
-    pname = "dtv-scan-tables";
-    version = "2020-05-18";
-    src = fetchFromGitHub {
-      owner = "tvheadend";
-      repo = "dtv-scan-tables";
-      rev = "e3138a506a064f6dfd0639d69f383e8e576609da";
-      sha256 = "19ac9ds3rfc2xrqcywsbd1iwcpv7vmql7gp01iikxkzcgm2g2b6w";
-    };
-    nativeBuildInputs = [ v4l-utils ];
-    installFlags = [ "DATADIR=$(out)" ];
-  };
 in stdenv.mkDerivation {
   pname = "tvheadend";
   inherit version;
