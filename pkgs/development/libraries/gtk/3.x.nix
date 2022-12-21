@@ -80,6 +80,13 @@ stdenv.mkDerivation rec {
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
 
+    # Gtk based programs will not render cursors correctly
+    # without the following patch
+    # https://gitlab.gnome.org/GNOME/gtk/-/commit/3f1536632f682c355d0c3abe1afc80cf975c2cce
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/3f1536632f682c355d0c3abe1afc80cf975c2cce.patch";
+      sha256 = "sha256-PwzsgViYDINQssflDiQN7yfOuwHm5xfpXnGusGWYNxA=";
+    })
     # Add accidentally non-dist’d build file.
     # https://gitlab.gnome.org/GNOME/gtk/-/commit/b2ad8d2abafbd94c7e58e5e1b98c92e6b6fa6d9a
     (fetchpatch2 {
