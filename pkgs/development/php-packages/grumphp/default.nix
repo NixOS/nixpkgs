@@ -1,11 +1,13 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ mkDerivation, fetchFromGitHub, makeWrapper, lib, php }:
 mkDerivation rec {
   pname = "grumphp";
-  version = "1.8.1";
+  version = "1.15.0";
 
-  src = fetchurl {
-    url = "https://github.com/phpro/${pname}/releases/download/v${version}/${pname}.phar";
-    sha256 = "sha256-3XPMyH2F3ZfRr8DmvlBY3Z6uolhaRraQxwKIskIwPq8=";
+  src = fetchFromGitHub {
+    repo = "grumphp-shim";
+    owner = "phpro";
+    rev = "v${version}";
+    sha256 = "EEbFsOIL/weafaQ+racJaKc4bzsWZKuMNmZ273jeRto=";
   };
 
   dontUnpack = true;
@@ -15,7 +17,7 @@ mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    install -D $src $out/libexec/${pname}/grumphp.phar
+    install -D $src/grumphp.phar $out/libexec/${pname}/grumphp.phar
     makeWrapper ${php}/bin/php $out/bin/grumphp \
       --add-flags "$out/libexec/${pname}/grumphp.phar"
     runHook postInstall
@@ -26,5 +28,6 @@ mkDerivation rec {
     homepage = "https://github.com/phpro/grumphp";
     license = licenses.mit;
     maintainers = teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
