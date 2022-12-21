@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "phive";
-  version = "0.15.0";
+  version = "0.15.2";
 
   src = fetchurl {
     url = "https://github.com/phar-io/phive/releases/download/${version}/phive-${version}.phar";
-    sha256 = "sha256-crMr8d5nsVt7+zQ5xPeph/JXmTEn6jJFVtp3mOgylB4=";
+    sha256 = "sha256-K7B2dT7F1nL14vlql6D+fo6ewkpDnu0A/SnvlCx5Bfk=";
   };
 
   dontUnpack = true;
@@ -27,5 +27,6 @@ mkDerivation rec {
     homepage = "https://github.com/phar-io/phive";
     license = licenses.bsd3;
     maintainers = with maintainers; teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
