@@ -31,5 +31,6 @@ mkDerivation {
     homepage = "https://getcomposer.org/";
     changelog = "https://github.com/composer/composer/releases/tag/${version}";
     maintainers = with maintainers; [ offline ] ++ teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
