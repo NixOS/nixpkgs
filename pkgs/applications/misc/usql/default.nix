@@ -11,18 +11,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.13.3";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-fNGdaIlGlel0kx9XNhM/nJqiUDeAiG0IygUv6FiPubY=";
+    hash = "sha256-YshGqp27N1iOBWSE9UH1zsQlFar2uKf4Jq2W8kSN0Qc=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-1aAF1qwfHaI5Lab97hEvSlw5o8+f1YbDyHrIBIGnsHQ=";
+  vendorHash = "sha256-qHs5Z7NRdQKPOmYSozhSVQfINMxJewVwQ1Gi4SMWT+8=";
   proxyVendor = true;
 
   # Exclude broken impala & hive driver
@@ -42,6 +42,7 @@ buildGoModule rec {
     "sqlite_fts5"
     "sqlite_introspect"
     "sqlite_json1"
+    "sqlite_math_functions"
     "sqlite_stat4"
     "sqlite_userauth"
     "sqlite_vtable"
