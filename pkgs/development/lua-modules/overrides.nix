@@ -376,7 +376,7 @@ with prev;
     ];
   });
 
-  lush-nvim = prev.luaLib.overrideLuarocks prev.lush-nvim (drv: rec {
+  lush-nvim = prev.luaLib.overrideLuarocks prev.lush-nvim (drv: {
     doCheck = false;
   });
 
@@ -398,10 +398,9 @@ with prev;
     patches = [
       ./luuid.patch
     ];
-    postConfigure = let inherit (prev.luuid) version pname; in
-      ''
-        sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
-      '';
+    postConfigure =  ''
+      sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
+    '';
   });
 
 
