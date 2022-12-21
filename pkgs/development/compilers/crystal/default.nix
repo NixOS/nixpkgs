@@ -4,6 +4,7 @@
 , fetchurl
 , fetchpatch
 , lib
+, substituteAll
   # Dependencies
 , boehmgc
 , coreutils
@@ -100,7 +101,12 @@ let
         inherit sha256;
       };
 
-      patches = [ ]
+      patches = [
+          (substituteAll {
+            src = ./tzdata.patch;
+            inherit tzdata;
+          })
+        ]
         ++ lib.optionals (lib.versionOlder version "1.2.0") [
         # add support for DWARF5 debuginfo, fixes builds on recent compilers
         # the PR is 8 commits from 2019, so just fetch the whole thing
@@ -123,9 +129,6 @@ let
         # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
         substituteInPlace Makefile \
           --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
-
-        substituteInPlace src/crystal/system/unix/time.cr \
-          --replace /usr/share/zoneinfo ${tzdata}/share/zoneinfo
 
         mkdir -p $TMP/crystal
 
