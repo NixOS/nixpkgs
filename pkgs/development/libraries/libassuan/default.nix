@@ -13,11 +13,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev"; # libassuan-config
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ npth gettext ];
-
-  configureFlags = [
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-  ];
+  buildInputs = [ npth gettext libgpg-error ];
 
   doCheck = true;
 
