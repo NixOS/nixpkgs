@@ -10,7 +10,7 @@
     Compositor such as sway without separately enabling a Wayland
     server:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 programs.sway.enable = true;
 </programlisting>
   <para>
@@ -22,7 +22,7 @@ programs.sway.enable = true;
     be able to share your screen, you might want to activate this
     option:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 xdg.portal.wlr.enable = true;
 </programlisting>
   <para>

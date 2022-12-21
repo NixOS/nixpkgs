@@ -69,7 +69,7 @@ nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     instead of the default installer image, you can build your own
     <literal>configuration.nix</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { modulesPath, ... }: {
   imports = [
     (modulesPath + &quot;/installer/netboot/netboot-minimal.nix&quot;)

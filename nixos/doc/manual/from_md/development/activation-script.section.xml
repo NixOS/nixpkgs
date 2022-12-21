@@ -22,7 +22,7 @@
     these dependencies into account and order the snippets accordingly.
     As a simple example:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 system.activationScripts.my-activation-script = {
   deps = [ &quot;etc&quot; ];
   # supportsDryActivation = true;

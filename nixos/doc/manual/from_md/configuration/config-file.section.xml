@@ -3,7 +3,7 @@
   <para>
     The NixOS configuration file generally looks like this:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { option definitions
@@ -21,7 +21,7 @@
     the name of an option and <literal>value</literal> is its value. For
     example,
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { services.httpd.enable = true;
@@ -44,7 +44,7 @@
     <literal>true</literal>. This means that the example above can also
     be written as:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { services = {
@@ -96,7 +96,7 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
         <para>
           Strings are enclosed in double quotes, e.g.
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 networking.hostName = &quot;dexter&quot;;
 </programlisting>
         <para>
@@ -107,7 +107,7 @@ networking.hostName = &quot;dexter&quot;;
           Multi-line strings can be enclosed in <emphasis>double single
           quotes</emphasis>, e.g.
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 networking.extraHosts =
   ''
     127.0.0.2 other-localhost
@@ -135,7 +135,7 @@ networking.extraHosts =
           These can be <literal>true</literal> or
           <literal>false</literal>, e.g.
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 networking.firewall.enable = true;
 networking.firewall.allowPing = false;
 </programlisting>
@@ -149,7 +149,7 @@ networking.firewall.allowPing = false;
         <para>
           For example,
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 60;
 </programlisting>
         <para>
@@ -171,7 +171,7 @@ boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 60;
           Sets were introduced above. They are name/value pairs enclosed
           in braces, as in the option definition
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 fileSystems.&quot;/boot&quot; =
   { device = &quot;/dev/sda1&quot;;
     fsType = &quot;ext4&quot;;
@@ -189,13 +189,13 @@ fileSystems.&quot;/boot&quot; =
           The important thing to note about lists is that list elements
           are separated by whitespace, like this:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quot; ];
 </programlisting>
         <para>
           List elements can be any other type, e.g. sets:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 swapDevices = [ { device = &quot;/dev/disk/by-label/swap&quot;; } ];
 </programlisting>
       </listitem>
@@ -211,7 +211,7 @@ swapDevices = [ { device = &quot;/dev/disk/by-label/swap&quot;; } ];
           through the function argument <literal>pkgs</literal>. Typical
           uses:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 environment.systemPackages =
   [ pkgs.thunderbird
     pkgs.emacs
