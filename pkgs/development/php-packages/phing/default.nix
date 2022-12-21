@@ -8,7 +8,7 @@ mkDerivation {
 
   src = fetchurl {
     url = "https://www.phing.info/get/phing-${version}.phar";
-    sha256 = "sha256-3QZsl5QJkFX5Z4RovMtw2ELCp8Zl4xiZsIBikakJ474=";
+    sha256 = "3QZsl5QJkFX5Z4RovMtw2ELCp8Zl4xiZsIBikakJ474=";
   };
 
   dontUnpack = true;
@@ -29,5 +29,6 @@ mkDerivation {
     license = licenses.lgpl3;
     homepage = "https://github.com/phingofficial/phing";
     maintainers = with maintainers; teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
