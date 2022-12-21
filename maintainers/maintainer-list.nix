@@ -1520,6 +1520,12 @@
     githubId = 12958979;
     name = "Mika Naylor";
   };
+  autrimpo = {
+    email = "michal@koutensky.net";
+    github = "autrimpo";
+    githubId = 5968483;
+    name = "Michal Koutenský";
+  };
   autumnal = {
     name = "Sven Friedrich";
     email = "sven@autumnal.de";
