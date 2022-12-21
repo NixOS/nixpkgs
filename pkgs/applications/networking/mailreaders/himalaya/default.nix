@@ -2,8 +2,9 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
-, enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installShellFiles
+, installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
+, installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
 , pkg-config
 , Security
 , libiconv
@@ -12,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "soywod";
@@ -23,7 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ICaahkIP1uSm4iXvSPMo8uVTtSa1nCyJdDihGdVEQvg=";
 
-  nativeBuildInputs = lib.optionals enableCompletions [ installShellFiles ]
+  nativeBuildInputs = [ ]
+    ++ lib.optionals (installManPages || installShellCompletions) [ installShellFiles ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
   buildInputs =
@@ -38,8 +40,14 @@ rustPlatform.buildRustPackage rec {
   # additional tooling and servers to test
   cargoTestFlags = [ "--lib" ];
 
-  postInstall = lib.optionalString enableCompletions ''
-    # Install shell function
+
+  postInstall = lib.optionalString installManPages ''
+    # Install man pages
+    mkdir -p $out/man
+    $out/bin/himalaya man $out/man
+    installManPage $out/man/*
+  '' ++ lib.optionalString installShellCompletions ''
+    # Install shell completions
     installShellCompletion --cmd himalaya \
       --bash <($out/bin/himalaya completion bash) \
       --fish <($out/bin/himalaya completion fish) \
@@ -50,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line interface for email management";
     homepage = "https://github.com/soywod/himalaya";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ toastal yanganto ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ soywod toastal yanganto ];
   };
 }
