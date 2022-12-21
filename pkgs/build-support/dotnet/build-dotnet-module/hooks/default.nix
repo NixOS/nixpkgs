@@ -10,6 +10,7 @@
 , runtimeDeps
 , buildType
 , runtimeId
+, useSdkAsRuntime
 }:
 assert (builtins.isString runtimeId);
 
@@ -61,11 +62,12 @@ in
     } ./dotnet-install-hook.sh) { };
 
   dotnetFixupHook = callPackage ({ }:
+    let dep = if useSdkAsRuntime then dotnet-sdk else dotnet-runtime; in
     makeSetupHook {
       name = "dotnet-fixup-hook";
-      propagatedBuildInputs = [ dotnet-runtime ];
+      propagatedBuildInputs = [ dep ];
       substitutions = {
-        dotnetRuntime = dotnet-runtime;
+        dotnetRuntime = dep;
         runtimeDeps = libraryPath;
       };
     } ./dotnet-fixup-hook.sh) { };
