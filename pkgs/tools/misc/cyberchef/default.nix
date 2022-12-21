@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gchq.github.io/CyberChef";
     maintainers = with maintainers; [ sebastianblunt ];
     license = licenses.asl20;
+    platforms = platforms.all;
   };
 }
