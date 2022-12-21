@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "deployer";
-  version = "6.8.0";
+  version = "7.0.2";
 
   src = fetchurl {
-    url = "https://deployer.org/releases/v${version}/${pname}.phar";
-    sha256 = "09mxwfa7yszsiljbkxpsd4sghqngl08cn18v4g1fbsxp3ib3kxi5";
+    url = "https://github.com/deployphp/deployer/releases/download/v${version}/deployer.phar";
+    sha256 = "DdPTpKrEsnM4NZhD/J9Pl0sGJ2woVLQbb9VLB4ZHOTY=";
   };
 
   dontUnpack = true;
@@ -32,5 +32,6 @@ mkDerivation rec {
     homepage = "https://deployer.org/";
     mainProgram = "dep";
     maintainers = with maintainers; teams.php.members;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
