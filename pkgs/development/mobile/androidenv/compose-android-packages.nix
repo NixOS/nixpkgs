@@ -6,7 +6,7 @@
 , platformToolsVersion ? "33.0.2"
 , buildToolsVersions ? [ "32.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "31.3.7"
+, emulatorVersion ? "31.3.9"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -250,7 +250,7 @@ rec {
 
     by setting nixpkgs config option 'android_sdk.accept_license = true;'.
   '' else callPackage ./tools.nix {
-    inherit deployAndroidPackage packages toolsVersion;
+    inherit deployAndroidPackage packages toolsVersion os;
 
     postInstall = ''
       # Symlink all requested plugins
