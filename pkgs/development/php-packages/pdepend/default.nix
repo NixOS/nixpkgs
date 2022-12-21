@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/pdepend/pdepend/releases/download/${version}/pdepend.phar";
-    sha256 = "sha256-/fmrmtMBFycN6su/JEdFzB2uTDtHZvhZMYgl7duaaIE=";
+    sha256 = "/fmrmtMBFycN6su/JEdFzB2uTDtHZvhZMYgl7duaaIE=";
   };
 
   dontUnpack = true;
@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     ";
     maintainers = teams.php.members;
     platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
