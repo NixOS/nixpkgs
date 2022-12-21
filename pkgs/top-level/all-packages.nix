@@ -25465,6 +25465,8 @@ with pkgs;
 
   osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
 
+  plistwatch = callPackage ../os-specific/darwin/plistwatch { };
+
   power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
 
   powercap = callPackage ../os-specific/linux/powercap { };
