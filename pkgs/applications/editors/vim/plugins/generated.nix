@@ -27,6 +27,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/BufOnly.vim/";
   };
 
+  ChatGPT-nvim = buildVimPluginFrom2Nix {
+    pname = "ChatGPT.nvim";
+    version = "2022-12-19";
+    src = fetchFromGitHub {
+      owner = "jackMort";
+      repo = "ChatGPT.nvim";
+      rev = "ce7599398d8a5e3427d0344861006ed03b737fe4";
+      sha256 = "0bc5ddgrdg97ir5xsgdk2nfzg48jai00i81s5f2xg58hak2g2ff9";
+    };
+    meta.homepage = "https://github.com/jackMort/ChatGPT.nvim/";
+  };
+
   CheckAttach = buildVimPluginFrom2Nix {
     pname = "CheckAttach";
     version = "2019-05-08";
