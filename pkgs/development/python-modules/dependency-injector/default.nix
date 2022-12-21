@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "4.40.0";
+  version = "4.41.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "ets-labs";
     repo = "python-dependency-injector";
     rev = version;
-    hash = "sha256-lcgPFdAgLmv7ILL2VVfqtGSw96aUfPv9oiOhksRtF3k=";
+    hash = "sha256-U3U/L8UuYrfpm4KwVNmViTbam7QdZd2vp1p+ENtOJlw=";
   };
 
   propagatedBuildInputs = [
