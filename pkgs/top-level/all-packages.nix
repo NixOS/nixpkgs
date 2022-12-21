@@ -38101,6 +38101,8 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
+  fsautocomplete = callPackage ../development/tools/fsautocomplete { };
+
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};

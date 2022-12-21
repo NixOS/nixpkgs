@@ -84,6 +84,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
      <ProjectReference Include="../foo/bar.fsproj" />
      <PackageReference Include="bar" Version="*" Condition=" '$(ContinuousIntegrationBuild)'=='true' "/>
   ```
+* `useSdkAsRuntime` can be used to link full dotnet sdk into result package, which is required for dotnet tools.
 * `executables` is used to specify which executables get wrapped to `$out/bin`, relative to `$out/lib/$pname`. If this is unset, all executables generated will get installed. If you do not want to install any, set this to `[]`. This gets done in the `preFixup` phase.
 * `runtimeDeps` is used to wrap libraries into `LD_LIBRARY_PATH`. This is how dotnet usually handles runtime dependencies.
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.

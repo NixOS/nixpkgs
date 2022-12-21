@@ -36,6 +36,8 @@
 
   # The path to publish the project to. When unset, the directory "$out/lib/$pname" is used.
 , installPath ? null
+  # Use full dotnet sdk at runtime intead of just the runtime.
+, useSdkAsRuntime ? false
   # The binaries that should get installed to `$out/bin`, relative to `$out/lib/$pname/`. These get wrapped accordingly.
   # Unfortunately, dotnet has no method for doing this automatically.
   # If unset, all executables in the projects root will get installed. This may cause bloat!
@@ -92,7 +94,7 @@ let
     else dotnet-sdk.meta.platforms;
 
   inherit (callPackage ./hooks {
-    inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
+    inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType useSdkAsRuntime;
     runtimeId =
       if runtimeId != null
       then runtimeId
@@ -149,6 +151,8 @@ stdenvNoCC.mkDerivation (args // {
   makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
     "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
   ];
+
+  useSdkAsRuntime = useSdkAsRuntime;
 
   # Stripping breaks the executable
   dontStrip = args.dontStrip or true;
