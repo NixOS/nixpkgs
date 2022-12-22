@@ -70,14 +70,12 @@ let
   ;
 
   # Timeout in syslinux is in units of 1/10 of a second.
-  # 0 is used to disable timeouts.
+  # null means max timeout (35996, just under 1h in 1/10 seconds)
+  # 0 means disable timeout
   syslinuxTimeout = if config.boot.loader.timeout == null then
-      0
+      35996
     else
-      max (config.boot.loader.timeout * 10) 1;
-
-
-  max = x: y: if x > y then x else y;
+      config.boot.loader.timeout * 10;
 
   # The configuration file for syslinux.
 
