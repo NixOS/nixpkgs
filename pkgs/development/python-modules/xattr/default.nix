@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "xattr";
   version = "0.10.1";
- format = "setuptools";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/xattr/xattr";
     changelog = "https://github.com/xattr/xattr/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
