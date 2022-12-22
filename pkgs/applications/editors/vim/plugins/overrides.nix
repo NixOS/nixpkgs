@@ -21,6 +21,7 @@
 , fish
 , fzf
 , gawk
+, gh
 , git
 , gnome
 , himalaya
@@ -342,6 +343,11 @@ self: super: {
   denops-vim = super.denops-vim.overrideAttrs (old: {
     dependencies = [ deno ];
   });
+
+  denops-gh-vim = super.denops-gh-vim.overrideAttrs (old: {
+    dependencies = with self; [ denops-vim gh ];
+  });
+
   deoplete-fish = super.deoplete-fish.overrideAttrs (old: {
     dependencies = with self; [ deoplete-nvim vim-fish ];
   });
