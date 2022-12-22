@@ -12,7 +12,7 @@ if [ -z "${NIX_PKG_CONFIG_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-set -- "$@" @addFlags@
+set -- @addFlags@ "$@"
 
 if (( ${#role_suffixes[@]} > 0 )); then
     # replace env var with nix-modified one
