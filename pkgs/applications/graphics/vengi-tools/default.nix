@@ -106,7 +106,5 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
