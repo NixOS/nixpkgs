@@ -151,12 +151,12 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  kexec = forMatchingSystems supportedSystems (system: (import lib/eval-config.nix {
+  kexecTarball = forMatchingSystems supportedSystems (system: (import lib/eval-config.nix {
     inherit system;
     modules = [
       ./modules/installer/netboot/netboot-minimal.nix
     ];
-  }).config.system.build.kexecTree);
+  }).config.system.build.kexecTarball);
 
   netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;

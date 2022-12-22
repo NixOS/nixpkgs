@@ -101,30 +101,24 @@ with lib;
       boot
     '';
 
-    # A script invoking kexec on ./bzImage and ./initrd.gz.
+    # A script invoking kexec to boot into the kernel and initrd.
     # Usually used through system.build.kexecTree, but exposed here for composability.
-    system.build.kexecScript = pkgs.writeScript "kexec-boot" ''
-      #!/usr/bin/env bash
-      if ! kexec -v >/dev/null 2>&1; then
-        echo "kexec not found: please install kexec-tools" 2>&1
-        exit 1
-      fi
-      SCRIPT_DIR=$( cd -- "$( dirname -- "''${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-      kexec --load ''${SCRIPT_DIR}/bzImage \
-        --initrd=''${SCRIPT_DIR}/initrd.gz \
-        --command-line "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}"
-      kexec -e
-    '';
+    system.build.kexecScript = ./kexec-boot.sh;
 
-    # A tree containing initrd.gz, bzImage and a kexec-boot script.
+    # A tree containing the kexec-boot script and its dependencies.
     system.build.kexecTree = pkgs.linkFarm "kexec-tree" [
       {
-        name = "initrd.gz";
+        name = "initrd";
         path = "${config.system.build.netbootRamdisk}/initrd";
       }
       {
-        name = "bzImage";
+        name = "kernel";
         path = "${config.system.build.kernel}/${config.system.boot.loader.kernelFile}";
+      }
+      {
+        name = "kernel-params";
+        path = pkgs.writeText "kernel-params"
+          "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}";
       }
       {
         name = "kexec-boot";
@@ -132,7 +126,32 @@ with lib;
       }
     ];
 
+    # A tarball of the kexecTree files for convenient download and transfer.
+    system.build.kexecTarball = let
+      baseName = "nixos-kexec-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
+    in pkgs.runCommandNoCC "${baseName}.tar.zst" {} ''
+      ln -s -- ${config.system.build.kexecTree} ${lib.escapeShellArg baseName}
+      # Set mode `u+w` to make it easier to `rm -r` or tweak
+      # the extracted tree.
+      tar \
+        --sort=name \
+        --owner=0 \
+        --group=0 \
+        --numeric-owner \
+        --mode=u+w \
+        --dereference \
+        -c -- ${lib.escapeShellArg baseName} \
+        | ${pkgs.zstd}/bin/zstd -10 -T$NIX_BUILD_CORES > $out
+    '';
+
     boot.loader.timeout = 10;
+
+    boot.initrd.postMountCommands = ''
+      # Copy any overlays from the kexec script.
+      if [[ -d /overlay ]]; then
+        cp -a --target-directory=/mnt-root /overlay/.
+      fi
+    '';
 
     boot.postBootCommands =
       ''
@@ -146,6 +165,7 @@ with lib;
         ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
+    system.stateVersion = lib.mkDefault lib.trivial.release;
   };
 
 }
