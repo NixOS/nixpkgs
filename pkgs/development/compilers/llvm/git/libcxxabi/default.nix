@@ -2,6 +2,7 @@
 , monorepoSrc, runCommand, fetchpatch
 , cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
+, withLibunwind ? !stdenv.hostPlatform.isWasm
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional (withLibunwind && !stdenv.isDarwin) libunwind;
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=libcxxabi"

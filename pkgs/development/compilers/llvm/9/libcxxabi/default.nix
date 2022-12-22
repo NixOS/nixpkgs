@@ -1,5 +1,6 @@
 { lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
 , enableShared ? !stdenv.hostPlatform.isStatic
+, withLibunwind ? !stdenv.hostPlatform.isWasm
 }:
 
 stdenv.mkDerivation {
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional (withLibunwind && !stdenv.isDarwin) libunwind;
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
