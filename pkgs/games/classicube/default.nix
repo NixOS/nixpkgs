@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   postBuild = "cd -";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/bin"
     cp 'src/ClassiCube' "$out/bin"
     # ClassiCube puts downloaded resources
@@ -75,6 +76,21 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/ClassiCube" \
       --run 'mkdir -p "$HOME/.local/share/ClassiCube"' \
       --run 'cd       "$HOME/.local/share/ClassiCube"'
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/applications" "$out/share/resources"
+    cp 'misc/CCicon.png' "$out/share/resources"
+    cat >"$out/share/applications/ClassiCube.desktop" <<EOF
+    [Desktop Entry]
+    Type = Application
+    Exec = "$out/bin/ClassiCube"
+    Icon = "$out/share/resources/CCicon.png"
+    Name = ClassiCube
+    GenericName = Sandbox Block Game
+    Categories = ["Game"]
+    EOF
   '';
 
   meta = with lib; {
