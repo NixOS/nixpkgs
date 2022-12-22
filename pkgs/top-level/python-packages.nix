@@ -2548,6 +2548,8 @@ self: super: with self; {
   django_hijack = callPackage ../development/python-modules/django-hijack { };
   # This package may need an older version of Django. Override the package set and set e.g. `django = super.django_1_9`. See the Nixpkgs manual for examples on how to override the package set.
 
+  django-import-export = callPackage ../development/python-modules/django-import-export { };
+
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
@@ -5612,6 +5614,8 @@ self: super: with self; {
   markerlib = callPackage ../development/python-modules/markerlib { };
 
   markupsafe = callPackage ../development/python-modules/markupsafe { };
+
+  markuppy = callPackage ../development/python-modules/markuppy { };
 
   markups = callPackage ../development/python-modules/markups { };
 
