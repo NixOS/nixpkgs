@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "troposphere";
   version = "4.2.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -48,5 +49,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jlesquembre ];
     license = licenses.bsd2;
     homepage = "https://github.com/cloudtools/troposphere";
+    changelog = "https://github.com/cloudtools/troposphere/blob/${version}/CHANGELOG.rst";
   };
 }
