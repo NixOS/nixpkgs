@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e35ed7a3cdc3100545b43e196d34754e6551e7f95e4caebbe0e1c0ca41c2f1b";
+    sha256 = "sha256-shr0ZHx7u4SP7y8CBhbGsCidy5+UtPmRpVMQ/5vsV0k=";
   };
 
   checkInputs = [ pytestCheckHook ];
