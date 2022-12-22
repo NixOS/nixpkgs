@@ -31,6 +31,9 @@ stdenv.mkDerivation {
   '';
   configureFlags = lib.optional withGNOME "--enable-gnome";
 
+  # error: implicitly declaring library function 'finite' with type 'int (double)'
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
@@ -39,7 +42,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
