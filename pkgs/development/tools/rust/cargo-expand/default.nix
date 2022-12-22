@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-expand";
-  version = "1.0.35";
+  version = "1.0.36";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hJb4FLL3+AMNLL05eQc7Mkhp0KEGxmHg8/ETDoZiLV4=";
+    sha256 = "sha256-8h20Cnu72ychSdtKlAz6US0wXMIcn1ZUWMgF6a0K4uI=";
   };
 
-  cargoSha256 = "sha256-wKVlmO2/ugAb7vUSIGMz0WGnjEVEsm459DV9FaM28Mk=";
+  cargoSha256 = "sha256-xIVoEIyp8NygfNu/aola1pM6KokjrPQ5v55eBc7zPZc=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
