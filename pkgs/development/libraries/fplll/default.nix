@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fplll";
-  version = "5.4.2";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fplll";
     rev = version;
-    sha256 = "sha256-6pzErZtT5xzCMcsNy2EwrZHiAICLrRl1dv59bp23hAA=";
+    sha256 = "sha256-utME3hZ3p2tx7vmp5dlAJ6J9MFEhFm/qbscGu1t9jnc=";
   };
 
   nativeBuildInputs = [
