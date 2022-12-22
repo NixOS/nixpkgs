@@ -32,6 +32,7 @@
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
+, extraPatches ? [ ]
 , nixosTestRunner ? false
 , doCheck ? false
 , qemu  # for passthru.tests
@@ -112,7 +113,8 @@ stdenv.mkDerivation rec {
       revert = true;
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+  ++ extraPatches;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
