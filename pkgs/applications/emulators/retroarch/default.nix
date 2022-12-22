@@ -27,7 +27,7 @@
 , libxml2
 , libXxf86vm
 , makeWrapper
-, mbedtls
+, mbedtls_2
 , mesa
 , nvidia_cg_toolkit
 , pkg-config
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     libxml2
-    mbedtls
+    mbedtls_2
     python3
     SDL2
     zlib
@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-update_cores"
     "--disable-builtinmbedtls"
+    "--enable-systemmbedtls"
     "--disable-builtinzlib"
     "--disable-builtinflac"
   ] ++
