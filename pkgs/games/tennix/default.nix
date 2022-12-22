@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchgit {
-    url = "git://repo.or.cz/tennix.git";
+    url = git://repo.or.cz/tennix.git;
     rev = "refs/tags/tennix-${version}";
     sha256 = "sha256-U5+S1jEeg+7gdM1++dln6ePTqxZu2Zt0oUrH3DIlkgk=";
   };
