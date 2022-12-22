@@ -65,7 +65,7 @@ buildPythonApplication rec {
     psycopg2
     pyasn1
     pydantic
-    PyICU
+    pyicu
     pyjwt
     pymacaroons
     pynacl
