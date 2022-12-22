@@ -77,5 +77,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];
+    knownVulnerabilities = [
+      "LLDP undervflow while parsing malformed Auto Attach TLV, see https://www.openwall.com/lists/oss-security/2022/12/20/2."
+    ];
   };
 }
