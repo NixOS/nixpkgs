@@ -32386,7 +32386,9 @@ with pkgs;
     boost = boost168;
   };
 
-  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
+  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   symbolic-preview = callPackage ../applications/graphics/symbolic-preview { };
 
