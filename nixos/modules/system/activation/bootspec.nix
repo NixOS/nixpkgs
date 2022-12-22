@@ -54,7 +54,7 @@ let
           specialisationInjector =
             let
               specialisationLoader = (lib.mapAttrsToList
-                (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/bootspec/${filename}" ])
+                (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/${filename}" ])
                 children);
             in
             lib.escapeShellArgs [
@@ -66,7 +66,7 @@ let
         ''
           mkdir -p $out/bootspec
 
-          ${toplevelInjector} | ${specialisationInjector} > $out/bootspec/${filename}
+          ${toplevelInjector} | ${specialisationInjector} > $out/${filename}
         '';
 
       validator = pkgs.writeCueValidator ./bootspec.cue {
