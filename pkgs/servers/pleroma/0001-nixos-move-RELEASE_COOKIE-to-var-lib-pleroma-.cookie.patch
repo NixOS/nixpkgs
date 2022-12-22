@@ -1,0 +1,24 @@
+From d49df5552a27e5591ce415062a8e3fbe331edd98 Mon Sep 17 00:00:00 2001
+From: Finn Behrens <me@kloenk.dev>
+Date: Wed, 12 Jan 2022 11:03:21 +0100
+Subject: [PATCH] nixos: move RELEASE_COOKIE to /var/lib/pleroma/.cookie
+
+---
+ rel/env.sh.eex | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/rel/env.sh.eex b/rel/env.sh.eex
+index e1b87102d..7a66fff75 100644
+--- a/rel/env.sh.eex
++++ b/rel/env.sh.eex
+@@ -10,3 +10,7 @@
+ # Set the release to work across nodes
+ export RELEASE_DISTRIBUTION="${RELEASE_DISTRIBUTION:-name}"
+ export RELEASE_NODE="${RELEASE_NODE:-<%= @release.name %>@127.0.0.1}"
++export RELEASE_COOKIE="${RELEASE_COOKIE:-/var/lib/<%= @release.name %>/.cookie}"
++if [ -f "$RELEASE_COOKIE" ]; then
++  export RELEASE_COOKIE="$(cat $RELEASE_COOKIE)"
++fi
+-- 
+2.32.0 (Apple Git-132)
+

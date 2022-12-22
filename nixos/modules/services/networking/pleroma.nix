@@ -32,6 +32,15 @@ in {
         description = lib.mdDoc "Directory where the pleroma service will save the uploads and static files.";
       };
 
+      cookie = mkOption {
+        type = types.nullOr (types.oneOf [ types.str types.path ]);
+        default = null;
+        description = ''
+          Override the release cookie used for pleroma. If it's a path the content will be used.
+          Pleroma will read the Cookie from /var/lib/pleroma/.cookie if this is not set.
+        '';
+      };
+
       configs = mkOption {
         type = with types; listOf str;
         description = lib.mdDoc ''
@@ -100,7 +109,6 @@ in {
       after = [ "network-online.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
-      environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -117,12 +125,13 @@ in {
         # has not been updated. But the no-op process is pretty fast.
         # Better be safe than sorry migration-wise.
         ExecStartPre =
-          let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
-            if [ ! -f /var/lib/pleroma/.cookie ]
-            then
-              echo "Creating cookie file"
-              dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
-            fi
+          let preScript = pkgs.writers.writeBashBin "pleromaStartPre" (if cfg.cookie == null then ''
+              if [ ! -f /var/lib/pleroma/.cookie ]
+              then
+                echo "Creating cookie file"
+                dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
+              fi
+            '' else "") + ''
             ${cfg.package}/bin/pleroma_ctl migrate
           '';
           in "${preScript}/bin/pleromaStartPre";
@@ -141,6 +150,8 @@ in {
         NoNewPrivileges = true;
         CapabilityBoundingSet = "~CAP_SYS_ADMIN";
       };
+    } // lib.mkIf (cfg.cookie != null) {
+      environment.RELEASE_COOKIE = cfg.cookie;
     };
 
   };

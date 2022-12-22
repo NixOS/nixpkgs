@@ -19,6 +19,8 @@ beamPackages.mixRelease rec {
   };
   stripDebug = false;
 
+  patches = [ ./0001-nixos-move-RELEASE_COOKIE-to-var-lib-pleroma-.cookie.patch ];
+
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
