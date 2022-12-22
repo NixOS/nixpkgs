@@ -2660,6 +2660,8 @@ self: super: with self; {
 
   django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield { };
 
+  django-vite = callPackage ../development/python-modules/django-vite { };
+
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
