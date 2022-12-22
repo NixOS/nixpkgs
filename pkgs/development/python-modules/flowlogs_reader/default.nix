@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "flowlogs-reader";
-  version = "3.2.0";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
     owner = "obsrvbl";
     repo = pname;
     # https://github.com/obsrvbl/flowlogs-reader/issues/57
-    rev = "fac4c6c63348ff67fd0a8f51d391ba7c9f59e5ed";
-    hash = "sha256-bGb2CLp33aIr0R/lBPWAF3CbtVTWpqmcvYgZ6bcARTc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PGyuzOhq1TC/nGsGJYQYTDpcsYzcwNPiaHWd66tfzQQ=";
   };
 
   propagatedBuildInputs = [
