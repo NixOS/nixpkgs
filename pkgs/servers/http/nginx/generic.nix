@@ -8,6 +8,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , withStream ? true
 , withMail ? false
 , withPerl ? true
+, withSlice ? false
 , modules ? []
 , ...
 }:
@@ -109,7 +110,7 @@ stdenv.mkDerivation {
     "--with-http_perl_module"
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"
-  ]
+  ] ++ optional withSlice "--with-http_slice_module"
     ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (geoip != null) "--with-http_geoip_module"
     ++ optional (withStream && geoip != null) "--with-stream_geoip_module"
