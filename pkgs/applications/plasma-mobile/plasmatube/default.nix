@@ -2,6 +2,7 @@
 , mkDerivation
 , cmake
 , extra-cmake-modules
+, wrapGAppsHook
 , gst_all_1
 , kcoreaddons
 , kdeclarative
@@ -9,6 +10,7 @@
 , kirigami2
 , qtmultimedia
 , qtquickcontrols2
+, yt-dlp
 }:
 
 mkDerivation {
@@ -16,6 +18,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     extra-cmake-modules
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -31,6 +34,20 @@ mkDerivation {
     gst-plugins-good
     gstreamer
   ]);
+
+  patches = [
+    ./0001-Add-placeholders-for-runtime-dependencies.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/videomodel.cpp \
+      --replace "@yt-dlp@" "${yt-dlp}/bin/yt-dlp"
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+  dontWrapGApps = true;
 
   meta = {
     description = "Youtube player powered by an invidious server";
