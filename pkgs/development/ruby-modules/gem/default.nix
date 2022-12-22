@@ -46,6 +46,7 @@ lib.makeOverridable (
 # If you need to apply patches, make sure to set `dontBuild = false`;
 , dontBuild ? true
 , dontInstallManpages ? false
+, dontAddToRubylib ? false
 , propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
 , buildFlags ? []
@@ -87,6 +88,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit dontBuild;
   inherit dontStrip;
   gemType = type;
+  inherit dontAddToRubylib;
 
   nativeBuildInputs = [
     ruby makeWrapper
