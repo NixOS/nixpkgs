@@ -2181,6 +2181,13 @@ self: super: {
   })
   super.polynomial);
 
+  # Unreleased bound relaxing patch allowing scotty 0.12
+  taffybar = appendPatch (pkgs.fetchpatch {
+    name = "taffybar-allow-scotty-0.12.patch";
+    url = "https://github.com/taffybar/taffybar/commit/2e428ba550fc51067526a0350b91185acef72d19.patch";
+    sha256 = "1lpcz671mk5cwqffjfi9ncc0d67bmwgzypy3i37a2fhfmxd0y3nl";
+  }) ((p: assert p.version == "4.0.0"; p) super.taffybar);
+
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:
