@@ -24372,9 +24372,7 @@ with pkgs;
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
   mariadb-connector-c_3_2 = callPackage ../servers/sql/mariadb/connector-c/3_2.nix { };
 
-  mariadb-galera = callPackage ../servers/sql/mariadb/galera {
-    asio = asio_1_10;
-  };
+  mariadb-galera = callPackage ../servers/sql/mariadb/galera { };
 
   inherit (import ../servers/sql/mariadb pkgs)
     mariadb_104
