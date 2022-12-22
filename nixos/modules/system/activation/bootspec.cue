@@ -1,4 +1,5 @@
 #V1: {
+	system:         string
 	init:           string
 	initrd?:        string
 	initrdSecrets?: string

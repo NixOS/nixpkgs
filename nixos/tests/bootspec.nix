@@ -90,6 +90,32 @@ in
     '';
   };
 
+  # Check that initrd create corresponding entries in bootspec.
+  initrd = makeTest {
+    name = "bootspec-with-initrd";
+    meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+
+    nodes.machine = {
+      imports = [ standard ];
+      environment.systemPackages = [ pkgs.jq ];
+      # It's probably the case, but we want to make it explicit here.
+      boot.initrd.enable = true;
+    };
+
+    testScript = ''
+      import json
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("test -e /run/current-system/bootspec/boot.json")
+
+      bootspec = json.loads(machine.succeed("jq -r '.v1' /run/current-system/bootspec/boot.json"))
+
+      assert all(key in bootspec for key in ('initrd', 'initrdSecrets')), "Bootspec should contain initrd or initrdSecrets field when initrd is enabled"
+    '';
+  };
+
   # Check that specialisations create corresponding entries in bootspec.
   specialisation = makeTest {
     name = "bootspec-with-specialisation";
