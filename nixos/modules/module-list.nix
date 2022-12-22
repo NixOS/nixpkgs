@@ -180,6 +180,7 @@
   ./programs/hamster.nix
   ./programs/htop.nix
   ./programs/iftop.nix
+  ./programs/i3lock.nix
   ./programs/iotop.nix
   ./programs/java.nix
   ./programs/k3b.nix
