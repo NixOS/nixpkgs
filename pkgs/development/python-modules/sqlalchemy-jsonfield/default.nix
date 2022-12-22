@@ -49,8 +49,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
     description = "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";
+    homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
+    changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ivan-tkatchev ];
   };
