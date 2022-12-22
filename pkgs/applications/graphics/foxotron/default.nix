@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WjsVvFhwVCzclHxA+Gu2YtR2yK0Opqhncwlg9FEhOLk=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+  '';
+
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ zlib ]
@@ -70,7 +75,5 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
