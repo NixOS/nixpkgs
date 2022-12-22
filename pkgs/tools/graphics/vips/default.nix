@@ -9,8 +9,10 @@
 , python3
 , fetchFromGitHub
 , fetchpatch
-, autoreconfHook
+, meson
+, ninja
 , gtk-doc
+, docbook-xsl-nons
 , gobject-introspection
   # Optional dependencies
 , libjpeg
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
   pname = "vips";
   version = "8.13.3";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = [ "bin" "out" "man" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
@@ -56,8 +58,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
+    meson
+    ninja
     gtk-doc
+    docbook-xsl-nons
     gobject-introspection
   ];
 
@@ -95,9 +99,13 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dcgif=disabled"
+    "-Dspng=disabled"
+    "-Dpdfium=disabled"
+    "-Dnifti=disabled"
+  ];
 
   meta = with lib; {
     homepage = "https://libvips.github.io/libvips/";
