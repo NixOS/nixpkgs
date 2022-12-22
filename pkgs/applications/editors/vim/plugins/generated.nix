@@ -2309,6 +2309,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/denite.nvim/";
   };
 
+  denops-vim = buildVimPluginFrom2Nix {
+    pname = "denops.vim";
+    version = "2022-12-13";
+    src = fetchFromGitHub {
+      owner = "vim-denops";
+      repo = "denops.vim";
+      rev = "ec67c68cbc5eec720a34749479f053b46c8c9f07";
+      sha256 = "04s8c4ph62bm6vjnvqsfqp96pgm38vdl5lkld6zm71ffn4qmvikk";
+    };
+    meta.homepage = "https://github.com/vim-denops/denops.vim/";
+  };
+
   deol-nvim = buildVimPluginFrom2Nix {
     pname = "deol.nvim";
     version = "2022-11-24";

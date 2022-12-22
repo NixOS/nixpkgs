@@ -46,6 +46,7 @@
 , xkb-switch
 , ycmd
 , zoxide
+, deno
 , nodejs
 , xdotool
 , xorg
@@ -338,6 +339,9 @@ self: super: {
     dependencies = with self; [ nvim-yarp ];
   });
 
+  denops-vim = super.denops-vim.overrideAttrs (old: {
+    dependencies = [ deno ];
+  });
   deoplete-fish = super.deoplete-fish.overrideAttrs (old: {
     dependencies = with self; [ deoplete-nvim vim-fish ];
   });
