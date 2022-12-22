@@ -755,6 +755,7 @@ with lib.maintainers; {
   xfce = {
     members = [
       romildo
+      muscaln
     ];
     scope = "Maintain Xfce desktop environment and related packages.";
     shortName = "Xfce";
