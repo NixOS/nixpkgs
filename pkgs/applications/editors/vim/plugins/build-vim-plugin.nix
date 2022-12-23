@@ -1,9 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , rtpPath
-, vim
-, vimCommandCheckHook
-, vimGenDocHook
-, neovimRequireCheckHook
 , toVimPlugin
 }:
 
@@ -14,44 +11,46 @@ rec {
       overrideAttrs = f: addRtp (drv.overrideAttrs f);
     };
 
-  buildVimPlugin = attrs@{
-    name ? "${attrs.pname}-${attrs.version}",
-    namePrefix ? "vimplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
-    preInstall ? "",
-    postInstall ? "",
-    path ? ".",
-    addonInfo ? null,
-    meta ? { },
-    ...
-  }:
-    let drv = stdenv.mkDerivation (attrs // {
-      name = namePrefix + name;
+  buildVimPlugin =
+    { name ? "${attrs.pname}-${attrs.version}"
+    , namePrefix ? "vimplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ""
+    , buildPhase ? ""
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? "."
+    , addonInfo ? null
+    , meta ? { }
+    , ...
+    }@attrs:
+    let
+      drv = stdenv.mkDerivation (attrs // {
+        name = namePrefix + name;
 
-      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+        inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
+          target=$out/${rtpPath}/${path}
+          mkdir -p $out/${rtpPath}
+          cp -r . $target
 
-        runHook postInstall
-      '';
+          runHook postInstall
+        '';
 
-      meta = {
-        platforms = lib.platforms.all;
-      } // meta;
-    });
-    in addRtp (toVimPlugin drv);
+        meta = {
+          platforms = lib.platforms.all;
+        } // meta;
+      });
+    in
+    addRtp (toVimPlugin drv);
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this
     buildPhase = ":";
-    configurePhase =":";
+    configurePhase = ":";
   } // attrs);
 }
