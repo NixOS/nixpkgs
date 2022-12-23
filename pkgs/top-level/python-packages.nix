@@ -9589,6 +9589,8 @@ self: super: with self; {
 
   quantities = callPackage ../development/python-modules/quantities { };
 
+  quantiphy-eval = callPackage ../development/python-modules/quantiphy-eval { };
+
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
