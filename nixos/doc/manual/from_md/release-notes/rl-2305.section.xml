@@ -100,6 +100,26 @@
       </listitem>
       <listitem>
         <para>
+          <literal>minio</literal> removed support for it’s legacy
+          filesystem backend in
+          <link xlink:href="https://github.com/minio/minio/releases/tag/RELEASE.2022-10-29T06-21-33Z">RELEASE.2022-10-29T06-21-33Z</link>.
+          This means if your storage was created with the old format,
+          minio will no longer start. Unfortunately minio doesn’t
+          provide a an automatic migration, they only provide
+          <link xlink:href="https://min.io/docs/minio/windows/operations/install-deploy-manage/migrate-fs-gateway.html">instructions
+          how to manually convert the node</link>. To facilitate this
+          migration we keep around the last version that still supports
+          the old filesystem backend as
+          <literal>minio_legacy_fs</literal>. Use it via
+          <literal>services.minio.package = minio_legacy_fs;</literal>
+          to export your data before switching to the new version. See
+          the corresponding <link xlink:href="">issue</link>
+          https://github.com/NixOS/nixpkgs/issues/199318) for more
+          details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.sourcehut.dispatch</literal> and the
           corresponding package
           (<literal>sourcehut.dispatchsrht</literal>) have been removed
