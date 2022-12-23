@@ -28,7 +28,7 @@ let
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "0sz7zgs6gnb9naivdvkvpb1d6xhgh681h8qhgas18xnnp1kk60ad";
+    x86_64-darwin = "sha256-TQEzZ7jWdhS0ehAjGJCBD3bTwrp77rajsmnZZ/T752s=";
     x86_64-linux = "sha256-46WjFA+E9M7RfTOM/Xoho+9ooToSgQiZaMlcZ3lJvBQ=";
   }.${system} or throwSystem;
 
@@ -133,7 +133,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
+        + "macos%2F${version}/Wire.pkg";
       inherit sha256;
     };
 
