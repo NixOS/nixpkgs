@@ -9863,6 +9863,8 @@ self: super: with self; {
 
   rki-covid-parser = callPackage ../development/python-modules/rki-covid-parser { };
 
+  rkm-codes = callPackage ../development/python-modules/rkm-codes { };
+
   rlax = callPackage ../development/python-modules/rlax { };
 
   rl-coach = callPackage ../development/python-modules/rl-coach { };
