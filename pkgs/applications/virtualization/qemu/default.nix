@@ -34,6 +34,7 @@
                     else null)
 , nixosTestRunner ? false
 , doCheck ? false
+, docSupport ? true
 , qemu  # for passthru.tests
 }:
 
@@ -141,7 +142,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-docs"
     "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
@@ -168,7 +168,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
-    ++ lib.optional canokeySupport "--enable-canokey";
+    ++ lib.optional canokeySupport "--enable-canokey"
+    ++ lib.optional docSupport "--enable-docs";
 
   dontWrapGApps = true;
 
