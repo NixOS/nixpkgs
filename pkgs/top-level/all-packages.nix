@@ -973,7 +973,8 @@ with pkgs;
   makeShellWrapper = makeSetupHook
     { deps = [ dieHook ];
       substitutions = {
-        shell = targetPackages.runtimeShell;
+        # targetPackages.runtimeShell only exists when pkgs == targetPackages (when targetPackages is not  __raw)
+        shell = if targetPackages ? runtimeShell then targetPackages.runtimeShell else throw "makeWrapper/makeShellWrapper must be in nativeBuildInputs";
       };
       passthru = {
         tests = tests.makeWrapper;
