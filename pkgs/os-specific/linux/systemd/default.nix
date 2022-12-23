@@ -123,7 +123,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.3";
+  version = "252.4";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -140,7 +140,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-F2wtg12amigd5KNCWmG3b9Yu6PUOby9mQgZ2VFtxl5A==";
+    hash = "sha256-8ejSEt3QyCSARGGVbXWac2dB9jdUpC4eX2rN0iENQX0=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
