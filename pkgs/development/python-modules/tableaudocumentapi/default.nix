@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "tableaudocumentapi";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ahR+o4UgFLm/9aFsEqmlwXkcgTjqI0wU2Tl9EjVjLZs=";
+    sha256 = "sha256-g6V1UBf+P21FcZkR3PHoUmdmrQwEvjdd1VKhvNmvOys=";
   };
 
   propagatedBuildInputs = [ lxml ];
