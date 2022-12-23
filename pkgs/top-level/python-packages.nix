@@ -6709,6 +6709,8 @@ self: super: with self; {
 
   parameterized = callPackage ../development/python-modules/parameterized { };
 
+  parametrize-from-file = callPackage ../development/python-modules/parametrize-from-file { };
+
   paramiko = callPackage ../development/python-modules/paramiko { };
 
   paramz = callPackage ../development/python-modules/paramz { };
