@@ -458,6 +458,8 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
+  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
+
   dufs = callPackage ../servers/http/dufs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -2197,7 +2199,14 @@ with pkgs;
     callPackage ../applications/emulators/retroarch/wrapper.nix
       { inherit retroarch; };
 
-  retroarch = wrapRetroArch { retroarch = retroarchBare; };
+  retroarch = wrapRetroArch {
+    retroarch = retroarchBare.override {
+      withAssets = true;
+      withCoreInfo = true;
+    };
+  };
+
+  retroarch-assets = callPackage ../applications/emulators/retroarch/retroarch-assets.nix { };
 
   libretro = recurseIntoAttrs
     (callPackage ../applications/emulators/retroarch/cores.nix {
@@ -6017,6 +6026,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  cask-server = libsForQt5.callPackage ../applications/misc/cask-server { };
+
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true; };
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk3 = true; };
@@ -9436,6 +9447,8 @@ with pkgs;
   marktext = callPackage ../applications/misc/marktext { };
 
   mars-mips = callPackage ../development/tools/mars-mips { };
+
+  maui-shell = libsForQt5.callPackage ../applications/window-managers/maui-shell { };
 
   mawk = callPackage ../tools/text/mawk { };
 
@@ -19576,7 +19589,7 @@ with pkgs;
   grpc = callPackage ../development/libraries/grpc {
     # grpc builds with c++17 so abseil must also be built that way
     abseil-cpp = abseil-cpp_202206.override {
-      cxxStandard = "17";
+      cxxStandard = grpc.cxxStandard;
     };
   };
 
@@ -24367,9 +24380,7 @@ with pkgs;
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
   mariadb-connector-c_3_2 = callPackage ../servers/sql/mariadb/connector-c/3_2.nix { };
 
-  mariadb-galera = callPackage ../servers/sql/mariadb/galera {
-    asio = asio_1_10;
-  };
+  mariadb-galera = callPackage ../servers/sql/mariadb/galera { };
 
   inherit (import ../servers/sql/mariadb pkgs)
     mariadb_104
