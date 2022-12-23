@@ -14743,8 +14743,11 @@ with pkgs;
   julia-stable = julia_18;
   julia = julia-stable;
 
-  julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
-  julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
+  julia_16-bin =  let julia_16-bin' = callPackage ../development/compilers/julia/1.6-bin.nix { };
+                  in callPackage ../development/compilers/julia/with-packages.nix { julia = julia_16-bin'; };
+
+  julia_18-bin = let julia_18-bin' = callPackage ../development/compilers/julia/1.8-bin.nix { };
+                 in callPackage ../development/compilers/julia/with-packages.nix { julia = julia_18-bin'; };
 
   julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
 
