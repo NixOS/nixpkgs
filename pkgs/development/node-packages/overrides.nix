@@ -453,6 +453,10 @@ final: prev: {
     }
   );
 
+  rush = prev."@microsoft/rush".override {
+    name = "rush";
+  };
+
   ssb-server = prev.ssb-server.override (oldAttrs: {
     buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
     meta = oldAttrs.meta // { broken = since "10"; };
