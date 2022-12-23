@@ -15421,6 +15421,10 @@ with pkgs;
     buildRockCompiler = true;
   };
 
+  rocm-core = callPackage ../development/libraries/rocm-core {
+    stdenv = rocmClangStdenv;
+  };
+
   rocprim = callPackage ../development/libraries/rocprim {
     stdenv = rocmClangStdenv;
   };
