@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821au";
-  version = "${kernel.version}-unstable-2022-08-22";
+  version = "${kernel.version}-unstable-2022-12-22";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821au-20210708";
-    rev = "ac275a0ed806fb1c714d8f9194052d4638a68fca";
-    sha256 = "sha256-N86zyw5Ap07vk38OfjGfzP7++ysZCIUVnLuwxeY8yws=So";
+    rev = "73f2036bc6c8666555fa453d267d3732392c1e00";
+    sha256 = "sha256-wx7xQBCfLu3UWB7ghp8dZ7OB2MFd5i8X0/ygyvW2K50=";
   };
 
   nativeBuildInputs = [ bc nukeReferences ];
