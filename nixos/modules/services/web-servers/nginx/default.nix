@@ -402,7 +402,28 @@ let
     -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
     openssl x509 -req -days 1 -in server.csr -signkey $out/server.key -out $out/server.crt
   '';
-  validatedConfigFile = pkgs.runCommand "validated-nginx.conf" { nativeBuildInputs = [ cfg.package ]; } ''
+  fakednsConfig = builtins.toFile "fakednsConfig" ''
+    [Settings]
+    ListenOnPort = 53
+    [DomainPattern]
+    name_pattern = *
+    answer_A = 192.168.42.42
+    answer_AAAA = fdac:3d9f:2940:bddd::1
+  '';
+  nginxWithResolver = pkgs.writeShellScript "nginxWithResolver" ''
+    set -e
+    fakedns --config ${fakednsConfig} &
+    # wait for the server to be ready
+    for i in $(seq 1 1000); do
+      if getent hosts foo.bar; then
+        break
+      fi
+      sleep 1
+    done
+    nginx -t -c /etc/nginx.conf || true
+  '';
+
+  validatedConfigFile = pkgs.runCommand "validated-nginx.conf" { nativeBuildInputs = [ cfg.package pkgs.bubblewrap pkgs.fakedns pkgs.getent ]; } ''
     # nginx absolutely wants to read the certificates even when told to only validate config, so let's provide fake certs
     sed ${configFile} \
     -e "s|ssl_certificate .*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
@@ -410,16 +431,34 @@ let
     -e "s|ssl_certificate_key .*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
     > conf
 
-    LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so \
-      NIX_REDIRECTS="/etc/resolv.conf=/dev/null" \
-      nginx -t -c $(readlink -f ./conf) > out 2>&1 || true
+    # nginx absolutely wants to resolve hostnames of upstream servers during parsing.
+    # we run a fake dns server inside a network namespace to fake that.
+    mkdir -p root/etc
+    for i in passwd group hosts; do cp /etc/$i root/etc/; done
+    mkdir -p root/var/log/nginx
+    echo "nameserver 127.0.0.1" > root/etc/resolv.conf
+    cp conf root/etc/nginx.conf
+    bwrun="bwrap --unshare-net --cap-add CAP_NET_BIND_SERVICE --bind root / --bind /nix /nix"
+    if $bwrun true; then
+      # user namespaces are available
+      userns=yes;
+      $bwrun ${nginxWithResolver} > out 2>&1;
+    else
+      userns=no;
+      echo "user namespaces are not available, dns resolution will fail if required";
+      nginx -t -c $(readlink -f ./conf) > out 2>&1 || true;
+    fi
     if ! grep -q "syntax is ok" out; then
-      echo nginx config validation failed.
-      echo config was ${configFile}.
-      echo 'in case of false positive, set `services.nginx.validateConfig` to false.'
-      echo nginx output:
-      cat out
-      exit 1
+      if grep -q "host not found" out && [[ $userns == no ]]; then
+        echo "validation failed because user namespaces are not available and the configuration contains hostnames. Accepting config."
+      else
+        echo nginx config validation failed.
+        echo config was ${configFile}.
+        echo 'in case of false positive, set `services.nginx.validateConfig` to false.'
+        echo nginx output:
+        cat out
+        exit 1
+      fi
     fi
     cp ${configFile} $out
   '';
