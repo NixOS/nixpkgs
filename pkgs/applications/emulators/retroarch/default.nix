@@ -131,9 +131,16 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
+  '' +
+  lib.optionalString enableNvidiaCgToolkit ''
+    wrapProgram $out/bin/retroarch-cg2glsl \
+      --prefix PATH ':' ${lib.makeBinPath [ nvidia_cg_toolkit ]}
   '';
 
-  preFixup = "rm $out/bin/retroarch-cg2glsl";
+  preFixup = lib.optionalString (!enableNvidiaCgToolkit) ''
+    rm $out/bin/retroarch-cg2glsl
+    rm $out/share/man/man6/retroarch-cg2glsl.6*
+  '';
 
   passthru.tests = nixosTests.retroarch;
 
