@@ -150,7 +150,7 @@ in
           git init ${repositoryDirectory}
         fi
 
-        ${gitWithRepo} fetch ${cfg.repository} ${lib.escapeShellArg cfg.branch}
+        ${gitWithRepo} fetch ${lib.escapeShellArg cfg.repository} ${lib.escapeShellArg cfg.branch}
 
         ${gitWithRepo} checkout FETCH_HEAD
 
