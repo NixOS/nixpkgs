@@ -24,12 +24,12 @@ let
 
   version = {
     x86_64-darwin = "3.29.4490";
-    x86_64-linux = "3.29.3004";
+    x86_64-linux = "3.30.3018";
   }.${system} or throwSystem;
 
   sha256 = {
     x86_64-darwin = "0sz7zgs6gnb9naivdvkvpb1d6xhgh681h8qhgas18xnnp1kk60ad";
-    x86_64-linux = "02cv5xl0yswa23nl6a0yajyc4032wpfyih39vbfang9ig7mc71ai";
+    x86_64-linux = "sha256-46WjFA+E9M7RfTOM/Xoho+9ooToSgQiZaMlcZ3lJvBQ=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -65,7 +65,7 @@ let
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
+        + "Wire-${version}_amd64.deb";
       inherit sha256;
     };
 
