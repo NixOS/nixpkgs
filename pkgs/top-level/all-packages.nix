@@ -4444,6 +4444,8 @@ with pkgs;
 
   facter = callPackage ../tools/system/facter { };
 
+  fakedns = callPackage ../tools/networking/fakedns { };
+
   faketty = callPackage ../tools/misc/faketty { };
 
   fasd = callPackage ../tools/misc/fasd { };
