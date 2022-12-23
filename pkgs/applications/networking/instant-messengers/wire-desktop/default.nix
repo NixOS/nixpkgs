@@ -27,7 +27,7 @@ let
     x86_64-linux = "3.30.3018";
   }.${system} or throwSystem;
 
-  sha256 = {
+  hash = {
     x86_64-darwin = "sha256-TQEzZ7jWdhS0ehAjGJCBD3bTwrp77rajsmnZZ/T752s=";
     x86_64-linux = "sha256-46WjFA+E9M7RfTOM/Xoho+9ooToSgQiZaMlcZ3lJvBQ=";
   }.${system} or throwSystem;
@@ -66,7 +66,7 @@ let
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/"
         + "Wire-${version}_amd64.deb";
-      inherit sha256;
+      inherit hash;
     };
 
     desktopItem = makeDesktopItem {
@@ -134,7 +134,7 @@ let
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
         + "macos%2F${version}/Wire.pkg";
-      inherit sha256;
+      inherit hash;
     };
 
     buildInputs = [
