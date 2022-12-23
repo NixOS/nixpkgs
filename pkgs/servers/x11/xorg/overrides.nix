@@ -887,6 +887,11 @@ self: super:
           "--disable-tls"
         ];
 
+        NIX_CFLAGS_COMPILE = [
+          # Needed with GCC 12
+          "-Wno-error=array-bounds"
+        ];
+
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
