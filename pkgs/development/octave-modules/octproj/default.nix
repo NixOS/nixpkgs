@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "octproj";
-  version = "2.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1mb8gb0r8kky47ap85h9qqdvs40mjp3ya0nkh45gqhy67ml06paq";
+    sha256 = "sha256-G2Ajnt4KGaq9hdXHLHL+6d9lGb83wkMHZqswNijwSzs=";
   };
 
   # The sed changes below allow for the package to be compiled.

@@ -13,11 +13,11 @@
 
 buildOctavePackage rec {
   pname = "msh";
-  version = "1.0.10";
+  version = "1.0.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1mb5qrp9y1w1cbzrd9v84430ldy57ca843yspnrgbcqpxyyxbgfz";
+    sha256 = "sha256-7xbB+RXq5SE7Ke5rNwSo/mqdSZTzCLXRhS4zdfGz55s=";
   };
 
   nativeBuildInputs = [

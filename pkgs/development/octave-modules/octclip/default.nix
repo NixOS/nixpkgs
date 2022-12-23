@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "octclip";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "05ijh3izgfaan84n6zp690nap9vnz0zicjd0cgvd1c6askm7vxql";
+    sha256 = "sha256-u6wvCibdkLgmC8Q2LlpVLfXR3LYtssYlO2cRqYPmmR8=";
   };
 
   # The only compilation problem is that no formatting specifier was provided

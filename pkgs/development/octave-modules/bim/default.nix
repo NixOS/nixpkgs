@@ -7,11 +7,11 @@
 
 buildOctavePackage rec {
   pname = "bim";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0y70w8mj80c5yns1j7nwngwwrxp1pa87kyz2n2yvmc3zdigcd6g8";
+    sha256 = "sha256-pv64swrPlgopBlubpAlfoD9KJlOSgF9wdbgdHHTcr9c=";
   };
 
   requiredOctavePackages = [

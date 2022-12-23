@@ -7,11 +7,11 @@
 
 buildOctavePackage rec {
   pname = "strings";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1b0ravfvq3bxd0w3axjfsx13mmmkifmqz6pfdgyf2s8vkqnp1qng";
+    sha256 = "sha256-agpTD9FN1qdp+BYdW5f+GZV0zqZMNzeOdymdo27mTOI=";
   };
 
   buildInputs = [
