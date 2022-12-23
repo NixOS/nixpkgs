@@ -11185,6 +11185,8 @@ self: super: with self; {
     py = python.override { x11Support=true; };
   };
 
+  tidyexc = callPackage ../development/python-modules/tidyexc { };
+
   tidylib = callPackage ../development/python-modules/pytidylib { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
