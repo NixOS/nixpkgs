@@ -3,6 +3,7 @@
 , fetchurl
 , io # >= 2.2.7
 , geometry # >= 4.0.0
+, gdal
 }:
 
 buildOctavePackage rec {
@@ -13,6 +14,10 @@ buildOctavePackage rec {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
     sha256 = "sha256-mrUQWqC15Ul5AHDvhMlNStqIMG2Zxa+hB2vDyeizLaI=";
   };
+
+  buildInputs = [
+    gdal
+  ];
 
   requiredOctavePackages = [
     io
