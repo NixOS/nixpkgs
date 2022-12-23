@@ -24408,8 +24408,7 @@ with pkgs;
   mariadb = mariadb_106;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
 
-  mongodb = hiPrio mongodb-3_4;
-
+  mongodb = hiPrio mongodb-6_0;
   mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
     sasl = cyrus_sasl;
     boost = boost160;
