@@ -1,6 +1,6 @@
 { buildOctavePackage
 , lib
-, fetchurl
+, fetchFromGitHub
 # Octave Dependencies
 , splines
 # Other Dependencies
@@ -15,9 +15,11 @@ buildOctavePackage rec {
   pname = "msh";
   version = "1.0.12";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7xbB+RXq5SE7Ke5rNwSo/mqdSZTzCLXRhS4zdfGz55s=";
+  src = fetchFromGitHub {
+    owner = "carlodefalco";
+    repo = "msh";
+    rev = "v${version}";
+    sha256 = "sha256-UnMrIruzm3ARoTgUlMMxfjTOMZw/znZUQJmj3VEOw8I=";
   };
 
   nativeBuildInputs = [

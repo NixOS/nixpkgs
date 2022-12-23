@@ -1,6 +1,6 @@
 { buildOctavePackage
 , lib
-, fetchurl
+, fetchFromBitbucket
 , proj # >= 6.3.0
 }:
 
@@ -8,9 +8,11 @@ buildOctavePackage rec {
   pname = "octproj";
   version = "3.0.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-G2Ajnt4KGaq9hdXHLHL+6d9lGb83wkMHZqswNijwSzs=";
+  src = fetchFromBitbucket {
+    owner = "jgpallero";
+    repo = pname;
+    rev = "OctPROJ-${version}";
+    sha256 = "sha256-d/Zf172Etj+GA0cnGsQaKMjOmirE7Hwyj4UECpg7QFM=";
   };
 
   # The sed changes below allow for the package to be compiled.

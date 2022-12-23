@@ -1,6 +1,6 @@
 { buildOctavePackage
 , lib
-, fetchurl
+, fetchFromGitHub
 , fpl
 , msh
 }:
@@ -9,9 +9,11 @@ buildOctavePackage rec {
   pname = "bim";
   version = "1.1.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-pv64swrPlgopBlubpAlfoD9KJlOSgF9wdbgdHHTcr9c=";
+  src = fetchFromGitHub {
+    owner = "carlodefalco";
+    repo = "bim";
+    rev = "v${version}";
+    sha256 = "sha256-hgFb1KFE1KJC8skIaeT/7h/fg1aqRpedGnEPY24zZSI=";
   };
 
   requiredOctavePackages = [

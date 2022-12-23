@@ -1,6 +1,6 @@
 { buildOctavePackage
 , lib
-, fetchurl
+, fetchFromGitHub
 , io
 }:
 
@@ -8,9 +8,11 @@ buildOctavePackage rec {
   pname = "statistics";
   version = "1.5.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JtXwR7bfFcRu6zRD1gGYG06Txmcu42w2C+zMXEiFf/U=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "statistics";
+    rev = "release-${version}";
+    sha256 = "sha256-+Eye29vH4HBfaZRzRNY6J0+wWjh6aCvnq7hZ7M34L2M=";
   };
 
   requiredOctavePackages = [
