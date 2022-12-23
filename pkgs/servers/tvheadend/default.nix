@@ -78,6 +78,8 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"
+    # Needed with GCC 12
+    "-Wno-error=use-after-free"
   ];
 
   configureFlags = [

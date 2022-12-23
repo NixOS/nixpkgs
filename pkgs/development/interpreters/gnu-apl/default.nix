@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
     # Needed with GCC 11
     "-Wno-error=misleading-indentation"
+    # Needed with GCC 12
+    "-Wno-error=nonnull"
+    "-Wno-error=stringop-overflow"
+    "-Wno-error=use-after-free"
    ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = lib.optionalString stdenv.isDarwin ''

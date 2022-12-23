@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
+    "-Wno-error=uninitialized"
+  ];
+
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 
   meta = {

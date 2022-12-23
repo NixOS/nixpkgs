@@ -51,6 +51,11 @@ let
         --replace '"clang++"' '"clang++-UNSUPPORTED"'
     '';
 
+    NIX_CFLAGS_COMPILE = [
+      # Needed with GCC 12
+      "-Wno-error=use-after-free"
+    ];
+
     makeFlags = [ "PREFIX=$(out)" ];
     buildPhase = ''
       common="$makeFlags -j$NIX_BUILD_CORES"

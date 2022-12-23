@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-overflow"
+    # Needed with GCC 12
+    "-Wno-error=use-after-free"
   ];
 
   propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];

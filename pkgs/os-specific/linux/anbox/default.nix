@@ -85,6 +85,11 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=mismatched-new-delete"
+  ];
+
   patchPhase = ''
     patchShebangs scripts
 

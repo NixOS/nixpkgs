@@ -60,6 +60,11 @@ let
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
           ];
 
+        NIX_CFLAGS_COMPILE = [
+          # Needed with GCC 12
+          "-Wno-error=missing-template-keyword"
+        ];
+
         inherit patches;
 
         # fix up the use of the very weird and custom 'fdb_install' command by just

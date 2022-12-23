@@ -40,6 +40,11 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=dangling-pointer"
+  ];
+
   preInstall = lib.optionalString withDriver ''
     mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
     mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \

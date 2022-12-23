@@ -30,6 +30,11 @@ buildGoModule {
     export GOARCH=$(go env GOHOSTARCH)
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
+  ];
+
   buildPhase = ''
     ninjaBuildPhase
   '';

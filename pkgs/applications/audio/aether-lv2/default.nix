@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     lv2 libX11 libGL libGLU mesa
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+    "-Wno-error=stringop-overflow"
+  ];
+
   installPhase = ''
     mkdir -p $out/lib/lv2
     cp -r aether.lv2 $out/lib/lv2

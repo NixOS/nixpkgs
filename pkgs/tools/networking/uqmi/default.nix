@@ -18,6 +18,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ libubox json_c ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=dangling-pointer"
+  ];
+
   meta = with lib; {
     description = "Tiny QMI command line utility";
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";

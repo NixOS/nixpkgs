@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbsd microsoft_gsl ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=array-parameter"
+    "-Wno-error=misleading-indentation"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/twosigma/iqueue";
     description = "Indexed queue";
