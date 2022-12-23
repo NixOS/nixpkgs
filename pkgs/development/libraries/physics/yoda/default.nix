@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python
+, root
+, makeWrapper
+, zlib
+, withRootSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
@@ -9,11 +18,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-jQe7BNy3k2SFhxihggNFLY2foAAp+pQjnq+oUpAyuP8=";
   };
 
-  nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
-  buildInputs = [ python ]
-    ++ (with python.pkgs; [ numpy matplotlib ])
-    ++ lib.optional withRootSupport root;
-  propagatedBuildInputs = [ zlib ];
+  nativeBuildInputs = with python.pkgs; [
+    cython
+    makeWrapper
+  ];
+
+  buildInputs = [
+    python
+  ] ++ (with python.pkgs; [
+    numpy
+    matplotlib
+  ]) ++ lib.optional withRootSupport [
+    root
+  ];
+
+  propagatedBuildInputs = [
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
@@ -31,13 +52,15 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   doInstallCheck = true;
+
   installCheckTarget = "check";
 
-  meta = {
+  meta = with lib; {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${version}/ChangeLog";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }
