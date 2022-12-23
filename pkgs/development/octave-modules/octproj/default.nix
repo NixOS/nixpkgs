@@ -30,6 +30,5 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "GNU Octave bindings to PROJ library for cartographic projections and CRS transformations";
-    broken = true; # error: unlink: operation failed: No such file or directory
   };
 }
