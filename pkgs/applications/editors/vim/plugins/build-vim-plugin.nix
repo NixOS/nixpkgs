@@ -25,6 +25,7 @@ rec {
     postInstall ? "",
     path ? ".",
     addonInfo ? null,
+    meta ? { },
     ...
   }:
     let drv = stdenv.mkDerivation (attrs // {
@@ -41,6 +42,10 @@ rec {
 
         runHook postInstall
       '';
+
+      meta = {
+        platforms = lib.platforms.all;
+      } // meta;
     });
     in addRtp (toVimPlugin drv);
 
