@@ -150,6 +150,55 @@
       </listitem>
       <listitem>
         <para>
+          The NixOS module for
+          <link linkend="opt-services.slurm.enableStools">Slurm</link>
+          has been converted to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> conforming configuration. All settings related to
+          <literal>slurm.conf</literal>,
+          <literal>cgroups.conf</literal>, and
+          <literal>slurmdbd.conf</literal> are now in
+          <link linkend="opt-services.slurm.settings">services.slurm.settings</link>,
+          <link linkend="opt-services.slurm.settingsCgroup">services.slurm.settingsCgroup</link>,
+          and
+          <link linkend="opt-services.slurm.dbdserver.settings">services.slurm.dbdserver.settings</link>
+          respectively. The following example outlines how an existing
+          configuration can be re-written. Before NixOS 23.05:
+        </para>
+        <programlisting language="nix">
+  services.slurm = {
+    controlMachine = &quot;control&quot;;
+    nodeName = [ &quot;node[1-3] CPUs=1 State=UNKNOWN&quot; ];
+    partitionName = [ &quot;debug Nodes=node[1-3] Default=YES MaxTime=INFINITE State=UP&quot; ];
+    extraConfig = ''
+      AccountingStorageHost=dbd
+      AccountingStorageType=accounting_storage/slurmdbd
+    '';
+  };
+</programlisting>
+        <para>
+          From NixOS 23.05 onwards:
+        </para>
+        <programlisting language="nix">
+  services.slurm.settings = {
+    SlurmctldHost = &quot;control&quot;;
+    nodeName.&quot;node[1-3]&quot; = {
+      CPUs = 1;
+      State = &quot;UNKNOWN&quot;;
+    };
+    partitionName.debug = {
+      Nodes = &quot;node[1-3]&quot;;
+      Default = true;
+      MaxTime = &quot;INFINITE&quot;;
+      State = &quot;UP&quot;;
+    };
+    AccountingStorageHost = &quot;dbd&quot;;
+    AccountingStorageType = &quot;accounting_storage/slurmdbd&quot;;
+  };
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and automatically
           mounted ext3-formatted instance store devices and partitions
           in stage-1 (initramfs), storing <literal>/tmp</literal> on the
