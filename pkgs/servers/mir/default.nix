@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
     sed -i "s|/@CMAKE_INSTALL_INCLUDEDIR@|@CMAKE_INSTALL_INCLUDEDIR@|" src/wayland/mirwayland.pc.in
     sed -i "s|/@CMAKE_INSTALL_LIBDIR@|@CMAKE_INSTALL_LIBDIR@|" src/platform/mirplatform.pc.in
     sed -i "s|/@CMAKE_INSTALL_INCLUDEDIR@|@CMAKE_INSTALL_INCLUDEDIR@|" src/platform/mirplatform.pc.in
+    sed -i "s|/@CMAKE_INSTALL_LIBDIR@|@CMAKE_INSTALL_LIBDIR@|" src/server/mirserver.pc.in
+    sed -i "s|/@CMAKE_INSTALL_INCLUDEDIR@|@CMAKE_INSTALL_INCLUDEDIR@|" src/server/mirserver.pc.in
+    sed -i "s|/@CMAKE_INSTALL_LIBDIR@|@CMAKE_INSTALL_LIBDIR@|" src/cookie/mircookie.pc.in
+    sed -i "s|/@CMAKE_INSTALL_INCLUDEDIR@|@CMAKE_INSTALL_INCLUDEDIR@|" src/cookie/mircookie.pc.in
+    sed -i "s|/@CMAKE_INSTALL_LIBDIR@|@CMAKE_INSTALL_LIBDIR@|" src/common/mircommon.pc.in
+    sed -i "s|/@CMAKE_INSTALL_INCLUDEDIR@|@CMAKE_INSTALL_INCLUDEDIR@|" src/common/mircommon.pc.in
   '';
 
   nativeBuildInputs = [
