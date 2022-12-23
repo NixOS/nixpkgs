@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.6";
+  version = "1.9.7";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-IVI/ova2yPM0iVnzqUhzSpMMollR08kZC0Qk4Tc18qQ=";
+    hash = "sha256-jQe7BNy3k2SFhxihggNFLY2foAAp+pQjnq+oUpAyuP8=";
   };
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
