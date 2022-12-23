@@ -10274,6 +10274,8 @@ self: super: with self; {
 
   sh = callPackage ../development/python-modules/sh { };
 
+  shlib = callPackage ../development/python-modules/shlib { };
+
   shellescape = callPackage ../development/python-modules/shellescape { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
