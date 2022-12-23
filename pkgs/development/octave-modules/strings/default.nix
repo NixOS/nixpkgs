@@ -2,7 +2,8 @@
 , stdenv
 , lib
 , fetchurl
-, pcre
+, pkg-config
+, pcre2
 }:
 
 buildOctavePackage rec {
@@ -14,8 +15,12 @@ buildOctavePackage rec {
     sha256 = "sha256-agpTD9FN1qdp+BYdW5f+GZV0zqZMNzeOdymdo27mTOI=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
-    pcre
+    pcre2
   ];
 
   # The gripes library no longer exists.
