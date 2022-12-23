@@ -9,6 +9,7 @@
 , libssh2
 , openssl
 , wxGTK32
+, gitUpdater
 }:
 
 gcc12Stdenv.mkDerivation rec {
@@ -87,6 +88,10 @@ gcc12Stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";
