@@ -44,6 +44,11 @@ rustPlatform.buildRustPackage {
     hash = "sha256-7iYiSO966o0M9M0ijGCpuRVRgus+tURLBN9S5lPDRb8=";
   };
 
+  patches = [
+    # replace with https://github.com/vectordotdev/vector/pull/15093 when ready
+    ./fix-for-rust-1.66.diff
+  ];
+
   cargoHash = "sha256-EqK6r/pFFKmnpPPUhqdC3bztYQZ+2w7u7V8Rj+9oWII=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
