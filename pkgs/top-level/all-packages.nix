@@ -17307,6 +17307,8 @@ with pkgs;
 
   fprettify = callPackage ../development/tools/fprettify { };
 
+  fortls = python3.pkgs.callPackage ../development/tools/fortls { };
+
   fortran-language-server = python3.pkgs.callPackage ../development/tools/fortran-language-server { };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
