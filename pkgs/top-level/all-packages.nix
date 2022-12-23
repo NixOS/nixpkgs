@@ -15310,11 +15310,11 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_65 = callPackage ../development/compilers/rust/1_65.nix {
+  rust_1_66 = callPackage ../development/compilers/rust/1_66.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_65;
+  rust = rust_1_66;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -15323,8 +15323,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_65 = rust_1_65.packages.stable;
-  rustPackages = rustPackages_1_65;
+  rustPackages_1_66 = rust_1_66.packages.stable;
+  rustPackages = rustPackages_1_66;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
