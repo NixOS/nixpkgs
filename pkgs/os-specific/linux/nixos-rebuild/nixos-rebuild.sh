@@ -35,6 +35,16 @@ verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+testInstrumented="$NIXOS_REBUILD_TEST_INSTRUMENTED"
+
+# log the given argument to stderr
+log() {
+    if [ -n "$testInstrumented" ]; then
+        jq '{ tag: "log", argv: $ARGS.positional }' --compact-output --null-input --args -- "$@" >&2
+    else
+        echo "$@" >&2
+    fi
+}
 
 # log the given argument to stderr
 log() {
@@ -161,13 +171,22 @@ fi
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
     if [ -n "$verboseScript" ]; then
-      echo "$@" >&2
+        if [ -n "$testInstrumented" ]; then
+            jq '{ tag: "log_verbose", argv: $ARGS.positional }' --compact-output --null-input --args -- "$@" >&2
+        else
+            echo "$@" >&2
+        fi
     fi
 }
 
 # Run a command, logging it first if verbose mode is on
 runCmd() {
-    logVerbose "$" "$@"
+    # if we are instrumented for testing, print the command
+    if [ -n "$testInstrumented" ]; then
+        jq '{ tag: "run_command", argv: $ARGS.positional }' --compact-output --null-input --args -- "$@" >&2
+    else
+        logVerbose "$" "$@"
+    fi
     "$@"
 }
 
