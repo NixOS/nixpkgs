@@ -36119,7 +36119,20 @@ with pkgs;
 
   lie = callPackage ../applications/science/math/LiE { };
 
-  magma = callPackage ../development/libraries/science/math/magma { };
+  magma = callPackage ../development/libraries/science/math/magma {
+    inherit (llvmPackages_rocm) openmp;
+  };
+
+  magma-cuda = magma.override {
+    useCUDA = true;
+    useROCM = false;
+  };
+
+  magma-hip = magma.override {
+    useCUDA = false;
+    useROCM = true;
+  };
+
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
