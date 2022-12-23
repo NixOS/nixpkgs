@@ -53,6 +53,9 @@ self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
     process = self.process_1_6_16_0;
+    # Prevent dependency on doctest which causes an inconsistent dependency
+    # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
+    vector = dontCheck super.vector;
   });
   cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
