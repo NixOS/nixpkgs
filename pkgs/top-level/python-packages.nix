@@ -2941,6 +2941,8 @@ self: super: with self; {
 
   embrace = callPackage ../development/python-modules/embrace { };
 
+  emborg = callPackage ../development/python-modules/emborg { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emv = callPackage ../development/python-modules/emv { };
