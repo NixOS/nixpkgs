@@ -4169,6 +4169,8 @@ self: super: with self; {
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
+  hassil = callPackage ../development/python-modules/hassil { };
+
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
