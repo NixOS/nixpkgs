@@ -15419,9 +15419,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
-  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
 
