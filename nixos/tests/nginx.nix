@@ -59,6 +59,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         services.nginx.package = pkgs.nginxMainline;
       };
 
+      # configuration validation must not fail when configuration references
+      # unreachable hostnames, https://github.com/NixOS/nixpkgs/issues/207409
+      specialisation.configValidationRegression.configuration = {
+        services.nginx.virtualHosts."1.my.test".locations."/".proxyPass = "http://some.other.domain";
+        services.nginx.upstreams."yay".servers."1.2.3.4:3000" = {};
+      };
+
       specialisation.reloadWithErrorsSystem.configuration = {
         services.nginx.package = pkgs.nginxMainline;
         services.nginx.virtualHosts."hello".extraConfig = "access_log /does/not/exist.log;";
