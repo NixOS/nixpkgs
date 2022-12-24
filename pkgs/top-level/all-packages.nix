@@ -18973,6 +18973,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
 
+  eglexternalplatform = callPackage ../development/libraries/eglexternalplatform {};
+
   egl-wayland = callPackage ../development/libraries/egl-wayland {};
 
   elastix = callPackage ../development/libraries/science/biology/elastix {
