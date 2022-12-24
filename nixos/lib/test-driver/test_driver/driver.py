@@ -220,6 +220,20 @@ class Driver:
                 res = driver.polling_conditions.pop()
                 assert res is self.condition
 
+            def wait(self, timeout: int = 900) -> None:
+                def condition(last: bool) -> bool:
+                    if last:
+                        rootlog.info(f"Last chance for {self.condition.description}")
+                    ret = self.condition.check(force=True)
+                    if not ret and not last:
+                        rootlog.info(
+                            f"({self.condition.description} failure not fatal yet)"
+                        )
+                    return ret
+
+                with rootlog.nested(f"waiting for {self.condition.description}"):
+                    retry(condition, timeout=timeout)
+
         if fun_ is None:
             return Poll
         else:
