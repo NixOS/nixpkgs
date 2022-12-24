@@ -36,11 +36,14 @@ in
   #
   # This works around that by using a public DNS server other than the DNS
   # server that QEMU provides (normally 10.0.2.3)
-  networking.nameservers = [ "8.8.8.8" ];
+  networking.nameservers = let
+    ns = config.networking.nameservers;
+  in if ns == [ ] then
+    [ "8.8.8.8" ]
+    else
+     ns;
 
   nix.settings = {
-    auto-optimise-store = true;
-
     min-free = 1024 * 1024 * 1024;
 
     max-free = 3 * 1024 * 1024 * 1024;
@@ -62,11 +65,11 @@ in
 
       # This installCredentials script is written so that it's as easy as
       # possible for a user to audit before confirming the `sudo`
-      installCredentials = pkgs.writeShellScript "install-credentials" ''
-        KEYS="''${1}"
-        INSTALL=${hostPkgs.coreutils}/bin/install
-        "''${INSTALL}" -g nixbld -m 600 "''${KEYS}/${user}_${keyType}" ${privateKey}
-        "''${INSTALL}" -g nixbld -m 644 "''${KEYS}/${user}_${keyType}.pub" ${publicKey}
+      installCredentials = let
+        install = hostPkgs.coreutils}/bin/install;
+      in pkgs.writeShellScript "install-credentials" ''
+        "${install}" -g nixbld -m 600 "''${1}/${user}_${keyType}" ${privateKey}
+        "${install}" -g nixbld -m 644 "''${1}/${user}_${keyType}.pub" ${publicKey}
       '';
 
       hostPkgs = config.virtualisation.host.pkgs;
@@ -93,7 +96,7 @@ in
         };
       });
 
-  system.stateVersion = "22.05";
+  inherit (config.system) stateVersion;
 
   users.users."${user}"= {
     isNormalUser = true;
