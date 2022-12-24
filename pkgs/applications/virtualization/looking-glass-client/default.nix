@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeDesktopItem, cmake, pkg-config
+{ stdenv, lib, fetchurl, makeDesktopItem, cmake, pkg-config
 , freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libffi, expat
 , libxkbcommon, libGL, libXext, libXrandr, libXi, libXScrnSaver, libXinerama
 , libXcursor, libXpresent, wayland, wayland-protocols
@@ -18,15 +18,16 @@ stdenv.mkDerivation rec {
   pname = "looking-glass-client";
   version = "B5.0.1";
 
-  src = fetchFromGitHub {
-    owner = "gnif";
-    repo = "LookingGlass";
-    rev = version;
-    sha256 = "sha256-UzZQU5SzJ2mo9QBweQB0VJSnKfzgTG5QaKpIQN/6LCE=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://looking-glass.io/artifact/${version}/source";
+    sha256 = "sha256-9gVoWkNV67zeBotC5q19QFISEOuPa5XMyioiS/qJNt0=";
+    name = "looking-glass-${version}-source.tar.gz";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     libGL
@@ -51,15 +52,21 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ];
 
-  postUnpack = ''
-    echo ${src.rev} > source/VERSION
-    export sourceRoot="source/client"
+  setSourceRoot = ''
+    export sourceRoot=$(realpath */client)
+  '';
+
+  preConfigure = ''
+    if [[ ! -f ../VERSION ]]; then
+      echo 'Missing VERSION file'
+      exit 1
+    fi
   '';
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
     ln -s ${desktopItem}/share/applications $out/share/
-    cp $src/resources/lg-logo.png $out/share/pixmaps
+    cp ../../resources/lg-logo.png $out/share/pixmaps
   '';
 
   meta = with lib; {
