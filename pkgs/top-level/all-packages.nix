@@ -9323,6 +9323,7 @@ with pkgs;
   lomiri = libsForQt5.callPackage ../desktops/lomiri { };
   lomiri-api = callPackage ../desktops/lomiri/core/lomiri-api { };
   lomiri-app-launch = callPackage ../desktops/lomiri/core/lomiri-app-launch { };
+  lomiri-click = callPackage ../desktops/lomiri/core/lomiri-click { };
 
   longview = callPackage ../servers/monitoring/longview { };
 
