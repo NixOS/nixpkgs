@@ -22,6 +22,14 @@ stdenv.mkDerivation {
     # Fix tests with shared library.
     # https://github.com/ianlancetaylor/libbacktrace/pull/99
     ./0001-libbacktrace-avoid-libtool-wrapping-tests.patch
+
+    # Support multiple debug dirs.
+    # https://github.com/ianlancetaylor/libbacktrace/pull/100
+    ./0002-libbacktrace-Allow-configuring-debug-dir.patch
+    ./0003-libbacktrace-Support-multiple-build-id-directories.patch
+
+    # Support NIX_DEBUG_INFO_DIRS environment variable.
+    ./0004-libbacktrace-Support-NIX_DEBUG_INFO_DIRS-environment.patch
   ];
 
   nativeBuildInputs = [
