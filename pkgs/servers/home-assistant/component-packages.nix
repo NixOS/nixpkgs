@@ -429,7 +429,8 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-    ]; # missing inputs: btsmarthub_devicelist
+      btsmarthub_devicelist
+    ];
     "bthome" = ps: with ps; [
       aiohttp-cors
       bleak-retry-connector
