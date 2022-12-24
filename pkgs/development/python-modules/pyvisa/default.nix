@@ -5,11 +5,14 @@
 , setuptools
 , typing-extensions
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyvisa";
   version = "1.13.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
