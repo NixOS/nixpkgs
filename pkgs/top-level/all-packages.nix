@@ -26083,6 +26083,8 @@ with pkgs;
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
 
+  sgx-azure-dcap-client = callPackage ../os-specific/linux/sgx/azure-dcap-client { };
+
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
   sgx-ssl = callPackage ../os-specific/linux/sgx/ssl { };
