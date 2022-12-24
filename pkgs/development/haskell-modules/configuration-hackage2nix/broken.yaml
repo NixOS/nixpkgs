@@ -1755,6 +1755,7 @@ broken-packages:
   - ghc-time-alloc-prof
   - ghc-usage
   - gh-labeler
+  - gi-adwaita
   - giak
   - gi-cogl
   - Gifcurry
@@ -3558,6 +3559,7 @@ broken-packages:
   - networked-game
   - network-house
   - network-manager-tui
+  - network-messagepack-rpc-websocket
   - network-metrics
   - network-msg
   - network-msgpack-rpc
@@ -4492,6 +4494,7 @@ broken-packages:
   - ron
   - rope
   - rosebud
+  - rose-trees
   - rosmsg
   - rosso
   - rotating-log
@@ -4797,6 +4800,7 @@ broken-packages:
   - skeletal-set
   - skell
   - skemmtun
+  - skews
   - skulk
   - skylighting-extensions
   - skylighting-lucid
@@ -5402,6 +5406,7 @@ broken-packages:
   - TrendGraph
   - trhsx
   - trial-tomland
+  - tries
   - trigger
   - trim
   - tripLL
@@ -5784,6 +5789,7 @@ broken-packages:
   - writer-cps-morph
   - wsdl
   - wsedit
+  - wss-client
   - wtk
   - wumpus-core
   - wxdirect
@@ -5958,7 +5964,9 @@ broken-packages:
   - zephyr
   - zero
   - zeromq3-haskell
+  - zeromq4-clone-pattern
   - zeromq4-conduit
+  - zeromq4-patterns
   - zeromq-haskell
   - zettelkast
   - ZFS
@@ -5984,11 +5992,3 @@ broken-packages:
   - zxcvbn-dvorak
   - zydiskell
   - zyre2
-  - gi-adwaita
-  - network-messagepack-rpc-websocket
-  - rose-trees
-  - skews
-  - tries
-  - wss-client
-  - zeromq4-clone-pattern
-  - zeromq4-patterns
