@@ -1,21 +1,18 @@
 { lib
-, pkgs
-, pkgsBuildHost
+, python27
+, callPackage
 , ...
 }:
 
 let
-  python27' = (pkgsBuildHost.python27.overrideAttrs (old:
-    {
-      # Overriding `meta.knownVulnerabilities` here, see #201859 for why it exists
-      # In resholve case this should not be a security issue,
-      # since it will only be used during build, not runtime
-      meta = (old.meta or { }) // { knownVulnerabilities = [ ]; };
-    }
-  )).override {
-    self = python27';
-    pkgsBuildHost = pkgsBuildHost // { python27 = python27'; };
+  python27' = lib.addMetaAttrs {
+    # Overriding `meta.knownVulnerabilities` here, see #201859 for why it exists
+    # In resholve case this should not be a security issue,
+    # since it will only be used during build, not runtime
+    knownVulnerabilities = [ ];
+  } python27.override {
     # strip down that python version as much as possible
+    openssl = null;
     bzip2 = null;
     readline = null;
     ncurses = null;
@@ -83,9 +80,8 @@ let
     ];
     enableOptimizations = false;
   };
-  callPackage = lib.callPackageWith (pkgs // { python27 = python27'; });
-  source = callPackage ./source.nix { };
-  deps = callPackage ./deps.nix { };
+  source = callPackage ./source.nix { python27 = python27'; };
+  deps = callPackage ./deps.nix { python27 = python27'; };
 in
 rec {
   # resholve itself
