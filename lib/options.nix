@@ -104,8 +104,6 @@ rec {
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
-
      The package is specified as a list of strings representing its attribute path in nixpkgs.
 
      Because of this, you need to pass nixpkgs itself as the first argument.
@@ -115,6 +113,8 @@ rec {
      You can also pass an example value, either a literal string or a package's attribute path.
 
      You can omit the default path if the name of the option is also attribute path in nixpkgs.
+
+     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
