@@ -1,6 +1,7 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchurl
+, fetchpatch
 , isPy37
 , isPy38
 , isPy39
@@ -14,6 +15,8 @@
 , requests
 , setuptools
 , typing-extensions
+, unzip
+, zip
 }:
 
 let
@@ -33,9 +36,42 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-45907.patch";
+      url = "https://github.com/pytorch/pytorch/commit/74a9ca993bd79f8131829e9c946657fa9a1d05ef.patch";
+      # luckily the fix itself is confined to a single
+      # python file provided as source in the wheel, so
+      # we can patch it despite this nominally being a
+      # binary package
+      includes = [ "torch/jit/annotations.py" ];
+      sha256 = "sha256-KpLeuyF06hSeFeTncoYStIWsB8qv1b1X/ntPR59Xr1g=";
+    })
+  ];
+  # extract wheel, run normal patch phase, repack wheel.
+  # effectively a "wheelPatchPhase". not a normal thing
+  # to do but needs must.
+  patchPhase = ''
+    wheelFile="$(realpath -s dist/*.whl)"
+    pushd "$(mktemp -d)"
+
+    unzip -q "$wheelFile"
+
+    patchPhase
+
+    newZip="$(mktemp -d)"/new.zip
+    zip -rq "$newZip" *
+    rm -rf "$wheelFile"
+    cp "$newZip" "$wheelFile"
+
+    popd
+  '';
+
   nativeBuildInputs = [
     addOpenGLRunpath
     patchelf
+    unzip
+    zip
   ];
 
   propagatedBuildInputs = [
