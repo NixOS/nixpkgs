@@ -30962,6 +30962,8 @@ with pkgs;
 
   nwg-bar = callPackage ../applications/misc/nwg-bar { };
 
+  nwg-dock = callPackage ../applications/misc/nwg-dock { };
+
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
