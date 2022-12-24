@@ -38,4 +38,6 @@ mkDerivation {
   ];
   license = lib.licenses.asl20;
   maintainers = with lib.maintainers; [ lassulus ];
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 }
