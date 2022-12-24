@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "striprtf";
-  version = "0.0.21";
+  version = "0.0.22";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/wqYbdJ+OI/RTODnKB34e7zADHzCPEX0LkTausqFNtY=";
+    sha256 = "sha256-T7rb6EJPQStbJjv3L7PA2rTdtXTWCd1NCE9uK4sEQCs=";
   };
 
   pythonImportsCheck = [
