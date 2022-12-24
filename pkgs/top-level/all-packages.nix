@@ -17228,6 +17228,8 @@ with pkgs;
 
   egypt = callPackage ../development/tools/analysis/egypt { };
 
+  electron-fiddle = callPackage ../development/tools/electron-fiddle { };
+
   elf2uf2-rs = callPackage ../development/embedded/elf2uf2-rs { };
 
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
