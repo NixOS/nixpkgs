@@ -140,7 +140,12 @@ self: super: {
   haskell-language-server =  let
     # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
     # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
-    additionalDeps = with self.haskell-language-server.scope; [ hls-brittany-plugin hls-haddock-comments-plugin hls-splice-plugin hls-tactics-plugin ];
+    additionalDeps = with self.haskell-language-server.scope; [
+      hls-brittany-plugin
+      hls-haddock-comments-plugin
+      (unmarkBroken hls-splice-plugin)
+      (unmarkBroken hls-tactics-plugin)
+    ];
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     # Pick old ormolu and fourmolu because ghc-lib-parser is not compatible
     ormolu = doJailbreak lself.ormolu_0_1_4_1;
@@ -159,20 +164,19 @@ self: super: {
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24;
 
-  hls-brittany-plugin = addBuildDepends (with self.hls-brittany-plugin.scope; [
+  hls-brittany-plugin = unmarkBroken (addBuildDepends (with self.hls-brittany-plugin.scope; [
     brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
     ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
     brittany = doJailbreak lself.brittany_0_13_1_2;
-    multistate = dontCheck lsuper.multistate;
+    multistate = unmarkBroken (dontCheck lsuper.multistate);
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
-  }));
+  })));
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
-  hls-haddock-comments-plugin = addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
+  hls-haddock-comments-plugin = unmarkBroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
     ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
-  ]) super.hls-haddock-comments-plugin;
-
+  ]) super.hls-haddock-comments-plugin);
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
