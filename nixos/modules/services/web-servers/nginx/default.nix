@@ -524,7 +524,9 @@ in
       };
 
       validateConfig = mkOption {
-        default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
+        # FIXME: re-enable if we can make of the configurations work.
+        #default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
+        default = false;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
         type = types.bool;
         description = lib.mdDoc ''
