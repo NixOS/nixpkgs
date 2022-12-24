@@ -7,8 +7,8 @@
 , qtsensors
 , mir
 , libuuid
-#, mirclient
 , process-cpp
+, lomiri-app-launch
 }:
 
 mkDerivation rec {
@@ -36,8 +36,8 @@ mkDerivation rec {
     qtsensors
     mir
     libuuid
-    #mirclient
     process-cpp
+    lomiri-app-launch
   ];
 
   meta = with lib; {
