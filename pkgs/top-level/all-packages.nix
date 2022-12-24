@@ -33288,6 +33288,8 @@ with pkgs;
 
   cl-wordle = callPackage ../games/cl-wordle { };
 
+  wordbook = callPackage ../applications/misc/wordbook { };
+
   wordnet = callPackage ../applications/misc/wordnet {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
