@@ -100,6 +100,7 @@ let
   getKeyLocations = pool:
     if isBool cfgZfs.requestEncryptionCredentials
     then "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}"
+    else if (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials) == [ ] then ":"
     else "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}";
 
   createImportService = { pool, systemd, force, prefix ? "" }:
