@@ -12115,6 +12115,8 @@ with pkgs;
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
 
+  tarantool = callPackage ../servers/tarantool { };
+
   tarssh = callPackage ../servers/tarssh { };
 
   tartan = callPackage ../development/tools/analysis/tartan {};
