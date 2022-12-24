@@ -117,8 +117,6 @@ in
 
           It is possible it already did not work like you expected.
 
-          It never worked on the Raspberry Pi 4 family.
-
           These options will be removed by NixOS 24.11.
         ''
       ];
@@ -130,8 +128,6 @@ in
           for years, and is now formally deprecated.
 
           It is possible it already did not work like you expected.
-
-          It never worked on the Raspberry Pi 4 family.
 
           These options will be removed by NixOS 24.11.
         ''
