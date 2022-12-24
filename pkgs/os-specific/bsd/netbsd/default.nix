@@ -1,6 +1,6 @@
 { stdenv, lib, stdenvNoCC
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, buildPackages, splicePackages, newScope
+, makeScopeWithSplicing, generateSplicesForMkScope
+, buildPackages
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
 , zlib
 , writeShellScript, writeText, runtimeShell, symlinkJoin
@@ -20,24 +20,14 @@ let
     name = "netbsd-setup-hook";
   } ./setup-hook.sh;
 
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.netbsd;
-    selfBuildHost = pkgsBuildHost.netbsd;
-    selfBuildTarget = pkgsBuildTarget.netbsd;
-    selfHostHost = pkgsHostHost.netbsd;
-    selfTargetTarget = pkgsTargetTarget.netbsd or {}; # might be missing
-  };
-
   defaultMakeFlags = [
     "MKSOFTFLOAT=${if stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
       then "yes"
       else "no"}"
   ];
 
-in lib.makeScopeWithSplicing
-  splicePackages
-  newScope
-  otherSplices
+in makeScopeWithSplicing
+  (generateSplicesForMkScope "netbsd")
   (_: {})
   (_: {})
   (self: let
@@ -46,7 +36,7 @@ in lib.makeScopeWithSplicing
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   #
-  # We use `lib.makeScopeWithSplicing` because this should be used for all
+  # We use `makeScopeWithSplicing` because this should be used for all
   # nested package sets which support cross, so the inner `callPackage` works
   # correctly. But for the inline packages we don't bother to use
   # `callPackage`.

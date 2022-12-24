@@ -5,9 +5,8 @@
 , db
 , lib
 , libffiBoot
-, newScope
+, makeScopeWithSplicing
 , pythonPackagesExtensions
-, splicePackages
 , stdenv
 }:
 
@@ -71,9 +70,7 @@
             overrides
           ]);
           aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
-        in lib.makeScopeWithSplicing
-          splicePackages
-          newScope
+        in makeScopeWithSplicing
           otherSplices
           keep
           extra

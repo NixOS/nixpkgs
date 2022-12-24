@@ -1,31 +1,17 @@
 { config
 , lib
 , pkgs
-, splicePackages
-, newScope
-, pkgsBuildBuild
-, pkgsBuildHost
-, pkgsBuildTarget
-, pkgsHostHost
-, pkgsTargetTarget
+, generateSplicesForMkScope
+, makeScopeWithSplicing
 }:
 
 let
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.xfce;
-    selfBuildHost = pkgsBuildHost.xfce;
-    selfBuildTarget = pkgsBuildTarget.xfce;
-    selfHostHost = pkgsHostHost.xfce;
-    selfTargetTarget = pkgsTargetTarget.xfce or { };
-  };
   keep = _self: { };
   extra = _spliced0: { };
 
 in
-lib.makeScopeWithSplicing
-  splicePackages
-  newScope
-  otherSplices
+makeScopeWithSplicing
+  (generateSplicesForMkScope "xfce")
   keep
   extra
   (self:

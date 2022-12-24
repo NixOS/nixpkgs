@@ -1,6 +1,6 @@
 { stdenv, lib, stdenvNoCC
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, buildPackages, splicePackages, newScope
+, makeScopeWithSplicing, generateSplicesForMkScope
+, buildPackages
 , bsdSetupHook, makeSetupHook
 , fetchgit, fetchurl, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
 , zlib, expat, libmd
@@ -23,14 +23,6 @@ let
   freebsdSetupHook = makeSetupHook {
     name = "freebsd-setup-hook";
   } ./setup-hook.sh;
-
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.freebsd;
-    selfBuildHost = pkgsBuildHost.freebsd;
-    selfBuildTarget = pkgsBuildTarget.freebsd;
-    selfHostHost = pkgsHostHost.freebsd;
-    selfTargetTarget = pkgsTargetTarget.freebsd or {}; # might be missing
-  };
 
   mkBsdArch = stdenv':  {
     x86_64 = "amd64";
@@ -74,10 +66,8 @@ let
     done
   '';
 
-in lib.makeScopeWithSplicing
-  splicePackages
-  newScope
-  otherSplices
+in makeScopeWithSplicing
+  (generateSplicesForMkScope "freebsd")
   (_: {})
   (_: {})
   (self: let

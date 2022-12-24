@@ -24,7 +24,7 @@ let
         # - imports lua-packages.nix
         # - adds spliced package sets to the package set
         # - applies overrides from `packageOverrides`
-        ({ lua, overrides, callPackage, splicePackages, newScope }: let
+        ({ lua, overrides, callPackage, makeScopeWithSplicing }: let
           luaPackagesFun = callPackage ../../../top-level/lua-packages.nix {
             lua = self;
           };
@@ -47,9 +47,7 @@ let
             overriddenPackages
             overrides
           ];
-        in lib.makeScopeWithSplicing
-          splicePackages
-          newScope
+        in makeScopeWithSplicing
           otherSplices
           keep
           extra
