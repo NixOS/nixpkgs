@@ -24,11 +24,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/konradhalas/dacite/issues/167
-    "test_from_dict_with_union_and_wrong_data"
-  ];
-
   pythonImportsCheck = [
     "dacite"
   ];
