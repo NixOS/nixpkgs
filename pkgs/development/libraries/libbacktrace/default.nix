@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
-  version = "unstable-2020-05-13";
+  version = "unstable-2022-12-16";
 
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
     repo = "libbacktrace";
-    rev = "9b7f216e867916594d81e8b6118f092ac3fcf704";
-    sha256 = "0qr624v954gnfkmpdlfk66sxz3acyfmv805rybsaggw5gz5sd1nh";
+    rev = "da7eff2f37e38136c5a0c8922957b9dfab5483ef";
+    sha256 = "ADp8n1kUf8OysFY/Jv1ytxKjqgz1Nu2VRcFGlt1k/HM=";
   };
 
   configureFlags = [
