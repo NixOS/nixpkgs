@@ -170,7 +170,7 @@ in
 
         ${lib.optionalString (cfg.switchCommand == "boot")
           ''
-          if [ "$(readlink /run/current-system)" != "$SYSTEM" ]; then
+          if [[ /run/current-system -ef "$SYSTEM" ]]; then
               systemctl reboot
           fi
           ''
