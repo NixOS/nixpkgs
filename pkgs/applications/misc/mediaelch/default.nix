@@ -10,7 +10,7 @@
 , ffmpeg
 , libmediainfo
 , libzen
-, qt5compat
+, qt5compat ? null # qt6 only
 , qtbase
 , qtdeclarative
 , qtmultimedia
@@ -18,7 +18,9 @@
 , qtwayland
 , quazip
 }:
-
+let
+  qtVersion = lib.versions.major qtbase.version;
+in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
   version = "2.8.18";
@@ -42,20 +44,21 @@ stdenv.mkDerivation rec {
     ffmpeg
     libmediainfo
     libzen
-    qt5compat
     qtbase
     qtdeclarative
     qtmultimedia
     qtsvg
     qtwayland
     quazip
+  ] ++ lib.optional (qtVersion == "6") [
+    qt5compat
   ];
 
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"
     "-DUSE_EXTERN_QUAZIP=ON"
-    "-DMEDIAELCH_FORCE_QT6=ON"
+    "-DMEDIAELCH_FORCE_QT${qtVersion}=ON"
   ];
 
   # libmediainfo.so.0 is loaded dynamically

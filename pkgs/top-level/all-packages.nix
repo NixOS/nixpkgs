@@ -30388,7 +30388,9 @@ with pkgs;
 
   media-downloader = callPackage ../applications/video/media-downloader { };
 
-  mediaelch = qt6Packages.callPackage ../applications/misc/mediaelch { };
+  mediaelch = mediaelch-qt5;
+  mediaelch-qt5 = libsForQt5.callPackage ../applications/misc/mediaelch { };
+  mediaelch-qt6 = qt6Packages.callPackage ../applications/misc/mediaelch { };
 
   mediainfo = callPackage ../applications/misc/mediainfo { };
 
