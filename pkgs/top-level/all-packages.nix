@@ -10662,7 +10662,10 @@ with pkgs;
 
   plantuml-server = callPackage ../tools/misc/plantuml-server { };
 
-  plan9port = callPackage ../tools/system/plan9port { };
+  plan9port = darwin.apple_sdk_11_0.callPackage ../tools/system/plan9port {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit Metal QuartzCore;
+    inherit (darwin) DarwinTools;
+  };
 
   platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
   platformio = platformioPackages.platformio-chrootenv;
@@ -17475,6 +17478,8 @@ with pkgs;
   help2man = callPackage ../development/tools/misc/help2man { };
 
   heroku = callPackage ../development/tools/heroku { };
+
+  highlight-assertions = callPackage ../development/tools/misc/highlight-assertions { };
 
   ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
@@ -29612,6 +29617,8 @@ with pkgs;
   slack-cli = callPackage ../tools/networking/slack-cli { };
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
+
+  slweb = callPackage ../applications/misc/slweb { };
 
   singularity = callPackage ../applications/virtualization/singularity { };
 
