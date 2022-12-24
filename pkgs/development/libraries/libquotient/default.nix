@@ -15,11 +15,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    # we need libqtolm for this
-    "-DQuotient_ENABLE_E2EE=OFF"
-  ];
-
   # https://github.com/quotient-im/libQuotient/issues/551
   postPatch = ''
     substituteInPlace Quotient.pc.in \
