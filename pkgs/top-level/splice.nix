@@ -146,6 +146,24 @@ in
 
   newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
 
+  # prefill 2 fields of the function for convenience
+  makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
+
+  # generate 'otherSplices' for 'makeScopeWithSplicing'
+  generateSplicesForMkScope = attr:
+    let
+      split = X: lib.splitString "." "${X}.${attr}";
+    in
+    {
+      # nulls should never be reached
+      selfBuildBuild = lib.attrByPath (split "pkgsBuildBuild") null pkgs;
+      selfBuildHost = lib.attrByPath (split "pkgsBuildHost") null pkgs;
+      selfBuildTarget = lib.attrByPath (split "pkgsBuildTarget") null pkgs;
+      selfHostHost = lib.attrByPath (split "pkgsHostHost") null pkgs;
+      selfHostTarget = lib.attrByPath (split "pkgsHostTarget") null pkgs;
+      selfTargetTarget = lib.attrByPath (split "pkgsTargetTarget") { } pkgs;
+    };
+
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
   __splicedPackages = splicedPackages // { recurseForDerivations = false; };
