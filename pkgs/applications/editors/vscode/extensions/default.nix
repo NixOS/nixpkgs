@@ -3011,6 +3011,22 @@ let
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
+      waderyan.gitblame = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitblame";
+          publisher = "waderyan";
+          version = "10.1.0";
+          sha256 = "TTYBaJ4gcMVICz4bGZTvbNRPpWD4tXuAJbI8QcHNDv0=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";
+          description = "Visual Studio Code Extension - See Git Blame info in status bar";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=waderyan.gitblame";
+          homepage = "https://github.com/Sertion/vscode-gitblame";
+          license = lib.licenses.mit;
+        };
+      };
+
       WakaTime.vscode-wakatime = callPackage ./wakatime { };
 
       wingrunr21.vscode-ruby = buildVscodeMarketplaceExtension {
