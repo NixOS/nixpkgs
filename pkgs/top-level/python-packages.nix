@@ -12034,6 +12034,8 @@ self: super: with self; {
 
   wled = callPackage ../development/python-modules/wled { };
 
+  wn = callPackage ../development/python-modules/wn { };
+
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };

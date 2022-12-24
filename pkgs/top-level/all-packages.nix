@@ -10778,6 +10778,8 @@ with pkgs;
 
   polypane = callPackage ../applications/networking/browsers/polypane { };
 
+  pomsky = callPackage ../tools/text/pomsky { };
+
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
@@ -16514,6 +16516,8 @@ with pkgs;
   refurb = callPackage ../development/tools/refurb { };
 
   srandrd = callPackage ../tools/X11/srandrd { };
+
+  sratoolkit = callPackage ../applications/science/biology/sratoolkit { };
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
@@ -24450,11 +24454,18 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
-  mongodb-6_0 = callPackage ../servers/nosql/mongodb/6.0.nix {
+  mongodb-6_0 = darwin.apple_sdk_11_0.callPackage ../servers/nosql/mongodb/6.0.nix {
     sasl = cyrus_sasl;
     boost = boost178.override { enableShared = false; };
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    stdenv = if stdenv.isDarwin then
+      darwin.apple_sdk_11_0.stdenv.override (old: {
+        hostPlatform = old.hostPlatform // { darwinMinVersion = "10.14"; };
+        buildPlatform = old.buildPlatform // { darwinMinVersion = "10.14"; };
+        targetPlatform = old.targetPlatform // { darwinMinVersion = "10.14"; };
+      }) else
+      if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
   };
 
   nginx-sso = callPackage ../servers/nginx-sso { };
@@ -25443,6 +25454,8 @@ with pkgs;
   libargon2 = callPackage ../development/libraries/libargon2 { };
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
+
+  libax25 = callPackage ../development/libraries/libax25 { };
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
@@ -30858,6 +30871,7 @@ with pkgs;
   mpvScripts = recurseIntoAttrs {
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+    inhibit-gnome = callPackage ../applications/video/mpv/scripts/inhibit-gnome.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
     mpv-playlistmanager = callPackage ../applications/video/mpv/scripts/mpv-playlistmanager.nix {};
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix {};
@@ -30961,6 +30975,8 @@ with pkgs;
   novnc = callPackage ../applications/networking/novnc { };
 
   nwg-bar = callPackage ../applications/misc/nwg-bar { };
+
+  nwg-dock = callPackage ../applications/misc/nwg-dock { };
 
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
@@ -33275,6 +33291,8 @@ with pkgs;
   wofi-emoji = callPackage ../applications/misc/wofi-emoji { };
 
   cl-wordle = callPackage ../games/cl-wordle { };
+
+  wordbook = callPackage ../applications/misc/wordbook { };
 
   wordnet = callPackage ../applications/misc/wordnet {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
