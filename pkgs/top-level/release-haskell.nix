@@ -388,9 +388,6 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      spectacle = [
-        compilerNames.ghc8107
-      ];
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
