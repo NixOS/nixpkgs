@@ -1,22 +1,31 @@
-{ lib, stdenv, callPackage, fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
+, unstableGitUpdater
 }:
-let
-  yesno = b: if b then "yes" else "no";
-in stdenv.mkDerivation rec {
+
+stdenv.mkDerivation {
   pname = "libbacktrace";
-  version = "2020-05-13";
+  version = "unstable-2020-05-13";
+
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
-    repo = pname;
+    repo = "libbacktrace";
     rev = "9b7f216e867916594d81e8b6118f092ac3fcf704";
     sha256 = "0qr624v954gnfkmpdlfk66sxz3acyfmv805rybsaggw5gz5sd1nh";
   };
+
   configureFlags = [
-    "--enable-static=${yesno enableStatic}"
-    "--enable-shared=${yesno enableShared}"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
   ];
+
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
+
   meta = with lib; {
     description = "A C library that may be linked into a C/C++ program to produce symbolic backtraces";
     homepage = "https://github.com/ianlancetaylor/libbacktrace";
