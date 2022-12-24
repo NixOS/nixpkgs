@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake }:
 
 let
-  version = "0.3.95";
+  version = "0.3.3";
   pname = "lensfun";
 
   # Fetch a more recent version of the repo containing a more recent lens
