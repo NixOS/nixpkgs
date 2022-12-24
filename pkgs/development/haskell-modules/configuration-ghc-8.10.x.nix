@@ -118,15 +118,18 @@ self: super: {
     ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
     brittany = doJailbreak lself.brittany_0_13_1_2;
     aeson = lself.aeson_1_5_6_0;
-    multistate = dontCheck lsuper.multistate;
+    multistate = doDistribute (markUnbroken (dontCheck lsuper.multistate));
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
   }))));
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
-  hls-haddock-comments-plugin = addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
+  hls-haddock-comments-plugin = doDistribute (markUnbroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
     ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
-  ]) super.hls-haddock-comments-plugin;
+  ]) super.hls-haddock-comments-plugin));
+
+  hls-splice-plugin = doDistribute (markUnbroken super.hls-splice-plugin);
+  hls-tactics-plugin = doDistribute (markUnbroken super.hls-tactics-plugin);
 
   mime-string = disableOptimization super.mime-string;
 
