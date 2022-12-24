@@ -5050,6 +5050,7 @@ broken-packages:
   - stripe-hs
   - strong-path
   - structural-traversal
+  - structured-haskell-mode
   - structures
   - stt
   - stunclient
