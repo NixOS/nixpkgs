@@ -4,6 +4,7 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 , unstableGitUpdater
+, autoreconfHook
 }:
 
 stdenv.mkDerivation {
@@ -17,10 +18,22 @@ stdenv.mkDerivation {
     sha256 = "ADp8n1kUf8OysFY/Jv1ytxKjqgz1Nu2VRcFGlt1k/HM=";
   };
 
+  patches = [
+    # Fix tests with shared library.
+    # https://github.com/ianlancetaylor/libbacktrace/pull/99
+    ./0001-libbacktrace-avoid-libtool-wrapping-tests.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
   configureFlags = [
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
   ];
+
+  doCheck = stdenv.isLinux;
 
   passthru = {
     updateScript = unstableGitUpdater { };
