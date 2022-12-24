@@ -89,6 +89,8 @@ in
         SendSIGHUP = true;
         TimeoutStopSec = "30s";
         KeyringMode = "shared";
+
+        Type = "idle";
       };
 
       # Don't kill a user session when using nixos-rebuild
