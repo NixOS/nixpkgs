@@ -1,4 +1,5 @@
 { self
+, bash
 , fetchpatch
 , lib
 , openssl
@@ -487,6 +488,10 @@ with self;
   patdiff = janePackage {
     pname = "patdiff";
     hash = "0623a7n5r659rkxbp96g361mvxkcgc6x9lcbkm3glnppplk5kxr9";
+
+    # Used by patdiff-git-wrapper.  Providing it here also causes the shebang
+    # line to be automatically patched.
+    buildInputs = [ bash ];
     propagatedBuildInputs = [ core_unix patience_diff ocaml_pcre ];
     meta = {
       description = "File Diff using the Patience Diff algorithm";

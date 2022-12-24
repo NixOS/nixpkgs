@@ -340,6 +340,24 @@ in rec {
     };
   };
 
+  mode-indicator = mkTmuxPlugin rec {
+    pluginName = "mode-indicator";
+    version = "unstable-2021-10-01";
+    src = fetchFromGitHub {
+      owner = "MunifTanjim";
+      repo = "tmux-mode-indicator";
+      rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
+      sha256 = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
+      description = "Plugin that displays prompt indicating currently active Tmux mode";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ aacebedo ];
+    };
+  };
+
   net-speed = mkTmuxPlugin {
     pluginName = "net-speed";
     version = "unstable-2018-12-02";
