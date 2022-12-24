@@ -21415,6 +21415,8 @@ with pkgs;
 
   libusbsio = callPackage ../development/libraries/libusbsio { };
 
+  libucontext = callPackage ../development/libraries/libucontext { };
+
   libutempter = callPackage ../development/libraries/libutempter { };
 
   libuldaq = callPackage ../development/libraries/libuldaq { };
