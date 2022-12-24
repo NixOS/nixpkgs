@@ -159,13 +159,13 @@ self: super: {
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24;
 
-  hls-brittany-plugin = addBuildDepends (with self.hls-brittany-plugin.scope; [
+  hls-brittany-plugin = doDistribute (markUnbroken (addBuildDepends (with self.hls-brittany-plugin.scope; [
     brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
     ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
     brittany = doJailbreak lself.brittany_0_13_1_2;
     multistate = dontCheck lsuper.multistate;
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
-  }));
+  }))));
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
