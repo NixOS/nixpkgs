@@ -21,6 +21,7 @@
 , withExtraFeatures ? true
 , testers
 , nushell
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -98,6 +99,9 @@ rustPlatform.buildRustPackage rec {
     shellPath = "/bin/nu";
     tests.version = testers.testVersion {
       package = nushell;
+    };
+    updateScript = nix-update-script {
+      attrPath = pname;
     };
   };
 }
