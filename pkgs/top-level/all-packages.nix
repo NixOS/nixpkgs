@@ -12643,6 +12643,8 @@ with pkgs;
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
+  validator-nu = callPackage ../tools/text/validator-nu { };
+
   vampire = callPackage ../applications/science/logic/vampire {};
 
   variety = callPackage ../applications/misc/variety {};
