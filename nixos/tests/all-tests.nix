@@ -691,6 +691,7 @@ in {
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
+  warzone2100 = handleTest ./warzone2100.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
