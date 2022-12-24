@@ -199,9 +199,9 @@ GTK themes can be installed either to user profile or system-wide (via
 GTK ones, you can use the following configuration:
 
 ```nix
-qt5.enable = true;
-qt5.platformTheme = "gtk2";
-qt5.style = "gtk2";
+qt.enable = true;
+qt.platformTheme = "gtk2";
+qt.style = "gtk2";
 ```
 
 ## Custom XKB layouts {#custom-xkb-layouts .unnumbered}

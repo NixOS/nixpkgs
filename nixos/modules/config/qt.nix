@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.qt5;
+  cfg = config.qt;
 
   isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
@@ -23,17 +23,23 @@ let
     else if isQt5ct then [ pkgs.libsForQt5.qt5ct ]
     else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
     else if isKde then [ pkgs.libsForQt5.plasma-integration pkgs.libsForQt5.systemsettings ]
-    else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
+    else throw "`qt.platformTheme` ${cfg.platformTheme} and `qt.style` ${cfg.style} are not compatible.";
 
 in
 
 {
   meta.maintainers = [ maintainers.romildo ];
 
-  options = {
-    qt5 = {
+  imports = [
+    (mkRenamedOptionModule ["qt5" "enable" ] ["qt" "enable" ])
+    (mkRenamedOptionModule ["qt5" "platformTheme" ] ["qt" "platformTheme" ])
+    (mkRenamedOptionModule ["qt5" "style" ] ["qt" "style" ])
+  ];
 
-      enable = mkEnableOption (lib.mdDoc "Qt5 theming configuration");
+  options = {
+    qt = {
+
+      enable = mkEnableOption (lib.mdDoc "Qt theming configuration");
 
       platformTheme = mkOption {
         type = types.enum [
@@ -53,7 +59,7 @@ in
           ["libsForQt5" "plasma-integration"]
         ];
         description = lib.mdDoc ''
-          Selects the platform theme to use for Qt5 applications.
+          Selects the platform theme to use for Qt applications.
 
           The options are
           - `gtk`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
@@ -82,7 +88,7 @@ in
           ["libsForQt5" "qtstyleplugins"]
         ];
         description = lib.mdDoc ''
-          Selects the style to use for Qt5 applications.
+          Selects the style to use for Qt applications.
 
           The options are
           - `adwaita`, `adwaita-dark`: Use Adwaita Qt style with

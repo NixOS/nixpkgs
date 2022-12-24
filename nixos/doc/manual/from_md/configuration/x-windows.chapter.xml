@@ -223,9 +223,9 @@ services.xserver.libinput.touchpad.tapping = false;
       configuration:
     </para>
     <programlisting language="nix">
-qt5.enable = true;
-qt5.platformTheme = &quot;gtk2&quot;;
-qt5.style = &quot;gtk2&quot;;
+qt.enable = true;
+qt.platformTheme = &quot;gtk2&quot;;
+qt.style = &quot;gtk2&quot;;
 </programlisting>
   </section>
   <section xml:id="custom-xkb-layouts">
