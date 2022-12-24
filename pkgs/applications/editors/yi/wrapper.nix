@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ ];
 
-    # dependency yi-language no longer builds doesn't build
+    # dependency yi-language no longer builds
     hydraPlatforms = lib.platforms.none;
     broken = true;
   };
