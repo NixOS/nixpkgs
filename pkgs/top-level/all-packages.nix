@@ -25455,6 +25455,8 @@ with pkgs;
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
 
+  libax25 = callPackage ../development/libraries/libax25 { };
+
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
   libkrun = callPackage ../development/libraries/libkrun {
