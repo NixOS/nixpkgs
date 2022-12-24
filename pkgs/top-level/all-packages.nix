@@ -5452,6 +5452,8 @@ with pkgs;
 
   notifymuch = callPackage ../applications/misc/notifymuch { };
 
+  nmh = callPackage ../tools/networking/nmh { };
+
   npins = callPackage ../tools/nix/npins { };
 
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
