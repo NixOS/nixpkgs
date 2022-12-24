@@ -2697,6 +2697,8 @@ with pkgs;
 
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
 
+  azure-static-sites-client = callPackage ../development/tools/azure-static-sites-client { };
+
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
   bashblog = callPackage ../tools/text/bashblog { };
@@ -10464,10 +10466,6 @@ with pkgs;
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
   percona-xtrabackup = percona-xtrabackup_8_0;
-  percona-xtrabackup_2_4 = callPackage ../tools/backup/percona-xtrabackup/2_4.nix {
-    boost = boost159;
-    openssl = openssl_1_1;
-  };
   percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
     boost = boost177;
     openssl = openssl_1_1;
@@ -11248,6 +11246,8 @@ with pkgs;
   rdfind = callPackage ../tools/filesystems/rdfind { };
 
   rhash = callPackage ../tools/security/rhash { };
+
+  rhoas = callPackage ../tools/admin/rhoas { };
 
   riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
   riemann-tools = callPackage ../tools/misc/riemann-tools { };
@@ -13099,6 +13099,8 @@ with pkgs;
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
+  vals = callPackage ../tools/security/vals { };
+
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
@@ -14448,12 +14450,12 @@ with pkgs;
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
-  gccgo = gccgo6;
-  gccgo6 = wrapCC (gcc6.cc.override {
-    name = "gccgo6";
+  gccgo = wrapCC (gcc.cc.override {
+    name = "gccgo";
     langCC = true; #required for go.
     langC = true;
     langGo = true;
+    langJit = true;
     profiledCompiler = false;
   });
 
@@ -15425,9 +15427,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
-  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
 
@@ -26078,6 +26078,8 @@ with pkgs;
   setools = callPackage ../os-specific/linux/setools { };
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
+
+  sgx-azure-dcap-client = callPackage ../os-specific/linux/sgx/azure-dcap-client { };
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 

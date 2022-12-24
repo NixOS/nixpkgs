@@ -1443,6 +1443,8 @@ self: super: with self; {
 
   btrfsutil = callPackage ../development/python-modules/btrfsutil { };
 
+  btsmarthub_devicelist = callPackage ../development/python-modules/btsmarthub_devicelist { };
+
   btsocket = callPackage ../development/python-modules/btsocket { };
 
   bucketstore = callPackage ../development/python-modules/bucketstore { };
