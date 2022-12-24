@@ -192,6 +192,7 @@ nscdInvalidate("group");
 
 # Generate a new /etc/passwd containing the declared users.
 my %usersOut;
+my %updatedUsers;
 foreach my $u (@{$spec->{users}}) {
     my $name = $u->{name};
 
@@ -240,6 +241,11 @@ foreach my $u (@{$spec->{users}}) {
         $u->{hashedPassword} = hashPassword($u->{password});
     }
 
+    # Keep the user data if we have a hashed password.
+    if (defined $u->{hashedPassword}) {
+        $updatedUsers{$name} = $u;
+    }
+
     if (!defined $u->{shell}) {
         if (defined $existing) {
             $u->{shell} = $existing->{shell};
@@ -286,6 +292,8 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
     next if !defined $u;
+    # skip adding the user if we have updated data (will be added in the next loop).
+    next if defined $updatedUsers{$u->{name}};
     $hashedPassword = "!" if !$spec->{mutableUsers};
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
     chomp $hashedPassword;
@@ -297,6 +305,8 @@ foreach my $u (values %usersOut) {
     next if defined $shadowSeen{$u->{name}};
     my $hashedPassword = "!";
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword};
+    # Update the hashed password with the newest one.
+    $hashedPassword = $updatedUsers{$u->{name}}->{hashedPassword} if defined $updatedUsers{$u->{name}};
     # FIXME: set correct value for sp_lstchg.
     push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
 }
