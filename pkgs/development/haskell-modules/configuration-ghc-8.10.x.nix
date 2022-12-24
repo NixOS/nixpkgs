@@ -67,7 +67,7 @@ self: super: {
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
   # Pick right versions for GHC-specific packages
-  ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
+  ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
   # ghc versions which don‘t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
