@@ -1101,6 +1101,7 @@ broken-packages:
   - derive-trie
   - derp-lib
   - describe
+  - descriptive
   - deterministic-game-engine
   - detrospector
   - deunicode
