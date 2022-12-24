@@ -7,17 +7,24 @@ assert drv?drvPath && drv.type or null == "derivation";
 # TODO: fork and improve nix-shell logic
 (pkgs.buildPackages.writeScriptBin "devShell" ''
   #!${pkgs.buildPackages.runtimeShell}
-  ${pkgs.buildPackages.nix}/bin/nix-shell ${builtins.unsafeDiscardOutputDependency drv.drvPath}
-'').overrideAttrs (finalAttrs: prevAttrs: {
-  passthru = prevAttrs.passthru or {} // {
-    shellData = pkgs.runCommandLocal "devShell-data" {
-      # inputDerivation can only produce one file without breaking back compat
-      # hence, we only use its implementation and improve its interface.
-      # TODO: expose the structured attrs files?
-      inherit (drv) inputDerivation;
-    } ''
-      mkdir $out
-      cp $inputDerivation $out/environment.sh
-    '';
-  };
+
+  # TODO replicate in bash
+  exec ${pkgs.buildPackages.nix}/bin/nix-shell ${builtins.unsafeDiscardOutputDependency drv.drvPath}
+
+'').overrideAttrs (prevAttrs: {
+  buildCommand = ''
+    # Write the bin/devShell command
+    ${prevAttrs.buildCommand}
+    mkdir -p $out
+
+    # environment.sh exposes the environment, but no bash functions
+    cp $inputDerivation $out/environment.sh
+
+    # TODO implement this and use it in the devShell command
+    #      should this have a different name?
+    # setup.sh loads the derivation-like environment variables and stdenv/setup.sh
+    echo '# TODO' >$out/setup.sh
+  '';
+  # TODO not sure if these must be equal; may want to reimplement this, maybe?
+  inherit (drv) inputDerivation;
 })
