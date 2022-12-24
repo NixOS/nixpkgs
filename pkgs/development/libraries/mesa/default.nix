@@ -19,6 +19,10 @@
 , enablePatentEncumberedCodecs ? true
 , libclc
 , jdupes
+, cmake
+, rustc
+, rust-bindgen
+, spirv-llvm-translator_14
 }:
 
 /** Packaging design:
@@ -37,8 +41,14 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.2.5";
+  version = "22.3.1";
   branch  = versions.major version;
+
+  rust-bindgen' = rust-bindgen.override {
+    rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
+      clang = llvmPackages.clang;
+    };
+  };
 
 self = stdenv.mkDerivation {
   pname = "mesa";
@@ -52,7 +62,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "sha256-hQ8GMUb467JirsBPZmwsHlYj8qGYfdok5DYbF7kSxzs=";
+    sha256 = "sha256-PJzWEcCFnTB6ugZZgzOGq9ykyGFi08J1ulvmLRbPMes=";
   };
 
   # TODO:
@@ -83,6 +93,10 @@ self = stdenv.mkDerivation {
     ++ lib.optional stdenv.isLinux "driversdev"
     ++ lib.optional enableOpenCL "opencl";
 
+  # FIXME: this fixes rusticl/iris segfaulting on startup, _somehow_.
+  # Needs more investigating.
+  separateDebugInfo = true;
+
   preConfigure = ''
     PATH=${llvmPackages.libllvm.dev}/bin:$PATH
   '';
@@ -105,7 +119,6 @@ self = stdenv.mkDerivation {
 
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
-    "-Dxvmc-libs-path=${placeholder "drivers"}/lib"
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
@@ -119,6 +132,7 @@ self = stdenv.mkDerivation {
     "-Dglvnd=true"
   ] ++ optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
+    "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ] ++ optional enablePatentEncumberedCodecs
     "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
@@ -132,7 +146,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped ]
+    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator_14 ]
     ++ lib.optional withValgrind valgrind-light
     # Mesa will not build zink when gallium-drivers=auto
     ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
@@ -188,12 +202,12 @@ self = stdenv.mkDerivation {
     mkdir -p $opencl/lib
     mv -t "$opencl/lib/"     \
       $out/lib/gallium-pipe   \
-      $out/lib/libMesaOpenCL*
+      $out/lib/lib*OpenCL*
 
-    # We construct our own .icd file that contains an absolute path.
-    rm -r $out/etc/OpenCL
+    # We construct our own .icd files that contain absolute paths.
     mkdir -p $opencl/etc/OpenCL/vendors/
     echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
+    echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
   '' + lib.optionalString enableOSMesa ''
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p $osmesa/lib
