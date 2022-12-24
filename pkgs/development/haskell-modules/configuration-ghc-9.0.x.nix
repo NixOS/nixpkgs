@@ -172,4 +172,7 @@ self: super: {
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
   apply-refact = self.apply-refact_0_9_3_0;
+
+  # Only broken on GHC > 9.1
+  ghc-api-compat = doDistribute (markUnbroken super.ghc-api-compat);
 }
