@@ -198,10 +198,10 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Cinnamon
-      qt5.enable = true;
-      qt5.platformTheme = "gnome";
-      qt5.style = "adwaita";
+      # Harmonize Qt applications under Cinnamon
+      qt.enable = true;
+      qt.platformTheme = "gnome";
+      qt.style = "adwaita";
 
       # Default Fonts
       fonts.fonts = with pkgs; [
