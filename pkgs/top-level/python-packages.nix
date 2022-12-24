@@ -5892,6 +5892,8 @@ self: super: with self; {
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
 
+  mongoquery = callPackage ../development/python-modules/mongoquery { };
+
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
 
   monosat = pkgs.monosat.python {
