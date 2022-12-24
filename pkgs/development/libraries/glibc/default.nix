@@ -149,6 +149,9 @@ callPackage ./common.nix { inherit stdenv; } {
       # Work around a Nix bug: hard links across outputs cause a build failure.
       cp $bin/bin/getconf $bin/bin/getconf_
       mv $bin/bin/getconf_ $bin/bin/getconf
+      # Allow load libnss tcb module.
+      # It is currently not possible to load third party libnss modules from a custom directory.
+      ln -sf /run/current-system/sw/lib/libnss_tcb.so.2 $out/lib/libnss_tcb.so.2
     '';
 
     separateDebugInfo = true;
