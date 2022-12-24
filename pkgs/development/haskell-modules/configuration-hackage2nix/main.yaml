@@ -526,6 +526,7 @@ unsupported-platforms:
   sdl2-mixer:                                   [ platforms.darwin ]
   sdl2-ttf:                                     [ platforms.darwin ]
   sensei:                                       [ platforms.darwin ]
+  spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
   emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
