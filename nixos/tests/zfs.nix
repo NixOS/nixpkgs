@@ -25,7 +25,7 @@ let
           usersharePath = "/var/lib/samba/usershares";
         in {
         virtualisation = {
-          emptyDiskImages = [ 4096 ];
+          emptyDiskImages = [ 4096 4096 ];
           useBootLoader = true;
           useEFIBoot = true;
         };
@@ -64,9 +64,19 @@ let
         };
 
         specialisation.encryption.configuration = {
+          boot.zfs.requestEncryptionCredentials = [ "automatic" ];
           virtualisation.fileSystems."/automatic" = {
             device = "automatic";
             fsType = "zfs";
+          };
+          virtualisation.fileSystems."/manual" = {
+            device = "manual";
+            fsType = "zfs";
+          };
+          virtualisation.fileSystems."/manual/encrypted" = {
+            device = "manual/encrypted";
+            fsType = "zfs";
+            options = [ "noauto" ];
           };
         };
 
@@ -88,6 +98,8 @@ let
             "zpool status",
             "parted --script /dev/vdc mklabel msdos",
             "parted --script /dev/vdc -- mkpart primary 1024M -1s",
+            "parted --script /dev/vdd mklabel msdos",
+            "parted --script /dev/vdd -- mkpart primary 1024M -1s",
         )
 
         with subtest("sharesmb works"):
@@ -113,9 +125,13 @@ let
             machine.succeed(
                 'echo password | zpool create -O mountpoint=legacy '
                 + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdc1",
+                "zpool create -O mountpoint=legacy manual /dev/vdd1",
+                "echo otherpass | zfs create "
+                + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
                 "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
                 "sync",
                 "zpool export automatic",
+                "zpool export manual",
             )
             machine.crash()
             machine.start()
@@ -123,8 +139,12 @@ let
             machine.send_console("password\n")
             machine.wait_for_unit("multi-user.target")
             machine.succeed(
-                "umount /automatic",
+                "zfs get keystatus manual/encrypted | grep unavailable",
+                "echo otherpass | zfs load-key manual/encrypted",
+                "systemctl start manual-encrypted.mount",
+                "umount /automatic /manual/encrypted /manual",
                 "zpool destroy automatic",
+                "zpool destroy manual",
             )
 
         with subtest("boot.zfs.forceImportAll works"):
