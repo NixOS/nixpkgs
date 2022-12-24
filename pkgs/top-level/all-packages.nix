@@ -10778,6 +10778,8 @@ with pkgs;
 
   polypane = callPackage ../applications/networking/browsers/polypane { };
 
+  pomsky = callPackage ../tools/text/pomsky { };
+
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
