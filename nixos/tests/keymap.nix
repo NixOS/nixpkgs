@@ -64,7 +64,6 @@ let
 
               # wait for reader to be ready
               machine.wait_for_file("${readyFile}")
-              machine.sleep(1)
 
               # send all keys
               for key in inputs:
