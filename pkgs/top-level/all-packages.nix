@@ -31654,6 +31654,8 @@ with pkgs;
 
   premid = callPackage ../applications/misc/premid { };
 
+  process-cpp = callPackage ../development/libraries/process-cpp { };
+
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
   };
