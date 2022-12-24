@@ -11656,6 +11656,12 @@
     githubId = 1973389;
     name = "Reuben D'Netto";
   };
+  realsnick = {
+    name = "Ido Samuelson";
+    email = "ido.samuelson@gmail.com";
+    github = "realsnick";
+    githubId = 1440852;
+  };
   redbaron = {
     email = "ivanov.maxim@gmail.com";
     github = "redbaron";
