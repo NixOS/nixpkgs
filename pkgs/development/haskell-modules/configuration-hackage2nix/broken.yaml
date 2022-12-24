@@ -5984,3 +5984,11 @@ broken-packages:
   - zxcvbn-dvorak
   - zydiskell
   - zyre2
+  - gi-adwaita
+  - network-messagepack-rpc-websocket
+  - rose-trees
+  - skews
+  - tries
+  - wss-client
+  - zeromq4-clone-pattern
+  - zeromq4-patterns
