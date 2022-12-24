@@ -4029,6 +4029,18 @@ final: prev:
     meta.homepage = "https://github.com/dundalek/lazy-lsp.nvim/";
   };
 
+  lazy-nvim = buildVimPluginFrom2Nix {
+    pname = "lazy.nvim";
+    version = "2022-12-23";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "lazy.nvim";
+      rev = "a973c2edc2167012d4721a784a0da46906cf005c";
+      sha256 = "1cjm24n295hm4ijpccyx1sns35n6rmz3ic07n15hvs8p2rgbk65b";
+    };
+    meta.homepage = "https://github.com/folke/lazy.nvim/";
+  };
+
   lazygit-nvim = buildVimPluginFrom2Nix {
     pname = "lazygit.nvim";
     version = "2022-11-05";
