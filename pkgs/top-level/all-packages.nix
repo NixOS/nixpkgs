@@ -12896,6 +12896,8 @@ with pkgs;
 
   xray = callPackage ../tools/networking/xray { };
 
+  xteve = callPackage ../servers/xteve { };
+
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
