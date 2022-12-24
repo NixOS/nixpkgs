@@ -119,9 +119,12 @@ self: super: {
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
-  hls-haddock-comments-plugin = addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
+  hls-haddock-comments-plugin = doDistribute (markUnbroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
     ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
-  ]) super.hls-haddock-comments-plugin;
+  ]) super.hls-haddock-comments-plugin));
+
+  hls-splice-plugin = doDistribute (markUnbroken super.hls-splice-plugin);
+  hls-tactics-plugin = doDistribute (markUnbroken super.hls-tactics-plugin);
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
