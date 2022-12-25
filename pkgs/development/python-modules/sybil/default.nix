@@ -1,31 +1,26 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "3.0.1";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bwLcIgSvflohIDeSTZdPcngfbcGP08RMx85GOhIPUw0=";
+  src = fetchFromGitHub {
+    owner = "simplistix";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-9fXvQfVS3IVdOV4hbA0bEYFJU7uK0WpqJKMNBltqFTI=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Sensitive to output of other commands
-    "test_namespace"
-    "test_unittest"
-  ];
+  # Circular dependency with testfixtures 
+  doCheck = false;
 
   pythonImportsCheck = [
     "sybil"
