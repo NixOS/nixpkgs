@@ -12637,6 +12637,8 @@ with pkgs;
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
+  swagger-cli = callPackage ../tools/networking/swagger-cli { };
+
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
   swagger-codegen3 = callPackage ../tools/networking/swagger-codegen3 { };
