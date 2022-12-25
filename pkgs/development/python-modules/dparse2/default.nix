@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-1tbNW7Gy7gvMnETdAM2ahHiwbhG9qvdYZggia1+7eGo=";
   };
 
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to parse Python dependency files";
     homepage = "https://github.com/nexB/dparse2";
+    changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
