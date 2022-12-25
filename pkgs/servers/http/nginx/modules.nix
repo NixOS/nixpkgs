@@ -282,7 +282,7 @@ let self = {
       cp -r "${src}/" "$lua_src"
       chmod -R +w "$lua_src"
       patch -p1 -d $lua_src -i ${nginx-1-23-patch}
-      export configureFlags="''${configureFlags/"${src}"/"$lua_src"}"
+      export configureFlags="''${configureFlags//"${src}"/"$lua_src"}"
       unset lua_src
     '';
     allowMemoryWriteExecute = true;
