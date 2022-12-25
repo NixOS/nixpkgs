@@ -410,6 +410,13 @@
           value of this setting.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
+          can now access AX.25 interfaces via the
+          <literal>libax25</literal> package.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
