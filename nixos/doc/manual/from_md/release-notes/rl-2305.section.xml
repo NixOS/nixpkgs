@@ -368,6 +368,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>firewall</literal> and <literal>nat</literal>
+          module now has a nftables based implementation. Enable
+          <literal>networking.nftables</literal> to use it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.fwupd</literal> module now allows
           arbitrary daemon settings to be configured in a structured
           manner
