@@ -30,11 +30,6 @@ buildPythonPackage rec {
     transformers
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "transformers>=3.4.0,<4.22.0" "transformers>=3.4.0 # ,<4.22.0"
-  '';
-
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
 
@@ -47,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
+    changelog = "https://github.com/explosion/spacy-transformers/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
