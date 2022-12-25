@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-9fXvQfVS3IVdOV4hbA0bEYFJU7uK0WpqJKMNBltqFTI=";
   };
 
-  # Circular dependency with testfixtures 
+  # Circular dependency with testfixtures
   doCheck = false;
 
   pythonImportsCheck = [
