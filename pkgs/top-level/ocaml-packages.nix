@@ -330,6 +330,8 @@ let
 
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
+    dscheck = callPackage ../development/ocaml-modules/dscheck { };
+
     dssi = callPackage ../development/ocaml-modules/dssi { };
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
