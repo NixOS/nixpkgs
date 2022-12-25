@@ -328,6 +328,8 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    domainslib = callPackage ../development/ocaml-modules/domainslib { };
+
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
     dscheck = callPackage ../development/ocaml-modules/dscheck { };
