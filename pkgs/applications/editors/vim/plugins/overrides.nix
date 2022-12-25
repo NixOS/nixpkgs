@@ -1151,6 +1151,8 @@ self: super: {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
         cargoSha256 = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
+        # tests require network access
+        doCheck = false;
       };
     in
     super.vim-markdown-composer.overrideAttrs (old: {

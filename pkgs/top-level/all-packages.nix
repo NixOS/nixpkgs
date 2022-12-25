@@ -11889,7 +11889,7 @@ with pkgs;
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
-  squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };
+  squashfs-tools-ng = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/squashfs-tools-ng { };
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
@@ -12114,6 +12114,8 @@ with pkgs;
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
+
+  tarantool = callPackage ../servers/tarantool { };
 
   tarssh = callPackage ../servers/tarssh { };
 
@@ -17309,6 +17311,8 @@ with pkgs;
   goreman = callPackage ../tools/system/goreman { };
 
   fprettify = callPackage ../development/tools/fprettify { };
+
+  fortls = python3.pkgs.callPackage ../development/tools/fortls { };
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/fortran-language-server { };
 
@@ -26644,6 +26648,8 @@ with pkgs;
   };
   flat-remix-gtk = callPackage ../data/themes/flat-remix-gtk { };
   flat-remix-gnome = callPackage ../data/themes/flat-remix-gnome { };
+
+  fluent-gtk-theme = callPackage ../data/themes/fluent-gtk-theme { };
 
   fluent-icon-theme = callPackage ../data/icons/fluent-icon-theme { };
 

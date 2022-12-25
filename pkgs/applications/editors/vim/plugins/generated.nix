@@ -533,6 +533,18 @@ final: prev:
     meta.homepage = "https://github.com/derekelkins/agda-vim/";
   };
 
+  ai-vim = buildVimPluginFrom2Nix {
+    pname = "ai.vim";
+    version = "2022-12-16";
+    src = fetchFromGitHub {
+      owner = "aduros";
+      repo = "ai.vim";
+      rev = "b5098a1d70be968444b6f3d9441443af3e357035";
+      sha256 = "1hx4zilzc0vf62hiwk3qgyn12mjs8fw0wq1fw9g1v3k9v512z4fb";
+    };
+    meta.homepage = "https://github.com/aduros/ai.vim/";
+  };
+
   alchemist-vim = buildVimPluginFrom2Nix {
     pname = "alchemist.vim";
     version = "2020-04-27";
@@ -3308,6 +3320,18 @@ final: prev:
       sha256 = "0zklzx2k85zyxn866xbhd6rnifc885rn68bnv1x945z34pj4m3xc";
     };
     meta.homepage = "https://github.com/ellisonleao/glow.nvim/";
+  };
+
+  godbolt-nvim = buildVimPluginFrom2Nix {
+    pname = "godbolt.nvim";
+    version = "2022-12-17";
+    src = fetchFromGitHub {
+      owner = "p00f";
+      repo = "godbolt.nvim";
+      rev = "c7b3785afb3fcc28088acbddfba588d7552f664d";
+      sha256 = "0r5yfjhfkkpqpghy7pid7wd5r75cqhxh14iamvh65lmi79hs0hn3";
+    };
+    meta.homepage = "https://github.com/p00f/godbolt.nvim/";
   };
 
   golden-ratio = buildVimPluginFrom2Nix {
