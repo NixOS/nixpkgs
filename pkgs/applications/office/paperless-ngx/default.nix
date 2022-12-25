@@ -200,6 +200,9 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : "${path}"
+    makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
+      --prefix PYTHONPATH : "$PYTHONPATH:$out/lib/paperless-ngx/src" \
+      --prefix PATH : "${path}"
   '';
 
   checkInputs = with python.pkgs.pythonPackages; [
