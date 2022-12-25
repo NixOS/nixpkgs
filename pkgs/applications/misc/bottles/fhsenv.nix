@@ -3,6 +3,7 @@
 , symlinkJoin
 , bottles-unwrapped
 , gst_all_1
+, pkgsi686Linux
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
@@ -94,7 +95,10 @@ let fhsEnv = {
     # Remove if merged https://github.com/bottlesdevs/Bottles/pull/2415
     export BOTTLES_USE_SYSTEM_GSTREAMER=1
     # Dirty hack, may be related with https://github.com/NixOS/nixpkgs/issues/148007
-    export GST_PLUGIN_PATH=${ lib.makeSearchPath "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) }
+    export GST_PLUGIN_PATH=${ lib.makeSearchPath "lib/gstreamer-1.0" (
+      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]
+      ++ (with pkgsi686Linux.gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ])
+    )}
   '';
 };
 in
