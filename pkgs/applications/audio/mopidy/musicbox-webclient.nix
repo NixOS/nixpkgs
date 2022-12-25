@@ -6,7 +6,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "pimusicbox";
-    repo = "mopidy-musicbox-webclient";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
@@ -16,8 +16,9 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Mopidy extension for playing music from SoundCloud";
-    license = licenses.mit;
+    description = "A Mopidy frontend extension and web client with additional features for Pi MusicBox";
+    homepage = "https://github.com/pimusicbox/mopidy-musicbox-webclient";
+    license = licenses.asl20;
     maintainers = [ maintainers.spwhitt ];
   };
 }
