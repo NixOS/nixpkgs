@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "wimglenn";
     repo = "advent-of-code-data";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xns//QAAYw9+Md0THUxFUxnqCDoS1qGslX6CFbIALng=";
+    hash = "sha256-yY8ItXZZp0yVs4viJzduMPq8Q8NKd34uvlGaVUE2GjQ=";
   };
 
   propagatedBuildInputs = [
