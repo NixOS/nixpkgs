@@ -1114,6 +1114,8 @@ let
 
     ordering = callPackage ../development/ocaml-modules/ordering { };
 
+    oseq = callPackage ../development/ocaml-modules/oseq { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otoml = callPackage ../development/ocaml-modules/otoml { };
