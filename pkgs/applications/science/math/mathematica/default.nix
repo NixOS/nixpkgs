@@ -4,6 +4,7 @@
 , cudaPackages
 , cudaSupport ? config.cudaSupport or false
 , lang ? "en"
+, webdoc ? false
 , version ? null
 }:
 
@@ -12,16 +13,20 @@ let versions = callPackage ./versions.nix { };
     matching-versions =
       lib.sort (v1: v2: lib.versionAtLeast v1.version v2.version) (lib.filter
         (v: v.lang == lang
-            && (if version == null then true else isMatching v.version version))
+            && (version == null || isMatching v.version version)
+            && webdoc == v.webdoc)
         versions);
 
     found-version =
       if matching-versions == []
       then throw ("No registered Mathematica version found to match"
-                  + " version=${version} and language=${lang}")
+                  + " version=${version} and language=${lang},"
+                  + " ${if webdoc
+                        then "using web documentation"
+                        else "and with documentation"}")
       else lib.head matching-versions;
 
-    specific-drv = ./. + "/(lib.versions.major found-version.version).nix";
+    specific-drv = ./. + "/${lib.versions.major found-version.version}.nix";
 
     real-drv = if lib.pathExists specific-drv
                then specific-drv
