@@ -7,6 +7,7 @@
 , openssh
 , openssl
 , python3
+, xxHash
 , zstd
 , installShellFiles
 , nixosTests
@@ -41,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     cython
     setuptools-scm
+    pkgconfig
 
     # docs
     sphinxHook
@@ -55,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
+    xxHash
     zstd
     openssl
   ] ++ lib.optionals stdenv.isLinux [
@@ -66,13 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
-
-  preConfigure = ''
-    export BORG_OPENSSL_PREFIX="${openssl.dev}"
-    export BORG_LZ4_PREFIX="${lz4.dev}"
-    export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
-  '';
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
