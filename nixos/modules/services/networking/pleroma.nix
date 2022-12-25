@@ -141,6 +141,8 @@ in {
         NoNewPrivileges = true;
         CapabilityBoundingSet = "~CAP_SYS_ADMIN";
       };
+      # disksup requires bash
+      path = [ pkgs.bash ];
     };
 
   };

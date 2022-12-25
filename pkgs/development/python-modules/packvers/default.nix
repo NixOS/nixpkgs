@@ -1,16 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, toml
-, pyyaml
-, packvers
+, pretend
+, pyparsing
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "dparse2";
-  version = "0.7.0";
+  pname = "packvers";
+  version = "21.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,33 +18,27 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
+    hash = "sha256-nCSYL0g7mXi9pGFt24pOXbmmYsaRuB+rRZrygf8DTLE=";
   };
 
   propagatedBuildInputs = [
-    toml
-    pyyaml
-    packvers
+    pyparsing
   ];
 
   checkInputs = [
+    pretend
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Requries pipenv
-    "tests/test_parse.py"
-  ];
-
   pythonImportsCheck = [
-    "dparse2"
+    "packvers"
   ];
 
   meta = with lib; {
-    description = "Module to parse Python dependency files";
+    description = "Module for version handling of modules";
     homepage = "https://github.com/nexB/dparse2";
-    changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    changelog = "https://github.com/nexB/packvers/blob/${version}/CHANGELOG.rst";
+    license = with licenses; [ asl20 /* and */ bsd2 ];
     maintainers = with maintainers; [ fab ];
   };
 }
