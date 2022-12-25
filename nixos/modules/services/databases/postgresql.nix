@@ -58,6 +58,15 @@ in
         '';
       };
 
+      socketDir = mkOption { 
+        type = with types; nullOr path;
+        default = /run/postgresql;
+        description = lib.mdDoc ''
+          Directory where PostgreSQL opens a UNIX domain socket to which clients can connect. 
+          A null value opens no socket, leaving PostgreSQL accessible only via TCP/IP.
+        '';
+      };
+
       checkConfig = mkOption {
         type = types.bool;
         default = true;
@@ -435,6 +444,7 @@ in
         log_line_prefix = cfg.logLinePrefix;
         listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
         port = cfg.port;
+        unix_socket_directories = toString cfg.socketDir;
       };
 
     services.postgresql.package = let
@@ -509,9 +519,10 @@ in
           '';
 
         # Wait for PostgreSQL to be ready to accept connections.
-        postStart =
-          ''
-            PSQL="psql --port=${toString cfg.port}"
+        postStart = let  
+          connection = if (cfg.socketDir == null) then "--port=${toString cfg.port}" else "--host=${toString cfg.socketDir}";
+          in ''
+            PSQL="psql ${connection}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
