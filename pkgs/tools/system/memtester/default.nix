@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "memtester";
-  version = "4.5.1";
+  version = "4.6.0";
 
   preConfigure = ''
     echo "$CC" > conf-cc
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://pyropus.ca/software/memtester/old-versions/memtester-${version}.tar.gz";
-    sha256 = "sha256-HF/COCV2wISzFM/TNNEnpmwgvWOJLKyfRFvB2LTKWkc=";
+    sha256 = "sha256-yf5Ot+gMjO9SAvkGXEwGgvVhZkfARV6RalcA+Y49uy4=";
   };
 
   installFlags = [ "INSTALLPATH=$(out)" ];
