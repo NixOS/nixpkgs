@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   keysDirectory = "/var/keys";
@@ -71,8 +71,7 @@ in
 
       hostPkgs = config.virtualisation.host.pkgs;
 
-    in
-      hostPkgs.writeShellScriptBin "create-builder" ''
+      script = hostPkgs.writeShellScriptBin "create-builder" ''
         KEYS="''${KEYS:-./keys}"
         ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
         PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
@@ -86,6 +85,13 @@ in
         fi
         KEYS="$(nix-store --add "$KEYS")" ${config.system.build.vm}/bin/run-nixos-vm
       '';
+
+    in
+      script.overrideAttrs (old: {
+        meta = (old.meta or { }) // {
+          platforms = lib.platforms.darwin;
+        };
+      });
 
   system.stateVersion = "22.05";
 
