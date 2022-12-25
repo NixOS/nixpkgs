@@ -165,6 +165,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
