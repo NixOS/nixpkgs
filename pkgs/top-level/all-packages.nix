@@ -27681,7 +27681,9 @@ with pkgs;
 
   vdo = callPackage ../os-specific/linux/vdo { };
 
-  windows = callPackages ../os-specific/windows { };
+  windmill = callPackage ../servers/windmill {};
+
+  windows = callPackages ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
