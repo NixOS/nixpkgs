@@ -9,11 +9,15 @@
 , pyarrow
 , pytestCheckHook
 , pythonRelaxDepsHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "autofaiss";
   version = "2.15.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "criteo";
@@ -22,7 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-OnDHwJxJcXx3DGxrkk2D2Ljs4CqPoYx7avdo9C8sDrU=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   pythonRemoveDeps = [
     # The `dataclasses` packages is a python2-only backport, unnecessary in
@@ -38,9 +44,18 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
-  propagatedBuildInputs = [ embedding-reader fsspec numpy faiss fire pyarrow ];
+  propagatedBuildInputs = [
+    embedding-reader
+    fsspec
+    numpy
+    faiss
+    fire
+    pyarrow
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # Attempts to spin up a Spark cluster and talk to it which doesn't work in
@@ -54,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatically create Faiss knn indices with the most optimal similarity search parameters";
     homepage = "https://github.com/criteo/autofaiss";
+    changelog = "https://github.com/criteo/autofaiss/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
   };
