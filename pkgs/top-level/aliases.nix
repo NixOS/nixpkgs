@@ -1621,9 +1621,8 @@ mapAliases ({
   xbmcPlain = throw "'xbmcPlain' has been renamed to/replaced by 'kodiPlain'"; # Converted to throw 2022-02-22
   xbmcPlugins = throw "'xbmcPlugins' has been renamed to/replaced by 'kodiPackages'"; # Converted to throw 2022-02-22
   xdg_utils = xdg-utils; # Added 2021-02-01
-  xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # Added 2020-03-14
-  xfce4-14 = xfce;
-  xfceUnstable = xfce4-14; # Added 2019-09-17
+  xfce4-14 = throw "xfce4-14 has been removed, use xfce instead"; # added 2022-12-25
+  xfceUnstable = throw "xfceUnstable has been removed, use xfce instead"; # added 2022-12-25
   xineLib = xine-lib; # Added 2021-04-27
   xineUI = xine-ui; # Added 2021-04-27
   xmonad_log_applet_gnome3 = throw "'xmonad_log_applet_gnome3' has been renamed to/replaced by 'xmonad_log_applet'"; # Converted to throw 2022-02-22
