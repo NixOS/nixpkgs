@@ -1,24 +1,26 @@
-{ lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff, pkg-config,
-librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xine-lib, ghostscript, makeWrapper }:
+{ lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff, libwebp, pkg-config,
+librsvg, glib, gtk2, libXext, libXxf86vm, poppler, vlc, ghostscript, makeWrapper, tzdata }:
 
 stdenv.mkDerivation rec {
   pname = "eaglemode";
-  version = "0.94.2";
+  version = "0.96.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
-    sha256 = "10zxih7gmyhq0az1mnsw2x563l4bbwcns794s4png8rf4d6hjszm";
+    hash = "sha256-aMVXJpfws9rh2Eaa/EzSLwtwvn0pVJlEbhxzvXME1hs=";
   };
 
+  # Fixes "Error: No time zones found." on the clock
+  postPatch = ''
+    substituteInPlace src/emClock/emTimeZonesModel.cpp --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+  '';
+
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff
-    librsvg glib gtk2 libXxf86vm libXext poppler xine-lib ghostscript ];
+  buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff libwebp
+    librsvg glib gtk2 libXxf86vm libXext poppler vlc ghostscript ];
 
   # The program tries to dlopen Xxf86vm, Xext and Xinerama, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.
-  # I use 'yes y' to skip a build error linking with xine-lib,
-  # because xine stopped exporting "_x_vo_new_port"
-  #  https://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
   buildPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext -lXinerama"
     perl make.pl build
@@ -36,8 +38,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://eaglemode.sourceforge.net";
     description = "Zoomable User Interface";
+    changelog = "https://eaglemode.sourceforge.net/ChangeLog.html";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ chuangzhu ];
     platforms = platforms.linux;
   };
 }
