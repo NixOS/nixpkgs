@@ -249,11 +249,11 @@
     "vendorHash": null
   },
   "cloudscale": {
-    "hash": "sha256-Eo7zT/KiJdzo7fhAcCg6EV29ENM/XSBumAHmL9J8agU=",
+    "hash": "sha256-DQ7yIqA9gII0Ub1C8DEa1AMhQbzRFvsng8TMBGz+qzg=",
     "homepage": "https://registry.terraform.io/providers/cloudscale-ch/cloudscale",
     "owner": "cloudscale-ch",
     "repo": "terraform-provider-cloudscale",
-    "rev": "v4.0.0",
+    "rev": "v4.1.0",
     "spdx": "MIT",
     "vendorHash": null
   },
