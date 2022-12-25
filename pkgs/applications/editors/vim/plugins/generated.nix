@@ -2033,6 +2033,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
   };
 
+  copilot-lua = buildVimPluginFrom2Nix {
+    pname = "copilot.lua";
+    version = "2022-12-20";
+    src = fetchFromGitHub {
+      owner = "zbirenbaum";
+      repo = "copilot.lua";
+      rev = "81eb5d1bc2eddad5ff0b4e3c1c4be5c09bdfaa63";
+      sha256 = "1hyv1iccy4fjpmdq16rl8pplhnrnz71nxjsndyf955q029l06ics";
+    };
+    meta.homepage = "https://github.com/zbirenbaum/copilot.lua/";
+  };
+
   copilot-vim = buildVimPluginFrom2Nix {
     pname = "copilot.vim";
     version = "2022-12-19";
