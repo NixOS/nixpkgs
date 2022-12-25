@@ -50,6 +50,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = {
+    command = [ ./update.sh ];
+    supportedFeatures = [ "commit" ];
+  };
+
   meta = with lib; {
     description = "Music typesetting system";
     homepage = "http://lilypond.org/";
