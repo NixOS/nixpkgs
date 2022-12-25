@@ -244,6 +244,7 @@
   ./programs/waybar.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
+  ./programs/xastir.nix
   ./programs/wshowkeys.nix
   ./programs/xfconf.nix
   ./programs/xfs_quota.nix
