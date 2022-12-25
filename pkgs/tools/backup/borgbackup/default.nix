@@ -10,17 +10,27 @@
 , zstd
 , installShellFiles
 , nixosTests
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
+    hash = "sha256-4yQY+GM8lvqWgTUqVutjuY4pQgNHLBFKUkJwnTaWZ4U=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix HashIndexSizeTestCase.test_size_on_disk_accurate problems on ZFS,
+      # see https://github.com/borgbackup/borg/issues/7250
+      url = "https://github.com/borgbackup/borg/pull/7252/commits/537a814e53e20013a041faa7192da005f137cf5b.patch";
+      hash = "sha256-dnF/FW8pS4Ub9aAL4b7zf6ZNjMZaiMqdtl5R+DlAZTM=";
+    })
+  ];
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
