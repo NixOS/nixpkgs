@@ -673,6 +673,15 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  nvim-teal-maker = super.nvim-teal-maker.overrideAttrs (old: {
+    buildInputs = [ luaPackages.cyan luaPackages.tl ];
+    postPatch = ''
+      substituteInPlace lua/tealmaker/init.lua \
+        --replace cyan ${luaPackages.cyan}/bin/cyan
+    '';
+    vimCommandCheck = "TealBuild";
+  });
+
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old:
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
