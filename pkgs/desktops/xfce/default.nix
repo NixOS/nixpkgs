@@ -109,9 +109,7 @@ lib.makeScopeWithSplicing
 
       xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
 
-      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter {
-        inherit (pkgs.gnome) libsoup;
-      };
+      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter { };
 
       xfdashboard = callPackage ./applications/xfdashboard { };
 
