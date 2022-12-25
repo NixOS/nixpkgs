@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "Tool for SSH security audits";
     homepage = "https://github.com/ssh-mitm/ssh-mitm";
     changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
 }
