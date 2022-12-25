@@ -2495,6 +2495,8 @@ self: super: with self; {
 
   django-celery-email = callPackage ../development/python-modules/django-celery-email { };
 
+  django-celery-results = callPackage ../development/python-modules/django-celery-results { };
+
   django_classytags = callPackage ../development/python-modules/django_classytags { };
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };

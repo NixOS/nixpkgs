@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mangal";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "metafates";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-U1NmJsh7OuS0/kktmMcIjEaqc1ABtWG0ilSUw0UL8aU=";
+    hash = "sha256-T0QoHqL07J4Fb95qluYPb0yZYwdr7vDNLlrp7zPhtrA=";
   };
 
   proxyVendor = true;
