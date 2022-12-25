@@ -301,12 +301,12 @@ self: super: ({
 
   # Build segfaults unless `fixity-th` is disabled.
   # https://github.com/tweag/ormolu/issues/927
-  ormolu_0_5_0_1 = overrideCabal (drv: {
+  ormolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.ormolu_0_5_0_1);
-  fourmolu_0_9_0_0 = overrideCabal (drv: {
+  }) (disableCabalFlag "fixity-th" super.ormolu);
+  fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu_0_9_0_0);
+  }) (disableCabalFlag "fixity-th" super.fourmolu);
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

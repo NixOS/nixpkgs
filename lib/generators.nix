@@ -342,7 +342,10 @@ rec {
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+                "${libStr.escapeNixIdentifier name} = ${
+                  builtins.addErrorContext "while evaluating an attribute `${name}`"
+                    (go (indent + "  ") value)
+                };") v)
         + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
   in go "";

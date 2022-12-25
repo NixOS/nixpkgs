@@ -49,8 +49,8 @@ let
         start_all()
 
         machine.wait_for_unit('graphical.target')
-        machine.wait_until_succeeds('pgrep -x codium')
 
+        codium_running.wait()
         with codium_running:
             # Wait until vscodium is visible. "File" is in the menu bar.
             machine.wait_for_text('Get Started')

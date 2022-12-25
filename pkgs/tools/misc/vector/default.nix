@@ -45,6 +45,11 @@ rustPlatform.buildRustPackage {
     sha256 = pinData.sha256;
   };
 
+  patches = [
+    # replace with https://github.com/vectordotdev/vector/pull/15093 when ready
+    ./fix-for-rust-1.66.diff
+  ];
+
   cargoSha256 = pinData.cargoSha256;
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]

@@ -138,8 +138,7 @@ stdenv.mkDerivation rec {
     ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
-  # We are emulating wrapGAppsHook, along with other variables to the
-  # wrapper
+  # We are emulating wrapGAppsHook, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
@@ -231,5 +230,7 @@ stdenv.mkDerivation rec {
     # as long as the base and libraries (minus 3d) are build,
     # this wrapper does not need to get built
     # the kicad-*small "packages" cause this to happen
+
+    mainProgram = "kicad";
   };
 }

@@ -14,7 +14,7 @@
 
   # optional dependencies
 , cups ? null, libmysqlclient ? null, postgresql ? null
-, withGtk3 ? false, dconf ? null, gtk3 ? null
+, withGtk3 ? false, dconf, gtk3
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -25,9 +25,6 @@
 , developerBuild ? false
 , decryptSslTraffic ? false
 }:
-
-assert withGtk3 -> dconf != null;
-assert withGtk3 -> gtk3 != null;
 
 let
   compareVersion = v: builtins.compareVersions version v;

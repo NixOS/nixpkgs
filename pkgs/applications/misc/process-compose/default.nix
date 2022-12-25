@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "process-compose";
-  version = "0.29.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FxOgddgwehzrteMBjTrdksKpTR43VZV7PHI7NClZ3OU=";
+    hash = "sha256-FB0PjvPBfbytIXwYs+eT9PMnKX/yymrajlJ42FDlMFs=";
   };
 
   ldflags = [

@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     rm -r external/{miniupnp,randomx,rapidjson,unbound}
     # export patched source for haven-gui
     cp -r . $source
+    # fix build on aarch64-darwin
+    substituteInPlace CMakeLists.txt --replace "-march=x86-64" ""
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -59,7 +61,5 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ kim0 ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

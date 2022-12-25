@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.12.6";
+  version = "2022.12.8";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -429,7 +429,8 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-    ]; # missing inputs: btsmarthub_devicelist
+      btsmarthub_devicelist
+    ];
     "bthome" = ps: with ps; [
       aiohttp-cors
       bleak-retry-connector

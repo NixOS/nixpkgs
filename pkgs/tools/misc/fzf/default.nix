@@ -1,4 +1,6 @@
-{ lib
+{ stdenv
+, lib
+, pkgs
 , buildGoModule
 , fetchFromGitHub
 , writeText
@@ -6,7 +8,20 @@
 , installShellFiles
 , ncurses
 , perl
+, glibcLocales
 }:
+
+let
+  # on Linux, wrap perl in the bash completion scripts with the glibc locales,
+  # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
+  # warnings on non-nixos machines
+  ourPerl = if stdenv.isDarwin then perl else (
+    pkgs.writers.writeBashBin "perl" ''
+      #!${pkgs.runtimeShell}
+      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      exec ${perl}/bin/perl "$@"
+    '');
+in
 buildGoModule rec {
   pname = "fzf";
   version = "0.35.1";
@@ -42,7 +57,7 @@ buildGoModule rec {
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
-      --replace " perl -n " " ${perl}/bin/perl -n "
+      --replace " perl -n " " ${ourPerl}/bin/perl -n "
   '';
 
   postInstall = ''

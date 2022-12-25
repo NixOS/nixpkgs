@@ -16,6 +16,8 @@ rec {
 
      Example:
        x = { a = { b = 3; }; }
+       # ["a" "b"] is equivalent to x.a.b
+       # 6 is a default value to return if the path does not exist in attrset
        attrByPath ["a" "b"] 6 x
        => 3
        attrByPath ["z" "z"] 6 x
@@ -23,6 +25,7 @@ rec {
 
      Type:
        attrByPath :: [String] -> Any -> AttrSet -> Any
+
   */
   attrByPath =
     # A list of strings representing the attribute path to return from `set`
@@ -96,7 +99,7 @@ rec {
        => error: cannot find attribute `z.z'
 
      Type:
-       getAttrFromPath :: [String] -> AttrSet -> Value
+       getAttrFromPath :: [String] -> AttrSet -> Any
   */
   getAttrFromPath =
     # A list of strings representing the attribute path to get from `set`
@@ -109,10 +112,7 @@ rec {
   /* Map each attribute in the given set and merge them into a new attribute set.
 
      Type:
-       concatMapAttrs ::
-         (String -> a -> AttrSet)
-         -> AttrSet
-         -> AttrSet
+       concatMapAttrs :: (String -> a -> AttrSet) -> AttrSet -> AttrSet
 
      Example:
        concatMapAttrs
@@ -168,8 +168,7 @@ rec {
        ] { a.b.c = 0; }
        => { a = { b = { d = 1; }; }; x = { y = "xy"; }; }
 
-    Type:
-      updateManyAttrsByPath :: [AttrSet] -> AttrSet -> AttrSet
+    Type: updateManyAttrsByPath :: [{ path :: [String], update :: (Any -> Any) }] -> AttrSet -> AttrSet
   */
   updateManyAttrsByPath = let
     # When recursing into attributes, instead of updating the `path` of each
@@ -252,6 +251,7 @@ rec {
      Example:
        attrValues {c = 3; a = 1; b = 2;}
        => [1 2 3]
+
      Type:
        attrValues :: AttrSet -> [Any]
   */
@@ -341,6 +341,7 @@ rec {
 
      Type:
        foldAttrs :: (Any -> Any -> Any) -> Any -> [AttrSets] -> Any
+
   */
   foldAttrs =
     # A function, given a value and a collector combines the two.
@@ -394,7 +395,7 @@ rec {
            { a = 2; b = 20; }
          ]
      Type:
-     cartesianProductOfSets :: AttrSet -> [AttrSet]
+       cartesianProductOfSets :: AttrSet -> [AttrSet]
   */
   cartesianProductOfSets =
     # Attribute set with attributes that are lists of values
@@ -413,7 +414,7 @@ rec {
        => { name = "some"; value = 6; }
 
      Type:
-       nameValuePair :: String -> Any -> AttrSet
+       nameValuePair :: String -> Any -> { name :: String, value :: Any }
   */
   nameValuePair =
     # Attribute name
@@ -600,7 +601,7 @@ rec {
        => { }
 
      Type:
-       optionalAttrs :: Bool -> AttrSet
+       optionalAttrs :: Bool -> AttrSet -> AttrSet
   */
   optionalAttrs =
     # Condition under which the `as` attribute set is returned.
@@ -646,7 +647,7 @@ rec {
        => { a = ["x" "y"]; b = ["z"] }
 
      Type:
-     zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+       zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
   */
   zipAttrsWith =
     builtins.zipAttrsWith or (f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets);
@@ -737,7 +738,7 @@ rec {
        }
 
      Type:
-     recursiveUpdate :: AttrSet -> AttrSet -> AttrSet
+       recursiveUpdate :: AttrSet -> AttrSet -> AttrSet
   */
   recursiveUpdate =
     # Left attribute set of the merge.
@@ -795,6 +796,7 @@ rec {
   /* Turns a list of strings into a human-readable description of those
     strings represented as an attribute path. The result of this function is
     not intended to be machine-readable.
+    Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
 
     Example:
       showAttrPath [ "foo" "10" "bar" ]
@@ -831,11 +833,11 @@ rec {
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getOutput pkgs.openssl
+       getBin pkgs.openssl
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r"
 
      Type:
-       getOutput :: Derivation -> String
+       getBin :: Derivation -> String
   */
   getBin = getOutput "bin";
 
@@ -844,11 +846,11 @@ rec {
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getOutput pkgs.openssl
+       getLib pkgs.openssl
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-lib"
 
      Type:
-       getOutput :: Derivation -> String
+       getLib :: Derivation -> String
   */
   getLib = getOutput "lib";
 
@@ -857,11 +859,11 @@ rec {
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getOutput pkgs.openssl
+       getDev pkgs.openssl
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
 
      Type:
-       getOutput :: Derivation -> String
+       getDev :: Derivation -> String
   */
   getDev = getOutput "dev";
 
@@ -870,15 +872,19 @@ rec {
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getOutput pkgs.openssl
+       getMan pkgs.openssl
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-man"
 
      Type:
-       getOutput :: Derivation -> String
+       getMan :: Derivation -> String
   */
   getMan = getOutput "man";
 
-  /* Pick the outputs of packages to place in `buildInputs` */
+  /* Pick the outputs of packages to place in `buildInputs`
+
+   Type: chooseDevOutputs :: [Derivation] -> [String]
+
+  */
   chooseDevOutputs =
     # List of packages to pick `dev` outputs from
     drvs:
@@ -900,6 +906,7 @@ rec {
 
      Type:
        recurseIntoAttrs :: AttrSet -> AttrSet
+
    */
   recurseIntoAttrs =
     # An attribute set to scan for derivations.
@@ -909,7 +916,7 @@ rec {
   /* Undo the effect of recurseIntoAttrs.
 
      Type:
-       recurseIntoAttrs :: AttrSet -> AttrSet
+       dontRecurseIntoAttrs :: AttrSet -> AttrSet
    */
   dontRecurseIntoAttrs =
     # An attribute set to not scan for derivations.
@@ -919,7 +926,10 @@ rec {
   /* `unionOfDisjoint x y` is equal to `x // y // z` where the
      attrnames in `z` are the intersection of the attrnames in `x` and
      `y`, and all values `assert` with an error message.  This
-      operator is commutative, unlike (//). */
+      operator is commutative, unlike (//).
+
+     Type: unionOfDisjoint :: AttrSet -> AttrSet -> AttrSet
+  */
   unionOfDisjoint = x: y:
     let
       intersection = builtins.intersectAttrs x y;
@@ -930,9 +940,10 @@ rec {
     in
       (x // y) // mask;
 
-  # deprecated
+  # DEPRECATED
   zipWithNames = zipAttrsWithNames;
-  # deprecated
+
+  # DEPRECATED
   zip = builtins.trace
     "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
 }
