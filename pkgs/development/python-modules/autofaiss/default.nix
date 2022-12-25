@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "autofaiss";
-  version = "2.15.3";
+  version = "2.15.4";
 
   src = fetchFromGitHub {
     owner = "criteo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-RJOOUMI4w1YPEjDKi0YkqTXU01AbVoPn2+Id6kdC5pA=";
+    hash = "sha256-OnDHwJxJcXx3DGxrkk2D2Ljs4CqPoYx7avdo9C8sDrU=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
