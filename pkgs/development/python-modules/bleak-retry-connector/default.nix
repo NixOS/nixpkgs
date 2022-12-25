@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "2.10.2";
+  version = "2.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9s7Ff7lH7a/zoV0blrp5tOZoZkBDAoSZx5aL9VQyzFo=";
+    hash = "sha256-p61U2WF+Bq2xJif3W74ghS51UggjLjIsFMGdhEu3pq8=";
   };
 
   postPatch = ''
@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
+    changelog = "https://github.com/bluetooth-devices/bleak-retry-connector/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
