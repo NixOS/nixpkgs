@@ -4,13 +4,13 @@
 , pythonOlder
 , toml
 , pyyaml
-, packaging
+, packvers
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dparse2";
-  version = "0.6.1";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,13 +19,13 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1tbNW7Gy7gvMnETdAM2ahHiwbhG9qvdYZggia1+7eGo=";
+    hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
   };
 
   propagatedBuildInputs = [
     toml
     pyyaml
-    packaging
+    packvers
   ];
 
   checkInputs = [
