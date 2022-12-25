@@ -737,6 +737,8 @@ let
 
     lo = callPackage ../development/ocaml-modules/lo { };
 
+    lockfree = callPackage ../development/ocaml-modules/lockfree { };
+
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
