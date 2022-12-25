@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bolero";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fyXXYV5X9t5biw1byWd1B2eQaPxdQPFWe3kVrLth2Ns=";
+    sha256 = "sha256-j6fWCIXfVS5b3NZizhg9pI+kJkWlR1eGUSW9hJO1/mQ=";
   };
 
-  cargoSha256 = "sha256-g8WeDqv5o4GKAd32+SJGLHl/cozWTVrrj1vWwvxX8Bw=";
+  cargoSha256 = "sha256-ycvGw99CcE29axG9UWD0lkQp5kxD6Eguco5Fh9Vfj6E=";
 
   buildInputs = [ libbfd libopcodes libunwind ];
 
