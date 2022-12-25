@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HpmaFP5BXqltidUFPHkNAQYfGbZzdwa4F9FXnCoHzBY=";
+    sha256 = "sha256-2XqT6PWi78RxOggEZX3trYN0XMpM0diN6Rhvd/l3YAQ=";
   };
 
   nativeBuildInputs = [
