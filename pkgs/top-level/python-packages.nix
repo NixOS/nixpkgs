@@ -6668,6 +6668,8 @@ self: super: with self; {
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
+  packvers = callPackage ../development/python-modules/packvers { };
+
   pafy = callPackage ../development/python-modules/pafy { };
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
