@@ -32,9 +32,7 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.strings.makeBinPath [ ktlint yapf rubocop rustfmt ] }
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";

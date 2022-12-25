@@ -34,9 +34,7 @@ buildGoModule rec {
       --zsh <($out/bin/supabase completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "supabase-cli";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A CLI for interacting with supabase";

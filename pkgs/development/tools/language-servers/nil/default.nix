@@ -20,9 +20,7 @@ rustPlatform.buildRustPackage rec {
     (lib.getBin nix)
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Yet another language server for Nix";

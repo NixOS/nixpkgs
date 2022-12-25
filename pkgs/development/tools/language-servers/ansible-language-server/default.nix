@@ -30,9 +30,7 @@ buildNpmPackage rec {
     sed -i '/"prepack"/d' package.json
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/ansible/ansible-language-server/releases/tag/v${version}";
