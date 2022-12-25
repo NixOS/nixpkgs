@@ -12,11 +12,11 @@
 }:
 
 let
-  version = "20221031.1308.130cc26";
+  version = "20221220.0956.79e1207";
 
   src = fetchzip {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
-    hash = "sha256-+xpSoSsG+G+w8+g0FhXx+6Phroj83ijW8xWvYO+kdqY=";
+    hash = "sha256-AQgz2GqueFG+yK42zJ9MzvP4BddGt0BFb+cIoA6Fif8=";
 
     stripRoot = false;
     postFetch = ''
