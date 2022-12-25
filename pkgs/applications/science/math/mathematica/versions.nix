@@ -7,7 +7,6 @@ let versions = [
     language = "English";
     sha256 = "sha256-T9XOXA6jpgN6bcO/do9sw1L73ABtyxuZCLzftv4Cl6o=";
     installer = "Mathematica_13.2.0_LINUX.sh";
-    webdoc = true;
   }
   {
     version = "13.2.0";
@@ -15,7 +14,6 @@ let versions = [
     language = "English";
     sha256 = "sha256-YRUvl2H9SwpwDZx04ugd7ZnK5G+t88bzAObXsGGVhk0=";
     installer = "Mathematica_13.2.0_BNDL_LINUX.sh";
-    webdoc = false;
   }
   {
     version = "13.1.0";
@@ -112,9 +110,8 @@ let versions = [
 
 in
 
-lib.flip map versions ({ version, lang, language, sha256, installer
-                       , webdoc ? false }: {
-  inherit version lang webdoc;
+lib.flip map versions ({ version, lang, language, sha256, installer }: {
+  inherit version lang;
   src = requireFile {
     name = installer;
     message = ''
