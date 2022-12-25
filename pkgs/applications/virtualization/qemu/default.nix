@@ -117,6 +117,31 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
       sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
     })
+    (fetchpatch {
+      name = "CVE-2022-4172.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/defb70980f6bed36100b74e84220f1764c0dd544.patch";
+      sha256 = "sha256-8HGe3UQB9/8mwYwSmv1vlDUCCfiqFGjk+Pf6Ibvbn9E=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4144.part-1.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/61c34fc194b776ecadc39fb26b061331107e5599.patch";
+      sha256 = "sha256-g4NGE8P7+lLyL2XAtXt8xSLsrPnvDyi7vbRPTQXgSSE=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4144.part-2.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/b1901de83a9456cde26fc755f71ca2b7b3ef50fc.patch";
+      sha256 = "sha256-rTFGzrH+ksx1oytMAym9CJJ9VJ5fX8MTjL4wo5/V94s=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4144.part-3.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/8efec0ef8bbc1e75a7ebf6e325a35806ece9b39f.patch";
+      sha256 = "sha256-Xhe1HyYO6FFGQomwYhmlB+UBKLV6U/A9Rl46C5qhS4M=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4144.part-4.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/6dbbf055148c6f1b7d8a3251a65bd6f3d1e1f622.patch";
+      sha256 = "sha256-fd2tqcih17LdaECAGhIOpRg8dXSbDa7C4M3hHxhisBE=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
