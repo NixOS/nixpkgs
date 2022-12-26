@@ -12,7 +12,7 @@ let
     sha256 = "sha256-Y1P+cTOK7NbV7k9rg38vE7EPuZQo88IQW3IYYou8ZOI=";
   };
 
-  # put packages that needs to be overriden in the py package scope
+  # put packages that needs to be overridden in the py package scope
   py = import ./python-packages.nix {
     inherit stdenv lib src version python3;
   };

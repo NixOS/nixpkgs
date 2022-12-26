@@ -1,4 +1,4 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-instaling-virtualbox-guest">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-installing-virtualbox-guest">
   <title>Installing in a VirtualBox guest</title>
   <para>
     Installing NixOS into a VirtualBox guest is convenient for users who

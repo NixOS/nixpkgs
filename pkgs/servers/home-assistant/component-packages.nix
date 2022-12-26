@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.12.6";
+  version = "2022.12.8";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -429,7 +429,8 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-    ]; # missing inputs: btsmarthub_devicelist
+      btsmarthub_devicelist
+    ];
     "bthome" = ps: with ps; [
       aiohttp-cors
       bleak-retry-connector
@@ -1349,7 +1350,9 @@
       pyheos
     ];
     "here_travel_time" = ps: with ps; [
-    ]; # missing inputs: here_routing here_transit
+      here-routing
+      here-transit
+    ];
     "hexaom" = ps: with ps; [
     ];
     "hi_kumo" = ps: with ps; [
@@ -4315,6 +4318,7 @@
     "hddtemp"
     "hdmi_cec"
     "heos"
+    "here_travel_time"
     "hisense_aehw4a1"
     "history"
     "history_stats"

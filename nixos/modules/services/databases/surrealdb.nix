@@ -10,6 +10,15 @@ in {
     services.surrealdb = {
       enable = mkEnableOption (lib.mdDoc "A scalable, distributed, collaborative, document-graph database, for the realtime web ");
 
+      package = mkOption {
+        default = pkgs.surrealdb;
+        defaultText = literalExpression "pkgs.surrealdb";
+        type = types.package;
+        description = lib.mdDoc ''
+          Which surrealdb derivation to use.
+        '';
+      };
+
       dbPath = mkOption {
         type = types.str;
         description = lib.mdDoc ''
@@ -57,7 +66,7 @@ in {
   config = mkIf cfg.enable {
 
     # Used to connect to the running service
-    environment.systemPackages = [ pkgs.surrealdb ] ;
+    environment.systemPackages = [ cfg.package ] ;
 
     systemd.services.surrealdb = {
       description = "A scalable, distributed, collaborative, document-graph database, for the realtime web ";
@@ -65,7 +74,7 @@ in {
       after = [ "network.target" ];
 
       script = ''
-        ${pkgs.surrealdb}/bin/surreal start \
+        ${cfg.package}/bin/surreal start \
           --user $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_USERNAME) \
           --pass $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_PASSWORD) \
           --bind ${cfg.host}:${toString cfg.port} \

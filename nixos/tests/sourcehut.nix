@@ -35,7 +35,7 @@ let
           };
 
           security.sudo.wheelNeedsPassword = false;
-          nix.trustedUsers = [ "root" "build" ];
+          nix.settings.trusted-users = [ "root" "build" ];
           documentation.nixos.enable = false;
 
           # builds.sr.ht-image-specific network settings

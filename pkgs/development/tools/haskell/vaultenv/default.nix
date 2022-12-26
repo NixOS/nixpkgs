@@ -96,4 +96,8 @@ mkDerivation rec {
   description = "Runs processes with secrets from HashiCorp Vault";
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ lnl7 manveru ];
+
+  # Does not compile on ghc92
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 }

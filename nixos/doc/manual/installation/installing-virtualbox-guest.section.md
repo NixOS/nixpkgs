@@ -1,4 +1,4 @@
-# Installing in a VirtualBox guest {#sec-instaling-virtualbox-guest}
+# Installing in a VirtualBox guest {#sec-installing-virtualbox-guest}
 
 Installing NixOS into a VirtualBox guest is convenient for users who
 want to try NixOS without installing it on bare metal. If you want to

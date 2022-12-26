@@ -50,4 +50,7 @@ haskellPackages.mkDerivation rec {
   # Windows not (yet) supported.
   platforms   = with lib.platforms; unix ++ darwin;
 
+  # doesn't build on ghc92
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 }

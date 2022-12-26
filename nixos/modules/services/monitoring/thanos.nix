@@ -300,7 +300,7 @@ let
       max-time = mkParamDef types.str "9999-12-31T23:59:59Z" ''
         End of time range limit to serve.
 
-        Thanos Store serves only blocks, which happened eariler than this
+        Thanos Store serves only blocks, which happened earlier than this
         value. Option can be a constant time in RFC3339 format or time duration
         relative to current time, such as -1d or 2h45m. Valid duration units are
         ms, s, m, h, d, w, y.

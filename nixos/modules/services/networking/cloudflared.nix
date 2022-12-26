@@ -258,7 +258,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     systemd.targets =
       mapAttrs'
         (name: tunnel:

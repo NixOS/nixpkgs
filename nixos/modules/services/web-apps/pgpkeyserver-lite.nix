@@ -41,7 +41,7 @@ in
         defaultText = literalExpression "head config.${sksOpt.hkpAddress}";
         type = types.str;
         description = lib.mdDoc ''
-          Wich ip address the sks-keyserver is listening on.
+          Which IP address the sks-keyserver is listening on.
         '';
       };
 

@@ -6,10 +6,14 @@
 , fftwSinglePrec
 , doxygen
 , swig
-, python3Packages, enablePython ? false
-, opencl-headers, ocl-icd, enableOpencl ? false
-, clang, enableClang ? true
-, cudatoolkit, enableCuda ? false
+, enablePython ? false
+, python3Packages
+, enableOpencl ? true
+, opencl-headers
+, ocl-icd
+, enableCuda ? false
+, cudaPackages
+, addOpenGLRunpath
 }:
 
 stdenv.mkDerivation rec {
@@ -31,11 +35,17 @@ stdenv.mkDerivation rec {
       serialization/tests/TestSerializeIntegrator.cpp
   '';
 
-  nativeBuildInputs = [ cmake gfortran swig doxygen python3Packages.python ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    swig
+    doxygen
+    python3Packages.python
+  ] ++ lib.optional enableCuda addOpenGLRunpath;
 
   buildInputs = [ fftwSinglePrec ]
     ++ lib.optionals enableOpencl [ ocl-icd opencl-headers ]
-    ++ lib.optional enableCuda cudatoolkit;
+    ++ lib.optional enableCuda cudaPackages.cudatoolkit;
 
   propagatedBuildInputs = lib.optionals enablePython (with python3Packages; [
     python
@@ -54,32 +64,36 @@ stdenv.mkDerivation rec {
     "-DOPENMM_BUILD_SHARED_LIB=ON"
   ] ++ lib.optionals enablePython [
     "-DOPENMM_BUILD_PYTHON_WRAPPERS=ON"
-  ] ++ lib.optionals enableClang [
-    "-DCMAKE_C_COMPILER=${clang}/bin/clang"
-    "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
   ] ++ lib.optionals enableOpencl [
     "-DOPENMM_BUILD_OPENCL_LIB=ON"
     "-DOPENMM_BUILD_AMOEBA_OPENCL_LIB=ON"
     "-DOPENMM_BUILD_DRUDE_OPENCL_LIB=ON"
     "-DOPENMM_BUILD_RPMD_OPENCL_LIB=ON"
   ] ++ lib.optionals enableCuda [
-    "-DCUDA_SDK_ROOT_DIR=${cudatoolkit}"
+    "-DCUDA_SDK_ROOT_DIR=${cudaPackages.cudatoolkit}"
     "-DOPENMM_BUILD_AMOEBA_CUDA_LIB=ON"
     "-DOPENMM_BUILD_CUDA_LIB=ON"
     "-DOPENMM_BUILD_DRUDE_CUDA_LIB=ON"
     "-DOPENMM_BUILD_RPMD_CUDA_LIB=ON"
-    "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib64/stubs"
+    "-DCMAKE_LIBRARY_PATH=${cudaPackages.cudatoolkit}/lib64/stubs"
   ];
 
   postInstall = lib.strings.optionalString enablePython ''
-    export OPENMM_LIB_PATH=$out/lib
-    export OPENMM_INCLUDE_PATH=$out/include
-    cd python
-    ${python3Packages.python.interpreter} setup.py build
-    ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      export OPENMM_LIB_PATH=$out/lib
+      export OPENMM_INCLUDE_PATH=$out/include
+      cd python
+      ${python3Packages.python.interpreter} setup.py build
+      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+    '';
+
+  postFixup = ''
+    for lib in $out/lib/plugins/*CUDA.so $out/lib/plugins/*Cuda*.so; do
+      addOpenGLRunpath "$lib"
+    done
   '';
 
-  doCheck = true;
+  # Couldn't get CUDA to run properly in the sandbox
+  doCheck = !enableCuda && !enableOpencl;
 
   meta = with lib; {
     description = "Toolkit for molecular simulation using high performance GPU code";

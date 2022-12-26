@@ -9,5 +9,9 @@ with lib; mkCoqDerivation {
   release."20200201".sha256 = "1h55s6lk47bk0lv5ralh81z55h799jbl9mhizmqwqzy57y8wqgs1";
 
   propagatedBuildInputs = [ StructTact ];
-  preConfigure = "patchShebangs ./configure";
+  preConfigure = ''
+    if [ -f ./configure ]; then
+      patchShebangs ./configure
+    fi
+  '';
 }

@@ -28,7 +28,7 @@ let
   # Upstream relies on /etc/skel to initiate a new users home directory with plank's dockitems.
   #
   # That is not possible within nixos, but we can achieve this easily with a simple script that copies
-  # them. We then use a xdg autostart and initalize it during the "EarlyInitialization" phase of a gnome session
+  # them. We then use a xdg autostart and initialize it during the "EarlyInitialization" phase of a gnome session
   # which is most appropriate for installing files into $HOME.
   #
 

@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-/9GVvVZ9uv/DuYsj/QCq0FN2gMmJYXHkT+P/eeKKwz0=";
   };
 
+  patches = [
+    (fetchurl { # https://gitlab.inria.fr/mpfr/mpfr/-/issues/1
+      url = "https://www.mpfr.org/mpfr-4.1.1/patch01";
+      hash = "sha256-gKPCcJviGsqsEqnMmYiNY6APp3+3VXbyBf6LoZhP9Eo=";
+    })
+  ];
+
   outputs = [ "out" "dev" "doc" "info" ];
 
   strictDeps = true;

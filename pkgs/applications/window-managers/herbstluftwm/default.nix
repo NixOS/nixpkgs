@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.pytestCheckHook
   ];
 
-  # make the package's module avalaible
+  # make the package's module available
   preCheck = ''
     export PYTHONPATH="$PYTHONPATH:../python"
   '';

@@ -2,7 +2,8 @@
 
 deployAndroidPackage {
   inherit package os;
-  buildInputs = lib.optionals (os == "linux") [ autoPatchelfHook pkgs.glibc pkgs.zlib pkgs.ncurses5 ];
+  nativeBuildInputs = lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 ];
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib64
     autoPatchelf --no-recurse $packageBaseDir/lib64

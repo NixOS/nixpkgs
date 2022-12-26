@@ -105,7 +105,7 @@ let
     };
   };
 
-  d2u = lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceStrings ["."] ["_"];
 
 in {
 

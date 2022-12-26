@@ -12,6 +12,13 @@ lib.makeScope pkgs.newScope (self: with self; {
     installPhase = "mv svg $out/share/iso-flags-svg";
   });
 
+  # Extensions added here will be shipped by default
+  nemoExtensions = [
+    folder-color-switcher
+    nemo-fileroller
+    nemo-python
+  ];
+
   # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
   bulky = callPackage ./bulky { };
   cinnamon-common = callPackage ./cinnamon-common { };
@@ -24,7 +31,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-session = callPackage ./cinnamon-session { };
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
+  folder-color-switcher = callPackage ./folder-color-switcher { };
   nemo = callPackage ./nemo { };
+  nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
+  nemo-python = callPackage ./nemo-extensions/nemo-python { };
+  nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   mint-artwork = callPackage ./mint-artwork { };
   mint-cursor-themes = callPackage ./mint-cursor-themes { };
   mint-themes = callPackage ./mint-themes { };

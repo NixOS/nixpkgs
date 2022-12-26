@@ -91,7 +91,7 @@ aspnetcore_packages () {
     # would fail due to missing dependencies.
     #
     # Moving them to a separate list stored alongside the SDK package definitions,
-    # and implictly including them along in buildDotnetModule allows us
+    # and implicitly including them along in buildDotnetModule allows us
     # to make updating .NET SDK packages a lot easier - we now just update
     # the versions of these packages in one place, and all packages that
     # use buildDotnetModule continue building with the new .NET version without changes.
@@ -141,7 +141,7 @@ sdk_packages () {
     # would fail due to missing dependencies.
     #
     # Moving them to a separate list stored alongside the SDK package definitions,
-    # and implictly including them along in buildDotnetModule allows us
+    # and implicitly including them along in buildDotnetModule allows us
     # to make updating .NET SDK packages a lot easier - we now just update
     # the versions of these packages in one place, and all packages that
     # use buildDotnetModule continue building with the new .NET version without changes.

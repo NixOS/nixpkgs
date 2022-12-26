@@ -9,7 +9,7 @@ let
   xcodewrapper = composeXcodeWrapper xcodewrapperArgs;
 in
 stdenv.mkDerivation {
-  name = lib.replaceChars [" "] [""] name;
+  name = lib.replaceStrings [" "] [""] name;
   buildCommand = ''
     mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"

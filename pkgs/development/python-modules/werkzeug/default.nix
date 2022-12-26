@@ -4,7 +4,6 @@
 , pythonOlder
 , fetchPypi
 , watchdog
-, dataclasses
 , ephemeral-port-reserve
 , pytest-timeout
 , pytest-xprocess
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!stdenv.isDarwin) [
     # watchdog requires macos-sdk 10.13+
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [
