@@ -38,10 +38,9 @@ rustPlatform.buildRustPackage rec {
   NIX_LDFLAGS = lib.optionals stdenv.isDarwin [ "-framework" "AppKit" ];
 
   meta = with lib; {
-    description =
-      "Minimalistic, blazing-fast, and extendable prompt for bash and zsh";
+    description = "Minimalistic, blazing-fast, and extendable prompt for bash and zsh";
     homepage = "https://github.com/aaqaishtyaq/iay";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaqaishtyaq ];
+    maintainers = with maintainers; [ aaqaishtyaq omasanori ];
   };
 }

@@ -177,6 +177,7 @@
   ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
+  ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
