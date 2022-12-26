@@ -1,8 +1,8 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index d18843c..a9df1fb 100644
+index e21ff50..d060ff6 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -8,11 +8,6 @@ if(NOT CMAKE_BUILD_TYPE)
+@@ -10,11 +10,6 @@ if(NOT CMAKE_BUILD_TYPE)
  	set(CMAKE_BUILD_TYPE Release)
  endif()
  
@@ -14,7 +14,7 @@ index d18843c..a9df1fb 100644
  add_executable(ect
  	main.cpp
  	gztools.cpp
-@@ -56,7 +51,6 @@ add_subdirectory(lodepng EXCLUDE_FROM_ALL)
+@@ -128,7 +123,6 @@ add_subdirectory(lodepng EXCLUDE_FROM_ALL)
  add_subdirectory(miniz EXCLUDE_FROM_ALL)
  add_subdirectory(zlib EXCLUDE_FROM_ALL)
  add_subdirectory(zopfli EXCLUDE_FROM_ALL)
@@ -23,10 +23,10 @@ index d18843c..a9df1fb 100644
  # Mozjpeg changes the install prefix if it thinks the current is defaulted
  set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT FALSE)
 diff --git a/src/Makefile b/src/Makefile
-index cc24367..7aa9f0a 100755
+index 9235e04..85c24d1 100755
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -18,7 +18,7 @@ CXXSRC = support.cpp zopflipng.cpp zopfli/deflate.cpp zopfli/zopfli_gzip.cpp zop
+@@ -19,24 +19,21 @@ CXXSRC = support.cpp zopflipng.cpp zopfli/deflate.cpp zopfli/zopfli_gzip.cpp zop
  lodepng/lodepng.cpp lodepng/lodepng_util.cpp optipng/codec.cpp optipng/optipng.cpp jpegtran.cpp gztools.cpp \
  leanify/zip.cpp leanify/leanify.cpp
  
@@ -35,30 +35,41 @@ index cc24367..7aa9f0a 100755
  all: deps bin
  
  bin: deps
-@@ -33,9 +33,6 @@ libz.a:
+ 	$(CC) -c $(UCFLAGS) optipng/image.c zopfli/util.c zopfli/squeeze.c zopfli/lz77.c \
+ 	zopfli/blocksplitter.c optipng/opngreduc/opngreduc.c LzFind.c miniz/miniz.c mozjpeg/transupp.c
+-	$(CXX) $(UCXXFLAGS) main.cpp libz.a $(OBJECTS) $(CXXSRC) mozjpeg/libjpeg.a libpng/libpng.a -o ${BINPREFIX}/ect $(LDFLAGS)
++	$(CXX) $(UCXXFLAGS) main.cpp libz.a $(OBJECTS) $(CXXSRC) mozjpeg/libjpeg.a -o ${BINPREFIX}/ect $(LDFLAGS)
+ clean:
+-	rm -f *.o *.a zlib/*.o libpng/*.o libpng/*.a libpng/pngusr.h libpng/pnglibconf.h
++	rm -f *.o *.a zlib/*.o
+ 	make -C mozjpeg clean
+-deps: libz.a libpng mozjpeg
++deps: libz.a mozjpeg
+ libz.a:
  	cd zlib/; \
- 	$(CC) $(UCFLAGS) -c adler32.c crc32.c deflate.c inffast.c inflate.c inftrees.c trees.c zutil.c gzlib.c gzread.c; \
- 	ar rcs ../libz.a adler32.o crc32.o deflate.o inffast.o inflate.o inftrees.o trees.o zutil.o gzlib.o gzread.o
+ 	$(CC) $(UCFLAGS) -c adler32.c crc32.c deflate.c inffast.c inflate.c inftrees.c trees.c zutil.c gzlib.c gzread.c adler32_simd.c crc32_simd.c; \
+ 	ar rcs ../libz.a adler32.o crc32.o deflate.o inffast.o inflate.o inftrees.o trees.o zutil.o gzlib.o gzread.o adler32_simd.o crc32_simd.o
 -libpng:
 -	cp pngusr.h libpng/pngusr.h
--	make -C libpng/ -f scripts/makefile.linux-opt CC="$(CC)" CFLAGS="$(UCFLAGS) -DPNG_USER_CONFIG -Wno-macro-redefined" libpng.a
+-	make -C libpng/ -f scripts/makefile.linux CC="$(CC)" CFLAGS="$(UCFLAGS) -DPNG_USER_CONFIG -Wno-macro-redefined" libpng.a
  mozjpeg:
  	cd mozjpeg/; \
  	export CC="$(CC)"; \
 diff --git a/src/optipng/CMakeLists.txt b/src/optipng/CMakeLists.txt
-index 1037a20..3c751e9 100644
+index e0d30a6..13c4e05 100644
 --- a/src/optipng/CMakeLists.txt
 +++ b/src/optipng/CMakeLists.txt
-@@ -16,16 +16,14 @@ add_library(optipng
+@@ -16,7 +16,6 @@ add_library(optipng
  add_library(optipng::optipng ALIAS optipng)
  
  #make sure that we are using custom zlib and custom libpng options
 -set(PNG_BUILD_ZLIB ON CACHE BOOL "use custom zlib within libpng" FORCE)
- set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../zlib/ CACHE FILEPATH "custom zlib directory" FORCE)
- if(NOT WIN32)
- 	add_compile_options(-Wno-macro-redefined)
+ set(PNG_ARM_NEON "on" CACHE STRING "Enable ARM NEON optimizations: on|off; on is default" FORCE)
+ set(ZLIB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../zlib/ CACHE FILEPATH "custom zlib directory" FORCE)
+ 
+@@ -30,9 +29,8 @@ if(NOT MSVC)
+ 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-null-pointer-subtraction")
  endif()
- add_compile_definitions(PNG_USER_CONFIG)
  
 -add_subdirectory(../libpng libpng EXCLUDE_FROM_ALL)
  target_link_libraries(optipng
