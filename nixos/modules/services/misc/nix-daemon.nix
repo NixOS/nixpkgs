@@ -42,7 +42,7 @@ let
         else if isDerivation v then toString v
         else if builtins.isPath v then toString v
         else if isString v then v
-        else if isCoercibleToString v then toString v
+        else if strings.isCoercibleToString v then toString v
         else abort "The nix conf value: ${toPretty {} v} can not be encoded";
 
       mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
