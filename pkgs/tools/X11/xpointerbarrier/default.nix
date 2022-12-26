@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
-    homepage = "https://uninformativ.de/git/xpointerbarrier";
+    homepage = "https://www.uninformativ.de/git/xpointerbarrier/file/README.html";
     description = "Create X11 pointer barriers around your working area";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres xzfc ];

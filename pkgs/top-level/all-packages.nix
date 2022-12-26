@@ -5595,6 +5595,8 @@ with pkgs;
 
   bfs = callPackage ../tools/system/bfs { };
 
+  bevelbar = callPackage ../tools/X11/bevelbar { };
+
   bgs = callPackage ../tools/X11/bgs { };
 
   bibclean = callPackage ../tools/typesetting/bibclean { };
@@ -27827,8 +27829,6 @@ with pkgs;
   bespokesynth-with-vst2 = bespokesynth.override {
     enableVST2 = true;
   };
-
-  bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
 
