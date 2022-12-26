@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, mopidy }:
+{ lib
+, fetchFromGitHub
+, pythonPackages
+, mopidy
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-musicbox-webclient";
@@ -11,14 +15,17 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
 
-  propagatedBuildInputs = [ mopidy ];
+  propagatedBuildInputs = [
+    mopidy
+  ];
 
   doCheck = false;
 
   meta = with lib; {
     description = "A Mopidy frontend extension and web client with additional features for Pi MusicBox";
     homepage = "https://github.com/pimusicbox/mopidy-musicbox-webclient";
+    changelog = "https://github.com/pimusicbox/mopidy-musicbox-webclient/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = with maintainers; [ spwhitt ];
   };
 }
