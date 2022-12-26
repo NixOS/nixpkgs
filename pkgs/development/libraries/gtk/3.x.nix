@@ -145,6 +145,8 @@ stdenv.mkDerivation rec {
     libSM
     libXcomposite
     libXcursor
+    libXdamage
+    libXfixes
     libXi
     libXrandr
     libXrender
