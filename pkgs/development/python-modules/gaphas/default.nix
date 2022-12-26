@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "gaphas";
-  version = "3.8.4";
+  version = "3.9.2";
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dfAkjPcA/fW50fsOT6lqwPRsdvkVUThSnKIHUmNm/8U=";
+    sha256 = "sha256-hw8aGjsrx6xWPbFybpss5EB3eg6tmxgkXpGiWguLKP4=";
   };
 
   nativeBuildInputs = [
