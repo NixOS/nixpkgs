@@ -1,17 +1,23 @@
-{ lib, stdenv, buildPecl, php, valgrind, pcre2 }:
+{ lib, stdenv, buildPecl, php, valgrind, pcre2, fetchFromGitHub }:
+
 let
   pname = "openswoole";
-  version = "4.12.0";
-in
-buildPecl {
-  inherit pname version;
+  version = "22.0.0";
+in buildPecl {
+  inherit version;
+  pname = "openswoole";
 
-  sha256 = "16fxwkjqihinzsmjbpzslf13m8yp0wnsqa2y5g0b07cf15g6qbny";
+  src = fetchFromGitHub {
+    owner = "openswoole";
+    repo = "swoole-src";
+    rev = "v${version}";
+    sha256 = "sha256-4Z7mBNGHXS/giSCmPpSyu9/99MEjCnoXgymDM/s1gk8=";
+  };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
 
   meta = with lib; {
-    changelog = "https://pecl.php.net/package/openswoole/${version}";
+    changelog = "https://github.com/openswoole/swoole-src/releases/tag/v${version}";
     description = "Coroutine-based concurrency library and high performance programmatic server for PHP";
     homepage = "https://www.openswoole.com/";
     license = licenses.asl20;
