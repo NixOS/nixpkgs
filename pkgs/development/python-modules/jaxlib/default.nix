@@ -234,12 +234,12 @@ let
     fetchAttrs = {
       sha256 =
         if cudaSupport then
-          "sha256-FO3mvxr+c3kWOhIRRdJ0gBOHrPr2LKrtjZvYaPp8Xu0="
+          "sha256-n8wo+hD9ZYO1SsJKgyJzUmjRlsz45WT6tt5ZLleGvGY="
         else {
-          x86_64-linux = "sha256-s4fJhjxr9Nj8EMfNFoKDE68AVN7ETsvuuCZ4bJVS1Eo=";
-          aarch64-linux = "sha256-MgkQ8BwIP77dwbYyEyb59WUcOE7jWthHcDJZFNceS4o=";
-          x86_64-darwin = "sha256-xF36ctkzH/LGvKhrcrqVDz5tUqFnYsFaOzjf3aJUTtU=";
-          aarch64-darwin = "sha256-/C6HUTHvRd+3LL4repJWWQq+2UXgO5za4xXZhhNxNrM=";
+          x86_64-linux = "sha256-A0A18kxgGNGHNQ67ZPUzh3Yq2LEcRV7CqR9EfP80NQk=";
+          aarch64-linux = "sha256-mU2jzuDu89jVmaG/M5bA3jSd7n7lDi+h8sdhs1z8p1A=";
+          x86_64-darwin = "sha256-9nNTpetvjyipD/l8vKlregl1j/OnZKAcOCoZQeRBvts=";
+          aarch64-darwin = "sha256-dOGUsdFImeOLcZ3VtgrNnd8A/HgIs/LYuH9GQV7A+78=";
         }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     };
 
