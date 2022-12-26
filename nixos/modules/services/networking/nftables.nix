@@ -134,7 +134,6 @@ in
         lib.mdDoc ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
-          This option conflicts with rulesetFile.
         '';
     };
     networking.nftables.rulesetFile = mkOption {
@@ -144,7 +143,6 @@ in
         lib.mdDoc ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
-          This option conflicts with ruleset and nftables based firewall.
         '';
     };
     networking.nftables.tables = mkOption {
