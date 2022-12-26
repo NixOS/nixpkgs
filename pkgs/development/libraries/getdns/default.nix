@@ -12,7 +12,7 @@ in rec {
 
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";
-    version = "1.7.2";
+    version = "1.7.3";
     outputs = [ "out" "dev" "lib" "man" ];
 
     src = fetchurl {
@@ -22,7 +22,7 @@ in rec {
         }/${pname}-${version}.tar.gz";
       sha256 =
         # upstream publishes hashes in hex format
-        "db89fd2a940000e03ecf48d0232b4532e5f0602e80b592be406fd57ad76fdd17";
+        "sha256-8UBMolDwLjehGKoAzw7Cy+EYluBgxtNpxnYbrqfVWiw=";
     };
 
     nativeBuildInputs = [ cmake doxygen ];
