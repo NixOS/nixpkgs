@@ -15865,7 +15865,7 @@ with pkgs;
     # On newer readline8 fails as:
     #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
     #   does not have the required size or alignment
-    readline = readline6;
+    readline = readline63;
   };
 
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
@@ -22417,7 +22417,6 @@ with pkgs;
   raylib = callPackage ../development/libraries/raylib { };
 
   readline = readline81;
-  readline6 = readline63;
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
