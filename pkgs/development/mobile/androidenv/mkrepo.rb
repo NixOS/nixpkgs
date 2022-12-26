@@ -154,7 +154,7 @@ def normalize_license license
   license = license.dup
   license.gsub!(/([^\n])\n([^\n])/m, '\1 \2')
   license.gsub!(/ +/, ' ')
-  license
+  license.strip
 end
 
 # Gets all license texts, deduplicating them.
@@ -281,8 +281,18 @@ def parse_addon_xml doc
   [licenses, addons, extras]
 end
 
+def merge_recursively a, b
+  a.merge!(b) {|key, a_item, b_item|
+    if a_item.class == Hash and b_item.class == Hash
+      merge_recursively(a_item, b_item)
+    else
+      a[key] = b_item
+    end
+  }
+end
+
 def merge dest, src
-  dest.merge! src
+  merge_recursively dest, src
 end
 
 opts = Slop.parse do |o|
@@ -300,19 +310,19 @@ result = {
 }
 
 opts[:packages].each do |filename|
-  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)))
+  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result[:licenses], licenses
   merge result[:packages], packages
 end
 
 opts[:images].each do |filename|
-  licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)))
+  licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result[:licenses], licenses
   merge result[:images], images
 end
 
 opts[:addons].each do |filename|
-  licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)))
+  licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result[:licenses], licenses
   merge result[:addons], addons
   merge result[:extras], extras
