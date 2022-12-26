@@ -327,7 +327,7 @@ let
             ${fish}/bin/fish ${fishScript} && touch $out
           '';
       };
-      updateScript = nix-update-script { attrPath = pname; };
+      updateScript = nix-update-script { };
     };
   };
 in
