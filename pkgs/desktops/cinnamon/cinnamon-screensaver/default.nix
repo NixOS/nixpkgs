@@ -93,6 +93,13 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
   '';
 
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "The Cinnamon screen locker and screensaver program";
