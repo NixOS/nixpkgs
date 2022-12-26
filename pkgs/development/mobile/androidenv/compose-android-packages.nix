@@ -112,8 +112,19 @@ let
   ] ++ extraLicenses);
 in
 rec {
-  deployAndroidPackage = callPackage ./deploy-androidpackage.nix {
+  deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
+    inherit stdenv lib mkLicenses;
   };
+  deployAndroidPackage = ({package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
+    let
+      extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
+    in
+    deployAndroidPackages ({
+      inherit os buildInputs meta;
+      packages = [ package ];
+      patchesInstructions = { "${package.name}" = patchInstructions; };
+    } // extraParams
+  ));
 
   platform-tools = callPackage ./platform-tools.nix {
     inherit deployAndroidPackage;
