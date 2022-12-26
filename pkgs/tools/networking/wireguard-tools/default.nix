@@ -37,10 +37,11 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      # allow users to provide their own resolvconf implementation, e.g. the one provided by systemd-resolved
+      # Which firewall and resolvconf implementations to use should be determined by the
+      # environment, we provide the "default" ones as fallback.
       wrapProgram $f \
-        --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables ]} \
-        --suffix PATH : ${lib.makeBinPath [ openresolv ]}
+        --prefix PATH : ${lib.makeBinPath [ procps iproute2 ]} \
+        --suffix PATH : ${lib.makeBinPath [ iptables openresolv ]}
     done
   '';
 
