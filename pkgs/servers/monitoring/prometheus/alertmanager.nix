@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "alertmanager";
-  version = "0.24.0";
+  version = "0.25.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "sha256-hoCE0wD9/Sh/oBce7kCg/wG44FmMs6dAKnEYP+2sH0w=";
+    sha256 = "sha256-h87m3flE2GRAXMBgaAC+sOsPWEs7l9loQt6jGaSdXfQ=";
   };
 
-  vendorSha256 = "sha256-ePb9qdCTEHHIV6JlbrBlaZjD5APwQuoGloO88W5S7Oc=";
+  vendorSha256 = "sha256-BX4mT0waYtKvNyOW3xw5FmXI8TLmv857YBFTnV7XXD8=";
 
   subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
 
