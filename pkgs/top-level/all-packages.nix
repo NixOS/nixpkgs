@@ -16919,6 +16919,11 @@ with pkgs;
     bintools = bintools-unwrapped;
   };
 
+  bintoolsDualAs = wrapBintoolsWith {
+    bintools = darwin.binutilsDualAs-unwrapped;
+    wrapGas = true;
+  };
+
   bison = callPackage ../development/tools/parsing/bison { };
 
   bisoncpp = callPackage ../development/tools/parsing/bisonc++ { };

@@ -28,6 +28,7 @@
 , buildPackages ? {}
 , targetPackages ? {}
 , useMacosReexportHack ? false
+, wrapGas ? false
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
@@ -164,6 +165,18 @@ stdenv.mkDerivation {
       exec="$ldPath/${targetPrefix}ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
+
+    # If we are asked to wrap `gas` and this bintools has it,
+    # then symlink it (`as` will be symlinked next).
+    # This is mainly for the wrapped gnatboot on x86-64 Darwin,
+    # as it must have both the GNU assembler from cctools (installed as `gas`)
+    # and the Clang integrated assembler (installed as `as`).
+    # See pkgs/os-specific/darwin/binutils/default.nix for details.
+    + lib.optionalString wrapGas ''
+      if [ -e $ldPath/${targetPrefix}gas ]; then
+        ln -s $ldPath/${targetPrefix}gas $out/bin/${targetPrefix}gas
+      fi
+    ''
 
     # Create symlinks for rest of the binaries.
     + ''
