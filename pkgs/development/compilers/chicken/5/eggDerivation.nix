@@ -1,4 +1,4 @@
-{ lib, stdenv, chicken, makeWrapper }:
+{ callPackage, lib, stdenv, chicken, makeWrapper }:
 { name, src
 , buildInputs ? []
 , chickenInstallFlags ? []
@@ -6,15 +6,15 @@
 , ...} @ args:
 
 let
-  overrides = import ./overrides.nix;
+  overrides = callPackage ./overrides.nix { };
   baseName = lib.getName name;
   override = if builtins.hasAttr baseName overrides
    then
      builtins.getAttr baseName overrides
    else
-     {};
+     lib.id;
 in
-stdenv.mkDerivation ({
+(stdenv.mkDerivation ({
   name = "chicken-${name}";
   propagatedBuildInputs = buildInputs;
   nativeBuildInputs = [ makeWrapper ];
@@ -43,4 +43,4 @@ stdenv.mkDerivation ({
   meta = {
     inherit (chicken.meta) platforms;
   } // args.meta or {};
-} // (builtins.removeAttrs args ["name" "buildInputs" "meta"]) // override)
+} // builtins.removeAttrs args ["name" "buildInputs" "meta"]) ).overrideAttrs override
