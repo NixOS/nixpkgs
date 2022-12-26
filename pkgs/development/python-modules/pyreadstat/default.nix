@@ -57,8 +57,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python package to read SAS, SPSS and Stata files into pandas data frames using the readstat C library";
+    description = "Module to read SAS, SPSS and Stata files into pandas data frames";
     homepage = "https://github.com/Roche/pyreadstat";
+    changelog = "https://github.com/Roche/pyreadstat/blob/v${version}/change_log.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ swflint ];
   };
