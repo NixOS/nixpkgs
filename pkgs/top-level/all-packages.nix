@@ -7469,6 +7469,8 @@ with pkgs;
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  forgejo = callPackage ../applications/version-management/forgejo {};
+
   gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
