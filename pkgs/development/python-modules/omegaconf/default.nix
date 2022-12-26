@@ -1,5 +1,5 @@
 { lib
-, antlr4_9-python3-runtime
+, antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
 , jre_minimal
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    antlr4_9-python3-runtime
+    antlr4-python3-runtime
     pyyaml
   ];
 

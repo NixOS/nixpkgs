@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, antlr4_9-python3-runtime
+, antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-resources
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    antlr4_9-python3-runtime
+    antlr4-python3-runtime
     omegaconf
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
