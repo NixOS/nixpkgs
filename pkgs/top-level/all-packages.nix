@@ -38337,4 +38337,6 @@ with pkgs;
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
 
   tuner = callPackage ../applications/audio/tuner { };
+
+  weggli = callPackage ../tools/security/weggli { };
 }
