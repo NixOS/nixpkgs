@@ -1,4 +1,9 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, go
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "alertmanager";
@@ -9,10 +14,10 @@ buildGoModule rec {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "sha256-h87m3flE2GRAXMBgaAC+sOsPWEs7l9loQt6jGaSdXfQ=";
+    hash = "sha256-h87m3flE2GRAXMBgaAC+sOsPWEs7l9loQt6jGaSdXfQ=";
   };
 
-  vendorSha256 = "sha256-BX4mT0waYtKvNyOW3xw5FmXI8TLmv857YBFTnV7XXD8=";
+  vendorHash = "sha256-BX4mT0waYtKvNyOW3xw5FmXI8TLmv857YBFTnV7XXD8=";
 
   subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
 
@@ -37,6 +42,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
+    changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
     platforms = platforms.unix;
