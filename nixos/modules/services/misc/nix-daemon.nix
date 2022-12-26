@@ -609,7 +609,7 @@ in
 
                 By default, pseudo-features `nixos-test`, `benchmark`,
                 and `big-parallel` used in Nixpkgs are set, `kvm`
-                is also included in it is available.
+                is also included if it is available.
               '';
             };
 
