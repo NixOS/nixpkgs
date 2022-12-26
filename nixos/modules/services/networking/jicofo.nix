@@ -93,6 +93,10 @@ in
         "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "jicofo";
         "-Djava.util.logging.config.file" = "/etc/jitsi/jicofo/logging.properties";
+        "-Dorg.jitsi.jicofo.XMPP_DOMAIN" = cfg.xmppHost;
+        "-Dorg.jitsi.jicofo.HOSTNAME" = if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain;
+        "-Dorg.jitsi.jicofo.FOCUS_USER_DOMAIN" = cfg.userDomain;
+        "-Dorg.jitsi.jicofo.FOCUS_USER_NAME" = cfg.userName;
       };
     in
     {
@@ -106,13 +110,8 @@ in
       environment.JAVA_SYS_PROPS = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps);
 
       script = ''
-        ${pkgs.jicofo}/bin/jicofo \
-          --host=${cfg.xmppHost} \
-          --domain=${if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain} \
-          --secret=$(cat ${cfg.componentPasswordFile}) \
-          --user_name=${cfg.userName} \
-          --user_domain=${cfg.userDomain} \
-          --user_password=$(cat ${cfg.userPasswordFile})
+        export JAVA_SYS_PROPS="$JAVA_SYS_PROPS -Dorg.jitsi.jicofo.FOCUS_USER_PASSWORD=$(cat ${cfg.userPasswordFile})"
+        exec ${pkgs.jicofo}/bin/jicofo --secret="$(cat ${cfg.componentPasswordFile})"
       '';
 
       serviceConfig = {

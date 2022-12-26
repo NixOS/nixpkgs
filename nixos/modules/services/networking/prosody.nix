@@ -708,7 +708,7 @@ in
       };
 
       authentication = mkOption {
-        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
+        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" "token" ];
         default = "internal_hashed";
         example = "internal_plain";
         description = lib.mdDoc "Authentication mechanism used for logins.";

@@ -24061,7 +24061,9 @@ with pkgs;
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
 
-  jitsi-meet-prosody = callPackage ../misc/jitsi-meet-prosody { };
+  jitsi-meet-prosody = callPackage ../servers/xmpp/prosody {
+    withJitsiModules = true;
+  };
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 

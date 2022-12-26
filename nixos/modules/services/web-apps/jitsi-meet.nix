@@ -332,11 +332,11 @@ in
         locations."~ ^/([^/\\?&:'\"]+)$".tryFiles = "$uri @root_path";
         locations."^~ /xmpp-websocket" = {
           priority = 100;
-          proxyPass = "http://localhost:5280/xmpp-websocket";
+          proxyPass = "http://127.0.0.1:5280/xmpp-websocket$is_args$args";
           proxyWebsockets = true;
         };
         locations."=/http-bind" = {
-          proxyPass = "http://localhost:5280/http-bind";
+          proxyPass = "http://127.0.0.1:5280/http-bind$is_args$args";
           extraConfig = ''
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $host;

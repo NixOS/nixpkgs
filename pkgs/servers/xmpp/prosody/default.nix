@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , icu
+, jitsi-meet
 , lua
 , nixosTests
 , withLibevent ? true
@@ -8,7 +9,8 @@
 , withExtraLibs ? [ ]
 , withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withCommunityModules ? [ ] }:
+, withCommunityModules ? [ ]
+, withJitsiModules ? true }:
 
 with lib;
 
@@ -18,11 +20,12 @@ let
     ]
     ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
+    ++ lib.optionals withJitsiModules [p.luadbi p.basexx p.luaossl p.cjson]
     ++ withExtraLuaPackages p
   );
 in
 stdenv.mkDerivation rec {
-  version = "0.12.1"; # also update communityModules
+  version = "0.12.2"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-p+y75B8BpCUYBVk6xtFdvGy3XZx6h2x2tFbPdP9LkOU=";
+    sha256 = "sha256-tmLoJBFPnw+46Rlqqe2rdETUP5SIHLyFyddHk7k4qhY=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -42,8 +45,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "cce12a660b98";
-    sha256 = "sha256-dFWS1EFd2wtFnnuU4xKPnBisIdKkgMAvBtsfAEbdLjE=";
+    rev = "83afe4078e6e";
+    sha256 = "sha256-spbd3TAZPvnCibMFVI7z2qp9a+k0dcu6YG17T2chAHU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -67,6 +70,7 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
+      ${lib.optionalString withJitsiModules "cp -R ${jitsi-meet.src}/resources/prosody-plugins/* $out/lib/prosody/modules/"}
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
@@ -75,7 +79,7 @@ stdenv.mkDerivation rec {
   passthru = {
     communityModules = withCommunityModules;
     tests = { inherit (nixosTests) prosody prosody-mysql; };
-  };
+  } // (if withJitsiModules then { single-node-smoke-test = nixosTests.jitsi-meet; } else {});
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
