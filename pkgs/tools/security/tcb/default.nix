@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
       --replace "PREFIX = /usr" "PREFIX = $out" \
       --replace "SBINDIR = /sbin" "SBINDIR = $bin/bin" \
       --replace "INCLUDEDIR = \$(PREFIX)/include" "INCLUDEDIR = $dev/include"
+
+    # Override default 'CC=gcc'
+    makeFlagsArray+=("CC=$CC")
   '';
 
   meta = with lib; {
