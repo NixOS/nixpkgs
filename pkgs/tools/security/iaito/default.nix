@@ -13,21 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "iaito";
-  version = "5.7.8";
+  version = "5.8.0";
 
   srcs = [
     (fetchFromGitHub rec {
       owner = "radareorg";
       repo = "iaito";
       rev = version;
-      hash = "sha256-c36WLpVUnffeY6cXSEHvguo8BHyxaLAluN9hBKsQc0s=";
+      hash = "sha256-LqJu30Bp+JgB+y3MDyPVuFmEoXTpfA7K2pxv1ZCABx0=";
       name = repo;
     })
     (fetchFromGitHub rec {
       owner = "radareorg";
       repo = "iaito-translations";
-      rev = "ab923335409fa298c39f0014588d78d926c6f3a2";
-      hash = "sha256-qkIC67a6YRwOa2Sr16Vg6If1TmAiSKUV7hw13Wxwl/w=";
+      rev = "e66b3a962a7fc7dfd730764180011ecffbb206bf";
+      hash = "sha256-6NRTZ/ydypsB5TwbivvwOH9TEMAff/LH69hCXTvMPp8=";
       name = repo;
     })
   ];
@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
     qtbase
     radare2
   ];
+
+  # the radare2 binary package seems to not install all necessary headers.
+  NIX_CFLAGS_COMPILE = [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
 
   postBuild = ''
     pushd ../../../iaito-translations

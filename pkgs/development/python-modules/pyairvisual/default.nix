@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2022.11.1";
+  version = "2022.12.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5o3iJEcpxiHvjEi6VZj39SelBtfeneg349hvFwJ2oQU=";
+    hash = "sha256-xzTho4HsIU2YLURz9DfFfaRL3tsrtVi8n5IA2bRkyzw=";
   };
 
   nativeBuildInputs = [

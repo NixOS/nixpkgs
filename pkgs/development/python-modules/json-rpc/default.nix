@@ -4,11 +4,11 @@ let
   pythonEnv = lib.optional isPy27 mock;
 in buildPythonPackage rec {
   pname = "json-rpc";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12bmblnznk174hqg2irggx4hd3cq1nczbwkpsqqzr13hbg7xpw6y";
+    sha256 = "sha256-/13xx/2G4dvQJZ8GWZdRzpGnx5DykEFHk6Vlq1ht3FI=";
   };
 
   checkInputs = pythonEnv ++ [ pytestCheckHook ];

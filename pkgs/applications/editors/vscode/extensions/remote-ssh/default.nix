@@ -9,28 +9,69 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
-  # patch runs on remote machine hence use of which
-  # links to local node if version is 12
+  nodeVersion = "16";
+
+  # As VS Code executes this code on the remote machine
+  # we test to see if we can build Node from Nixpkgs
+  # otherwise we check if the globally installed Node
+  # is usable.
   patch = ''
-    f="$HOME/.vscode-server/bin/$COMMIT_ID/node"
-    localNodePath=''$(which node)
-    if [ -x "''$localNodePath" ]; then
-      localNodeVersion=''$(node -v)
-      if [ "\''${localNodeVersion:1:2}" = "12" ]; then
-        echo PATCH: replacing ''$f with ''$localNodePath
-        rm ''$f
-        ln -s ''$localNodePath ''$f
+    # Use Node from nixpkgs for NixOS hosts
+    #
+
+    serverDir="$HOME/.vscode-server/bin/$COMMIT_ID"
+    serverNode="$serverDir/node"
+    echo "VS Code Node: $serverNode"
+
+    # Check if VS Code Server has a non-working Node or the wrong version of Node
+    if ! nodeVersion=$($serverNode -v) || [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+      echo "VS Code Node Version: $nodeVersion"
+
+      if nix-build "<nixpkgs>" -A nodejs-${nodeVersion}_x --out-link "$serverDir/nix" && [ -e "$serverDir/nix/bin/node" ]; then
+        nodePath="$serverDir/nix/bin/node"
+      fi
+
+      echo "Node from Nix: $nodePath"
+
+      nodeVersion=$($nodePath -v)
+      echo "Node from Nix Version: $nodeVersion"
+
+      if [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+        echo "Getting Node from Nix failed, use Local Node instead"
+        nodePath=$(which node)
+        echo "Local Node: $nodePath"
+        nodeVersion=$($nodePath -v)
+        echo "Local Node Version: $nodeVersion"
+      fi
+
+      if [ "\''${nodeVersion:1:2}" == "${nodeVersion}" ]; then
+        echo PATCH: replacing $serverNode with $nodePath
+        ln -sf $nodePath $serverNode
       fi
     fi
+
+    nodeVersion=$($serverNode -v)
+    echo "VS Code Node Version: $nodeVersion"
+
+    if [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+      echo "Unsupported VS Code Node version: $nodeVersion", quitting
+      fail_with_exitcode ''${o.InstallExitCode.ServerTransferFailed}
+    fi
+
     ${lib.optionalString useLocalExtensions ''
       # Use local extensions
       if [ -d $HOME/.vscode/extensions ]; then
-        if ! test -L "$HOME/.vscode-server/extensions"; then
-          mkdir -p $HOME/.vscode-server
-          ln -s $HOME/.vscode/extensions $HOME/.vscode-server/
+        if [ -e $HOME/.vscode-server/extensions ]; then
+          mv $HOME/.vscode-server/extensions $HOME/.vscode-server/extensions.bak
         fi
+
+        mkdir -p $HOME/.vscode-server
+        ln -s $HOME/.vscode/extensions $HOME/.vscode-server/extensions
       fi
     ''}
+
+    #
+    # Start the server
   '';
 in
 buildVscodeMarketplaceExtension {
@@ -43,7 +84,7 @@ buildVscodeMarketplaceExtension {
 
   postPatch = ''
     substituteInPlace "out/extension.js" \
-      --replace "# install extensions" '${patch}'
+      --replace '# Start the server\n' '${patch}'
   '';
 
   meta = with lib; {

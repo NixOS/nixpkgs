@@ -158,7 +158,7 @@ The first steps to all these are the same:
 
     You\'ll likely want to set a root password for your first boot using
     the configuration files because you won\'t have a chance to enter a
-    password until after you reboot. You can initalize the root password
+    password until after you reboot. You can initialize the root password
     to an empty one with this line: (and of course don\'t forget to set
     one once you\'ve rebooted or to lock the account with
     `sudo passwd -l root` if you use `sudo`)

@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     rm -r external/{miniupnp,randomx,rapidjson,unbound}
     # export patched source for haven-gui
     cp -r . $source
+    # fix build on aarch64-darwin
+    substituteInPlace CMakeLists.txt --replace "-march=x86-64" ""
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

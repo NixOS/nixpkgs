@@ -66,14 +66,15 @@ rec {
       # prevent infinite recursion for the default stdenv value
       defaultStdenv = stdenv;
     in
-    { stdenv ? defaultStdenv
+    {
     # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
-    , runLocal ? false
+      stdenv ? defaultStdenv
     # whether to build this derivation locally instead of substituting
-    , derivationArgs ? {}
+    , runLocal ? false
     # extra arguments to pass to stdenv.mkDerivation
-    , name
+    , derivationArgs ? {}
     # name of the resulting derivation
+    , name
     # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
     stdenv.mkDerivation ({
@@ -305,7 +306,7 @@ rec {
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          ${shellcheck}/bin/shellcheck "$target"
+          ${shellcheck.unwrapped}/bin/shellcheck "$target"
           runHook postCheck
         ''
         else checkPhase;

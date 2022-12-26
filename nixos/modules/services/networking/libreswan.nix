@@ -106,7 +106,7 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          Whether to disable send and accept redirects for all nework interfaces.
+          Whether to disable send and accept redirects for all network interfaces.
           See the Libreswan [
           FAQ](https://libreswan.org/wiki/FAQ#Why_is_it_recommended_to_disable_send_redirects_in_.2Fproc.2Fsys.2Fnet_.3F) page for why this is recommended.
         '';

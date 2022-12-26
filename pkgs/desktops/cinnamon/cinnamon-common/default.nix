@@ -54,13 +54,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.6.4";
+  version = "5.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-IPu3J05y4xEFn82cI0y9eN+4kJRChKS/zEGZOWaJnZw=";
+    hash = "sha256-UAPzB4Ps/w0VQjbbVl4KMRghwMc4roJR2/ZWkmwOSos=";
   };
 
   patches = [
@@ -150,6 +150,8 @@ stdenv.mkDerivation rec {
       {} +
 
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
+
+    sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
 
     sed "s|\"upload-system-info\"|\"${xapp}/bin/upload-system-info\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
 

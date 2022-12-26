@@ -174,7 +174,7 @@ in {
           CURRENT_PACKAGE=$(readlink ${dataDir}/current-package)
           NEW_PACKAGE=${cfg.package}
           if [ "$CURRENT_PACKAGE" != "$NEW_PACKAGE" ]; then
-            # keeping tmp arround between upgrades seems to bork stuff, so delete it
+            # keeping tmp around between upgrades seems to bork stuff, so delete it
             rm -rf ${dataDir}/tmp
           fi
         elif [ -e ${dataDir}/tmp ]; then

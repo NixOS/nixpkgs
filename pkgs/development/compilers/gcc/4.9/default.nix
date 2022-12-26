@@ -147,7 +147,7 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  # When targetting darwin, libgcc_ext.10.{4,5}.dylib are created as
+  # When targeting darwin, libgcc_ext.10.{4,5}.dylib are created as
   # MH_DYLIB_STUB files, which install_name_tool can't change, so we
   # get a cycle between $out and $lib.
   outputs = if langJava || langGo || targetPlatform.isDarwin then ["out" "man" "info"]

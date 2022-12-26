@@ -106,7 +106,7 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
            && sed -i 's|driver_local.maximize_window()||' web/regression/runtests.py"
       )
 
-      # Don't bother to test LDAP or kerberos authentification
+      # Don't bother to test LDAP or kerberos authentication
       with subtest("run browser test"):
           machine.succeed(
                'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \

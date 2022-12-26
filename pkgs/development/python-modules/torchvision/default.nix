@@ -15,7 +15,7 @@
 }:
 
 let
-  inherit (torch.cudaPackages) cudatoolkit cudnn;
+  inherit (torch.cudaPackages) cudatoolkit cudaFlags cudnn;
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -45,7 +45,7 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pillow torch scipy ];
 
   preBuild = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${cudaArchStr}"
+    export TORCH_CUDA_ARCH_LIST="${cudaFlags.cudaCapabilitiesSemiColonString}"
     export FORCE_CUDA=1
   '';
 

@@ -7,18 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidfuzz-cpp";
-  version = "1.10.1";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
     rev = "v${version}";
-    hash = "sha256-c9ESzsDcoUw5XAEZDHdG8jazjI5Oyqic1gaT0qGQsbI=";
+    hash = "sha256-I7MdeLs+J5a57ypgUJIW0/pSFPzK4nZA4ZrVRdKX7J4=";
   };
-
-  patches = [
-    ./dont-fetch-project-options.patch
-  ];
 
   nativeBuildInputs = [
     cmake

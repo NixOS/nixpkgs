@@ -141,7 +141,7 @@ in
       default = false;
       description = lib.mdDoc ''
         Finish all remaining jobs before stopping.
-        If not set gitlab-runner will stop immediatly without waiting
+        If not set gitlab-runner will stop immediately without waiting
         for jobs to finish, which will lead to failed builds.
       '';
     };

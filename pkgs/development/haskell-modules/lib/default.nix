@@ -279,7 +279,7 @@ rec {
    */
   triggerRebuild = drv: i: compose.triggerRebuild i drv;
 
-  /* Override the sources for the package and optionaly the version.
+  /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
    */
   overrideSrc = drv: src: compose.overrideSrc src drv;

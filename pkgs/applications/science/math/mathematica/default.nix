@@ -5,6 +5,24 @@
 , cudaSupport ? config.cudaSupport or false
 , lang ? "en"
 , version ? null
+/*
+If you wish to completely override the src, use:
+my_mathematica = mathematica.override {
+  source = pkgs.requireFile {
+    name = "Mathematica_XX.X.X_BNDL_LINUX.sh";
+    # Get this hash via a command similar to this:
+    # nix-store --query --hash \
+    # $(nix store add-path Mathematica_XX.X.X_BNDL_LINUX.sh --name 'Mathematica_XX.X.X_BNDL_LINUX.sh')
+    sha256 = "0000000000000000000000000000000000000000000000000000";
+    message = ''
+      Your override for Mathematica includes a different src for the installer,
+      and it is missing.
+    '';
+    hashMode = "recursive";
+  };
+}
+*/
+, source ? null
 }:
 
 let versions = callPackage ./versions.nix { };
@@ -38,7 +56,8 @@ in
 
 callPackage real-drv {
   inherit cudaSupport cudaPackages;
-  inherit (found-version) version lang src;
+  inherit (found-version) version lang;
+  src = if source == null then found-version.src else source;
   name = ("mathematica"
           + lib.optionalString cudaSupport "-cuda"
           + "-${found-version.version}"

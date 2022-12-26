@@ -1,0 +1,13 @@
+diff --git a/src/catfs/file.rs b/src/catfs/file.rs
+index 6e781eb..92fdd80 100644
+--- a/src/catfs/file.rs
++++ b/src/catfs/file.rs
+@@ -569,7 +569,7 @@ impl Handle {
+         path: &dyn AsRef<Path>,
+         create: bool,
+     ) -> error::Result<()> {
+-        let _ = self.page_in_res.0.lock().unwrap();
++        drop(self.page_in_res.0.lock().unwrap());
+ 
+         let mut buf = [0u8; 0];
+         let mut flags = rlibc::O_RDWR;

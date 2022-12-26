@@ -57,7 +57,7 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
-        ${replaceChars ["\n"] ["\n  "] extraConfig}
+        ${replaceStrings ["\n"] ["\n  "] extraConfig}
       }
     '';
 

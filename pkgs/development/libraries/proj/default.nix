@@ -5,6 +5,7 @@
 , cmake
 , pkg-config
 , buildPackages
+, callPackage
 , sqlite
 , libtiff
 , curl
@@ -13,7 +14,7 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
   version = "9.1.1";
 
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     python = python3.pkgs.pyproj;
+    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
@@ -71,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+})

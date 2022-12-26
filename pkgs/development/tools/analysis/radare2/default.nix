@@ -30,7 +30,7 @@
 
 let
   # FIXME: Compare revision with
-  # https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L26-L27
+  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35arm64/Makefile#L26-L27
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
@@ -47,21 +47,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.7.8";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    hash = "sha256-+/9SeILuDCUaYwPhhN6z3vQFicd1Bh8N/yicZTybR5o=";
+    hash = "sha256-9bDwtMNru7tG0L735y+Vrcg7Htk/TV9SVZn7WP4Ap4c=";
   };
 
   preBuild = ''
-    cp -r ${arm64} ../libr/asm/arch/arm/v35arm64/arch-arm64
-    chmod -R +w ../libr/asm/arch/arm/v35arm64/arch-arm64
+    pushd ../libr/arch/p/arm/v35arm64
+    cp -r ${arm64} arch-arm64
+    chmod -R +w arch-arm64
 
-    cp -r ${armv7} ../libr/asm/arch/arm/v35arm64/arch-armv7
-    chmod -R +w ../libr/asm/arch/arm/v35arm64/arch-armv7
+    cp -r ${armv7} arch-armv7
+    chmod -R +w arch-armv7
+    popd
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''

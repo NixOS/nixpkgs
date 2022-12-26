@@ -79,5 +79,7 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ siriobalmelli ];
     platforms   = platforms.all;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

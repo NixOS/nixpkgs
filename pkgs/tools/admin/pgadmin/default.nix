@@ -181,7 +181,7 @@ pythonPackages.buildPythonApplication rec {
   # checks will be run through nixos/tests
   doCheck = false;
 
-  # speaklater3 is seperate because when passing buildDeps
+  # speaklater3 is separate because when passing buildDeps
   # to the test, it fails there due to a collision with speaklater
   propagatedBuildInputs = buildDeps ++ [ pythonPackages.speaklater3 ];
 

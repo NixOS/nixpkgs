@@ -271,7 +271,7 @@
       <listitem>
         <para>
           The versioned <literal>postgresql</literal> have been renamed
-          to use underscore number seperators. For example,
+          to use underscore number separators. For example,
           <literal>postgresql96</literal> has been renamed to
           <literal>postgresql_9_6</literal>.
         </para>

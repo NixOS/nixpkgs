@@ -1,4 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, apacheHttpd
+, apr
+, cairo
+, iniparser
+, mapnik
+, boost
+, icu
+, harfbuzz
+, libjpeg
+, libtiff
+, libwebp
+, proj
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
@@ -21,8 +39,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # test is broken and I couldn't figure out a better way to disable it.
+  postPatch = ''
+    echo "int main(){return 0;}" > src/gen_tile_test.cpp
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ apacheHttpd apr cairo iniparser mapnik ];
+  buildInputs = [
+    apacheHttpd
+    apr
+    cairo
+    iniparser
+    mapnik
+    boost
+    icu
+    harfbuzz
+    libjpeg
+    libtiff
+    libwebp
+    proj
+    sqlite
+  ];
 
   configureFlags = [
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"

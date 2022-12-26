@@ -21,7 +21,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   desktopItem = makeDesktopItem {
     name = pname;
     exec = pname;
-    comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
+    comment = lib.replaceStrings ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
     categories = [ "Development" ];

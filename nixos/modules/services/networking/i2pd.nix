@@ -473,7 +473,7 @@ in
         type = with types; nullOr str;
         default = null;
         description = lib.mdDoc ''
-          Router Familiy to trust for first hops.
+          Router Family to trust for first hops.
         '';
       };
 

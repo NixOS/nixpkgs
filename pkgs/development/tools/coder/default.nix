@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "coder";
-  version = "0.13.1";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-85eH3gKn1khMiksA/kL+fHt1WiaOzVntYCiL1PR/0Cg=";
+    hash = "sha256-26RvDJ890MclDB4rtYQ7CcB3NQRXC7sI2cXd689Eq6E=";
   };
 
   # integration tests require network access

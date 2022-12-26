@@ -6,19 +6,27 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.5.3";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gb7lFRqqw4w/B+Sw0iteDkuGsPfw/ZZ+sRMTu5vxIUo=";
+    sha256 = "sha256-PwShGS1rbfZCK5OS6Cnn+mduOpWAD4fC69mcGB5GB1c=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "bs4" "beautifulsoup4"
+  '';
 
   propagatedBuildInputs = [
     prometheus-alertmanager
   ] ++ (with python3Packages; [
     aiohttp
+    aiohttp-openmetrics
+    beautifulsoup4
+    jinja2
     slixmpp
     prometheus-client
     pyyaml
@@ -28,6 +36,8 @@ python3Packages.buildPythonApplication rec {
     unittestCheckHook
     pytz
   ];
+
+  pythonImportsCheck = [ "prometheus_xmpp" ];
 
   meta = {
     description = "XMPP Web hook for Prometheus";

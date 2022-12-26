@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, zlib, readline, ncurses
 
 # for tests
-, python3Packages, sqldiff, sqlite-analyzer
+, python3Packages, sqldiff, sqlite-analyzer, tracker
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3Packages) sqlalchemy;
-    inherit sqldiff sqlite-analyzer;
+    inherit sqldiff sqlite-analyzer tracker;
   };
 
   meta = {

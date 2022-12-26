@@ -207,7 +207,6 @@ let
         # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
         # hyper-haskell-server-with-packages # hyper-haskell-server is broken
         icepeak
-        idris
         ihaskell
         jacinda
         jl
@@ -219,7 +218,6 @@ let
         matterhorn
         mueval
         naproche
-        neuron-notes
         niv
         nix-delegate
         nix-deploy
@@ -390,24 +388,11 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      spectacle = [
-        compilerNames.ghc8107
-      ];
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc924
         compilerNames.ghc925
-      ];
-      purescript = [
-        compilerNames.ghc924
-        compilerNames.ghc925
-      ];
-      purescript-cst = [
-        compilerNames.ghc8107
-      ];
-      purescript-ast = [
-        compilerNames.ghc8107
       ];
     })
     {

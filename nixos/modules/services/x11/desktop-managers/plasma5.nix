@@ -384,6 +384,11 @@ in
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
+      # Extra services for D-Bus activation
+      services.dbus.packages = [
+        plasma5.kactivitymanagerd
+      ];
+
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
         "/share"
@@ -446,6 +451,9 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      # xdg-desktop-portal-kde expects PipeWire to be running.
+      # This does not, by default, replace PulseAudio.
+      services.pipewire.enable = mkDefault true;
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
@@ -577,6 +585,8 @@ in
       hardware.bluetooth.enable = true;
       hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
+      # Required for autorotate
+      hardware.sensor.iio.enable = lib.mkDefault true;
 
       # Recommendations can be found here:
       #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg

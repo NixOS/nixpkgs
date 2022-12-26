@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.18.8";
+  version = "0.18.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DRJhqHpeGbDzqhym6z9wCmzTz3VpnwJMdDKFT5vMVUE=";
+    hash = "sha256-Ihaz/izB9L6osu3CPwBWOwLZ2JOLKhsDuqOUf/B02qI=";
   };
 
   propagatedBuildInputs = [
