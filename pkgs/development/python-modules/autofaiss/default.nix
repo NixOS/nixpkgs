@@ -39,6 +39,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    # As of v2.15.4, autofaiss asks for fire<0.5 but we have fire v0.5.0 in
+    # nixpkgs at the time of writing (2022-12-25).
+    "fire"
     # As of v2.15.3, autofaiss asks for pyarrow<8 but we have pyarrow v9.0.0 in
     # nixpkgs at the time of writing (2022-12-15).
     "pyarrow"
