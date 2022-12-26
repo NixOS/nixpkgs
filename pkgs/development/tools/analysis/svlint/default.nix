@@ -1,29 +1,25 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svlint";
-  version = "0.6.0";
+  version = "0.6.1";
 
-  src = fetchFromGitHub {
-    owner = "dalance";
-    repo = "svlint";
-    rev = "v${version}";
-    sha256 = "sha256-dtfOSj0WnNyQLimXkSK+L8pWL/oc0nIugDyUmGaBP3w=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-rPgURBjhfCRO7XFtr24Y7Dvcm/VEv7frq8p6wvtgjdY=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoSha256 = "sha256-IFoK52Qmw34oghAwlGtGFLl9MWXtJkMcx86jIqiwjuQ=";
 
-  cargoSha256 = "sha256-A9cL5veliWDNp1RbhOzR1e2X7c7mTAnl1qMATaMhhT8=";
+  cargoBuildFlags = [ "--bin" "svlint" ];
 
   meta = with lib; {
     description = "SystemVerilog linter";
     homepage = "https://github.com/dalance/svlint";
+    changelog = "https://github.com/dalance/svlint/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ trepetti ];
   };

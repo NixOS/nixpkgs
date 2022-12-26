@@ -626,12 +626,12 @@
   };
   hlsl = buildGrammar {
     language = "hlsl";
-    version = "329e3c8";
+    version = "39c822b";
     source = fetchFromGitHub {
       owner = "theHamsta";
       repo = "tree-sitter-hlsl";
-      rev = "329e3c8bd6f696a6128e0dccba34b2799dc3037e";
-      hash = "sha256-unxcw0KTlMDtcdjvIZidU/QckjfHBtc+LzAR7SukdU0=";
+      rev = "39c822b795bd6533815d100b5e7d1ec7778a1c2a";
+      hash = "sha256-WXlOl+aopL332rW2c2dYyf/xoYx9g7BfkdMUIFJbxzg=";
     };
     meta.homepage = "https://github.com/theHamsta/tree-sitter-hlsl";
   };
