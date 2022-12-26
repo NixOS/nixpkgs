@@ -126,7 +126,7 @@ assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "250.8";
+  version = "250.9";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-16PkAl0amLfdZ0L55opHdhXylKKof7RUlOJ/jDeRQko=";
+    sha256 = "sha256-38NCLEt33GcGiaUVl8AftcLCWcCQHmzTYwm5BJmldVU=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -259,6 +259,7 @@ stdenv.mkDerivation {
 
           # We did never provide support for libxkbcommon & qrencode
           { name = "libxkbcommon.so.0"; pkg = null; }
+          { name = "libqrencode.so.3"; pkg = null; }
           { name = "libqrencode.so.4"; pkg = null; }
 
           # We did not provide libpwquality before so it is safe to disable it for
