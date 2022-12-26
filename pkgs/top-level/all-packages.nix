@@ -4928,6 +4928,8 @@ with pkgs;
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
 
+  linuxdoc-tools = callPackage ../tools/text/sgml/linuxdoc-tools { };
+
   lisgd = callPackage ../tools/inputmethods/lisgd { };
 
   lite = callPackage ../applications/editors/lite { };
