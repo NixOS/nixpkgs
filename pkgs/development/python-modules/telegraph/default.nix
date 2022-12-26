@@ -10,24 +10,16 @@
 buildPythonPackage rec {
   pname = "telegraph";
   version = "2.2.0";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
-    sha256 = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
     rev = "refs/tags/v${version}";
+    hash = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
   };
-
-  checkInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [ "tests/" ];
-
-  disabledTests = [
-    "test_get_page"
-  ];
-
-  doCheck = true;
 
   propagatedBuildInputs = [
     requests
@@ -39,12 +31,28 @@ buildPythonPackage rec {
     ];
   };
 
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "telegraph" ];
+  pytestFlagsArray = [
+    "tests/"
+  ];
+
+  disabledTests = [
+    "test_get_page"
+  ];
+
+  doCheck = true;
+
+  pythonImportsCheck = [
+    "telegraph"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/python273/telegraph";
     description = "Telegraph API wrapper";
+    homepage = "https://github.com/python273/telegraph";
+    changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gp2112 ];
   };
