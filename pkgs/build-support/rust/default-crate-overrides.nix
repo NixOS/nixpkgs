@@ -19,6 +19,7 @@
 , foundationdb
 , capnproto
 , nettle
+, gtk4
 , clang
 , llvmPackages
 , linux-pam
@@ -124,6 +125,21 @@ in
 
   gdk-pixbuf = attrs: {
     buildInputs = [ gdk-pixbuf ];
+  };
+
+  gtk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gdk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gsk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
   };
 
   libgit2-sys = attrs: {
