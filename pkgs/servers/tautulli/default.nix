@@ -48,6 +48,6 @@ buildPythonApplication rec {
     homepage = "https://tautulli.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ csingley rhoriguchi ];
+    maintainers = with maintainers; [ rhoriguchi ];
   };
 }
