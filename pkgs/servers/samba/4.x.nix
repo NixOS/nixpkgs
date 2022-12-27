@@ -75,11 +75,12 @@ stdenv.mkDerivation rec {
     perl.pkgs.ParseYapp
     perl.pkgs.JSON
     libxslt
-    buildPackages.stdenv.cc
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
+  ] ++ optionals stdenv.isLinux [
+    buildPackages.stdenv.cc
   ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
     ++ optionals stdenv.isDarwin [
     fixDarwinDylibNames
@@ -218,10 +219,7 @@ stdenv.mkDerivation rec {
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    # N.B. enableGlusterFS does not build
-    # TODO: darwin support needs newer SDK for "_futimens" and "_utimensat"
-    # see https://github.com/NixOS/nixpkgs/issues/101229
-    broken = (stdenv.isDarwin && stdenv.isx86_64) || enableGlusterFS;
+    broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
   };
 }

@@ -24736,7 +24736,7 @@ with pkgs;
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
 
-  samba4 = callPackage ../servers/samba/4.x.nix { };
+  samba4 = darwin.apple_sdk_11_0.callPackage ../servers/samba/4.x.nix { };
 
   samba = samba4;
 
