@@ -674,10 +674,7 @@ self: super: {
   });
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace lua/tealmaker/init.lua \
-        --replace cyan ${luaPackages.cyan}/bin/cyan
-    '';
+    passthru.pathDependencies = [ luaPackages.cyan ];
     vimCommandCheck = "TealBuild";
   });
 
