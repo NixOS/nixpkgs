@@ -67,6 +67,9 @@ in stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PATH : "${dpkg}/bin"
     done
+    ln -s cvs-debi $out/bin/cvs-debc
+    ln -s debchange $out/bin/dch
+    ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
   meta = with lib; {
