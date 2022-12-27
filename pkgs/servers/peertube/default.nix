@@ -2,14 +2,21 @@
 , brotli, fixup_yarn_lock, jq, nodejs, which, yarn
 }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
-    else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
-
+  bcrypt_arch_details = {
+    "x86_64-linux" = {
+      "arch" = "linux-x64";
+      "hash" = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+    };
+    "aarch64-linux" = {
+      arch = "linux-arm64";
+      hash = "sha256-q8BR7kILYV8i8ozDkpcuKarf4s1TgRqOrUeLqjdWEQ0=";
+    };
+  };
+  system = stdenv.hostPlatform.system;
   bcrypt_version = "5.1.0";
   bcrypt_lib = fetchurl {
-    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${bcrypt_arch_details.${system}.arch}-glibc.tar.gz";
+    hash = "${bcrypt_arch_details.${system}.hash}";
   };
 
 in stdenv.mkDerivation rec {
@@ -122,7 +129,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ immae izorkin matthiasbeyer mohe2015 stevenroose ];
   };
 }
