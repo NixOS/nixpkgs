@@ -5191,6 +5191,8 @@ with pkgs;
 
   osv-detector = callPackage ../tools/security/osv-detector {};
 
+  osv-scanner = callPackage ../tools/security/osv-scanner {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
