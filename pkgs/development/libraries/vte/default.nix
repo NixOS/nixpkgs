@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   pname = "vte";
   version = "0.72.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -73,9 +74,10 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
+  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4" || gtkVersion == null);
     # Required by vte-2.91.pc.
-    (if gtkVersion == "3" then gtk3 else gtk4)
+    lib.optional (gtkVersion != null) (if gtkVersion == "3" then gtk3 else gtk4)
+  ++ [
     glib
     pango
   ];
@@ -87,6 +89,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (gtkVersion == "4") [
     "-Dgtk3=false"
     "-Dgtk4=true"
+  ] ++ lib.optionals (gtkVersion == null) [
+    "-Dgtk3=false"
+    "-Dgtk4=false"
   ] ++ lib.optionals stdenv.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"
