@@ -21,7 +21,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://vitess.io/";
+    homepage = "https://vitess.io/";
     changelog = "https://github.com/vitessio/vitess/releases/tag/v${version}";
     description = "A database clustering system for horizontal scaling of MySQL";
     license = licenses.asl20;
