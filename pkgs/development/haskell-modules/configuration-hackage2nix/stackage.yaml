@@ -2315,7 +2315,6 @@ default-package-overrides:
   - shakespeare ==2.0.30
   - shakespeare-text ==1.1.0
   - shared-memory ==0.2.0.0
-  - ShellCheck ==0.8.0
   - shell-conduit ==5.0.0
   - shell-escape ==0.2.0
   - shellmet ==0.0.4.1
