@@ -11,6 +11,17 @@ in
 
 { imports = [
     ../virtualisation/qemu-vm.nix
+
+    # Avoid a dependency on stateVersion
+    {
+      disabledModules = [
+        ../virtualisation/nixos-containers.nix
+        ../services/x11/desktop-managers/xterm.nix
+      ];
+      config = {
+      };
+      options.boot.isContainer = lib.mkOption { default = false; internal = true; };
+    }
   ];
 
   # The builder is not intended to be used interactively
@@ -97,7 +108,23 @@ in
     # To prevent gratuitous rebuilds on each change to Nixpkgs
     nixos.revision = null;
 
-    stateVersion = "22.05";
+    stateVersion = lib.mkDefault (throw ''
+      The macOS linux builder should not need a stateVersion to be set, but a module
+      has accessed stateVersion nonetheless.
+      Please inspect the trace of the following command to figure out which module
+      has a dependency on stateVersion.
+
+        nix-instantiate --argstr system x86_64-darwin -A darwin.builder --show-trace
+
+      or
+
+        nix-instantiate --argstr system aarch64-darwin -A darwin.builder --show-trace
+
+      If this error occurred while evaluating the static part of the option
+      documentation, the problem may be fixed by adding defaultText to an option.
+      Otherwise, the dependency should be removed. As a last resort, stateVersion
+      may be hardcoded in the darwin.builder package by replacing this exception.
+    '');
   };
 
   users.users."${user}"= {
