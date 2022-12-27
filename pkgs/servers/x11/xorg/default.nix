@@ -1724,11 +1724,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xauth = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xauth";
-    version = "1.1";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xauth-1.1.tar.bz2";
-      sha256 = "032klzzw8r09z36x1272ssd79bcisz8j5p8gbdy111fiknvx27bd";
+      url = "mirror://xorg/individual/app/xauth-1.1.2.tar.xz";
+      sha256 = "0072ivzn4z59ysanz838nh8s4mcmdsx6q9xkvlfysv2k37ynmfkq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
