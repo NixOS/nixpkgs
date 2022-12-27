@@ -520,9 +520,9 @@ in
 
         # Wait for PostgreSQL to be ready to accept connections.
         postStart = let  
-          connection = if (cfg.socketDir == null) then "--port=${toString cfg.port}" else "--host=${toString cfg.socketDir}";
+          host = if (cfg.socketDir == null) then "" else "--host=${toString cfg.socketDir}";
           in ''
-            PSQL="psql ${connection}"
+            PSQL="psql --port=${toString cfg.port} ${host}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
