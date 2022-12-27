@@ -5574,6 +5574,12 @@
     githubId = 86223025;
     name = "helium";
   };
+  hellwolf = {
+    email = "zhicheng.miao@gmail.com";
+    github = "hellwolf";
+    githubId = 186660;
+    name = "Miao, ZhiCheng";
+  };
   henkkalkwater = {
     email = "chris+nixpkgs@netsoj.nl";
     github = "HenkKalkwater";
