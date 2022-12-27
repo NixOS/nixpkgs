@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  pname = "nanosaur";
-  version = "unstable-2021-12-03";
+  pname = "nanosaur2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
-    rev = "b567a3e6d7fd1cbc43800cfaa1bd82f31c6d9fae";
-    sha256 = "sha256-P/o6uSwUV6O8u8XNXN9YyA8XlgEUkqGj3SC+oD2/GKQ=";
+    rev = "v${version}";
+    sha256 = "sha256-UY+fyn8BA/HfCd2LCj5cfGmQACKUICH6CDCW4q6YDkg=";
     fetchSubmodules = true;
   };
 
@@ -35,18 +35,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mv build $out
-    makeWrapper $out/Nanosaur $out/bin/Nanosaur --chdir "$out"
+    makeWrapper $out/Nanosaur2 $out/bin/Nanosaur2 --chdir "$out"
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
+    description = "A port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
-      Nanosaur is a 1998 Macintosh game by Pangea Software.
-      In it, you’re a cybernetic dinosaur from the future who’s sent back in time 20 minutes before a giant asteroid hits the Earth.
-      And you get to shoot at T-Rexes with nukes.
+      Nanosaur is a 2004 Macintosh game by Pangea Software.
+
+      Is a continuation of the original Nanosaur storyline, only this time you get to fly a pterodactyl who’s loaded with hi-tech weaponry.
     '';
-    homepage = "https://github.com/jorio/Nanosaur";
+    homepage = "https://github.com/jorio/Nanosaur2";
     license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;

@@ -34695,6 +34695,8 @@ with pkgs;
 
   nanosaur = callPackage ../games/nanosaur { };
 
+  nanosaur2 = callPackage ../games/nanosaur2 { };
+
   nethack = callPackage ../games/nethack { };
 
   nethack-qt = callPackage ../games/nethack {
