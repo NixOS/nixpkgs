@@ -271,6 +271,9 @@ in
           '')
           (mkIf cfg.jwt.enable ''
             allow_empty_token = false
+            enable_domain_verification = true
+            asap_accepted_audiences = { "${cfg.hostName}" }
+            asap_accepted_issuers = { "${cfg.jwt.appId}" }
           '')
         ];
         ssl = {

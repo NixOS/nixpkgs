@@ -107,7 +107,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 sleep 1
                 echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
                 sleep 1
-            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjA5Mjg4MiwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJqd3RzZXJ2ZXIiLCJzdWIiOiJqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.N9aCgvP1oOhNiv58EgD39VyNDnSGIkPb8cpFD9cg2mI'
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEwNDMxNSwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJqd3RzZXJ2ZXIiLCJzdWIiOiJqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.3W07cCH6G17JPLF6FGyj5ENqOLqCEsIiGkCCwjzQJIc'
         """
     )
     assert '<failure' not in succeeded_auth
@@ -127,5 +127,33 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     assert '<success' not in failed_auth
     assert '<failure' in failed_auth
     assert 'Invalid signature' in failed_auth
+
+    # This JWT was generated using the correct server secret but the wrong issuer (badissuer instead of nixos). Make sure it's rejected.
+    failed_auth = client.wait_until_succeeds(
+        """
+            (
+                echo '<open to="jwtserver" version="1.0" xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>'
+                sleep 1
+                echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
+                sleep 1
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiYWRpc3N1ZXIiLCJpYXQiOjE2NzIxMDQzMTUsImV4cCI6NDEwMjQ0NDgwMCwiYXVkIjoiand0c2VydmVyIiwic3ViIjoiand0c2VydmVyIiwicm9vbSI6Ik5peE9TUnVsZXMifQ.6bAuaufVKNoqzo8h4MwxC_RLIEyVcR1XPgxY24wJP4I'
+        """
+    )
+    assert '<success' not in failed_auth
+    assert '<failure' in failed_auth
+
+    # This JWT was generated using the correct server secret but the wrong subject and audience (notjwtserver instead of jwtserver). Make sure it's rejected.
+    failed_auth = client.wait_until_succeeds(
+        """
+            (
+                echo '<open to="jwtserver" version="1.0" xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>'
+                sleep 1
+                echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
+                sleep 1
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEwNDMxNSwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJub3Rqd3RzZXJ2ZXIiLCJzdWIiOiJub3Rqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.VPgBYcztngG2tj7e5Dt9lZMzxAExWmHONvs8YGUA0b8'
+        """
+    )
+    assert '<success' not in failed_auth
+    assert '<failure' in failed_auth
   '';
 })
