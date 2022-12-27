@@ -86,13 +86,28 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
           break
         time.sleep(1)
 
-      current_node.log("Service running here!")
+      current_node.succeed("systemctl restart pacemaker")
+      time.sleep(10)
+
+      # wait until the service is started
+      while True:
+        output = node1.succeed("crm_resource -r cat --locate")
+        match = re.search("is running on: (.+)", output)
+        if match:
+          for machine in machines:
+            if machine.name == match.group(1):
+              current_node = machine
+          break
+        time.sleep(1)
+
+      current_node.log("Service running here after systemctl restart")
       current_node.crash()
 
       # pick another node that's still up
       for machine in machines:
         if machine.booted:
           check_node = machine
+
       # find where the service has been started next
       while True:
         output = check_node.succeed("crm_resource -r cat --locate")
@@ -105,6 +120,6 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
           break
         time.sleep(1)
 
-      next_node.log("Service migrated here!")
+      next_node.log("Service migrated here after crash")
   '';
 })

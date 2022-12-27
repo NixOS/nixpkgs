@@ -44,6 +44,7 @@ in
     systemd.services.pacemaker = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        ExecStartPost = "${pkgs.coreutils}/bin/chown -R hacluster:pacemaker /var/lib/pacemaker";
         StateDirectory = "pacemaker";
         StateDirectoryMode = "0700";
       };
