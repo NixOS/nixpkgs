@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   pname = "vte";
   version = "0.74.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -75,9 +76,11 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
-    # Required by vte-2.91.pc.
-    (if gtkVersion == "3" then gtk3 else gtk4)
+  # Required by vte-2.91.pc.
+  propagatedBuildInputs = lib.optionals (gtkVersion != null) [
+    (assert (gtkVersion == "3" || gtkVersion == "4");
+    if gtkVersion == "3" then gtk3 else gtk4)
+  ] ++ [
     glib
     pango
   ];
