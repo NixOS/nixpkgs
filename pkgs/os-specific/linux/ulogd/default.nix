@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, gnumake, libnetfilter_acct, libnetfilter_conntrack
 , libnetfilter_log, libmnl, libnfnetlink, automake, autoconf, autogen, libtool
-, pkg-config, libpcap, linuxdoc-tools, autoreconfHook }:
+, pkg-config, libpcap, linuxdoc-tools, autoreconfHook, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "2.0.8";
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     libtool
     linuxdoc-tools
   ];
+
+  passthru.tests = { inherit (nixosTests) ulogd; };
 
   meta = with lib; {
     description = "Userspace logging daemon for netfilter/iptables";
