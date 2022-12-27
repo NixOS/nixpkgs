@@ -417,6 +417,13 @@
           <literal>libax25</literal> package.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          JWT authentication support has been added to Jitsi. Use
+          <literal>services.jitsi.jwt.enable = true</literal> and set
+          <literal>services.jitsi.jwt.appId</literal> to enable it.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
