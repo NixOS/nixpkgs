@@ -10994,7 +10994,7 @@ with pkgs;
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
-  qdrant = callPackage ../servers/search/qdrant { };
+  qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant { };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
@@ -29201,7 +29201,7 @@ with pkgs;
 
   goffice = callPackage ../development/libraries/goffice { };
 
-  got = callPackage ../applications/version-management/got { };
+  got = darwin.apple_sdk_11_0.callPackage ../applications/version-management/got { };
 
   gtkterm = callPackage ../tools/misc/gtkterm { };
 
