@@ -163,7 +163,7 @@ pkgs.mkShell rec {
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
       packages=(
-        "build-tools;30.0.3" "ndk-bundle" "platform-tools" \
+        "build-tools;30.0.3" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
         "platforms;android-31" "platforms;android-32" "platforms;android-33" \
