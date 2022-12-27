@@ -1143,6 +1143,21 @@
     },
     "21": {
       "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "bad07917816ba029ddb09ce0836e4aac4a460d4d",
+              "size": 297671829,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-21_r32.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-google_apis-arm64-v8a",
+          "path": "system-images/android-21/google_apis/arm64-v8a",
+          "revision": "21-google_apis-arm64-v8a"
+        },
         "armeabi-v7a": {
           "archives": [
             {
@@ -1192,6 +1207,21 @@
     },
     "22": {
       "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "fd62e99e278f337fd58cadd37bf4f4c1998c8297",
+              "size": 382307460,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-22_r26.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-google_apis-arm64-v8a",
+          "path": "system-images/android-22/google_apis/arm64-v8a",
+          "revision": "22-google_apis-arm64-v8a"
+        },
         "armeabi-v7a": {
           "archives": [
             {
@@ -1684,15 +1714,15 @@
           "archives": [
             {
               "os": "macosx",
-              "sha1": "0b850a4f317d7a6abe854a6845705c9ca4437764",
-              "size": 1492105537,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r05-darwin.zip"
+              "sha1": "831cfe87d12eb5dd9d107ca2dfb203d52ca7b217",
+              "size": 1582091204,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r07-darwin.zip"
             },
             {
               "os": "linux",
-              "sha1": "0b850a4f317d7a6abe854a6845705c9ca4437764",
-              "size": 1492105537,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r05-linux.zip"
+              "sha1": "831cfe87d12eb5dd9d107ca2dfb203d52ca7b217",
+              "size": 1582091204,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r07-linux.zip"
             }
           ],
           "displayName": "Google Play ARM 64 v8a System Image",
@@ -1705,50 +1735,16 @@
           "archives": [
             {
               "os": "all",
-              "sha1": "ed2931ebef4f7bedff8610254748d6496ce5d3c4",
-              "size": 1496628942,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-33_r05.zip"
+              "sha1": "b7491eecf45556bd96f7b7a80c020b18a8a7df0d",
+              "size": 1481773028,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-33_r07.zip"
             }
           ],
           "displayName": "Google Play Intel x86 Atom_64 System Image",
-          "license": "android-sdk-preview-license",
+          "license": "android-sdk-license",
           "name": "system-image-33-google_apis_playstore-x86_64",
           "path": "system-images/android-33/google_apis_playstore/x86_64",
           "revision": "33-google_apis_playstore-x86_64"
-        }
-      }
-    },
-    "Tiramisu": {
-      "android-tv": {
-        "arm64-v8a": {
-          "archives": [
-            {
-              "os": "all",
-              "sha1": "4b70bed5ffb28162cdde7852e0597d957910270d",
-              "size": 840304267,
-              "url": "https://dl.google.com/android/repository/sys-img/android-tv/arm64-v8a-Tiramisu_r03.zip"
-            }
-          ],
-          "displayName": "Android TV ARM 64 v8a System Image",
-          "license": "android-sdk-license",
-          "name": "system-image-Tiramisu-android-tv-arm64-v8a",
-          "path": "system-images/android-Tiramisu/android-tv/arm64-v8a",
-          "revision": "Tiramisu-android-tv-arm64-v8a"
-        },
-        "x86": {
-          "archives": [
-            {
-              "os": "all",
-              "sha1": "547a24d9dec83e11486ef4ea45848d9fa99f35c2",
-              "size": 832895525,
-              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-Tiramisu_r03.zip"
-            }
-          ],
-          "displayName": "Android TV Intel x86 Atom System Image",
-          "license": "android-sdk-license",
-          "name": "system-image-Tiramisu-android-tv-x86",
-          "path": "system-images/android-Tiramisu/android-tv/x86",
-          "revision": "Tiramisu-android-tv-x86"
         }
       }
     },
@@ -1758,15 +1754,15 @@
           "archives": [
             {
               "os": "macosx",
-              "sha1": "4653d7aa2dbd2629c3afc1c700284de0f7791bb2",
-              "size": 1514681298,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r05-darwin.zip"
+              "sha1": "069cdb5926cef729c8f14897cdc70e47acfe6736",
+              "size": 1489462208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r08-darwin.zip"
             },
             {
               "os": "linux",
-              "sha1": "4653d7aa2dbd2629c3afc1c700284de0f7791bb2",
-              "size": 1514681298,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r05-linux.zip"
+              "sha1": "069cdb5926cef729c8f14897cdc70e47acfe6736",
+              "size": 1489462208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r08-linux.zip"
             }
           ],
           "displayName": "Google Play ARM 64 v8a System Image",
@@ -1779,9 +1775,9 @@
           "archives": [
             {
               "os": "all",
-              "sha1": "2a4ea6ce714155ea8ddfea26cf61ad219f32c02a",
-              "size": 1519169526,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-TiramisuPrivacySandbox_r05.zip"
+              "sha1": "7ae1658d066353e9f079afe694bdc17c446c0c88",
+              "size": 1493513570,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-TiramisuPrivacySandbox_r08.zip"
             }
           ],
           "displayName": "Google Play Intel x86 Atom_64 System Image",
@@ -3413,6 +3409,33 @@
         "name": "build-tools",
         "path": "build-tools/33.0.0",
         "revision": "33.0.0"
+      },
+      "33.0.1": {
+        "archives": [
+          {
+            "os": "linux",
+            "sha1": "fefb393b82814feb94f88147827cbc918cf992b0",
+            "size": 56003178,
+            "url": "https://dl.google.com/android/repository/build-tools_r33.0.1-linux.zip"
+          },
+          {
+            "os": "macosx",
+            "sha1": "d091bee94295480891ca679e7b2004fe6198d05f",
+            "size": 60027237,
+            "url": "https://dl.google.com/android/repository/build-tools_r33.0.1-macosx.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "710918f38f8fa7595320f4d29db5910770993f63",
+            "size": 55631116,
+            "url": "https://dl.google.com/android/repository/build-tools_r33.0.1-windows.zip"
+          }
+        ],
+        "displayName": "Android SDK Build-Tools 33.0.1",
+        "license": "android-sdk-license",
+        "name": "build-tools",
+        "path": "build-tools/33.0.1",
+        "revision": "33.0.1"
       }
     },
     "cmake": {
@@ -3492,7 +3515,7 @@
           }
         ],
         "displayName": "CMake 3.22.1",
-        "license": "android-sdk-preview-license",
+        "license": "android-sdk-license",
         "name": "cmake",
         "path": "cmake/3.22.1",
         "revision": "3.22.1"
@@ -3741,119 +3764,119 @@
         "name": "cmdline-tools",
         "path": "cmdline-tools/7.0",
         "revision": "7.0"
-      }
-    },
-    "emulator": {
-      "31.2.10": {
+      },
+      "8.0": {
         "archives": [
           {
             "os": "linux",
-            "sha1": "1f2c3ddeb2c9ac4feef5946098a0a710d08e9c6d",
-            "size": 276337904,
-            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8420304.zip"
-          },
-          {
-            "os": "windows",
-            "sha1": "206491b5c4e531b2c66dc80402702b9fa1a64c2a",
-            "size": 345300871,
-            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8420304.zip"
+            "sha1": "09b65ebc5aa9c5011fec9416d22711ce7ffc2260",
+            "size": 120916547,
+            "url": "https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip"
           },
           {
             "os": "macosx",
-            "sha1": "677b6a00c145eb8bf4306daeb2231c8efd507177",
-            "size": 313876814,
-            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8420304.zip"
+            "sha1": "089eedfc62371040f9e027835d5114178fc0e658",
+            "size": 120916533,
+            "url": "https://dl.google.com/android/repository/commandlinetools-mac-9123335_latest.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "d1511ce5b61e5988b3de4b83062f0a570671074f",
+            "size": 120895407,
+            "url": "https://dl.google.com/android/repository/commandlinetools-win-9123335_latest.zip"
+          }
+        ],
+        "displayName": "Android SDK Command-line Tools",
+        "license": "android-sdk-license",
+        "name": "cmdline-tools",
+        "path": "cmdline-tools/8.0",
+        "revision": "8.0"
+      }
+    },
+    "emulator": {
+      "31.3.10": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "4a35a2702f9138653cd1b67d04e01ffa65fb37bc",
+            "size": 347308456,
+            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8807927.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "43df6ed553b89e1553d588251526aae8f79da214",
+            "size": 293822881,
+            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8807927.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "52f8bfa4a09074e607d393302fe8a627846a18e9",
+            "size": 380246403,
+            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8807927.zip"
           }
         ],
         "displayName": "Android Emulator",
         "license": "android-sdk-license",
         "name": "emulator",
         "path": "emulator",
-        "revision": "31.2.10"
+        "revision": "31.3.10"
       },
-      "31.3.8": {
+      "31.3.14": {
         "archives": [
           {
-            "os": "macosx",
-            "sha1": "7214e8384c97a7c9875142149d3bf9c940e9b5a0",
-            "size": 347222379,
-            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8598121.zip"
-          },
-          {
             "os": "linux",
-            "sha1": "0f781977a6cc5377b64444121ff75a513841a4fa",
-            "size": 293782881,
-            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8598121.zip"
+            "sha1": "b5ab96ebffc6ea6816a5b0e9474859463b21ab78",
+            "size": 293826836,
+            "url": "https://dl.google.com/android/repository/emulator-linux_x64-9322596.zip"
           },
           {
             "os": "windows",
-            "sha1": "b4f30bad4e68da41cc9bd44965259b2111a011a1",
-            "size": 380151866,
-            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8598121.zip"
+            "sha1": "632eba430f67abeddcf15ceb0a872b25fdbb7e62",
+            "size": 381130167,
+            "url": "https://dl.google.com/android/repository/emulator-windows_x64-9322596.zip"
+          },
+          {
+            "os": "macosx",
+            "sha1": "00e8685beffbe19f803cd5d698fbe6406b5ee6f3",
+            "size": 347313356,
+            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-9322596.zip"
+          }
+        ],
+        "displayName": "Android Emulator",
+        "license": "android-sdk-license",
+        "name": "emulator",
+        "path": "emulator",
+        "revision": "31.3.14"
+      },
+      "32.1.8": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "13cadd038b401fdfa04e4af153a7f696ccd422cc",
+            "size": 309314692,
+            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-9310560.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "7d82689a73aacdd56684d7134dc88cc3537fb911",
+            "size": 270158359,
+            "url": "https://dl.google.com/android/repository/emulator-linux_x64-9310560.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "8324aeb3bd74a214978252c51574b40cdb56b4ba",
+            "size": 333001267,
+            "url": "https://dl.google.com/android/repository/emulator-windows_x64-9310560.zip"
           }
         ],
         "displayName": "Android Emulator",
         "license": "android-sdk-preview-license",
         "name": "emulator",
         "path": "emulator",
-        "revision": "31.3.8"
-      },
-      "31.3.9": {
-        "archives": [
-          {
-            "os": "macosx",
-            "sha1": "6e7b549113252728cfe0992d58e8cb1790dce9d6",
-            "size": 347241742,
-            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8700579.zip"
-          },
-          {
-            "os": "linux",
-            "sha1": "1c1a7ef65476d3de34f19455a0093cb68e8e90f7",
-            "size": 293801439,
-            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8700579.zip"
-          },
-          {
-            "os": "windows",
-            "sha1": "ea834211b199a7fcf6b6758a53c4594d01b44ab9",
-            "size": 380168712,
-            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8700579.zip"
-          }
-        ],
-        "displayName": "Android Emulator",
-        "license": "android-sdk-license",
-        "name": "emulator",
-        "path": "emulator",
-        "revision": "31.3.9"
+        "revision": "32.1.8"
       }
     },
     "extras": {
-      "1.1": {
-        "archives": [
-          {
-            "os": "linux",
-            "sha1": "18632007ecb843b4fc69babd521a9b061868534b",
-            "size": 1307393,
-            "url": "https://dl.google.com/android/repository/desktop-head-unit-linux_r01.1.zip"
-          },
-          {
-            "os": "macosx",
-            "sha1": "ccb64105888ba61ab06f20ad1ba97c71d440a421",
-            "size": 2299061,
-            "url": "https://dl.google.com/android/repository/desktop-head-unit-macosx_r01.1.zip"
-          },
-          {
-            "os": "windows",
-            "sha1": "f26d80a84020b40e24f8a99873dea6a9c7978f10",
-            "size": 2615480,
-            "url": "https://dl.google.com/android/repository/desktop-head-unit-windows_r01.1.zip"
-          }
-        ],
-        "displayName": "Android Auto Desktop Head Unit Emulator",
-        "license": "android-sdk-license",
-        "name": "extras",
-        "path": "extras/google/auto",
-        "revision": "1.1"
-      },
       "2.0": {
         "archives": [
           {
@@ -3880,6 +3903,33 @@
         "name": "extras",
         "path": "extras/google/auto",
         "revision": "2.0"
+      },
+      "2.1": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "4f8a3d3e32b27de1fc190d149039842e76a55bdd",
+            "size": 7797329,
+            "url": "https://dl.google.com/android/repository/desktop-head-unit-darwin-x64_r02.1.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "5d87eb87a1421e59d528eac1f5cdd406c0b39f51",
+            "size": 6927985,
+            "url": "https://dl.google.com/android/repository/desktop-head-unit-linux-x64_r02.1.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "c27bf84e59dda7b79315b6ca2a314063feffd6ac",
+            "size": 7012059,
+            "url": "https://dl.google.com/android/repository/desktop-head-unit-windows-x64_r02.1.zip"
+          }
+        ],
+        "displayName": "Android Auto Desktop Head Unit Emulator",
+        "license": "android-sdk-license",
+        "name": "extras",
+        "path": "extras/google/auto",
+        "revision": "2.1"
       }
     },
     "ndk": {
@@ -4908,6 +4958,60 @@
         "name": "ndk",
         "path": "ndk/25.0.8528842",
         "revision": "25.0.8528842-rc4"
+      },
+      "25.0.8775105": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "8c54514c62f635dbbc161e30e21f16bcd22526df",
+            "size": 716557039,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25-darwin.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "9fce956edb6abd5aca42acf6bbfb21a90a67f75b",
+            "size": 530938532,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25-linux.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "1da93e7da5803dd8ef47e9283ec2c7b98d34b8da",
+            "size": 467387858,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25-windows.zip"
+          }
+        ],
+        "displayName": "NDK (Side by side) 25.0.8775105",
+        "license": "android-sdk-license",
+        "name": "ndk",
+        "path": "ndk/25.0.8775105",
+        "revision": "25.0.8775105"
+      },
+      "25.1.8937393": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "248f96de6713cbec8707ee2262d3cf08d14d9fde",
+            "size": 716592117,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25b-darwin.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "e27dcb9c8bcaa77b78ff68c3f23abcf6867959eb",
+            "size": 530975885,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25b-linux.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "b2e9b5ab2e1434a65ffd85780891878cf5c6fd92",
+            "size": 467422601,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25b-windows.zip"
+          }
+        ],
+        "displayName": "NDK (Side by side) 25.1.8937393",
+        "license": "android-sdk-license",
+        "name": "ndk",
+        "path": "ndk/25.1.8937393",
+        "revision": "25.1.8937393"
       }
     },
     "ndk-bundle": {
@@ -5605,32 +5709,32 @@
       }
     },
     "platform-tools": {
-      "33.0.2": {
+      "33.0.3": {
         "archives": [
           {
             "os": "macosx",
-            "sha1": "9b5661e0c18a2e5b6935e2b96bcc7be580cd6dcd",
-            "size": 13038676,
-            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.2-darwin.zip"
+            "sha1": "250da3216e4c93ccd2612dcec0b64c2668354b09",
+            "size": 12767128,
+            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip"
           },
           {
             "os": "linux",
-            "sha1": "6bf4f747ad929b02378b44ce083b4502d26109c7",
-            "size": 7406632,
-            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.2-linux.zip"
+            "sha1": "deb43a0f9eaccd16a47937367ef3b53db3db8d10",
+            "size": 7505569,
+            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.3-linux.zip"
           },
           {
             "os": "windows",
-            "sha1": "2d7599f59b54f02c4ecd33d656091a3c1e55ad9c",
-            "size": 6304111,
-            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.2-windows.zip"
+            "sha1": "6028a80149c0ccde2db22d69e7fe84a352d852a2",
+            "size": 5642796,
+            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.3-windows.zip"
           }
         ],
         "displayName": "Android SDK Platform-Tools",
         "license": "android-sdk-license",
         "name": "platform-tools",
         "path": "platform-tools",
-        "revision": "33.0.2"
+        "revision": "33.0.3"
       }
     },
     "platforms": {
@@ -6037,9 +6141,9 @@
         "archives": [
           {
             "os": "all",
-            "sha1": "298f5800e37f3c089ab0eb58d4f6aef4058b689b",
-            "size": 67324871,
-            "url": "https://dl.google.com/android/repository/platform-33_r01.zip"
+            "sha1": "eef99bd4617e80da85187a183eba356d787100d9",
+            "size": 67334130,
+            "url": "https://dl.google.com/android/repository/platform-33_r02.zip"
           }
         ],
         "displayName": "Android SDK Platform 33",
@@ -6178,9 +6282,9 @@
         "archives": [
           {
             "os": "all",
-            "sha1": "8dd74a564f71c8381f5230682c5da291d230cc81",
-            "size": 67918949,
-            "url": "https://dl.google.com/android/repository/platform-TiramisuPrivacySandbox_r03.zip"
+            "sha1": "07f3eb84b8f237e61744967d7aee1225efba25e6",
+            "size": 67975400,
+            "url": "https://dl.google.com/android/repository/platform-TiramisuPrivacySandbox_r08.zip"
           }
         ],
         "displayName": "Android SDK Platform TiramisuPrivacySandbox",
@@ -6558,6 +6662,21 @@
         "name": "sources",
         "path": "sources/android-32",
         "revision": "32"
+      },
+      "33": {
+        "archives": [
+          {
+            "os": "all",
+            "sha1": "dd9819363bb213e378bb9d84b4c5fe8d8091c219",
+            "size": 49205616,
+            "url": "https://dl.google.com/android/repository/sources-33_r01.zip"
+          }
+        ],
+        "displayName": "Sources for Android 33",
+        "license": "android-sdk-license",
+        "name": "sources",
+        "path": "sources/android-33",
+        "revision": "33"
       }
     },
     "tools": {
