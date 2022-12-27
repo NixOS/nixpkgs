@@ -51,6 +51,10 @@ let
 
   nvimAutoDisableWrap = makeNeovimConfig { };
 
+  neovimWithCyan = neovim.override {
+    configure.packages.all.start = [ vimPlugins.nvim-teal-maker ];
+  };
+
   wrapNeovim2 = suffix: config:
     wrapNeovimUnstable neovim-unwrapped (config // {
       extraName = suffix;
@@ -259,5 +263,10 @@ pkgs.recurseIntoAttrs rec {
   run_nvim_with_opt_plugin = runTest nvim_with_opt_plugin ''
     export HOME=$TMPDIR
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
+  '';
+
+  pathDeps = runTest neovimWithCyan ''
+    export HOME=$(mktemp -d)
+    ${neovimWithCyan}/bin/nvim --headless -ei NONE '+!cyan version' +quit!
   '';
 }
