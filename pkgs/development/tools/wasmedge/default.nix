@@ -5,6 +5,9 @@
 , cmake
 , gtest
 , spdlog
+, Foundation
+, libxml2
+, libffi
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -17,6 +20,11 @@ llvmPackages.stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-P2Y2WK6G8aEK1Q4hjrS9X+2WbOfy4brclB/+SWP5LTM=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.lld
+  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [ Foundation ];
 
   buildInputs = [
     boost
@@ -31,7 +39,7 @@ llvmPackages.stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ];
+  ] ++ lib.optional llvmPackages.stdenv.isDarwin "-DWASMEDGE_FORCE_DISABLE_LTO=ON";
 
   meta = with lib; {
     homepage = "https://wasmedge.org/";
