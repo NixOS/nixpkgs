@@ -69,6 +69,8 @@ let
         opt = map (x: x.plugin) pluginsPartitioned.right;
       };
 
+      pathDependencies = lib.concatMap (plugin: plugin.pathDependencies or [ ]) requiredPlugins;
+
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
       python3Env = python3Packages.python.withPackages (ps:
         [ ps.pynvim ]
@@ -95,7 +97,9 @@ let
       # avoid double wrapping, see comment near finalMakeWrapperArgs
       makeWrapperArgs =
         let
-          binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
+          binPath = lib.makeBinPath (pathDependencies
+            ++ lib.optionals withRuby [ rubyEnv ]
+            ++ lib.optionals withNodeJs [ nodejs ]);
 
           hostProviderViml = lib.mapAttrsToList genProviderSettings hostprog_check_table;
 
