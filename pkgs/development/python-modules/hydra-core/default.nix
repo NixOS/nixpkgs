@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;
