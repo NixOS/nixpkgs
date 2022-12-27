@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl
-, perl, gmp, mpfr, flint, boost
-, bliss, ppl, singular, cddlib, lrs, nauty
-, ninja, ant, openjdk
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gmp
+, mpfr
+, flint
+, boost
+, bliss
+, ppl
+, singular
+, cddlib
+, lrs
+, nauty
+, ninja
+, ant
+, openjdk
 , perlPackages
 , makeWrapper
 }:
@@ -21,17 +34,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GfsAypJBpHwpvoEl/IzJ1gQfeMcYwB7oNe01xWJ+86w=";
   };
 
+  nativeBuildInputs = [
+    makeWrapper
+    ninja
+    ant
+    perl
+  ];
+
   buildInputs = [
-    perl gmp mpfr flint boost
-    bliss ppl singular cddlib lrs nauty
+    perl
+    gmp
+    mpfr
+    flint
+    boost
+    bliss
+    ppl
+    singular
+    cddlib
+    lrs
+    nauty
     openjdk
   ] ++ (with perlPackages; [
-    JSON TermReadLineGnu TermReadKey XMLSAX
+    JSON
+    TermReadLineGnu
+    TermReadKey
+    XMLSAX
   ]);
-
-  nativeBuildInputs = [
-    makeWrapper ninja ant perl
-  ];
 
   ninjaFlags = [ "-C" "build/Opt" ];
 
@@ -43,9 +71,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software for research in polyhedral geometry";
+    homepage = "https://www.polymake.org/doku.php";
+    changelog = "https://github.com/polymake/polymake/blob/V${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
     platforms = platforms.linux;
-    homepage = "https://www.polymake.org/doku.php";
   };
 }
