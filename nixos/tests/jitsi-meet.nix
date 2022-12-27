@@ -32,7 +32,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         hostName = "jwtserver";
         jwt = {
           enable = true;
-          appId = "nixos";
+          appId = "jwtserver";
+          issuer = "nixos";
+          audience = "nixos";
           secretFile = pkgs.writeText "jitsi-test-jwt" "b+bXFmEL3eIax/vjaHvcoDgQPcat8iF59QU6yq4Sb2niTXGg";
         };
       };
@@ -107,7 +109,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 sleep 1
                 echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
                 sleep 1
-            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEwNDMxNSwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJqd3RzZXJ2ZXIiLCJzdWIiOiJqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.3W07cCH6G17JPLF6FGyj5ENqOLqCEsIiGkCCwjzQJIc'
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEyMjI2MCwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJuaXhvcyIsInN1YiI6Imp3dHNlcnZlciIsInJvb20iOiJOaXhPU1J1bGVzIn0.Jtyu7iaDMlzRtkqLOz8qnXnF9Gj_Kbvr8RHmh5iviFc'
         """
     )
     assert '<failure' not in succeeded_auth
@@ -121,7 +123,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 sleep 1
                 echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
                 sleep 1
-            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjA5Mjg4MiwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJqd3RzZXJ2ZXIiLCJzdWIiOiJqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.5jCwXMFkSQ-X7mkTIpiuezFEOKYL00sr4Su2JY9_P7Q'
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEyMjI2MCwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJuaXhvcyIsInN1YiI6Imp3dHNlcnZlciIsInJvb20iOiJOaXhPU1J1bGVzIn0.Vd1WKCytwa2fmqY0iDMv_vTaZaY1rzm_C8HJKWLUvgw'
         """
     )
     assert '<success' not in failed_auth
@@ -136,13 +138,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 sleep 1
                 echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
                 sleep 1
-            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiYWRpc3N1ZXIiLCJpYXQiOjE2NzIxMDQzMTUsImV4cCI6NDEwMjQ0NDgwMCwiYXVkIjoiand0c2VydmVyIiwic3ViIjoiand0c2VydmVyIiwicm9vbSI6Ik5peE9TUnVsZXMifQ.6bAuaufVKNoqzo8h4MwxC_RLIEyVcR1XPgxY24wJP4I'
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiYWRpc3N1ZXIiLCJpYXQiOjE2NzIxMjIyNjAsImV4cCI6NDEwMjQ0NDgwMCwiYXVkIjoibml4b3MiLCJzdWIiOiJqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.yCQ77krJB15WIkFWe5p-opvMAez6G-dQ9hs6R9xzCt0'
         """
     )
     assert '<success' not in failed_auth
     assert '<failure' in failed_auth
 
-    # This JWT was generated using the correct server secret but the wrong subject and audience (notjwtserver instead of jwtserver). Make sure it's rejected.
+    # This JWT was generated using the correct server secret but the wrong subject and audience (badsubject/badaudience). Make sure it's rejected.
     failed_auth = client.wait_until_succeeds(
         """
             (
@@ -150,7 +152,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 sleep 1
                 echo '<auth mechanism="ANONYMOUS" xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
                 sleep 1
-            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEwNDMxNSwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJub3Rqd3RzZXJ2ZXIiLCJzdWIiOiJub3Rqd3RzZXJ2ZXIiLCJyb29tIjoiTml4T1NSdWxlcyJ9.VPgBYcztngG2tj7e5Dt9lZMzxAExWmHONvs8YGUA0b8'
+            ) | websocat --insecure --text -H='Sec-Websocket-Protocol: xmpp' 'wss://jwtserver/xmpp-websocket?room=NixOSRules&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJuaXhvcyIsImlhdCI6MTY3MjEyMjI2MCwiZXhwIjo0MTAyNDQ0ODAwLCJhdWQiOiJiYWRhdWRpZW5jZSIsInN1YiI6ImJhZHN1YmplY3QiLCJyb29tIjoiTml4T1NSdWxlcyJ9.hyiz6iQasQFmqnMbCuvqFiaVl6YARtxseX1-RoiyqQo'
         """
     )
     assert '<success' not in failed_auth

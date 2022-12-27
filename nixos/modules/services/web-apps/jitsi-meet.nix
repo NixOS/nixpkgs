@@ -67,11 +67,25 @@ in
         '';
       };
       appId = mkOption {
-        type = str;
-        default = "jitsi";
+        type = nullOr str;
+        default = null;
         example = "my-jwt-issuer.example.com";
         description = lib.mdDoc ''
           The application ID issuing JWTs.
+        '';
+      };
+      issuer = mkOption {
+        type = nullOr str;
+        default = null;
+        description = lib.mdDoc ''
+          Set to the desired JWT issuer if you want Prosody to verify the JWT issuers too.
+        '';
+      };
+      audience = mkOption {
+        type = nullOr str;
+        default = null;
+        description = lib.mdDoc ''
+          Set to the desired JWT audience if you want Prosody to verify the JWT audiences too.
         '';
       };
       secretFile = mkOption {
@@ -271,9 +285,15 @@ in
           '')
           (mkIf cfg.jwt.enable ''
             allow_empty_token = false
+          '')
+          (mkIf (cfg.jwt.issuer != null || cfg.jwt.audience != null) ''
             enable_domain_verification = true
-            asap_accepted_audiences = { "${cfg.hostName}" }
-            asap_accepted_issuers = { "${cfg.jwt.appId}" }
+          '')
+          (mkIf (cfg.jwt.issuer != null) ''
+            asap_accepted_issuers = { "${cfg.jwt.issuer}" }
+          '')
+          (mkIf (cfg.jwt.audience != null) ''
+            asap_accepted_audiences = { "${cfg.jwt.audience}" }
           '')
         ];
         ssl = {
