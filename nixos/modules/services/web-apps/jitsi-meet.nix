@@ -56,6 +56,35 @@ in
       '';
     };
 
+    jwt = {
+      enable = mkOption {
+        type = bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to enable JWT authentication.
+
+          This will automatically set services.prosody.authentication = "token" and generate a JWT secret.
+        '';
+      };
+      appId = mkOption {
+        type = str;
+        default = "jitsi";
+        example = "my-jwt-issuer.example.com";
+        description = lib.mdDoc ''
+          The application ID issuing JWTs.
+        '';
+      };
+      secretFile = mkOption {
+        type = nullOr (either string (either package path));
+        default = null;
+        example = "/run/keys/jitsi";
+        description = lib.mdDoc ''
+          File containing a secret to read for JWT authentication. If provided, must be populated manually.
+          A random alphanumeric string of 64 characters is ideal.
+        '';
+      };
+    };
+
     config = mkOption {
       type = attrs;
       default = { };
@@ -174,6 +203,7 @@ in
   config = mkIf cfg.enable {
     services.prosody = mkIf cfg.prosody.enable {
       enable = mkDefault true;
+      authentication = mkIf cfg.jwt.enable "token";
       xmppComplianceSuite = mkDefault false;
       modules = {
         admin_adhoc = mkDefault false;
@@ -191,9 +221,14 @@ in
           name = "Jitsi Meet MUC";
           roomLocking = false;
           roomDefaultPublicJids = true;
-          extraConfig = ''
-            storage = "memory"
-          '';
+          extraConfig = lib.mkMerge [
+            (mkBefore ''
+              storage = "memory"
+            '')
+            (mkIf cfg.jwt.enable ''
+              modules_enabled = { "token_verification" }
+            '')
+          ];
         }
         {
           domain = "internal.${cfg.hostName}";
@@ -207,27 +242,37 @@ in
       ];
       extraModules = [ "pubsub" "smacks" ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
-      extraConfig = lib.mkMerge [ (mkAfter ''
-        Component "focus.${cfg.hostName}" "client_proxy"
-          target_address = "focus@auth.${cfg.hostName}"
-        '')
+      extraConfig = lib.mkMerge [
         (mkBefore ''
           cross_domain_websocket = true;
           consider_websocket_secure = true;
+        '')
+        (mkIf cfg.jwt.enable ''
+          app_id = "${cfg.jwt.appId}"
+          app_secret = os.getenv('JITSI_JWT_SECRET') or ""
+        '')
+        (mkAfter ''
+          Component "focus.${cfg.hostName}" "client_proxy"
+            target_address = "focus@auth.${cfg.hostName}"
         '')
       ];
       virtualHosts.${cfg.hostName} = {
         enabled = true;
         domain = cfg.hostName;
-        extraConfig = ''
-          authentication = "anonymous"
-          c2s_require_encryption = false
-          admins = { "focus@auth.${cfg.hostName}" }
-          smacks_max_unacked_stanzas = 5
-          smacks_hibernation_time = 60
-          smacks_max_hibernated_sessions = 1
-          smacks_max_old_sessions = 1
-        '';
+        extraConfig = lib.mkMerge [
+          (mkBefore ''
+            authentication = "${if cfg.jwt.enable then "token" else "anonymous"}"
+            c2s_require_encryption = false
+            admins = { "focus@auth.${cfg.hostName}" }
+            smacks_max_unacked_stanzas = 5
+            smacks_hibernation_time = 60
+            smacks_max_hibernated_sessions = 1
+            smacks_max_old_sessions = 1
+          '')
+          (mkIf cfg.jwt.enable ''
+            allow_empty_token = false
+          '')
+        ];
         ssl = {
           cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
           key = "/var/lib/jitsi-meet/jitsi-meet.key";
@@ -283,7 +328,10 @@ in
       };
 
       script = let
-        secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
+        jwtSecretFile = if cfg.jwt.secretFile == null then "jwt-secret" else "${cfg.jwt.secretFile}";
+        secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ]
+          ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret")
+          ++ (optional (cfg.jwt.enable && cfg.jwt.secretFile == null) "jwt-secret");
       in
       ''
         cd /var/lib/jitsi-meet
@@ -297,12 +345,16 @@ in
 
         # for easy access in prosody
         echo "JICOFO_COMPONENT_SECRET=$(cat jicofo-component-secret)" > secrets-env
+        if [ -f "${jwtSecretFile}" ]; then
+          echo "JITSI_JWT_SECRET=$(cat "${jwtSecretFile}")" >> secrets-env
+        fi
+
         chown root:jitsi-meet secrets-env
         chmod 640 secrets-env
       ''
       + optionalString cfg.prosody.enable ''
         # generate self-signed certificates
-        if [ ! -f /var/lib/jitsi-meet.crt ]; then
+        if [ ! -f /var/lib/jitsi-meet/jitsi-meet.crt ]; then
           ${getBin pkgs.openssl}/bin/openssl req \
             -x509 \
             -newkey rsa:4096 \
@@ -410,13 +462,18 @@ in
       userPasswordFile = "/var/lib/jitsi-meet/jicofo-user-secret";
       componentPasswordFile = "/var/lib/jitsi-meet/jicofo-component-secret";
       bridgeMuc = "jvbbrewery@internal.${cfg.hostName}";
-      config = mkMerge [{
-        "org.jitsi.jicofo.ALWAYS_TRUST_MODE_ENABLED" = "true";
-      #} (lib.mkIf cfg.jibri.enable {
-       } (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
-        "org.jitsi.jicofo.jibri.BREWERY" = "JibriBrewery@internal.${cfg.hostName}";
-        "org.jitsi.jicofo.jibri.PENDING_TIMEOUT" = "90";
-      })];
+      config = mkMerge [
+        {
+          "org.jitsi.jicofo.ALWAYS_TRUST_MODE_ENABLED" = "true";
+        }
+        (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
+          "org.jitsi.jicofo.jibri.BREWERY" = "JibriBrewery@internal.${cfg.hostName}";
+          "org.jitsi.jicofo.jibri.PENDING_TIMEOUT" = "90";
+        })
+        (lib.mkIf cfg.jwt.enable {
+          "org.jitsi.jicofo.auth.URL" = "JWT:${cfg.hostName}";
+        })
+      ];
     };
 
     services.jibri = mkIf cfg.jibri.enable {

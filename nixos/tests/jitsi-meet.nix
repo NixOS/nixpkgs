@@ -30,37 +30,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.jitsi-meet = {
         enable = true;
         hostName = "jwtserver";
-      };
-      services.jitsi-videobridge.openFirewall = true;
-      services.jicofo = {
-        config = {
-          authentication = ''
-            type = JWT
-            login-url = "jwtserver"
-          '';
-        };
-      };
-      services.prosody = {
-        enable = true;
-        authentication = "token";
-        extraConfig = ''
-          app_id = "nixos";
-          app_secret = "b+bXFmEL3eIax/vjaHvcoDgQPcat8iF59QU6yq4Sb2niTXGg";
-        '';
-
-        muc = [
-          {
-            domain = "conference.jwtserver";
-            extraConfig = ''
-              modules_enabled = { "token_verification" };
-            '';
-          }
-        ];
-        virtualHosts."jwtserver" = {
-          extraConfig = ''
-            authentication = "token";
-            allow_empty_token = false;
-          '';
+        jwt = {
+          enable = true;
+          appId = "nixos";
+          secretFile = pkgs.writeText "jitsi-test-jwt" "b+bXFmEL3eIax/vjaHvcoDgQPcat8iF59QU6yq4Sb2niTXGg";
         };
       };
 
