@@ -7,8 +7,10 @@
 , doCheck ? true
 , cudaSupport ? config.cudaSupport or false
 , ncclSupport ? false
+, rSupport ? config.rSupport or false
 , cudaPackages
 , llvmPackages
+, R
 }:
 
 assert ncclSupport -> cudaSupport;
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
+  ] ++ lib.optionals rSupport [
+    R
   ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
@@ -39,8 +43,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc" ]
     ++ lib.optionals (cudaSupport && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
-    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
+    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
+    ++ lib.optionals rSupport [ "-DR_LIB=ON" ];
 
+  # tests are expected to fail if rSupport is enabled
   inherit doCheck;
 
   # By default, cmake build will run ctests with all checks enabled
@@ -57,8 +63,16 @@ stdenv.mkDerivation rec {
     cp -r ../include $out
     cp -r ../dmlc-core/include/dmlc $out/include
     cp -r ../rabit/include/rabit $out/include
+  ''
+  + lib.optionalString (!rSupport) ''
     install -Dm755 ../lib/${libname} $out/lib/${libname}
     install -Dm755 ../xgboost $out/bin/xgboost
+  ''
+  + lib.optionalString rSupport ''
+    mkdir $out/lib
+    cp ../lib/xgboost.so $out/lib/xgboost.so
+  ''
+  + ''
     runHook postInstall
   '';
 
