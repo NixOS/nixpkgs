@@ -22,6 +22,7 @@
 , clang
 , llvmPackages
 , linux-pam
+, pango
 , cmake
 , glib
 , freetype
@@ -168,6 +169,11 @@ in
 
   pam-sys = attr: {
     buildInputs = [ linux-pam ];
+  };
+
+  pango-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
   };
 
   pq-sys = attr: {
