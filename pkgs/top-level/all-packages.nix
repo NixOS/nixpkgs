@@ -1049,6 +1049,8 @@ with pkgs;
     prefetch-yarn-deps
     fetchYarnDeps;
 
+  find-billy = callPackage ../games/find-billy { };
+
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
   flare-floss = callPackage ../tools/security/flare-floss { };
