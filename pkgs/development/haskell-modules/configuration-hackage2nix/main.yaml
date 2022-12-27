@@ -444,6 +444,8 @@ package-maintainers:
     - time-domain
   utdemir:
     - nix-tree
+  zowoq:
+    - ShellCheck
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
