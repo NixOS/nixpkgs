@@ -78,8 +78,6 @@ in
   };
 
   evdev-sys = attrs: {
-    LIBGIT2_SYS_USE_PKG_CONFIG = true;
-    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libevdev ];
   };
 
