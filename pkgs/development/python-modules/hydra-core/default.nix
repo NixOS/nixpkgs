@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "hydra";
+  pname = "hydra-core";
   version = "1.3.1";
   format = "setuptools";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
+    repo = "hydra";
     rev = "refs/tags/v${version}";
     hash = "sha256-4FOh1Jr+LM8ffh/xcAqMqKudKbXb2DZdxU+czq2xwxs=";
   };
