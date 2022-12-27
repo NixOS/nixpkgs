@@ -89,7 +89,7 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlNativeNuildInputs;
+    inherit ocamlPackages ocamlNativeBuildInputs;
     inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
