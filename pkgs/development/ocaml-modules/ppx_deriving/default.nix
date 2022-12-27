@@ -1,6 +1,7 @@
 { lib
 , fetchurl
 , buildDunePackage
+, ocaml
 , cppo
 , ppxlib
 , ppx_derivers
@@ -51,7 +52,7 @@ buildDunePackage rec {
     result
   ];
 
-  doCheck = true;
+  doCheck = lib.versionOlder ocaml.version "5.0";
   checkInputs = [
     (if lib.versionAtLeast version "5.2" then ounit2 else ounit)
   ];
