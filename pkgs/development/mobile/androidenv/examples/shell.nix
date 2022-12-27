@@ -146,8 +146,9 @@ pkgs.mkShell rec {
   '';
 
   passthru.tests = {
-    sdkmanager-licenses-test = pkgs.runCommand "sdkmanager-licenses-test" {
-      buildInputs = [ androidSdk jdk ];
+
+    shell-sdkmanager-licenses-test = pkgs.runCommand "shell-sdkmanager-licenses-test" {
+      nativeBuildInputs = [ androidSdk jdk ];
     } ''
       if [[ ! "$(sdkmanager --licenses)" =~ "All SDK package licenses accepted." ]]; then
         echo "At least one of SDK package licenses are not accepted."
@@ -156,8 +157,8 @@ pkgs.mkShell rec {
       touch $out
     '';
 
-    sdkmanager-packages-test = pkgs.runCommand "sdkmanager-packages-test" {
-      buildInputs = [ androidSdk jdk ];
+    shell-sdkmanager-packages-test = pkgs.runCommand "shell-sdkmanager-packages-test" {
+      nativeBuildInputs = [ androidSdk jdk ];
     } ''
       output="$(sdkmanager --list)"
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')

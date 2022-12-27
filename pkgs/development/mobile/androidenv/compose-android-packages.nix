@@ -188,9 +188,11 @@ rec {
       # Deploy all system images with the same  systemImageType in one derivation to avoid the `null` problem below
       # with avdmanager when trying to create an avd!
       #
+      # ```
       # $ yes "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
       # Error: Package path is not valid. Valid system image paths are:
       # null
+      # ```
       let
         availablePackages = map (abiVersion:
           system-images-packages.${apiVersion}.${type}.${abiVersion}
