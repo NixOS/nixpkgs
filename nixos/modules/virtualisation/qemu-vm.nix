@@ -218,8 +218,7 @@ let
                 chmod 0644 $efiVars
               '' else ""}
             '';
-          nativeBuildInputs = with pkgs; [ dosfstools gptfdisk kmod mtools ];
-          buildInputs = with pkgs; [ util-linux ];
+          buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
                       + lib.optionalString cfg.useEFIBoot (
                         " -drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
@@ -227,7 +226,7 @@ let
         }
         ''
           # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
-          sgdisk \
+          ${pkgs.gptfdisk}/bin/sgdisk \
             --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
             --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
             --attributes=1:set:1 \
@@ -250,16 +249,16 @@ let
             ''
           }
 
-          mkfs.fat -F16 /dev/vda2
+          ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
           export MTOOLS_SKIP_CHECK=1
-          mlabel -i /dev/vda2 ::boot
+          ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
 
           # Mount /boot; load necessary modules first.
-          insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
-          insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko.xz || true
-          insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko.xz || true
-          insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
-          insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
+          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
           mkdir /boot
           mount /dev/vda2 /boot
 

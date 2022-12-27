@@ -36,9 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "flashfocus" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/fennerm/flashfocus";
