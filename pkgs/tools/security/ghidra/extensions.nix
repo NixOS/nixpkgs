@@ -7,6 +7,8 @@ lib.makeScope newScope (self: {
 
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
+  machinelearning = self.callPackage ./extensions/machinelearning { inherit ghidra; };
+
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 
 })
