@@ -82,10 +82,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.jicofo.config = mapAttrs (_: v: mkDefault v) {
-      "org.jitsi.jicofo.BRIDGE_MUC" = cfg.bridgeMuc;
-    };
-
     users.groups.jitsi-meet = {};
 
     systemd.services.jicofo = let
@@ -93,10 +89,6 @@ in
         "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "jicofo";
         "-Djava.util.logging.config.file" = "/etc/jitsi/jicofo/logging.properties";
-        "-Dorg.jitsi.jicofo.XMPP_DOMAIN" = cfg.xmppHost;
-        "-Dorg.jitsi.jicofo.HOSTNAME" = if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain;
-        "-Dorg.jitsi.jicofo.FOCUS_USER_DOMAIN" = cfg.userDomain;
-        "-Dorg.jitsi.jicofo.FOCUS_USER_NAME" = cfg.userName;
       };
     in
     {
@@ -139,9 +131,17 @@ in
       };
     };
 
-    environment.etc."jitsi/jicofo/sip-communicator.properties".source =
+    environment.etc."jitsi/jicofo/sip-communicator.properties".source = let
+      renderedConfig = {
+        "org.jitsi.jicofo.BRIDGE_MUC" = cfg.bridgeMuc;
+        "org.jitsi.jicofo.FOCUS_USER_DOMAIN" = cfg.userDomain;
+        "org.jitsi.jicofo.FOCUS_USER_NAME" = cfg.userName;
+        "org.jitsi.jicofo.XMPP_DOMAIN" = cfg.xmppHost;
+        "org.jitsi.jicofo.HOSTNAME" = if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain;
+      } // cfg.config;
+      in
       pkgs.writeText "sip-communicator.properties" (
-        generators.toKeyValue {} cfg.config
+        generators.toKeyValue {} renderedConfig
       );
     environment.etc."jitsi/jicofo/logging.properties".source =
       mkDefault "${pkgs.jicofo}/etc/jitsi/jicofo/logging.properties-journal";
