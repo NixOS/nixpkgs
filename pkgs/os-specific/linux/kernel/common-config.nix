@@ -954,6 +954,10 @@ let
 
       # Fresh toolchains frequently break -Werror build for minor issues.
       WERROR = whenAtLeast "5.15" no;
+
+      # https://www.kernel.org/doc/html/next/admin-guide/mm/multigen_lru.html
+      LRU_GEN            = whenAtLeast "6.1" yes;
+      LRU_GEN_ENABLED    = whenAtLeast "6.1" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
