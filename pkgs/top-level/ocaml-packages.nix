@@ -610,6 +610,8 @@ let
 
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
+    httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
     index = callPackage ../development/ocaml-modules/index { };
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
@@ -934,6 +936,8 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
+
     mustache =  callPackage ../development/ocaml-modules/mustache { };
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
@@ -1104,8 +1108,6 @@ let
 
     opium = callPackage ../development/ocaml-modules/opium { };
 
-    opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
-
     opti = callPackage ../development/ocaml-modules/opti { };
 
     optint = callPackage ../development/ocaml-modules/optint { };
@@ -1199,6 +1201,8 @@ let
     repr = callPackage ../development/ocaml-modules/repr { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
+
+    rock = callPackage ../development/ocaml-modules/rock { };
 
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 

@@ -11731,7 +11731,8 @@ with pkgs;
 
   snallygaster = callPackage ../tools/security/snallygaster { };
 
-  snapcast = callPackage ../applications/audio/snapcast {
+  snapcast = darwin.apple_sdk_11_0.callPackage ../applications/audio/snapcast {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit AudioToolbox;
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
   };
 
@@ -14049,7 +14050,7 @@ with pkgs;
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
   # profile-guided optimizations
-  fastStdenv = overrideCC gccStdenv (wrapNonDeterministicGcc gccStdenv buildPackages.gcc10);
+  fastStdenv = overrideCC gccStdenv (wrapNonDeterministicGcc gccStdenv buildPackages.gcc_latest);
 
   wrapCCMulti = cc:
     if stdenv.targetPlatform.system == "x86_64-linux" then let
@@ -20064,11 +20065,11 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
-  itk_5 = callPackage ../development/libraries/itk/5.x.nix {
+  itk_5_2 = callPackage ../development/libraries/itk/5.2.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  itk-unstable = callPackage ../development/libraries/itk/unstable.nix {
+  itk_5 = callPackage ../development/libraries/itk/5.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -23677,6 +23678,8 @@ with pkgs;
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
 
   alerta-server = callPackage ../servers/monitoring/alerta { };
+
+  allmark = callPackage ../servers/allmark {};
 
   alps = callPackage ../servers/alps { };
 
@@ -34691,6 +34694,8 @@ with pkgs;
   naev = callPackage ../games/naev { };
 
   nanosaur = callPackage ../games/nanosaur { };
+
+  nanosaur2 = callPackage ../games/nanosaur2 { };
 
   nethack = callPackage ../games/nethack { };
 
