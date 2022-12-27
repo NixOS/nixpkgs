@@ -1,29 +1,36 @@
 { lib
 , aiounittest
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
+, flit-core
 , pytestCheckHook
-, typing-extensions
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.17.0";
-  disabled = isPy27;
+  version = "0.18.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8OaswkvEhkFJJnrIL7Rt+zvkRV+Z/iHfgmCcxua67lE=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "omnilib";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   checkInputs = [
     aiounittest
     pytestCheckHook
-    typing-extensions
   ];
 
-  # tests are not pick-up automatically by the hook
+  # Tests are not pick-up automatically by the hook
   pytestFlagsArray = [
     "aiosqlite/tests/*.py"
   ];
