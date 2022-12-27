@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mrbean-bremen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W6RhVnMuOgB4GNxczx3UlSeq0RWIM7yISKEvpnrE9uk=";
+    hash = "sha256-W6RhVnMuOgB4GNxczx3UlSeq0RWIM7yISKEvpnrE9uk=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module and CLI tool for GitHub repo statistics";
     homepage = "https://github.com/mrbean-bremen/ghrepo-stats";
+    changelog = "https://github.com/mrbean-bremen/ghrepo-stats/blob/v${version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
