@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ] ++ (with python.pkgs; [
     numpy
     matplotlib
-  ]) ++ lib.optional withRootSupport [
+  ]) ++ lib.optionals withRootSupport [
     root
   ];
 
