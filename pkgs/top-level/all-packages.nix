@@ -29201,7 +29201,7 @@ with pkgs;
 
   goffice = callPackage ../development/libraries/goffice { };
 
-  got = callPackage ../applications/version-management/got { };
+  got = darwin.apple_sdk_11_0.callPackage ../applications/version-management/got { };
 
   gtkterm = callPackage ../tools/misc/gtkterm { };
 
