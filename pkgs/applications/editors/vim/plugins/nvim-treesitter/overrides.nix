@@ -69,6 +69,8 @@ in
   passthru = {
     inherit builtGrammars allGrammars grammarToPlugin withPlugins withAllGrammars;
 
+    grammarPlugins = lib.mapAttrs (_: grammarToPlugin) generatedDerivations;
+
     tests.check-queries =
       let
         nvimWithAllGrammars = neovim.override {
