@@ -51,9 +51,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/celluloid-player/celluloid";

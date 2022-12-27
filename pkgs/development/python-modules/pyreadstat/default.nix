@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.1.9";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Roche";
     repo = "pyreadstat";
-    rev = "v${version}";
-    hash = "sha256-OtvAvZTmcBTGfgp3Ddp9JJuZegr1o6c7rTMOuLwJSpk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Rw+v1+KpjSSZoqhlENKcJiaFhAvcNRbZ3+MA2dOsj4Q=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +57,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python package to read SAS, SPSS and Stata files into pandas data frames using the readstat C library";
+    description = "Module to read SAS, SPSS and Stata files into pandas data frames";
     homepage = "https://github.com/Roche/pyreadstat";
+    changelog = "https://github.com/Roche/pyreadstat/blob/v${version}/change_log.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ swflint ];
   };

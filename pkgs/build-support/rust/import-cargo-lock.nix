@@ -7,6 +7,9 @@
   # Cargo lock file contents as string
 , lockFileContents ? null
 
+  # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
+, allowBuiltinFetchGit ? false
+
   # Hashes for git dependencies.
 , outputHashes ? {}
 } @ args:
@@ -38,14 +41,14 @@ let
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
   # safely skip it.
-  depPackages = (builtins.filter (p: p ? "source") packages);
+  depPackages = builtins.filter (p: p ? "source") packages;
 
   # Create dependent crates from packages.
   #
   # Force evaluation of the git SHA -> hash mapping, so that an error is
   # thrown if there are stale hashes. We cannot rely on gitShaOutputHash
   # being evaluated otherwise, since there could be no git dependencies.
-  depCrates = builtins.deepSeq (gitShaOutputHash) (builtins.map mkCrate depPackages);
+  depCrates = builtins.deepSeq gitShaOutputHash (builtins.map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = builtins.listToAttrs (
@@ -117,12 +120,20 @@ let
           If you use `buildRustPackage`, you can add this attribute to the `cargoLock`
           attribute set.
         '';
-        sha256 = gitShaOutputHash.${gitParts.sha} or missingHash;
-        tree = fetchgit {
-          inherit sha256;
-          inherit (gitParts) url;
-          rev = gitParts.sha; # The commit SHA is always available.
-        };
+        tree =
+          if gitShaOutputHash ? ${gitParts.sha} then
+            fetchgit {
+              inherit (gitParts) url;
+              rev = gitParts.sha; # The commit SHA is always available.
+              sha256 = gitShaOutputHash.${gitParts.sha};
+            }
+          else if allowBuiltinFetchGit then
+            builtins.fetchGit {
+              inherit (gitParts) url;
+              rev = gitParts.sha;
+            }
+          else
+            missingHash;
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         tree=${tree}
 

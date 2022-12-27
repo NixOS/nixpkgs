@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haven-cli";
-  version = "2.2.3";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "haven-protocol-org";
     repo = "haven-main";
     rev = "v${version}";
-    sha256 = "sha256-nBVLNT0jWIewr6MPDGwDqXoVtyFLyls1IEQraVoWDQ4=";
+    sha256 = "sha256-ZQiSh1pB0njIAyJFPIsgoqNuhvMGRJ2NIZaUoB1fN3E=";
     fetchSubmodules = true;
   };
 

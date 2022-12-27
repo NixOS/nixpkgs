@@ -1,3 +1,85 @@
+/* Technical details
+
+`make-disk-image` has a bit of magic to minimize the amount of work to do in a virtual machine.
+
+It relies on the [LKL (Linux Kernel Library) project](https://github.com/lkl/linux) which provides Linux kernel as userspace library.
+
+The Nix-store only image only need to run LKL tools to produce an image and will never spawn a virtual machine, whereas full images will always require a virtual machine, but also use LKL.
+
+### Image preparation phase
+
+Image preparation phase will produce the initial image layout in a folder:
+
+- devise a root folder based on `$PWD`
+- prepare the contents by copying and restoring ACLs in this root folder
+- load in the Nix store database all additional paths computed by `pkgs.closureInfo` in a temporary Nix store
+- run `nixos-install` in a temporary folder
+- transfer from the temporary store the additional paths registered to the installed NixOS
+- compute the size of the disk image based on the apparent size of the root folder
+- partition the disk image using the corresponding script according to the partition table type
+- format the partitions if needed
+- use `cptofs` (LKL tool) to copy the root folder inside the disk image
+
+At this step, the disk image already contains the Nix store, it now only needs to be converted to the desired format to be used.
+
+### Image conversion phase
+
+Using `qemu-img`, the disk image is converted from a raw format to the desired format: qcow2(-compressed), vdi, vpc.
+
+### Image Partitioning
+
+#### `none`
+
+No partition table layout is written. The image is a bare filesystem image.
+
+#### `legacy`
+
+The image is partitioned using MBR. There is one primary ext4 partition starting at 1 MiB that fills the rest of the disk image.
+
+This partition layout is unsuitable for UEFI.
+
+#### `legacy+gpt`
+
+This partition table type uses GPT and:
+
+- create a "no filesystem" partition from 1MiB to 2MiB ;
+- set `bios_grub` flag on this "no filesystem" partition, which marks it as a [GRUB BIOS partition](https://www.gnu.org/software/parted/manual/html_node/set.html) ;
+- create a primary ext4 partition starting at 2MiB and extending to the full disk image ;
+- perform optimal alignments checks on each partition
+
+This partition layout is unsuitable for UEFI boot, because it has no ESP (EFI System Partition) partition. It can work with CSM (Compatibility Support Module) which emulates legacy (BIOS) boot for UEFI.
+
+#### `efi`
+
+This partition table type uses GPT and:
+
+- creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
+- creates an primary ext4 partition starting after the boot partition and extending to the full disk image
+
+#### `hybrid`
+
+This partition table type uses GPT and:
+
+- creates a "no filesystem" partition from 0 to 1MiB, set `bios_grub` flag on it ;
+- creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
+- creates a primary ext4 partition starting after the boot one and extending to the full disk image
+
+This partition could be booted by a BIOS able to understand GPT layouts and recognizing the MBR at the start.
+
+### How to run determinism analysis on results?
+
+Build your derivation with `--check` to rebuild it and verify it is the same.
+
+If it fails, you will be left with two folders with one having `.check`.
+
+You can use `diffoscope` to see the differences between the folders.
+
+However, `diffoscope` is currently not able to diff two QCOW2 filesystems, thus, it is advised to use raw format.
+
+Even if you use raw disks, `diffoscope` cannot diff the partition table and partitions recursively.
+
+To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$image-p$i.raw skip=$start count=$sectors` for each `(start, sectors)` listed in the `fdisk` output. Now, you will have each partition as a separate file and you can compare them in pairs.
+*/
 { pkgs
 , lib
 
@@ -47,6 +129,18 @@
 , # Whether to invoke `switch-to-configuration boot` during image creation
   installBootLoader ? true
 
+, # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
+  touchEFIVars ? false
+
+, # OVMF firmware derivation
+  OVMF ? pkgs.OVMF.fd
+
+, # EFI firmware
+  efiFirmware ? OVMF.firmware
+
+, # EFI variables
+  efiVariables ? OVMF.variables
+
 , # The root file system type.
   fsType ? "ext4"
 
@@ -70,6 +164,22 @@
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 
+  # Whether to fix:
+  #   - GPT Disk Unique Identifier (diskGUID)
+  #   - GPT Partition Unique Identifier: depends on the layout, root partition UUID can be controlled through `rootGPUID` option
+  #   - GPT Partition Type Identifier: fixed according to the layout, e.g. ESP partition, etc. through `parted` invocation.
+  #   - Filesystem Unique Identifier when fsType = ext4 for *root partition*.
+  # BIOS/MBR support is "best effort" at the moment.
+  # Boot partitions may not be deterministic.
+  # Also, to fix last time checked of the ext4 partition if fsType = ext4.
+, deterministic ? true
+
+  # GPT Partition Unique Identifier for root partition.
+, rootGPUID ? "F222513B-DED1-49FA-B591-20CE86A2FE7F"
+  # When fsType = ext4, this is the root Filesystem Unique Identifier.
+  # TODO: support other filesystems someday.
+, rootFSUID ? (if fsType == "ext4" then rootGPUID else null)
+
 , # Whether a nix channel based on the current source tree should be
   # made available inside the image. Useful for interactive use of nix
   # utils, but changes the hash of the image when the sources are
@@ -80,15 +190,18 @@
   additionalPaths ? []
 }:
 
-assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
-# We use -E offset=X below, which is only supported by e2fsprogs
-assert partitionTableType != "none" -> fsType == "ext4";
+assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "hybrid" "none" ]);
+assert (lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null) "In deterministic mode with a ext4 partition, rootFSUID must be non-null, by default, it is equal to rootGPUID.");
+  # We use -E offset=X below, which is only supported by e2fsprogs
+assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
+assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.");
+  # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
+assert (lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.");
 # Either both or none of {user,group} need to be set
-assert lib.all
+assert (lib.assertMsg (lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
-         contents;
-assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
+        contents) "Contents of the disk image should set none of {user, group} or both at the same time.");
 
 with lib;
 
@@ -127,6 +240,14 @@ let format' = format; in let
         mkpart primary ext4 2MB -1 \
         align-check optimal 2 \
         print
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+          --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
+          --partition-guid=3:${rootGPUID} \
+          $diskImage
+      ''}
     '';
     efi = ''
       parted --script $diskImage -- \
@@ -134,6 +255,13 @@ let format' = format; in let
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
         mkpart primary ext4 ${bootSize} -1
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+          --partition-guid=2:${rootGPUID} \
+          $diskImage
+      ''}
     '';
     hybrid = ''
       parted --script $diskImage -- \
@@ -143,9 +271,19 @@ let format' = format; in let
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
         mkpart primary ext4 ${bootSize} -1
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+          --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
+          --partition-guid=3:${rootGPUID} \
+          $diskImage
+      ''}
     '';
     none = "";
   }.${partitionTableType};
+
+  useEFIBoot = touchEFIVars;
 
   nixpkgs = cleanSource pkgs.path;
 
@@ -171,7 +309,9 @@ let format' = format; in let
       config.system.build.nixos-enter
       nix
       systemdMinimal
-    ] ++ stdenv.initialPath);
+    ]
+    ++ lib.optional deterministic gptfdisk
+    ++ stdenv.initialPath);
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -368,20 +508,35 @@ let format' = format; in let
     diskImage=$out/${filename}
   '';
 
+  createEFIVars = ''
+    efiVars=$out/efi-vars.fd
+    cp ${efiVariables} $efiVars
+    chmod 0644 $efiVars
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
-      preVM = prepareImage;
+      preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = moveOrConvertImage + postVM;
+      QEMU_OPTS =
+        concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+        ++ lib.optionals touchEFIVars [
+          "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ]
+      );
       memSize = 1024;
     } ''
       export PATH=${binPath}:$PATH
 
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
 
-      # Some tools assume these exist
-      ln -s vda /dev/xvda
-      ln -s vda /dev/sda
+      # It is necessary to set root filesystem unique identifier in advance, otherwise
+      # bootloader might get the wrong one and fail to boot.
+      # At the end, we reset again because we want deterministic timestamps.
+      ${optionalString (fsType == "ext4" && deterministic) ''
+        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+      ''}
       # make systemd-boot find ESP without udev
       mkdir /dev/block
       ln -s /dev/vda1 /dev/block/254:1
@@ -396,6 +551,8 @@ let format' = format; in let
         mkdir -p /mnt/boot
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot
+
+        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
@@ -405,7 +562,13 @@ let format' = format; in let
       ''}
 
       ${lib.optionalString installBootLoader ''
-        # Set up core system link, GRUB, etc.
+        # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
+        # Use this option to create a symlink from vda to any arbitrary device you want.
+        ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+            ln -s /dev/vda ${config.boot.loader.grub.device}
+        ''}
+
+        # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
         # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
@@ -432,8 +595,12 @@ let format' = format; in let
       # Make sure resize2fs works. Note that resize2fs has stricter criteria for resizing than a normal
       # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic
       # output, of course, but we can fix that when/if we start making images deterministic.
+      # In deterministic mode, this is fixed to 1970-01-01 (UNIX timestamp 0).
+      # This two-step approach is necessary otherwise `tune2fs` will want a fresher filesystem to perform
+      # some changes.
       ${optionalString (fsType == "ext4") ''
-        tune2fs -T now -c 0 -i 0 $rootDisk
+        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+        ${optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
       ''}
     ''
   );

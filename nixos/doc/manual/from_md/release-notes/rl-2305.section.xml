@@ -333,6 +333,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nixos/lib/make-disk-image.nix</literal> can now
+          mutate EFI variables, run user-provided EFI firmware or
+          variable templates. This is now extensively documented in the
+          NixOS manual.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -400,6 +408,13 @@
           <literal>client</literal>. The strict RPF warning has been
           removed as the RPF will be loosened automatically based on the
           value of this setting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
+          can now access AX.25 interfaces via the
+          <literal>libax25</literal> package.
         </para>
       </listitem>
     </itemizedlist>

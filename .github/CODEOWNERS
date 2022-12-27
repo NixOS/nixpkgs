@@ -48,6 +48,10 @@
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
+# Nixpkgs make-disk-image
+/doc/builders/images/makediskimage.section.md  @raitobezarius
+/nixos/lib/make-disk-image.nix                 @raitobezarius
+
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
