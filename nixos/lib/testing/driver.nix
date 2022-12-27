@@ -46,6 +46,7 @@ let
       lib.warnIf config.skipLint "Linting is disabled";
 
   driver =
+    config._module.assertAndWarn
     hostPkgs.runCommand "nixos-test-driver-${config.name}"
       {
         # inherit testName; TODO (roberth): need this?

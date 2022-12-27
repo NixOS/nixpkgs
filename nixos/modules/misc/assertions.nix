@@ -1,7 +1,21 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-with lib;
+let
+  inherit (lib)
+    filter
+    concatStringsSep
+    mkOption
+    showWarnings
+    types
+    ;
 
+  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+  assertAndWarn = x: if failedAssertions != []
+    then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else showWarnings config.warnings x;
+
+in
 {
 
   options = {
@@ -29,6 +43,17 @@ with lib;
       '';
     };
 
+    _module.assertAndWarn = mkOption {
+      internal = true;
+      type = types.functionTo types.raw;
+      description = ''
+        A function that applies the assertions and warnings.
+        If there are none, it behaves like the identity function, `x: x`.
+      '';
+    };
   };
-  # impl of assertions is in <nixpkgs/nixos/modules/system/activation/top-level.nix>
+
+  config = {
+    _module.assertAndWarn = assertAndWarn;
+  };
 }
