@@ -12,7 +12,7 @@
 , withManual ? true
 , pythonSupport ? true
 , withpcre2 ? true
-, sendEmailSupport ? false
+, sendEmailSupport ? perlSupport
 , Security, CoreServices
 , nixosTests
 , withLibsecret ? false
