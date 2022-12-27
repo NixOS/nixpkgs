@@ -40,6 +40,7 @@ let
       };
       argsOverride = {
         inherit version;
+        modDirVersion = modDirVersion' + kernelPatches.hardened.${kernel.meta.branch}.extra;
         src = fetchurl {
           url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
           inherit sha256;
@@ -48,7 +49,6 @@ let
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = modDirVersion' + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
   };
 in {
@@ -593,11 +593,11 @@ in {
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
-  manualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
+  manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
 
-  customPackage = { version, src, configfile, allowImportFromDerivation ? true }:
+  customPackage = { version, src, modDirVersion ? lib.versions.pad 3 version, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (packagesFor (manualConfig {
-      inherit version src configfile lib stdenv allowImportFromDerivation;
+      inherit version src modDirVersion configfile allowImportFromDerivation;
     }));
 
   # Derive one of the default .config files

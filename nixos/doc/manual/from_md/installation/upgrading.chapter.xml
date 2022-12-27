@@ -128,7 +128,7 @@ nixos https://nixos.org/channels/nixos-unstable
       You can keep a NixOS system up-to-date automatically by adding the
       following to <literal>configuration.nix</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 system.autoUpgrade.enable = true;
 system.autoUpgrade.allowReboot = true;
 </programlisting>
@@ -145,7 +145,7 @@ system.autoUpgrade.allowReboot = true;
       contains a different kernel, initrd or kernel modules. You can
       also specify a channel explicitly, e.g.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.11;
 </programlisting>
   </section>

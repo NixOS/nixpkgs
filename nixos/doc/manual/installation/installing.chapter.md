@@ -230,11 +230,11 @@ The recommended partition scheme differs depending if the computer uses
 #### UEFI (GPT) {#sec-installation-manual-partitioning-UEFI}
 []{#sec-installation-partitioning-UEFI} <!-- legacy anchor -->
 
-Here\'s an example partition scheme for UEFI, using `/dev/sda` as the
+Here's an example partition scheme for UEFI, using `/dev/sda` as the
 device.
 
 ::: {.note}
-You can safely ignore `parted`\'s informational message about needing to
+You can safely ignore `parted`'s informational message about needing to
 update /etc/fstab.
 :::
 
@@ -279,11 +279,11 @@ Once complete, you can follow with
 #### Legacy Boot (MBR) {#sec-installation-manual-partitioning-MBR}
 []{#sec-installation-partitioning-MBR} <!-- legacy anchor -->
 
-Here\'s an example partition scheme for Legacy Boot, using `/dev/sda` as
+Here's an example partition scheme for Legacy Boot, using `/dev/sda` as
 the device.
 
 ::: {.note}
-You can safely ignore `parted`\'s informational message about needing to
+You can safely ignore `parted`'s informational message about needing to
 update /etc/fstab.
 :::
 
