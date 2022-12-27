@@ -1194,6 +1194,15 @@ with pkgs;
 
   adminer = callPackage ../servers/adminer { };
 
+  akkoma = callPackage ../servers/akkoma { };
+  akkoma-frontends = recurseIntoAttrs {
+    pleroma-fe = callPackage ../servers/akkoma/pleroma-fe { };
+    admin-fe = callPackage ../servers/akkoma/admin-fe { };
+  };
+  akkoma-emoji = recurseIntoAttrs {
+    blobs_gg = callPackage ../servers/akkoma/emoji/blobs_gg.nix { };
+  };
+
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
   aefs = callPackage ../tools/filesystems/aefs { };
