@@ -1,26 +1,42 @@
-{deployAndroidPackage, requireFile, lib, packages, toolsVersion, os, callPackage, postInstall ? ""}:
+{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, postInstall}:
 
-if toolsVersion == "26.0.1" then callPackage ./tools/26.nix {
-  inherit deployAndroidPackage lib os postInstall;
-  package = {
-    name = "tools";
-    path = "tools";
-    revision = "26.0.1";
-    archives = {
-      linux = requireFile {
-        url = "https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip";
-        sha256 = "185yq7qwxflw24ccm5d6zziwlc9pxmsm3f54pm9p7xm0ik724kj4";
-      };
-      macosx = requireFile {
-        url = "https://dl.google.com/android/repository/sdk-tools-darwin-3859397.zip";
-        sha256 = "1ycx9gzdaqaw6n19yvxjawywacavn1jc6sadlz5qikhgfr57b0aa";
-      };
-    };
-  };
-} else if toolsVersion == "26.1.1" then callPackage ./tools/26.nix {
-  inherit deployAndroidPackage lib os postInstall;
-  package = packages.tools.${toolsVersion};
-} else callPackage ./tools/25.nix {
-  inherit deployAndroidPackage lib os postInstall;
-  package = packages.tools.${toolsVersion};
+deployAndroidPackage {
+  name = "androidsdk";
+  inherit os package;
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optional (os == "linux") (
+      (with pkgs; [ glibc freetype fontconfig fontconfig.lib])
+      ++ (with pkgs.xorg; [ libX11 libXrender libXext ])
+      ++ (with pkgsi686Linux; [ glibc xorg.libX11 xorg.libXrender xorg.libXext fontconfig.lib freetype zlib ])
+    );
+
+  patchInstructions = ''
+    ${lib.optionalString (os == "linux") ''
+      # Auto patch all binaries
+      autoPatchelf .
+    ''}
+
+    # Wrap all scripts that require JAVA_HOME
+    for i in bin; do
+      find $i -maxdepth 1 -type f -executable | while read program; do
+        if grep -q "JAVA_HOME" $program; then
+          wrapProgram $PWD/$program --prefix PATH : ${pkgs.jdk8}/bin
+        fi
+      done
+    done
+
+    # Wrap monitor script
+    wrapProgram $PWD/monitor \
+      --prefix PATH : ${pkgs.jdk8}/bin \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (with pkgs; [ xorg.libX11 xorg.libXtst ])}
+
+    # Patch all script shebangs
+    patchShebangs .
+
+    cd $out/libexec/android-sdk
+    ${postInstall}
+  '';
+
+  meta.license = lib.licenses.unfree;
 }
