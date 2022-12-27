@@ -11731,7 +11731,8 @@ with pkgs;
 
   snallygaster = callPackage ../tools/security/snallygaster { };
 
-  snapcast = callPackage ../applications/audio/snapcast {
+  snapcast = darwin.apple_sdk_11_0.callPackage ../applications/audio/snapcast {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit AudioToolbox;
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
   };
 
