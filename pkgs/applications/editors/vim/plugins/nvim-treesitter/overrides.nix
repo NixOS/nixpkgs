@@ -41,7 +41,7 @@ let
       ];
     in
 
-    runCommand "nvim-treesitter-${name}-grammar" { } ''
+    runCommand "nvim-treesitter-grammar-${name}" { } ''
       mkdir -p $out/parser
       ln -s ${grammar}/parser $out/parser/${name}.so
     '';
@@ -68,6 +68,8 @@ in
 
   passthru = {
     inherit builtGrammars allGrammars grammarToPlugin withPlugins withAllGrammars;
+
+    grammarPlugins = lib.mapAttrs (_: grammarToPlugin) generatedDerivations;
 
     tests.check-queries =
       let
