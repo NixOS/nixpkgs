@@ -45,6 +45,11 @@ in
     buildInputs = [ cairo ];
   };
 
+  cairo-sys-rs = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ cairo ];
+  };
+
   capnp-rpc = attrs: {
     nativeBuildInputs = [ capnproto ];
   };
