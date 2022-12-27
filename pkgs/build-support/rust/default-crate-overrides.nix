@@ -227,6 +227,11 @@ in
     buildInputs = [ gmp ];
   };
 
+  pangocairo-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
+  };
+
   sequoia-store = attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
