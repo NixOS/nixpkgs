@@ -2606,6 +2606,8 @@ self: super: with self; {
 
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
+  django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
+
   django-rq = callPackage ../development/python-modules/django-rq { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
