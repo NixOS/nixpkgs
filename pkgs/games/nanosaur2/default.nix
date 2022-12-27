@@ -47,9 +47,7 @@ stdenv.mkDerivation rec {
       Is a continuation of the original Nanosaur storyline, only this time you get to fly a pterodactyl who’s loaded with hi-tech weaponry.
     '';
     homepage = "https://github.com/jorio/Nanosaur2";
-    license = with licenses; [
-      cc-by-sa-40
-    ];
+    license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;
   };
