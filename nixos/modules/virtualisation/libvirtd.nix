@@ -1,8 +1,10 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    optionalString optionals
+    escapeShellArgs
+    literalExpression mkIf mkOption mkRenamedOptionModule mkRemovedOptionModule types;
 
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
@@ -212,7 +214,6 @@ in
   ###### interface
 
   options.virtualisation.libvirtd = {
-
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -221,6 +222,14 @@ in
         virtual machines. Users in the "libvirtd" group can interact with
         the daemon (e.g. to start or stop VMs) using the
         {command}`virsh` command line tool, among others.
+      '';
+    };
+
+    socketActivated = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        If activated libvirtd will be socket-activated rather than run persistently.
       '';
     };
 
@@ -319,8 +328,8 @@ in
       {
         assertion = config.virtualisation.libvirtd.qemu.ovmf.package == null;
         message = ''
-        The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
-        If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
+          The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
+          If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
         '';
       }
       {
@@ -360,132 +369,191 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    systemd.services.libvirtd-config = {
-      description = "Libvirt Virtual Machine Management Daemon - configuration";
-      script = ''
-        # Copy default libvirt network config .xml files to /var/lib
-        # Files modified by the user will not be overwritten
-        for i in $(cd ${cfg.package}/var/lib && echo \
-            libvirt/qemu/networks/*.xml \
-            libvirt/nwfilter/*.xml );
-        do
-            mkdir -p /var/lib/$(dirname $i) -m 755
-            if [ ! -e /var/lib/$i ]; then
-              cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
-            fi
-        done
+    systemd.services = {
+      libvirtd-config = {
+        description = "Libvirt Virtual Machine Management Daemon - configuration";
+        script = ''
+          # Copy default libvirt network config .xml files to /var/lib
+          # Files modified by the user will not be overwritten
+          for i in $(cd ${cfg.package}/var/lib && echo \
+              libvirt/qemu/networks/*.xml \
+              libvirt/nwfilter/*.xml );
+          do
+              mkdir -p /var/lib/$(dirname $i) -m 755
+              cp -npd ${cfg.package}/var/lib/$i /var/lib/$i
+          done
 
-        # Copy generated qemu config to libvirt directory
-        cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
+          # Copy generated qemu config to libvirt directory
+          cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
 
-        # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
-        for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do
-          ln -s --force "$emulator" /run/${dirName}/nix-emulators/
-        done
+          # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
+          for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do
+            ln -s --force "$emulator" /run/${dirName}/nix-emulators/
+          done
 
-        for helper in bin/qemu-pr-helper; do
-          ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
-        done
+          for helper in bin/qemu-pr-helper; do
+            ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
+          done
 
-        ${optionalString cfg.qemu.ovmf.enable (let
-          ovmfpackage = pkgs.buildEnv {
-            name = "qemu-ovmf";
-            paths = cfg.qemu.ovmf.packages;
+          ${optionalString cfg.qemu.ovmf.enable (let
+            ovmfpackage = pkgs.buildEnv {
+              name = "qemu-ovmf";
+              paths = cfg.qemu.ovmf.packages;
+            };
+          in
+            ''
+            ln -s --force ${ovmfpackage}/FV/AAVMF_CODE.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          '')}
+        '';
+
+        serviceConfig = {
+          Type = "oneshot";
+          RuntimeDirectoryPreserve = "yes";
+          LogsDirectory = subDirs [ "qemu" ];
+          RuntimeDirectory = subDirs [ "nix-emulators" "nix-helpers" "nix-ovmf" ];
+          StateDirectory = subDirs [ "dnsmasq" ];
+        };
+      };
+
+      libvirtd = {
+        wantedBy = optionals (!cfg.socketActivated) [ "multi-user.target" ];
+        requires = [ "libvirtd-config.service" ];
+        after = [ "libvirtd-config.service" ]
+          ++ optionals vswitch.enable [ "ovs-vswitchd.service" ];
+
+        environment.LIBVIRTD_ARGS = escapeShellArgs (
+          [
+            "--config"
+            configFile
+            "--timeout"
+            "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
+          ] ++ cfg.extraOptions
+        );
+
+        path = [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
+          ++ optionals vswitch.enable [ vswitch.package ]
+          ++ optionals cfg.qemu.swtpm.enable [ cfg.qemu.swtpm.package ];
+
+        serviceConfig = {
+          Type = "notify";
+          KillMode = "process"; # when stopping, leave the VMs alone
+          Restart = "no";
+        };
+        restartIfChanged = false;
+      };
+
+      virtchd = {
+        path = [ pkgs.cloud-hypervisor ];
+      };
+
+      virtlockd = {
+        description = "Virtual machine lock manager";
+        serviceConfig.ExecStart = "@${cfg.package}/sbin/virtlockd virtlockd";
+        restartIfChanged = false;
+      };
+
+      virtlogd = {
+        description = "Virtual machine log manager";
+        serviceConfig.ExecStart = "@${cfg.package}/sbin/virtlogd virtlogd";
+        restartIfChanged = false;
+      };
+
+      libvirt-guests = {
+        wantedBy = [ "multi-user.target" ];
+        path = with pkgs; [ coreutils gawk cfg.package ];
+        restartIfChanged = false;
+
+        environment = {
+          ON_BOOT = "${cfg.onBoot}";
+          ON_SHUTDOWN = "${cfg.onShutdown}";
+          PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
+        };
+      };
+    };
+
+    systemd.sockets = {
+      # https://libvirt.org/daemons.html#monolithic-systemd-integration
+      libvirtd.wantedBy = [ "sockets.target" ];
+
+      libvirtd-admin.wantedBy = [ "sockets.target" ];
+
+      libvirtd-ro.wantedBy = [ "sockets.target" ];
+
+      virtlockd = {
+        description = "Virtual machine lock manager socket";
+        wantedBy = [ "sockets.target" ];
+        listenStreams = [ "/run/${dirName}/virtlockd-sock" ];
+      };
+
+      virtlockd-admin.wantedBy = [ "sockets.target" ];
+
+      virtlogd = {
+        description = "Virtual machine log manager socket";
+        wantedBy = [ "sockets.target" ];
+        listenStreams = [ "/run/${dirName}/virtlogd-sock" ];
+      };
+
+      virtlogd-admin.wantedBy = [ "sockets.target" ];
+    };
+
+    systemd.user = {
+      services = {
+        libvirtd = {
+          description = "libvirtd";
+          after = [ "libvirtd.socket" ];
+          before = [ "virtlogd.service" ];
+          wants = [ "libvirtd.socket" "virtlogd.service" ];
+          wantedBy = optionals (!cfg.socketActivated) [ "default.target" ];
+          unitConfig.ConditionUser = "!@system";
+          serviceConfig = {
+            Type = "exec";
+            ExecStart = "${pkgs.libvirt}/bin/libvirtd --timeout=30";
+            Slice = "libvirt.slice";
           };
-        in
-          ''
-          ln -s --force ${ovmfpackage}/FV/AAVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
-        '')}
+        };
 
-        # Symlink hooks to /var/lib/libvirt
-        ${concatStringsSep "\n" (map (driver:
-          ''
-          mkdir -p /var/lib/${dirName}/hooks/${driver}.d
-          rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
-          ${concatStringsSep "\n" (mapAttrsToList (name: value:
-            "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}") cfg.hooks.${driver})}
-        '') (attrNames cfg.hooks))}
-      '';
+        virtlogd = {
+          description = "virtlogd";
+          after = [ "libvirtd.service" "virtlogd.socket" ];
+          wants = [ "libvirtd.service" ];
+          unitConfig.ConditionUser = "!@system";
+          serviceConfig = {
+            Type = "exec";
+            ExecStart = "${pkgs.libvirt}/bin/virtlogd --timeout=30";
+            Slice = "libvirt.slice";
+          };
+        };
+      };
 
-      serviceConfig = {
-        Type = "oneshot";
-        RuntimeDirectoryPreserve = "yes";
-        LogsDirectory = subDirs [ "qemu" ];
-        RuntimeDirectory = subDirs [ "nix-emulators" "nix-helpers" "nix-ovmf" ];
-        StateDirectory = subDirs [ "dnsmasq" ];
+      sockets = {
+        libvirtd = {
+          wantedBy = [ "sockets.target" ];
+          unitConfig.ConditionUser = "!@system";
+          socketConfig = {
+            ListenStream = [
+              "%t/${dirName}/libvirt-sock"
+              "%t/${dirName}/libvirt-admin-sock"
+            ];
+            RuntimeDirectory = dirName;
+          };
+        };
+
+        virtlogd = {
+          wantedBy = [ "sockets.target" ];
+          unitConfig.ConditionUser = "!@system";
+          socketConfig = {
+            ListenStream = [
+              "%t/${dirName}/virtlogd-sock"
+              "%t/${dirName}/virtlogd-admin-sock"
+            ];
+            RuntimeDirectory = dirName;
+          };
+        };
       };
     };
-
-    systemd.services.libvirtd = {
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd-config.service" ];
-      after = [ "libvirtd-config.service" ]
-        ++ optional vswitch.enable "ovs-vswitchd.service";
-
-      environment.LIBVIRTD_ARGS = escapeShellArgs (
-        [
-          "--config"
-          configFile
-          "--timeout"
-          "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
-        ] ++ cfg.extraOptions
-      );
-
-      path = [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
-        ++ optional vswitch.enable vswitch.package
-        ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
-
-      serviceConfig = {
-        Type = "notify";
-        KillMode = "process"; # when stopping, leave the VMs alone
-        Restart = "no";
-      };
-      restartIfChanged = false;
-    };
-
-    systemd.services.virtchd = {
-      path = [ pkgs.cloud-hypervisor ];
-    };
-
-    systemd.services.libvirt-guests = {
-      wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ coreutils gawk cfg.package ];
-      restartIfChanged = false;
-
-      environment.ON_BOOT = "${cfg.onBoot}";
-      environment.ON_SHUTDOWN = "${cfg.onShutdown}";
-      environment.PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
-    };
-
-    systemd.sockets.virtlogd = {
-      description = "Virtual machine log manager socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/${dirName}/virtlogd-sock" ];
-    };
-
-    systemd.services.virtlogd = {
-      description = "Virtual machine log manager";
-      serviceConfig.ExecStart = "@${cfg.package}/sbin/virtlogd virtlogd";
-      restartIfChanged = false;
-    };
-
-    systemd.sockets.virtlockd = {
-      description = "Virtual machine lock manager socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/${dirName}/virtlockd-sock" ];
-    };
-
-    systemd.services.virtlockd = {
-      description = "Virtual machine lock manager";
-      serviceConfig.ExecStart = "@${cfg.package}/sbin/virtlockd virtlockd";
-      restartIfChanged = false;
-    };
-
-    # https://libvirt.org/daemons.html#monolithic-systemd-integration
-    systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
     security.polkit = {
       enable = true;
