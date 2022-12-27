@@ -32,7 +32,7 @@ let
 
     # expects a list of plugin configuration
     # expects { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
-    , plugins ? []
+    , plugins ? [ ]
     # custom viml config appended after plugin-specific config
     , customRC ? ""
 
@@ -59,14 +59,14 @@ let
       in
         map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
 
-      pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
+      pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [ p.config ] else acc) [ ] pluginsNormalized;
 
       pluginsPartitioned = lib.partition (x: x.optional == true) pluginsNormalized;
       requiredPlugins = vimUtils.requiredPluginsForPackage myVimPackage;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
       myVimPackage = {
-            start = map (x: x.plugin) pluginsPartitioned.wrong;
-            opt = map (x: x.plugin) pluginsPartitioned.right;
+        start = map (x: x.plugin) pluginsPartitioned.wrong;
+        opt = map (x: x.plugin) pluginsPartitioned.right;
       };
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
@@ -75,7 +75,7 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
+      luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
 
       # Mapping a boolean argument to a key that tells us whether to add or not to
       # add to nvim's 'embedded rc' this:
@@ -91,7 +91,7 @@ let
       };
       ## Here we calculate all of the arguments to the 1st call of `makeWrapper`
       # We start with the executable itself NOTE we call this variable "initial"
-      # because if configure != {} we need to call makeWrapper twice, in order to
+      # because if configure != { } we need to call makeWrapper twice, in order to
       # avoid double wrapping, see comment near finalMakeWrapperArgs
       makeWrapperArgs =
         let
@@ -107,7 +107,7 @@ let
             "--cmd" (lib.intersperse "|" hostProviderViml)
             "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
             "--cmd" "set rtp^=${vimUtils.packDir packDirArgs}"
-            ];
+          ];
         in
         [
           "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
@@ -120,13 +120,13 @@ let
           "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
         ];
 
-      manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
+      manifestRc = vimUtils.vimrcContent { customRC = ""; } ;
       # we call vimrcContent without 'packages' to avoid the init.vim generation
-      neovimRcContent = vimUtils.vimrcContent ({
+      neovimRcContent = vimUtils.vimrcContent {
         beforePlugins = "";
         customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
         packages = null;
-      });
+      };
     in
 
     builtins.removeAttrs args ["plugins"] // {
@@ -151,16 +151,16 @@ let
   legacyWrapper = neovim: {
     extraMakeWrapperArgs ? ""
     /* the function you would have passed to python.withPackages */
-    , extraPythonPackages ? (_: [])
+    , extraPythonPackages ? (_: [ ])
     /* the function you would have passed to python.withPackages */
-    , withPython3 ? true,  extraPython3Packages ? (_: [])
+    , withPython3 ? true,  extraPython3Packages ? (_: [ ])
     /* the function you would have passed to lua.withPackages */
-    , extraLuaPackages ? (_: [])
+    , extraLuaPackages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
     , vimAlias ? false
     , viAlias ? false
-    , configure ? {}
+    , configure ? { }
     , extraName ? ""
   }:
     let
@@ -169,8 +169,8 @@ let
       plugins = if builtins.hasAttr "plug" configure then
           throw "The neovim legacy wrapper doesn't support configure.plug anymore, please setup your plugins via 'configure.packages' instead"
         else
-          lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
-      genPlugin = packageName: {start ? [], opt ? []}:
+          lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or { }));
+      genPlugin = packageName: {start ? [ ], opt ? [ ]}:
         start ++ (map (p: { plugin = p; optional = true; }) opt);
 
       res = makeNeovimConfig {
@@ -185,8 +185,8 @@ let
     in
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-      wrapRc = (configure != {});
-  });
+      wrapRc = configure != { };
+    });
 in
 {
   inherit makeNeovimConfig;
