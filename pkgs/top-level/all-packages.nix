@@ -1502,6 +1502,8 @@ with pkgs;
     withNtfs = true;
   };
 
+  vitess = callPackage ../development/tools/database/vitess {};
+
   voms = callPackage ../tools/networking/voms { };
 
   vopono = callPackage ../tools/networking/vopono { };
