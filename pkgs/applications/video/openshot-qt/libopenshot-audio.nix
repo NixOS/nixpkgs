@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XtwTZsj/L/sw/28E7Qr5UyghGlBFFXvbmZLGXBB8vg0=";
   };
 
+  # https://github.com/OpenShot/libopenshot-audio/issues/112
+  postPatch = ''
+    substituteInPlace JuceLibraryCode/modules/juce_core/native/juce_osx_ObjCHelpers.h \
+      --replace "#if ! JUCE_IOS" "#if ! JUCE_IOS && ! JUCE_ARM"
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -63,7 +69,5 @@ stdenv.mkDerivation rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
