@@ -364,9 +364,15 @@ in {
             };
 
             http_addr = mkOption {
-              description = lib.mdDoc "Listening address.";
-              default = "";
               type = types.str;
+              default = "127.0.0.1";
+              description = lib.mdDoc ''
+                Listening address.
+
+                ::: {.note}
+                This setting intentionally varies from upstream's default to be a bit more secure by default.
+                :::
+              '';
             };
 
             http_port = mkOption {
