@@ -46,9 +46,7 @@ rustPlatform.buildRustPackage rec {
     installManPage texlab.1
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

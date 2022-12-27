@@ -53,9 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.granite7";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

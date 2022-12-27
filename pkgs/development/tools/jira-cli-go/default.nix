@@ -28,9 +28,7 @@ buildGoModule rec {
       command = "jira version";
       inherit version;
     };
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [ installShellFiles ];

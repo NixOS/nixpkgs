@@ -50,9 +50,7 @@ mkDerivation rec {
     "--with-ffmpeg"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";

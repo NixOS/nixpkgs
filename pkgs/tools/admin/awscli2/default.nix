@@ -110,7 +110,6 @@ with py.pkgs; buildPythonApplication rec {
   passthru = {
     python = py; # for aws_shell
     updateScript = nix-update-script {
-      attrPath = pname;
       # Excludes 1.x versions from the Github tags list
       extraArgs = [ "--version-regex" "^(2\.(.*))" ];
     };

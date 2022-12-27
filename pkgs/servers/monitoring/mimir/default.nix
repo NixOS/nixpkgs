@@ -19,7 +19,6 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = pname;
       extraArgs = [ "--version-regex" "mimir-([0-9.]+)" ];
     };
     tests = {

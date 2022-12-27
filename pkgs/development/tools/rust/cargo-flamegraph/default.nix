@@ -27,9 +27,7 @@ rustPlatform.buildRustPackage rec {
       --set-default PERF ${perf}/bin/perf
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";

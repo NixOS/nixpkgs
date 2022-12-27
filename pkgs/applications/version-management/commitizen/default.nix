@@ -81,9 +81,7 @@ buildPythonApplication rec {
     "test_get_commits_with_signature"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
