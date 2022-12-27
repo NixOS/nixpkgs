@@ -714,7 +714,7 @@
           <literal>programs.msmtp.*</literal> can be used instead for an
           equivalent setup. For example:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   # Original ssmtp configuration:
   services.ssmtp = {
@@ -847,7 +847,7 @@
           <literal>config.nixpkgs.config.allowUnfree</literal> are
           enabled. If you still want these fonts, use:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   fonts.fonts = [
     pkgs.xorg.fontbhlucidatypewriter100dpi
@@ -942,7 +942,7 @@
         <para>
           Before:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.matrix-synapse = {
     enable = true;
@@ -977,7 +977,7 @@
         <para>
           After:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.matrix-synapse = {
     enable = true;
@@ -1143,7 +1143,7 @@
         <para>
           Before:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
   services.keycloak = {
     enable = true;
     httpPort = &quot;8080&quot;;
@@ -1157,7 +1157,7 @@
         <para>
           After:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
   services.keycloak = {
     enable = true;
     settings = {

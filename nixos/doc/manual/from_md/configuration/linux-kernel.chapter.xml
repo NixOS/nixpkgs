@@ -5,7 +5,7 @@
     option <literal>boot.kernelPackages</literal>. For instance, this
     selects the Linux 3.10 kernel:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
 </programlisting>
   <para>
@@ -48,7 +48,7 @@ zcat /proc/config.gz
     <xref linkend="sec-customising-packages" />). For instance, to
     enable support for the kernel debugger KGDB:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
   linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
     extraConfig = ''
@@ -69,7 +69,7 @@ nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
     automatically by <literal>udev</literal>. You can force a module to
     be loaded via <xref linkend="opt-boot.kernelModules" />, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quot; ];
 </programlisting>
   <para>
@@ -77,7 +77,7 @@ boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quo
     root file system), you can use
     <xref linkend="opt-boot.initrd.kernelModules" />:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.initrd.kernelModules = [ &quot;cifs&quot; ];
 </programlisting>
   <para>
@@ -88,7 +88,7 @@ boot.initrd.kernelModules = [ &quot;cifs&quot; ];
     Kernel runtime parameters can be set through
     <xref linkend="opt-boot.kernel.sysctl" />, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
 </programlisting>
   <para>
@@ -101,7 +101,7 @@ boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
       You can customize the default kernel configuration by overriding
       the arguments for your kernel package:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 pkgs.linux_latest.override {
   ignoreConfigErrors = true;
   autoModules = false;
@@ -126,7 +126,7 @@ pkgs.linux_latest.override {
     <para>
       To use your custom kernel package in your NixOS configuration, set
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
 </programlisting>
     <para>
@@ -139,7 +139,7 @@ boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
       a kernel that uses it with
       <literal>pkgs.linuxManualConfig</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 let
   baseKernel = pkgs.linux_latest;
 in pkgs.linuxManualConfig {
@@ -198,7 +198,7 @@ $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox module
       available kernel version <emphasis>that is supported by
       ZFS</emphasis> like this:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
 }
