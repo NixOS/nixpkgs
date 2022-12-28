@@ -11,6 +11,8 @@
 , pytest-asyncio
 , mock
 , pythonOlder
+, pandas
+, google-cloud-storage
 }:
 
 buildPythonPackage rec {
@@ -27,9 +29,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     google-api-core
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+    pandas = [
+      pandas
+    ];
+    storage = [
+      google-cloud-storage
+    ];
+  };
 
   checkInputs = [
     google-cloud-storage
