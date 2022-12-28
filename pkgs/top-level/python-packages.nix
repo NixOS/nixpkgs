@@ -6979,6 +6979,8 @@ self: super: with self; {
 
   peewee = callPackage ../development/python-modules/peewee { };
 
+  peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
+
   pefile = callPackage ../development/python-modules/pefile { };
 
   pelican = callPackage ../development/python-modules/pelican {
