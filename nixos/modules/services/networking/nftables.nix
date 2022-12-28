@@ -248,7 +248,11 @@ in
         RemainAfterExit = true;
         ExecStart = rulesScript;
         ExecReload = rulesScript;
-        ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
+        ExecStop = "${pkgs.nftables}/bin/nft ${
+          if cfg.flushRuleset then "flush ruleset"
+          else escapeShellArg (concatStringsSep "; " (
+            mapAttrsToList (_: table: "delete table ${table.family} ${table.name}") enabledTables
+          ))}";
       };
     };
   };
