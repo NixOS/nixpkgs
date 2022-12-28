@@ -319,7 +319,7 @@ in
       hackmdPath = mkOption {
         type = types.nullOr types.str;
         default = "${cfg.package}/public/views/hackmd.ejs";
-        defaultText = "$''{cfg.package}/public/views/hackmd.ejs";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/hackmd.ejs\"";
         description = lib.mdDoc ''
           Path to the hackmd template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
