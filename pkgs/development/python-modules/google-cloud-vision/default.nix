@@ -2,31 +2,31 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.1.4";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1nqU9Sr+tWPK3l5r7UiFD0wA3+UmYcHFT4ta2bdRL+U=";
+    hash = "sha256-SZQxkx57cY+8q4Mg880jT8TlYcfwLz4KEpHiyOb2Ujc=";
   };
 
   propagatedBuildInputs = [
-    libcst
     google-api-core
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     mock
