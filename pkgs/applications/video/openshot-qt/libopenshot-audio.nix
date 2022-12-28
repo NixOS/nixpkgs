@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , alsa-lib
 , cmake
 , doxygen
@@ -27,6 +28,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-XtwTZsj/L/sw/28E7Qr5UyghGlBFFXvbmZLGXBB8vg0=";
   };
+
+  patches = [
+    # https://forum.juce.com/t/juce-and-macos-11-arm/40285/24
+    ./undef-fpret-on-aarch64-darwin.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +69,5 @@ stdenv.mkDerivation rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
