@@ -39,6 +39,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/alexivkin/CUPS-PDF-to-PDF">cups-pdf-to-pdf</link>,
+          a pdf-generating cups backend based on
+          <link xlink:href="https://www.cups-pdf.de/">cups-pdf</link>.
+          Available as
+          <link linkend="opt-services.printing.cups-pdf.enable">services.printing.cups-pdf</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/junegunn/fzf">fzf</link>,
           a command line fuzzyfinder. Available as
           <link linkend="opt-programs.fzf.fuzzyCompletion">programs.fzf</link>.
