@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
