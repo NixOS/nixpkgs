@@ -21,6 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Protobufs for Google Cloud Organization Policy.";
     homepage = "https://github.com/googleapis/python-org-policy";
+    changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
   };
