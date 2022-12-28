@@ -55,6 +55,7 @@ let
     escapeNixString
     hasInfix
     isCoercibleToString
+    isSimpleCoercibleToString
     ;
   inherit (lib.trivial)
     boolToString
@@ -227,7 +228,7 @@ rec {
       merge = loc: defs:
         let
           getType = value:
-            if isAttrs value && isCoercibleToString value
+            if isAttrs value && isSimpleCoercibleToString value
             then "stringCoercibleSet"
             else builtins.typeOf value;
 
