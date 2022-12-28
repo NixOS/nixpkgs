@@ -28,11 +28,14 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pythonImportsCheck = [ "google.cloud.runtimeconfig" ];
+  pythonImportsCheck = [
+    "google.cloud.runtimeconfig"
+  ];
 
   meta = with lib; {
     description = "Google Cloud RuntimeConfig API client library";
-    homepage = "https://pypi.org/project/google-cloud-runtimeconfig";
+    homepage = "https://github.com/googleapis/python-runtimeconfig";
+    changelog = "https://github.com/googleapis/python-runtimeconfig/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
