@@ -100,6 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
+    changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
