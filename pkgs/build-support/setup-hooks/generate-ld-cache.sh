@@ -8,8 +8,6 @@ generateLDCache() {
 
     echo "generating LD cache for ELF executables in $dir"
 
-    declare -a libDirs
-
     local i
     while IFS= read -r -d $'\0' i; do
         if [[ "$i" =~ .build-id ]]; then continue; fi
