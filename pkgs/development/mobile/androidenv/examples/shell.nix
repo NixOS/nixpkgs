@@ -29,14 +29,14 @@ let
       platformTools = "33.0.3";
       buildTools = "30.0.3";
       ndk = [
-        "22.1.7171670"
-        "21.3.6528147" # LTS NDK
+        "25.1.8937393" # LTS NDK
+        "24.0.8215888"
       ];
-      cmake = "3.18.1";
+      cmake = "3.22.1";
       emulator = "31.3.14";
     };
 
-    platforms = ["23" "24" "25" "26" "27" "28" "29" "30"];
+    platforms = ["23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33"];
     abis = ["armeabi-v7a" "arm64-v8a"];
     extras = ["extras;google;gcm"];
   };
