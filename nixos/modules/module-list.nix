@@ -201,6 +201,7 @@
   ./programs/nbd.nix
   ./programs/neovim.nix
   ./programs/nethoscope.nix
+  ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nm-applet.nix
   ./programs/nncp.nix
@@ -1101,6 +1102,7 @@
   ./services/video/rtsp-simple-server.nix
   ./services/video/unifi-video.nix
   ./services/wayland/cage.nix
+  ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix

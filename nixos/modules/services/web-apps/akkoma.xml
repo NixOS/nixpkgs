@@ -1,0 +1,396 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-akkoma">
+  <title>Akkoma</title>
+  <para>
+    <link xlink:href="https://akkoma.dev/">Akkoma</link> is a
+    lightweight ActivityPub microblogging server forked from Pleroma.
+  </para>
+  <section xml:id="modules-services-akkoma-service-configuration">
+    <title>Service configuration</title>
+    <para>
+      The Elixir configuration file required by Akkoma is generated
+      automatically from
+      <link xlink:href="options.html#opt-services.akkoma.config"><option>services.akkoma.config</option></link>.
+      Secrets must be included from external files outside of the Nix
+      store by setting the configuration option to an attribute set
+      containing the attribute <option>_secret</option> – a string
+      pointing to the file containing the actual value of the option.
+    </para>
+    <para>
+      For the mandatory configuration settings these secrets will be
+      generated automatically if the referenced file does not exist
+      during startup, unless disabled through
+      <link xlink:href="options.html#opt-services.akkoma.initSecrets"><option>services.akkoma.initSecrets</option></link>.
+    </para>
+    <para>
+      The following configuration binds Akkoma to the Unix socket
+      <literal>/run/akkoma/socket</literal>, expecting to be run behind
+      a HTTP proxy on <literal>fediverse.example.com</literal>.
+    </para>
+    <programlisting language="nix">
+services.akkoma.enable = true;
+services.akkoma.config = {
+  &quot;:pleroma&quot; = {
+    &quot;:instance&quot; = {
+      name = &quot;My Akkoma instance&quot;;
+      description = &quot;More detailed description&quot;;
+      email = &quot;admin@example.com&quot;;
+      registration_open = false;
+    };
+
+    &quot;Pleroma.Web.Endpoint&quot; = {
+      url.host = &quot;fediverse.example.com&quot;;
+    };
+  };
+};
+</programlisting>
+    <para>
+      Please refer to the
+      <link xlink:href="https://docs.akkoma.dev/stable/configuration/cheatsheet/">configuration
+      cheat sheet</link> for additional configuration options.
+    </para>
+  </section>
+  <section xml:id="modules-services-akkoma-user-management">
+    <title>User management</title>
+    <para>
+      After the Akkoma service is running, the administration utility
+      can be used to
+      <link xlink:href="https://docs.akkoma.dev/stable/administration/CLI_tasks/user/">manage
+      users</link>. In particular an administrative user can be created
+      with
+    </para>
+    <programlisting>
+$ pleroma_ctl user new &lt;nickname&gt; &lt;email&gt; --admin --moderator --password &lt;password&gt;
+</programlisting>
+  </section>
+  <section xml:id="modules-services-akkoma-proxy-configuration">
+    <title>Proxy configuration</title>
+    <para>
+      Although it is possible to expose Akkoma directly, it is common
+      practice to operate it behind an HTTP reverse proxy such as nginx.
+    </para>
+    <programlisting language="nix">
+services.akkoma.nginx = {
+  enableACME = true;
+  forceSSL = true;
+};
+
+services.nginx = {
+  enable = true;
+
+  clientMaxBodySize = &quot;16m&quot;;
+  recommendedTlsSettings = true;
+  recommendedOptimisation = true;
+  recommendedGzipSettings = true;
+};
+</programlisting>
+    <para>
+      Please refer to <xref linkend="module-security-acme" /> for
+      details on how to provision an SSL/TLS certificate.
+    </para>
+    <section xml:id="modules-services-akkoma-media-proxy">
+      <title>Media proxy</title>
+      <para>
+        Without the media proxy function, Akkoma does not store any
+        remote media like pictures or video locally, and clients have to
+        fetch them directly from the source server.
+      </para>
+      <programlisting language="nix">
+# Enable nginx slice module distributed with Tengine
+services.nginx.package = pkgs.tengine;
+
+# Enable media proxy
+services.akkoma.config.&quot;:pleroma&quot;.&quot;:media_proxy&quot; = {
+  enabled = true;
+  proxy_opts.redirect_on_failure = true;
+};
+
+# Adjust the persistent cache size as needed:
+#  Assuming an average object size of 128 KiB, around 1 MiB
+#  of memory is required for the key zone per GiB of cache.
+# Ensure that the cache directory exists and is writable by nginx.
+services.nginx.commonHttpConfig = ''
+  proxy_cache_path /var/cache/nginx/cache/akkoma-media-cache
+    levels= keys_zone=akkoma_media_cache:16m max_size=16g
+    inactive=1y use_temp_path=off;
+'';
+
+services.akkoma.nginx = {
+  locations.&quot;/proxy&quot; = {
+    proxyPass = &quot;http://unix:/run/akkoma/socket&quot;;
+
+    extraConfig = ''
+      proxy_cache akkoma_media_cache;
+
+      # Cache objects in slices of 1 MiB
+      slice 1m;
+      proxy_cache_key $host$uri$is_args$args$slice_range;
+      proxy_set_header Range $slice_range;
+
+      # Decouple proxy and upstream responses
+      proxy_buffering on;
+      proxy_cache_lock on;
+      proxy_ignore_client_abort on;
+
+      # Default cache times for various responses
+      proxy_cache_valid 200 1y;
+      proxy_cache_valid 206 301 304 1h;
+
+      # Allow serving of stale items
+      proxy_cache_use_stale error timeout invalid_header updating;
+    '';
+  };
+};
+</programlisting>
+      <section xml:id="modules-services-akkoma-prefetch-remote-media">
+        <title>Prefetch remote media</title>
+        <para>
+          The following example enables the
+          <literal>MediaProxyWarmingPolicy</literal> MRF policy which
+          automatically fetches all media associated with a post through
+          the media proxy, as soon as the post is received by the
+          instance.
+        </para>
+        <programlisting language="nix">
+services.akkoma.config.&quot;:pleroma&quot;.&quot;:mrf&quot;.policies =
+  map (pkgs.formats.elixirConf { }).lib.mkRaw [
+    &quot;Pleroma.Web.ActivityPub.MRF.MediaProxyWarmingPolicy&quot;
+];
+</programlisting>
+      </section>
+      <section xml:id="modules-services-akkoma-media-previews">
+        <title>Media previews</title>
+        <para>
+          Akkoma can generate previews for media.
+        </para>
+        <programlisting language="nix">
+services.akkoma.config.&quot;:pleroma&quot;.&quot;:media_preview_proxy&quot; = {
+  enabled = true;
+  thumbnail_max_width = 1920;
+  thumbnail_max_height = 1080;
+};
+</programlisting>
+      </section>
+    </section>
+  </section>
+  <section xml:id="modules-services-akkoma-frontend-management">
+    <title>Frontend management</title>
+    <para>
+      Akkoma will be deployed with the <literal>pleroma-fe</literal> and
+      <literal>admin-fe</literal> frontends by default. These can be
+      modified by setting
+      <link xlink:href="options.html#opt-services.akkoma.frontends"><option>services.akkoma.frontends</option></link>.
+    </para>
+    <para>
+      The following example overrides the primary frontend’s default
+      configuration using a custom derivation.
+    </para>
+    <programlisting language="nix">
+services.akkoma.frontends.primary.package = pkgs.runCommand &quot;pleroma-fe&quot; {
+  config = builtins.toJSON {
+    expertLevel = 1;
+    collapseMessageWithSubject = false;
+    stopGifs = false;
+    replyVisibility = &quot;following&quot;;
+    webPushHideIfCW = true;
+    hideScopeNotice = true;
+    renderMisskeyMarkdown = false;
+    hideSiteFavicon = true;
+    postContentType = &quot;text/markdown&quot;;
+    showNavShortcuts = false;
+  };
+  nativeBuildInputs = with pkgs; [ jq xorg.lndir ];
+  passAsFile = [ &quot;config&quot; ];
+} ''
+  mkdir $out
+  lndir ${pkgs.akkoma-frontends.pleroma-fe} $out
+
+  rm $out/static/config.json
+  jq -s add ${pkgs.akkoma-frontends.pleroma-fe}/static/config.json ${config} \
+    &gt;$out/static/config.json
+'';
+</programlisting>
+  </section>
+  <section xml:id="modules-services-akkoma-federation-policies">
+    <title>Federation policies</title>
+    <para>
+      Akkoma comes with a number of modules to police federation with
+      other ActivityPub instances. The most valuable for typical users
+      is the
+      <link xlink:href="https://docs.akkoma.dev/stable/configuration/cheatsheet/#mrf_simple"><literal>:mrf_simple</literal></link>
+      module which allows limiting federation based on instance
+      hostnames.
+    </para>
+    <para>
+      This configuration snippet provides an example on how these can be
+      used. Choosing an adequate federation policy is not trivial and
+      entails finding a balance between connectivity to the rest of the
+      fediverse and providing a pleasant experience to the users of an
+      instance.
+    </para>
+    <programlisting language="nix">
+services.akkoma.config.&quot;:pleroma&quot; = with (pkgs.formats.elixirConf { }).lib; {
+  &quot;:mrf&quot;.policies = map mkRaw [
+    &quot;Pleroma.Web.ActivityPub.MRF.SimplePolicy&quot;
+  ];
+
+  &quot;:mrf_simple&quot; = {
+    # Tag all media as sensitive
+    media_nsfw = mkMap {
+      &quot;nsfw.weird.kinky&quot; = &quot;Untagged NSFW content&quot;;
+    };
+
+    # Reject all activities except deletes
+    reject = mkMap {
+      &quot;kiwifarms.cc&quot; = &quot;Persistent harassment of users, no moderation&quot;;
+    };
+
+    # Force posts to be visible by followers only
+    followers_only = mkMap {
+      &quot;beta.birdsite.live&quot; = &quot;Avoid polluting timelines with Twitter posts&quot;;
+    };
+  };
+};
+</programlisting>
+  </section>
+  <section xml:id="modules-services-akkoma-upload-filters">
+    <title>Upload filters</title>
+    <para>
+      This example strips GPS and location metadata from uploads,
+      deduplicates them and anonymises the the file name.
+    </para>
+    <programlisting language="nix">
+services.akkoma.config.&quot;:pleroma&quot;.&quot;Pleroma.Upload&quot;.filters =
+  map (pkgs.formats.elixirConf { }).lib.mkRaw [
+    &quot;Pleroma.Upload.Filter.Exiftool&quot;
+    &quot;Pleroma.Upload.Filter.Dedupe&quot;
+    &quot;Pleroma.Upload.Filter.AnonymizeFilename&quot;
+  ];
+</programlisting>
+  </section>
+  <section xml:id="modules-services-akkoma-migration-pleroma">
+    <title>Migration from Pleroma</title>
+    <para>
+      Pleroma instances can be migrated to Akkoma either by copying the
+      database and upload data or by pointing Akkoma to the existing
+      data. The necessary database migrations are run automatically
+      during startup of the service.
+    </para>
+    <para>
+      The configuration has to be copy‐edited manually.
+    </para>
+    <para>
+      Depending on the size of the database, the initial migration may
+      take a long time and exceed the startup timeout of the system
+      manager. To work around this issue one may adjust the startup
+      timeout
+      <option>systemd.services.akkoma.serviceConfig.TimeoutStartSec</option>
+      or simply run the migrations manually:
+    </para>
+    <programlisting>
+pleroma_ctl migrate
+</programlisting>
+    <section xml:id="modules-services-akkoma-migration-pleroma-copy">
+      <title>Copying data</title>
+      <para>
+        Copying the Pleroma data instead of re‐using it in place may
+        permit easier reversion to Pleroma, but allows the two data sets
+        to diverge.
+      </para>
+      <para>
+        First disable Pleroma and then copy its database and upload
+        data:
+      </para>
+      <programlisting>
+# Create a copy of the database
+nix-shell -p postgresql --run 'createdb -T pleroma akkoma'
+
+# Copy upload data
+mkdir /var/lib/akkoma
+cp -R --reflink=auto /var/lib/pleroma/uploads /var/lib/akkoma/
+</programlisting>
+      <para>
+        After the data has been copied, enable the Akkoma service and
+        verify that the migration has been successful. If no longer
+        required, the original data may then be deleted:
+      </para>
+      <programlisting>
+# Delete original database
+nix-shell -p postgresql --run 'dropdb pleroma'
+
+# Delete original Pleroma state
+rm -r /var/lib/pleroma
+</programlisting>
+    </section>
+    <section xml:id="modules-services-akkoma-migration-pleroma-reuse">
+      <title>Re‐using data</title>
+      <para>
+        To re‐use the Pleroma data in place, disable Pleroma and enable
+        Akkoma, pointing it to the Pleroma database and upload
+        directory.
+      </para>
+      <programlisting language="nix">
+# Adjust these settings according to the database name and upload directory path used by Pleroma
+services.akkoma.config.&quot;:pleroma&quot;.&quot;Pleroma.Repo&quot;.database = &quot;pleroma&quot;;
+services.akkoma.config.&quot;:pleroma&quot;.&quot;:instance&quot;.upload_dir = &quot;/var/lib/pleroma/uploads&quot;;
+</programlisting>
+      <para>
+        Please keep in mind that after the Akkoma service has been
+        started, any migrations applied by Akkoma have to be rolled back
+        before the database can be used again with Pleroma. This can be
+        achieved through <literal>pleroma_ctl ecto.rollback</literal>.
+        Refer to the
+        <link xlink:href="https://hexdocs.pm/ecto_sql/Mix.Tasks.Ecto.Rollback.html">Ecto
+        SQL documentation</link> for details.
+      </para>
+    </section>
+  </section>
+  <section xml:id="modules-services-akkoma-advanced-deployment">
+    <title>Advanced deployment options</title>
+    <section xml:id="modules-services-akkoma-confinement">
+      <title>Confinement</title>
+      <para>
+        The Akkoma systemd service may be confined to a chroot with
+      </para>
+      <programlisting language="nix">
+services.systemd.akkoma.confinement.enable = true;
+</programlisting>
+      <para>
+        Confinement of services is not generally supported in NixOS and
+        therefore disabled by default. Depending on the Akkoma
+        configuration, the default confinement settings may be
+        insufficient and lead to subtle errors at run time, requiring
+        adjustment:
+      </para>
+      <para>
+        Use
+        <link xlink:href="options.html#opt-systemd.services._name_.confinement.packages"><option>services.systemd.akkoma.confinement.packages</option></link>
+        to make packages available in the chroot.
+      </para>
+      <para>
+        <option>services.systemd.akkoma.serviceConfig.BindPaths</option>
+        and
+        <option>services.systemd.akkoma.serviceConfig.BindReadOnlyPaths</option>
+        permit access to outside paths through bind mounts. Refer to
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#BindPaths="><link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html"><citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry></link></link>
+        for details.
+      </para>
+    </section>
+    <section xml:id="modules-services-akkoma-distributed-deployment">
+      <title>Distributed deployment</title>
+      <para>
+        Being an Elixir application, Akkoma can be deployed in a
+        distributed fashion.
+      </para>
+      <para>
+        This requires setting
+        <link xlink:href="options.html#opt-services.akkoma.dist.address"><option>services.akkoma.dist.address</option></link>
+        and
+        <link xlink:href="options.html#opt-services.akkoma.dist.cookie"><option>services.akkoma.dist.cookie</option></link>.
+        The specifics depend strongly on the deployment environment. For
+        more information please check the relevant
+        <link xlink:href="https://www.erlang.org/doc/reference_manual/distributed.html">Erlang
+        documentation</link>.
+      </para>
+    </section>
+  </section>
+</chapter>

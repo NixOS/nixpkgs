@@ -149,7 +149,7 @@ multiple modules, or as an alternative to related `enable` options.
 
 As an example, we will take the case of display managers. There is a
 central display manager module for generic display manager options and a
-module file per display manager backend (sddm, gdm \...).
+module file per display manager backend (sddm, gdm ...).
 
 There are two approaches we could take with this module structure:
 
