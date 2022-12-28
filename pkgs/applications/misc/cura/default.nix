@@ -9,20 +9,29 @@ mkDerivation rec {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xa=";
+    sha256 = "01qjxjdzp4n8rs5phwi3kdkf222w4qwcfnb7mvfawyd2yakqim6h";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
     rev = "5.2.0";
-    sha256 = "sha256-7y4OcbeQHv+loJ4cMgPU0e818Zsv90EwARdztNWS8za=";
+    sha256 = "0xn6mdn3kwabssad8rpmnmx3kgzh9ldy0kgb6qr2bcd6cklg4anp";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring
+    keyring
+    # libsavitar # TODO? Alpine apparently currently ignores it, see: https://git.alpinelinux.org/aports/tree/testing/cura/APKBUILD?id=2474a2fc7f819a7c8a31ccc561b95955dec5101f
+    numpy-stl
+    pynest2d
+    pyqt6
+    pyserial
+    requests
+    sentry-sdk
+    trimesh
+    uranium
+    zeroconf
   ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
