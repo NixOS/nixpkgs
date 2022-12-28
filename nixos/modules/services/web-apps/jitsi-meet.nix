@@ -31,6 +31,7 @@ let
   # types.attrs doesn't do merging. Let's merge explicitly, can still be overridden if
   # user desires.
   defaultCfg = {
+    authdomain = if cfg.jwt.enable then cfg.hostName else null;
     hosts = {
       domain = cfg.hostName;
       muc = "conference.${cfg.hostName}";
@@ -66,17 +67,25 @@ in
           This will automatically set services.prosody.authentication = "token" and generate a JWT secret.
         '';
       };
+      verifyDomain = mkOption {
+        type = bool;
+        default = true;
+        description = lib.mdDoc ''
+          True if we should verify the domain.
+        '';
+      };
       appId = mkOption {
         type = nullOr str;
         default = null;
-        example = "my-jwt-issuer.example.com";
+        example = "jitsi.example.com";
         description = lib.mdDoc ''
-          The application ID issuing JWTs.
+          The application ID issuing JWTs. Usually equal to the domain name.
         '';
       };
       issuer = mkOption {
         type = nullOr str;
         default = null;
+        example = "issuer.example.com";
         description = lib.mdDoc ''
           Set to the desired JWT issuer if you want Prosody to verify the JWT issuers too.
         '';
@@ -84,8 +93,10 @@ in
       audience = mkOption {
         type = nullOr str;
         default = null;
+        example = "issuer.example.com";
         description = lib.mdDoc ''
           Set to the desired JWT audience if you want Prosody to verify the JWT audiences too.
+          Frequently equal to the issuer.
         '';
       };
       secretFile = mkOption {
@@ -286,13 +297,13 @@ in
           (mkIf cfg.jwt.enable ''
             allow_empty_token = false
           '')
-          (mkIf (cfg.jwt.issuer != null || cfg.jwt.audience != null) ''
+          (mkIf (cfg.jwt.enable && cfg.jwt.verifyDomain) ''
             enable_domain_verification = true
           '')
-          (mkIf (cfg.jwt.issuer != null) ''
+          (mkIf (cfg.jwt.enable && cfg.jwt.issuer != null) ''
             asap_accepted_issuers = { "${cfg.jwt.issuer}" }
           '')
-          (mkIf (cfg.jwt.audience != null) ''
+          (mkIf (cfg.jwt.enable && cfg.jwt.audience != null) ''
             asap_accepted_audiences = { "${cfg.jwt.audience}" }
           '')
         ];
@@ -492,9 +503,6 @@ in
         (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
           "org.jitsi.jicofo.jibri.BREWERY" = "JibriBrewery@internal.${cfg.hostName}";
           "org.jitsi.jicofo.jibri.PENDING_TIMEOUT" = "90";
-        })
-        (lib.mkIf cfg.jwt.enable {
-          "org.jitsi.jicofo.auth.URL" = "JWT:${cfg.hostName}";
         })
       ];
     };
