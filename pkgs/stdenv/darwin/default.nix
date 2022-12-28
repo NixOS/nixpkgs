@@ -564,6 +564,7 @@ rec {
           libiconv
           brotli.lib
           file
+          ncurses
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -573,7 +574,7 @@ rec {
           compiler-rt
           clang-unwrapped
         ]) ++
-        (with pkgs.darwin; [ dyld ICU Libsystem locale ] ++ lib.optional useAppleSDKLibs objc4);
+        (with pkgs.darwin; [ dyld libtapi cctools ICU Libsystem locale ] ++ lib.optional useAppleSDKLibs objc4);
 
       overrides = persistent;
     };
@@ -746,6 +747,7 @@ rec {
         cc.expand-response-params
         libxml2.out
         file
+        ncurses
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook
