@@ -328,7 +328,7 @@ in
       errorPath = mkOption {
         type = types.nullOr types.str;
         default = "${cfg.package}/public/views/error.ejs";
-        defaultText = literalExpression "\"\$''{cfg.package}/public/views/error.ejs\"";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/error.ejs\"";
         description = lib.mdDoc ''
           Path to the error template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
