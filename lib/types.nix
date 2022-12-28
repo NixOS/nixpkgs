@@ -54,7 +54,7 @@ let
     concatStringsSep
     escapeNixString
     hasInfix
-    isCoercibleToString
+    isMoreCoercibleToString
     isSimpleCoercibleToString
     ;
   inherit (lib.trivial)
@@ -480,7 +480,7 @@ rec {
     path = mkOptionType {
       name = "path";
       descriptionClass = "noun";
-      check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+      check = x: isMoreCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
 

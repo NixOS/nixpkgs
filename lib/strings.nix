@@ -810,7 +810,7 @@ rec {
   */
   isMoreCoercibleToString = x:
     elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (isList x && lib.all isCoercibleToString x) ||
+    (isList x && lib.all isMoreCoercibleToString x) ||
     x ? outPath ||
     x ? __toString;
 
