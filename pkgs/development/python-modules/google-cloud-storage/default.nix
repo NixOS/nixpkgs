@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "test_list_buckets"
     "test_open"
     "test_anonymous_client_access_to_public_bucket"
+    "test_ctor_w_custom_endpoint_use_auth"
   ];
 
   disabledTestPaths = [
@@ -68,6 +69,7 @@ buildPythonPackage rec {
     "tests/system/test_bucket.py"
     "tests/system/test_fileio.py"
     "tests/system/test_kms_integration.py"
+    "tests/unit/test_transfer_manager.py"
   ];
 
   preCheck = ''
