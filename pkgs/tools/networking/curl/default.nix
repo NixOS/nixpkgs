@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
     ./CVE-2022-32221.patch
     ./CVE-2022-42915.patch
     ./CVE-2022-42916.patch
+    ./CVE-2022-43551.patch
+    ./CVE-2022-43552.patch
   ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   patchFlags = [ "-p1" "--binary" ];
