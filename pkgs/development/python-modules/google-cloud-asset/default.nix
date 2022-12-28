@@ -8,6 +8,7 @@
 , google-cloud-os-config
 , google-cloud-testutils
 , libcst
+, protobuf
 , proto-plus
 , pytest-asyncio
 , pytestCheckHook
@@ -35,7 +36,14 @@ buildPythonPackage rec {
     google-cloud-os-config
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   checkInputs = [
     google-cloud-testutils
