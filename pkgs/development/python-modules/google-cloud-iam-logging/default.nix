@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "IAM Service Logging client library";
     homepage = "https://github.com/googleapis/python-iam-logging";
+    changelog = "https://github.com/googleapis/python-iam-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
