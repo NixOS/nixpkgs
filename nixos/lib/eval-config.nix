@@ -32,6 +32,7 @@ evalConfigArgs@
 , lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                  in lib.optional (e != "") (import e)
+, declarationLocations ? false
 }:
 
 let pkgs_ = pkgs;
@@ -94,7 +95,7 @@ let
       locatedModules ++ legacyModules;
 
   noUserModules = evalModulesMinimal ({
-    inherit prefix specialArgs;
+    inherit prefix specialArgs declarationLocations;
     modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
   });
 

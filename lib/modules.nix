@@ -48,6 +48,11 @@ let
   inherit (lib.strings)
     isConvertibleWithToString
     ;
+  mapAttrsLoc = f: set: mapAttrs
+    (name: val: f (builtins.unsafeGetAttrPos name set) name val)
+    set;
+
+  dontMapAttrsLoc = f: builtins.mapAttrs (f null);
 
   showDeclPrefix = loc: decl: prefix:
     " - option(s) with prefix `${showOption (loc ++ [prefix])}' in module `${decl._file}'";
@@ -78,6 +83,9 @@ let
                   # there's _module.args. If specialArgs.modulesPath is defined it will be
                   # used as the base path for disabledModules.
                   specialArgs ? {}
+                , # Whether to get declaration locations. This has some
+                  # performance cost to evaluation time.
+                  declarationLocations ? false
                 , # `class`:
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
@@ -92,6 +100,8 @@ let
         lib.warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
         lib.warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
         x;
+
+      maybeMapAttrsLoc = if declarationLocations then mapAttrsLoc else dontMapAttrsLoc;
 
       legacyModules =
         optional (evalModulesArgs?args) {
@@ -231,7 +241,7 @@ let
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
-        in mergeModules prefix (reverseList collected);
+        in mergeModules maybeMapAttrsLoc prefix (reverseList collected);
 
       options = merged.matchedOptions;
 
@@ -533,11 +543,11 @@ let
          ];
        }
   */
-  mergeModules = prefix: modules:
-    mergeModules' prefix modules
+  mergeModules = maybeMapAttrsLoc: prefix: modules:
+    mergeModules' maybeMapAttrsLoc prefix modules
       (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
 
-  mergeModules' = prefix: options: configs:
+  mergeModules' = maybeMapAttrsLoc: prefix: options: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
@@ -663,7 +673,7 @@ let
                   showRawDecls loc nonOptions
                 }"
           else
-            mergeModules' loc decls defns) declsByName;
+            mergeModules' maybeMapAttrsLoc loc decls defns) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
 
@@ -730,9 +740,10 @@ let
             else res.options;
         in opt.options // res //
           { declarations = res.declarations ++ [opt._file];
+            declarationsWithLocations = res.declarationsWithLocations ++ [opt._loc];
             options = submodules;
           } // typeSet
-    ) { inherit loc; declarations = []; options = []; } opts;
+    ) { inherit loc; declarations = []; declarationsWithLocations = []; options = []; } opts;
 
   /* Merge all the definitions of an option to produce the final
      config value. */
