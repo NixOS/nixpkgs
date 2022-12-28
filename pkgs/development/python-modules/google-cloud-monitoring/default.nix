@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Stackdriver Monitoring API client library";
     homepage = "https://github.com/googleapis/python-monitoring";
+    changelog = "https://github.com/googleapis/python-monitoring/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
