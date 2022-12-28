@@ -2,12 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-
 , cached-property
 , packaging
 , pdm-pep517
 , requests
-
 , flask
 , pytest-httpserver
 , pytestCheckHook
@@ -19,6 +17,7 @@ buildPythonPackage rec {
   pname = "unearth";
   version = "0.7.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -45,9 +44,14 @@ buildPythonPackage rec {
     trustme
   ];
 
+  pythonImportsCheck = [
+    "unearth"
+  ];
+
   meta = with lib; {
+    description = "A utility to fetch and download Python packages";
     homepage = "https://github.com/frostming/unearth";
-    description = "A utility to fetch and download python packages";
+    changelog = "https://github.com/frostming/unearth/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ betaboon ];
   };
