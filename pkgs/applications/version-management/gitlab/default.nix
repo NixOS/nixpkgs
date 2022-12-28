@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
 
 let
@@ -20,8 +20,11 @@ let
     inherit ruby;
     gemdir = ./rubyEnv;
     gemset =
-      let x = import (gemdir + "/gemset.nix");
+      let x = import (gemdir + "/gemset.nix") src;
       in x // {
+        gpgme = x.gpgme // {
+          nativeBuildInputs = [ pkg-config ];
+        };
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
@@ -47,7 +50,7 @@ let
     # `console` executable.
     ignoreCollisions = true;
 
-    extraConfigPaths = lib.forEach data.vendored_gems (gem: "${src}/vendor/gems/${gem}");
+    extraConfigPaths = [ "${src}/vendor" ];
   };
 
   assets = stdenv.mkDerivation {
@@ -99,6 +102,7 @@ let
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
       patchShebangs node_modules/
+      patchShebangs scripts/frontend/
 
       runHook postConfigure
     '';
