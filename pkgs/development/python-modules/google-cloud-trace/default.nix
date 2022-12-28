@@ -2,32 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, google-cloud-core
 , google-cloud-testutils
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.7.3";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HFntFmPn3FPhCrB+nnJlBD9zqG2jDsP2naEl2IxhRqE=";
+    hash = "sha256-dKywvDNcvDOULHREKcHWIBVVBBzrttICX+VgcborJVI=";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    google-cloud-core
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     google-cloud-testutils
