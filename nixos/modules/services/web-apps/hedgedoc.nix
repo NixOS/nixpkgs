@@ -310,7 +310,7 @@ in
       indexPath = mkOption {
         type = types.nullOr types.str;
         default = "${cfg.package}/public/views/index.ejs";
-        defaultText = literalExpression "\"\$''{cfg.package}/public/views/index.ejs\"";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/index.ejs\"";
         description = lib.mdDoc ''
           Path to the index template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
