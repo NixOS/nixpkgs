@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, antlr4_9-python3-runtime
+, antlr4
+, antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-resources
@@ -8,10 +9,11 @@
 , omegaconf
 , pytestCheckHook
 , pythonOlder
+, substituteAll
 }:
 
 buildPythonPackage rec {
-  pname = "hydra";
+  pname = "hydra-core";
   version = "1.3.1";
   format = "setuptools";
 
@@ -19,17 +21,32 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
+    repo = "hydra";
     rev = "refs/tags/v${version}";
     hash = "sha256-4FOh1Jr+LM8ffh/xcAqMqKudKbXb2DZdxU+czq2xwxs=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./antlr4.patch;
+      antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
+    })
+  ];
+
+  postPatch = ''
+    # We substitute the path to the jar with the one from our antlr4
+    # package, so this file becomes unused
+    rm -v build_helpers/bin/antlr*-complete.jar
+
+    sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/requirements.txt
+  '';
 
   nativeBuildInputs = [
     jre_headless
   ];
 
   propagatedBuildInputs = [
-    antlr4_9-python3-runtime
+    antlr4-python3-runtime
     omegaconf
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
@@ -55,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;
