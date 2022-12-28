@@ -744,9 +744,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_10_5 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_7;
+    hspec = self.hspec_2_10_8;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_7;
+      hspec = self.hspec_2_10_8;
     };
   });
 
@@ -1440,14 +1440,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_7 = doDistribute (super.hspec_2_10_7.override {
-    hspec-discover = self.hspec-discover_2_10_7;
-    hspec-core = self.hspec-core_2_10_7;
+  hspec_2_10_8 = doDistribute (super.hspec_2_10_8.override {
+    hspec-discover = self.hspec-discover_2_10_8;
+    hspec-core = self.hspec-core_2_10_8;
   });
-  hspec-discover_2_10_7 = super.hspec-discover_2_10_7.override {
+  hspec-discover_2_10_8 = super.hspec-discover_2_10_8.override {
     hspec-meta = self.hspec-meta_2_10_5;
   };
-  hspec-core_2_10_7 = super.hspec-core_2_10_7.override {
+  hspec-core_2_10_8 = super.hspec-core_2_10_8.override {
     hspec-meta = self.hspec-meta_2_10_5;
   };
 
@@ -2214,6 +2214,7 @@ self: super: {
 
   # Too strict upper bound on th-desugar, fixed in 3.1.1
   singletons-th = assert super.singletons-th.version == "3.1"; doJailbreak super.singletons-th;
+  singletons-base = doJailbreak super.singletons-base;
 
   # Ships a broken Setup.hs
   # https://github.com/lehins/conduit-aeson/issues/1

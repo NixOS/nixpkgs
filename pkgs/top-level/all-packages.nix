@@ -2173,7 +2173,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/BSNES
 
-  ares = callPackage ../applications/emulators/bsnes/ares { };
+  ares = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/ares { };
 
   bsnes-hd = callPackage ../applications/emulators/bsnes/bsnes-hd {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
@@ -4404,6 +4404,8 @@ with pkgs;
   envconsul = callPackage ../tools/system/envconsul { };
 
   envsubst = callPackage ../tools/misc/envsubst { };
+
+  envfs = callPackage ../tools/filesystems/envfs { };
 
   er-patcher = callPackage ../tools/games/er-patcher { };
 
@@ -16652,7 +16654,7 @@ with pkgs;
     antlr4_10
     antlr4_11;
 
-  antlr4 = antlr4_8;
+  antlr4 = antlr4_11;
 
   antlr = antlr4;
 

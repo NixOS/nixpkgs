@@ -150,8 +150,9 @@ let
         # Ensure that the home directory already exists
         # We can't assert createHome == true because that's not the case for root
         cd "${config.users.users.${cfg.user}.home}"
-        ${install} -d .config/borg
-        ${install} -d .cache/borg
+        # Create each directory separately to prevent root owned parent dirs
+        ${install} -d .config .config/borg
+        ${install} -d .cache .cache/borg
       '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
         ${install} -d ${escapeShellArg cfg.repo}
       ''));

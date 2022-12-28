@@ -1331,8 +1331,6 @@ dont-distribute-packages:
  - elasticsearch-interchange
  - electrs-client
  - elerea-examples
- - eliminators
- - eliminators_0_9_1
  - elliptic-curve
  - elsa
  - emacs-keys
@@ -1363,11 +1361,15 @@ dont-distribute-packages:
  - essence-of-live-coding-PortMidi
  - essence-of-live-coding-gloss
  - essence-of-live-coding-gloss-example
+ - essence-of-live-coding-gloss_0_2_7
  - essence-of-live-coding-pulse
  - essence-of-live-coding-pulse-example
+ - essence-of-live-coding-pulse_0_2_7
  - essence-of-live-coding-quickcheck
+ - essence-of-live-coding-quickcheck_0_2_7
  - essence-of-live-coding-vivid
  - essence-of-live-coding-warp
+ - essence-of-live-coding-warp_0_2_7
  - estimators
  - estreps
  - eternity
@@ -1392,6 +1394,9 @@ dont-distribute-packages:
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
+ - eventuo11y
+ - eventuo11y-batteries
+ - eventuo11y-json
  - every-bit-counts
  - ewe
  - exference
@@ -1490,6 +1495,7 @@ dont-distribute-packages:
  - fmt-for-rio
  - foldable1
  - follower
+ - fontconfig-pure
  - foo
  - format
  - format-status
@@ -1497,8 +1503,6 @@ dont-distribute-packages:
  - formlets-hsp
  - forsyde-deep
  - forth-hll
- - fortran-src
- - fortran-src-extras
  - fortran-vars
  - foscam-directory
  - foscam-sort
@@ -2118,7 +2122,6 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
- - hevm
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2739,7 +2742,6 @@ dont-distribute-packages:
  - medea
  - mediabus-fdk-aac
  - mediabus-rtp
- - melf
  - mellon-gpio
  - mellon-web
  - memcache-conduit
@@ -2994,7 +2996,6 @@ dont-distribute-packages:
  - optimal-blocks
  - optimusprime
  - optparse-enum
- - orbits
  - orchid
  - orchid-demo
  - order-maintenance
@@ -3391,6 +3392,7 @@ dont-distribute-packages:
  - rfc-redis
  - rfc-servant
  - rhine-gloss
+ - rhine-terminal
  - rhythm-game-tutorial
  - rib
  - ribosome
@@ -3597,9 +3599,6 @@ dont-distribute-packages:
  - simple-session
  - simpleirc-lens
  - simseq
- - singleton-nats
- - singletons-presburger
- - singletons-presburger_0_7_1_0
  - siphon
  - siren-json
  - sirkel
@@ -4009,7 +4008,6 @@ dont-distribute-packages:
  - ukrainian-phonetics-basic
  - unagi-bloomfilter
  - unbound
- - unbounded-delays-units
  - uni-events
  - uni-graphs
  - uni-htk
@@ -4023,9 +4021,6 @@ dont-distribute-packages:
  - uniqueness-periods-vector-filters
  - uniqueness-periods-vector-general
  - uniqueness-periods-vector-properties
- - units
- - units-attoparsec
- - units-defs
  - universal
  - universe
  - universe-dependent-sum

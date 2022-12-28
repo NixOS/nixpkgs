@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, protobuf, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, protobuf
+, zlib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -17,11 +23,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ protobuf zlib ];
 
+  PROTOC = lib.getExe buildPackages.protobuf;
+
   meta = with lib; {
     homepage = "https://github.com/protobuf-c/protobuf-c/";
     description = "C bindings for Google's Protocol Buffers";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

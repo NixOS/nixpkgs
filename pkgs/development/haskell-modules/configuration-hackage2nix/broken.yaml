@@ -633,6 +633,7 @@ broken-packages:
   - CC-delcont-ref-tf
   - cci
   - ccnx
+  - cdp
   - c-dsl
   - cedict
   - cef
@@ -1099,6 +1100,7 @@ broken-packages:
   - derive-lifted-instances
   - derive-monoid
   - derive-trie
+  - deriving-openapi3
   - derp-lib
   - describe
   - descriptive
@@ -1317,6 +1319,7 @@ broken-packages:
   - ekg-rrd
   - ekg-statsd
   - elevator
+  - eliminators
   - elision
   - elm-export-persistent
   - elm-street
@@ -1575,6 +1578,7 @@ broken-packages:
   - forml
   - formura
   - Fortnite-Hack-Cheats-Free-V-Bucks-Generator
+  - fortran-src-extras
   - foscam-filename
   - fpe
   - FPretty
@@ -2212,6 +2216,7 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
+  - hevm
   - HExcel
   - hexchat
   - hexif
@@ -3274,6 +3279,7 @@ broken-packages:
   - medium-sdk-haskell
   - meep
   - megalisp
+  - melf
   - mellon-core
   - melody
   - membrain
@@ -4783,7 +4789,6 @@ broken-packages:
   - simplistic-generics
   - singlethongs
   - singleton-dict
-  - singletons-base
   - singleton-typelits
   - single-tuple
   - singnal
@@ -5501,6 +5506,7 @@ broken-packages:
   - ui-command
   - unamb-custom
   - unbeliever
+  - unbounded-delays-units
   - unboxed
   - unboxed-containers
   - unboxed-references
@@ -5521,6 +5527,7 @@ broken-packages:
   - uniqueness-periods-general
   - uniqueness-periods-vector
   - uniqueness-periods-vector-common
+  - units-attoparsec
   - unittyped
   - unitym-yesod
   - uni-util
