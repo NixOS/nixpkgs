@@ -9336,6 +9336,11 @@ with pkgs;
 
   loki = callPackage ../development/libraries/loki { stdenv = gcc10StdenvCompat; };
 
+  lomiri = libsForQt5.callPackage ../desktops/lomiri { };
+  lomiri-api = callPackage ../desktops/lomiri/core/lomiri-api { };
+  lomiri-app-launch = callPackage ../desktops/lomiri/core/lomiri-app-launch { };
+  lomiri-click = callPackage ../desktops/lomiri/core/lomiri-click { };
+
   longview = callPackage ../servers/monitoring/longview { };
 
   lorien = callPackage ../applications/graphics/lorien { };
@@ -24519,6 +24524,8 @@ with pkgs;
 
   miniflux = callPackage ../servers/miniflux { };
 
+  mir = callPackage ../servers/mir { };
+
   icinga2 = callPackage ../servers/monitoring/icinga2 { };
 
   icinga2-agent = callPackage ../servers/monitoring/icinga2 {
@@ -31711,6 +31718,8 @@ with pkgs;
   };
 
   premid = callPackage ../applications/misc/premid { };
+
+  process-cpp = callPackage ../development/libraries/process-cpp { };
 
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
