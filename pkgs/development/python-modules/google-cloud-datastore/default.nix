@@ -3,12 +3,13 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
 , google-cloud-testutils
+, libcst
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -28,7 +29,14 @@ buildPythonPackage rec {
     google-api-core
     google-cloud-core
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   passthru.optional-dependencies = {
     libcst = [
