@@ -115,11 +115,6 @@ in
       has a dependency on stateVersion.
 
         nix-instantiate --attr darwin.builder --show-trace
-
-      If this error occurred while evaluating the static part of the option
-      documentation, the problem may be fixed by adding defaultText to an option.
-      Otherwise, the dependency should be removed. As a last resort, stateVersion
-      may be hardcoded in the darwin.builder package by replacing this exception.
     '');
   };
 
