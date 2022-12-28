@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.0.6";
+  version = "2.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-PN09TaJZR/REQPIgrm9XR+mXvR1evMAWGQziAzpg+fE=";
+    hash = "sha256-2CzWX+hMH1gN9WytRUf9BGiJ/bfEu2e0Kzg4ScDMrBo=";
   };
 
   propagatedBuildInputs = [
@@ -94,6 +94,7 @@ buildPythonPackage rec {
     "test_main_setPref_invalid_field"
     "test_main_setPref_valid_field_int_as_string"
     "test_readGPIOs"
+    "test_onGPIOreceive"
     "test_setURL_empty_url"
     "test_watchGPIOs"
     "test_writeConfig_with_no_radioConfig"
