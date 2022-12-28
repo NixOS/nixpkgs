@@ -18,9 +18,10 @@ let
   plat = elemAt info 1;
   shas =
     {
-      x86_64-linux  = "1ld7656b37l67vi4pyv0il865b168niqnbd4hzbvdnwrm35prp10";
-      x86_64-darwin = "11b180y11xw5q01l7aw6lyn15lp9ks8xmakjg1j7gp3z6c90hpn3";
-      aarch64-linux = "0s4ph79x17f90jk31wjwk259dk9dmhnmnkxdcn77m191wvf6m3wy";
+      x86_64-linux   = "7281b79f2bf7421c2d71ab4eecdfd517b86b6788d1651dad315198c564284ea9";
+      x86_64-darwin  = "6d2343171a0d384910312220aae3512f45e3d3d900557b736c139b8363a008e4";
+      aarch64-linux  = "3153820d53a454513b534765fef68ce1f61a2dd92d4dae7428a1220bb3ce8fe5";
+      aarch64-darwin = "e62af7486c1041d3f1648646671d5c665e1abffd696cd2a5d96c2a5aaabe38f8";
     };
 in
 stdenv.mkDerivation rec {
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
   buildInputs = [ jre_headless util-linux zlib ];
 
@@ -70,6 +72,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.elastic;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];

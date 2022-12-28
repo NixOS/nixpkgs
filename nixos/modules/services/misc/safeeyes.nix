@@ -16,7 +16,7 @@ in
 
     services.safeeyes = {
 
-      enable = mkEnableOption "the safeeyes OSGi service";
+      enable = mkEnableOption (lib.mdDoc "the safeeyes OSGi service");
 
     };
 
@@ -33,8 +33,6 @@ in
 
       wantedBy = [ "graphical-session.target" ];
       partOf   = [ "graphical-session.target" ];
-
-      path = [ pkgs.alsa-utils ];
 
       startLimitIntervalSec = 350;
       startLimitBurst = 10;

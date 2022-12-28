@@ -1,25 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, django
+, django-taggit
 , pytz
 , pythonOlder
-, six
+, python
 }:
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "5.2";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e541a46a0a899ef4778a4708be22e71cac3efacc09a6ff44bc065c5c9194c054";
-  };
+  version = "6.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
-  doCheck = false;
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-p6hvOkPWRVJYLHvwyn9nS05wblikRFmlSYZuLiCcuqc=";
+  };
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [
+    django
+    pytz
+  ];
+
+  passthru.optional-dependencies.taggit = [
+    django-taggit
+  ];
+
+  checkInputs = passthru.optional-dependencies.taggit;
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} ./runtests.py --noinput
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";

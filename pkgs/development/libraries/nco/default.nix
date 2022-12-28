@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils }:
+{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "nco";
-  version = "5.0.3";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "nco";
     repo = "nco";
     rev = version;
-    sha256 = "sha256-KrFRBlD3z/sjKIvxmE0s/xCILQmESecilnlUGzDDICw=";
+    sha256 = "sha256-LmxHgSBBqXK5M4KOthd8R+H5EY3O5lueb2gnw5mK8Xw=";
   };
 
   nativeBuildInputs = [ flex which antlr2 ];
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       --replace "/bin/mv" "${coreutils}/bin/mv"
   '';
 
+  makeFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://nco.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

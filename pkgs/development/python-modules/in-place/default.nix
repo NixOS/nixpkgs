@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tox.ini --replace "--cov=in_place --no-cov-on-fail" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [ pytestCheckHook ];
 

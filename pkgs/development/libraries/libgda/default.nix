@@ -11,23 +11,18 @@
 , gobject-introspection
 , vala
 , libgee
-, overrideCC
-, gcc6
 , fetchpatch
 , autoreconfHook
 , gtk-doc
 , autoconf-archive
 , yelp-tools
 , mysqlSupport ? false
-, libmysqlclient ? null
+, libmysqlclient
 , postgresSupport ? false
-, postgresql ? null
+, postgresql
 }:
 
-assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
-
-(if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libgda";
   version = "5.2.10";
 
@@ -48,7 +43,6 @@ assert postgresSupport -> postgresql != null;
     pkg-config
     intltool
     itstool
-    libxml2
     gobject-introspection
     vala
     autoreconfHook
@@ -65,6 +59,10 @@ assert postgresSupport -> postgresql != null;
     libmysqlclient
   ] ++ lib.optionals postgresSupport [
     postgresql
+  ];
+
+  propagatedBuildInputs = [
+    libxml2
   ];
 
   configureFlags = [

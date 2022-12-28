@@ -1,13 +1,14 @@
 { lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
   unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
-
-with builtins; buildDotnetPackage rec {
-  baseName = "keepass";
-  version = "2.48.1";
+let
+  inherit (builtins) add length readFile replaceStrings unsafeDiscardStringContext toString map;
+in buildDotnetPackage rec {
+  pname = "keepass";
+  version = "2.49";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "sha256-HkAgKPvf8TUgUlgsGWVgjuYJaRPGi8obOFQEtmzDtLE=";
+    sha256 = "sha256-1hg4bRuQSG+UzEQGeQcSURTmTxt5ITGQqfg0IS7RWt0=";
   };
 
   sourceRoot = ".";
@@ -69,14 +70,15 @@ with builtins; buildDotnetPackage rec {
     icon = "keepass";
     desktopName = "Keepass";
     genericName = "Password manager";
-    categories = "Utility;";
-    mimeType = lib.concatStringsSep ";" [
-      "application/x-keepass2"
-      ""
-    ];
+    categories = [ "Utility" ];
+    mimeTypes = [ "application/x-keepass2" ];
   };
 
-  outputFiles = [ "Build/KeePass/Release/*" "Build/KeePassLib/Release/*" ];
+  outputFiles = [
+    "Build/KeePass/Release/*"
+    "Build/KeePassLib/Release/*"
+    "Ext/KeePass.config.xml" # contains <PreferUserConfiguration>true</PreferUserConfiguration>
+  ];
   dllFiles = [ "KeePassLib.dll" ];
   exeFiles = [ "KeePass.exe" ];
 

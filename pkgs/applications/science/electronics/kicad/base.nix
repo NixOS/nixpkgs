@@ -5,6 +5,7 @@
 , libGL
 , zlib
 , wxGTK
+, gtk3
 , libX11
 , gettext
 , glew
@@ -20,6 +21,7 @@
 , libpthreadstubs
 , libXdmcp
 , lndir
+, unixODBC
 
 , util-linux
 , libselinux
@@ -31,11 +33,11 @@
 , dbus
 , at-spi2-core
 , libXtst
+, pcre2
 
-, swig
+, swig4
 , python
 , wxPython
-, opencascade
 , opencascade-occt
 , libngspice
 , valgrind
@@ -44,22 +46,16 @@
 , baseName
 , kicadSrc
 , kicadVersion
-, i18n
-, withOCE
 , withOCC
 , withNgspice
 , withScripting
+, withI18n
+, withPCM
 , debug
 , sanitizeAddress
 , sanitizeThreads
-, withI18n
 }:
 
-assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
-assert lib.asserts.assertMsg (!(withOCC && withOCE))
-  "Only one of OCC and OCE may be enabled";
-assert lib.assertMsg (!(stable && (sanitizeAddress || sanitizeThreads)))
-  "Only kicad-unstable(-small) supports address/thread sanitation";
 assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
   "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
 
@@ -72,33 +68,35 @@ stdenv.mkDerivation rec {
 
   src = kicadSrc;
 
+  patches = [
+    # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
+    ./writable.patch
+  ];
+
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = ''
-    substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}" \
-  '';
+  postPatch = if (!stable) then ''
+    substituteInPlace cmake/KiCadVersion.cmake \
+      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+  ''
+  else "";
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags = optionals (stable && withScripting) [
-    "-DKICAD_SCRIPTING=ON"
-    "-DKICAD_SCRIPTING_MODULES=ON"
-    "-DKICAD_SCRIPTING_PYTHON3=ON"
-    "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DKICAD_USE_EGL=ON"
+  ]
+  ++ optionals (withScripting) [
+    "-DKICAD_SCRIPTING_WXPYTHON=ON"
   ]
   ++ optionals (!withScripting) [
-    "-DKICAD_SCRIPTING=OFF"
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
   ]
-  ++ optional (withNgspice) "-DKICAD_SPICE=ON"
-  ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
+  ++ optional (!withNgspice) "-DKICAD_SPICE=OFF"
   ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
-  ++ optionals (withOCE) [
-    "-DKICAD_USE_OCE=ON"
-    "-DOCE_DIR=${opencascade}"
-  ]
   ++ optionals (withOCC) [
     "-DKICAD_USE_OCC=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
@@ -108,11 +106,23 @@ stdenv.mkDerivation rec {
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
   ]
+  ++ optionals (!doInstallCheck) [
+    "-DKICAD_BUILD_QA_TESTS=OFF"
+  ]
   ++ optionals (sanitizeAddress) [
     "-DKICAD_SANITIZE_ADDRESS=ON"
   ]
   ++ optionals (sanitizeThreads) [
     "-DKICAD_SANITIZE_THREADS=ON"
+  ]
+  ++ optionals (withI18n) [
+    "-DKICAD_BUILD_I18N=ON"
+  ]
+  ++ optionals (!withPCM && stable) [
+    "-DKICAD_PCM=OFF"
+  ]
+  ++ optionals (!stable) [ # upstream issue 12491
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
   ];
 
   nativeBuildInputs = [
@@ -132,9 +142,10 @@ stdenv.mkDerivation rec {
     libdatrie
     libxkbcommon
     libepoxy
-    dbus.daemon
+    dbus
     at-spi2-core
     libXtst
+    pcre2
   ];
 
   buildInputs = [
@@ -143,7 +154,7 @@ stdenv.mkDerivation rec {
     zlib
     libX11
     wxGTK
-    wxGTK.gtk
+    gtk3
     pcre
     libXdmcp
     gettext
@@ -154,34 +165,25 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
+    swig4
+    python
   ]
-  # unstable requires swig and python
-  # wxPython still optional
-  ++ optionals (withScripting || (!stable)) [ swig python ]
+  ++ optional (!stable) unixODBC
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
-  ++ optional (withOCE) opencascade
   ++ optional (withOCC) opencascade-occt
-  ++ optional (debug) valgrind
-  ;
+  ++ optional (debug) valgrind;
 
   # debug builds fail all but the python test
-  # 5.1.x fails the eeschema test
-  doInstallCheck = !debug && !stable;
+  doInstallCheck = !(debug);
   installCheckTarget = "test";
 
   dontStrip = debug;
 
-  postInstall = optionalString (withI18n) ''
-    mkdir -p $out/share
-    lndir ${i18n}/share $out/share
-  '';
-
   meta = {
     description = "Just the built source without the libraries";
     longDescription = ''
-      Just the build products, optionally with the i18n linked in
-      the libraries are passed via an env var in the wrapper, default.nix
+      Just the build products, the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad.org/";
     license = lib.licenses.agpl3;

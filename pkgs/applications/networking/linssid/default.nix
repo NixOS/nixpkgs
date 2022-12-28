@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, qtbase, qtsvg, qmake, pkg-config, boost, wirelesstools, iw, qwt, wrapQtAppsHook }:
+{ lib, stdenv, fetchurl, qtbase, qtsvg, qmake, pkg-config, boost, wirelesstools, iw, qwt6_1, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "linssid";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg boost qwt ];
+  buildInputs = [ qtbase qtsvg boost qwt6_1 ];
 
   patches = [ ./0001-unbundled-qwt.patch ];
 
   postPatch = ''
-    sed -e "s|/usr/include/qt5.*$|& ${qwt}/include|" -i linssid-app/linssid-app.pro
+    sed -e "s|/usr/include/qt5.*$|& ${qwt6_1}/include|" -i linssid-app/linssid-app.pro
     sed -e "s|/usr/include/|/nonexistent/|g" -i linssid-app/*.pro
     sed -e 's|^LIBS .*= .*libboost_regex.a|LIBS += -lboost_regex|' \
         -e "s|/usr|$out|g" \

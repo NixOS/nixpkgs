@@ -73,6 +73,6 @@ redoxRustPlatform.buildRustPackage rec {
     description = "C Library in Rust for Redox and Linux";
     license = licenses.mit;
     maintainers = [ maintainers.aaronjanse ];
-    platforms = platforms.redox;
+    platforms = platforms.redox ++ [ "x86_64-linux" ];
   };
 }

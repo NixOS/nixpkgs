@@ -22,6 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     ed
     unifdef
+    python.pkgs.setuptools
   ];
 
   makeFlags = [

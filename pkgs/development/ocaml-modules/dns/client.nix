@@ -1,20 +1,25 @@
-{ lib, buildDunePackage, dns, ocaml_lwt, mirage-clock, mirage-time
-, mirage-random, mirage-stack, mirage-crypto-rng, mtime, randomconv
-, cstruct, fmt, logs, rresult, domain-name, ipaddr, alcotest }:
+{ lib, buildDunePackage, dns, lwt, mirage-clock, mirage-time
+, mirage-random, mirage-crypto-rng, mtime, randomconv
+, cstruct, fmt, logs, rresult, domain-name, ipaddr, alcotest
+, ca-certs, ca-certs-nss
+, happy-eyeballs
+, tcpip
+, tls, tls-mirage
+}:
 
 buildDunePackage {
   pname = "dns-client";
   inherit (dns) src version;
 
-  useDune2 = true;
-
-  propagatedBuildInputs = [ cstruct fmt logs dns rresult randomconv domain-name ipaddr
-                            ocaml_lwt mirage-stack mirage-random mirage-time mirage-clock
+  propagatedBuildInputs = [ cstruct fmt logs dns randomconv domain-name ipaddr
+                            lwt mirage-random mirage-time mirage-clock
+                            ca-certs ca-certs-nss happy-eyeballs tcpip tls tls-mirage
                             mtime mirage-crypto-rng ];
   checkInputs = [ alcotest ];
   doCheck = true;
 
   meta = dns.meta // {
     description = "Pure DNS resolver API";
+    mainProgram = "dns-client.unix";
   };
 }

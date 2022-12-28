@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "goimapnotify";
-  version = "2.3.2";
+  version = "2.3.7";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     rev = version;
-    sha256 = "sha256-pkpdIkabxz9bu0LnyU1/wu1qqPc/pQqCn8tePc2fIfg=";
+    sha256 = "sha256-Wot+E+rDgXQ4FVgdfqe6a3O9oYUK3X1xImC33eDuUBo=";
   };
 
-  vendorSha256 = "sha256-4+2p/7BAEk+1V0TII9Q2O2YNX0rvBiw2Ss7k1dsvUbk=";
+  vendorSha256 = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
 
   postPatch = ''
     for f in command.go command_test.go; do
@@ -24,7 +24,6 @@ buildGoModule rec {
       "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";
     homepage = "https://gitlab.com/shackra/goimapnotify";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ wohanley ];
   };
 }

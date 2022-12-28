@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, ocaml, findlib, withStatic ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   version = "1.1";
-  name = "ocaml${ocaml.version}-num-${version}";
+  pname = "ocaml${ocaml.version}-num";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "num";
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withStatic ./enable-static.patch;
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
-
 
   meta = {
     description = "Legacy Num library for arbitrary-precision integer and rational arithmetic";
@@ -28,4 +28,7 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     inherit (src.meta) homepage;
   };
-}
+} // (if lib.versions.majorMinor ocaml.version == "4.06" then {
+    NIX_CFLAGS_COMPILE = "-fcommon";
+  } else {})
+)

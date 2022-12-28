@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "biblatex-check";
-  version = "2019-11-09";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Pezmc";
     repo = "BibLatex-Check";
-    rev = "2db50bf94d1480f37edf1b3619e73baf4ef85938";
-    sha256 = "1bq0yqckhssazwkivipdjmn1jpsf301i4ppyl88qhc5igx39wg25";
+    rev = "v${version}";
+    sha256 = "sha256-8oHX56+kRWWl8t22DqLAFinjPngRMo3vXxXuVXBwutM=";
   };
 
   buildInputs = [ python3 ];

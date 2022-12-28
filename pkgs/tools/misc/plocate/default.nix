@@ -1,6 +1,8 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchgit
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -8,20 +10,30 @@
 , liburing
 , zstd
 }:
-
+let
+  dbfile = lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
+in
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.7";
+  version = "1.1.17";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-5Ie4qgiKUoI9Kma6YvjXirvBbpbKVuaMSSAZa36zN3M=";
+    sha256 = "sha256-EcWzvbY8ey5asEJxUeSl10ozApgg+wL5o8NCNw7/W7k=";
   };
+
+  patches = [
+    # fix redefinition error
+    (fetchpatch {
+      url = "https://git.sesse.net/?p=plocate;a=patch;h=0125004cd28c5f9124632b594e51dde73af1691c";
+      revert = true;
+      sha256 = "sha256-1TDpxIdpDZQ0IZ/wGG91RVZDrpMpWkvhRF8oE0CJWIY=";
+    })
+  ];
 
   postPatch = ''
     sed -i meson.build \
-      -e "s@unitdir =.*@unitdir = '$out/lib/systemd/system'@" \
       -e '/mkdir\.sh/d'
   '';
 
@@ -30,16 +42,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ systemd liburing zstd ];
 
   mesonFlags = [
-    # I don't know why we can't do this but instead have to resort to patching meson.build
-    #   "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "-Dsharedstatedir=/var/lib"
+    "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsharedstatedir=${builtins.dirOf dbfile}"
+    "-Ddbpath=${builtins.baseNameOf dbfile}"
   ];
 
   meta = with lib; {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }

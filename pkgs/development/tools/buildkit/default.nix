@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "buildkit";
-  version = "0.9.0";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
-    sha256 = "0i04b5ngvhkan45mx6xjcia0dsx0dc6w8bwy90yg3qnz7yzidm2d";
+    sha256 = "sha256-bTzpiTqdAfo31sFRBCp0EzYMVjc6jt4aPK0VLsB9j0g=";
   };
 
   vendorSha256 = null;
@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/moby/buildkit";
     license = licenses.asl20;
     maintainers = with maintainers; [ vdemeester marsam ];
+    mainProgram = "buildctl";
   };
 }

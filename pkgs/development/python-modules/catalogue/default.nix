@@ -2,33 +2,42 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , typing-extensions
+, zipp
 }:
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "2.0.6";
+  version = "2.0.8";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0idjhx2s8cy6ppd18k1zy246d97gdd6i217m5q26fwa47xh3asik";
+    sha256 = "sha256-syXHdlkgi/tq8bDZOxoapBEuG7KaTFztgWdYpyLw44g=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
+    zipp
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "catalogue" ];
+  pythonImportsCheck = [
+    "catalogue"
+  ];
 
   meta = with lib; {
     description = "Tiny library for adding function or object registries";
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
   };
 }

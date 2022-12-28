@@ -23,8 +23,8 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
-  v = "2.50pre20171114";
-  name = "clisp-${v}";
+  version = "2.50pre20171114";
+  pname = "clisp";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/clisp/clisp";
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.cons.org";
-    maintainers = with lib.maintainers; [raskin tohl];
+    maintainers = with lib.maintainers; [ raskin ];
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = lib.platforms.linux;
   };

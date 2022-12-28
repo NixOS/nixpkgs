@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fribidi";
-  version = "1.0.10";
+  version = "1.0.12";
 
   outputs = [ "out" "devdoc" ];
 
   # NOTE: Only URL tarball has "Have pre-generated man pages: true", which works-around upstream usage of some rare ancient `c2man` fossil application.
   src = fetchurl {
     url = "https://github.com/fribidi/fribidi/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "009wcpgk4jj5x52skjkfs6xar6x38mcngs75rb59nj9ig1y6h73z";
+    sha256 = "sha256-DNIz+X/IxnuzrCfOhEDe9dP/rPUWdluRwsxlRJgpNJU=";
   };
 
   postPatch = ''

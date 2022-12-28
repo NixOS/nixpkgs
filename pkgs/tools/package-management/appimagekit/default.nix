@@ -37,6 +37,11 @@ let
       cp -v ${appimagekit_src}/lib/libappimage/src/patches/squashfuse_dlopen.[hc] .
     '';
 
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: libsquashfuse_ll.a(libfuseprivate_la-fuseprivate.o):(.bss+0x8):
+    #     multiple definition of `have_libloaded'; runtime.4.o:(.bss.have_libloaded+0x0): first defined here
+    NIX_CFLAGS_COMPILE = "-fcommon";
+
     preConfigure = ''
       sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
       sed -i "s/typedef off_t sqfs_off_t/typedef int64_t sqfs_off_t/g" common.h
@@ -91,6 +96,7 @@ in stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_LIBARCHIVE=ON"
     "-DUSE_SYSTEM_GTEST=ON"
     "-DUSE_SYSTEM_MKSQUASHFS=ON"
+    "-DTOOLS_PREFIX=${stdenv.cc.targetPrefix}"
   ];
 
   postInstall = ''

@@ -1,8 +1,6 @@
-diff --git a/test/run b/test/run
-index 9623e49d..3df1c5a8 100755
 --- a/test/run
 +++ b/test/run
-@@ -126,23 +126,17 @@ file_size() {
+@@ -148,21 +148,17 @@ file_size() {
  objdump_cmd() {
      local file="$1"
  
@@ -22,10 +20,8 @@ index 9623e49d..3df1c5a8 100755
  objdump_grep_cmd() {
 -    if $HOST_OS_APPLE; then
 -        fgrep -q "\"$1\""
--    else
--        fgrep -q ": $1"
--    fi
-+    fgrep -q ": $1"
- }
- 
- expect_stat() {
+-    elif $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
++    if $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
+         fgrep -q "$1"
+     else
+         fgrep -q ": $1"

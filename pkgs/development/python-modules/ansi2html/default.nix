@@ -2,13 +2,14 @@
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.6.0";
+  version = "1.8.0";
+  format = "pyproject";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f124ea7efcf3f24f1f9398e527e688c9ae6eab26b0b84e1299ef7f94d92c596";
+    sha256 = "sha256-OLgqKYSCofomE/D5yb6z23Ko+DLurFjrLke/Ms039tU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -5,16 +5,16 @@
 
 buildDunePackage rec {
   pname = "ethernet";
-  version = "2.2.0";
+  version = "3.0.0";
 
-  minimumOCamlVersion = "4.06";
+  minimumOCamlVersion = "4.08";
 
   # necessary due to cstruct
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0qzisqibx2gd8rh330n642mk5wz229199rnlrs7x8cr5pnymif7z";
+    sha256 = "0a898vp9dw42majsvzzvs8pc6x4ns01wlwhwbacixliv6vv78ng9";
   };
 
   nativeBuildInputs = [

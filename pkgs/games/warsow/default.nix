@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     for i in ${warsow-engine}/bin/*; do
-      makeWrapper "$i" "$out/bin/$(basename "$i")" --run "cd $out/share/warsow"
+      makeWrapper "$i" "$out/bin/$(basename "$i")" --chdir "$out/share/warsow"
     done
   '';
 

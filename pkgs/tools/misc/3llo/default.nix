@@ -1,24 +1,10 @@
-{ lib, ruby, bundlerApp, fetchpatch }:
+{ lib, ruby_3_0, bundlerApp, fetchpatch }:
 
 bundlerApp {
   pname = "3llo";
+  ruby = ruby_3_0;
 
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-
-  gemset = lib.recursiveUpdate (import ./gemset.nix) ({
-    "3llo" = {
-      dontBuild = false;
-      patches = [
-        (fetchpatch {
-          url = "https://github.com/qcam/3llo/commit/7667c67fdc975bac315da027a3c69f49e7c06a2e.patch";
-          sha256 = "0ahp19igj77x23b2j9zk3znlmm7q7nija7mjgsmgqkgfbz2r1y7v";
-        })
-      ];
-    };
-  });
-
-  inherit ruby;
+  gemdir  = ./.;
 
   exes = [ "3llo" ];
 

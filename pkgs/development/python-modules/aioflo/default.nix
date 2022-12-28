@@ -6,35 +6,42 @@
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioflo";
-  version = "2021.10.0";
+  version = "2021.11.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BunTgK8IS9uE8y/LMk7624kunouNAWNqe3Xm2DjQ1pY=";
+    sha256 = "sha256-7NrOoc1gi8YzZaKvCnHnzAKPlMnMhqxjdyZGN5H/8TQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
   checkInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aioflo" ];
+  pythonImportsCheck = [
+    "aioflo"
+  ];
 
   meta = with lib; {
     description = "Python library for Flo by Moen Smart Water Detectors";

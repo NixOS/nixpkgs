@@ -1,23 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest
 , pythonOlder
+, setuptoolsBuildHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-socket";
-  version = "0.4.0";
-  disabled = pythonOlder "3.6";
+  version = "0.5.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miketheman";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cFYtJqZ/RjFbn9XlEy6ffxZ2djisajQAwjV/YR2f59Q=";
+    hash = "sha256-QKHnuq2pqWMVUhF9nnhJggEK6SSyp6zBEfQX9tGND2E=";
   };
 
   nativeBuildInputs = [
@@ -28,23 +29,12 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/miketheman/pytest-socket/pull/74
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/miketheman/pytest-socket/commit/32519170e656e731d24b81770a170333d3efa6a8.patch";
-      sha256 = "19ksgx77rsa6ijcbml74alwc5052mdqr4rmvqhlzvfcvv3676ig2";
-    })
-  ];
-
   # pytest-socket require network for majority of tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pytest_socket" ];
+  pythonImportsCheck = [
+    "pytest_socket"
+  ];
 
   meta = with lib; {
     description = "Pytest Plugin to disable socket calls during tests";

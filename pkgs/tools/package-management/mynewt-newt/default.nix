@@ -1,30 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+}:
 
 buildGoModule rec {
   pname = "mynewt-newt";
-  version = "1.7.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newt";
     rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
-    sha256 = "0rwn4ghh7kal8csxlh0w1p29b5m1nam9lkrxla5wdfhnzbsg8hfa";
+    sha256 = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/apache/mynewt-newt/commit/6a51e35565323ebe8feb8d1aa6e00960b6ce662e.patch";
-      sha256 = "186yha60jzcjq8r04w12rqqh3cin2w974l77hz2ixhmjzyr56wqv";
-    })
-    (fetchpatch {
-      url = "https://github.com/apache/mynewt-newt/commit/7d4ef3fe65a9a83cc58e7bd973654ad235cc68bc.patch";
-      sha256 = "01scmq58bfr4c9icqzm79q7a55izflsb3mlx9xn0dv92m3mbprx7";
-    })
-  ];
-
-  vendorSha256 = "1sh9mx3lc28fzvc1yrhz58rlbaac7aq1dqyvxwj98vld3kigpv1z";
+  vendorSha256 = "sha256-/LK+NSs7YZkw6TRvBQcn6/SszIwAfXN0rt2AKSBV7CE=";
 
   doCheck = false;
+
+  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
+  # https://github.com/shirou/gopsutil/issues/976
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
 
   meta = with lib; {
     homepage = "https://mynewt.apache.org/";

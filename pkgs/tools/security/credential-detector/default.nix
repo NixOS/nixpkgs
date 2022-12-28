@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "credential-detector";
-  version = "1.7.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "ynori7";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1g5ja32rsf1b7y9gvmy29qz2ymyyvgh53wzd6vvknfla1df0slab";
+    sha256 = "sha256-zUQRzlp/7gZhCm5JYu9kYxcoFjDldCYKarRorOHa3E0=";
   };
 
-  vendorSha256 = "1mn3sysvdz4b94804gns1yssk2q08djq3kq3cd1h7gm942zwrnq4";
+  vendorSha256 = "sha256-VWmfATUbfnI3eJbFTUp6MR1wGESuI15PHZWuon5M5rg=";
 
   meta = with lib; {
     description = "Tool to detect potentially hard-coded credentials";

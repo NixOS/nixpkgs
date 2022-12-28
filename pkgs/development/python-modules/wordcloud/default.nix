@@ -1,35 +1,44 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, fetchpatch
 , matplotlib
 , mock
 , numpy
 , pillow
-, cython
-, pytest-cov
-, pytest
-, fetchpatch
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "word_cloud";
+  pname = "wordcloud";
   version = "1.8.1";
+  format = "setuptools";
 
-  # tests are not included in pypi tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "amueller";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4EFQfv+Jn9EngUAyDoJP0yv9zr9Tnbrdwq1YzDacB9Q=";
+    hash = "sha256-4EFQfv+Jn9EngUAyDoJP0yv9zr9Tnbrdwq1YzDacB9Q=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ matplotlib numpy pillow ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  # Tests require extra dependencies
-  checkInputs = [ mock pytest pytest-cov ];
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pillow
+  ];
 
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest test
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   patches = [
     (fetchpatch {
@@ -39,8 +48,26 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-report xml --tb=short" ""
+  '';
+
+  preCheck = ''
+    cd test
+  '';
+
+  pythonImportsCheck = [
+    "wordcloud"
+  ];
+
+  disabledTests = [
+    # Don't tests CLI
+    "test_cli_as_executable"
+  ];
+
   meta = with lib; {
-    description = "A little word cloud generator in Python";
+    description = "Word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];

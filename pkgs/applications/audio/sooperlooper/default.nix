@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -34,7 +35,12 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config which libtool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    which
+    libtool
+  ];
 
   buildInputs = [
     liblo

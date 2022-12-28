@@ -1,24 +1,24 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index 5440d72..6e173fa 100644
+index b9bf434..58cfe81 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -774,15 +774,6 @@ version = "0.1.2"
+@@ -685,15 +685,6 @@ version = "0.1.4"
  source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
+ checksum = "28988d872ab76095a6e6ac88d99b54fd267702734fd7ffe610ca27f533ddb95a"
  
 -[[package]]
 -name = "openssl-src"
--version = "111.11.0+1.1.1h"
+-version = "111.17.0+1.1.1m"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "380fe324132bea01f45239fadfec9343adb044615f29930d039bec1ae7b9fa5b"
+-checksum = "05d6a336abd10814198f66e2a91ccd7336611f30334119ca8ce300536666fcf4"
 -dependencies = [
 - "cc",
 -]
 -
  [[package]]
  name = "openssl-sys"
- version = "0.9.58"
-@@ -792,7 +783,6 @@ dependencies = [
+ version = "0.9.72"
+@@ -703,7 +694,6 @@ dependencies = [
   "autocfg",
   "cc",
   "libc",
@@ -27,17 +27,17 @@ index 5440d72..6e173fa 100644
   "vcpkg",
  ]
 diff --git a/Cargo.toml b/Cargo.toml
-index 4d319f2..6f4d0e5 100644
+index bc97f20..54d3b14 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -21,8 +21,8 @@ colored = "2.0"
+@@ -17,8 +17,8 @@ colored = "2.0"
  dialoguer = "0.6"
  dirs = "3.0"
  fs2 = "0.4"
--isahc = { version = "0.9", features = ["static-ssl"] }
--curl = {version = "0.4", features = ["static-curl", "static-ssl", "force-system-lib-on-osx", "http2"]}
-+isahc = "0.9"
-+curl = {version = "0.4", features = ["force-system-lib-on-osx", "http2"]}
+-isahc = { version = "1.6.0", default-features = false, features = ["static-ssl", "static-curl"] }
+-curl = {version = "0.4.42", default-features = false, features = ["ssl", "static-curl", "static-ssl", "force-system-lib-on-osx"]}
++isahc = { version = "1.6.0", default-features = false }
++curl = {version = "0.4.42", default-features = false, features = ["ssl", "force-system-lib-on-osx"]}
  ctrlc = "3.1"
  console = "0.12"
- 
+ anyhow = "1.0"

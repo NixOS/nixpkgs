@@ -5,6 +5,10 @@ with lib;
 let
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
+  package = if config.security.polkit.enable
+              then pkgs.pcscliteWithPolkit
+              else pkgs.pcsclite;
+
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
     paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
@@ -16,14 +20,14 @@ in
   ###### interface
 
   options.services.pcscd = {
-    enable = mkEnableOption "PCSC-Lite daemon";
+    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
 
     plugins = mkOption {
       type = types.listOf types.package;
       default = [ pkgs.ccid ];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
-      description = "Plugin packages to be used for PCSC-Lite.";
+      description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
     };
 
     readerConfig = mkOption {
@@ -35,11 +39,10 @@ in
         LIBPATH           /path/to/serial_reader.so
         CHANNELID         1
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration for devices that aren't hotpluggable.
 
-        See <citerefentry><refentrytitle>reader.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for valid options.
+        See {manpage}`reader.conf(5)` for valid options.
       '';
     };
   };
@@ -50,8 +53,8 @@ in
 
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ pkgs.pcsclite ];
-    systemd.packages = [ (getBin pkgs.pcsclite) ];
+    environment.systemPackages = [ package ];
+    systemd.packages = [ (getBin package) ];
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
@@ -67,7 +70,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart = [ "" "${getBin package}/bin/pcscd -f -x -c ${cfgFile}" ];
     };
   };
 }

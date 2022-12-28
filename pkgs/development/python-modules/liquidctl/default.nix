@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , installShellFiles
+, setuptools
 , docopt
 , hidapi
 , pyusb
@@ -10,21 +11,27 @@
 , i2c-tools
 , pytestCheckHook
 , colorlog
+, crcmod
+, pillow
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.7.2";
+  version = "1.11.1";
   disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fPSvxdr329SxAe4N7lTa7hddFp1WVUplkhYD1oDQXAI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-9g6h8GMOcICiry9M9b/Tt0ONsTxuJI/duprUkxB1Gr0=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docopt
@@ -33,6 +40,8 @@ buildPythonPackage rec {
     smbus-cffi
     i2c-tools
     colorlog
+    crcmod
+    pillow
   ];
 
   propagatedNativeBuildInputs = [

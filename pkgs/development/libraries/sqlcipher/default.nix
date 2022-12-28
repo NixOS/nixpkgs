@@ -1,19 +1,42 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, tcl
+, installShellFiles
+, buildPackages
+, readline
+, ncurses
+, zlib
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
-  version = "4.4.3";
+  version = "4.5.3";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    sha256 = "sha256-E23PTNnVZbBQtHL0YjUwHNVUA76XS8rlARBOVvX6zZw=";
+    hash = "sha256-yo7bB6xgF23Hdur25fprSFgbuxNclseUCdq3DFAfIK8=";
   };
 
-  nativeBuildInputs = [ installShellFiles tcl ];
-  buildInputs = [ readline ncurses openssl zlib ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    installShellFiles
+    tcl
+  ];
+
+  buildInputs = [
+    readline
+    ncurses
+    openssl
+    zlib
+  ];
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
 
   configureFlags = [
     "--enable-threadsafe"
@@ -21,9 +44,8 @@ stdenv.mkDerivation rec {
   ];
 
   CFLAGS = [
-    "-DSQLITE_ENABLE_COLUMN_METADATA=1"
-    "-DSQLITE_SECURE_DELETE=1"
-    "-DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
+    # We want feature parity with sqlite
+    sqlite.NIX_CFLAGS_COMPILE
     "-DSQLITE_HAS_CODEC"
   ];
 
@@ -36,9 +58,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.zetetic.net/sqlcipher/";
+    changelog = "https://github.com/sqlcipher/sqlcipher/blob/v${version}/CHANGELOG.md";
     description = "SQLite extension that provides 256 bit AES encryption of database files";
-    platforms = platforms.unix;
+    homepage = "https://www.zetetic.net/sqlcipher/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

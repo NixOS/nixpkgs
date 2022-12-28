@@ -1,15 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
+{ lib, stdenv, fetchurl, makeWrapper, bc, findutils, flac, lame, opusTools, procps, sox }:
 
-let
-  version = "1.7.5";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "caudec";
-  inherit version;
+  version = "1.7.5";
 
   src = fetchurl {
-    url = "http://caudec.net/downloads/caudec-${version}.tar.gz";
+    url = "http://caudec.cocatre.net/downloads/caudec-${version}.tar.gz";
     sha256 = "5d1f5ab3286bb748bd29cbf45df2ad2faf5ed86070f90deccf71c60be832f3d5";
   };
 
@@ -17,7 +13,7 @@ stdenv.mkDerivation {
     patchShebangs ./install.sh
   '';
 
-  nativeBuildInputs = [ bash makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     ./install.sh --prefix=$out/bin
@@ -31,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
    meta = with lib; {
-    homepage = "http://caudec.net/";
+    homepage = "https://caudec.cocatre.net/";
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;
     platforms   = platforms.linux ++ platforms.darwin;

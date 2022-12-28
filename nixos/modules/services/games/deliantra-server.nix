@@ -10,7 +10,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, the Deliantra game server will be started at boot.
       '';
     };
@@ -19,7 +19,7 @@ in {
       type = types.package;
       default = pkgs.deliantra-server;
       defaultText = literalExpression "pkgs.deliantra-server";
-      description = ''
+      description = lib.mdDoc ''
         The package to use for the Deliantra server (and map/arch data, if you
         don't change dataDir).
       '';
@@ -29,7 +29,7 @@ in {
       type = types.str;
       default = "${pkgs.deliantra-data}";
       defaultText = literalExpression ''"''${pkgs.deliantra-data}"'';
-      description = ''
+      description = lib.mdDoc ''
         Where to store readonly data (maps, archetypes, sprites, etc).
         Note that if you plan to use the live map editor (rather than editing
         the maps offline and then nixos-rebuilding), THIS MUST BE WRITEABLE --
@@ -41,7 +41,7 @@ in {
     stateDir = mkOption {
       type = types.str;
       default = "/var/lib/deliantra";
-      description = ''
+      description = lib.mdDoc ''
         Where to store runtime data (save files, persistent items, etc).
 
         If left at the default, this will be automatically created on server
@@ -54,14 +54,14 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to open ports in the firewall for the server.
       '';
     };
 
     configFiles = mkOption {
       type = types.attrsOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Contents of the server configuration files. These will be appended to
         the example configurations the server comes with and overwrite any
         default settings defined therein.
@@ -73,7 +73,7 @@ in {
         {
           dm_file = '''
             admin:secret_password:localhost
-            jane:xyzzy:*
+            alice:xyzzy:*
           ''';
           motd = "Welcome to Deliantra!";
           settings = '''

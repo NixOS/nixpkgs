@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "8.1.0";
+  version = "9.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b57b432b2ac9161c2482a569a023211d2d3d0ada81c4da62c8f6e47f0b2bf82d";
+    sha256 = "sha256-qnYodaJwr0kFfKyofVsDTmMLMYDexqGTz8uSefPWPfQ=";
   };
 
   propagatedBuildInputs = [

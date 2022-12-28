@@ -1,19 +1,28 @@
 { buildPythonPackage
 , fetchPypi
+, setuptools
 , h2
 , lib
 , pyjwt
 , pyopenssl
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioapns";
-  version = "2.0.2";
+  version = "2.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea58ce685aa6d0ffbdc3be4a6999c7268b9c765f806d3e4da7677c098fb72cbc";
+    sha256 = "sha256-3FMNIhIZrstPKTfHVmN+K28UR2G26HZ5S/JtXmaFk1c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     h2

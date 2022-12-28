@@ -7,17 +7,10 @@
 , h2
 , tls-mirage
 , mimic
-, cohttp-lwt
-, letsencrypt
-, emile
 , ke
 , bigstringaf
-, domain-name
-, duration
 , faraday
-, ipaddr
 , tls
-, x509
 , lwt
 , logs
 , fmt
@@ -32,15 +25,15 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.0.5";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    sha256 = "e85a018046eb062d2399fdbe8d9d3400a4d5cd51bb62840446503f557c3eeff1";
+    sha256 = "sha256-+RkrmWJJREHg8BBdNe92vYhd2/Frvs7l5qOr9jBwymU=";
   };
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     mirage-stack
@@ -48,18 +41,12 @@ buildDunePackage rec {
     h2
     tls-mirage
     mimic
-    cohttp-lwt
-    letsencrypt
-    emile
     ke
     bigstringaf
-    domain-name
-    ipaddr
-    duration
     faraday
     tls
-    x509
     cstruct
+    tcpip
   ];
 
   doCheck = true;
@@ -68,7 +55,6 @@ buildDunePackage rec {
     logs
     fmt
     mirage-crypto-rng
-    tcpip
     mirage-time-unix
     ptime
     uri

@@ -1,4 +1,5 @@
 { autoPatchelfHook
+, autoSignDarwinBinariesHook
 , coreutils
 , curl
 , dotnetCorePackages
@@ -10,56 +11,67 @@
 , icu
 , libkrb5
 , lib
-, linkFarm
+, linkFarmFromDrvs
 , lttng-ust
 , makeWrapper
-, nodejs-12_x
+, nodejs-16_x
 , openssl
 , stdenv
 , zlib
+, writeShellApplication
+, nuget-to-nix
 }:
 let
-  deps = (import ./deps.nix { inherit fetchurl; });
-  nugetPackages = map
-    (x: {
-      name = "${x.name}.nupkg";
-      path = "${x}";
-    })
-    deps;
-  nugetSource = linkFarm "nuget-packages" nugetPackages;
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
 
-  dotnetSdk = dotnetCorePackages.sdk_3_1;
-  runtimeId =
-    if stdenv.isAarch64
-    then "linux-arm64"
-    else "linux-x64";
+  nugetSource = linkFarmFromDrvs "nuget-packages" (
+    import ./deps.nix { inherit fetchNuGet; }
+  );
+
+  dotnetSdk = dotnetCorePackages.sdk_6_0;
+  # Map Nix systems to .NET runtime ids
+  runtimeIds = {
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "osx-x64";
+    "aarch64-darwin" = "osx-arm64";
+  };
+  runtimeId = runtimeIds.${stdenv.system};
   fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.284.0";
+  version = "2.300.2";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    sha256 = "sha256-JR0OzbT5gGhO/dxb/eSjP/d/VxW/aLmTs/oPwN8b8Rc=";
+    hash = "sha256-4TCClrCCHMVtbGAlxmAhZt63nQlMxkaLLZ9EOgurSMA=";
   };
 
   nativeBuildInputs = [
     dotnetSdk
     dotnetPackages.Nuget
     makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
     curl # libcurl.so.4
     libkrb5 # libgssapi_krb5.so.2
-    lttng-ust # liblttng-ust.so.0
     stdenv.cc.cc.lib # libstdc++.so.6
     zlib # libz.so.1
     icu
+  ] ++ lib.optionals stdenv.isLinux [
+    lttng-ust # liblttng-ust.so.0
   ];
 
   patches = [
@@ -71,20 +83,17 @@ stdenv.mkDerivation rec {
     ./patches/use-get-directory-for-diag.patch
     # Don't try to install systemd service
     ./patches/dont-install-systemd-service.patch
-    # Prevent the runner from starting a self-update for new versions
-    # (upstream issue: https://github.com/actions/runner/issues/485)
-    ./patches/prevent-self-update.patch
   ];
 
   postPatch = ''
     # Relax the version requirement
     substituteInPlace src/global.json \
-      --replace '3.1.302' '${dotnetSdk.version}'
+      --replace '6.0.300' '${dotnetSdk.version}'
 
     # Disable specific tests
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
+                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" (map (x: "FullyQualifiedName!=${x}") disabledTests)}'"
 
     # We don't use a Git checkout
     substituteInPlace src/dir.proj \
@@ -96,13 +105,12 @@ stdenv.mkDerivation rec {
       --replace '/bin/ln' '${coreutils}/bin/ln'
   '';
 
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = stdenv.isDarwin;
+
   configurePhase = ''
     runHook preConfigure
 
-    # Set up Nuget dependencies
     export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
 
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
@@ -110,17 +118,10 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
+      --source "${dotnetSdk.packages}" \
       --source "${nugetSource}"
 
     runHook postConfigure
-  '';
-
-  postConfigure = ''
-    # `crossgen` dependency is called during build
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
-      $HOME/.nuget/packages/microsoft.netcore.app.runtime.${runtimeId}/*/tools/crossgen
   '';
 
   buildPhase = ''
@@ -139,13 +140,23 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  disabledTests = [
-    # Self-updating is patched out, hence this test will fail
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
-  ] ++ map
-    # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
+  __darwinAllowLocalNetworking = true;
+
+  # Fully qualified name of disabled tests
+  disabledTests =
+    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
+      "Cancel_CloneHashTask_WhenNotNeeded"
+      "CloneHash_RuntimeAndExternals"
+      "DownloadRetry"
+      "FallbackToFullPackage"
+      "NoUpdateOnOldVersion"
+      "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
+      "UseExternalsRuntimeTrimmedPackage"
+      "UseExternalsTrimmedPackage"
+      "ValidateHash"
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"
       "CompositeActionWithActionfile_CompositePrestepNested"
       "CompositeActionWithActionfile_MaxLimit"
@@ -175,20 +186,37 @@ stdenv.mkDerivation rec {
       "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
       "RepositoryActionWithWrapperActionfile_PreSteps"
       "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
       "EnsureDotnetsdkBashDownloadScriptUpToDate"
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+    ]
+    ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+      "RunnerLayoutParts_CheckExternalsHash"
+      "RunnerLayoutParts_CheckDotnetRuntimeHash"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+    ]
+    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
+      "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
+      "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
     ];
-
   checkInputs = [ git ];
 
   checkPhase = ''
     runHook preCheck
 
     mkdir -p _layout/externals
-    ln -s ${nodejs-12_x} _layout/externals/node12
+    ln -s ${nodejs-16_x} _layout/externals/node16
+
+    printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
 
     # BUILDCONFIG needs to be "Debug"
     dotnet msbuild \
@@ -215,26 +243,42 @@ stdenv.mkDerivation rec {
 
     # Install the helper scripts to bin/ to resemble the upstream package
     mkdir -p $out/bin
-    install -m755 src/Misc/layoutbin/runsvc.sh        $out/bin/
-    install -m755 src/Misc/layoutbin/RunnerService.js $out/lib/
-    install -m755 src/Misc/layoutroot/run.sh          $out/lib/
-    install -m755 src/Misc/layoutroot/config.sh       $out/lib/
-    install -m755 src/Misc/layoutroot/env.sh          $out/lib/
+    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/bin/
+    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/
+    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/
+    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/run-helper.sh
+    install -m755 src/Misc/layoutroot/config.sh                $out/lib/
+    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/
 
     # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' "$out/lib"
-    substituteInPlace $out/lib/config.sh --replace './bin' "$out/lib"
+    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
+    substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
+      --replace 'source ./env.sh' $out/bin/env.sh
+  '' + lib.optionalString stdenv.isLinux ''
+    # Make binary paths absolute
+    substituteInPlace $out/lib/config.sh \
+      --replace 'ldd' '${glibc.bin}/bin/ldd' \
+      --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
+  '' + ''
+    # Remove uneeded copy for run-helper template
+    substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
     substituteInPlace $out/bin/runsvc.sh \
       --replace './externals' "$out/externals" \
       --replace './bin' "$out/lib"
 
-    # The upstream package includes Node 12 and expects it at the path
-    # externals/node12. As opposed to the official releases, we don't
-    # link the Alpine Node flavor.
+    # The upstream package includes Node {12,16} and expects it at the path
+    # externals/node{12,16}. As opposed to the official releases, we don't
+    # link the Alpine Node flavors.
     mkdir -p $out/externals
-    ln -s ${nodejs-12_x} $out/externals/node12
+    ln -s ${nodejs-16_x} $out/externals/node16
+
+    # Install Nodejs scripts called from workflows
+    install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/hashFiles/index.js
+    mkdir -p $out/lib/checkScripts
+    install src/Misc/layoutbin/checkScripts/* $out/lib/checkScripts/
 
     runHook postInstall
   '';
@@ -242,7 +286,7 @@ stdenv.mkDerivation rec {
   # Stripping breaks the binaries
   dontStrip = true;
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
   '';
 
@@ -250,31 +294,70 @@ stdenv.mkDerivation rec {
     fix_rpath() {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/$1
     }
-
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
-        ''${@:2}
+        "''${@:2}"
     }
-
+  '' + lib.optionalString stdenv.isLinux ''
     fix_rpath Runner.Listener
     fix_rpath Runner.PluginHost
     fix_rpath Runner.Worker
-
+  '' + ''
     wrap Runner.Listener
     wrap Runner.PluginHost
     wrap Runner.Worker
-    wrap run.sh
-    wrap env.sh
+    wrap run.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}'
+    wrap env.sh --run 'cd $RUNNER_ROOT'
 
-    wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
+    wrap config.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}' \
+      --run 'mkdir -p $RUNNER_ROOT' \
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
+      --chdir $out
   '';
+
+  # Script to create deps.nix file for dotnet dependencies. Run it with
+  # $(nix-build -A github-runner.passthru.createDepsFile)/bin/create-deps-file
+  #
+  # Default output path is /tmp/${pname}-deps.nix, but can be overridden with cli argument.
+  #
+  # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
+  passthru.createDepsFile = writeShellApplication {
+    name = "create-deps-file";
+    runtimeInputs = [ coreutils dotnetSdk (nuget-to-nix.override { dotnet-sdk = dotnetSdk; }) ];
+    text = ''
+      # Disable telemetry data
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
+
+      printf "\n* Setup workdir\n"
+      workdir="$(mktemp -d /tmp/${pname}.XXX)"
+      HOME="$workdir"/.fake-home
+      cp -rT "${src}" "$workdir"
+      chmod -R +w "$workdir"
+      trap 'rm -rf "$workdir"' EXIT
+
+      pushd "$workdir"
+
+      mkdir nuget_pkgs
+
+      ${lib.concatMapStrings (rid: ''
+      printf "\n* Restore ${pname} (${rid}) dotnet project\n"
+      dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
+      '') (lib.attrValues runtimeIds)}
+
+      printf "\n* Make %s file\n" "$(basename "$deps_file")"
+      nuget-to-nix "$workdir/nuget_pkgs" "${dotnetSdk.packages}" > "$deps_file"
+      printf "\n* Dependency file writen to %s" "$deps_file"
+    '';
+  };
 
   meta = with lib; {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
+    platforms = attrNames runtimeIds;
   };
 }

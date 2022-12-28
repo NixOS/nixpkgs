@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rinutils";
-  version = "0.8.0";
+  version = "0.10.1";
 
   meta = with lib; {
     homepage = "https://github.com/shlomif/rinutils";
@@ -14,8 +14,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1q09aihm5m42xiq2prpa9mf0srwiirzgzblkp5nl74i7zg6pg5hx";
+    sha256 = "sha256-MewljOmd57u+efMzjOcwSNrEVCUEXrK9DWvZLRuLmvs=";
   };
 
   nativeBuildInputs = [ cmake perl ];
+
+  # https://github.com/shlomif/rinutils/issues/5
+  # (variable was unused at time of writing)
+  postPatch = ''
+    substituteInPlace librinutils.pc.in \
+      --replace '$'{exec_prefix}/@RINUTILS_INSTALL_MYLIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 }

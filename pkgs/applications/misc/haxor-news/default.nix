@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, fetchpatch }:
+{ lib, fetchFromGitHub, python3 }:
 
 
 let
@@ -15,7 +15,14 @@ let
           sha256 = "09h1153wgr5x2ny7ds0w2m81n3bb9j8hjb8sjfnrg506r01clkyx";
         };
       });
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      # Use click 7
+      click = super.click.overridePythonAttrs (old: rec {
+        version = "7.1.2";
+        src = old.src.override {
+          inherit version;
+          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+        };
+      });
     };
   };
 in
@@ -45,11 +52,9 @@ buildPythonApplication rec {
   # will fail without pre-seeded config files
   doCheck = false;
 
-  checkInputs = [ mock ];
+  checkInputs = [ unittestCheckHook mock ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -v
-  '';
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
 
   meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, xorg, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
   pname = "x11-ssh-askpass";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ xlibsWrapper ];
+  buildInputs = [ xorg.libX11 xorg.libXt xorg.libICE xorg.libSM ];
 
   configureFlags = [
     "--with-app-defaults-dir=$out/etc/X11/app-defaults"
@@ -30,5 +30,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight passphrase dialog for OpenSSH or other open variants of SSH";
     license = licenses.mit;
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

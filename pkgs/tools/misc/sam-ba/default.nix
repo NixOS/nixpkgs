@@ -1,40 +1,35 @@
-{ lib, stdenv, fetchzip, libX11, libXScrnSaver, libXext, libXft, libXrender
-, freetype, zlib, fontconfig
-}:
+{ lib, stdenv, fetchzip, glib, zlib, libglvnd, python3, autoPatchelfHook }:
 
-let
-  maybe64 = if stdenv.isx86_64 then "_64" else "";
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc.lib libX11 libXScrnSaver libXext libXft libXrender freetype
-      zlib fontconfig
-    ];
-in
 stdenv.mkDerivation rec {
-  version = "2.16";
+  version = "3.5";
   pname = "sam-ba";
 
   src = fetchzip {
-    url = "http://www.atmel.com/dyn/resources/prod_documents/sam-ba_${version}_linux.zip";
-    sha256 = "18lsi4747900cazq3bf0a87n3pc7751j5papj9sxarjymcz9vks4";
+    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_${version}-linux_x86_64.tar.gz";
+    sha256 = "1k0nbgyc98z94nphm2q7s82b274clfnayf4a2kv93l5594rzdbp1";
   };
 
-  # Pre-built binary package. Install everything to /opt/sam-ba to not mess up
-  # the internal directory structure. Then create wrapper in /bin. Attemts to
-  # use "patchelf --set-rpath" instead of setting LD_PRELOAD_PATH failed.
+  buildInputs = [
+    glib
+    libglvnd
+    zlib
+
+    (python3.withPackages (ps: [ps.pyserial]))
+  ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin/" \
              "$out/opt/sam-ba/"
     cp -a . "$out/opt/sam-ba/"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/opt/sam-ba/sam-ba${maybe64}"
-    cat > "$out/bin/sam-ba" << EOF
-    export LD_LIBRARY_PATH="${libPath}"
-    exec "$out/opt/sam-ba/sam-ba${maybe64}"
-    EOF
-    chmod +x "$out/bin/sam-ba"
-  '';
+    ln -sr "$out/opt/sam-ba/sam-ba" "$out/bin/"
+    ln -sr "$out/opt/sam-ba/multi_sam-ba.py" "$out/bin/"
 
-  # Do our own thing
-  dontPatchELF = true;
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Programming tools for Atmel SAM3/7/9 ARM-based microcontrollers";
@@ -42,10 +37,11 @@ stdenv.mkDerivation rec {
       Atmel SAM-BA software provides an open set of tools for programming the
       Atmel SAM3, SAM7 and SAM9 ARM-based microcontrollers.
     '';
+    # Alternatively: https://www.microchip.com/en-us/development-tool/SAM-BA-In-system-Programmer
     homepage = "http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools";
-    # License in <source>/doc/readme.txt
-    license = "BSD-like (partly binary-only)";  # according to Buildroot
-    platforms = [ "x86_64-linux" ];  # patchelf fails on i686-linux
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2Only;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

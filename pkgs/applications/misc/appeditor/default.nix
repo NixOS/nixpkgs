@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appeditor";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "donadigo";
     repo = "appeditor";
     rev = version;
-    sha256 = "14ycw1b6v2sa4vljpnx2lpx4w89mparsxk6s8w3yx4dqjglcg5bp";
+    sha256 = "sha256-0zutz1nnThyF7h44cDxjE53hhAJfJf6DTs9p4HflXr8=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +43,17 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Fix build with vala 0.56
+    # https://github.com/donadigo/appeditor/pull/122
+    substituteInPlace src/Application.vala \
+      --replace "private static string? create_exec_filename;" "public static string? create_exec_filename;"
+
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

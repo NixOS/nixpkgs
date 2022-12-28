@@ -5,13 +5,15 @@
 , doxygen
 , freeglut
 , freetype
-, GLUT
 , libGL
 , libGLU
-, OpenGL
 , pkg-config
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) OpenGL GLUT;
+in
 stdenv.mkDerivation rec {
   pname = "ftgl";
   version = "2.4.0";
@@ -22,6 +24,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
+
+  # GL_DYLIB is hardcoded to an impure path
+  # /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+  # and breaks build on recent macOS versions
+  postPatch = ''
+    substituteInPlace m4/gl.m4 \
+      --replace ' -dylib_file $GL_DYLIB: $GL_DYLIB' ""
+  '';
 
   nativeBuildInputs = [
     autoreconfHook

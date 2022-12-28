@@ -2,13 +2,13 @@
 
 let
   pname = "uucp";
-  version = "14.0.0";
+  version = "15.0.0";
   webpage = "https://erratique.ch/software/${pname}";
   minimumOCamlVersion = "4.03";
   doCheck = true;
 in
 
-if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
+if lib.versionOlder ocaml.version minimumOCamlVersion
 then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
 else
 
@@ -18,12 +18,15 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
+    sha256 = "sha256-rEeU9AWpCzuAtAOe7hJHBmJjP97BZsQsPFQQ8uZLUzA=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg uutf uunf uucd ];
 
   propagatedBuildInputs = [ uchar ];
+
+  strictDeps = true;
 
   buildPhase = ''
     runHook preBuild

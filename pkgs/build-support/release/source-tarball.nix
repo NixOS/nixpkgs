@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (
 
-  # First, attributes that can be overriden by the caller (via args):
+  # First, attributes that can be overridden by the caller (via args):
   {
     # By default, only configure and build a source distribution.
     # Some packages can only build a distribution after a general

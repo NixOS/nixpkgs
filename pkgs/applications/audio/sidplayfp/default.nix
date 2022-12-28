@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sidplayfp";
-  version = "2.2.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     rev = "v${version}";
-    sha256 = "sha256-DBZZf3A0AYkeQxQvHGyHHbsQ2EDuxsZnZPbxkWTNcHA=";
+    sha256 = "sha256-7a09ec/Ap6XCnmQekLnXbH9kPP3io4+A72dVSfp3krs=";
   };
 
   nativeBuildInputs = [ autoreconfHook perl pkg-config ];
@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

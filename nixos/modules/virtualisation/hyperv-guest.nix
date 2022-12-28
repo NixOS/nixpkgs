@@ -8,13 +8,13 @@ let
 in {
   options = {
     virtualisation.hypervGuest = {
-      enable = mkEnableOption "Hyper-V Guest Support";
+      enable = mkEnableOption (lib.mdDoc "Hyper-V Guest Support");
 
       videoMode = mkOption {
         type = types.str;
         default = "1152x864";
         example = "1024x768";
-        description = ''
+        description = lib.mdDoc ''
           Resolution at which to initialize the video adapter.
 
           Supports screen resolution up to Full HD 1920x1080 with 32 bit color
@@ -55,8 +55,6 @@ in {
 
     systemd = {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
-
-      services.hv-vss.unitConfig.ConditionPathExists = [ "/dev/vmbus/hv_vss" ];
 
       targets.hyperv-daemons = {
         wantedBy = [ "multi-user.target" ];

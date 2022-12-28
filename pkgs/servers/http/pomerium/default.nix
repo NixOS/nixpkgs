@@ -1,73 +1,119 @@
 { buildGoModule
 , fetchFromGitHub
+, callPackage
 , lib
 , envoy
-, zip
+, mkYarnPackage
+, fetchYarnDeps
 , nixosTests
+, pomerium-cli
 }:
 
 let
-  inherit (lib) concatStringsSep mapAttrsToList;
+  inherit (lib) concatStringsSep concatMap id mapAttrsToList;
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.14.7";
+  version = "0.20.0";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256:1jb96jk5qmary4fi1z9zwmppdyskj0qb6qii8s8mwazjjxqj1z2s";
+    sha256 = "sha256-J8ediRreV80lzPcKIOSl1CNHp04ZW9ePyNyejlN50cE=";
   };
 
-  vendorSha256 = "sha256:1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
+  vendorSha256 = "sha256-V8asyi1Nm+h3KK/loBRZQN6atfEGUEdRydeZsp9wyQY=";
+
+  ui = mkYarnPackage {
+    inherit version;
+    src = "${src}/ui";
+
+    # update pomerium-ui-package.json when updating package, sourced from ui/package.json
+    packageJSON = ./pomerium-ui-package.json;
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/ui/yarn.lock";
+      sha256 = "sha256:1n6swanrds9hbd4yyfjzpnfhsb8fzj1pwvvcg3w7b1cgnihclrmv";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      yarn --offline build
+      runHook postbuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R deps/pomerium/dist $out
+      runHook postInstall
+    '';
+
+    doDist = false;
+  };
+
   subPackages = [
     "cmd/pomerium"
-    "cmd/pomerium-cli"
   ];
+
+  # patch pomerium to allow use of external envoy
+  patches = [ ./external-envoy.diff ];
 
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
     setVars = {
-      Version = "v${version}";
-      BuildMeta = "nixpkgs";
-      ProjectName = "pomerium";
-      ProjectURL = "github.com/pomerium/pomerium";
+      "github.com/pomerium/pomerium/internal/version" = {
+        Version = "v${version}";
+        BuildMeta = "nixpkgs";
+        ProjectName = "pomerium";
+        ProjectURL = "github.com/pomerium/pomerium";
+      };
+      "github.com/pomerium/pomerium/pkg/envoy" = {
+        OverrideEnvoyPath = "${envoy}/bin/envoy";
+      };
     };
-    varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
+    concatStringsSpace = list: concatStringsSep " " list;
+    mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+    varFlags = concatStringsSpace (
+      mapAttrsToFlatList (package: packageVars:
+        mapAttrsToList (variable: value:
+          "-X ${package}.${variable}=${value}"
+        ) packageVars
+      ) setVars);
   in [
     "${varFlags}"
   ];
 
-  nativeBuildInputs = [
-    zip
-  ];
+  preBuild = ''
+    # Replace embedded envoy with nothing.
+    # We set OverrideEnvoyPath above, so rawBinary should never get looked at
+    # but we still need to set a checksum/version.
+    rm pkg/envoy/files/files_{darwin,linux}*.go
+    cat <<EOF >pkg/envoy/files/files_external.go
+    package files
 
-  # Pomerium expects to have envoy append to it in a zip.
-  # We use a store-only (-0) zip, so that the Nix scanner can find any store references we had in the envoy binary.
-  postBuild = ''
-    # Append Envoy
-    pushd $NIX_BUILD_TOP
-    mkdir -p envoy
-    cd envoy
-    cp ${envoy}/bin/envoy envoy
-    zip -0 envoy.zip envoy
-    popd
+    import _ "embed" // embed
 
-    mv $GOPATH/bin/pomerium $GOPATH/bin/pomerium.old
-    cat $GOPATH/bin/pomerium.old $NIX_BUILD_TOP/envoy/envoy.zip >$GOPATH/bin/pomerium
-    zip --adjust-sfx $GOPATH/bin/pomerium
+    var rawBinary []byte
+
+    //go:embed envoy.sha256
+    var rawChecksum string
+
+    //go:embed envoy.version
+    var rawVersion string
+    EOF
+    sha256sum '${envoy}/bin/envoy' > pkg/envoy/files/envoy.sha256
+    echo '${envoy.version}' > pkg/envoy/files/envoy.version
+
+    # put the built UI files where they will be picked up as part of binary build
+    cp -r ${ui}/* ui/dist
   '';
-
-  # We also need to set dontStrip to avoid having the envoy ZIP stripped off the end.
-  dontStrip = true;
 
   installPhase = ''
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
-    install -Dm0755 $GOPATH/bin/pomerium-cli $out/bin/pomerium-cli
   '';
 
   passthru.tests = {
     inherit (nixosTests) pomerium;
+    inherit pomerium-cli;
   };
 
   meta = with lib; {
@@ -75,6 +121,6 @@ buildGoModule rec {
     description = "Authenticating reverse proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Envoy derivation is x86_64-linux only.
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

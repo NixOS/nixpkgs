@@ -2,7 +2,6 @@
 
 buildDunePackage {
   pname = "caqti-driver-sqlite3";
-  useDune2 = true;
   inherit (caqti) version src;
 
   propagatedBuildInputs = [ caqti ocaml_sqlite3 ];

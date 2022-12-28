@@ -2,13 +2,13 @@
 
 let
   pname = "jadx";
-  version = "1.2.0";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w1wc81mkjcsgjbrihbsphxkcmwnfnf555pmlsd2vs2a04nki01y";
+    hash = "sha256-so82zzCXIJV5tIVUBJFZEpArThNQVqWASGofNzIobQM=";
   };
 
   deps = stdenv.mkDerivation {
@@ -21,6 +21,14 @@ let
       export GRADLE_USER_HOME=$(mktemp -d)
       export JADX_VERSION=${version}
       gradle --no-daemon jar
+
+      # Apparently, Gradle won't cache the `compileOnlyApi` dependency
+      # `org.jetbrains:annotations:22.0.0` which is defined in
+      # `io.github.skylot:raung-common`. To make it available in the
+      # output, we patch `build.gradle` and run Gradle again.
+      substituteInPlace build.gradle \
+        --replace 'org.jetbrains:annotations:23.0.0' 'org.jetbrains:annotations:22.0.0'
+      gradle --no-daemon jar
     '';
 
     # Mavenize dependency paths
@@ -29,16 +37,22 @@ let
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
+
+      # Work around okio-2.10.0 bug, fixed in 3.0. Remove "-jvm" from filename.
+      # https://github.com/square/okio/issues/954
+      mv $out/com/squareup/okio/okio/2.10.0/okio{-jvm,}-2.10.0.jar
     '';
 
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "05fsycpd90dbak2vgdpd9cz08liq5j78ag9ry9y1s62ld776g0hz";
+    outputHash = "sha256-J6YpBYVqx+aWiMFX/67T7bhu4RTlKVaT4t359YJ6m7I=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle jdk makeWrapper ];
+
+  # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
+  __darwinAllowLocalNetworking = true;
 
   buildPhase = ''
     # The installDist Gradle build phase tries to copy some dependency .jar
@@ -96,6 +110,10 @@ in stdenv.mkDerivation {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];

@@ -3,7 +3,7 @@
 , lib
 , numpy
 , opencv3
-, sphinx_rtd_theme
+, sphinx-rtd-theme
 , lxml
 , xmljson
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     opencv3
-    sphinx_rtd_theme
+    sphinx-rtd-theme
     lxml
     xmljson
   ];

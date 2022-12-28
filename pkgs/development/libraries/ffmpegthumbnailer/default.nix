@@ -1,20 +1,26 @@
-{ fetchFromGitHub, lib, stdenv, ffmpeg, cmake, libpng, pkg-config, libjpeg
+{ fetchFromGitHub, lib, stdenv, ffmpeg-headless, cmake, libpng, pkg-config, libjpeg
 }:
 
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
-  version = "2.2.2";
+  version = "unstable-2022-02-18";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    rev = version;
-    sha256 = "1bakbr714j7yxdal1f5iq0gcl4cxggbbgj227ihdh5kvygqlwich";
+    rev = "3db9fe895b2fa656bb40ddb7a62e27604a688171";
+    sha256 = "0606pbg391l4s8mpyyalm9zrcnm75fwqdlrxy2gif9n21i2fm3rc";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ffmpeg libpng libjpeg ];
+  buildInputs = [ ffmpeg-headless libpng libjpeg ];
   cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
+
+  # https://github.com/dirkvdb/ffmpegthumbnailer/issues/215
+  postPatch = ''
+    substituteInPlace libffmpegthumbnailer.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 
   meta = with lib;  {
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
         This thumbnailer was designed to be as fast and lightweight as possible.
         The only dependencies are ffmpeg and libpng.
     ";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.jagajaga ];
   };

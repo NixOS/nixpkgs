@@ -1,19 +1,19 @@
 { stdenv, lib
 , makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
+, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
-  version = "4.0.1.1302";
+  version = "4.1.0.1523";
 
   src = fetchurl {
     # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/Packages
     urls = [
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
-      "https://web.archive.org/web/20210921220718/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
+      "https://web.archive.org/web/20220709124028/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
     ];
-    sha256 = "208e67a544be5be7ff25218d68b4eb2ea9e65abfed444c99a0f7a6738d69ab9a";
+    sha256 = "sha256-nOrIOPZ0yOBGOQgNQxnm1cVR9NJ+BTEC12UB7Ux1yuk=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,13 @@ stdenv.mkDerivation rec {
     libpulseaudio
     gtk3
     openssl_1_1.out
-    icu
+    icu70
     webkitgtk
     librsvg
     gdk-pixbuf
     libsoup
     glib-networking
+    graphicsmagick_q16
   ];
 
   unpackPhase = ''
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
+    patchelf --replace-needed libGraphicsMagick++-Q16.so.12 libGraphicsMagick++.so.12 $out/usr/lib/x86_64-linux-gnu/pcoip-client/vchan_plugins/libvchan-plugin-clipboard.so
   '';
 
   installPhase = ''
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Client for Amazon WorkSpaces, a managed, secure Desktop-as-a-Service (DaaS) solution";
     homepage = "https://clients.amazonworkspaces.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ]; # TODO Mac support
     maintainers = [ maintainers.mausch ];

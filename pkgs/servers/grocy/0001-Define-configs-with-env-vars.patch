@@ -1,4 +1,4 @@
-From 035709eeac697945a26276cc17b996c1a0678ddc Mon Sep 17 00:00:00 2001
+From 05b762c6ca58ecb5fd631a019fbda69b0647785f Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Tue, 22 Dec 2020 15:38:56 +0100
 Subject: [PATCH] Define configs with env vars
@@ -33,10 +33,10 @@ index 17ba6a99..89f48089 100644
  
  $container->set('UrlManager', function (Container $container) {
 diff --git a/services/DatabaseService.php b/services/DatabaseService.php
-index dfcd5d4b..bc8d1a1d 100644
+index c093f361..0894791f 100644
 --- a/services/DatabaseService.php
 +++ b/services/DatabaseService.php
-@@ -107,6 +107,6 @@ class DatabaseService
+@@ -114,6 +114,6 @@ class DatabaseService
  			return GROCY_DATAPATH . '/grocy_' . $dbSuffix . '.db';
  		}
  
@@ -45,23 +45,23 @@ index dfcd5d4b..bc8d1a1d 100644
  	}
  }
 diff --git a/services/FilesService.php b/services/FilesService.php
-index 7d070350..fba2e923 100644
+index 7d070350..a6dd4b08 100644
 --- a/services/FilesService.php
 +++ b/services/FilesService.php
-@@ -103,7 +103,7 @@ class FilesService extends BaseService
+@@ -10,7 +10,7 @@ class FilesService extends BaseService
  
- 	public function GetFilePath($group, $fileName)
+ 	public function __construct()
  	{
--		$groupFolderPath = $this->StoragePath . '/' . $group;
+-		$this->StoragePath = GROCY_DATAPATH . '/storage';
 +		$this->StoragePath = getenv('GROCY_STORAGE_DIR');
- 
- 		if (!file_exists($groupFolderPath))
+ 		if (!file_exists($this->StoragePath))
  		{
+ 			mkdir($this->StoragePath);
 diff --git a/services/StockService.php b/services/StockService.php
-index f73ac5bd..6b6e693a 100644
+index 85f57803..15556112 100644
 --- a/services/StockService.php
 +++ b/services/StockService.php
-@@ -1589,8 +1589,7 @@ class StockService extends BaseService
+@@ -1704,8 +1704,7 @@ class StockService extends BaseService
  			throw new \Exception('No barcode lookup plugin defined');
  		}
  
@@ -72,5 +72,5 @@ index f73ac5bd..6b6e693a 100644
  		{
  			require_once $path;
 -- 
-2.31.1
+2.38.1
 

@@ -15,7 +15,7 @@ in
 
   options = {
     programs.zsh.syntaxHighlighting = {
-      enable = mkEnableOption "zsh-syntax-highlighting";
+      enable = mkEnableOption (lib.mdDoc "zsh-syntax-highlighting");
 
       highlighters = mkOption {
         default = [ "main" ];
@@ -30,7 +30,7 @@ in
           "line"
         ]));
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies the highlighters to be used by zsh-syntax-highlighting.
 
           The following defined options can be found here:
@@ -48,7 +48,7 @@ in
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies custom patterns to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:
@@ -65,7 +65,7 @@ in
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies custom styles to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:

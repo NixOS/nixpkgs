@@ -2,40 +2,30 @@
 
 stdenv.mkDerivation rec {
   pname = "drush";
-  version = "6.1.0";
+  version = "8.4.11";
 
-  meta = with lib; {
-    description = "Command-line shell and Unix scripting interface for Drupal";
-    homepage    = "https://github.com/drush-ops/drush";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+  src = fetchurl {
+    url = "https://github.com/drush-ops/drush/releases/download/${version}/drush.phar";
+    sha256 = "sha256-4DD16PQHGZzAGwmm/WNeZ/dDKnlQslcb35AkpiJs5tQ=";
   };
 
-  src = fetchFromGitHub {
-    owner = "drush-ops";
-    repo  = pname;
-    rev = version;
-    sha256 = "sha256-0nf/m+xJmfHsFLuordiMp8UyrGGXuS70+zFHkIxLWhU=";
-  };
-
-  consoleTable = fetchurl {
-    url    = "http://download.pear.php.net/package/Console_Table-1.1.3.tgz";
-    sha256 = "07gbjd7m1fj5dmavr0z20vkqwx1cz2522sj9022p257jifj1yl76";
-  };
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    # install libraries
-    cd lib
-    tar -xf ${consoleTable}
-    cd ..
-
-    mkdir -p "$out"
-    cp -r . "$out/src"
-    mkdir "$out/bin"
-    wrapProgram "$out/src/drush" --prefix PATH : "${lib.makeBinPath [ which php bash coreutils ncurses ]}"
-    ln -s "$out/src/drush" "$out/bin/drush"
+    mkdir -p $out/bin
+    install -D $src $out/libexec/drush/drush.phar
+    makeWrapper ${php}/bin/php $out/bin/drush \
+      --add-flags "$out/libexec/drush/drush.phar" \
+      --prefix PATH : "${lib.makeBinPath [ which php bash coreutils ncurses ]}"
   '';
+
+  meta = with lib; {
+    description = "Command-line shell and Unix scripting interface for Drupal";
+    homepage = "https://github.com/drush-ops/drush";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.all;
+  };
 }

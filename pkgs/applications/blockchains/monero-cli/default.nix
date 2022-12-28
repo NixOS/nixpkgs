@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
@@ -9,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.17.2.3";
+  version = "0.18.1.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "0nax991fshfh51grhh2ryfrwwws35k16gzl1l3niva28zff2xmq6";
+    sha256 = "sha256-yV1ysoesEcjL+JX6hkmcrBDmazOWBvYK6EjshxJzcAw=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # remove vendored libraries
-    rm -r external/{miniupnp,randomx,rapidjson,unbound}
+    rm -r external/{miniupnp,randomx,rapidjson}
     # export patched source for monero-gui
     cp -r . $source
   '';

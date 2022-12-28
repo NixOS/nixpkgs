@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libspng";
-  version = "0.7.0";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "randy408";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zk0w09is4g7gysax4h0f4xj5f40vm6ipc1wi98ymzban89cjjnz";
+    sha256 = "sha256-t5qVhRxepl1rOQk/F5GhcvU1nk9oGb+kWXmybP+iAfY=";
   };
 
   doCheck = true;
@@ -38,19 +38,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pkg-config
     zlib
   ];
 
   nativeBuildInputs = [
     ninja
     meson
+    pkg-config
   ];
 
   meta = with lib; {
     description = "Simple, modern libpng alternative";
-    homepage = "https://github.com/randy408/libspng";
+    homepage = "https://libspng.org/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ humancalico ];
+    platforms = platforms.all;
   };
 }

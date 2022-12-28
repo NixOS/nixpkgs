@@ -35,10 +35,10 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libresolv.so.* $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/ld-linux*.so.? $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/libc.so.* $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -90,6 +90,10 @@ rec {
     done
 
     mount -t devtmpfs devtmpfs /dev
+    ln -s /proc/self/fd /dev/fd
+    ln -s /proc/self/fd/0 /dev/stdin
+    ln -s /proc/self/fd/1 /dev/stdout
+    ln -s /proc/self/fd/2 /dev/stderr
 
     ifconfig lo up
 
@@ -110,7 +114,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose
+    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -119,7 +123,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -506,8 +510,7 @@ rec {
      tarball must contain an RPM specfile. */
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    prePhases = [ pkgs.prepareImagePhase pkgs.sysInfoPhase ];
-    dontUnpack = true;
+    prePhases = [ "prepareImagePhase" "sysInfoPhase" ];
     dontConfigure = true;
 
     outDir = "rpms/${attrs.diskImage.name}";
@@ -532,9 +535,7 @@ rec {
     buildPhase = ''
       eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      srcName="$(stripHash "$src")"
+      srcName="$(rpmspec --srpm -q --qf '%{source}' *.spec)"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
       export HOME=/tmp/home
@@ -976,45 +977,45 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian9i386 = {
-      name = "debian-9.13-stretch-i386";
-      fullName = "Debian 9.13 Stretch (i386)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-i386/Packages.xz";
-        sha256 = "sha256-fFRumd20wuVaYxzw0VPkAw5mQo8kIg+eXII15VSz9wA=";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
-    };
-
-    debian9x86_64 = {
-      name = "debian-9.13-stretch-amd64";
-      fullName = "Debian 9.13 Stretch (amd64)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-amd64/Packages.xz";
-        sha256 = "sha256-1p4DEVpTGlBE3PtbQ90kYw4QNHkW0F4rna/Xz+ncMhw=";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
-    };
-
     debian10i386 = {
-      name = "debian-10.9-buster-i386";
-      fullName = "Debian 10.9 Buster (i386)";
+      name = "debian-10.13-buster-i386";
+      fullName = "Debian 10.13 Buster (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-i386/Packages.xz";
-        sha256 = "sha256-zlkbKV+IGBCyWKD4v4LFM/EUA4TYS9fkLBPuF6MgUDo=";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-i386/Packages.xz";
+        hash = "sha256-n9JquhtZgxw3qr9BX0MQoY3ZTIHN0dit+iru3DC31UY=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
     debian10x86_64 = {
-      name = "debian-10.9-buster-amd64";
-      fullName = "Debian 10.9 Buster (amd64)";
+      name = "debian-10.13-buster-amd64";
+      fullName = "Debian 10.13 Buster (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-amd64/Packages.xz";
-        sha256 = "sha256-k13toY1b3CX7GBPQ7Jm24OMqCEsgPlGK8M99x57o69o=";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-amd64/Packages.xz";
+        hash = "sha256-YukIIB3u87jgp9oudwklsxyKVKjSL618wFgDSXiFmjU=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
+
+    debian11i386 = {
+      name = "debian-11.5-bullseye-i386";
+      fullName = "Debian 11.5 Bullseye (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-tHrWSd4K5TCwIaLTPqK/Rcon0O0r+Jsxb7OcchOo8Vo=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
+
+    debian11x86_64 = {
+      name = "debian-11.5-bullseye-amd64";
+      fullName = "Debian 11.5 Bullseye (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-whpBERKOPyhrWguVQ2QchrwRHU4tCkGwu42x6khF/2g=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
@@ -1155,7 +1156,7 @@ rec {
      of the default image parameters can be given.  In particular,
      `extraPackages' specifies the names of additional packages from
      the distribution that should be included in the image; `packages'
-     allows the entire set of packages to be overriden; and `size'
+     allows the entire set of packages to be overridden; and `size'
      sets the size of the disk in megabytes.  E.g.,
      `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
      size = 8192; }' builds an 8 GiB image containing Firefox in

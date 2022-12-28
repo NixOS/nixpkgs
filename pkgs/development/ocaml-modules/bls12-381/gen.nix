@@ -2,14 +2,15 @@
 
 buildDunePackage rec {
   pname = "bls12-381-gen";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitLab {
-      owner = "dannywillems";
-      repo = "ocaml-bls12-381";
-      rev = version;
-      sha256 = "0jxc8qrdn74brmzjns1xycv3cb257kx5pa3ripgl9ci4njkv87n2";
+    owner = "dannywillems";
+    repo = "ocaml-bls12-381";
+    rev = "${version}-legacy";
+    sha256 = "qocIfQdv9rniOUykRulu2zWsqkzT0OrsGczgVKALRuk=";
   };
+
   useDune2 = true;
 
   minimalOCamlVersion = "4.08";

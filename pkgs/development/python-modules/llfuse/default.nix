@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.1";
+  version = "1.4.2";
 
   disabled = pythonOlder "3.5";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "python-llfuse";
     repo = "python-llfuse";
     rev = "release-${version}";
-    sha256 = "1dcpdg6cpkmdbyg66fgrylj7dp9zqzg5bf23y6m6673ykgxlv480";
+    hash = "sha256-TnZnv439fLvg0WM96yx0dPSSz8Mrae6GDC9LiLFrgQ8=";
   };
 
   nativeBuildInputs = [ cython pkg-config ];

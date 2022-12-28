@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
-, python
+, unittestCheckHook
 , fetchPypi
 , flask
-, Babel
+, babel
 , jinja2
 , pytz
 , speaklater
@@ -20,15 +20,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flask
-    Babel
+    babel
     jinja2
     pytz
     speaklater
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "Adds i18n/l10n support to Flask applications";

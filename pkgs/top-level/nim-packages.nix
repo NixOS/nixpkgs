@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub }:
+{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub, buildPackages }:
 
 lib.makeScope newScope (self:
   let callPackage = self.callPackage;
@@ -6,7 +6,9 @@ lib.makeScope newScope (self:
     inherit nim;
     nim_builder = callPackage ../development/nim-packages/nim_builder { };
     buildNimPackage =
-      callPackage ../development/nim-packages/build-nim-package { };
+      callPackage ../development/nim-packages/build-nim-package {
+        inherit (buildPackages.buildPackages.nimPackages) nim_builder;
+      };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
     astpatternmatching =
@@ -24,11 +26,16 @@ lib.makeScope newScope (self:
 
     frosty = callPackage ../development/nim-packages/frosty { };
 
+    getdns = callPackage ../development/nim-packages/getdns {
+      inherit (pkgs) getdns; };
+
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
     jester = callPackage ../development/nim-packages/jester { };
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
+
+    jsony = callPackage ../development/nim-packages/jsony { };
 
     karax = callPackage ../development/nim-packages/karax { };
 
@@ -47,8 +54,6 @@ lib.makeScope newScope (self:
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
     pixie = callPackage ../development/nim-packages/pixie { };
-
-    python = callPackage ../development/nim-packages/python { };
 
     redis = callPackage ../development/nim-packages/redis { };
 
@@ -78,8 +83,6 @@ lib.makeScope newScope (self:
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
     tempfile = callPackage ../development/nim-packages/tempfile { };
-
-    typography = callPackage ../development/nim-packages/typography { };
 
     ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 

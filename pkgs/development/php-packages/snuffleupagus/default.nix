@@ -22,8 +22,6 @@ buildPecl rec {
 
   internalDeps = with php.extensions; [
     session
-  ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
-    hash
   ];
 
   patches = [

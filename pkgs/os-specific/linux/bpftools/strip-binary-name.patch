@@ -1,0 +1,15 @@
+Strip path to the binary from prints.
+
+I see no sense in including the full path in outputs like bpftool --version
+Especially as argv[0] may not include it, based on calling via $PATH or not.
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -443 +443,7 @@
+-	bin_name = argv[0];
++	/* Strip the path if any. */
++	const char *bin_name_slash = strrchr(argv[0], '/');
++	if (bin_name_slash) {
++		bin_name = bin_name_slash + 1;
++	} else {
++		bin_name = argv[0];
++	}

@@ -1,24 +1,35 @@
 { lib
+, aniso8601
+, blinker
 , buildPythonPackage
 , fetchPypi
-, aniso8601
 , flask
-, pytz
-, six
-, blinker
 , mock
 , nose
 , pytestCheckHook
+, pythonOlder
+, pytz
+, six
+, werkzeug
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-RESTful";
+  pname = "flask-restful";
   version = "0.3.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gm5dz088v3d2k1dkcp9b3nnqpkk0fp2jly870hijj2xhc5nbv6c";
+    pname = "Flask-RESTful";
+    inherit version;
+    hash = "sha256-zOxlC4NdSBkhOMhTKa4Dc15s7VjpstnCFG1shMBvpT4=";
   };
+
+  # conditional so that overrides are easier for web applications
+  patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
+    ./werkzeug-2.1.0-compat.patch
+  ];
 
   propagatedBuildInputs = [
     aniso8601
@@ -28,19 +39,29 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
+    blinker
     mock
     nose
-    blinker
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Broke in flask 2.2 upgrade
+    "test_exception_header_forwarded"
+  ];
+
+  pythonImportsCheck = [
+    "flask_restful"
   ];
 
   meta = with lib; {
+    description = "Framework for creating REST APIs";
     homepage = "https://flask-restful.readthedocs.io";
-    description = "Simple framework for creating REST APIs";
     longDescription = ''
       Flask-RESTful provides the building blocks for creating a great
       REST API.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

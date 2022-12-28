@@ -14,9 +14,9 @@ in
       nanorc = lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           The system-wide nano configuration.
-          See <citerefentry><refentrytitle>nanorc</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+          See {manpage}`nanorc(5)`.
         '';
         example = ''
           set nowrap
@@ -27,7 +27,7 @@ in
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether to enable syntax highlight for various languages.";
+        description = lib.mdDoc "Whether to enable syntax highlight for various languages.";
       };
     };
   };

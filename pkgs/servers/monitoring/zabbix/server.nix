@@ -46,6 +46,7 @@ in
       ++ optional ipmiSupport openipmi;
 
       configureFlags = [
+        "--enable-ipv6"
         "--enable-server"
         "--with-iconv"
         "--with-libcurl"

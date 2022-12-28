@@ -11,16 +11,16 @@ let
   inherit (import ./common.nix { inherit system; }) baseConfig;
 
   hydraPkgs = {
-    inherit (pkgs) hydra-unstable;
+    inherit (pkgs) hydra_unstable;
   };
 
   makeHydraTest = with pkgs.lib; name: package: makeTest {
     name = "hydra-${name}";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ pstn lewo ma27 ];
+      maintainers = [ lewo ma27 ];
     };
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ baseConfig ];
       services.hydra = { inherit package; };
     };

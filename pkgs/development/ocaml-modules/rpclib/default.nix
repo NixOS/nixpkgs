@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, ocaml
 , alcotest
 , base64, cmdliner, rresult, xmlm, yojson
 }:
@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ base64 rresult xmlm ];
   checkInputs = [ alcotest ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-rpc";

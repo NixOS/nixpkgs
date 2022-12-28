@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, hunspell, ncurses, pkg-config, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mythes-1.2.4";
+  pname = "mythes";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hunspell/${name}.tar.gz";
+    url = "mirror://sourceforge/hunspell/mythes-${version}.tar.gz";
     sha256 = "0prh19wy1c74kmzkkavm9qslk99gz8h8wmjvwzjc6lf8v2az708y";
   };
 

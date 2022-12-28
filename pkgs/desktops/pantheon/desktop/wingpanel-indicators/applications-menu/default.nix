@@ -26,15 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.10.1";
-
-  repoName = "applications-menu";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "applications-menu";
     rev = version;
-    sha256 = "sha256-e9InWx5b2DAFK7m7z/oCW7Mw/ymBNz1Sc7vT65kkZ9o=";
+    sha256 = "sha256-pEBvFN+zYsF8CbB29rTNclwAYhw/Hb0HhLzXtijfI4M=";
   };
 
   patches = [
@@ -82,10 +80,10 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  doCheck = true;
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

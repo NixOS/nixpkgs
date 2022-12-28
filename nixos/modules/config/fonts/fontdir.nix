@@ -30,18 +30,19 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create a directory with links to all fonts in
-          <filename>/run/current-system/sw/share/X11/fonts</filename>.
+          {file}`/run/current-system/sw/share/X11/fonts`.
         '';
       };
 
       decompressFonts = mkOption {
         type = types.bool;
         default = config.programs.xwayland.enable;
-        description = ''
+        defaultText = literalExpression "config.programs.xwayland.enable";
+        description = lib.mdDoc ''
           Whether to decompress fonts in
-          <filename>/run/current-system/sw/share/X11/fonts</filename>.
+          {file}`/run/current-system/sw/share/X11/fonts`.
         '';
       };
 

@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mity/md4c";
     description = "Markdown parser made in C";
     longDescription = ''
       MD4C is Markdown parser implementation in C, with the following features:
@@ -58,8 +57,10 @@ stdenv.mkDerivation rec {
         "Unicode"). See more details below.
       - Permissive license: MD4C is available under the MIT license.
     '';
+    homepage = "https://github.com/mity/md4c";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "md2html";
     platforms = platforms.all;
   };
 }

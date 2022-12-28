@@ -2,26 +2,36 @@
 , buildPythonPackage
 , fetchPypi
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "retrying";
-  version = "1.3.3";
+  version = "1.3.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fwp86xv0rvkncjdvy2mwcvbglw4w9k0fva25i7zx8kd19b3kh08";
+    hash = "sha256-NF2oxXZb2YKx0ZFd65EC/T0fetFr2EqXALhfZNJOjz4=";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+  ];
 
   # doesn't ship tests in tarball
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/rholder/retrying";
-    description = "General-purpose retrying library";
-    license = licenses.asl20;
-  };
+  pythonImportsCheck = [
+    "retrying"
+  ];
 
+  meta = with lib; {
+    description = "General-purpose retrying library";
+    homepage = "https://github.com/rholder/retrying";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
+  };
 }

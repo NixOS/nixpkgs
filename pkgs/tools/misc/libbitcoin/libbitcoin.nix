@@ -21,6 +21,8 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  patches = [ ./fix-gcc11-compilation.patch ];
+
   configureFlags = [
     "--with-tests=no"
     "--with-boost=${boost.dev}"
@@ -29,7 +31,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "C++ library for building bitcoin applications";
-    homepage = "https://libbitcoin.org/";
+    homepage = "https://libbitcoin.info/";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
 

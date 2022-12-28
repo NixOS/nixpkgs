@@ -1,24 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll,
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll, python3,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.42.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "1s8glmzz0g5lj1fjwwy4m3n660smiq5wl9r1lg686wqh42hcgnsy";
-
-# Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
-# LLVM.  (The submodule is a specific tag in the LLVM source tree).
-#
-# The pony developers are currently working to get off 9.x as quickly
-# as possible so hopefully in a few revisions this package build will
-# become a lot simpler.
-#
-# https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
+    sha256 = "sha256-FnzlFTiJrqoUfnys+q9is6OH9yit5ExDiRszQ679QbY=";
 
     fetchSubmodules = true;
   };
@@ -26,22 +17,23 @@ stdenv.mkDerivation (rec {
   ponygbenchmark = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v1.5.2";
-    sha256 = "13rxagpzw6bal6ajlmrxlh9kgfvcixn6j734b2bvfqz7lch8n0pa";
+    rev = "v1.5.4";
+    sha256 = "1dbjdjzkpbsq3jl9ksyg8mw759vkac8qzq1557m73ldnavbhz48x";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper which ];
+  nativeBuildInputs = [ cmake makeWrapper which python3 ];
   buildInputs = [ libxml2 z3 ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
   patches = [
     ./disable-tests.patch
-    ./fix-libstdcpp-path.patch
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
-      googletest = fetchurl {
-        url = "https://github.com/google/googletest/archive/release-1.8.1.tar.gz";
-        sha256 = "17147961i01fl099ygxjx4asvjanwdd446nwbq9v8156h98zxwcv";
+      googletest = fetchFromGitHub {
+        owner = "google";
+        repo = "googletest";
+        rev = "release-1.10.0";
+        sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
       };
     })
   ];
@@ -57,9 +49,7 @@ stdenv.mkDerivation (rec {
   postPatch = ''
     # Patching Vendor LLVM
     patchShebangs --host build/build_libs/gbenchmark-prefix/src/benchmark/tools/*.py
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-09-01-is-trivially-copyable.diff
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-01-07-01-c-exports.diff
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2019-12-23-01-jit-eh-frames.diff
+    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-07-28-01-c-exports.diff
     substituteInPlace packages/process/_test.pony \
         --replace '"/bin/' '"${coreutils}/bin/' \
         --replace '=/bin' "${coreutils}/bin"

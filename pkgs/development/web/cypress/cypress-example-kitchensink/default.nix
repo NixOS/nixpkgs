@@ -1,6 +1,6 @@
 { callPackage
 , cypress
-, nodejs-12_x
+, nodejs-14_x
 , # FIXME: duplicated from ./regen-nix. node2nix should expose this
   nodePackages
 , xorg
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   passthru.fc = fontConfigEtc;
   nativeBuildInputs = [
     cypress
-    nodejs-12_x
+    nodejs-14_x
     xorg.xorgserver
     nodePackages.jsonplaceholder
   ];

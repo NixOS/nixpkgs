@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ sumnerevans ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.airsonic = {
@@ -15,7 +15,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     def airsonic_is_up(_) -> bool:
-        return machine.succeed("curl --fail http://localhost:4040/login")
+        status, _ = machine.execute("curl --fail http://localhost:4040/login")
+        return status == 0
 
 
     machine.start()

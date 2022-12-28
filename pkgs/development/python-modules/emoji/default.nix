@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "1.6.1";
+  version = "2.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0x18l8jgbki9yqx994w97dagfaqrbxi3sy2l2101is1dfjr0kib6";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3mCzbFuBIMdF6tbKLxqNKAO50vaRWeOxpydJ4ZeE+Vc=";
   };
 
   checkInputs = [
@@ -23,11 +27,14 @@ buildPythonPackage rec {
     "test_emojize_name_only"
   ];
 
-  pythonImportsCheck = [ "emoji" ];
+  pythonImportsCheck = [
+    "emoji"
+  ];
 
   meta = with lib; {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
+    changelog = "https://github.com/carpedm20/emoji/blob/v${version}/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
   };

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://argtable.org";
+    homepage = "https://github.com/argtable/argtable3";
     description = "A single-file, ANSI C command-line parsing library";
     longDescription = ''
       Argtable is an open source ANSI C library that parses GNU-style

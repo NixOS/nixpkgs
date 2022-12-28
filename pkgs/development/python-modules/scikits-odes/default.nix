@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "scikits.odes";
-  version = "2.6.2";
+  version = "2.6.5";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "267d8bfa1e18d075d574158053d887562381e88176ebab856516b52b14860983";
+    sha256 = "sha256-MP1pNkr0fAyWWVHJVHiaVEn1UsbVsjU9MZHHAQYtPYI=";
   };
 
   nativeBuildInputs = [

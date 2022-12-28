@@ -1,19 +1,17 @@
 { lib, fetchurl, buildDunePackage
-, cstruct, lwt, mirage-device
+, cstruct, lwt, fmt
 }:
 
 buildDunePackage rec {
   pname = "mirage-block";
-  version = "2.0.1";
-
-  useDune2 = true;
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-block/releases/download/v${version}/mirage-block-v${version}.tbz";
-    sha256 = "1wp8wmixaz9i2sbvq6nkx903lbnpdgb2w404pz1wk8kcg9p3ilcc";
+    sha256 = "sha256-NB5nJpppMtdi0HDjKcCAqRjO4vIbAMfnP934P+SnzmU=";
   };
 
-  propagatedBuildInputs = [ cstruct lwt mirage-device ];
+  propagatedBuildInputs = [ cstruct lwt fmt ];
 
   meta = with lib; {
     description = "Block signatures and implementations for MirageOS";

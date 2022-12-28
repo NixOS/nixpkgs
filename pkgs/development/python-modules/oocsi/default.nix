@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "oocsi";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "020xfjvcgicj81zl3z9wnb2f9bha75bjw512b0cc38w66bniinjq";
+    sha256 = "sha256-AgDBsPoi0aQ6uglc7Zl4gxVmeyDCysoef5vZpxgwE/Q=";
   };
 
   # Tests are not shipped

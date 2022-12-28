@@ -2,24 +2,20 @@
 , runCommand
 , makeWrapper
 , lib
+, stdenv
 , extraPackages ? []
-, buildah
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
 , util-linux # nsenter
-, cni-plugins # not added to path
 , iptables
 }:
 
 let
-  buildah = buildah-unwrapped;
-
-  preferLocalBuild = true;
-
   binPath = lib.makeBinPath ([
+  ] ++ lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
@@ -29,11 +25,13 @@ let
     iptables
   ] ++ extraPackages);
 
-in runCommand buildah.name {
-  name = "${buildah.pname}-wrapper-${buildah.version}";
-  inherit (buildah) pname version;
+in runCommand buildah-unwrapped.name {
+  name = "${buildah-unwrapped.pname}-wrapper-${buildah-unwrapped.version}";
+  inherit (buildah-unwrapped) pname version;
 
-  meta = builtins.removeAttrs buildah.meta [ "outputsToInstall" ];
+  preferLocalBuild = true;
+
+  meta = builtins.removeAttrs buildah-unwrapped.meta [ "outputsToInstall" ];
 
   outputs = [
     "out"
@@ -45,7 +43,7 @@ in runCommand buildah.name {
   ];
 
 } ''
-  ln -s ${buildah.man} $man
+  ln -s ${buildah-unwrapped.man} $man
 
   mkdir -p $out/bin
   ln -s ${buildah-unwrapped}/share $out/share

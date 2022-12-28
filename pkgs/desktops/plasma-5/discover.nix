@@ -14,6 +14,7 @@
 , util-linux
 , qtbase
 , qtquickcontrols2
+, qtwebview
 , qtx11extras
 , karchive
 , kcmutils
@@ -26,13 +27,14 @@
 , kirigami2
 , kitemmodels
 , knewstuff
+, kpurpose
 , kwindowsystem
 , kxmlgui
 , plasma-framework
 }:
 
 mkDerivation {
-  name = "discover";
+  pname = "discover";
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python3 ];
   buildInputs = [
     # discount is needed for libmarkdown
@@ -45,6 +47,7 @@ mkDerivation {
     pcre
     util-linux
     qtquickcontrols2
+    qtwebview
     qtx11extras
     karchive
     kcmutils
@@ -57,6 +60,7 @@ mkDerivation {
     kirigami2
     kitemmodels
     knewstuff
+    kpurpose
     kwindowsystem
     kxmlgui
     plasma-framework

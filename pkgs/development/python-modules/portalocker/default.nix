@@ -1,16 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , pytestCheckHook
 , pytest-mypy
+, pythonOlder
 , redis
 }:
 
 buildPythonPackage rec {
-  version = "2.3.2";
   pname = "portalocker";
+  version = "2.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "75cfe02f702737f1726d83e04eedfa0bda2cc5b974b1ceafb8d6b42377efbd5f";
+    hash = "sha256-lk9oMPtCp0tdMrzpntN9gwjB19RN3xjz3Yn0aA3pezk=";
   };
 
   propagatedBuildInputs = [
@@ -20,6 +26,14 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-mypy
+  ];
+
+  disabledTests = [
+    "test_combined" # no longer compatible with setuptools>=58
+  ];
+
+  pythonImportsCheck = [
+    "portalocker"
   ];
 
   meta = with lib; {

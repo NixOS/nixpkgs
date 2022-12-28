@@ -32,6 +32,8 @@ stdenv.mkDerivation {
   pname = targetPrefix + pkg-config.pname + "-wrapper";
   inherit (pkg-config) version;
 
+  enableParallelBuilding = true;
+
   preferLocalBuild = true;
 
   shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
@@ -44,8 +46,12 @@ stdenv.mkDerivation {
     inherit pkg-config;
   };
 
+  strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
+
+  # Additional flags passed to pkg-config.
+  addFlags = lib.optional stdenv.targetPlatform.isStatic "--static";
 
   unpackPhase = ''
     src=$PWD
@@ -76,8 +82,6 @@ stdenv.mkDerivation {
     + ''
       ln -s ${pkg-config}/share $out/share
     '';
-
-  strictDeps = true;
 
   wrapperName = "PKG_CONFIG_WRAPPER";
 

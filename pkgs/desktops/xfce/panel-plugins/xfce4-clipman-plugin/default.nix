@@ -1,4 +1,4 @@
-{ mkXfceDerivation, libXtst, libxfce4ui, xfce4-panel, xfconf }:
+{ lib, mkXfceDerivation, libXtst, libxfce4ui, xfce4-panel, xfconf }:
 
 mkXfceDerivation {
   category = "panel-plugins";
@@ -8,7 +8,8 @@ mkXfceDerivation {
 
   buildInputs = [ libXtst libxfce4ui xfce4-panel xfconf ];
 
-  meta = {
+  meta = with lib; {
     description = "Clipboard manager for Xfce panel";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

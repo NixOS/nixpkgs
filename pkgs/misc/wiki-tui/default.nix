@@ -1,31 +1,29 @@
-{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, nix-update-script, Security }:
+{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.4.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TWpCmHG07dv0/hXGpo71Ie0uDRqs6yywHzcv0Hpi8Sc=";
+    sha256 = "sha256-sqkVi8w4QoktC1ZLUPHzfMUxIzCadcIj3dEYigz854U=";
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-tJhbIsmh4zw1Dhvc2jE0N1cTE4//DOe3rDzDVNiTigA=";
+  cargoSha256 = "sha256-xRj0bF5VymvFVB0tSBndWA+OHBIEY2/ovRIBdDoOHA4=";
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  # Tests fail with this error: `found argument --test-threads which was not expected`
+  doCheck = false;
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     license = licenses.mit;
-    maintainers = with maintainers; [ legendofmiracles ];
-    mainProgram = "wiki-tui";
+    maintainers = with maintainers; [ lom builditluc ];
   };
 }

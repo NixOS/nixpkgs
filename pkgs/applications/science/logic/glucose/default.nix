@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0aahrkaq7n0z986fpqz66yz946nxardfi6dh8calzcfjpvqiraji";
   };
 
+  postPatch = ''
+    substituteInPlace Main.cc \
+      --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
+  '';
+
   buildInputs = [ zlib ];
 
   sourceRoot = "glucose-syrup-${version}/simp";
@@ -23,7 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];
-    # Build uses _FPU_EXTENDED macro
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

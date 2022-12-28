@@ -40,16 +40,11 @@ stdenv.mkDerivation {
   buildInputs = cursesDeps ++ optionals tiles tilesDeps;
 
   postPatch = ''
-    patchShebangs .
-
-    # Locale patch required for Darwin builds, see:
-    # https://github.com/NixOS/nixpkgs/pull/74064#issuecomment-560083970
-    sed -i src/translations.cpp \
-        -e 's@#elif (defined(__linux__) || (defined(MACOSX) && !defined(TILES)))@#elif 1@'
+    patchShebangs lang/compile_mo.sh
   '';
 
   makeFlags = [
-    "PREFIX=$(out)" "LANGUAGES=all"
+    "PREFIX=$(out)" "LANGUAGES=all" "RUNTESTS=0"
     (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
   ] ++ optionals (!debug) [
     "RELEASE=1"
@@ -68,6 +63,7 @@ stdenv.mkDerivation {
   );
 
   dontStrip = debug;
+  enableParallelBuilding = true;
 
   passthru = {
     isTiles = tiles;

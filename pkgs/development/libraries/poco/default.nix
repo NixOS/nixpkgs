@@ -3,19 +3,19 @@
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "https://pocoproject.org/releases/${pname}-${version}/${pname}-${version}-all.tar.gz";
-    sha256 = "1jilzh0h6ik5lr167nax7q6nrpzxl99p11pkl202ig06pgh32nbz";
+    sha256 = "sha256-MczOYCAEcnAAO/tbDafirUMohMI9PNUJyG9HzzpeXSo=";
   };
 
   patches = [
-    # Use GNUInstallDirs (https://github.com/pocoproject/poco/pull/3105)
+    # Use GNUInstallDirs (https://github.com/pocoproject/poco/pull/3503)
     (fetchpatch {
       name = "use-gnuinstalldirs.patch";
-      url = "https://github.com/pocoproject/poco/commit/9e8f84dff4575f01be02e0b07364efd1561ce66c.patch";
-      sha256 = "1bj4i93gxr7pwx33bfyhg20ad4ak1rbxkrlpsgzk7rm6mh0mld26";
+      url = "https://github.com/pocoproject/poco/commit/16a2a74f6c28c6e6baca2ba26b4964b51d8a1b74.patch";
+      sha256 = "sha256-mkemG8UemJEUQxae1trKakhnJFJW0AufDYFAbmnINbY=";
       # Files not included in release tarball
       excludes = [
         "Encodings/Compiler/CMakeLists.txt"
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ openssl unixODBC libmysqlclient ];
-  propagatedBuildInputs = [ zlib pcre expat sqlite ];
+  buildInputs = [ unixODBC libmysqlclient ];
+  propagatedBuildInputs = [ zlib pcre expat sqlite openssl ];
 
   outputs = [ "out" "dev" ];
 

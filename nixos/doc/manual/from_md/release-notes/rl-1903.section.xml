@@ -29,9 +29,9 @@
           <para>
             By default,
             <literal>services.xserver.desktopManager.pantheon</literal>
-            enables LightDM as a display manager, as pantheon's screen
+            enables LightDM as a display manager, as pantheon’s screen
             locking implementation relies on it. Because of that it is
-            recommended to leave LightDM enabled. If you'd like to
+            recommended to leave LightDM enabled. If you’d like to
             disable it anyway, set
             <literal>services.xserver.displayManager.lightdm.enable</literal>
             to <literal>false</literal> and enable your preferred
@@ -39,8 +39,8 @@
           </para>
         </note>
         <para>
-          Also note that Pantheon's LightDM greeter is not enabled by
-          default, because it has numerous issues in NixOS and isn't
+          Also note that Pantheon’s LightDM greeter is not enabled by
+          default, because it has numerous issues in NixOS and isn’t
           optimal for use here yet.
         </para>
       </listitem>
@@ -200,7 +200,7 @@
       <listitem>
         <para>
           The <literal>ntp</literal> module now has sane default
-          restrictions. If you're relying on the previous defaults,
+          restrictions. If you’re relying on the previous defaults,
           which permitted all queries and commands from all
           firewall-permitted sources, you can set
           <literal>services.ntp.restrictDefault</literal> and
@@ -271,7 +271,7 @@
       <listitem>
         <para>
           The versioned <literal>postgresql</literal> have been renamed
-          to use underscore number seperators. For example,
+          to use underscore number separators. For example,
           <literal>postgresql96</literal> has been renamed to
           <literal>postgresql_9_6</literal>.
         </para>
@@ -342,7 +342,7 @@
           preserved when also setting interface specific rules such as
           <literal>networking.firewall.interfaces.en0.allow*</literal>.
           These rules continue to use the pseudo device
-          &quot;default&quot;
+          <quote>default</quote>
           (<literal>networking.firewall.interfaces.default.*</literal>),
           and assigning to this pseudo device will override the
           (<literal>networking.firewall.allow*</literal>) options.
@@ -360,9 +360,9 @@
           presence of <literal>services.sssd.enable = true</literal>
           because nscd caching would interfere with
           <literal>sssd</literal> in unpredictable ways as well. Because
-          we're using nscd not for caching, but for convincing glibc to
+          we’re using nscd not for caching, but for convincing glibc to
           find NSS modules in the nix store instead of an absolute path,
-          we have decided to disable caching globally now, as it's
+          we have decided to disable caching globally now, as it’s
           usually not the behaviour the user wants and can lead to
           surprising behaviour. Furthermore, negative caching of host
           lookups is also disabled now by default. This should fix the
@@ -374,7 +374,7 @@
           setting the <literal>services.nscd.config</literal> option
           with the desired caching parameters.
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.nscd.config =
   ''
@@ -453,7 +453,7 @@
           with its control field set to <literal>sufficient</literal>
           instead of <literal>required</literal>, so that password
           managed only by later PAM password modules are being executed.
-          Previously, for example, changing an LDAP account's password
+          Previously, for example, changing an LDAP account’s password
           through PAM was not possible: the whole password module
           verification was exited prematurely by
           <literal>pam_unix</literal>, preventing
@@ -497,11 +497,11 @@
           <link xlink:href="https://matrix.org/blog/2019/02/05/synapse-0-99-0/">the
           last version to accept self-signed certificates</link>. As
           such, it is now recommended to use a proper certificate
-          verified by a root CA (for example Let's Encrypt). The new
+          verified by a root CA (for example Let’s Encrypt). The new
           <link linkend="module-services-matrix">manual chapter on
           Matrix</link> contains a working example of using nginx as a
           reverse proxy in front of <literal>matrix-synapse</literal>,
-          using Let's Encrypt certificates.
+          using Let’s Encrypt certificates.
         </para>
       </listitem>
       <listitem>
@@ -682,7 +682,7 @@
           <link xlink:href="options.html#opt-services.ndppd.enable">all
           config options</link> provided by the current upstream version
           as service options. Additionally the <literal>ndppd</literal>
-          package doesn't contain the systemd unit configuration from
+          package doesn’t contain the systemd unit configuration from
           upstream anymore, the unit is completely configured by the
           NixOS module now.
         </para>

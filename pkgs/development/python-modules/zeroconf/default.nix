@@ -1,5 +1,6 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , ifaddr
@@ -10,21 +11,25 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.37.0";
+  version = "0.39.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = version;
-    sha256 = "sha256-KdcRG1YKtvhcqq/FNiOVQeXlyYepvPjRL5EZJA8Axyk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CUHpTtCQBuuy8E8bjxfhGOIKr9n2Gdhg/RIyv6OWGvI=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
     ifaddr
   ];
+
+  # OSError: [Errno 48] Address already in use
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = [
     pytest-asyncio
@@ -39,6 +44,8 @@ buildPythonPackage rec {
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
+    # Starting with 0.39.0: AssertionError: assert [('add', '_ht..._tcp.local.')]
+    "test_service_browser_expire_callbacks"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_lots_of_names"
   ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, wxGTK, libX11, readline }:
+{ lib, stdenv, fetchFromGitHub, wxGTK, libX11, readline }:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -13,17 +13,16 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bossa";
-  version = "1.8";
+  version = "1.9.1";
 
-  src = fetchgit {
-    url = "https://github.com/shumatech/BOSSA";
-    rev = "3be622ca0aa6214a2fc51c1ec682c4a58a423d62";
-    sha256 = "19ik86qbffcb04cgmi4mnascbkck4ynfj87ha65qdk6fmp5q35vm";
+  src = fetchFromGitHub {
+    owner = "shumatech";
+    repo = "BOSSA";
+    rev = version;
+    sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
-
-  patches = [ ./bossa-no-applet-build.patch ];
 
   nativeBuildInputs = [ bin2c ];
   buildInputs = [ wxGTK libX11 readline ];

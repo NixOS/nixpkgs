@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, qtbase,
   ki18n, ktextwidgets, kwallet, kwidgetsaddons,
-  sane-backends
+  ksanecore, sane-backends
 }:
 
 mkDerivation {
@@ -12,5 +12,6 @@ mkDerivation {
     maintainers = with maintainers; [ polendri ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase ki18n ktextwidgets kwallet kwidgetsaddons sane-backends ];
+  buildInputs = [ qtbase ki18n ktextwidgets kwallet kwidgetsaddons ];
+  propagatedBuildInputs = [ ksanecore sane-backends ];
 }

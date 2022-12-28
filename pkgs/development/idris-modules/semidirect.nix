@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "semidirect";
+  pname = "semidirect";
   version = "2018-07-02";
 
   idrisDeps = [ contrib patricia ];

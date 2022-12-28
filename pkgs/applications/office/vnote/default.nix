@@ -8,14 +8,14 @@
 
 mkDerivation rec {
   pname = "vnote";
-  version = "3.10.1";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-juLyKAq21qNCWTpyMJSMw86U/DMbw/QJCr8QwyqVclA=";
+    sha256 = "sha256-osJvoi7oyZupJ/bnqpm0TdZ5cMYEeOw9DHOIAzONKLg=";
   };
 
   nativeBuildInputs = [

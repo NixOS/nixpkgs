@@ -27,6 +27,8 @@ buildPythonPackage rec {
   disabledTests = [
     # cyclic dependency on `molecule` (see https://github.com/pycontribs/subprocess-tee/issues/50)
     "test_molecule"
+    # duplicates in console output, rich issue
+    "test_rich_console_ex"
   ];
 
   pythonImportsCheck = [

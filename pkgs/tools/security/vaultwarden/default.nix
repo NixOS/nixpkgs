@@ -1,20 +1,24 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
 , pkg-config, openssl
 , libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
+let
+  webvault = callPackage ./webvault.nix {};
+in
+
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.23.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lbOsJsmZxdBNTbhsGJ1mcjWlJ6802GYM3waTiWYOErY=";
+    sha256 = "sha256-LPIc1odUBvjVJty3GYYFNhile4XBWMisLUeVtWH6xgE=";
   };
 
-  cargoSha256 = "sha256-ViXpoPkBznB0o/dc/l1r3m0y+z2w58wqlU8/cg8u7tI=";
+  cargoSha256 = "sha256-IfseODaoqlPNBlVjS+9+rKXAOq29TgULMA/ogmqg0NA=";
 
   postPatch = ''
     # Upstream specifies 1.57; nixpkgs has 1.56 which also produces a working
@@ -34,7 +38,11 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = dbBackend;
 
-  passthru.tests = nixosTests.vaultwarden;
+  passthru = {
+    inherit webvault;
+    tests = nixosTests.vaultwarden;
+    updateScript = callPackage ./update.nix {};
+  };
 
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";

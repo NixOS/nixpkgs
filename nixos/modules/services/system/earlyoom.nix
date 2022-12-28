@@ -1,124 +1,160 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-  ecfg = config.services.earlyoom;
+  cfg = config.services.earlyoom;
+
+  inherit (lib)
+    mkDefault mkEnableOption mkIf mkOption types
+    mkRemovedOptionModule literalExpression
+    escapeShellArg concatStringsSep optional optionalString;
+
 in
 {
-  options = {
-    services.earlyoom = {
+  options.services.earlyoom = {
+    enable = mkEnableOption (lib.mdDoc "Early out of memory killing");
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable early out of memory killing.
-        '';
-      };
+    freeMemThreshold = mkOption {
+      type = types.ints.between 1 100;
+      default = 10;
+      description = lib.mdDoc ''
+        Minimum available memory (in percent).
 
-      freeMemThreshold = mkOption {
-        type = types.int;
-        default = 10;
-        description = ''
-          Minimum of availabe memory (in percent).
-          If the free memory falls below this threshold and the analog is true for
-          <option>services.earlyoom.freeSwapThreshold</option>
-          the killing begins.
-        '';
-      };
+        If the available memory falls below this threshold (and the analog is true for
+        {option}`freeSwapThreshold`) the killing begins.
+        SIGTERM is sent first to the process that uses the most memory; then, if the available
+        memory falls below {option}`freeMemKillThreshold` (and the analog is true for
+        {option}`freeSwapKillThreshold`), SIGKILL is sent.
 
-      freeSwapThreshold = mkOption {
-        type = types.int;
-        default = 10;
-        description = ''
-          Minimum of availabe swap space (in percent).
-          If the available swap space falls below this threshold and the analog
-          is true for <option>services.earlyoom.freeMemThreshold</option>
-          the killing begins.
-        '';
-      };
+        See [README](https://github.com/rfjakob/earlyoom#command-line-options) for details.
+      '';
+    };
 
-      useKernelOOMKiller= mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Use kernel OOM killer instead of own user-space implementation.
-        '';
-      };
+    freeMemKillThreshold = mkOption {
+      type = types.nullOr (types.ints.between 1 100);
+      default = null;
+      description = lib.mdDoc ''
+        Minimum available memory (in percent) before sending SIGKILL.
+        If unset, this defaults to half of {option}`freeMemThreshold`.
 
-      ignoreOOMScoreAdjust = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Ignore oom_score_adjust values of processes.
-          User-space implementation only.
-        '';
-      };
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
+      '';
+    };
 
-      enableDebugInfo = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable debugging messages.
-        '';
-      };
+    freeSwapThreshold = mkOption {
+      type = types.ints.between 1 100;
+      default = 10;
+      description = lib.mdDoc ''
+        Minimum free swap space (in percent) before sending SIGTERM.
 
-      notificationsCommand = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          This option is deprecated and ignored by earlyoom since 1.6.
-          Use <option>services.earlyoom.enableNotifications</option> instead.
-        '';
-      };
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
+      '';
+    };
 
-      enableNotifications = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Send notifications about killed processes via the system d-bus.
-          To actually see the notifications in your GUI session, you need to have
-          <literal>systembus-notify</literal> running as your user.
+    freeSwapKillThreshold = mkOption {
+      type = types.nullOr (types.ints.between 1 100);
+      default = null;
+      description = lib.mdDoc ''
+        Minimum free swap space (in percent) before sending SIGKILL.
+        If unset, this defaults to half of {option}`freeSwapThreshold`.
 
-          See <link xlink:href="https://github.com/rfjakob/earlyoom#notifications">README</link> for details.
-        '';
-      };
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
+      '';
+    };
+
+    enableDebugInfo = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Enable debugging messages.
+      '';
+    };
+
+    enableNotifications = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Send notifications about killed processes via the system d-bus.
+
+        WARNING: enabling this option (while convenient) should *not* be done on a
+        machine where you do not trust the other users as it allows any other
+        local user to DoS your session by spamming notifications.
+
+        To actually see the notifications in your GUI session, you need to have
+        `systembus-notify` running as your user, which this
+        option handles by enabling {option}`services.systembus-notify`.
+
+        See [README](https://github.com/rfjakob/earlyoom#notifications) for details.
+      '';
+    };
+
+    killHook = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = literalExpression ''
+        pkgs.writeShellScript "earlyoom-kill-hook" '''
+          echo "Process $EARLYOOM_NAME ($EARLYOOM_PID) was killed" >> /path/to/log
+        '''
+      '';
+      description = lib.mdDoc ''
+        An absolute path to an executable to be run for each process killed.
+        Some environment variables are available, see
+        [README](https://github.com/rfjakob/earlyoom#notifications) and
+        [the man page](https://github.com/rfjakob/earlyoom/blob/master/MANPAGE.md#-n-pathtoscript)
+        for details.
+      '';
+    };
+
+    reportInterval = mkOption {
+      type = types.int;
+      default = 3600;
+      example = 0;
+      description = lib.mdDoc "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
+    };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
+      description = lib.mdDoc "Extra command-line arguments to be passed to earlyoom.";
     };
   };
 
-  config = mkIf ecfg.enable {
-    assertions = [
-      { assertion = ecfg.freeMemThreshold > 0 && ecfg.freeMemThreshold <= 100;
-        message = "Needs to be a positive percentage"; }
-      { assertion = ecfg.freeSwapThreshold > 0 && ecfg.freeSwapThreshold <= 100;
-        message = "Needs to be a positive percentage"; }
-      { assertion = !ecfg.useKernelOOMKiller || !ecfg.ignoreOOMScoreAdjust;
-        message = "Both options in conjunction do not make sense"; }
-    ];
+  imports = [
+    (mkRemovedOptionModule [ "services" "earlyoom" "useKernelOOMKiller" ] ''
+      This option is deprecated and ignored by earlyoom since 1.2.
+    '')
+    (mkRemovedOptionModule [ "services" "earlyoom" "notificationsCommand" ] ''
+      This option was removed in earlyoom 1.6, but was reimplemented in 1.7
+      and is available as the new option `services.earlyoom.killHook`.
+    '')
+    (mkRemovedOptionModule [ "services" "earlyoom" "ignoreOOMScoreAdjust" ] ''
+      This option is deprecated and ignored by earlyoom since 1.7.
+    '')
+  ];
 
-    warnings = optional (ecfg.notificationsCommand != null)
-      "`services.earlyoom.notificationsCommand` is deprecated and ignored by earlyoom since 1.6.";
+  config = mkIf cfg.enable {
+    services.systembus-notify.enable = mkDefault cfg.enableNotifications;
 
     systemd.services.earlyoom = {
       description = "Early OOM Daemon for Linux";
       wantedBy = [ "multi-user.target" ];
-      path = optional ecfg.enableNotifications pkgs.dbus;
+      path = optional cfg.enableNotifications pkgs.dbus;
       serviceConfig = {
-        StandardOutput = "null";
         StandardError = "journal";
-        ExecStart = ''
-          ${pkgs.earlyoom}/bin/earlyoom \
-          -m ${toString ecfg.freeMemThreshold} \
-          -s ${toString ecfg.freeSwapThreshold} \
-          ${optionalString ecfg.useKernelOOMKiller "-k"} \
-          ${optionalString ecfg.ignoreOOMScoreAdjust "-i"} \
-          ${optionalString ecfg.enableDebugInfo "-d"} \
-          ${optionalString ecfg.enableNotifications "-n"}
-        '';
+        ExecStart = concatStringsSep " " ([
+          "${pkgs.earlyoom}/bin/earlyoom"
+          ("-m ${toString cfg.freeMemThreshold}"
+            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
+          ("-s ${toString cfg.freeSwapThreshold}"
+            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
+          "-r ${toString cfg.reportInterval}"
+        ]
+        ++ optional cfg.enableDebugInfo "-d"
+        ++ optional cfg.enableNotifications "-n"
+        ++ optional (cfg.killHook != null) "-N ${escapeShellArg cfg.killHook}"
+        ++ cfg.extraArgs
+        );
       };
     };
-
-    environment.systemPackages = optional ecfg.enableNotifications pkgs.systembus-notify;
   };
 }

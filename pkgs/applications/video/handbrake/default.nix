@@ -10,7 +10,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, nixosTests
+  # For tests
+, testers
+, runCommand
+, fetchurl
   # Main build tools
 , pkg-config
 , autoconf
@@ -54,10 +57,10 @@
 , libdvdcss
 , libbluray
   # Darwin-specific
-, AudioToolbox ? null
-, Foundation ? null
-, libobjc ? null
-, VideoToolbox ? null
+, AudioToolbox
+, Foundation
+, libobjc
+, VideoToolbox
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -81,14 +84,59 @@
 }:
 
 let
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     rev = version;
-    sha256 = "sha256-Usz2+U1Wb8yJ5W2HqV0FqBaaE25fuVKk/NwKBHaKzwk=";
+    sha256 = "1kk11zl1mk37d4cvbc75gfndmma7vy3vkp4gmkyl92kiz6zadhyy";
   };
+
+  # Handbrake maintains a set of ffmpeg patches. In particular, these
+  # patches are required for subtitle timing to work correctly. See:
+  # https://github.com/HandBrake/HandBrake/issues/4029
+  ffmpeg-version = "4.4.1";
+  ffmpeg-hb = ffmpeg-full.overrideAttrs (old: {
+    version = ffmpeg-version;
+    src = fetchurl {
+      url = "https://www.ffmpeg.org/releases/ffmpeg-${ffmpeg-version}.tar.bz2";
+      hash = "sha256-j8nyCsXtlRFanihWR63Q7t1cwamKA5raFMEyRS+YrEI=";
+    };
+    patches = old.patches or [] ++ [
+      "${src}/contrib/ffmpeg/A01-qsv-scale-fix-green-stripes.patch"
+      "${src}/contrib/ffmpeg/A02-qsv-interpolation.patch"
+      "${src}/contrib/ffmpeg/A03-qsv-dx11-ffmpeg44.patch"
+      "${src}/contrib/ffmpeg/A04-configure-ensure-the-right-libmfx-version-is-used-wh.patch"
+      "${src}/contrib/ffmpeg/A05-qsv-add-includedir-mfx-to-the-search-path-for-old-ve.patch"
+      "${src}/contrib/ffmpeg/A06-qsv-load-user-plugin-for-MFX_VERSION-2.0.patch"
+      "${src}/contrib/ffmpeg/A07-qsv-build-audio-related-code-when-MFX_VERSION-2.0.patch"
+      "${src}/contrib/ffmpeg/A08-qsvenc-don-t-support-multi-frame-encode-when-MFX_VER.patch"
+      "${src}/contrib/ffmpeg/A09-qsvenc-don-t-support-MFX_RATECONTROL_LA_EXT-when-MFX.patch"
+      "${src}/contrib/ffmpeg/A10-qsv-don-t-support-OPAQUE-memory-when-MFX_VERSION-2.0.patch"
+      "${src}/contrib/ffmpeg/A11-qsv-opaque-deinterlace.patch"
+      "${src}/contrib/ffmpeg/A12-qsv-opaque-vpp.patch"
+      "${src}/contrib/ffmpeg/A13-qsv-opaque-hwcontext_qsv.patch"
+      "${src}/contrib/ffmpeg/A14-configure-check-mfxdefs.h-instead-of-mfxvp9.h-for-MF.patch"
+      "${src}/contrib/ffmpeg/A15-configure-allow-user-to-build-FFmpeg-against-oneVPL.patch"
+      "${src}/contrib/ffmpeg/A16-qsv-add-macro-QSV_ONEVPL-for-the-oneVPL-SDK.patch"
+      "${src}/contrib/ffmpeg/A17-qsv-use-a-new-method-to-create-mfx-session-when-usin.patch"
+      "${src}/contrib/ffmpeg/A18-qsv-new-method-hwcontext_qsv.patch"
+      "${src}/contrib/ffmpeg/A19-qsv-fix-session-for-d3d11-device.patch"
+      "${src}/contrib/ffmpeg/A20-mov-read-name-track-tag-written-by-movenc.patch"
+      "${src}/contrib/ffmpeg/A21-movenc-write-3gpp-track-titl-tag.patch"
+      "${src}/contrib/ffmpeg/A22-mov-read-3gpp-udta-tags.patch"
+      "${src}/contrib/ffmpeg/A23-movenc-write-3gpp-track-names-tags-for-all-available.patch"
+      "${src}/contrib/ffmpeg/A24-FFmpeg-devel-amfenc-Add-support-for-pict_type-field.patch"
+      "${src}/contrib/ffmpeg/A25-dvdsubdec-fix-processing-of-partial-packets.patch"
+      "${src}/contrib/ffmpeg/A26-ccaption_dec-return-number-of-bytes-used.patch"
+      "${src}/contrib/ffmpeg/A27-dvdsubdec-return-number-of-bytes-used.patch"
+      "${src}/contrib/ffmpeg/A28-dvdsubdec-use-pts-of-initial-packet.patch"
+      "${src}/contrib/ffmpeg/A29-matroskaenc-aac-extradata-updated.patch"
+      "${src}/contrib/ffmpeg/A30-ccaption_dec-fix-pts-in-real_time-mode.patch"
+      "${src}/contrib/ffmpeg/A32-qsv-fix-decode-10bit-hdr.patch"
+    ];
+  });
 
   versionFile = writeText "version.txt" ''
     BRANCH=${versions.majorMinor version}.x
@@ -103,7 +151,7 @@ let
   inherit (lib) optional optionals optionalString versions;
 
 in
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "handbrake";
   inherit version src;
 
@@ -149,7 +197,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     a52dec
     dav1d
-    ffmpeg-full
+    ffmpeg-hb
     fontconfig
     freetype
     fribidi
@@ -203,7 +251,7 @@ stdenv.mkDerivation rec {
   ++ optional (!useGtk) "--disable-gtk"
   ++ optional useFdk "--enable-fdk-aac"
   ++ optional stdenv.isDarwin "--disable-xcode"
-  ++ optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
+  ++ optional stdenv.hostPlatform.isx86 "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [ "-lx265" ];
@@ -211,7 +259,23 @@ stdenv.mkDerivation rec {
   makeFlags = [ "--directory=build" ];
 
   passthru.tests = {
-    basic-conversion = nixosTests.handbrake;
+    basic-conversion =
+      let
+        # Big Buck Bunny example, licensed under CC Attribution 3.0.
+        testMkv = fetchurl {
+          url = "https://github.com/Matroska-Org/matroska-test-files/blob/cf0792be144ac470c4b8052cfe19bb691993e3a2/test_files/test1.mkv?raw=true";
+          sha256 = "1hfxbbgxwfkzv85pvpvx55a72qsd0hxjbm9hkl5r3590zw4s75h9";
+        };
+      in
+      runCommand "${pname}-${version}-basic-conversion" { nativeBuildInputs = [ self ]; } ''
+        mkdir -p $out
+        cd $out
+        HandBrakeCLI -i ${testMkv} -o test.mp4 -e x264 -q 20 -B 160
+        test -e test.mp4
+        HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160
+        test -e test.mkv
+      '';
+    version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
   };
 
   meta = with lib; {
@@ -230,4 +294,5 @@ stdenv.mkDerivation rec {
     platforms = with platforms; unix;
     broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
   };
-}
+};
+in self

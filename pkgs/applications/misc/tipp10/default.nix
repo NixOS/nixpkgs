@@ -19,7 +19,7 @@ mkDerivation rec {
     description = "Learn and train typing with the ten-finger system";
     homepage = "https://gitlab.com/tipp10/tipp10";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

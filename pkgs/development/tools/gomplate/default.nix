@@ -2,21 +2,31 @@
 
 buildGoModule rec {
   pname = "gomplate";
-  version = "3.9.0";
+  version = "3.11.3";
   owner = "hairyhenderson";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit owner rev;
     repo = pname;
-    sha256 = "sha256-liy8cqn+hWoTOHchCY1LLu23tNvz7eGA+AN0d0APjC4=";
+    sha256 = "sha256-NvTwiGyBHhHiVHdWeXnJONNkHkrvsc1zmHPK8rSHaQw=";
   };
 
-  vendorSha256 = "sha256-Ph9z/Tom7O7V7yZ/On+etty+Bl653HiY/J3d3yfweeQ=";
+  vendorSha256 = "sha256-BIcOErtlcnE70Mo6fjmA/btvSpw95RaKLqNWsgyJgpc=";
 
-  # some tests require network access
   postPatch = ''
-    rm net/net_test.go
+    # some tests require network access
+    rm net/net_test.go \
+      internal/tests/integration/datasources_blob_test.go \
+      internal/tests/integration/datasources_git_test.go
+    # some tests rely on external tools we'd rather not depend on
+    rm internal/tests/integration/datasources_consul_test.go \
+      internal/tests/integration/datasources_vault*_test.go
+  '';
+
+  # TestInputDir_RespectsUlimit
+  preCheck = ''
+    ulimit -n 1024
   '';
 
   ldflags = [

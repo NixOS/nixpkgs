@@ -1,16 +1,21 @@
 { lib, python3, fetchFromGitHub }:
 python3.pkgs.buildPythonApplication rec {
   pname = "joystickwake";
-  version = "0.2.5";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "foresto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yhzv4gbz0c0ircxk91m1d4ygf14mla137z4nfxggmbvjs0aa4y0";
+    sha256 = "0f990bvykjjq2rzzbm158kajnqxigfzcrzap11dc415wkvn25k6q";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ pyudev xlib ];
+
+  postInstall = ''
+    # autostart file
+    ln -s $out/${python3.sitePackages}/etc $out/etc
+  '';
 
   meta = with lib; {
     description = "A joystick-aware screen waker";

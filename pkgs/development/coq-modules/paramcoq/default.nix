@@ -4,10 +4,12 @@ with lib; mkCoqDerivation {
   pname = "paramcoq";
   inherit version;
   defaultVersion = with versions; switch coq.version [
-    { case = range "8.10" "8.14"; out = "1.1.3+coq${coq.coq-version}"; }
+    { case = range "8.10" "8.16"; out = "1.1.3+coq${coq.coq-version}"; }
     { case = range "8.7"  "8.13"; out = "1.1.2+coq${coq.coq-version}"; }
   ] null;
   displayVersion = { paramcoq = "..."; };
+  release."1.1.3+coq8.16".sha256 = "sha256-K7/8hXH6DwiW7Gw41sgQF8UDAO3c32xBGWQQapzG8Mo=";
+  release."1.1.3+coq8.15".sha256 = "0sl7ihznwz05d2x2v78w1zd4q55c1sgy06vxasbcls4v2pkw53hl";
   release."1.1.3+coq8.14".sha256 = "00zqq9dc2p5v0ib1jgizl25xkwxrs9mrlylvy0zvb96dpridjc71";
   release."1.1.3+coq8.13".sha256 = "06ndly736k4pmdn4baqa7fblp6lx7a9pxm9gvz1vzd6ic51825wp";
   release."1.1.3+coq8.12".sha256 = "sha256:10j23ws8ymqpxhapni75sxbzz0dl4n9sgasrx618i7s7b705y2rh";

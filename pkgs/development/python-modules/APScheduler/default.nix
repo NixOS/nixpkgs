@@ -2,55 +2,51 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
-, pytestCheckHook
+, gevent
 , pytest-asyncio
 , pytest-tornado
-, sqlalchemy
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+, setuptools-scm
+, six
 , tornado
 , twisted
-, mock
-, gevent
-, six
-, pytz
 , tzlocal
-, funcsigs
-, setuptools
-, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "APScheduler";
-  version = "3.8.1";
+  pname = "apscheduler";
+  version = "3.9.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5cf344ebcfbdaa48ae178c029c055cec7bc7a4a47c21e315e4d1f08bd35f2355";
+    pname = "APScheduler";
+    inherit version;
+    hash = "sha256-ZeZXS2OVSY03HQRfKop+T31Qxq0h73MT0VscfPIN8eM=";
   };
 
   buildInputs = [
     setuptools-scm
   ];
 
+  propagatedBuildInputs = [
+    pytz
+    setuptools
+    six
+    tzlocal
+  ];
+
   checkInputs = [
+    gevent
     pytest-asyncio
     pytest-tornado
     pytestCheckHook
-    sqlalchemy
     tornado
     twisted
-    mock
-    gevent
-  ];
-
-  propagatedBuildInputs = [
-    six
-    pytz
-    tzlocal
-    funcsigs
-    setuptools
   ];
 
   postPatch = ''
@@ -60,15 +56,21 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_broken_pool"
+    # gevent tests have issue on newer Python releases
+    "test_add_live_job"
+    "test_add_pending_job"
+    "test_shutdown"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_submit_job"
     "test_max_instances"
   ];
 
-  pythonImportsCheck = [ "apscheduler" ];
+  pythonImportsCheck = [
+    "apscheduler"
+  ];
 
   meta = with lib; {
-    description = "A Python library that lets you schedule your Python code to be executed";
+    description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -7,22 +7,18 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+, removeReferencesTo
 }:
-
-assert (
-  lib.assertMsg (!withPerl -> stdenv.hostPlatform != stdenv.buildPlatform)
-  "withPerl should not be disabled unless cross compiling"
-);
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.0+quick_unstable-2021-11.02";
+  version = "3.0.7+quic1";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "62d4de00abfa82fc01efa2eba1982a86c4864f39";
-    sha256 = "11mi4bkkyy4qd2wml6p7xcsbps0mabk3bp537rp7n43qnhwyg1g3";
+    rev = "openssl-${version}";
+    sha256 = "sha256-ZRS0ZV+/U4PD2lVE+PsUAWSuk5EFg5mOKYlwgY3Ecus=";
   };
 
   patches = [
@@ -56,7 +52,7 @@ stdenv.mkDerivation rec {
     !(stdenv.hostPlatform.useLLVM or false) &&
     stdenv.cc.isGNU;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl removeReferencesTo ];
   buildInputs = lib.optional withCryptodev cryptodev
     # perl is included to allow the interpreter path fixup hook to set the
     # correct interpreter in c_rehash.
@@ -73,6 +69,12 @@ stdenv.mkDerivation rec {
       x86_64-linux = "./Configure linux-x86_64";
       x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       riscv64-linux = "./Configure linux64-riscv64";
+      mips64el-linux =
+        if stdenv.hostPlatform.isMips64n64
+        then "./Configure linux64-mips64"
+        else if stdenv.hostPlatform.isMips64n32
+        then "./Configure linux-mips64"
+        else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
     }.${stdenv.hostPlatform.system} or (
       if stdenv.hostPlatform == stdenv.buildPlatform
         then "./config"
@@ -100,17 +102,23 @@ stdenv.mkDerivation rec {
     "shared" # "shared" builds both shared and static libraries
     "--libdir=lib"
     "--openssldir=etc/ssl"
-    "enable-ktls"
   ] ++ lib.optionals withCryptodev [
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
   ] ++ lib.optional enableSSL2 "enable-ssl2"
     ++ lib.optional enableSSL3 "enable-ssl3"
+    # We select KTLS here instead of the configure-time detection (which we patch out).
+    # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+    ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
     ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
     # OpenSSL needs a specific `no-shared` configure flag.
     # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
     # for a comprehensive list of configuration options.
-    ++ lib.optional static "no-shared";
+    ++ lib.optional static "no-shared"
+    # This introduces a reference to the CTLOG_FILE which is undesired when
+    # trying to build binaries statically.
+    ++ lib.optional static "no-ct"
+    ;
 
   makeFlags = [
     "MANDIR=$(man)/share/man"
@@ -123,13 +131,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString (!static) ''
+  postInstall = (if static then ''
+    # OPENSSLDIR has a reference to self
+    ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+  '' else ''
     # If we're building dynamic libraries, then don't install static
     # libraries.
     if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
         rm "$out/lib/"*.a
     fi
-  '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+  '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
     # Fix bin/c_rehash's perl interpreter line
     #
     # - openssl 1_0_2: embeds a reference to buildPackages.perl
@@ -161,7 +172,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://quictls.github.io/openssl/";
+    homepage = "https://quictls.github.io";
     description = "TLS/SSL and crypto library with QUIC APIs";
     license = licenses.openssl;
     platforms = platforms.all;

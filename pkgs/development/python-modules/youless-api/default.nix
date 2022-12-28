@@ -7,13 +7,12 @@
 , idna
 , nose
 , requests
-, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "youless-api";
-  version = "0.15";
+  version = "1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "jongsoftdev";
     repo = "youless-python-bridge";
     rev = version;
-    sha256 = "sha256-77uQUAPDCFQiCpNAI0feOtHq82sE0n70IV1Njn/W29M=";
+    hash = "sha256-yh4ZmMn5z6aTZrhj9ZmvpmsDOF4MeDcPtSgr4fimjGM=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +29,6 @@ buildPythonPackage rec {
     chardet
     idna
     requests
-    six
     urllib3
   ];
 

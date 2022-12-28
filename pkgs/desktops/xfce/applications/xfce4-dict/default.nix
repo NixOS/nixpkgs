@@ -1,4 +1,4 @@
-{ mkXfceDerivation, automakeAddFlags, gtk3, libxfce4ui, libxfce4util, xfce4-panel }:
+{ lib, mkXfceDerivation, automakeAddFlags, gtk3, libxfce4ui, libxfce4util, xfce4-panel }:
 
 mkXfceDerivation {
   category = "apps";
@@ -17,7 +17,8 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel ];
 
-  meta = {
+  meta = with lib; {
     description = "A Dictionary Client for the Xfce desktop environment";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

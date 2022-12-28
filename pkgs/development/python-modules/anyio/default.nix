@@ -2,7 +2,9 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
+, setuptools
 , setuptools-scm
 , idna
 , sniffio
@@ -19,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.3.2";
+  version = "3.5.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,14 +29,23 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XBIrFb/XDneaOf/TeHxyeEfyQ7qQcWO7LJF0k1f4Ark=";
+    sha256 = "sha256-AZ9M/NBCBlMIUpRJgKbJRL/oReZDUh2Jhwtoxoo0tMs=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Pytest 7.0 compatibility
+      url = "https://github.com/agronholm/anyio/commit/fed7cc4f95e196f68251bcb9253da3b143ea8e7e.patch";
+      sha256 = "sha256-VmZmiQEmWJ4aPz0Wx+GTMZo7jXRDScnRYf2Hu2hiRVw=";
+    })
+  ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -44,6 +55,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
+
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   checkInputs = [
     curio

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "libLAS-1.8.1";
+  pname = "libLAS";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/liblas/${name}.tar.bz2";
+    url = "https://download.osgeo.org/liblas/libLAS-${version}.tar.bz2";
     sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
   };
 
@@ -30,5 +31,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.michelk ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

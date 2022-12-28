@@ -1,31 +1,71 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, cmake, pkg-config
-, bison, flex
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, boost
+, zlib
+, libevent
+, openssl
+, python3
+, cmake
+, pkg-config
+, bison
+, flex
 , static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "thrift";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1Yg1ZtFh+Pbd1OIfOp4+a4JyeZ0FSCDxwlsR6GcY+Gs=";
+    hash = "sha256-snLBeIuxZdmVIaJZmzG5f6aeWTHQmQFdka4QegsMxY8=";
   };
 
-  # Workaround to make the python wrapper not drop this package:
+  # Workaround to make the Python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ cmake pkg-config bison flex ];
-  buildInputs = [ boost zlib libevent openssl ]
-    ++ lib.optionals (!static) [ (python3.withPackages (ps: [ps.twisted])) ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    pkg-config
+  ];
 
-  preConfigure = "export PY_PREFIX=$out";
+  buildInputs = [
+    boost
+    libevent
+    openssl
+    zlib
+  ] ++ lib.optionals (!static) [
+    (python3.withPackages (ps: [ps.twisted]))
+  ];
+
+  postPatch = ''
+    # Python 3.10 related failures:
+    # SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats
+    # AttributeError: module 'collections' has no attribute 'Hashable'
+    substituteInPlace test/py/RunClientServer.py \
+      --replace "'FastbinaryTest.py'," "" \
+      --replace "'TestEof.py'," "" \
+      --replace "'TestFrozen.py'," ""
+  '';
+
+  preConfigure = ''
+    export PY_PREFIX=$out
+  '';
 
   patches = [
     # ToStringTest.cpp is failing from some reason due to locale issue, this
     # doesn't disable all UnitTests as in Darwin.
     ./disable-failing-test.patch
+    (fetchpatch {
+      name = "setuptools-gte-62.1.0.patch"; # https://github.com/apache/thrift/pull/2635
+      url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";
+      hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
+    })
   ];
 
   cmakeFlags = [
@@ -43,12 +83,12 @@ stdenv.mkDerivation rec {
   disabledTests = [
     "PythonTestSSLSocket"
   ] ++ lib.optionals stdenv.isDarwin [
-    # tests that hang up in the darwin sandbox
+    # Tests that hang up in the Darwin sandbox
     "SecurityTest"
     "SecurityFromBufferTest"
     "python_test"
 
-    # tests that fail in the darwin sandbox when trying to use network
+    # Tests that fail in the Darwin sandbox when trying to use network
     "UnitTests"
     "TInterruptTest"
     "TServerIntegrationTest"
@@ -62,6 +102,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = !static;
+
   checkPhase = ''
     runHook preCheck
 
@@ -69,13 +110,14 @@ stdenv.mkDerivation rec {
 
     runHook postCheck
   '';
+
   enableParallelChecking = false;
 
   meta = with lib; {
     description = "Library for scalable cross-language services";
-    homepage = "http://thrift.apache.org/";
+    homepage = "https://thrift.apache.org/";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

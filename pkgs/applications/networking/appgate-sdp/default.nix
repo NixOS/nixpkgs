@@ -31,7 +31,6 @@
 , nss
 , openssl
 , pango
-, procps
 , python3
 , stdenv
 , systemd
@@ -87,11 +86,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "5.5.0";
+  version = "6.0.3";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-lWInks3DBkSpKQh+dcNyn43iY5vvE67FLadohBbF6n4=";
+    sha256 = "sha256-UDyVPoQM78CKVWXgr08An77QTiFVmRNHwQPGaj1jAIM=";
   };
 
   # just patch interpreter
@@ -141,8 +140,9 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${makeBinPath [ iproute2 networkmanager dnsmasq ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate/service
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
-        --prefix PATH : ${makeBinPath [ xdg-utils ]} \
+        --suffix PATH : ${makeBinPath [ xdg-utils ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
 
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
@@ -151,6 +151,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
     homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ymatsiuk ];

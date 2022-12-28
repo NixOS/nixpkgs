@@ -16,7 +16,7 @@ in
     boot.initrd.availableKernelModules = mkIf inInitrd
       [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" "sha256" ];
 
-    boot.initrd.extraUtilsCommands = mkIf inInitrd
+    boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''
         copy_bin_and_libs ${pkgs.cifs-utils}/sbin/mount.cifs
       '';

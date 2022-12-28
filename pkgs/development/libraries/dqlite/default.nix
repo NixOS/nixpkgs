@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv
-, raft-canonical, sqlite-replication }:
+, raft-canonical, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libuv
     raft-canonical.dev
-    sqlite-replication
+    sqlite
   ];
 
   enableParallelBuilding = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://dqlite.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joko wucke13 ];
+    maintainers = with maintainers; [ joko ];
     platforms = platforms.linux;
   };
 }

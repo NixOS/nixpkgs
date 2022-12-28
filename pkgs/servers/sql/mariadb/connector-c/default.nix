@@ -11,10 +11,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    urls = [
-      "https://downloads.mariadb.org/f/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz"
-      "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz"
-    ];
+    url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
     inherit sha256;
   };
 
@@ -59,6 +56,7 @@ stdenv.mkDerivation {
     ln -sv mariadb $dev/include/mysql
     ln -sv mariadb_version.h $dev/include/mariadb/mysql_version.h
     ln -sv libmariadb.pc $dev/lib/pkgconfig/mysqlclient.pc
+    install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
   meta = {

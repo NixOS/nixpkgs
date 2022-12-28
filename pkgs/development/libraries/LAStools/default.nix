@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "LAStools";
-  version = "201003"; # LAStools makes release-ish commits with a message containing their version number as YYMMDD; these align with their website changelog
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "LAStools";
     repo = "LAStools";
-    rev = "635b76b42cc4912762da31b92f875df5310e1714";
-    sha256 = "0682ca3bp51lmfp46vsjnd1bqpn05g95pf4kclvjv1y8qivkxsaq";
+    rev = "v${version}";
+    sha256 = "sha256-HL64koe0GNzJzyA0QP4I0M1y2HSxigsZTqOw67RCwNc=";
   };
 
   patches = [

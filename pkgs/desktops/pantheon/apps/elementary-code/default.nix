@@ -1,50 +1,50 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pkg-config
+, appstream
+, desktop-file-utils
 , meson
 , ninja
-, vala
+, pkg-config
+, polkit
 , python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, libpeas
+, vala
+, wrapGAppsHook
 , editorconfig-core-c
+, granite
+, gtk3
 , gtksourceview4
 , gtkspell3
+, libgee
+, libgit2-glib
+, libhandy
+, libpeas
 , libsoup
 , vte
-, webkitgtk
 , ctags
-, libgit2-glib
-, wrapGAppsHook
-, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.1.0";
-
-  repoName = "code";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "code";
     rev = version;
-    sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
+    sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix drag and drop of accented text and between tabs
+    # https://github.com/elementary/code/pull/1194
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/1ed7b590768ea9cb5b4658e27d9dc7ac224442ae.patch";
+      sha256 = "sha256-VrYcEbkzQKi5gFB/Vw/0NITZvSXKXfuEv2R3m0VALVM=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -59,9 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ctags
     editorconfig-core-c
-    elementary-icon-theme
     granite
     gtk3
     gtksourceview4
@@ -72,11 +70,7 @@ stdenv.mkDerivation rec {
     libpeas
     libsoup
     vte
-    webkitgtk
   ];
-
-  # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
-  LC_ALL = "C.UTF-8";
 
   # ctags needed in path by outline plugin
   preFixup = ''
@@ -89,6 +83,10 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Code editor designed for elementary OS";

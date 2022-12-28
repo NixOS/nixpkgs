@@ -1,12 +1,9 @@
-diff -ru -x '*~' lsof_4.91_src-orig/usage.c lsof_4.91_src/usage.c
---- lsof_4.91_src-orig/usage.c	2018-02-14 15:20:32.000000000 +0100
-+++ lsof_4.91_src/usage.c	2018-10-08 21:57:45.718560869 +0200
-@@ -930,26 +930,6 @@
+--- a/usage.c	2018-02-14 15:20:32.000000000 +0100
++++ b/usage.c	2018-10-08 21:57:45.718560869 +0200
+@@ -930,24 +930,6 @@
  		(void) fprintf(stderr, "    configuration info: %s\n", cp);
  #endif	/* defined(LSOF_CINFO) */
  
--	    if ((cp = isnullstr(LSOF_CCDATE)))
--		(void) fprintf(stderr, "    constructed: %s\n", cp);
 -	    cp = isnullstr(LSOF_HOST);
 -	    if (!(cp1 = isnullstr(LSOF_LOGNAME)))
 -		cp1 = isnullstr(LSOF_USER);

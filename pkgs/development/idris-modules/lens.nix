@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "lens";
+  pname = "lens";
   version = "2017-09-25";
 
   idrisDeps = [ bifunctors ];

@@ -5,19 +5,20 @@
 , sphinx
 , ipywidgets
 , pythonOlder
+, nbconvert
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-sphinx";
-  version = "0.2.4";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit version;
     pname = "jupyter_sphinx";
-    sha256 = "b5ba1efdd1488b385de0068036a665932ed93998e40ce3a342c60f0926781fd9";
+    sha256 = "sha256-DBGjjxNDE48sUFHA00xMVF9EgBdMG9QcAlb+gm4LqlU=";
   };
 
-  propagatedBuildInputs = [ nbformat sphinx ipywidgets ];
+  propagatedBuildInputs = [ nbconvert nbformat sphinx ipywidgets ];
 
   doCheck = false;
 

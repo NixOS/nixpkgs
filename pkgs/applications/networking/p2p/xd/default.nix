@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "XD";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "majestrate";
     repo = "XD";
     rev = "v${version}";
-    sha256 = "sha256-fXENoqhR04TYS/kAJUqsqa0+j+KyzdsMlXIZ2GMPMhc=";
+    sha256 = "sha256-AavNiFZlpX6XZQLP1kl9igA833i0gxOTYGubo3MvpSU=";
   };
 
-  vendorSha256 = "1wg3cym2rwrhjsqlgd38l8mdq5alccz808465117n3vyga9m35lq";
+  vendorSha256 = "sha256-mJZRk3p+D3tCKIYggD5jVBXcKqJotEexljDzLKpn4/E=";
 
   checkInputs = [ perl ];
 

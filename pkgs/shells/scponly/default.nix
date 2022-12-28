@@ -13,14 +13,15 @@ stdenv.mkDerivation {
 
   patches = [ ./scponly-fix-make.patch ];
 
-  buildInputs = [ openssh ];
-
-  # Add path to sftp-server so configure finds it
-  preConfigure = "export PATH=$PATH:${openssh}/libexec";
+  strictDeps = true;
 
   # chroot doesn't seem to work, so not enabling
   # rsync could also be optionally enabled
-  configureFlags = [ "--enable-winscp-compat" ];
+  configureFlags = [
+    "--enable-winscp-compat"
+    "scponly_PROG_SFTP_SERVER=${lib.getBin openssh}/libexec/sftp-server"
+    "scponly_PROG_SCP=${lib.getBin openssh}/bin/scp"
+  ];
 
   postInstall = lib.optionalString (debugLevel > 0) ''
     mkdir -p $out/etc/scponly && echo ${

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p dotnet-sdk_3
+#!nix-shell -i bash -p dotnet-sdk_6
 set -euo pipefail
 
 # Writes deps for dotnet package in $pkgSrc to $depsFile.
@@ -25,14 +25,14 @@ HOME=home DOTNET_CLI_TELEMETRY_OPTOUT=1 \
 
 echo "{ fetchNuGet }: [" > "$depsFile"
 while read pkgSpec; do
-  { read name; read version; } < <(
+  { read pname; read version; } < <(
     # Ignore build version part: 1.0.0-beta2+77df2220 -> 1.0.0-beta2
     sed -nE 's/.*<id>([^<]*).*/\1/p; s/.*<version>([^<+]*).*/\1/p' "$pkgSpec"
   )
   sha256=$(nix-hash --type sha256 --flat --base32 "$(dirname "$pkgSpec")"/*.nupkg)
   cat >> "$depsFile" <<EOF
   (fetchNuGet {
-    name = "$name";
+    pname = "$pname";
     version = "$version";
     sha256 = "$sha256";
   })

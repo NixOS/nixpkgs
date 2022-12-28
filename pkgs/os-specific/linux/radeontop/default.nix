@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace getver.sh --replace ver=unknown ver=${version}
+    substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

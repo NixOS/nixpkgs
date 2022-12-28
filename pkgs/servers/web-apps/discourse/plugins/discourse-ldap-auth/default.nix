@@ -6,8 +6,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "jonmbake";
     repo = "discourse-ldap-auth";
-    rev = "eca02c560f2f2bf42feeb1923bc17e074f16b891";
-    sha256 = "sha256-HLNoDvvxkBMvqP6WbRrJY0CYnK92W77nzSpuwgl0VPA=";
+    rev = "84635b1c352b2145b8e6074d94047f1e2020dcbc";
+    sha256 = "sha256-yCCSger7qa9R/BMaQdcFtLXqLPj3i3y4tTanz+ufZTw=";
   };
   meta = with lib; {
     homepage = "https://github.com/jonmbake/discourse-ldap-auth";

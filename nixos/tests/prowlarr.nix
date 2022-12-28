@@ -12,7 +12,7 @@ with lib;
 
   testScript = ''
     machine.wait_for_unit("prowlarr.service")
-    machine.wait_for_open_port("9696")
+    machine.wait_for_open_port(9696)
     machine.succeed("curl --fail http://localhost:9696/")
   '';
 })

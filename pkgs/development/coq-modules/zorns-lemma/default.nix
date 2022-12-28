@@ -25,7 +25,7 @@ with lib;
     { case = "8.5"; out = "8.5.0"; }
   ] null;
 
-  useDune2ifVersion = versions.isGe "9.0";
+  useDuneifVersion = versions.isGe "9.0";
 
   meta = {
     description = "Development of basic set theory";

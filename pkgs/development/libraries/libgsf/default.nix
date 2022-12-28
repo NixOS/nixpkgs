@@ -1,26 +1,83 @@
-{ fetchurl, lib, stdenv, pkg-config, intltool, gettext, glib, libxml2, zlib, bzip2
-, perl, gdk-pixbuf, libiconv, libintl, gnome }:
+{ fetchFromGitLab
+, lib
+, stdenv
+, autoreconfHook
+, gtk-doc
+, pkg-config
+, intltool
+, gettext
+, glib
+, libxml2
+, zlib
+, bzip2
+, perl
+, gdk-pixbuf
+, libiconv
+, libintl
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.47";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0kbpp9ksl7977xiga37sk1gdw1r039v6zviqznl7alvvg39yp26i";
-  };
-
-  nativeBuildInputs = [ pkg-config intltool libintl ];
-
-  buildInputs = [ gettext bzip2 zlib ];
-  checkInputs = [ perl ];
-
-  propagatedBuildInputs = [ libxml2 glib gdk-pixbuf libiconv ];
+  version = "1.14.50";
 
   outputs = [ "out" "dev" ];
 
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libgsf";
+    rev = "LIBGSF_${lib.replaceStrings ["."] ["_"] version}";
+    hash = "sha256-6RP2DJWcDQ8dkKtcPxAkRsS7jSvvLoDNZHXiDJwR8Eg=";
+  };
+
+  postPatch = ''
+    # Fix cross-compilation
+    substituteInPlace configure.ac \
+      --replace "AC_PATH_PROG(PKG_CONFIG, pkg-config, no)" \
+                "PKG_PROG_PKG_CONFIG"
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+    pkg-config
+    intltool
+    libintl
+  ];
+
+  buildInputs = [
+    gettext
+    bzip2
+    zlib
+  ];
+
+  checkInputs = [
+    perl
+  ];
+
+  propagatedBuildInputs = [
+    libxml2
+    glib
+    gdk-pixbuf
+    libiconv
+  ];
+
   doCheck = true;
-  preCheck = "patchShebangs ./tests/";
+
+  preCheck = ''
+    patchShebangs ./tests/
+  '';
+
+  # checking pkg-config is at least version 0.9.0... ./configure: line 15213: no: command not found
+  # configure: error: in `/build/libgsf-1.14.50':
+  # configure: error: The pkg-config script could not be found or is too old.  Make sure it
+  # is in your PATH or set the PKG_CONFIG environment variable to the full
+  preConfigure = ''
+    export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -31,10 +88,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME's Structured File Library";
-    homepage    = "https://www.gnome.org/projects/libgsf";
-    license     = licenses.lgpl2Plus;
+    homepage = "https://www.gnome.org/projects/libgsf";
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       Libgsf aims to provide an efficient extensible I/O abstraction for

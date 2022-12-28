@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libltc";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://github.com/x42/libltc/releases/download/v${version}/libltc-${version}.tar.gz";
-    sha256 = "173h9dgmain3nyrwk6q2d7yl4fnh4vacag4s2p01n5b7nyrkxrjh";
+    sha256 = "sha256-Cm1CzWwh6SWif6Vg3EWsgAV9J18jNCECglkJwC07Ekk=";
   };
 
   meta = with lib; {

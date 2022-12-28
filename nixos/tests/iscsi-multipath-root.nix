@@ -111,11 +111,11 @@ import ./make-test-python.nix (
 
         environment.etc."initiator-root-disk-closure".source = nodes.initiatorRootDisk.config.system.build.toplevel;
 
-        nix.binaryCaches = lib.mkForce [ ];
-        nix.extraOptions = ''
-          hashed-mirrors =
-          connect-timeout = 1
-        '';
+        nix.settings = {
+          substituters = lib.mkForce [ ];
+          hashed-mirrors = null;
+          connect-timeout = 1;
+        };
       };
 
       initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {

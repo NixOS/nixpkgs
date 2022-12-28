@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.2";
+  version = "2.0.4";
   pname = "python-json-logger";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "202a4f29901a4b8002a6d1b958407eeb2dd1d83c18b18b816f5b64476dde9096";
+    sha256 = "sha256-dk12IXX5n8xGML1IU7CWMqy2CmIkrLJ84IzXDwsbgb0=";
   };
 
   checkInputs = [ nose ];

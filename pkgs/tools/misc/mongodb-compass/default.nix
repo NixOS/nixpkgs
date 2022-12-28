@@ -14,7 +14,6 @@ fontconfig,
 freetype,
 gdk-pixbuf,
 glib,
-gnome2,
 gtk3,
 lib,
 libdrm,
@@ -34,7 +33,7 @@ xorg,
 }:
 
 let
-  version = "1.29.4";
+  version = "1.34.2";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -50,7 +49,6 @@ let
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libdrm
     libnotify
@@ -84,10 +82,12 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "sha256-CqC6BrRhMfjxamSwC6ub1u3+FtDuIq3/OMNdUZgpCAQ=";
+        sha256 = "sha256-qXteinKphHi2dwHQ4WMIegG+Yb9YGU/WuCbhwcoIV3Y=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
+      # NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
+      # Feel free to make a PR adding support if desired
 
 in stdenv.mkDerivation {
   pname = "mongodb-compass";
@@ -130,7 +130,8 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "The GUI for MongoDB";
     maintainers = with maintainers; [ bryanasdev000 ];
-    homepage = "https://www.mongodb.com/products/compass";
+    homepage = "https://github.com/mongodb-js/compass";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.sspl;
     platforms = [ "x86_64-linux" ];
   };

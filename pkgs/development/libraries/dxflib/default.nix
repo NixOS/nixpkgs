@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , qmake
 }:
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     install -d -m 0755 $out/lib
-    cp -pr *.so* $out/lib
+    cp -pr *${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
     install -d -m 0755 $out/include/dxflib
     cp -pr src/*.h $out/include/dxflib
     # Generate pkg-config file
@@ -39,8 +40,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://qcad.org/en/90-dxflib";
-    maintainers = with lib.maintainers; [raskin];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     description = "DXF file format library";
   };
 }

@@ -34,6 +34,7 @@ in {
           autosnap = true;
         };
         datasets."pool/sanoid".use_template = [ "test" ];
+        datasets."pool/compat".useTemplate = [ "test" ];
         extraArgs = [ "--verbose" ];
       };
 
@@ -48,6 +49,15 @@ in {
           };
           # Take snapshot and sync
           "pool/syncoid".target = "root@target:pool/syncoid";
+
+          # Test pool without parent (regression test for https://github.com/NixOS/nixpkgs/pull/180111)
+          "pool".target = "root@target:pool/full-pool";
+
+          # Test backward compatible options (regression test for https://github.com/NixOS/nixpkgs/issues/181561)
+          "pool/compat" = {
+            target = "root@target:pool/compat";
+            extraArgs = [ "--no-sync-snap" ];
+          };
         };
       };
     };
@@ -67,6 +77,7 @@ in {
         "udevadm settle",
         "zpool create pool -R /mnt /dev/vdb1",
         "zfs create pool/sanoid",
+        "zfs create pool/compat",
         "zfs create pool/syncoid",
         "udevadm settle",
     )
@@ -91,6 +102,7 @@ in {
 
     # Take snapshot with sanoid
     source.succeed("touch /mnt/pool/sanoid/test.txt")
+    source.succeed("touch /mnt/pool/compat/test.txt")
     source.systemctl("start --wait sanoid.service")
 
     assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set after snapshotting"
@@ -104,6 +116,12 @@ in {
     target.succeed("cat /mnt/pool/sanoid/test.txt")
     source.systemctl("start --wait syncoid-pool-syncoid.service")
     target.succeed("cat /mnt/pool/syncoid/test.txt")
+
+    source.systemctl("start --wait syncoid-pool.service")
+    target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")
+
+    source.systemctl("start --wait syncoid-pool-compat.service")
+    target.succeed("cat /mnt/pool/compat/test.txt")
 
     assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set after syncing snapshots"
     assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set after syncing snapshots"

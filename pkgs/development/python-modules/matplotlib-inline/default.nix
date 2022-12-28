@@ -1,5 +1,4 @@
 { lib, buildPythonPackage, fetchPypi
-, matplotlib
 , traitlets
 
 # tests
@@ -8,21 +7,25 @@
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a04bfba22e0d1395479f866853ec1ee28eea1485c1d69a6faf00dc3e24ff34ee";
+    sha256 = "sha256-+Ifl8Qupjo0rFQ3c9HAsHl+LOiAAXrD3S/29Ng7m8wQ=";
   };
 
   propagatedBuildInputs = [
-    matplotlib # not documented, but required
     traitlets
   ];
 
   # wants to import ipython, which creates a circular dependency
   doCheck = false;
-  pythonImportsCheck = [ "matplotlib_inline" ];
+
+  #
+  pythonImportsCheck = [
+    # tries to import matplotlib, which can't work with doCheck disabled
+    #"matplotlib_inline"
+  ];
 
   passthru.tests = { inherit ipython; };
 

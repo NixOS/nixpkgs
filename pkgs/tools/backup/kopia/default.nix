@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.9.6";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lfzlYpkAGGY7fs9PYPSg2XYgW92WV1/zh2oRz4Qw7vs=";
+    sha256 = "sha256-5zocfkNHsTFl3Sjwkr7dGnDY+4WO20F5AMgjfFulNd0=";
   };
 
-  vendorSha256 = "sha256-xa6B3gGgJc7E8VCfpRXlE8Jw3ylNnfynK+QEiqy2yF4=";
+  vendorSha256 = "sha256-Xmd4Q2X0cur4XGEjy1ysEEQkNqch4G+jGkPnrepgP6g=";
 
   doCheck = false;
 

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, atk
 , pkg-config
 , curl
 , darwin
@@ -19,14 +20,18 @@
 , foundationdb
 , capnproto
 , nettle
+, gtk4
 , clang
 , llvmPackages
 , linux-pam
+, pango
 , cmake
 , glib
 , freetype
 , rdkafka
 , udev
+, libevdev
+, alsa-lib
 , ...
 }:
 
@@ -34,7 +39,17 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
+  alsa-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ alsa-lib ];
+  };
+
   cairo-rs = attrs: {
+    buildInputs = [ cairo ];
+  };
+
+  cairo-sys-rs = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo ];
   };
 
@@ -63,6 +78,10 @@ in
   dbus = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
+  };
+
+  evdev-sys = attrs: {
+    buildInputs = [ libevdev ];
   };
 
   expat-sys = attrs: {
@@ -107,6 +126,21 @@ in
 
   gdk-pixbuf = attrs: {
     buildInputs = [ gdk-pixbuf ];
+  };
+
+  gtk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gdk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gsk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
   };
 
   libgit2-sys = attrs: {
@@ -154,6 +188,11 @@ in
     buildInputs = [ linux-pam ];
   };
 
+  pango-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
+  };
+
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
@@ -170,7 +209,7 @@ in
   };
 
   security-framework-sys = attr: {
-    propagatedBuildInputs = [ Security ];
+    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
   };
 
   sequoia-openpgp = attrs: {
@@ -187,6 +226,11 @@ in
 
   sequoia-guide = attrs: {
     buildInputs = [ gmp ];
+  };
+
+  pangocairo-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
   };
 
   sequoia-store = attrs: {
@@ -220,4 +264,10 @@ in
   xcb = attrs: {
     buildInputs = [ python3 ];
   };
+
+  atk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ atk ];
+  };
+
 }

@@ -5,7 +5,7 @@
 , setuptools-scm
 , pythonOlder
 , sdcc
-, nmigen
+, amaranth
 , fx2
 , libusb1
 , aiohttp
@@ -19,23 +19,23 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2021-03-02";
+  version = "unstable-2021-12-12";
   disabled = pythonOlder "3.7";
   # python software/setup.py --version
-  realVersion = "0.1.dev1660+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev1679+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "41c48bbcee284d024e4249a81419fbbae674cf40";
-    sha256 = "1fg8ps228930d70bczwmcwnrd1gvm02a58mxbpn8pyakwbwwa6hq";
+    rev = "e640a778c446b7e9812727e73c560d12aeb41d7c";
+    sha256 = "EsQ9ZjalKDQ54JOonra4yPDI56cF5n86y/Rd798cZsU=";
   };
 
   nativeBuildInputs = [ setuptools-scm sdcc ];
 
   propagatedBuildInputs = [
     setuptools
-    nmigen
+    amaranth
     fx2
     libusb1
     aiohttp
@@ -72,6 +72,6 @@ buildPythonPackage rec {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily thoughtpolice ];
   };
 }

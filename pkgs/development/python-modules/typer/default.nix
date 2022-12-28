@@ -1,44 +1,54 @@
 { lib
 , stdenv
 , buildPythonPackage
+, colorama
+, fetchpatch
 , fetchPypi
+, flit-core
 , click
 , pytestCheckHook
+, rich
 , shellingham
 , pytest-xdist
 , pytest-sugar
 , coverage
-, mypy
-, black
-, isort
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.4.0";
+  version = "0.6.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pgm0zsylbmz1r96q4n3rfi0h3pn4jss2yfs83z0yxa90nmsxhv3";
+    hash = "sha256-LVcgpeY/c+rzHtqhX2q4fzXwaQ+MojMBfX0j10OpHXM=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     click
   ];
 
+  passthru.optional-dependencies = {
+    all = [
+      colorama
+      shellingham
+      rich
+    ];
+  };
+
   checkInputs = [
-    pytestCheckHook
-    pytest-xdist
+    coverage # execs coverage in tests
     pytest-sugar
-    shellingham
-    coverage
-    mypy
-    black
-    isort
-  ];
+    pytest-xdist
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.all;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -47,12 +57,16 @@ buildPythonPackage rec {
     # likely related to https://github.com/sarugaku/shellingham/issues/35
     "test_show_completion"
     "test_install_completion"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    "test_install_completion"
   ];
 
-  pythonImportsCheck = [ "typer" ];
+  pythonImportsCheck = [
+    "typer"
+  ];
 
   meta = with lib; {
-    description = "Python library for building CLI applications";
+    description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat ];

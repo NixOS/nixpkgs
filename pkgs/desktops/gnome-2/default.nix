@@ -49,26 +49,17 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gtkhtml = callPackage ./platform/gtkhtml { enchant = pkgs.enchant1; };
 
-  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant1; };
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant2; };
 
   gtkglext = callPackage ./platform/gtkglext { };
 
 #### DESKTOP
 
-  # Removed from recent GNOME releases, but still required
-  scrollkeeper = callPackage ./desktop/scrollkeeper { };
-
   gtksourceview = callPackage ./desktop/gtksourceview {
     autoreconfHook = pkgs.autoreconfHook269;
   };
 
-  vte = callPackage ./desktop/vte { };
-
-#### BINDINGS
-
-  libglademm = callPackage ./bindings/libglademm { };
-
-} // lib.optionalAttrs (config.allowAliases or true) {
+} // lib.optionalAttrs config.allowAliases {
   inherit (pkgs)
     # GTK Libs
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
@@ -91,4 +82,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_icon_theme = self.gnome-icon-theme;
   gnomeicontheme = self.gnome-icon-theme;
   gnome_common = gnome-common;
+  libglademm = throw "libglademm has been removed"; # 2022-01-15
 })

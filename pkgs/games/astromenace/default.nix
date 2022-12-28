@@ -1,8 +1,8 @@
-{ fetchurl, lib, stdenv, cmake, xlibsWrapper, libGLU, libGL, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
+{ fetchurl, lib, stdenv, cmake, xorg, libGLU, libGL, SDL, openal, fontconfig, freealut, freetype, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
   pname = "astromenace";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/openastromenace/astromenace-src-${version}.tar.bz2";
@@ -10,29 +10,31 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ xlibsWrapper libGLU libGL SDL openal freealut libogg libvorbis ];
+  buildInputs = [ xorg.libICE xorg.libX11 xorg.libXinerama libGLU libGL SDL openal fontconfig freealut freetype libogg libvorbis ];
 
-  buildPhase = ''
-    cmake ./
-    make
+  postBuild = ''
     ./AstroMenace --pack --rawdata=../RAW_VFS_DATA
   '';
+
   installPhase = ''
     mkdir -p $out/bin
+
     cp AstroMenace $out
     cp gamedata.vfs $out
+
     cat > $out/bin/AstroMenace << EOF
     #!${runtimeShell}
     $out/AstroMenace --dir=$out
     EOF
+
     chmod 755 $out/bin/AstroMenace
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
     homepage = "https://www.viewizard.com/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "AstroMenace";
   };
 }

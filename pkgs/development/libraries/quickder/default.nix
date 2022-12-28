@@ -1,50 +1,57 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages, hexio
-, cmake, bash, arpa2cm, git, asn2quickder }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, python3
+, cmake
+, doxygen
+, graphviz
+, quickmem
+, arpa2common
+, arpa2cm
+, ensureNewerSourcesForZipFilesHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "quickder";
-  version = "1.3.0";
+  version = "1.7.1";
 
-  src = fetchFromGitHub {
-    sha256 = "15lxv8vcjnsjxg7ywcac5p6mj5vf5pxq1219yap653ci4f1liqfr";
-    rev = "version-${version}";
-    owner = "vanrein";
+  src = fetchFromGitLab {
+    owner = "arpa2";
     repo = "quick-der";
+    rev = "v${version}";
+    sha256 = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = with python2Packages; [
-    arpa2cm
-    asn1ate
-    hexio
-    pyparsing
-    python
-    six
-    asn1ate
-    asn2quickder
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    ensureNewerSourcesForZipFilesHook
   ];
+
+  buildInputs = [
+    arpa2cm
+    arpa2common
+    (python3.withPackages (ps: with ps; [
+      asn1ate
+      colored
+      pyparsing
+      setuptools
+      six
+    ]))
+    quickmem
+  ];
+
 
   postPatch = ''
-    substituteInPlace ./CMakeLists.txt \
-      --replace "get_version_from_git" "set (Quick-DER_VERSION 1.2) #"
-    substituteInPlace ./CMakeLists.txt \
-      --replace \$\{ARPA2CM_TOOLCHAIN_DIR} "$out/share/ARPA2CM/toolchain/"
-    patchShebangs python/scripts/
+    substituteInPlace setup.py --replace 'pyparsing==' 'pyparsing>='
   '';
 
-  cmakeFlags = [
-    "-DNO_TESTING=ON"
-    "-DARPA2CM_TOOLCHAIN_DIR=$out/share/ARPA2CM/toolchain/"
-  ];
-
-  preConfigure = ''
-    export PREFIX=$out
-  '';
+  doCheck = true;
 
   meta = with lib; {
     description = "Quick (and Easy) DER, a Library for parsing ASN.1";
-    homepage = "https://github.com/vanrein/quick-der";
+    homepage = "https://gitlab.com/arpa2/quick-der/";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

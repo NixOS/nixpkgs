@@ -5,8 +5,10 @@
 The Coq derivation is overridable through the `coq.override overrides`, where overrides is an attribute set which contains the arguments to override. We recommend overriding either of the following
 
 * `version` (optional, defaults to the latest version of Coq selected for nixpkgs, see `pkgs/top-level/coq-packages` to witness this choice), which follows the conventions explained in the `coqPackages` section below,
-* `customOCamlPackage` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
+* `customOCamlPackages` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
 * `coq-version` (optional, defaults to the short version e.g. "8.10"), is a version number of the form "x.y" that indicates which Coq's version build behavior to mimic when using a source which is not a release. E.g. `coq.override { version = "d370a9d1328a4e1cdb9d02ee032f605a9d94ec7a"; coq-version = "8.10"; }`.
+
+The associated package set can be obtained using `mkCoqPackages coq`, where `coq` is the derivation to use.
 
 ## Coq packages attribute sets: `coqPackages` {#coq-packages-attribute-sets-coqpackages}
 
@@ -22,17 +24,23 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
   * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github,
 * `defaultVersion` (optional). Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when no `version` is provided (or if `version = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
 * `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `sha256` attribute (you may put the empty string `""` in order to automatically insert a fake sha256, this will trigger an error which will allow you to find the correct sha256), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
-* `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `sha256` and returns an attribute set with a `version` and `src`.
+* `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `hash` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
 * `owner` (optional, defaults to `"coq-community"`).
 * `domain` (optional, defaults to `"github.com"`), domains including the strings `"github"` or `"gitlab"` in their names are automatically supported, otherwise, one must change the `fetcher` argument to support them (cf `pkgs/development/coq-modules/heq/default.nix` for an example),
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
 * `namePrefix` (optional, defaults to `[ "coq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
-* `extraBuildInputs` (optional), by default `buildInputs` just contains `coq`, this allows to add more build inputs,
-* `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `coq.ocamlPackages` attribute can be used in `extraBuildInputs` to depend on the same package set Coq was built against.
-* `useDune2ifVersion` (optional, default to `(x: false)` uses Dune2 to build the package if the provided predicate evaluates to true on the version, e.g. `useDune2if = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
-* `useDune2` (optional, defaults to `false`) uses Dune2 to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
+* `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune`, `useDuneifVersion` and `mlPlugin` are set).
+* `extraNativeBuildInputs` (optional, deprecated), an additional list of derivation to add to `nativeBuildInputs`,
+* `overrideNativeBuildInputs` (optional) replaces the default list of derivation to which `nativeBuildInputs` and `extraNativeBuildInputs` adds extra elements,
+* `buildInputs` (optional), is a list of libraries and dependencies that are required to build and run the current derivation, in addition to the default one `[ coq ]`,
+* `extraBuildInputs` (optional, deprecated), an additional list of derivation to add to `buildInputs`,
+* `overrideBuildInputs` (optional) replaces the default list of derivation to which `buildInputs` and `extraBuildInputs` adds extras elements,
+* `propagatedBuildInputs` (optional) is passed as is to `mkDerivation`, we recommend to use this for Coq libraries and Coq plugin dependencies, as this makes sure the paths of the compiled libraries and plugins will always be added to the build environements of subsequent derivation, which is necessary for Coq packages to work correctly,
+* `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `coq.ocamlPackages` attribute can be used in `nativeBuildInputs`, `buildInputs`, and `propagatedBuildInputs` to depend on the same package set Coq was built against.
+* `useDuneifVersion` (optional, default to `(x: false)` uses Dune to build the package if the provided predicate evaluates to true on the version, e.g. `useDuneifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
+* `useDune` (optional, defaults to `false`) uses Dune to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
 * `opam-name` (optional, defaults to concatenating with a dash separator the components of `namePrefix` and `pname`), name of the Dune package to build.
 * `enableParallelBuilding` (optional, defaults to `true`), since it is activated by default, we provide a way to disable it.
 * `extraInstallFlags` (optional), allows to extend `installFlags` which initializes the variable `COQMF_COQLIB` so as to install in the proper subdirectory. Indeed Coq libraries should be installed in `$(out)/lib/coq/${coq.coq-version}/user-contrib/`. Such directories are automatically added to the `$COQPATH` environment variable by the hook defined in the Coq derivation.
@@ -79,4 +87,59 @@ with lib; mkCoqDerivation {
     license = licenses.cecill-c;
   };
 }
+```
+
+## Three ways of overriding Coq packages {#coq-overriding-packages}
+
+There are three distinct ways of changing a Coq package by overriding one of its values: `.override`, `overrideCoqDerivation`, and `.overrideAttrs`.  This section explains what sort of values can be overridden with each of these methods.
+
+### `.override` {#coq-override}
+
+`.override` lets you change arguments to a Coq derivation.  In the case of the `multinomials` package above, `.override` would let you override arguments like `mkCoqDerivation`, `version`, `coq`, `mathcomp`, `mathcom-finmap`, etc.
+
+For example, assuming you have a special `mathcomp` dependency you want to use, here is how you could override the `mathcomp` dependency:
+
+```nix
+multinomials.override {
+  mathcomp = my-special-mathcomp;
+}
+```
+
+In Nixpkgs, all Coq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
+
+```nix
+coqPackages.multinomials.override {
+  version = "1.5.1";
+}
+```
+
+Refer to [](#coq-packages-attribute-sets-coqpackages) for all the different formats that you can potentially pass to `version`, as well as the restrictions.
+
+### `overrideCoqDerivation` {#coq-overrideCoqDerivation}
+
+The `overrideCoqDerivation` function lets you easily change arguments to `mkCoqDerivation`.  These arguments are described in [](#coq-packages-attribute-sets-coqpackages).
+
+For example, here is how you could locally add a new release of the `multinomials` library, and set the `defaultVersion` to use this release:
+
+```nix
+coqPackages.lib.overrideCoqDerivation
+  {
+    defaultVersion = "2.0";
+    release."2.0".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk";
+  }
+  coqPackages.multinomials
+```
+
+### `.overrideAttrs` {#coq-overrideAttrs}
+
+`.overrideAttrs` lets you override arguments to the underlying `stdenv.mkDerivation` call. Internally, `mkCoqDerivation` uses `stdenv.mkDerivation` to create derivations for Coq libraries.  You can override arguments to `stdenv.mkDerivation` with `.overrideAttrs`.
+
+For instance, here is how you could add some code to be performed in the derivation after installation is complete:
+
+```nix
+coqPackages.multinomials.overrideAttrs (oldAttrs: {
+  postInstall = oldAttrs.postInstall or "" + ''
+    echo "you can do anything you want here"
+  '';
+})
 ```

@@ -1,7 +1,7 @@
 {lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse}:
 
 stdenv.mkDerivation rec {
-  name = "wiimms-iso-tools";
+  pname = "wiimms-iso-tools";
   version = "3.02a";
 
   src = fetchurl {
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     patchShebangs gen-text-file.sh
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security -fcommon";
   INSTALL_PATH = "$out";
 
   installPhase = ''

@@ -6,7 +6,7 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 
 - For basic usage just pull `texlive.combined.scheme-basic` for an environment with basic LaTeX support.
 
-- It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this:
+- It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this. Most CTAN packages should be available:
 
   ```nix
   texlive.combine {
@@ -55,11 +55,11 @@ let
     srcs = [
       (fetchurl {
         url = "http://mirrors.ctan.org/macros/latex/contrib/foiltex/foiltex.dtx";
-        sha256 = "07frz0krpz7kkcwlayrwrj2a2pixmv0icbngyw92srp9fp23cqpz";
+        hash = "sha256-/2I2xHXpZi0S988uFsGuPV6hhMw8e0U5m/P8myf42R0=";
       })
       (fetchurl {
         url = "http://mirrors.ctan.org/macros/latex/contrib/foiltex/foiltex.ins";
-        sha256 = "09wkyidxk3n3zvqxfs61wlypmbhi1pxmjdi1kns9n2ky8ykbff99";
+        hash = "sha256-KTm3pkd+Cpu0nSE2WfsNEa56PeXBaNfx/sOO2Vv0kyc=";
       })
     ];
 

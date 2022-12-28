@@ -81,8 +81,12 @@ for module in $(cat closure); do
     for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:'); do
         mkdir -p "$out/lib/firmware/$(dirname "$i")"
         echo "firmware for $module: $i"
-        cp "$firmware/lib/firmware/$i" "$out/lib/firmware/$i" 2>/dev/null \
-            || echo "WARNING: missing firmware $i for module $module"
+        for name in "$i" "$i.xz" ""; do
+            [ -z "$name" ] && echo "WARNING: missing firmware $i for module $module"
+            if cp "$firmware/lib/firmware/$name" "$out/lib/firmware/$name" 2>/dev/null; then
+                break
+            fi
+        done
     done
 done
 

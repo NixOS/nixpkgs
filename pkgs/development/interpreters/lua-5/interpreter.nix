@@ -2,19 +2,26 @@
 , compat ? false
 , callPackage
 , makeWrapper
+, self
 , packageOverrides ? (final: prev: {})
-, sourceVersion
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, version
 , hash
+, passthruFun
 , patches ? []
 , postConfigure ? null
 , postBuild ? null
 , staticOnly ? stdenv.hostPlatform.isStatic
-}:
+, luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}"
+} @ inputs:
 let
-  luaPackages = callPackage ../../lua-modules {
-    lua = self;
-    overrides = packageOverrides;
-  };
+  luaPackages = self.pkgs;
+
+  luaversion = lib.versions.majorMinor version;
 
 plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
        else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
@@ -25,19 +32,19 @@ plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux
        else if stdenv.hostPlatform.isBSD then "bsd"
        else if stdenv.hostPlatform.isUnix then "posix"
        else "generic";
+in
 
-self = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lua";
-  luaversion = with sourceVersion; "${major}.${minor}";
-  version = "${luaversion}.${sourceVersion.patch}";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
     sha256 = hash;
   };
 
-  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -123,18 +130,23 @@ self = stdenv.mkDerivation rec {
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
   '';
 
-  passthru = rec {
-    buildEnv = callPackage ./wrapper.nix {
-      lua = self;
-      inherit (luaPackages) requiredLuaModules;
-    };
-    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
-    pkgs = luaPackages;
-    interpreter = "${self}/bin/lua";
+  # copied from python
+  passthru = let
+    # When we override the interpreter we also need to override the spliced versions of the interpreter
+    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
+  in passthruFun rec {
+    inherit self luaversion packageOverrides luaAttr;
+    executable = "lua";
+    luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
+    luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
+    luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
+    luaOnHostForHost = override pkgsHostHost.${luaAttr};
+    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
   };
 
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = "https://www.lua.org";
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data
@@ -147,5 +159,4 @@ self = stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-};
-in self
+}

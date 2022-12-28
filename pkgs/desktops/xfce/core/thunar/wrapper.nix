@@ -1,4 +1,4 @@
-{ makeWrapper, symlinkJoin, thunar, thunarPlugins, lib }:
+{ lib, makeWrapper, symlinkJoin, thunar, thunarPlugins }:
 
 symlinkJoin {
   name = "thunar-with-plugins-${thunar.version}";
@@ -9,10 +9,10 @@ symlinkJoin {
 
   postBuild = ''
     wrapProgram "$out/bin/thunar" \
-      --set "THUNARX_MODULE_DIR" "$out/lib/thunarx-3"
+      --set "THUNARX_DIRS" "$out/lib/thunarx-3"
 
     wrapProgram "$out/bin/thunar-settings" \
-      --set "THUNARX_MODULE_DIR" "$out/lib/thunarx-3"
+      --set "THUNARX_DIRS" "$out/lib/thunarx-3"
 
     # NOTE: we need to remove the folder symlink itself and create
     # a new folder before trying to substitute any file below.

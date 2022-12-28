@@ -64,7 +64,7 @@ in
     propagatedBuildInputs = [pkgs.openssl];
     overrides = y: (x.overrides y) // {
       prePatch = ''
-        sed 's|libssl.so|${pkgs.openssl.out}/lib/libssl.so|' -i src/reload.lisp
+        sed 's|libssl.so|${pkgs.lib.getLib pkgs.openssl}/lib/libssl.so|' -i src/reload.lisp
       '';
     };
   };
@@ -292,17 +292,5 @@ $out/lib/common-lisp/query-fs"
     };
   };
   lla = addNativeLibs [ pkgs.openblas ];
-  uax-15 = x: {
-    overrides = y: (x.overrides y) // {
-      postPatch = ''
-        patch -p1 < ${
-          pkgs.fetchurl {
-            # https://github.com/sabracrolleton/uax-15/pull/12
-            url = "https://github.com/nuddyco/uax-15/commit/d553181669f488636df03d60ad7f5bec64d566bf.diff";
-            sha256 = "sha256:1608jzw7giy18vlw7pz4pl8prwlprgif8zcl9hwa0wf5gdxwd7gn";
-          }}
-      '';
-    };
-  };
 #  cl-opengl = addNativeLibs [ pkgs.libGL pkgs.glfw ];
 }

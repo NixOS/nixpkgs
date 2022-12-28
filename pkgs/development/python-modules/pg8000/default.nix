@@ -1,27 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, importlib-metadata
 , passlib
+, python-dateutil
 , pythonOlder
 , scramp
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.23.0";
-  format = "setuptools";
+  version = "1.29.4";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pBPgAUE0KBOiykfot7BUn/M4zKAryBkHa21w8S11XHk=";
+    hash = "sha256-dtKqF1ejC8ceAwfa4Yw3TjNqaRI+awRuIGqWYR+iozA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     passlib
+    python-dateutil
     scramp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
+
+  postPatch = ''
+    sed '/^\[metadata\]/a version = ${version}' setup.cfg
+  '';
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
@@ -33,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python driver for PostgreSQL";
     homepage = "https://github.com/tlocke/pg8000";
+    changelog = "https://github.com/tlocke/pg8000#release-notes";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;

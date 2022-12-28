@@ -1,38 +1,53 @@
 { lib
 , mkDerivation
+, gcc11Stdenv
+, srcs
 
 , cmake
 , extra-cmake-modules
+, wrapQtAppsHook
 
+, c-ares
+, curl
 , kcontacts
 , ki18n
+, kio
 , kirigami2
 , knotifications
 , kpeople
 , libphonenumber
 , libqofono
+, modemmanager-qt
 , protobuf
-, telepathy
+, qcoro
+, qtquickcontrols2
 }:
 
-mkDerivation rec {
+# Workaround for AArch64 not using GCC11 yet.
+gcc11Stdenv.mkDerivation rec {
   pname = "spacebar";
+  inherit (srcs.spacebar) version src;
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    c-ares
+    curl
     kcontacts
     ki18n
+    kio
     kirigami2
     knotifications
     kpeople
     libphonenumber
-    libqofono
+    modemmanager-qt
     protobuf # Needed by libphonenumber
-    telepathy
+    qcoro
+    qtquickcontrols2
   ];
 
   meta = with lib; {

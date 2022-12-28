@@ -13,6 +13,7 @@
 , tcpip
 , uri
 , lwt
+, astring
 }:
 
 buildDunePackage {
@@ -21,9 +22,9 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
-    minimumOCamlVersion
   ;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf
@@ -43,6 +44,7 @@ buildDunePackage {
     tcpip
     uri
     lwt
+    astring
   ];
 
   meta = paf.meta // {

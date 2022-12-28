@@ -4,17 +4,21 @@
 , numpy
 , pytestCheckHook
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.1";
+  version = "3.1.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dfm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0q9dj7mihjjkcy6famzwhz1xcxxzzvm00n01w4bbm66ax9zvis52";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HAuwWFNL63BlvHomQx+hWw4et7kRYd3zhH2FAj632Lg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,7 +35,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "emcee" ];
+  pythonImportsCheck = [
+    "emcee"
+  ];
 
   meta = with lib; {
     description = "Kick ass affine-invariant ensemble MCMC sampling";

@@ -5,31 +5,46 @@
 , Security
 , DiskArbitration
 , Foundation
+, nixosTests
 }:
 
-let version = "0.23.1";
+let version = "0.30.2";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "v${version}";
-    sha256 = "sha256-4F7noByC9ZgqYwPfkm8VE15QU2jbBvUAH4Idxa+J+Aw=";
+    hash = "sha256-kxANzEORvR+BJDfLUD1FLorBuYjnUQixgD2jDoX6jrg=";
   };
-  cargoPatches = [
-    # feature mini-dashboard tries to download a file from the internet
-    # feature analitycs should be opt-in
-    ./remove-default-feature.patch
+
+  cargoHash = "sha256-IYNIr7PBNNloPizaauFYR9/NPnBMS8kQi+RNsKsNjLE=";
+
+  # Default features include mini dashboard which downloads something from the internet.
+  buildNoDefaultFeatures = true;
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    DiskArbitration
+    Foundation
   ];
-  cargoSha256 = "sha256-dz+1IQZRSeMEagI2dnOtR3A8prg4UZ2Om0pd1BUhuhE=";
-  buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
+
+  passthru.tests = {
+    meilisearch = nixosTests.meilisearch;
+  };
+
+  # Tests will try to compile with mini-dashboard features which downloads something from the internet.
+  doCheck = false;
+
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = "https://docs.meilisearch.com/";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
   };
 }

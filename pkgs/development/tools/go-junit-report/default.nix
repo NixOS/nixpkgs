@@ -1,23 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "go-junit-report-unstable";
-  version = "2018-06-14";
-  rev = "385fac0ced9acaae6dc5b39144194008ded00697";
-
-  goPackagePath = "github.com/jstemmer/go-junit-report";
+buildGoModule rec {
+  pname = "go-junit-report";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "jstemmer";
     repo = "go-junit-report";
-    sha256 = "109zs8wpdmc2ijc2khyqija8imay88ka6v50xvrpnnwnd3ywckxi";
+    rev = "v${version}";
+    sha256 = "sha256-Xz2tJtacsd6PqqA0ZT2eRgTACZonhdDtRWfBGcHW3A4=";
   };
 
+  vendorSha256 = "sha256-+KmC7m6xdkWTT/8MkGaW9gqkzeZ6LWL0DXbt+12iTHY=";
+
+  ldflags = [ "-s" "-w" ];
+
   meta = with lib; {
-    description = "Converts go test output to an xml report, suitable for applications that expect junit xml reports (e.g. Jenkins)";
-    homepage    = "https://${goPackagePath}";
+    description = "Convert go test output to junit xml";
+    homepage = "https://github.com/jstemmer/go-junit-report";
+    license = licenses.mit;
     maintainers = with maintainers; [ cryptix ];
-    license     = licenses.mit;
   };
 }

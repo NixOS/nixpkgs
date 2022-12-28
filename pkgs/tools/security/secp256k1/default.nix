@@ -7,15 +7,13 @@
 stdenv.mkDerivation {
   pname = "secp256k1";
 
-  # I can't find any version numbers, so we're just using the date of the
-  # last commit.
-  version = "unstable-2021-06-06";
+  version = "unstable-2022-02-06";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "7973576f6e3ab27d036a09397152b124d747f4ae";
-    sha256 = "0vjk55dv0mkph4k6bqgkykmxn05ngzvhc4rzjnvn33xzi8dzlvah";
+    rev = "5dcc6f8dbdb1850570919fc9942d22f728dbc0af";
+    sha256 = "x9qG2S6tBSRseWaFIN9N2fRpY1vkv8idT3d3rfJnmaU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -44,6 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/bitcoin-core/secp256k1";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    platforms = with platforms; all;
   };
 }

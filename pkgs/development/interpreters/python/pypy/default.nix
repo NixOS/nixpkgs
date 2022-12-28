@@ -1,6 +1,6 @@
 { lib, stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
 , self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
@@ -23,13 +23,15 @@ with lib;
 
 let
   isPy3k = substring 0 1 pythonVersion == "3";
+  isPy39OrNewer = versionAtLeast pythonVersion "3.9";
   passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${if isPy3k then "3" else ""}";
+    executable = "pypy${if isPy39OrNewer then lib.versions.majorMinor pythonVersion else if isPy3k then "3" else ""}";
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
+    inherit pythonAttr;
 
     pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
@@ -51,7 +53,7 @@ in with passthru; stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
+    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl libX11 gdbm db
   ]  ++ optionals isPy3k [
     xz
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
@@ -147,6 +149,7 @@ in with passthru; stdenv.mkDerivation rec {
     cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
     cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
     ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
+    ${optionalString isPy39OrNewer "ln -s $out/bin/${executable}-c $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
     ln -s $out/${executable}-c/include $out/include/${libPrefix}

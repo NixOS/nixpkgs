@@ -4,7 +4,7 @@
 , fetchPypi
 , dataclasses-json
 , pycryptodome
-, setuptools
+, setuptools-scm
 , pytest-asyncio
 , pytest-cases
 , pytestCheckHook
@@ -28,10 +28,13 @@ buildPythonPackage rec {
       --replace "--cov pysiaalarm --cov-report term-missing" ""
   '';
 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     dataclasses-json
     pycryptodome
-    setuptools
   ];
 
   checkInputs = [

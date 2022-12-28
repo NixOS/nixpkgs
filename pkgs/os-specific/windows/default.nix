@@ -37,6 +37,8 @@ lib.makeScope newScope (self: with self; {
     stdenv = crossThreadsStdenv;
   };
 
+  npiperelay = callPackage ./npiperelay { };
+
   pthreads = callPackage ./pthread-w32 { };
 
   wxMSW = callPackage ./wxMSW-2.8 { };

@@ -7,6 +7,7 @@
 , libusb1
 , mock
 , pyasn1
+, pythonAtLeast
 , pycryptodome
 , pytestCheckHook
 , rsa
@@ -14,33 +15,44 @@
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.4.2";
+  version = "0.4.3";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
-  # pypi does not contain tests, using github sources instead
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    sha256 = "sha256-8tclSjmLlTAIeq6t7YPGtJwvSwtlzQ7sRAQatcQRzeY=";
+    hash = "sha256-+RU3nyJpHq0r/9erEbjUILpwIPWq14HdOX7LkSxySs4=";
   };
 
   propagatedBuildInputs = [
-    aiofiles
     cryptography
-    libusb1
     pyasn1
     rsa
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiofiles
+    ];
+    usb = [
+      libusb1
+    ];
+  };
 
   checkInputs = [
     mock
     pycryptodome
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.optional-dependencies.async
+  ++ passthru.optional-dependencies.usb;
 
-  pythonImportsCheck = [ "adb_shell" ];
+  pythonImportsCheck = [
+    "adb_shell"
+  ];
 
   meta = with lib; {
     description = "Python implementation of ADB with shell and FileSync functionality";

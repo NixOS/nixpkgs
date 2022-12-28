@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
@@ -13,9 +12,14 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
+  #
+  # We don't use sage's own build system (which builds all its
+  # dependencies), so we exclude changes to "build/" from patches by
+  # default to avoid conflicts.
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, excludes ? [ "build/*" ]
+                  , ...}@args: (
     fetchpatch ({
-      inherit name sha256;
+      inherit name sha256 excludes;
 
       # There are three places to get changes from:
       #
@@ -49,33 +53,23 @@ let
                "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
              ]
              else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
-
-      # We don't care about sage's own build system (which builds all its dependencies).
-      # Exclude build system changes to avoid conflicts.
-      excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" "excludes" ])
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.4";
+  version = "9.7";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
+    sha256 = "sha256-MYpCp18wqKwCa+tcJ7He14p1FXDlVm1vubQqQS9g3LY=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Make sure py2/py3 tests are only run when their expected context (all "sage"
-    # tests) are also run. That is necessary to test dochtml individually. See
-    # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
-    # TODO: Determine if it is still necessary.
-    ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
-
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
 
@@ -86,6 +80,10 @@ stdenv.mkDerivation rec {
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
+
+    # Docbuilding copies files from the Nix store and expects them to be writable.
+    # Remove when https://github.com/matplotlib/matplotlib/pull/23805 lands.
+    ./patches/sphinx-fix-matplotlib-css-perms.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -109,32 +107,75 @@ stdenv.mkDerivation rec {
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
-    # https://trac.sagemath.org/ticket/32305
+    # Upstream will wait until Sage 9.7 to upgrade to linbox 1.7 because it
+    # does not support gcc 6. We can upgrade earlier.
+    # https://trac.sagemath.org/ticket/32959
+    ./patches/linbox-1.7-upgrade.patch
+
+    # adapted from https://trac.sagemath.org/ticket/23712#comment:22
+    ./patches/tachyon-renamed-focallength.patch
+
+    # https://trac.sagemath.org/ticket/34118
     (fetchSageDiff {
-      base = "9.4";
-      name = "networkx-2.6-upgrade.patch";
-      rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
-      sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
+      name = "sympy-1.11-upgrade.patch";
+      base = "9.7";
+      rev = "52815744bde2b682245b6f985a112f7cb8666056";
+      sha256 = "sha256-gv6z6JkQ6S6oCJQNkVgcPVvzlplyvR1nC7pWmcUiSc0=";
     })
 
-    # https://trac.sagemath.org/ticket/32420
+    # https://trac.sagemath.org/ticket/34460
     (fetchSageDiff {
-      base = "9.5.beta2";
-      name = "sympy-1.9-update.patch";
-      rev = "beed4e16aff32e47d0c3b1c58cb1e2f4c38590f8";
-      sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
+      name = "ipywidgets-8-upgrade.patch";
+      base = "9.7";
+      rev = "2816dbacb342398a23bb3099e20c92c8020ab0fa";
+      sha256 = "sha256-tCOsMxXwPkRg3FJGVvTqDzlWdra78UfDY6nci0Nr9GI=";
     })
 
-    # https://trac.sagemath.org/ticket/32797
+    # https://trac.sagemath.org/ticket/34391
     (fetchSageDiff {
-      base = "9.5.beta7";
-      name = "pari-2.13.3-update.patch";
-      rev = "f5f7a86908daf60b25e66e6a189c51ada7e0a732";
-      sha256 = "sha256-H/caGx3q4KcdsyGe+ojV9bUTQ5y0siqM+QHgDbeEnbw=";
+      name = "gap-4.12-upgrade.patch";
+      base = "9.8.beta2";
+      rev = "eb8cd42feb58963adba67599bf6e311e03424328";
+      sha256 = "sha256-0dKewOZe2n3PqSdxCJt18FkqwTdrD0VA5MXAMiTW8Tw=";
     })
+
+    # https://trac.sagemath.org/ticket/34701
+    (fetchSageDiff {
+      name = "libgap-fix-gc-crashes-on-aarch64.patch";
+      base = "eb8cd42feb58963adba67599bf6e311e03424328"; # TODO: update when #34391 lands
+      rev = "90acc7f1c13a80b8aa673469a2668feb9cd4207f";
+      sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
+    })
+
+    # https://trac.sagemath.org/ticket/34537
+    (fetchSageDiff {
+      name = "pari-2.15.1-upgrade.patch";
+      squashed = true;
+      base = "54cd6fe6de52aee5a433e0569e8c370618cb2047"; # 9.8.beta1
+      rev = "1e86aa26790d84bf066eca67f98a60a8aa3d4d3a";
+      sha256 = "sha256-LUgcMqrKXWb72Kxl0n6MV5unLXlQSeG8ncN41F7TRSc=";
+      excludes = ["build/*"
+                  "src/sage/geometry/polyhedron/base_number_field.py"
+                  "src/sage/geometry/polyhedron/backend_normaliz.py"
+                  "src/sage/lfunctions/pari.py"];
+    })
+    # Some files were excluded from the above patch due to
+    # conflicts. The patch below contains rebased versions.
+    ./patches/pari-2.15.1-upgrade-rebased.patch
+
+    # Sage uses mixed integer programs (MIPs) to find edge disjoint
+    # spanning trees. For some reason, aarch64 glpk takes much longer
+    # than x86_64 glpk to solve such MIPs. Since the MIP formulation
+    # has "numerous problems" and will be replaced by a polynomial
+    # algorithm soon, disable this test for now.
+    # https://trac.sagemath.org/ticket/34575
+    ./patches/disable-slow-glpk-test.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
+
+  # do not create .orig backup files if patch applies with fuzz
+  patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment

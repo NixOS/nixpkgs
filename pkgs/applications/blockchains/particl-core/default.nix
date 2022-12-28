@@ -18,13 +18,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "particl-core";
-  version = "0.19.2.14";
+  version = "23.0.3.0";
 
   src = fetchFromGitHub {
     owner = "particl";
     repo = "particl-core";
     rev = "v${version}";
-    sha256 = "sha256-gJLEMfEvQ35xjKt8iN/FXi2T/GBMSS7eUqOC8XHKPBg=";
+    sha256 = "sha256-jrIsErKeHP9CMUWsrD42RmfmApP7J091OLA5JNY0fe0=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
     longDescription = ''
       An open source, decentralized privacy platform built for global person to person eCommerce.

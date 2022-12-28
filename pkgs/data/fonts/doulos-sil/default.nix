@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "6.001";
+  version = "6.101";
 in
   fetchzip rec {
     name = "doulos-sil-${version}";
@@ -14,7 +14,7 @@ in
       unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
     '';
 
-    sha256 = "sha256-MkeLLT7EAeSuCMxVVxVfajHufxr+xMLIz2hf3wF3U4o=";
+    sha256 = "sha256-vYdnudMkkWz6r8pwq98fyO0zcfFBRPmrqlmWxHCOIcc=";
 
     meta = with lib; {
       homepage = "https://software.sil.org/doulos";

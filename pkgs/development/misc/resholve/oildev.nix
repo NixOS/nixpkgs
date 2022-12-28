@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, python27Packages
+, python27
 , callPackage
 , fetchFromGitHub
 , makeWrapper
@@ -13,6 +13,8 @@
 , cmark
 , file
 , glibcLocales
+, six
+, typing
 }:
 
 rec {
@@ -32,7 +34,7 @@ rec {
     '';
   };
 
-  py-yajl = python27Packages.buildPythonPackage rec {
+  py-yajl = python27.pkgs.buildPythonPackage rec {
     pname = "oil-pyyajl-unstable";
     version = "2019-12-05";
     src = fetchFromGitHub {
@@ -51,7 +53,7 @@ rec {
     (or accepting all of the patches we need to do so).
     This creates one without disturbing upstream too much.
   */
-  oildev = python27Packages.buildPythonPackage rec {
+  oildev = python27.pkgs.buildPythonPackage rec {
     pname = "oildev-unstable";
     version = "2021-07-14";
 
@@ -70,7 +72,7 @@ rec {
         Note: -f is necessary to keep it from being a pain to update
         hash on rev updates. Command will fail w/o and not print hash.
       */
-      extraPostFetch = ''
+      postFetch = ''
         rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
       '';
     };
@@ -79,8 +81,8 @@ rec {
     patchSrc = fetchFromGitHub {
       owner = "abathur";
       repo = "nix-py-dev-oil";
-      rev = "v0.8.12.1";
-      hash = "sha256-7JVnosdcvmVFN3h6SIeeqcJFcyFkai//fFuzi7ThNMY=";
+      rev = "v0.8.12.2";
+      hash = "sha256-+dVxzPKMGNKFE+7Ggzx9iWjjvwW2Ow3UqmjjUud9Mqo=";
     };
     patches = [
       "${patchSrc}/0001-add_setup_py.patch"
@@ -88,13 +90,14 @@ rec {
       "${patchSrc}/0004-disable-internal-py-yajl-for-nix-built.patch"
       "${patchSrc}/0006-disable_failing_libc_tests.patch"
       "${patchSrc}/0007-namespace_via_init.patch"
+      "${patchSrc}/0009-avoid_nix_arch64_darwin_toolchain_bug.patch"
     ];
 
     buildInputs = [ readline cmark py-yajl ];
 
     nativeBuildInputs = [ re2c file makeWrapper ];
 
-    propagatedBuildInputs = with python27Packages; [ six typing ];
+    propagatedBuildInputs = [ six typing ];
 
     doCheck = true;
 

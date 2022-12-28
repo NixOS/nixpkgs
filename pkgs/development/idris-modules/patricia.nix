@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "patricia";
+  pname = "patricia";
   version = "2017-10-27";
 
   idrisDeps = [ specdris ];

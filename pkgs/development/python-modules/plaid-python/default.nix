@@ -4,15 +4,19 @@
 , nulltype
 , python-dateutil
 , urllib3
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "plaid-python";
-  version = "8.6.0";
+  version = "11.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da3570fedbc096aa058affa72fc71905401b373a5b0d28b7c27e7af7998859d9";
+    hash = "sha256-zZGnKFLsT29IX8EK1Tv5I1Ser+9tREzkJcYY6+Fid6o=";
   };
 
   propagatedBuildInputs = [

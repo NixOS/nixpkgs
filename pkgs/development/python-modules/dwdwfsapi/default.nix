@@ -3,15 +3,19 @@
 , fetchPypi
 , requests
 , ciso8601
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "dwdwfsapi";
-  version = "1.0.4";
+  version = "1.0.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JOIg6rLrU8v39z1I6smIPEeiUPdSdJcD2avUsTQq+bU=";
+    hash = "sha256-zeSV2acjtSWUYnrMjEBtrSPlXRvrNQRX5SYPYHnaOy0=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +26,9 @@ buildPythonPackage rec {
   # All tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [ "dwdwfsapi" ];
+  pythonImportsCheck = [
+    "dwdwfsapi"
+  ];
 
   meta = with lib; {
     description = "Python client to retrieve data provided by DWD via their geoserver WFS API";

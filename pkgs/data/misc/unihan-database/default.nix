@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unihan-database";
-  version = "12.1.0";
+  version = "15.0.0";
 
   src = fetchurl {
     url = "https://www.unicode.org/Public/zipped/${version}/Unihan.zip";
-    sha256 = "1kfdhgg2gm52x3s07bijb5cxjy0jxwhd097k5lqhvzpznprm6ibf";
+    hash = "sha256-JLFUaR/JfLRCZ7kl1iBkKXCGs/iWtXqBgce21CcCoCY=";
   };
 
   nativeBuildInputs = [

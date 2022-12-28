@@ -74,7 +74,10 @@ let
             services.vaultwarden = {
               enable = true;
               dbBackend = backend;
-              config.rocketPort = 80;
+              config = {
+                rocketAddress = "0.0.0.0";
+                rocketPort = 80;
+              };
             };
 
             networking.firewall.allowedTCPPorts = [ 80 ];
@@ -84,7 +87,12 @@ let
                 testRunner = pkgs.writers.writePython3Bin "test-runner"
                   {
                     libraries = [ pkgs.python3Packages.selenium ];
+                    flakeIgnore = [
+                      "E501"
+                    ];
                   } ''
+
+                  from selenium.webdriver.common.by import By
                   from selenium.webdriver import Firefox
                   from selenium.webdriver.firefox.options import Options
                   from selenium.webdriver.support.ui import WebDriverWait
@@ -101,41 +109,40 @@ let
 
                   wait.until(EC.title_contains("Create Account"))
 
-                  driver.find_element_by_css_selector('input#email').send_keys(
-                    '${userEmail}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_email').send_keys(
+                      '${userEmail}'
                   )
-                  driver.find_element_by_css_selector('input#name').send_keys(
-                    'A Cat'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_name').send_keys(
+                      'A Cat'
                   )
-                  driver.find_element_by_css_selector('input#masterPassword').send_keys(
-                    '${userPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_master-password').send_keys(
+                      '${userPassword}'
                   )
-                  driver.find_element_by_css_selector('input#masterPasswordRetype').send_keys(
-                    '${userPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_confirm-master-password').send_keys(
+                      '${userPassword}'
                   )
-                  driver.find_element_by_css_selector('input#acceptPolicies').click()
 
-                  driver.find_element_by_xpath("//button[contains(., 'Submit')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Create Account')]").click()
 
                   wait.until_not(EC.title_contains("Create Account"))
 
-                  driver.find_element_by_css_selector('input#masterPassword').send_keys(
-                    '${userPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#login_input_master-password').send_keys(
+                      '${userPassword}'
                   )
-                  driver.find_element_by_xpath("//button[contains(., 'Log In')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Log In')]").click()
 
-                  wait.until(EC.title_contains("My Vault"))
+                  wait.until(EC.title_contains("Bitwarden Web Vault"))
 
-                  driver.find_element_by_xpath("//button[contains(., 'Add Item')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Add Item')]").click()
 
-                  driver.find_element_by_css_selector('input#name').send_keys(
-                    'secrets'
+                  driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
+                      'secrets'
                   )
-                  driver.find_element_by_css_selector('input#loginPassword').send_keys(
-                    '${storedPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#loginPassword').send_keys(
+                      '${storedPassword}'
                   )
 
-                  driver.find_element_by_xpath("//button[contains(., 'Save')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Save')]").click()
                 '';
               in
               [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
@@ -157,7 +164,7 @@ let
       with subtest("configure the cli"):
           client.succeed("bw --nointeraction config server http://server")
 
-      with subtest("can't login to nonexistant account"):
+      with subtest("can't login to nonexistent account"):
           client.fail(
               "bw --nointeraction --raw login ${userEmail} ${userPassword}"
           )

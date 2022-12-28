@@ -7,7 +7,7 @@ with lib;
   ###### interface
   options = {
     services.neard = {
-      enable = mkEnableOption "neard, NFC daemon";
+      enable = mkEnableOption (lib.mdDoc "neard, NFC daemon");
     };
   };
 

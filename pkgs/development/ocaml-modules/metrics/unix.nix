@@ -1,12 +1,17 @@
-{ buildDunePackage, gnuplot, ocaml_lwt, metrics, metrics-lwt, mtime, uuidm }:
+{ buildDunePackage, gnuplot, lwt, metrics, metrics-lwt, mtime, uuidm }:
 
 buildDunePackage rec {
 
   pname = "metrics-unix";
 
-  inherit (metrics) version useDune2 src;
+  inherit (metrics) version src;
 
-  propagatedBuildInputs = [ gnuplot ocaml_lwt metrics mtime uuidm ];
+  # Fixes https://github.com/mirage/metrics/issues/57
+  postPatch = ''
+    substituteInPlace src/unix/dune --replace "mtime mtime.clock" "mtime"
+  '';
+
+  propagatedBuildInputs = [ gnuplot lwt metrics mtime uuidm ];
 
   checkInputs = [ metrics-lwt ];
 

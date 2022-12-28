@@ -6,17 +6,20 @@
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "16.3.0";
+  version = "21.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "87f06525c6cc47de86d7886ed35f04140ddaf1b0c59482ba578fdb3f5d143b1c";
+    hash = "sha256-9Jhhd/qmphNnmWphXtFr6V52WA7KtKA8lI6cKsdGsOE=";
   };
 
   propagatedBuildInputs = [
@@ -24,14 +27,14 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.containerservice" ];
+  pythonImportsCheck = [
+    "azure.mgmt.containerservice"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Container Service Management Client Library";

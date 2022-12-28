@@ -2,15 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
-  version = "2.0.3";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "nojhan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BY0/lcBxcfIgKXbXZjiEgVdugmo8vD6UWGsjEVq6j6E=";
+    sha256 = "sha256-7mnrXLqnCdOuS2aRs4tVLfO8SRFrqZHNM40gWE/CVFI=";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -D -m 0444 liquidprompt $out/bin/liquidprompt
     install -D -m 0444 liquidpromptrc-dist $out/share/doc/liquidprompt/liquidpromptrc-dist

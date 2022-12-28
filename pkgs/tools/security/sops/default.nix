@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "sops";
-  version = "3.7.1";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "mozilla";
     repo = pname;
-    sha256 = "0z3jcyl245yjszzjf2h6l1dwa092vxzvfmnivmwi6jvpsdcv33h1";
+    sha256 = "sha256-wN1ksLwD4G+fUhvCe+jahh1PojPk6L6tnx1rsc7dz+M=";
   };
 
-  vendorSha256 = "1mnwgsbpi56ql0lbpn7dkaps96x9b1lmhlk5cd6d40da7xj616n7";
+  vendorSha256 = "sha256-8IaE+vhVZkc9QDR6+/3eOSsuf3SYF2upNcCifbqtx14=";
+
+  ldflags = [ "-s" "-w" ];
 
   doCheck = false;
 

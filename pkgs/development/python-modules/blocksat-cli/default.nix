@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "0.4.1";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "96ec5e548dcdb71ada75727d76b34006fe5f6818bd89cf982e15616d41889603";
+    sha256 = "sha256-btwL8l5UdE9FwWXfuf1OHa8EwXDoFrh8tvOwr1yhyRg=";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "grit";
@@ -14,6 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-iMMkjJ5dnlr0oSCifBQPWkInQBCp1bh23s+BcKzDNCg=";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A multitree-based personal task manager";
     homepage = "https://github.com/climech/grit";
     license = licenses.mit;

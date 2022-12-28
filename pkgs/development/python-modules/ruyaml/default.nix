@@ -10,13 +10,15 @@
 
 buildPythonPackage rec {
   pname = "ruyaml";
-  version = "0.90.0.2";
+  version = "0.91.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "0gxvwry7n1gczxkjzyfrr3fammllkvnnamja4yln8xrg3n1h89al";
   };
 
@@ -35,7 +37,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ruyaml" ];
+  pythonImportsCheck = [
+    "ruyaml"
+  ];
 
   meta = with lib; {
     description = "YAML 1.2 loader/dumper package for Python";

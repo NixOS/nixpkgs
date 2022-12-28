@@ -1,61 +1,74 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , setuptools-scm
-, ansible-base
+, ansible-compat
+, ansible-core
+, black
 , enrich
+, filelock
 , flaky
+, jsonschema
+, pythonOlder
+, pytest
+, pytest-xdist
+, pytestCheckHook
 , pyyaml
 , rich
 , ruamel-yaml
-, tenacity
 , wcmatch
 , yamllint
-, pytest-xdist
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.2.1";
-  disabled = isPy27;
+  version = "6.10.0";
   format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1krKWcjYllQdN5uSBbISa4UQiKqwosLKsZ/3SxhM3xw=";
+    sha256 = "sha256-9ezsWOvntr/El2vn1uQAQRqK8FsOGhnxXyX1nzQBNIw=";
   };
+
+  postPatch = ''
+    # it is fine if lint tools are missing
+    substituteInPlace conftest.py \
+      --replace "sys.exit(1)" ""
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    ansible-base
+    ansible-compat
+    ansible-core
+    black
     enrich
-    flaky
+    filelock
+    jsonschema
+    pytest # yes, this is an actual runtime dependency
     pyyaml
     rich
     ruamel-yaml
-    tenacity
     wcmatch
     yamllint
   ];
 
+  # tests can't be easily run without installing things from ansible-galaxy
+  doCheck = false;
+
   checkInputs = [
+    flaky
     pytest-xdist
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "--numprocesses" "auto"
   ];
 
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible-base ]}
+    export PATH=$PATH:${lib.makeBinPath [ ansible-core ]}
 
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
@@ -82,12 +95,12 @@ buildPythonPackage rec {
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-base ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ansible-community/ansible-lint";
+    homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
     license = licenses.mit;
-    maintainers = with maintainers; [ sengaya SuperSandro2000 ];
+    maintainers = with maintainers; [ sengaya ];
   };
 }

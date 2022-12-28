@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "limesurvey";
   meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.limesurvey = {
       enable = true;
       virtualHost = {

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, buildGoModule, git
-, asciidoctor, ruby
+{ lib, fetchurl, buildGoModule, asciidoctor, ruby
 }:
 
 buildGoModule rec {
@@ -11,11 +10,9 @@ buildGoModule rec {
     sha256 = "sha256-FuL5pvIM468hEm6rUBKGW6+WlYv4DPHNnpwpRGzMwlY=";
   };
 
-  vendorSha256 = "sha256-KpdXI2Znhe0iCp0DjSZXzUYDZIz2KBRv1/SpaRTFMAc=";
+  vendorSha256 = "sha256-QpgRCnsOOZujE405dCe+PYg/zNkqnrfZFfbBFo7adjY=";
 
   subPackages = [ "." ];
-
-  runVend = true;
 
   nativeBuildInputs = [ asciidoctor ruby ];
 

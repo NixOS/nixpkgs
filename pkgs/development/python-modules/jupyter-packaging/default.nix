@@ -2,26 +2,42 @@
 , buildPythonPackage
 , fetchPypi
 , deprecation
+, hatchling
 , pythonOlder
 , packaging
 , pytestCheckHook
+, pytest-timeout
+, setuptools
 , tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";
-  version = "0.10.2";
+  version = "0.12.3";
   disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_packaging";
     inherit version;
-    sha256 = "sha256-iEX0ht1IwWYM+tGOUJHRwDVA6y6fvzzs8h7LIrabh3A=";
+    sha256 = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
 
-  propagatedBuildInputs = [ deprecation packaging tomlkit ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    deprecation
+    packaging
+    setuptools
+    tomlkit
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

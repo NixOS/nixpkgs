@@ -10,15 +10,19 @@
 , pytestCheckHook
 , pytest-asyncio
 , sqlparse
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.11.1";
+  version = "3.26.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b993b4c68f11dd6fe0f66e0c437a71f9bed8d77f6bf1ddc4aad422ce3b330ecb";
+    hash = "sha256-d4FJCW0tTVgb+JTL386bYwmSlwEGAGSJAovsNs8kjaI=";
   };
 
   propagatedBuildInputs = [
@@ -65,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
+    changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

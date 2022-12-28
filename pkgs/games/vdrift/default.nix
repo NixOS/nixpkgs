@@ -12,7 +12,7 @@
 , bullet
 , curl
 , gettext
-, writeTextFile
+, writeShellScriptBin
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
@@ -54,21 +54,15 @@ let
     };
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
-in writeTextFile {
+in
+(writeShellScriptBin "vdrift"  ''
+  export VDRIFT_DATA_DIRECTORY="${data}"
+  exec ${bin}/bin/vdrift "$@"
+'').overrideAttrs (_: {
   name = wrappedName;
-  text = ''
-    export VDRIFT_DATA_DIRECTORY="${data}"
-    exec ${bin}/bin/vdrift "$@"
-  '';
-  destination = "/bin/vdrift";
-  executable = true;
-  checkPhase = ''
-    ${stdenv.shell} -n $out/bin/vdrift
-  '';
-} // {
   meta = bin.meta // {
     hydraPlatforms = [ ];
   };
   unwrapped = bin;
   inherit bin data;
-}
+})

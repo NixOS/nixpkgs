@@ -1,6 +1,8 @@
 { lib, stdenv, poetryLib }: python:
 let
-  inherit (poetryLib) ireplace targetMachine;
+  inherit (poetryLib) ireplace;
+
+  targetMachine = poetryLib.getTargetMachine stdenv;
 
   # Like builtins.substring but with stop being offset instead of length
   substr = start: stop: s: builtins.substring start (stop - start) s;

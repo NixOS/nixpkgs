@@ -1,33 +1,46 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, loguru
+, pytest-asyncio
+, pytest-mypy
 , pytestCheckHook
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.5.6";
+  version = "3.4.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0gd2jana5w6bn7z58di4a8dwcxvc8rx282jawbw7ws7qm2a5klz3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-O/+jvdzzxUFaQdAfUM9p40fPPDNN+stTauCD993HH6Y=";
   };
 
-  # disable coverage and linting
   postPatch = ''
     sed -i '/--cov/d' pytest.ini
-    sed -i '/--flake8/d' pytest.ini
+    sed -i '/--mypy/d' pytest.ini
   '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  passthru.optional-dependencies = {
+    loguru = [
+      loguru
+    ];
+  };
 
   checkInputs = [
+    pytest-asyncio
+    pytest-mypy
     pytestCheckHook
+  ] ++ passthru.optional-dependencies.loguru;
+
+  pythonImportsCheck = [
+    "python_utils"
   ];
 
   pytestFlagsArray = [
@@ -37,6 +50,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
+    changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -3,7 +3,7 @@
 {
   pname = "rely";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

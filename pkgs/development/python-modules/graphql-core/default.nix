@@ -2,28 +2,34 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-benchmark
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.1.6";
+  version = "3.2.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1ip0yrqmnqncgpwvba18x020gkwr7csiw4zdy6mrdnvwf5qyam4x";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LtBbHA5r6/YNh2gKX0+NqQjrpKuMioyOYWT0R59SIL4=";
   };
 
   checkInputs = [
+    pytest-asyncio
     pytest-benchmark
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "graphql" ];
+  pythonImportsCheck = [
+    "graphql"
+  ];
 
   meta = with lib; {
     description = "Port of graphql-js to Python";

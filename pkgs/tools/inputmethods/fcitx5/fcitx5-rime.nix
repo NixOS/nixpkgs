@@ -6,22 +6,21 @@
 , gettext
 , fcitx5
 , librime
-, brise
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.7";
+  version = "5.0.15";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "1djakg17rxc38smja4y76i0p4gwdj3lgwym8kybkaspk7lxr62zy";
+    sha256 = "sha256-gSot+jxZn2m/RQP9ELN/S5sh5uQfhA1s45+N5svN5fg=";
   };
 
   cmakeFlags = [
-    "-DRIME_DATA_DIR=${brise}/share/rime-data"
+    "-DRIME_DATA_DIR=${placeholder "out"}/share/rime-data"
   ];
 
   nativeBuildInputs = [
@@ -35,6 +34,8 @@ stdenv.mkDerivation rec {
     fcitx5
     librime
   ];
+
+  patches = [ ./fcitx5-rime-with-nix-env-variable.patch ];
 
   meta = with lib; {
     description = "RIME support for Fcitx5";

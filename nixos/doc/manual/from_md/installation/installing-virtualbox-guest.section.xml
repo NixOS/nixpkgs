@@ -1,4 +1,4 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-instaling-virtualbox-guest">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-installing-virtualbox-guest">
   <title>Installing in a VirtualBox guest</title>
   <para>
     Installing NixOS into a VirtualBox guest is convenient for users who
@@ -11,8 +11,8 @@
   <orderedlist numeration="arabic">
     <listitem>
       <para>
-        Add a New Machine in VirtualBox with OS Type &quot;Linux / Other
-        Linux&quot;
+        Add a New Machine in VirtualBox with OS Type <quote>Linux /
+        Other Linux</quote>
       </para>
     </listitem>
     <listitem>
@@ -38,7 +38,7 @@
     <listitem>
       <para>
         Click on Settings / System / Acceleration and enable
-        &quot;VT-x/AMD-V&quot; acceleration
+        <quote>VT-x/AMD-V</quote> acceleration
       </para>
     </listitem>
     <listitem>
@@ -58,25 +58,25 @@
     There are a few modifications you should make in configuration.nix.
     Enable booting:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.loader.grub.device = &quot;/dev/sda&quot;;
 </programlisting>
   <para>
     Also remove the fsck that runs at startup. It will always fail to
     run, stopping your boot until you press <literal>*</literal>.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.initrd.checkJournalingFS = false;
 </programlisting>
   <para>
     Shared folders can be given a name and a path in the host system in
     the VirtualBox settings (Machine / Settings / Shared Folders, then
-    click on the &quot;Add&quot; icon). Add the following to the
+    click on the <quote>Add</quote> icon). Add the following to the
     <literal>/etc/nixos/configuration.nix</literal> to auto-mount them.
     If you do not add <literal>&quot;nofail&quot;</literal>, the system
     will not boot properly.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ...} :
 {
   fileSystems.&quot;/virtualboxshare&quot; = {

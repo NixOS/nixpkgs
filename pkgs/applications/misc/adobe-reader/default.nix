@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Adobe Reader, a viewer for PDF documents";
     homepage = "http://www.adobe.com/products/reader";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     knownVulnerabilities = [
       "Numerous unresolved vulnerabilities"

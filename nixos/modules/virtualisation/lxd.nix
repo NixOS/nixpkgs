@@ -18,17 +18,17 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option enables lxd, a daemon that manages
           containers. Users in the "lxd" group can interact with
           the daemon (e.g. to start or stop containers) using the
-          <command>lxc</command> command line tool, among others.
+          {command}`lxc` command line tool, among others.
 
           Most of the time, you'll also want to start lxcfs, so
           that containers can "see" the limits:
-          <code>
-            virtualisation.lxc.lxcfs.enable = true;
-          </code>
+          ```
+          virtualisation.lxc.lxcfs.enable = true;
+          ```
         '';
       };
 
@@ -36,7 +36,7 @@ in {
         type = types.package;
         default = pkgs.lxd;
         defaultText = literalExpression "pkgs.lxd";
-        description = ''
+        description = lib.mdDoc ''
           The LXD package to use.
         '';
       };
@@ -45,7 +45,7 @@ in {
         type = types.package;
         default = pkgs.lxc;
         defaultText = literalExpression "pkgs.lxc";
-        description = ''
+        description = lib.mdDoc ''
           The LXC package to use with LXD (required for AppArmor profiles).
         '';
       };
@@ -54,7 +54,7 @@ in {
         type = types.bool;
         default = config.boot.zfs.enabled;
         defaultText = literalExpression "config.boot.zfs.enabled";
-        description = ''
+        description = lib.mdDoc ''
           Enables lxd to use zfs as a storage for containers.
 
           This option is enabled by default if a zfs pool is configured
@@ -65,7 +65,7 @@ in {
       recommendedSysctlSettings = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enables various settings to avoid common pitfalls when
           running containers requiring many file operations.
           Fixes errors like "Too many open files" or
@@ -79,7 +79,7 @@ in {
         type = types.int;
         default = 600;
         apply = toString;
-        description = ''
+        description = lib.mdDoc ''
           Time to wait (in seconds) for LXD to become ready to process requests.
           If LXD does not reply within the configured time, lxd.service will be
           considered failed and systemd will attempt to restart it.
@@ -129,11 +129,19 @@ in {
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "lxcfs.service" ];
-      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
+      after = [
+        "network-online.target"
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+      ];
+      requires = [
+        "network-online.target"
+        "lxd.socket"
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+      ];
       documentation = [ "man:lxd(1)" ];
 
-      path = optional cfg.zfsSupport config.boot.zfs.package;
+      path = [ pkgs.util-linux ]
+        ++ optional cfg.zfsSupport config.boot.zfs.package;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";

@@ -6,8 +6,10 @@
   },
   "context.modules": [
     {
-      "name": "libpipewire-module-rtkit",
-      "args": {},
+      "name": "libpipewire-module-rt",
+      "args": {
+        "nice.level": -11
+      },
       "flags": [
         "ifexists",
         "nofail"
@@ -27,16 +29,75 @@
     },
     {
       "name": "libpipewire-module-protocol-pulse",
-      "args": {
-        "server.address": [
-          "unix:native"
-        ],
-        "vm.overrides": {
+      "args": {}
+    }
+  ],
+  "context.exec": [
+    {
+      "path": "pactl",
+      "args": "load-module module-always-sink"
+    }
+  ],
+  "stream.properties": {},
+  "pulse.properties": {
+    "server.address": [
+      "unix:native"
+    ],
+    "vm.overrides": {
+      "pulse.min.quantum": "1024/48000"
+    }
+  },
+  "pulse.rules": [
+    {
+      "matches": [
+        {}
+      ],
+      "actions": {
+        "update-props": {}
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.process.binary": "teams"
+        },
+        {
+          "application.process.binary": "teams-insiders"
+        },
+        {
+          "application.process.binary": "skypeforlinux"
+        }
+      ],
+      "actions": {
+        "quirks": [
+          "force-s16-info"
+        ]
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.process.binary": "firefox"
+        }
+      ],
+      "actions": {
+        "quirks": [
+          "remove-capture-dont-move"
+        ]
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.name": "~speech-dispatcher*"
+        }
+      ],
+      "actions": {
+        "update-props": {
+          "pulse.min.req": "1024/48000",
           "pulse.min.quantum": "1024/48000"
         }
       }
     }
-  ],
-  "context.exec": [],
-  "stream.properties": {}
+  ]
 }

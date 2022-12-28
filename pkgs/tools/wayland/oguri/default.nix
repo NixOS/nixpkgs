@@ -8,6 +8,7 @@
 , gdk-pixbuf
 , wayland
 , wayland-protocols
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sXNvpI/YPDPd2cXQAfRO4ut21gSCXxbo1DpaZmHJDYQ=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [
     cairo
     gdk-pixbuf

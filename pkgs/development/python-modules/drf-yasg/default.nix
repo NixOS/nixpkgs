@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.20.0";
+  version = "1.21.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d50f197c7f02545d0b736df88c6d5cf874f8fea2507ad85ad7de6ae5bf2d9e5a";
+    sha256 = "sha256-iHyfeeZPRqpIl0I05hApsb6msS6mKKj8ijaXWJrdHT4=";
   };
 
   postPatch = ''
     # https://github.com/axnsan12/drf-yasg/pull/710
-    substituteInPlace requirements/base.txt --replace packaging ""
+    sed -i "/packaging/d" requirements/base.txt
   '';
 
   nativeBuildInputs = [

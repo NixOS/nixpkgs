@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbeafb7d92839dc221365340e79d012cb50ee48a1f3f30dd916eb35a8b93db00";
+    sha256 = "sha256-ruPeXyg2B0z9gD8crxb2g5DyYu8JzX3H0Oiu6baHhkM=";
   };
 
   nativeBuildInputs = [

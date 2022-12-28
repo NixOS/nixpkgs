@@ -3,8 +3,8 @@
 buildPecl {
   pname = "yaml";
 
-  version = "2.2.1";
-  sha256 = "sha256-4XrQTnUuJf0Jm93S350m3+8YPI0AxBebydei4cl9eBk=";
+  version = "2.2.2";
+  sha256 = "sha256-EZBS8EYdV9hvRMJS+cmy3XQ0hscBwaCroK6+zdDYuCo=";
 
   configureFlags = [ "--with-yaml=${libyaml}" ];
 
@@ -13,7 +13,7 @@ buildPecl {
   meta = with lib; {
     description = "YAML-1.1 parser and emitter";
     license = licenses.mit;
-    homepage = "http://bd808.com/pecl-file_formats-yaml/";
+    homepage = "https://bd808.com/pecl-file_formats-yaml/";
     maintainers = teams.php.members;
   };
 }

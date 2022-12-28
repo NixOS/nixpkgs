@@ -1,26 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
-  pname = "helm";
-  version = "3.7.1";
-  gitCommit = "1d11fcb5d3f3bf00dbe6fe31b8412839a96b3dc4";
+  pname = "kubernetes-helm";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-NjBG3yLtvnAXziLH/ALRJVaFW327qo7cvnf1Jpq3QlI=";
+    sha256 = "sha256-SUPa6bbops2rrzzzYM5fH0l4DT7/rIkOqc396lTesao=";
   };
-  vendorSha256 = "sha256-gmyF/xuf5dTxorgqvW4PNA1l2SQ2oJuZCAFw7d8ufGc=";
-
-  doCheck = false;
+  vendorSha256 = "sha256-vyHT/N5lat/vqM2jK4Q+jJOtZpS52YCYGcJqfa5e0KM=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
+
+  preCheck = ''
+    # skipping version tests because they require dot git directory
+    substituteInPlace cmd/helm/version_test.go \
+      --replace "TestVersion" "SkipVersion"
+  '' + lib.optionalString stdenv.isLinux ''
+    # skipping plugin tests on linux
+    substituteInPlace cmd/helm/plugin_test.go \
+      --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
+      --replace "TestLoadPlugins" "SkipLoadPlugins"
+    substituteInPlace cmd/helm/helm_test.go \
+      --replace "TestPluginExitCode" "SkipPluginExitCode"
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
@@ -32,7 +43,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/kubernetes/helm";
     description = "A package manager for kubernetes";
+    mainProgram = "helm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man ];
+    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man techknowlogick ];
   };
 }

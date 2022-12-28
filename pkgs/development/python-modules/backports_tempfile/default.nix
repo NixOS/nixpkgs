@@ -1,5 +1,5 @@
 { lib
-, python
+, unittestCheckHook
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
@@ -19,12 +19,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ backports_weakref ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
-
   # requires https://pypi.org/project/backports.test.support
   doCheck = false;
+
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = {
     description = "Backport of new features in Python's tempfile module";

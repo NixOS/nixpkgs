@@ -1,43 +1,64 @@
-{lib, fetchFromGitHub, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4, setuptools}:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pythonOlder
+, buildPythonPackage
+, basemap
+, gfortran
+, netcdf4
+, numpy
+, python
+, setuptools
+, xarray
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "wrf-python";
-  version = "1.3.2";
+  version = "1.3.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
-    rev = version;
-    sha256 = "1rklkki54z5392cpwwy78bnmsy2ghc187l3j7nv0rzn6jk5bvyi7";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
-
-  propagatedBuildInputs = [
-    wrapt
-    numpy
-    setuptools
-    xarray
-  ];
 
   nativeBuildInputs = [
     gfortran
   ];
 
+  propagatedBuildInputs = [
+    basemap
+    numpy
+    setuptools
+    xarray
+    wrapt
+  ];
+
   checkInputs = [
     netcdf4
-  ] ++ lib.optional (pythonOlder "3.3") mock;
+  ];
 
-  doCheck = true;
   checkPhase = ''
     runHook preCheck
     cd ./test/ci_tests
-    python utests.py
+    ${python.interpreter} utests.py
     runHook postCheck
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "wrf"
+  ];
+
+  meta = with lib; {
     description = "WRF postprocessing library for Python";
     homepage = "http://wrf-python.rtfd.org";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mhaselsteiner ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mhaselsteiner ];
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

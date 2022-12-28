@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, cmake, zlib }:
+{ lib
+, stdenv
+, fetchzip
+, cmake
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "zdbsp";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${version}-src.zip";
-    sha256 = "1j6k0appgjjj3ffbll9hy9nnbqr17szd1s66q08zrbkfqf6g8f0d";
+    sha256 = "sha256-DTj0jMNurvwRwMbo0L4+IeNlbfIwUbqcG1LKd68C08g=";
     stripRoot = false;
   };
 
@@ -23,8 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "ZDoom's internal node builder for DOOM maps";
     homepage = "https://zdoom.org/wiki/ZDBSP";
+    description = "ZDoom's internal node builder for DOOM maps";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lassulus siraben ];
     platforms = platforms.unix;

@@ -1,3 +1,0 @@
-url https://github.com/ambrop72/badvpn/releases
-version_link '[0-9][.]tar[.][a-z0-9]+$'
-version '.*/([0-9.]+)[.]tar[.].*' '\1'

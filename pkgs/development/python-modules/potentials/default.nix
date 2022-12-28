@@ -16,10 +16,11 @@
 , scipy
 , unidecode
 , xmltodict
+, yabadaba
 }:
 
 buildPythonPackage rec {
-  version = "0.3.1";
+  version = "0.3.5";
   pname = "potentials";
   format = "setuptools";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02l1rav5jdfsb00byxbswyhqdnjljp9y7g4ddn4mivzi7x39qa52";
+    hash = "sha256-e2+Yrgpj6Cy76qzw9/NhDq9ogsNQAJcKi9kvY2fZE+k=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     scipy
     unidecode
     xmltodict
+    yabadaba
   ];
 
   # Project has no tests

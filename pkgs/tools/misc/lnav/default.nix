@@ -1,31 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre2
+, sqlite
+, ncurses
+, readline
+, zlib
+, bzip2
+, autoconf
+, automake
+, curl
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-1b4mVKIUotMSK/ADHnpiM42G98JF0abL8sXXGFyS3sw=";
+    sha256 = "sha256-W0NXmdbrarSmLOLpl9bt9kYjjDBtejGgh0QYeGFVMNQ=";
   };
 
   patches = [ ./0001-Forcefully-disable-docs-build.patch ];
   postPatch = ''
     substituteInPlace Makefile.am \
-      --replace "SUBDIRS = src test" "SUBDIRS = src"
+      --replace "SUBDIRS = tools src test" "SUBDIRS = tools src"
   '';
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [
+  strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    autoconf
+    automake
     zlib
+    curl.dev
+  ];
+  buildInputs = [
     bzip2
     ncurses
-    pcre-cpp
+    pcre2
     readline
     sqlite
     curl

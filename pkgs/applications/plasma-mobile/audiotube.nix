@@ -1,13 +1,16 @@
 { lib
 , mkDerivation
-, fetchpatch
 
 , extra-cmake-modules
+, gcc11
+, wrapGAppsHook
 
+, gst_all_1
 , kcoreaddons
 , kcrash
 , ki18n
 , kirigami2
+, qtimageformats
 , qtmultimedia
 , qtquickcontrols2
 , python3Packages
@@ -16,16 +19,10 @@
 mkDerivation rec {
   pname = "audiotube";
 
-  patches = [
-    # Fix compatibility with ytmusicapi 0.19.1
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma-mobile/audiotube/-/commit/734caa02805988200f923b88d1590b3f7dac8ac2.patch";
-      sha256 = "0zq4f0w84dv0630bpvmqkfmhxbvibr2fxhzy6d2mnf098028gzyd";
-    })
-  ];
-
   nativeBuildInputs = [
     extra-cmake-modules
+    wrapGAppsHook
+    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
     python3Packages.wrapPython
     python3Packages.pybind11
   ];
@@ -35,21 +32,27 @@ mkDerivation rec {
     kcrash
     ki18n
     kirigami2
+    qtimageformats
     qtmultimedia
     qtquickcontrols2
-    python3Packages.youtube-dl
-    python3Packages.ytmusicapi
-  ];
+  ] ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]) ++ pythonPath;
 
-  pythonPath = [
-    python3Packages.youtube-dl
-    python3Packages.ytmusicapi
+  pythonPath = with python3Packages; [
+    yt-dlp
+    ytmusicapi
   ];
 
   preFixup = ''
     buildPythonPath "$pythonPath"
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+  dontWrapGApps = true;
 
   meta = with lib; {
     description = "Client for YouTube Music";

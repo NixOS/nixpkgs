@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "senv";
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/SpectralOps/senv";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    broken = stdenv.isDarwin; # needs golang.org/x/sys bump
   };
 }

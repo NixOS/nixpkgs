@@ -19,5 +19,7 @@ buildGoPackage rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.snglth ];
     platforms = platforms.unix;
+    # does not build with go 1.17: https://github.com/cloudflare/utahfs/issues/46
+    broken = true;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vampire";
-  version = "4.5.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
-    rev = version;
-    sha256 = "0q9gqyq96amdnhxgwjyv0r2sxakikp3jvmizgj2h0spfz643p8db";
+    rev = "v${version}";
+    sha256 = "0z71nxjak3ibp842r8iv37w1x3cbkrmjs88lpvxqb4sgrbyk38zd";
   };
 
   buildInputs = [ z3 zlib ];
@@ -47,10 +47,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://vprover.github.io/";
     description = "The Vampire Theorem Prover";
     platforms = platforms.unix;
-    license = licenses.unfree;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ gebner ];
   };
 }

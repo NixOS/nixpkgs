@@ -1,8 +1,8 @@
 { lib, multiStdenv, fetchurl }:
 
-let version = "1.7.4"; in
-multiStdenv.mkDerivation {
-  name = "statifier-${version}";
+multiStdenv.mkDerivation rec {
+  pname = "statifier";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/statifier/statifier-${version}.tar.gz";

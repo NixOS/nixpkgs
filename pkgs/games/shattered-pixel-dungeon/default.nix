@@ -10,15 +10,15 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "1.0.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
     # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
-    rev = "1f296a2d1088ad35421f5f8040a9f0803fa46ba8";
-    sha256 = "sha256-MzHdUAzCR2JtIdY1SGuge3xgR6qIhNYxUPOxA+TZtLE=";
+    rev = "5d1a2dce6b554b40f6737ead45d411fd98f4c67d";
+    sha256 = "sha256-Vu7K0NnqFY298BIQV9AwNEahV0eJl14tAeq+rw6KrtM=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-0P/BcjNnbDN25DguRcCyzPuUG7bouxEx1ySodIbSwvg=";
+    outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
   };
 
 in stdenv.mkDerivation rec {
@@ -80,6 +80,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

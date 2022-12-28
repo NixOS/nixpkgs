@@ -91,7 +91,7 @@ buildDhallPackage {
 let
   nixpkgs = builtins.fetchTarball {
     url    = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
-    sha256 = "1pbl4c2dsaz2lximgd31m96jwbps6apn3anx8cvvhk1gl9rkg107";
+    sha256 = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
   dhallOverlay = self: super: {
@@ -295,7 +295,7 @@ terms of `buildDhallPackage` that accepts the following arguments:
 * `document`: Set to `true` to generate documentation for the package
 
 Additionally, `buildDhallGitHubPackage` accepts the same arguments as
-`fetchFromGitHub`, such as `sha256` or `fetchSubmodules`.
+`fetchFromGitHub`, such as `hash` or `fetchSubmodules`.
 
 ## `dhall-to-nixpkgs` {#ssec-dhall-dhall-to-nixpkgs}
 
@@ -316,7 +316,7 @@ $ dhall-to-nixpkgs github https://github.com/Gabriel439/dhall-semver.git
     repo = "dhall-semver";
     rev = "2d44ae605302ce5dc6c657a1216887fbb96392a4";
     fetchSubmodules = false;
-    sha256 = "0y8shvp8srzbjjpmnsvz9c12ciihnx1szs0yzyi9ashmrjvd0jcz";
+    hash = "sha256-n0nQtswVapWi/x7or0O3MEYmAkt/a1uvlOtnje6GGnk=";
     directory = "";
     file = "package.dhall";
     source = false;

@@ -1,5 +1,9 @@
 { lib, fetchFromGitHub, buildDunePackage, ocaml, result, ppx_derivers }:
 
+if lib.versionOlder "4.13" ocaml.version
+then throw "ocaml-migrate-parsetree-1.8 is not available for OCaml ${ocaml.version}"
+else
+
 buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";
    version = "1.8.0";

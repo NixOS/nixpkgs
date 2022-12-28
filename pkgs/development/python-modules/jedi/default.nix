@@ -3,32 +3,32 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, colorama
+, attrs
 , django
-, docopt
 , pytestCheckHook
 , parso
 }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.18.0";
+  version = "0.18.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
     rev = "v${version}";
-    sha256 = "0d8zdj56hyxbsvvrid6r3nprm0ygxaad6zpsbhbj6k7p3dcx7acw";
+    hash = "sha256-hNRmUFpRzVKJQAtfsSNV4jeTR8vVj1+mGBIPO6tUGto=";
     fetchSubmodules = true;
   };
 
   propagatedBuildInputs = [ parso ];
 
   checkInputs = [
-    colorama
+    attrs
     django
-    docopt
     pytestCheckHook
   ];
 
@@ -48,9 +48,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
-    license = licenses.lgpl3Plus;
+    homepage = "https://github.com/davidhalter/jedi";
+    changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }

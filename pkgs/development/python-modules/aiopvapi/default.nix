@@ -2,21 +2,23 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "1.6.14";
+  version = "2.0.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "02bl7q166j6rb8av9n1jz11xlwhrzmbkjq70mwr86qaj63pcxrak";
+  src = fetchFromGitHub {
+    owner = "sander76";
+    repo = "aio-powerview-api";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cghfNi5T343/7GxNLDrE0iAewMlRMycQTP7SvDVpU2M=";
   };
 
   propagatedBuildInputs = [
@@ -27,13 +29,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # async_timeout 4.0.0 removes loop, https://github.com/sander76/aio-powerview-api/pull/13
-    # Patch doesn't apply due to different line endings
-    substituteInPlace aiopvapi/helpers/aiorequest.py \
-      --replace ", loop=self.loop)" ")"
-  '';
 
   pythonImportsCheck = [
     "aiopvapi"

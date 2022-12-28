@@ -2,9 +2,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd-cryptenroll";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ymatsiuk ];
+    broken = true; # times out after two hours, details -> https://github.com/NixOS/nixpkgs/issues/167994
   };
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     environment.systemPackages = [ pkgs.cryptsetup ];
     virtualisation = {
       emptyDiskImages = [ 512 ];

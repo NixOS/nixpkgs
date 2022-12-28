@@ -25,9 +25,9 @@ stdenv.mkDerivation {
   };
 
   # replace database with a more recent snapshot
-  postUnpack = ''
-    rm -R source/data/db
-    cp -R ${lensfunDatabase}/data/db source/data
+  prePatch = ''
+    rm -R ./data/db
+    cp -R ${lensfunDatabase}/data/db ./data
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitea
 , autoreconfHook
+, validatePkgConfig
 , geos
 }:
 
@@ -19,14 +20,21 @@ stdenv.mkDerivation rec {
     sha256 = "0h7lzlkn9g4xky6h81ndy0aa6dxz8wb6rnl8v3987jy1i6pr072p";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    validatePkgConfig
+    geos # for geos-config
+  ];
 
   buildInputs = [ geos ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "RT Topology Library";
     homepage = "https://git.osgeo.org/gitea/rttopo/librttopo";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.unix;
   };
 }

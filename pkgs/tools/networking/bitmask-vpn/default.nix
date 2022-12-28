@@ -78,6 +78,9 @@ buildGoModule rec {
     substituteInPlace providers/vendor.conf \
       --replace "provider = riseup" "provider = ${provider}"
 
+    substituteInPlace branding/templates/debian/app.desktop-template \
+      --replace "Icon=icon" "Icon=${pname}"
+
     patchShebangs gui/build.sh
     wrapPythonProgramsIn branding/scripts
   '' + lib.optionalString stdenv.isLinux ''
@@ -130,11 +133,12 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -m 755 -D -t $out/bin build/qt/release/${provider}-vpn
+    install -m 755 -D -t $out/bin build/qt/release/${pname}
 
     VERSION=${version} VENDOR_PATH=providers branding/scripts/generate-debian branding/templates/debian/data.json
     (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
-    install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${provider}-vpn.desktop
+    install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${pname}.desktop
+    install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
   '' + lib.optionalString stdenv.isLinux ''
     install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
   '';
@@ -154,7 +158,7 @@ buildGoModule rec {
       a variety of trusted service provider all from one app.
       Current providers include Riseup Networks
       and The Calyx Institute, where the former is default.
-      The <literal>${provider}-vpn</literal> executable should appear
+      The <literal>${pname}</literal> executable should appear
       in your desktop manager's XDG menu or could be launch in a terminal
       to get an execution log. A new icon should then appear in your systray
       to control the VPN and configure some options.

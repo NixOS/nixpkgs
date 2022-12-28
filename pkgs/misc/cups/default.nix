@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , removeReferencesTo
 , zlib
@@ -18,25 +19,19 @@
 , avahi ? null
 , libpaper ? null
 , coreutils
+, nixosTests
 }:
-
-### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
-### works at least for your platform.
 
 with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 
-  # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.3.3op2";
+  version = "2.4.2";
 
-  src = fetchurl (if stdenv.isDarwin then {
-    url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
-  } else {
+  src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "1pwndz4gwkm7311wkhhzlw2diy7wbck7yy026jbaxh3rprdmgcyy";
-  });
+    sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
+  };
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -56,6 +51,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gmp ];
 
+  configurePlatforms = lib.optionals stdenv.isLinux [ "build" "host" ];
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
@@ -68,8 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ optional (libusb1 != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper"
-    ++ optional stdenv.isDarwin "--disable-launchd";
+    ++ optional (libpaper != null) "--enable-libpaper";
 
   # AR has to be an absolute path
   preConfigure = ''
@@ -93,6 +88,7 @@ stdenv.mkDerivation rec {
   installFlags =
     [ # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
+      "LAUNCHD_DIR=$(TMPDIR)/dummy"
       "LOGDIR=$(TMPDIR)/dummy"
       "REQUESTS=$(TMPDIR)/dummy"
       "STATEDIR=$(TMPDIR)/dummy"
@@ -134,6 +130,8 @@ stdenv.mkDerivation rec {
       substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
+
+  passthru.tests.nixos = nixosTests.printing;
 
   meta = {
     homepage = "https://openprinting.github.io/cups/";

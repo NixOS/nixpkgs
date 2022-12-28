@@ -1,15 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub, twisted, ldaptor, configobj }:
+{ lib, buildPythonPackage, fetchFromGitHub, twisted, ldaptor, configobj, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "privacyidea-ldap-proxy";
-  version = "0.6.2";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "privacyidea";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U2lg4zDQKn9FQ7O0zSLaijIkXKVjg8wi2ItueF4ACDU=";
+    sha256 = "1i2kgxqd38xvb42qj0a4a35w4vk0fyp3n7w48kqmvrxc77p6r6i8";
   };
+
+  patches = [
+    # support for LDAPCompareRequest.
+    (fetchpatch {
+      url = "https://github.com/mayflower/privacyidea-ldap-proxy/commit/a13356717379b174f1a6abf767faa0dbd459f5dd.patch";
+      sha256 = "sha256-SBTj9ayQ8JFD8BoYIl77nxWVV3PXnHZ8JMlJnxd/nEk=";
+    })
+  ];
 
   propagatedBuildInputs = [ twisted ldaptor configobj ];
 

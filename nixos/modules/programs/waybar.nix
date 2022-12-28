@@ -4,7 +4,7 @@ with lib;
 
 {
   options.programs.waybar = {
-    enable = mkEnableOption "waybar";
+    enable = mkEnableOption (lib.mdDoc "waybar");
   };
 
   config = mkIf config.programs.waybar.enable {

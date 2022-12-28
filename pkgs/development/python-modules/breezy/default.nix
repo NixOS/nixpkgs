@@ -3,23 +3,36 @@
 , fetchPypi
 , configobj
 , patiencediff
-, six
+, fastbencode
 , fastimport
 , dulwich
 , launchpadlib
 , testtools
+, pythonOlder
+, installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.2.1";
+  version = "3.2.2";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4LJo6xoooq8EUoDDfQIa4y1/8XX0ybmfM6rX2wsp2Fw=";
+    sha256 = "sha256-GHpuRSCN0F2BdQc2cgyDcQz0gJT1R+xAgcVxJZVZpNU=";
   };
 
-  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  propagatedBuildInputs = [
+    configobj
+    fastbencode
+    patiencediff
+    fastimport
+    dulwich
+    launchpadlib
+  ];
 
   checkInputs = [ testtools ];
 
@@ -29,6 +42,8 @@ buildPythonPackage rec {
   # symlink for bazaar compatibility
   postInstall = ''
     ln -s "$out/bin/brz" "$out/bin/bzr"
+
+    installShellCompletion --cmd brz --bash contrib/bash/brz
   '';
 
   pythonImportsCheck = [ "breezy" ];
@@ -36,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
   };
 }

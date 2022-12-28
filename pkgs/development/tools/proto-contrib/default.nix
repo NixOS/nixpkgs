@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0ksxic7cypv9gg8q5lkl5bla1n9i65z7b03cx9lwq6252glmf2jk";
   };
 
-  vendorSha256 = "1ivvq5ch9grdrwqq29flv9821kyb16k0cj6wgj5v0dyn63w420aw";
+  vendorSha256 = "sha256-XAFB+DDWN7CLfNxIBqYJy88gUNrUJYExzy2/BFnBe8c=";
 
   doCheck = false;
 
@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/emicklei/proto-contrib";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

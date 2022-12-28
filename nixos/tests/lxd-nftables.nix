@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ patryk27 ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     virtualisation = {
       lxd.enable = true;
     };

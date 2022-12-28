@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ lib.optional (!stdenv.isLinux) libiconv;
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: serve_pdf.o:offrss.h:75: multiple definition of `cgi_url_path';
+  #     offrss.o:offrss.h:75: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configurePhase = ''
     substituteInPlace Makefile \
       --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'

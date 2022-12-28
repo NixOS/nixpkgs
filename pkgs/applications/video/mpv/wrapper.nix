@@ -32,7 +32,7 @@ let
     # All arguments besides the input and output binaries (${mpv}/bin/mpv and
     # $out/bin/mpv). These are used by the darwin specific makeWrapper call
     # used to wrap $out/Applications/mpv.app/Contents/MacOS/mpv as well.
-    mostMakeWrapperArgs = lib.strings.escapeShellArgs ([ "--argv0" "'$0'"
+    mostMakeWrapperArgs = lib.strings.escapeShellArgs ([ "--inherit-argv0"
       # These are always needed (TODO: Explain why)
       "--prefix" "LUA_CPATH" ";" "${mpv.luaEnv}/lib/lua/${mpv.lua.luaversion}/?.so"
       "--prefix" "LUA_PATH" ";" "${mpv.luaEnv}/share/lua/${mpv.lua.luaversion}/?.lua"
@@ -53,7 +53,7 @@ let
     )) ++ extraMakeWrapperArgs)
     ;
     umpvWrapperArgs = lib.strings.escapeShellArgs ([
-      "--argv0" "'$0'"
+      "--inherit-argv0"
       "--set" "MPV" "${placeholder "out"}/bin/mpv"
     ] ++ extraUmpvWrapperArgs)
     ;
@@ -64,7 +64,7 @@ let
       # TODO: don't link all mpv outputs and convert package to mpv-unwrapped?
       paths = [ mpv.all ];
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       passthru.unwrapped = mpv;
 

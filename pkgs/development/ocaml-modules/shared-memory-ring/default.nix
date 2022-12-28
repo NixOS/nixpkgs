@@ -5,17 +5,16 @@
 , mirage-profile
 , cstruct
 , ounit
+, stdlib-shims
 }:
 
 buildDunePackage rec {
   pname = "shared-memory-ring";
-  version = "3.1.0";
-
-  useDune2 = true;
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "https://github.com/mirage/shared-memory-ring/releases/download/v${version}/shared-memory-ring-v${version}.tbz";
-    sha256 = "06350ph3rdfvybi0cgs3h3rdkmjspk3c4375rxvbdg0kza1w22x1";
+    url = "https://github.com/mirage/shared-memory-ring/releases/download/v${version}/shared-memory-ring-${version}.tbz";
+    sha256 = "sha256-KW8grij/OAnFkdUdRRZF21X39DvqayzkTWeRKwF8uoU=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +24,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     mirage-profile
     cstruct
+    stdlib-shims
   ];
 
   doCheck = true;

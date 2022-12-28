@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-test-autoconf-2.69.patch ./fix-perl-5.26.patch ];
 
-  buildInputs = [ perl autoconf ];
+  strictDeps = true;
+  nativeBuildInputs = [ perl autoconf ];
+  buildInputs = [ autoconf ];
 
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.

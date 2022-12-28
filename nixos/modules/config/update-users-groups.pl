@@ -186,7 +186,7 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-updateFile($gidMapFile, to_json($gidMap));
+updateFile($gidMapFile, to_json($gidMap, {canonical => 1}));
 updateFile("/etc/group", \@lines);
 nscdInvalidate("group");
 
@@ -223,10 +223,10 @@ foreach my $u (@{$spec->{users}}) {
     }
 
     # Ensure home directory incl. ownership and permissions.
-    if ($u->{createHome}) {
-        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home} and ! $is_dry;
+    if ($u->{createHome} and !$is_dry) {
+        make_path($u->{home}, { mode => oct($u->{homeMode}) }) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
-        chmod 0700, $u->{home};
+        chmod oct($u->{homeMode}), $u->{home};
     }
 
     if (defined $u->{passwordFile}) {
@@ -272,7 +272,7 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-updateFile($uidMapFile, to_json($uidMap));
+updateFile($uidMapFile, to_json($uidMap, {canonical => 1}));
 updateFile("/etc/passwd", \@lines);
 nscdInvalidate("passwd");
 
@@ -351,7 +351,7 @@ foreach my $u (values %usersOut) {
         push @subGids, $value;
     }
 
-    if($u->{isNormalUser}) {
+    if($u->{autoSubUidGidRange}) {
         my $subordinate = allocSubUid($name);
         $subUidMap->{$name} = $subordinate;
         my $value = join(":", ($name, $subordinate, 65536));

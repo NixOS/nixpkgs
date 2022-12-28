@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OSGeo/PROJ/commit/6f1a3c4648bf06862dca0b3725cbb3b7ee0284e3.diff";
       sha256 = "0gapny0a9c3r0x9szjgn86sspjrrf4vwbija77b17w6ci5cq4pdf";
     })
+    ./tests-sqlite-3.39.patch
   ];
 
   postPatch = lib.optionalString (version == "7.2.1") ''
@@ -53,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://proj4.org";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

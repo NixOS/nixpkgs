@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "zydis";
-  version = "3.2.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zydis";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-FB7hGQ9vI3ZE376iROEpdtZm91IiccBhtAFa94JgnUY=";
+    sha256 = "sha256-WSBi8HUVj/JR0/0pBoEaUKD0kOk41gSW5ZW74fn8b4k=";
   };
 
   nativeBuildInputs = [

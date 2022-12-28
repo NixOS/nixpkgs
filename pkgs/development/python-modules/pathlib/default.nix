@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, unittestCheckHook
 , pythonAtLeast
 }:
 
@@ -15,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = {
     description = "Object-oriented filesystem paths";

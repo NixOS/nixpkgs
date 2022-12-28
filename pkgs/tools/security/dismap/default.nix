@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dismap";
-  version = "0.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "zhzyker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d5r6n92ndlr48f4z6lxwrx7bdh5mmibdjcyab4j2h49lf37c1qd";
+    sha256 = "sha256-YjjiS6iLIQvrPS378v2nyrgwWBJ9YtDeNTPz0ze05mU=";
   };
 
-  vendorSha256 = "00hwhc86rj806arvqfhfarmxs1drcdp91xkr12whqhsi9ddc254d";
+  vendorSha256 = "sha256-GnchyE2TswvjYlehhMYesZruTTwyTorfR+17K0RXXFY=";
 
   meta = with lib; {
     description = "Asset discovery and identification tools";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pkg-config, alsa-lib, dbus, libjack2
+{ lib, stdenv, fetchFromGitHub, makeWrapper, pkg-config, alsa-lib, dbus, libjack2
 , python3Packages , meson, ninja }:
 
 stdenv.mkDerivation rec {

@@ -1,25 +1,34 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, zfs
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "zfsbackup";
-  version = "unstable-2020-09-30";
-  rev = "092f80846b23e02f99d2aa72d9d889eabfdcb053";
-
-  goPackagePath = "github.com/someone1/zfsbackup-go";
+  version = "unstable-2022-09-23";
+  rev = "a30f1a44bcae5f64cfb36a12926242a968a759c6";
 
   src = fetchFromGitHub {
     owner = "someone1";
     repo = "zfsbackup-go";
     inherit rev;
-    sha256 = "1xiacaf4r9jkx0m8wjfis14cq622yhljldwkflh9ni3khax7dlgi";
+    sha256 = "sha256-ZJ7gtT4AdMLEs2+hJa2Sia0hSoQd3CftdqRsH/oJxd8=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";
+
+  ldflags = [ "-w" "-s" ];
+
+  # Tests require loading the zfs kernel module.
+  doCheck = false;
 
   meta = with lib; {
     description = "Backup ZFS snapshots to cloud storage such as Google, Amazon, Azure, etc";
     homepage = "https://github.com/someone1/zfsbackup-go";
     license = licenses.mit;
-    maintainers = [ maintainers.xfix ];
+    maintainers = with maintainers; [ xfix ];
+    platforms = platforms.linux;
+    mainProgram = "zfsbackup-go";
   };
 }

@@ -157,7 +157,36 @@ rec {
                                 }
                       );
 
-  closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
+  closePropagationSlow = list: (uniqList {inputList = (innerClosePropagation [] list);});
+
+  # This is an optimisation of lib.closePropagation which avoids the O(n^2) behavior
+  # Using a list of derivations, it generates the full closure of the propagatedXXXBuildInputs
+  # The ordering / sorting / comparison is done based on the `outPath`
+  # attribute of each derivation.
+  # On some benchmarks, it performs up to 15 times faster than lib.closePropagation.
+  # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
+  closePropagationFast = list:
+    builtins.map (x: x.val) (builtins.genericClosure {
+      startSet = builtins.map (x: {
+        key = x.outPath;
+        val = x;
+      }) (builtins.filter (x: x != null) list);
+      operator = item:
+        if !builtins.isAttrs item.val then
+          [ ]
+        else
+          builtins.concatMap (x:
+            if x != null then [{
+              key = x.outPath;
+              val = x;
+            }] else
+              [ ]) ((item.val.propagatedBuildInputs or [ ])
+                ++ (item.val.propagatedNativeBuildInputs or [ ]));
+    });
+
+  closePropagation = if builtins ? genericClosure
+    then closePropagationFast
+    else closePropagationSlow;
 
   # calls a function (f attr value ) for each record item. returns a list
   mapAttrsFlatten = f: r: map (attr: f attr r.${attr}) (attrNames r);

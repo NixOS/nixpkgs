@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncgopher";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "jansc";
     repo = "ncgopher";
     rev = "v${version}";
-    sha256 = "sha256-1tiijW3q/8zS9437G9gJDzBtxqVE3QUxgw74P7rcv98=";
+    sha256 = "sha256-KrvTwcIeINIBkia6PTnKXp4jFd6GEMBh/xbn0Ot/wmE=";
   };
 
-  cargoSha256 = "sha256-LA8LjY8oZslGFQhKR8fJ2heYxSBqUnmeejXKRvZXjIs=";
+  cargoSha256 = "sha256-Zft/ip+/uJbUIqCDDEa4hchmZZiYWGdaVnzWC74FgU8=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

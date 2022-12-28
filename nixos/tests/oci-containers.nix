@@ -12,7 +12,7 @@ let
     name = "oci-containers-${backend}";
 
     meta = {
-      maintainers = with lib.maintainers; [ adisbladis benley ] ++ lib.teams.serokell.members;
+      maintainers = with lib.maintainers; [ adisbladis benley mkaito ] ++ lib.teams.serokell.members;
     };
 
     nodes = {

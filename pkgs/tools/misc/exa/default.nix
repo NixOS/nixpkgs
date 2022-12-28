@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
-, Security, libiconv, installShellFiles
+{ lib
+, gitSupport ? true
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pandoc
+, pkg-config
+, zlib
+, Security
+, libiconv
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +28,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
 
+  # FIXME: LTO is broken with rustc 1.61, see https://github.com/rust-lang/rust/issues/97255
+  # remove this with rustc 1.61.1+
+  CARGO_PROFILE_RELEASE_LTO = "false";
+
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional gitSupport "git";
 
   outputs = [ "out" "man" ];
 

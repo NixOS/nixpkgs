@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "taglib";
-  version = "1.12";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
     rev = "v${version}";
-    sha256 = "sha256-omErajnYgxbflsbe6pS2KsexZcXisso0WGYnmIud7WA=";
+    sha256 = "sha256-DRALRH+/7c2lBvCpLp8hop3Xxsf76F1q8L7F9qehqQA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://taglib.org/";
-    repositories.git = "git://github.com/taglib/taglib.git";
     description = "A library for reading and editing audio file metadata";
     longDescription = ''
       TagLib is a library for reading and editing the meta-data of several

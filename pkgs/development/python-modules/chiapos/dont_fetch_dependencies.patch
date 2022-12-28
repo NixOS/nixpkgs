@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b757b70..fcce055 100644
+index 5d7862b..c2d06a1 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -21,23 +21,20 @@ include(${CMAKE_INSTALL_PREFIX}/share/cmake/pybind11/pybind11Config.cmake)
@@ -28,4 +28,14 @@ index b757b70..fcce055 100644
 +  SOURCE_DIR @ghc_filesystem@
  )
  FetchContent_MakeAvailable(gulrak)
+ 
+@@ -150,8 +147,7 @@ ENDIF()
+ 
+ FetchContent_Declare(
+   Catch2
+-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+-  GIT_TAG        v2.13.7
++  SOURCE_DIR     @catch2_src@
+ )
+ FetchContent_MakeAvailable(Catch2)
  

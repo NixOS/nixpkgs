@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, xlibsWrapper, libXv, libpng }:
+{ fetchurl, lib, stdenv, libX11, libXext, libXv, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "qemacs";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "156z4wpj49i6j388yjird5qvrph7hz0grb4r44l4jf3q8imadyrg";
   };
 
-  buildInputs = [ xlibsWrapper libpng libXv ];
+  buildInputs = [ libpng libX11 libXext libXv ];
 
   preInstall = ''
     mkdir -p $out/bin $out/man

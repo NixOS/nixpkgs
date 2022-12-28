@@ -3,6 +3,8 @@
 , libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
+, mods-dat ? null
+, versionsJson ? ./versions.json
 , username ? "", token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
 }:
@@ -53,15 +55,14 @@ let
     comment = "A game in which you build and maintain factories.";
     exec = "factorio";
     icon = "factorio";
-    type = "Application";
-    categories = "Game";
+    categories = [ "Game" ];
   };
 
   branch = if experimental then "experimental" else "stable";
 
   # NB `experimental` directs us to take the latest build, regardless of its branch;
   # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
-  versions = importJSON ./versions.json;
+  versions = importJSON versionsJson;
   binDists = makeBinDists versions;
 
   actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
@@ -86,7 +87,7 @@ let
         (lib.overrideDerivation
           (fetchurl {
             inherit name url sha256;
-            curlOpts = [
+            curlOptsList = [
               "--get"
               "--data-urlencode" "username@username"
               "--data-urlencode" "token@token"
@@ -130,7 +131,7 @@ let
     fi
   '';
 
-  modDir = factorio-utils.mkModDirDrv mods;
+  modDir = factorio-utils.mkModDirDrv mods mods-dat;
 
   base = with actual; {
     pname = "factorio-${releaseType}";
@@ -167,6 +168,7 @@ let
         version 1.0 in mid 2020.
       '';
       homepage = "https://www.factorio.com/";
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
       platforms = [ "x86_64-linux" ];

@@ -8,6 +8,7 @@
 , mirage-stack
 , mirage-time
 , tls-mirage
+, x509
 }:
 
 buildDunePackage {
@@ -16,9 +17,9 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
-    minimumOCamlVersion
   ;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf
@@ -29,6 +30,7 @@ buildDunePackage {
     mirage-stack
     mirage-time
     tls-mirage
+    x509
   ];
 
   doCheck = true;

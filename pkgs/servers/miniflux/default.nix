@@ -2,19 +2,19 @@
 
 let
   pname = "miniflux";
-  version = "2.0.33";
+  version = "2.0.41";
 
 in buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = pname;
-    repo = pname;
+    repo = "v2";
     rev = version;
-    sha256 = "0vcfpy71gdvd0z20v6d36l3yvmnm4nmfplivw9yjzv8kbnf9mabc";
+    sha256 = "sha256-NhxzpNtRzLE9bVWIGSHwnok7RjqRp8Uan9uCvdigAyk=";
   };
 
-  vendorSha256 = "1j4jskcply9mxz9bggw1c6368k22rga6f3f6mgs1pklz5v7r7n2j";
+  vendorSha256 = "sha256-906gMXI6zEIIcXvT/ZqAM+5F0GVHbipUtdrPO6+32KQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

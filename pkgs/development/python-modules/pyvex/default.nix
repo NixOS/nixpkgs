@@ -7,22 +7,25 @@
 , fetchPypi
 , future
 , pycparser
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.0.10689";
+  version = "9.2.31";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BP0yRsp0I6QNN6lCpF6MwBw/BXTXCsNbmzfpKNMS0fQ=";
+    hash = "sha256-Te0wFz+3/HVKlMXW5WJ6mRGh8wWiMXR6Ypi/4hvnz/8=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace vex/Makefile-gcc --replace '/usr/bin/ar' 'ar'
-  '';
-
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     archinfo
@@ -32,15 +35,29 @@ buildPythonPackage rec {
     pycparser
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace vex/Makefile-gcc \
+      --replace '/usr/bin/ar' 'ar'
+  '';
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
+  ];
+
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
-    substituteInPlace pyvex_c/Makefile --replace 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
+    substituteInPlace pyvex_c/Makefile \
+      --replace 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
   # No tests are available on PyPI, GitHub release has tests
   # Switch to GitHub release after all angr parts are present
   doCheck = false;
-  pythonImportsCheck = [ "pyvex" ];
+
+  pythonImportsCheck = [
+    "pyvex"
+  ];
 
   meta = with lib; {
     description = "Python interface to libVEX and VEX IR";

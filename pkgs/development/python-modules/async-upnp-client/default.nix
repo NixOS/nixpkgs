@@ -14,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.22.12";
-  disabled = pythonOlder "3.6";
+  version = "0.32.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = version;
-    sha256 = "sha256-fp7I0G6gljkTZ2slQJ8R9AJ9VKQOQi2cLiZ63seUajs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1/RW84ammc6mu90izMtL7Cv11krc4WhdqCSq9ncFibI=";
   };
 
   propagatedBuildInputs = [
@@ -59,11 +61,19 @@ buildPythonPackage rec {
     "test_deferred_callback_url"
   ];
 
-  pythonImportsCheck = [ "async_upnp_client" ];
+  disabledTestPaths = [
+    # Tries to bind to multicast socket and fails to find proper interface
+    "tests/test_ssdp_listener.py"
+  ];
+
+  pythonImportsCheck = [
+    "async_upnp_client"
+  ];
 
   meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
+    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

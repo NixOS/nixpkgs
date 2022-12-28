@@ -49,7 +49,6 @@ denyFileList=(
 denyAttrList=(
         python27Packages
         python37Packages
-        libsForQt512
         linuxPackages_
         rubyPackages_
 )

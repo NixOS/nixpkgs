@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  # fix for case-sensitive filesystems
+  # https://github.com/MCredstoner2004/ImageLOL/issues/1
+  postPatch = ''
+    mv imagelol src
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
@@ -25,5 +33,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

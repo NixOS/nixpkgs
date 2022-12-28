@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "0n846hqfqvmsmim7qdlms0qr86f1hck19p12nq3g3z2x74n3sl0p";
   };
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   buildInputs = [ gmp mpfr ];
 
   doCheck = true; # not cross;

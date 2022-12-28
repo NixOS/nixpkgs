@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , autoreconfHook
 , libxslt
 , docbook_xsl
@@ -13,9 +14,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-dev-tools";
-  version = "4.16.0";
+  version = "4.18.0";
 
-  sha256 = "sha256-5r9dJfCgXosXoOAtNg1kaPWgFEAmyw/pWTtdG+K1h3A=";
+  sha256 = "sha256-VgQiTRMPD1VeUkUnFkX78C2VrsrXFWCdmupL8PQc7+c=";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -34,7 +35,8 @@ mkXfceDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Autoconf macros and scripts to augment app build systems";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

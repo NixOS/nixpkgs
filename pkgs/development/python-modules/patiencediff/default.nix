@@ -1,18 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "patiencediff";
-  version = "0.2.2";
+  version = "0.2.12";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "456d9fc47fe43f9aea863059ea2c6df5b997285590e4b7f9ee8fbb6c3419b5a7";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "breezy-team";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BdTsx4UIRRK9fbMXOrgut651YMTowxHDFfitlP7ue2I=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "patiencediff"
+  ];
 
   meta = with lib; {
     description = "C implementation of patiencediff algorithm for Python";
     homepage = "https://github.com/breezy-team/patiencediff";
+    changelog = "https://github.com/breezy-team/patiencediff/releases/tag/v${version}";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.wildsebastian ];
+    maintainers = with maintainers; [ wildsebastian ];
   };
 }

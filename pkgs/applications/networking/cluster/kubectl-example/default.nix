@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubectl-example";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "seredot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18vp53cda93qjssxygwqp55yc80a93781839gf3138awngf731yq";
+    sha256 = "sha256-7tqeIE6Ds8MrLH9k8cdzpeJP9pXVptduoEFE0zdrLlo=";
   };
 
   vendorSha256 = null;

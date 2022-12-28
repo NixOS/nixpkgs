@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , aniso8601
 , jsonschema
 , flask
 , werkzeug
 , pytz
 , faker
-, six
 , mock
 , blinker
 , pytest-flask
@@ -18,14 +18,17 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.5.1";
+  version = "1.0.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
     rev = version;
-    sha256 = "18vrmknyxw6adn62pz3kr9kvazfgjgl4pgimdf8527fyyiwcqy15";
+    sha256 = "sha256-fodoGeVSNw4XZrVt907H20OJQIR8FlfINvEPWOkZQqI=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +36,6 @@ buildPythonPackage rec {
     flask
     jsonschema
     pytz
-    six
     werkzeug
   ];
 
@@ -54,11 +56,13 @@ buildPythonPackage rec {
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
   ];
 
-  pythonImportsCheck = [ "flask_restx" ];
+  pythonImportsCheck = [
+    "flask_restx"
+  ];
 
   meta = with lib; {
-    homepage = "https://flask-restx.readthedocs.io/en/${version}/";
     description = "Fully featured framework for fast, easy and documented API development with Flask";
+    homepage = "https://github.com/python-restx/flask-restx";
     changelog = "https://github.com/python-restx/flask-restx/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];

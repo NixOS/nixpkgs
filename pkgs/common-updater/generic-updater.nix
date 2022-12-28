@@ -1,8 +1,9 @@
 { stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
 
-{ pname
-, version
-, attrPath ? pname
+{ name ? null
+, pname ? null
+, version ? null
+, attrPath ? null
 , versionLister
 , ignoredVersions ? ""
 , rev-prefix ? ""
@@ -15,22 +16,28 @@ let
   fileForGitCommands = "update-git-commits.txt";
 
   # shell script to update package
-  updateScript = writeScript "update-script.sh" ''
+  updateScript = writeScript "generic-update-script.sh" ''
     #! ${stdenv.shell}
     set -o errexit
     set -x
 
-    pname="$1"
-    version="$2"
-    attr_path="$3"
-    version_lister="$4"
-    ignored_versions="$5"
-    rev_prefix="$6"
-    odd_unstable="$7"
-    patchlevel_unstable="$8"
+    name="$1"
+    pname="$2"
+    version="$3"
+    attr_path="$4"
+    version_lister="$5"
+    ignored_versions="$6"
+    rev_prefix="$7"
+    odd_unstable="$8"
+    patchlevel_unstable="$9"
+
+    [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
+    [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
+    [[ -n "$version" ]] || version="$UPDATE_NIX_OLD_VERSION"
+    [[ -n "$attr_path" ]] || attr_path="$UPDATE_NIX_ATTR_PATH"
 
     # print header
-    echo "# $pname-$version" >> ${fileForGitCommands}
+    echo "# $name" >> ${fileForGitCommands}
 
     function version_is_ignored() {
       local tag="$1"
@@ -55,7 +62,7 @@ let
       return 1
     }
 
-    tags=$($version_lister $pname ${fileForGitCommands}) || exit 1
+    tags=$(sh -c "$version_lister --pname=$pname --attr-path=$attr_path --file=\"${fileForGitCommands}\"") || exit 1
 
     # print available tags
     for tag in $tags; do
@@ -92,7 +99,7 @@ let
     if [ -n "$latest_tag" ]; then
       # print commands to commit the changes
       if [ "$version" != "$latest_tag" ]; then
-        pfile=$(EDITOR=echo ${nix}/bin/nix edit -f. "$attr_path")
+        pfile=$(EDITOR=echo ${nix}/bin/nix edit --extra-experimental-features nix-command -f. "$attr_path")
         echo "   git add $pfile " >> ${fileForGitCommands}
         echo "   git commit -m '$attr_path: $version -> $latest_tag'" >> ${fileForGitCommands}
       fi
@@ -104,5 +111,7 @@ let
     echo "" >> ${fileForGitCommands}
   '';
 
-in
-[ updateScript pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ]
+in {
+  name = "generic-update-script";
+  command = [ updateScript name pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ];
+}

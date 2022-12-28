@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "http://qt.nokia.com/products/qt-addons/mobility";
     maintainers = [ maintainers.qknight ];
     platforms = platforms.linux;
-    license = with licenses; [ bsd3 fdl13 gpl3 lgpl21 ];
+    license = with licenses; [ bsd3 fdl13Plus gpl3Plus lgpl21Plus ];
   };
 }
 

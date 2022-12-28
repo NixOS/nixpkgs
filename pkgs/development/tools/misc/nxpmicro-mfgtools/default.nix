@@ -7,22 +7,23 @@
 , libusb1
 , libzip
 , openssl
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "nxpmicro-mfgtools";
-  version = "1.4.165";
+  version = "1.4.243";
 
   src = fetchFromGitHub {
     owner = "NXPmicro";
     repo = "mfgtools";
     rev = "uuu_${version}";
-    sha256 = "0k309lp27d4k6x4qq0badbk8i47xsc6f3fffz73650iyfs4hcniw";
+    hash = "sha256-gyy9D6y1y+9GlT3wfW+huoWaZP1e8YzZnc7EbJftppI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
-  buildInputs = [ bzip2 libusb1 libzip openssl ];
+  buildInputs = [ bzip2 libusb1 libzip openssl zstd ];
 
   preConfigure = "echo ${version} > .tarball-version";
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NXPmicro/mfgtools";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bmilanov jraygauthier ];
+    mainProgram = "uuu";
     platforms = platforms.all;
   };
 }

@@ -1,42 +1,28 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule {
   pname = "morty";
-  version = "0.2.0";
+  version = "unstable-2021-04-22";
 
-  goPackagePath = "github.com/asciimoo/morty";
-
-  src = fetchgit {
-    rev = "v${version}";
-    url = "https://github.com/asciimoo/morty";
-    sha256 = "1wvrdlwbpzizfg7wrcfyf1x6qllp3aw425n88z516wc9jalfqrrm";
+  src = fetchFromGitHub {
+    owner = "asciimoo";
+    repo = "morty";
+    rev = "f5bff1e285d3f973cacf73318e55175edafd633f";
+    sha256 = "sha256-ik2VAPdxllt76UVFt77c1ltxIwFNahAKjn3FuErNFYo=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";
 
   meta = with lib; {
-    homepage = "https://github.com/asciimoo/morty";
-    maintainers = with maintainers; [ leenaars ];
-    license = licenses.agpl3;
     description = "Privacy aware web content sanitizer proxy as a service";
     longDescription = ''
-      Morty is a web content sanitizer proxy as a service. It rewrites web
-      pages to exclude malicious HTML tags and attributes. It also replaces
-      external resource references to prevent third party information leaks.
+      Morty rewrites web pages to exclude malicious HTML tags and attributes.
+      It also replaces external resource references to prevent third party information leaks.
 
-      The main goal of morty is to provide a result proxy for searx, but it
-      can be used as a standalone sanitizer service too.
-
-      Features:
-
-      * HTML sanitization
-      * Rewrites HTML/CSS external references to locals
-      * JavaScript blocking
-      * No Cookies forwarded
-      * No Referrers
-      * No Caching/Etag
-      * Supports GET/POST forms and IFrames
-      * Optional HMAC URL verifier key to prevent service abuse
-'';
-   };
+      The main goal of morty is to provide a result proxy for searx, but it can be used as a standalone sanitizer service too.
+    '';
+    homepage = "https://github.com/asciimoo/morty";
+    maintainers = with maintainers; [ leenaars SuperSandro2000 ];
+    license = licenses.agpl3;
+  };
 }

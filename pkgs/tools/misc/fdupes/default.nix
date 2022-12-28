@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses, pcre2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, ncurses, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "fdupes";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo  = "fdupes";
     rev   = "v${version}";
-    sha256 = "1c5hv7vkfxsii1qafhsynzp9zkwim47xkpk27sy64qdsjnhysdak";
+    hash  = "sha256-8GYQfnUxS790pDXw2sjnDZNB55PMDaCcO6daIa/MPMw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ncurses pcre2 ];
 
   meta = with lib; {

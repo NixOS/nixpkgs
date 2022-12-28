@@ -1,29 +1,16 @@
-{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+}:
 
-{ lib, python3, fetchFromGitHub, packageOverrides ? self: super: {}
- }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-let
-  defaultOverrides = commonOverrides ++ [
-    (self: super: {
-      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
-        pname = "aiofiles";
-        version = "0.5.0";
-        src = fetchFromGitHub {
-          owner = "Tinche";
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "17bsg2x5r0q6jy74hajnbp717pvbf752w0wgih6pbb4hdvfg5lcf";
-        };
-        doCheck = false;
-      });
-    })
-  ];
-
-  python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
-  };
-in python.pkgs.buildPythonPackage {
+python3.pkgs.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -36,14 +23,28 @@ in python.pkgs.buildPythonPackage {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
-      --replace "py-cpuinfo==7.0.0" "py-cpuinfo>=8.0.0"
+      --replace "psutil==" "psutil>=" \
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
+      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt-toolkit py-cpuinfo
+  propagatedBuildInputs = with python3.pkgs; [
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async_generator
+    distro
+    importlib-resources
+    jinja2
+    jsonschema
+    multidict
+    prompt-toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    setuptools
+    yarl
+    zipstream
   ];
 
   # Requires network access
@@ -64,6 +65,6 @@ in python.pkgs.buildPythonPackage {
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       LWPProtocolHttps
       MozillaCA
       CryptSSLeay
-      IOSocketInet6
+      IOSocketINET6
       LinuxDistribution
       JSONPP
       JSON

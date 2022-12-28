@@ -16,10 +16,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpmd/phpmd.phar
     makeWrapper ${php}/bin/php $out/bin/phpmd \
       --add-flags "$out/libexec/phpmd/phpmd.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -27,6 +29,5 @@ mkDerivation {
     license = licenses.bsd3;
     homepage = "https://phpmd.org/";
     maintainers = teams.php.members;
-    broken = versionOlder php.version "7.4";
   };
 }

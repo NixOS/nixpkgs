@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "docstring-to-markdown";
-  version = "0.9";
+  version = "0.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XVTlSqqWmvnB5nvjvgGDJmg71KKTq2hHB4//QW7ugvA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4Jl1XJpxwbxGWxdF4bOerjHyzHCIHtrydklwwk1WGs4=";
   };
 
   patches = [
@@ -31,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/python-lsp/docstring-to-markdown";
     description = "On the fly conversion of Python docstrings to markdown";
+    changelog = "https://github.com/python-lsp/docstring-to-markdown/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
   };

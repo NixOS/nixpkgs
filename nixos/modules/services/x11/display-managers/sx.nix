@@ -7,8 +7,8 @@ let cfg = config.services.xserver.displayManager.sx;
 in {
   options = {
     services.xserver.displayManager.sx = {
-      enable = mkEnableOption "sx pseudo-display manager" // {
-        description = ''
+      enable = mkEnableOption (lib.mdDoc "sx pseudo-display manager") // {
+        description = lib.mdDoc ''
           Whether to enable the "sx" pseudo-display manager, which allows users
           to start manually via the "sx" command from a vt shell. The X server
           runs under the user's id, not as root. The user must provide a

@@ -1,10 +1,16 @@
 { runCommand, haskellPackages, lib, all-cabal-hashes, writeShellScript }:
 let
+  # Checks if the version looks like a Haskell PVP version which is the format
+  # Hackage enforces. This will return false if the version strings is empty or
+  # we've overridden the package to ship an unstable version of the package
+  # (sadly there's no good way to show something useful on hackage in this case).
+  isPvpVersion = v: builtins.match "([0-9]+)(\\.[0-9]+)*" v != null;
+
   pkgLine = name: pkg:
     let
       version = pkg.version or "";
     in
-    if version != "" then
+    if isPvpVersion version then
       ''"${name}","${version}","http://hydra.nixos.org/job/nixpkgs/trunk/haskellPackages.${name}.x86_64-linux"''
     else "";
   all-haskellPackages = builtins.toFile "all-haskellPackages" (lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.mapAttrsToList pkgLine haskellPackages)));

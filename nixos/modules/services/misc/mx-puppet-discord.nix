@@ -12,10 +12,10 @@ let
 in {
   options = {
     services.mx-puppet-discord = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         mx-puppet-discord is a discord puppeting bridge for matrix.
         It handles bridging private and group DMs, as well as Guilds (servers)
-      '';
+      '');
 
       settings = mkOption rec {
         apply = recursiveUpdate default;
@@ -39,7 +39,7 @@ in {
 
           #defaults to sqlite but can be configured to use postgresql with
           #connstring
-          database.filename = "${dataDir}/mx-puppet-discord/database.db";
+          database.filename = "${dataDir}/database.db";
           logging = {
             console = "info";
             lineDateFormat = "MMM-D HH:mm:ss.SSS";
@@ -57,17 +57,20 @@ in {
             relay.whitelist = [ "@.*:example.com" ];
           }
         '';
-        description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
+        description = lib.mdDoc ''
+          {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
-          <link xlink:href="https://github.com/matrix-discord/mx-puppet-discord/blob/master/sample.config.yaml">
-          sample.config.yaml</link>.
+          [
+          sample.config.yaml](https://github.com/matrix-discord/mx-puppet-discord/blob/master/sample.config.yaml).
         '';
       };
       serviceDependencies = mkOption {
         type = with types; listOf str;
         default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
-        description = ''
+        defaultText = literalExpression ''
+          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+        '';
+        description = lib.mdDoc ''
           List of Systemd services to require and wait for when starting the application service.
         '';
       };
@@ -76,10 +79,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.mx-puppet-discord = {
-      description = ''
-        mx-puppet-discord is a discord puppeting bridge for matrix.
-        It handles bridging private and group DMs, as well as Guilds (servers).
-      '';
+      description = "Matrix to Discord puppeting bridge";
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
@@ -107,10 +107,12 @@ in {
         PrivateTmp = true;
         WorkingDirectory = pkgs.mx-puppet-discord;
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = "0027";
 
         ExecStart = ''
-          ${pkgs.mx-puppet-discord}/bin/mx-puppet-discord -c ${settingsFile}
+          ${pkgs.mx-puppet-discord}/bin/mx-puppet-discord \
+            -c ${settingsFile} \
+            -f ${registrationFile}
         '';
       };
     };

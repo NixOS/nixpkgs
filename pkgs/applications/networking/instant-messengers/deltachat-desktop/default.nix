@@ -1,66 +1,68 @@
 { lib
+, buildNpmPackage
 , copyDesktopItems
-, electron
+, electron_18
+, buildGoModule
 , esbuild
 , fetchFromGitHub
 , fetchpatch
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
-, nodePackages
+, noto-fonts-emoji
 , pkg-config
+, python3
+, roboto
 , rustPlatform
+, sqlcipher
 , stdenv
 , CoreServices
 }:
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.60.0";
+    version = "1.104.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      sha256 = "1agm5xyaib4ynmw4mhgmkhh4lnxs91wv0q9i1zfihv2vkckfm2s2";
+      hash = "sha256-+FQ6XE+CtvSNSgpEr8h0mcr9DCC6TvGgLrYGdw0Ve2o=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      sha256 = "09d3mw2hb1gmqg7smaqwnfm7izw40znl0h1dz7s2imms2cnkjws1";
+      hash = "sha256-c3tt+nYZksI/VhJk4bNHu9ZXeDTaA2aLAQo1BmuF+2g=";
     };
-    patches = [
-      # https://github.com/deltachat/deltachat-core-rust/pull/2589
-      (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/408467e85d04fbbfd6bed5908d84d9e995943487.patch";
-        sha256 = "1j2ywaazglgl6370js34acrg0wrh0b7krqg05dfjf65n527lzn59";
-      })
-      ./no-static-lib.patch
-      # https://github.com/deltachat/deltachat-core-rust/pull/2660
-      (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/8fb5e038a97d8ae68564c885d61b93127a68366d.patch";
-        sha256 = "088pzfrrkgfi4646dc72404s3kykcpni7hgkppalwlzg0p4is41x";
-      })
-    ];
   });
-  electronExec = if stdenv.isDarwin then
-    "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
-  else
-    "${electron}/bin/electron";
-in nodePackages.deltachat-desktop.override rec {
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.14.54";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
+      };
+      vendorSha256 = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+    });
+  };
+in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.22.2";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    sha256 = "0in6w2vl4ypgjb9gfhyh77vg05ni5p3z24lah7wvvhywcpv1jp2n";
+    hash = "sha256-/F1fU54eTM9mUaQe/Ex9DnTDb+fzl/1HNyYvLWE2BBU=";
   };
 
+  npmDepsHash = "sha256-3wzN7G27IGTlFZUE9RzQXfApVfaTc92Sbb+jjH/zeoc=";
+
   nativeBuildInputs = [
-    esbuild
     makeWrapper
     pkg-config
+    python3
   ] ++ lib.optionals stdenv.isLinux [
     copyDesktopItems
   ];
@@ -72,31 +74,42 @@ in nodePackages.deltachat-desktop.override rec {
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 
-  postInstall = let
-    keep = lib.concatMapStringsSep " " (file: "! -name ${file}") [
-      "_locales" "build" "html-dist" "images" "index.js"
-      "node_modules" "themes" "tsc-dist"
-    ];
-  in ''
-    rm -r node_modules/deltachat-node/{deltachat-core-rust,prebuilds,src}
+  preBuild = ''
+    rm -r node_modules/deltachat-node/node/prebuilds
+  '';
 
-    patchShebangs node_modules/sass/sass.js
+  npmBuildScript = "build4production";
 
-    npm run build
+  installPhase = ''
+    runHook preInstall
 
     npm prune --production
 
-    find . -mindepth 1 -maxdepth 1 ${keep} -print0 | xargs -0 rm -r
+    mkdir -p $out/lib/node_modules/deltachat-desktop
+    cp -r . $out/lib/node_modules/deltachat-desktop
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s $out/lib/node_modules/deltachat-desktop/build/icon.png \
+    awk '!/^#/ && NF' build/packageignore_list \
+      | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
+
+    install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
-    makeWrapper ${electronExec} $out/bin/deltachat \
+    ln -sf ${noto-fonts-emoji}/share/fonts/noto/NotoColorEmoji.ttf \
+      $out/lib/node_modules/deltachat-desktop/html-dist/fonts/noto/emoji
+    for font in $out/lib/node_modules/deltachat-desktop/html-dist/fonts/Roboto-*.ttf; do
+      ln -sf ${roboto}/share/fonts/truetype/$(basename $font) \
+        $out/lib/node_modules/deltachat-desktop/html-dist/fonts
+    done
+
+    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
+
+    runHook postInstall
   '';
 
   desktopItems = lib.singleton (makeDesktopItem {
@@ -106,11 +119,14 @@ in nodePackages.deltachat-desktop.override rec {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = meta.description;
-    categories = "Network;InstantMessaging;Chat;";
-    extraEntries = ''
-      StartupWMClass=DeltaChat
-      MimeType=x-scheme-handler/openpgp4fpr;x-scheme-handler/mailto;
-    '';
+    categories = [ "Network" "InstantMessaging" "Chat" ];
+    startupWMClass = "DeltaChat";
+    mimeTypes = [
+      "x-scheme-handler/openpgp4fpr"
+      "x-scheme-handler/dcaccount"
+      "x-scheme-handler/dclogin"
+      "x-scheme-handler/mailto"
+    ];
   });
 
   passthru.updateScript = ./update.sh;
@@ -118,7 +134,9 @@ in nodePackages.deltachat-desktop.override rec {
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";
     homepage = "https://github.com/deltachat/deltachat-desktop";
+    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    mainProgram = "deltachat";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

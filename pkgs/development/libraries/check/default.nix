@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libcheck.github.io/check/";
 
     license = licenses.lgpl2Plus;
+    mainProgram = "checkmk";
     platforms = platforms.all;
   };
 }

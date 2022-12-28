@@ -2,7 +2,7 @@
 , qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
-, bison, flex, gdb, gperf, perl, pkg-config, python2, ruby
+, bison, flex, gdb, gperf, perl, pkg-config, python38, ruby
 , ICU, OpenGL
 }:
 
@@ -30,7 +30,7 @@ qtModule {
     ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ]
     ++ lib.optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
-    bison flex gdb gperf perl pkg-config python2 ruby
+    bison flex gdb gperf perl pkg-config python38 ruby
   ] ++ lib.optional usingAnnulenWebkitFork cmake;
 
   cmakeFlags = lib.optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
@@ -69,5 +69,8 @@ qtModule {
 
   meta = {
     maintainers = with lib.maintainers; [ abbradar periklis ];
+    knownVulnerabilities = [
+      "QtWebkit upstream is unmaintained and receives no security updates, see https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/"
+    ];
   };
 }

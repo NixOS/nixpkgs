@@ -1,11 +1,18 @@
-{ lib, buildGoModule, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, buildGoModule
+, buildGoPackage
+, fetchFromGitHub
+, installShellFiles
+, pkgsBuildBuild
+}:
 
 let
   # Argo can package a static server in the CLI using the `staticfiles` go module.
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = buildGoPackage rec {
+  staticfiles = pkgsBuildBuild.buildGoPackage rec {
     name = "staticfiles";
     src = fetchFromGitHub {
       owner = "bouk";
@@ -19,22 +26,26 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "3.1.1";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
-    rev = "v${version}";
-    sha256 = "sha256-WErNPofVnV6L7DkYU/dh4mWm+u7UJNFUmRN6IZzMb2g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZG10ruusSywXWn88UqrHVfAWrio2KoK2YoM9qdtMlhU=";
   };
 
-  vendorSha256 = "sha256-99N//woGPx9QEtkFsktaiAbu7TS+3DHArBA52OUJFU4=";
+  vendorHash = "sha256-Tqn5HGhRbN++yAo9JajUMTxFjVLw5QTvsis8wcfRIHw=";
 
   doCheck = false;
 
-  subPackages = [ "cmd/argo" ];
+  subPackages = [
+    "cmd/argo"
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   preBuild = ''
     mkdir -p ui/dist/app
@@ -54,7 +65,10 @@ buildGoModule rec {
 
   postInstall = ''
     for shell in bash zsh; do
-      $out/bin/argo completion $shell > argo.$shell
+      ${if (stdenv.buildPlatform == stdenv.hostPlatform)
+        then "$out/bin/argo"
+        else "${pkgsBuildBuild.argo}/bin/argo"
+      } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done
   '';
@@ -62,6 +76,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Container native workflow engine for Kubernetes";
     homepage = "https://github.com/argoproj/argo";
+    changelog = "https://github.com/argoproj/argo-workflows/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ groodt ];
     platforms = platforms.unix;

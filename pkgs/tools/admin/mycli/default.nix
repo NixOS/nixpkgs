@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.24.1";
+  version = "1.26.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
+    sha256 = "sha256-jAMDXJtFJtv6CwhZZU4pdKDndZKp6bJ/QPWo2q6DvrE=";
   };
 
   propagatedBuildInputs = [
@@ -26,10 +26,11 @@ buildPythonApplication rec {
     pygments
     pymysql
     pyperclip
+    sqlglot
     sqlparse
   ];
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
     export HOME=.
@@ -41,8 +42,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
-      --replace "importlib_resources >= 5.0.0" "importlib_resources"
+      --replace "cryptography == 36.0.2" "cryptography"
   '';
 
   meta = with lib; {

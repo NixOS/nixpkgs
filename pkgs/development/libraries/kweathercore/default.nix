@@ -2,23 +2,25 @@
 , lib
 , fetchFromGitLab
 , extra-cmake-modules
+, kholidays
 , ki18n
 , qtlocation
 }:
 
 mkDerivation rec {
   pname = "kweathercore";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08ipabskhsbspkzzdlpwl89r070q8d0vc9500ma6d5i9fnpmkz6d";
+    sha256 = "sha256-LIgUSXKHcRqcBwGTRxU5Z4eHuWmPLerorlrnI6Cf9k4=";
   };
 
   buildInputs = [
+    kholidays
     ki18n
     qtlocation
   ];

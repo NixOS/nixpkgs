@@ -19,6 +19,7 @@ in {
         port = port;
         tcp.port = tcpPort;
         http.port = httpPort;
+        openFirewall = true;
         buffer = bufferSize;
         streams = {
           mpd = {
@@ -40,6 +41,7 @@ in {
           };
         };
       };
+      environment.systemPackages = [ pkgs.snapcast ];
     };
     client = {
       environment.systemPackages = [ pkgs.snapcast ];
@@ -70,6 +72,13 @@ in {
         server.succeed(
             "curl --fail http://localhost:${toString httpPort}/jsonrpc -d '{json.dumps(get_rpc_version)}'"
         )
+
+    with subtest("test a ipv6 connection"):
+        server.execute("systemd-run --unit=snapcast-local-client snapclient -h ::1 -p ${toString port}")
+        server.wait_until_succeeds(
+            "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
+        )
+        server.wait_until_succeeds("journalctl -o cat -u snapcast-local-client | grep -q 'buffer: ${toString bufferSize}'")
 
     with subtest("test a connection"):
         client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")

@@ -1,24 +1,26 @@
---- a/Makefile.darwin	2021-09-12 14:42:51.000000000 +0300
-+++ b/Makefile.darwin	2021-09-12 15:09:16.000000000 +0300
-@@ -49,6 +49,7 @@
+diff --git a/Quake/Makefile.darwin b/Quake/Makefile.darwin
+index 6a08e6d..4e320cd 100644
+--- a/Makefile.darwin
++++ b/Makefile.darwin
+@@ -50,6 +50,7 @@ LINKER = $(CC)
  LIPO ?= lipo
  
- STRIP ?= strip
+ STRIP ?= strip -S
 +PKG_CONFIG ?= pkg-config
  
  CPUFLAGS=
  LDFLAGS =
-@@ -84,9 +85,6 @@
- USE_RPATH=1
+@@ -86,9 +87,6 @@ USE_RPATH=1
  endif
+ CFLAGS += $(call check_gcc,-std=gnu11,)
  CFLAGS += $(CPUFLAGS)
 -ifeq ($(USE_RPATH),1)
 -LDFLAGS+=-Wl,-rpath,@executable_path/../Frameworks
 -endif
- 
  ifneq ($(DEBUG),0)
  DFLAGS += -DDEBUG
-@@ -115,19 +113,14 @@
+ CFLAGS += -g
+@@ -117,19 +115,14 @@ CFLAGS += -DGL_SILENCE_DEPRECATION=1
  # not relying on sdl-config command and assuming
  # /Library/Frameworks/SDL.framework is available
  SDL_CFLAGS =-D_GNU_SOURCE=1 -D_THREAD_SAFE
@@ -34,42 +36,49 @@
 -ifneq ($(SDL_FRAMEWORK_PATH),)
 -SDL_LIBS  +=-F$(SDL_FRAMEWORK_PATH)
 -SDL_CFLAGS+=-F$(SDL_FRAMEWORK_PATH)
-+SDL_CONFIG ?= sdl2-config
++SDL_CONFIG ?= sdl-config
  endif
 -SDL_LIBS  +=-Wl,-framework,$(SDL_FRAMEWORK_NAME) -Wl,-framework,Cocoa
 +SDL_CFLAGS := $(shell $(SDL_CONFIG) --cflags)
 +SDL_LIBS   := $(shell $(SDL_CONFIG) --libs)
-+SDL_LIBS  += -Wl,-framework,Cocoa
++SDL_LIBS   += -Wl,-framework,Cocoa
  
  NET_LIBS   :=
  
-@@ -164,38 +157,26 @@
+@@ -165,45 +158,31 @@ ifeq ($(USE_CODEC_WAVE),1)
+ CFLAGS+= -DUSE_CODEC_WAVE
  endif
  ifeq ($(USE_CODEC_FLAC),1)
- CFLAGS+= -DUSE_CODEC_FLAC
+-CFLAGS+= -DUSE_CODEC_FLAC
 -CODEC_INC = -I../MacOSX/codecs/include
 -CODEC_LINK= -L../MacOSX/codecs/lib
- CODECLIBS+= -lFLAC
+-CODECLIBS+= -lFLAC
++CFLAGS+= -DUSE_CODEC_FLAC $(shell $(PKG_CONFIG) --cflags flac)
++CODECLIBS+= $(shell $(PKG_CONFIG) --libs flac)
  endif
  ifeq ($(USE_CODEC_OPUS),1)
 -CFLAGS+= -DUSE_CODEC_OPUS
 -CODEC_INC = -I../MacOSX/codecs/include
 -CODEC_LINK= -L../MacOSX/codecs/lib
 -CODECLIBS+= -lopusfile -lopus -logg
-+CFLAGS+= -DUSE_CODEC_OPUS $(shell $(PKG_CONFIG) --cflags opusfile)
-+CODECLIBS+= $(shell $(PKG_CONFIG) --libs   opusfile)
++CFLAGS+= -DUSE_CODEC_OPUS $(shell $(PKG_CONFIG) --cflags ogg opus opusfile)
++CODECLIBS+= $(shell $(PKG_CONFIG) --libs ogg opus opusfile)
  endif
  ifeq ($(USE_CODEC_VORBIS),1)
- CFLAGS+= -DUSE_CODEC_VORBIS $(cpp_vorbisdec)
+-CFLAGS+= -DUSE_CODEC_VORBIS $(cpp_vorbisdec)
 -CODEC_INC = -I../MacOSX/codecs/include
 -CODEC_LINK= -L../MacOSX/codecs/lib
- CODECLIBS+= $(lib_vorbisdec)
+-CODECLIBS+= $(lib_vorbisdec)
++CFLAGS+= -DUSE_CODEC_VORBIS $(shell $(PKG_CONFIG) --cflags ogg vorbis vorbisfile)
++CODECLIBS+= $(shell $(PKG_CONFIG) --libs ogg vorbis vorbisfile)
  endif
  ifeq ($(USE_CODEC_MP3),1)
- CFLAGS+= -DUSE_CODEC_MP3
+-CFLAGS+= -DUSE_CODEC_MP3
 -CODEC_INC = -I../MacOSX/codecs/include
 -CODEC_LINK= -L../MacOSX/codecs/lib
- CODECLIBS+= $(lib_mp3dec)
+-CODECLIBS+= $(lib_mp3dec)
++CFLAGS+= -DUSE_CODEC_MP3 $(shell $(PKG_CONFIG) --cflags $(MP3LIB))
++CODECLIBS+= $(shell $(PKG_CONFIG) --libs $(MP3LIB))
  endif
  ifeq ($(USE_CODEC_MIKMOD),1)
  CFLAGS+= -DUSE_CODEC_MIKMOD
@@ -78,15 +87,25 @@
  CODECLIBS+= -lmikmod
  endif
  ifeq ($(USE_CODEC_XMP),1)
- CFLAGS+= -DUSE_CODEC_XMP
+-CFLAGS+= -DUSE_CODEC_XMP
 -CODEC_INC = -I../MacOSX/codecs/include
 -CODEC_LINK= -L../MacOSX/codecs/lib
- CODECLIBS+= -lxmp
+-CODECLIBS+= -lxmp
++CFLAGS+= -DUSE_CODEC_XMP $(shell $(PKG_CONFIG) --cflags libxmp)
++CODECLIBS+= $(shell $(PKG_CONFIG) --libs libxmp)
+ endif
+ ifeq ($(USE_CODEC_MODPLUG),1)
+ CFLAGS+= -DUSE_CODEC_MODPLUG
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+ CODECLIBS+= -lmodplug
  endif
  ifeq ($(USE_CODEC_UMX),1)
-@@ -332,3 +313,5 @@
+@@ -333,4 +312,7 @@ debug:
  clean:
- 	rm -f $(shell find . \( -name '*~' -o -name '#*#' -o -name '*.o' -o -name '*.res' -o -name $(DEFAULT_TARGET) \) -print)
+ 	$(RM) *.o *.d $(DEFAULT_TARGET)
  
-+install:	quakespasm
++install: quakespasm
 +	install -D -m 755 quakespasm /usr/local/games/quake
++
+ sinclude $(OBJS:.o=.d)

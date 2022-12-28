@@ -11,7 +11,7 @@ in {
   options = {
 
     services.colord = {
-      enable = mkEnableOption "colord, the color management daemon";
+      enable = mkEnableOption (lib.mdDoc "colord, the color management daemon");
     };
 
   };

@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, alsa-lib, jack2, minixml, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name =  packageName + "-" + version ;
-  packageName = "aj-snapshot" ;
+  pname = "aj-snapshot" ;
   version = "0.9.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${packageName}/${name}.tar.bz2";
+    url = "mirror://sourceforge/aj-snapshot/aj-snapshot-${version}.tar.bz2";
     sha256 = "0z8wd5yvxdmw1h1rj6km9h01xd4xmp4d86gczlix7hsc7zrf0wil";
   };
 

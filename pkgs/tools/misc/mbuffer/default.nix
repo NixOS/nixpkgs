@@ -7,26 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mbuffer";
-  version = "20211018";
+  version = "20220418";
 
   src = fetchurl {
     url = "http://www.maier-komor.de/software/mbuffer/mbuffer-${version}.tgz";
-    sha256 = "sha256-4kDB5OSsFMKL6MZg7EfUTOFrHo7JKqkHrRMAT/1dtuM=";
+    sha256 = "sha256-blgB+fX/EURdHQMCi1oDzQivVAhpe3+UxCeDMiijAMc=";
   };
 
   buildInputs = [
     openssl
+  ];
+  nativeBuildInputs = [
     which
   ];
-
-  # The mbuffer configure scripts fails to recognize the correct
-  # objdump binary during cross-building for foreign platforms.
-  # The correct objdump is exposed via the environment variable
-  # $OBJDUMP, which should be used in such cases.
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace configure \
-      --replace "OBJDUMP=$ac_cv_path_OBJDUMP" 'OBJDUMP=''${OBJDUMP}'
-  '';
 
   doCheck = true;
 

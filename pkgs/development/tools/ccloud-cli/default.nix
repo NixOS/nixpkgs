@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       sha256 = "0936hipcl37w4mzzsnjlz4q1z4j9094i4irigzqwg14gdbs7p11s";
     });
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dontStrip = stdenv.isDarwin;
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Confluent Cloud CLI";
     homepage = "https://docs.confluent.io/current/cloud/cli/index.html";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ kalbasit ];
 

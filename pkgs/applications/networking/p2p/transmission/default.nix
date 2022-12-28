@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -15,6 +16,7 @@
 , miniupnpc
 , dht
 , libnatpmp
+, libiconv
   # Build options
 , enableGTK3 ? false
 , gtk3
@@ -44,6 +46,14 @@ in stdenv.mkDerivation {
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix build with openssl 3.0
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/transmission/-/raw/debian/3.00-2.1/debian/patches/openssl3-compat.patch";
+      hash = "sha256-v+SDTW/lCtc8B3TuhQB1pmjW/QRAGLtYncaImNNwpes=";
+    })
+  ];
 
   outputs = [ "out" "apparmor" ];
 
@@ -84,9 +94,7 @@ in stdenv.mkDerivation {
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ;
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+  ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postInstall = ''
     mkdir $apparmor

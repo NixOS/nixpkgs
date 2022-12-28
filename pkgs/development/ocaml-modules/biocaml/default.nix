@@ -4,17 +4,20 @@
 
 buildDunePackage rec {
   pname = "biocaml";
-  version = "0.11.1";
+  version = "0.11.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.11";
 
   src = fetchFromGitHub {
     owner = "biocaml";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1il84vvypgkhdyc2j5fmgh14a58069s6ijbd5dvyl2i7jdxaazji";
+    sha256 = "01yw12yixs45ya1scpb9jy2f7dw1mbj7741xib2xpq3kkc1hc21s";
+  };
+
+  patches = fetchpatch {
+    url = "https://github.com/biocaml/biocaml/commit/3ef74d0eb4bb48d2fb7dd8b66fb3ad8fe0aa4d78.patch";
+    sha256 = "0rcvf8gwq7sz15mghl9ing722rl2zpnqif9dfxrnpdxiv0rl0731";
   };
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];

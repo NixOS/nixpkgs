@@ -4,13 +4,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "markdown-anki-decks";
-  version = "1.0.0";
-
+  version = "1.1.1";
   format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "R6T8KOHMb1Neg/RG5JQl9+7LxOkAoZL0L5wvVaqm9O0=";
+    hash = "sha256-SvKjjE629OwxWsPo2egGf2K6GzlWAYYStarHhA4Ex0w=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -18,31 +17,30 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    genanki
-    typer
-    colorama
-    shellingham
     beautifulsoup4
+    genanki
     markdown
     python-frontmatter
-  ];
+    typer
+  ] ++ typer.optional-dependencies.all;
 
   postPatch = ''
-    # No API changes.
     substituteInPlace pyproject.toml \
-      --replace 'python-frontmatter = "^0.5.0"' 'python-frontmatter = "^1.0.0"' \
-      --replace 'genanki = "^0.10.1"' 'genanki = "^0.11.0"' \
-      --replace 'typer = "^0.3.2"' 'typer = "^0.4.0"'
+      --replace 'typer = "^0.4.0"' 'typer = "*"'
   '';
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.
   doCheck = false;
 
+  pythonImportsCheck = [
+    "markdown_anki_decks"
+  ];
+
   meta = with lib; {
-    description = "Simple program to convert markdown files into anki decks";
-    maintainers = with maintainers; [ jtojnar ];
+    description = "Tool to convert Markdown files into Anki Decks";
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     license = licenses.mit;
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
 }

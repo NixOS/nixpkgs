@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stdman";
-  version = "2020.11.17";
+  version = "2022.07.30";
 
   src = fetchFromGitHub {
     owner = "jeaye";
     repo = "stdman";
     rev = version;
-    sha256 = "sha256-pzAVuXSuUfwI7gQpFqmH/+klSUH3KipZup2TgZs8XsY=";
+    sha256 = "sha256-ABogxVQS6p3wUV8GuB2tp7vMxe63t51dNoclEnYpa/0=";
   };
 
   outputDevdoc = "out";

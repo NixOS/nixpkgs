@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.3.14";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "13l8blq7y6p7a235x2lfiqml1bd4ba2brm3vfvs8wasjh3fvm9g5";
+    sha256 = "sha256-VGP9JVw92rk1yXZDqTKcMzJt8t+T8YAg8zYxFaWxGr4=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     icon = "thonny";
     desktopName = "Thonny";
     comment     = "Python IDE for beginners";
-    categories  = "Development;IDE";
+    categories  = [ "Development" "IDE" ];
   }) ];
 
   propagatedBuildInputs = with python3.pkgs; [

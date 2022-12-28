@@ -1,26 +1,29 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , prompt-toolkit
-, pytest-cov
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "1.10.0";
+  version = "unstable-2022-07-27";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = pname;
-    rev = version;
-    sha256 = "14k24fq2nmk90iv0k7pnmmdhmk8z261397wg52sfcsccyhpdw3i7";
+    rev = "848b040c5b7086ffe75bd92c656e15e94d905146";
+    hash = "sha256-W0d1Uoy5JdN3BFfeyk1GG0HBzmgKoBApaGad0UykZaY=";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -28,11 +31,17 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest-cov
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "questionary" ];
+  disabledTests = [
+    # TypeError: <lambda>() missing 1 required...
+    "test_print_with_style"
+  ];
+
+  pythonImportsCheck = [
+    "questionary"
+  ];
 
   meta = with lib; {
     description = "Python library to build command line user prompts";

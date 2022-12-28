@@ -8,16 +8,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.8.2";
   pname = "xmlschema";
+  version = "1.11.3";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
-    rev = "v${version}";
-    sha256 = "sha256-d7f19T17aAwdtNDjCrsXXY39u0aRgQo4vFPnxFNs2PQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z6VgLRDp5PHaYstdV30gt6xGVd4uifz4LkYQ2z3ayk4=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +43,9 @@ buildPythonPackage rec {
     "tests/test_validation.py"
   ];
 
-  pythonImportsCheck = [ "xmlschema" ];
+  pythonImportsCheck = [
+    "xmlschema"
+  ];
 
   meta = with lib; {
     description = "XML Schema validator and data conversion library for Python";

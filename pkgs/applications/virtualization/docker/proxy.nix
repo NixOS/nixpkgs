@@ -1,13 +1,13 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "docker-proxy-${rev}";
-  rev = "fa125a3512ee0f6187721c88582bf8c4378bd4d7";
+  pname = "docker-proxy";
+  version = "unstable-2020-12-15";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "docker";
     repo = "libnetwork";
+    rev = "fa125a3512ee0f6187721c88582bf8c4378bd4d7";
     sha256 = "1r47y0gww3j7fas4kgiqbhrz5fazsx1c6sxnccdfhj8fzik77s9y";
   };
 

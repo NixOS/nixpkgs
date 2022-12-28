@@ -18,11 +18,11 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.14.3";
+  version = "3.17.4";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "sha256-1rdyLNSH8jMkmIg88uHMN3ZXqTHAtzU1adybJEZzJ9M=";
+    sha256 = "sha256-mcEnSGcio//ZWiaLTOsJdsvyF5JsaBqWMb1yRuq4yyo=";
   };
 
   mpiSupport = !withp4est || p4est.mpiSupport;
@@ -74,6 +74,6 @@ stdenv.mkDerivation rec {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://www.mcs.anl.gov/petsc/index.html";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ wucke13 cburstedde ];
+    maintainers = with maintainers; [ cburstedde ];
   };
 }

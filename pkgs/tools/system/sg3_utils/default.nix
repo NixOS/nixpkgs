@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sg3_utils";
-  version = "1.46r862";
+  version = "1.47";
 
   src = fetchurl {
     url = "https://sg.danny.cz/sg/p/sg3_utils-${version}.tgz";
-    sha256 = "s2UmU+p3s7Hoe+GFri2q+/3XLBICc+h04cxM86yaAs8=";
+    sha256 = "sha256-hnPH+sqEm2s0dkMy0qqR9y2wW/9zgruDbQaIeVGZw+E=";
   };
 
   meta = with lib; {

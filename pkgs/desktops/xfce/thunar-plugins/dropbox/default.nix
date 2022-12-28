@@ -6,6 +6,7 @@
 , cmake
 , ninja
 , xfce
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -30,16 +31,13 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.thunar-dropbox-plugin";
-    versionLister = xfce.gitLister src.meta.homepage;
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/Jeinzi/thunar-dropbox";
     description = "A plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

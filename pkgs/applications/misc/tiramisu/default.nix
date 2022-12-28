@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, vala }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tiramisu";
-  version = "unstable-2021-05-20";
+  version = "2.0.20211107";
 
   src = fetchFromGitHub {
     owner = "Sweets";
-    repo = "tiramisu";
-    rev = "e53833d0b5b0ae41ceb7dc434d8e25818fe62291";
-    sha256 = "sha256-F4oaTOAQQfOkEXeBVbGH+0CHc9v9Ac08GyzHliOdAfc=";
+    repo = pname;
+    rev = version;
+    sha256 = "1n1x1ybbwbanibw7b90k7v4cadagl41li17hz2l8s2sapacvq3mw";
   };
 
   buildInputs = [ glib ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config vala ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

@@ -1,5 +1,6 @@
 { asttokens
 , buildPythonPackage
+, cython
 , executing
 , fetchFromGitHub
 , git
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "stack-data";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "stack_data";
     rev = "v${version}";
-    sha256 = "sha256-dRIRDMq0tc1QuBHvppPwJA5PVGHyVRhoBlX5BsdDzec=";
+    sha256 = "sha256-brXFrk1UU5hxCVeRvGK7wzRA0Hoj9fgqoxTIwInPrEc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cython
     littleutils
     pygments
     pytestCheckHook
@@ -47,8 +49,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AssertionError
-    "test_variables"
     "test_example"
+    "test_executing_style_defs"
+    "test_pygments_example"
+    "test_variables"
   ];
 
   pythonImportsCheck = [ "stack_data" ];

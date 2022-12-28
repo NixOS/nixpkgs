@@ -2,6 +2,7 @@
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
+, shadow
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -14,17 +15,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "3.0.3";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "106yhsjwjadxsl9dqxywg287mdwsksman02hdalhav18vcnvnlpj";
+    sha256 = "1jijxnvjcsgz5yw4i9fj7ycdnnz90r3l0zicpwinswrw47ac3yy5";
   };
 
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl
+    shadow
   ];
 
   # cmocka is checked / used(?) in the configure script
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
       --replace '@PREFIX@' $out/lib
+    substituteInPlace ./configure.ac \
+      --replace 'm4_esyscmd_s([git describe --tags --always --dirty])' '${version}'
   '';
 
   configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
@@ -85,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ ];
   };
 }

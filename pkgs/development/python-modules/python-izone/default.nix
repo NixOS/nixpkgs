@@ -2,27 +2,33 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , aiohttp
 , netifaces
-, asynctest
-, pytest-aiohttp
+, pytest-aio
+, pytest-asyncio
 , pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.1.6";
+  version = "1.2.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";
-    rev = "v${version}";
-    sha256 = "sha256-zgE1ccEPSa9nX0SEMN02VEGfnHexk/+jCJe7ugUL5UA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0rj+tKn2pbFe+nczTMGLwIwmc4jCznGGF4/IMjlEvQg=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     aiohttp
@@ -30,19 +36,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
-    pytest-aiohttp
+    pytest-aio
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  patches = [
-    # async_timeout 4.0.0 removes current_task, https://github.com/Swamp-Ig/pizone/pull/15
-    (fetchpatch {
-      name = "remove-current-task.patch";
-      url = "https://github.com/Swamp-Ig/pizone/commit/988998cf009a39938e4ee37079337b0c187977f2.patch";
-      sha256 = "nVCQBMc4ZE7CQsYC986wqvPPyA7zJ/g278jJrpaiAIw=";
-    })
-  ];
+  doCheck = false; # most tests access network
 
   pythonImportsCheck = [
     "pizone"

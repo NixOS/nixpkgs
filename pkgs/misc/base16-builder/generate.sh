@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodePackages.node2nix
-exec node2nix --nodejs-10 \
+exec node2nix --nodejs-16 \
      --input node-packages.json \
      --output node-packages-generated.nix \
      --supplement-input supplement.json \

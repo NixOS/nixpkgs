@@ -1,26 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, future, configparser, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fonttools
+, future
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "arabic_reshaper";
-  version = "2.1.3";
+  pname = "arabic-reshaper";
+  version = "2.1.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a236fc6e9dde2a61cc6a5ca962b522e42694e1bb2a2d86894ed7a4eba4ce1890";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "mpcabd";
+    repo = "python-arabic-reshaper";
+    rev = "v${version}";
+    hash = "sha256-qQGIC/KequOQZoxwm7AEkdPV0QpS7YoBV9v8ZA7AYQM=";
   };
 
-  propagatedBuildInputs = [ future ]
-    ++ lib.optionals isPy27 [ configparser ];
+  propagatedBuildInputs = [
+    future
+  ];
 
-  # Tests are not published on pypi
-  doCheck = false;
+  passthru.optional-dependencies = {
+    with-fonttools = [
+      fonttools
+    ];
+  };
 
-  pythonImportsCheck = [ "arabic_reshaper" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "arabic_reshaper"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";
-    platforms = platforms.unix;
+    homepage = "https://github.com/mpcabd/python-arabic-reshaper";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ freezeboy ];
   };
 }

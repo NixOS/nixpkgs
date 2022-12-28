@@ -9,8 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "06l80xgykj7x1kqkjvcq06pwj2rmca458zvs053qc55x3sg06bfa";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja gobject-introspection libtool vala ];
   buildInputs = [ glib libcanberra ];
+
+  mesonFlags = [
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Denable_vala=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -24,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Small library for playing system sounds";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -63,6 +63,7 @@ in
           };
       '';
 
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = with licenses; [ mit eapl ];
       maintainers = [ maintainers.eperuffo ];
       platforms = platforms.linux;

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
+, pythonOlder
 , requests
 , websocket-client
 , websockets
@@ -9,15 +10,21 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.9.3";
+  version = "0.11.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
     rev = version;
-    sha256 = "sha256-LUM7SP03U3mRxCTjgxPRXh/ZLz15R04zBWOxLKnan98=";
+    hash = "sha256-QX8CPf3o0IaAhjWYeUjDoAgktNrh/sSRjFhOweAxxco=";
   };
+
+  postPatch = ''
+    sed -i '/download_url/d' setup.py
+  '';
 
   propagatedBuildInputs = [
     aiohttp

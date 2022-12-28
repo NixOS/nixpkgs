@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytrends";
-  version = "4.7.3";
+  version = "4.8.0";
   disabled = isPy27; # python2 pandas is too old
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ccb06c57c31fa157b978a0d810de7718ee46583d28cf818250d45f36abd2faa";
+    sha256 = "sha256-BLezPrbfwSCqictGQGiKi2MzNydrbdzqRP8Mf2tiQ9I=";
   };
 
   propagatedBuildInputs = [ requests lxml pandas ];

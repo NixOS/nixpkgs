@@ -235,9 +235,9 @@
         <para>
           The <literal>networking.wireless.iwd</literal> module now
           installs the upstream-provided 80-iwd.link file, which sets
-          the NamePolicy= for all wlan devices to &quot;keep
-          kernel&quot;, to avoid race conditions between iwd and
-          networkd. If you don't want this, you can set
+          the NamePolicy= for all wlan devices to <quote>keep
+          kernel</quote>, to avoid race conditions between iwd and
+          networkd. If you don’t want this, you can set
           <literal>systemd.network.links.&quot;80-iwd&quot; = lib.mkForce {}</literal>.
         </para>
       </listitem>
@@ -245,7 +245,7 @@
         <para>
           <literal>rubyMinimal</literal> was removed due to being unused
           and unusable. The default ruby interpreter includes JIT
-          support, which makes it reference it's compiler. Since JIT
+          support, which makes it reference it’s compiler. Since JIT
           support is probably needed by some Gems, it was decided to
           enable this feature with all cc references by default, and
           allow to build a Ruby derivation without references to cc, by
@@ -330,7 +330,7 @@
           <literal>mediatomb</literal> package. If you want to keep the
           old behavior, you must declare it with:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.mediatomb.package = pkgs.mediatomb;
 }
@@ -341,7 +341,7 @@
           service declaration to add the firewall rules itself before,
           you should now declare it with:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.mediatomb.openFirewall = true;
 }
@@ -368,7 +368,7 @@
           <link xlink:href="options.html#opt-services.uwsgi.capabilities">services.uwsgi.capabilities</link>.
           The previous behaviour can be restored by setting:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.uwsgi.user = &quot;root&quot;;
   services.uwsgi.group = &quot;root&quot;;
@@ -427,7 +427,7 @@
         <para>
           <link xlink:href="options.html#opt-networking.wireguard.interfaces">networking.wireguard.interfaces.&lt;name&gt;.generatePrivateKeyFile</link>,
           which is off by default, had a <literal>chmod</literal> race
-          condition fixed. As an aside, the parent directory's
+          condition fixed. As an aside, the parent directory’s
           permissions were widened, and the key files were made
           owner-writable. This only affects newly created keys. However,
           if the exact permissions are important for your setup, read
@@ -527,7 +527,7 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
             this directory are guarded to only run if the files they
             want to manipulate do not already exist, and so will not
             re-apply their changes if the IMDS response changes.
-            Examples: <literal>root</literal>'s SSH key is only added if
+            Examples: <literal>root</literal>’s SSH key is only added if
             <literal>/root/.ssh/authorized_keys</literal> does not
             exist, and SSH host keys are only set from user data if they
             do not exist in <literal>/etc/ssh</literal>.
@@ -550,9 +550,9 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
           configures Privoxy, and the
           <literal>services.tor.client.privoxy.enable</literal> option
           has been removed. To enable Privoxy, and to configure it to
-          use Tor's faster port, use the following configuration:
+          use Tor’s faster port, use the following configuration:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   opt-services.privoxy.enable = true;
   opt-services.privoxy.enableTor = true;
@@ -628,7 +628,7 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
           exporter no longer accepts a fixed command-line parameter to
           specify the URL of the endpoint serving JSON. It now expects
           this URL to be passed as an URL parameter, when scraping the
-          exporter's <literal>/probe</literal> endpoint. In the
+          exporter’s <literal>/probe</literal> endpoint. In the
           prometheus scrape configuration the scrape target might look
           like this:
         </para>
@@ -689,7 +689,7 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
           <literal>mpich</literal> instead of the default
           <literal>openmpi</literal> can now be achived like this:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 self: super:
 {
   mpi = super.mpich;
@@ -790,7 +790,7 @@ self: super:
           for any device that the kernel recognises as an hardware RNG,
           as it will automatically run the krngd task to periodically
           collect random data from the device and mix it into the
-          kernel's RNG.
+          kernel’s RNG.
         </para>
         <para>
           The default SMTP port for GitLab has been changed to
@@ -850,7 +850,7 @@ self: super:
           kodiPackages.inputstream-adaptive and kodiPackages.vfs-sftp
           addons:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   environment.systemPackages = [
     pkgs.kodi
@@ -867,7 +867,7 @@ self: super:
           and as a result the above configuration should now be written
           as:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   environment.systemPackages = [
     (pkgs.kodi.withPackages (p: with p; [
@@ -893,7 +893,7 @@ self: super:
           <literal>services.minio.dataDir</literal> changed type to a
           list of paths, required for specifiyng multiple data
           directories for using with erasure coding. Currently, the
-          service doesn't enforce nor checks the correct number of paths
+          service doesn’t enforce nor checks the correct number of paths
           to correspond to minio requirements.
         </para>
       </listitem>
@@ -910,7 +910,7 @@ self: super:
           <literal>dvorak-programmer</literal> in
           <literal>console.keyMap</literal> now instead of
           <literal>dvp</literal>. In
-          <literal>services.xserver.xkbVariant</literal> it's still
+          <literal>services.xserver.xkbVariant</literal> it’s still
           <literal>dvp</literal>.
         </para>
       </listitem>
@@ -954,7 +954,7 @@ self: super:
           supported.
         </para>
         <para>
-          Furthermore, Radicale's systemd unit was hardened which might
+          Furthermore, Radicale’s systemd unit was hardened which might
           break some deployments. In particular, a non-default
           <literal>filesystem_folder</literal> has to be added to
           <literal>systemd.services.radicale.serviceConfig.ReadWritePaths</literal>
@@ -991,7 +991,7 @@ self: super:
       <listitem>
         <para>
           <link xlink:href="https://www.gnuradio.org/">GNURadio</link>
-          has a <literal>pkgs</literal> attribute set, and there's a
+          has a <literal>pkgs</literal> attribute set, and there’s a
           <literal>gnuradio.callPackage</literal> function that extends
           <literal>pkgs</literal> with a
           <literal>mkDerivation</literal>, and a
@@ -1027,7 +1027,7 @@ self: super:
       <listitem>
         <para>
           <link xlink:href="https://kodi.tv/">Kodi</link> has been
-          updated to version 19.1 &quot;Matrix&quot;. See the
+          updated to version 19.1 <quote>Matrix</quote>. See the
           <link xlink:href="https://kodi.tv/article/kodi-19-0-matrix-release">announcement</link>
           for further details.
         </para>
@@ -1098,9 +1098,9 @@ self: super:
       <listitem>
         <para>
           The default-version of <literal>nextcloud</literal> is
-          nextcloud21. Please note that it's <emphasis>not</emphasis>
+          nextcloud21. Please note that it’s <emphasis>not</emphasis>
           possible to upgrade <literal>nextcloud</literal> across
-          multiple major versions! This means that it's e.g. not
+          multiple major versions! This means that it’s e.g. not
           possible to upgrade from nextcloud18 to nextcloud20 in a
           single deploy and most <literal>20.09</literal> users will
           have to upgrade to nextcloud20 first.
@@ -1122,7 +1122,7 @@ self: super:
       </listitem>
       <listitem>
         <para>
-          NixOS now emits a deprecation warning if systemd's
+          NixOS now emits a deprecation warning if systemd’s
           <literal>StartLimitInterval</literal> setting is used in a
           <literal>serviceConfig</literal> section instead of in a
           <literal>unitConfig</literal>; that setting is deprecated and
@@ -1158,7 +1158,7 @@ self: super:
           users to declare autoscan media directories from their nixos
           configuration:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.mediatomb.mediaDirectories = [
     { path = &quot;/var/lib/mediatomb/pictures&quot;; recursive = false; hidden-files = false; }
@@ -1255,8 +1255,8 @@ self: super:
       <listitem>
         <para>
           The <literal>services.dnscrypt-proxy2</literal> module now
-          takes the upstream's example configuration and updates it with
-          the user's settings. An option has been added to restore the
+          takes the upstream’s example configuration and updates it with
+          the user’s settings. An option has been added to restore the
           old behaviour if you prefer to declare the configuration from
           scratch.
         </para>
@@ -1298,13 +1298,14 @@ self: super:
         <para>
           The zookeeper package does not provide
           <literal>zooInspector.sh</literal> anymore, as that
-          &quot;contrib&quot; has been dropped from upstream releases.
+          <quote>contrib</quote> has been dropped from upstream
+          releases.
         </para>
       </listitem>
       <listitem>
         <para>
           In the ACME module, the data used to build the hash for the
-          account directory has changed to accomodate new features to
+          account directory has changed to accommodate new features to
           reduce account rate limit issues. This will trigger new
           account creation on the first rebuild following this update.
           No issues are expected to arise from this, thanks to the new
@@ -1317,7 +1318,7 @@ self: super:
           now always ensures home directory permissions to be
           <literal>0700</literal>. Permissions had previously been
           ignored for already existing home directories, possibly
-          leaving them readable by others. The option's description was
+          leaving them readable by others. The option’s description was
           incorrect regarding ownership management and has been
           simplified greatly.
         </para>
@@ -1518,7 +1519,7 @@ self: super:
           been dropped. Users that still want it should add the
           following to their system configuration:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.gvfs.package = pkgs.gvfs.override { samba = null; };
 }

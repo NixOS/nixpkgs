@@ -13,10 +13,10 @@ let
 in
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "10.7.1";
+  version = "10.8.0";
   src = fetchurl {
-    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64.zip";
-    sha256 = "sha256-mMjy7Ve7wEmPxkAmux0WahUgJ86ylnWZP4smDZeBs8Q=";
+    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64-portable.zip";
+    sha256 = "sha256-Xn0ga2Z1UKd++TriL47ulV6idVTNBR8uiSW7FnL7r1g=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook unzip ];
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage    = "https://github.com/betaflight/betaflight/wiki";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.gpl3;
     maintainers = with maintainers; [ wucke13 ];
     platforms   = platforms.linux;

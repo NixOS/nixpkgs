@@ -25,11 +25,10 @@ in stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "Ballerburg";
       desktopName = "Ballerburg SDL";
-      type = "Application";
       exec = "_NET_WM_ICON=ballerburg ballerburg";
       comment = meta.description;
       icon = "ballerburg";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

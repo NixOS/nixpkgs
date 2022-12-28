@@ -7,32 +7,59 @@
 , pyyaml
 , ruamel-yaml
 , toml
+, tomli
+, tomli-w
 }:
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "5.4.1";
-  disabled = pythonOlder "3.6";
+  version = "6.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
-    rev = version;
-    sha256 = "sha256-SkteajcWG7rBFMm6Xp6QCfkZfwthRituGL/RtICbtYk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-42VDZ4aASFFWhRY3ApBQ4dq76eD1flZtxUM9hpA9iiI=";
   };
 
-  propagatedBuildInputs = [
-    msgpack
-    pyyaml
-    ruamel-yaml
-    toml
-  ];
+  passthru.optional-dependencies = {
+    all = [
+      msgpack
+      ruamel-yaml
+      toml
+    ];
+    yaml = [
+      ruamel-yaml
+    ];
+    ruamel-yaml = [
+      ruamel-yaml
+    ];
+    PyYAML = [
+      pyyaml
+    ];
+    tomli = [
+      tomli-w
+    ] ++ lib.optionals (pythonOlder "3.11") [
+      tomli
+    ];
+    toml = [
+      toml
+    ];
+    msgpack = [
+      msgpack
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.all;
 
-  pythonImportsCheck = [ "box" ];
+  pythonImportsCheck = [
+    "box"
+  ];
 
   meta = with lib; {
     description = "Python dictionaries with advanced dot notation access";

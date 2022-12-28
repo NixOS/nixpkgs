@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , gtk3
-, adwaita-icon-theme
+, pcre2
 , glib
 , desktop-file-utils
 , gtk-doc
@@ -25,7 +25,7 @@
 , runCommand
 , symlinkJoin
 , gobject-introspection
-, nix-update-script
+, gitUpdater
 }:
 
 let
@@ -45,16 +45,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "14.0.0";
+  version = "15.0.2";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "gucharmap";
     rev = version;
-    sha256 = "sha256-d283zVRH42NZNq+vGmItN3ZBrRrl9gpYDco7osm3RoY=";
+    sha256 = "sha256-QoHLMq3U/BvpCFKttxLo0qs2xmZ/pCqPjsgq/MMWNbo=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     gtk3
     glib
     gsettings-desktop-schemas
-    adwaita-icon-theme
+    pcre2
   ];
 
   mesonFlags = [
@@ -90,12 +90,13 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-    patchShebangs data/meson_desktopfile.py gucharmap/gen-guch-unicode-tables.pl gucharmap/meson_compileschemas.py
+    patchShebangs \
+      data/meson_desktopfile.py \
+      gucharmap/gen-guch-unicode-tables.pl
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.gucharmap";
+    updateScript = gitUpdater {
     };
   };
 

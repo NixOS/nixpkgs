@@ -29,13 +29,14 @@ stdenv.mkDerivation rec {
     sha256 = "0vipg3y0kbbzjhxky6hfyxy42mpqhvwn1r010zr5givcfp8ghq26";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cmake pkg-config ]
     ++ optionals docSupport [ doxygen graphviz ]
     ++ optionals pythonSupport [ swig ];
 
   buildInputs = [ libconfuse ]
-    ++ optionals cppSupport [ boost ]
-    ++ optionals pythonSupport [ python3 ];
+    ++ optionals cppSupport [ boost ];
 
   cmakeFlags = [
     "-DFTDIPP=${onOff cppSupport}"
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
     "-DLINK_PYTHON_LIBRARY=${onOff pythonSupport}"
     "-DPYTHON_BINDINGS=${onOff pythonSupport}"
     "-DDOCUMENTATION=${onOff docSupport}"
+    "-DPYTHON_EXECUTABLE=${python3.pythonForBuild.interpreter}"
+    "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   propagatedBuildInputs = [ libusb1 ];

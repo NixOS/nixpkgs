@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "Real-time 3D simulation of space";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ hjones2199 ];
     platforms = platforms.linux;
   };
 }

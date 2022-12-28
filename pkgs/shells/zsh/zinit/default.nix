@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation rec {
   };
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   installPhase = ''
     outdir="$out/share/$pname"
@@ -34,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
   #TODO:doc output
 
   meta = with lib; {
-    homepage = "https://github.com/zdharma/zinit";
+    homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
     license = licenses.mit;
     maintainers = with maintainers; [ pasqui23 sei40kr ];

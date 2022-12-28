@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3
-, bdftopcf, mkfontscale
-, libfaketime, fonttosfnt
+, bdftopcf, xorg
+, libfaketime,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale
-      libfaketime fonttosfnt
+    [ python3 bdftopcf xorg.mkfontscale
+      libfaketime xorg.fonttosfnt
     ];
 
   postPatch = ''

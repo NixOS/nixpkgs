@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
-    categories = "Game;RolePlaying;";
+    categories = [ "Game" "RolePlaying" ];
     genericName = pname;
   };
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     install -Dm755 t-engine $dir/t-engine
     cp -r bootstrap game $dir
     makeWrapper $dir/t-engine $out/bin/${pname} \
-      --run "cd $dir"
+      --chdir "$dir"
 
     install -Dm755 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Tales of Maj'eyal (rogue-like game)";
     homepage = "https://te4.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

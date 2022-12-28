@@ -1,20 +1,37 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialindex";
-  version = "1.8.5";
+  version = "1.9.3";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";
-    sha256 = "1vxzm7kczwnb6qdmc0hb00z8ykx11zk3sb68gc7rch4vrfi4dakw";
+  src = fetchFromGitHub {
+    owner = "libspatialindex";
+    repo = "libspatialindex";
+    rev = finalAttrs.version;
+    hash = "sha256-zsvS0IkCXyuNLCQpccKdAsFKoq0l+y66ifXlTHLNTkc=";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    # Allow building static libs
+    (fetchpatch {
+      name = "fix-static-lib-build.patch";
+      url = "https://github.com/libspatialindex/libspatialindex/commit/caee28d84685071da3ff3a4ea57ff0b6ae64fc87.patch";
+      hash = "sha256-nvTW/t9tw1ZLeycJY8nj7rQgZogxQb765Ca2b9NDvRo=";
+    })
+  ];
 
-  meta = {
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DSIDX_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+  ];
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "Extensible spatial index library in C++";
-    homepage = "http://libspatialindex.github.io/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    homepage = "https://libspatialindex.org";
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
-}
+})

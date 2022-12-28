@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deadd-notification-center";
-  version = "2021-03-10";
+  version = "2022-04-20";
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
-    rev = "640ce0f";
-    sha256 = "12ldr8vppylr90849g3mpjphmnr4lp0vsdkj01a5f4bv4ksx35fm";
+    rev = "d31867472c35a09562c832b0a589479930c52b86";
+    sha256 = "sha256-Arl4niscJPYCFWd4mw42IgNs+JsHsVpaTx86zEj3KFM=";
   };
 
   patches = [

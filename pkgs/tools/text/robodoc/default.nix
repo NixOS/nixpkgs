@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/gumpu/ROBODoc";
     description = "Documentation Extraction Tool";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, runCommand, symlinkJoin, why3 }:
+{ stdenv, makeWrapper, runCommand, why3 }:
 provers:
 let configAwkScript = runCommand "why3-conf.awk" { inherit provers; }
   ''
@@ -12,19 +12,22 @@ let configAwkScript = runCommand "why3-conf.awk" { inherit provers; }
   '';
 in
 stdenv.mkDerivation {
-  name = "${why3.name}-with-provers";
+  pname = "${why3.pname}-with-provers";
+  version = why3.version;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ why3 ] ++ provers;
 
+  dontUnpack = true;
+
   buildPhase = ''
     mkdir -p $out/share/why3/
-    why3 config --detect-provers -C $out/share/why3/why3.conf
+    why3 config detect -C $out/share/why3/why3.conf
     awk -i inplace -f ${configAwkScript} $out/share/why3/why3.conf
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    makeWrapper ${why3}/bin/why3 $out/bin/why3 --add-flags "--extra-config $out/share/why3/why3.conf"
+    makeWrapper ${why3}/bin/why3 $out/bin/why3 --add-flags "--config $out/share/why3/why3.conf"
   '';
 }

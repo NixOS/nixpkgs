@@ -15,7 +15,8 @@ maturinBuildHook() {
       "CC_@rustTargetPlatform@=@ccForHost@" \
       "CXX_@rustTargetPlatform@=@cxxForHost@" \
       maturin build \
-        --cargo-extra-args="-j $NIX_BUILD_CORES --frozen" \
+        --jobs=$NIX_BUILD_CORES \
+        --frozen \
         --target @rustTargetPlatformSpec@ \
         --manylinux off \
         --strip \

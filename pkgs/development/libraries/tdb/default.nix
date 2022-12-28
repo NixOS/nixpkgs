@@ -5,17 +5,18 @@
 , python3
 , readline
 , libxslt
+, libxcrypt
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 }:
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-vPztiE9wMQgJmLXEscXc5XVnBV95QX+G26QNzemaDkE=";
+    sha256 = "sha256-1okr2L7+BKd2QqHdVuSoeTSb8c9bLAv1+4QQYZON7ws=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     readline # required to build python
+    libxcrypt
   ];
 
   wafPath = "buildtools/bin/waf";

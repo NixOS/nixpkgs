@@ -15,18 +15,18 @@ in
           name = mkOption {
             type = str;
             example = "sleep";
-            description = "Name of the script.";
+            description = lib.mdDoc "Name of the script.";
           };
           script = mkOption {
             type = str;
             example = "sleep 5";
-            description = "Shell script to execute when metrics are requested.";
+            description = lib.mdDoc "Shell script to execute when metrics are requested.";
           };
           timeout = mkOption {
             type = nullOr int;
             default = null;
             example = 60;
-            description = "Optional timeout for the script in seconds.";
+            description = lib.mdDoc "Optional timeout for the script in seconds.";
           };
         };
       });
@@ -37,11 +37,11 @@ in
           ];
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML
-        settings that can all be used here: <link xlink:href="https://github.com/adhocteam/script_exporter#sample-configuration" />
+        settings that can all be used here: <https://github.com/adhocteam/script_exporter#sample-configuration>
       '';
     };
   };

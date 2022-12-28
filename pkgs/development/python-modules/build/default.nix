@@ -3,9 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , filelock
-, flit-core
 , importlib-metadata
-, isPy3k
 , packaging
 , pep517
 , pytest-mock
@@ -13,56 +11,68 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , toml
-, typing ? null
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.5.1";
+  version = "0.9.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "15hc9mbxsngfc9n805x8rk7yqbxnw12mpk6hfwcsldnfii1vg2ph";
+    hash = "sha256-iQvfZC/h9SbagExoG8dJ2A8G8gVRdMaRvEy9QcQIN5I=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
-    toml
-    pep517
     packaging
-  ] ++ lib.optionals (!isPy3k) [
-    typing
+    pep517
+    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
   checkInputs = [
     filelock
+    toml
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
-    "test_isolation"
-    "test_isolated_environment_install"
+    # Tests often fail with StopIteration
+    "test_isolat"
     "test_default_pip_is_never_too_old"
     "test_build"
+    "test_with_get_requires"
     "test_init"
+    "test_output"
+    "test_wheel_metadata"
   ] ++ lib.optionals stdenv.isDarwin [
-    # expects Apple's python and its quirks
+    # Expects Apple's Python and its quirks
     "test_can_get_venv_paths_with_conflicting_default_scheme"
   ];
 
-  pythonImportsCheck = [ "build" ];
+  pythonImportsCheck = [
+    "build"
+  ];
 
   meta = with lib; {
     description = "Simple, correct PEP517 package builder";
@@ -71,7 +81,7 @@ buildPythonPackage rec {
       is a simple build tool and does not perform any dependency management.
     '';
     homepage = "https://github.com/pypa/build";
-    maintainers = with maintainers; [ fab ];
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

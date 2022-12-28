@@ -82,6 +82,8 @@ rec {
   */
   generateLuarocksConfig = {
     externalDeps
+
+    # a list of lua derivations
     , requiredLuaRocks
     , extraVariables ? {}
     , rocksSubdir
@@ -113,9 +115,10 @@ rec {
     -- To prevent collisions when creating environments, we install the rock
     -- files into per-package subdirectories
     rocks_subdir = '${rocksSubdir}'
-    -- Then we need to tell luarocks where to find the rock files per
-    -- dependency
+    -- first tree is the default target where new rocks are installed,
+    -- any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
     rocks_trees = {
+      {name = "current", root = '${placeholder "out"}', rocks_dir = "current" },
       ${lib.concatStringsSep "\n, " rocksTrees}
     }
   '' + lib.optionalString lua.pkgs.isLuaJIT ''

@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "tomladris";
+  pname = "tomladris";
   version = "2017-11-14";
 
   idrisDeps = [ lightyear contrib ];

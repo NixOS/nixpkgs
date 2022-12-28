@@ -1,6 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
+, runCommand
 , rustPlatform
 , openssl
 , zlib
@@ -10,47 +12,58 @@
 , xorg
 , libiconv
 , AppKit
+, Foundation
 , Security
+# darwin.apple_sdk.sdk
+, sdk
 , nghttp2
 , libgit2
 , withExtraFeatures ? true
+, testers
+, nushell
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.40.0";
+  version = "0.73.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-ebIU632dYCKaU1Hh8Q3k6W2SRdZ49kcVx6eTzcKAzQw=";
+    sha256 = "sha256-hxcB5nzhVjsC5XYR4Pt3GN4ZEgWpetQQZr0mj3bAnRc=";
   };
 
-  cargoSha256 = "sha256-/AIARaMAxxMgBMMVecp2BXTyCe99pf/eXGJB6O1MyuU=";
+  cargoSha256 = "sha256-pw+pBZeXuKSaP/qC3aiauXAH/BRR1rQZ2jVVmR1JQhU=";
+
+  # enable pkg-config feature of zstd
+  cargoPatches = [ ./zstd-pkg-config.patch ];
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ];
+    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ]
+    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    Foundation
+    (
+      # Pull a header that contains a definition of proc_pid_rusage().
+      # (We pick just that one because using the other headers from `sdk` is not
+      # compatible with our C++ standard library. This header is already in
+      # the standard library on aarch64)
+      # See also:
+      # https://github.com/shanesveller/nixpkgs/tree/90ed23b1b23c8ee67928937bdec7ddcd1a0050f5/pkgs/development/libraries/webkitgtk/default.nix
+      # https://github.com/shanesveller/nixpkgs/blob/90ed23b1b23c8ee67928937bdec7ddcd1a0050f5/pkgs/tools/system/btop/default.nix#L32-L38
+      runCommand "${pname}_headers" { } ''
+        install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
+      ''
+    )
+  ] ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
   buildFeatures = lib.optional withExtraFeatures "extra";
-
-  # Since 0.34, nu has an indirect dependency on `zstd-sys` (via `polars` and
-  # `parquet`, for dataframe support), which by default has an impure build
-  # (git submodule for the `zstd` C library). The `pkg-config` feature flag
-  # fixes this, but it's hard to invoke this in the right place, because of
-  # the indirect dependencies. So add a direct dependency on `zstd-sys` here
-  # at the top level, along with this feature flag, to ensure that when
-  # `zstd-sys` is transitively invoked, it triggers a pure build using the
-  # system `zstd` library provided above.
-  #
-  # (If this patch needs updating, in a nushell repo add the zstd-sys line to
-  # Cargo.toml, then `cargo update --package zstd-sys` to update Cargo.lock.)
-  cargoPatches = [ ./use-system-zstd-lib.diff ];
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
@@ -74,5 +87,9 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     shellPath = "/bin/nu";
+    tests.version = testers.testVersion {
+      package = nushell;
+    };
+    updateScript = nix-update-script { };
   };
 }

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gparted";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Xu4ubXSxXvlrE7OiMQyGjtIpjgM0ECHn0SpamKHR4Qk=";
+    sha256 = "sha256-5Sk6eS5T/b66KcSoNBE82WA9DWOTMNqTGkaL82h4h74=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       polkit_version = polkit.version;
     })
   ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [ "--disable-doc" ];
 

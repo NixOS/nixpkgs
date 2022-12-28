@@ -3,26 +3,33 @@
 , fetchPypi
 , sphinx
 , plantuml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.22";
+  version = "0.24.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a42c7a13ab1ae9ed18e8e8b0f76b8d35dc476fdebe6e634354fe6fd0f261f686";
+    hash = "sha256-OdLkvEDV4JMSYSmhRPVrbuFfWM+lBItZSOY6Ea/ztYY=";
   };
+
+  propagatedBuildInputs = [
+    sphinx
+    plantuml
+  ];
 
   # No tests included.
   doCheck = false;
 
-  propagatedBuildInputs = [ sphinx plantuml ];
-
   meta = with lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
     homepage = "https://github.com/sphinx-contrib/plantuml/";
-    maintainers = with maintainers; [ ];
     license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ ];
   };
 }

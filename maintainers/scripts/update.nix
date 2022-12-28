@@ -48,7 +48,17 @@ let
         let
           result = builtins.tryEval pathContent;
 
-          dedupResults = lst: nubOn ({ package, attrPath }: package.updateScript) (lib.concatLists lst);
+          somewhatUniqueRepresentant =
+            { package, attrPath }: {
+              inherit (package) updateScript;
+              # Some updaters use the same `updateScript` value for all packages.
+              # Also compare `meta.description`.
+              position = package.meta.position or null;
+              # We cannot always use `meta.position` since it might not be available
+              # or it might be shared among multiple packages.
+            };
+
+          dedupResults = lst: nubOn somewhatUniqueRepresentant (lib.concatLists lst);
         in
           if result.success then
             let
@@ -147,7 +157,7 @@ let
 
     to run update script for specific package, or
 
-        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: builtins.isList pkg.updateScript && builtins.length pkg.updateScript >= 1 && (let script = builtins.head pkg.updateScript; in builtins.isAttrs script && script.name == "gnome-update-script"))'
+        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'
 
     to run update script for all packages matching given predicate, or
 

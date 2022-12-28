@@ -5,37 +5,42 @@
 , qt5
 , gnuradio3_8Minimal
 , thrift
-, log4cpp
 , mpir
 , fftwFloat
 , alsa-lib
 , libjack2
+, wrapGAppsHook
 # drivers (optional):
 , rtl-sdr
 , hackrf
 , pulseaudioSupport ? true, libpulseaudio
+, portaudioSupport ? false, portaudio
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
+assert portaudioSupport -> portaudio != null;
+# audio backends are mutually exclusive
+assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.14.6";
+  version = "2.15.9";
 
   src = fetchFromGitHub {
-    owner = "csete";
+    owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-DMmQXcGPudAVOwuc+LVrcIzfwMMQVBZPbM6Bt1w56D8=";
+    sha256 = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     qt5.wrapQtAppsHook
+    wrapGAppsHook
   ];
   buildInputs = [
-    log4cpp
+    gnuradio3_8Minimal.unwrapped.log4cpp
     mpir
     fftwFloat
     alsa-lib
@@ -49,11 +54,25 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
   ] ++ lib.optionals (gnuradio3_8Minimal.hasFeature "gr-ctrlport") [
     thrift
     gnuradio3_8Minimal.unwrapped.python.pkgs.thrift
-  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
+  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals portaudioSupport [ portaudio ];
 
-  postInstall = ''
-    install -vD $src/gqrx.desktop -t "$out/share/applications/"
-    install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
+  cmakeFlags =
+    let
+      audioBackend =
+        if pulseaudioSupport
+        then "Pulseaudio"
+        else if portaudioSupport
+        then "Portaudio"
+        else "Gr-audio";
+    in [
+      "-DLINUX_AUDIO_BACKEND=${audioBackend}"
+    ];
+
+   # Prevent double-wrapping, inject wrapper args manually instead.
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {

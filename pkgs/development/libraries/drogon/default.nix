@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "drogon";
-  version = "1.7.3";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     rev = "v${version}";
-    sha256 = "0j7bnc6l5hbcf0l7pjzw82i9z1rbh57ni60wpa50q10gwbm4waxn";
+    sha256 = "sha256-IpECYpPuheoLelEdgV+J26b+95fMfRmeQ44q6JvqRtw=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional postgresSupport postgresql
     ++ lib.optional redisSupport hiredis
     # drogon uses mariadb for mysql (see https://github.com/drogonframework/drogon/wiki/ENG-02-Installation#Library-Dependencies)
-    ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
+    ++ lib.optionals mysqlSupport [ libmysqlclient mariadb ];
 
   patches = [
     # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself

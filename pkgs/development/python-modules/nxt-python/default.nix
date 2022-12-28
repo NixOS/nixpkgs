@@ -4,33 +4,27 @@
 , isPy3k
 , pyusb
 , pybluez
-, pyfantom
+, pytest
 , git
 }:
 
-buildPythonPackage {
-  version = "unstable-20160819";
+buildPythonPackage rec {
+  version = "3.0.1";
   pname = "nxt-python";
-  disabled = isPy3k;
+  format = "setuptools";
 
   src = fetchgit {
-    url = "https://github.com/Eelviny/nxt-python";
-    rev = "479e20b7491b28567035f4cee294c4a2af629297";
-    sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
-    branchName= "pyusb";
+    url = "https://github.com/schodet/nxt-python.git";
+    rev = version;
+    sha256 = "004c0dr6767bjiddvp0pchcx05falhjzj33rkk03rrl0ha2nhxvz";
   };
 
-  propagatedBuildInputs = [ pyusb pybluez pyfantom git ];
-
-  # Tests fail on Mac dependency
-  doCheck = false;
+  propagatedBuildInputs = [ pyusb pybluez pytest git ];
 
   meta = with lib; {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
-    homepage = "https://github.com/Eelviny/nxt-python";
+    homepage = "https://github.com/schodet/nxt-python";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ ibizaman ];
   };
-
 }

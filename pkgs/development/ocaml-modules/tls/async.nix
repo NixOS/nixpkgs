@@ -1,18 +1,16 @@
-{ lib, buildDunePackage, tls, async, cstruct-async, core, cstruct, mirage-crypto-rng-async, async_find }:
+{ lib, buildDunePackage, tls, async, cstruct-async, core, cstruct, mirage-crypto-rng-async }:
 
 buildDunePackage rec {
   pname = "tls-async";
 
   inherit (tls) src meta version;
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.11";
 
   doCheck = true;
 
   propagatedBuildInputs = [
     async
-    async_find
     core
     cstruct
     cstruct-async

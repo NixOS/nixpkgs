@@ -11,17 +11,18 @@
 , enableJemalloc ? false, jemalloc
 , enableLite ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.26.0";
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nd8ixj249qiw089piw28aly0zmlla2k62gd6axd0bs2wfc4zma8";
+    sha256 = "sha256-HVLxLltOZ0e9BCekynjdc+f/fTS9vz15GZVKB77uDXo=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -30,8 +31,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enableJemalloc jemalloc;
 
+  outputs = [
+    "out"
+    "tools"
+  ];
+
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
-    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field";
+    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field -faligned-allocation";
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -40,6 +46,7 @@ stdenv.mkDerivation rec {
     "-DWITH_BENCHMARK_TOOLS=0"
     "-DWITH_TESTS=1"
     "-DWITH_TOOLS=0"
+    "-DWITH_CORE_TOOLS=1"
     "-DWITH_BZ2=1"
     "-DWITH_LZ4=1"
     "-DWITH_SNAPPY=1"
@@ -48,15 +55,30 @@ stdenv.mkDerivation rec {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional
-        (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
-        "-DFORCE_SSE42=1")
+    (lib.optional sse42Support "-DFORCE_SSE42=1")
     (lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
+
+  preInstall = ''
+    mkdir -p $tools/bin
+    cp tools/{ldb,sst_dump} $tools/bin/
+  '' + lib.optionalString stdenv.isDarwin ''
+    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
+  '' + lib.optionalString (stdenv.isLinux && enableShared) ''
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
+  '';
+
+  # Old version doesn't ship the .pc file, new version puts wrong paths in there.
+  postFixup = ''
+    if [ -f "$out"/lib/pkgconfig/rocksdb.pc ]; then
+      substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
+        --replace '="''${prefix}//' '="/'
+    fi
+  '';
 
   meta = with lib; {
     homepage = "https://rocksdb.org";

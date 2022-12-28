@@ -1,14 +1,30 @@
-{ lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkg-config, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome, glib, kmod, file, fetchpatch, libnma }:
-let
+{ stdenv
+, lib
+, fetchurl
+, substituteAll
+, vpnc
+, intltool
+, pkg-config
+, networkmanager
+, libsecret
+, gtk3
+, gtk4
+, withGnome ? true
+, gnome
+, glib
+, kmod
+, file
+, libnma
+, libnma-gtk4
+}:
+
+stdenv.mkDerivation rec {
   pname = "NetworkManager-vpnc";
-  version = "1.2.6";
-in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  version = "1.2.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1js5lwcsqws4klgypfxl4ikmakv7v7xgddij1fj6b0y0qicx0kyy";
+    url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1l4xqlPI/cP95++EpNqpeaYFwj/THO/2R79+qqma+8w=";
   };
 
   patches = [
@@ -16,21 +32,29 @@ in stdenv.mkDerivation {
       src = ./fix-paths.patch;
       inherit vpnc kmod;
     })
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/merge_requests/5.patch";
-      sha256 = "0z0x5vqmrsap3ynamhya7gh6c6k5grhj2vqpy76alnv9xns8dzi6";
-    })
   ];
 
-  buildInputs = [ vpnc networkmanager glib ]
-    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
+  nativeBuildInputs = [
+    intltool
+    pkg-config
+    file
+  ];
 
-  nativeBuildInputs = [ intltool pkg-config file ];
+  buildInputs = [
+    vpnc
+    networkmanager
+    glib
+  ] ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
-    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--enable-absolute-paths"
   ];
 
@@ -40,6 +64,7 @@ in stdenv.mkDerivation {
       attrPath = "networkmanager-vpnc";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-vpnc-service.name";
   };
 
   meta = with lib; {

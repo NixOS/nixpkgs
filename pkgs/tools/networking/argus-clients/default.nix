@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "argus-clients";
-  version = "3.0.8.2";
+  version = "3.0.8.3";
 
   src = fetchurl {
     url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
-    sha256 = "1c9vj6ma00gqq9h92fg71sxcsjzz912166sdg90ahvnmvmh3l1rj";
+    sha256 = "sha256-uNTvi6zbrYHAivQMPkhlNCoqRW9GOkgKvCf3mInds80=";
   };
 
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];

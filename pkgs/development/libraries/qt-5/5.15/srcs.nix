@@ -1,10 +1,8 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.3";
-  overrides = {
-    qtscript.version = "5.15.4";
-  };
+  version = "5.15.7";
+  overrides = {};
 
   mk = name: args:
     let
@@ -36,21 +34,27 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     version = "5.212.0-alpha4";
   };
 
+  catapult = fetchgit {
+    url = "https://chromium.googlesource.com/catapult";
+    rev = "5eedfe23148a234211ba477f76fc2ea2e8529189";
+    hash = "sha256-LPfBCEB5tJOljXpptsNk0sHGtJf/wIRL7fccN79Nh6o=";
+  };
+
   qtwebengine =
     let
-      branchName = "5.15.7";
+      branchName = "5.15.11";
       rev = "v${branchName}-lts";
     in
     {
-      version = "${branchName}-${lib.substring 0 7 rev}";
+      version = branchName;
 
       src = fetchgit {
         url = "https://github.com/qt/qtwebengine.git";
-        sha256 = "fssBN/CDgXAuiNj14MPeIDI15ZDRBGuF7wxSXns9exU=";
+        sha256 = "sha256-yrKPof18G10VjrwCn/4E/ywlpATJQZjvmVeM+9hLY0U=";
         inherit rev branchName;
         fetchSubmodules = true;
         leaveDotGit = true;
-        name = "qtwebengine-${lib.substring 0 7 rev}.tar.gz";
+        name = "qtwebengine-${lib.substring 0 8 rev}.tar.gz";
         postFetch = ''
           # remove submodule .git directory
           rm -rf "$out/src/3rdparty/.git"

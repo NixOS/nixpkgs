@@ -2,7 +2,7 @@
 , buildPythonPackage
 , casttube
 , fetchPypi
-, isPy3k
+, pythonOlder
 , protobuf
 , requests
 , zeroconf
@@ -10,16 +10,21 @@
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "10.1.1";
+  version = "13.0.4";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyChromecast";
     inherit version;
-    sha256 = "sha256-M6R9VRrotvkxKVZIKOcuf03LJsn4gSMohwzzAO5FQ48=";
+    hash = "sha256-eS+6PzHklopemcGcdxd0CDoqp+iX6/b14hjjCOM6Rh8=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf>=3.19.1,<4" "protobuf>=3.19.1"
+  '';
 
   propagatedBuildInputs = [
     casttube
@@ -38,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Python to communicate with the Google Chromecast";
     homepage = "https://github.com/home-assistant-libs/pychromecast";
+    changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;

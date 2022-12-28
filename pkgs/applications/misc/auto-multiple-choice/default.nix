@@ -11,6 +11,7 @@
 , graphicsmagick
 , gsettings-desktop-schemas
 , gtk3
+, hicolor-icon-theme
 , libnotify
 , librsvg
 , libxslt
@@ -24,10 +25,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "auto-multiple-choice";
-  version = "1.5.1";
+  version = "1.5.2";
   src = fetchurl {
     url = "https://download.auto-multiple-choice.net/${pname}_${version}_precomp.tar.gz";
-    sha256 = "71831122f7b43245d3289617064e0b561817c0130ee1773c1b957841b28b854c";
+    sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
   };
   tlType = "run";
 
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
     "LANG_GTKSOURCEVIEW_DIR=/share/gtksourceview-4/language-specs"
     # Pretend to be redhat so `install` doesn't try to chown/chgrp.
     "SYSTEM_TYPE=rpm"
+    "GCC=${stdenv.cc.targetPrefix}cc"
+    "GCC_PP=${stdenv.cc.targetPrefix}c++"
   ];
 
   preFixup = ''
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${with perlPackages; makePerlPath [
+    --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [
       ArchiveZip
       DBDSQLite
       Cairo
@@ -75,14 +78,15 @@ stdenv.mkDerivation rec {
       GlibObjectIntrospection
       Gtk3
       LocaleGettext
+      OpenOfficeOODoc
       PerlMagick
       TextCSV
       XMLParser
       XMLSimple
       XMLWriter
     ]}:"$out/share/perl5 \
-    --prefix XDG_DATA_DIRS : "$out/share" \
-    --set TEXINPUTS ":.:$out/share/texmf/tex/latex/AMC"
+    --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+    --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
   nativeBuildInputs = [
@@ -100,6 +104,7 @@ stdenv.mkDerivation rec {
     graphicsmagick
     gsettings-desktop-schemas
     gtk3
+    hicolor-icon-theme
     libnotify
     librsvg
     libxslt

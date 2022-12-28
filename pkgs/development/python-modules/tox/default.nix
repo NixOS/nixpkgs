@@ -8,21 +8,24 @@
 , virtualenv
 , setuptools-scm
 , toml
+, tomli
 , filelock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "3.24.4";
+  version = "3.27.1";
 
   buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ packaging pluggy py six virtualenv toml filelock ];
+  propagatedBuildInputs = [ packaging pluggy py six virtualenv filelock ]
+                          ++ lib.optional (pythonOlder "3.11") tomli;
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c30b57fa2477f1fb7c36aa1d83292d5c2336cd0018119e1b1c17340e2c2708ca";
+    hash = "sha256-sqkg41pmjMBpQv/RzzpPsiGk2QnKchkftthLCxinvgQ=";
   };
 
   meta = with lib; {

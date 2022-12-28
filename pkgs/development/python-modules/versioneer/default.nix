@@ -1,28 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, setuptools
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "versioneer";
-  version = "0.21";
-  disabled = pythonOlder "3.6";
+  version = "0.28";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "64f2dbcbbed15f9a6da2b85f643997db729cf496cafdb97670fb2fa73a7d8e20";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "python-versioneer";
+    repo = "python-versioneer";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Jy0c1I3kLgJAeGWzcgl5qVAWesf4EXaMIOW03B+1yWE=";
   };
 
-  # Couldn't get tests to work because, for instance, they used virtualenv and
-  # pip.
+  nativeBuildInputs = [
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  # Couldn't get tests to work because, for instance, they used virtualenv and pip
   doCheck = false;
 
-  pythonImportsCheck = [ "versioneer" ];
+  pythonImportsCheck = [
+    "versioneer"
+  ];
 
   meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
     homepage = "https://github.com/warner/python-versioneer";
+    changelog = "https://github.com/python-versioneer/python-versioneer/blob/${version}/NEWS.md";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jluttine ];
   };

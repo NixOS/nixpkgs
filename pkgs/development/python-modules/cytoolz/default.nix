@@ -2,7 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
-, nose
+, pytestCheckHook
+, cython
 , toolz
 , python
 , isPy27
@@ -10,20 +11,26 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.11.0";
+  version = "0.12.0";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c64f3590c3eb40e1548f0d3c6b2ccde70493d0b8dc6cc7f9f3fec0bb3dcd4222";
+    sha256 = "sha256-wQWwX4XgP7zWAkQ3WWjmLkT+eYwVo1Mcki1TEBjSJBI=";
   };
 
-  checkInputs = [ nose ];
+  nativeBuildInputs = [ cython ];
+
   propagatedBuildInputs = [ toolz ];
 
-  checkPhase = ''
-    nosetests -v $out/${python.sitePackages}
+  # tests are located in cytoolz/tests, however we can't import cytoolz
+  # from $PWD, as it will break relative imports
+  preCheck = ''
+    cd cytoolz
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";

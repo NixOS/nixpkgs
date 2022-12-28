@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages, linuxHeaders, perl }:
+{ lib, stdenv, fetchurl, buildPackages, linuxHeaders, perl, nixosTests }:
 
 let
   commonMakeFlags = [
@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "klibc";
-  version = "2.0.9";
+  version = "2.0.11";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
-    sha256 = "sha256-bcynCJEzINJjCfBbDCv2gHG/EbPa3MTmx9kjg3/CPuE=";
+    hash = "sha256-XrMOXh7HPcTjhMYLuUOvicUxdMgvh3Ev3TTdMoZNX2A=";
   };
 
   patches = [ ./no-reinstall-kernel-headers.patch ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" "stackprotector" ];
 
   makeFlags = commonMakeFlags ++ [
-    "KLIBCARCH=${stdenv.hostPlatform.linuxArch}"
+    "KLIBCARCH=${if stdenv.hostPlatform.isRiscV64 then "riscv64" else stdenv.hostPlatform.linuxArch}"
     "KLIBCKERNELSRC=${linuxHeaders}"
   ] # TODO(@Ericson2314): We now can get the ABI from
     # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?
@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
       ln -sv $file $out/lib/klibc/include
     done
   '';
+
+  passthru.tests = {
+    # uses klibc's ipconfig
+    inherit (nixosTests) initrd-network-ssh;
+  };
 
   meta = {
     description = "Minimalistic libc subset for initramfs usage";

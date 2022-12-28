@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "NGT";
-  version = "v1.12.3-alpha";
+  version = "1.12.3-alpha";
 
   src = fetchFromGitHub {
     owner = "yahoojapan";

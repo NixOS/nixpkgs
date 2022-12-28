@@ -39,6 +39,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   pythonImportsCheck = [
     "pytautulli"
   ];

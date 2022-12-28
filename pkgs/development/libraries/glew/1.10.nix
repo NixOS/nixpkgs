@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+{ lib, stdenv, fetchurl, libGLU, libXmu, libXi, libXext
 , AGL, OpenGL
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-1.10.0";
+  pname = "glew";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${name}.tgz";
+    url = "mirror://sourceforge/glew/glew-${version}.tgz";
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
-  buildInputs = if stdenv.isDarwin then [ AGL ] else [ xlibsWrapper libXmu libXi ];
+  buildInputs = if stdenv.isDarwin then [ AGL ] else [ libXmu libXi libXext ];
   propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+
+  outputs = [ "out" "dev" ];
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
@@ -31,8 +34,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -pv $out/share/doc/glew
-    mkdir -p $out/lib/pkgconfig
-    cp glew*.pc $out/lib/pkgconfig
+    mkdir -p $dev/lib/pkgconfig
+    cp glew*.pc $dev/lib/pkgconfig
     cp -r README.txt LICENSE.txt doc $out/share/doc/glew
   '';
 

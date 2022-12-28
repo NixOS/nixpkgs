@@ -2,23 +2,31 @@
 , fetchurl
 , makeWrapper
 , curl
+, espeak
 , file
 , gtk3
+, gtkdatabox
 , intltool
 , pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "klavaro";
-  version = "3.11";
+  version = "3.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
-    sha256 = "1rkxaqb62w4mv86fcnmr32lq6y0h4hh92wmsy5ddb9a8jnzx6r7w";
+    sha256 = "0z6c3lqikk50mkz3ipm93l48qj7b98lxyip8y6ndg9y9k0z0n878";
   };
 
   nativeBuildInputs = [ intltool makeWrapper pkg-config ];
-  buildInputs = [ curl gtk3 ];
+  buildInputs = [ curl gtk3 gtkdatabox ];
+
+  postPatch = ''
+    substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
+  '';
+
+  patches = [ ./icons.patch ./trans_lang_get_similar.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.18.2";
+  version = "1.18.12";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
-    sha256 = "sha256-N0vhWK4cH7OKKe7xzDzfif81NrSP8TINIIqyBOpsX4o=";
+    sha256 = "sha256-tGTkkl2VWmyobdCGFudjsmrkbX/Tfb4oFnjjQGWx5DA=";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # install check instead, when those paths will have been created.
   doInstallCheck = true;
   preInstallCheck = ''
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     patchShebangs tools/tests/test-wrapper.sh
   '';
   installCheckTarget = "check";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fping, rrdtool, perlPackages }:
+{ lib, stdenv, fetchurl, fping, rrdtool, perlPackages, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "smokeping";
@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/htdocs/smokeping.fcgi.dist $out/htdocs/smokeping.fcgi
   '';
+
+  passthru.tests.smokeping = nixosTests.smokeping;
+
   meta = {
     description = "Network latency collector";
     homepage = "http://oss.oetiker.ch/smokeping";

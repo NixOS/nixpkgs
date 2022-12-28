@@ -16,7 +16,7 @@
 , pkg-config
 , shared-mime-info
 , wrapGAppsHook
-, xapps
+, xapp
 , yelp-tools
 , libsecret
 , webkitgtk
@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "2.6.5";
+  version = "2.8.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "qBF5lc7ZNwuTr6x4c4pJA6a7oXqOYsYA1lpTmQkylT0=";
+    sha256 = "sha256-7g0j1cWgNtWlqKWzBnngUA2WNr8Zh8YO/jJ8OdTII7Y=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    xapps
+    xapp
     libsecret
     webkitgtk
     libwebp

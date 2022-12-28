@@ -24,14 +24,21 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.24.2";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = version;
-    sha256 = "0xpzc3rizdkjxclgxngswz0a22kdv1pw235gsw517ma7i06d0lw6";
+    sha256 = "sha256-Qz8kYXu2NmcgtW8GbmLPfB4BOearEycE6EMmQRXmWeI=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "attrs>=19.3.0,<21.5.0" "attrs" \
+      --replace "pip>=9,<22.2" "pip" \
+      --replace "typing==3.6.4" "typing"
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -58,12 +65,6 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  postPatch = ''
-    sed -i setup.py -e "/pip>=/c\'pip',"
-    substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing'
-  '';
-
   disabledTestPaths = [
     # Don't check the templates and the sample app
     "chalice/templates"
@@ -85,6 +86,9 @@ buildPythonPackage rec {
     # Don't build
     "test_can_generate_pipeline_for_all"
     "test_build_wheel"
+    # https://github.com/aws/chalice/issues/1850
+    "test_resolve_endpoint"
+    "test_endpoint_from_arn"
   ];
 
   pythonImportsCheck = [ "chalice" ];

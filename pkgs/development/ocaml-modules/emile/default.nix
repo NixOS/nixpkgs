@@ -25,9 +25,9 @@ buildDunePackage rec {
   ];
 
   # technically emile is available for ocaml >= 4.03, but alcotest
-  # and angstrom (fmt) are only available for >= 4.05. Disabling
-  # tests for < 4.05 at least improves the error message
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  # and angstrom (fmt) are only available for >= 4.08. Disabling
+  # tests for < 4.08 at least improves the error message
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
   meta = with lib; {

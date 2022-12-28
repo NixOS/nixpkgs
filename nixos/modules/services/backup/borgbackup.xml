@@ -179,7 +179,7 @@ sudo borg init --encryption=repokey-blake2  \
           mode = "repokey-blake2";
           passCommand = "cat /run/keys/borgbackup_passphrase";
         };
-        BORG_RSH = "ssh -i /run/keys/id_ed25519_borgbase";
+        environment = { BORG_RSH = "ssh -i /run/keys/id_ed25519_borgbase"; };
         compression = "auto,lzma";
         startAt = "daily";
     };

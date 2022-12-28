@@ -8,18 +8,24 @@
 , omd
 , octavius
 , dune-build-info
+, dune-rpc
 , uutf
+, dyn
 , re
-, pp
+, stdune
+, chrome-trace
+, dune_3
 , csexp
+, pp
 , cmdliner
+, ordering
 , ocamlformat-rpc-lib
 }:
 
 buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc) version src;
-  useDune2 = true;
+  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
   minimumOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
       "4.12"
@@ -30,15 +36,45 @@ buildDunePackage rec {
   # They are vendored by upstream only because it is then easier to install
   # ocaml-lsp without messing with your opam switch, but nix should prevent
   # this type of problems without resorting to vendoring.
-  preBuild = ''
+  preBuild = lib.optionalString (lib.versionOlder version "1.10.4") ''
     rm -r ocaml-lsp-server/vendor/{octavius,uutf,omd,cmdliner}
   '';
 
   buildInputs =
-    if lib.versionAtLeast version "1.7.0" then
+    if lib.versionAtLeast version "1.12.0" then
+      [
+        pp
+        re
+        ppx_yojson_conv_lib
+        octavius
+        dune-build-info
+        dune-rpc
+        omd
+        cmdliner
+        ocamlformat-rpc-lib
+        dyn
+        stdune
+        chrome-trace
+      ]
+    else if lib.versionAtLeast version "1.10.0" then
+      [
+        pp
+        re
+        ppx_yojson_conv_lib
+        octavius
+        dune-build-info
+        dune-rpc
+        omd
+        cmdliner
+        ocamlformat-rpc-lib
+        dyn
+        stdune
+      ]
+    else if lib.versionAtLeast version "1.7.0" then
       [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
     else
-      [ cppo
+      [
+        cppo
         ppx_yojson_conv_lib
         ocaml-syntax-shims
         octavius

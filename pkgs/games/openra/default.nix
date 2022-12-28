@@ -13,7 +13,7 @@ with pkgs.lib;
 let
   /*  Building an engine or out-of-tree mod is very similar,
       but different enough not to be able to build them with the same package definition,
-      so instaed we define what is common between them in a seperate file.
+      so instaed we define what is common between them in a separate file.
 
       Although `callPackage` could be used, it would require undoing `makeOverridable`,
       because `common.nix` does not define a package, but just an attribute set,
@@ -43,7 +43,7 @@ let
   callWithName = name: value: if isFunction value then value name else value;
   buildOpenRASet = f: args: pkgs.recurseIntoAttrs (mapAttrs callWithName (f ({
     inherit (pkgs) fetchFromGitHub;
-    extraPostFetch = ''
+    postFetch = ''
       sed -i 's/curl/curl --insecure/g' $out/thirdparty/{fetch-thirdparty-deps,noget}.sh
       $out/thirdparty/fetch-thirdparty-deps.sh
     '';

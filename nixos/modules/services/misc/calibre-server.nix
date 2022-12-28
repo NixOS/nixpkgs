@@ -23,23 +23,23 @@ in
   options = {
     services.calibre-server = {
 
-      enable = mkEnableOption "calibre-server";
+      enable = mkEnableOption (lib.mdDoc "calibre-server");
 
       libraries = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The directories of the libraries to serve. They must be readable for the user under which the server runs.
         '';
         type = types.listOf types.path;
       };
 
       user = mkOption {
-        description = "The user under which calibre-server runs.";
+        description = lib.mdDoc "The user under which calibre-server runs.";
         type = types.str;
         default = "calibre-server";
       };
 
       group = mkOption {
-        description = "The group under which calibre-server runs.";
+        description = lib.mdDoc "The group under which calibre-server runs.";
         type = types.str;
         default = "calibre-server";
       };

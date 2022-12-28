@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, gmp, openssl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, gmp, openssl, pkg-config
+, enableStatic ? stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "libff";
-  version = "1.0.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "scipr-lab";
@@ -12,11 +13,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = [ "-DWITH_PROCPS=Off" ];
+  cmakeFlags = [ "-DWITH_PROCPS=Off" ]
+    ++ lib.optionals stdenv.isAarch64 [ "-DCURVE=ALT_BN128" "-DUSE_ASM=OFF" ];
 
-  # CMake is hardcoded to always build static library which causes linker
-  # failure for Haskell applications depending on haskellPackages.hevm on macOS.
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"
   '';
 

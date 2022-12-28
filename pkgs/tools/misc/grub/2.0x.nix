@@ -64,6 +64,20 @@ stdenv.mkDerivation rec {
       url = "https://marc.info/?l=grub-devel&m=146193404929072&q=mbox";
       sha256 = "00wa1q5adiass6i0x7p98vynj9vsz1w0gn1g4dgz89v35mpyw2bi";
     })
+
+    # Pull upstream patch to fix linkage against binutils-2.36.
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=b98275138bf4fc250a1c362dfd2c8b1cf2421701";
+      sha256 = "001m058bsl2pcb0ii84jfm5ias8zgzabrfy6k2cc9w6w1y51ii82";
+    })
+    # Properly handle multiple initrd paths in 30_os-prober
+    # Remove this patch once a new release is cut
+    (fetchpatch {
+      name = "Properly-handle-multiple-initrd-paths-in-os-prober.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=000b5cd04fd228f9741f5dca0491636bc0b89eb8";
+      sha256 = "sha256-Mex3qQ0lW7ZCv7ZI7MSSqbylJXZ5RTbR4Pv1+CJ0ciM=";
+    })
   ];
 
   postPatch = if kbdcompSupport then ''
@@ -82,6 +96,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   hardeningDisable = [ "all" ];
+
+  separateDebugInfo = !xenSupport;
 
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";

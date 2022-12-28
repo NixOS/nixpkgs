@@ -1,25 +1,28 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , makeWrapper
 , pythonOlder
 , crytic-compile
 , prettytable
 , setuptools
 , solc
-  # solc is currently broken on Darwin, default to false
-, withSolc ? !stdenv.isDarwin
+, withSolc ? false
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.8.1";
-  disabled = pythonOlder "3.6";
+  version = "0.9.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5JgF53ip72bne8AlGf126FIIvXi+u7rovJmMSCcZjEQ=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "crytic";
+    repo = "slither";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u9uA4eq6gYQXHhZ1ruk1vkEIRTKsgN87zENuR1Fhew4=";
   };
 
   nativeBuildInputs = [

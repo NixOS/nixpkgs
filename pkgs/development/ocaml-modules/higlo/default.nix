@@ -1,27 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, xtmpl, ulex }:
+{ lib, buildDunePackage, fetchFromGitLab, sedlex, xtmpl }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "higlo";
-  version = "0.6";
-  src = fetchFromGitHub {
+  version = "0.8";
+  useDune2 = true;
+  src = fetchFromGitLab {
+    domain = "framagit.org";
     owner = "zoggy";
     repo = "higlo";
-    rev = "release-${version}";
-    sha256 = "0m0qyk2ydivai54502s45sdw9w4xr0j3jpwyc4vqk62a7iz9ihxh";
+    rev = version;
+    sha256 = "sha256:09hsbwy5asacgh4gdj0vjpy4kzfnq3qji9szbsbyswsf1nbyczir";
   };
 
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ xtmpl ulex ];
-
-  createFindlibDestdir = true;
-
-  patches = ./install.patch;
+  propagatedBuildInputs = [ sedlex xtmpl ];
 
   meta = with lib; {
     description = "OCaml library for syntax highlighting";
-    homepage = "https://zoggy.github.io/higlo/";
+    inherit (src.meta) homepage;
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];
   };
 }

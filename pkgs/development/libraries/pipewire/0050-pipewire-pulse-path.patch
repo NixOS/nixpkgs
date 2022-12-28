@@ -1,19 +1,19 @@
 diff --git a/meson_options.txt b/meson_options.txt
-index 71c2e35e9..a0f380c04 100644
+index 961ae2a76..692b84dfd 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -176,6 +176,9 @@ option('udev',
+@@ -179,6 +179,9 @@ option('udev',
  option('udevrulesdir',
         type : 'string',
         description : 'Directory for udev rules (defaults to /lib/udev/rules.d)')
 +option('pipewire_pulse_prefix',
 +       type : 'string',
 +       description: 'Install directory for the pipewire-pulse daemon')
- option('systemd-user-unit-dir',
+ option('systemd-system-unit-dir',
         type : 'string',
-        description : 'Directory for user systemd units (defaults to /usr/lib/systemd/user)')
+        description : 'Directory for system systemd units (defaults to /usr/lib/systemd/system)')
 diff --git a/src/daemon/systemd/user/meson.build b/src/daemon/systemd/user/meson.build
-index 5bd134537..5a3ca9ed5 100644
+index d17f3794f..34afe4f1a 100644
 --- a/src/daemon/systemd/user/meson.build
 +++ b/src/daemon/systemd/user/meson.build
 @@ -9,7 +9,7 @@ install_data(

@@ -1,73 +1,69 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, copyDesktopItems, libxshmfence, wrapGAppsHook }:
 
 let
-  description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
-  desktopItem = makeDesktopItem {
-    name = "Trilium";
-    exec = "trilium";
-    icon = "trilium";
-    comment = description;
-    desktopName = "Trilium Notes";
-    categories = "Office";
-  };
-
-  meta = with lib; {
-    inherit description;
+  metaCommon = with lib; {
+    description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.48.7";
+  version = "0.57.5";
 
-  desktopSource = {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "16clrn89mq2n30hb50y45s6qn5l7n1hj4b124wjxrkmmwpdbjwad";
-  };
+  desktopSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
+  desktopSource.sha256 = "0zm16g30bz9xm2z1x7w7knm352hpb8n301gcr8kwab79qrhszwl2";
 
-  serverSource = {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "18zwplcai4s82pdy3l30862jdl22311qh78anrjz29fm6srx1y9l";
-  };
+  serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
+  serverSource.sha256 = "0l53kps7rhf8rx9zx29psvjl3611y7pymfkh2yb13h6iv1c77gdf";
 
 in {
 
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
-    inherit meta;
-
-    src = fetchurl desktopSource;
-
-    # Fetch from source repo, no longer included in release.
-    # (they did special-case icon.png but we want the scalable svg)
-    # Use the version here to ensure we get any changes.
-    trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/icon.svg";
-      sha256 = "0sz3piskdlx267whx8r6afrdadn25bf0zmxplj1599zqkf7w7n0x";
+    meta = metaCommon // {
+      mainProgram = "trilium";
     };
 
+    src = fetchurl desktopSource;
 
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
       wrapGAppsHook
+      copyDesktopItems
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
+    buildInputs = atomEnv.packages ++ [ libxshmfence ];
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "Trilium";
+        exec = "trilium";
+        icon = "trilium";
+        comment = meta.description;
+        desktopName = "Trilium Notes";
+        categories = [ "Office" ];
+      })
+    ];
+
+    # Remove trilium-portable.sh, so trilium knows it is packaged making it stop auto generating a desktop item on launch
+    postPatch = ''
+      rm ./trilium-portable.sh
+    '';
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+      mkdir -p $out/share/icons/hicolor/128x128/apps
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
-      ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
-      cp ${desktopItem}/share/applications/* $out/share/applications
+      ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
       runHook postInstall
     '';
 
@@ -77,13 +73,15 @@ in {
     '';
 
     dontStrip = true;
+
+    passthru.updateScript = ./update.sh;
   };
 
 
   trilium-server = stdenv.mkDerivation rec {
     pname = "trilium-server";
     inherit version;
-    inherit meta;
+    meta = metaCommon;
 
     src = fetchurl serverSource;
 

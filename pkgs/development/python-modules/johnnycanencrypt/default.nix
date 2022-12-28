@@ -7,8 +7,7 @@
 , pkg-config
 , pcsclite
 , nettle
-, requests
-, vcrpy
+, httpx
 , numpy
 , pytestCheckHook
 , pythonOlder
@@ -18,31 +17,31 @@
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.5.0";
+  version = "0.11.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
     rev = "v${version}";
-    sha256 = "192wfrlyylrpzq70yki421mi1smk8q2cyki2a1d03q7h6apib3j4";
+    hash = "sha256-YhuYejxuKZEv1xQ1fQcXSkt9I80iJOJ6MecG622JJJo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit patches src;
     name = "${pname}-${version}";
-    hash = "sha256-2XhXCKyXVlFgbcOoMy/A5ajiIVxBii56YeI29mO720U=";
+    hash = "sha256-r2NU1e3yeZDLOBy9pndGYM3JoH6BBKQkXMLsJR6PTRs=";
   };
 
   format = "pyproject";
 
+  # https://github.com/kushaldas/johnnycanencrypt/issues/125
   patches = [ ./Cargo.lock.patch ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   propagatedBuildInputs = [
-    requests
-    vcrpy
+    httpx
   ];
 
   nativeBuildInputs = [
@@ -54,8 +53,9 @@ buildPythonPackage rec {
   ]);
 
   buildInputs = [
-    pcsclite
     nettle
+  ] ++ lib.optionals stdenv.isLinux [
+    pcsclite
   ] ++ lib.optionals stdenv.isDarwin [
     PCSC
     libiconv
@@ -69,14 +69,6 @@ buildPythonPackage rec {
     pytestCheckHook
     numpy
   ];
-
-  # Remove with the next release after 0.5.0. This change is required
-  # for compatibility with maturin 0.9.0.
-  postPatch = ''
-    sed '/project-url = /d' -i Cargo.toml
-    substituteInPlace pyproject.toml \
-      --replace 'manylinux = "off"' 'skip-auditwheel = true'
-  '';
 
   preCheck = ''
     export TESTDIR=$(mktemp -d)

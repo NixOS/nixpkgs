@@ -6,7 +6,7 @@
 , editablePackageSources
 }:
 let
-  name = poetryLib.moduleName pyProject.tool.poetry.name;
+  name = poetryLib.normalizePackageName pyProject.tool.poetry.name;
 
   # Just enough standard PKG-INFO fields for an editable installation
   pkgInfoFields = {

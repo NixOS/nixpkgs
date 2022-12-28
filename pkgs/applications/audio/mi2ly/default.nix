@@ -1,27 +1,19 @@
-{lib, stdenv, fetchurl}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="mi2ly";
-    version="0.12";
-    name="${baseName}-${version}";
-    hash="1b14zcwlvnxhjxr3ymyzg0mg4sbijkinzpxm641s859jxcgylmll";
-    url="https://download.savannah.gnu.org/releases/mi2ly/mi2ly.0.12.tar.bz2";
-    sha256="1b14zcwlvnxhjxr3ymyzg0mg4sbijkinzpxm641s859jxcgylmll";
-  };
-  buildInputs = [
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+{ lib, stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
+  pname = "mi2ly";
+  version = "0.12";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://download.savannah.gnu.org/releases/mi2ly/mi2ly.${version}.tar.bz2";
+    sha256 = "sha256-lFbqH+syFaQDMbXfb+OUcWnyKnjfVz9yl7DbTTn7JKw=";
   };
 
-  sourceRoot=".";
+  sourceRoot = ".";
 
   hardeningDisable = [ "format" ];
+
+  NIX_CFLAGS_COMPILE = [ "-fgnu89-inline" ];
 
   buildPhase = "./cc";
   installPhase = ''
@@ -30,12 +22,11 @@ stdenv.mkDerivation {
     cp README Doc.txt COPYING Manual.txt "$out/share/doc/mi2ly"
   '';
 
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "MIDI to Lilypond converter";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
-    broken = true; # 2018-04-11
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "https://www.nongnu.org/mi2ly/";
   };
 }

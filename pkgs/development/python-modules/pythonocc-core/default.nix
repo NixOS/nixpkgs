@@ -1,15 +1,29 @@
-{ lib, stdenv, python, fetchFromGitHub, cmake, swig, opencascade, smesh, freetype, libGL, libGLU, libX11
-, Cocoa }:
+{ lib, stdenv, python, fetchFromGitHub
+, cmake
+, Cocoa
+, fontconfig
+, freetype
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXi
+, libXmu
+, opencascade-occt
+, rapidjson
+, smesh
+, swig4
+}:
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
-  version = "0.18.1";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
     rev = version;
-    sha256 = "1jk4y7f75z9lyawffpfkr50qw5452xzi1imcdlw9pdvf4i0y86k3";
+    sha256 = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
   };
 
   postPatch = ''
@@ -18,10 +32,11 @@ stdenv.mkDerivation rec {
     --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
   '';
 
-  nativeBuildInputs = [ cmake swig ];
+  nativeBuildInputs = [ cmake swig4 ];
   buildInputs = [
-    python opencascade smesh
-    freetype libGL libGLU libX11
+    python opencascade-occt smesh
+    freetype libGL libGLU libX11 libXext libXmu libXi
+    fontconfig rapidjson
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [

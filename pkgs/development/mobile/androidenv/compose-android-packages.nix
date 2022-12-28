@@ -1,20 +1,20 @@
-{ requireFile, autoPatchelfHook, pkgs, pkgsHostHost, pkgs_i686
+{ callPackage, stdenv, lib, fetchurl, ruby, writeText
 , licenseAccepted ? false
 }:
 
 { toolsVersion ? "26.1.1"
-, platformToolsVersion ? "31.0.3"
-, buildToolsVersions ? [ "31.0.0" ]
+, platformToolsVersion ? "33.0.2"
+, buildToolsVersions ? [ "32.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "30.6.3"
+, emulatorVersion ? "31.3.9"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
 , systemImageTypes ? [ "google_apis_playstore" ]
-, abiVersions ? [ "armeabi-v7a" ]
+, abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "22.1.7171670"
+, ndkVersion ? "24.0.8215888"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -25,9 +25,6 @@
 }:
 
 let
-  inherit (pkgs) stdenv lib fetchurl;
-  inherit (pkgs.buildPackages) makeWrapper unzip;
-
   # Determine the Android os identifier from Nix's system identifier
   os = if stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
@@ -35,7 +32,7 @@ let
 
   # Uses mkrepo.rb to create a repo spec.
   mkRepoJson = { packages ? [], images ? [], addons ? [] }: let
-    mkRepoRuby = (pkgs.ruby.withPackages (pkgs: with pkgs; [ slop nokogiri ]));
+    mkRepoRuby = (ruby.withPackages (pkgs: with pkgs; [ slop nokogiri ]));
     mkRepoRubyArguments = lib.lists.flatten [
       (builtins.map (package: ["--packages" "${package}"]) packages)
       (builtins.map (image: ["--images" "${image}"]) images)
@@ -115,24 +112,24 @@ let
   ] ++ extraLicenses);
 in
 rec {
-  deployAndroidPackage = import ./deploy-androidpackage.nix {
-    inherit stdenv unzip;
+  deployAndroidPackage = callPackage ./deploy-androidpackage.nix {
   };
 
-  platform-tools = import ./platform-tools.nix {
-    inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
+  platform-tools = callPackage ./platform-tools.nix {
+    inherit deployAndroidPackage;
+    os = if stdenv.system == "aarch64-darwin" then "macosx" else os; # "macosx" is a universal binary here
     package = packages.platform-tools.${platformToolsVersion};
   };
 
   build-tools = map (version:
-    import ./build-tools.nix {
-      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
+    callPackage ./build-tools.nix {
+      inherit deployAndroidPackage os;
       package = packages.build-tools.${version};
     }
   ) buildToolsVersions;
 
-  emulator = import ./emulator.nix {
-    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
+  emulator = callPackage ./emulator.nix {
+    inherit deployAndroidPackage os;
     package = packages.emulator.${emulatorVersion};
   };
 
@@ -170,17 +167,17 @@ rec {
   ) platformVersions);
 
   cmake = map (version:
-    import ./cmake.nix {
-      inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
+    callPackage ./cmake.nix {
+      inherit deployAndroidPackage os;
       package = packages.cmake.${version};
     }
   ) cmakeVersions;
 
   # Creates a NDK bundle.
   makeNdkBundle = ndkVersion:
-    import ./ndk-bundle {
-      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools;
-      package = packages.ndk-bundle.${ndkVersion};
+    callPackage ./ndk-bundle {
+      inherit deployAndroidPackage os platform-tools;
+      package = packages.ndk-bundle.${ndkVersion} or packages.ndk.${ndkVersion};
     };
 
   # All NDK bundles.
@@ -221,6 +218,12 @@ rec {
       '') plugins}
     '';
 
+  # Function that automatically links the default NDK plugin.
+  linkNdkPlugin = {name, plugin, check}:
+    lib.optionalString check ''
+      ln -s ${plugin}/libexec/android-sdk/${name} ${name}
+    '';
+
   # Function that automatically links a plugin for which only one version exists
   linkPlugin = {name, plugin, check ? true}:
     lib.optionalString check ''
@@ -246,8 +249,8 @@ rec {
     ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
     by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-  '' else import ./tools.nix {
-    inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686 lib;
+  '' else callPackage ./tools.nix {
+    inherit deployAndroidPackage packages toolsVersion os;
 
     postInstall = ''
       # Symlink all requested plugins
@@ -258,7 +261,7 @@ rec {
       ${linkPlatformPlugins { name = "sources"; plugins = sources; check = includeSources; }}
       ${linkPlugins { name = "cmake"; plugins = cmake; }}
       ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
-      ${linkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
+      ${linkNdkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
 
       ${lib.optionalString includeSystemImages ''
         mkdir -p system-images
@@ -305,12 +308,18 @@ rec {
           ln -s $i $out/bin
       done
 
+      # the emulator auto-linked from platform-tools does not find its local qemu, while this one does
+      ${lib.optionalString includeEmulator ''
+        rm $out/bin/emulator
+        ln -s $out/libexec/android-sdk/emulator/emulator $out/bin
+      ''}
+
       # Write licenses
       mkdir -p licenses
       ${lib.concatMapStrings (licenseName:
         let
           licenseHashes = builtins.concatStringsSep "\n" (mkLicenseHashes licenseName);
-          licenseHashFile = pkgs.writeText "androidenv-${licenseName}" licenseHashes;
+          licenseHashFile = writeText "androidenv-${licenseName}" licenseHashes;
         in
         ''
           ln -s ${licenseHashFile} licenses/${licenseName}

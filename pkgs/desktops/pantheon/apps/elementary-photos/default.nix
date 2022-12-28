@@ -8,7 +8,6 @@
 , vala
 , desktop-file-utils
 , gtk3
-, libaccounts-glib
 , libexif
 , libgee
 , libhandy
@@ -24,25 +23,21 @@
 , libsoup
 , sqlite
 , python3
-, scour
 , webkitgtk
 , libwebp
 , appstream
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.3";
-
-  repoName = "photos";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "photos";
     rev = version;
-    sha256 = "sha256-ja4ElW0FNm9oNyn+00SdI2Cxep6LyWTYM8Blc6bnuiY=";
+    sha256 = "sha256-VhJggQMy1vk21zNA5pR4uAPGCwnIxLUHVO58AZs+h6s=";
   };
 
   nativeBuildInputs = [
@@ -56,19 +51,12 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    elementary-icon-theme
+  buildInputs = [
     geocode-glib
     gexiv2
     granite
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
     gtk3
     json-glib
-    libaccounts-glib
     libexif
     libgee
     libgphoto2
@@ -78,10 +66,15 @@ stdenv.mkDerivation rec {
     librest
     libsoup
     libwebp
-    scour
     sqlite
     webkitgtk
-  ];
+  ] ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   mesonFlags = [
     "-Dplugins=false"
@@ -93,9 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

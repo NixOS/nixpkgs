@@ -428,7 +428,7 @@ index 000000000000..1ed7032d4472
 +solution, and details the disagreements and arguments.  The latest
 +version of this document can be found at the following URL.
 +
-+ https://git.kernel.org/cgit/linux/kernel/git/tj/cgroup.git/tree/Documentation/cgroup-v2-cpu.txt?h=cgroup-v2-cpu
++ https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Documentation/cgroup-v2-cpu.txt?h=cgroup-v2-cpu
 +
 +This document was posted to the linux-kernel and cgroup mailing lists.
 +Unfortunately, no consensus was reached as of Oct, 2016.  The thread
@@ -759,7 +759,7 @@ index 000000000000..1ed7032d4472
 +     Re: [PATCHSET RFC cgroup/for-4.6] cgroup, sched: implement resource group and PRIO_RGRP
 +     Peter Zijlstra <peterz@infradead.org>
 +
-+[5]  https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/cgroup-v2.txt
++[5]  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/cgroup-v2.txt
 +     Control Group v2
 +     Tejun Heo <tj@kernel.org>
 +

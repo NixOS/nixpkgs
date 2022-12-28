@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , buildPackages
 , pkg-config
+, meson
+, ninja
 , libusb-compat-0_1
 , readline
 , libewf
@@ -19,68 +21,70 @@
 , python3
 , ruby
 , lua
+, lz4
 , capstone
 , useX11 ? false
 , rubyBindings ? false
-, pythonBindings ? false
 , luaBindings ? false
 }:
 
 let
-  # FIXME: Compare revision with https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L20
+  # FIXME: Compare revision with
+  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35arm64/Makefile#L26-L27
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
-    sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
+    rev = "c9e7242972837ac11fc94db05fabcb801a8269c9";
+    hash = "sha256-HFQj23GlLAyyzMGnPq40XaPv5qPDHdDlQOo0Hprc9Cs=";
+  };
+  armv7 = fetchFromGitHub {
+    owner = "radareorg";
+    repo = "vector35-arch-armv7";
+    rev = "dde39f69ffea19fc37e681874b12cb4707bc4f30";
+
+    hash = "sha256-bnWQc0dScM9rhIdzf+iVXvMqYWq/bguEAUQPaZRgdlU=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.4.2";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-5GvJ7J+pAL8GIZ4Tv09wdGyihfMm1bUABhmf7ozQoxc=";
+    hash = "sha256-9bDwtMNru7tG0L735y+Vrcg7Htk/TV9SVZn7WP4Ap4c=";
   };
 
   preBuild = ''
-    cp -r ${arm64} libr/asm/arch/arm/v35arm64/arch-arm64
-    chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
+    pushd ../libr/arch/p/arm/v35arm64
+    cp -r ${arm64} arch-arm64
+    chmod -R +w arch-arm64
+
+    cp -r ${armv7} arch-armv7
+    chmod -R +w arch-armv7
+    popd
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib; do
-      install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
-    done
+    install_name_tool -add_rpath $out/lib $out/lib/libr_io.${version}.dylib
   '';
 
-  postInstall = ''
-    install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
-  '';
-
-  WITHOUT_PULL = "1";
-  makeFlags = [
-    "GITTAP=${version}"
-    "RANLIB=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ranlib"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "HOST_CC=${stdenv.cc.targetPrefix}cc"
-  ];
-
-  configureFlags = [
-    "--with-sysmagic"
-    "--with-syszip"
-    "--with-sysxxhash"
-    "--with-syscapstone"
-    "--with-openssl"
+  mesonFlags = [
+   "-Duse_sys_capstone=true"
+   "-Duse_sys_magic=true"
+   "-Duse_sys_zip=true"
+   "-Duse_sys_xxhash=true"
+   "-Duse_sys_lz4=true"
+   "-Dr2_gittap=${version}"
   ];
 
   enableParallelBuilding = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config meson ninja python3 ];
   buildInputs = [
     capstone
     file
@@ -91,10 +95,10 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     libuv
-  ] ++ lib.optional useX11 [ gtkdialog vte gtk2 ]
-    ++ lib.optional rubyBindings [ ruby ]
-    ++ lib.optional pythonBindings [ python3 ]
-    ++ lib.optional luaBindings [ lua ];
+    lz4
+  ] ++ lib.optionals useX11 [ gtkdialog vte gtk2 ]
+    ++ lib.optionals rubyBindings [ ruby ]
+    ++ lib.optionals luaBindings [ lua ];
 
   propagatedBuildInputs = [
     # radare2 exposes r_lib which depends on these libraries
@@ -104,10 +108,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "unix-like reverse engineering framework and commandline tools";
-    homepage = "https://radare.org/";
+    description = "UNIX-like reverse engineering framework and command-line tools";
+    homepage = "https://radare.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin makefu mic92 arkivm ];
+    maintainers = with maintainers; [ azahi raskin makefu mic92 arkivm ];
     platforms = platforms.unix;
   };
 }

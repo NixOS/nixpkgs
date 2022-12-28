@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "setoids";
+  pname = "setoids";
   version = "2018-06-18";
 
   idrisDeps = [ contrib ];

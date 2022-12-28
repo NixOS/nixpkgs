@@ -1,25 +1,42 @@
-{ lib, python, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.14";
+  version = "0.7.16";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2f01e84e79ea7a14040225cb6c079bb266e7ba147346356c266490b18c77ce82";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "ponyorm";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-yATIsX2nKsW5DBwg9/LznQqf+XPY3q46WZut18Sr0v0=";
   };
 
-  doCheck = true;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # stripping the tests
-  postInstall = ''
-    rm -rf $out/${python.sitePackages}/pony/orm/tests
-  '';
+  disabledTests = [
+    # Tests are outdated
+    "test_exception_msg"
+    "test_method"
+  ];
+
+  pythonImportsCheck = [
+    "pony"
+  ];
 
   meta = with lib; {
-    description = "Pony is a Python ORM with beautiful query syntax";
+    description = "Library for advanced object-relational mapping";
     homepage = "https://ponyorm.org/";
-    maintainers = with maintainers; [ d-goldin xvapx ];
     license = licenses.asl20;
+    maintainers = with maintainers; [ d-goldin xvapx ];
   };
 }

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "flux-led";
-  version = "0.25.1";
+  version = "0.28.34";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "flux_led";
-    rev = version;
-    sha256 = "sha256-+GgA7ma27dah8G/ITsy84jZHpktJHnGSMjzMfAvvuJg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bIL9ivjCLKeTLK3n0ytgGkXQggsuDiMCY7kAtE81qfY=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to communicate with the flux_led smart bulbs";
     homepage = "https://github.com/Danielhiversen/flux_led";
+    changelog = "https://github.com/Danielhiversen/flux_led/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ colemickens ];
     platforms = platforms.linux;

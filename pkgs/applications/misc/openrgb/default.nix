@@ -1,32 +1,23 @@
-{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config, coreutils }:
+{ lib, stdenv, fetchFromGitLab, qmake, wrapQtAppsHook, libusb1, hidapi, pkg-config, coreutils, mbedtls_2, qtbase, qttools }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openrgb";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "sha256-x/wGD39Jm/kmcTEZP3BnLXxyv/jkPOJd6mLCO0dp5wM=";
+    sha256 = "sha256-46dL1D5oVlw6mNuFDCbbrUDmq42yFXV/qFJ1JnPT5/s=";
   };
 
-  nativeBuildInputs = [ qmake pkg-config ];
-  buildInputs = [ libusb1 hidapi ];
+  nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
+  buildInputs = [ libusb1 hidapi mbedtls_2 qtbase qttools ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    cp openrgb $out/bin
-
-    substituteInPlace 60-openrgb.rules \
+  postPatch = ''
+    patchShebangs scripts/build-udev-rules.sh
+    substituteInPlace scripts/build-udev-rules.sh \
       --replace /bin/chmod "${coreutils}/bin/chmod"
-
-    mkdir -p $out/etc/udev/rules.d
-    cp 60-openrgb.rules $out/etc/udev/rules.d
-
-    runHook postInstall
   '';
 
   doInstallCheck = true;

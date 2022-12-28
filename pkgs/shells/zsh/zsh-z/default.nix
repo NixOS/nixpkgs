@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-HnwUWqzwavh/Qox+siOe5lwTp7PBdiYx+9M0NMNFx00=";
   };
 
+  strictDeps = true;
   dontBuild = true;
 
   installPhase = ''

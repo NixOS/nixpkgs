@@ -58,7 +58,10 @@ stdenv.mkDerivation {
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ maintainers.eelco ];
+    maintainers = [
+      maintainers.eelco
+      maintainers.m00wl
+    ];
     platforms = platforms.all;
     mainProgram = "grep";
   };

@@ -42,7 +42,21 @@ Unlike other libraries mentioned in this section, GdkPixbuf only supports a sing
 
 ### Icons {#ssec-gnome-icons}
 
-When an application uses icons, an icon theme should be available in `XDG_DATA_DIRS` during runtime. The package for the default, icon-less [hicolor-icon-theme](https://www.freedesktop.org/wiki/Software/icon-theme/) (should be propagated by every icon theme) contains [a setup hook](#ssec-gnome-hooks-hicolor-icon-theme) that will pick up icon themes from `buildInputs` and pass it to our wrapper. Unfortunately, relying on that would mean every user has to download the theme included in the package expression no matter their preference. For that reason, we leave the installation of icon theme on the user. If you use one of the desktop environments, you probably already have an icon theme installed.
+When an application uses icons, an icon theme should be available in `XDG_DATA_DIRS` during runtime. The package for the default, icon-less [hicolor-icon-theme](https://www.freedesktop.org/wiki/Software/icon-theme/) (should be propagated by every icon theme) contains [a setup hook](#ssec-gnome-hooks-hicolor-icon-theme) that will pick up icon themes from `buildInputs` and add their datadirs to `XDG_ICON_DIRS` environment variable (this is Nixpkgs specific, not actually a XDG standard variable). Unfortunately, relying on that would mean every user has to download the theme included in the package expression no matter their preference. For that reason, we leave the installation of icon theme on the user. If you use one of the desktop environments, you probably already have an icon theme installed.
+
+In the rare case you need to use icons from dependencies (e.g. when an app forces an icon theme), you can use the following to pick them up:
+
+```nix
+  buildInputs = [
+    pantheon.elementary-icon-theme
+  ];
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
+```
 
 To avoid costly file system access when locating icons, GTK, [as well as Qt](https://woboq.com/blog/qicon-reads-gtk-icon-cache-in-qt57.html), can rely on `icon-theme.cache` files from the themes' top-level directories. These files are generated using `gtk-update-icon-cache`, which is expected to be run whenever an icon is added or removed to an icon theme (typically an application icon into `hicolor` theme) and some programs do indeed run this after icon installation. However, since packages are installed into their own prefix by Nix, this would lead to conflicts. For that reason, `gtk3` provides a [setup hook](#ssec-gnome-hooks-gtk-drop-icon-theme-cache) that will clean the file from installation. Since most applications only ship their own icon that will be loaded on start-up, it should not affect them too much. On the other hand, icon themes are much larger and more widely used so we need to cache them. Because we recommend installing icon themes globally, we will generate the cache files from all packages in a profile using a NixOS module. You can enable the cache generation using `gtk.iconCache.enable` option if your desktop environment does not already do that.
 
@@ -92,13 +106,13 @@ For convenience, it also adds `dconf.lib` for a GIO module implementing a GSetti
 
 - []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGAppsHook` will prepend it to `XDG_DATA_DIRS`.
 
-- []{#ssec-gnome-hooks-gdk-pixbuf} `gdk-pixbuf` setup hook will populate `GDK_PIXBUF_MODULE_FILE` with the path to biggest `loaders.cache` file from the dependencies containing [GdkPixbuf loaders](ssec-gnome-gdk-pixbuf-loaders). This works fine when there are only two packages containing loaders (`gdk-pixbuf` and e.g. `librsvg`) – it will choose the second one, reasonably expecting that it will be bigger since it describes extra loader in addition to the default ones. But when there are more than two loader packages, this logic will break. One possible solution would be constructing a custom cache file for each package containing a program like `services/x11/gdk-pixbuf.nix` NixOS module does. `wrapGAppsHook` copies the `GDK_PIXBUF_MODULE_FILE` environment variable into the produced wrapper.
+- []{#ssec-gnome-hooks-gdk-pixbuf} `gdk-pixbuf` setup hook will populate `GDK_PIXBUF_MODULE_FILE` with the path to biggest `loaders.cache` file from the dependencies containing [GdkPixbuf loaders](#ssec-gnome-gdk-pixbuf-loaders). This works fine when there are only two packages containing loaders (`gdk-pixbuf` and e.g. `librsvg`) – it will choose the second one, reasonably expecting that it will be bigger since it describes extra loader in addition to the default ones. But when there are more than two loader packages, this logic will break. One possible solution would be constructing a custom cache file for each package containing a program like `services/x11/gdk-pixbuf.nix` NixOS module does. `wrapGAppsHook` copies the `GDK_PIXBUF_MODULE_FILE` environment variable into the produced wrapper.
 
 - []{#ssec-gnome-hooks-gtk-drop-icon-theme-cache} One of `gtk3`’s setup hooks will remove `icon-theme.cache` files from package’s icon theme directories to avoid conflicts. Icon theme packages should prevent this with `dontDropIconThemeCache = true;`.
 
 - []{#ssec-gnome-hooks-dconf} `dconf.lib` is a dependency of `wrapGAppsHook`, which then also adds it to the `GIO_EXTRA_MODULES` variable.
 
-- []{#ssec-gnome-hooks-hicolor-icon-theme} `hicolor-icon-theme`’s setup hook will add icon themes to `XDG_ICON_DIRS` which is prepended to `XDG_DATA_DIRS` by `wrapGAppsHook`.
+- []{#ssec-gnome-hooks-hicolor-icon-theme} `hicolor-icon-theme`’s setup hook will add icon themes to `XDG_ICON_DIRS`.
 
 - []{#ssec-gnome-hooks-gobject-introspection} `gobject-introspection` setup hook populates `GI_TYPELIB_PATH` variable with `lib/girepository-1.0` directories of dependencies, which is then added to wrapper by `wrapGAppsHook`. It also adds `share` directories of dependencies to `XDG_DATA_DIRS`, which is intended to promote GIR files but it also [pollutes the closures](https://github.com/NixOS/nixpkgs/issues/32790) of packages using `wrapGAppsHook`.
 

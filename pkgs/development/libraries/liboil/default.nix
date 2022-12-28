@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "liboil-0.3.17";
+  pname = "liboil";
+  version = "0.3.17";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${name}.tar.gz";
+    url = "${meta.homepage}/download/liboil-${version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
@@ -28,5 +29,7 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

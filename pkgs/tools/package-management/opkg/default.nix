@@ -2,11 +2,11 @@
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.4";
+  version = "0.6.0";
   pname = "opkg";
   src = fetchurl {
     url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
-    sha256 = "sha256-IhesxYuOsxMAYx66514iLrxwDJwc9kCAiHBdGaRyyDk=";
+    sha256 = "sha256-VoRHIu/yN9rxSqbmgUNvMkUhPFWQ7QzaN6ed9jf/Okw=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

@@ -15,19 +15,20 @@ let
   ];
 
   # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.5.0";
+  version = "3.1.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "0agqldh68hn898d3f6k99kjbz8had5j5k0jyvi71d4k9vhx8cy7c";
+    sha256 = "sha256-3gsaXnflGiGOpIkqDQe5u6x8d18x67/dc4Hh1iU89+o=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
   ) availableShapingTypes;
 
   doCheck = true;
+
+  outputs = [ "out" "doc" "man" ];
 
   passthru.tests = {
     noShaping = fcft.override { withShapingTypes = []; };

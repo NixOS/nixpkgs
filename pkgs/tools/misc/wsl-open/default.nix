@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wsl-open";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "4U6U57";
     repo = "wsl-open";
     rev = "v${version}";
-    sha256 = "1mwak846zh47p3pp4q5f54cw8d9qk61zn43q81j2pkcm35mv9lzg";
+    sha256 = "sha256-amqkDXdgIqGjRZMkltwco0UAI++G0RY/MxLXwtlxogE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

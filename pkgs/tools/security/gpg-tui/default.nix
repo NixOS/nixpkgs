@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    sha256 = "sha256-2fTJHcJJzQIAyxLnWdoyR77tA9p/3s3UescypGwKfc0=";
+    hash = "sha256-eUUHH6bPfYjkHo7C7GWzewTpT8je7TQK9M8mTM5v59s=";
   };
 
-  cargoSha256 = "sha256-8dWMJZiWy0cO0CGAFEmtGYZ8bVK1ZR7qBkjKn6rLC+k=";
+  cargoHash = "sha256-GtSvDfG9lRUirm4d6PSaOBLTHZJT2PH0Sx/9GVquX5M=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal user interface for GnuPG";
     homepage = "https://github.com/orhun/gpg-tui";
+    changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

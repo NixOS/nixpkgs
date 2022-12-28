@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python2
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python3
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
 
-  buildInputs = [ gnutls libotr python2 ]
+  buildInputs = [ gnutls libotr python3 ]
     ++ optional enableLibPurple pidgin
     ++ optional enablePam pam;
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitlbee.org/";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ lassulus pSub ];
     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

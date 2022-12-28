@@ -6,18 +6,16 @@
 , pkg-config
 , gobject-introspection
 , vala
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
 , glib
 , gsettings-desktop-schemas
 , gtk3
 , enableGlade ? false
 , glade
 , xvfb-run
-, libxml2
 , gdk-pixbuf
 , librsvg
+, libxml2
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
@@ -28,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.5.0";
+  version = "1.8.0";
 
   outputs = [
     "out"
@@ -41,25 +39,27 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RmueAmwfnrO2WWb1MNl3A6ghLar5EXSMFF6cuEPb1v4=";
+    sha256 = "sha256-bCVCwFeJJLDCm3rmy0TrJt846wHW1e89fQsIJXYyMOg=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    docbook_xml_dtd_43
-    docbook-xsl-nons
     gobject-introspection
-    gtk-doc
-    libxml2
+    gi-docgen
     meson
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals enableGlade [
+    libxml2 # for xmllint
   ];
 
   buildInputs = [
     gdk-pixbuf
     gtk3
-    libxml2
   ] ++ lib.optionals enableGlade [
     glade
   ];
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
         # HdySettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
         # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
         # See hdy_settings_constructed function in https://gitlab.gnome.org/GNOME/libhandy/-/commit/bb68249b005c445947bfb2bee66c91d0fe9c41a4
-        "${glib.getSchemaPath gsettings-desktop-schemas}/../.."
+        (glib.getSchemaDataDirPath gsettings-desktop-schemas)
 
         # Some tests require icons
         "${hicolor-icon-theme}/share"
@@ -106,9 +106,15 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   } // lib.optionalAttrs (!enableGlade) {
     glade =

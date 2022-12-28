@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yad";
-  version = "10.1";
+  version = "12.1";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
     rev = "v${version}";
-    sha256 = "sha256-k41Z3QVGm7JUR1ny0vJKLxakabK9Da5qCnrPUHvAkWE=";
+    sha256 = "sha256-9WgTsjerV9k1sHnhob3xviRDfHa6W+szzGs0AGBJG+g=";
   };
 
   configureFlags = [

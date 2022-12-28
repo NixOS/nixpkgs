@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "prom2json";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prom2json";
-    sha256 = "09glf7br1a9k6j2hs94l2k4mlmlckdz5c9v6qg618c2nd4rk1mz6";
+    sha256 = "sha256-5RPpgUEFLecu0qRg7KSNLwdUEiXeebrGdP/udCtq4z0=";
   };
 
-  vendorSha256 = null;
+  vendorSha256 = "sha256-fPGkqrnl21as1xiT279qPzkz01tDNOSMcsm/DSNHDU0=";
 
   meta = with lib; {
     description = "Tool to scrape a Prometheus client and dump the result as JSON";

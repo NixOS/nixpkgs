@@ -2,7 +2,7 @@
 , lib
 , fetchPypi
 , glibcLocales
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,9 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = {
     description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";

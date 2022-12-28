@@ -1,22 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.2.15";
+  version = "0.3.3";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "1kygk7ilv7la36kv4jdn1ird7f3896wgr88kyqf0iagfqkzb2vsb";
+    sha256 = "sha256-XzAU8Rs0/Q1KvE2tF0zzv9d2/a07BzZQbVzOdrPlbSk=";
   };
 
-  cargoSha256 = "1f42cqaqnjwi9k4ihqil6z2dqh5dnf76x54gk7mndzkrfg3rl573";
+  cargoSha256 = "sha256-r5rIuulcPB5Y4AkbUPswf3W4DZ9Pc8auzmDDvSOOZEA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "dist-client" "dist-server" ];
+  # sccache-dist is only supported on x86_64 Linux machines.
+  buildFeatures = lib.optionals (stdenv.system == "x86_64-linux") [ "dist-client" "dist-server" ];
 
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460
@@ -25,7 +26,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Ccache with Cloud Storage";
     homepage = "https://github.com/mozilla/sccache";
-    maintainers = with maintainers; [ doronbehar ];
+    changelog = "https://github.com/mozilla/sccache/releases/tag/v${version}";
+    maintainers = with maintainers; [ doronbehar figsoda ];
     license = licenses.asl20;
   };
 }

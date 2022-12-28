@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , gtk3
 , gettext
 , json_c
@@ -22,6 +23,7 @@ let
 in buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "mypaint";
@@ -31,6 +33,15 @@ in buildPythonApplication rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix build due to setuptools issue.
+    # https://github.com/mypaint/mypaint/pull/1183
+    (fetchpatch {
+      url = "https://github.com/mypaint/mypaint/commit/423950bec96d6057eac70442de577364d784a847.patch";
+      sha256 = "OxJJOi20bFMRibL59zx6svtMrkgeMYyEvbdSXbZHqpc=";
+    })
+  ];
+
   nativeBuildInputs = [
     gettext
     pkg-config
@@ -38,6 +49,7 @@ in buildPythonApplication rec {
     wrapGAppsHook
     gobject-introspection # for setup hook
     hicolor-icon-theme # fór setup hook
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [

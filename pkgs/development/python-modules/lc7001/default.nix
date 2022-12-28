@@ -4,22 +4,24 @@
 , fetchPypi
 , pythonOlder
 , poetry-core
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lc7001";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "NgnszlgmeUnfWs9onnboFRz3c4OibsNaZHjDINvoMPc=";
+    sha256 = "sha256-I4I3vwW1kJsgLFPMGpe9hkD3iEeC3AqI4pCi6SCWPx4=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

@@ -36,11 +36,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ${platform.folder}/pngout $out/bin
   '' + lib.optionalString stdenv.isLinux ''
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${platform.ld-linux} $out/bin/pngout
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
   '';
 
   meta = {
     description = "A tool that aggressively optimizes the sizes of PNG images";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
     homepage = "http://advsys.net/ken/utils.htm";
     platforms = lib.attrNames platforms;

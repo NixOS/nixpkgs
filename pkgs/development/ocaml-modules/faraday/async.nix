@@ -1,12 +1,12 @@
-{ buildDunePackage, faraday, core, async }:
+{ buildDunePackage, lib, faraday, core_unix, async }:
 
 buildDunePackage rec {
   pname = "faraday-async";
-  inherit (faraday) version src useDune2;
+  inherit (faraday) version src;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [ faraday core async ];
+  propagatedBuildInputs = [ faraday core_unix async ];
 
   meta = faraday.meta // {
     description = "Async support for Faraday";

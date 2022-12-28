@@ -13,11 +13,12 @@
 , gdk-pixbuf
 , pango
 , gettext
+, itstool
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "drawing";
-  version = "0.8.3";
+  version = "1.0.1";
 
   format = "other";
 
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "maoschanz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qDLJ+Mw4z66ro9/zoEIzDJpA+jJLYw0WgsP7mA+56XM=";
+    sha256 = "sha256-9nosriI3Kdf1M5/TYFWn1jtQTqNKhBcFh7q3E4Uoq4s=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
     glib
     gettext
+    itstool
   ];
 
   buildInputs = [

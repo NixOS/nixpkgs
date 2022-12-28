@@ -1,28 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mcpp";
-  version = "2.7.2";
+  version = "2.7.2.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/mcpp/mcpp-${version}.tar.gz";
-    sha256 = "0r48rfghjm90pkdyr4khxg783g9v98rdx2n69xn8f6c5i0hl96rv";
+  src = fetchFromGitHub {
+    owner = "museoa";
+    repo = "mcpp";
+    rev = finalAttrs.version;
+    hash= "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
   };
 
   configureFlags = [ "--enable-mcpplib" ];
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2019-14274.patch";
-      url = "https://github.com/h8liu/mcpp/commit/ea453aca2742be6ac43ba4ce0da6f938a7e5a5d8.patch";
-      sha256 = "0svkdr3w9b45v6scgzvggw9nsh6a3k7g19fqk0w3vlckwmk5ydzr";
-    })
-  ];
-
   meta = with lib; {
-    homepage = "http://mcpp.sourceforge.net/";
-    description = "A portable c preprocessor";
+    homepage = "https://github.com/museoa/mcpp";
+    description = "Matsui's C preprocessor";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

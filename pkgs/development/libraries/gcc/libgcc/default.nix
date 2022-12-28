@@ -4,7 +4,7 @@
 }:
 
 stdenvNoLibs.mkDerivation rec {
-  name = "libgcc-${version}";
+  pname = "libgcc";
   inherit (gcc.cc) src version;
 
   outputs = [ "out" "dev" ];

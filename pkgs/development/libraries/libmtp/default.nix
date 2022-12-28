@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmtp";
-  version = "1.1.19";
+  version = "1.1.20";
 
   src = fetchFromGitHub {
     owner = "libmtp";
     repo = "libmtp";
     rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-o8JKoKVNpU/nHTDnKJpa8FlXt37fZnTf45WBTCxLyTs=";
+    sha256 = "sha256-/tyCoEW/rCLfZH2HhA3Nxuij9d/ZJgsfyP4fLlfyNRA=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -35,9 +35,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libusb1 ];
 
-  preConfigure = "./autogen.sh";
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [ "--with-udev=${placeholder "out"}/lib/udev" ];
+
+  configurePlatforms = [ "build" "host" ];
 
   enableParallelBuilding = true;
 

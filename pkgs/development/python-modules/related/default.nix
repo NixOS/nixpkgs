@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "related";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "w0XmNWh1xF08qitH22lQgTRNqO6qyYrYd2dc6x3Fop0=";
+    hash = "sha256-IqmbqAW6PubN9GBXrMs5Je4u1XkgLl9camSGNrlrFJA=";
   };
 
   propagatedBuildInputs = [

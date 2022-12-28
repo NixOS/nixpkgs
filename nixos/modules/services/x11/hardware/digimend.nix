@@ -16,7 +16,7 @@ in
 
     services.xserver.digimend = {
 
-      enable = mkEnableOption "the digimend drivers for Huion/XP-Pen/etc. tablets";
+      enable = mkEnableOption (lib.mdDoc "the digimend drivers for Huion/XP-Pen/etc. tablets");
 
     };
 

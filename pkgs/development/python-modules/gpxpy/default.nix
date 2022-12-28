@@ -1,15 +1,15 @@
-{ lib, fetchFromGitHub, buildPythonPackage, python, lxml, isPy3k }:
+{ lib, fetchFromGitHub, buildPythonPackage, python, lxml, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "gpxpy";
-  version = "1.4.2";
-  disabled = !isPy3k;
+  version = "1.5.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tkrajina";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r5gb660nrkrdbw5m5h1n5k10npcfv9bxqv92z55ds8r7rw2saz6";
+    sha256 = "sha256-Fkl2dte1WkPi2hBOdT23BMfNflR0j4GeNH86d46WNQk=";
   };
 
   propagatedBuildInputs = [ lxml ];

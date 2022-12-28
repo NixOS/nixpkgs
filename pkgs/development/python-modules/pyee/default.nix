@@ -1,28 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, vcversioner
 , mock
-, pytestCheckHook
 , pytest-asyncio
 , pytest-trio
-, twisted
+, pytestCheckHook
 , pythonOlder
+, twisted
+, typing-extensions
+, vcversioner
 }:
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "8.2.2";
+  version = "9.0.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XH5g+N+VcQ2+F1UOFs4BU/g5kMAO90SEG0Pzce1T6+o=";
+    hash = "sha256-J3DEkoq8ch9GtwXmpysMWUgMSmnJqDygsAu5lPHqSzI=";
   };
 
   buildInputs = [
     vcversioner
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
   ];
 
   checkInputs = [
@@ -33,7 +39,9 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [ "pyee" ];
+  pythonImportsCheck = [
+    "pyee"
+  ];
 
   meta = with lib; {
     description = "A port of Node.js's EventEmitter to Python";

@@ -270,6 +270,20 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
+    '' +
+    # The hadrian install Makefile uses 'xxx' as a temporary placeholder in path
+    # substitution. Which can break the build if the store path / prefix happens
+    # to contain this string. This will be fixed with 9.4 bindists.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/21402
+    ''
+      # Detect hadrian Makefile by checking for the target that has the problem
+      if grep '^update_package_db' ghc-${version}*/Makefile > /dev/null; then
+        echo Hadrian bindist, applying workaround for xxx path substitution.
+        # based on https://gitlab.haskell.org/ghc/ghc/-/commit/dd5fecb0e2990b192d92f4dfd7519ecb33164fad.patch
+        substituteInPlace ghc-${version}*/Makefile --replace 'xxx' '\0xxx\0'
+      else
+        echo Not a hadrian bindist, not applying xxx path workaround.
+      fi
     '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
@@ -418,7 +432,6 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [
       prusnak
       domenkozar

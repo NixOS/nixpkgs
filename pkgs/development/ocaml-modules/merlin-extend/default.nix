@@ -11,12 +11,14 @@ buildDunePackage rec {
     sha256 = "0hvc4mz92x3rl2dxwrhvhzwl4gilnyvvwcqgr45vmdpyjyp3dwn2";
   };
 
-  buildInputs = [ cppo ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cppo ];
 
   meta = with lib; {
     homepage = "https://github.com/let-def/merlin-extend";
     description = "SDK to extend Merlin";
     license = licenses.mit;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   inherit (grpc) src version;
   pname = "grpcio";
+  format = "setuptools";
 
   outputs = [ "out" "dev" ];
 

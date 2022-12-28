@@ -1,20 +1,30 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 }:
 
 buildGoModule rec {
   pname = "dnstake";
-  version = "0.0.2";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "pwnesia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mjwnb0zyqnwk26f32v9vqxc9k6zcks9nn1595mf2hck5xwn86yk";
+    sha256 = "sha256-k6j7DIwK8YAKmEjn8JJO7XBcap9ui6cgUSJG7CeHAAM=";
   };
 
-  vendorSha256 = "1xhzalx1x8js449w1qs2qdwbnz2s8mmypz9maj7jzl5mqfyhlwlp";
+  patches = [
+    # https://github.com/pwnesia/dnstake/pull/36
+    (fetchpatch {
+      name = "update-x-sys-fix-darwin.patch";
+      url = "https://github.com/pwnesia/dnstake/commit/974efbbff4ce26d2f2646ca2ceb1316c131cefbe.patch";
+      sha256 = "sha256-fLOGF8damdLROd8T0fH/FGSVX23dtc+yHhSvVCwVeuY=";
+    })
+  ];
+
+  vendorSha256 = "sha256-lV6dUl+OMUQfhlgNL38k0Re1Mr3VP9b8SI3vTJ8CP18=";
 
   meta = with lib; {
     description = "Tool to check missing hosted DNS zones";

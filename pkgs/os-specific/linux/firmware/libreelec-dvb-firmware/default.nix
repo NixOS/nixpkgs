@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, lib}:
+{ stdenvNoCC, fetchFromGitHub, lib}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "libreelec-dvb-firmware";
   version = "1.4.2";
 

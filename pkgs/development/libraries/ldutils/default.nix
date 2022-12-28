@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "ldutils";
-  version = "1.03";
+  version = "1.10";
 
   src = fetchFromGitLab {
     owner = "ldutils-projects";
     repo = pname;
     rev = "v_${version}";
-    sha256 = "0pi05py71hh5vlhl0kjh9wxmd7yixw10s0kr2wb4l4c0abqxr82j";
+    sha256 = "sha256-fP+tZY+ayaeuxPvywO/639sNE+IwrxaEJ245q9HTOCU=";
   };
 
   buildInputs = [
@@ -25,6 +25,8 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
   ];
+
+  qmakeFlags = [ "ldutils.pro" ];
 
   LDUTILS_LIB=placeholder "out";
   LDUTILS_INCLUDE=placeholder "out";

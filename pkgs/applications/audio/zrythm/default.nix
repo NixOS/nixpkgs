@@ -4,7 +4,6 @@
 , SDL2
 , alsa-lib
 , libaudec
-, bash
 , bash-completion
 , breeze-icons
 , carla
@@ -13,13 +12,12 @@
 , curl
 , dconf
 , libepoxy
-, ffmpeg
 , fftw
 , fftwFloat
 , flex
 , glib
-, gtk3
-, gtksourceview3
+, gtk4
+, gtksourceview5
 , guile
 , graphviz
 , help2man
@@ -57,17 +55,19 @@
 , xxHash
 , vamp-plugin-sdk
 , zstd
+, libadwaita
+, sassc
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-alpha.26.0.13";
+  version = "1.0.0-alpha.28.1.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dkXlkJ+qlfxV9Bv2UvZZa2iRVm8tgpK4JxkWL2Jeq48=";
+    sha256 = "sha256-ERE7I6E3+RmmpnZEtcJL/1v9a37IwFauVsbJvI9gsRQ=";
   };
 
   nativeBuildInputs = [
@@ -95,14 +95,13 @@ stdenv.mkDerivation rec {
     curl
     dconf
     libepoxy
-    ffmpeg
     fftw
     fftwFloat
     flex
     breeze-icons
     glib
-    gtk3
-    gtksourceview3
+    gtk4
+    gtksourceview5
     graphviz
     guile
     json-glib
@@ -130,22 +129,27 @@ stdenv.mkDerivation rec {
     xdg-utils
     xxHash
     zstd
+    libadwaita
+    sassc
   ];
 
   mesonFlags = [
-    "-Denable_ffmpeg=true"
-    "-Denable_rtmidi=true"
-    "-Denable_rtaudio=true"
-    "-Denable_sdl=true"
+    "-Drtmidi=enabled"
+    "-Drtaudio=enabled"
+    "-Dsdl=enabled"
+    "-Dcarla=enabled"
     "-Dmanpage=true"
     # "-Duser_manual=true" # needs sphinx-intl
     "-Dlsp_dsp=disabled"
     "-Db_lto=false"
+    "-Ddebug=true"
   ];
 
   NIX_LDFLAGS = ''
     -lfftw3_threads -lfftw3f_threads
   '';
+
+  dontStrip = true;
 
   postPatch = ''
     chmod +x scripts/meson-post-install.sh
@@ -156,7 +160,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/"
-    )
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+             )
   '';
 
   meta = with lib; {

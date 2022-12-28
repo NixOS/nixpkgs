@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hadess/rtl8723bs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    broken = (! versionOlder kernel.version "4.12"); # Now in kernel staging drivers
+    broken = versionAtLeast kernel.version "4.12"; # Now in kernel staging drivers
     maintainers = with maintainers; [ elitak ];
   };
 }

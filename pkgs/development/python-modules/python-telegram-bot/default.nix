@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.8.1";
+  version = "13.15";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sGaR5Vw1lDJn7mNtmqcCs1eRVdLzLg4tbX8R8LXnJ/A=";
+    hash = "sha256-tAR2BrgIG2K71qo2H3yh7+h/qPGIHsnZMtNYRL9XoVQ=";
   };
 
   propagatedBuildInputs = [
@@ -39,10 +39,11 @@ buildPythonPackage rec {
 
     substituteInPlace requirements.txt \
       --replace "APScheduler==3.6.3" "APScheduler" \
-      --replace "cachetools==4.2.2" "cachetools"
+      --replace "cachetools==4.2.2" "cachetools" \
+      --replace "tornado==6.1" "tornado"
   '';
 
-  setupPyGlobalFlags = "--with-upstream-urllib3";
+  setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
 
   # tests not included with release
   doCheck = false;

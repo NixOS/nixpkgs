@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "http-parser";
@@ -12,7 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
-  patches = [ ./build-shared.patch ];
+  patches = [
+    ./build-shared.patch
+  ] ++ lib.optionals stdenv.isAarch32 [
+    # https://github.com/nodejs/http-parser/pull/510
+    (fetchpatch {
+      url = "https://github.com/nodejs/http-parser/commit/4f15b7d510dc7c6361a26a7c6d2f7c3a17f8d878.patch";
+      sha256 = "sha256-rZZMJeow3V1fTnjadRaRa+xTq3pdhZn/eJ4xjxEDoU4=";
+    })
+  ];
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
   buildFlags = [ "library" ];
   doCheck = true;

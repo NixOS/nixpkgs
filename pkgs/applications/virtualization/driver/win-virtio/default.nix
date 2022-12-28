@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Windows VirtIO Drivers";
     homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
     license = [ licenses.bsd3 ];
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

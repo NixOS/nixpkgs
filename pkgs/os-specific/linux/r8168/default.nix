@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
-  # [1] http://www.realtek.com.tw/downloads/downloadsView.aspx?PFid=5&Level=5&Conn=4&DownTypeID=3
+  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
   # I've verified manually (`diff -r`) that the source code for version 8.046.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
@@ -27,11 +27,13 @@ in stdenv.mkDerivation rec {
   # avoid using the Makefile directly -- it doesn't understand
   # any kernel but the current.
   # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
+  makeFlags = kernel.makeFlags ++ [
+    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)/src"
+    "modules"
+  ];
   preBuild = ''
-    makeFlagsArray+=("-C${kernel.dev}/lib/modules/${kernel.modDirVersion}/build")
-    makeFlagsArray+=("M=$PWD/src")
     makeFlagsArray+=("EXTRA_CFLAGS=-DCONFIG_R8168_NAPI -DCONFIG_R8168_VLAN -DCONFIG_ASPM -DENABLE_S5WOL -DENABLE_EEE")
-    makeFlagsArray+=("modules")
   '';
 
   enableParallelBuilding = true;
@@ -52,5 +54,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ timokau ];
+    broken = (lib.versions.majorMinor kernel.modDirVersion) != "5.15";
   };
 }

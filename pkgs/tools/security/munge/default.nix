@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "munge";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "15h805rwcb9f89dyrkxfclzs41n3ff8x7cc1dbvs8mb0ds682c4j";
   };
 
-  nativeBuildInputs = [ autoreconfHook gawk gnused ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoreconfHook
+    libgcrypt # provides libgcrypt.m4
+  ];
   buildInputs = [ libgcrypt zlib bzip2 ];
 
   preAutoreconf = ''
@@ -21,6 +25,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
+    "--with-libgcrypt-prefix=${libgcrypt.dev}"
+    # workaround for cross compilation: https://github.com/dun/munge/issues/103
+    "ac_cv_file__dev_spx=no"
+    "x_ac_cv_check_fifo_recvfd=no"
   ];
 
   meta = with lib; {

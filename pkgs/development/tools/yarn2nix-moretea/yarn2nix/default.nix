@@ -1,6 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
+, allowAliases ? pkgs.config.allowAliases
 }:
 
 let
@@ -9,6 +10,14 @@ let
   compose = f: g: x: f (g x);
   id = x: x;
   composeAll = builtins.foldl' compose id;
+
+  # https://docs.npmjs.com/files/package.json#license
+  # TODO: support expression syntax (OR, AND, etc)
+  getLicenseFromSpdxId = licstr:
+    if licstr == "UNLICENSED" then
+      lib.licenses.unfree
+    else
+      lib.getLicenseFromSpdxId licstr;
 in rec {
   # Export yarn again to make it easier to find out which yarn was used.
   inherit yarn;
@@ -30,16 +39,7 @@ in rec {
       non-null = builtins.filter (x: x != null) parts;
     in builtins.concatStringsSep "-" non-null;
 
-  # https://docs.npmjs.com/files/package.json#license
-  # TODO: support expression syntax (OR, AND, etc)
-  spdxLicense = licstr:
-    if licstr == "UNLICENSED" then
-      lib.licenses.unfree
-    else
-      lib.findFirst
-        (l: l ? spdxId && l.spdxId == licstr)
-        { shortName = licstr; }
-        (builtins.attrValues lib.licenses);
+  inherit getLicenseFromSpdxId;
 
   # Generates the yarn.nix from the yarn.lock file
   mkYarnNix = { yarnLock, flags ? [] }:
@@ -58,7 +58,6 @@ in rec {
     "--offline"
     "--frozen-lockfile"
     "--ignore-engines"
-    "--ignore-scripts"
   ];
 
   mkYarnModules = {
@@ -69,16 +68,23 @@ in rec {
     yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
+    yarnFlags ? [ ],
+    ignoreScripts ? true,
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
     workspaceDependencies ? [], # List of yarn packages
+    packageResolutions ? {},
   }:
     let
-      extraBuildInputs = (lib.flatten (builtins.map (key:
-        pkgConfig.${key}.buildInputs or []
-      ) (builtins.attrNames pkgConfig)));
+      extraNativeBuildInputs =
+        lib.concatMap
+          (key: pkgConfig.${key}.nativeBuildInputs or [])
+          (builtins.attrNames pkgConfig);
+      extraBuildInputs =
+        lib.concatMap
+          (key: pkgConfig.${key}.buildInputs or [])
+          (builtins.attrNames pkgConfig);
 
       postInstall = (builtins.map (key:
         if (pkgConfig.${key} ? postInstall) then
@@ -93,7 +99,7 @@ in rec {
 
       workspaceJSON = pkgs.writeText
         "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; }); # scoped packages need second splat
+        (builtins.toJSON { private = true; workspaces = ["deps/**"]; resolutions = packageResolutions; }); # scoped packages need second splat
 
       workspaceDependencyLinks = lib.concatMapStringsSep "\n"
         (dep: ''
@@ -106,7 +112,8 @@ in rec {
       inherit preBuild postBuild name;
       dontUnpack = true;
       dontInstall = true;
-      buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
+      nativeBuildInputs = [ yarn nodejs git ] ++ extraNativeBuildInputs;
+      buildInputs = extraBuildInputs;
 
       configurePhase = lib.optionalString (offlineCache ? outputHash) ''
         if ! cmp -s ${yarnLock} ${offlineCache}/yarn.lock; then
@@ -134,7 +141,7 @@ in rec {
 
         ${workspaceDependencyLinks}
 
-        yarn install ${lib.escapeShellArgs yarnFlags}
+        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ lib.optional ignoreScripts "--ignore-scripts" ++ yarnFlags)}
 
         ${lib.concatStringsSep "\n" postInstall}
 
@@ -168,7 +175,9 @@ in rec {
   let
     package = lib.importJSON packageJSON;
 
-    packageGlobs = package.workspaces;
+    packageGlobs = if lib.isList package.workspaces then package.workspaces else package.workspaces.packages;
+
+    packageResolutions = package.resolutions or {};
 
     globElemToRegex = lib.replaceStrings ["*"] [".*"];
 
@@ -217,7 +226,7 @@ in rec {
         inherit name;
         value = mkYarnPackage (
           builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock workspaceDependencies; }
+          // { inherit src packageJSON yarnLock packageResolutions workspaceDependencies; }
           // lib.attrByPath [name] {} packageOverrides
         );
       })
@@ -232,13 +241,14 @@ in rec {
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
+    yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
     pkgConfig ? {},
     extraBuildInputs ? [],
     publishBinsFor ? null,
     workspaceDependencies ? [], # List of yarnPackages
+    packageResolutions ? {},
     ...
   }@attrs:
     let
@@ -258,7 +268,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig;
+        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig packageResolutions;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
@@ -292,8 +302,8 @@ in rec {
         '')
         workspaceDependenciesTransitive;
 
-    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies"] // {
-      inherit src pname;
+    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
+      inherit src version pname;
 
       name = baseName;
 
@@ -349,7 +359,7 @@ in rec {
         runHook postInstall
       '';
 
-      doDist = true;
+      doDist = attrs.doDist or true;
 
       distPhase = attrs.distPhase or ''
         # pack command ignores cwd option
@@ -366,11 +376,10 @@ in rec {
 
       meta = {
         inherit (nodejs.meta) platforms;
-        description = packageJSON.description or "";
-        homepage = packageJSON.homepage or "";
-        version = packageJSON.version or "";
-        license = if packageJSON ? license then spdxLicense packageJSON.license else "";
-      } // (attrs.meta or {});
+      } // lib.optionalAttrs (package ? description) { inherit (package) description; }
+        // lib.optionalAttrs (package ? homepage) { inherit (package) homepage; }
+        // lib.optionalAttrs (package ? license) { license = getLicenseFromSpdxId package.license; }
+        // (attrs.meta or {});
     });
 
   yarn2nix = mkYarnPackage {
@@ -403,7 +412,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = defaultYarnFlags ++ [ "--ignore-scripts" "--production=true" ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -437,4 +446,7 @@ in rec {
 
     patchShebangs $out
   '';
+} // lib.optionalAttrs allowAliases {
+  # Aliases
+  spdxLicense = getLicenseFromSpdxId; # added 2021-12-01
 }

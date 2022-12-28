@@ -5,9 +5,15 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "jool-cli-${sourceAttrs.version}";
+  pname = "jool-cli";
+  version = sourceAttrs.version;
 
   src = sourceAttrs.src;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libnl iptables ];

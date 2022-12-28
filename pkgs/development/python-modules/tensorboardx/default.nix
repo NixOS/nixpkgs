@@ -1,6 +1,7 @@
 { boto3
 , buildPythonPackage
 , crc32c
+, which
 , fetchFromGitHub
 , lib
 , matplotlib
@@ -9,22 +10,23 @@
 , pillow
 , protobuf
 , pytestCheckHook
-, pytorch
+, torch
 , six
 , soundfile
-, tensorflow-tensorboard
+, tensorboard
 , torchvision
 }:
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.4";
+  version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
-    rev = "v${version}";
-    sha256 = "1kcw062bcqvqva5kag9j7q72wk3vdqgf5cnn0lxmsvhlmq5sjdfn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Np0Ibn51qL0ORwq1IY8lUle05MQDdb5XkI1uzGOKJno=";
   };
 
   # apparently torch API changed a bit at 1.6
@@ -32,12 +34,23 @@ buildPythonPackage rec {
     substituteInPlace tensorboardX/pytorch_graph.py --replace \
       "torch.onnx.set_training(model, False)" \
       "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
+
+    # Version detection seems broken here, the version reported by python is
+    # newer than the protobuf package itself.
+    sed -i -e "s/'protobuf[^']*'/'protobuf'/" setup.py
   '';
+
+  nativeBuildInputs = [
+    which
+    protobuf
+  ];
+
+  # required to make tests deterministic
+  PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   propagatedBuildInputs = [
     crc32c
     numpy
-    protobuf
     six
     soundfile
   ];
@@ -48,8 +61,8 @@ buildPythonPackage rec {
     moto
     pillow
     pytestCheckHook
-    pytorch
-    tensorflow-tensorboard
+    torch
+    tensorboard
     torchvision
   ];
 

@@ -8,7 +8,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-4VjxneRWDJNevgUHwht5v/F2GLkjDYB2/oxf/5/b1bE=";
   };
   nativeBuildInputs = [ dev86 sharutils ];
-  DESTDIR = placeholder "out";
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: identify.o:(.bss+0x0): multiple definition of `identify';
+  #     common.o:(.bss+0x160): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "SBIN_DIR=/bin"
+    "USRSBIN_DIR=/bin"
+    "MAN_DIR=/share/man"
+  ];
 
   meta = with lib; {
     homepage = "https://www.joonet.de/lilo/";

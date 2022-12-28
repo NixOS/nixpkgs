@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, netcdf, hdf5, curl, gfortran }:
+{ lib, stdenv, fetchFromGitHub, netcdf, hdf5, curl, gfortran, CoreFoundation }:
 stdenv.mkDerivation rec {
   pname = "netcdf-fortran";
   version = "4.4.5";
@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ netcdf hdf5 curl ];
+  buildInputs = [ netcdf hdf5 curl ]
+    ++ lib.optional stdenv.isDarwin CoreFoundation;
   doCheck = true;
+
+  FFLAGS = [ "-std=legacy" ];
+  FCFLAGS = [ "-std=legacy" ];
 
   meta = with lib; {
     description = "Fortran API to manipulate netcdf files";

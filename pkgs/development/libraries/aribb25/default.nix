@@ -48,10 +48,11 @@ stdenv.mkDerivation rec {
     lib.optional stdenv.isDarwin "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   meta = with lib; {
-    homepage = "https://code.videolan.org/videolan/aribb25";
     description = "Sample implementation of the ARIB STD-B25 standard";
-    platforms = platforms.all;
+    homepage = "https://code.videolan.org/videolan/aribb25";
     license = licenses.isc;
     maintainers = with maintainers; [ midchildan ];
+    mainProgram = "b25";
+    platforms = platforms.all;
   };
 }

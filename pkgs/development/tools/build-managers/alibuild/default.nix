@@ -1,18 +1,21 @@
-{ lib, python}:
+{ lib, python }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "alibuild";
-  version = "1.5.5";
+  version = "1.11.2";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1sh02avpab4qlyin3p928xw91l4fgs8x5x2rzl623ayqsnfjv19j";
+    hash = "sha256-wq2H2inUf2CjPD45krCNdjw2s4FXsEDlfOHqW8VaVKg=";
   };
 
   doCheck = false;
-  propagatedBuildInputs = [
-    python.pkgs.requests
-    python.pkgs.pyyaml
+  propagatedBuildInputs = with python.pkgs; [
+    requests
+    pyyaml
+    boto3
+    jinja2
+    distro
   ];
 
   meta = with lib; {

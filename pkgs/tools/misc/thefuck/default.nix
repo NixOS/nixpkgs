@@ -5,20 +5,20 @@
 
 buildPythonApplication rec {
   pname = "thefuck";
-  version = "3.31";
+  version = "3.32";
 
   src = fetchFromGitHub {
     owner = "nvbn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eKKUUJr00sUtT4u91MUgJjyPOXp3NigYVfYUP/sDBhY=";
+    sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
   propagatedBuildInputs = [ colorama decorator psutil pyte six ];
 
   checkInputs = [ go mock pytestCheckHook pytest-mock ];
 
-  disabledTests = lib.optional stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.isDarwin [
     "test_settings_defaults"
     "test_from_file"
     "test_from_env"

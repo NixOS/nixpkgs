@@ -3,7 +3,7 @@
   options.virtualisation.spiceUSBRedirection.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Install the SPICE USB redirection helper with setuid
       privileges. This allows unprivileged users to pass USB devices
       connected to this machine to libvirt VMs, both local and

@@ -2,32 +2,48 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
-, ecdsa
-, pytest-cov
 , pytestCheckHook
 , pythonOlder
+, sphinxHook
+, sphinx-rtd-theme
+, zope_interface
 }:
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.1.0";
-  disabled = pythonOlder "3.6";
+  version = "2.5.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
-    sha256 = "sha256-+6ROeJi7yhYKKytQH0koJPyDgkhdOm8Rul0MGTfOYTA=";
+    sha256 = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i '/types-cryptography/d' setup.cfg
+  '';
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    zope_interface
+  ];
+
+  passthru.optional-dependencies.crypto = [
     cryptography
-    ecdsa
   ];
 
   checkInputs = [
-    pytest-cov
     pytestCheckHook
-  ];
+  ] ++ (lib.flatten (lib.attrValues passthru.optional-dependencies));
 
   pythonImportsCheck = [ "jwt" ];
 

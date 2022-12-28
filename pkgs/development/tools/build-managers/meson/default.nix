@@ -1,28 +1,22 @@
 { lib
-, python3
-
-, writeTextDir
-, substituteAll
 , fetchpatch
 , installShellFiles
+, ninja
+, pkg-config
+, python3
+, substituteAll
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.57.1";
+  version = "0.64.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
+    sha256 = "sha256-Oo4DDCM094IIX4FicGLMbUpnce3zHgVf/jdPnmsImrk=";
   };
 
   patches = [
-    # Upstream insists on not allowing bindir and other dir options
-    # outside of prefix for some reason:
-    # https://github.com/mesonbuild/meson/issues/2561
-    # We remove the check so multiple outputs can work sanely.
-    ./allow-dirs-outside-of-prefix.patch
-
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
@@ -57,14 +51,28 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # Fix passing multiple --define-variable arguments to pkg-config.
+    # https://github.com/mesonbuild/meson/pull/10670
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
+      sha256 = "GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
+      excludes = [
+        "docs/yaml/objects/dep.yaml"
+      ];
+    })
   ];
 
   setupHook = ./setup-hook.sh;
 
-  # 0.45 update enabled tests but they are failing
+  # Meson included tests since 0.45, however they fail in Nixpkgs because they
+  # require a typical building environment (including C compiler and stuff).
+  # Just for the sake of documentation, the next lines are maintained here.
   doCheck = false;
-  # checkInputs = [ ninja pkg-config ];
-  # checkPhase = "python ./run_project_tests.py";
+  checkInputs = [ ninja pkg-config ];
+  checkPhase = ''
+    python ./run_project_tests.py
+  '';
 
   postFixup = ''
     pushd $out/bin
@@ -87,9 +95,19 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";
-    description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
+    description = "An open source, fast and friendly build system made in Python";
+    longDescription = ''
+      Meson is an open source build system meant to be both extremely fast, and,
+      even more importantly, as user friendly as possible.
+
+      The main design point of Meson is that every moment a developer spends
+      writing or debugging build definitions is a second wasted. So is every
+      second spent waiting for the build system to actually start compiling
+      code.
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    inherit (python3.meta) platforms;
   };
 }
+# TODO: a more Nixpkgs-tailoired test suite

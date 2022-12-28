@@ -3,27 +3,29 @@
 , fetchFromGitHub
 , autoreconfHook
 , alsa-lib
-, python
+, python3
 , SDL
 }:
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20210525";
+  version = "20220506";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "06ybkbqry7f7lmzgwb9s7ipafshl5gdj98lcjsjkcbnywj8r9b3h";
+    sha256 = "sha256-fK0FBn9e7l1Y/A7taFlaoas6ZPREFhEmskVBqjda6q0=";
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]
     ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook python ];
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
   buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsa-lib;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";

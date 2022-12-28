@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hamlib";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1m8gb20i8ga6ndnnw187ry1h4z8wx27v1hl7c610r6ky60pv4072";
+    sha256 = "sha256-i/AQewcfUvCFh/OOLe6KeEjeE0NDWzJvj2bZXh+KJIc=";
   };
 
   nativeBuildInputs = [

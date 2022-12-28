@@ -4,12 +4,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
-  version = "0.1.7";
+  version = "0.1.18";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "graph_cli";
-    sha256 = "sha256-/v9COgAjuunJ06HHl55J0moV1p4uO+N+w2QwE8tgebQ=";
+    sha256 = "sha256-0mxOc8RJ3GNgSbppLylIViqfYf6zwJ49pltnsyQUpSA=";
   };
 
   propagatedBuildInputs = with python3Packages; [

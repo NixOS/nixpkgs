@@ -21,7 +21,7 @@ let
 
   # Wrap the original `mkDerivation` providing extra args to it.
   extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
-    mkDerivationSuper (args // f args));
+    (mkDerivationSuper args).overrideAttrs f);
 
   # Wrap the original `mkDerivation` transforming the result.
   overrideMkDerivationResult = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
@@ -60,16 +60,16 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else mkDerivationSuper (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
-      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (args.configureFlags or []) ++ [
+      else (mkDerivationSuper args).overrideAttrs(finalAttrs: {
+        NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "") + " -static";
+      } // lib.optionalAttrs (!(finalAttrs.dontAddStaticConfigureFlags or false)) {
+        configureFlags = (finalAttrs.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
       }));
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
-        stdenv0.glibc.static
+        pkgs.glibc.static
       ];
     });
 
@@ -119,7 +119,7 @@ rec {
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
 
     # Glibc doesn’t come with static runtimes by default.
-    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.stdenv.glibc.static ])
+    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.glibc.static ])
   );
 
 
@@ -149,31 +149,6 @@ rec {
   });
 
 
-  /* Return a modified stdenv that builds packages with GCC's coverage
-     instrumentation.  The coverage note files (*.gcno) are stored in
-     $out/.build, along with the source code of the package, to enable
-     programs like lcov to produce pretty-printed reports.
-  */
-  addCoverageInstrumentation = stdenv:
-    overrideInStdenv stdenv [ pkgs.enableGCOVInstrumentation pkgs.keepBuildTree ];
-
-
-  /* Replace the meta.maintainers field of a derivation.  This is useful
-     when you want to fork to update some packages without disturbing other
-     developers.
-
-     e.g.:  in all-packages.nix:
-
-     # remove all maintainers.
-     defaultStdenv = replaceMaintainersField allStdenvs.stdenv pkgs [];
-  */
-  replaceMaintainersField = stdenv: pkgs: maintainers:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
-        lib.recursiveUpdate pkg { meta.maintainers = maintainers; });
-    });
-
-
   /* Use the trace output to report all processed derivations with their
      license name.
   */
@@ -189,48 +164,6 @@ rec {
         in pkg // {
           outPath = printDrvPath pkg.outPath;
           drvPath = printDrvPath pkg.drvPath;
-        });
-    });
-
-
-  /* Abort if the license predicate is not verified for a derivation
-     declared with mkDerivation.
-
-     One possible predicate to avoid all non-free packages can be achieved
-     with the following function:
-
-     isFree = license: with builtins;
-       if license == null then true
-       else if isList license then lib.all isFree license
-       else license != "non-free" && license != "unfree";
-
-     This adapter can be defined on the defaultStdenv definition.  You can
-     use it by patching the all-packages.nix file or by using the override
-     feature of ~/.config/nixpkgs/config.nix .
-  */
-  validateLicenses = licensePred: stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
-        let
-          drv = builtins.unsafeDiscardStringContext pkg.drvPath;
-          license =
-            pkg.meta.license or
-              # Fixed-output derivations such as source tarballs usually
-              # don't have licensing information, but that's OK.
-              (pkg.outputHash or
-                (builtins.trace
-                  "warning: ${drv} lacks licensing information" null));
-
-          validate = arg:
-            if licensePred license then arg
-            else abort ''
-              while building ${drv}:
-              license `${builtins.toString license}' does not pass the predicate.
-            '';
-
-        in pkg // {
-          outPath = validate pkg.outPath;
-          drvPath = validate pkg.drvPath;
         });
     });
 
@@ -268,6 +201,27 @@ rec {
 
         preferLocalBuild = true;
         allowSubstitutes = false;
+      });
+    });
+
+
+  /* Modify a stdenv so that it builds binaries with the specified list of
+     compilerFlags appended and passed to the compiler.
+
+     This example would recompile every derivation on the system with
+     -funroll-loops and -O3 passed to each gcc invocation.
+
+     Example:
+       nixpkgs.overlays = [
+         (self: super: {
+           stdenv = super.withCFlags [ "-funroll-loops" "-O3" ] super.stdenv;
+         })
+       ];
+  */
+  withCFlags = compilerFlags: stdenv:
+    stdenv.override (old: {
+      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
       });
     });
 }

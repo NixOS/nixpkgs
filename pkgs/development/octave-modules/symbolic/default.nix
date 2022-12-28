@@ -1,38 +1,26 @@
 { buildOctavePackage
 , lib
-, fetchurl
-# Octave's Python (Python 3)
+, fetchFromGitHub
+  # Octave's Python (Python 3)
 , python
-# Needed only to get the correct version of sympy needed
-, python2Packages
 }:
 
 let
-  # Need to use sympy 1.5.1 for https://github.com/cbm755/octsympy/issues/1023
-  # It has been addressed, but not merged yet.
-  # In the meantime, we create a Python environment with Python 3, its mpmath
-  # version and sympy 1.5 from python2Packages.
-  pythonEnv = (let
-      overridenPython = let
-        packageOverrides = self: super: {
-          sympy = super.sympy.overridePythonAttrs (old: rec {
-            version = python2Packages.sympy.version;
-            src = python2Packages.sympy.src;
-          });
-        };
-      in python.override {inherit packageOverrides; self = overridenPython; };
-    in overridenPython.withPackages (ps: [
-      ps.sympy
-      ps.mpmath
-    ]));
+  pythonEnv = python.withPackages (ps: [
+    ps.sympy
+    ps.mpmath
+  ]);
 
-in buildOctavePackage rec {
+in
+buildOctavePackage rec {
   pname = "symbolic";
-  version = "2.9.0";
+  version = "3.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1jr3kg9q6r4r4h3hiwq9fli6wsns73rqfzkrg25plha9195c97h8";
+  src = fetchFromGitHub {
+    owner = "cbm755";
+    repo = "octsympy";
+    rev = "v${version}";
+    hash = "sha256-FJb5uazqEiyNI6TL9WVewMoQnC3CutcHENl+umNZeto=";
   };
 
   propagatedBuildInputs = [ pythonEnv ];

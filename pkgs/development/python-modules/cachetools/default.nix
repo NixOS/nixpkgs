@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "4.2.4";
+  version = "5.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-doPLl7Ooc2cKlTiS/dqLTKSkTlSgPFztIumAzciM0bc=";
+    hash = "sha256-DheHTD62f1ZxoiS0y0/CzDMHvKGmEiEUAX6oaqTpB78=";
   };
 
   checkInputs = [

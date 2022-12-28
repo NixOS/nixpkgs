@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "requests-oauthlib";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0smaxs5ixng4z0k6dsgmm6s972ka3p6a2ykdpnl23mqzlw0ic9ml";
+    sha256 = "sha256-db6sSkeIHuuU1epdatMe+IhWr/4jMrmq+1LGRSzPDXo=";
   };
 
   propagatedBuildInputs = [ oauthlib requests ];

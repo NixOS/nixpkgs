@@ -15,7 +15,8 @@
 , ghostscript
 }:
 
-assert lib.versionOlder ocaml.version "4.06";
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02" && lib.versionOlder ocaml.version "4.10")
+  "camlimages 4.2.4 is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
@@ -54,9 +55,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     omake install
-    runHook postBuild
+    runHook postInstall
   '';
 
   createFindlibDestdir = true;

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dalfox";
-  version = "2.5.4";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zwDdOj6/YcZQZW5WWMZztTVl5QsYMCcqtaAFsM+1bn0=";
+    sha256 = "sha256-+RCjudjbvc793sE2GCV/l23JD7ZqjNWhi7ZjUaCvTzw=";
   };
 
-  vendorSha256 = "sha256-AZbzcGqje2u9waH2NGWITXpax2GCFqbIEd4uNiDmcIY=";
+  vendorSha256 = "sha256-pLhTwbcMIqm7nrzypMs6yVrqtdCAoPrabTXsUtJ6Zls=";
 
   meta = with lib; {
     description = "Tool for analysing parameter and XSS scanning";

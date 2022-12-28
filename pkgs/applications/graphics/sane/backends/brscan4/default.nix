@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1 }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     tar xfvz data.tar.gz
   '';
 
-  nativeBuildInputs = [ makeWrapper patchelf coreutils udevRules ];
+  nativeBuildInputs = [ makeWrapper patchelf udevRules ];
   buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     description = "Brother brscan4 sane backend driver";
     homepage = "http://www.brother.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };

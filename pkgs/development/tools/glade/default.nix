@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , gettext
 , fetchurl
 , python3
@@ -8,7 +9,7 @@
 , gtk3
 , glib
 , gjs
-, webkitgtk
+, webkitgtk_4_1
 , gobject-introspection
 , wrapGAppsHook
 , itstool
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glade";
-  version = "3.38.2";
+  version = "3.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glade/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dxsiz9ahqkxg2a1dw9sbd8jg59y5pdz4c1gvnbmql48gmj8gz4q";
+    sha256 = "McmtrqhJlyq5UXtWThmsGZd8qXdYsQntwxZwCPU+PZw=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gjs
-    webkitgtk
+    webkitgtk_4_1
     libxml2
     python3
     python3.pkgs.pygobject3
@@ -56,6 +57,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gnome.adwaita-icon-theme
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace 'webkit2gtk-4.0' 'webkit2gtk-4.1'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

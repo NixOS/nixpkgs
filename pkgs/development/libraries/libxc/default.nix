@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libxc";
-  version = "5.1.7";
+  version = "6.0.0";
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "0s01q5sh50544s7q2q7kahcqydlyzk1lx3kg1zwl76y90942bjd1";
+    hash = "sha256-g1BjqzSVauDrzxIqqU2kLl6RFs6/oe2VthtndbnJQCc=";
   };
 
   nativeBuildInputs = [ perl cmake gfortran ];
@@ -26,10 +26,6 @@ stdenv.mkDerivation rec {
     "-DDISABLE_KXC=0"
     "-DDISABLE_LXC=0"
   ];
-
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)
-  '';
 
   doCheck = true;
 

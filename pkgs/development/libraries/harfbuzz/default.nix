@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
+, fetchpatch
 , pkg-config
 , glib
 , freetype
@@ -21,26 +22,39 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+# for passthru.tests
+, gimp
+, gtk3
+, gtk4
+, mapnik
+, qt5
 }:
 
 let
-  version = "3.0.0";
+  version = "5.3.1";
   inherit (lib) optional optionals optionalString;
-  mesonFeatureFlag = opt: b:
-    "-D${opt}=${if b then "enabled" else "disabled"}";
-  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 
 stdenv.mkDerivation {
   pname = "harfbuzz${optionalString withIcu "-icu"}";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "harfbuzz";
-    repo = "harfbuzz";
-    rev = version;
-    sha256 = "sha256-yRRr4RcnbwoZ1Hn3+zbbocKFyBSLYx/exaAHNGsPINA=";
+  src = fetchurl {
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    sha256 = "sha256-Smzgl7dagSH6zEuoO1sIO/7GV/RbADzVo0JPKua0Q00=";
   };
+
+  patches = [
+    # Pick upstream patch for exported symbol test failing on darwin
+    # https://github.com/harfbuzz/harfbuzz/issues/3850
+    (fetchpatch {
+      name = "harfbuzz-fix-check-symbol-tests-lto-and-darwin.patch";
+      url = "https://github.com/harfbuzz/harfbuzz/commit/b0b7a65388da25ae3fa01e969ad6abc67eed4f49.patch";
+      sha256 = "0my064r88pikw6q70hbgf6hwfkw544b9f5ai73qhn2a3c83jqn06";
+    })
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -64,7 +78,10 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "coretext" withCoreText)
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "introspection" isNativeCompilation)
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -79,9 +96,8 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype ]
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
-    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
+  buildInputs = [ glib freetype gobject-introspection ]
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
@@ -98,6 +114,11 @@ stdenv.mkDerivation {
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
     ''}
   '';
+
+  passthru.tests = {
+    inherit gimp gtk3 gtk4 mapnik;
+    inherit (qt5) qtbase;
+  };
 
   meta = with lib; {
     description = "An OpenType text shaping engine";

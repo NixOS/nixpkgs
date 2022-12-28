@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbaseencode";
-  version = "1.0.11";
+  version = "1.0.14";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f52yh052z8k90d1ag6nk01p1gf4i1zxp1daw8mashs8avqr2m7g";
+    sha256 = "sha256-cSiinuIc/qONuy9ZVsmsF4DiN1VUL43ZAXffCiIGgkY=";
   };
 
   nativeBuildInputs = [ cmake ];

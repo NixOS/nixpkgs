@@ -7,8 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
   version = "21.10.2";
-
-  disabled = python3.pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -31,10 +30,17 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "prompt-toolkit==3.0.19" "prompt-toolkit>=3.0.19"
+  '';
+
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "quark" ];
+  pythonImportsCheck = [
+    "quark"
+  ];
 
   meta = with lib; {
     description = "Android malware (analysis and scoring) system";

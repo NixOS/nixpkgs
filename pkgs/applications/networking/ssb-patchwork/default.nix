@@ -26,7 +26,7 @@ let
     comment = "Client for the decentralized social network Secure Scuttlebutt";
     desktopName = "Patchwork";
     genericName = "Patchwork";
-    categories = "Network;";
+    categories = [ "Network" ];
   };
 
 in

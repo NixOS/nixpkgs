@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
-  version = "0.pre+date=2021-10-08";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "BQN";
-    rev = "0001109a1c5a420421b368c79d34b1e93bfe606e";
-    hash = "sha256-riHHclTLkrVbtzmcz9ungAIc7kaoFHS77+SNatsfNhc=";
+    rev = "v${version}";
+    sha256 = "1kxzxz2hrd1871281s4rsi569qk314aqfmng9pkqn8gv9nqhmph0";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres sternenseemann ];
     inherit (jdk.meta) platforms;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dbqn-native.x86_64-darwin
   };
 }
 # TODO: Processing app

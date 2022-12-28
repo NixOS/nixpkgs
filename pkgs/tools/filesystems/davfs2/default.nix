@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "davfs2";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/davfs2-${version}.tar.gz";
-    sha256 = "sha256-LmtnVoW9kXdyvmDwmZrgmMgPef8g3BMej+xFR8u2O1A=";
+    sha256 = "sha256-zj65SOzlgqUck0zLDMcOZZg5FycXyv8XP2ml4q+QxcA=";
   };
 
   buildInputs = [ neon zlib ];

@@ -10,6 +10,7 @@
 , pango
 , fribidi
 , vala
+, gi-docgen
 , libxml2
 , perl
 , gettext
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "5.2.0";
+  version = "5.6.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ybNPoCZU9WziL6CIJ9idtLqBYxsubX0x6mXRPHKUMOk=";
+    sha256 = "ZZ2cydA0oRTwfn4TTugNd97ASXyxUWrlNpEZwvy52hY=";
   };
 
   patches = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     perl
     gobject-introspection
     vala
+    gi-docgen
   ];
 
   buildInputs = [
@@ -68,17 +70,35 @@ stdenv.mkDerivation rec {
     dbus
   ];
 
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
+
   doCheck = stdenv.isLinux;
 
   checkPhase = ''
     runHook preCheck
 
-    XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --no-rebuild --print-errorlogs
+    env \
+      XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
+      GTK_A11Y=none \
+      xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

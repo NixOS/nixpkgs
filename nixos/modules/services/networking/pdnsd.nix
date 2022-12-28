@@ -24,38 +24,38 @@ in
 
 { options =
     { services.pdnsd =
-        { enable = mkEnableOption "pdnsd";
+        { enable = mkEnableOption (lib.mdDoc "pdnsd");
 
           cacheDir = mkOption {
             type = types.str;
             default = "/var/cache/pdnsd";
-            description = "Directory holding the pdnsd cache";
+            description = lib.mdDoc "Directory holding the pdnsd cache";
           };
 
           globalConfig = mkOption {
             type = types.lines;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Global configuration that should be added to the global directory
-              of <literal>pdnsd.conf</literal>.
+              of `pdnsd.conf`.
             '';
           };
 
           serverConfig = mkOption {
             type = types.lines;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Server configuration that should be added to the server directory
-              of <literal>pdnsd.conf</literal>.
+              of `pdnsd.conf`.
             '';
           };
 
           extraConfig = mkOption {
             type = types.lines;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Extra configuration directives that should be added to
-              <literal>pdnsd.conf</literal>.
+              `pdnsd.conf`.
             '';
           };
         };

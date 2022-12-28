@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "gmt";
-  version = "6.2.0";
+  version = "6.4.0";
   src = fetchurl {
     url = "https://github.com/GenericMappingTools/gmt/releases/download/${version}/gmt-${version}-src.tar.gz";
-    sha256 = "sha256-q3BikSrurRAhdw+tR1bgqZhg/ejqm0KPsAwi+hWju/w=";
+    sha256 = "sha256-0mfAx9b7MMnqfgKe8n2tsm/9e5LLS0cD+aO6Do85Ohs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "-DGMT_INSTALL_MODULE_LINKS:BOOL=FALSE"
     "-DLICENSE_RESTRICTED=LGPL" # "GPL" and "no" also valid
   ] ++ (with stdenv;
-    lib.optional (!isDarwin) [
+    lib.optionals (!isDarwin) [
       "-DFFTW3_ROOT=${fftwSinglePrec.dev}"
       "-DLAPACK_LIBRARY=${lapack}/lib/liblapack.so"
       "-DBLAS_LIBRARY=${blas}/lib/libblas.so"

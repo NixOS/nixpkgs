@@ -6,7 +6,7 @@
 buildDunePackage rec {
   pname = "ipaddr";
 
-  inherit (macaddr) version src useDune2 minimumOCamlVersion;
+  inherit (macaddr) version src;
 
   propagatedBuildInputs = [ macaddr domain-name stdlib-shims ];
 

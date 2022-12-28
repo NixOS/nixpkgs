@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metamath";
-  version = "0.196";
+  version = "0.198";
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "metamath";
     repo = "metamath-exe";
     rev = "v${version}";
-    sha256 = "sha256-/ofH5fq7lUxbbRBAczsLNG3UPsOMbCdcxkB3el5OPcU=";
+    sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 
   meta = with lib; {

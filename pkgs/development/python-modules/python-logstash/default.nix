@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-logstash";
-  version = "0.4.6";
+  version = "0.4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13763yx0k655y0c8gxv7jj6cqp45zypx2fmnc56jnn9zz1fkx50h";
+    sha256 = "sha256-0E4c4R7MEH5KTzuAf8V9loEelkpVQIGzu7RHMvdO9fk=";
   };
 
   # no tests

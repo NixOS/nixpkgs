@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "2021.10.0";
+  version = "2022.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-h89gfdZvk7H22xAczaPMscTYZu0YeFxvFfL6/Oz2cJw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KxT3Se27b+XoTETXCljOVGVmEuXcpYxOhIBs1xAdtZ8=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
     types-pytz
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'titlecase = "^2.3"' 'titlecase = "*"' \
-      --replace 'pytz = "^2021.3"' 'pytz = "*"'
-  '';
 
   disabledTests = [
     # AssertionError: assert datetime.date(...

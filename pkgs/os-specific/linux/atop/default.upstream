@@ -1,4 +1,0 @@
-url http://atoptool.nl/downloadatop.php
-version_link '[.]tar[.]'
-version '[^0-9]*[-.]([0-9]([-0-9.]*[0-9])?)[.].*' '\1'
-minimize_overwrite

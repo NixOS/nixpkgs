@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jirafeau";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitLab {
     owner = "mojo42";
     repo = "Jirafeau";
     rev = version;
-    hash = "sha256-9v6rtxViXsolx5AKSp2HxcFyU1XJWFSiqzTBl+dQBD4=";
+    hash = "sha256-jJ2r8XTtAzawTVo2A2pDwy7Z6KHeyBkgXXaCPY0w/rg=";
   };
 
   installPhase = ''

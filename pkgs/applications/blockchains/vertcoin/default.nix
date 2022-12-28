@@ -9,6 +9,7 @@
 , protobuf
 , hexdump
 , zeromq
+, gmp
 , withGui
 , qtbase ? null
 , qttools ? null
@@ -19,15 +20,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "vertcoin";
-  version = "0.15.0.1";
+  version = "0.18.0";
 
   name = pname + toString (optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
     owner = pname + "-project";
     repo = pname + "-core";
-    rev = version;
-    sha256 = "09q7qicw52gv225hq6wlpsf4zr4hjc8miyim5cygi5nxxrlw7kd3";
+    rev = "2bd6dba7a822400581d5a6014afd671fb7e61f36";
+    sha256 = "ua9xXA+UQHGVpCZL0srX58DDUgpfNa+AAIKsxZbhvMk=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     libevent
     db4
     zeromq
+    gmp
   ] ++ optionals withGui [
     qtbase
     qttools

@@ -1,5 +1,4 @@
 { lib
-, asyncio-dgram
 , buildPythonPackage
 , click
 , fetchFromGitHub
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.4.13";
+  version = "0.5.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,12 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-XO9KmsC3DXgVcGWr5ss3m2wB8rVboWyQUWBidynhkP8=";
+    rev = "v${version}";
+    hash = "sha256-IkuAYEg5nuUT6zxmuJe6afp4MVWf0+HAnEoAdOrdTvQ=";
   };
 
   propagatedBuildInputs = [
-    asyncio-dgram
     click
   ];
 
@@ -32,11 +30,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   disabledTests = [
     # Tests requires network features (e. g., discovery testing)
     "test_Bulb_Discovery"
     "test_timeout"
     "test_timeout_PilotBuilder"
+    "test_error_PilotBuilder_warm_wite"
+    "test_error_PilotBuilder_cold_white_lower"
   ];
 
   pythonImportsCheck = [

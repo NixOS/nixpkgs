@@ -9,24 +9,25 @@
 , google-cloud-core
 , google-cloud-testutils
 , mock
+, pandas
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "2.7.0";
+  version = "3.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a4ad2832be3b86c8f0fb57b2d382a1f67218137c6f6051372647ac5147d6421";
+    hash = "sha256-bxFBWi6cx7TeeofMP59XVRX9aDpCP2N5lAkUpWYW1wU=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "google-cloud-appengine-logging >= 0.1.0, < 1.0.0dev" "google-cloud-appengine-logging >= 0.1.0"
-  '';
 
   propagatedBuildInputs = [
     google-api-core
@@ -41,8 +42,10 @@ buildPythonPackage rec {
     flask
     google-cloud-testutils
     mock
+    pandas
     pytestCheckHook
     pytest-asyncio
+    rich
   ];
 
   disabledTests = [
@@ -57,7 +60,7 @@ buildPythonPackage rec {
     rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
 
-  pythonImortsCheck = [
+  pythonImportsCheck = [
     "google.cloud.logging"
     "google.cloud.logging_v2"
   ];
@@ -65,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
+    changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "crossfire-server";
-  version = "r${toString rev}";
+  version = rev;
 
   src = fetchsvn {
     url = "http://svn.code.sf.net/p/crossfire/code/server/trunk/";
-    sha256 = sha256;
-    rev = rev;
+    inherit sha256;
+    rev = "r${rev}";
   };
 
   nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python3 ];

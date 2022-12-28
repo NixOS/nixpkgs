@@ -8,15 +8,8 @@
 # The solution is to splice the package sets together as we do below, so every
 # `callPackage`d expression in fact gets both versions. Each# derivation (and
 # each derivation's outputs) consists of the run-time version, augmented with a
-# `nativeDrv` field for the build-time version, and `crossDrv` field for the
+# `__spliced.buildHost` field for the build-time version, and `__spliced.hostTarget` field for the
 # run-time version.
-#
-# We could have used any names we want for the disambiguated versions, but
-# `crossDrv` and `nativeDrv` were somewhat similarly used for the old
-# cross-compiling infrastructure. The names are mostly invisible as
-# `mkDerivation` knows how to pull out the right ones for `buildDepends` and
-# friends, but a few packages use them directly, so it seemed efficient (to
-# @Ericson2314) to reuse those names, at least initially, to minimize breakage.
 #
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
@@ -42,18 +35,20 @@ let
         valueBuildBuild = pkgsBuildBuild.${name} or {};
         valueBuildHost = pkgsBuildHost.${name} or {};
         valueBuildTarget = pkgsBuildTarget.${name} or {};
-        valueHostHost = throw "`valueHostHost` unimplemented: pass manually rather than relying on splice.";
+        valueHostHost = pkgsHostHost.${name} or {};
         valueHostTarget = pkgsHostTarget.${name} or {};
         valueTargetTarget = pkgsTargetTarget.${name} or {};
         augmentedValue = defaultValue
-          # TODO(@Ericson2314): Stop using old names after transition period
-          // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = valueBuildHost; })
-          // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = valueHostTarget; })
+          # TODO(@Artturin): remove before release 23.05 and only have __spliced.
+          // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = lib.warn "use ${name}.__spliced.buildHost instead of ${name}.nativeDrv" valueBuildHost; })
+          // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = lib.warn "use ${name}.__spliced.hostTarget instead of ${name}.crossDrv" valueHostTarget; })
           // {
             __spliced =
                  (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })
+              // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { buildHost = valueBuildHost; })
               // (lib.optionalAttrs (pkgsBuildTarget ? ${name}) { buildTarget = valueBuildTarget; })
-              // { hostHost = valueHostHost; }
+              // (lib.optionalAttrs (pkgsHostHost ? ${name}) { hostHost = valueHostHost; })
+              // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { hostTarget = valueHostTarget; })
               // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) { targetTarget = valueTargetTarget;
           });
         };
@@ -81,7 +76,7 @@ let
           pkgsBuildBuild = valueBuildBuild;
           pkgsBuildHost = valueBuildHost;
           pkgsBuildTarget = valueBuildTarget;
-          pkgsHostHost = {};
+          pkgsHostHost = valueHostHost;
           pkgsHostTarget = valueHostTarget;
           pkgsTargetTarget = valueTargetTarget;
         # Don't be fancy about non-derivations. But we could have used used

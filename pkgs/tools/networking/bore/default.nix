@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1xlbfzmy0wjyz3jpr17r4ma4i79d9b32yqwwi10vrcjzr7vsyhmx";
-  cargoBuildFlags = "-p ${pname}";
+  cargoBuildFlags = [ "-p" pname ];
 
   # FIXME can’t test --all-targets and --doc in a single invocation
   cargoTestFlags = [ "--all-targets" "--workspace" ];

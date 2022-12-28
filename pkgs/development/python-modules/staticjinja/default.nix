@@ -9,14 +9,15 @@
 , pytest-check
 , pythonOlder
 , markdown
-, testVersion
+, testers
 , tomlkit
 , staticjinja
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "4.1.1";
+  version = "4.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Bpgff3VaTylnYpkWoaWEiRWu4sYSP6dLbHDOjAhj7BM=";
+    sha256 = "sha256-w6ge5MQXNRHCM43jKnagTlbquJJys7mprgBOS2uuwHQ=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +52,9 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  passthru.tests.version = testVersion {
-    package = staticjinja;
+  passthru.tests = {
+    version = testers.testVersion { package = staticjinja; };
+    minimal-template = callPackage ./test-minimal-template {};
   };
 
   meta = with lib; {

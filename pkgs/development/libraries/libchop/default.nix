@@ -4,10 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libchop-0.5.2";
+  pname = "libchop";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "mirror://savannah/libchop/${name}.tar.gz";
+    url = "mirror://savannah/libchop/libchop-${version}.tar.gz";
     sha256 = "0fpdyxww41ba52d98blvnf543xvirq1v9xz1i3x1gm9lzlzpmc2g";
   };
 

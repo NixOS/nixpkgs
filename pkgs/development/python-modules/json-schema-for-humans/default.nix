@@ -2,7 +2,6 @@
 , beautifulsoup4
 , buildPythonPackage
 , click
-, dataclasses
 , dataclasses-json
 , fetchFromGitHub
 , htmlmin
@@ -19,17 +18,22 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "0.39.1";
+  version = "0.44";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JoD4XEfIUsAbITWa0LMYgNP6WzrblI4HUIgLpx5gn18=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LsZPf5PVXPSyHNgfBdjH4hG4OFIdSprO5uj3saPDqzo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pytz = "^2021.1"' 'pytz = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -45,8 +49,6 @@ buildPythonPackage rec {
     pytz
     pyyaml
     requests
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [
@@ -68,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
+    changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ astro ];
   };

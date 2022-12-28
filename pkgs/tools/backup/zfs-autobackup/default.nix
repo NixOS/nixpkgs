@@ -28,6 +28,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/psy0rz/zfs_autobackup";
     description = "ZFS backup, replicationand snapshot tool";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mschneider ];
+    maintainers = with maintainers; [ ];
   };
 }

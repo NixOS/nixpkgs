@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -12,7 +12,7 @@
   libffi ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
@@ -57,7 +57,7 @@
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -96,6 +96,9 @@ let
   # build the haddock program (removing the `enableHaddockProgram` option).
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
+
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
@@ -152,7 +155,7 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -161,6 +164,14 @@ let
   ];
 
 in
+
+# C compiler, bintools and LLVM are used at build time, but will also leak into
+# the resulting GHC's settings file and used at runtime. This means that we are
+# currently only able to build GHC if hostPlatform == buildPlatform.
+assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
+assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+
 stdenv.mkDerivation (rec {
   version = "8.10.7";
   pname = "${targetPrefix}ghc${variantSuffix}";
@@ -183,6 +194,14 @@ stdenv.mkDerivation (rec {
     # when adding new GHC releases in nixpkgs.
     ./respect-ar-path.patch
 
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
+
     # cabal passes incorrect --host= when cross-compiling
     # https://github.com/haskell/cabal/issues/5887
     (fetchpatch {
@@ -204,6 +223,15 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
       sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
     })
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./cabal-paths.patch
   ];
 
   postPatch = "patchShebangs .";
@@ -217,7 +245,7 @@ stdenv.mkDerivation (rec {
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
@@ -230,15 +258,12 @@ stdenv.mkDerivation (rec {
     export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
     export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
   '' + lib.optionalString useLLVM ''
-    export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
-    export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
-  '' + lib.optionalString (targetCC.isClang || (useLLVM && stdenv.targetPlatform.isDarwin)) (let
-    # LLVM backend on Darwin needs clang, if we are already using clang, might as well set the environment variable.
-    # See also https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-    clang = if targetCC.isClang then targetCC else llvmPackages.clang;
-  in ''
-    export CLANG="${clang}/bin/${clang.targetPrefix}clang"
-  '') + ''
+    export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
+    export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+  '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
+    # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
+    export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+  '' + ''
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -351,6 +376,10 @@ stdenv.mkDerivation (rec {
 
     inherit llvmPackages;
     inherit enableShared;
+
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";

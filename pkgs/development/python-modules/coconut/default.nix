@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , cpyparsing
 , ipykernel
@@ -12,15 +12,15 @@
 , watchdog
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "coconut";
-  version = "1.6.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
     rev = "v${version}";
-    sha256 = "/397YGV6QWWmKfqr5hSvqRoPOu7Hx1Pak6rVPR3etzw=";
+    sha256 = "sha256-TkMwOE/Jug1zKjR1048o/Jmn8o9/oQPNqzwXYakwpgs=";
   };
 
   propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   # Currently most tests have performance issues
   pytestFlagsArray = [
-    "tests/constants_test.py"
+    "coconut/tests/constants_test.py"
   ];
 
   pythonImportsCheck = [ "coconut" ];

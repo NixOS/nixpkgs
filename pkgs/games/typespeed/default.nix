@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./typespeed-config-in-home.patch ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: typespeed-typespeed.o:/build/typespeed-0.6.5/src/typespeed.h:69: multiple definition of
+  #     `opt'; typespeed-file.o:/build/typespeed-0.6.5/src/typespeed.h:69: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configureFlags = [ "--datadir=\${out}/share/" ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

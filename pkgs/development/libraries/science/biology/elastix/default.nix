@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, itk, python3, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, itk_5_2, python3, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname    = "elastix";
@@ -20,13 +20,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ itk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ itk_5_2 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   doCheck = !stdenv.isDarwin;  # usual dynamic linker issues
-
-  preCheck = "
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  ";
 
   meta = with lib; {
     homepage = "https://elastix.lumc.nl";

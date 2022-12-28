@@ -1,18 +1,22 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
+
 # propagatedBuildInputs
-, Babel
+, babel
 , alabaster
 , docutils
 , imagesize
+, importlib-metadata
 , jinja2
 , packaging
 , pygments
 , requests
-, setuptools
 , snowballstemmer
+, sphinxcontrib-apidoc
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -20,7 +24,9 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
+
 # check phase
+, cython
 , html5lib
 , pytestCheckHook
 , typed-ast
@@ -28,18 +34,34 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.2.0";
-  disabled = pythonOlder "3.5";
+  version = "5.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1i38n5bxqiycjwmiv9dl72r3f5ks4zmif30znqg8zilclbx6g16x";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dTgQNMRIn7ETm+1HgviOkWWOCmLX7Ez6DM9ChlI32mY=";
+    postFetch = ''
+      cd $out
+      mv tests/roots/test-images/testimäge.png \
+        tests/roots/test-images/testimæge.png
+      patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
+    '';
   };
 
+  postPatch = ''
+    # remove impurity caused by date inclusion
+    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
+    substituteInPlace setup.cfg \
+      --replace "tag_build = .dev" "" \
+      --replace "tag_date = true" ""
+  '';
+
   propagatedBuildInputs = [
-    Babel
+    babel
     alabaster
     docutils
     imagesize
@@ -47,7 +69,6 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    setuptools
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -57,14 +78,24 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+
+    # extra plugins which are otherwise not found by sphinx-build
+    sphinxcontrib-apidoc
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   checkInputs = [
+    cython
     html5lib
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [
     typed-ast
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # requires network access
@@ -76,6 +107,29 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
+    "test_inspect_main_url"
+    "test_auth_header_uses_first_match"
+    "test_linkcheck_allowed_redirects"
+    "test_linkcheck_request_headers"
+    "test_linkcheck_request_headers_no_slash"
+    "test_follows_redirects_on_HEAD"
+    "test_get_after_head_raises_connection_error"
+    "test_invalid_ssl"
+    "test_connect_to_selfsigned_with_tls_verify_false"
+    "test_connect_to_selfsigned_with_tls_cacerts"
+    "test_connect_to_selfsigned_with_requests_env_var"
+    "test_connect_to_selfsigned_nonexistent_cert_file"
+    "test_TooManyRedirects_on_HEAD"
+    "test_too_many_requests_retry_after_int_del"
+    "test_too_many_requests_retry_after_HTTP_date"
+    "test_too_many_requests_retry_after_without_header"
+    "test_too_many_requests_user_timeout"
+    "test_raises_for_invalid_status"
+    "test_auth_header_no_match"
+    "test_follows_redirects_on_GET"
+    "test_connect_to_selfsigned_fails"
   ];
 
   meta = with lib; {
@@ -86,6 +140,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.sphinx-doc.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.sphinx.members;
   };
 }

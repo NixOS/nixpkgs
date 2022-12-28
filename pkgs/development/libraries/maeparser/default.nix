@@ -8,21 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "maeparser";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "maeparser";
     rev = "v${version}";
-    sha256 = "1qzp8d58ksy88y4fx1b0x65wycslm7zxzbb8ns28gkjh12xpzhwz";
+    sha256 = "sha256-9KxCR/spIZzePjmZe8qihIi1hEhPvxg/9dAlYmHxZPs=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost zlib ];
 
   meta = with lib; {
-    description = "maestro file parser";
+    homepage = "https://github.com/schrodinger/maeparser";
+    description = "Maestro file parser";
     maintainers = [ maintainers.rmcgibbo ];
     license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

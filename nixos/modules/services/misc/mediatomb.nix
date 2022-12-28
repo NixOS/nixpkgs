@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -6,6 +6,7 @@ let
 
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
+  opt = options.services.mediatomb;
   name = cfg.package.pname;
   pkg = cfg.package;
   optionYesNo = option: if option then "yes" else "no";
@@ -14,19 +15,19 @@ let
     options = {
       path = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Absolute directory path to the media directory to index.
         '';
       };
       recursive = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether the indexation must take place recursively or not.";
+        description = lib.mdDoc "Whether the indexation must take place recursively or not.";
       };
       hidden-files = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to index the hidden files or not.";
+        description = lib.mdDoc "Whether to index the hidden files or not.";
       };
     };
   };
@@ -201,7 +202,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Gerbera/Mediatomb DLNA server.
         '';
       };
@@ -209,17 +210,16 @@ in {
       serverName = mkOption {
         type = types.str;
         default = "Gerbera (Mediatomb)";
-        description = ''
+        description = lib.mdDoc ''
           How to identify the server on the network.
         '';
       };
 
       package = mkOption {
         type = types.package;
-        example = literalExpression "pkgs.mediatomb";
         default = pkgs.gerbera;
         defaultText = literalExpression "pkgs.gerbera";
-        description = ''
+        description = lib.mdDoc ''
           Underlying package to be used with the module.
         '';
       };
@@ -227,7 +227,7 @@ in {
       ps3Support = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable ps3 specific tweaks.
           WARNING: incompatible with DSM 320 support.
         '';
@@ -236,7 +236,7 @@ in {
       dsmSupport = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable D-Link DSM 320 specific tweaks.
           WARNING: incompatible with ps3 support.
         '';
@@ -245,7 +245,7 @@ in {
       tg100Support = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Telegent TG100 specific tweaks.
         '';
       };
@@ -253,7 +253,7 @@ in {
       transcoding = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable transcoding.
         '';
       };
@@ -261,7 +261,8 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/${name}";
-        description = ''
+        defaultText = literalExpression ''"/var/lib/''${config.${opt.package}.pname}"'';
+        description = lib.mdDoc ''
           The directory where Gerbera/Mediatomb stores its state, data, etc.
         '';
       };
@@ -269,7 +270,7 @@ in {
       pcDirectoryHide = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to list the top-level directory or not (from upnp client standpoint).
         '';
       };
@@ -277,19 +278,19 @@ in {
       user = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "User account under which ${name} runs.";
+        description = lib.mdDoc "User account under which the service runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "Group account under which ${name} runs.";
+        description = lib.mdDoc "Group account under which the service runs.";
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 49152;
-        description = ''
+        description = lib.mdDoc ''
           The network port to listen on.
         '';
       };
@@ -297,7 +298,7 @@ in {
       interface = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           A specific interface to bind to.
         '';
       };
@@ -305,12 +306,12 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If false (the default), this is up to the user to declare the firewall rules.
           If true, this opens port 1900 (tcp and udp) and the port specified by
-          <option>sercvices.mediatomb.port</option>.
+          {option}`sercvices.mediatomb.port`.
 
-          If the option <option>services.mediatomb.interface</option> is set,
+          If the option {option}`services.mediatomb.interface` is set,
           the firewall rules opened are dedicated to that interface. Otherwise,
           those rules are opened globally.
         '';
@@ -319,7 +320,7 @@ in {
       uuid = mkOption {
         type = types.str;
         default = "fdfc8a4e-a3ad-4c1d-b43d-a2eedb03a687";
-        description = ''
+        description = lib.mdDoc ''
           A unique (on your network) to identify the server by.
         '';
       };
@@ -327,7 +328,7 @@ in {
       mediaDirectories = mkOption {
         type = with types; listOf (submodule mediaDirectory);
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Declare media directories to index.
         '';
         example = [
@@ -339,12 +340,12 @@ in {
       customCfg = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Allow ${name} to create and use its own config file inside the <literal>dataDir</literal> as
-          configured by <option>services.mediatomb.dataDir</option>.
+        description = lib.mdDoc ''
+          Allow the service to create and use its own config file inside the `dataDir` as
+          configured by {option}`services.mediatomb.dataDir`.
           Deactivated by default, the service then runs with the configuration generated from this module.
           Otherwise, when enabled, no service configuration is generated. Gerbera/Mediatomb then starts using
-          config.xml within the configured <literal>dataDir</literal>. It's up to the user to make a correct
+          config.xml within the configured `dataDir`. It's up to the user to make a correct
           configuration file.
         '';
       };
@@ -361,10 +362,13 @@ in {
     in mkIf cfg.enable {
     systemd.services.mediatomb = {
       description = "${cfg.serverName} media Server";
-      after = [ "network.target" ];
+      # Gerbera might fail if the network interface is not available on startup
+      # https://github.com/gerbera/gerbera/issues/1324
+      after = [ "network.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
     };
 
     users.groups = optionalAttrs (cfg.group == "mediatomb") {

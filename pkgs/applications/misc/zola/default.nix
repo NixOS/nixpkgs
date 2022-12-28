@@ -9,20 +9,22 @@
 , CoreServices
 , installShellFiles
 , libsass
+, zola
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.14.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "getzola";
-    repo = pname;
+    repo = "zola";
     rev = "v${version}";
-    sha256 = "1cvvxiginwf1rldijzwk9gh63qc0ls5d7j3j8ri7yhk21pz9f6bi";
+    sha256 = "sha256-VkR7fM2WeI1itGq5kl54CVLnNW+NxIodkVKeGv8HoaU=";
   };
 
-  cargoSha256 = "1hg8j9a8c6c3ap24jd96y07rlp4f0s2mkyx5034nlnkm3lj4q42n";
+  cargoSha256 = "sha256-74QVFjDlT3ewx4sCK4/r5In0muqboBFEpMFBv2L5YaM=";
 
   nativeBuildInputs = [
     cmake
@@ -46,13 +48,13 @@ rustPlatform.buildRustPackage rec {
       --bash completions/zola.bash
   '';
 
+  passthru.tests.version = testers.testVersion { package = zola; };
+
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
-    # set because of unstable-* version
-    mainProgram = "zola";
   };
 }

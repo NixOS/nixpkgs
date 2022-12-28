@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi;
@@ -17,16 +17,16 @@ in
     services.unifi.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to enable the unifi controller service.
       '';
     };
 
     services.unifi.jrePackage = mkOption {
       type = types.package;
-      default = pkgs.jre8;
-      defaultText = literalExpression "pkgs.jre8";
-      description = ''
+      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
+      defaultText = literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
+      description = lib.mdDoc ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
     };
@@ -35,7 +35,7 @@ in
       type = types.package;
       default = pkgs.unifiLTS;
       defaultText = literalExpression "pkgs.unifiLTS";
-      description = ''
+      description = lib.mdDoc ''
         The unifi package to use.
       '';
     };
@@ -44,15 +44,15 @@ in
       type = types.package;
       default = pkgs.mongodb;
       defaultText = literalExpression "pkgs.mongodb";
-      description = ''
+      description = lib.mdDoc ''
         The mongodb package to use.
       '';
     };
 
-    services.unifi.openPorts = mkOption {
+    services.unifi.openFirewall = mkOption {
       type = types.bool;
-      default = true;
-      description = ''
+      default = false;
+      description = lib.mdDoc ''
         Whether or not to open the minimum required ports on the firewall.
 
         This is necessary to allow firmware upgrades and device discovery to
@@ -65,7 +65,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 1024;
-      description = ''
+      description = lib.mdDoc ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -75,8 +75,8 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 4096;
-      description = ''
-        Set the maximimum heap size for the JVM in MB. If this option isn't set, the
+      description = lib.mdDoc ''
+        Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
     };
@@ -93,7 +93,7 @@ in
     };
     users.groups.unifi = {};
 
-    networking.firewall = mkIf cfg.openPorts {
+    networking.firewall = mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
@@ -191,6 +191,7 @@ in
   };
   imports = [
     (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
+    (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 
   meta.maintainers = with lib.maintainers; [ erictapen pennae ];

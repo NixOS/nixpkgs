@@ -7,7 +7,7 @@
 
 let
   self = mkDerivation {
-    name = "krunner";
+    pname = "krunner";
     nativeBuildInputs = [ extra-cmake-modules ];
     buildInputs = [
       kconfig kcoreaddons ki18n kio kservice qtdeclarative solid

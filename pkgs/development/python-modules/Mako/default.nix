@@ -1,23 +1,49 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , isPyPy
+
+# propagates
 , markupsafe
+
+# extras: Babel
+, babel
+
+# tests
 , mock
 , pytestCheckHook
+, lingua
+, chameleon
 }:
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.1.5";
+  version = "1.2.2";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "169fa52af22a91900d852e937400e79f535496191c63712e3b9fda5a9bed6fc3";
+    sha256 = "sha256-NySGmzY7pjCicqX4n2jAcDUhN7j9F1dlABe34G/aFj8=";
   };
 
-  propagatedBuildInputs = [ markupsafe ];
-  checkInputs = [ pytestCheckHook markupsafe mock ];
+  propagatedBuildInputs = [
+    markupsafe
+  ];
+
+  passthru.optional-dependencies = {
+    babel = [
+      babel
+    ];
+  };
+
+  checkInputs = [
+    chameleon
+    lingua
+    mock
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.babel;
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315

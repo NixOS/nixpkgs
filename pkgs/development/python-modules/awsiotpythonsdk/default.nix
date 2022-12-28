@@ -1,22 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "AWSIoTPythonSDK";
-  version = "1.4.9";
+  version = "1.5.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python";
-    rev = "v${version}";
-    sha256 = "0mbppz1lnia4br5vjz1l4z4vw47y3bzcfpckzhs9lxhj4vq6d001";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GHMnDRxXkaKDTaawwPtMqa7EZJ8Y35+ScgtfEP9PJGs=";
   };
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
-  pythonImportsCheck = [ "AWSIoTPythonSDK" ];
+
+  pythonImportsCheck = [
+    "AWSIoTPythonSDK"
+  ];
 
   meta = with lib; {
     description = "Python SDK for connecting to AWS IoT";

@@ -1,12 +1,14 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, liberasurecode, six }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, liberasurecode, six }:
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.6.0";
+  version = "unstable-2022-03-11";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-gBHjHuia5/uZymkWZgyH4BCEZqmWK9SXowAQIJdOO7E=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "pyeclib";
+    rev = "b50040969a03f7566ffcb468336e875d21486113";
+    sha256 = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
   };
 
   postPatch = ''

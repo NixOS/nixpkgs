@@ -9,43 +9,45 @@
 , gnused
 , jq
 , mpv
-, ncurses
 , ueberzug
-, youtube-dl
+, yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "1.2.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-3wbjCtRmnd9tm8kqKaIF6VmMdKsWznhOvQkEsrAJpAE=";
+    hash = "sha256-01F3JSpA/SjAZWmXPftT/EvGlLVM3U/zLyABREgePi8=";
   };
-
-  patches = [
-    # Updates have to be installed through Nix.
-    ./no-update.patch
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}/bin" ];
-
   dontBuild = true;
 
+  installFlags = [
+    "PREFIX="
+    "DESTDIR=${placeholder "out"}"
+    "doc"
+    "addons"
+  ];
+
   postInstall = ''
-    wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      coreutils curl dmenu fzf gnused jq mpv ncurses ueberzug youtube-dl
-    ]}
+    wrapProgram "$out/bin/ytfzf" \
+      --prefix PATH : ${lib.makeBinPath [
+        coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+      ]} \
+      --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
   meta = with lib; {
     description = "A posix script to find and watch youtube videos from the terminal";
     homepage = "https://github.com/pystardust/ytfzf";
     license = licenses.gpl3Only;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];
   };
 }

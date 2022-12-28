@@ -1,6 +1,6 @@
 { fetchurl
 , fetchpatch
-, gcc9Stdenv
+, stdenv
 , installShellFiles
 , lib
 , libftdi1
@@ -11,7 +11,7 @@
 , jlinkSupport ? false
 }:
 
-gcc9Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "flashrom";
   version = "1.2";
 
@@ -31,6 +31,11 @@ gcc9Stdenv.mkDerivation rec {
       url = "https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d.patch";
       sha256 = "sha256-fXYDXgT/ik+qtxxFEyJ7/axtycbwLkEg0UD+hzsYEwg=";
     })
+    # fix build with gcc 10
+    (fetchpatch {
+      url = "https://github.com/flashrom/flashrom/commit/3a0c1966e4c66f91e6e8551e906b6db38002acb4.patch";
+      sha256 = "sha256-UfXLefMS20VUc7hk4IXECFbDWEbBnHMGSzOYemTfvjI=";
+    })
   ];
 
   postPatch = ''
@@ -49,8 +54,8 @@ gcc9Stdenv.mkDerivation rec {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
+    maintainers = with maintainers; [ fpletz felixsinger ];
     platforms = platforms.all;
-    broken = gcc9Stdenv.isDarwin; # requires DirectHW
+    broken = stdenv.isDarwin; # requires DirectHW
   };
 }

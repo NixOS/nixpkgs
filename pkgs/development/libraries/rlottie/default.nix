@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "rlottie";
@@ -11,6 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "10bxr1zf9wxl55d4cw2j02r6sgqln7mbxplhhfvhw0z92fi40kr3";
   };
 
+  patches = [
+    # Fixed build with GCC 11
+    (fetchpatch {
+       url = "https://github.com/Samsung/rlottie/commit/2d7b1fa2b005bba3d4b45e8ebfa632060e8a157a.patch";
+       hash = "sha256-2JPsj0WiBMMu0N3NUYDrHumvPN2YS8nPq5Zwagx6UWE=";
+    })
+  ];
+
   nativeBuildInputs = [ meson ninja pkg-config ];
 
   meta = with lib; {
@@ -19,5 +34,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit bsd3 mpl11 ftl ];
     platforms = platforms.all;
     maintainers = with maintainers; [ CRTified ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

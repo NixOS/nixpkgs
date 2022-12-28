@@ -1,33 +1,45 @@
 { lib
 , async_generator
 , buildPythonPackage
+, docutils
 , fetchFromGitHub
 , geographiclib
-, isPy3k
 , pytestCheckHook
+, pythonOlder
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "2.2.0";
-  disabled = !isPy3k; # only Python 3
+  version = "2.3.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-zFz0T/M/CABKkChuiKsFkWj2pphZuFeE5gz0HxZYaz8=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
   };
 
-  propagatedBuildInputs = [ geographiclib ];
+  propagatedBuildInputs = [
+    geographiclib
+  ];
 
   checkInputs = [
     async_generator
+    docutils
     pytestCheckHook
+    pytz
   ];
 
-  # Exclude tests which perform API calls
-  pytestFlagsArray = [ "--ignore test/geocoders/" ];
+  disabledTests = [
+    # ignore --skip-tests-requiring-internet flag
+    "test_user_agent_default"
+  ];
+
+  pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
+
   pythonImportsCheck = [ "geopy" ];
 
   __darwinAllowLocalNetworking = true;

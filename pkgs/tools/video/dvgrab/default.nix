@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       AVI type 2, Quicktime DV, a series of JPEG stills or MPEG2-TS.
     '';
 
-    homepage = "http://kinodv.org/";
+    homepage = "https://github.com/ddennedy/dvgrab"; # Formerly http://www.kinodv.org/
 
     license = licenses.gpl2Plus;
     platforms = platforms.gnu ++ platforms.linux;

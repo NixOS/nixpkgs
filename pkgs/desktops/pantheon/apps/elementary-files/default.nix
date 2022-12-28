@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
 , ninja
-, gettext
 , vala
 , python3
 , desktop-file-utils
@@ -20,10 +20,7 @@
 , elementary-dock
 , bamf
 , sqlite
-, libdbusmenu-gtk3
 , zeitgeist
-, glib-networking
-, elementary-icon-theme
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
@@ -32,29 +29,28 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.1.0";
-
-  repoName = "files";
+  version = "6.2.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "files";
     rev = version;
-    sha256 = "sha256-aGiFEeSvDV5rPD2Ll/BuDoWclEPhR1UuoCxUSS9CGmw=";
+    sha256 = "sha256-pJFeMG2aGaMkS00fSoRlMR2YSg5YzwqwaQT8G7Gk5S4=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Ensure special user directory icon used for bookmark
+    # https://github.com/elementary/files/pull/2106
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/00b1c2a975aeab378ed6eb1d90c8988f82596add.patch";
+      sha256 = "sha256-F/Vk7dg57uBBMO4WOJ/7kKbRNMZuWZ3QfrBfEIBozbw=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    gettext
-    glib-networking
     meson
     ninja
     pkg-config
@@ -66,13 +62,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    elementary-icon-theme
     glib
     granite
     gtk3
     libcanberra
     libcloudproviders
-    libdbusmenu-gtk3
     libgee
     libgit2-glib
     libhandy
@@ -87,6 +81,10 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "File browser designed for elementary OS";

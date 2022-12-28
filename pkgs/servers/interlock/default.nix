@@ -1,27 +1,28 @@
-{ sudo, coreutils, systemd, cryptsetup
-, mount, umount
-, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, coreutils
+, cryptsetup
+, mount
+, systemd
+, umount
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "interlock";
-  version = "2016.04.13";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/inversepath/interlock";
-
-  subPackages = [ "./cmd/interlock" ];
+  version = "2020.03.05";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "inversepath";
+    owner = "usbarmory";
     repo = "interlock";
-    sha256 = "06aqx3jy744yx29xyg8ips0dw16186hfqbxdv3hfrmwxmaxhl4lz";
+    rev = "v${version}";
+    sha256 = "sha256-YXa4vErt3YnomTKAXCv8yUVhcc0ST47n9waW5E8QZzY=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-OL6I95IpyTIc8wCwD9nWxVUTrmZH6COhsd/YwNTyvN0=";
 
-  nativeBuildInputs = [ sudo ];
-  tags = [ "textsecure" ];
+  ldflags = [ "-s" "-w" ];
+
   postPatch = ''
     grep -lr '/s\?bin/' | xargs sed -i \
       -e 's|/bin/mount|${mount}/bin/mount|' \
@@ -34,4 +35,19 @@ buildGoPackage rec {
       -e 's|/usr/bin/sudo|/run/wrappers/bin/sudo|' \
       -e 's|/sbin/cryptsetup|${cryptsetup}/bin/cryptsetup|'
   '';
+
+  postInstall = ''
+    mkdir -p $out/share
+    cp -R $src/static $out/share
+  '';
+
+  # Tests are broken due to an error during key generation.
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = "https://github.com/usbarmory/interlock";
+    description = "File encryption tool and an HSM frontend";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+  };
 }

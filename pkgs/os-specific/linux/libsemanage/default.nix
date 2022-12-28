@@ -6,12 +6,12 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libsemanage";
-  version = "2.9";
-  inherit (libsepol) se_release se_url;
+  version = "3.4";
+  inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "075w6y3l9hiy5hicgwrmijyxmhfyd1r7cnc08qxyg4j46jfk8xi5";
+    url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
+    sha256 = "sha256-k7QjohYAuOP7WbuSXUWD0SWPRb6/Y8Kb3jBN/T1S79Y=";
    };
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";

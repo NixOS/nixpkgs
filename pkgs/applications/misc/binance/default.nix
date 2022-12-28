@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "binance";
-  version = "1.26.0";
+  version = "1.39.0";
 
   src = fetchurl {
     url = "https://github.com/binance/desktop/releases/download/v${version}/${pname}-${version}-amd64-linux.deb";
-    sha256 = "sha256-UNqz/0IQ1nWANk83X7IVwvZTJayqNO5xPS6oECCgqHI=";
+    sha256 = "sha256-6VQerIzX2u8QGUsa8kvu6Qud3OEn9lrZkQddfkZ1X0g=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Binance Cryptoexchange Official Desktop Client";
     homepage = "https://www.binance.com/en/desktop-download";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];

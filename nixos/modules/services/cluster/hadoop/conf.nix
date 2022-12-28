@@ -1,6 +1,6 @@
 { cfg, pkgs, lib }:
 let
-  propertyXml = name: value: ''
+  propertyXml = name: value: lib.optionalString (value != null) ''
     <property>
       <name>${name}</name>
       <value>${builtins.toString value}</value>
@@ -29,16 +29,17 @@ let
     export HADOOP_LOG_DIR=/tmp/hadoop/$USER
   '';
 in
-pkgs.runCommand "hadoop-conf" {} ''
+pkgs.runCommand "hadoop-conf" {} (with cfg; ''
   mkdir -p $out/
-  cp ${siteXml "core-site.xml" cfg.coreSite}/* $out/
-  cp ${siteXml "hdfs-site.xml" cfg.hdfsSite}/* $out/
-  cp ${siteXml "mapred-site.xml" cfg.mapredSite}/* $out/
-  cp ${siteXml "yarn-site.xml" cfg.yarnSite}/* $out/
-  cp ${siteXml "httpfs-site.xml" cfg.httpfsSite}/* $out/
-  cp ${cfgFile "container-executor.cfg" cfg.containerExecutorCfg}/* $out/
+  cp ${siteXml "core-site.xml" (coreSite // coreSiteInternal)}/* $out/
+  cp ${siteXml "hdfs-site.xml" (hdfsSiteDefault // hdfsSite // hdfsSiteInternal)}/* $out/
+  cp ${siteXml "hbase-site.xml" (hbaseSiteDefault // hbaseSite // hbaseSiteInternal)}/* $out/
+  cp ${siteXml "mapred-site.xml" (mapredSiteDefault // mapredSite)}/* $out/
+  cp ${siteXml "yarn-site.xml" (yarnSiteDefault // yarnSite // yarnSiteInternal)}/* $out/
+  cp ${siteXml "httpfs-site.xml" httpfsSite}/* $out/
+  cp ${cfgFile "container-executor.cfg" containerExecutorCfg}/* $out/
   cp ${pkgs.writeTextDir "hadoop-user-functions.sh" userFunctions}/* $out/
   cp ${pkgs.writeTextDir "hadoop-env.sh" hadoopEnv}/* $out/
-  cp ${cfg.log4jProperties} $out/log4j.properties
-  ${lib.concatMapStringsSep "\n" (dir: "cp -r ${dir}/* $out/") cfg.extraConfDirs}
-''
+  cp ${log4jProperties} $out/log4j.properties
+  ${lib.concatMapStringsSep "\n" (dir: "cp -f -r ${dir}/* $out/") extraConfDirs}
+'')

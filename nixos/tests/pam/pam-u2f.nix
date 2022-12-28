@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ ... }:
 {
   name = "pam-u2f";
 
-  machine =
+  nodes.machine =
     { ... }:
     {
       security.pam.u2f = {
@@ -12,6 +12,7 @@ import ../make-test-python.nix ({ ... }:
         debug = true;
         enable = true;
         interactive = true;
+        origin = "nixos-test";
       };
     };
 
@@ -19,7 +20,7 @@ import ../make-test-python.nix ({ ... }:
     ''
       machine.wait_for_unit("multi-user.target")
       machine.succeed(
-          'egrep "auth required .*/lib/security/pam_u2f.so.*debug.*interactive.*cue" /etc/pam.d/ -R'
+          'egrep "auth required .*/lib/security/pam_u2f.so.*debug.*interactive.*cue.*origin=nixos-test" /etc/pam.d/ -R'
       )
     '';
 })

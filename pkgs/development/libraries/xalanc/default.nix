@@ -1,38 +1,21 @@
-{ lib, stdenv, fetchurl, xercesc, getopt }:
+{ lib, stdenv, fetchFromGitHub, xercesc, getopt, cmake }:
 
-let
-  platform = if stdenv.isLinux then "linux" else
-             if stdenv.isDarwin then "macosx" else
-             throw "Unsupported platform";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "xalan-c";
-  version = "1.11";
+  version = "1.12.0";
 
-  src = fetchurl {
-    url = "mirror://apache/xalan/xalan-c/sources/xalan_c-${version}-src.tar.gz";
-    sha256 = "0a3a2b15vpacnqgpp6fiy1pwyc8q6ywzvyb5445f6wixfdspypjg";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "xalan-c";
+    rev = "Xalan-C_1_12_0";
+    sha256 = "sha256:0q1204qk97i9h14vxxq7phcfpyiin0i1zzk74ixvg4wqy87b62s8";
   };
 
-  configurePhase = ''
-    export XALANCROOT=`pwd`/c
-    cd `pwd`/c
-    mkdir -p $out
-    ./runConfigure -p ${platform} -c cc -x c++ -P$out
-  '';
-
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ xercesc getopt ];
 
-  # Parallel build fails as:
-  #   c++ ... -c ... ExecutionContext.cpp
-  #   ProblemListenerBase.hpp:28:10: fatal error: LocalMsgIndex.hpp: No such file or directory
-  # The build failure happens due to missing intra-project dependencies
-  # against generated headers. Future 1.12 version dropped
-  # autotools-based build system. Let's disable parallel builds until
-  # next release.
-  enableParallelBuilding = false;
-
   meta = {
-    homepage = "http://xalan.apache.org/";
+    homepage = "https://xalan.apache.org/";
     description = "A XSLT processor for transforming XML documents";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

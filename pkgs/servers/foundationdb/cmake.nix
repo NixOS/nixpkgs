@@ -33,7 +33,7 @@ let
 
         buildInputs = [ libressl boost ];
         nativeBuildInputs = [ cmake ninja python3 openjdk mono ]
-          ++ lib.optional useClang [ llvmPackages.lld ];
+          ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
         dontFixCmake = true;
@@ -123,7 +123,7 @@ let
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
-          maintainers = with maintainers; [ thoughtpolice ];
+          maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };
 in makeFdb

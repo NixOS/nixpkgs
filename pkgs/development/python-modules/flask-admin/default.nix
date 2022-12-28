@@ -1,21 +1,23 @@
 { lib
 , arrow
+, azure-storage-blob
+, boto
 , buildPythonPackage
 , colour
-, email_validator
+, email-validator
 , enum34
 , fetchPypi
 , flask
-, flask_sqlalchemy
 , flask-babelex
 , flask-mongoengine
+, flask-sqlalchemy
 , geoalchemy2
-, isPy27
 , mongoengine
 , pillow
 , psycopg2
 , pymongo
 , pytestCheckHook
+, pythonOlder
 , shapely
 , sqlalchemy
 , sqlalchemy-citext
@@ -26,29 +28,38 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.5.8";
+  version = "1.6.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Flask-Admin";
     inherit version;
-    sha256 = "sha256-6wah8xuYiB3uU6VcZPrr0ZkNaqw4gmNksoDfCyZ5/3Q=";
+    hash = "sha256-Qk/8ebew3/8FFVVobqEuhuSN/6ysFL6qMZ+0UCrECYg=";
   };
 
   propagatedBuildInputs = [
     flask
     wtforms
-  ] ++ lib.optionals isPy27 [
-    enum34
   ];
+
+  passthru.optional-dependencies = {
+    aws = [
+      boto
+    ];
+    azure = [
+      azure-storage-blob
+    ];
+  };
 
   checkInputs = [
     arrow
     colour
-    email_validator
-    flask_sqlalchemy
+    email-validator
     flask-babelex
     flask-mongoengine
+    flask-sqlalchemy
     geoalchemy2
     mongoengine
     pillow
@@ -62,6 +73,18 @@ buildPythonPackage rec {
     wtf-peewee
   ];
 
+  disabledTests = [
+    # Incompatible with werkzeug 2.1
+    "test_mockview"
+    # Tests are outdated and don't work with peewee
+    "test_nested_flask_views"
+    "test_export_csv"
+    "test_list_row_actions"
+    "test_column_editable_list"
+    "test_column_filters"
+    "test_export_csv"
+  ];
+
   disabledTestPaths = [
     # Tests have additional requirements
     "flask_admin/tests/geoa/test_basic.py"
@@ -69,6 +92,7 @@ buildPythonPackage rec {
     "flask_admin/tests/pymongo/test_basic.py"
     "flask_admin/tests/sqla/test_basic.py"
     "flask_admin/tests/sqla/test_form_rules.py"
+    "flask_admin/tests/sqla/test_inlineform.py"
     "flask_admin/tests/sqla/test_postgres.py"
     "flask_admin/tests/sqla/test_translation.py"
   ];
@@ -78,7 +102,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Simple and extensible admin interface framework for Flask";
+    description = "Admin interface framework for Flask";
     homepage = "https://github.com/flask-admin/flask-admin/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

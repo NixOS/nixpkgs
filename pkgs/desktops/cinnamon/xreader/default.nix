@@ -8,7 +8,7 @@
 , gtk3
 , wrapGAppsHook
 , libxml2
-, xapps
+, xapp
 , meson
 , pkg-config
 , cairo
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "3.0.2";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "vyZhKsuASbkc6IBtfbhTIHOQ0XYNFaCVua+jS4B5LWk=";
+    sha256 = "sha256-cQ8ofBTOzHD1te2lXuCgJImgK3M1/lXmnh4yL4LfYx4=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,12 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dmathjax-directory=${nodePackages.mathjax}"
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ] ++ (map (x: "-D${x}=true") backends);
 
   buildInputs = [
     glib
     gtk3
-    xapps
+    xapp
     cairo
     libxml2
     libsecret
