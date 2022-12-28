@@ -230,6 +230,7 @@ in {
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glusterfs = handleTest ./glusterfs.nix {};
   gnome = handleTest ./gnome.nix {};
+  gnome-flashback = handleTest ./gnome-flashback.nix {};
   gnome-xorg = handleTest ./gnome-xorg.nix {};
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
