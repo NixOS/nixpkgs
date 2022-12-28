@@ -558,7 +558,7 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
-    # TODO: drop this in the future:
+    # TODO: deprecate this in the future:
     loaOf = elemType: types.attrsOf elemType // {
       name = "loaOf";
       deprecationMessage = "Mixing lists with attribute values is no longer"
