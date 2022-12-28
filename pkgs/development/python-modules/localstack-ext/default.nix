@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zMGKGTKomduydhOAxfif/Caf1QJiG2mxig4a+789SJc=";
+    hash = "sha256-zMGKGTKomduydhOAxfif/Caf1QJiG2mxig4a+789SJc=";
   };
 
   postPatch = ''
@@ -33,8 +33,7 @@ buildPythonPackage rec {
     cat setup.cfg
 
     substituteInPlace setup.cfg \
-      --replace "dill==0.3.2" "dill~=0.3.0" \
-      --replace "requests>=2.20.0,<2.26" "requests~=2.20"
+      --replace "dill==0.3.2" "dill~=0.3.0"
   '';
 
   propagatedBuildInputs = [
@@ -48,7 +47,9 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  pythonImportsCheck = [ "localstack_ext" ];
+  pythonImportsCheck = [
+    "localstack_ext"
+  ];
 
   # No tests in repo
   doCheck = false;
@@ -60,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extensions for LocalStack";
     homepage = "https://github.com/localstack/localstack";
+    changelog = "https://github.com/localstack/localstack/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jonringer ];
   };
