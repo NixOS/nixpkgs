@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Memorystore for Redis API client library";
     homepage = "https://github.com/googleapis/python-redis";
+    changelog = "https://github.com/googleapis/python-redis/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
