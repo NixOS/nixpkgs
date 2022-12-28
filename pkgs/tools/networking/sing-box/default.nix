@@ -1,6 +1,9 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
+, buildPackages
 }:
 
 buildGoModule rec {
@@ -32,6 +35,15 @@ buildGoModule rec {
   subPackages = [
     "cmd/sing-box"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
+    installShellCompletion --cmd sing-box \
+      --bash <(${emulator} $out/bin/sing-box completion bash) \
+      --fish <(${emulator} $out/bin/sing-box completion fish) \
+      --zsh  <(${emulator} $out/bin/sing-box completion zsh )
+  '';
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";
