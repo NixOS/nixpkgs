@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # require credentials
+    # Tests require credentials
     "test_report_error_event"
     "test_report_exception"
   ];
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
+    changelog = "https://github.com/googleapis/python-error-reporting/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
