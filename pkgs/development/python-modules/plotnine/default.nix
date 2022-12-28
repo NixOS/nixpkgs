@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DompMBXzxx1oRKx6qfsNoJuQj199+n3V1opcoysuvOo=";
+    hash = "sha256-DompMBXzxx1oRKx6qfsNoJuQj199+n3V1opcoysuvOo=";
   };
 
   postPatch = ''
@@ -69,7 +69,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Grammar of graphics for python";
-    homepage = "https://plotnine.readthedocs.io/en/stable";
+    homepage = "https://plotnine.readthedocs.io/";
+    changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };
