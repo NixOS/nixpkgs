@@ -633,6 +633,7 @@ broken-packages:
   - CC-delcont-ref-tf
   - cci
   - ccnx
+  - cdp
   - c-dsl
   - cedict
   - cef
@@ -1099,6 +1100,7 @@ broken-packages:
   - derive-lifted-instances
   - derive-monoid
   - derive-trie
+  - deriving-openapi3
   - derp-lib
   - describe
   - descriptive
