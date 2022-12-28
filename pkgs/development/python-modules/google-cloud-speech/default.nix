@@ -2,11 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 , setuptools
 }:
@@ -24,16 +24,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    libcst
     google-api-core
     proto-plus
+    protobuf
     setuptools
-  ];
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
