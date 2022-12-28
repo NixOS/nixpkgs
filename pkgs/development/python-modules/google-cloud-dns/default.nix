@@ -3,8 +3,8 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, pytestCheckHook
 , mock
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -17,12 +17,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RPpi7pPFHGxXIWBY2S0qkRa3E6SocanRajqDuZ4wwfk=";
+    hash = "sha256-RPpi7pPFHGxXIWBY2S0qkRa3E6SocanRajqDuZ4wwfk=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+  ];
 
-  checkInputs = [ mock pytestCheckHook ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   preCheck = ''
     # don#t shadow python imports
@@ -34,7 +40,9 @@ buildPythonPackage rec {
     "test_quota"
   ];
 
-  pythonImportsCheck = [ "google.cloud.dns" ];
+  pythonImportsCheck = [
+    "google.cloud.dns"
+  ];
 
   meta = with lib; {
     description = "Google Cloud DNS API client library";
