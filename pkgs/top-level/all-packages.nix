@@ -1421,6 +1421,8 @@ with pkgs;
 
   kanata-with-cmd = kanata.override { withCmd = true; };
 
+  kaufkauflist = callPackage ../applications/misc/kaufkauflist { };
+
   ksmbd-tools = callPackage ../os-specific/linux/ksmbd-tools { };
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
