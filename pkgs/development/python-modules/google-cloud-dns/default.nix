@@ -5,11 +5,15 @@
 , google-cloud-core
 , pytestCheckHook
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
   version = "0.34.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud DNS API client library";
     homepage = "https://github.com/googleapis/python-dns";
+    changelog = "https://github.com/googleapis/python-dns/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
