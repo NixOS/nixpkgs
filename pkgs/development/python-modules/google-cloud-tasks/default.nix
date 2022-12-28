@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Tasks API API client library";
     homepage = "https://github.com/googleapis/python-tasks";
+    changelog = "https://github.com/googleapis/python-tasks/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
