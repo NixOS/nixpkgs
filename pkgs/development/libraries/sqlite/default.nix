@@ -17,18 +17,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${optionalString interactive "-interactive"}";
-  version = "3.40.0";
+  version = "3.40.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "sha256-AzNVIHbScAx1NSJW6Rx4v1zWJJFYm6DGmu0KgYaJgOc=";
+    sha256 = "sha256-LF3qIH+lCNdlrx72ILY33LBlcq+m8B8IFb1bv4ZLM9k=";
   };
-
-  patches = [
-    ./3.39.4-autoconf-CVE-2022-46908.patch
-  ];
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
