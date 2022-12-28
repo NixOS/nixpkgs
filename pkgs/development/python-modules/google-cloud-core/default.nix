@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , google-api-core
+, google-auth
+, grpcio
 , mock
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -16,17 +18,24 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uVKe5wR/2NS/SiGC3mGRVCQN8X++YOrTmQeMGuFSr5o=";
+    hash = "sha256-uVKe5wR/2NS/SiGC3mGRVCQN8X++YOrTmQeMGuFSr5o=";
   };
 
   propagatedBuildInputs = [
+    google-auth
     google-api-core
   ];
+
+  passthru.optional-dependencies = {
+    grpc = [
+      grpcio
+    ];
+  };
 
   checkInputs = [
     mock
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.grpc;
 
   # prevent google directory from shadowing google imports
   preCheck = ''
