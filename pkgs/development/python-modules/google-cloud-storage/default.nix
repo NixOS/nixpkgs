@@ -1,34 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , google-auth
-, google-cloud-iam
 , google-cloud-core
+, google-cloud-iam
 , google-cloud-kms
 , google-cloud-testutils
 , google-resumable-media
 , mock
+, protobuf
+, pytestCheckHook
 , pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.5.0";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OC80uR3iIS48LntA7AedJ+4uPbuumbdbG82MYwY84jU=";
+    hash = "sha256-GsLVjS1pPLE0HrxIZZo1J753jZ4tiYlpeidGAlko/xc=";
   };
 
   propagatedBuildInputs = [
     google-auth
     google-cloud-core
     google-resumable-media
+    requests
   ];
+
+  passthru.optional-dependencies = {
+    protobuf = [
+      protobuf
+    ];
+  };
 
   checkInputs = [
     google-cloud-iam
