@@ -27,9 +27,11 @@ buildNpmPackage rec {
   # wiping out node_modules, which causes a mysterious error stating that tsc isn't installed.
   postPatch = ''
     sed -i '/"prepare"/d' package.json
+    sed -i '/"prepack"/d' package.json
   '';
 
   npmPackFlags = [ "--ignore-scripts" ];
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/ansible/ansible-language-server/releases/tag/v${version}";
