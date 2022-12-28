@@ -693,6 +693,10 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  orgmode = super.orgmode.overrideAttrs (old: {
+    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
+  });
+
   inherit parinfer-rust;
 
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
@@ -715,7 +719,10 @@ self: super: {
 
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [
+      plenary-nvim
+      (nvim-treesitter.withPlugins (p: [ p.http p.json ]))
+    ];
   });
 
   skim = buildVimPluginFrom2Nix {
