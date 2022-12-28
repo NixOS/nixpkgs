@@ -16,10 +16,12 @@
 , libpulseaudio
 , openal
 , udev
-, Cocoa
-, OpenAL
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Cocoa OpenAL;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
   version = "130.1";
