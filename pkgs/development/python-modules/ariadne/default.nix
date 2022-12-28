@@ -1,8 +1,8 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , freezegun
 , graphql-core
-, lib
 , opentracing
 , pytest-asyncio
 , pytest-mock
@@ -24,7 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-HiIg+80vaMzQdqF2JKzP7oZzfpqSTrumXmUHGLT/wF8=";
   };
 
-  propagatedBuildInputs = [ graphql-core starlette typing-extensions ];
+  propagatedBuildInputs = [
+    graphql-core
+    starlette
+    typing-extensions
+  ];
 
   checkInputs = [
     freezegun
@@ -39,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for implementing GraphQL servers using schema-first approach";
     homepage = "https://ariadnegraphql.org";
+    changelog = "https://github.com/mirumee/ariadne/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ samuela ];
   };
