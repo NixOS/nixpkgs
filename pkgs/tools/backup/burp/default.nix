@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "burp";
-  version = "2.2.18";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
     rev = version;
-    sha256 = "1zhq240kz881vs2s620qp0kifmgr582caalm85ls789w9rmdkhjl";
+    sha256 = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
 
   patches = [
