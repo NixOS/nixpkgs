@@ -93,7 +93,12 @@ in
         };
       });
 
-  system.stateVersion = "22.05";
+  system = {
+    # To prevent gratuitous rebuilds on each change to Nixpkgs
+    nixos.revision = null;
+
+    stateVersion = "22.05";
+  };
 
   users.users."${user}"= {
     isNormalUser = true;
