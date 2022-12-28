@@ -3471,6 +3471,8 @@ self: super: with self; {
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
+  fluids = callPackage ../development/python-modules/fluids { };
+
   flux-led = callPackage ../development/python-modules/flux-led { };
 
   flynt = callPackage ../development/python-modules/flynt { };
