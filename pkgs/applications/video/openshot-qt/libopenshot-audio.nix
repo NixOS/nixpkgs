@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , alsa-lib
 , cmake
 , doxygen
@@ -28,11 +29,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XtwTZsj/L/sw/28E7Qr5UyghGlBFFXvbmZLGXBB8vg0=";
   };
 
-  # https://github.com/OpenShot/libopenshot-audio/issues/112
-  postPatch = ''
-    substituteInPlace JuceLibraryCode/modules/juce_core/native/juce_osx_ObjCHelpers.h \
-      --replace "#if ! JUCE_IOS" "#if ! JUCE_IOS && ! JUCE_ARM"
-  '';
+  patches = [
+    # https://forum.juce.com/t/juce-and-macos-11-arm/40285/24
+    ./undef-fpret-on-aarch64-darwin.patch
+  ];
 
   nativeBuildInputs = [
     cmake
