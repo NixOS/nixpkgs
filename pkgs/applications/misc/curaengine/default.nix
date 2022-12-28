@@ -2,16 +2,19 @@
 , lib
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , runCommand
 , cmake
 
 # Dependencies
-, boost178
+, boost
 , clipper
 , libarcus
 , protobuf
+, range-v3
 , rapidjson
 , stb
+, spdlog
 }:
 let
   # curaengine maintained its own `Findstb.cmake` in the past,
@@ -20,55 +23,63 @@ let
   # We revive it here from the parent commit since it's unclear
   # how nixpkgs's cmake should find it otherwise.
   FindStbCmake = ./cmake/FindStb.cmake;
-  # FindStbCmake = fetchurl {
-  #   url = "https://raw.githubusercontent.com/Ultimaker/CuraEngine/ddbc941b28f1ec9442384185923e9e4f300461f2/cmake/Findstb.cmake";
-  #   sha256 = "176fhfp05khb7bl3zsk0msk18lx9fasxkd8vzlvxaxnfnw7g6r0k";
-  # };
-  FindStbCmakeDarknetROS = fetchurl {
-    url = "https://raw.githubusercontent.com/dustism/darknet_ros/20bdb7e83b42bf8f86595970cedc43928bf9028c/darknet_ros/cmake/Modules/FindStb.cmake";
-    sha256 = "0r6pfch73mrjzjj8063j59pkski6qaci100qv6lplf2iyyj78dd9";
-  };
 
-  FindClipperCmake = fetchurl {
-    url = "https://raw.githubusercontent.com/tamasmeszaros/libnest2d/11f1a8e8b7344008edc3fa0d4ff7b09253b153bb/cmake_modules/FindClipper.cmake";
-    sha256 = "12z1400a796j1i9brppvya1nd6bycxq5vkpcw43zpjgsisch004h";
-  };
   # Make a directory that contains all of the extra `.cmake` files,
   # so we can provide it with `-DCMAKE_MODULE_PATH`.
   # Note that CMake is case sensitive on non-Windows for these file names!
   ExtraFindCmakeDir = runCommand "curaengine-cmake-dir" {} ''
     mkdir -p $out
-    # ln -s ${FindStbCmakeDarknetROS} $out/Findstb.cmake
     ln -s ${FindStbCmake} $out/FindStb.cmake
-    ln -s ${FindClipperCmake} $out/FindClipper.cmake
   '';
 
   in
 stdenv.mkDerivation rec {
   pname = "curaengine";
-  version = "5.0.0";
+  version = "5.2.1";
 
-  # src = fetchFromGitHub {
-  #   owner = "Ultimaker";
-  #   repo = "CuraEngine";
-  #   # TODO: This upstream commit is slightly after the 5.0.0 release.
-  #   #       Switch back to `rev = version;` on the next release that has this fix:
-  #   #       https://github.com/Ultimaker/CuraEngine/commit/bb9ad578abc949c474db7a0677a355ad379ae585#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aL262
-  #   #       for https://github.com/Ultimaker/CuraEngine/issues/1650
-  #   rev = "41989f284a7350b9d70b0ae2d4e53b6a16adf9c9";
-  #   sha256 = "10kmv388mhgy4sl0jrb4x8ypm00176mxvzbf5b6z6639xzr98jnk";
-  # };
-  # src = lib.cleanSource /home/niklas/src/CuraEngine;
   src = fetchFromGitHub {
-    owner = "nh2";
+    owner = "Ultimaker";
     repo = "CuraEngine";
-    rev = "9be6b828b4a42866e5c407b1da4012dd6ad1c84c";
-    sha256 = "sha256-W26XY0o4xJ8zWoikIlHy0R9Q9lsu85DRrf8dLxkgGZ8=";
+    rev = version;
+    sha256 = "03267hm5vjd6fs2ggdn8rc92xrx0ilfkpvmdf2lf0f0w6p3s534w";
   };
+
+  patches = [
+    # Imported from Alpine:
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/curaengine/cmake-helpers.patch?id=0c8c8327f0fd55c277778637f444a22961af3fcf";
+      name = "curaengine-cmake-helpers.patch";
+      sha256 = "1zn4yipcl6jxzs0bjclss64wcyq71h8sgik2bbb94jl4pnammvmm";
+    })
+    # Imported from Alpine:
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/curaengine/cmake.patch?id=0c8c8327f0fd55c277778637f444a22961af3fcf";
+      name = "curaengine-cmake.patch";
+      sha256 = "1g1f54h9z50c9246nz1vfnz4wkds3j87xbv6rlmm4wbcbcg107ij";
+    })
+  ];
+
+  # The `cmake.patch` does
+  #     -find_package(stb REQUIRED)
+  # We insert it back here (as a new line after RapidJSON), but with capital `S`:
+  #     find_package(Stb REQUIRED)
+  # so that our `FindStb.cmake` from above (passed via `DCMAKE_MODULE_PATH`)
+  # will pick up the `find_package()` and find it.
+  #
+  # The `cmake.patch` also does
+  #     -        stb::stb
+  # so we insert it back here (again with uppercase `S`) after `Boost:boost`.
+  postPatch = ''
+    sed -i \
+      -e "s,find_package(RapidJSON REQUIRED),find_package(RapidJSON REQUIRED)\nfind_package(Stb REQUIRED)," \
+      -e "s,Boost::boost$,Boost::boost\nStb::Stb," \
+      CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
-    boost178 # Change to `boost` once nixpkgs default boost is >= 1.78
+    boost
+    range-v3
     rapidjson
     stb
   ];
@@ -76,24 +87,22 @@ stdenv.mkDerivation rec {
     clipper
     libarcus
     protobuf
+    spdlog # Apparently available in both compiled-library and header-only version; assuming the former for now (which as per its README speeds up compiles), so not putting it into `nativeBuildInputs`.
   ];
+
+  # The `cmake-helpers.patch` added above adds `FindClipper.cmake` which calls
+  # CMake's `FIND_PATH()` but only on *environment* variables (`$ENV{CLIPPER_PATH}`),
+  # not CMake variables, so we cannot set this one with `cmakeFlags = [ "-D..." ]`
+  # and instead set it here as an environment variable.
+  CLIPPER_PATH = lib.getLib clipper;
 
   cmakeFlags = [
     "-DCURA_ENGINE_VERSION=${version}"
-    # "-Darcus_DIR=${lib.getLib libarcus}/lib/cmake/Arcus"
-    # "-DCMAKE_PREFIX_PATH=${lib.getDev libarcus}/lib/cmake/Arcus"
-    # "--log-level=DEBUG"
-    # "-Dclipper_DIR=${lib.getLib clipper}"
-    # "-Dclipper_INCLUDE_DIR=${lib.getDev clipper}/include"
-    # "-Dclipper_LIBRARIES=${lib.getLib clipper}/lib"
 
-    #
+    # See comments on `ExtraFindCmakeDir` above.
     "-DCMAKE_MODULE_PATH=${ExtraFindCmakeDir}"
 
-    # "-DStb_DIR=${lib.getDev stb}/include/stb" # used by `FindStbCmakeDarknetROS` above
-    "-DPC_Stb_INCLUDEDIR=${lib.getDev stb}" # used by `FindStbCmake` above
-
-    "-DCMAKE_VERBOSE_MAKEFILE=1"
+    # "-DCMAKE_VERBOSE_MAKEFILE=1" # enable for easier debugging of build failures
   ];
 
   meta = with lib; {
