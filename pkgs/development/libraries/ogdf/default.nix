@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake doxygen ];
 
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-fPIC" ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-fPIC"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DOGDF_WARNING_ERRORS=OFF"
+  ];
 
   meta = with lib; {
     description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
