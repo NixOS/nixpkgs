@@ -805,6 +805,17 @@ rec {
     x ? outPath ||
     x ? __toString;
 
+  /* Check whether a value can be coerced to a string,
+     The value must be a string, path, or attribute set.
+
+     This follows Nix's internal coerceToString(coerceMore = false) logic,
+     except for external types, for which we return false.
+   */
+  isSimpleCoercibleToString = x:
+    elem (typeOf x) [ "path" "string" ] ||
+    x ? outPath ||
+    x ? __toString;
+
   /* Check whether a value is a store path.
 
      Example:
