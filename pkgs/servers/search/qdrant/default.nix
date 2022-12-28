@@ -37,7 +37,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/qdrant/qdrant";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    # never built on x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
