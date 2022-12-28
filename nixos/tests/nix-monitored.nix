@@ -26,5 +26,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         actual = machine.succeed("unbuffer nix --version")
         expected = "nix-output-monitor ${pkgs.nix-output-monitor.version}\nnix (Nix) ${pkgs.nix.version}"
         assert expected == actual.strip(), f"version string is {actual}, expected {expected}"
+
+        actual = machine.succeed("which -a nix")
+        expected = "/run/current-system/sw/bin/nix\n${pkgs.nix}/bin/nix"
+        assert expected == actual.strip(), f"nix paths are {actual}, expected {expected}"
     '';
   })
