@@ -283,7 +283,7 @@ end
 
 def merge_recursively a, b
   a.merge!(b) {|key, a_item, b_item|
-    if a_item.class == Hash and b_item.class == Hash
+    if a_item.is_a?(Hash) && b_item.is_a?(Hash)
       merge_recursively(a_item, b_item)
     else
       a[key] = b_item
