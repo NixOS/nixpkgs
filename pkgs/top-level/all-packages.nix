@@ -36718,6 +36718,8 @@ with pkgs;
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 
+  cups-pdf-to-pdf = callPackage ../misc/cups/drivers/cups-pdf-to-pdf {};
+
   cups-toshiba-estudio = callPackage ../misc/cups/drivers/estudio {};
 
   cups-zj-58 =  callPackage ../misc/cups/drivers/zj-58 { };
