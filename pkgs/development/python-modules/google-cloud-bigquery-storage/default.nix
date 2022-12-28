@@ -1,30 +1,45 @@
 { lib
 , buildPythonPackage
+, fastavro
 , fetchPypi
 , google-api-core
 , google-auth
 , google-cloud-bigquery
+, pandas
 , protobuf
+, pyarrow
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.17.0";
+  version = "2.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AsEcoAmOg+J/g8P5o51PzO9R5z0Nce9zQ/EiIYhmaFw=";
+    hash = "sha256-5qyk97b06tuH+FEJBhd1Y1GOFYfIt7FivPjhyede9BY=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    fastavro = [
+      fastavro
+    ];
+    pandas = [
+      pandas
+    ];
+    pyarrow = [
+      pyarrow
+    ];
+  };
 
   checkInputs = [
     google-auth
