@@ -2214,6 +2214,7 @@ self: super: {
 
   # Too strict upper bound on th-desugar, fixed in 3.1.1
   singletons-th = assert super.singletons-th.version == "3.1"; doJailbreak super.singletons-th;
+  singletons-base = doJailbreak super.singletons-base;
 
   # Ships a broken Setup.hs
   # https://github.com/lehins/conduit-aeson/issues/1

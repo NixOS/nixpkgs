@@ -4783,7 +4783,6 @@ broken-packages:
   - simplistic-generics
   - singlethongs
   - singleton-dict
-  - singletons-base
   - singleton-typelits
   - single-tuple
   - singnal
