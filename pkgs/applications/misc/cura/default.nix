@@ -29,6 +29,12 @@ mkDerivation rec {
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
     "-DCURA_VERSION=${version}"
+    # The upstream code checks for an exact python version and errors out
+    # if we don't have that and do not pass `Python_VERSION` explicitly.
+    "-DPython_VERSION=${python3.pythonVersion}"
+    # Set install location to not be the global Python install dir
+    # (which is read-only in the nix store); see:
+    "-DPython_SITELIB_LOCAL=${placeholder "out"}/${python3.sitePackages}"
   ];
 
   makeWrapperArgs = [
@@ -52,7 +58,11 @@ mkDerivation rec {
 
   postFixup = ''
     wrapPythonPrograms
-    wrapQtApp $out/bin/cura
+
+    # find $out/bin
+    # exit 1
+
+    wrapQtApp $out/bin/cura_app.py
   '';
 
   meta = with lib; {
