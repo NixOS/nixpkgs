@@ -5,6 +5,7 @@
 , mock
 , libcst
 , proto-plus
+, protobuf
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
@@ -26,7 +27,8 @@ buildPythonPackage rec {
     google-api-core
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     mock
@@ -35,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_list_clusters"
   ];
 
