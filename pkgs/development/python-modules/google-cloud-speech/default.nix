@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Speech API client library";
     homepage = "https://github.com/googleapis/python-speech";
+    changelog = "https://github.com/googleapis/python-speech/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
