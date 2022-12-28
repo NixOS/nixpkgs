@@ -22,7 +22,7 @@
       </listitem>
       <listitem>
         <para>
-          The default desktop environment now is KDE's Plasma 5. KDE 4
+          The default desktop environment now is KDE’s Plasma 5. KDE 4
           has been removed
         </para>
       </listitem>
@@ -560,7 +560,7 @@
           Parsoid service now uses YAML configuration format.
           <literal>service.parsoid.interwikis</literal> is now called
           <literal>service.parsoid.wikis</literal> and is a list of
-          either API URLs or attribute sets as specified in parsoid's
+          either API URLs or attribute sets as specified in parsoid’s
           documentation.
         </para>
       </listitem>
@@ -581,7 +581,7 @@
           <literal>service.nylon</literal> is now declared using named
           instances. As an example:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.nylon = {
     enable = true;
@@ -594,7 +594,7 @@
         <para>
           should be replaced with:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.nylon.myvpn = {
     enable = true;
@@ -615,7 +615,7 @@
           <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
           overlays</link>. For example, the following code:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 let
   pkgs = import &lt;nixpkgs&gt; {};
 in
@@ -624,7 +624,7 @@ in
         <para>
           should be replaced by:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 let
   pkgs = import &lt;nixpkgs&gt; {};
 in
@@ -647,7 +647,7 @@ in
       <listitem>
         <para>
           <literal>local_recipient_maps</literal> is not set to empty
-          value by Postfix service. It's an insecure default as stated
+          value by Postfix service. It’s an insecure default as stated
           by Postfix documentation. Those who want to retain this
           setting need to set it via
           <literal>services.postfix.extraConfig</literal>.
@@ -669,7 +669,7 @@ in
       <listitem>
         <para>
           The socket handling of the <literal>services.rmilter</literal>
-          module has been fixed and refactored. As rmilter doesn't
+          module has been fixed and refactored. As rmilter doesn’t
           support binding to more than one socket, the options
           <literal>bindUnixSockets</literal> and
           <literal>bindInetSockets</literal> have been replaced by
@@ -729,7 +729,7 @@ in
           improves visual consistency and makes Java follow system font
           style, improving the situation on HighDPI displays. This has a
           cost of increased closure size; for server and other headless
-          workloads it's recommended to use
+          workloads it’s recommended to use
           <literal>jre_headless</literal>.
         </para>
       </listitem>

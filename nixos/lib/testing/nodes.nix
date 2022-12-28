@@ -23,7 +23,7 @@ let
               nixpkgs.config.allowAliases = false;
             })
           testModuleArgs.config.extraBaseModules
-        ] ++ optional config.minimal ../../modules/testing/minimal-kernel.nix;
+        ];
     };
 
 
@@ -75,14 +75,6 @@ in
         An attribute set of arbitrary values that will be made available as module arguments during the resolution of module `imports`.
 
         Note that it is not possible to override these from within the NixOS configurations. If you argument is not relevant to `imports`, consider setting {option}`defaults._module.args.<name>` instead.
-      '';
-    };
-
-    minimal = mkOption {
-      type = types.bool;
-      default = false;
-      description = mdDoc ''
-        Enable to configure all [{option}`nodes`](#test-opt-nodes) to run with a minimal kernel.
       '';
     };
 

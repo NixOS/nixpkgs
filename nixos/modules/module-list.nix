@@ -201,6 +201,7 @@
   ./programs/nbd.nix
   ./programs/neovim.nix
   ./programs/nethoscope.nix
+  ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nm-applet.nix
   ./programs/nncp.nix
@@ -244,6 +245,7 @@
   ./programs/waybar.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
+  ./programs/xastir.nix
   ./programs/wshowkeys.nix
   ./programs/xfconf.nix
   ./programs/xfs_quota.nix
@@ -821,6 +823,8 @@
   ./services/networking/firefox-syncserver.nix
   ./services/networking/fireqos.nix
   ./services/networking/firewall.nix
+  ./services/networking/firewall-iptables.nix
+  ./services/networking/firewall-nftables.nix
   ./services/networking/flannel.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
@@ -890,6 +894,8 @@
   ./services/networking/namecoind.nix
   ./services/networking/nar-serve.nix
   ./services/networking/nat.nix
+  ./services/networking/nat-iptables.nix
+  ./services/networking/nat-nftables.nix
   ./services/networking/nats.nix
   ./services/networking/nbd.nix
   ./services/networking/ncdns.nix
@@ -1022,6 +1028,7 @@
   ./services/networking/znc/default.nix
   ./services/printing/cupsd.nix
   ./services/printing/ipp-usb.nix
+  ./services/printing/cups-pdf.nix
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
@@ -1096,6 +1103,7 @@
   ./services/video/rtsp-simple-server.nix
   ./services/video/unifi-video.nix
   ./services/wayland/cage.nix
+  ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix

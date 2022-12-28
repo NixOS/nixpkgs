@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "1.27.4";
+  version = "1.27.7";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-pF94rGVWhW0KIoSHijkqsoMkzrNd21ncGU+PKqffkZU=";
+    sha256 = "sha256-3IHKFO/P5TdD8ujFUuJj0xZsJDIUSmKjy7j6BefPK58=";
   };
 
   vendorSha256 = "sha256-RO9dZP236Kt8SSpZFF7KRksrjgwiEkPxE5DIMUK69Kw=";
@@ -34,9 +34,7 @@ buildGoModule rec {
       --zsh <($out/bin/supabase completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "supabase-cli";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A CLI for interacting with supabase";

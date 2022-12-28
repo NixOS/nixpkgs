@@ -60,9 +60,7 @@ buildGoModule rec {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       inherit version;
       package = usql;

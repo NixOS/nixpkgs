@@ -110,9 +110,7 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";

@@ -25,9 +25,25 @@
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://akkoma.social">Akkoma</link>, an
+          ActivityPub microblogging server. Available as
+          <link xlink:href="options.html#opt-services.akkoma.enable">services.akkoma</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/akinomyoga/ble.sh">blesh</link>,
           a line editor written in pure bash. Available as
           <link linkend="opt-programs.bash.blesh.enable">programs.bash.blesh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/alexivkin/CUPS-PDF-to-PDF">cups-pdf-to-pdf</link>,
+          a pdf-generating cups backend based on
+          <link xlink:href="https://www.cups-pdf.de/">cups-pdf</link>.
+          Available as
+          <link linkend="opt-services.printing.cups-pdf.enable">services.printing.cups-pdf</link>.
         </para>
       </listitem>
       <listitem>
@@ -344,6 +360,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nixos/lib/make-disk-image.nix</literal> can now
+          mutate EFI variables, run user-provided EFI firmware or
+          variable templates. This is now extensively documented in the
+          NixOS manual.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -386,6 +410,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>firewall</literal> and <literal>nat</literal>
+          module now has a nftables based implementation. Enable
+          <literal>networking.nftables</literal> to use it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.fwupd</literal> module now allows
           arbitrary daemon settings to be configured in a structured
           manner
@@ -411,6 +442,13 @@
           <literal>client</literal>. The strict RPF warning has been
           removed as the RPF will be loosened automatically based on the
           value of this setting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
+          can now access AX.25 interfaces via the
+          <literal>libax25</literal> package.
         </para>
       </listitem>
     </itemizedlist>

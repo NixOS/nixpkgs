@@ -169,6 +169,10 @@ let
       krb5
     ]) ++ additionalPkgs pkgs;
 
+    extraBwrapArgs = [
+      "--bind-try /etc/nixos/ /etc/nixos/"
+    ];
+
     # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''
       ln -s "${unwrapped}/share" "$out/"

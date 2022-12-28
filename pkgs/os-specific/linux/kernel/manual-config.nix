@@ -1,8 +1,11 @@
-{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+{ lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
 }:
 
 let
+  lib_ = lib;
+  stdenv_ = stdenv;
+
   readConfig = configfile: import (runCommand "config.nix" {} ''
     echo "{" > "$out"
     while IFS='=' read key val; do
@@ -12,18 +15,16 @@ let
     done < "${configfile}"
     echo "}" >> $out
   '').outPath;
-in {
-  lib,
-  # Allow overriding stdenv on each buildLinux call
-  stdenv,
+in lib.makeOverridable ({
   # The kernel version
   version,
   # Position of the Linux build expression
   pos ? null,
   # Additional kernel make flags
   extraMakeFlags ? [],
-  # The version of the kernel module directory
-  modDirVersion ? version,
+  # The name of the kernel module directory
+  # Needs to be X.Y.Z[-extra], so pad with zeros if needed.
+  modDirVersion ? lib.versions.pad 3 version,
   # The kernel source (tarball, git checkout, etc.)
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
@@ -36,7 +37,7 @@ in {
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
-  # Use defaultMeta // extraMeta
+  # Extra meta attributes
   extraMeta ? {},
 
   # for module compatibility
@@ -47,7 +48,7 @@ in {
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
   # ignored
-  features ? null,
+  features ? null, lib ? lib_, stdenv ? stdenv_,
 }:
 
 let
@@ -386,4 +387,4 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
-} // (optionalAttrs (pos != null) { inherit pos; }))
+} // (optionalAttrs (pos != null) { inherit pos; })))

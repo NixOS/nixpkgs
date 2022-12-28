@@ -673,6 +673,14 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  nvim-teal-maker = super.nvim-teal-maker.overrideAttrs (old: {
+    postPatch = ''
+      substituteInPlace lua/tealmaker/init.lua \
+        --replace cyan ${luaPackages.cyan}/bin/cyan
+    '';
+    vimCommandCheck = "TealBuild";
+  });
+
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old:
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
@@ -722,18 +730,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.1.2";
+      version = "1.2.8";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        sha256 = "sha256-WL0eXwiPhcndI74wtFox2tSnZn1siE86x2MLkfpxxT4=";
+        sha256 = "sha256-iPZ0DPAErkMJIn85t1FIiGhLcMZlL06iNKLqmRu7gXI=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-1WbgnsjoFdvko6VRKY+IjafMNqvJvyIZCDk8I9GV3GM=";
+        cargoSha256 = "sha256-HZEh6jtuRqsyjyDbDIV38x2N1unbSu24D8vrPZ17ktE=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -1040,6 +1048,10 @@ self: super: {
         rm $out/colors/darkBlue.vim
       '';
     });
+  });
+
+  vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs (old: {
+    dependencies = with self; [ vim-dadbod ];
   });
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {

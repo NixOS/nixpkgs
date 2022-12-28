@@ -36,7 +36,6 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    attrPath = pname;
     extraArgs = [ "--version=branch" ];
   };
 

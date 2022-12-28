@@ -1,0 +1,25 @@
+From ce73c82ebadeb2e358e1a8e244eef723ffa96c76 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Tue, 20 Sep 2022 18:42:31 +0800
+Subject: [PATCH 1/2] skip building doc
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 94df626014..418f6ff268 100644
+--- a/Makefile
++++ b/Makefile
+@@ -229,7 +229,7 @@ define stringreplace
+ endef
+ 
+ 
+-install: $(build_depsbindir)/stringreplace $(BUILDROOT)/doc/_build/html/en/index.html
++install: $(build_depsbindir)/stringreplace
+ ifeq ($(BUNDLE_DEBUG_LIBS),1)
+ 	@$(MAKE) $(QUIET_MAKE) all
+ else
+-- 
+2.38.1
+
