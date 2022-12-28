@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_inspect_content"
   ];
 
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Data Loss Prevention (DLP) API API client library";
     homepage = "https://github.com/googleapis/python-dlp";
+    changelog = "https://github.com/googleapis/python-dlp/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
