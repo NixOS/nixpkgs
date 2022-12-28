@@ -148,6 +148,16 @@ in {
       visible = false;
     };
 
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = lib.mdDoc ''
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
+      '';
+    };
+
     contents = mkOption {
       description = lib.mdDoc "Set of files that have to be linked into the initrd";
       example = literalExpression ''
@@ -352,6 +362,7 @@ in {
         "/etc/systemd/system.conf".text = ''
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
+          ${cfg.extraConfig}
         '';
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
