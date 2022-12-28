@@ -114,11 +114,7 @@ in
       Please inspect the trace of the following command to figure out which module
       has a dependency on stateVersion.
 
-        nix-instantiate --argstr system x86_64-darwin -A darwin.builder --show-trace
-
-      or
-
-        nix-instantiate --argstr system aarch64-darwin -A darwin.builder --show-trace
+        nix-instantiate --attr darwin.builder --show-trace
 
       If this error occurred while evaluating the static part of the option
       documentation, the problem may be fixed by adding defaultText to an option.
