@@ -1681,6 +1681,8 @@ self: super: with self; {
 
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
+  chemicals = callPackage ../development/python-modules/chemicals { };
+
   cheroot = callPackage ../development/python-modules/cheroot { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
