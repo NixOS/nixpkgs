@@ -346,7 +346,7 @@ in
       slidePath = mkOption {
         type = types.nullOr types.str;
         default = "${cfg.package}/public/views/slide.hbs";
-        defaultText = literalExpression "\"\$''{cfg.package}/public/views/slide.hbs\"";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/slide.hbs\"";
         description = lib.mdDoc ''
           Path to the slide template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
