@@ -32,6 +32,6 @@ buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ equirosa ];
   };
-  
+
   passthru.updateScript = gitUpdater { };
 }
