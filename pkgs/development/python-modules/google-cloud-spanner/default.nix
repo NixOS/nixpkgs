@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, google-api-core
 , google-cloud-core
 , google-cloud-testutils
 , grpc-google-iam-v1
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    google-api-core
     google-cloud-core
     grpc-google-iam-v1
     proto-plus
