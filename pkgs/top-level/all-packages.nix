@@ -2162,7 +2162,9 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/BSNES
 
-  ares = callPackage ../applications/emulators/bsnes/ares { };
+  ares = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/ares {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa OpenAL;
+  };
 
   bsnes-hd = callPackage ../applications/emulators/bsnes/bsnes-hd {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
