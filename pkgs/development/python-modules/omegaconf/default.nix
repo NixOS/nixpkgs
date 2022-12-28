@@ -1,5 +1,6 @@
 { lib
-, antlr4_9-python3-runtime
+, antlr4
+, antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
 , jre_minimal
@@ -8,6 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, substituteAll
 }:
 
 buildPythonPackage rec {
@@ -24,12 +26,27 @@ buildPythonPackage rec {
     hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./antlr4.patch;
+      antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
+    })
+  ];
+
+  postPatch = ''
+    # We substitute the path to the jar with the one from our antlr4
+    # package, so this file becomes unused
+    rm -v build_helpers/bin/antlr*-complete.jar
+
+    sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
+  '';
+
   nativeBuildInputs = [
     jre_minimal
   ];
 
   propagatedBuildInputs = [
-    antlr4_9-python3-runtime
+    antlr4-python3-runtime
     pyyaml
   ];
 
