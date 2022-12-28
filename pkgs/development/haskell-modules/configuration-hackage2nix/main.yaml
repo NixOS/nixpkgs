@@ -86,6 +86,8 @@ default-package-overrides:
   # hnix < 0.17 (unreleased) needs hnix-store-* 0.5.*
   - hnix-store-core == 0.5.0.0            # 2022-06-17: Until hnix 0.17
   - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
+  # reflex-dom-core 0.7.0.2 has no reflex 0.9 compatible release and most likely most people will want to use them together
+  - reflex < 0.9.0.0
 
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.

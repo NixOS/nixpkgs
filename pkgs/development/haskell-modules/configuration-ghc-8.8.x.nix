@@ -205,6 +205,9 @@ self: super: {
   # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
   megaparsec = doJailbreak super.megaparsec;
 
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
   apply-refact = self.apply-refact_0_9_3_0;
