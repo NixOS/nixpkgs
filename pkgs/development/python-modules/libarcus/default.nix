@@ -4,22 +4,28 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "5.0.0";
+  version = "5.2.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "0f871vx14hyjnqiqik36zmf7mi7dvzf08cqpryk8g1acj9mkh3ag";
+    sha256 = "1rcymbgk3fijmsa1vdicgrcp45igvrsh30rld989mmqd04chmr4x";
   };
 
   patches = [
-    # Fix build against protobuf 3.18+
-    # https://github.com/Ultimaker/libArcus/issues/121
+    # Imported from Alpine:
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/coryan/vcpkg/f69b85aa403b04e7d442c90db3418d484e44024f/ports/arcus/0001-fix-protobuf-deprecated.patch";
-      sha256 = "0bqj7pxzpwsamknd6gadj419x6mwx8wnlfzg4zqn6cax3cmasjb2";
+      url = "https://git.alpinelinux.org/aports/plain/community/libarcus/cmake-build.patch?id=ad078141cb02378fe42aedea4271f4beb2fd2f01";
+      name = "libarcus-cmake-build.patch";
+      sha256 = "0v0cxhaazq29psq9idcv16ngvp30j3h5xghx8vb9n79zl1a9b82n";
+    })
+    # Imported from Alpine:
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/libarcus/ArcusConfig.patch?id=2a3bb5dbbb9f049578f7d2ca55f22dc7db635bfd";
+      name = "libarcus-ArcusConfig.patch";
+      sha256 = "1yq4a3r6q3bq22adsmzh9048q6db9qrwp1cl51xp1x7j9b9cxgda";
     })
   ];
 
@@ -30,13 +36,8 @@ buildPythonPackage rec {
   buildInputs = [ protobuf ];
 
   cmakeFlags = [
-    # The upstream code checks for an exact python version and errors out
-    # if we don't have that and do not pass `Python_VERSION` explicitly:
-    #     https://github.com/Ultimaker/libArcus/commit/f867664e46144fed9ae9c4f4e6a29192163fb884#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aR31
-    "-DPython_VERSION=${python.pythonVersion}"
-    # Set install location to not be the global Python install dir
-    # (which is read-only in the nix store); see:
-    "-DPython_SITELIB_LOCAL=${placeholder "out"}/${python.sitePackages}"
+    # The `libarcus-cmake-build.patch` above adds a line with `set_target_properties()` that requires this.
+    "-DARCUS_VERSION=${version}"
   ];
 
   meta = with lib; {
