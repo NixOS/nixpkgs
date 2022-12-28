@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "BigQuery Data Transfer API client library";
     homepage = "https://github.com/googleapis/python-bigquery-datatransfer";
+    changelog = "https://github.com/googleapis/python-bigquery-datatransfer/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
