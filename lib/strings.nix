@@ -798,8 +798,17 @@ rec {
   in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
     result;
 
-  /* Check whether a value can be coerced to a string */
-  isCoercibleToString = x:
+  /* Soft-deprecated name for isMoreCoercibleToString */
+  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
+    "lib.strings.isCoercibleToString is deprecated in favor of either isSimpleCoercibleToString or isMoreCoercibleString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
+    isMoreCoercibleToString;
+
+  /* Check whether a list or other value can be passed to toString.
+
+     Many types of value are coercible to string this way, including int, float,
+     null, bool, list of similarly coercible values.
+  */
+  isMoreCoercibleToString = x:
     elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
     (isList x && lib.all isCoercibleToString x) ||
     x ? outPath ||
