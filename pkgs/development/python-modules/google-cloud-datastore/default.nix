@@ -38,12 +38,6 @@ buildPythonPackage rec {
     ];
   };
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
-  };
-
   checkInputs = [
     google-cloud-testutils
     mock
