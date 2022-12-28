@@ -154,7 +154,8 @@ def normalize_license license
   license = license.dup
   license.gsub!(/([^\n])\n([^\n])/m, '\1 \2')
   license.gsub!(/ +/, ' ')
-  license.strip
+  license.strip!
+  license
 end
 
 # Gets all license texts, deduplicating them.
