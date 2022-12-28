@@ -1814,6 +1814,7 @@ self: super: {
   ] super.haskell-ci).overrideScope (self: super: {
     Cabal = self.Cabal_3_6_3_0;
     cabal-install-parsers = self.cabal-install-parsers_0_4_5;
+    ShellCheck = self.ShellCheck_0_8_0;
   });
 
   large-hashable = lib.pipe (super.large-hashable.override {
