@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.7.1";
+  version = "3.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    sha256 = "sha256-zKgaeK3fskz2TuHvIWlxBrdZIWfIJHhaqopZ3+V36wY=";
+    hash = "sha256-iXf9K/xI4u+dDV0Zf6S08nbws4NqycrTEW0B8/qCjQc=";
   };
 
   nativeBuildInputs = [
