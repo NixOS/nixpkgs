@@ -11173,6 +11173,8 @@ self: super: with self; {
     cudnnSupport = false;
   };
 
+  thermo = callPackage ../development/python-modules/thermo { };
+
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
   thermopro-ble = callPackage ../development/python-modules/thermopro-ble { };
