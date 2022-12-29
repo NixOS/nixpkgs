@@ -32,6 +32,7 @@ let
         description = lib.mdDoc "Username to authenticate with.";
         example = "example-user";
         type = types.nullOr types.str;
+        default = null;
       };
 
       # Note: It does not make sense to provide a way to declaratively
@@ -108,7 +109,7 @@ let
       ExecStart = "${openconnect}/bin/openconnect --config=${
           generateConfig name icfg
         } ${icfg.gateway}";
-      StandardInput = "file:${icfg.passwordFile}";
+      StandardInput = lib.mkIf (icfg.passwordFile != null) "file:${icfg.passwordFile}";
 
       ProtectHome = true;
     };
