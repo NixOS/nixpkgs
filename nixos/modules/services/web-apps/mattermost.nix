@@ -5,7 +5,62 @@ with lib;
 let
   cfg = config.services.mattermost;
 
-  mattermostConf = recursiveUpdate
+  # The directory to store mutable data within dataDir.
+  mutableDataDir = "${cfg.dataDir}/data";
+
+  # The plugin directory. Note that this is the *post-unpack* plugin directory,
+  # since Mattermost unpacks plugins to put them there. (Hence, mutable data.)
+  pluginDir = "${mutableDataDir}/plugins";
+
+  # Mattermost uses this as a staging directory to unpack plugins, among possibly other things.
+  # Ensure that it's inside mutableDataDir since it can get rather large.
+  tempDir = "${mutableDataDir}/tmp";
+
+  mattermostPluginDerivations = with pkgs;
+    map (plugin: stdenv.mkDerivation {
+      name = "mattermost-plugin";
+      installPhase = ''
+        mkdir -p $out/share
+        cp ${plugin} $out/share/plugin.tar.gz
+      '';
+      dontUnpack = true;
+      dontPatch = true;
+      dontConfigure = true;
+      dontBuild = true;
+      preferLocalBuild = true;
+    }) cfg.plugins;
+
+  mattermostPlugins = with pkgs;
+    if mattermostPluginDerivations == [] then null
+    else stdenv.mkDerivation {
+      name = "${cfg.package.name}-plugins";
+      nativeBuildInputs = [
+        autoPatchelfHook
+      ] ++ mattermostPluginDerivations;
+      buildInputs = [
+        cfg.package
+      ];
+      installPhase = ''
+        mkdir -p $out
+        plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
+        for plugin in "''${plugins[@]}"; do
+          hash="$(sha256sum "$plugin" | cut -d' ' -f1)"
+          mkdir -p "$hash"
+          tar -C "$hash" -xzf "$plugin"
+          autoPatchelf "$hash"
+          GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/$hash.tar.gz" .
+          rm -rf "$hash"
+        done
+      '';
+
+      dontUnpack = true;
+      dontPatch = true;
+      dontConfigure = true;
+      dontBuild = true;
+      preferLocalBuild = true;
+    };
+
+  mattermostConfWithoutPlugins = recursiveUpdate
     {
       ServiceSettings.SiteURL = cfg.siteUrl;
       ServiceSettings.ListenAddress = "${cfg.listenAddress}:${toString cfg.port}";
@@ -13,17 +68,27 @@ let
       SqlSettings.DriverName = "postgres";
       SqlSettings.DataSource = "postgres:///${cfg.database.name}?host=/run/postgresql";
       FileSettings.Directory = cfg.dataDir;
-      PluginSettings.Directory = "${cfg.dataDir}/plugins/server";
-      PluginSettings.ClientDirectory = "${cfg.dataDir}/plugins/client";
+      PluginSettings.Directory = "${pluginDir}/server";
+      PluginSettings.ClientDirectory = "${pluginDir}/client";
       LogSettings.FileLocation = cfg.logDir;
     }
     cfg.settings;
+
+  mattermostConf = recursiveUpdate
+    mattermostConfWithoutPlugins
+    (
+      if mattermostPlugins == null then {}
+      else {
+        PluginSettings = {
+          Enable = true;
+        };
+      }
+    );
 
   mattermostConfJSON = (pkgs.formats.json { }).generate "mattermost-config.json" mattermostConf;
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "mattermost" "plugins" ] "Plugin support has been removed as its fundamentally to get it working without patchelfing and patching Mattermost's Go code.")
     (mkRemovedOptionModule [ "services" "mattermost" "matterircd" "enable" ] "This option has been removed as it shouldn't be part of the Mattermost module.")
     (mkRemovedOptionModule [ "services" "mattermost" "matterircd" "package" ] "This option has been removed as it shouldn't be part of the Mattermost module.")
     (mkRemovedOptionModule [ "services" "mattermost" "matterircd" "parameters" ] "This option has been removed as it shouldn't be part of the Mattermost module.")
@@ -57,13 +122,13 @@ in
         type = types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
-        description = lib.mdDoc "Address for Mattermost server to listens on.";
+        description = lib.mdDoc "Address for Mattermost server to listen on.";
       };
 
       port = mkOption {
         type = types.port;
         default = 8065;
-        description = lib.mdDoc "Port for Mattermost server to listens on.";
+        description = lib.mdDoc "Port for Mattermost server to listen on.";
       };
 
       dataDir = mkOption {
@@ -92,6 +157,17 @@ in
         };
       };
 
+      plugins = mkOption {
+        type = types.listOf (types.oneOf [types.path types.package]);
+        default = [];
+        example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
+        description = lib.mdDoc ''
+          Plugins to add to the configuration. Overrides any installed if non-null.
+          This is a list of paths to .tar.gz files or derivations evaluating to
+          .tar.gz files.
+        '';
+      };
+
       siteUrl = mkOption {
         type = types.str;
         example = "https://chat.example.com";
@@ -116,7 +192,7 @@ in
           but won't be overwritten on changes or rebuilds.
 
           If this option is disabled, changes in the system console won't
-          be possible (default). If an config.json is present, it will be
+          be possible (default). If a config.json is present, it will be
           overwritten!
         '';
       };
@@ -161,19 +237,42 @@ in
       "d ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.logDir} 0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.configDir} 0750 ${cfg.user} ${cfg.group} - -"
+      "d ${mutableDataDir} 0750 ${cfg.user} ${cfg.group} - -"
+
+      # Remove and recreate tempDir.
+      "R ${tempDir} - - - - -"
+      "d ${tempDir} 0750 ${cfg.user} ${cfg.group} - -"
+
+      # Ensure that pluginDir is a directory, as it could be a symlink on prior versions.
+      "r ${pluginDir} - - - - -"
+      "d ${pluginDir} 0750 ${cfg.user} ${cfg.group} - -"
       "d ${mattermostConf.PluginSettings.Directory} 0750 ${cfg.user} ${cfg.group} - -"
       "d ${mattermostConf.PluginSettings.ClientDirectory} 0750 ${cfg.user} ${cfg.group} - -"
+
       "L+ ${cfg.dataDir}/fonts - - - - ${cfg.package}/fonts"
       "L+ ${cfg.dataDir}/i18n - - - - ${cfg.package}/i18n"
       "L+ ${cfg.dataDir}/templates - - - - ${cfg.package}/templates"
       "L+ ${cfg.dataDir}/client - - - - ${cfg.package}/client"
-    ];
+    ] ++ (
+      if mattermostPlugins == null then
+        # Create the plugin tarball directory if it's a symlink.
+        [
+          "r ${cfg.dataDir}/plugins - - - - -"
+          "d ${cfg.dataDir}/plugins 0750 ${cfg.user} ${cfg.group} - -"
+        ]
+      else
+        # Symlink the plugin tarball directory.
+        ["L+ ${cfg.dataDir}/plugins - - - - ${mattermostPlugins}"]
+    );
 
     systemd.services.mattermost = {
       description = "Mattermost chat service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "postgresql.service" ];
       requires = [ "network.target" "postgresql.service" ];
+
+      # Use tempDir as this can get rather large, especially if Mattermost unpacks a large number of plugins.
+      environment.TMPDIR = tempDir;
 
       preStart = lib.optionalString (!cfg.mutableConfig) ''
         ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.configDir}/config.json"
