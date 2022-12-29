@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the NissanConnect EV";
     homepage = "https://github.com/filcole/pycarwings2";
+    changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
