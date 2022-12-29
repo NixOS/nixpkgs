@@ -1,8 +1,11 @@
 { lib
-, buildGoModule
+, buildGo118Module
 , fetchFromGitHub
 }:
 
+let
+  buildGoModule = buildGo118Module; # build fails with 1.19
+in
 buildGoModule rec {
   pname = "brev-cli";
   version = "0.6.197";

@@ -4,20 +4,21 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
-, llvmPackages
 , expat
-, freetype
-, libxcb
-, python3
-, libiconv
-, AppKit
-, CoreText
-, Security
 , fira-code
 , fontconfig
+, freetype
 , harfbuzz
+, libiconv
+, libxcb
+, llvmPackages
+, python3
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) AppKit CoreText Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
   version = "0.5.1";

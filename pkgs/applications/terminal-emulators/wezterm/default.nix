@@ -1,33 +1,33 @@
-{ stdenv
-, rustPlatform
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
+, fontconfig
+, installShellFiles
+, libGL
+, libX11
+, libiconv
+, libxcb
+, libxkbcommon
 , ncurses
+, nixosTests
+, openssl
 , perl
 , pkg-config
 , python3
-, fontconfig
-, installShellFiles
-, openssl
-, libGL
-, libX11
-, libxcb
-, libxkbcommon
+, runCommand
+, rustPlatform
+, wayland
 , xcbutil
 , xcbutilimage
 , xcbutilkeysyms
 , xcbutilwm
-, wayland
 , zlib
-, CoreGraphics
-, Cocoa
-, Foundation
-, libiconv
-, UserNotifications
-, nixosTests
-, runCommand
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
+in
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
   version = "20221119-145034-49b9839f";
@@ -81,8 +81,8 @@ rustPlatform.buildRustPackage rec {
     Cocoa
     CoreGraphics
     Foundation
-    libiconv
     UserNotifications
+    libiconv
   ];
 
   buildFeatures = [ "distro-defaults" ];

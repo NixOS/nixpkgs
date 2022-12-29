@@ -5,9 +5,12 @@
 , pkg-config
 , sqlite
 , openssl
-, CoreServices
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices;
+in
 rustPlatform.buildRustPackage rec {
   pname = "arti";
   version = "1.1.0";

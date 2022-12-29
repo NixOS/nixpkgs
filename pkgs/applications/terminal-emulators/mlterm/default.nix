@@ -1,13 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem, nixosTests
-, libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, cairo
+, gdk-pixbuf
+, gtk3
+, libX11
+, libXft
+, makeDesktopItem
+, nixosTests
+, pkg-config
+, vte
+
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
 , fcitx, ibus, uim #IME
 , wrapGAppsHook #color picker in mlconfig
-, Cocoa #Darwin
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
+in
 stdenv.mkDerivation rec {
   pname = "mlterm";
   version = "3.9.2";
@@ -119,7 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "http://mlterm.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg atemu ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; unix;
     broken = stdenv.system == "aarch64-darwin"; # https://github.com/arakiken/mlterm/issues/51
   };
 }

@@ -1,5 +1,15 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security, pkg-config, openssl }:
+{ lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  openssl,
+  darwin,
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "bindle";
   version = "0.8.1";

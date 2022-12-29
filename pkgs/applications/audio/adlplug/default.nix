@@ -13,29 +13,33 @@
 , libXinerama
 , libXext
 , libXcursor
-, Foundation
-, Cocoa
-, Carbon
-, CoreServices
-, ApplicationServices
-, CoreAudio
-, CoreMIDI
-, AudioToolbox
-, Accelerate
-, CoreImage
-, IOKit
-, AudioUnit
-, QuartzCore
-, WebKit
-, DiscRecording
-, CoreAudioKit
-
-  # Enabling JACK requires a JACK server at runtime, no fallback mechanism
-, withJack ? false, jack
-
+# Enabling JACK requires a JACK server at runtime, no fallback mechanism
+, withJack ? false, libjack2
 , type ? "ADL"
+, darwin
 }:
 
+let
+  jack = libjack2;
+  inherit (darwin.apple_sdk.frameworks)
+    Accelerate
+    ApplicationServices
+    AudioToolbox
+    AudioUnit
+    Carbon
+    Cocoa
+    CoreAudio
+    CoreAudioKit
+    CoreImage
+    CoreMIDI
+    CoreServices
+    DiscRecording
+    Foundation
+    IOKit
+    QuartzCore
+    WebKit
+  ;
+in
 assert lib.assertOneOf "type" type [ "ADL" "OPN" ];
 let
   chip = {

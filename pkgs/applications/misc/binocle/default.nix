@@ -3,17 +3,16 @@
 , rustPlatform
 , fetchFromGitHub
 , makeWrapper
-, AppKit
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, Foundation
-, Metal
-, QuartzCore
-, xorg
 , vulkan-loader
+, darwin
+, xorg
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks)
+    AppKit CoreFoundation CoreGraphics CoreVideo Foundation Metal QuartzCore;
+  inherit (xorg) libX11 libXcursor libXi libXrandr;
+in
 rustPlatform.buildRustPackage rec {
   pname = "binocle";
   version = "0.3.0";
@@ -32,12 +31,24 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    AppKit CoreFoundation CoreGraphics CoreVideo Foundation Metal QuartzCore
+    AppKit
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
+    Foundation
+    Metal
+    QuartzCore
   ];
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     wrapProgram $out/bin/binocle \
-      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath (with xorg; [ libX11 libXcursor libXi libXrandr ] ++ [ vulkan-loader ])}
+      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([
+        libX11
+        libXcursor
+        libXi
+        libXrandr
+        vulkan-loader
+      ])}
   '';
 
   meta = with lib; {

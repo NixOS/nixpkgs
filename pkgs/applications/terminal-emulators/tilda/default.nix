@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , expat
 , gettext
-, gtk
+, gtk3
 , libconfuse
 , pcre2
 , vte
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
     gettext
-    gtk
+    gtk3
     libconfuse
     pcre2
     vte

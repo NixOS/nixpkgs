@@ -1,5 +1,16 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, Security, makeWrapper, libgit2 }:
+{ lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
+  installShellFiles,
+  libgit2,
+  makeWrapper,
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "cocogitto";
   version = "5.2.0";

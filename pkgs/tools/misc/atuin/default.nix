@@ -4,11 +4,13 @@
 , installShellFiles
 , rustPlatform
 , libiconv
-, Security
-, SystemConfiguration
+, darwin
 , nixosTests
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+in
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
   version = "12.0.0";

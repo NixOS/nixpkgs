@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, pkg-config
-, libusb1
-, libiconv
-, AppKit
-, IOKit
+{ lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  libiconv,
+  libusb1,
+  pkg-config,
+  darwin,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+in
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
   version = "0.3.5";

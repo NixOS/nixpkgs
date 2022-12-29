@@ -193,9 +193,7 @@ with pkgs;
 
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
-  bindle = callPackage ../servers/bindle {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  bindle = callPackage ../servers/bindle { };
 
   canonicalize-jar = callPackage ../build-support/java/canonicalize-jar.nix { };
   canonicalize-jars-hook = makeSetupHook {
@@ -256,9 +254,7 @@ with pkgs;
 
   _0x =  callPackage ../tools/misc/0x { };
 
-  atuin = callPackage ../tools/misc/atuin {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
+  atuin = callPackage ../tools/misc/atuin { };
 
   automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
 
@@ -276,9 +272,7 @@ with pkgs;
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
-  arti = callPackage ../tools/security/arti {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  arti = callPackage ../tools/security/arti { };
 
   authy = callPackage ../applications/misc/authy { };
 
@@ -306,16 +300,14 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo {};
 
-  binserve = callPackage ../servers/binserve {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  binserve = callPackage ../servers/binserve { };
 
   bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
 
   breakpad = callPackage ../development/misc/breakpad { };
 
   brev-cli = callPackage ../development/misc/brev-cli {
-    buildGoModule = buildGo118Module; # build fails with 1.19
+
   };
 
   buf = callPackage ../development/tools/buf { };
@@ -357,10 +349,7 @@ with pkgs;
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml {
-    inherit (llvmPackages) libclang llvm;
-    inherit (python3.pkgs) sphinx;
-  };
+  castxml = callPackage ../development/tools/castxml { };
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
@@ -382,9 +371,7 @@ with pkgs;
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
-  cloak = callPackage ../applications/misc/cloak {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cloak = callPackage ../applications/misc/cloak { };
 
   cmark = callPackage ../development/libraries/cmark { };
 
@@ -392,15 +379,11 @@ with pkgs;
 
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
-  cocogitto = callPackage ../development/tools/cocogitto {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cocogitto = callPackage ../development/tools/cocogitto { };
 
   conftest = callPackage ../development/tools/conftest { };
 
-  coldsnap = callPackage ../tools/admin/coldsnap {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  coldsnap = callPackage ../tools/admin/coldsnap { };
 
   colemak-dh = callPackage ../data/misc/colemak-dh { };
 
@@ -458,9 +441,7 @@ with pkgs;
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
-  dufs = callPackage ../servers/http/dufs {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  dufs = callPackage ../servers/http/dufs { };
 
   ea = callPackage ../tools/misc/ea { };
 
@@ -468,9 +449,7 @@ with pkgs;
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
-  edgedb = callPackage ../tools/networking/edgedb {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  edgedb = callPackage ../tools/networking/edgedb { };
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
@@ -508,13 +487,9 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
-  probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
+  probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli { };
 
-  probe-run = callPackage ../development/tools/rust/probe-run {
-    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
-  };
+  probe-run = callPackage ../development/tools/rust/probe-run { };
 
   mix2nix = callPackage ../development/tools/mix2nix { };
 
@@ -1179,10 +1154,7 @@ with pkgs;
 
   adenum  = callPackage ../tools/security/adenum { };
 
-  adlplug = callPackage ../applications/audio/adlplug {
-    inherit (darwin.apple_sdk.frameworks) Foundation Cocoa Carbon CoreServices ApplicationServices CoreAudio CoreMIDI AudioToolbox Accelerate CoreImage IOKit AudioUnit QuartzCore WebKit DiscRecording CoreAudioKit;
-    jack = libjack2;
-  };
+  adlplug = callPackage ../applications/audio/adlplug { };
   opnplug = adlplug.override {
     type = "OPN";
   };
@@ -2057,9 +2029,7 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  mednafen = callPackage ../applications/emulators/mednafen {
-    inherit (darwin) libiconv;
-  };
+  mednafen = callPackage ../applications/emulators/mednafen { };
 
   mednafen-server = callPackage ../applications/emulators/mednafen/server.nix { };
 
@@ -2176,14 +2146,9 @@ with pkgs;
 
   dolphin-emu = callPackage ../applications/emulators/dolphin-emu { };
 
-  dolphin-emu-beta = qt5.callPackage ../applications/emulators/dolphin-emu/master.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL VideoToolbox;
-    inherit (darwin) moltenvk;
-  };
+  dolphin-emu-beta = qt5.callPackage ../applications/emulators/dolphin-emu/master.nix { };
 
-  dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
-  };
+  dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix { };
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
@@ -2310,9 +2275,7 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  alacritty = callPackage ../applications/terminal-emulators/alacritty {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
-  };
+  alacritty = callPackage ../applications/terminal-emulators/alacritty { };
 
   blackbox-terminal = callPackage ../applications/terminal-emulators/blackbox-terminal { };
 
@@ -2342,10 +2305,7 @@ with pkgs;
 
   kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
 
-  kitty = callPackage ../applications/terminal-emulators/kitty {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
-  };
+  kitty = callPackage ../applications/terminal-emulators/kitty { };
 
   kitty-themes  = callPackage ../misc/kitty-themes {};
 
@@ -2356,7 +2316,6 @@ with pkgs;
   mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
     libssh2 = null;
     openssl = null;
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
@@ -2404,9 +2363,7 @@ with pkgs;
 
   termonad = callPackage ../applications/terminal-emulators/termonad { };
 
-  tilda = callPackage ../applications/terminal-emulators/tilda {
-    gtk = gtk3;
-  };
+  tilda = callPackage ../applications/terminal-emulators/tilda { };
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
@@ -2414,9 +2371,7 @@ with pkgs;
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
-  wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
-  };
+  wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm { };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
 
@@ -2709,9 +2664,7 @@ with pkgs;
 
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
 
-  binocle = callPackage ../applications/misc/binocle {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreVideo Foundation Metal QuartzCore;
-  };
+  binocle = callPackage ../applications/misc/binocle { };
 
   bitwise = callPackage ../tools/misc/bitwise { };
 
@@ -8567,14 +8520,7 @@ with pkgs;
 
   kent = callPackage ../applications/science/biology/kent { };
 
-  keybase = callPackage ../tools/security/keybase {
-    # Reasoning for the inherited apple_sdk.frameworks:
-    # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
-    # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
-    #      #cgo LDFLAGS: -framework AVFoundation -framework CoreFoundation -framework ImageIO -framework CoreMedia  -framework Foundation -framework CoreGraphics -lobjc
-    #    with the exception of CoreFoundation, due to the warning in https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix#L25
-    inherit (darwin.apple_sdk.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
-  };
+  keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
 
@@ -18126,17 +18072,13 @@ with pkgs;
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
-  silicon = callPackage ../tools/misc/silicon {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreText Security;
-  };
+  silicon = callPackage ../tools/misc/silicon { };
 
   simpleTpmPk11 = callPackage ../tools/security/simple-tpm-pk11 { };
 
   slimerjs = callPackage ../development/tools/slimerjs {};
 
-  slint-lsp = callPackage ../development/tools/misc/slint-lsp {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
-  };
+  slint-lsp = callPackage ../development/tools/misc/slint-lsp { };
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
 
@@ -19648,7 +19590,6 @@ with pkgs;
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg-headless; });
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
   });
 
   gusb = callPackage ../development/libraries/gusb { };
@@ -27732,9 +27673,7 @@ with pkgs;
   };
   audaciousQt5 = audacious;
 
-  audacity = darwin.apple_sdk_11_0.callPackage ../applications/audio/audacity {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudioKit;
-  };
+  audacity = darwin.apple_sdk_11_0.callPackage ../applications/audio/audacity { };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 

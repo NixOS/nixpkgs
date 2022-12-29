@@ -1,5 +1,12 @@
-{ callPackage, AudioToolbox, AVFoundation, Cocoa, CoreFoundation, CoreMedia, CoreServices, CoreVideo, DiskArbitration, Foundation, IOKit, MediaToolbox, OpenGL, VideoToolbox }:
+{ callPackage,
+  darwin,
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks)
+    AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices
+    CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
+in
 {
   gstreamer = callPackage ./core { inherit CoreServices; };
 
@@ -9,7 +16,10 @@
 
   gst-plugins-good = callPackage ./good { inherit Cocoa; };
 
-  gst-plugins-bad = callPackage ./bad { inherit AudioToolbox AVFoundation CoreMedia CoreVideo Foundation MediaToolbox VideoToolbox; };
+  gst-plugins-bad = callPackage ./bad {
+    inherit AudioToolbox AVFoundation CoreMedia CoreVideo Foundation MediaToolbox
+      VideoToolbox;
+  };
 
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 

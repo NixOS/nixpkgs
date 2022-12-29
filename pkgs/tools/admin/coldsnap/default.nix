@@ -1,12 +1,15 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , openssl
-, stdenv
-, Security
 , pkg-config
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "coldsnap";
   version = "0.4.2";

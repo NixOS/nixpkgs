@@ -15,9 +15,12 @@
 , libsndfile
 , pkg-config
 , zlib
-, libiconv
+, darwin
 }:
 
+let
+  inherit (darwin) libiconv;
+in
 stdenv.mkDerivation rec {
   pname = "mednafen";
   version = "1.29.0";

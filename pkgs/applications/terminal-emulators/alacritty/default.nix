@@ -1,36 +1,29 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, rustPlatform
-, nixosTests
-
 , cmake
-, installShellFiles
-, makeWrapper
-, ncurses
-, pkg-config
-, python3
-
 , expat
 , fontconfig
 , freetype
+, installShellFiles
 , libGL
-, xorg
+, libiconv
 , libxkbcommon
+, makeWrapper
+, ncurses
+, nixosTests
+, pkg-config
+, python3
+, rustPlatform
 , wayland
 , xdg-utils
-
-  # Darwin Frameworks
-, AppKit
-, CoreGraphics
-, CoreServices
-, CoreText
-, Foundation
-, libiconv
-, OpenGL
+, xorg
+, darwin
 }:
 let
+  inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
+
   rpathLibs = [
     expat
     fontconfig
@@ -46,6 +39,7 @@ let
     libxkbcommon
     wayland
   ];
+
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";

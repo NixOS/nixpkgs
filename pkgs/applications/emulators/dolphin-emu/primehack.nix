@@ -38,14 +38,14 @@
 , libpulseaudio
 
 # - Inputs used for Darwin
-, CoreBluetooth
-, ForceFeedback
-, IOKit
-, OpenGL
 , libpng
 , hidapi
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
+in
 stdenv.mkDerivation rec {
   pname = "dolphin-emu-primehack";
   version = "1.0.6a";

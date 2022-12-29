@@ -1,25 +1,20 @@
 { lib
 , stdenv
-, rustPlatform
 , fetchCrate
-, pkg-config
 , cmake
 , fontconfig
 , libGL
-, xorg
-, libxkbcommon
-, wayland
-  # Darwin Frameworks
-, AppKit
-, CoreGraphics
-, CoreServices
-, CoreText
-, Foundation
 , libiconv
-, OpenGL
+, libxkbcommon
+, pkg-config
+, rustPlatform
+, wayland
+, xorg
+, darwin
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   rpathLibs = [ fontconfig libGL xorg.libxcb xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi ]
     ++ lib.optionals stdenv.isLinux [ libxkbcommon wayland ];
 in

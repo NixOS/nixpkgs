@@ -1,20 +1,22 @@
-{ stdenv
-, lib
-, runCommand
-, patchelf
+{ lib
+, stdenv
 , fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, pkg-config
 , curl
-, Security
-, CoreServices
 , libiconv
-, xz
+, makeWrapper
+, patchelf
 , perl
+, pkg-config
+, runCommand
+, rustPlatform
 , substituteAll
+, xz
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "edgedb";
   version = "2.0.1";

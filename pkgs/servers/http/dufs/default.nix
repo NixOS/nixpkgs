@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config }:
+{ lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  darwin,
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
   version = "0.31.0";

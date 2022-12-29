@@ -1,5 +1,15 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, libusb1, AppKit }:
+{ lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  libusb1,
+  darwin,
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks) AppKit;
+in
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-cli";
   version = "0.13.0";

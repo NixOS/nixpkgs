@@ -1,31 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
-, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
-, libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
-, libxkbcommon, libXi, libXext, wayland-protocols, wayland
-, lcms2
-, librsync
-, openssl
-, installShellFiles
+{ lib
+, stdenv
+, fetchFromGitHub
+, bashInteractive
 , dbus
-, darwin
-, Cocoa
-, CoreGraphics
-, Foundation
-, IOKit
-, Kernel
-, OpenGL
+, fish
+, fontconfig
+, harfbuzz
+, imagemagick
+, installShellFiles
+, lcms2
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
 , libcanberra
 , libicns
 , libpng
-, python3
-, zlib
-, bashInteractive
-, zsh
-, fish
+, librsync
+, libstartup_notification
+, libunistring
+, libxkbcommon
+, ncurses
 , nixosTests
+, openssl
+, pkg-config
+, python3
+, python3Packages
+, wayland
+, wayland-protocols
+, zlib
+, zsh
+
+, darwin
 }:
 
 with python3Packages;
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
+  harfbuzz_custom = harfbuzz.override { withCoreText = stdenv.isDarwin; };
+in
 buildPythonApplication rec {
   pname = "kitty";
   version = "0.26.2";
@@ -39,7 +55,7 @@ buildPythonApplication rec {
   };
 
   buildInputs = [
-    harfbuzz
+    harfbuzz_custom
     ncurses
     lcms2
     librsync

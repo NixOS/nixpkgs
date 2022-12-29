@@ -52,13 +52,16 @@
 , gtk3
 , libpng
 , libjpeg
-, AppKit
-, CoreAudioKit
+, darwin
 }:
 
 # TODO
 # 1. detach sbsms
 
+let
+  inherit (lib) optionals;
+  inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudioKit;
+in
 stdenv.mkDerivation rec {
   pname = "audacity";
   version = "3.2.3";

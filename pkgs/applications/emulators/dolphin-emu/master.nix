@@ -41,15 +41,14 @@
 , jq
 
   # Darwin-only dependencies
-, CoreBluetooth
-, ForceFeedback
-, IOKit
-, VideoToolbox
-, OpenGL
 , libpng
-, moltenvk
+, darwin
 }:
 
+let
+    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL VideoToolbox;
+    inherit (darwin) moltenvk;
+in
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
   version = "5.0-17269";

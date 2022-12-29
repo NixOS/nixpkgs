@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices;
+in
 rustPlatform.buildRustPackage rec {
   pname = "binserve";
   version = "0.2.0";
