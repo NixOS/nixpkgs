@@ -273,12 +273,13 @@ The following methods are available on machine objects:
 
 `wait_for_open_port`
 
-:   Wait until a process is listening on the given TCP port (on
-    `localhost`, at least).
+:   Wait until a process is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_closed_port`
 
-:   Wait until nobody is listening on the given TCP port.
+:   Wait until nobody is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_x`
 
