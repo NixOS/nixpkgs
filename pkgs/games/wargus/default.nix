@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, fetchFromGitHub
-, fetchurl, runCommand, unzip, bchunk, p7zip
+, requireFile, runCommand, p7zip
 , cmake, pkg-config, makeWrapper
 , zlib, bzip2, libpng
 , dialog, python3, cdparanoia, ffmpeg
@@ -8,20 +8,19 @@
 let
   stratagus = callPackage ./stratagus.nix {};
 
-  dataDownload = fetchurl {
-    url = "https://archive.org/download/warcraft-ii-tides-of-darkness_202105/Warcess.zip";
-    sha256 = "0yxgvf8xpv1w2bjmny4a38pa3xcdgqckk9abj21ilkc5zqzqmm9b";
+  dataDownload = requireFile {
+    message = ''
+      Provide a Warcraft II CD-ROM image.
+    '';
+    name = "WC2BTDP01.iso";
+    sha256 = "0wc4wqb9afxykah8lq1jw0sl564j5gs1shrr67cflfsaiscr4qxm";
   };
 
   data = runCommand "warcraft2" {
-    buildInputs = [ unzip bchunk p7zip ];
+    buildInputs = [ p7zip ];
     meta.license = lib.licenses.unfree;
   } ''
-    unzip ${dataDownload} "Warcraft.II.Tides.of.Darkness/Warcraft II - Tides of Darkness (1995)/games/WarcrafD/cd/"{WC2BTDP.img,WC2BTDP.cue}
-    bchunk "Warcraft.II.Tides.of.Darkness/Warcraft II - Tides of Darkness (1995)/games/WarcrafD/cd/"{WC2BTDP.img,WC2BTDP.cue} WC2BTDP
-    rm -r Warcraft.II.Tides.of.Darkness
-    7z x WC2BTDP01.iso
-    rm WC2BTDP*.{iso,cdr}
+    7z x ${dataDownload}
     cp -r DATA $out
   '';
 
