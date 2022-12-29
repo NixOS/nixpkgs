@@ -27739,8 +27739,8 @@ with pkgs;
   };
   audaciousQt5 = audacious;
 
-  audacity = callPackage ../applications/audio/audacity {
-    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon CoreAudio CoreAudioKit CoreServices;
+  audacity = darwin.apple_sdk_11_0.callPackage ../applications/audio/audacity {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudioKit;
   };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
