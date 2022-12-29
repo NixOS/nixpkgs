@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
-, python39, fetchpatch
+, python39
 }:
 
 let
@@ -84,18 +84,23 @@ let
         nativeCheckInputs = [];
         doCheck = false;
       });
+      # Requires pytest-httpserver as checkInput now which requires Werkzeug>=2 which is not
+      # supported by current privacyIDEA.
+      responses = super.responses.overridePythonAttrs (lib.const {
+        doCheck = false;
+      });
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.7.4";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QoVL6WJjX6+sN5S/iqV3kcfQ5fWTXkTnf6NpZcw3bGo=";
+    sha256 = "sha256-A3Dk1oX0yf5uoH3z7JkH6Uoi+l/jf1BwUurN1U8UnL0=";
     fetchSubmodules = true;
   };
 
@@ -104,17 +109,7 @@ python3'.pkgs.buildPythonPackage rec {
     defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
-    pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt
-  ];
-
-  patches = [
-    # Apply https://github.com/privacyidea/privacyidea/pull/3304, fixes
-    # `Exceeds the limit (4300) for integer string conversion` in the tests,
-    # see https://hydra.nixos.org/build/192932057
-    (fetchpatch {
-      url = "https://github.com/privacyidea/privacyidea/commit/0e28f36c0b3291a361669f4a3a77c294f4564475.patch";
-      sha256 = "sha256-QqcO8bkt+I2JKce/xk2ZhzEaLZ3E4uZ4x5W9Kk0pMQQ=";
-    })
+    pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt segno
   ];
 
   passthru.tests = { inherit (nixosTests) privacyidea; };
@@ -128,6 +123,7 @@ python3'.pkgs.buildPythonPackage rec {
 
     # Tries to connect to `fcm.googleapis.com`.
     "test_02_api_push_poll"
+    "test_04_decline_auth_request"
 
     # Timezone info not available in build sandbox
     "test_14_convert_timestamp_to_utc"
