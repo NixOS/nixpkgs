@@ -6738,8 +6738,6 @@ self: super: with self; {
 
   packvers = callPackage ../development/python-modules/packvers { };
 
-  pafy = callPackage ../development/python-modules/pafy { };
-
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
