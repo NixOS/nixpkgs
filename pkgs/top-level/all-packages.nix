@@ -11074,6 +11074,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  raider = callPackage ../applications/misc/raider { };
+
   railway = callPackage ../development/tools/railway { };
 
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
