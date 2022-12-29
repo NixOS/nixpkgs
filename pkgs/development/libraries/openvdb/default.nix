@@ -5,6 +5,8 @@ stdenv.mkDerivation rec
   pname = "openvdb";
   version = "9.1.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "dreamworksanimation";
     repo = "openvdb";
@@ -15,6 +17,14 @@ stdenv.mkDerivation rec
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
+
+  cmakeFlags = [ "-DOPENVDB_CORE_STATIC=OFF" ];
+
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/OpenVDB/FindOpenVDB.cmake \
+      --replace \''${OPENVDB_LIBRARYDIR} $out/lib \
+      --replace \''${OPENVDB_INCLUDEDIR} $dev/include
+  '';
 
   meta = with lib; {
     description = "An open framework for voxel";
