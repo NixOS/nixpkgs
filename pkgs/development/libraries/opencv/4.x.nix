@@ -14,6 +14,7 @@
 , config
 , ocl-icd
 , buildPackages
+, qimgv
 
 , enableJPEG ? true
 , libjpeg
@@ -365,7 +366,12 @@ stdenv.mkDerivation {
     popd
   '';
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = [ ]; };
+  passthru = {
+    tests = {
+      inherit qimgv;
+      inherit (gst_all_1) gst-plugins-bad;
+    } // lib.optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; };
+  } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
