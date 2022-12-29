@@ -2068,13 +2068,6 @@ with pkgs;
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
   mgba = callPackage ../applications/emulators/mgba {
-    ffmpeg = ffmpeg_4;
-    lua = lua5_4;
-    inherit (libsForQt5)
-      qtbase
-      qtmultimedia
-      qttools
-      wrapQtAppsHook;
   };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
