@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "7.0.0";
+  version = "7.0.4";
   format = "setuptools";
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jsrFowh5NFFkBZTZykLOibmHcR4eTJMShVMh7CH2zLQ=";
+    hash = "sha256-xSaqiXjBAC8FnxUsSt43WMShJBjfqyspdUrmIwyvPQQ=";
   };
 
   checkInputs = [
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of helpers and mock objects for unit tests and doc tests";
     homepage = "https://github.com/Simplistix/testfixtures";
+    changelog = "https://github.com/simplistix/testfixtures/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ siriobalmelli ];
   };
