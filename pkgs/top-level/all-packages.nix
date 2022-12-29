@@ -1915,9 +1915,7 @@ with pkgs;
 
   thicket = callPackage ../applications/version-management/thicket { };
 
-  tig = callPackage ../applications/version-management/tig {
-    readline = readline81;
-  };
+  tig = callPackage ../applications/version-management/tig { };
 
   top-git = callPackage ../applications/version-management/topgit { };
 
@@ -13562,16 +13560,16 @@ with pkgs;
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
-  bash = lowPrio (callPackage ../shells/bash/5.1.nix {
+  bash = lowPrio (callPackage ../shells/bash/5.nix {
     binutils = stdenv.cc.bintools;
   });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/5.1.nix {
+  bashInteractive = callPackage ../shells/bash/5.nix {
     binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
   };
-  bashInteractiveFHS = callPackage ../shells/bash/5.1.nix {
+  bashInteractiveFHS = callPackage ../shells/bash/5.nix {
     binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
@@ -22539,14 +22537,14 @@ with pkgs;
 
   raylib = callPackage ../development/libraries/raylib { };
 
-  readline = readline81;
+  readline = readline82;
   readline6 = readline63;
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
-  readline81 = callPackage ../development/libraries/readline/8.1.nix { };
+  readline82 = callPackage ../development/libraries/readline/8.2.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
 
@@ -25340,9 +25338,7 @@ with pkgs;
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
-  dropwatch = callPackage ../os-specific/linux/dropwatch {
-    readline = readline81;
-  };
+  dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
   dsd = callPackage ../applications/radio/dsd { };
 
