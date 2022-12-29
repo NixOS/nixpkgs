@@ -357,6 +357,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.grafana</literal> listens only on localhost
+          by default again. This was changed to upstreams default of
+          <literal>0.0.0.0</literal> by accident in the freeform setting
+          conversion.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
