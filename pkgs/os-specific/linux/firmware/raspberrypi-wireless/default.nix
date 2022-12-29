@@ -1,23 +1,36 @@
 { lib, stdenvNoCC, fetchFromGitHub }:
 
+let
+  verinfo = {
+    version = "2022-07-06";
+    btfw = {
+      rev = "dd840d991939f5046959b8c564596c7228f9d41d";
+      hash = "sha512-XvF6IHDoKBJkSs0Wyt8O1vcCMpSNS9WSYopn0+EyCr4btABGsHWTkgxb4nQbd+VbE6Ls2dcKr+c+X6aw/y1jhQ==";
+    };
+    wififw = {
+      rev = "541e5a05d152e7e6f0d9be45622e4a3741e51c02";
+      hash = "sha512-0erVWiFom0V5AMu+XlolJnY9Q5/RCFlZwUovMBMNdEPb+L5rHcCdrA7zehDX1oRNe8DPb4S5gjny0iG/G7G6NQ==";
+    };
+  };
+in
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2022-07-06";
+  version = verinfo.version;
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "dd840d991939f5046959b8c564596c7228f9d41d";
-      hash = "sha512-XvF6IHDoKBJkSs0Wyt8O1vcCMpSNS9WSYopn0+EyCr4btABGsHWTkgxb4nQbd+VbE6Ls2dcKr+c+X6aw/y1jhQ==";
+      rev = verinfo.btfw.rev;
+      hash = verinfo.btfw.hash;
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "541e5a05d152e7e6f0d9be45622e4a3741e51c02";
-      hash = "sha512-0erVWiFom0V5AMu+XlolJnY9Q5/RCFlZwUovMBMNdEPb+L5rHcCdrA7zehDX1oRNe8DPb4S5gjny0iG/G7G6NQ==";
+      rev = verinfo.wififw.rev;
+      hash = verinfo.wififw.hash;
     })
   ];
 
@@ -44,6 +57,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
