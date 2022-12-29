@@ -12018,6 +12018,8 @@ with pkgs;
   strongswanTNC = strongswan.override { enableTNC = true; };
   strongswanNM  = strongswan.override { enableNetworkManager = true; };
 
+  stylish = callPackage ../applications/misc/stylish { };
+
   stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
 
   su = shadow.su;
