@@ -75,10 +75,6 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optional serverSupport bottle
   ;
 
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   nativeCheckInputs = with python3Packages; [
     pytest
   ];

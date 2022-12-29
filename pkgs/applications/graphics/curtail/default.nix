@@ -37,17 +37,15 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     appstream-glib
     python3.pkgs.pygobject3
-    gobject-introspection
     gettext
+    gtk3
   ];
-
-  # Currently still required for the gobject-introspection setup hook
-  strictDeps = false;
 
   preInstall = ''
     patchShebangs ../build-aux/meson/postinstall.py

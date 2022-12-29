@@ -61,7 +61,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     confuse
-    gobject-introspection
     gst-python
     jellyfish
     mediafile
@@ -74,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     unidecode
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
-  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [
     gobject-introspection
     sphinxHook
