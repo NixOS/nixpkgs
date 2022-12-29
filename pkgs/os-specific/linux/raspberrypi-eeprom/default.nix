@@ -12,7 +12,7 @@
 
 let verinfo = {
   version = "2022-12-07";
-  rev = "6e79e995bbc75c5fdd5305bd7fe029758cfade2f";
+  rev = "36886df55b9c9681f886b7f29039df7a02c3caa2";
   hash = "sha256-/Q9zj/Hn/8S7bF1CN6ZCg705VYU+QUagNr4RNgZl+oA=";
 }; in
 stdenvNoCC.mkDerivation rec {
