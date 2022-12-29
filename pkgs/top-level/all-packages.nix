@@ -6843,6 +6843,8 @@ with pkgs;
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
+  emborg = python3Packages.callPackage ../development/python-modules/emborg { };
+
   emem = callPackage ../applications/misc/emem { };
 
   empty = callPackage ../tools/misc/empty { };
