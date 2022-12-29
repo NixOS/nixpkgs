@@ -393,6 +393,14 @@
       </listitem>
       <listitem>
         <para>
+          A new option <literal>recommendedBrotliSettings</literal> has
+          been added to <literal>services.nginx</literal>. Learn more
+          about compression in Brotli format
+          <link xlink:href="https://github.com/google/ngx_brotli/blob/master/README.md">here</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
