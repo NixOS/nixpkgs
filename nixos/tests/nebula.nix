@@ -123,12 +123,13 @@ in
   testScript = let
 
     setUpPrivateKey = name: ''
-    ${name}.succeed(
-        "mkdir -p /root/.ssh",
-        "chown 700 /root/.ssh",
-        "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
-        "chown 600 /root/.ssh/id_snakeoil",
-    )
+      ${name}.start()
+      ${name}.succeed(
+          "mkdir -p /root/.ssh",
+          "chown 700 /root/.ssh",
+          "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
+          "chown 600 /root/.ssh/id_snakeoil",
+      )
     '';
 
     # From what I can tell, StrictHostKeyChecking=no is necessary for ssh to work between machines.
@@ -154,18 +155,18 @@ in
       ${name}.succeed(
           "scp ${sshOpts} 192.168.1.1:/tmp/${name}.crt /etc/nebula/${name}.crt",
           "scp ${sshOpts} 192.168.1.1:/etc/nebula/ca.crt /etc/nebula/ca.crt",
+          '(id nebula-smoke >/dev/null && chown -R nebula-smoke:nebula-smoke /etc/nebula) || true'
       )
     '';
 
   in ''
-    start_all()
-
     # Create the certificate and sign the lighthouse's keys.
     ${setUpPrivateKey "lighthouse"}
     lighthouse.succeed(
         "mkdir -p /etc/nebula",
         'nebula-cert ca -name "Smoke Test" -out-crt /etc/nebula/ca.crt -out-key /etc/nebula/ca.key',
         'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "lighthouse" -groups "lighthouse" -ip "10.0.100.1/24" -out-crt /etc/nebula/lighthouse.crt -out-key /etc/nebula/lighthouse.key',
+        'chown -R nebula-smoke:nebula-smoke /etc/nebula'
     )
 
     # Reboot the lighthouse and verify that the nebula service comes up on boot.

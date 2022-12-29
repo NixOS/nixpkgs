@@ -414,6 +414,16 @@
       </listitem>
       <listitem>
         <para>
+          Nebula now runs as a system user and group created for each
+          nebula network, using the <literal>CAP_NET_ADMIN</literal>
+          ambient capability on launch rather than starting as root.
+          Ensure that any files each Nebula instance needs to access are
+          owned by the correct user and group, by default
+          <literal>nebula-${networkName}</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           In <literal>mastodon</literal> it is now necessary to specify
           location of file with <literal>PostgreSQL</literal> database
           password. In
@@ -792,6 +802,18 @@
           <link xlink:href="options.html#opt-services.garage.package">services.garage.package</link>
           or upgrade accordingly
           <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nebula now supports the
+          <literal>services.nebula.networks.&lt;name&gt;.isRelay</literal>
+          and
+          <literal>services.nebula.networks.&lt;name&gt;.relays</literal>
+          configuration options for setting up or allowing traffic
+          relaying. See the
+          <link xlink:href="https://www.defined.net/blog/announcing-relay-support-in-nebula/">announcement</link>
+          for more details about relays.
         </para>
       </listitem>
       <listitem>
