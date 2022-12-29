@@ -204,8 +204,27 @@ in
               Type = "simple";
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
+              UMask = "0027";
               CapabilityBoundingSet = "CAP_NET_ADMIN";
               AmbientCapabilities = "CAP_NET_ADMIN";
+              LockPersonality = true;
+              NoNewPrivileges = true;
+              PrivateDevices = false; # needs access to /dev/net/tun (below)
+              DeviceAllow = "/dev/net/tun rw";
+              DevicePolicy = "closed";
+              PrivateTmp = true;
+              PrivateUsers = false; # CapabilityBoundingSet needs to apply to the host namespace
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectHome = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              ProtectSystem = "strict";
+              RestrictNamespaces = true;
+              RestrictSUIDSGID = true;
               User = networkId;
               Group = networkId;
             };
@@ -227,6 +246,8 @@ in
         };
       }) enabledNetworks);
 
-    users.groups = mkMerge (mapAttrsToList (netName: netCfg: { ${nameToId netName} = {}; }) enabledNetworks);
+    users.groups = mkMerge (mapAttrsToList (netName: netCfg: {
+      ${nameToId netName} = {};
+    }) enabledNetworks);
   };
 }
