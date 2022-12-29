@@ -77,7 +77,7 @@ buildDotnetModule rec {
   })];
 
   meta = with lib; {
-    description = "Rhythm is just a *click* away";
+    description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
     license = with licenses; [
       mit
