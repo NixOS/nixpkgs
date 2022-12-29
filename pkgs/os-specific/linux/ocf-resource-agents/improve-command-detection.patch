@@ -1,0 +1,24 @@
+diff --git a/heartbeat/ocf-binaries.in b/heartbeat/ocf-binaries.in
+index e9bf95fc..3392bb0b 100644
+--- a/heartbeat/ocf-binaries.in
++++ b/heartbeat/ocf-binaries.in
+@@ -59,17 +59,12 @@ check_binary () {
+ 	    # Chances are we have a fully setup OCF environment
+ 	    ocf_exit_reason "Setup problem: couldn't find command: $1"
+ 	else 
+-	    echo "Setup problem: couldn't find command: $1"
++	    echo "Setup problem2: couldn't find command: $1"
+ 	fi
+ 	exit $OCF_ERR_INSTALLED
+     fi
+ }
+ 
+ have_binary () {
+-    if [ "$OCF_TESTER_FAIL_HAVE_BINARY" = "1" ]; then
+-    	false
+-    else
+-	local bin=`echo $1 | sed -e 's/ -.*//'`
+-	test -x "`which $bin 2>/dev/null`"
+-    fi
++   command -v $(echo $1 | sed -e 's/ -.*//')
+ }
