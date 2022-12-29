@@ -886,6 +886,16 @@ rec {
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
+    # A recursively defined type that doesn't trigger infinite recursions.
+    recursive = tf: let
+      base = tf (mkOptionType { name = "itself"; description = "itself"; descriptionClass = "noun"; });
+      type = tf type // {
+        description = "recursive type of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") base}";
+        descriptionClass = "composite";
+        inherit (base) getSubOptions getSubModules substSubModules;
+      };
+    in type;
+
   };
 };
 

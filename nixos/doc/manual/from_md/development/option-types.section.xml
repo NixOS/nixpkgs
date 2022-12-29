@@ -698,6 +698,29 @@
           </para>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.recursive</literal>
+          <emphasis><literal>f</literal></emphasis>
+        </term>
+        <listitem>
+          <para>
+            A recursively defined type based on the fixed point of
+            <literal>f</literal>. As an example, you could define the
+            type of boolean
+            <link xlink:href="https://en.wikipedia.org/wiki/Rose_tree">rose
+            trees</link> as
+            <literal>with types; recursive (t: either bool (listOf t))</literal>.
+            If you used <literal>lib.fix</literal> instead of
+            <literal>recursive</literal>, you would run into infinite
+            recursions as the module system tries to determine the
+            description and suboptions of this type.
+          </para>
+          <para>
+            This is useful for defining recursive formats such as JSON.
+          </para>
+        </listitem>
+      </varlistentry>
     </variablelist>
   </section>
   <section xml:id="section-option-types-submodule">

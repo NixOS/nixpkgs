@@ -337,6 +337,16 @@ Composed types are types that take a type as parameter. `listOf
     value of type *`to`*. Can be used to preserve backwards compatibility
     of an option if its type was changed.
 
+`types.recursive` *`f`*
+
+:   A recursively defined type based on the fixed point of `f`.
+    As an example, you could define the type of boolean [rose trees](https://en.wikipedia.org/wiki/Rose_tree)
+    as `with types; recursive (t: either bool (listOf t))`. If you used
+    `lib.fix` instead of `recursive`, you would run into infinite recursions
+    as the module system tries to determine the description and suboptions of this type.
+
+    This is useful for defining recursive formats such as JSON.
+
 ## Submodule {#section-option-types-submodule}
 
 `submodule` is a very powerful type that defines a set of sub-options
