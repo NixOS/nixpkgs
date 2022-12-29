@@ -2175,9 +2175,7 @@ with pkgs;
 
   ares = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/ares { };
 
-  bsnes-hd = callPackage ../applications/emulators/bsnes/bsnes-hd {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
-  };
+  bsnes-hd = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/bsnes-hd { };
 
   higan = callPackage ../applications/emulators/bsnes/higan { };
 
@@ -4405,6 +4403,8 @@ with pkgs;
 
   envsubst = callPackage ../tools/misc/envsubst { };
 
+  envfs = callPackage ../tools/filesystems/envfs { };
+
   er-patcher = callPackage ../tools/games/er-patcher { };
 
   errcheck = callPackage ../development/tools/errcheck { };
@@ -4773,7 +4773,9 @@ with pkgs;
 
   hunt = callPackage ../tools/misc/hunt { };
 
-  hypr = callPackage ../applications/window-managers/hyprwm/hypr { };
+  hypr = callPackage ../applications/window-managers/hyprwm/hypr {
+    cairo = cairo.override { xcbSupport = true; };
+  };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
     stdenv = gcc11Stdenv;
@@ -11691,6 +11693,8 @@ with pkgs;
 
   skydns = callPackage ../servers/skydns { };
 
+  sing-box = callPackage ../tools/networking/sing-box { };
+
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
   skribilo = callPackage ../tools/typesetting/skribilo {
@@ -16023,6 +16027,7 @@ with pkgs;
   lua51Packages = recurseIntoAttrs lua5_1.pkgs;
   lua52Packages = recurseIntoAttrs lua5_2.pkgs;
   lua53Packages = recurseIntoAttrs lua5_3.pkgs;
+  lua54Packages = recurseIntoAttrs lua5_4.pkgs;
   luajitPackages = recurseIntoAttrs luajit.pkgs;
 
   luaPackages = lua52Packages;

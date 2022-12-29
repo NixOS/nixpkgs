@@ -558,6 +558,15 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    # TODO: deprecate this in the future:
+    loaOf = elemType: types.attrsOf elemType // {
+      name = "loaOf";
+      deprecationMessage = "Mixing lists with attribute values is no longer"
+        + " possible; please use `types.attrsOf` instead. See"
+        + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
+      nestedTypes.elemType = elemType;
+    };
+
     # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
     uniq = elemType: mkOptionType rec {
       name = "uniq";
