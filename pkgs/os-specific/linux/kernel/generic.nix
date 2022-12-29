@@ -50,6 +50,7 @@
 , ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
+, extraPassthru ? {}
 
 , isZen      ? false
 , isLibre    ? false
@@ -225,7 +226,7 @@ let
           ) overridableKernel;
       };
     in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
-  };
+  } // extraPassthru;
 
   finalKernel = lib.extendDerivation true passthru kernel;
 in finalKernel
