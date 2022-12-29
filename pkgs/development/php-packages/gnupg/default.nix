@@ -1,10 +1,18 @@
-{ buildPecl, lib, gpgme, file, gnupg, php }:
+{ buildPecl, lib, gpgme, file, gnupg, php, fetchFromGitHub }:
 
-buildPecl {
+let
+  version = "1.5.1";
+in buildPecl {
+  inherit version;
   pname = "gnupg";
 
-  version = "1.5.1";
-  sha256 = "sha256-qZBvRlqyNDyy8xJ+4gnHJ2Ajh0XDSHjZu8FXZIYhklI=";
+  src = fetchFromGitHub {
+    owner = "php-gnupg";
+    repo = "php-gnupg";
+    rev = "gnupg-${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-kEc0883sYgmAf1mkH0zRjHzUASnZgQvdYE6VzT5X2RI=";
+  };
 
   buildInputs = [ gpgme ];
   checkInputs = [ gnupg ];
@@ -29,6 +37,7 @@ buildPecl {
   doCheck = true;
 
   meta = with lib; {
+    changelog = "https://github.com/php-gnupg/php-gnupg/releases/tag/gnupg-${version}";
     broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = licenses.bsd3;
