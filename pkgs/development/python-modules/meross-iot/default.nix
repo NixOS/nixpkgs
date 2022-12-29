@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "albertogeniola";
     repo = "MerossIot";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6TWtqPYbHZKiAEHAGxZrPxvIiLdNhwOtqtgG+HtQGjI=";
+    hash = "sha256-6TWtqPYbHZKiAEHAGxZrPxvIiLdNhwOtqtgG+HtQGjI=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
+    changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
