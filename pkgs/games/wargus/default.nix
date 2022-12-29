@@ -2,7 +2,7 @@
 , requireFile, runCommand, p7zip
 , cmake, pkg-config, makeWrapper
 , zlib, bzip2, libpng
-, dialog, python3, cdparanoia, ffmpeg
+, ffmpeg
 }:
 
 let

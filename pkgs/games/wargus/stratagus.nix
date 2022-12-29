@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, makeWrapper
-, zlib, bzip2, libpng, lua5_1, toluapp
+, cmake, pkg-config, zlib, bzip2, libpng, lua5_1, toluapp
 , SDL2, SDL2_mixer, SDL2_image, libGL
 }:
 
