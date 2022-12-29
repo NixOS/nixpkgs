@@ -13,6 +13,7 @@
 , glib
 , gobject-introspection
 , folks
+, bash
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -39,6 +40,7 @@ python3Packages.buildPythonApplication rec {
     libsecret
     gnome-online-accounts
     folks
+    bash
   ];
 
   nativeBuildInputs = [
@@ -58,9 +60,6 @@ python3Packages.buildPythonApplication rec {
 
   # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped
   dontWrapGApps = true;
-
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")

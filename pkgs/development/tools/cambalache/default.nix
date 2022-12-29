@@ -40,6 +40,8 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils # for update-desktop-database
     shared-mime-info # for update-mime-database
     wrapGAppsHook
+    gtk4 # checks for broadwayd and gtk4-broadwayd during configure
+    gtk3
   ];
 
   pythonPath = with python3.pkgs; [
@@ -56,10 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     libadwaita
     libhandy
   ];
-
-  # Not compatible with gobject-introspection setup hooks.
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   # Prevent double wrapping.
   dontWrapGApps = true;

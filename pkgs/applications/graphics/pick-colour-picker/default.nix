@@ -37,10 +37,6 @@ buildPythonPackage rec {
     gtk3
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  # this must be false, otherwise the gobject-introspection hook doesn't run
-  strictDeps = false;
-
   preDistPhases = [ "fixupIconPath" ];
 
   fixupIconPath = ''

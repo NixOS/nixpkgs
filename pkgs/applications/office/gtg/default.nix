@@ -67,7 +67,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   format = "other";
-  strictDeps = false; # gobject-introspection does not run with strictDeps (https://github.com/NixOS/nixpkgs/issues/56943)
 
   checkPhase = "xvfb-run pytest ../tests/";
 
