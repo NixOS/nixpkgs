@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.9.1";
+  version = "22.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KbcHnAdr59hk7W36BiTb/hD74ktj/DGzq1vcuZ/lGfQ=";
+    hash = "sha256-Vj780rP5rJ+YsMWlb3BR9LTKT/nTt0C2H3J0X9sysj8=";
   };
 
   propagatedBuildInputs = [
