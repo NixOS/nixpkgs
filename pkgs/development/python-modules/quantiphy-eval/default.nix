@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # tests require quantiphy import
   doCheck = false;
 
-  # Also affeted by the circular dependency on quantiphy
+  # Also affected by the circular dependency on quantiphy
   # pythonImportsCheck = [
   #   "quantiphy_eval"
   # ];
