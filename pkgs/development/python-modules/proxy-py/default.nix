@@ -1,7 +1,10 @@
 { lib
 , stdenv
+, bash
 , buildPythonPackage
 , fetchFromGitHub
+, gnumake
+, httpx
 , openssl
 , paramiko
 , pytest-asyncio
@@ -15,7 +18,7 @@
 buildPythonPackage rec {
   pname = "proxy-py";
   version = "2.4.3";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -25,6 +28,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+    --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
+    substituteInPlace pytest.ini \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -36,7 +48,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    httpx
     openssl
+    gnumake
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -46,10 +60,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "typing-extensions==3.7.4.3" "typing-extensions"
-  '';
+  disabledTests = [
+    # Test requires network access
+    "test_http2_via_proxy"
+    # Tests run into a timeout
+    "integration"
+  ];
 
   pythonImportsCheck = [
     "proxy"
