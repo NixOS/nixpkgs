@@ -33,9 +33,10 @@ buildPythonPackage rec {
   # tests require quantiphy import
   doCheck = false;
 
-  pythonImportsCheck = [
-    "quantiphy_eval"
-  ];
+  # Also affeted by the circular dependency on quantiphy
+  # pythonImportsCheck = [
+  #   "quantiphy_eval"
+  # ];
 
   meta = with lib; {
     description = "QuantiPhy support for evals in-line";
