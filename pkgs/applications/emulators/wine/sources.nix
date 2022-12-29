@@ -54,7 +54,7 @@ in rec {
 
     updateScript = writeShellScript "update-wine-stable" (''
       ${updateScriptPreamble}
-      major=''${UPDATE_NIX_OLD_VERSION%.*}
+      major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_stable=$(get_latest_wine_version "$major.0")
       latest_gecko=$(get_latest_lib_version wine-gecko)
 
@@ -86,7 +86,7 @@ in rec {
 
     updateScript = writeShellScript "update-wine-unstable" ''
       ${updateScriptPreamble}
-      major=''${UPDATE_NIX_OLD_VERSION%.*}
+      major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_unstable=$(get_latest_wine_version "$major.x")
       latest_mono=$(get_latest_lib_version wine-mono)
 
