@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, git }:
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeWrapper
+, electron
+, git
+}:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
@@ -52,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
+    changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ weihua ];
     platforms = [ "x86_64-linux" ];
