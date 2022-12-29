@@ -13718,6 +13718,12 @@
     githubId = 66133083;
     name = "Tomas Bravo";
   };
+  tchab = {
+    email = "dev@chabs.name";
+    github = "t-chab";
+    githubId = 2120966;
+    name = "t-chab";
+  };
   tchekda = {
     email = "contact@tchekda.fr";
     github = "Tchekda";
