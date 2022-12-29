@@ -8878,6 +8878,8 @@ self: super: with self; {
 
   pytest-freezegun = callPackage ../development/python-modules/pytest-freezegun { };
 
+  pytest-freezer = callPackage ../development/python-modules/pytest-freezer { };
+
   pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
