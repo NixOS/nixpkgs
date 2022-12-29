@@ -869,9 +869,17 @@ rec {
   # option declarations in submodules have accurate position information.
   # TODO: Merge this into mergeOptionDecls
   fixupOptionType = loc: opt:
-    if opt.type.getSubModules or null == null
+    builtins.addErrorContext ''
+      while evaluating the type of option `${showOption loc}`
+
+      ====================================
+      A possible cause for the error is that `${showOption loc}` has a recursively
+      defined type that does not use `types.recursive`.
+      ====================================
+    ''
+    (if opt.type.getSubModules or null == null
     then opt // { type = opt.type or types.unspecified; }
-    else opt // { type = opt.type.substSubModules opt.options; options = []; };
+    else opt // { type = opt.type.substSubModules opt.options; options = []; });
 
 
   /* Properties. */
