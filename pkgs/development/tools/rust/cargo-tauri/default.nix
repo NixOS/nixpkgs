@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -7,8 +8,12 @@
 , cairo
 , gtk3
 , webkitgtk
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
   version = "1.2.3";
@@ -26,7 +31,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-Hp6+T2CN0CsXaGnCVqAYaOjZNDkmI+MXDfHIgbU1S0g=";
 
-  buildInputs = [ glibc libsoup cairo gtk3 webkitgtk ];
+  buildInputs = lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
