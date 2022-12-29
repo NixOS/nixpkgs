@@ -1,15 +1,28 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, python3
+, binutils-unwrapped
+, findutils
+, kmod
+, pciutils
+, libraspberrypi
 }:
+
+let verinfo = {
+  version = "2022-12-07";
+  rev = "6e79e995bbc75c5fdd5305bd7fe029758cfade2f";
+  hash = "sha256-/Q9zj/Hn/8S7bF1CN6ZCg705VYU+QUagNr4RNgZl+oA=";
+}; in
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2022.12.07-138a1";
+  version = verinfo.version;
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "v${version}";
-    hash = "sha256-/Q9zj/Hn/8S7bF1CN6ZCg705VYU+QUagNr4RNgZl+oA=";
+    inherit (verinfo) rev hash;
   };
 
   buildInputs = [ python3 ];
@@ -48,6 +61,8 @@ stdenvNoCC.mkDerivation rec {
         ])}"
     done
   '';
+
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
     description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 EEPROMs";
