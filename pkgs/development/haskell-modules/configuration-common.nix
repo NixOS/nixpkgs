@@ -1657,6 +1657,9 @@ self: super: {
   # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
   trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
 
+  # 2022-12-28: Too strict version bounds on bytestring
+  iconv = doJailbreak super.iconv;
+
   # 2021-04-02: iCalendar is basically unmaintained.
   # There is a PR for fixing the build: https://github.com/chrra/iCalendar/pull/50
   iCalendar = appendPatches [
