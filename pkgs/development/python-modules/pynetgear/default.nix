@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "MatMaul";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-cffaXYoMBICfevoRnm3n0/qfD/Arz4TZeGihhIMmUcI=";
+    hash = "sha256-cffaXYoMBICfevoRnm3n0/qfD/Arz4TZeGihhIMmUcI=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with Netgear wireless routers";
     homepage = "https://github.com/MatMaul/pynetgear";
+    changelog = "https://github.com/MatMaul/pynetgear/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
