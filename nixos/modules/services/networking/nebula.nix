@@ -175,6 +175,7 @@ in
           relay = {
             am_relay = netCfg.isRelay;
             relays = netCfg.relays;
+            use_relays = true;
           };
           listen = {
             host = netCfg.listen.host;

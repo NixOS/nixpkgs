@@ -37,6 +37,7 @@ in
 
         services.nebula.networks.smoke = {
           isLighthouse = true;
+          isRelay = true;
           firewall = {
             outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
             inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
@@ -55,6 +56,7 @@ in
           staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
+          relays = [ "10.0.100.1" ];
           firewall = {
             outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
             inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
@@ -73,6 +75,7 @@ in
           staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
+          relays = [ "10.0.100.1" ];
           firewall = {
             outbound = [ { port = "any"; proto = "any"; host = "any"; } ];
             inbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
@@ -92,6 +95,7 @@ in
           staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
+          relays = [ "10.0.100.1" ];
           firewall = {
             outbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
             inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
@@ -111,6 +115,7 @@ in
           staticHostMap = { "10.0.100.1" = [ "192.168.1.1:4242" ]; };
           isLighthouse = false;
           lighthouses = [ "10.0.100.1" ];
+          relays = [ "10.0.100.1" ];
           firewall = {
             outbound = [ { port = "any"; proto = "any"; host = "lighthouse"; } ];
             inbound = [ { port = "any"; proto = "any"; host = "any"; } ];
@@ -159,6 +164,28 @@ in
       )
     '';
 
+    getPublicIp = node: ''
+      ${node}.succeed("ip --brief addr show eth1 | awk '{print $3}' | tail -n1 | cut -d/ -f1").strip()
+    '';
+
+    # Never do this for anything security critical! (Thankfully it's just a test.)
+    # Restart Nebula right after the mutual block and/or restore so the state is fresh.
+    blockTrafficBetween = nodeA: nodeB: ''
+      node_a = ${getPublicIp nodeA}
+      node_b = ${getPublicIp nodeB}
+      ${nodeA}.succeed("iptables -I INPUT -s " + node_b + " -j DROP")
+      ${nodeB}.succeed("iptables -I INPUT -s " + node_a + " -j DROP")
+      ${nodeA}.systemctl("restart nebula@smoke.service")
+      ${nodeB}.systemctl("restart nebula@smoke.service")
+    '';
+    allowTrafficBetween = nodeA: nodeB: ''
+      node_a = ${getPublicIp nodeA}
+      node_b = ${getPublicIp nodeB}
+      ${nodeA}.succeed("iptables -D INPUT -s " + node_b + " -j DROP")
+      ${nodeB}.succeed("iptables -D INPUT -s " + node_a + " -j DROP")
+      ${nodeA}.systemctl("restart nebula@smoke.service")
+      ${nodeB}.systemctl("restart nebula@smoke.service")
+    '';
   in ''
     # Create the certificate and sign the lighthouse's keys.
     ${setUpPrivateKey "lighthouse"}
@@ -210,6 +237,12 @@ in
     node3.succeed("ping -c3 10.0.100.1")
     node3.succeed("ping -c3 10.0.100.2")
 
+    # block node3 <-> node2, and node3 -> node2 should still work.
+    ${blockTrafficBetween "node3" "node2"}
+    node3.succeed("ping -c10 10.0.100.2")
+    ${allowTrafficBetween "node3" "node2"}
+    node3.succeed("ping -c10 10.0.100.2")
+
     # node4 can ping the lighthouse but not node2 or node3
     node4.succeed("ping -c3 10.0.100.1")
     node4.fail("ping -c3 10.0.100.2")
@@ -217,7 +250,56 @@ in
 
     # node2 can ping node3 now that node3 pinged it first
     node2.succeed("ping -c3 10.0.100.3")
+
+    # block node2 <-> node3, and node2 -> node3 should still work.
+    ${blockTrafficBetween "node2" "node3"}
+    node3.succeed("ping -c10 10.0.100.2")
+    node2.succeed("ping -c10 10.0.100.3")
+    ${allowTrafficBetween "node2" "node3"}
+    node3.succeed("ping -c10 10.0.100.2")
+    node2.succeed("ping -c10 10.0.100.3")
+
     # node4 can ping node2 if node2 pings it first
+    node2.succeed("ping -c3 10.0.100.4")
+    node4.succeed("ping -c3 10.0.100.2")
+
+    # block node4 <-> node2, and node2 <-> node4 should still work.
+    ${blockTrafficBetween "node2" "node4"}
+    node2.succeed("ping -c10 10.0.100.4")
+    node4.succeed("ping -c10 10.0.100.2")
+    ${allowTrafficBetween "node2" "node4"}
+    node2.succeed("ping -c10 10.0.100.4")
+    node4.succeed("ping -c10 10.0.100.2")
+
+    # block lighthouse <-> node3 and node2 <-> node3; node3 won't get to node2
+    ${blockTrafficBetween "node3" "lighthouse"}
+    ${blockTrafficBetween "node3" "node2"}
+    node3.fail("ping -c3 10.0.100.2")
+    ${allowTrafficBetween "node3" "lighthouse"}
+    ${allowTrafficBetween "node3" "node2"}
+    node3.succeed("ping -c3 10.0.100.2")
+
+    # block lighthouse <-> node2, node2 <-> node3, and node2 <-> node4; it won't get to node3 or node4
+    ${blockTrafficBetween "node2" "lighthouse"}
+    ${blockTrafficBetween "node2" "node3"}
+    ${blockTrafficBetween "node2" "node4"}
+    node3.fail("ping -c3 10.0.100.2")
+    node2.fail("ping -c3 10.0.100.3")
+    node2.fail("ping -c3 10.0.100.4")
+    ${allowTrafficBetween "node2" "lighthouse"}
+    ${allowTrafficBetween "node2" "node3"}
+    ${allowTrafficBetween "node2" "node4"}
+    node3.succeed("ping -c3 10.0.100.2")
+    node2.succeed("ping -c3 10.0.100.3")
+    node2.succeed("ping -c3 10.0.100.4")
+
+    # block lighthouse <-> node4 and node4 <-> node2; it won't get to node2
+    ${blockTrafficBetween "node4" "lighthouse"}
+    ${blockTrafficBetween "node4" "node2"}
+    node2.fail("ping -c3 10.0.100.4")
+    node4.fail("ping -c3 10.0.100.2")
+    ${allowTrafficBetween "node4" "lighthouse"}
+    ${allowTrafficBetween "node4" "node2"}
     node2.succeed("ping -c3 10.0.100.4")
     node4.succeed("ping -c3 10.0.100.2")
   '';
