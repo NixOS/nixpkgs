@@ -49,10 +49,20 @@ stdenvNoCC.mkDerivation {
 
     # Bluetooth firmware
     cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+    
+    # jfc, some cypress fixup
+    (cd $out/lib/firmware/cypress; ln -s "cyfmac43455-sdio-standard.bin" "cyfmac43455-sdio.bin")
 
     # CM4 symlink must be added since it's missing from upstream
     pushd $out/lib/firmware/brcm &>/dev/null
     ln -s "./brcmfmac43455-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt"
+
+    # RPI02W still stuck:
+    # [    2.352195] brcmfmac mmc1:0001:1: Direct firmware load for brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.bin failed with error -2
+    # [    2.352331] brcmfmac mmc1:0001:1: Direct firmware load for brcm/brcmfmac43430b0-sdio.bin failed with error -2
+    # ln -s "./brcmfmac43430b0-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.txt"
+    ln -s "./brcmfmac43436s-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.txt"
+
     popd &>/dev/null
 
     runHook postInstall
