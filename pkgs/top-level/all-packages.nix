@@ -8654,9 +8654,7 @@ with pkgs;
 
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
 
-  kubo = callPackage ../applications/networking/kubo {
-    openssl = openssl_1_1;
-  };
+  kubo = callPackage ../applications/networking/kubo { };
 
   kubo-migrator-all-fs-repo-migrations = callPackage ../applications/networking/kubo-migrator/all-migrations.nix { };
   kubo-migrator-unwrapped = callPackage ../applications/networking/kubo-migrator/unwrapped.nix { };
@@ -8888,7 +8886,6 @@ with pkgs;
 
   mdbook-plantuml = callPackage ../tools/text/mdbook-plantuml {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    openssl = openssl_1_1;
   };
 
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
@@ -15081,7 +15078,7 @@ with pkgs;
 
   muonlang = callPackage ../development/compilers/muonlang { };
 
-  inherit (callPackages ../development/compilers/nim { openssl = openssl_1_1; })
+  inherit (callPackages ../development/compilers/nim { })
     nim-unwrapped nimble-unwrapped nim;
   nimPackages = recurseIntoAttrs nim.pkgs;
 
@@ -16539,9 +16536,7 @@ with pkgs;
 
   srelay = callPackage ../tools/networking/srelay { };
 
-  xidel = callPackage ../tools/text/xidel {
-    openssl = openssl_1_1;
-  };
+  xidel = callPackage ../tools/text/xidel { };
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
@@ -18756,9 +18751,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  nfd = callPackage ../servers/nfd {
-    openssl = openssl_1_1;
-  };
+  nfd = callPackage ../servers/nfd { };
 
   cddlib = callPackage ../development/libraries/cddlib {};
 
@@ -21266,9 +21259,7 @@ with pkgs;
 
   libstroke = callPackage ../development/libraries/libstroke { };
 
-  libstrophe = callPackage ../development/libraries/libstrophe {
-    openssl = openssl_1_1;
-  };
+  libstrophe = callPackage ../development/libraries/libstrophe { };
 
   libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
 
@@ -22425,7 +22416,6 @@ with pkgs;
 
   quill = callPackage ../tools/security/quill {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
 
   qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray {};
@@ -24113,9 +24103,7 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
-  lighttpd = callPackage ../servers/http/lighttpd {
-    openssl = openssl_1_1;
-  };
+  lighttpd = callPackage ../servers/http/lighttpd { };
 
   listmonk = callPackage ../servers/mail/listmonk { };
 
