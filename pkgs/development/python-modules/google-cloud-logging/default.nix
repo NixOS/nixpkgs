@@ -1,32 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , django
+, fetchPypi
 , flask
 , google-api-core
 , google-cloud-appengine-logging
 , google-cloud-audit-log
 , google-cloud-core
 , google-cloud-testutils
+, grpc-google-iam-v1
 , mock
 , pandas
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 , rich
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.3.1";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bxFBWi6cx7TeeofMP59XVRX9aDpCP2N5lAkUpWYW1wU=";
+    hash = "sha256-zeD1n625F0aHRiUrr0sR6gD21obvAhORg+r5IfOu5rQ=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +36,10 @@ buildPythonPackage rec {
     google-cloud-appengine-logging
     google-cloud-audit-log
     google-cloud-core
+    grpc-google-iam-v1
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     django
@@ -56,9 +60,15 @@ buildPythonPackage rec {
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
-    # requires credentials
-    rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
+
+  disabledTestPaths = [
+    # Tests require credentials
+    "tests/system/test_system.py"
+    "tests/unit/test__gapic.py"
+    # Exclude performance tests
+    "tests/performance/test_performance.py"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.logging"
