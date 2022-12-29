@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.8.0";
+  version = "3.8.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VUR8qmZvIZjFtrE6JtIITSb6WxFcANBlZkshJGgMTtw=";
+    hash = "sha256-dWX2KOpWv82OVOQr3FXaiZyFwav+G1vP0UfpGIzrs7I=";
   };
 
   nativeBuildInputs = [
