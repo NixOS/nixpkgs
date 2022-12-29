@@ -53,6 +53,8 @@ lib.makeScope newScope (self:
 
     noise = callPackage ../development/nim-packages/noise { };
 
+    npeg = callPackage ../development/nim-packages/npeg { };
+
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
     pixie = callPackage ../development/nim-packages/pixie { };
