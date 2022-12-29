@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , hypothesis
 , pythonOlder
 , pytestCheckHook
@@ -8,12 +9,13 @@
 
 buildPythonPackage rec {
   pname = "chardet";
-  version = "5.0.0";
+  version = "5.1.0";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-A2jfK/14tfwgVyu06bt/tT4sCU9grpmTM56GcdCvuKo=";
+    sha256 = "sha256-DWJxK5VrwVT4X7CiZuKjxZE8KWfgA0hwGzJBHW3vMeU=";
   };
 
   checkInputs = [
@@ -21,6 +23,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  buildInputs = [ setuptools ];
   disabledTests = [
     # flaky; https://github.com/chardet/chardet/issues/256
     "test_detect_all_and_detect_one_should_agree"
