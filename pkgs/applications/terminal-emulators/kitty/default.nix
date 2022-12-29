@@ -7,12 +7,13 @@
 , openssl
 , installShellFiles
 , dbus
-, darwin
 , Cocoa
 , CoreGraphics
 , Foundation
 , IOKit
 , Kernel
+, UniformTypeIdentifiers
+, UserNotifications
 , OpenGL
 , libcanberra
 , libicns
@@ -51,11 +52,11 @@ buildPythonApplication rec {
     IOKit
     Kernel
     OpenGL
+    UniformTypeIdentifiers
+    UserNotifications
     libpng
     python3
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
-    darwin.apple_sdk.frameworks.UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -218,6 +219,7 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
     maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
   };
 }

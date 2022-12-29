@@ -1884,9 +1884,9 @@ with pkgs;
 
   kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
 
-  kitty = callPackage ../applications/terminal-emulators/kitty {
+  kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel UniformTypeIdentifiers OpenGL UserNotifications;
   };
 
   kitty-themes  = callPackage ../misc/kitty-themes {};
