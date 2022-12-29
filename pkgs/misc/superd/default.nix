@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "superd";
-  version = "0.7";
+  version = "0.7.1";
 
   src = fetchFromSourcehut {
     owner = "~craftyguy";
     repo = pname;
     rev = version;
-    hash = "sha256-XSB6qgepWhus15lOP9GzbiNoOCSsy6xLij7ic3LFs1E=";
+    hash = "sha256-5g9Y1Lpxp9cUe0sNvU5CdsTGcN+j00gIKPO9pD5j8uM=";
   };
 
   vendorHash = "sha256-Oa99U3THyWLjH+kWMQAHO5QAS2mmtY7M7leej+gnEqo=";

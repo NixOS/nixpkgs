@@ -15879,7 +15879,7 @@ with pkgs;
     # On newer readline8 fails as:
     #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
     #   does not have the required size or alignment
-    readline = readline6;
+    readline = readline63;
   };
 
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
@@ -22448,7 +22448,6 @@ with pkgs;
   raylib = callPackage ../development/libraries/raylib { };
 
   readline = readline81;
-  readline6 = readline63;
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
@@ -31380,6 +31379,8 @@ with pkgs;
     synthpod = callPackage ../applications/audio/open-music-kontrollers/synthpod.nix { };
     vm = callPackage ../applications/audio/open-music-kontrollers/vm.nix { };
   };
+
+  openrsync = darwin.apple_sdk_11_0.callPackage ../applications/networking/sync/openrsync { };
 
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
