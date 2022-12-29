@@ -2,18 +2,28 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.15.84";
-  tag = "1.20230106";
+  # see notes in maintainer/foo/bar/TODO
+
+  # - RPi folks tag firmware and expects you to work backward to find kernel commit
+  # - The kernel commit is specified by rev, not sure if guaranteed to actually be tagged
+  #   as such, name these fields accordingly:
+  # - Use the raspberrypi/firmware "stable" branch, and the rev used for `raspberrypifw` and this url:
+  #   https://github.com/raspberrypi/firmware/blob/{{raspberrypifw->src->rev}}/extra/git_hash
+  verinfo = {
+    modDirVersion = "5.15.84";
+    version = "2023-01-06";
+    rev = "refs/tags/1.20230106";
+    hash = "sha512-6Dcpo81JBvc8NOv1nvO8JwjUgOOviRgHmXLLcGpE/pI2lEOcSeDRlB/FZtflzXTGilapvmwOSx5NxQfAmysHqQ==";
+  };
 in
 lib.overrideDerivation (buildLinux (args // {
-  version = "${modDirVersion}-${tag}";
-  inherit modDirVersion;
+  modDirVersion = verinfo.modDirVersion;
+  version = "${verinfo.modDirVersion}-${verinfo.version}";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = tag;
-    hash = "sha512-6Dcpo81JBvc8NOv1nvO8JwjUgOOviRgHmXLLcGpE/pI2lEOcSeDRlB/FZtflzXTGilapvmwOSx5NxQfAmysHqQ==";
+    inherit (verinfo) rev hash;
   };
 
   defconfig = {
@@ -27,6 +37,8 @@ lib.overrideDerivation (buildLinux (args // {
     efiBootStub = false;
   } // (args.features or {});
 
+  extraPassthru.verinfo = verinfo;
+
   extraConfig = ''
     # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
     #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
@@ -39,6 +51,8 @@ lib.overrideDerivation (buildLinux (args // {
     #       |    ^~~~~~~~~~~~~~~~~~~~~~~~~
     DRM_AMDGPU n
   '';
+
+  passthru.verinfo = verinfo;
 
   extraMeta = if (rpiVersion < 3) then {
     platforms = with lib.platforms; arm;
