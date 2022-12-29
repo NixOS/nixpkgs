@@ -6953,6 +6953,8 @@ self: super: with self; {
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
+  pyproject-api = callPackage ../development/python-modules/pyproject-api { };
+
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
