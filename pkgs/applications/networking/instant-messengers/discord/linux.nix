@@ -1,7 +1,7 @@
 { pname, version, src, openasar, meta, binaryName, desktopName, autoPatchelfHook
 , makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
-, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
+, glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
+    libglvnd
     libnotify
     libX11
     libXcomposite
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
         --run "${lib.getExe disableBreakingUpdates}"
