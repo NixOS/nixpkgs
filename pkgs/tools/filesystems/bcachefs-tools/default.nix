@@ -13,9 +13,12 @@
 , zstd
 , lz4
 , python3Packages
+, util-linux
 , udev
 , valgrind
 , nixosTests
+, makeWrapper
+, getopt
 , fuse3
 , fuseSupport ? false
 }:
@@ -39,7 +42,9 @@ stdenv.mkDerivation {
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkg-config docutils python3Packages.python ];
+  nativeBuildInputs = [
+    pkg-config docutils python3Packages.python makeWrapper
+  ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
@@ -52,6 +57,13 @@ stdenv.mkDerivation {
 
   preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
+  '';
+
+  # this symlink is needed for mount -t bcachefs to work
+  postFixup = ''
+    ln -s $out/bin/mount.bcachefs.sh $out/bin/mount.bcachefs
+    wrapProgram $out/bin/mount.bcachefs.sh \
+      --prefix PATH : ${lib.makeBinPath [ getopt util-linux ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
