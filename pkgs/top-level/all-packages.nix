@@ -31089,8 +31089,6 @@ with pkgs;
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
-  mps-youtube = callPackage ../applications/misc/mps-youtube { };
-
   mplayer = callPackage ../applications/video/mplayer ({
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
