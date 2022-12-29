@@ -27747,6 +27747,8 @@ with pkgs;
 
   avocode = callPackage ../applications/graphics/avocode {};
 
+  ax25-apps = callPackage ../applications/radio/ax25-apps {};
+
   ax25-tools = callPackage ../applications/radio/ax25-tools {};
 
   azpainter = callPackage ../applications/graphics/azpainter { };
