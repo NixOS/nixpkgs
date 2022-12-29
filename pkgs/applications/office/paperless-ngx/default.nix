@@ -12,6 +12,7 @@
 , unpaper
 , liberation_ttf
 , fetchFromGitHub
+, fetchpatch
 }:
 
 let
@@ -136,6 +137,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     langdetect
     lxml
     msgpack
+    nltk
     numpy
     ocrmypdf
     pathvalidate
@@ -192,6 +194,14 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
   postBuild = ''
     ${python.interpreter} -OO -m compileall src
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "Bakes-the-NLTK-data-into-the-image-60mb.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/8da3ae2c539266d96c8885964f07bf34c69d73c4.patch";
+      hash = "sha256-MFOAfZkcyx0teLvGZ9lrG5YlroYljv6GgAlCoaH8S/A=";
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/lib
