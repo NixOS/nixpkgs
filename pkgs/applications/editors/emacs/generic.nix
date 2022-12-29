@@ -6,7 +6,7 @@
   , name ? "emacs-${version}${versionModifier}"
   , patches ? _: [ ]
   , macportVersion ? null
-}:
+}@outer:
 { stdenv, llvmPackages_6, lib, fetchurl, fetchpatch, substituteAll, ncurses, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
@@ -33,7 +33,7 @@
 , srcRepo ? true, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? true
-, version ? version
+, version ? outer.version
 , withAthena ? false
 , withToolkitScrollBars ? true
 , withPgtk ? false, gtk3 ? null
