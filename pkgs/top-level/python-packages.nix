@@ -1981,6 +1981,8 @@ self: super: with self; {
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
+  coolprop = callPackage ../development/python-modules/coolprop { };
+
   cookies = callPackage ../development/python-modules/cookies { };
 
   coordinates = callPackage ../development/python-modules/coordinates { };
