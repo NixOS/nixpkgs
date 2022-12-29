@@ -1779,7 +1779,6 @@ broken-packages:
   - GiST
   - git
   - git-all
-  - git-brunch
   - git-checklist
   - git-cuk
   - git-date
