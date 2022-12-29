@@ -4,6 +4,7 @@
 , flit-scm
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
   checkInputs = [
     pytestCheckHook
