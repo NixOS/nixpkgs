@@ -90,6 +90,8 @@ lib.makeScope newScope (self:
 
     tempfile = callPackage ../development/nim-packages/tempfile { };
 
+    tkrzw = callPackage ../development/nim-packages/tkrzw { inherit (pkgs) tkrzw; };
+
     ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 
     unicodedb = callPackage ../development/nim-packages/unicodedb { };
