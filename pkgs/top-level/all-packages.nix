@@ -23437,14 +23437,6 @@ with pkgs;
 
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
-  # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
-  xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
-    packages = [
-      freetype fontconfig xorg.xorgproto xorg.libX11 xorg.libXt
-      xorg.libXft xorg.libXext xorg.libSM xorg.libICE
-    ];
-  };
-
   xmlada = callPackage ../development/libraries/ada/xmlada { };
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };

@@ -242,6 +242,14 @@
           that it configures the NixOS boot process, not the Nix daemon.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Deprecated <literal>xlibsWrapper</literal> transitional
+          package has been removed in favour of direct use of its
+          constitutents: <literal>xorg.libX11</literal>,
+          <literal>freetype</literal> and others.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-notable-changes">
