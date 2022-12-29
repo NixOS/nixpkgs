@@ -2,16 +2,20 @@
 
 let
   inherit (lib) optionals;
+  verinfo = {
+    version = "2022-07-11";
+    rev = "439b6198a9b340de5998dd14a26a0d9d38a6bcac";
+    hash = "sha512-KMHgj73eXHT++IE8DbCsFeJ87ngc9R3XxMUJy4Z3s4/MtMeB9zblADHkyJqz9oyeugeJTrDtuVETPBRo7M4Y8A==";
+  };
 in
 stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";
-  version = "unstable-2022-07-11";
+  version = verinfo.version;
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "tools";
-    rev = "439b6198a9b340de5998dd14a26a0d9d38a6bcac";
-    hash = "sha512-KMHgj73eXHT++IE8DbCsFeJ87ngc9R3XxMUJy4Z3s4/MtMeB9zblADHkyJqz9oyeugeJTrDtuVETPBRo7M4Y8A==";
+    inherit (verinfo) rev hash;
   };
 
   NIX_CFLAGS_COMPILE = [
@@ -42,6 +46,8 @@ stdenv.mkDerivation {
     cp -v *.bin $out/
     runHook postInstall
   '';
+
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
     description = "Firmware related ARM stubs for the Raspberry Pi";
