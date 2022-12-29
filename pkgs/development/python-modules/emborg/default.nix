@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pytestCheckHook
+, pythonOlder
 , borgbackup
 , appdirs
 , arrow
@@ -19,23 +20,17 @@
 buildPythonPackage rec {
   pname = "emborg";
   version = "1.34";
+  format = "flit";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
     rev = "v${version}";
-    sha256 = "sha256-bnlELPZzTU9KyVsz5Q0aW9xWvVrgwpowQrjkQvX844g=";
+    hash = "sha256-bnlELPZzTU9KyVsz5Q0aW9xWvVrgwpowQrjkQvX844g=";
   };
 
-  format = "flit";
-  checkInputs = [
-    nestedtext
-    parametrize-from-file
-    pytestCheckHook
-    shlib
-    voluptuous
-    borgbackup
-  ];
   propagatedBuildInputs = [
     appdirs
     arrow
@@ -45,8 +40,18 @@ buildPythonPackage rec {
     requests
   ];
 
+  checkInputs = [
+    nestedtext
+    parametrize-from-file
+    pytestCheckHook
+    shlib
+    voluptuous
+    borgbackup
+  ];
+
   # this disables testing fuse mounts
   MISSING_DEPENDENCIES = "fuse";
+
   postPatch = ''
     patchShebangs .
   '';
@@ -59,9 +64,14 @@ buildPythonPackage rec {
     })
   ];
 
+  pythonImportsCheck = [
+    "emborg"
+  ];
+
   meta = with lib; {
     description = "Interactive command line interface to Borg Backup";
     homepage = "https://github.com/KenKundert/emborg";
+    changelog = "https://github.com/KenKundert/emborg/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jpetrucciani ];
   };
