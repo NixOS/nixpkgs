@@ -1,19 +1,24 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , pkg-config
 }:
 
+let verinfo = {
+  rev = "54fd97ae4066a10b6b02089bc769ceed328737e0";
+  hash = "sha512-f7tBgIykcIdkwcFjBKk5ooD/5Bsyrd/0OFr7LNCwWFYeE4DH3XA7UR7YjArkwqUVCVBByr82EOaacw0g1blOkw==";
+  version = "unstable-2022-06-16";
+}; in
 stdenv.mkDerivation rec {
   pname = "libraspberrypi";
-  version = "unstable-2022-06-16";
+  version = verinfo.version;
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "54fd97ae4066a10b6b02089bc769ceed328737e0";
-    hash = "sha512-f7tBgIykcIdkwcFjBKk5ooD/5Bsyrd/0OFr7LNCwWFYeE4DH3XA7UR7YjArkwqUVCVBByr82EOaacw0g1blOkw==";
+    inherit (verinfo) rev hash;
   };
 
   patches = [
@@ -29,6 +34,8 @@ stdenv.mkDerivation rec {
     (if (stdenv.hostPlatform.isAarch64) then "-DARM64=ON" else "-DARM64=OFF")
     "-DVMCS_INSTALL_PREFIX=${placeholder "out"}"
   ];
+
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
     description = "Userland tools & libraries for interfacing with Raspberry Pi hardware";
