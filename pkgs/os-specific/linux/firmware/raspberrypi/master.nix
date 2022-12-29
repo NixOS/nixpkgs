@@ -26,12 +26,13 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
+  passthru.verinfo = verinfo;
+
   meta = with lib; {
     description = "Firmware for the Raspberry Pi board (unstable master branch)";
     homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
     maintainers = with maintainers; [ dezgeg ];
     broken = stdenvNoCC.isDarwin; # Hash mismatch on source, mystery.
-    inherit verinfo;
   };
 }
