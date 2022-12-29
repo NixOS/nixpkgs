@@ -49,6 +49,8 @@ lib.makeScope newScope (self:
 
     nimbox = callPackage ../development/nim-packages/nimbox { };
 
+    nimSHA2 = callPackage ../development/nim-packages/nimSHA2 { };
+
     nimsimd = callPackage ../development/nim-packages/nimsimd { };
 
     noise = callPackage ../development/nim-packages/noise { };
