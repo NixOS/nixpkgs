@@ -10,8 +10,6 @@
 
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
 
-  obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
-
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
@@ -33,6 +31,8 @@
   };
 
   obs-websocket = throw "obs-websocket has been removed: Functionality has been integrated into obs-studio itself.";
+
+  obs-backgroundremoval = throw "obs-backgroundremoval has been removed: It does not work anymore and is unmaintained.";
 
   wlrobs = callPackage ./wlrobs.nix { };
 }
