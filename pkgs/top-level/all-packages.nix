@@ -34146,6 +34146,8 @@ with pkgs;
 
   osu-lazer = callPackage ../games/osu-lazer { };
 
+  osu-lazer-bin = callPackage ../games/osu-lazer-bin { };
+
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
   qgo = libsForQt5.callPackage ../games/qgo { };
