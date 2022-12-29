@@ -1860,7 +1860,6 @@ broken-packages:
   - graphics-drawingcombinators
   - graphics-formats-collada
   - graph-matchings
-  - graphmod
   - graphmod-plugin
   - graphql-api
   - graphql-utils
