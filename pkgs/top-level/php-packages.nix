@@ -175,6 +175,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     grumphp = callPackage ../development/php-packages/grumphp { };
 
+    phan = callPackage ../development/php-packages/phan { };
+
     phing = callPackage ../development/php-packages/phing { };
 
     phive = callPackage ../development/php-packages/phive { };
