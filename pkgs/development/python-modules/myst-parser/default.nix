@@ -19,15 +19,15 @@
 
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "0.18.0";
+  version = "0.18.1";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-GEtrC7o5YnkuvBfQQfhG5P74QMiHz63Fdh1cC/r5CF0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-wgRZwafAF05LtwjH6SVKzsY7bKeZ6lUlM3dB5PdOn1E=";
   };
 
   postPatch = ''
