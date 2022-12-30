@@ -1,7 +1,8 @@
 { self, callPackage, fetchFromGitHub, passthruFun }:
+
 callPackage ./default.nix {
   version = "2.1.0-2022-10-04";
-  isStable = false;
+
   src = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
