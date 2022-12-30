@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.4.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = isPy27;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "sha256-lJTa8cdhL1mQX6CeZcm4qQu6yzgE2R96lOd4gx5vz6U=";
+    sha256 = "sha256-sNt7daMjZ6DiXCOzl4QsZeNEoSBlJNFsgGnwockbX0w=";
   };
 
   postPatch = ''
