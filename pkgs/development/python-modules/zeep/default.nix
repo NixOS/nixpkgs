@@ -28,15 +28,15 @@
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.1.0";
+  version = "4.2.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
-    rev = version;
-    sha256 = "sha256-fJLr2LJpbNQTl183R56G7sJILfm04R39qpJxLogQLoo=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
   };
 
   patches = [
