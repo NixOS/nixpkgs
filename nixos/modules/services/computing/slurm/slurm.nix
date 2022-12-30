@@ -24,9 +24,10 @@ let
         description = "Format of slurm config files.";
       };
 
-      generate = name: value:
+      generate = name: value: extraText:
         pkgs.writeTextDir name (( concatStringsSep "\n" (
-          mapAttrsToList (key: val: entryToString key val ) value )) + "\n");
+          mapAttrsToList (key: val: entryToString key val ) value )) + "\n"
+            + (optionalString (extraText != null) extraText));
    };
 
   cfg = config.services.slurm;
@@ -35,7 +36,7 @@ let
 
   defaultUser = "slurm";
 
-  configFile = settingsFormat.generate "slurm.conf" cfg.settings;
+  configFile = settingsFormat.generate "slurm.conf" cfg.settings cfg.extraConfig;
 
   plugStackConfig = pkgs.writeTextDir "plugstack.conf"
     ''
@@ -43,9 +44,9 @@ let
       ${cfg.extraPlugstackConfig}
     '';
 
-  cgroupConf = settingsFormat.generate "cgroup.conf" cfg.settingsCgroup;
+  cgroupConf = settingsFormat.generate "cgroup.conf" cfg.settingsCgroup null;
 
-  slurmdbdConf = settingsFormat.generate "slurmdbd.conf" cfg.dbdserver.settings;
+  slurmdbdConf = settingsFormat.generate "slurmdbd.conf" cfg.dbdserver.settings null;
 
   # slurm expects some additional config files to be
   # in the same directory as slurm.conf
@@ -110,6 +111,15 @@ in {
               };
             };
           };
+        '';
+      };
+
+      extraConfig = mkOption {
+        default = null;
+        type = with types; nullOr lines;
+        description = lib.mdDoc ''
+          Extra configuration options that will be added verbatim at
+          the end of the slurm configuration file.
         '';
       };
 
@@ -238,10 +248,6 @@ in {
       ${removedMessage}
       The partitions are now defined in services.slurm.settings.
     '')
-    (mkRemovedOptionModule [ "services" "slurm" "extraConfig" ] ''
-      ${removedMessage}
-      The configuration for slurm.conf is now defined in services.slurm.settings.
-    '')
     (mkRemovedOptionModule [ "services" "slurm" "extraCgroupConfig" ] ''
       ${removedMessage}
       The configuration for cgroup.conf is now defined in services.slurm.settingsCgroup.
@@ -302,6 +308,11 @@ in {
         Please set services.slurm.settings.SlurmctldHost to the hostname running slurmcltd.
       '';
     }];
+
+    warnings = optional (cfg.extraConfig != null) ''
+      services.slurm.extraConfig is deprecated and will be removed in NixOS 23.11.
+      Please have a look at the 23.05 release notes.
+    '' ;
 
     environment = {
       systemPackages = [ wrappedSlurm ];
