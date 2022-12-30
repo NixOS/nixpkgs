@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.8.3";
+  version = "2.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pB7exeGYpFT4nf3YuIhoI+bqG6YYEP6oWs0tohkOIbw=";
+    hash = "sha256-gd0cJX6XHwQguNJ7jFDUVwQg9eNk0ZUL4VH5L+3K+Lw=";
   };
 
   propagatedBuildInputs = [
