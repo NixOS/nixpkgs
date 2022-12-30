@@ -62,8 +62,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # configuration validation must not fail when configuration references
       # unreachable hostnames, https://github.com/NixOS/nixpkgs/issues/207409
       specialisation.configValidationRegression.configuration = {
-        services.nginx.virtualHosts."1.my.test".locations."/".proxyPass = "http://some.other.domain";
+        services.nginx.virtualHosts."1.my.test" = {
+          addSSL = true;
+          sslTrustedCertificate = "/dev/nonexistent/ca";
+          sslCertificateKey = "/dev/nonexistent/key";
+          sslCertificate = "/dev/nonexistent/cert";
+          locations."/".proxyPass = "http://some.other.domain";
+        };
         services.nginx.upstreams."yay".servers."1.2.3.4:3000" = {};
+        services.nginx.sslDhparam = "/var/lib/dhparams/nginx.pem";
+        security.dhparams = {
+          stateful = true;
+          params = { nginx.bits = 2048; };
+        };
       };
 
       specialisation.reloadWithErrorsSystem.configuration = {

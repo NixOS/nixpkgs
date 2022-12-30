@@ -401,6 +401,7 @@ let
     openssl req -new -key $out/server.key -out server.csr \
     -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
     openssl x509 -req -days 1 -in server.csr -signkey $out/server.key -out $out/server.crt
+    openssl dhparam -out $out/dhparam.pem 1024
   '';
   fakednsConfig = builtins.toFile "fakednsConfig" ''
     [Settings]
@@ -429,7 +430,10 @@ let
     -e "s|ssl_certificate .*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
     -e "s|ssl_trusted_certificate .*;|ssl_trusted_certificate ${snakeOilCert}/server.crt;|g" \
     -e "s|ssl_certificate_key .*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
+    -e "s|ssl_password_file .*;||g" \
+    -e "s|ssl_dhparam .*;|ssl_dhparam ${snakeOilCert}/dhparam.pem;|g" \
     > conf
+
 
     # nginx absolutely wants to resolve hostnames of upstream servers during parsing.
     # we run a fake dns server inside a network namespace to fake that.
