@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.3.0";
+  version = "1.4.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-S4xkr3jS5GvkMu8JnEGfqhmkxy3FtZZb7Rbuniltudg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-/NxiKbCd2acYcNe5ww3voM9SGVE2IDqknngqApkDbNs=";
   };
 
   propagatedBuildInputs = [
