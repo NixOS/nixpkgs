@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "geniushub-client";
-  version = "0.6.30";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "390932b6e5051e221d104b2683d9deb6e352172c4ec4eeede0954bf2f9680211";
+    sha256 = "sha256-nNLiyQHx12vBcx5GJ4KsMVIe8m80BFcTh2ektHpMxYw=";
   };
 
   propagatedBuildInputs = [
