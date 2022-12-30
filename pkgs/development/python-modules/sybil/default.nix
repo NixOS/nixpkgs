@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "3.0.1";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bwLcIgSvflohIDeSTZdPcngfbcGP08RMx85GOhIPUw0=";
+    hash = "sha256-4zlDL+Get5mGUayETMLU048tpY2/vcWdkukbYW+VfNg=";
   };
 
   checkInputs = [
