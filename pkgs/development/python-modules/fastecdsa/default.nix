@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "fastecdsa";
-  version = "2.2.3";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "269bdb0f618b38f8f6aec9d23d23db518046c3cee01a954fa6aa7322a1a7db8f";
+    sha256 = "sha256-8ZjORPaUbKuwKYip9J0U78QQ26XiEemDIbqdhzeyP/g=";
   };
 
   buildInputs = [ gmp ];
