@@ -64,7 +64,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "c15df758a8795f53e57f2a228eb4593c22b16dffd9b38f83901f76cd9533140b";
+    sha256 = "sha256-wV33WKh5X1PlfyoijrRZPCKxbf/Zs4+DkB92zZUzFAs=";
   };
 
   # TODO:
