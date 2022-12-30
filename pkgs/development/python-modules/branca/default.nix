@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5vL366fdNozu+PY4Irhn9eEdTTq90Jmnh9ue0rcGWuE=";
+    sha256 = "sha256-VZSYVSFFBMdYO3G5oDqE3OLpaoQCdhO7U7QtBIRM4k4=";
   };
 
   checkInputs = [ pytest selenium ];
