@@ -9,11 +9,12 @@
 , wayland
 , gtk3
 , gobject-introspection
+, vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-layer-shell";
-  version = "0.7.0";
+  version = "0.8.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # for demo
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "wmww";
     repo = "gtk-layer-shell";
     rev = "v${version}";
-    sha256 = "sha256-0S1WBpxXpWoMOecJQS6FKEXRZdw4E5hrjURPyhkxiMc=";
+    sha256 = "sha256-Z7jPYLKgkwMNXu80aaZ2vNj57LbN+X2XqlTTq6l0wTE=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+    vala
   ];
 
   buildInputs = [
