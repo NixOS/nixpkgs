@@ -1489,9 +1489,7 @@ with pkgs;
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
-  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin {
-    inherit (libsForQt5) qtbase wrapQtAppsHook;
-  };
+  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
   ventoy-bin-full = ventoy-bin.override {
     withCryptsetup = true;
     withXfs = true;

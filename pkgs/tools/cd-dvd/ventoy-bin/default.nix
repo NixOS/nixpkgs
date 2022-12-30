@@ -20,10 +20,8 @@
 , ntfs3g
 , parted
 , procps
-, qtbase
 , util-linux
 , which
-, wrapQtAppsHook
 , xfsprogs
 , xz
 , defaultGuiType ? ""
@@ -33,6 +31,7 @@
 , withNtfs ? false
 , withGtk3 ? false
 , withQt5 ? false
+, libsForQt5
 }:
 
 assert lib.elem defaultGuiType [ "" "gtk3" "qt5" ];
@@ -40,6 +39,8 @@ assert defaultGuiType == "gtk3" -> withGtk3;
 assert defaultGuiType == "qt5" -> withQt5;
 
 let
+  inherit (lib) optional optionalString;
+  inherit (libsForQt5) qtbase wrapQtAppsHook;
   arch = {
     x86_64-linux = "x86_64";
     i686-linux = "i386";
@@ -47,7 +48,6 @@ let
     mipsel-linux = "mips64el";
   }.${stdenv.hostPlatform.system}
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-  inherit (lib) optional optionalString;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
