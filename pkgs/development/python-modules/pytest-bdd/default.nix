@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "6.0.0";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-1dyAhvEw8gUe78qDpgrcwl6grWKiwPgSe/QeFAjBzZg=";
+    sha256 = "sha256-+76jIgfDQPdIoesTr1+QUu8wmOnrdf4KT+TJr9F2Hqk=";
   };
 
   buildInputs = [
