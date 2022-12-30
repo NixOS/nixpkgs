@@ -1365,7 +1365,6 @@ self: super: {
     (disableCabalFlag "callHierarchy") # Disabled temporarily: https://github.com/haskell/haskell-language-server/pull/3431
   ]).overrideScope (lself: lsuper: {
     hls-call-hierarchy-plugin = null;
-    hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -1378,11 +1377,11 @@ self: super: {
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
   });
 
-  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-    hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
-    apply-refact = lsuper.apply-refact_0_11_0_0;
-  });
+    hlint = enableCabalFlag "ghc-lib" super.hlint;
+    apply-refact = self.apply-refact_0_11_0_0;
+  };
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
@@ -1392,9 +1391,6 @@ self: super: {
 
   # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
   hls-refine-imports-plugin = dontCheck super.hls-refine-imports-plugin;
-
-  # 2021-09-14: Tests are broken because of undeterministic variable names
-  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
   # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
   hls-explicit-imports-plugin = dontCheck super.hls-explicit-imports-plugin;
@@ -1914,6 +1910,9 @@ self: super: {
   # Necesssary .txt files are not included in sdist.
   # https://github.com/haskell/haskell-language-server/pull/2887
   hls-change-type-signature-plugin = dontCheck super.hls-change-type-signature-plugin;
+
+  # 2022-12-30: Restrictive upper bound on optparse-applicative
+  retrie = doJailbreak super.retrie;
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
   # https://github.com/recursion-schemes/recursion-schemes/issues/128

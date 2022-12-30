@@ -109,7 +109,7 @@ self: super: {
       hls-brittany-plugin
       hls-haddock-comments-plugin
       (unmarkBroken hls-splice-plugin)
-      (unmarkBroken hls-tactics-plugin)
+      hls-tactics-plugin
     ];
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     Cabal = lself.Cabal_3_6_3_0;
@@ -117,6 +117,12 @@ self: super: {
     lens-aeson = lself.lens-aeson_1_1_3;
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
   }));
+
+  hls-tactics-plugin = unmarkBroken (addBuildDepends (with self.hls-tactics-plugin.scope; [
+    aeson extra fingertree generic-lens ghc-exactprint ghc-source-gen ghcide
+    hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
+    parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
+  ]) super.hls-tactics-plugin);
 
   hls-brittany-plugin =  unmarkBroken (addBuildDepends (with self.hls-brittany-plugin.scope; [
     brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
@@ -173,9 +179,16 @@ self: super: {
   # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
   megaparsec = doJailbreak super.megaparsec;
 
+  retrie = dontCheck self.retrie_1_1_0_0; 
+
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
+
   apply-refact = self.apply-refact_0_9_3_0;
+
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) apply-refact;
+  };
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;

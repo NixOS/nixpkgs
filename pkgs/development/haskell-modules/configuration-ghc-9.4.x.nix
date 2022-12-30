@@ -172,23 +172,28 @@ in {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  hlint = self.hlint_3_5;
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) hlint;
+  };
+
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
+
+  ghc-exactprint = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ HUnit data-default fail filemanip free ghc-paths ordered-containers silently syb Diff ];
+  })
+    self.ghc-exactprint_1_6_1;
 
   # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
     hls-refactor-plugin = null;
-    hls-class-plugin = null;
     hls-eval-plugin = null;
     hls-floskell-plugin = null;
-    hls-fourmolu-plugin = null;
-    hls-gadt-plugin = null;
-    hls-hlint-plugin = null;
     hls-ormolu-plugin = null;
     hls-rename-plugin = null;
     hls-stylish-haskell-plugin = null;
-    hls-retrie-plugin = null;
   };
 
   # https://github.com/tweag/ormolu/issues/941
@@ -197,5 +202,5 @@ in {
   }) (disableCabalFlag "fixity-th" super.ormolu);
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
 }
