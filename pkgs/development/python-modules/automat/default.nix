@@ -10,13 +10,13 @@
 }:
 
 let automat = buildPythonPackage rec {
-  version = "20.2.0";
+  version = "22.10.0";
   pname = "automat";
 
   src = fetchPypi {
     pname = "Automat";
     inherit version;
-    sha256 = "7979803c74610e11ef0c0d68a2942b152df52da55336e0c9d58daf1831cbdf33";
+    sha256 = "sha256-5WvrhO2tGdzBHTDo2biV913ute9elrhKRnBms7hLsE4=";
   };
 
   patches = [
