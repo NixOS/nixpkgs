@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HoWWwoGMrkRqlYzrF2apGsxsZAHwHbHSO5TCSCelxUc=";
+    sha256 = "sha256-SDdIg05+gfLNaQ+glitTf3Z/6K9HBci62mjIu9rIoX0=";
   };
   nativeBuildInputs = [
     setuptools-scm
