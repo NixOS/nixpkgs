@@ -427,11 +427,11 @@ let
   validatedConfigFile = pkgs.runCommand "validated-nginx.conf" { nativeBuildInputs = [ cfg.package pkgs.bubblewrap pkgs.fakedns pkgs.getent ]; } ''
     # nginx absolutely wants to read the certificates even when told to only validate config, so let's provide fake certs
     sed ${configFile} \
-    -e "s|ssl_certificate .*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
-    -e "s|ssl_trusted_certificate .*;|ssl_trusted_certificate ${snakeOilCert}/server.crt;|g" \
-    -e "s|ssl_certificate_key .*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
-    -e "s|ssl_password_file .*;||g" \
-    -e "s|ssl_dhparam .*;|ssl_dhparam ${snakeOilCert}/dhparam.pem;|g" \
+    -e "s|ssl_certificate [^;]*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
+    -e "s|ssl_trusted_certificate [^;]*;|ssl_trusted_certificate ${snakeOilCert}/server.crt;|g" \
+    -e "s|ssl_certificate_key [^;]*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
+    -e "s|ssl_password_file [^;]*;||g" \
+    -e "s|ssl_dhparam [^;]*;|ssl_dhparam ${snakeOilCert}/dhparam.pem;|g" \
     > conf
 
 
