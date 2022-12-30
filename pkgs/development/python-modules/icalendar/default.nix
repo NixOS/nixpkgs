@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.1.0";
+  version = "5.0.4";
   pname = "icalendar";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-l0i3wC78xD5Y0GFa4JdqxPJl6Q2t7ptPiE3imQXBs5U=";
+    sha256 = "sha256-8KqG1vW8EQ7TuR6WxIxwNR16CfvtJTZvZz3At5nIOXU=";
   };
 
   buildInputs = [ setuptools ];
