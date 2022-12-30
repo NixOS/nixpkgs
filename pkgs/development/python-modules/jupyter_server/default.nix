@@ -3,9 +3,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, hatch-jupyter-builder
+, hatchling
 , pandoc
 , pytestCheckHook
 , pytest-console-scripts
+, pytest-jupyter
 , pytest-timeout
 , pytest-tornasync
 , argon2-cffi
@@ -15,8 +18,10 @@
 , ipykernel
 , ipython_genutils
 , traitlets
-, jupyter_core
+, jupyter-core
 , jupyter-client
+, jupyter-events
+, jupyter-server-terminals
 , nbformat
 , nbconvert
 , send2trash
@@ -30,13 +35,19 @@
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.19.1";
+  version = "2.0.6";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0cw1lpRYSXQrw+7fBpn+61CtbGBF6+8CqSmLfxPCfp8=";
+    hash= "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
   };
+
+  nativeBuildInputs = [
+    hatch-jupyter-builder
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     argon2-cffi
@@ -45,8 +56,10 @@ buildPythonPackage rec {
     pyzmq
     ipython_genutils
     traitlets
-    jupyter_core
+    jupyter-core
     jupyter-client
+    jupyter-events
+    jupyter-server-terminals
     nbformat
     nbconvert
     send2trash
@@ -62,6 +75,7 @@ buildPythonPackage rec {
     pandoc
     pytestCheckHook
     pytest-console-scripts
+    pytest-jupyter
     pytest-timeout
     pytest-tornasync
     requests
