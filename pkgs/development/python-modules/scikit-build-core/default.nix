@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.1.3";
+  version = "0.1.5";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-qkVj7fS2+JB8mpJ788vTw4jhD/TGtZAMtCiBlmjbFM8=";
+    hash = "sha256-OUS/QOaBd0DDBrDk8c3LzFrPVrVF65EJQPRjGtnUmjU=";
   };
 
   postPatch = ''
