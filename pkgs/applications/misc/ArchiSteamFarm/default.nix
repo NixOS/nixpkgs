@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -27,10 +28,19 @@ buildDotnetModule rec {
 
   projectFile = "ArchiSteamFarm.sln";
   executables = [ "ArchiSteamFarm" ];
+  dotnetFlags = [
+    "-p:PublishSingleFile=true"
+    "-p:PublishTrimmed=true"
+  ];
+  selfContainedBuild = true;
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
   doCheck = true;
+
+  preBuild = ''
+    export projectFile=(ArchiSteamFarm)
+  '';
 
   preInstall = ''
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -38,6 +48,15 @@ buildDotnetModule rec {
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
+  '';
+
+  postInstall = ''
+    buildPlugin() {
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/${pname}/plugins/$1 --configuration Release \
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore
+     }
+     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
   '';
 
   passthru = {
