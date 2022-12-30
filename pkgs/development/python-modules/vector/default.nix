@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b785678f449de32476f427911248391ddcc7c3582a522a88cbbd50c92dcae490";
+    sha256 = "sha256-/e0wZDWIIm9vi37NEkIEitQj0p1M132AAO6id0eaA5Y=";
   };
 
   nativeBuildInputs = [
