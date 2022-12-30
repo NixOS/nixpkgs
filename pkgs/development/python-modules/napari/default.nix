@@ -35,7 +35,7 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.4.16";
+  version = "0.4.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ mkDerivationWith buildPythonPackage rec {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Fx3DoTIb2ev5wMP/gmprPIoxeF2f+Cbac6pnWB/zTTw=";
+    hash = "sha256-34FALCI7h0I295553Rv0KZxKIipuA2OMNsINGde7/oE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
