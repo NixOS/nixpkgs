@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "7.0.5";
+  version = "7.1.0";
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    sha256 = "sha256-Ax4Tr3cdb4krlBrbbqBFRbv5Hrxc5ox4qvP/9uH7SEQ=";
+    sha256 = "sha256-bFCDRadxqtfVbr/w5wYovysOx1c3Yr6ZYCFHMN4njyc=";
   };
 
   propagatedBuildInputs = [
