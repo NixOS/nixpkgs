@@ -4,7 +4,7 @@
 , fetchPypi
 , glibcLocales
 , hypothesis
-, PyICU
+, pyicu
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     fastnumbers
-    PyICU
+    pyicu
   ];
 
   checkInputs = [

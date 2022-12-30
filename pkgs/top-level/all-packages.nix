@@ -2068,13 +2068,6 @@ with pkgs;
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
   mgba = callPackage ../applications/emulators/mgba {
-    ffmpeg = ffmpeg_4;
-    lua = lua5_4;
-    inherit (libsForQt5)
-      qtbase
-      qtmultimedia
-      qttools
-      wrapQtAppsHook;
   };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
@@ -6849,6 +6842,8 @@ with pkgs;
 
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
+
+  emborg = python3Packages.callPackage ../development/python-modules/emborg { };
 
   emem = callPackage ../applications/misc/emem { };
 
@@ -12019,6 +12014,8 @@ with pkgs;
   strongswan    = callPackage ../tools/networking/strongswan { };
   strongswanTNC = strongswan.override { enableTNC = true; };
   strongswanNM  = strongswan.override { enableNetworkManager = true; };
+
+  stylish = callPackage ../applications/misc/stylish { };
 
   stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
 
@@ -21727,7 +21724,7 @@ with pkgs;
 
   minizip = callPackage ../development/libraries/minizip { };
 
-  minizip2 = callPackage ../development/libraries/minizip2 { };
+  minizip-ng = callPackage ../development/libraries/minizip-ng { };
 
   mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
@@ -34146,6 +34143,8 @@ with pkgs;
 
   osu-lazer = callPackage ../games/osu-lazer { };
 
+  osu-lazer-bin = callPackage ../games/osu-lazer-bin { };
+
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
   qgo = libsForQt5.callPackage ../games/qgo { };
@@ -34864,6 +34863,8 @@ with pkgs;
   prboom-plus = callPackage ../games/prboom-plus { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
+
+  qq = callPackage ../applications/networking/instant-messengers/qq { };
 
   qqwing = callPackage ../games/qqwing { };
 

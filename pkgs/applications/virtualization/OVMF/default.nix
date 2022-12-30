@@ -21,6 +21,7 @@ let
   version = lib.getVersion edk2;
 
   suffixes = {
+    i686 = "FV/OVMF";
     x86_64 = "FV/OVMF";
     aarch64 = "FV/AAVMF";
   };
