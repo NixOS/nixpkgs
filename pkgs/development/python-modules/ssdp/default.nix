@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.1.0";
+  version = "1.1.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = pname;
-    rev = version;
-    sha256 = "19d2b5frpq2qkfkpz173wpjk5jwhkjpk75p8q92nm8iv41nrzljy";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-D2mww3sEc2SvufWNmT450a2CW+ogROn3RHypljkebuY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
