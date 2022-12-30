@@ -26,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    py
     pytestCheckHook
   ];
 
