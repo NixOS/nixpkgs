@@ -13,7 +13,7 @@
 
 let
   pname = "hassil";
-  version = "0.1.3";
+  version = "0.1.4";
 in
 buildPythonPackage {
   inherit pname version;
@@ -21,7 +21,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KWkzHWMo50OIrZ2kwFhhqDSleFFkAD7/JugjvSyCkww=";
+    hash = "sha256-ygaPdfH2jBk2xvlgt7V8/VcZAtv6Lwsi8g+stK/DdT8=";
   };
 
   postPatch = ''
