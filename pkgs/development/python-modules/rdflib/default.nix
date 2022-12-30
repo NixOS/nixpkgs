@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.1.1";
+  version = "6.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = pname;
-    rev = version;
-    hash = "sha256:1ih7vx4i16np1p8ig5faw74apmbm7kgyj9alya521yvzid6d7pzd";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GkqfSyApOFKPIiIYXhgaRZuMawk7PRYmxGDhnRI+Rz0=";
   };
 
   propagatedBuildInputs = [
