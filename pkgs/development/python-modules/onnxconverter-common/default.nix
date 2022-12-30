@@ -11,15 +11,15 @@
 
 buildPythonPackage {
   pname = "onnxconverter-common";
-  version = "1.12.2"; # Upstream no longer seems to push tags
+  version = "1.13.0"; # Upstream no longer seems to push tags
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxconverter-common";
-    rev = "814cdf494d987900d30b16971c0e8334aaca9ae6";
-    hash = "sha256-XA/kl8aT1wLthl1bMihtv/1ELOW1sGO/It5XfJtD+sY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VT9ly0d0Yhw1J6C521oUyaCx4WtFSdpyk8EdIKlre3c=";
   };
 
   propagatedBuildInputs = [
