@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
-    sha256 = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
+    sha256 = "sha256-aShcfjH8RPaKH+swnpSODfUyWdV5KV5s/isXkjKfBf0=";
   };
 
   postPatch = ''
