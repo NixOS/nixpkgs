@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DompMBXzxx1oRKx6qfsNoJuQj199+n3V1opcoysuvOo=";
+    sha256 = "sha256-2RKgS2ONz4IsUaZ4i4VmQjI0jVFfFR2zpkwAAZZvaEE=";
   };
 
   postPatch = ''
