@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "asyncio-mqtt";
-  version = "0.14.0";
+  version = "0.16.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sbtinstruments";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ByVslOx/XsxVan2/xdRi+wOQR9oVpIGtHPcHlIcHMEk=";
+    hash = "sha256-f3JqocjOEwNjo6Uv17ij6oEdrjb6Z2wTzdhdVhx46iM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "test_client_websockets"
     "test_client_pending_calls_threshold"
     "test_client_no_pending_calls_warnings_with_max_concurrent_outgoing_calls"
+    "test_multiple_messages_generators"
   ];
 
   meta = with lib; {
