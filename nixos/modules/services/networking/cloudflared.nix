@@ -168,8 +168,7 @@ in
           inherit originRequest;
 
           credentialsFile = mkOption {
-            type = with types; nullOr str;
-            default = null;
+            type = types.str;
             description = lib.mdDoc ''
               Credential file.
 
@@ -190,8 +189,7 @@ in
           };
 
           default = mkOption {
-            type = with types; nullOr str;
-            default = null;
+            type = types.str;
             description = lib.mdDoc ''
               Catch-all service if no ingress matches.
 
@@ -262,12 +260,12 @@ in
     systemd.targets =
       mapAttrs'
         (name: tunnel:
-          nameValuePair "cloudflared-tunnel-${name}" ({
-            description = lib.mdDoc "Cloudflare tunnel '${name}' target";
+          nameValuePair "cloudflared-tunnel-${name}" {
+            description = "Cloudflare tunnel '${name}' target";
             requires = [ "cloudflared-tunnel-${name}.service" ];
             after = [ "cloudflared-tunnel-${name}.service" ];
             unitConfig.StopWhenUnneeded = true;
-          })
+          }
         )
         config.services.cloudflared.tunnels;
 

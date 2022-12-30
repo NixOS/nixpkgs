@@ -1,60 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-let
-    mkNode = { replicationMode, publicV6Address ? "::1" }: { pkgs, ... }: {
-      networking.interfaces.eth1.ipv6.addresses = [{
-        address = publicV6Address;
-        prefixLength = 64;
-      }];
-
-      networking.firewall.allowedTCPPorts = [ 3901 3902 ];
-
-      services.garage = {
-        enable = true;
-        settings = {
-          replication_mode = replicationMode;
-
-          rpc_bind_addr = "[::]:3901";
-          rpc_public_addr = "[${publicV6Address}]:3901";
-          rpc_secret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
-
-          s3_api = {
-            s3_region = "garage";
-            api_bind_addr = "[::]:3900";
-            root_domain = ".s3.garage";
-          };
-
-          s3_web = {
-            bind_addr = "[::]:3902";
-            root_domain = ".web.garage";
-            index = "index.html";
-          };
-        };
-      };
-      environment.systemPackages = [ pkgs.minio-client ];
-
-      # Garage requires at least 1GiB of free disk space to run.
-      virtualisation.diskSize = 2 * 1024;
-    };
-
-
-in {
-  name = "garage";
+args@{ mkNode, ... }:
+(import ../make-test-python.nix ({ pkgs, ...} : {
+  name = "garage-basic";
   meta = {
     maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
   };
 
   nodes = {
     single_node = mkNode { replicationMode = "none"; };
-    node1 = mkNode { replicationMode = 3; publicV6Address = "fc00:1::1"; };
-    node2 = mkNode { replicationMode = 3; publicV6Address = "fc00:1::2"; };
-    node3 = mkNode { replicationMode = 3; publicV6Address = "fc00:1::3"; };
-    node4 = mkNode { replicationMode = 3; publicV6Address = "fc00:1::4"; };
   };
 
   testScript = ''
     from typing import List
     from dataclasses import dataclass
     import re
+
     start_all()
 
     cur_version_regex = re.compile('Current cluster layout version: (?P<ver>\d*)')
@@ -135,35 +94,5 @@ in {
       # Now Garage is operational.
       test_bucket_writes(single_node)
       test_bucket_over_http(single_node)
-
-    with subtest("Garage works as a multi-node S3 storage"):
-      nodes = ('node1', 'node2', 'node3', 'node4')
-      rev_machines = {m.name: m for m in machines}
-      def get_machine(key): return rev_machines[key]
-      for key in nodes:
-        node = get_machine(key)
-        node.wait_for_unit("garage.service")
-        node.wait_for_open_port(3900)
-
-      # Garage is initialized on all nodes.
-      node_ids = {key: get_node_fqn(get_machine(key)) for key in nodes}
-
-      for key in nodes:
-        for other_key in nodes:
-          if other_key != key:
-            other_id = node_ids[other_key]
-            get_machine(key).succeed(f"garage node connect {other_id.node_id}@{other_id.host}")
-
-      # Provide multiple zones for the nodes.
-      zones = ["nixcon", "nixcon", "paris_meetup", "fosdem"]
-      apply_garage_layout(node1,
-      [
-        f'{ndata.node_id} -z {zones[index]} -c 1'
-        for index, ndata in enumerate(node_ids.values())
-      ])
-      # Now Garage is operational.
-      test_bucket_writes(node1)
-      for node in nodes:
-         test_bucket_over_http(get_machine(node))
   '';
-})
+})) args

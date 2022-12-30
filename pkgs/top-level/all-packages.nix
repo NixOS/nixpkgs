@@ -357,10 +357,7 @@ with pkgs;
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml {
-    inherit (llvmPackages) libclang llvm;
-    inherit (python3.pkgs) sphinx;
-  };
+  castxml = callPackage ../development/tools/castxml { };
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
@@ -4921,6 +4918,8 @@ with pkgs;
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
 
+  linuxdoc-tools = callPackage ../tools/text/sgml/linuxdoc-tools { };
+
   lisgd = callPackage ../tools/inputmethods/lisgd { };
 
   lite = callPackage ../applications/editors/lite { };
@@ -7356,9 +7355,12 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  garage = callPackage ../tools/filesystems/garage {
+  inherit (callPackage ../tools/filesystems/garage {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  })
+    garage
+      garage_0_7 garage_0_8
+      garage_0_7_3 garage_0_8_0;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
@@ -12538,7 +12540,7 @@ with pkgs;
 
   twurl = callPackage ../tools/misc/twurl { };
 
-  txr = callPackage ../tools/misc/txr { inherit (llvmPackages_latest) stdenv; };
+  txr = callPackage ../tools/text/txr { };
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
@@ -13088,6 +13090,8 @@ with pkgs;
   ugarit-manifest-maker = callPackage ../tools/backup/ugarit-manifest-maker {
     inherit (chickenPackages_4) eggDerivation fetchegg;
   };
+
+  ulogd = callPackage ../os-specific/linux/ulogd { };
 
   unar = callPackage ../tools/archivers/unar {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
