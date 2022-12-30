@@ -10036,6 +10036,8 @@ with pkgs;
 
   numlockx = callPackage ../tools/X11/numlockx { };
 
+  nurl = callPackage ../tools/misc/nurl { };
+
   nttcp = callPackage ../tools/networking/nttcp { };
 
   ntttcp = callPackage ../tools/networking/ntttcp { };
