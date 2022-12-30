@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "0.1.11";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dfz3bpmjmaxlhda6hfgsac7afb65pljibi8zkp9gc0ffn5rj161";
+    sha256 = "sha256-V5xysYunkqW9VLpI5j5GTSGTPjNkcsl0CRpnV/Mb/Nw=";
   };
 
   propagatedBuildInputs = [ six ];
