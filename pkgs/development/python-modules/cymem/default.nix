@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
-    rev = "v${version}";
-    sha256 = "sha256-o+44v6wvE9HxeQaDDQ0+gi7z1V7jtkZvWglY8UyVHLg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lYMRFFMS+ETjWd4xi12ezC8CVLbLJfynmOU1DpYQcck=";
   };
 
   propagatedBuildInputs = [
