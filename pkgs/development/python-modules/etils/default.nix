@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0dWve9nHhKJzxOHsz6qP6speBIGghxe1MT+iMdoiqQM=";
+    hash = "sha256-SJED6eSZpWZ2XGBFjuFdGFzwBl8gYKTRamj49Gli7Q0=";
   };
 
   nativeBuildInputs = [
