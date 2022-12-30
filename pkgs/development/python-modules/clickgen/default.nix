@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "clickgen";
-  version = "1.2.0";
+  version = "2.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "clickgen";
-    rev = "v${version}";
-    sha256 = "sha256-01c8SVy+J004dq5KCUe62w7i/xUTxTfl/IpvUtGQgw0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-qDaSfIeKCbyl3C2iKz9DYQc1oNwTe5xDlGg/yYhakSw=";
   };
 
   buildInputs = [ libXcursor libX11 libpng ];
