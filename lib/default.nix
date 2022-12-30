@@ -127,7 +127,8 @@ let
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkRenamedOptionModuleWith
       mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule mkDerivedConfig doRename;
+      mkAliasOptionModule mkDerivedConfig doRename
+      mkAliasOptionModuleMD;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
