@@ -14,7 +14,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "ShellHub Agent daemon");
 
-      package = mkPackageOption pkgs "shellhub-agent" { };
+      package = mkPackageOptionMD pkgs "shellhub-agent" { };
 
       preferredHostname = mkOption {
         type = types.str;

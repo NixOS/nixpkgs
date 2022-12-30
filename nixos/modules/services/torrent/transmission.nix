@@ -174,7 +174,7 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "transmission" {};
+      package = mkPackageOptionMD pkgs "transmission" {};
 
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
