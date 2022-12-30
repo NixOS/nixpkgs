@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-HiIg+80vaMzQdqF2JKzP7oZzfpqSTrumXmUHGLT/wF8=";
+    hash = "sha256-LRsijp2N0L4QCvPt0vWBX0qE4yqDDKtMcTBQ/eAkljA=";
   };
 
   propagatedBuildInputs = [ graphql-core starlette typing-extensions ];
