@@ -179,7 +179,7 @@ self: super: {
   # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
   megaparsec = doJailbreak super.megaparsec;
 
-  retrie = dontCheck self.retrie_1_1_0_0; 
+  retrie = dontCheck self.retrie_1_1_0_0;
 
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;

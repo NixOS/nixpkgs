@@ -181,7 +181,7 @@ self: super: {
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
 
-  retrie = dontCheck self.retrie_1_1_0_0; 
+  retrie = dontCheck self.retrie_1_1_0_0;
 
   apply-refact = self.apply-refact_0_9_3_0;
 
