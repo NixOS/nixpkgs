@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     xorg.libICE
   ];
 
+  # N.B. the shared object is used by bindings
+  cmakeFlags = [
+    "-DENABLE_BUILD_SHARED=ON"
+    "-DENABLE_BUILD_DYNAMIC=ON"
+  ];
+
   nativeBuildInputs = [ cmake gfortran ];
 
   doCheck = true;
