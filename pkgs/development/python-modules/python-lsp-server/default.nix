@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
+    sha256 = "sha256-9cyzJxyCris7FsVni5IZCCL6IAcsN8tMakNoKPeWv7s=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
