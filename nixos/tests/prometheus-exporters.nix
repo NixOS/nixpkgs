@@ -658,7 +658,7 @@ let
         # ModemManager is installed when NetworkManager is enabled. Ensure it is
         # started and is wanted by NM and the exporter to start everything up
         # in the right order.
-        networking.networkmanager.enable = true;
+        services.networkmanager.enable = true;
         systemd.services.ModemManager = {
           enable = true;
           wantedBy = [ "NetworkManager.service" "prometheus-modemmanager-exporter.service" ];

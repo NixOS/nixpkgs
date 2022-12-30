@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.services.tlp;
-  enableRDW = config.networking.networkmanager.enable;
+  enableRDW = config.services.networkmanager.enable;
   tlp = pkgs.tlp.override { inherit enableRDW; };
   # TODO: Use this for having proper parameters in the future
   mkTlpConfig = tlpConfig: generators.toKeyValue {

@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.networking.networkmanager;
+  cfg = config.services.networkmanager;
 
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
 
@@ -364,7 +364,7 @@ in {
 
           If you enable this option the
           `networkmanager_strongswan` plugin will be added to
-          the {option}`networking.networkmanager.plugins` option
+          the {option}`services.networkmanager.plugins` option
           so you don't need to do that yourself.
         '';
       };
@@ -395,7 +395,7 @@ in {
     assertions = [
       { assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [];
         message = ''
-          You can not use networking.networkmanager with networking.wireless.
+          You can not use services.networkmanager with networking.wireless.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }

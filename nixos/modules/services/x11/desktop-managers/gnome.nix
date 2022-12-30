@@ -359,7 +359,7 @@ in
         style = mkDefault "adwaita";
       };
 
-      networking.networkmanager.enable = mkDefault true;
+      services.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
 

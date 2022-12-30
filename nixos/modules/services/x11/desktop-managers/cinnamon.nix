@@ -116,7 +116,7 @@ in
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
-      networking.networkmanager.enable = mkDefault true;
+      services.networkmanager.enable = mkDefault true;
 
       # Enable colord server
       services.colord.enable = true;

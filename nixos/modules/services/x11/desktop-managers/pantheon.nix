@@ -174,7 +174,7 @@ in
         pkgs.pantheon.gnome-settings-daemon
       ];
       programs.dconf.enable = true;
-      networking.networkmanager.enable = mkDefault true;
+      services.networkmanager.enable = mkDefault true;
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [

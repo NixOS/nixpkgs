@@ -488,7 +488,7 @@ in {
       {
         assertion = length cfg.interfaces > 1 -> !cfg.dbusControlled;
         message =
-          let daemon = if config.networking.networkmanager.enable then "NetworkManager" else
+          let daemon = if config.services.networkmanager.enable then "NetworkManager" else
                        if config.services.connman.enable then "connman" else null;
               n = toString (length cfg.interfaces);
           in ''
