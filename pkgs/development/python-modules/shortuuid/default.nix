@@ -25,10 +25,6 @@ buildPythonPackage rec {
     "shortuuid"
   ];
 
-  pytestFlagsArray = [
-    "shortuuid/tests.py"
-  ];
-
   meta = with lib; {
     description = "Library to generate concise, unambiguous and URL-safe UUIDs";
     homepage = "https://github.com/stochastic-technologies/shortuuid/";
