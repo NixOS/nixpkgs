@@ -22,15 +22,15 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "7.5.3";
+  version = "7.5.4";
   disabled = pythonOlder "3.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ArangoDB-Community";
     repo = "python-arango";
-    rev = version;
-    sha256 = "0qb2yp05z8dmgsyyxqrl3q0a60jaiih96zhxmqrn2yf7as45n07j";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-b3UZuH2hpulRSThReBkDwh0MLJmc95HeWInmmMAl4g0=";
   };
 
   propagatedBuildInputs = [
