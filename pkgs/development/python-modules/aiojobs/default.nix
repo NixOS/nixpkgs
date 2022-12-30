@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "flit";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "EQwD0b2B9qFVd/8thKInaio0hpPzvVIjvCN0TcARu2w=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-FHdEVt/XXmuTrPAETyod3fHJIK1wg957/+QMAhZG1xk=";
   };
 
   nativeBuildInputs = [
