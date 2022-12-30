@@ -2,8 +2,12 @@
 , stdenv
 , callPackage
 , buildPythonPackage
+, python
 , fetchPypi
 , rustPlatform
+, rust
+, rustc
+, cargo
 , setuptools-rust
 , openssl
 , Security
@@ -47,9 +51,11 @@ buildPythonPackage rec {
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ] ++ [
-    rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+  ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
@@ -68,6 +74,11 @@ buildPythonPackage rec {
     pytest-subtests
     pytz
   ];
+
+  CARGO_BUILD_TARGET = "${rust.toRustTargetSpec stdenv.hostPlatform}";
+  PYO3_CROSS_LIB_DIR = "${python}/lib/${python.libPrefix}";
+  "CARGO_TARGET_${lib.toUpper (builtins.replaceStrings ["-"] ["_"] (rust.toRustTarget stdenv.hostPlatform))}_LINKER" =
+    "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
 
   pytestFlagsArray = [
     "--disable-pytest-warnings"
