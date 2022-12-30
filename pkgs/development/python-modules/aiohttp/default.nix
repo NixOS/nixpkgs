@@ -103,11 +103,12 @@ buildPythonPackage rec {
   # aiohttp in current folder shadows installed version
   # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
+    rm setup.cfg
     cd tests
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
