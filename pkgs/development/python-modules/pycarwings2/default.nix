@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pycarwings2";
-  version = "2.13";
+  version = "2.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "filcole";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04k1la7wix6sp668nqpwdhd3057b2bzcz7h2b9a57cxlifl8pjxf";
+    sha256 = "sha256-kqj/NZXqgPUsOnnzMPmIlICHek7RBxksmL3reNBK+bo=";
   };
 
   propagatedBuildInputs = [
