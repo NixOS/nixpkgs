@@ -623,15 +623,24 @@ rec {
    */
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
-    , deps ? []
-    , substitutions ? {}
-    , meta ? {}
-    , passthru ? {}
+    , deps ? [ ]
+      # hooks go in nativeBuildInput so these will be nativeBuildInput
+    , propagatedBuildInputs ? [ ]
+      # these will be buildInputs
+    , depsTargetTargetPropagated ? [ ]
+    , meta ? { }
+    , passthru ? { }
+    , substitutions ? { }
     }:
     script:
     runCommand name
       (substitutions // {
         inherit meta;
+        inherit depsTargetTargetPropagated;
+        propagatedBuildInputs =
+          # remove list conditionals before 23.11
+          lib.warnIf (!lib.isList deps) "deps argument to makeSetupHook must be a list. content: ${toString deps}"
+            propagatedBuildInputs ++ (if lib.isList deps then deps else [ deps ] );
         strictDeps = true;
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
@@ -642,8 +651,7 @@ rec {
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
-      '' + lib.optionalString (deps != []) ''
-        printWords ${toString deps} > $out/nix-support/propagated-build-inputs
+        recordPropagatedDependencies
       '' + lib.optionalString (substitutions != {}) ''
         substituteAll ${script} $out/nix-support/setup-hook
       '');
