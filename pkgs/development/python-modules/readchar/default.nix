@@ -12,20 +12,20 @@
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "3.0.5";
+  version = "4.0.3";
   format = "setuptools";
 
   # Don't use wheels on PyPI
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256:01bjw3ipdzxq1ijn9354nlya625i26ri7jac1dnlj1d1gdd8m5lx";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-QMaTZRS9iOSuax706Es9WhkwU3vdcNb14dbiSt48aN0=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov readchar" ""
+      --replace "--cov=readchar" ""
   '';
 
   nativeBuildInputs = [
