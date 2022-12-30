@@ -18,6 +18,7 @@ rec {
     isInt
     isList
     isAttrs
+    isPath
     isString
     match
     parseDrvName
@@ -821,7 +822,8 @@ rec {
      string interpolations and in most functions that expect a string.
    */
   isStringLike = x:
-    elem (typeOf x) [ "path" "string" ] ||
+    isString x ||
+    isPath x ||
     x ? outPath ||
     x ? __toString;
 
