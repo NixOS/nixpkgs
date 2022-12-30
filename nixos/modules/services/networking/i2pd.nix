@@ -348,7 +348,7 @@ in
       };
 
       ntcp = mkEnableTrueOption "ntcp";
-      ssu = mkEnableTrueOption "ssu";
+      ssu = mkEnableOption (lib.mdDoc "SSU");
 
       ssu2.enable = mkEnableTrueOption "SSU2";
       ssu2.published = mkEnableTrueOption (lib.mdDoc "SSU2 publication");
