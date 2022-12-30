@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-minify";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "${pname}-plugin";
-    rev = version;
-    sha256 = "sha256-7v4uX711KAKuXFeVdLuIdGQi2i+dL4WX7+Zd4H1L3lM=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-ABoLt5sFpt8Hm07tkqeAcs63ZvJ4vTbGw4QRYVYpMEA=";
   };
 
   propagatedBuildInputs = [
