@@ -1,7 +1,7 @@
 { lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
 , testers, Security, garage, nixosTests }:
 let
-  generic = { version, sha256, cargoSha256, eol ? false }: rustPlatform.buildRustPackage {
+  generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
     inherit version;
 
@@ -62,6 +62,7 @@ let
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
       knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
+      inherit broken;
     };
   };
 in
@@ -83,6 +84,8 @@ in
       version = "0.8.0";
       sha256 = "sha256-c2RhHfg0+YV2E9Ckl1YSc+0nfzbHPIt0JgtT0DND9lA=";
       cargoSha256 = "sha256-vITXckNOiJbMuQW6/8p7dsZThkjxg/zUy3AZBbn33no=";
+      # On Darwin, tests are failing.
+      broken = stdenv.isDarwin;
     };
 
     garage_0_8 = garage_0_8_0;
