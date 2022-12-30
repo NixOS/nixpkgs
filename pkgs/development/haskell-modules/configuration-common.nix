@@ -2370,4 +2370,16 @@ self: super: {
   } super.postgrest));
 
   html-charset = dontCheck super.html-charset;
+
+  # true-name-0.1.0.4 has been tagged, but has not been released to Hackage.
+  # Also, beyond 0.1.0.4 an additional patch is required to make true-name
+  # compatible with current versions of template-haskell
+  # https://github.com/liyang/true-name/pull/4
+  true-name = appendPatch (fetchpatch {
+    url = "https://github.com/liyang/true-name/compare/0.1.0.3...nuttycom:true-name:update_template_haskell.patch";
+    hash = "sha256-ZMBXGGc2X5AKXYbqgkLXkg5BhEwyj022E37sUEWahtc=";
+  }) (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.true-name);
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
