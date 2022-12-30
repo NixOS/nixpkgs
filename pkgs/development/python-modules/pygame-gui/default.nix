@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "064";
+  version = "067";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    sha256 = "sha256-13+fK1hYxiMh0T+xbbmHViZjyBoQfRyIDc05fIJ/46U=";
+    sha256 = "sha256-ZBd9jq+20A8kxsvZxuCIfyzuZvk5/73vhh4xmExuwGQ=";
   };
 
   propagatedBuildInputs = [ pygame python-i18n ];
