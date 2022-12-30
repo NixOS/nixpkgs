@@ -52,6 +52,8 @@ buildPythonPackage rec {
     "disk_io_counters"
     "sensors_battery"
     "user"
+  ] ++ lib.optionals (with stdenv; isAarch64 && isLinux) [
+    "test_disk_partitions"
   ];
 
   pythonImportsCheck = [

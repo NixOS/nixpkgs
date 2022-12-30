@@ -1,5 +1,12 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pytestCheckHook,
-  libffi, pkg-config, pycparser
+{ lib
+, stdenv
+, buildPythonPackage
+, isPyPy
+, fetchPypi
+, pytestCheckHook
+, libffi
+, pkg-config
+, pycparser
 }:
 
 if isPyPy then null else buildPythonPackage rec {
@@ -10,6 +17,20 @@ if isPyPy then null else buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-1AC/uaN7E1ElPLQCZxzqfom97MKU6AFqcH9tHYrJNPk=";
   };
+
+  patches = [
+    #
+    # Trusts the libffi library inside of nixpkgs on Apple devices.
+    #
+    # Based on some analysis I did:
+    #
+    #   https://groups.google.com/g/python-cffi/c/xU0Usa8dvhk
+    #
+    # I believe that libffi already contains the code from Apple's fork that is
+    # deemed safe to trust in cffi.
+    #
+    ./darwin-use-libffi-closures.diff
+  ];
 
   buildInputs = [ libffi ];
 
@@ -29,9 +50,7 @@ if isPyPy then null else buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";
 
-  # Lots of tests fail on aarch64-darwin due to "Cannot allocate write+execute memory":
-  # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-  doCheck = !stdenv.hostPlatform.isMusl && !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   checkInputs = [ pytestCheckHook ];
 

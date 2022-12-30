@@ -52,6 +52,20 @@ stdenv.mkDerivation {
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
 
+  preInstall = lib.optionalString (stdenv.isDarwin) ''
+    for file in lib/*.dylib; do
+      if [ -L "$file" ]; then continue; fi
+
+      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
+      installName="$out/lib/$baseName"
+      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
+
+      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${libcxxabi}/lib/$abiName $file
+      done
+    done
+  '';
+
   passthru = {
     isLLVM = true;
   };

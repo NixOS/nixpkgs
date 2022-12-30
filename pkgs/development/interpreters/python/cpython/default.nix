@@ -7,6 +7,7 @@
 , mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
+, openssl_legacy
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
@@ -76,6 +77,10 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 with lib;
 
 let
+  # some python packages need legacy ciphers, so we're using openssl 3, but with that config
+  # null check for Minimal
+  openssl' = if openssl != null then openssl_legacy else null;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
 
@@ -116,7 +121,7 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
@@ -209,7 +214,19 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
-  patches = [
+  patches = optionals (version == "3.10.9") [
+    # https://github.com/python/cpython/issues/100160
+    ./3.10/asyncio-deprecation.patch
+  ] ++ optionals (version == "3.11.1") [
+    # https://github.com/python/cpython/issues/100160
+    (fetchpatch {
+      name = "asyncio-deprecation-3.11.patch";
+      url = "https://github.com/python/cpython/commit/3fae04b10e2655a20a3aadb5e0d63e87206d0c67.diff";
+      revert = true;
+      excludes = [ "Misc/NEWS.d/*" ];
+      sha256 = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
+    })
+  ] ++ [
     # Disable the use of ldconfig in ctypes.util.find_library (since
     # ldconfig doesn't work on NixOS), and don't use
     # ctypes.util.find_library during the loading of the uuid module
@@ -322,8 +339,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (openssl != null) [
-    "--with-openssl=${openssl.dev}"
+  ] ++ optionals (openssl' != null) [
+    "--with-openssl=${openssl'.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -488,7 +505,7 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    lib.optionals (openssl' != null && !static) [ openssl'.dev ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.

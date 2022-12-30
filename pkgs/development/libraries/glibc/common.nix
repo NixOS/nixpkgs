@@ -45,7 +45,7 @@
 
 let
   version = "2.35";
-  patchSuffix = "-163";
+  patchSuffix = "-224";
   sha256 = "sha256-USNzL2tnzNMZMF79OZlx1YWSEivMKmUYob0lEN0M9S4=";
 in
 
@@ -71,6 +71,9 @@ stdenv.mkDerivation ({
           $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
        */
       ./2.35-master.patch.gz
+
+      /* Revert this patch contained in the previous bundle.  For now, until we know more. */
+      ./revert-mktime.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch

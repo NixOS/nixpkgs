@@ -5,6 +5,8 @@ let
     inherit openssl;
     python = python3;
   };
+
+  npmPatches = callPackage ./npm-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
@@ -21,5 +23,5 @@ buildNodejs {
 
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
-  ];
+  ] ++ npmPatches;
 }
