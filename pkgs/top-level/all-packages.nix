@@ -27849,6 +27849,10 @@ with pkgs;
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 
+  avalanchego = callPackage ../applications/networking/avalanchego {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+
   avizo = callPackage ../applications/misc/avizo { };
 
   avocode = callPackage ../applications/graphics/avocode {};
