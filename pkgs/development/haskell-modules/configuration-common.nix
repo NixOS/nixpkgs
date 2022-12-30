@@ -1887,15 +1887,6 @@ self: super: {
   # https://github.com/dagit/zenc/issues/5
   zenc = doJailbreak super.zenc;
 
-  # Release 1.0.0.0 added version bounds (was unrestricted before),
-  # but with too strict lower bounds for our lts-18.
-  # Disable aeson for now, future release should support it
-  graphql =
-    assert super.graphql.version == "1.0.3.0";
-    appendConfigureFlags [
-      "-f-json"
-    ] super.graphql;
-
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (fetchpatch {
     url = "https://github.com/ajscholl/basic-cpuid/commit/2f2bd7a7b53103fb0cf26883f094db9d7659887c.patch";
