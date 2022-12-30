@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.13.0";
+  version = "0.18.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-u08lxVMuyO5CwFbmxn69QqdSWcvGaSMZgizRJlsHa0k=";
+    hash = "sha256-OhNyJcnxjbyP/Kpt70qLv3ZtZvXXVTWEMcjv/pa50/4=";
   };
 
   nativeBuildInputs = [
