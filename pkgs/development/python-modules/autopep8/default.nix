@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "hhatto";
     repo = "autopep8";
-    rev = "v${version}";
-    sha256 = "sha256-77ZVprACHUP8BmylTtvHvJMjb70E1YFKKdQDigAZG6s=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-YEPSsUzJG4MPiiloVAf9m/UiChkhkN0+lK6spycpSvo=";
   };
 
   patches = [
