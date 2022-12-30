@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "4.0.1";
+  version = "4.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-hQuZkstsB37pFDWmA0W6qGd7rAer1mun7Z6MxMp0ZmE=";
+    sha256 = "sha256-XWkCZhBapjtzH3g3t+xXiB2f54p3Xw0+UBKVNH+gGHQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
