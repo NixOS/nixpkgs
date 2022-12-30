@@ -6,15 +6,15 @@
 
 buildPythonPackage rec {
   pname = "markdown-include";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "setuptools";
 
   # only wheel on pypi
   src = fetchFromGitHub {
     owner = "cmacmackin";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-2pC0K/Z5l7q6sx4FSM4Pi1/5bt1wLZsqOmcbnE47rVs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wTGgxvM3/h+6plUcheeMSkpk1we7pwuWHurkDkmbnPY=";
   };
 
   propagatedBuildInputs = [
