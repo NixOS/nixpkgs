@@ -51,13 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMZ_LIBCOMP=OFF"
   ];
 
-  postInstall = let
-    libext = if stdenv.hostPlatform.isStatic then ".a" else ".so";
-  in ''
+  postInstall = ''
     # make lib findable as libminizip-ng even if compat is enabled
-    if [ ! -e $out/lib/libminizip-ng${libext} ]; then
-      ln -s $out/lib/libminizip${libext} $out/lib/libminizip-ng${libext}
-    fi
+    for ext in so dylib a ; do
+      if [ -e $out/lib/libminizip.$ext ] && [ ! -e $out/lib/libminizip-ng.$ext ]; then
+        ln -s $out/lib/libminizip.$ext $out/lib/libminizip-ng.$ext
+      fi
+    done
     if [ ! -e $out/include/minizip-ng ]; then
       ln -s $out/include $out/include/minizip-ng
     fi
