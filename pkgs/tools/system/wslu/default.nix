@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "wslu";
@@ -16,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A collection of utilities for Windows 10 Linux Subsystems";
     homepage = "https://github.com/wslutilities/wslu";
+    changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jamiemagee ];
     platforms = platforms.linux;
