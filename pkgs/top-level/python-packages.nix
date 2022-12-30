@@ -2945,6 +2945,8 @@ self: super: with self; {
 
   embrace = callPackage ../development/python-modules/embrace { };
 
+  emborg = callPackage ../development/python-modules/emborg { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emv = callPackage ../development/python-modules/emv { };
@@ -6721,6 +6723,8 @@ self: super: with self; {
 
   parameterized = callPackage ../development/python-modules/parameterized { };
 
+  parametrize-from-file = callPackage ../development/python-modules/parametrize-from-file { };
+
   paramiko = callPackage ../development/python-modules/paramiko { };
 
   paramz = callPackage ../development/python-modules/paramz { };
@@ -8013,7 +8017,7 @@ self: super: with self; {
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
-  PyICU = callPackage ../development/python-modules/pyicu { };
+  pyicu = callPackage ../development/python-modules/pyicu { };
 
   pyimpfuzzy = callPackage ../development/python-modules/pyimpfuzzy {
     inherit (pkgs) ssdeep;
@@ -9599,6 +9603,10 @@ self: super: with self; {
 
   quantities = callPackage ../development/python-modules/quantities { };
 
+  quantiphy = callPackage ../development/python-modules/quantiphy { };
+
+  quantiphy-eval = callPackage ../development/python-modules/quantiphy-eval { };
+
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
@@ -9872,6 +9880,8 @@ self: super: with self; {
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   rki-covid-parser = callPackage ../development/python-modules/rki-covid-parser { };
+
+  rkm-codes = callPackage ../development/python-modules/rkm-codes { };
 
   rlax = callPackage ../development/python-modules/rlax { };
 
@@ -10175,6 +10185,8 @@ self: super: with self; {
 
   securetar = callPackage ../development/python-modules/securetar { };
 
+  seedir = callPackage ../development/python-modules/seedir { };
+
   seekpath = callPackage ../development/python-modules/seekpath { };
 
   segments = callPackage ../development/python-modules/segments { };
@@ -10277,6 +10289,8 @@ self: super: with self; {
   sharkiq = callPackage ../development/python-modules/sharkiq { };
 
   sh = callPackage ../development/python-modules/sh { };
+
+  shlib = callPackage ../development/python-modules/shlib { };
 
   shellescape = callPackage ../development/python-modules/shellescape { };
 
@@ -11196,6 +11210,8 @@ self: super: with self; {
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
   };
+
+  tidyexc = callPackage ../development/python-modules/tidyexc { };
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
 

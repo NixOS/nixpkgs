@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.16.1";
+  version = "0.16.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j9++euxSsvf6ZLkVJtyGdlOx6WWrAXEOczqwypYZkXA=";
+    hash = "sha256-w39Qt046dWDzbt41t9LVMCJNM2uGOv9VTZf3yfWUlNM=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [

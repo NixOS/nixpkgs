@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.12.0";
+  version = "2.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J0EBMixLlBgjru2OGrbnvlGRaGxtstK9Na/rowUF54A=";
+    hash = "sha256-vn4ctHIl3JiZ5WRy/cTarANYSmhDZ1MpwM5nF5yyDik=";
   };
 
   propagatedBuildInputs = [
@@ -81,6 +81,7 @@ buildPythonPackage rec {
     broken = stdenv.isDarwin;
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
+    changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
     license = licenses.epl20;
     maintainers = with maintainers; [ ];
   };

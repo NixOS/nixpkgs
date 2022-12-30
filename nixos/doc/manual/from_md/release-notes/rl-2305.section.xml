@@ -357,6 +357,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.grafana</literal> listens only on localhost
+          by default again. This was changed to upstreams default of
+          <literal>0.0.0.0</literal> by accident in the freeform setting
+          conversion.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -381,6 +389,14 @@
           <literal>services.nginx.virtualHosts</literal> now allows one
           to add exceptions with the <literal>locations</literal>
           option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new option <literal>recommendedBrotliSettings</literal> has
+          been added to <literal>services.nginx</literal>. Learn more
+          about compression in Brotli format
+          <link xlink:href="https://github.com/google/ngx_brotli/blob/master/README.md">here</link>.
         </para>
       </listitem>
       <listitem>
