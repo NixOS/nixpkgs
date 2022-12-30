@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.1.18";
+  version = "0.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XVmbt8r5HL8r64ISdJozmM+9HuyvqbpdejWICzFnfiw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-a32H5X3VsfYuU1TkOH5uGn1eDLvGUDI6WhXEQ0AKwq8=";
   };
 
   nativeBuildInputs = [
