@@ -33327,6 +33327,8 @@ with pkgs;
 
   weston = callPackage ../applications/window-managers/weston { };
 
+  wgnord = callPackage ../applications/networking/wgnord/default.nix {};
+
   whalebird = callPackage ../applications/misc/whalebird {
     electron = electron_19;
   };
