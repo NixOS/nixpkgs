@@ -19,8 +19,8 @@ in
   imports = [
     (mkRenamedOptionModule ["services" "transmission" "port"]
                            ["services" "transmission" "settings" "rpc-port"])
-    (mkAliasOptionModule ["services" "transmission" "openFirewall"]
-                         ["services" "transmission" "openPeerPorts"])
+    (mkAliasOptionModuleMD ["services" "transmission" "openFirewall"]
+                           ["services" "transmission" "openPeerPorts"])
   ];
   options = {
     services.transmission = {
