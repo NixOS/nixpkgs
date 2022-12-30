@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "2.5.3";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "riptideio";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7zuFKJuKc+J4g7qoK22xed8dmXJatQbQXz4aKAOcvN8=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
