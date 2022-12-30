@@ -520,6 +520,7 @@
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
   ./services/logging/vector.nix
+  ./services/logging/ulogd.nix
   ./services/mail/clamsmtp.nix
   ./services/mail/davmail.nix
   ./services/mail/dkimproxy-out.nix

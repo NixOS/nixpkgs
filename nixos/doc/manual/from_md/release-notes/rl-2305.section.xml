@@ -76,6 +76,14 @@
           <link xlink:href="options.html#opt-services.v2raya.enable">services.v2raya</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.netfilter.org/projects/ulogd/index.html">ulogd</link>,
+          a userspace logging daemon for netfilter/iptables related
+          logging. Available as
+          <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
@@ -397,6 +405,21 @@
           been added to <literal>services.nginx</literal>. Learn more
           about compression in Brotli format
           <link xlink:href="https://github.com/google/ngx_brotli/blob/master/README.md">here</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>
+          version is based on
+          <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>,
+          existing installations will keep using version 0.7. New
+          installations will use version 0.8. In order to upgrade a
+          Garage cluster, please follow
+          <link xlink:href="https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/">upstream
+          instructions</link> and force
+          <link xlink:href="options.html#opt-services.garage.package">services.garage.package</link>
+          or upgrade accordingly
+          <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>.
         </para>
       </listitem>
       <listitem>

@@ -919,6 +919,38 @@
   },
   "images": {
     "10": {
+      "default": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8537616a7add47cce24c60f18bc2429e3dc90ae3",
+              "size": 67927049,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-10_r05.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-10-default-armeabi-v7a",
+          "path": "system-images/android-10/default/armeabi-v7a",
+          "revision": "10-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "a166d5ccbb165e1dd5464fbfeec30a61f77790d8",
+              "size": 75386095,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-10_r05.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-10-default-x86",
+          "path": "system-images/android-10/default/x86",
+          "revision": "10-default-x86"
+        }
+      },
       "google_apis": {
         "armeabi-v7a": {
           "archives": [
@@ -972,6 +1004,38 @@
       }
     },
     "15": {
+      "default": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "03d7ed95a9d3b107e3f2e5b166d017ea12529e70",
+              "size": 102452069,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-15_r05.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-15-default-armeabi-v7a",
+          "path": "system-images/android-15/default/armeabi-v7a",
+          "revision": "15-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "61381aef3fd0cdc8255cb3298072a920c80186ca",
+              "size": 116030933,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-15_r07.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-15-default-x86",
+          "path": "system-images/android-15/default/x86",
+          "revision": "15-default-x86"
+        }
+      },
       "google_apis": {
         "armeabi-v7a": {
           "archives": [
@@ -1006,6 +1070,53 @@
       }
     },
     "16": {
+      "default": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "69b944b0d5a18c8563fa80d7d229af64890f724e",
+              "size": 118646340,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-16_r06.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-16-default-armeabi-v7a",
+          "path": "system-images/android-16/default/armeabi-v7a",
+          "revision": "16-default-armeabi-v7a"
+        },
+        "mips": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "67943c54fb3943943ffeb05fdd39c0b753681f6e",
+              "size": 122482530,
+              "url": "https://dl.google.com/android/repository/sys-img/default/sysimg_mips-16_r04.zip"
+            }
+          ],
+          "displayName": "MIPS System Image",
+          "license": "mips-android-sysimage-license",
+          "name": "system-image-16-default-mips",
+          "path": "system-images/android-16/default/mips",
+          "revision": "16-default-mips"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "ee6718e7556c8f8bd8d3f470b34f2c5dbf9bcff4",
+              "size": 135305313,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-16_r07.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-16-default-x86",
+          "path": "system-images/android-16/default/x86",
+          "revision": "16-default-x86"
+        }
+      },
       "google_apis": {
         "armeabi-v7a": {
           "archives": [
@@ -1040,6 +1151,53 @@
       }
     },
     "17": {
+      "default": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "a18a3fd0958ec4ef52507f58e414fc5c7dfd59d6",
+              "size": 124437041,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-17_r06.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-17-default-armeabi-v7a",
+          "path": "system-images/android-17/default/armeabi-v7a",
+          "revision": "17-default-armeabi-v7a"
+        },
+        "mips": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "f0c6e153bd584c29e51b5c9723cfbf30f996a05d",
+              "size": 131781761,
+              "url": "https://dl.google.com/android/repository/sys-img/default/sysimg_mips-17_r01.zip"
+            }
+          ],
+          "displayName": "MIPS System Image",
+          "license": "mips-android-sysimage-license",
+          "name": "system-image-17-default-mips",
+          "path": "system-images/android-17/default/mips",
+          "revision": "17-default-mips"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "1ad5ffb51e31f5fe9fa47411fed2c2ade9a33865",
+              "size": 194811128,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-17_r07.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-17-default-x86",
+          "path": "system-images/android-17/default/x86",
+          "revision": "17-default-x86"
+        }
+      },
       "google_apis": {
         "armeabi-v7a": {
           "archives": [
@@ -1074,6 +1232,38 @@
       }
     },
     "18": {
+      "default": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "580b583720f7de671040d5917c8c9db0c7aa03fd",
+              "size": 130590545,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-18_r05.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-18-default-armeabi-v7a",
+          "path": "system-images/android-18/default/armeabi-v7a",
+          "revision": "18-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "7a4ced4d9b0ab48047825491b4072dc2eb9b610e",
+              "size": 150097655,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-18_r04.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-18-default-x86",
+          "path": "system-images/android-18/default/x86",
+          "revision": "18-default-x86"
+        }
+      },
       "google_apis": {
         "armeabi-v7a": {
           "archives": [
@@ -1108,6 +1298,38 @@
       }
     },
     "19": {
+      "default": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "d1a5fd4f2e1c013c3d3d9bfe7e9db908c3ed56fa",
+              "size": 159871567,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-19_r05.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-19-default-armeabi-v7a",
+          "path": "system-images/android-19/default/armeabi-v7a",
+          "revision": "19-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "2ac82153aae97f7eae4c5a0761224fe04321d03d",
+              "size": 185886274,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-19_r06.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-19-default-x86",
+          "path": "system-images/android-19/default/x86",
+          "revision": "19-default-x86"
+        }
+      },
       "google_apis": {
         "armeabi-v7a": {
           "archives": [
@@ -1142,7 +1364,116 @@
       }
     },
     "21": {
+      "android-tv": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "b63e28a47f11b639dd94981a458b7abfa89ac331",
+              "size": 249428246,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/armeabi-v7a-21_r03.zip"
+            }
+          ],
+          "displayName": "Android TV ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-android-tv-armeabi-v7a",
+          "path": "system-images/android-21/android-tv/armeabi-v7a",
+          "revision": "21-android-tv-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "2f8a1988188d6abfd6c6395baeb4471a034dc1e8",
+              "size": 268946785,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-21_r03.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-android-tv-x86",
+          "path": "system-images/android-21/android-tv/x86",
+          "revision": "21-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "c4375f1b4b4cd21a8617660e25f621cedcbd8332",
+              "size": 211426314,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-21_r04.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-default-arm64-v8a",
+          "path": "system-images/android-21/default/arm64-v8a",
+          "revision": "21-default-arm64-v8a"
+        },
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8c606f81306564b65e41303d2603e4c42ded0d10",
+              "size": 187163871,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-21_r04.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-default-armeabi-v7a",
+          "path": "system-images/android-21/default/armeabi-v7a",
+          "revision": "21-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "00f0eb0a1003efe3316347f762e20a85d8749cff",
+              "size": 208212529,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-21_r05.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-default-x86",
+          "path": "system-images/android-21/default/x86",
+          "revision": "21-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "9078a095825a69e5e215713f0866c83cef65a342",
+              "size": 292623982,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-21_r05.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-default-x86_64",
+          "path": "system-images/android-21/default/x86_64",
+          "revision": "21-default-x86_64"
+        }
+      },
       "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "bad07917816ba029ddb09ce0836e4aac4a460d4d",
+              "size": 297671829,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-21_r32.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-21-google_apis-arm64-v8a",
+          "path": "system-images/android-21/google_apis/arm64-v8a",
+          "revision": "21-google_apis-arm64-v8a"
+        },
         "armeabi-v7a": {
           "archives": [
             {
@@ -1191,7 +1522,101 @@
       }
     },
     "22": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "c78efd5a155622eb490be9d326f5783993375c35",
+              "size": 293118949,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-22_r03.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-android-tv-x86",
+          "path": "system-images/android-22/android-tv/x86",
+          "revision": "22-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "703e27a9a4fb7a6e763cb7d713b89e5249a8fc99",
+              "size": 219124634,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-22_r02.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-default-arm64-v8a",
+          "path": "system-images/android-22/default/arm64-v8a",
+          "revision": "22-default-arm64-v8a"
+        },
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "2114ec015dbf3a16cbcb4f63e8a84a1b206a07a1",
+              "size": 194596267,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-22_r02.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-default-armeabi-v7a",
+          "path": "system-images/android-22/default/armeabi-v7a",
+          "revision": "22-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e33e2a6cc3f1cc56b2019dbef3917d2eeb26f54e",
+              "size": 214268954,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-22_r06.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-default-x86",
+          "path": "system-images/android-22/default/x86",
+          "revision": "22-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "5db3b27f78cd9c4c5092b1cad5a5dd479fb5b2e4",
+              "size": 299976630,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-22_r06.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-default-x86_64",
+          "path": "system-images/android-22/default/x86_64",
+          "revision": "22-default-x86_64"
+        }
+      },
       "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "fd62e99e278f337fd58cadd37bf4f4c1998c8297",
+              "size": 382307460,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-22_r26.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-22-google_apis-arm64-v8a",
+          "path": "system-images/android-22/google_apis/arm64-v8a",
+          "revision": "22-google_apis-arm64-v8a"
+        },
         "armeabi-v7a": {
           "archives": [
             {
@@ -1240,6 +1665,100 @@
       }
     },
     "23": {
+      "android-tv": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "bd84678ae8caf71d584f5210e866b2807e7b4b52",
+              "size": 304269268,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/armeabi-v7a-23_r12.zip"
+            }
+          ],
+          "displayName": "Android TV ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-23-android-tv-armeabi-v7a",
+          "path": "system-images/android-23/android-tv/armeabi-v7a",
+          "revision": "23-android-tv-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "094575ec634a662115a7a4c2b63d1743dfbca43c",
+              "size": 340921232,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-23_r21.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-23-android-tv-x86",
+          "path": "system-images/android-23/android-tv/x86",
+          "revision": "23-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "ac18f3bd717e02804eee585e029f5dbc1a2616bf",
+              "size": 253807785,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-23_r07.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-23-default-arm64-v8a",
+          "path": "system-images/android-23/default/arm64-v8a",
+          "revision": "23-default-arm64-v8a"
+        },
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "7cf2ad756e54a3acfd81064b63cb0cb9dff2798d",
+              "size": 238333358,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-23_r06.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-23-default-armeabi-v7a",
+          "path": "system-images/android-23/default/armeabi-v7a",
+          "revision": "23-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "f6c3e3dd7bd951454795aa75c3a145fd05ac25bb",
+              "size": 260804863,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-23_r10.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-23-default-x86",
+          "path": "system-images/android-23/default/x86",
+          "revision": "23-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "7cbc291483ca07dc67b71268c5f08a5755f50f51",
+              "size": 365009313,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-23_r10.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-23-default-x86_64",
+          "path": "system-images/android-23/default/x86_64",
+          "revision": "23-default-x86_64"
+        }
+      },
       "google_apis": {
         "arm64-v8a": {
           "archives": [
@@ -1304,6 +1823,132 @@
       }
     },
     "24": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "ef7890e565f4e3544fd23613b437d4418fb10f99",
+              "size": 398227164,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-24_r22.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-android-tv-x86",
+          "path": "system-images/android-24/android-tv/x86",
+          "revision": "24-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e88ebdf4533efa0370603ee4ab0e7834e0cc364f",
+              "size": 305854153,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-24_r09.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-default-arm64-v8a",
+          "path": "system-images/android-24/default/arm64-v8a",
+          "revision": "24-default-arm64-v8a"
+        },
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e22c47afd06398b35f2705ca2e7fa85323351568",
+              "size": 782997866,
+              "url": "https://dl.google.com/android/repository/sys-img/default/armeabi-v7a-24_r07.zip"
+            }
+          ],
+          "displayName": "ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-default-armeabi-v7a",
+          "path": "system-images/android-24/default/armeabi-v7a",
+          "revision": "24-default-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "c1cae7634b0216c0b5990f2c144eb8ca948e3511",
+              "size": 313489224,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-24_r08.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-default-x86",
+          "path": "system-images/android-24/default/x86",
+          "revision": "24-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "f6559e1949a5879f31a9662f4f0e50ad60181684",
+              "size": 419261998,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-24_r08.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-default-x86_64",
+          "path": "system-images/android-24/default/x86_64",
+          "revision": "24-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "d264adca13330b5e50665ab44726e4fecc1ddd1f",
+              "size": 709604485,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-24_r29.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-google_apis-arm64-v8a",
+          "path": "system-images/android-24/google_apis/arm64-v8a",
+          "revision": "24-google_apis-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "74505c33546fb9f6722fb7aa8fc1472777b924ff",
+              "size": 889204295,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-24_r27.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-google_apis-x86",
+          "path": "system-images/android-24/google_apis/x86",
+          "revision": "24-google_apis-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "46d09c0723b77ddba00f2281099a2c44a88ac971",
+              "size": 1119800108,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-24_r27.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-24-google_apis-x86_64",
+          "path": "system-images/android-24/google_apis/x86_64",
+          "revision": "24-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "x86": {
           "archives": [
@@ -1323,6 +1968,164 @@
       }
     },
     "25": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "faae592bc991001b1880a8198d729b25855cc34b",
+              "size": 438201093,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-25_r16.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-android-tv-x86",
+          "path": "system-images/android-25/android-tv/x86",
+          "revision": "25-android-tv-x86"
+        }
+      },
+      "android-wear": {
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "76d3568a4e08023047af7d13025a35c9bf1d7e5c",
+              "size": 377841195,
+              "url": "https://dl.google.com/android/repository/sys-img/android-wear/armeabi-v7a-25_r03.zip"
+            }
+          ],
+          "displayName": "Android Wear ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-android-wear-armeabi-v7a",
+          "path": "system-images/android-25/android-wear/armeabi-v7a",
+          "revision": "25-android-wear-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "693fce7b487a65491a4e88e9f740959688c9dbe6",
+              "size": 397826706,
+              "url": "https://dl.google.com/android/repository/sys-img/android-wear/x86-25_r03.zip"
+            }
+          ],
+          "displayName": "Android Wear Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-android-wear-x86",
+          "path": "system-images/android-25/android-wear/x86",
+          "revision": "25-android-wear-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "b39d359623323a1b4906c071dec396040016ea73",
+              "size": 308416103,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-25_r02.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-default-arm64-v8a",
+          "path": "system-images/android-25/default/arm64-v8a",
+          "revision": "25-default-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "78ce7eb1387d598685633b9f7cbb300c3d3aeb5f",
+              "size": 316695942,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-25_r01.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-default-x86",
+          "path": "system-images/android-25/default/x86",
+          "revision": "25-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "7093d7b39216020226ff430a3b7b81c94d31ad37",
+              "size": 422702097,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-25_r01.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-default-x86_64",
+          "path": "system-images/android-25/default/x86_64",
+          "revision": "25-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "23162a2123e9e5cd5a7e930f8ca867676e83c0df",
+              "size": 740445031,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-25_r20.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-google_apis-arm64-v8a",
+          "path": "system-images/android-25/google_apis/arm64-v8a",
+          "revision": "25-google_apis-arm64-v8a"
+        },
+        "armeabi-v7a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "a6f7c491e3bb937523dddfa287e07d785934e8a1",
+              "size": 952973150,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-25_r18.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM EABI v7a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-google_apis-armeabi-v7a",
+          "path": "system-images/android-25/google_apis/armeabi-v7a",
+          "revision": "25-google_apis-armeabi-v7a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "93872600c58521c8a67dc44c8e17cff4def009f3",
+              "size": 1013657090,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-25_r18.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-google_apis-x86",
+          "path": "system-images/android-25/google_apis/x86",
+          "revision": "25-google_apis-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "0da7b5bca8ff5deff45b942f61f081e038271ba6",
+              "size": 1298264628,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-25_r18.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-25-google_apis-x86_64",
+          "path": "system-images/android-25/google_apis/x86_64",
+          "revision": "25-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "x86": {
           "archives": [
@@ -1342,6 +2145,134 @@
       }
     },
     "26": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "f908b3c81a03513a756c17a197faecfc91e437df",
+              "size": 401675862,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-26_r14.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-26-android-tv-x86",
+          "path": "system-images/android-26/android-tv/x86",
+          "revision": "26-android-tv-x86"
+        }
+      },
+      "android-wear": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "fbffa91b936ca18fcc1e0bab2b52a8b0835cbb1c",
+              "size": 370311037,
+              "url": "https://dl.google.com/android/repository/sys-img/android-wear/x86-26_r04.zip"
+            }
+          ],
+          "displayName": "Android Wear Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-android-wear-x86",
+          "path": "system-images/android-26/android-wear/x86",
+          "revision": "26-android-wear-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "c3199baf49790fc65f90f7ce734435d5778f6a30",
+              "size": 328910124,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-26_r01.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-default-arm64-v8a",
+          "path": "system-images/android-26/default/arm64-v8a",
+          "revision": "26-default-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e613d6e0da668e30daf547f3c6627a6352846f90",
+              "size": 350195807,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-26_r01.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-default-x86",
+          "path": "system-images/android-26/default/x86",
+          "revision": "26-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "432f149c048bffce7f9de526ec65b336daf7a0a3",
+              "size": 474178332,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-26_r01.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-default-x86_64",
+          "path": "system-images/android-26/default/x86_64",
+          "revision": "26-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "75fe6f36cf0854270876543641da53887961a63b",
+              "size": 732225522,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-26_r01.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-google_apis-arm64-v8a",
+          "path": "system-images/android-26/google_apis/arm64-v8a",
+          "revision": "26-google_apis-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "edac36ae459ebc974aac4b51b67b7356fa099f5b",
+              "size": 805108564,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-26_r16.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-google_apis-x86",
+          "path": "system-images/android-26/google_apis/x86",
+          "revision": "26-google_apis-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "0eb13cc91cf164b617eaf85e4030289cb18189de",
+              "size": 980740438,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-26_r16.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-26-google_apis-x86_64",
+          "path": "system-images/android-26/google_apis/x86_64",
+          "revision": "26-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "x86": {
           "archives": [
@@ -1361,6 +2292,102 @@
       }
     },
     "27": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "b7d2a9349cdb1da9dafbd42de7378f6f1933d193",
+              "size": 410757280,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-27_r09.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-27-android-tv-x86",
+          "path": "system-images/android-27/android-tv/x86",
+          "revision": "27-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "cb01199edae33ce375c6d8e08aea08911ff0d583",
+              "size": 331796092,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-27_r01.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-27-default-arm64-v8a",
+          "path": "system-images/android-27/default/arm64-v8a",
+          "revision": "27-default-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "4ec990fac7b62958decd12e18a4cd389dfe7c582",
+              "size": 360984187,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-27_r01.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-27-default-x86",
+          "path": "system-images/android-27/default/x86",
+          "revision": "27-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "2878261011a59ca3de29dc5b457a495fdb268d60",
+              "size": 491675204,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-27_r01.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-27-default-x86_64",
+          "path": "system-images/android-27/default/x86_64",
+          "revision": "27-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "a7ae177097205090fee9801349575cea0dd9f606",
+              "size": 730343967,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-27_r01.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-27-google_apis-arm64-v8a",
+          "path": "system-images/android-27/google_apis/arm64-v8a",
+          "revision": "27-google_apis-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "0a130cad4f6d42c305a61265dc6c738e9e2b45c4",
+              "size": 807298593,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-27_r11.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-27-google_apis-x86",
+          "path": "system-images/android-27/google_apis/x86",
+          "revision": "27-google_apis-x86"
+        }
+      },
       "google_apis_playstore": {
         "x86": {
           "archives": [
@@ -1380,6 +2407,134 @@
       }
     },
     "28": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "4c13edca32c1abb899a0702fe6972087712bcb78",
+              "size": 475216948,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-28_r10.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-28-android-tv-x86",
+          "path": "system-images/android-28/android-tv/x86",
+          "revision": "28-android-tv-x86"
+        }
+      },
+      "android-wear": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "3dd75066e95327baf8991915a043e53e06a2cfb5",
+              "size": 682327945,
+              "url": "https://dl.google.com/android/repository/sys-img/android-wear/x86-28_r09.zip"
+            }
+          ],
+          "displayName": "Wear OS Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-28-android-wear-x86",
+          "path": "system-images/android-28/android-wear/x86",
+          "revision": "28-android-wear-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "4de0491612ca12097be7deb76af835ebabadefca",
+              "size": 425671679,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-28_r01.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-28-default-arm64-v8a",
+          "path": "system-images/android-28/default/arm64-v8a",
+          "revision": "28-default-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "ce03c42d80c0fc6dc47f6455dbee7aa275d02780",
+              "size": 437320152,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-28_r04.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-28-default-x86",
+          "path": "system-images/android-28/default/x86",
+          "revision": "28-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "d47a85c8f4e9fd57df97814ad8884eeb0f3a0ef0",
+              "size": 564792723,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-28_r04.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-28-default-x86_64",
+          "path": "system-images/android-28/default/x86_64",
+          "revision": "28-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "3360092d11284a9f2d7146847932a426c438b372",
+              "size": 856031756,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-28_r01.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-arm-dbt-license",
+          "name": "system-image-28-google_apis-arm64-v8a",
+          "path": "system-images/android-28/google_apis/arm64-v8a",
+          "revision": "28-google_apis-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e0541ac9b783ab91a00054e133bda340a2b9c757",
+              "size": 994434707,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-28_r12.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-arm-dbt-license",
+          "name": "system-image-28-google_apis-x86",
+          "path": "system-images/android-28/google_apis/x86",
+          "revision": "28-google_apis-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "1d93bd994e29c4e9bbe71fd9c278addc5418cbee",
+              "size": 1102721597,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-28_r11.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-28-google_apis-x86_64",
+          "path": "system-images/android-28/google_apis/x86_64",
+          "revision": "28-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
@@ -1429,6 +2584,141 @@
       }
     },
     "29": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "736c2f6c79493b5ee4ca0d2531a25c9eb7f9c7ab",
+              "size": 590809630,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-29_r03.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-29-android-tv-x86",
+          "path": "system-images/android-29/android-tv/x86",
+          "revision": "29-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "fa0d67d7430fcc84b2fe2508ea81e92ac644e264",
+              "size": 498049256,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-29_r08.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-29-default-arm64-v8a",
+          "path": "system-images/android-29/default/arm64-v8a",
+          "revision": "29-default-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "windows",
+              "sha1": "cc4fa13e49cb2e93770d4f2e90ea1dd2a81e315b",
+              "size": 516543600,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-29_r08-windows.zip"
+            },
+            {
+              "os": "macosx",
+              "sha1": "cc4fa13e49cb2e93770d4f2e90ea1dd2a81e315b",
+              "size": 516543600,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-29_r08-darwin.zip"
+            },
+            {
+              "os": "linux",
+              "sha1": "cc4fa13e49cb2e93770d4f2e90ea1dd2a81e315b",
+              "size": 516543600,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86-29_r08-linux.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-29-default-x86",
+          "path": "system-images/android-29/default/x86",
+          "revision": "29-default-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "windows",
+              "sha1": "e4b798d6fcddff90d528d74ef22ce3dd4a2ca798",
+              "size": 689676765,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-29_r08-windows.zip"
+            },
+            {
+              "os": "macosx",
+              "sha1": "e4b798d6fcddff90d528d74ef22ce3dd4a2ca798",
+              "size": 689676765,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-29_r08-darwin.zip"
+            },
+            {
+              "os": "linux",
+              "sha1": "e4b798d6fcddff90d528d74ef22ce3dd4a2ca798",
+              "size": 689676765,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-29_r08-linux.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-29-default-x86_64",
+          "path": "system-images/android-29/default/x86_64",
+          "revision": "29-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e5938d570019150135c3bdf39442d103ea8aca86",
+              "size": 1169015927,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-29_r12.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-arm-dbt-license",
+          "name": "system-image-29-google_apis-arm64-v8a",
+          "path": "system-images/android-29/google_apis/arm64-v8a",
+          "revision": "29-google_apis-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8dc45a7406b922116f2121f6826868c2e7087389",
+              "size": 1133056400,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-29_r12.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-29-google_apis-x86",
+          "path": "system-images/android-29/google_apis/x86",
+          "revision": "29-google_apis-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8392b93dc05c380bb0e6b2375ba318c14b263b37",
+              "size": 1313280930,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-29_r12.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-29-google_apis-x86_64",
+          "path": "system-images/android-29/google_apis/x86_64",
+          "revision": "29-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
@@ -1508,6 +2798,134 @@
       }
     },
     "30": {
+      "android-tv": {
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "f4151d2390fc015ddb2a7715bea9bc69a5ee0b4e",
+              "size": 699304963,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-30_r04.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-30-android-tv-x86",
+          "path": "system-images/android-30/android-tv/x86",
+          "revision": "30-android-tv-x86"
+        }
+      },
+      "android-wear": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "4096b210414f609e5f83bd846b6f77700ef23ac4",
+              "size": 768213685,
+              "url": "https://dl.google.com/android/repository/sys-img/android-wear/arm64-v8a-30_r11.zip"
+            }
+          ],
+          "displayName": "Wear OS 3 ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-30-android-wear-arm64-v8a",
+          "path": "system-images/android-30/android-wear/arm64-v8a",
+          "revision": "30-android-wear-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e528d54306411a56ea2391557c95d4654d949d3c",
+              "size": 856620801,
+              "url": "https://dl.google.com/android/repository/sys-img/android-wear/x86-30_r11.zip"
+            }
+          ],
+          "displayName": "Wear OS 3 Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-30-android-wear-x86",
+          "path": "system-images/android-30/android-wear/x86",
+          "revision": "30-android-wear-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "2462af138023fbbd1114421818890884d4ebceab",
+              "size": 548363604,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-30_r01.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-30-default-arm64-v8a",
+          "path": "system-images/android-30/default/arm64-v8a",
+          "revision": "30-default-arm64-v8a"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e08119b65d2c188ef69f127028eb4c8cc632cd8f",
+              "size": 676379913,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-30_r10.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-30-default-x86_64",
+          "path": "system-images/android-30/default/x86_64",
+          "revision": "30-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "14393e29f2b1021d4bfece3a1cb29af745e95dac",
+              "size": 1244095258,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-30_r11.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-arm-dbt-license",
+          "name": "system-image-30-google_apis-arm64-v8a",
+          "path": "system-images/android-30/google_apis/arm64-v8a",
+          "revision": "30-google_apis-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "a23869f790fd42dddc83c47be1d1827fbebb7869",
+              "size": 650472769,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-30_r10.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-30-google_apis-x86",
+          "path": "system-images/android-30/google_apis/x86",
+          "revision": "30-google_apis-x86"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8ec579d5fe31804dd80132f1678655bfc015609b",
+              "size": 1438274971,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-30_r11.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-30-google_apis-x86_64",
+          "path": "system-images/android-30/google_apis/x86_64",
+          "revision": "30-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
@@ -1587,6 +3005,102 @@
       }
     },
     "31": {
+      "android-tv": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "e8cec4080464d516e3f863d943c24055155f29bf",
+              "size": 763104604,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/arm64-v8a-31_r04.zip"
+            }
+          ],
+          "displayName": "Android TV ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-31-android-tv-arm64-v8a",
+          "path": "system-images/android-31/android-tv/arm64-v8a",
+          "revision": "31-android-tv-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8c0b848019afade7f2a8ddb5c361178f63ec86ca",
+              "size": 772250386,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-31_r04.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-31-android-tv-x86",
+          "path": "system-images/android-31/android-tv/x86",
+          "revision": "31-android-tv-x86"
+        }
+      },
+      "default": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "1052df2d0afc8fe57138db19d5ebd82d10c607da",
+              "size": 635481190,
+              "url": "https://dl.google.com/android/repository/sys-img/default/arm64-v8a-31_r03.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-31-default-arm64-v8a",
+          "path": "system-images/android-31/default/arm64-v8a",
+          "revision": "31-default-arm64-v8a"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "1200d6983af477fd6439f11cc5cabf9866bc4a16",
+              "size": 657244568,
+              "url": "https://dl.google.com/android/repository/sys-img/default/x86_64-31_r03.zip"
+            }
+          ],
+          "displayName": "Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-31-default-x86_64",
+          "path": "system-images/android-31/default/x86_64",
+          "revision": "31-default-x86_64"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "afdec4698b61bfbcf8471eff418951d7183c7b55",
+              "size": 1415899601,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-31_r10.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-arm-dbt-license",
+          "name": "system-image-31-google_apis-arm64-v8a",
+          "path": "system-images/android-31/google_apis/arm64-v8a",
+          "revision": "31-google_apis-arm64-v8a"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "05a74ff8509fb76cbfd14b2e3307addad5c4d0df",
+              "size": 1458104208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-31_r11.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-31-google_apis-x86_64",
+          "path": "system-images/android-31/google_apis/x86_64",
+          "revision": "31-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
@@ -1627,6 +3141,23 @@
       }
     },
     "32": {
+      "google_apis": {
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "9727f570164b062e820d6e62edabc96d125027f6",
+              "size": 1471221547,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-32_r03.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-preview-license",
+          "name": "system-image-32-google_apis-x86_64",
+          "path": "system-images/android-32/google_apis/x86_64",
+          "revision": "32-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
@@ -1679,20 +3210,84 @@
       }
     },
     "33": {
+      "android-tv": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "41b75155961eb506b492e60e8fba590ad7baa02c",
+              "size": 828027584,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/arm64-v8a-33_r05.zip"
+            }
+          ],
+          "displayName": "Android TV ARM 64 v8a System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-33-android-tv-arm64-v8a",
+          "path": "system-images/android-33/android-tv/arm64-v8a",
+          "revision": "33-android-tv-arm64-v8a"
+        },
+        "x86": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "ec3fe6a450ed6aa5fec2703fca68648e7813094f",
+              "size": 817908695,
+              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-33_r05.zip"
+            }
+          ],
+          "displayName": "Android TV Intel x86 Atom System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-33-android-tv-x86",
+          "path": "system-images/android-33/android-tv/x86",
+          "revision": "33-android-tv-x86"
+        }
+      },
+      "google_apis": {
+        "arm64-v8a": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "8e7733de150ad1a912d63f90a11a1de705b5ddcf",
+              "size": 1619645676,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-33_r08.zip"
+            }
+          ],
+          "displayName": "Google APIs ARM 64 v8a System Image",
+          "license": "android-sdk-arm-dbt-license",
+          "name": "system-image-33-google_apis-arm64-v8a",
+          "path": "system-images/android-33/google_apis/arm64-v8a",
+          "revision": "33-google_apis-arm64-v8a"
+        },
+        "x86_64": {
+          "archives": [
+            {
+              "os": "all",
+              "sha1": "6f5210b87ca249aa6ea2a25bb6d5598c19fa9372",
+              "size": 1510438727,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-33_r08.zip"
+            }
+          ],
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+          "name": "system-image-33-google_apis-x86_64",
+          "path": "system-images/android-33/google_apis/x86_64",
+          "revision": "33-google_apis-x86_64"
+        }
+      },
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
             {
               "os": "macosx",
-              "sha1": "0b850a4f317d7a6abe854a6845705c9ca4437764",
-              "size": 1492105537,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r05-darwin.zip"
+              "sha1": "831cfe87d12eb5dd9d107ca2dfb203d52ca7b217",
+              "size": 1582091204,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r07-darwin.zip"
             },
             {
               "os": "linux",
-              "sha1": "0b850a4f317d7a6abe854a6845705c9ca4437764",
-              "size": 1492105537,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r05-linux.zip"
+              "sha1": "831cfe87d12eb5dd9d107ca2dfb203d52ca7b217",
+              "size": 1582091204,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r07-linux.zip"
             }
           ],
           "displayName": "Google Play ARM 64 v8a System Image",
@@ -1705,50 +3300,16 @@
           "archives": [
             {
               "os": "all",
-              "sha1": "ed2931ebef4f7bedff8610254748d6496ce5d3c4",
-              "size": 1496628942,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-33_r05.zip"
+              "sha1": "b7491eecf45556bd96f7b7a80c020b18a8a7df0d",
+              "size": 1481773028,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-33_r07.zip"
             }
           ],
           "displayName": "Google Play Intel x86 Atom_64 System Image",
-          "license": "android-sdk-preview-license",
+          "license": "android-sdk-license",
           "name": "system-image-33-google_apis_playstore-x86_64",
           "path": "system-images/android-33/google_apis_playstore/x86_64",
           "revision": "33-google_apis_playstore-x86_64"
-        }
-      }
-    },
-    "Tiramisu": {
-      "android-tv": {
-        "arm64-v8a": {
-          "archives": [
-            {
-              "os": "all",
-              "sha1": "4b70bed5ffb28162cdde7852e0597d957910270d",
-              "size": 840304267,
-              "url": "https://dl.google.com/android/repository/sys-img/android-tv/arm64-v8a-Tiramisu_r03.zip"
-            }
-          ],
-          "displayName": "Android TV ARM 64 v8a System Image",
-          "license": "android-sdk-license",
-          "name": "system-image-Tiramisu-android-tv-arm64-v8a",
-          "path": "system-images/android-Tiramisu/android-tv/arm64-v8a",
-          "revision": "Tiramisu-android-tv-arm64-v8a"
-        },
-        "x86": {
-          "archives": [
-            {
-              "os": "all",
-              "sha1": "547a24d9dec83e11486ef4ea45848d9fa99f35c2",
-              "size": 832895525,
-              "url": "https://dl.google.com/android/repository/sys-img/android-tv/x86-Tiramisu_r03.zip"
-            }
-          ],
-          "displayName": "Android TV Intel x86 Atom System Image",
-          "license": "android-sdk-license",
-          "name": "system-image-Tiramisu-android-tv-x86",
-          "path": "system-images/android-Tiramisu/android-tv/x86",
-          "revision": "Tiramisu-android-tv-x86"
         }
       }
     },
@@ -1758,15 +3319,15 @@
           "archives": [
             {
               "os": "macosx",
-              "sha1": "4653d7aa2dbd2629c3afc1c700284de0f7791bb2",
-              "size": 1514681298,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r05-darwin.zip"
+              "sha1": "069cdb5926cef729c8f14897cdc70e47acfe6736",
+              "size": 1489462208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r08-darwin.zip"
             },
             {
               "os": "linux",
-              "sha1": "4653d7aa2dbd2629c3afc1c700284de0f7791bb2",
-              "size": 1514681298,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r05-linux.zip"
+              "sha1": "069cdb5926cef729c8f14897cdc70e47acfe6736",
+              "size": 1489462208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r08-linux.zip"
             }
           ],
           "displayName": "Google Play ARM 64 v8a System Image",
@@ -1779,9 +3340,9 @@
           "archives": [
             {
               "os": "all",
-              "sha1": "2a4ea6ce714155ea8ddfea26cf61ad219f32c02a",
-              "size": 1519169526,
-              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-TiramisuPrivacySandbox_r05.zip"
+              "sha1": "7ae1658d066353e9f079afe694bdc17c446c0c88",
+              "size": 1493513570,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-TiramisuPrivacySandbox_r08.zip"
             }
           ],
           "displayName": "Google Play Intel x86 Atom_64 System Image",
@@ -1816,7 +3377,7 @@
       "Intel Corporation Internal Evaluation License Agreement for x86 Android* System Images for Android Software Development Kit (SDK) This Internal Evaluation License Agreement (this \"Agreement\") is entered into by and between Intel and you (as an individual developer or a legal entity -- identified below as Recipient). Intel shall provide the Evaluation Software to Recipient as described in accordance with the Internal Evaluation License Terms and Conditions.\n\nDefinitions. These terms shall have the following meanings:\n\n\"Intel\" or \"INTEL\" Intel Corporation With an Address of: 2200 Mission College Blvd. Santa Clara, CA 95052 Office of the General Counsel Mail Stop: RNB-4-51 Attn: Software and Services Group Legal\n\n\"Evaluation Software\" The x86 Android* emulator system images for Android Software Development Kit (SDK), as provided by Intel.\n\nINTERNAL EVALUATION LICENSE TERMS AND CONDITIONS\n\n1. DEFINITIONS.\n\n1.1 Additional Defined Terms. \"Agreement\", \"Evaluation Software\", \"Intel\", \"Non-disclosure Agreement\", \"Recipient\", and \"Effective Date\" shall have the meanings ascribed to them on the signature page(s) of this Agreement.\n\n1.2 Evaluation Materials means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications and other related materials) related to the Evaluation Software.\n\n1.3 \"Open Source Software\" means any software that requires as a condition of use, modification and/or distribution of such software that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNUs General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).\n\n1.4 \"Pre-Release Materials\" means \"alpha\" or \"beta\" designated pre-release features, which may not be fully functional, which Intel may substantially modify in producing any production version of the Evaluation Materials and/or is still under development by Intel and/or Intels suppliers.\n\n2. PURPOSE. Intel desires to provide the Evaluation Materials to Recipient solely for Recipient's internal evaluation of the Evaluation Software and other Intel products, to evaluate the desirability of cooperating with Intel in developing products based on the Evaluation Software and/or to advise Intel as to possible modifications to the Evaluation Software. Recipient may not disclose, distribute or make commercial use of the Evaluation Materials or any modifications to the Evaluation Materials. THE EVALUATION MATERIALS ARE PROVIDED FOR EVALUATION PURPOSES ONLY AND MAY NOT BE DISTRIBUTED BY RECIPIENT OR INCORPORATED INTO RECIPIENTS PRODUCTS OR SOFTWARE. PLEASE CONTACT AN INTEL SALES REPRESENTATIVE TO LEARN ABOUT THE AVAILABILITY AND COST OF A COMMERICAL VERSION OF THE EVALUATION SOFTWARE.\n\n3. TITLE. Title to the Evaluation Materials remains with Intel or its suppliers. Recipient shall not mortgage, pledge or encumber the Evaluation Materials in any way. Recipient shall return all Evaluation Materials, keeping no copies, upon termination or expiration of this Agreement.\n\n4. LICENSE. Intel grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above. Unless otherwise communicated in writing by Intel to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a \"Release\") the license grant in this Section 4 and the Evaluation Period shall apply to each Release. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software not provided to Recipient in source code form. EXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY OTHER INTELLECTUAL PROPERTY RIGHTS IS GRANTED TO THE RECIPIENT.\n\n5. NO OBLIGATION. Recipient shall have no duty to purchase or license any product from Intel. Intel and its suppliers shall have no obligation to provide support for, or develop a non-evaluation version of, the Evaluation Software or to license any version of it.\n\n6. MODIFICATIONS. This Agreement does NOT obligate Recipient to provide Intel with comments or suggestions regarding Evaluation Materials. However, should Recipient provide Intel with comments or suggestions for the modification, correction, improvement or enhancement of (a) the Evaluation Materials or (b) Intel products or processes which may embody the Evaluation Materials, Recipient grants to Intel a non-exclusive, irrevocable, worldwide, royalty-free license, with the right to sublicense Intels licensees and customers, under Recipient intellectual property rights, the rights to use and disclose such comments and suggestions in any manner Intel chooses and to display, perform, copy, make, have made, use, sell, offer to sell, import, and otherwise dispose of Intels and its sublicensees products embodying such comments and suggestions in any manner and via any media Intel chooses, without reference to the source.\n\n7. WARRANTY DISCLAIMER. INTEL AND ITS SUPPLIERS MAKE NO WARRANTIES WITH RESPECT TO EVALUATION MATERIALS, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ANY IMPLIED WARRANTY OF NONINFRINGEMENT. THE EVALUATION MATERIALS ARE PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND.\n\n8. LIMITATION OF LIABILITY. INTEL AND ITS SUPPLIERS SHALL NOT BE LIABLE FOR ANY PROPERTY DAMAGE, PERSONAL INJURY, LOSS OF PROFITS, INTERRUPTION OF BUSINESS OR ANY SPECIAL, CONSEQUENTIAL OR INCIDENTAL DAMAGES, HOWEVER CAUSED, WHETHER FOR BREACH OF WARRANTY, CONTRACT, STRICT LIABILITY OR OTHERWISE. INTEL AND ITS SUPPLIERS DISCLAIM ALL LIABILITY, INCLUDING LIABILITY FOR INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS RELATING TO THE EVALUATION MATERIALS.\n\n9. EXPIRATION. Intel may terminate this Agreement immediately after a breach by Recipient.\n\n10. GENERAL.\n\n10.1 Controlling Law. Any claims arising under or relating to this Agreement shall be governed by the internal substantive laws of the State of Delaware or federal courts located in Delaware, without regard to principles of conflict of laws. Each party hereby agrees to jurisdiction and venue in the courts of the State of Delaware for all disputes and litigation arising under or relating to this Agreement. The parties agree that the United Nations Convention on Contracts for the International Sale of Goods is specifically excluded from application to this Agreement. The parties consent to the personal jurisdiction of the above courts.\n\n10.2 Remedies. Recipient acknowledges that any disclosure, commercialization, or public use of the Evaluation Materials would cause irreparable injury to Intel and consents to the grant of an injunction by any court of competent jurisdiction in the event of a threatened breach.\n\n10.3 Assignment. Recipient may not delegate, assign or transfer this Agreement, the license granted or any of Recipients rights or duties hereunder, expressly, by implication, by operation of law, by way of merger (regardless of whether Recipient is the surviving entity) or acquisition, or otherwise and any attempt to do so, without Intels express prior written consent, shall be null and void. Intel may assign this Agreement, and its rights and obligations hereunder, in its sole discretion.\n\n10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and Intel and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and Intel with respect to the subject matter hereof. This Agreement supersedes any and all \"click-to-accept\" or shrink-wrapped licenses, in hard-copy or electronic form, embedded in or included with the Evaluation Materials. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed by duly authorized representatives of Recipient and Intel. Without limiting the foregoing, terms and conditions on any purchase orders or similar materials submitted by Recipient to Intel, and any terms contained in Intels standard acknowledgment form that are in conflict with these terms, shall be of no force or effect.\n\n10.5 Severability. In the event that any provision of this Agreement shall be unenforceable or invalid under any applicable law or be so held by applicable court decision, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such provision shall be changed and interpreted so as to best accomplish the objectives of such unenforceable or invalid provision within the limits of applicable law or applicable court decisions.\n\n10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other approval from the U.S. Department of Commerce or any other agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is \"deemed\" to take place when information is released to a foreign national wherever located.\n\n10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments and (iv) Intel can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . Intel is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.\n\n10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header provided with Evaluation Software. Additional detail may be provided (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement. ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED POSSIBLY WITH FAULTS"
     ],
     "mips-android-sysimage-license": [
-      "MIPS Technologies, Inc. (“MIPS”) Internal Evaluation License Agreement for MIPS Android™ System Images for Android Software Development Kit (SDK): This Internal Evaluation License Agreement (this \"Agreement\") is entered into by and between MIPS and you (as an individual developer or a legal entity -- identified below as “Recipient”). MIPS shall make the Evaluation Software available to Recipient as described in accordance with the terms and conditions set forth below.\n\nBy clicking on the “Accept” button, downloading, installing, or otherwise using the Evaluation Materials (defined below), you agree to be bound by the terms of this Agreement effective as of the date you click “Accept” (the “Effective Date”), and if doing so on behalf of an entity, you represent that you are authorized to bind the entity to the terms and conditions of this Agreement. If you do not agree to be bound by the terms and conditions of this Agreement, do not download, install, or use the Evaluation Materials.\n\n1. DEFINITIONS. These terms shall have the following meanings:\n\n1.1 “MIPS” shall mean MIPS Technologies, Inc., a Delaware corporation having a principal place of business at: 955 East Arques Ave., Sunnyvale, CA 94085\n\n1.2 “Evaluation Software” shall mean MIPS Android™ emulator system images for Android Software Development Kit (SDK), as made available to Recipient.\n\n1.3 “Evaluation Materials\" means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications, reference manuals, and other related materials) related to the Evaluation Software as made available to Recipient.\n\n1.4 “Open Source Software” means any software that requires (as a condition of use, modification and/or distribution of such software) that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNU’s General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).\n\n1.5 “Pre-Release Materials” means “alpha” or “beta” designated pre-release features, which may not be fully functional, which MIPS may substantially modify in producing any production version of the Evaluation Materials, and/or which is still under development by MIPS and/or MIPS’ suppliers.\n\n2. PURPOSE. MIPS desires to make the Evaluation Materials available to Recipient solely for Recipient's internal evaluation of the Evaluation Software to evaluate the desirability of cooperating with MIPS in developing products that are compatible with the Evaluation Software and/or to advise MIPS as to possible modifications to the Evaluation Software. Recipient may not disclose, distribute, modify (except to facilitate the above-mentioned internal evaluation), or make commercial use of the Evaluation Materials or any modifications of the Evaluation Materials.\n\nTHE EVALUATION MATERIALS ARE PROVIDED FOR EVALUATION PURPOSES ONLY AND MAY NOT BE MODIFIED (EXCEPT TO FACILITATE THE INTERNAL EVALUATION) OR DISTRIBUTED BY RECIPIENT OR INCORPORATED INTO RECIPIENT’S PRODUCTS OR SOFTWARE. PLEASE CONTACT A MIPS SALES REPRESENTATIVE TO LEARN ABOUT THE AVAILABILITY AND COST OF A COMMERCIAL VERSION OF THE EVALUATION SOFTWARE.\n\n3. TITLE. Title to the Evaluation Materials remains with MIPS or its suppliers. Recipient shall not mortgage, pledge or encumber the Evaluation Materials in any way. Recipient shall return all Evaluation Materials, keeping no copies, upon termination or expiration of this Agreement.\n\n4. LICENSE. MIPS grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above and only for a period beginning on the Effective Date and extending to the first anniversary of the Effective Date (the “Evaluation Period”). Unless otherwise communicated in writing by MIPS to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a “Release”) the license grant in this Section 4 and the Evaluation Period shall apply to each Release, in which case the Evaluation Period shall begin on the date that the Release is made generally available and continue to the first anniversary of such date. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software that is not provided to Recipient in source code form.\n\n\nEXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY OTHER MIPS INTELLECTUAL PROPERTY RIGHTS IS GRANTED TO THE RECIPIENT. OTHER THAN AS EXPLICITLY SET FORTH IN PARAGRAPH 2 ABOVE, NO RIGHT TO COPY, TO REPRODUCE, TO MODIFY, OR TO CREATE DERIVATIVE WORKS OF, THE EVALUATION MATERIALS IS GRANTED HEREIN.\n\n5. NO OBLIGATION. Recipient shall have no duty to purchase or license any product from MIPS. MIPS and its suppliers shall have no obligation to provide support for, or develop a non-evaluation version of, the Evaluation Software or to license any version of it.\n\n6. MODIFICATIONS. This Agreement does not obligate Recipient to provide MIPS with comments or suggestions regarding Evaluation Materials. However, should Recipient provide MIPS with comments or suggestions for the modification, correction, improvement or enhancement of (a) the Evaluation Materials or (b) MIPS products or processes which may embody the Evaluation Materials, then Recipient agrees to grant and hereby grants to MIPS a non-exclusive, irrevocable, worldwide, fully paid-up, royalty-free license, with the right to sublicense MIPS’ licensees and customers, under Recipient’s Intellectual property rights, to use and disclose such comments and suggestions in any manner MIPS chooses and to display, perform, copy, make, have made, use, sell, offer to sell, import, and otherwise dispose of MIPS’ and its sublicensee’s products embodying such comments and suggestions in any manner and via any media MIPS chooses, without reference to the source.\n\n7. WARRANTY DISCLAIMER. MIPS AND ITS SUPPLIERS MAKE NO WARRANTIES WITH RESPECT TO EVALUATION MATERIALS, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ANY IMPLIED WARRANTY OF NONINFRINGEMENT WITH RESPECT TO THIRD PARTY INTELLECTUAL PROPERTY. RECIPIENT ACKNOWLEDGES AND AGREES THAT THE EVALUATION MATERIALS ARE PROVIDED “AS IS,” WITHOUT WARRANTY OF ANY KIND.\n\n8. LIMITATION OF LIABILITY. MIPS AND ITS SUPPLIERS SHALL NOT BE LIABLE FOR ANY PROPERTY DAMAGE, PERSONAL INJURY, LOSS OF PROFITS, INTERRUPTION OF BUSINESS OR FOR ANY DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL OR INCIDENTAL DAMAGES, HOWEVER CAUSED OR ALLEGED, WHETHER FOR BREACH OF WARRANTY, CONTRACT, STRICT LIABILITY OR OTHERWISE, INCLUDING WITHOUT LIMITATION, UNDER TORT OR OTHER LEGAL THEORY. MIPS AND ITS SUPPLIERS DISCLAIM ANY AND ALL LIABILITY, INCLUDING LIABILITY FOR INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS OF ANY KIND RELATING TO THE EVALUATION MATERIALS.\n\n9. EXPIRATION. MIPS may terminate this Agreement immediately after a breach by Recipient or otherwise at MIPS’ reasonable discretion and upon five (5) business days’ notice to Recipient.\n\n10. GENERAL.\n\n10.1 Controlling Law. This Agreement shall be governed by California law excluding its choice of law rules. With the exception of MIPS’ rights to enforce its intellectual property rights and any confidentiality obligations under this Agreement or any licenses distributed with the Evaluation Materials, all disputes and any claims arising under or relating to this Agreement shall be subject to the exclusive jurisdiction and venue of the state and federal courts located in Santa Clara County, California. Each party hereby agrees to jurisdiction and venue in the courts set forth in the preceding sentence. The parties agree that the United Nations Convention on Contracts for the International Sale of Goods is specifically excluded from application to this Agreement. The parties consent to the personal jurisdiction of the above courts.\n\n10.2 Remedies. Recipient acknowledges and agrees that any breach of confidentiality obligations under this Agreement or any licenses distributed with the Evaluation Materials, as well as any disclosure, commercialization, or public use of the Evaluation Materials, would cause irreparable injury to MIPS, and therefore Recipient agrees to consent to, and hereby consents to, the grant of an injunction by any court of competent jurisdiction in the event of an actual or threatened breach.\n\n10.3 Assignment. Recipient may not delegate, assign or transfer this Agreement, the license granted or any of Recipient’s rights, obligations, or duties hereunder, expressly, by implication, by operation of law, by way of merger (regardless of whether Recipient is the surviving entity) or acquisition, or otherwise and any attempt to do so, without MIPS’ express prior written consent, shall be ineffective, null and void. MIPS may freely assign this Agreement, and its rights and obligations hereunder, in its sole discretion.\n\n10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and MIPS and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and MIPS with respect to the subject matter hereof. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed or otherwise accepted by duly authorized representatives of Recipient and MIPS.\n\n10.5 Severability. In the event that any provision of this Agreement is finally adjudicated to be unenforceable or invalid under any applicable law, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such unenforceable or invalid provision shall be interpreted so as to best accomplish the objectives of such provision within the limits of applicable law or applicable court decisions.\n\n10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other necessary approval from the U.S. Department of Commerce or any other governing agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all applicable laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is \"deemed\" to take place when information is released to a foreign national wherever located.\n\n10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments or may not be suitable for certain applications and (iv) MIPS can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . MIPS is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.\n\nANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED “AS IS” AND “AS AVAILABLE”, POSSIBLY WITH FAULTS, AND WITHOUT REPRESENTATION OR WARRANTY OF ANY KIND.\n\n10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header as indicated in the Evaluation Software. Additional detail may be available (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement.\n"
+      "MIPS Technologies, Inc. (“MIPS”) Internal Evaluation License Agreement for MIPS Android™ System Images for Android Software Development Kit (SDK): This Internal Evaluation License Agreement (this \"Agreement\") is entered into by and between MIPS and you (as an individual developer or a legal entity -- identified below as “Recipient”). MIPS shall make the Evaluation Software available to Recipient as described in accordance with the terms and conditions set forth below.\n\nBy clicking on the “Accept” button, downloading, installing, or otherwise using the Evaluation Materials (defined below), you agree to be bound by the terms of this Agreement effective as of the date you click “Accept” (the “Effective Date”), and if doing so on behalf of an entity, you represent that you are authorized to bind the entity to the terms and conditions of this Agreement. If you do not agree to be bound by the terms and conditions of this Agreement, do not download, install, or use the Evaluation Materials.\n\n1. DEFINITIONS. These terms shall have the following meanings:\n\n1.1 “MIPS” shall mean MIPS Technologies, Inc., a Delaware corporation having a principal place of business at: 955 East Arques Ave., Sunnyvale, CA 94085\n\n1.2 “Evaluation Software” shall mean MIPS Android™ emulator system images for Android Software Development Kit (SDK), as made available to Recipient.\n\n1.3 “Evaluation Materials\" means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications, reference manuals, and other related materials) related to the Evaluation Software as made available to Recipient.\n\n1.4 “Open Source Software” means any software that requires (as a condition of use, modification and/or distribution of such software) that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNU’s General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).\n\n1.5 “Pre-Release Materials” means “alpha” or “beta” designated pre-release features, which may not be fully functional, which MIPS may substantially modify in producing any production version of the Evaluation Materials, and/or which is still under development by MIPS and/or MIPS’ suppliers.\n\n2. PURPOSE. MIPS desires to make the Evaluation Materials available to Recipient solely for Recipient's internal evaluation of the Evaluation Software to evaluate the desirability of cooperating with MIPS in developing products that are compatible with the Evaluation Software and/or to advise MIPS as to possible modifications to the Evaluation Software. Recipient may not disclose, distribute, modify (except to facilitate the above-mentioned internal evaluation), or make commercial use of the Evaluation Materials or any modifications of the Evaluation Materials.\n\nTHE EVALUATION MATERIALS ARE PROVIDED FOR EVALUATION PURPOSES ONLY AND MAY NOT BE MODIFIED (EXCEPT TO FACILITATE THE INTERNAL EVALUATION) OR DISTRIBUTED BY RECIPIENT OR INCORPORATED INTO RECIPIENT’S PRODUCTS OR SOFTWARE. PLEASE CONTACT A MIPS SALES REPRESENTATIVE TO LEARN ABOUT THE AVAILABILITY AND COST OF A COMMERCIAL VERSION OF THE EVALUATION SOFTWARE.\n\n3. TITLE. Title to the Evaluation Materials remains with MIPS or its suppliers. Recipient shall not mortgage, pledge or encumber the Evaluation Materials in any way. Recipient shall return all Evaluation Materials, keeping no copies, upon termination or expiration of this Agreement.\n\n4. LICENSE. MIPS grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above and only for a period beginning on the Effective Date and extending to the first anniversary of the Effective Date (the “Evaluation Period”). Unless otherwise communicated in writing by MIPS to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a “Release”) the license grant in this Section 4 and the Evaluation Period shall apply to each Release, in which case the Evaluation Period shall begin on the date that the Release is made generally available and continue to the first anniversary of such date. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software that is not provided to Recipient in source code form.\n\n\nEXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY OTHER MIPS INTELLECTUAL PROPERTY RIGHTS IS GRANTED TO THE RECIPIENT. OTHER THAN AS EXPLICITLY SET FORTH IN PARAGRAPH 2 ABOVE, NO RIGHT TO COPY, TO REPRODUCE, TO MODIFY, OR TO CREATE DERIVATIVE WORKS OF, THE EVALUATION MATERIALS IS GRANTED HEREIN.\n\n5. NO OBLIGATION. Recipient shall have no duty to purchase or license any product from MIPS. MIPS and its suppliers shall have no obligation to provide support for, or develop a non-evaluation version of, the Evaluation Software or to license any version of it.\n\n6. MODIFICATIONS. This Agreement does not obligate Recipient to provide MIPS with comments or suggestions regarding Evaluation Materials. However, should Recipient provide MIPS with comments or suggestions for the modification, correction, improvement or enhancement of (a) the Evaluation Materials or (b) MIPS products or processes which may embody the Evaluation Materials, then Recipient agrees to grant and hereby grants to MIPS a non-exclusive, irrevocable, worldwide, fully paid-up, royalty-free license, with the right to sublicense MIPS’ licensees and customers, under Recipient’s Intellectual property rights, to use and disclose such comments and suggestions in any manner MIPS chooses and to display, perform, copy, make, have made, use, sell, offer to sell, import, and otherwise dispose of MIPS’ and its sublicensee’s products embodying such comments and suggestions in any manner and via any media MIPS chooses, without reference to the source.\n\n7. WARRANTY DISCLAIMER. MIPS AND ITS SUPPLIERS MAKE NO WARRANTIES WITH RESPECT TO EVALUATION MATERIALS, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ANY IMPLIED WARRANTY OF NONINFRINGEMENT WITH RESPECT TO THIRD PARTY INTELLECTUAL PROPERTY. RECIPIENT ACKNOWLEDGES AND AGREES THAT THE EVALUATION MATERIALS ARE PROVIDED “AS IS,” WITHOUT WARRANTY OF ANY KIND.\n\n8. LIMITATION OF LIABILITY. MIPS AND ITS SUPPLIERS SHALL NOT BE LIABLE FOR ANY PROPERTY DAMAGE, PERSONAL INJURY, LOSS OF PROFITS, INTERRUPTION OF BUSINESS OR FOR ANY DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL OR INCIDENTAL DAMAGES, HOWEVER CAUSED OR ALLEGED, WHETHER FOR BREACH OF WARRANTY, CONTRACT, STRICT LIABILITY OR OTHERWISE, INCLUDING WITHOUT LIMITATION, UNDER TORT OR OTHER LEGAL THEORY. MIPS AND ITS SUPPLIERS DISCLAIM ANY AND ALL LIABILITY, INCLUDING LIABILITY FOR INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS OF ANY KIND RELATING TO THE EVALUATION MATERIALS.\n\n9. EXPIRATION. MIPS may terminate this Agreement immediately after a breach by Recipient or otherwise at MIPS’ reasonable discretion and upon five (5) business days’ notice to Recipient.\n\n10. GENERAL.\n\n10.1 Controlling Law. This Agreement shall be governed by California law excluding its choice of law rules. With the exception of MIPS’ rights to enforce its intellectual property rights and any confidentiality obligations under this Agreement or any licenses distributed with the Evaluation Materials, all disputes and any claims arising under or relating to this Agreement shall be subject to the exclusive jurisdiction and venue of the state and federal courts located in Santa Clara County, California. Each party hereby agrees to jurisdiction and venue in the courts set forth in the preceding sentence. The parties agree that the United Nations Convention on Contracts for the International Sale of Goods is specifically excluded from application to this Agreement. The parties consent to the personal jurisdiction of the above courts.\n\n10.2 Remedies. Recipient acknowledges and agrees that any breach of confidentiality obligations under this Agreement or any licenses distributed with the Evaluation Materials, as well as any disclosure, commercialization, or public use of the Evaluation Materials, would cause irreparable injury to MIPS, and therefore Recipient agrees to consent to, and hereby consents to, the grant of an injunction by any court of competent jurisdiction in the event of an actual or threatened breach.\n\n10.3 Assignment. Recipient may not delegate, assign or transfer this Agreement, the license granted or any of Recipient’s rights, obligations, or duties hereunder, expressly, by implication, by operation of law, by way of merger (regardless of whether Recipient is the surviving entity) or acquisition, or otherwise and any attempt to do so, without MIPS’ express prior written consent, shall be ineffective, null and void. MIPS may freely assign this Agreement, and its rights and obligations hereunder, in its sole discretion.\n\n10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and MIPS and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and MIPS with respect to the subject matter hereof. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed or otherwise accepted by duly authorized representatives of Recipient and MIPS.\n\n10.5 Severability. In the event that any provision of this Agreement is finally adjudicated to be unenforceable or invalid under any applicable law, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such unenforceable or invalid provision shall be interpreted so as to best accomplish the objectives of such provision within the limits of applicable law or applicable court decisions.\n\n10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other necessary approval from the U.S. Department of Commerce or any other governing agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all applicable laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is \"deemed\" to take place when information is released to a foreign national wherever located.\n\n10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments or may not be suitable for certain applications and (iv) MIPS can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . MIPS is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.\n\nANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED “AS IS” AND “AS AVAILABLE”, POSSIBLY WITH FAULTS, AND WITHOUT REPRESENTATION OR WARRANTY OF ANY KIND.\n\n10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header as indicated in the Evaluation Software. Additional detail may be available (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement."
     ]
   },
   "packages": {
@@ -3413,6 +4974,33 @@
         "name": "build-tools",
         "path": "build-tools/33.0.0",
         "revision": "33.0.0"
+      },
+      "33.0.1": {
+        "archives": [
+          {
+            "os": "linux",
+            "sha1": "fefb393b82814feb94f88147827cbc918cf992b0",
+            "size": 56003178,
+            "url": "https://dl.google.com/android/repository/build-tools_r33.0.1-linux.zip"
+          },
+          {
+            "os": "macosx",
+            "sha1": "d091bee94295480891ca679e7b2004fe6198d05f",
+            "size": 60027237,
+            "url": "https://dl.google.com/android/repository/build-tools_r33.0.1-macosx.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "710918f38f8fa7595320f4d29db5910770993f63",
+            "size": 55631116,
+            "url": "https://dl.google.com/android/repository/build-tools_r33.0.1-windows.zip"
+          }
+        ],
+        "displayName": "Android SDK Build-Tools 33.0.1",
+        "license": "android-sdk-license",
+        "name": "build-tools",
+        "path": "build-tools/33.0.1",
+        "revision": "33.0.1"
       }
     },
     "cmake": {
@@ -3492,7 +5080,7 @@
           }
         ],
         "displayName": "CMake 3.22.1",
-        "license": "android-sdk-preview-license",
+        "license": "android-sdk-license",
         "name": "cmake",
         "path": "cmake/3.22.1",
         "revision": "3.22.1"
@@ -3741,119 +5329,119 @@
         "name": "cmdline-tools",
         "path": "cmdline-tools/7.0",
         "revision": "7.0"
-      }
-    },
-    "emulator": {
-      "31.2.10": {
+      },
+      "8.0": {
         "archives": [
           {
             "os": "linux",
-            "sha1": "1f2c3ddeb2c9ac4feef5946098a0a710d08e9c6d",
-            "size": 276337904,
-            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8420304.zip"
-          },
-          {
-            "os": "windows",
-            "sha1": "206491b5c4e531b2c66dc80402702b9fa1a64c2a",
-            "size": 345300871,
-            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8420304.zip"
+            "sha1": "09b65ebc5aa9c5011fec9416d22711ce7ffc2260",
+            "size": 120916547,
+            "url": "https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip"
           },
           {
             "os": "macosx",
-            "sha1": "677b6a00c145eb8bf4306daeb2231c8efd507177",
-            "size": 313876814,
-            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8420304.zip"
+            "sha1": "089eedfc62371040f9e027835d5114178fc0e658",
+            "size": 120916533,
+            "url": "https://dl.google.com/android/repository/commandlinetools-mac-9123335_latest.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "d1511ce5b61e5988b3de4b83062f0a570671074f",
+            "size": 120895407,
+            "url": "https://dl.google.com/android/repository/commandlinetools-win-9123335_latest.zip"
+          }
+        ],
+        "displayName": "Android SDK Command-line Tools",
+        "license": "android-sdk-license",
+        "name": "cmdline-tools",
+        "path": "cmdline-tools/8.0",
+        "revision": "8.0"
+      }
+    },
+    "emulator": {
+      "31.3.10": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "4a35a2702f9138653cd1b67d04e01ffa65fb37bc",
+            "size": 347308456,
+            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8807927.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "43df6ed553b89e1553d588251526aae8f79da214",
+            "size": 293822881,
+            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8807927.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "52f8bfa4a09074e607d393302fe8a627846a18e9",
+            "size": 380246403,
+            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8807927.zip"
           }
         ],
         "displayName": "Android Emulator",
         "license": "android-sdk-license",
         "name": "emulator",
         "path": "emulator",
-        "revision": "31.2.10"
+        "revision": "31.3.10"
       },
-      "31.3.8": {
+      "31.3.14": {
         "archives": [
           {
-            "os": "macosx",
-            "sha1": "7214e8384c97a7c9875142149d3bf9c940e9b5a0",
-            "size": 347222379,
-            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8598121.zip"
-          },
-          {
             "os": "linux",
-            "sha1": "0f781977a6cc5377b64444121ff75a513841a4fa",
-            "size": 293782881,
-            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8598121.zip"
+            "sha1": "b5ab96ebffc6ea6816a5b0e9474859463b21ab78",
+            "size": 293826836,
+            "url": "https://dl.google.com/android/repository/emulator-linux_x64-9322596.zip"
           },
           {
             "os": "windows",
-            "sha1": "b4f30bad4e68da41cc9bd44965259b2111a011a1",
-            "size": 380151866,
-            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8598121.zip"
+            "sha1": "632eba430f67abeddcf15ceb0a872b25fdbb7e62",
+            "size": 381130167,
+            "url": "https://dl.google.com/android/repository/emulator-windows_x64-9322596.zip"
+          },
+          {
+            "os": "macosx",
+            "sha1": "00e8685beffbe19f803cd5d698fbe6406b5ee6f3",
+            "size": 347313356,
+            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-9322596.zip"
+          }
+        ],
+        "displayName": "Android Emulator",
+        "license": "android-sdk-license",
+        "name": "emulator",
+        "path": "emulator",
+        "revision": "31.3.14"
+      },
+      "32.1.8": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "13cadd038b401fdfa04e4af153a7f696ccd422cc",
+            "size": 309314692,
+            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-9310560.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "7d82689a73aacdd56684d7134dc88cc3537fb911",
+            "size": 270158359,
+            "url": "https://dl.google.com/android/repository/emulator-linux_x64-9310560.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "8324aeb3bd74a214978252c51574b40cdb56b4ba",
+            "size": 333001267,
+            "url": "https://dl.google.com/android/repository/emulator-windows_x64-9310560.zip"
           }
         ],
         "displayName": "Android Emulator",
         "license": "android-sdk-preview-license",
         "name": "emulator",
         "path": "emulator",
-        "revision": "31.3.8"
-      },
-      "31.3.9": {
-        "archives": [
-          {
-            "os": "macosx",
-            "sha1": "6e7b549113252728cfe0992d58e8cb1790dce9d6",
-            "size": 347241742,
-            "url": "https://dl.google.com/android/repository/emulator-darwin_x64-8700579.zip"
-          },
-          {
-            "os": "linux",
-            "sha1": "1c1a7ef65476d3de34f19455a0093cb68e8e90f7",
-            "size": 293801439,
-            "url": "https://dl.google.com/android/repository/emulator-linux_x64-8700579.zip"
-          },
-          {
-            "os": "windows",
-            "sha1": "ea834211b199a7fcf6b6758a53c4594d01b44ab9",
-            "size": 380168712,
-            "url": "https://dl.google.com/android/repository/emulator-windows_x64-8700579.zip"
-          }
-        ],
-        "displayName": "Android Emulator",
-        "license": "android-sdk-license",
-        "name": "emulator",
-        "path": "emulator",
-        "revision": "31.3.9"
+        "revision": "32.1.8"
       }
     },
     "extras": {
-      "1.1": {
-        "archives": [
-          {
-            "os": "linux",
-            "sha1": "18632007ecb843b4fc69babd521a9b061868534b",
-            "size": 1307393,
-            "url": "https://dl.google.com/android/repository/desktop-head-unit-linux_r01.1.zip"
-          },
-          {
-            "os": "macosx",
-            "sha1": "ccb64105888ba61ab06f20ad1ba97c71d440a421",
-            "size": 2299061,
-            "url": "https://dl.google.com/android/repository/desktop-head-unit-macosx_r01.1.zip"
-          },
-          {
-            "os": "windows",
-            "sha1": "f26d80a84020b40e24f8a99873dea6a9c7978f10",
-            "size": 2615480,
-            "url": "https://dl.google.com/android/repository/desktop-head-unit-windows_r01.1.zip"
-          }
-        ],
-        "displayName": "Android Auto Desktop Head Unit Emulator",
-        "license": "android-sdk-license",
-        "name": "extras",
-        "path": "extras/google/auto",
-        "revision": "1.1"
-      },
       "2.0": {
         "archives": [
           {
@@ -3880,6 +5468,33 @@
         "name": "extras",
         "path": "extras/google/auto",
         "revision": "2.0"
+      },
+      "2.1": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "4f8a3d3e32b27de1fc190d149039842e76a55bdd",
+            "size": 7797329,
+            "url": "https://dl.google.com/android/repository/desktop-head-unit-darwin-x64_r02.1.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "5d87eb87a1421e59d528eac1f5cdd406c0b39f51",
+            "size": 6927985,
+            "url": "https://dl.google.com/android/repository/desktop-head-unit-linux-x64_r02.1.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "c27bf84e59dda7b79315b6ca2a314063feffd6ac",
+            "size": 7012059,
+            "url": "https://dl.google.com/android/repository/desktop-head-unit-windows-x64_r02.1.zip"
+          }
+        ],
+        "displayName": "Android Auto Desktop Head Unit Emulator",
+        "license": "android-sdk-license",
+        "name": "extras",
+        "path": "extras/google/auto",
+        "revision": "2.1"
       }
     },
     "ndk": {
@@ -4908,6 +6523,60 @@
         "name": "ndk",
         "path": "ndk/25.0.8528842",
         "revision": "25.0.8528842-rc4"
+      },
+      "25.0.8775105": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "8c54514c62f635dbbc161e30e21f16bcd22526df",
+            "size": 716557039,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25-darwin.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "9fce956edb6abd5aca42acf6bbfb21a90a67f75b",
+            "size": 530938532,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25-linux.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "1da93e7da5803dd8ef47e9283ec2c7b98d34b8da",
+            "size": 467387858,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25-windows.zip"
+          }
+        ],
+        "displayName": "NDK (Side by side) 25.0.8775105",
+        "license": "android-sdk-license",
+        "name": "ndk",
+        "path": "ndk/25.0.8775105",
+        "revision": "25.0.8775105"
+      },
+      "25.1.8937393": {
+        "archives": [
+          {
+            "os": "macosx",
+            "sha1": "248f96de6713cbec8707ee2262d3cf08d14d9fde",
+            "size": 716592117,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25b-darwin.zip"
+          },
+          {
+            "os": "linux",
+            "sha1": "e27dcb9c8bcaa77b78ff68c3f23abcf6867959eb",
+            "size": 530975885,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25b-linux.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "b2e9b5ab2e1434a65ffd85780891878cf5c6fd92",
+            "size": 467422601,
+            "url": "https://dl.google.com/android/repository/android-ndk-r25b-windows.zip"
+          }
+        ],
+        "displayName": "NDK (Side by side) 25.1.8937393",
+        "license": "android-sdk-license",
+        "name": "ndk",
+        "path": "ndk/25.1.8937393",
+        "revision": "25.1.8937393"
       }
     },
     "ndk-bundle": {
@@ -5605,32 +7274,32 @@
       }
     },
     "platform-tools": {
-      "33.0.2": {
+      "33.0.3": {
         "archives": [
           {
             "os": "macosx",
-            "sha1": "9b5661e0c18a2e5b6935e2b96bcc7be580cd6dcd",
-            "size": 13038676,
-            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.2-darwin.zip"
+            "sha1": "250da3216e4c93ccd2612dcec0b64c2668354b09",
+            "size": 12767128,
+            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip"
           },
           {
             "os": "linux",
-            "sha1": "6bf4f747ad929b02378b44ce083b4502d26109c7",
-            "size": 7406632,
-            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.2-linux.zip"
+            "sha1": "deb43a0f9eaccd16a47937367ef3b53db3db8d10",
+            "size": 7505569,
+            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.3-linux.zip"
           },
           {
             "os": "windows",
-            "sha1": "2d7599f59b54f02c4ecd33d656091a3c1e55ad9c",
-            "size": 6304111,
-            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.2-windows.zip"
+            "sha1": "6028a80149c0ccde2db22d69e7fe84a352d852a2",
+            "size": 5642796,
+            "url": "https://dl.google.com/android/repository/platform-tools_r33.0.3-windows.zip"
           }
         ],
         "displayName": "Android SDK Platform-Tools",
         "license": "android-sdk-license",
         "name": "platform-tools",
         "path": "platform-tools",
-        "revision": "33.0.2"
+        "revision": "33.0.3"
       }
     },
     "platforms": {
@@ -6037,9 +7706,9 @@
         "archives": [
           {
             "os": "all",
-            "sha1": "298f5800e37f3c089ab0eb58d4f6aef4058b689b",
-            "size": 67324871,
-            "url": "https://dl.google.com/android/repository/platform-33_r01.zip"
+            "sha1": "eef99bd4617e80da85187a183eba356d787100d9",
+            "size": 67334130,
+            "url": "https://dl.google.com/android/repository/platform-33_r02.zip"
           }
         ],
         "displayName": "Android SDK Platform 33",
@@ -6178,9 +7847,9 @@
         "archives": [
           {
             "os": "all",
-            "sha1": "8dd74a564f71c8381f5230682c5da291d230cc81",
-            "size": 67918949,
-            "url": "https://dl.google.com/android/repository/platform-TiramisuPrivacySandbox_r03.zip"
+            "sha1": "07f3eb84b8f237e61744967d7aee1225efba25e6",
+            "size": 67975400,
+            "url": "https://dl.google.com/android/repository/platform-TiramisuPrivacySandbox_r08.zip"
           }
         ],
         "displayName": "Android SDK Platform TiramisuPrivacySandbox",
@@ -6558,6 +8227,21 @@
         "name": "sources",
         "path": "sources/android-32",
         "revision": "32"
+      },
+      "33": {
+        "archives": [
+          {
+            "os": "all",
+            "sha1": "dd9819363bb213e378bb9d84b4c5fe8d8091c219",
+            "size": 49205616,
+            "url": "https://dl.google.com/android/repository/sources-33_r01.zip"
+          }
+        ],
+        "displayName": "Sources for Android 33",
+        "license": "android-sdk-license",
+        "name": "sources",
+        "path": "sources/android-33",
+        "revision": "33"
       }
     },
     "tools": {

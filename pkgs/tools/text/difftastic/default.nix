@@ -9,24 +9,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PyjgnO5LXV0UGNqpb2J39Ni077L5MjHc5ZkK/r8//II=";
+    sha256 = "sha256-zLps/R3KMx51eGdHINmvq9Cv4JTkVSont3Gktwgxsrg=";
   };
 
   depsExtraArgs = {
     postBuild = let
-      mimallocPatch = (fetchpatch {
+      mimallocPatch = fetchpatch {
         name = "mimalloc-older-macos-fixes.patch";
         url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
         stripLen = 1;
         extraPrefix = "libmimalloc-sys/c_src/mimalloc/";
         sha256 = "1cqgay6ayzxsj8v1dy8405kwd8av34m4bjc84iyg9r52amlijbg4";
-      });
+      };
     in ''
       pushd $name
       patch -p1 < ${mimallocPatch}
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
       popd
     '';
   };
-  cargoSha256 = "sha256-jVs5KokgofAqhNLfr/RJ9qOHwBYMnkqc2EcAFezS9/0=";
+  cargoSha256 = "sha256-kVJwGEY0TvsKzTbcSgOSWIhx8MbH/KNB3Q8KvQfhCac=";
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 
