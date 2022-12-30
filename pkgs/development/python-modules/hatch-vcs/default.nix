@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "hatch-vcs";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hatch_vcs";
     inherit version;
-    sha256 = "sha256-mRPXM7NO7JuwNF0GJsoyFlpK0t4V0c5kPDbQnKkIq/8=";
+    sha256 = "sha256-zsUQfPzkgsZ/i8lvGLvDIMmqDQaBgOFK0xe77loVP+4=";
   };
 
   nativeBuildInputs = [
