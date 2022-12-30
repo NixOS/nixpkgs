@@ -320,7 +320,6 @@ dont-distribute-packages:
  - Pup-Events-Demo
  - Quelea
  - RESTng
- - RJson
  - RMP
  - RNAFold
  - RNAFoldProgs
@@ -851,8 +850,6 @@ dont-distribute-packages:
  - bricks-parsec
  - bricks-rendering
  - bricks-syntax
- - brittany
- - brittany_0_13_1_2
  - broadcast-chan-conduit
  - broadcast-chan-pipes
  - bronyradiogermany-streaming
@@ -867,7 +864,6 @@ dont-distribute-packages:
  - burnt-explorer
  - buster-gtk
  - buster-network
- - butcher
  - butterflies
  - bv-sized
  - bv-sized-lens
@@ -2252,7 +2248,6 @@ dont-distribute-packages:
  - hscassandra
  - hscope
  - hsdev
- - hsexif
  - hsfacter
  - hsinspect-lsp
  - hslogstash
@@ -2284,7 +2279,6 @@ dont-distribute-packages:
  - htsn-import
  - http-client-auth
  - http-client-rustls
- - http-encodings
  - http-enumerator
  - http2-client-grpc
  - http2-grpc-proto-lens
@@ -2332,7 +2326,6 @@ dont-distribute-packages:
  - hyperpublic
  - iException
  - ice40-prim
- - iconv-typed
  - ide-backend
  - ide-backend-server
  - ideas-math
@@ -2353,6 +2346,7 @@ dont-distribute-packages:
  - imprevu-happstack
  - improve
  - inch
+ - incipit
  - incremental-computing
  - incremental-maps
  - increments
@@ -2393,7 +2387,6 @@ dont-distribute-packages:
  - irc-fun-client
  - irc-fun-color
  - irc-fun-messages
- - iridium
  - ironforge
  - isevaluated
  - ismtp
@@ -2586,7 +2579,6 @@ dont-distribute-packages:
  - liblawless
  - liblinear-enumerator
  - libmolude
- - libpafe
  - libraft
  - librato
  - libxml-enumerator
@@ -2759,7 +2751,6 @@ dont-distribute-packages:
  - midimory
  - midisurface
  - mighttpd
- - mime-string
  - minecraft-data
  - minesweeper
  - mini-egison
@@ -2779,7 +2770,6 @@ dont-distribute-packages:
  - mmsyn7ukr
  - mmtl-base
  - moan
- - mockazo
  - modify-fasta
  - modsplit
  - modular-prelude-classy
@@ -3079,7 +3069,6 @@ dont-distribute-packages:
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
  - phooey
- - photoname
  - pianola
  - pier
  - ping
@@ -3117,9 +3106,13 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
+ - polysemy-conc
  - polysemy-http
+ - polysemy-log
  - polysemy-log-co
+ - polysemy-log-di
  - polysemy-methodology-composite
+ - polysemy-process
  - polysemy-scoped-fs
  - polyseq
  - polytypeable-utils
@@ -3274,7 +3267,6 @@ dont-distribute-packages:
  - rasa-ext-views
  - rasa-ext-vim
  - rascal
- - rating-chgk-info
  - raw-feldspar
  - rawr
  - razom-text-util
@@ -3661,9 +3653,6 @@ dont-distribute-packages:
  - snow-white
  - snowflake-core
  - snowflake-server
- - soap
- - soap-openssl
- - soap-tls
  - sock2stream
  - socket-io
  - sockets
