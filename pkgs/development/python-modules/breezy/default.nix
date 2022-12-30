@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.2.2";
+  version = "3.3.1";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GHpuRSCN0F2BdQc2cgyDcQz0gJT1R+xAgcVxJZVZpNU=";
+    sha256 = "sha256-8AwtF3ZvKUf23GkuEkflwXcakYb06UGql+zJ0qwjqKY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
