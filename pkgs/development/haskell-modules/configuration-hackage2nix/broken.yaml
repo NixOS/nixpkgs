@@ -219,6 +219,7 @@ broken-packages:
   - artifact
   - asap
   - ascii85-conduit
+  - ascii-caseless
   - ascii-flatten
   - ascii-string
   - ascii-vector-avc
@@ -1862,6 +1863,7 @@ broken-packages:
   - graph-matchings
   - graphmod-plugin
   - graphql-api
+  - graphql-spice
   - graphql-utils
   - graphql-w-persistent
   - graph-rewriting
@@ -3870,6 +3872,7 @@ broken-packages:
   - patrol
   - patronscraper
   - pattern-trie
+  - paynow-zw
   - paypal-adaptive-hoops
   - paypal-api
   - paypal-rest-client
@@ -4047,6 +4050,7 @@ broken-packages:
   - polysemy-path
   - polysemy-readline
   - polysemy-req
+  - polysemy-resume
   - polysemy-socket
   - polysemy-video
   - polysemy-vinyl
