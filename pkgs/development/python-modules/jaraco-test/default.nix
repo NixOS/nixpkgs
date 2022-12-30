@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-test";
-  version = "5.1.0";
+  version = "5.2.0";
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jaraco.test";
     inherit version;
-    sha256 = "04a7503c0c78cd057bd6b5f16ad1e3379b911b619df6694480a564ebc214c0a8";
+    sha256 = "sha256-K1OYx58TriCKoGfdLlEw3ArC699DR5w9r7bxLz2bdIs=";
   };
 
   nativeBuildInputs = [
