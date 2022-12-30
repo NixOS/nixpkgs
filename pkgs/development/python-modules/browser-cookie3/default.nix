@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.16.2";
+  version = "0.16.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IB0Ms+mCHh7lfG3XYfvE2h/2lec5Tq9AAjqANz7x0hE=";
+    hash = "sha256-LWqXml6ShNU7gHZChdETwkSmLhipnSCgnyCWnBs7MXw=";
   };
 
   propagatedBuildInputs = [
