@@ -14755,6 +14755,8 @@ with pkgs;
   julia-stable-bin = julia_18-bin;
   julia-bin = julia-stable-bin;
 
+  julia2nix = callPackage ../development/julia-modules/julia2nix.nix { julia = julia-bin; };
+
   jwasm =  callPackage ../development/compilers/jwasm { };
 
   kind2 = callPackage ../development/compilers/kind2 {
