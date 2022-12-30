@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "pyspellchecker";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zKbDJCjuOI0Vsbh+lK/Dv5T7GGK6hIo7RJvs1inSatM=";
+    hash = "sha256-7UanIYo2PvGjSPrBTJ/vlbCspdqndEOJ1whD/MCWGzE=";
   };
 
   # no tests in PyPI
