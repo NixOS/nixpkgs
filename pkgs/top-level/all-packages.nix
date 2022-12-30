@@ -7355,9 +7355,12 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  garage = callPackage ../tools/filesystems/garage {
+  inherit (callPackage ../tools/filesystems/garage {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  })
+    garage
+      garage_0_7 garage_0_8
+      garage_0_7_3 garage_0_8_0;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
