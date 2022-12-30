@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pathspec";
-  version = "0.10.1";
+  version = "0.10.3";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-es5hYbYh0x55AutrWuFI0Sz9I/SiSbn/trn+4SCEMj0=";
+    hash = "sha256-ViAN5Ad9nQeRRlqpCVoB1CGGHkBbUJaVUFHe79aX1vY=";
   };
 
   nativeBuildInputs = [
