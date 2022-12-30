@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "dm-env";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Pv2ZsGUlY1mVB8QV1ItRiWyIvi8BwrYlCvi6tRVx41M=";
+    sha256 = "sha256-pDbrHGVMOeDJhqUWzuIYvqcUC1EPzv9j+X60/P89k94=";
   };
 
   buildInputs = [
