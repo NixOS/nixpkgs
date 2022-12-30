@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  # TODO(@sternenseemann): allow building against dzaima's replxx fork
   buildInputs = [
     libffi
   ];
@@ -79,11 +78,6 @@ stdenv.mkDerivation rec {
   '')
   + lib.optionalString enableReplxx ''
     cp -r ${replxx-submodule} build/replxxLocal/
-  ''
-  # Need to adjust ld flags for darwin manually
-  # https://github.com/dzaima/CBQN/issues/26
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeFlagsArray+=(LD_LIBS="-ldl -lffi")
   '';
 
   outputs = [
