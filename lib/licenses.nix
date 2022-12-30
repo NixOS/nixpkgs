@@ -842,6 +842,12 @@ in mkLicense lset) ({
     fullName = "SGI Free Software License B v2.0";
   };
 
+  # Gentoo seems to treat it as a license:
+  # https://gitweb.gentoo.org/repo/gentoo.git/tree/licenses/SGMLUG?id=7d999af4a47bf55e53e54713d98d145f935935c1
+  sgmlug = {
+    fullName = "SGML UG SGML Parser Materials license";
+  };
+
   sleepycat = {
     spdxId = "Sleepycat";
     fullName = "Sleepycat License";

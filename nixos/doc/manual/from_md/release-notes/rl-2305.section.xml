@@ -76,6 +76,14 @@
           <link xlink:href="options.html#opt-services.v2raya.enable">services.v2raya</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.netfilter.org/projects/ulogd/index.html">ulogd</link>,
+          a userspace logging daemon for netfilter/iptables related
+          logging. Available as
+          <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
