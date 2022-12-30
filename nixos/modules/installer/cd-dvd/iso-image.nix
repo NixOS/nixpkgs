@@ -77,6 +77,14 @@ let
     else
       config.boot.loader.timeout * 10;
 
+  # Timeout in grub is in seconds.
+  # null means max timeout (infinity)
+  # 0 means disable timeout
+  grubEfiTimeout = if config.boot.loader.timeout == null then
+      -1
+    else
+      config.boot.loader.timeout;
+
   # The configuration file for syslinux.
 
   # Notes on syslinux configuration and UNetbootin compatibility:
@@ -284,7 +292,7 @@ let
     if serial; then set with_serial=yes ;fi
     export with_serial
     clear
-    set timeout=10
+    set timeout=${toString grubEfiTimeout}
 
     # This message will only be viewable when "gfxterm" is not used.
     echo ""
