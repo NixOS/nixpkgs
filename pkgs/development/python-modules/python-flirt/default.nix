@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "python-flirt";
-  version = "0.7.0";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "lancelot";
-    rev = "v${version}";
-    sha256 = "sha256-FsdnWWfyQte7FDz5ldo+S+3IEtbOIODOeh1fHDP2/4s=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-J48tRgJw6JjUrcAQdRELFE50pyDptbmbgYbr+rAK/PA=";
   };
 
   postPatch = ''
