@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "azure-data-tables";
-  version = "12.4.0";
+  version = "12.4.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-3V/I3pHi+JCO+kxkyn9jz4OzBoqbpCYpjeO1QTnpZlw=";
+    sha256 = "sha256-FvEo6PZubKBcB/t4/MxxNJMjHfHYXjPE4lp5yURVhko=";
   };
 
   propagatedBuildInputs = [
