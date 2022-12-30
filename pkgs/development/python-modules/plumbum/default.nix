@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
-    rev = "v${version}";
-    sha256 = "sha256-bCCcNFz+ZsbKSF7aCfy47lBHb873tDYN0qFuSCxJp1w=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-SqZO9qYOtBB+KWP0DLsImI64QTTpYKzWMYwSua9k2S0=";
   };
 
   postPatch = ''
