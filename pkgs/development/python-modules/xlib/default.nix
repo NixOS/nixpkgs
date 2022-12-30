@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.31";
+  version = "0.33";
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = version;
-    sha256 = "155p9xhsk01z9vdml74h07svlqy6gljnx9c6qbydcr14lwghwn06";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
   patches = [
