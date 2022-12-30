@@ -16,11 +16,11 @@
 }:
 let
   pname = "cmsis-pack-manager";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NeUG6PFI2eTwq5SNtAB6ZMA1M3z1JmMND29V9/O5sgw=";
+    sha256 = "sha256-2pKGJlPubR+C4UhdCuMDR9GG2wQOaP6YkMXxeAcaRkk=";
   };
 
   native = rustPlatform.buildRustPackage {
