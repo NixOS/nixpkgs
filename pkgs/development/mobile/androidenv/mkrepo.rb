@@ -17,6 +17,9 @@ end
 
 # Returns a system image URL for a given system image name.
 def image_url value, dir
+  if dir == "default"
+    dir = "android"
+  end
   if value && value.start_with?('http')
     value
   elsif value
