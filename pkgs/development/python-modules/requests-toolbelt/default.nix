@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "requests-toolbelt";
-  version = "0.9.1";
+  version = "0.10.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-loCJ1FhK1K18FxRU8KXG2sI5celHJSHqO21J1hCqb8A=";
+    hash = "sha256-YuCff/XMvakncqKfOUpJw61ssYHVaLEzdiayq7Yopj0=";
   };
 
   propagatedBuildInputs = [
