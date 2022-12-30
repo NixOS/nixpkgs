@@ -605,7 +605,7 @@ let
             auth required pam_deny.so
 
             # Password management.
-            password sufficient pam_unix.so nullok sha512
+            password sufficient pam_unix.so nullok ${config.security.pam.unixAuthArgs}
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
@@ -1182,6 +1182,19 @@ in
           More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
         '';
       };
+    };
+
+    security.pam.unixAuthArgs = mkOption {
+      default = "sha512";
+      type = types.str;
+      description = lib.mdDoc ''
+        Arguments to the pam_unix module.
+
+        Consider switching to "yescrypt rounds=10" for
+        better resistance against brute force, especially if
+        your login password is used as a key for encrypted
+        filesystems (such as ecryptfs, fscrypt, or pam_mount)
+      '';
     };
 
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
