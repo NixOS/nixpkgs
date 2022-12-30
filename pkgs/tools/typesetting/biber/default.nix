@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
+{ lib, stdenv, fetchurl, perlPackages, shortenPerlShebang, texlive }:
 
 let
   biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
@@ -23,14 +23,6 @@ perlPackages.buildPerlModule {
   inherit (biberSource) version;
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
-
-  patches = [
-    # Perl 5.36.0 compatibility: https://github.com/plk/biber/pull/411
-    (fetchpatch {
-      url = "https://github.com/plk/biber/commit/d9e961710074d266ad6bdf395c98868d91952088.patch";
-      sha256 = "08fx7mvq78ndnj59xv3crncih7a8201rr31367kphysz2msjbj52";
-    })
-  ];
 
   buildInputs = with perlPackages; [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
