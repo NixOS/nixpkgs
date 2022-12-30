@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
 , arrow
 , six
 , hypothesis
@@ -7,28 +10,33 @@
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.26";
+  version = "1.27";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
-    rev = "v${version}";
-    sha256 = "0snrmvmc3rnz90cql5ayzs878rrkadk46rhvf2sn78nb0x57wa20";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SvE+UAGpUomUBHlH4aYZ1BYmLp3BherRjosKsIaOA/s=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner>=2.0" ""
-  '';
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ arrow six ];
+  propagatedBuildInputs = [
+    arrow
+    six
+  ];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
-  preCheck = ''
-    patchShebangs test.doctests.py test.inform.py
-    ./test.doctests.py
-    ./test.inform.py
-  '';
+  checkInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  disabledTests = [
+    "test_prostrate"
+  ];
 
   meta = with lib; {
     description = "Print and logging utilities";
