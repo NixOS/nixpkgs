@@ -1,15 +1,18 @@
 { lib
 , bleak
 , bleak-retry-connector
+, boto3
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.30.1";
+  version = "0.36.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,12 +21,15 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
-    hash = "sha256-5Rn1hQ1TZhRiCJGJCaA1sl+HnerL/oOhRdMiSl1Recg=";
+    hash = "sha256-eXCHmtdizRJJdwFeZU0yLi8NWwMqbET6ZItQQClYVI4=";
   };
 
   propagatedBuildInputs = [
     bleak
     bleak-retry-connector
+    boto3
+    cryptography
+    requests
   ];
 
   checkInputs = [
