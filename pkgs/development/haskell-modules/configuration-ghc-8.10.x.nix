@@ -127,7 +127,7 @@ self: super: {
   hls-brittany-plugin =  unmarkBroken (addBuildDepends (with self.hls-brittany-plugin.scope; [
     brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
     ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
-    brittany = doJailbreak lself.brittany_0_13_1_2;
+    brittany = doJailbreak (unmarkBroken lself.brittany_0_13_1_2);
     aeson = lself.aeson_1_5_6_0;
     multistate = unmarkBroken (dontCheck lsuper.multistate);
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
