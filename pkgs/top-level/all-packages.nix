@@ -31070,6 +31070,8 @@ with pkgs;
 
   pijuice = with python3Packages; toPythonApplication pijuice;
 
+  pinegrow6 = callPackage ../applications/editors/pinegrow { pinegrowVersion = "6"; };
+
   pinegrow = callPackage ../applications/editors/pinegrow { };
 
   piper = callPackage ../os-specific/linux/piper { };
