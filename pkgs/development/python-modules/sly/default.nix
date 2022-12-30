@@ -1,24 +1,39 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, setuptools
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sly";
   version = "0.5";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JR1CAV6FBxWK7CFk8GA130qCsDFM5kUPRX1xJedkkCQ=";
+    hash = "sha256-JR1CAV6FBxWK7CFk8GA130qCsDFM5kUPRX1xJedkkCQ=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  postPatch = ''
+    # imperative dev dependency installation
+    rm Makefile
+  '';
+
+  pythonImportsCheck = [
+    "sly"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "An improved PLY implementation of lex and yacc for Python 3";
