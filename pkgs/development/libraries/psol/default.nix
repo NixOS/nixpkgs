@@ -2,10 +2,10 @@
 
 fetchzip rec {
   pname = "psol";
-  version = "1.13.35.2"; # Latest stable, 2018-02-05
+  version = "1.14.36.1";
 
-  url = "https://dl.google.com/dl/page-speed/psol/${version}-x64.tar.gz";
-  sha256 = "0xi2srf9gx0x2sz9r45zb35k2n0iv457if1lqzvbanls3f935cmr";
+  url = "https://dist.apache.org/repos/dist/release/incubator/pagespeed/${version}/x64/psol-${version}-apache-incubating-x64.tar.gz";
+  sha256 = "sha256-fvpjeoEgpSbk376rT1oZrdYAtuoiePbtjEF9lO9xGWc=";
 
   meta = with lib; {
     description = "PageSpeed Optimization Libraries";
