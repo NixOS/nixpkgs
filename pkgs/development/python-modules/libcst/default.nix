@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.4.7";
+  version = "0.4.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-YrGajxs8t8PU4XRkFlhwtxoa9pzpKPXq8ZvN/uqftlE=";
+    sha256 = "sha256-ikddvKsvXMNHMfA9jUhvyiDXII0tTs/rE97IGI/azgA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
