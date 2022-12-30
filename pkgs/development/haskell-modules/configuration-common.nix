@@ -1358,7 +1358,9 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
+    (disableCabalFlag "callHierarchy") # Disabled temporarily: https://github.com/haskell/haskell-language-server/pull/3431
   ]).overrideScope (lself: lsuper: {
+    hls-call-hierarchy-plugin = null;
     hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
@@ -1375,6 +1377,7 @@ self: super: {
   hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
+    apply-refact = lsuper.apply-refact_0_11_0_0;
   });
 
   # For -f-auto see cabal.project in haskell-language-server.
@@ -1397,9 +1400,6 @@ self: super: {
 
   # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
   hls-refactor-plugin = dontCheck super.hls-refactor-plugin;
-
-  # 2022-11-18: https://github.com/haskell/haskell-language-server/commit/c1a7527c4fb348bee6093d9794b7d3e0c8d563f2
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.1.0.0"; doJailbreak super.hls-fourmolu-plugin;
 
   # tests require network
   ghcide = dontCheck super.ghcide;

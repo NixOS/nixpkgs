@@ -2322,7 +2322,6 @@ broken-packages:
   - hls-brittany-plugin
   - hls-haddock-comments-plugin
   - hls-selection-range-plugin
-  - hls-splice-plugin
   - hls-stan-plugin
   - hls-tactics-plugin
   - hlwm
