@@ -930,7 +930,6 @@ self: super: {
 
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
-  brittany = doJailbreak (dontCheck super.brittany);  # Outdated upperbound on ghc-exactprint: https://github.com/lspitzner/brittany/issues/342
 
   # Fix with Cabal 2.2, https://github.com/guillaume-nargeot/hpc-coveralls/pull/73
   hpc-coveralls = appendPatch (fetchpatch {
