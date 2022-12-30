@@ -168,7 +168,6 @@ self: super: {
     brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
     ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
     brittany = doJailbreak lself.brittany_0_13_1_2;
-    multistate = unmarkBroken (dontCheck lsuper.multistate);
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
   })));
 

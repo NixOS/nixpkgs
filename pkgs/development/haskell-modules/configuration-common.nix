@@ -665,6 +665,10 @@ self: super: {
   idris = self.generateOptparseApplicativeCompletions [ "idris" ]
     (doJailbreak (dontCheck super.idris));
 
+  # Too strict bound on hspec
+  # https://github.com/lspitzner/multistate/issues/9#issuecomment-1367853016
+  multistate = doJailbreak super.multistate;
+
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
