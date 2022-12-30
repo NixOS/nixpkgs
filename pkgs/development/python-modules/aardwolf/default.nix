@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.0.8";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-plz1D+Lr5rV8iJo7IUmuXfjxLvVxX9lgyxyYXUlPH0k=";
+    hash = "sha256-+rlmpXatsVep2jgDyQfr4LxIcy8vBAsPGmQZK4Dr4WQ=";
   };
 
   propagatedBuildInputs = [
