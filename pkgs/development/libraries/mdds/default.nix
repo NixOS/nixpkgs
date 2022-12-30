@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mdds";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     owner = "mdds";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jCzF0REocpnP56LfY42zlGTXyKyz4GPovDshhrh4jyo=";
+    sha256 = "sha256-Y9uBJKM34UTEj/3c1w69QHhvwFcMNlAohEco0O0B+xI=";
   };
 
   postInstall = ''
