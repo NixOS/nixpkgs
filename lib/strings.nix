@@ -810,10 +810,9 @@ rec {
      null, bool, list of similarly coercible values.
   */
   isConvertibleWithToString = x:
-    elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (isList x && lib.all isConvertibleWithToString x) ||
-    x ? outPath ||
-    x ? __toString;
+    isStringLike x ||
+    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    (isList x && lib.all isConvertibleWithToString x);
 
   /* Check whether a value can be coerced to a string.
      The value must be a string, path, or attribute set.
