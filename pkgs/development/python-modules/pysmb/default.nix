@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pysmb";
-  version = "1.2.8";
+  version = "1.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     inherit pname version;
     format = "setuptools";
     extension = "zip";
-    hash = "sha256-OwfbFiF0ZQOdDCVpTAcFuDZjyoIlniCfNWbVd1Nqc5U=";
+    hash = "sha256-1xrGfAFtRImwwTqdgGKoNyyd+vK6794Lw5YzVOmC9sY=";
   };
 
   propagatedBuildInputs = [
