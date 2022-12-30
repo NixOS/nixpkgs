@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "21.12.0";
+  version = "22.10.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ItkV4w2e5H6eTv46qr0mVy5PIvEWGDkc7+GgHCtCU4=";
+    hash = "sha256-HKAdoXbuN7NSeicC99QNvJ/7jPx75aA7+k+e7EXlXEY=";
   };
 
   nativeBuildInputs = [
