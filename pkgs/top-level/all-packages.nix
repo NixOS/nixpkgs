@@ -357,10 +357,7 @@ with pkgs;
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml {
-    inherit (llvmPackages) libclang llvm;
-    inherit (python3.pkgs) sphinx;
-  };
+  castxml = callPackage ../development/tools/castxml { };
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
