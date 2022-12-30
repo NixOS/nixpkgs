@@ -3,14 +3,14 @@ isodate, lxml, xmlsec, freezegun }:
 
 buildPythonPackage rec {
   pname = "python3-saml";
-  version = "1.14.0";
+  version = "1.15.0";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "onelogin";
     repo = "python3-saml";
-    rev = "v${version}";
-    sha256 = "sha256-TAfVXh1fSKhNn/lsi7elq4wFyKCxCtCYUTrnH3ytBTw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-xPPR2z3h8RpoAROpKpu9ZoDxGq5Stm9wQVt4Stj/6fg=";
   };
 
   postPatch = ''
