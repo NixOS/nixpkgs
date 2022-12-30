@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.3.1";
+  version = "2.3.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
-    rev = version;
-    sha256 = "sha256-an/FTbujN2VnTYa0wngM8ugV1LNHJWM32RVqIbaW0KY=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-grsyHqt7ahiNsYKcZN/c5cJaag/nTWTBcaHaXnW1SpU=";
   };
 
   propagatedBuildInputs = [
