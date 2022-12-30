@@ -395,7 +395,7 @@ rec {
   */
   toShellVar = name: value:
     lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
-    if isAttrs value && ! isSimpleCoercibleToString value then
+    if isAttrs value && ! isStringLike value then
       "declare -A ${name}=(${
         concatStringsSep " " (lib.mapAttrsToList (n: v:
           "[${escapeShellArg n}]=${escapeShellArg v}"
@@ -800,7 +800,7 @@ rec {
 
   /* Soft-deprecated name for isMoreCoercibleToString */
   isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
-    "lib.strings.isCoercibleToString is deprecated in favor of either isSimpleCoercibleToString or isMoreCoercibleString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
+    "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isMoreCoercibleString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
     isMoreCoercibleToString;
 
   /* Check whether a list or other value can be passed to toString.
@@ -814,13 +814,13 @@ rec {
     x ? outPath ||
     x ? __toString;
 
-  /* Check whether a value can be coerced to a string,
+  /* Check whether a value can be coerced to a string.
      The value must be a string, path, or attribute set.
 
-     This follows Nix's internal coerceToString(coerceMore = false) logic,
-     except for external types, for which we return false.
+     String-like values can be used without explicit conversion in
+     string interpolations and in most functions that expect a string.
    */
-  isSimpleCoercibleToString = x:
+  isStringLike = x:
     elem (typeOf x) [ "path" "string" ] ||
     x ? outPath ||
     x ? __toString;
@@ -838,7 +838,7 @@ rec {
        => false
   */
   isStorePath = x:
-    if isSimpleCoercibleToString x then
+    if isStringLike x then
       let str = toString x; in
       substring 0 1 str == "/"
       && dirOf str == storeDir
