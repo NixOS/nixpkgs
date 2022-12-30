@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.39.0";
+  version = "0.40.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-nra2Xvfo1cfMoZkY7sem7NIEDwDmODWbGVNCeefSuQY=";
+    sha256 = "sha256-+3VgONZzlobgs4wujCaGTTYpIgYrWgWwYgKQqirS7t8=";
   };
 
   pythonRelaxDeps = [
