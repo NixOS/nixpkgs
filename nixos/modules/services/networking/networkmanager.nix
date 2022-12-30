@@ -383,7 +383,7 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule
+    (mkAliasOptionModule
       [ "networking" "networkmanager" ]
       [ "services" "networkmanager" ])
   ];
