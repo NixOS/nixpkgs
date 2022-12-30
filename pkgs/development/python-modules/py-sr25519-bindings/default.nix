@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "0.1.5";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-sr25519-bindings";
-    rev = "a97398b386c10ebe0a1f6c45dea466add0d407ce";
-    sha256 = "sha256-RJfwWeD82J5QqY+qq2bC3vlqT75jUwhTXuIsza4qUzk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Lu3J0+YeQHHKItOZTT24DlQAUJuE9fd+py6Eb46/MSE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
