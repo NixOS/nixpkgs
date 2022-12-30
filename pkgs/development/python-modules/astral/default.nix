@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "2.2";
+  version = "3.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e41d9967d5c48be421346552f0f4dedad43ff39a83574f5ff2ad32b6627b6fbe";
+    sha256 = "sha256-m3w7QS6eadFyz7JL4Oat3MnxvQGijbi+vmbXXMxTPYg=";
   };
 
   propagatedBuildInputs = [ pytz requests freezegun ];
