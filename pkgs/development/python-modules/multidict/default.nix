@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.0.3";
+  version = "6.0.4";
 
   disabled = pythonOlder "3.7";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JSOikAbANGh+zNPucAk6aXEpo//ocyU107Lfak7MJ50=";
+    hash = "sha256-NmaQZJLvt2RTwOe5fyz0WbBoLnQCwEialUhJZdvB2kk=";
   };
 
   postPatch = ''
