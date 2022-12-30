@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "ansible-language-server";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+42fZ4ILUHg/KcnllUaFYYPBKHxauagbsVdIY1MgwSI=";
+    hash = "sha256-IBySScjfF2bIbiOv09uLMt9QH07zegm/W1vmGhdWxGY=";
   };
 
-  npmDepsHash = "sha256-DRXIbIogMeiJvZOB44hKkkfc3dg8mscnV6k2rUvYCNs=";
+  npmDepsHash = "sha256-rJ1O2OsrJhTIfywK9/MRubwwcCmMbu61T4zyayg+mAU=";
   npmBuildScript = "compile";
 
   # We remove the prepare and prepack scripts because they run the
