@@ -2423,6 +2423,7 @@ dont-distribute-packages:
  - javaclass
  - javascript-extras
  - javasf
+ - jespresso
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
  - join

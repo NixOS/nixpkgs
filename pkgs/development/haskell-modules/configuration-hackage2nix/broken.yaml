@@ -474,6 +474,7 @@ broken-packages:
   - bricks-internal
   - brick-skylighting
   - brillig
+  - brittany
   - broadcast-chan-tests
   - broccoli
   - brok
@@ -2569,6 +2570,7 @@ broken-packages:
   - http-conduit-downloader
   - http-directory
   - http-dispatch
+  - http-encodings
   - http-grammar
   - http-kinder
   - http-kit
@@ -2651,6 +2653,7 @@ broken-packages:
   - icepeak
   - icfpc2020-galaxy
   - IcoGrid
+  - iconv-typed
   - ideas
   - ide-backend-common
   - idempotent
@@ -2772,6 +2775,7 @@ broken-packages:
   - irc-fun-types
   - ireal
   - iri
+  - iridium
   - iris
   - iron-mq
   - irt
@@ -3057,6 +3061,7 @@ broken-packages:
   - libltdl
   - liboath-hs
   - liboleg
+  - libpafe
   - libpq
   - librandomorg
   - libsystemd-daemon
@@ -3353,6 +3358,7 @@ broken-packages:
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
+  - mockazo
   - mock-httpd
   - modbus-tcp
   - model
@@ -4312,6 +4318,7 @@ broken-packages:
   - rank-product
   - rapid-term
   - Rasenschach
+  - rating-chgk-info
   - rational-list
   - rattle
   - rattletrap
@@ -4483,6 +4490,7 @@ broken-packages:
   - rivers
   - rivet-migration
   - rivet-simple-deploy
+  - RJson
   - Rlang-QQ
   - rlglue
   - RLP
