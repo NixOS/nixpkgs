@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "backoff";
-  version = "2.1.2";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "litl";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-eKd1g3UxXlpSlNlik80RKXRaw4mZyvAWl3i2GNuZ3hI=";
+    sha256 = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
 
   nativeBuildInputs = [
