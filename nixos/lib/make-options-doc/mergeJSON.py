@@ -315,6 +315,7 @@ if hasDocBookErrors:
         "  };\n" +
         "\n" +
         "  example.enable = mkEnableOption (lib.mdDoc ''your thing'');\n" +
+        "  example.package = mkPackageOptionMD pkgs \"your-package\" {};\n" +
         "  imports = [ (mkAliasOptionModuleMD [ \"example\" \"args\" ] [ \"example\" \"settings\" ]) ];",
         file = sys.stderr)
 
