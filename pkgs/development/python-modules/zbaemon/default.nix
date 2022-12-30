@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zdaemon";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f249fc6885646d165d7d6b228a7b71f5170fc7117de9e0688271f8fb97840f72";
+    sha256 = "sha256-SCHjvbRzh88eklWwREusQ3z3KqC1nRQHuTLjH9QyPvw=";
   };
 
   propagatedBuildInputs = [ zconfig ];
