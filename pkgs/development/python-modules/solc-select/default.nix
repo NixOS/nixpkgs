@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "solc-select";
-  version = "0.2.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6VawTcffIgnR+zuC4rti+Ocwu1VMTX+VihT/L7LzchI=";
+    sha256 = "sha256-zrpWHQdoCVDGaDGDf9fWhnRsTe1GVwqk1qls1PyvlLw=";
   };
 
   # no tests
