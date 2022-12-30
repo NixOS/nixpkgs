@@ -6,6 +6,7 @@
 , rebulk
 , pythonOlder
 , importlib-resources
+, py
 , pytestCheckHook
 , pytest-mock
 , pytest-benchmark
@@ -14,11 +15,12 @@
 
 buildPythonPackage rec {
   pname = "guessit";
-  version = "3.4.3";
+  version = "3.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "731e96e6a1f3b065d05accc8c19f35d4485d880b77ab8dc4b262cc353df294f7";
+    hash = "sha256-eiaeOlfMBz5htWJZiT6rPFwC0a2Ky8iuLnjF6DnxELw=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     python-dateutil
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  checkInputs = [ pytestCheckHook pytest-mock pytest-benchmark pyyaml ];
+  checkInputs = [ py pytestCheckHook pytest-mock pytest-benchmark pyyaml ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
