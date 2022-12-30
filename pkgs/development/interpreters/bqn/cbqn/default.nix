@@ -5,6 +5,8 @@
 , bqn-path ? null
 , mbqn-source ? null
 , enableReplxx ? false
+  # No support for macOS' .dylib on the CBQN side
+, enableLibcbqn ? stdenv.hostPlatform.isLinux
 , libffi
 , pkg-config
 }:
@@ -59,6 +61,14 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional enableReplxx "REPLXX=1";
 
+  buildFlags = [
+    # interpreter binary
+    "o3"
+  ] ++ lib.optionals enableLibcbqn [
+    # embeddable interpreter as a shared lib
+    "shared-o3"
+  ];
+
   preBuild = ''
     # Purity: avoids git downloading bytecode files
     mkdir -p build/bytecodeLocal/gen
@@ -76,6 +86,12 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(LD_LIBS="-ldl -lffi")
   '';
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
+
   installPhase = ''
      runHook preInstall
 
@@ -84,7 +100,12 @@ stdenv.mkDerivation rec {
      # note guard condition for case-insensitive filesystems
      [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
      [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
-
+  ''
+  + lib.optionalString enableLibcbqn ''
+     install -Dm644 include/bqnffi.h -t "$dev/include"
+     install -Dm755 libcbqn${stdenv.hostPlatform.extensions.sharedLibrary} -t "$lib/lib"
+  ''
+  + ''
      runHook postInstall
   '';
 
