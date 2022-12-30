@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "2.1.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Ousret";
     repo = "charset_normalizer";
     rev = "refs/tags/${version}";
-    hash = "sha256-ntNMHjkQJqzSElEeyFmPIjUh6ZxQkTktPipfPHiJ/Vc=";
+    hash = "sha256-2kXs6ZdemA6taV4aa9xBKLmhbSgpybjg3Z61EUFabrk=";
   };
 
   checkInputs = [
