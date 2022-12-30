@@ -359,16 +359,9 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = released;
+      haskell-language-server = builtins.filter (x: x != compilerNames.ghc884) released;
       hoogle = released;
-      hlint = [
-        compilerNames.ghc884
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        # https://github.com/ndmitchell/hlint/issues/1413
-      ];
+      hlint = released;
       hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
