@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "notebook-shim";
-  version = "0.1.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
-    rev = "v${version}";
-    sha256 = "sha256-5oIYj8SdC4E0N/yFxsmD2p4VkStHvqrVqAwb/htyPm4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-/z4vXSBqeL2wSqJ0kFNgU0TSGUGByhxHNya8EO55+7s=";
   };
 
   propagatedBuildInputs = [ jupyter_server ];
