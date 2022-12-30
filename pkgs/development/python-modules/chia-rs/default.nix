@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "chia-rs";
-  version = "0.1.5";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "chia-network";
     repo = "chia_rs";
-    rev = version;
-    sha256 = "sha256-4TIRj7FMIArI/EvDARReC4MqDG44zjn/MKoUHAVqq5s=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-WIt7yGceILzVhegluiSb7w3F9qQvI5DjulheGsJrcf8=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
