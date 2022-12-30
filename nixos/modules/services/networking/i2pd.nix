@@ -155,6 +155,11 @@ let
       (boolOpt "enabled" cfg.ntcp2.enable)
       (boolOpt "published" cfg.ntcp2.published)
       (intOpt "port" cfg.ntcp2.port)
+      (sec "ssu2")
+      (boolOpt "enabled" cfg.ssu2.enable)
+      (boolOpt "published" cfg.ssu2.published)
+    ] ++ (optionalNullInt "port" cfg.ssu2.port)
+      ++ [
       (sec "addressbook")
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
@@ -344,6 +349,17 @@ in
 
       ntcp = mkEnableTrueOption "ntcp";
       ssu = mkEnableTrueOption "ssu";
+
+      ssu2.enable = mkEnableTrueOption "SSU2";
+      ssu2.published = mkEnableTrueOption (lib.mdDoc "SSU2 publication");
+      ssu2.port = mkOption {
+        type = with types; nullOr port;
+        default = null;
+        description = lib.mdDoc ''
+          Port to listen for incoming SSU2 connections.
+          Router defaults to the I2P listen port or port + 1 if {command}`ssu` is enabled.
+        '';
+      };
 
       notransit = mkEnableOption (lib.mdDoc "notransit") // {
         description = lib.mdDoc ''
