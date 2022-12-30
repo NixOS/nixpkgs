@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pybravia";
-  version = "0.2.3";
+  version = "0.2.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Drafteed";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ZM1XJnEYMNcbVOkpcI1ml7Cck2CXA2QXEpJMx3RwtSQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QWn5VdZlbxm2/ZvsQWlKuVPPBcqFkyt75Odh9Mf9Bqk=";
   };
 
   nativeBuildInputs = [
