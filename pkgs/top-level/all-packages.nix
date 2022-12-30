@@ -1682,6 +1682,8 @@ with pkgs;
 
   git-bug = callPackage ../applications/version-management/git-bug { };
 
+  git-bug-migration = callPackage ../applications/version-management/git-bug-migration { };
+
   git-chglog = callPackage ../applications/version-management/git-chglog { };
 
   git-cinnabar = callPackage ../applications/version-management/git-cinnabar {
