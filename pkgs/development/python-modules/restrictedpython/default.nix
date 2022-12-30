@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "5.2";
+  version = "6.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    sha256 = "sha256-Y02h9sXBIqJi9DOwg+49F6mgOfjxs3eFl++0dGHNNhs=";
+    sha256 = "sha256-QFzwvZ7sLxmxMmtfSCKO/lbWWQtOkYJrjMOyzUAKlq0=";
   };
 
   checkInputs = [
