@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "chart-studio";
-  version = "5.10.0";
+  version = "5.11.0";
 
   # chart-studio was split from plotly
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-j1MiLUSIun0xnUFCcyZ5p8eGF5Q34jCwoVuQG5xSlkU=";
+    sha256 = "sha256-Reti8tvBpBxpfNjnZs8wWuS76oEWIKPCxzSdTEO+ykA=";
   };
 
   sourceRoot = "source/packages/python/chart-studio";
