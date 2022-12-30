@@ -2,18 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "whatthepatch";
-  version = "1.0.2";
+  version = "1.0.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cscorley";
     repo = pname;
-    rev = version;
-    hash = "sha256-0l/Ebq7Js9sKFJ/RzkQ1aWEDCxt+COVd2qVnLSWwFx0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-P4SYSMdDjwXOmre3hXKS4gQ0OS9pz0SWqBeD/WQMQFw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     pytestCheckHook
