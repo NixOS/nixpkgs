@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "yoyo-migrations";
-  version = "7.3.2";
+  version = "8.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RIQIKOGgFp9UHnAtWu3KgYWtpoCH57rUhQpvxdced6Q=";
+    sha256 = "sha256-ggYGoD4mLPHNT1niVsKPpEZCUiTVuCo9EnX9eBeFI+Q=";
   };
 
   propagatedBuildInputs = [ setuptools sqlparse tabulate ];
