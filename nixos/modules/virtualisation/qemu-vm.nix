@@ -926,7 +926,7 @@ in
       };
     };
 
-    virtualisation.qemu.networkingOptions =
+    virtualisation.qemu.networkingOptions = mkDefault (
       let
         forwardingOptions = flip concatMapStrings cfg.forwardPorts
           ({ proto, from, host, guest }:
@@ -940,7 +940,7 @@ in
       [
         "-net nic,netdev=user.0,model=virtio"
         "-netdev user,id=user.0,${forwardingOptions}\"$QEMU_NET_OPTS\""
-      ];
+      ]);
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
