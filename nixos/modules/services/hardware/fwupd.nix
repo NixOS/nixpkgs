@@ -19,10 +19,11 @@ let
       };
     };
     "fwupd/uefi_capsule.conf" = {
-      source = pkgs.writeText "uefi_capsule.conf" ''
-        [uefi_capsule]
-        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-      '';
+      source = format.generate "uefi_capsule.conf" {
+        uefi_capsule = {
+          OverrideESPMountPoint = config.boot.loader.efi.efiSysMountPoint;
+        } // cfg.uefiCapsuleSettings;
+      };
     };
   };
 
@@ -133,6 +134,12 @@ in {
         description = lib.mdDoc ''
           Configurations for the fwupd daemon.
         '';
+      };
+
+      uefiCapsuleSettings = mkOption {
+        type = format.type.nestedTypes.elemType;
+        default = {};
+        description = lib.mdDoc "Settings for uefi_capsule.conf";
       };
     };
   };
