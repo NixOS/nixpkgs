@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "sly";
-  version = "0.4";
+  version = "0.5";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0an31bm5m8wqwphanmcsbbnmycy6l4xkmg4za4bwq8hk4dm2dwp5";
+    sha256 = "sha256-JR1CAV6FBxWK7CFk8GA130qCsDFM5kUPRX1xJedkkCQ=";
   };
 
   checkInputs = [ pytest ];
