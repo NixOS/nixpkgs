@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "py-bip39-bindings";
-  version = "0.1.10";
+  version = "0.1.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-bip39-bindings";
-    rev = "ddb74433c2dca7b1f1e1984c33b9da7b51a30227";
-    sha256 = "sha256-MBDic955EohTW6BWprv7X+ZPHoqzkyBJYKV4jpNPKz8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-3/KBPUFVFkJifunGWJeAHLnY08KVTb8BHCFzDqKWH18=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
