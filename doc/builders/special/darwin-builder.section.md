@@ -38,8 +38,8 @@ Run 'nixos-help' for the NixOS manual.
 nixos login:
 ```
 
-> Note: When you need to stop the VM, type `Ctrl`-`a` + `c` to open the `qemu`
-> prompt and then type `quit` followed by `Enter`
+> Note: When you need to gracefully shut down the VM, type `Ctrl`-`a` + `c` to
+> open the `qemu` prompt and then type `system_powerdown` followed by `Enter`
 
 To delegate builds to the remote builder, add the following options to your
 `nix.conf` file:
