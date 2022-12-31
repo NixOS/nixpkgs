@@ -6331,6 +6331,8 @@ self: super: with self; {
 
   notify2 = callPackage ../development/python-modules/notify2 { };
 
+  notion-client = callPackage ../development/python-modules/notion-client { };
+
   notmuch = callPackage ../development/python-modules/notmuch {
     inherit (pkgs) notmuch;
   };

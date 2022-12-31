@@ -101,14 +101,14 @@ def _perform_ocr_on_screenshot(
 
     tess_args = f"-c debug_file=/dev/null --psm 11"
 
-    cmd = f"convert {magick_args} {screenshot_path} tiff:{screenshot_path}.tiff"
+    cmd = f"convert {magick_args} '{screenshot_path}' 'tiff:{screenshot_path}.tiff'"
     ret = subprocess.run(cmd, shell=True, capture_output=True)
     if ret.returncode != 0:
         raise Exception(f"TIFF conversion failed with exit code {ret.returncode}")
 
     model_results = []
     for model_id in model_ids:
-        cmd = f"tesseract {screenshot_path}.tiff - {tess_args} --oem {model_id}"
+        cmd = f"tesseract '{screenshot_path}.tiff' - {tess_args} --oem '{model_id}'"
         ret = subprocess.run(cmd, shell=True, capture_output=True)
         if ret.returncode != 0:
             raise Exception(f"OCR failed with exit code {ret.returncode}")
@@ -744,7 +744,7 @@ class Machine:
             {"image": os.path.basename(filename)},
         ):
             self.send_monitor_command(f"screendump {tmp}")
-            ret = subprocess.run(f"pnmtopng {tmp} > {filename}", shell=True)
+            ret = subprocess.run(f"pnmtopng '{tmp}' > '{filename}'", shell=True)
             os.unlink(tmp)
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
