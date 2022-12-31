@@ -15,7 +15,7 @@
     rev = "urbit-v1.15";
     hash = "sha256-YHl4aPJglUIQ6mrLWSUU7gNJn9DjeCwNBCCUkDfX2iw=";
   };
-  sources = import ./sources.nix {};
+  sources = callPackage ./sources.nix {};
   ca-bundle = callPackage ./ca-bundle.nix {};
   ent = callPackage ./ent.nix {
     inherit urbit-src;
