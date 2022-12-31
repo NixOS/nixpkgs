@@ -1,11 +1,9 @@
 { lib, stdenv, coreutils, pkgconfig                      # build/env
 , cacert, ca-bundle, ivory-header                        # codegen
 , curlUrbit, ent, gmp, h2o, libsigsegv, libuv, lmdb      # libs
-, murmur3, openssl, openssl-static-osx, softfloat3       #
-, urcrypt, zlib, zlib-static-osx                         #
-, enableStatic           ? stdenv.hostPlatform.isStatic  # opts
-, verePace               ? ""
-, doCheck                ? true
+, murmur3, openssl, softfloat3                           #
+, urcrypt, zlib                                          #
+, doCheck                ? true                          # opts
 , enableParallelBuilding ? true
 , dontStrip              ? true
 , urbit-src }:
@@ -25,7 +23,7 @@ let
 in stdenv.mkDerivation {
   inherit src version;
 
-  pname = "urbit" + lib.optionalString enableStatic "-static";
+  pname = "urbit";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -41,10 +39,10 @@ in stdenv.mkDerivation {
     libuv
     lmdb
     murmur3
-    (if stdenv.isDarwin && enableStatic then openssl-static-osx else openssl)
+    openssl
     softfloat3
     urcrypt
-    (if stdenv.isDarwin && enableStatic then zlib-static-osx else zlib)
+    zlib
   ];
 
   # Ensure any `/usr/bin/env bash` shebang is patched.
@@ -59,11 +57,7 @@ in stdenv.mkDerivation {
     cp ./build/urbit $out/bin/urbit
   '';
 
-  dontDisableStatic = enableStatic;
-
-  configureFlags = if enableStatic
-    then [ "--disable-shared" "--enable-static" ]
-    else [];
+  dontDisableStatic = false;
 
   # CFLAGS = oFlags ++ [ "-Werror" ];
   CFLAGS = oFlags ++ [ "" ];
@@ -71,7 +65,6 @@ in stdenv.mkDerivation {
   MEMORY_DEBUG = false;
   CPU_DEBUG = false;
   EVENT_TIME_DEBUG = false;
-  VERE_PACE = if enableStatic then verePace else "";
 
   inherit enableParallelBuilding doCheck dontStrip;
 

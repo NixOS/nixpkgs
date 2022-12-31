@@ -1,17 +1,13 @@
 { urbit-src, stdenv, autoreconfHook, pkgconfig
-, libaes_siv, openssl, openssl-static-osx, secp256k1
-, enableStatic ? stdenv.hostPlatform.isStatic }:
+, libaes_siv, openssl, secp256k1
+}:
 
 stdenv.mkDerivation rec {
   name = "urcrypt";
   src  = "${urbit-src}/pkg/urcrypt";
 
   # XX why are these required for darwin?
-  dontDisableStatic = enableStatic;
-
-  configureFlags = if enableStatic
-    then [ "--disable-shared" "--enable-static" ]
-    else [];
+  dontDisableStatic = false;
 
   nativeBuildInputs =
     [ autoreconfHook pkgconfig ];

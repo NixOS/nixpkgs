@@ -30,7 +30,6 @@
     inherit urbit-src;
     inherit fetchGitHubLFS;
   };
-  openssl-static-osx = openssl;
   softfloat3 = callPackage ./softfloat3.nix {
     inherit sources;
   };
@@ -60,13 +59,12 @@
         ./pkgs/lmdb/darwin-fsync.patch
       ];
   });
-  zlib-static-osx = zlib;
   urbit = callPackage ./urbit.nix {
-    inherit urbit-src libsigsegv curlUrbit zlib-static-osx h2o lmdb;
-    inherit ent openssl-static-osx ca-bundle ivory-header murmur3 softfloat3 urcrypt;
+    inherit urbit-src libsigsegv curlUrbit h2o lmdb;
+    inherit ent ca-bundle ivory-header murmur3 softfloat3 urcrypt;
   };
   urcrypt = callPackage ./urcrypt.nix {
     inherit urbit-src;
-    inherit openssl-static-osx libaes_siv;
-  }; #TODO enableStatic
+    inherit libaes_siv;
+  };
 in urbit
