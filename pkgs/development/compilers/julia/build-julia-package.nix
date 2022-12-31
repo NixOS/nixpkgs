@@ -140,16 +140,7 @@ in stdenv.mkDerivation ({
   postFixup = if isJuliaArtifact  then ''
     if [[ -d "$out"/share/julia/artifacts/${attrs.juliaPath}/bin ]]; then
       for fn in $(echo $out/share/julia/artifacts/${attrs.juliaPath}/bin/*); do
-        if [[ $(file $fn) =~ .*[[:space:]]+ELF[[:space:]]+.*[[:space:]]+dynamically[[:space:]]linked,[[:space:]]interpreter ]]; then
-          ${if stdenv.system == "i686-linux" then ''
-            patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $fn;
-          ''
-          else if stdenv.system == "x86_64-linux" then ''
-            echo $fn
-            patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $fn;
-          ''
-          else ""}
-      fi
+          isELF $fn && patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} $fn || true
       done;
     fi
   '' else "";
