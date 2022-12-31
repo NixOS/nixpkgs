@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmocka
+
+# for passthru.tests
+, libfido2
+, mysql80
+, openssh
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcbor";
@@ -17,6 +28,15 @@ stdenv.mkDerivation rec {
   doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" "-DBUILD_SHARED_LIBS=on" ];
+
+  passthru.tests = {
+    inherit libfido2 mysql80;
+    openssh = (openssh.override { withFIDO = true; });
+    systemd = (systemd.override {
+      withFido2 = true;
+      withCryptsetup = true;
+    });
+  };
 
   meta = with lib; {
     description = "CBOR protocol implementation for C and others";
