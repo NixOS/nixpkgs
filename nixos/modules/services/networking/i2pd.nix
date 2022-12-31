@@ -154,7 +154,8 @@ let
       (sec "ntcp2")
       (boolOpt "enabled" cfg.ntcp2.enable)
       (boolOpt "published" cfg.ntcp2.published)
-      (intOpt "port" cfg.ntcp2.port)
+    ] ++ (optionalNullInt "port" cfg.ntcp2.port)
+      ++ [
       (sec "ssu2")
       (boolOpt "enabled" cfg.ssu2.enable)
       (boolOpt "published" cfg.ssu2.published)
@@ -511,10 +512,11 @@ in
       ntcp2.enable = mkEnableTrueOption "NTCP2";
       ntcp2.published = mkEnableOption (lib.mdDoc "NTCP2 publication");
       ntcp2.port = mkOption {
-        type = types.port;
-        default = 0;
+        type = with types; nullOr port;
+        default = null;
         description = lib.mdDoc ''
-          Port to listen for incoming NTCP2 connections (0=auto).
+          Port to listen for incoming NTCP2 connections.
+          Router defaults to the I2P listen port.
         '';
       };
 
