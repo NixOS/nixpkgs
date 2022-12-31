@@ -27,10 +27,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # Discovery of 'vtk' in setuptools is not working properly, due to a missing
-    # .egg-info in the vtk package. It does however import and run just fine.
-    substituteInPlace mayavi/__init__.py --replace "'vtk'" ""
-
     # building the docs fails with the usual Qt xcb error, so skip:
     substituteInPlace setup.py \
       --replace "build.build.run(self)" "build.build.run(self); return"
