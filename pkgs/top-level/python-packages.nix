@@ -9166,8 +9166,6 @@ self: super: with self; {
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
-  python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
-
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
