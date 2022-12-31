@@ -1,5 +1,11 @@
 { lib, requireFile }:
 
+/*
+ * To calculate the hash of an installer, use a command like this:
+ *
+ *   nix --extra-experimental-features nix-command hash file <installer-file>
+ */
+
 let versions = [
   {
     version = "13.2.0";
