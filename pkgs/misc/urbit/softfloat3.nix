@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   '';
 
   preBuild = ''
-    cd build/Linux-x86_64-GCC 
+    cd build/Linux-x86_64-GCC
   '';
 
   installPhase = ''

@@ -86,7 +86,7 @@ let
 
       header "download lfs data from remote"
 
-      # Pozor/Achtung: the href contains credential and signature information, 
+      # Pozor/Achtung: the href contains credential and signature information,
       # so we avoid echoing it to stdout/err.
       "''${curl[@]}" -s --output "$out" "$href"
     '';
