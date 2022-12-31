@@ -1375,6 +1375,8 @@ with pkgs;
 
   gh-eco = callPackage ../tools/misc/gh-eco { };
 
+  ghostie = callPackage ../tools/misc/ghostie { };
+
   glooctl = callPackage ../applications/networking/cluster/glooctl { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
