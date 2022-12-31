@@ -10,6 +10,8 @@
 buildPythonPackage rec {
   pname = "pytest-tap";
   version = "3.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -19,13 +21,25 @@ buildPythonPackage rec {
     sha256 = "R0RSdKTyJYGq+x0+ut4pJEywTGNgGp/ps36ZaH5dyY4=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ tappy ];
+  buildInputs = [
+    pytest
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    tappy
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   disabledTests = [
     # Fixed in 4ed0138bf659c348b6dfb8bb701ae1989625d3d8 and hopefully in next release
     "test_unittest_expected_failure"
+  ];
+
+  pythonImportsCheck = 
+    "pytest_tap"
   ];
 
   meta = with lib; {
