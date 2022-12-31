@@ -24,6 +24,7 @@
 , libraw1394
 , libGLU
 , pciutils
+, aha
 }:
 
 mkDerivation {
@@ -52,6 +53,7 @@ mkDerivation {
     libraw1394
     libGLU
     pciutils
+    aha
   ];
   preFixup = ''
     # fix wrong symlink of infocenter pointing to a 'systemsettings5' binary in
