@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
+{ lib
+, stdenv
+, fetchurl
+, jdk
+, jre
+, swt
+, makeWrapper
+, xorg
+, dpkg
+}:
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
@@ -13,6 +22,7 @@ stdenv.mkDerivation rec {
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
 
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ jdk ];
 
   installPhase = ''
@@ -34,8 +44,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast and friendly network scanner";
     homepage = "https://angryip.org";
+    changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kylesferrazza ];
   };
