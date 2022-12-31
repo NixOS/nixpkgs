@@ -1,10 +1,9 @@
 { lib, stdenv, coreutils, pkgconfig                      # build/env
-, cacert, ca-bundle, ivory                               # codegen
+, cacert, ca-bundle, ivory-header                        # codegen
 , curlUrbit, ent, gmp, h2o, libsigsegv, libuv, lmdb      # libs
 , murmur3, openssl, openssl-static-osx, softfloat3       #
 , urcrypt, zlib, zlib-static-osx                         #
 , enableStatic           ? stdenv.hostPlatform.isStatic  # opts
-, enableDebug            ? false
 , verePace               ? ""
 , doCheck                ? true
 , enableParallelBuilding ? true
@@ -20,14 +19,13 @@ let
   # See https://github.com/urbit/urbit/issues/5561
   oFlags =
     if stdenv.isDarwin
-    then (if enableDebug then [ "-O0" "-g" ] else [ "-O3" ])
-    else [ (if enableDebug then "-O0" else "-O3") "-g" ];
+    then [ "-O3" ]
+    else [ "-O3" "-g" ];
 
 in stdenv.mkDerivation {
   inherit src version;
 
-  pname = "urbit" + lib.optionalString enableDebug "-debug"
-    + lib.optionalString enableStatic "-static";
+  pname = "urbit" + lib.optionalString enableStatic "-static";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -67,16 +65,13 @@ in stdenv.mkDerivation {
     then [ "--disable-shared" "--enable-static" ]
     else [];
 
-  # CFLAGS = oFlags ++ lib.optionals (!enableDebug) [ "-Werror" ];
-  CFLAGS = oFlags ++ lib.optionals (!enableDebug) [ "" ];
+  # CFLAGS = oFlags ++ [ "-Werror" ];
+  CFLAGS = oFlags ++ [ "" ];
 
-  MEMORY_DEBUG = enableDebug;
-  CPU_DEBUG = enableDebug;
+  MEMORY_DEBUG = false;
+  CPU_DEBUG = false;
   EVENT_TIME_DEBUG = false;
   VERE_PACE = if enableStatic then verePace else "";
-
-  # See https://github.com/NixOS/nixpkgs/issues/18995
-  hardeningDisable = lib.optionals enableDebug [ "all" ];
 
   inherit enableParallelBuilding doCheck dontStrip;
 
@@ -86,7 +81,5 @@ in stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ uningan ];
     platforms = with platforms; linux;
-    debug = enableDebug;
-    arguments = lib.optionals enableDebug [ "-g" ];
   };
 }
