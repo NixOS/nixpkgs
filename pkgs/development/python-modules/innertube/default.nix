@@ -3,6 +3,7 @@
 , buildPythonPackage
 , mediate
 , pytestCheckHook
+, httpx
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     mediate
+    httpx
   ];
 
   checkInputs = [
