@@ -10,12 +10,23 @@
       In addition to numerous new and upgraded packages, this release
       has the following highlights:
     </para>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           Cinnamon has been updated to 5.6, see
           <link xlink:href="https://github.com/NixOS/nixpkgs/pull/201328#issue-1449910204">the
           pull request</link> for what is changed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          It’s now possible to make
+          <link xlink:href="https://julialang.org">Julia</link>
+          environments with a set of packages using e.g.
+          <literal>julia-bin.withPackages</literal>. Definitions for
+          packages in the main Julia package repository not available in
+          NixOS can be generated with <literal>julia2nix</literal> and
+          used directly with <literal>withPackages</literal>.
         </para>
       </listitem>
     </itemizedlist>
