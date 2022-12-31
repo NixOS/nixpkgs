@@ -1,0 +1,11 @@
+--- a/src/fault-linux-arm.h
++++ b/src/fault-linux-arm.h
+@@ -17,6 +17,8 @@
+ 
+ #include "fault-posix-ucontext.h"
+ 
++#define HAVE_STACKVMA 0
++
+ #if defined(__aarch64__) || defined(__ARM_64BIT_STATE) || defined(__ARM_PCS_AAPCS64) /* 64-bit */
+ 
+ /* See glibc/sysdeps/unix/sysv/linux/aarch64/sys/ucontext.h.

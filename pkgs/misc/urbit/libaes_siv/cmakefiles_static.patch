@@ -1,0 +1,34 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,8 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "")
+ set(CMAKE_BUILD_TYPE Release)
+ endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
+ 
++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
++
+ include(GNUInstallDirs)
+ 
+ # Warning: don't use the UB sanitizer in production builds. It can introduce timing side-channels
+@@ -31,10 +33,12 @@ endif(NOT DISABLE_DOCS)
+ configure_file(config.h.in config.h)
+ include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ 
++if(BUILD_SHARED_LIBS)
+ add_library(aes_siv SHARED aes_siv.c)
+ target_include_directories(aes_siv PUBLIC ${OPENSSL_INCLUDE_DIR})
+ target_link_libraries(aes_siv ${OPENSSL_CRYPTO_LIBRARY})
+ set_target_properties(aes_siv PROPERTIES VERSION "1.0.1" SOVERSION 1)
++endif()
+ 
+ add_library(aes_siv_static STATIC aes_siv.c)
+ target_include_directories(aes_siv_static PUBLIC ${OPENSSL_INCLUDE_DIR})
+@@ -63,7 +67,9 @@ endif(ENABLE_SANITIZER)
+ add_executable(bench EXCLUDE_FROM_ALL bench.c)
+ target_link_libraries(bench aes_siv_static)
+ 
++if(BUILD_SHARED_LIBS)
+ install(TARGETS aes_siv LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++endif()
+ install(TARGETS aes_siv_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ install(FILES aes_siv.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+ 

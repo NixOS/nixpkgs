@@ -1,0 +1,11 @@
+--- a/src/fault-linux-i386.h
++++ b/src/fault-linux-i386.h
+@@ -18,6 +18,8 @@
+ 
+ #include "fault-posix-ucontext.h"
+ 
++#define HAVE_STACKVMA 0
++
+ #if defined __x86_64__
+ /* 64 bit registers */
+ 

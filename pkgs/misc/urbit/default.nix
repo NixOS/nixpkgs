@@ -1,31 +1,76 @@
-{ lib, stdenv, fetchFromGitHub, curl, git, gmp, libsigsegv, meson, ncurses, ninja
-, openssl, pkg-config, re2c, zlib
-}:
-
-stdenv.mkDerivation rec {
-  pname = "urbit";
-  version = "0.7.3";
-
-  src = fetchFromGitHub {
+{
+  pkgs,
+  callPackage,
+  fetchFromGitHub,
+  curlMinimal,
+  openssl,
+  zlib,
+  lib,
+  stdenv,
+}: let
+  fetchGitHubLFS = callPackage ./fetch-github-lfs.nix {};
+  urbit-src = fetchFromGitHub {
     owner = "urbit";
     repo = "urbit";
-    rev = "v${version}";
-    sha256 = "192843pjzh8z55fd0x70m3l1vncmixljia3nphgn7j7x4976xkp2";
-    fetchSubmodules = true;
+    rev = "urbit-v1.15";
+    hash = "sha256-YHl4aPJglUIQ6mrLWSUU7gNJn9DjeCwNBCCUkDfX2iw=";
   };
-
-  nativeBuildInputs = [ pkg-config ninja meson ];
-  buildInputs = [ curl git gmp libsigsegv ncurses openssl re2c zlib ];
-
-  postPatch = ''
-    patchShebangs .
-  '';
-
-  meta = with lib; {
-    description = "An operating function";
-    homepage = "https://urbit.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mudri ];
-    platforms = with platforms; linux;
+  sources = import ./sources.nix {};
+  ca-bundle = callPackage ./ca-bundle.nix {};
+  ent = callPackage ./ent.nix {
+    inherit urbit-src;
   };
-}
+  libaes_siv = callPackage ./libaes_siv {
+    inherit sources;
+  };
+  murmur3 = callPackage ./murmur3.nix {
+    inherit sources;
+  };
+  ivory = callPackage ./pill/ivory.nix {
+    arvo = false;
+    solid = false;
+    urbit = false;
+    bootFakeShip = false;
+    inherit urbit-src;
+    inherit fetchGitHubLFS;
+  };
+  openssl-static-osx = openssl;
+  softfloat3 = callPackage ./softfloat3.nix {
+    inherit sources;
+  };
+  optionalList = xs: if xs == null then [ ] else xs;
+  curlUrbit = curlMinimal.override {
+    http2Support = false;
+    scpSupport = false;
+    gssSupport = false;
+    ldapSupport = false;
+    brotliSupport = false;
+  };
+  h2o = pkgs.h2o.overrideAttrs (_attrs: {
+    version = sources.h2o.rev;
+    src = sources.h2o;
+    outputs = [ "out" "dev" "lib" ];
+    meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  });
+  libsigsegv = pkgs.libsigsegv.overrideAttrs (attrs: {
+    patches = optionalList attrs.patches ++ [
+      ./libsigsegv/disable-stackvma_fault-linux-arm.patch
+      ./libsigsegv/disable-stackvma_fault-linux-i386.patch
+    ];
+  });
+  lmdb = pkgs.lmdb.overrideAttrs (attrs: {
+    patches =
+      optionalList attrs.patches ++ lib.optional stdenv.isDarwin [
+        ./pkgs/lmdb/darwin-fsync.patch
+      ];
+  });
+  zlib-static-osx = zlib;
+  urbit = callPackage ./urbit.nix {
+    inherit urbit-src libsigsegv curlUrbit zlib-static-osx h2o lmdb;
+    inherit ent openssl-static-osx ca-bundle ivory murmur3 softfloat3 urcrypt;
+  };
+  urcrypt = callPackage ./urcrypt.nix {
+    inherit urbit-src;
+    inherit openssl-static-osx libaes_siv;
+  }; #TODO enableStatic
+in urbit

@@ -1,0 +1,13 @@
+diff --git a/libraries/liblmdb/mdb.c b/libraries/liblmdb/mdb.c
+index fe65e30..0070215 100644
+--- a/libraries/liblmdb/mdb.c
++++ b/libraries/liblmdb/mdb.c
+@@ -2526,7 +2526,7 @@ mdb_env_sync(MDB_env *env, int force)
+ 					rc = ErrCode();
+ 			} else
+ #endif
+-			if (MDB_FDATASYNC(env->me_fd))
++			if (fcntl(env->me_fd, F_FULLFSYNC, 0))
+ 				rc = ErrCode();
+ 		}
+ 	}
