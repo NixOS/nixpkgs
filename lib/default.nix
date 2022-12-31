@@ -96,14 +96,16 @@ let
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs isValidPosixName toShellVar toShellVars
+      escapeShellArg escapeShellArgs
+      isStorePath isStringLike
+      isValidPosixName toShellVar toShellVars
       escapeRegex escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
-      withFeatureAs fixedWidthString fixedWidthNumber isStorePath
+      withFeatureAs fixedWidthString fixedWidthNumber
       toInt toIntBase10 readPathsFromFile fileContents;
     inherit (self.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
