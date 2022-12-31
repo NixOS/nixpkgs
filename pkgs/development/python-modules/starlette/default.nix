@@ -71,6 +71,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
+  ];
+
   disabledTests = [
     # asserts fail due to inclusion of br in Accept-Encoding
     "test_websocket_headers"
