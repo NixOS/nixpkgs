@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/attriaayush/ghostie/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
+    broken = stdenv.isx86_64 && stdenv.isDarwin;
   };
 }
 
