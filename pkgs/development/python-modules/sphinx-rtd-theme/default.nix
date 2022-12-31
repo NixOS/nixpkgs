@@ -18,8 +18,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils<0.18" "docutils"
+    substituteInPlace setup.cfg \
+      --replace "docutils <0.18" "docutils" \
+      --replace "sphinx >=1.6,<6" "sphinx"
   '';
 
   preBuild = ''
