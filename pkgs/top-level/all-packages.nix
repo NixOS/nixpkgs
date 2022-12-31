@@ -14495,7 +14495,11 @@ with pkgs;
 
   gnatboot = gnatboot12;
   gnatboot11 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "11"; });
-  gnatboot12 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "12"; });
+  gnatboot12 = wrapCCWith ({
+    cc = callPackage ../development/compilers/gnatboot { majorVersion = "12"; };
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    bintools = bintoolsDualAs;
+  });
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
