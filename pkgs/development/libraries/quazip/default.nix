@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  outputs = [ "out" "dev" ];
+
   meta = with lib; {
     description = "Provides access to ZIP archives from Qt programs";
     license = licenses.lgpl21Plus;
