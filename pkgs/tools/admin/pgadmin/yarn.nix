@@ -3834,11 +3834,11 @@
       };
     }
     {
-      name = "decode_uri_component___decode_uri_component_0.2.0.tgz";
+      name = "decode_uri_component___decode_uri_component_0.2.2.tgz";
       path = fetchurl {
-        name = "decode_uri_component___decode_uri_component_0.2.0.tgz";
-        url  = "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz";
-        sha512 = "hjf+xovcEn31w/EUYdTXQh/8smFL/dzYjohQGEIgjyNavaJfBY2p5F527Bo1VPATxv0VYTUC2bOcXvqFwk78Og==";
+        name = "decode_uri_component___decode_uri_component_0.2.2.tgz";
+        url  = "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz";
+        sha512 = "FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==";
       };
     }
     {

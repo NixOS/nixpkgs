@@ -113,7 +113,7 @@ self: super: {
     additionalDeps = with self.haskell-language-server.scope; [
       hls-haddock-comments-plugin
       (unmarkBroken hls-splice-plugin)
-      (unmarkBroken hls-tactics-plugin)
+      hls-tactics-plugin
     ];
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     # Needed for modern ormolu and fourmolu.
@@ -126,6 +126,12 @@ self: super: {
   hls-haddock-comments-plugin = unmarkBroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
     ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
   ]) super.hls-haddock-comments-plugin);
+
+  hls-tactics-plugin = unmarkBroken (addBuildDepends (with self.hls-tactics-plugin.scope; [
+    aeson extra fingertree generic-lens ghc-exactprint ghc-source-gen ghcide
+    hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
+    parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
+  ]) super.hls-tactics-plugin);
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
@@ -157,9 +163,6 @@ self: super: {
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;
 
-  # Too strict bounds on base
-  # https://github.com/lspitzner/multistate/issues/9
-  multistate = doJailbreak super.multistate;
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
 
@@ -177,7 +180,14 @@ self: super: {
 
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
+
+  retrie = dontCheck self.retrie_1_1_0_0;
+
   apply-refact = self.apply-refact_0_9_3_0;
+
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) apply-refact;
+  };
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
