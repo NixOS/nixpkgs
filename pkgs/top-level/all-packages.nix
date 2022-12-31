@@ -11231,6 +11231,8 @@ with pkgs;
 
   sandboxfs = callPackage ../tools/filesystems/sandboxfs { };
 
+  sanjuuni = callPackage ../tools/graphics/sanjuuni { };
+
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview {};
