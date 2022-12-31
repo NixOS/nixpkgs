@@ -1375,6 +1375,8 @@ with pkgs;
 
   gh-eco = callPackage ../tools/misc/gh-eco { };
 
+  ghostie = callPackage ../tools/misc/ghostie { };
+
   glooctl = callPackage ../applications/networking/cluster/glooctl { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
@@ -11547,6 +11549,8 @@ with pkgs;
   sequoia = callPackage ../tools/security/sequoia {
     pythonPackages = python3Packages;
   };
+
+  sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
   sewer = callPackage ../tools/admin/sewer { };
 
@@ -33306,6 +33310,8 @@ with pkgs;
   wlc = callPackage  ../tools/misc/wlc { };
 
   wlclock = callPackage ../applications/misc/wlclock { };
+
+  wlcs = callPackage ../development/tools/wlcs { };
 
   wllvm = callPackage  ../development/tools/wllvm { };
 
