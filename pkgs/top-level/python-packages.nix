@@ -1977,6 +1977,8 @@ self: super: with self; {
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
+  contourpy = callPackage ../development/python-modules/contourpy { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
