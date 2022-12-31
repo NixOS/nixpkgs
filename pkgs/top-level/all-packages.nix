@@ -33307,6 +33307,8 @@ with pkgs;
 
   wlclock = callPackage ../applications/misc/wlclock { };
 
+  wlcs = callPackage ../development/tools/wlcs { };
+
   wllvm = callPackage  ../development/tools/wllvm { };
 
   wmname = callPackage ../applications/misc/wmname { };
