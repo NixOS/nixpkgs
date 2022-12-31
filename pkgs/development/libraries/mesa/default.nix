@@ -44,6 +44,8 @@ let
   version = "22.3.1";
   branch  = versions.major version;
 
+  withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
+
   rust-bindgen' = rust-bindgen.override {
     rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
       clang = llvmPackages.clang;
@@ -164,7 +166,7 @@ self = stdenv.mkDerivation {
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
-  ] ++ optional stdenv.isLinux libdrm
+  ] ++ optional withLibdrm libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   doCheck = false;
@@ -256,9 +258,10 @@ self = stdenv.mkDerivation {
   ];
 
   passthru = {
-    inherit libdrm;
     inherit (libglvnd) driverLink;
     inherit llvmPackages;
+
+    libdrm = if withLibdrm then libdrm else null;
 
     tests = lib.optionalAttrs stdenv.isLinux {
       devDoesNotDependOnLLVM = stdenv.mkDerivation {
