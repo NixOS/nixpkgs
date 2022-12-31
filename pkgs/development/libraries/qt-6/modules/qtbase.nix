@@ -274,6 +274,9 @@ stdenv.mkDerivation rec {
       -e "/^bindir=/ c bindir=$dev/bin"
 
     patchShebangs $out $dev
+
+    # QTEST_ASSERT and other macros keeps runtime reference to qtbase.dev
+    substituteInPlace "$dev/include/QtTest/qtestassert.h" --replace "__FILE__" "__BASE_FILE__"
   '';
 
   dontStrip = debugSymbols;
