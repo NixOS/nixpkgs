@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Iconic fonts in PyQt and PySide applications";
     homepage = "https://github.com/spyder-ide/qtawesome";
+    changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux; # fails on Darwin
