@@ -26,11 +26,7 @@
   murmur3 = callPackage ./murmur3.nix {
     inherit sources;
   };
-  ivory = callPackage ./pill/ivory.nix {
-    arvo = false;
-    solid = false;
-    urbit = false;
-    bootFakeShip = false;
+  ivory-header = callPackage ./ivory-header.nix {
     inherit urbit-src;
     inherit fetchGitHubLFS;
   };
@@ -67,7 +63,7 @@
   zlib-static-osx = zlib;
   urbit = callPackage ./urbit.nix {
     inherit urbit-src libsigsegv curlUrbit zlib-static-osx h2o lmdb;
-    inherit ent openssl-static-osx ca-bundle ivory murmur3 softfloat3 urcrypt;
+    inherit ent openssl-static-osx ca-bundle ivory-header murmur3 softfloat3 urcrypt;
   };
   urcrypt = callPackage ./urcrypt.nix {
     inherit urbit-src;

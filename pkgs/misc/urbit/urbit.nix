@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     ent
     gmp
     h2o
-    ivory.header
+    ivory-header
     libsigsegv
     libuv
     lmdb
