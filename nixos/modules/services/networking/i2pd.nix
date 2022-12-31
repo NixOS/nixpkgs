@@ -464,6 +464,8 @@ in
           "http://inr.i2p/export/alive-hosts.txt"
           "http://i2p-projekt.i2p/hosts.txt"
           "http://stats.i2p/cgi-bin/newhosts.txt"
+          "http://reg.i2p/hosts.txt"
+          "http://identiguy.i2p/hosts.txt"
         ];
         description = lib.mdDoc ''
           AddressBook subscription URLs
