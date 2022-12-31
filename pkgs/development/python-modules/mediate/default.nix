@@ -18,9 +18,7 @@ buildPythonPackage rec {
     roster
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  doCheck = false;
 
   pythonImportsCheck = [
     "mediate"
