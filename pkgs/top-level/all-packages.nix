@@ -32631,7 +32631,7 @@ with pkgs;
   taskopen = callPackage ../applications/misc/taskopen { };
 
   tdesktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
-    abseil-cpp = abseil-cpp_202111;
+    abseil-cpp = abseil-cpp_202206;
   };
 
   telegram-bot-api = callPackage ../servers/telegram-bot-api { };
