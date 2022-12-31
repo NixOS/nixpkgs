@@ -7,13 +7,13 @@
     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
   }),
   pkgs ? import nixpkgsSource {
-      config.allowUnfree = true;
+    config.allowUnfree = true;
   },
   */
 
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {
-      config.allowUnfree = true;
+    config.allowUnfree = true;
   },
 
   config ? pkgs.config
