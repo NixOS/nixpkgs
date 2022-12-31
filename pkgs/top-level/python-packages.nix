@@ -4189,6 +4189,8 @@ self: super: with self; {
 
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
 
+  hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
+
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
