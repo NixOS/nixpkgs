@@ -11905,7 +11905,7 @@ self: super: with self; {
   vt-py = callPackage ../development/python-modules/vt-py { };
 
   vtk = toPythonModule (pkgs.vtk_9.override {
-    pythonInterpreter = python;
+    inherit python;
     enablePython = true;
   });
 
