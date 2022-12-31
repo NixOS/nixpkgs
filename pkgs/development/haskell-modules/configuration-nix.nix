@@ -723,10 +723,8 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.haskell-language-server;
 
-  # NOTE: this patch updates the hevm code to work with the latest packages that broke the build
-  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
-  # tests depend on a specific version of solc
-  hevm = dontCheck (appendPatch ./patches/hevm-update-deps.patch super.hevm);
+  # there are three very heavy test suites that need external repos, one requires network access
+  hevm = dontCheck super.hevm;
 
   # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
   # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
