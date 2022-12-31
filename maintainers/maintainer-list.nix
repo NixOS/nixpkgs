@@ -1975,6 +1975,12 @@
     githubId = 1743184;
     name = "Boris Babić";
   };
+  borlaag = {
+    email = "borlaag@proton.me";
+    github = "Borlaag";
+    githubId = 114830266;
+    name = "Børlaag";
+  };
   bosu = {
     email = "boriss@gmail.com";
     github = "bosu";
