@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, py
 , pytest-benchmark
 , pytest-asyncio
 , pytestCheckHook
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
+    py
     pytest-asyncio
     pytest-benchmark
     pytestCheckHook
