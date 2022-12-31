@@ -1917,6 +1917,8 @@ self: super: with self; {
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
 
+  comm = callPackage ../development/python-modules/comm { };
+
   commandparse = callPackage ../development/python-modules/commandparse { };
 
   commentjson = callPackage ../development/python-modules/commentjson { };
