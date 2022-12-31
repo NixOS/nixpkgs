@@ -20,14 +20,11 @@ buildPythonPackage rec {
     httpx
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  doCheck = false;
 
   pythonImportsCheck = [
     "innertube"
   ];
-
 
   meta = with lib; {
     description = "Python client for Google's private InnerTube API";
