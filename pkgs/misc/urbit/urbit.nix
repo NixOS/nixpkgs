@@ -73,6 +73,6 @@ in stdenv.mkDerivation {
     homepage = "https://urbit.org";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.uningan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
