@@ -944,6 +944,8 @@ let
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
+    note = callPackage ../development/ocaml-modules/note { };
+
     notty = callPackage ../development/ocaml-modules/notty { };
 
     npy = callPackage ../development/ocaml-modules/npy {
