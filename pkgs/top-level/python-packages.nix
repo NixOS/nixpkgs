@@ -5697,6 +5697,8 @@ self: super: with self; {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+  mediate = callPackage ../development/python-modules/mediate { };
+
   meilisearch = callPackage ../development/python-modules/meilisearch { };
 
   meinheld = callPackage ../development/python-modules/meinheld { };
