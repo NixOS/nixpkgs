@@ -68,11 +68,11 @@ in stdenv.mkDerivation {
 
   inherit enableParallelBuilding doCheck dontStrip;
 
-  meta = with lib; {
+  meta = {
     description = "An operating function";
     homepage = "https://urbit.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ uningan ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.uningan ];
+    platforms = lib.platforms.linux;
   };
 }
