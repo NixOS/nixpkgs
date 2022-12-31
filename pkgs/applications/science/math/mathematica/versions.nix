@@ -25,6 +25,13 @@ let versions = [
     version = "13.1.0";
     lang = "en";
     language = "English";
+    sha256 = "sha256-GZyUYslx/M4aFI3Pj9Osw3/w79/Jp/4T3mRE277pNuM=";
+    installer = "Mathematica_13.1.0_LINUX.sh";
+  }
+  {
+    version = "13.1.0";
+    lang = "en";
+    language = "English";
     sha256 = "sha256-LIpGAJ3uTkZgjc0YykwusyyHQKlCnTvrZGStFfSOz60=";
     installer = "Mathematica_13.1.0_BNDL_LINUX.sh";
   }
