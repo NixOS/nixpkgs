@@ -122,6 +122,18 @@ in
     isNormalUser = true;
   };
 
+  security.polkit.enable = true;
+
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (action.id === "org.freedesktop.login1.power-off" && subject.user === "${user}") {
+        return "yes";
+      } else {
+        return "no";
+      }
+    })
+  '';
+
   virtualisation = {
     diskSize = 20 * 1024;
 
