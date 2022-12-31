@@ -114,6 +114,8 @@ let
       ++ (optionalNullString "ifname" cfg.ifname)
       ++ (optionalNullString "ifname4" cfg.ifname4)
       ++ (optionalNullString "ifname6" cfg.ifname6)
+      ++ (optionalNullString "address4" cfg.address4)
+      ++ (optionalNullString "address6" cfg.address6)
       ++ [
       (sec "limits")
       (intOpt "transittunnels" cfg.limits.transittunnels)
@@ -284,6 +286,22 @@ in
         default = null;
         description = lib.mdDoc ''
           Your external IP or hostname.
+        '';
+      };
+
+      address4 = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = lib.mdDoc ''
+          Local IPv4 address to bind transport sockets to.
+        '';
+      };
+
+      address6 = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = lib.mdDoc ''
+          Local IPv6 address to bind transport sockets to.
         '';
       };
 
