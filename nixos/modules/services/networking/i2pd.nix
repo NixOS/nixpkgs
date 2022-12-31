@@ -111,8 +111,6 @@ let
       ++ (optionalNullString "datadir" cfg.dataDir)
       ++ (optionalNullInt "share" cfg.share)
       ++ (optionalNullBool "ssu" cfg.ssu)
-      ++ (optionalNullBool "ntcp" cfg.ntcp)
-      ++ (optionalNullString "ntcpproxy" cfg.ntcpProxy)
       ++ (optionalNullString "ifname" cfg.ifname)
       ++ (optionalNullString "ifname4" cfg.ifname4)
       ++ (optionalNullString "ifname6" cfg.ifname6)
@@ -121,9 +119,6 @@ let
       (intOpt "transittunnels" cfg.limits.transittunnels)
       (intOpt "coresize" cfg.limits.coreSize)
       (intOpt "openfiles" cfg.limits.openFiles)
-      (intOpt "ntcphard" cfg.limits.ntcpHard)
-      (intOpt "ntcpsoft" cfg.limits.ntcpSoft)
-      (intOpt "ntcpthreads" cfg.limits.ntcpThreads)
       (sec "upnp")
       (boolOpt "enabled" cfg.upnp.enable)
       (sec "precomputation")
@@ -340,15 +335,6 @@ in
         '';
       };
 
-      ntcpProxy = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        description = lib.mdDoc ''
-          Proxy URL for NTCP transport.
-        '';
-      };
-
-      ntcp = mkEnableTrueOption "ntcp";
       ssu = mkEnableOption (lib.mdDoc "SSU");
 
       ssu2.enable = mkEnableTrueOption "SSU2";
@@ -541,30 +527,6 @@ in
         default = 0;
         description = lib.mdDoc ''
           Maximum number of open files (0 - use system default).
-        '';
-      };
-
-      limits.ntcpHard = mkOption {
-        type = types.int;
-        default = 0;
-        description = lib.mdDoc ''
-          Maximum number of active transit sessions.
-        '';
-      };
-
-      limits.ntcpSoft = mkOption {
-        type = types.int;
-        default = 0;
-        description = lib.mdDoc ''
-          Threshold to start probabalistic backoff with ntcp sessions (default: use system limit).
-        '';
-      };
-
-      limits.ntcpThreads = mkOption {
-        type = types.int;
-        default = 1;
-        description = lib.mdDoc ''
-          Maximum number of threads used by NTCP DH worker.
         '';
       };
 
