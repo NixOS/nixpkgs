@@ -9,7 +9,8 @@ let
 
 in
 
-{ imports = [
+{
+  imports = [
     ../virtualisation/qemu-vm.nix
 
     # Avoid a dependency on stateVersion
@@ -18,8 +19,7 @@ in
         ../virtualisation/nixos-containers.nix
         ../services/x11/desktop-managers/xterm.nix
       ];
-      config = {
-      };
+      config = { };
       options.boot.isContainer = lib.mkOption { default = false; internal = true; };
     }
   ];
@@ -98,11 +98,11 @@ in
       '';
 
     in
-      script.overrideAttrs (old: {
-        meta = (old.meta or { }) // {
-          platforms = lib.platforms.darwin;
-        };
-      });
+    script.overrideAttrs (old: {
+      meta = (old.meta or { }) // {
+        platforms = lib.platforms.darwin;
+      };
+    });
 
   system = {
     # To prevent gratuitous rebuilds on each change to Nixpkgs
@@ -118,7 +118,7 @@ in
     '');
   };
 
-  users.users."${user}"= {
+  users.users."${user}" = {
     isNormalUser = true;
   };
 
