@@ -32,7 +32,6 @@
 , libsepol
 , vulkan-headers
 , vulkan-loader
-, valgrind
 , libthai
 , libdrm
 , libdatrie
@@ -143,7 +142,6 @@ stdenv.mkDerivation rec {
     libthai
     libdrm
     libdatrie
-    valgrind
     udev
     # Text rendering
     fontconfig
