@@ -38,7 +38,7 @@ buildPythonPackage rec {
   buildInputs = [
     pytest
   ];
-  
+
   propagatedBuildInputs = [
     setuptools-git
     mock
