@@ -995,6 +995,39 @@ stripHash() {
 }
 
 
+recordPropagatedDependencies() {
+    # Propagate dependencies into the development output.
+    declare -ra flatVars=(
+        # Build
+        depsBuildBuildPropagated
+        propagatedNativeBuildInputs
+        depsBuildTargetPropagated
+        # Host
+        depsHostHostPropagated
+        propagatedBuildInputs
+        # Target
+        depsTargetTargetPropagated
+    )
+    declare -ra flatFiles=(
+        "${propagatedBuildDepFiles[@]}"
+        "${propagatedHostDepFiles[@]}"
+        "${propagatedTargetDepFiles[@]}"
+    )
+
+    local propagatedInputsIndex
+    for propagatedInputsIndex in "${!flatVars[@]}"; do
+        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
+        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
+
+        [[ "${!propagatedInputsSlice}" ]] || continue
+
+        mkdir -p "${!outputDev}/nix-support"
+        # shellcheck disable=SC2086
+        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
+    done
+}
+
+
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
     local fn="$1"
@@ -1379,36 +1412,8 @@ fixupPhase() {
     done
 
 
-    # Propagate dependencies & setup hook into the development output.
-    declare -ra flatVars=(
-        # Build
-        depsBuildBuildPropagated
-        propagatedNativeBuildInputs
-        depsBuildTargetPropagated
-        # Host
-        depsHostHostPropagated
-        propagatedBuildInputs
-        # Target
-        depsTargetTargetPropagated
-    )
-    declare -ra flatFiles=(
-        "${propagatedBuildDepFiles[@]}"
-        "${propagatedHostDepFiles[@]}"
-        "${propagatedTargetDepFiles[@]}"
-    )
-
-    local propagatedInputsIndex
-    for propagatedInputsIndex in "${!flatVars[@]}"; do
-        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
-        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
-
-        [[ "${!propagatedInputsSlice}" ]] || continue
-
-        mkdir -p "${!outputDev}/nix-support"
-        # shellcheck disable=SC2086
-        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
-    done
-
+    # record propagated dependencies & setup hook into the development output.
+    recordPropagatedDependencies
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
