@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the Hetzner Cloud API";
     homepage = "https://github.com/hetznercloud/hcloud-python";
+    changelog = "https://github.com/hetznercloud/hcloud-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ liff ];
   };
