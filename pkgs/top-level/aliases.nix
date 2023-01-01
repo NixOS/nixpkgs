@@ -142,6 +142,9 @@ mapAliases ({
   blastem = throw "blastem has been removed from nixpkgs as it would still require python2"; # Added 2022-01-01
   bluezFull = bluez; # Added 2019-12-03
   bomi = throw "bomi has been removed from nixpkgs since it was broken and abandoned upstream"; # Added 2020-12-10
+  boost159 = throw "boost159 has been deprecated in favor of the latest version"; # Added 2023-01-01
+  boost15x = throw "boost15x has been deprecated in favor of the latest version"; # Added 2023-01-01
+  boost160 = throw "boost160 has been deprecated in favor of the latest version"; # Added 2023-01-01
   botan = throw "botan has been removed because it did not support a supported openssl version"; # added 2021-12-15
   bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # Added 2021-01-24
