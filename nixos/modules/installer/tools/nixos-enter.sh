@@ -101,7 +101,7 @@ chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" 
     LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" IN_NIXOS_ENTER=1 chroot "$mountPoint" "$system/activate" 1>&2 || true
 
     # Create /tmp
-    chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
+    chroot "$mountPoint" "$system/sw/bin/systemd-tmpfiles" --create --remove --exclude-prefix=/dev 1>&2 || true
 )
 
 unset TMPDIR
