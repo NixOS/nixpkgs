@@ -18709,8 +18709,6 @@ with pkgs;
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost159
-    boost160
     boost165
     boost166
     boost168
@@ -18726,7 +18724,6 @@ with pkgs;
     boost180
   ;
 
-  boost15x = boost159;
   boost16x = boost169;
   boost17x = boost179;
   boost18x = boost180;
