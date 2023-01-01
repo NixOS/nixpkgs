@@ -49,6 +49,10 @@ buildPythonPackage rec {
 
     # disabled until https://github.com/davidhalter/jedi/issues/1858 is resolved
     "test_interpreter"
+    "test_scanning_venvs"
+    "test_create_environment_venv_path"
+    "test_create_environment_executable"
+    "test_venv_and_pths"
   ];
 
   meta = with lib; {
