@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib, openjdk, perl, ant }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libewf
+, afflib
+, openssl
+, zlib
+, openjdk
+, perl
+, ant
+}:
 
 stdenv.mkDerivation rec {
   version = "4.12.0";
@@ -8,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-NX7LNtor7UQJ6HCDz9wGpxbqrLQTTH9+543hOaQOAz4=";
+    hash = "sha256-NX7LNtor7UQJ6HCDz9wGpxbqrLQTTH9+543hOaQOAz4=";
   };
 
   # Fetch libraries using a fixed output derivation
@@ -16,7 +27,10 @@ stdenv.mkDerivation rec {
 
     version = "1.0";
     pname = "sleuthkit-deps";
-    nativeBuildInputs = [ openjdk ant ];
+    nativeBuildInputs = [
+      openjdk
+      ant
+    ];
 
     src = sleuthsrc;
 
@@ -56,8 +70,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook openjdk perl ant rdeps ];
-  buildInputs = [ libewf afflib openssl zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    openjdk
+    perl
+    ant
+    rdeps
+  ];
+
+  buildInputs = [
+    libewf
+    afflib
+    openssl
+    zlib
+  ];
 
   # Hack to fix the RPATH
   preFixup = ''
@@ -82,6 +108,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
+    changelog = "https://github.com/sleuthkit/sleuthkit/releases/tag/sleuthkit-${version}";
     maintainers = with maintainers; [ raskin gfrascadorio ];
     platforms = platforms.linux;
     sourceProvenance = with sourceTypes; [
