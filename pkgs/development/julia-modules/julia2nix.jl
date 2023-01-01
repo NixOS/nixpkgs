@@ -5,6 +5,7 @@
 using Pkg
 using Pkg.Artifacts
 using SHA
+using Base.Filesystem: isfile, cp
 
 ###################################################################
 # Help functions
@@ -125,39 +126,45 @@ end
 ###################################################################
 # Main part
 
-function main()
-    pkgs = parse_args()
-    produce_nix_definitions(pkgs)
-end
-
 function print_usage()
     println("""
-    julia2nix [--help] pkg ...
+    julia2nix [--help] [--project project.toml] pkg ...
 
     Print to stdout a 'nix' list of expressions for packages 'pkg ...' end their
-    dependencies suitable for importing into a nix Julia environment.
+    dependencies suitable for importing into a nix Julia environment. If the '--project'
+    option is used then produce definitions for the packages in project.toml (inc.
+    dependencies).
 
     OPTIONS
-    --help  Print this message
+    --help           Print this message
+    --project FILE   Produce definitions for packages in FILE (a Project.toml file)
     """)
 end
 
-function parse_args(args = Base.ARGS)
+function main(args = Base.ARGS)
     if length(args) == 0 || args[1] == "--help"
         print_usage()
         exit(0)
+    elseif length(args) == 2 && args[1] == "--project"
+        nix_definitions_from_project_toml(args[2])
+    else
+        nix_definitions_from_pkgs_names(args)
     end
-    pkgs = map(p -> Pkg.REPLMode.parse_package(Pkg.REPLMode.lex(p), ())[1], Base.ARGS)
-    return pkgs
+    return 0
 end
 
-function produce_nix_definitions(pkgs)
+function julia_init()
     popfirst!(DEPOT_PATH)
     path = mktempdir(prefix="julia2nix_")
     pushfirst!(DEPOT_PATH, path)
     push!(LOAD_PATH, path * "/packages")
     ENV["JULIA_PKG_PRECOMPILE_AUTO"]=0
+    return path
+end
 
+function nix_definitions_from_pkgs_names(args)
+    path = julia_init()
+    pkgs = map(p -> Pkg.REPLMode.parse_package(Pkg.REPLMode.lex(p), ())[1], args)
     try
         Pkg.activate(path)
         Pkg.Registry.add()
@@ -167,6 +174,28 @@ function produce_nix_definitions(pkgs)
         nix_pkg_defs(pkgs_deps)
     catch
         @error "One or more packages not found, check the names."
+        exit(1)
+    end
+end
+
+function nix_definitions_from_project_toml(ptoml)
+    path = julia_init()
+    try
+        Pkg.Registry.add()
+        # if there's no Manifest.toml file copy Project.toml to a writable
+        # tmp dir and generate it.
+        if !isfile(dirname(ptoml) * "/Manifest.toml")
+            ptoml_tmp = path * "/" * basename(ptoml)
+            cp(ptoml, ptoml_tmp)
+            Pkg.activate(ptoml_tmp)
+            Pkg.resolve()
+        else
+            Pkg.activate(ptoml)
+        end
+        pkgs_deps = Pkg.dependencies()
+        nix_pkg_defs(pkgs_deps)
+    catch
+        @error "Error processing $(ptoml)."
         exit(1)
     end
 end
