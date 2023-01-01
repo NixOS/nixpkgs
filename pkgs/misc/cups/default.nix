@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
+  patches = [
+    ./0001-Increase-log-level-for-Expiring-subscriptions.patch
+  ];
+
   postPatch = ''
     substituteInPlace cups/testfile.c \
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'

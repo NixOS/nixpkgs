@@ -1,0 +1,29 @@
+From 7225df2a2a52309dcb11922d718f79329cbdaefb Mon Sep 17 00:00:00 2001
+From: ckie <git-525ff67@ckie.dev>
+Date: Mon, 2 Jan 2023 00:20:51 +0200
+Subject: [PATCH] Increase log level for "Expiring subscriptions..."
+
+Fixes https://github.com/NixOS/nixpkgs/issues/195090.
+
+NixOS systems with Avahi enabled would previously spam the journal with
+this log message once a second: this hides that spam behind the log level.
+---
+ scheduler/subscriptions.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scheduler/subscriptions.c b/scheduler/subscriptions.c
+index 2dbb28f85..9b31ec250 100644
+--- a/scheduler/subscriptions.c
++++ b/scheduler/subscriptions.c
+@@ -621,7 +621,7 @@ cupsdExpireSubscriptions(
+   curtime = time(NULL);
+   update  = 0;
+ 
+-  cupsdLogMessage(CUPSD_LOG_INFO, "Expiring subscriptions...");
++  cupsdLogMessage(CUPSD_LOG_DEBUG, "Expiring subscriptions...");
+ 
+   for (sub = (cupsd_subscription_t *)cupsArrayFirst(Subscriptions);
+        sub;
+-- 
+2.38.1
+
