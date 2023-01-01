@@ -6330,6 +6330,8 @@ with pkgs;
 
   ctlptl = callPackage ../development/tools/ctlptl { };
 
+  dumpnar = callPackage ../tools/archivers/dumpnar { };
+
   snooze = callPackage ../tools/system/snooze { };
 
   cudaPackages_10_0 = callPackage ./cuda-packages.nix { cudaVersion = "10.0"; };
