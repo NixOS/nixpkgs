@@ -33846,11 +33846,11 @@ with pkgs;
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
   dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
-    boost = boost165;
+    boost = boost17x;
     withGui = true;
   };
   dogecoind = callPackage ../applications/blockchains/dogecoin {
-    boost = boost165;
+    boost = boost17x;
     withGui = false;
   };
 
