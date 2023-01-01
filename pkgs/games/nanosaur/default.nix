@@ -20,21 +20,12 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    cmake --build build
-    runHook postBuild
-  '';
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   installPhase = ''
     runHook preInstall
-    mv build $out
+    mkdir -p "$out/bin"
+    mv Nanosaur Data ReadMe.txt "$out/"
     makeWrapper $out/Nanosaur $out/bin/Nanosaur --chdir "$out"
     runHook postInstall
   '';
