@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "2022-12-01";
+  version = "2023-01-01";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = pname;
     rev = version;
-    hash = "sha256-E/QGmoL7Q3GDR2/I5o2CAMHMcmPQEJAySke1s+nOaho=";
+    hash = "sha256-xpNlmGG7Qy0SPzXZ9sQ0i9Yo2hMaK+YsTEOTk10rs+k=";
   };
 
-  cargoHash = "sha256-T3i86L6cF6uFbSs7xtKHGzB6XrE9jn2RZghxFzDleXU=";
+  cargoHash = "sha256-mwfM3hIEaHKa2oPVWzXpua+W2Oa5brvNRbRCcV0KapY=";
 
   CFG_DATE = version;
   CFG_REV = "release";
@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Yet another language server for Nix";
     homepage = "https://github.com/oxalica/nil";
+    changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ figsoda oxalica ];
   };
