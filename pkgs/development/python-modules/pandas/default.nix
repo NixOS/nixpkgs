@@ -98,6 +98,8 @@ buildPythonPackage rec {
     "test_rolling_var_numerical_issues"
     # Requires mathplotlib
     "test_subset_for_boolean_cols"
+    # DeprecationWarning from numpy
+    "test_sort_values_sparse_no_warning"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
