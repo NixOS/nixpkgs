@@ -54,6 +54,9 @@ buildGoModule rec {
       installShellCompletion --$shell completions/$shell/*
     done
 
+    install contrib/cni/*.conf -Dt $out/etc/cni/net.d
+    install crictl.yaml -Dt $out/etc
+
     installManPage docs/*.[1-9]
     runHook postInstall
   '';
