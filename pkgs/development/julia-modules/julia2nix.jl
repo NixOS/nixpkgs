@@ -147,7 +147,7 @@ function parse_args(args = Base.ARGS)
         print_usage()
         exit(0)
     end
-    pkgs = map(a -> PackageSpec(name = a), Base.ARGS) ::Vector{PackageSpec}
+    pkgs = map(p -> Pkg.REPLMode.parse_package(Pkg.REPLMode.lex(p), ())[1], Base.ARGS)
     return pkgs
 end
 
