@@ -33818,11 +33818,11 @@ with pkgs;
   besu = callPackage ../applications/blockchains/besu { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
-    boost = boost165;
+    boost = boost17x;
     withGui = true;
   };
   bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
-    boost = boost165;
+    boost = boost17x;
     mkDerivation = stdenv.mkDerivation;
     withGui = false;
   };
