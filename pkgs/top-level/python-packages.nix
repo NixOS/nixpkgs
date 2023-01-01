@@ -11429,6 +11429,8 @@ self: super: with self; {
 
   troposphere = callPackage ../development/python-modules/troposphere { };
 
+  trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   trustme = callPackage ../development/python-modules/trustme { };
