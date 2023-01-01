@@ -1681,6 +1681,8 @@ self: super: with self; {
 
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
+  chemicals = callPackage ../development/python-modules/chemicals { };
+
   cheroot = callPackage ../development/python-modules/cheroot { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
@@ -1978,6 +1980,8 @@ self: super: with self; {
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
+
+  coolprop = callPackage ../development/python-modules/coolprop { };
 
   cookies = callPackage ../development/python-modules/cookies { };
 
@@ -3474,6 +3478,8 @@ self: super: with self; {
   flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
+
+  fluids = callPackage ../development/python-modules/fluids { };
 
   flux-led = callPackage ../development/python-modules/flux-led { };
 
@@ -11190,6 +11196,8 @@ self: super: with self; {
     cudaSupport = false;
     cudnnSupport = false;
   };
+
+  thermo = callPackage ../development/python-modules/thermo { };
 
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
