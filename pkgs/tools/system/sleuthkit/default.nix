@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib, openjdk, perl, ant }:
 
 stdenv.mkDerivation rec {
-  version = "4.11.1";
+  version = "4.12.0";
   pname = "sleuthkit";
 
   sleuthsrc = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-TM8My4dAZigukwMUNDnP3aVCQ8JDdVv/KNkchDvCl9I=";
+    sha256 = "sha256-NX7LNtor7UQJ6HCDz9wGpxbqrLQTTH9+543hOaQOAz4=";
   };
 
   # Fetch libraries using a fixed output derivation
