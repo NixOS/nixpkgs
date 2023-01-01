@@ -1,5 +1,5 @@
 { lib
-, callPackage
+, pkgs
 , fetchFromGitHub
 , curlMinimal
 , openssl
@@ -17,60 +17,61 @@
     hash = "sha256-YHl4aPJglUIQ6mrLWSUU7gNJn9DjeCwNBCCUkDfX2iw=";
   };
 
-  fetchGitHubLFS = callPackage ./fetch-github-lfs.nix {};
+  callPackage = lib.callPackageWith ( pkgs // urbitPackages);
 
-  sources = callPackage ./sources.nix {};
+  urbitPackages = {
 
-  ca-bundle = callPackage ./ca-bundle.nix {};
+    fetchGitHubLFS = callPackage ./fetch-github-lfs.nix {};
 
-  ent = callPackage ./ent.nix {
-    inherit urbit-src;
-  };
+    ca-bundle = callPackage ./ca-bundle.nix {};
 
-  libaes_siv = callPackage ./libaes_siv {
-    inherit sources;
-  };
+    ent = callPackage ./ent.nix {
+      inherit urbit-src;
+    };
 
-  murmur3 = callPackage ./murmur3.nix {
-    inherit sources;
-  };
+    libaes_siv = callPackage ./libaes_siv {};
 
-  ivory-header = callPackage ./ivory-header.nix {
-    inherit urbit-src;
-    inherit fetchGitHubLFS;
-  };
+    murmur3 = callPackage ./murmur3.nix {};
 
-  softfloat3 = callPackage ./softfloat3.nix {
-    inherit sources;
-  };
+    ivory-header = callPackage ./ivory-header.nix {
+      inherit urbit-src;
+    };
 
-  h2o-stable = h2o.overrideAttrs (_attrs: {
-    version = sources.h2o.rev;
-    src = sources.h2o;
-    outputs = [ "out" "dev" "lib" ];
-    meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
-  });
+    softfloat3 = callPackage ./softfloat3.nix {};
 
-  libsigsegv_patched = libsigsegv.overrideAttrs (attrs: {
-    patches = (lib.lists.optionals (attrs.patches != null) attrs.patches) ++ [
-      ./libsigsegv/disable-stackvma_fault-linux-arm.patch
-      ./libsigsegv/disable-stackvma_fault-linux-i386.patch
-    ];
-  });
+    h2o-stable = h2o.overrideAttrs (_attrs: {
+      version = "v2.2.6";
+      src = fetchFromGitHub {
+        owner = "h2o";
+        repo = "h2o";
+        rev = "v2.2.6";
+        sha256 = "0qni676wqvxx0sl0pw9j0ph7zf2krrzqc1zwj73mgpdnsr8rsib7";
+      };
+      outputs = [ "out" "dev" "lib" ];
+      meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    });
 
-  lmdb_patched = lmdb.overrideAttrs (attrs: {
-    patches =
-      attrs.patches or [] ++ lib.optionals stdenv.isDarwin [
-        ./lmdb/darwin-fsync.patch
+    libsigsegv_patched = libsigsegv.overrideAttrs (oldAttrs: {
+      patches = (lib.lists.optionals (oldAttrs.patches != null) oldAttrs.patches) ++ [
+        ./libsigsegv/disable-stackvma_fault-linux-arm.patch
+        ./libsigsegv/disable-stackvma_fault-linux-i386.patch
       ];
-  });
+    });
 
-  urbit = callPackage ./urbit.nix {
-    inherit urbit-src libsigsegv_patched curlMinimal h2o-stable lmdb_patched;
-    inherit ent ca-bundle ivory-header murmur3 softfloat3 urcrypt;
+    lmdb_patched = lmdb.overrideAttrs (oldAttrs: {
+      patches =
+        oldAttrs.patches or [] ++ lib.optionals stdenv.isDarwin [
+          ./lmdb/darwin-fsync.patch
+        ];
+    });
+
+    urbit = callPackage ./urbit.nix {
+      inherit urbit-src;
+    };
+
+    urcrypt = callPackage ./urcrypt.nix {
+      inherit urbit-src;
+    };
   };
-  urcrypt = callPackage ./urcrypt.nix {
-    inherit urbit-src;
-    inherit libaes_siv;
-  };
-in urbit
+
+in urbitPackages.urbit

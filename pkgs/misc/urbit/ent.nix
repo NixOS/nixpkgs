@@ -1,7 +1,8 @@
-{ urbit-src, lib, stdenv, enableParallelBuilding ? true }:
+{ urbit-src, lib, stdenv }:
 
 stdenv.mkDerivation {
-  name = "ent";
+  pname = "ent";
+  version = urbit-src.rev;
   src = lib.cleanSource "${urbit-src}/pkg/ent";
 
   postPatch = ''
@@ -10,5 +11,13 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  inherit enableParallelBuilding;
+  enableParallelBuilding = true;
+
+  meta = {
+    description = "Cross-platform wrapper around getentropy";
+    homepage = "https://github.com/urbit/urbit";
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.uningan ];
+    platforms = lib.platforms.unix;
+  };
 }

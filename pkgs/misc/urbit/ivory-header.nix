@@ -1,25 +1,14 @@
-{ urbit-src, lib, stdenvNoCC, fetchGitHubLFS, curl, xxd }:
-
-let
+{ urbit-src
+, runCommandLocal
+, fetchGitHubLFS
+, xxd
+}: let
   lfs = fetchGitHubLFS {
     src = /.
       + builtins.unsafeDiscardStringContext "${urbit-src}/bin/ivory.pill";
   };
-in stdenvNoCC.mkDerivation {
-  name = "ivory-header";
-  src = lfs;
-  nativeBuildInputs = [ xxd ];
-  phases = [ "installPhase" ];
-
-  installPhase = ''
-    file=u3_Ivory.pill
-
-    header "writing $file"
-
+in runCommandLocal "ivory-header" {} ''
     mkdir -p $out/include
-    cat $src > $file
-    xxd -i $file > $out/include/ivory_impl.h
-  '';
-
-  preferLocalBuild = true;
-}
+    cat ${lfs} > u3_Ivory.pill
+    ${xxd}/bin/xxd -i u3_Ivory.pill > $out/include/ivory_impl.h
+  ''
