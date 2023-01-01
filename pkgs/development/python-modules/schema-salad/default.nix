@@ -57,13 +57,15 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    pycodegen = [ black ];
+    pycodegen = [
+      black
+    ];
   };
 
   meta = with lib; {
-    broken = true; # disables on outdated version of mistune
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
+    changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };
