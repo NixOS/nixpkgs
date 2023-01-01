@@ -55,6 +55,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.magicbug.co.uk/cloudlog/">Cloudlog</link>,
+          a web-based Amateur Radio logging application. Available as
+          <link linkend="opt-services.cloudlog.enable">services.cloudlog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/junegunn/fzf">fzf</link>,
           a command line fuzzyfinder. Available as
           <link linkend="opt-programs.fzf.fuzzyCompletion">programs.fzf</link>.
