@@ -1,6 +1,7 @@
 { lib, stdenv, coreutils, pkgconfig                      # build/env
 , cacert, ca-bundle, ivory-header                        # codegen
-, curlUrbit, ent, gmp, h2o, libsigsegv, libuv, lmdb      # libs
+, curlMinimal, ent, gmp, h2o-stable                      # libs
+, libsigsegv_patched, libuv, lmdb_patched                #
 , murmur3, openssl, softfloat3                           #
 , urcrypt, zlib                                          #
 , doCheck                ? true                          # opts
@@ -30,14 +31,14 @@ in stdenv.mkDerivation {
   buildInputs = [
     cacert
     ca-bundle
-    curlUrbit
+    curlMinimal
     ent
     gmp
-    h2o
+    h2o-stable
     ivory-header
-    libsigsegv
+    libsigsegv_patched
     libuv
-    lmdb
+    lmdb_patched
     murmur3
     openssl
     softfloat3
