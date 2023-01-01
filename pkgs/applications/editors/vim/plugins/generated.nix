@@ -823,12 +823,12 @@ final: prev:
 
   barbar-nvim = buildVimPluginFrom2Nix {
     pname = "barbar.nvim";
-    version = "2022-12-31";
+    version = "2023-01-01";
     src = fetchFromGitHub {
       owner = "romgrk";
       repo = "barbar.nvim";
-      rev = "e773abf71973422dc8333bec9f7930674b3ab7bd";
-      sha256 = "1rq3hixp11g67g5qhwaxpnfnblsrsfnww6ynf3k3p16k8nrxdsd5";
+      rev = "bb2e5e4df5b643c4353e9d6de2d2e6e863f5e531";
+      sha256 = "147vgf7cldq1f04glcp9md2f4y06p3l8jl5sk45np9b8kp5ysh2q";
     };
     meta.homepage = "https://github.com/romgrk/barbar.nvim/";
   };
@@ -4071,8 +4071,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lazy.nvim";
-      rev = "11eee43c7ee63a71b08009769437e8a10814a48c";
-      sha256 = "1swinq9dv3iix3g34a0f4bkc2dkd4y6vl23r90lqccmnlfm6h72v";
+      rev = "3974a6cbe38f7958c2e4f41c6f0d9a6c001a723d";
+      sha256 = "1idpzy1mnkgvpgiiirazpfpdm2xvv4zl7bbfsvmfqi6wc57c7vx6";
     };
     meta.homepage = "https://github.com/folke/lazy.nvim/";
   };
@@ -6243,8 +6243,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "3a621b9a8362fac358d828254485024986d6d81b";
-      sha256 = "0dib32b4y325f4yfarw0ph74851lg56slq0vgf1rrq3v588szvdl";
+      rev = "b67822bf58b0fbf0c496ae21a177d02fa8388edf";
+      sha256 = "01l1sl39pia8fa2b7ld0rdi76yjlrnh82rlxvgfqjivppq23k0zm";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
@@ -11108,6 +11108,18 @@ final: prev:
     meta.homepage = "https://github.com/andymass/vim-matchup/";
   };
 
+  vim-mediawiki-editor = buildVimPluginFrom2Nix {
+    pname = "vim-mediawiki-editor";
+    version = "2022-10-29";
+    src = fetchFromGitHub {
+      owner = "aquach";
+      repo = "vim-mediawiki-editor";
+      rev = "ba6a1139bdde0bdf2990f7110a42b304815f76b5";
+      sha256 = "00d1vwf0say9vsrsvz710483ybbhwn5799k3qb4skna0vzjryayz";
+    };
+    meta.homepage = "https://github.com/aquach/vim-mediawiki-editor/";
+  };
+
   vim-mergetool = buildVimPluginFrom2Nix {
     pname = "vim-mergetool";
     version = "2019-06-22";
@@ -12238,12 +12250,12 @@ final: prev:
 
   vim-slime = buildVimPluginFrom2Nix {
     pname = "vim-slime";
-    version = "2022-10-29";
+    version = "2023-01-01";
     src = fetchFromGitHub {
       owner = "jpalardy";
       repo = "vim-slime";
-      rev = "55e8604bda53f11cbce5d2b976bacb157de70297";
-      sha256 = "19r7hx4xkw3b8fc81gp1sqc4xk3w2i55mpcbsrjr1mjyjwydjb84";
+      rev = "c9eaebd1068443b4d92c952788e4c75d337c1125";
+      sha256 = "0d8l1l8hmc6n78n8j20fwc7171615rbi139j1z2l7821f6dbggzk";
     };
     meta.homepage = "https://github.com/jpalardy/vim-slime/";
   };
@@ -12755,12 +12767,12 @@ final: prev:
 
   vim-tpipeline = buildVimPluginFrom2Nix {
     pname = "vim-tpipeline";
-    version = "2022-12-22";
+    version = "2023-01-01";
     src = fetchFromGitHub {
       owner = "vimpostor";
       repo = "vim-tpipeline";
-      rev = "b4aefd5a1e697ea68d50df2f7b222036a7251df8";
-      sha256 = "147mv6zn5b8my8a8w7ddk1g1wzj0xsdssb265j19vs8ajijg7bcy";
+      rev = "86f37afec5cefd75baaebf8900889dabb9789a2c";
+      sha256 = "133vfipflvalyp373lmqza5p8dhh2qnnvlh5y2bsxh5abjk1jml1";
     };
     meta.homepage = "https://github.com/vimpostor/vim-tpipeline/";
   };
