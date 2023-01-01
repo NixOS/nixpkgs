@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, meson, ninja
-, gtk-doc ? null, file, docbook_xsl
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, file
+, docbook_xsl
+, gtk-doc ? null
 , buildDevDoc ? gtk-doc != null
+
+# for passthru.tests
+, gnuradio
+, gst_all_1
+, qt6
+, vips
+
 }: let
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
@@ -34,6 +47,12 @@ in stdenv.mkDerivation rec {
   ;
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+    inherit gnuradio vips;
+    qt6-qtmultimedia = qt6.qtmultimedia;
+  };
 
   meta = with lib; {
     description = "The Oil Runtime Compiler";
