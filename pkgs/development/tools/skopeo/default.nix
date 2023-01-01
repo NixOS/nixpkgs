@@ -11,6 +11,7 @@
 , makeWrapper
 , fuse-overlayfs
 , dockerTools
+, runCommand
 }:
 
 buildGoModule rec {
@@ -46,6 +47,7 @@ buildGoModule rec {
     runHook preInstall
     PREFIX=$out make install-binary install-completions
     PREFIX=$man make install-docs
+    install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
@@ -53,8 +55,13 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (dockerTools.examples) testNixFromDockerHub;
+  passthru = {
+    policy = runCommand "policy" { } ''
+      install ${src}/default-policy.json -Dt $out
+    '';
+    tests = {
+      inherit (dockerTools.examples) testNixFromDockerHub;
+    };
   };
 
   meta = with lib; {
