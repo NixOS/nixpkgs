@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.1.5";
+  version = "2.0.0";
   pname = "pytest-relaxed";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e39a7e5b14e14dfff0de0ad720dfffa740c128d599ab14cfac13f4deb34164a6";
+    sha256 = "sha256-Szc8x1Rmb/YPVCWmnLQUZCwqEc56RsjOBmpzjkCSyjk=";
   };
 
   # newer decorator versions are incompatible and cause the test suite to fail
