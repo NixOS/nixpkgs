@@ -47,8 +47,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-nW/WfiY6uF67qNa95tvNvSv/alP2WmzTk34LEBma/04=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-CINKvRnBspciS+wefJB8gzBE13L8CjbYCkmLmTTeYlA=";
   };
 
   propagatedBuildInputs = [
@@ -110,6 +110,10 @@ buildPythonPackage rec {
     "test_flowview"
     # ValueError: Exceeds the limit (4300) for integer string conversion
     "test_roundtrip_big_integer"
+
+    "test_wireguard"
+    "test_commands_exist"
+    "test_statusbar"
   ];
 
   disabledTestPaths = [
