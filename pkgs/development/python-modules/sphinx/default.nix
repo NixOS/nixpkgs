@@ -5,6 +5,9 @@
 , fetchFromGitHub
 , fetchpatch
 
+# nativeBuildInputs
+, flit-core
+
 # propagatedBuildInputs
 , babel
 , alabaster
@@ -34,8 +37,8 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "5.1.1";
-  format = "setuptools";
+  version = "5.3.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -43,7 +46,7 @@ buildPythonPackage rec {
     owner = "sphinx-doc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dTgQNMRIn7ETm+1HgviOkWWOCmLX7Ez6DM9ChlI32mY=";
+    hash = "sha256-80bVg1rfBebgSOKbWkzP84vpm39iLgM8lWlVD64nSsQ=";
     postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
@@ -51,6 +54,10 @@ buildPythonPackage rec {
       patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
     '';
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   postPatch = ''
     # remove impurity caused by date inclusion
