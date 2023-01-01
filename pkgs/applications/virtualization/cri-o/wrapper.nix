@@ -40,6 +40,7 @@ in runCommand cri-o-unwrapped.name {
   ln -s ${cri-o-unwrapped.man} $man
 
   mkdir -p $out/bin
+  ln -s ${cri-o-unwrapped}/etc $out/etc
   ln -s ${cri-o-unwrapped}/share $out/share
 
   for p in ${cri-o-unwrapped}/bin/*; do
