@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "BURP - BackUp and Restore Program";
     homepage    = "https://burp.grke.org";
     license     = licenses.agpl3;
-    maintainers = with maintainers; [ tokudan ];
+    maintainers = with maintainers; [ arjan-s ];
     platforms   = platforms.all;
   };
 }
