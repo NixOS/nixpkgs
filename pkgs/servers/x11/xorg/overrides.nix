@@ -26,7 +26,7 @@ self: super:
 {
   wrapWithXFileSearchPathHook = callPackage ({ makeBinaryWrapper, makeSetupHook, writeScript }: makeSetupHook {
       name = "wrapWithXFileSearchPathHook";
-      deps = [ makeBinaryWrapper ];
+      propagatedBuildInputs = [ makeBinaryWrapper ];
     } (writeScript "wrapWithXFileSearchPathHook.sh" ''
       wrapWithXFileSearchPath() {
         paths=(

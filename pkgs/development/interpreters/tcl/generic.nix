@@ -53,7 +53,7 @@ let
         libdir = "lib/${libPrefix}";
         tclPackageHook = callPackage ({ buildPackages }: makeSetupHook {
           name = "tcl-package-hook";
-          deps = [ buildPackages.makeWrapper ];
+          propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./tcl-package-hook.sh) {};
       };
     };
