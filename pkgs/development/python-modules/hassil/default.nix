@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 
+# build
+, antlr4
+
 # propagates
 , antlr4-python3-runtime
 , dataclasses-json
@@ -24,8 +27,14 @@ buildPythonPackage {
     hash = "sha256-ygaPdfH2jBk2xvlgt7V8/VcZAtv6Lwsi8g+stK/DdT8=";
   };
 
+  nativeBuildInputs = [
+    antlr4
+  ];
+
   postPatch = ''
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements.txt
+    rm hassil/grammar/*.{tokens,interp}
+    antlr -Dlanguage=Python3 -visitor -o hassil/grammar/ *.g4
   '';
 
   propagatedBuildInputs = [
