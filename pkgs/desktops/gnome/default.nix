@@ -4,7 +4,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
   # Temporary helper until gdk-pixbuf supports multiple cache files.
-  # This will go away, do not use outside Nixpkgs.
+  # This will go away, do not use outside nixpkgs.
   _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
