@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pysmbc";
-  version = "1.0.23";
+  version = "1.0.24";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y0n1n6jkzf4mr5lqfc73l2m0qp56gvxwfjnx2vj8c0hh5i1gnq8";
+    sha256 = "sha256-zq3o1hHmPXKnXSYrNCptyDa2+AqzjqX9WtRD4ve+LO0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
