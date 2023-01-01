@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , jdk
-, jre
 , ant
 , makeWrapper
 }:
@@ -37,11 +36,11 @@ stdenv.mkDerivation rec {
     # but it hardcodes bash shebang and does not pin the java path.
     # So we create our own wrapper, using similar cmdline args as upstream.
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/DataExplorer \
+    makeWrapper ${jdk}/bin/java $out/bin/DataExplorer \
       --add-flags "-Xms64m -Xmx3092m -jar $out/share/DataExplorer/DataExplorer.jar" \
       --set SWT_GTK3 0
 
-    makeWrapper ${jre}/bin/java $out/bin/DevicePropertiesEditor \
+    makeWrapper ${jdk}/bin/java $out/bin/DevicePropertiesEditor \
       --add-flags "-Xms32m -Xmx512m -classpath $out/share/DataExplorer/DataExplorer.jar gde.ui.dialog.edit.DevicePropertiesEditor" \
       --set SWT_GTK3 0 \
       --set LIBOVERLAY_SCROLLBAR 0
