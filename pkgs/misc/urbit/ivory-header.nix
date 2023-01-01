@@ -4,8 +4,7 @@
 , xxd
 }: let
   lfs = fetchGitHubLFS {
-    src = /.
-      + builtins.unsafeDiscardStringContext "${urbit-src}/bin/ivory.pill";
+    src = "${urbit-src}/bin/ivory.pill";
   };
 in runCommandLocal "ivory-header" {} ''
     mkdir -p $out/include

@@ -5,9 +5,6 @@
 # get `is not allowed to refer to a store path` errors.
 , name ? baseNameOf src, owner ? "urbit", repo ? "urbit"
 , preferLocalBuild ? true }:
-
-assert builtins.isPath src;
-
 let
 
   # Parse the first 7 characters of the supplied `src` path for the required

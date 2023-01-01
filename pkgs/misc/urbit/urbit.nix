@@ -1,15 +1,24 @@
-{ lib, stdenv, coreutils, pkgconfig                      # build/env
-, cacert, ca-bundle, ivory-header                        # codegen
-, curlMinimal, ent, gmp, h2o-stable                      # libs
-, libsigsegv_patched, libuv, lmdb_patched                #
-, murmur3, openssl, softfloat3                           #
-, urcrypt, zlib                                          #
-, doCheck                ? true                          # opts
-, enableParallelBuilding ? true
-, dontStrip              ? true
-, urbit-src }:
-
-let
+{ lib
+, stdenv
+, coreutils
+, pkg-config
+, cacert
+, ca-bundle
+, ivory-header
+, curlMinimal
+, ent
+, gmp
+, h2o-stable
+, libsigsegv_patched
+, libuv
+, lmdb_patched
+, murmur3
+, openssl
+, softfloat3
+, urcrypt
+, zlib
+, urbit-src
+}:let
 
   src = lib.cleanSource "${urbit-src}/pkg/urbit";
 
@@ -26,7 +35,7 @@ in stdenv.mkDerivation {
 
   pname = "urbit";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     cacert
@@ -46,11 +55,6 @@ in stdenv.mkDerivation {
     zlib
   ];
 
-  # Ensure any `/usr/bin/env bash` shebang is patched.
-  postPatch = ''
-    patchShebangs ./configure
-  '';
-
   checkTarget = "test";
 
   installPhase = ''
@@ -67,13 +71,19 @@ in stdenv.mkDerivation {
   CPU_DEBUG = false;
   EVENT_TIME_DEBUG = false;
 
-  inherit enableParallelBuilding doCheck dontStrip;
+  enableParallelBuilding = true;
+  doCheck = true;
+
+  # Ensure any `/usr/bin/env bash` shebang is patched.
+  postPatch = ''
+    patchShebangs ./configure
+  '';
 
   meta = {
     description = "An operating function";
     homepage = "https://urbit.org";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.uningan ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 }

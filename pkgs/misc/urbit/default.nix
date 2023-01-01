@@ -48,7 +48,7 @@
         sha256 = "0qni676wqvxx0sl0pw9j0ph7zf2krrzqc1zwj73mgpdnsr8rsib7";
       };
       outputs = [ "out" "dev" "lib" ];
-      meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      meta.platforms = lib.platforms.unix;
     });
 
     libsigsegv_patched = libsigsegv.overrideAttrs (oldAttrs: {
