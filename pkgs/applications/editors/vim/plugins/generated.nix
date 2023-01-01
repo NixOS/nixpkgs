@@ -11108,6 +11108,18 @@ final: prev:
     meta.homepage = "https://github.com/andymass/vim-matchup/";
   };
 
+  vim-mediawiki-editor = buildVimPluginFrom2Nix {
+    pname = "vim-mediawiki-editor";
+    version = "2022-10-29";
+    src = fetchFromGitHub {
+      owner = "aquach";
+      repo = "vim-mediawiki-editor";
+      rev = "ba6a1139bdde0bdf2990f7110a42b304815f76b5";
+      sha256 = "00d1vwf0say9vsrsvz710483ybbhwn5799k3qb4skna0vzjryayz";
+    };
+    meta.homepage = "https://github.com/aquach/vim-mediawiki-editor/";
+  };
+
   vim-mergetool = buildVimPluginFrom2Nix {
     pname = "vim-mergetool";
     version = "2019-06-22";
