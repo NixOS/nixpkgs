@@ -8,19 +8,29 @@
 buildPythonPackage rec {
   pname = "pysmbc";
   version = "1.0.24";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zq3o1hHmPXKnXSYrNCptyDa2+AqzjqX9WtRD4ve+LO0=";
+    hash = "sha256-zq3o1hHmPXKnXSYrNCptyDa2+AqzjqX9WtRD4ve+LO0=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ samba ];
+  buildInputs = [
+    samba
+  ];
 
   # Tests would require a local SMB server
   doCheck = false;
-  pythonImportsCheck = [ "smbc" ];
+
+  pythonImportsCheck = [
+    "smbc"
+  ];
 
   meta = with lib; {
     description = "libsmbclient binding for Python";
