@@ -34023,7 +34023,9 @@ with pkgs;
 
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
-  sumokoin = callPackage ../applications/blockchains/sumokoin { boost = boost165; };
+  sumokoin = callPackage ../applications/blockchains/sumokoin {
+    boost = boost17x;
+  };
 
   solana-testnet = callPackage ../applications/blockchains/solana {
     inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
