@@ -3002,17 +3002,17 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xhost = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
+  xhost = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXmu, xorgproto, gettext }: stdenv.mkDerivation {
     pname = "xhost";
-    version = "1.0.8";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xhost-1.0.8.tar.bz2";
-      sha256 = "15n3mnd4i5kh4z32qv11580qjgvnng0wry2y753ljrqkkrbkrp52";
+      url = "mirror://xorg/individual/app/xhost-1.0.9.tar.xz";
+      sha256 = "0ib66h78ykc4zki4arh8hkcsgk1mk8yyy0ay5sdb2d908qqvb1pa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config gettext ];
     buildInputs = [ libX11 libXau libXmu xorgproto ];
     meta.platforms = lib.platforms.unix;
   }) {};
