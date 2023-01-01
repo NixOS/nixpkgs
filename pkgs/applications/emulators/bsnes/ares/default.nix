@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, which
 , wrapGAppsHook
 , libicns
 , SDL2
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    which
     wrapGAppsHook
   ] ++ lib.optionals stdenv.isDarwin [
     libicns
@@ -72,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "hiro=gtk3"
   ] ++ lib.optionals stdenv.isDarwin [
     "hiro=cocoa"
+    "lto=false"
     "vulkan=false"
   ] ++ [
     "local=false"
