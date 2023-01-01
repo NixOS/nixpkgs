@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
+{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, libxcrypt, pkg-config, swig, perl, gcc }:
 
 let
   self = stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ let
     nativeBuildInputs = [ pkg-config swig perl ]
       ++ lib.optional stdenv.isDarwin gcc;
 
-    buildInputs = [ getopt lua boost ];
+    buildInputs = [ getopt lua boost libxcrypt ];
 
     postPatch = ''
       substituteInPlace src/makefile \
