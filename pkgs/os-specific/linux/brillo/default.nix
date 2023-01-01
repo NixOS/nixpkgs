@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brillo";
-  version = "1.4.11";
+  version = "1.4.12";
 
   src = fetchFromGitLab {
     owner= "cameronnemo";
     repo= "brillo";
     rev= "v${version}";
-    sha256 = "sha256-R83Zx0dw9bmCF5kHTNYoNzCmJZK3cVzXNb30qAUexFc=";
+    sha256 = "sha256-dKGNioWGVAFuB4kySO+QGTnstyAD0bt4/6FBVwuRxJo=";
   };
 
   patches = [
