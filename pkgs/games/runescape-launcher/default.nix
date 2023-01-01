@@ -19,6 +19,7 @@
 , pango
 , SDL2
 , wrapGAppsHook
+, xdg-utils
 , xorg
 , xorg_sys_opengl
 , zlib
@@ -61,6 +62,7 @@ let
       libpulseaudio
       SDL2
       openssl_1_1
+      xdg-utils # The launcher uses `xdg-open` to open HTTP URLs in the user's browser
       xorg_sys_opengl
       zlib
     ];
@@ -128,6 +130,7 @@ in
       openssl_1_1
       pango
       SDL2
+      xdg-utils
       xorg.libX11
       xorg_sys_opengl
       zlib
