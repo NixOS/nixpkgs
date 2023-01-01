@@ -41,10 +41,10 @@ lib.overrideDerivation (buildLinux (args // {
   '';
 
   extraMeta = if (rpiVersion < 3) then {
-    platforms = with lib.platforms; [ arm ];
+    platforms = with lib.platforms; arm;
     hydraPlatforms = [];
   } else {
-    platforms = with lib.platforms; [ arm aarch64 ];
+    platforms = with lib.platforms; arm ++ aarch64;
     hydraPlatforms = [ "aarch64-linux" ];
   };
 } // (args.argsOverride or {}))) (oldAttrs: {

@@ -27,11 +27,19 @@ rec {
      For another application, see build-support/vm, where this
      function is used to build arbitrary derivations inside a QEMU
      virtual machine.
+
+     Note that in order to preserve evaluation errors, the new derivation's
+     outPath depends on the old one's, which means that this function cannot
+     be used in circular situations when the old derivation also depends on the
+     new one.
+
+     You should in general prefer `drv.overrideAttrs` over this function;
+     see the nixpkgs manual for more information on overriding.
   */
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in lib.flip (extendDerivation true) newDrv (
+    in lib.flip (extendDerivation (builtins.seq drv.drvPath true)) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }

@@ -42,7 +42,7 @@ let
         else if isDerivation v then toString v
         else if builtins.isPath v then toString v
         else if isString v then v
-        else if strings.isCoercibleToString v then toString v
+        else if strings.isConvertibleWithToString v then toString v
         else abort "The nix conf value: ${toPretty {} v} can not be encoded";
 
       mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
@@ -792,7 +792,10 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs));
+    nix.nrBuildUsers = mkDefault (
+      if cfg.settings.auto-allocate-uids or false then 0
+      else max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
+    );
 
     users.users = nixbldUsers;
 
