@@ -40,11 +40,15 @@ function deps_str(deps)
     end
 end
 
+function pkg_slug(uuid, tree_hash)
+    return Base.version_slug(uuid, Base.SHA1((tree_hash)))
+end
+
 function pkg_nix(name, version, uuid, tree_hash, deps)
     server = pkg_server()
     julia_pname = "julia-bin"
     julia_version = Base.VERSION
-    # sha256 = "$(pkg_sha256(uuid, tree_hash))";
+    path = name * "/" *  pkg_slug(uuid, tree_hash);
     nix = """
         {
             pname = "$(name)";
