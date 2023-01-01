@@ -57,9 +57,7 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
-  hasUnsupportedPlatform = attrs:
-    (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-      lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or []));
+  hasUnsupportedPlatform = attrs: !(lib.meta.availableOn hostPlatform attrs);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
