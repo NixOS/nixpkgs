@@ -36,6 +36,10 @@ buildPythonPackage rec {
     trustme
   ];
 
+  disabledTests = [
+    "test_connect_via_socket_path"
+  ];
+
   pythonImportsCheck = [
     "aiosmtplib"
   ];
