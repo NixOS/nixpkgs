@@ -35,7 +35,7 @@
 , sure
 }:
 
-buildPythonPackage rec {
+let moto = buildPythonPackage rec {
   pname = "moto";
   version = "4.0.3";
   format = "setuptools";
@@ -76,6 +76,8 @@ buildPythonPackage rec {
     werkzeug
     xmltodict
   ];
+
+  doCheck = false; # tests take very long, therefore moved into passthru.tests
 
   checkInputs = [
     freezegun
@@ -149,10 +151,15 @@ buildPythonPackage rec {
     "test_s3_server_post_to_bucket_redirect"
   ];
 
+  passthru.tests = {
+    check = moto.overridePythonAttrs (_: { doCheck = true; });
+  };
+
   meta = with lib; {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/spulec/moto";
     license = licenses.asl20;
     maintainers = [ ];
   };
-}
+};
+in moto
