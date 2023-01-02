@@ -83,7 +83,7 @@ edk2 = buildStdenv.mkDerivation {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = with platforms; aarch64 ++ i686 ++ x86_64;
   };
 
   passthru = {

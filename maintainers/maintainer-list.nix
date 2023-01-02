@@ -16074,7 +16074,7 @@
     githubId = 17733984;
   };
   wesleyjrz = {
-    email = "wesleyjr2002@gmail.com";
+    email = "dev@wesleyjrz.com";
     name = "Wesley V. Santos Jr.";
     github = "wesleyjrz";
     githubId = 60184588;
