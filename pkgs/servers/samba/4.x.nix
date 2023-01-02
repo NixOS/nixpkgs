@@ -21,9 +21,12 @@
 , libunwind
 , systemd
 , samba
+, talloc
 , jansson
+, ldb
 , libtasn1
 , tdb
+, tevent
 , libxcrypt
 , cmocka
 , rpcsvc-proto
@@ -99,8 +102,11 @@ stdenv.mkDerivation rec {
     zlib
     libunwind
     gnutls
+    ldb
+    talloc
     libtasn1
     tdb
+    tevent
     libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
@@ -140,6 +146,7 @@ stdenv.mkDerivation rec {
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
+    "--bundled-libraries=!ldb,!pyldb-util!talloc,!pytalloc-util,!tevent,!tdb,!pytdb"
   ] ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam"
