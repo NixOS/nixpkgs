@@ -3,6 +3,7 @@
 , fetchPypi
 , google-api-core
 , pythonOlder
+, protobuf
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     google-api-core
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   # No tests in repo
   doCheck = false;
