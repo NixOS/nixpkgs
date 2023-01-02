@@ -21,7 +21,6 @@ buildGoModule rec {
   gitCommit = "a5f90a25abcacd4aa334490f0d204329abeaa691";
   modRoot = "cmd/crc";
 
-
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "crc";
@@ -42,7 +41,6 @@ buildGoModule rec {
   '';
 
   tags = [ "containers_image_openpgp" ];
-
 
   ldflags = [
     "-X github.com/crc-org/crc/pkg/crc/version.crcVersion=${version}"
