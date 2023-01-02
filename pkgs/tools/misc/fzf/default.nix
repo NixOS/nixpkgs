@@ -1,9 +1,9 @@
 { stdenv
 , lib
-, pkgs
 , buildGoModule
 , fetchFromGitHub
 , writeText
+, writeShellScriptBin
 , runtimeShell
 , installShellFiles
 , ncurses
@@ -16,8 +16,7 @@ let
   # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
   # warnings on non-nixos machines
   ourPerl = if stdenv.isDarwin then perl else (
-    pkgs.writers.writeBashBin "perl" ''
-      #!${pkgs.runtimeShell}
+    writeShellScriptBin "perl" ''
       export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
       exec ${perl}/bin/perl "$@"
     '');

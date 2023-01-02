@@ -6,7 +6,7 @@ else
 
 let
   pname = "tsdl";
-  version = "0.9.8";
+  version = "0.9.9";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-zjXz2++42FHmbE0nIDeryNQeX+avGwh9rwAs8O0pZYU=";
+    sha256 = "sha256-GqFz+bYG2ESkAEJyP8DKud4JFfU5MGLulzJa5Z4sptQ=";
   };
 
   nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];

@@ -2,7 +2,7 @@
 
 callPackage ./default.nix {
   version = "2.0.5-2022-09-13";
-  isStable = true;
+
   src = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";

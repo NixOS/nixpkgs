@@ -4,6 +4,7 @@
 , cudaPackages
 , cudaSupport ? config.cudaSupport or false
 , lang ? "en"
+, webdoc ? false
 , version ? null
 /*
 If you wish to completely override the src, use:
@@ -30,16 +31,20 @@ let versions = callPackage ./versions.nix { };
     matching-versions =
       lib.sort (v1: v2: lib.versionAtLeast v1.version v2.version) (lib.filter
         (v: v.lang == lang
-            && (if version == null then true else isMatching v.version version))
+            && (version == null || isMatching v.version version)
+            && matchesDoc v)
         versions);
 
     found-version =
       if matching-versions == []
       then throw ("No registered Mathematica version found to match"
-                  + " version=${version} and language=${lang}")
+                  + " version=${toString version} and language=${lang},"
+                  + " ${if webdoc
+                        then "using web documentation"
+                        else "and with local documentation"}")
       else lib.head matching-versions;
 
-    specific-drv = ./. + "/(lib.versions.major found-version.version).nix";
+    specific-drv = ./. + "/${lib.versions.major found-version.version}.nix";
 
     real-drv = if lib.pathExists specific-drv
                then specific-drv
@@ -51,6 +56,11 @@ let versions = callPackage ./versions.nix { };
           n       = lib.min (lib.length as) (lib.length bs);
           sublist = l: lib.sublist 0 n l;
       in lib.compareLists lib.compare (sublist as) (sublist bs) == 0;
+
+    matchesDoc = v:
+      builtins.match (if webdoc
+                      then ".*[0-9]_LINUX.sh"
+                      else ".*[0-9]_BNDL_LINUX.sh") v.src.name != null;
 
 in
 

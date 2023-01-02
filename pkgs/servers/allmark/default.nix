@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A cross-platform markdown web server";
-    homepage = "https://allmark.io";
+    homepage = "https://github.com/andreaskoch/allmark";
     changelog = "https://github.com/andreaskoch/allmark/-/releases/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ urandom ];

@@ -694,13 +694,7 @@ self: super: builtins.intersectAttrs super {
   retrie_1_2_0_0 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_1_1;
 
-  haskell-language-server = let
-    # This wrapper will be included in the sdist in the next release, then we can remove this custom fetch.
-    abi-compat-check-wrapper = assert super.haskell-language-server.version == "1.8.0.0"; pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/haskell/haskell-language-server/c12379c57ab8f0abd606e9f397de54e508d024a0/bindist/wrapper.in";
-      sha256 = "sha256-vHi6+s8/V4WJSCxIqjP+thumEpttokpCc+a823WEPPk=";
-    }; in
-      overrideCabal (drv: {
+  haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
     # by default. Unless we reflect this in the generic builder, GHC is going to
     # produce some illegal references to /build/.
@@ -717,7 +711,7 @@ self: super: builtins.intersectAttrs super {
         -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
         -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
         -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
-        ${abi-compat-check-wrapper} > "$out/bin/haskell-language-server"
+        bindist/wrapper.in > "$out/bin/haskell-language-server"
       ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
       chmod +x "$out/bin/haskell-language-server"
       '';
@@ -947,6 +941,13 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.fourmolu;
 
+  # Test suite wants to run main executable
+  fourmolu_0_10_1_0 = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/fourmolu:$PATH"
+    '';
+  }) super.fourmolu_0_10_1_0;
+
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
@@ -1089,13 +1090,18 @@ self: super: builtins.intersectAttrs super {
     hls-module-name-plugin
     hls-splice-plugin
     hls-refactor-plugin
-    hls-code-range-plugin
-    hls-explicit-fixity-plugin;
+    hls-cabal-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
 
+  # https://github.com/haskell/haskell-language-server/pull/3431
+  hls-cabal-fmt-plugin = dontCheck super.hls-cabal-fmt-plugin;
+  hls-code-range-plugin = dontCheck super.hls-code-range-plugin;
+  hls-explicit-record-fields-plugin = dontCheck super.hls-explicit-record-fields-plugin;
+
   # Flaky tests
+  hls-explicit-fixity-plugin = dontCheck super.hls-explicit-fixity-plugin;
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
   hls-class-plugin = dontCheck super.hls-class-plugin;

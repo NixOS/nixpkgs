@@ -219,6 +219,7 @@ broken-packages:
   - artifact
   - asap
   - ascii85-conduit
+  - ascii-caseless
   - ascii-flatten
   - ascii-string
   - ascii-vector-avc
@@ -473,6 +474,7 @@ broken-packages:
   - bricks-internal
   - brick-skylighting
   - brillig
+  - brittany
   - broadcast-chan-tests
   - broccoli
   - brok
@@ -1779,7 +1781,6 @@ broken-packages:
   - GiST
   - git
   - git-all
-  - git-brunch
   - git-checklist
   - git-cuk
   - git-date
@@ -1861,9 +1862,9 @@ broken-packages:
   - graphics-drawingcombinators
   - graphics-formats-collada
   - graph-matchings
-  - graphmod
   - graphmod-plugin
   - graphql-api
+  - graphql-spice
   - graphql-utils
   - graphql-w-persistent
   - graph-rewriting
@@ -2324,7 +2325,6 @@ broken-packages:
   - hls-brittany-plugin
   - hls-haddock-comments-plugin
   - hls-selection-range-plugin
-  - hls-splice-plugin
   - hls-stan-plugin
   - hls-tactics-plugin
   - hlwm
@@ -2570,6 +2570,7 @@ broken-packages:
   - http-conduit-downloader
   - http-directory
   - http-dispatch
+  - http-encodings
   - http-grammar
   - http-kinder
   - http-kit
@@ -2652,7 +2653,7 @@ broken-packages:
   - icepeak
   - icfpc2020-galaxy
   - IcoGrid
-  - iconv
+  - iconv-typed
   - ideas
   - ide-backend-common
   - idempotent
@@ -2774,6 +2775,7 @@ broken-packages:
   - irc-fun-types
   - ireal
   - iri
+  - iridium
   - iris
   - iron-mq
   - irt
@@ -3059,6 +3061,7 @@ broken-packages:
   - libltdl
   - liboath-hs
   - liboleg
+  - libpafe
   - libpq
   - librandomorg
   - libsystemd-daemon
@@ -3355,6 +3358,7 @@ broken-packages:
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
+  - mockazo
   - mock-httpd
   - modbus-tcp
   - model
@@ -3472,7 +3476,6 @@ broken-packages:
   - multiplate-simplified
   - multipool
   - multirec
-  - multistate
   - Munkres-simple
   - muon
   - murmur
@@ -3875,6 +3878,7 @@ broken-packages:
   - patrol
   - patronscraper
   - pattern-trie
+  - paynow-zw
   - paypal-adaptive-hoops
   - paypal-api
   - paypal-rest-client
@@ -4052,6 +4056,7 @@ broken-packages:
   - polysemy-path
   - polysemy-readline
   - polysemy-req
+  - polysemy-resume
   - polysemy-socket
   - polysemy-video
   - polysemy-vinyl
@@ -4313,6 +4318,7 @@ broken-packages:
   - rank-product
   - rapid-term
   - Rasenschach
+  - rating-chgk-info
   - rational-list
   - rattle
   - rattletrap
@@ -4484,6 +4490,7 @@ broken-packages:
   - rivers
   - rivet-migration
   - rivet-simple-deploy
+  - RJson
   - Rlang-QQ
   - rlglue
   - RLP

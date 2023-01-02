@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , buildPackages
-, isStable
 , version
 , src
 , extraMeta ? { }
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     } >> src/luaconf.h
   '';
 
-  configurePhase = false;
+  dontConfigure = true;
 
   buildInputs = lib.optional enableValgrindSupport valgrind;
 
@@ -91,8 +90,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
-  '' + lib.optionalString (!isStable) ''
-    ln -s "$out"/bin/luajit-* "$out"/bin/luajit
+    if [[ ! -e "$out"/bin/luajit ]]; then
+      ln -s "$out"/bin/luajit* "$out"/bin/luajit
+    fi
   '';
 
   LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-performance JIT compiler for Lua 5.1";
-    homepage = "http://luajit.org";
+    homepage = "https://luajit.org/";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     # See https://github.com/LuaJIT/LuaJIT/issues/628

@@ -3,21 +3,27 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, ffmpeg
+, ffmpeg_4
 , imagemagick
 , libedit
 , libelf
 , libepoxy
 , libzip
-, lua
+, lua5_4
 , minizip
 , pkg-config
-, qtbase
-, qtmultimedia
-, qttools
-, wrapQtAppsHook
+, libsForQt5
 }:
 
+let
+    ffmpeg = ffmpeg_4;
+    lua = lua5_4;
+    inherit (libsForQt5)
+      qtbase
+      qtmultimedia
+      qttools
+      wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
   version = "0.10.0";

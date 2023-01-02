@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.17.2";
+  version = "0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EWBFNfZq2dj4TlHBcQKWDof8OBn4RESvaLHrh1aGZjA=";
+    hash = "sha256-6U2dNTb/Gipw1tL1bLBV65qV0LmjpfuBuej5024zN4k=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "holidays"
+  ];
+
+  disabledTestPaths = [
+    "test/test_imports.py"
   ];
 
   meta = with lib; {

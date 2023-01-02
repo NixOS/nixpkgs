@@ -483,8 +483,8 @@ start_all()
         </term>
         <listitem>
           <para>
-            Wait until a process is listening on the given TCP port (on
-            <literal>localhost</literal>, at least).
+            Wait until a process is listening on the given TCP port and
+            IP address (default <literal>localhost</literal>).
           </para>
         </listitem>
       </varlistentry>
@@ -494,7 +494,8 @@ start_all()
         </term>
         <listitem>
           <para>
-            Wait until nobody is listening on the given TCP port.
+            Wait until nobody is listening on the given TCP port and IP
+            address (default <literal>localhost</literal>).
           </para>
         </listitem>
       </varlistentry>

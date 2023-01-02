@@ -266,7 +266,6 @@ stdenv.mkDerivation rec {
 
     # Move development tools to $dev
     moveQtDevTools
-    moveToOutput bin "$dev"
     moveToOutput libexec "$dev"
 
     # fixup .pc file (where to find 'moc' etc.)

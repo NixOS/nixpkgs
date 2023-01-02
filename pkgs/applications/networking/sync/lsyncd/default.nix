@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkg-config, rsync,
-  asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
+  asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt, xnu }:
 
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # Special flags needed on Darwin:
   # https://github.com/axkibe/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
-  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" ];
+  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" "-DXNU_DIR=${xnu}/include" ];
 
   dontUseCmakeBuildDir = true;
 
@@ -44,7 +44,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bobvanderlinden ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

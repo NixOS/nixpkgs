@@ -29,6 +29,43 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
+  # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
+  # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  compressMimeTypes = [
+    "application/atom+xml"
+    "application/geo+json"
+    "application/json"
+    "application/ld+json"
+    "application/manifest+json"
+    "application/rdf+xml"
+    "application/vnd.ms-fontobject"
+    "application/wasm"
+    "application/x-rss+xml"
+    "application/x-web-app-manifest+json"
+    "application/xhtml+xml"
+    "application/xliff+xml"
+    "application/xml"
+    "font/collection"
+    "font/otf"
+    "font/ttf"
+    "image/bmp"
+    "image/svg+xml"
+    "image/vnd.microsoft.icon"
+    "text/cache-manifest"
+    "text/calendar"
+    "text/css"
+    "text/csv"
+    "text/html"
+    "text/javascript"
+    "text/markdown"
+    "text/plain"
+    "text/vcard"
+    "text/vnd.rim.location.xloc"
+    "text/vtt"
+    "text/x-component"
+    "text/xml"
+  ];
+
   defaultFastcgiParams = {
     SCRIPT_FILENAME   = "$document_root$fastcgi_script_name";
     QUERY_STRING      = "$query_string";
@@ -138,6 +175,16 @@ let
         # OCSP stapling
         ssl_stapling on;
         ssl_stapling_verify on;
+      ''}
+
+      ${optionalString (cfg.recommendedBrotliSettings) ''
+        brotli on;
+        brotli_static on;
+        brotli_comp_level 5;
+        brotli_window 512k;
+        brotli_min_length 256;
+        brotli_types ${lib.concatStringsSep " " compressMimeTypes};
+        brotli_buffers 32 8k;
       ''}
 
       ${optionalString (cfg.recommendedGzipSettings) ''
@@ -456,6 +503,16 @@ in
         '';
       };
 
+      recommendedBrotliSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+
+          This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
+        '';
+      };
+
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
@@ -537,11 +594,10 @@ in
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExpression "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.echo ]";
         description = lib.mdDoc ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
-          to install. Packaged modules are available in
-          `pkgs.nginxModules`.
+          to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
       };
 
@@ -998,6 +1054,8 @@ in
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
     }) dependentCertNames;
+
+    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

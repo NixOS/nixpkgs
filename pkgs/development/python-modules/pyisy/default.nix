@@ -4,11 +4,15 @@
 , requests
 , python-dateutil
 , aiohttp
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyisy";
   version = "3.0.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "automicus";
@@ -37,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to talk to ISY994 from UDI";
     homepage = "https://github.com/automicus/PyISY";
+    changelog = "https://github.com/automicus/PyISY/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

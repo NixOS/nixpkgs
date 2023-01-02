@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, which
 , wrapGAppsHook
 , libicns
 , SDL2
@@ -24,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "130.1";
+  version = "131";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-q2wDpbNaDyKPBL20FDaHScKQEJYstlQdJ4CzbRoSPlk=";
+    hash = "sha256-gex53bh/175/i0cMimcPO26C6cxqQGPo4sp2bxh1sAw=";
   };
 
   patches = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    which
     wrapGAppsHook
   ] ++ lib.optionals stdenv.isDarwin [
     libicns
@@ -72,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "hiro=gtk3"
   ] ++ lib.optionals stdenv.isDarwin [
     "hiro=cocoa"
+    "lto=false"
     "vulkan=false"
   ] ++ [
     "local=false"

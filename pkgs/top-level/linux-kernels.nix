@@ -184,7 +184,7 @@ in {
        else testing;
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_6_0;
+      kernel = linux_6_1;
       kernelPatches = kernel.kernelPatches;
    };
 

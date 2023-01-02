@@ -18,6 +18,7 @@ rec {
     isInt
     isList
     isAttrs
+    isPath
     isString
     match
     parseDrvName
@@ -395,7 +396,7 @@ rec {
   */
   toShellVar = name: value:
     lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
-    if isAttrs value && ! isCoercibleToString value then
+    if isAttrs value && ! isStringLike value then
       "declare -A ${name}=(${
         concatStringsSep " " (lib.mapAttrsToList (n: v:
           "[${escapeShellArg n}]=${escapeShellArg v}"
@@ -798,10 +799,31 @@ rec {
   in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
     result;
 
-  /* Check whether a value can be coerced to a string */
-  isCoercibleToString = x:
-    elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (isList x && lib.all isCoercibleToString x) ||
+  /* Soft-deprecated function. While the original implementation is available as
+     isConvertibleWithToString, consider using isStringLike instead, if suitable. */
+  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
+    "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
+    isConvertibleWithToString;
+
+  /* Check whether a list or other value can be passed to toString.
+
+     Many types of value are coercible to string this way, including int, float,
+     null, bool, list of similarly coercible values.
+  */
+  isConvertibleWithToString = x:
+    isStringLike x ||
+    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    (isList x && lib.all isConvertibleWithToString x);
+
+  /* Check whether a value can be coerced to a string.
+     The value must be a string, path, or attribute set.
+
+     String-like values can be used without explicit conversion in
+     string interpolations and in most functions that expect a string.
+   */
+  isStringLike = x:
+    isString x ||
+    isPath x ||
     x ? outPath ||
     x ? __toString;
 
@@ -818,7 +840,7 @@ rec {
        => false
   */
   isStorePath = x:
-    if !(isList x) && isCoercibleToString x then
+    if isStringLike x then
       let str = toString x; in
       substring 0 1 str == "/"
       && dirOf str == storeDir
