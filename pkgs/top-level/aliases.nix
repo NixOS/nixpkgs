@@ -318,6 +318,7 @@ mapAliases ({
   curaByDagoma = throw "curaByDagoma has been removed from nixpkgs, because it was unmaintained and dependent on python2 packages"; # Added 2022-01-12
   curaLulzbot = throw "curaLulzbot has been removed due to insufficient upstream support for a modern dependency chain"; # Added 2021-10-23
   cv = throw "'cv' has been renamed to/replaced by 'progress'"; # Converted to throw 2022-02-22
+  cvs2svn = throw "'cvs2svn' has been removed because it only supports pypy2"; # Added 2023-01-02
   cvs_fast_export = cvs-fast-export; # Added 2021-06-10
 
   ### D ###
