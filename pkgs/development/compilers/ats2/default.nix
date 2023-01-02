@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
+  '';
+
   buildInputs = [ gmp ];
 
   # Disable parallel build, errors:
