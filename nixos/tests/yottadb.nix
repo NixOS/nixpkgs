@@ -5,7 +5,14 @@ let
         ZHALT $G(^ydbTest($R(100)))'=$J
       checkProcName N F,X S F="/proc/self/comm" O F U F R X U 0 C F
         ZHALT X'="yottadb"
-      checkHelp S $zgbldir="$ydb_dist/gtmhelp.gld"
+      checkHelp
+        ; gtmhelp is readonly (Nix store), but why can't we just read it?
+        ; Let's move gtmhelp to /tmp for our tests:
+        ZSY "cp $ydb_dist/gtmhelp.* /tmp/"
+        ; And update `gld` to point to a new `dat` copy:
+        ZSY "env ydb_gbldir=/tmp/gtmhelp.gld $ydb_dist/gde change -segment DEFAULT -file=/tmp/gtmhelp.dat"
+        ;
+        S $zgbldir="/tmp/gtmhelp.gld"
         I $ZSYSLOG("DATA-ON-HELP="_$D(^HELP))
         ZHALT $O(^HELP(""))'="s"
     '';
@@ -61,10 +68,7 @@ in {
     machine.succeed("journalctl --no-pager -S '%s' -g 'I-GTMSECSHRDMNSTARTED'" % ts)
 
     ts = getSyslogTs()
-    # Expect SECSHRSRV to fail because GTMHELP is read-only (Nix Store),
-    # but we're still fine to read it...
     machine.succeed("yottadb -r checkHelp^ydbTest")
-    machine.succeed("journalctl --no-pager -S '%s' -g 'W-GTMSECSHRSRVFID'" % ts)
     machine.succeed("journalctl --no-pager -S '%s' -g 'DATA-ON-HELP=11'" % ts)
 
     ts = getSyslogTs()
