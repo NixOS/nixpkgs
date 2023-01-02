@@ -16,6 +16,7 @@
 , tomlkit
 , typing-extensions
 , gitpython
+, py
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.15.5";
+  version = "2.15.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7.2";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dchzwMaUhHB1TqcaMZO9tCZ4KA5I1T+tdkGOxikm5AY=";
+    hash = "sha256-T+om5rrG0Gjyr05L5X4j82/S11Q7JBUDNOm4gVEQ494=";
   };
 
   patches = [
@@ -75,6 +76,7 @@ buildPythonPackage rec {
   checkInputs = [
     gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
+    py
     pytest-timeout
     pytest-xdist
     pytestCheckHook
