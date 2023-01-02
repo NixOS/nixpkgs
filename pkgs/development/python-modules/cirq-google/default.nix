@@ -22,7 +22,7 @@ buildPythonPackage rec {
     cirq-core
     google-api-core
     protobuf
-  ];
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     freezegun
