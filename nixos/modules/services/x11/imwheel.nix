@@ -37,8 +37,8 @@ in
             Window class translation rules.
             /etc/X11/imwheelrc is generated based on this config
             which means this config is global for all users.
-            See [offical man pages](http://imwheel.sourceforge.net/imwheel.1.html)
-            for more informations.
+            See [official man pages](http://imwheel.sourceforge.net/imwheel.1.html)
+            for more information.
           '';
         };
       };

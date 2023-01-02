@@ -101,16 +101,13 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Indicates whether this is an account for a “real” user. This
-          automatically sets {option}`group` to
-          `users`, {option}`createHome` to
-          `true`, {option}`home` to
-          {file}`/home/«username»`,
+          Indicates whether this is an account for a “real” user.
+          This automatically sets {option}`group` to `users`,
+          {option}`createHome` to `true`,
+          {option}`home` to {file}`/home/«username»`,
           {option}`useDefaultShell` to `true`,
-          and {option}`isSystemUser` to
-          `false`.
-          Exactly one of `isNormalUser` and
-          `isSystemUser` must be true.
+          and {option}`isSystemUser` to `false`.
+          Exactly one of `isNormalUser` and `isSystemUser` must be true.
         '';
       };
 

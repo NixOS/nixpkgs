@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-phCeJkiY8XxaD4VQCxOzoInkwWQzHU7ZGdHvxNVgifU=";
+    hash = "sha256-kwD6yJhVTaVAAUVA6k4r6HZy4w+MPDF7DfJBS8wGE/c=";
   };
 
   propagatedBuildInputs = [

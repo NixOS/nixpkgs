@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
       --replace "-march=corei7" ""  \
       --replace "-mtune=native" ""
+    substituteInPlace Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/libopenjp2.pc.cmake.in  \
+      --replace "@OPENJPEG_INSTALL_LIB_DIR@" "@OPENJPEG_INSTALL_FULL_LIB_DIR@"
     ln -sr ${itkGenericLabelInterpolatorSrc} Modules/External/ITKGenericLabelInterpolator
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
   '';

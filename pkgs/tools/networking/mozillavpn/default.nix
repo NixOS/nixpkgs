@@ -1,6 +1,7 @@
 { buildGoModule
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , go
 , lib
 , pkg-config
@@ -21,14 +22,21 @@
 
 let
   pname = "mozillavpn";
-  version = "2.11.0";
+  version = "2.12.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-QXxZ6RQwXrVsaZRkW13r7aoz8iHxuT0nW/2aFDpLLzU=";
+    hash = "sha256-T8dPM90X4soVG/plKsf7DM9XgdX5Vcp0i6zTE60gbq0=";
   };
+  patches = [
+    # vpnglean: Add Cargo.lock file
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/5236/commits/6fdc689001619a06b752fa629647642ea66f4e26.patch";
+      hash = "sha256-j666Z31D29WIL3EXbek2aLzA4Fui/9VZvupubMDG24Q=";
+    })
+  ];
 
   netfilter-go-modules = (buildGoModule {
     inherit pname version src;
@@ -40,19 +48,24 @@ let
     inherit src;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-BRUUEDIVQoF+FuKnoBzFbMyeGOgGb6/boYSaftZPF2U=";
+    hash = "sha256-/DmKSV0IKxZV0Drh6dTsiqgZhuxt6CoegXpYdqN4UzQ=";
   };
-
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-oSO7KS4aBwSVYIyxmWTXKn0CL9t6CDR/hx+0+nbf/dM=";
+    hash = "sha256-6qyMARhPPgTryEtaBNrIPN9ja/fe7Fyx38iGuTd+Dk8=";
+  };
+  vpngleanDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}-vpnglean";
+    preBuild = "cd vpnglean";
+    hash = "sha256-8OLTQmRvy6pATEBX2za6f9vMEqwkf9L5VyERtAN2BDQ=";
   };
 
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit pname version src patches;
 
   buildInputs = [
     polkit
@@ -73,6 +86,7 @@ stdenv.mkDerivation {
     python3.pkgs.setuptools
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
     which
     wrapQtAppsHook
   ];
@@ -86,6 +100,11 @@ stdenv.mkDerivation {
     pushd source/signature
     cargoDeps='${signatureDeps}' cargoSetupPostUnpackHook
     signatureDepsCopy="$cargoDepsCopy"
+    popd
+
+    pushd source/vpnglean
+    cargoDeps='${vpngleanDeps}' cargoSetupPostUnpackHook
+    vpngleanDepsCopy="$cargoDepsCopy"
     popd
   '';
   dontCargoSetupPostUnpack = true;
@@ -108,9 +127,6 @@ stdenv.mkDerivation {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    substituteInPlace src/connectionbenchmark/benchmarktasktransfer.cpp \
-      --replace 'QT_VERSION >= 0x060400' 'false'
-
     ln -s '${netfilter-go-modules}' linux/netfilter/vendor
 
     pushd extension/bridge
@@ -119,6 +135,10 @@ stdenv.mkDerivation {
 
     pushd signature
     cargoDepsCopy="$signatureDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    pushd vpnglean
+    cargoDepsCopy="$vpngleanDepsCopy" cargoSetupPostPatchHook
     popd
 
     cargoSetupPostPatchHook() { true; }

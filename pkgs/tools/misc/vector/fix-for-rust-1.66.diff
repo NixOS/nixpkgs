@@ -1,0 +1,13 @@
+diff --git a/src/sources/aws_kinesis_firehose/filters.rs b/src/sources/aws_kinesis_firehose/filters.rs
+index ac33682..fe65ed4 100644
+--- a/src/sources/aws_kinesis_firehose/filters.rs
++++ b/src/sources/aws_kinesis_firehose/filters.rs
+@@ -28,7 +28,7 @@ pub fn firehose(
+     acknowledgements: bool,
+     out: SourceSender,
+     log_namespace: LogNamespace,
+-) -> impl Filter<Extract = impl warp::Reply, Error = Infallible> + Clone {
++) -> impl Filter<Extract = (impl warp::Reply,), Error = Infallible> + Clone {
+     let bytes_received = register!(BytesReceived::from(Protocol::HTTP));
+     let context = handlers::Context {
+         compression: record_compression,

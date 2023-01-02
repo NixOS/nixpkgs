@@ -16,6 +16,7 @@
 , libappindicator-gtk3
 , libxshmfence
 , libglvnd
+, wayland
 }@args:
 
 let

@@ -49,7 +49,7 @@ with lib;
       registration token on startup as needed. Make sure the PAT has a scope of
       `admin:org` for organization-wide registrations or a scope of
       `repo` for a single repository. Fine-grained PATs need read and write permission
-      to the "Adminstration" resources.
+      to the "Administration" resources.
 
       Changing this option or the file's content triggers a new runner registration.
     '';

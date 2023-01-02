@@ -585,6 +585,8 @@ in
       hardware.bluetooth.enable = true;
       hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
+      # Required for autorotate
+      hardware.sensor.iio.enable = lib.mkDefault true;
 
       # Recommendations can be found here:
       #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg

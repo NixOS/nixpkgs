@@ -11,8 +11,10 @@ let
 
   format = pkgs.formats.toml {};
   settings = {
-    database_url = dbURL;
     human_logs = true;
+    syncstorage = {
+      database_url = dbURL;
+    };
     tokenserver = {
       node_type = "mysql";
       database_url = dbURL;
@@ -253,8 +255,7 @@ in
       serviceConfig = {
         User = defaultUser;
         Group = defaultUser;
-        ExecStart = "${cfg.package}/bin/syncstorage --config ${configFile}";
-        Stderr = "journal";
+        ExecStart = "${cfg.package}/bin/syncserver --config ${configFile}";
         EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
 
         # hardening

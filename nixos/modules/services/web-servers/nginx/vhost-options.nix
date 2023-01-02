@@ -54,8 +54,8 @@ with lib;
 
       description = lib.mdDoc ''
         Listen addresses for this virtual host.
-        Compared to `listen` this only sets the addreses
-        and the ports are choosen automatically.
+        Compared to `listen` this only sets the addresses
+        and the ports are chosen automatically.
 
         Note: This option overrides `enableIPv6`
       '';

@@ -16,9 +16,9 @@
       <listitem>
         <para>
           Platform support: x86_64-linux and x86_64-darwin since release
-          time (the latter isn't NixOS, really). Binaries for
+          time (the latter isn’t NixOS, really). Binaries for
           aarch64-linux are available, but no channel exists yet, as
-          it's waiting for some test fixes, etc.
+          it’s waiting for some test fixes, etc.
         </para>
       </listitem>
       <listitem>
@@ -495,11 +495,11 @@
         <para>
           The propagation logic has been changed. The new logic, along
           with new types of dependencies that go with, is thoroughly
-          documented in the &quot;Specifying dependencies&quot; section
-          of the &quot;Standard Environment&quot; chapter of the nixpkgs
-          manual. The old logic isn't but is easy to describe:
-          dependencies were propagated as the same type of dependency no
-          matter what. In practice, that means that many
+          documented in the <quote>Specifying dependencies</quote>
+          section of the <quote>Standard Environment</quote> chapter of
+          the nixpkgs manual. The old logic isn’t but is easy to
+          describe: dependencies were propagated as the same type of
+          dependency no matter what. In practice, that means that many
           <literal>propagatedNativeBuildInputs</literal> should instead
           be <literal>propagatedBuildInputs</literal>. Thankfully, that
           was and is the least used type of dependency. Also, it means
@@ -541,7 +541,7 @@
           Previously, if other options in the Postfix module like
           <literal>services.postfix.useSrs</literal> were set and the
           user set config options that were also set by such options,
-          the resulting config wouldn't include all options that were
+          the resulting config wouldn’t include all options that were
           needed. They are now merged correctly. If config options need
           to be overridden, <literal>lib.mkForce</literal> or
           <literal>lib.mkOverride</literal> can be used.
@@ -626,7 +626,7 @@
               if <literal>config.networking.domain</literal> is set,
               <literal>matomo.${config.networking.hostName}</literal> if
               it is not set. If you change your
-              <literal>serverName</literal>, remember you'll need to
+              <literal>serverName</literal>, remember you’ll need to
               update the <literal>trustedHosts[]</literal> array in
               <literal>/var/lib/matomo/config/config.ini.php</literal>
               as well.
@@ -793,7 +793,7 @@
         <para>
           <literal>services.btrfs.autoScrub</literal> has been added, to
           periodically check btrfs filesystems for data corruption. If
-          there's a correct copy available, it will automatically repair
+          there’s a correct copy available, it will automatically repair
           corrupted blocks.
         </para>
       </listitem>
@@ -830,7 +830,7 @@
         <para>
           In order to have the previous default configuration add
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.xserver.displayManager.lightdm.greeters.gtk.indicators = [
     &quot;~host&quot; &quot;~spacer&quot;

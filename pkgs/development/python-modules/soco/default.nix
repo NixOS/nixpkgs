@@ -47,9 +47,7 @@ buildPythonPackage rec {
     "soco"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "python3Packages.${pname}";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "CLI and library to control Sonos speakers";

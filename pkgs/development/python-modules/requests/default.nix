@@ -27,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
   };
 
-  patches = [
-    # Use the default NixOS CA bundle from the certifi package
-    ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
-  ];
-
   propagatedBuildInputs = [
     brotlicffi
     certifi

@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
-    rev = "v${version}";
-    hash = "sha256-KJ+z4zGrdGIXcGZzqHtWMf8aAzcn9CtltFawcHVldMQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5j4hbG95KRfRQTyyZgoNp/eHIcy0FphyEhbYnzyUMO4=";
   };
 
   sourceRoot = "source/${pname}";

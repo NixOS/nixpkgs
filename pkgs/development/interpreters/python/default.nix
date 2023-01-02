@@ -84,13 +84,12 @@
         });
     in rec {
         isPy27 = pythonVersion == "2.7";
-        isPy35 = pythonVersion == "3.5";
-        isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
         isPy38 = pythonVersion == "3.8";
         isPy39 = pythonVersion == "3.9";
         isPy310 = pythonVersion == "3.10";
         isPy311 = pythonVersion == "3.11";
+        isPy312 = pythonVersion == "3.12";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
@@ -121,19 +120,19 @@
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "15";
+        patch = "16";
         suffix = "";
       };
-      sha256 = "sha256-Etr/aAlSjZ9hVCFpUEI8njDw5HM2y1fGqgtDh91etLI=";
+      sha256 = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
     };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "8";
+        patch = "9";
         suffix = "";
       };
-      sha256 = "sha256-ajDs3lnEcEgBPrWmWMm13sJ3ID0nk2Z/V433Zx9/A/M=";
+      sha256 = "sha256-WuA+MIJgFkuro5kh/bTb+ObQPYI1qTnUWCsz8LXkaoM=";
     };
   };
 
@@ -199,6 +198,19 @@ in {
       suffix = "";
     };
     sha256 = "sha256-hYeRkvLP/VbLFsCSkFlJ6/Pl45S392RyNSljeQHftY8=";
+    inherit (darwin) configd;
+    inherit passthruFun;
+  };
+
+  python312 = callPackage ./cpython {
+    self = __splicedPackages.python312;
+    sourceVersion = {
+      major = "3";
+      minor = "12";
+      patch = "0";
+      suffix = "a3";
+    };
+    sha256 = "sha256-G2SzB14KkkGXTlgOCbCckRehxOK+aYA5IB7x2Kc0U9E=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

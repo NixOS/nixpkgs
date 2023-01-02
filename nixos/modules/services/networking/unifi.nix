@@ -76,7 +76,7 @@ in
       default = null;
       example = 4096;
       description = lib.mdDoc ''
-        Set the maximimum heap size for the JVM in MB. If this option isn't set, the
+        Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
     };

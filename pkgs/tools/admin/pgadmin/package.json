@@ -192,7 +192,7 @@
     "pep8": "pycodestyle --config=../.pycodestyle ../docs && pycodestyle --config=../.pycodestyle ../pkg && pycodestyle --config=../.pycodestyle ../tools && pycodestyle --config=../.pycodestyle ../web",
     "auditjs-html": "yarn audit --json | yarn run yarn-audit-html --output ../auditjs.html",
     "auditjs": "yarn audit --groups dependencies",
-    "auditpy": "safety check --full-report -i 40493",
+    "auditpy": "safety check --full-report -i 40493 -i 51668",
     "audit": "yarn run auditjs && yarn run auditpy"
   }
 }

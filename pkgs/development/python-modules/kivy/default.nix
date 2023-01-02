@@ -11,22 +11,14 @@
 
 buildPythonPackage rec {
   pname = "Kivy";
-  version = "2.0.0";
+  version = "2.1.0";
 
-  # use github since pypi line endings are CRLF and patches do not apply
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "kivy";
     rev = version;
-    sha256 = "sha256-/7GSVQUkYSBEnLVBizMnZAZZxvXVN4r4lskyOgLEcew=";
+    sha256 = "sha256-k9LIiLtlHY6H1xfVylI/Xbm7R6pCpC5UHe8GWnCwEGA=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/kivy/kivy/commit/1c0656c4472817677cf3b08be504de9ca6b1713f.patch";
-      sha256 = "sha256-phAjMaC3LQuvufwiD0qXzie5B+kezCf8FpKeQMhy/ms=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

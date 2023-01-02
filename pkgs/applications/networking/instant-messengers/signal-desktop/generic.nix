@@ -47,6 +47,7 @@
 , libdbusmenu
 , libpulseaudio
 , xdg-utils
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -112,6 +113,7 @@ stdenv.mkDerivation rec {
     libnotify
     libdbusmenu
     xdg-utils
+    wayland
   ];
 
   unpackPhase = "dpkg-deb -x $src .";

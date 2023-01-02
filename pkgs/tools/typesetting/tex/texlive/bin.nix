@@ -14,26 +14,17 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2021";
+  year = "2022";
   version = year; # keep names simple for now
 
   common = {
     src = fetchurl {
       urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0325-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0325-source.tar.xz"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
+              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
       ];
-      sha256 = "0jsq1p66l46k2qq0gbqmx25flj2nprsz4wrd1ybn286p11kdkvvs";
+      hash = "sha256-X/o0heUessRJBJZFD8abnXvXy55TNX2S20vNT9YXm1Y=";
     };
-    patches = [
-      # Pull upstream fix for -fno-common toolchains.
-      (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/TeX-Live/texlive-source/commit/7748582aeda70ffa02105f6e3e2fc2476e76aac6.patch";
-        sha256 = "1y59cwa41kbg0i071g488jhi9qg0h8l7hqd69brhx2yj95za8c40";
-        excludes = [ "texk/xdvik/ChangeLog" ];
-      })
-    ];
 
     prePatch = ''
       for i in texk/kpathsea/mktex*; do
@@ -220,8 +211,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         mkdir -p "$path" && cd "$path"
         "../../../$path/configure" $configureFlags $extraConfig
 
-        if [[ "$path" =~ "libs/pplib" ]]; then
-          # TODO: revert for texlive 2022
+        if [[ "$path" =~ "libs/luajit" ]] || [[ "$path" =~ "libs/pplib" ]]; then
+          # ../../../texk/web2c/mfluadir/luapeg/lpeg.h:29:10: fatal error: 'lua.h' file not found
           # ../../../texk/web2c/luatexdir/luamd5/md5lib.c:197:10: fatal error: 'utilsha.h' file not found
           make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         fi
@@ -437,7 +428,7 @@ xdvi = stdenv.mkDerivation {
   pname = "texlive-xdvi.bin";
   inherit version;
 
-  inherit (common) src patches;
+  inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ freetype ghostscript ]

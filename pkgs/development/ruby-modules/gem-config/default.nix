@@ -14,7 +14,7 @@
 #   gems that don't behave correctly, fixes are already provided in the form of
 #   derivations.
 #
-# This seperates "what to build" (the exact gem versions) from "how to build"
+# This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which

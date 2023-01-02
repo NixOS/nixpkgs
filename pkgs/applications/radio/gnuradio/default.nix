@@ -48,13 +48,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.10";
-  minor = "4";
+  minor = "5";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-Ov2NGiEj3mhqYwDYXWd6wcCAv78Ux2/LWyGjQ/ukQNk=";
+  sourceSha256 = "sha256-NP7OH4kRulWpWxyHudIzCJPfjiiilgnhBlixmwOj70I=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -299,7 +299,7 @@ stdenv.mkDerivation rec {
     ./modtool-newmod-permissions.patch
   ];
   passthru = shared.passthru // {
-    # Deps that are potentially overriden and are used inside GR plugins - the same version must
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
     inherit
       boost
       volk

@@ -25,6 +25,7 @@
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
+, wrapGAppsHook
 , unrarSupport ? false
 }:
 
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qmake
     removeReferencesTo
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -169,6 +171,7 @@ stdenv.mkDerivation rec {
 
   # Wrap manually
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   # Remove some references to shrink the closure size. This reference (as of
   # 2018-11-06) was a single string like the following:
@@ -178,7 +181,9 @@ stdenv.mkDerivation rec {
       $out/lib/calibre/calibre/plugins/podofo.so
 
     for program in $out/bin/*; do
-      wrapQtApp $program \
+      wrapProgram $program \
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]} \
         --prefix PYTHONPATH : $PYTHONPATH \
         --prefix PATH : ${poppler_utils.out}/bin
     done

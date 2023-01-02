@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
     # `jq -r '.[0].name'` results in `v0.0`
     readonly latest_version="$(curl \
-      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
       -s "https://api.github.com/repos/clojure/brew-install/tags" \
       | jq -r '.[1].name')"
 

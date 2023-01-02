@@ -100,10 +100,11 @@ stdenv.mkDerivation rec {
     python3
     python3.pkgs.pyparsing
     python3.pkgs.six
-    wayland-scanner
     vala
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     mesonEmulatorHook
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
 
   propagatedBuildInputs = [

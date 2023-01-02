@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.5.5";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "dieselrabbit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1tBr7k7RutCHvea/56J7drl9P+WZ5bQpDeQwhgktc1s=";
+    hash = "sha256-/ePvq+jFLiIsP1w9YxMl3lbekNRaDhKMjKXoYkCOpn8=";
   };
 
   checkInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for Pentair Screenlogic devices";
     homepage = "https://github.com/dieselrabbit/screenlogicpy";
+    changelog = "https://github.com/dieselrabbit/screenlogicpy/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

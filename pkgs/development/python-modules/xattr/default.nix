@@ -3,18 +3,24 @@
 , fetchPypi
 , python
 , cffi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "0.10.0";
+  version = "0.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ciZS0qUyTheJHEFtTHbZHM+YgwqPUWoN6FM86GfzrK8=";
+    hash = "sha256-wS59gf+qBgWzrIwiwplKjhipzxxZKHobdyKiKJyVLsU=";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [
+    cffi
+  ];
 
   # https://github.com/xattr/xattr/issues/43
   doCheck = false;
@@ -23,10 +29,15 @@ buildPythonPackage rec {
     ${python.interpreter} -m compileall -f xattr
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/xattr/xattr";
-    description = "Python wrapper for extended filesystem attributes";
-    license = licenses.mit;
-  };
+  pythonImportsCheck = [
+    "xattr"
+  ];
 
+  meta = with lib; {
+    description = "Python wrapper for extended filesystem attributes";
+    homepage = "https://github.com/xattr/xattr";
+    changelog = "https://github.com/xattr/xattr/blob/v${version}/CHANGES.txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

@@ -2,21 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typeshare";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchCrate {
     inherit version;
     pname = "typeshare-cli";
-    sha256 = "sha256-KDmE5f9B2lNVbjdF8d81NTJIwpvPhsoLMA8w7iYIIl8=";
+    sha256 = "sha256-SbTI7170Oc1e09dv4TvUwByG3qkyAL5YXZ96NzI0FSI=";
   };
 
-  cargoSha256 = "sha256-b983tSue9WHkPrcIhp5QSjwj+lESURUYueebjXUWMJY=";
+  cargoSha256 = "sha256-5EhXw2WcRJqCbdMvOtich9EYQqi0uwCH1a1XXIo8aAo=";
 
   buildFeatures = [ "go" ];
-
-  postInstall = ''
-    ln -s $out/bin/typeshare{-cli,}
-  '';
 
   meta = with lib; {
     description = "Command Line Tool for generating language files with typeshare";

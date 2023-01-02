@@ -2,9 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, antlr4
 , antlr4-python3-runtime
 , igraph
 , pygments
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,6 +20,10 @@ buildPythonPackage rec {
     sha256 = "1vzyliiyrxx8l9sfbqcyr4xn5swd7znkxy69kn0vb5rban8hm9c1";
   };
 
+  nativeBuildInputs = [
+    antlr4
+  ];
+
   patches = [
     # https://github.com/SkyTemple/ExplorerScript/pull/17
     (fetchpatch {
@@ -26,8 +32,27 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ antlr4-python3-runtime igraph ];
-  checkInputs = [ pygments ];
+  postPatch = ''
+    sed -i "s/antlr4-python3-runtime.*/antlr4-python3-runtime',/" setup.py
+    antlr -Dlanguage=Python3 -visitor explorerscript/antlr/{ExplorerScript,SsbScript}.g4
+  '';
+
+  propagatedBuildInputs = [
+    antlr4-python3-runtime
+    igraph
+  ];
+
+  passthru.optional-dependencies.pygments = [
+    pygments
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.pygments;
+
+  pythonImportsCheck = [
+    "explorerscript"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/explorerscript";

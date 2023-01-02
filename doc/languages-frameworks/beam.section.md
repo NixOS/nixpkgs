@@ -93,7 +93,7 @@ Practical steps:
 - run `mix2nix > mix_deps.nix` in the upstream repo.
 - pass `mixNixDeps = with pkgs; import ./mix_deps.nix { inherit lib beamPackages; };` as an argument to mixRelease.
 
-If there are git depencencies.
+If there are git dependencies.
 
 - You'll need to fix the version artificially in mix.exs and regenerate the mix.lock with fixed version (on upstream). This will enable you to run `mix2nix > mix_deps.nix`.
 - From the mix_deps.nix file, remove the dependencies that had git versions and pass them as an override to the import function.

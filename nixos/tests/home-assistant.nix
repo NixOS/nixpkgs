@@ -120,7 +120,7 @@ in {
     start_all()
 
     # Parse the package path out of the systemd unit, as we cannot
-    # access the final package, that is overriden inside the module,
+    # access the final package, that is overridden inside the module,
     # by any other means.
     pattern = re.compile(r"path=(?P<path>[\/a-z0-9-.]+)\/bin\/hass")
     response = hass.execute("systemctl show -p ExecStart home-assistant.service")[1]

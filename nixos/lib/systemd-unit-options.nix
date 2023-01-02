@@ -324,7 +324,11 @@ in rec {
       scriptArgs = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Arguments passed to the main process script.";
+        example = "%i";
+        description = lib.mdDoc ''
+          Arguments passed to the main process script.
+          Can contain specifiers (`%` placeholders expanded by systemd, see {manpage}`systemd.unit(5)`).
+        '';
       };
 
       preStart = mkOption {

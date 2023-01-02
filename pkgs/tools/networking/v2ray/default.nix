@@ -48,9 +48,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "v2ray";
-    };
+    updateScript = nix-update-script { };
     tests.simple-vmess-proxy-test = nixosTests.v2ray;
   };
 

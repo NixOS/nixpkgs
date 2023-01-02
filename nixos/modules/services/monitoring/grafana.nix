@@ -364,9 +364,15 @@ in {
             };
 
             http_addr = mkOption {
-              description = lib.mdDoc "Listening address.";
-              default = "";
               type = types.str;
+              default = "127.0.0.1";
+              description = lib.mdDoc ''
+                Listening address.
+
+                ::: {.note}
+                This setting intentionally varies from upstream's default to be a bit more secure by default.
+                :::
+              '';
             };
 
             http_port = mkOption {
@@ -555,7 +561,7 @@ in {
             auto_assign_org_role = mkOption {
               description = lib.mdDoc "Default role new users will be auto assigned.";
               default = "Viewer";
-              type = types.enum ["Viewer" "Editor"];
+              type = types.enum ["Viewer" "Editor" "Admin"];
             };
           };
 
@@ -1291,7 +1297,10 @@ in {
         SystemCallArchitectures = "native";
         # Upstream grafana is not setting SystemCallFilter for compatibility
         # reasons, see https://github.com/grafana/grafana/pull/40176
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ] ++ lib.optional (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''

@@ -12,7 +12,8 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.1.0";
+  version = "4.2.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "cloudtools";
     repo = pname;
     rev = version;
-    hash = "sha256-cAn4Hty5f/RsCnUA59CxtGrhRgzVyaHe5PuQOM6lwEQ=";
+    hash = "sha256-4flnV4WxK21NNd9FXizkw6FoGffSL27Tq/Jc87vYJbc=";
   };
 
   propagatedBuildInputs = [
@@ -48,5 +49,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jlesquembre ];
     license = licenses.bsd2;
     homepage = "https://github.com/cloudtools/troposphere";
+    changelog = "https://github.com/cloudtools/troposphere/blob/${version}/CHANGELOG.rst";
   };
 }

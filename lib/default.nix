@@ -63,7 +63,7 @@ let
 
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
-      hasAttr head isAttrs isBool isInt isList isString length
+      hasAttr head isAttrs isBool isInt isList isPath isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
@@ -96,14 +96,16 @@ let
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs isValidPosixName toShellVar toShellVars
+      escapeShellArg escapeShellArgs
+      isStorePath isStringLike
+      isValidPosixName toShellVar toShellVars
       escapeRegex escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
-      withFeatureAs fixedWidthString fixedWidthNumber isStorePath
+      withFeatureAs fixedWidthString fixedWidthNumber
       toInt toIntBase10 readPathsFromFile fileContents;
     inherit (self.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;

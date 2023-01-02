@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src  = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "refs/tags/${version}"; # because pure ${version} doesn't work
-    hash = "sha256-L2MQ0dS9mZ+SOFoS/rclPtEl3/iFyEKn6Bse/ysHyKo=";
+    hash = "sha256-bUUQP7ze0j8d+VEckexDOferAgAHdKZbdKR3q0TNOeE=";
   };
 
-  cargoSha256 = "sha256-3ucWGmylRatJOl8zktSRMXr5p6L+5+LQV6ALJTtQpiA=";
+  cargoSha256 = "sha256-E8eIUASjCIVsZhptbU41VfK8bFmA4FTT3LVagLrgUso=";
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";
@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
+    changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
   };

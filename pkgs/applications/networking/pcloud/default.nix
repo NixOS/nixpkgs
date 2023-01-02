@@ -15,23 +15,35 @@
 # ^1 https://github.com/NixOS/nixpkgs/issues/69338
 
 {
- # Build dependencies
- appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
+  # Build dependencies
+  appimageTools
+, autoPatchelfHook
+, fetchzip
+, lib
+, stdenv
 
- # Runtime dependencies;
- # A few additional ones (e.g. Node) are already shipped together with the
- # AppImage, so we don't have to duplicate them here.
-, alsa-lib, dbus-glib, fuse, gsettings-desktop-schemas, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
+  # Runtime dependencies;
+  # A few additional ones (e.g. Node) are already shipped together with the
+  # AppImage, so we don't have to duplicate them here.
+, alsa-lib
+, dbus-glib
+, fuse
+, gsettings-desktop-schemas
+, gtk3
+, libdbusmenu-gtk2
+, libXdamage
+, nss
+, udev
 }:
 
 let
   pname = "pcloud";
-  version = "1.9.9";
-  code = "XZWTVkVZQM0GNXA4hrFGPkefzUUWVLKOpPIX";
+  version = "1.10.0";
+  code = "XZCy4sVZGb7r8VpDE4SCv2QI3OYx1HYChIvy";
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
-    hash = "sha256-8566vKrE3/QCm4qW9KxEAO+r+YfMRYOhV2Da7qic48M=";
+    hash = "sha256-kzID1y/jVuqFfD/PIUR2TFa0AvxKVcfNQ4ZXiHx0gRk=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -39,7 +51,8 @@ let
     src = "${src}/pcloud";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = appimageContents;

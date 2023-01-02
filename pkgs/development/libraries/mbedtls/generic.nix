@@ -32,10 +32,14 @@ stdenv.mkDerivation rec {
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
   '';
 
-  cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
-    "-Wno-error=format"
-    "-Wno-error=format-truncation"
+  cmakeFlags = [
+    "-DUSE_SHARED_MBEDTLS_LIBRARY=${if stdenv.hostPlatform.isStatic then "off" else "on"}"
+
+    # Avoid a dependency on jsonschema and jinja2 by not generating source code
+    # using python. In releases, these generated files are already present in
+    # the repository and do not need to be regenerated. See:
+    # https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.3.0 below "Requirement changes".
+    "-DGEN_FILES=off"
   ];
 
   meta = with lib; {

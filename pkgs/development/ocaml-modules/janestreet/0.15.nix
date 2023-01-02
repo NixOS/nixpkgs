@@ -1,4 +1,5 @@
 { self
+, bash
 , fetchpatch
 , lib
 , openssl
@@ -487,6 +488,10 @@ with self;
   patdiff = janePackage {
     pname = "patdiff";
     hash = "0623a7n5r659rkxbp96g361mvxkcgc6x9lcbkm3glnppplk5kxr9";
+
+    # Used by patdiff-git-wrapper.  Providing it here also causes the shebang
+    # line to be automatically patched.
+    buildInputs = [ bash ];
     propagatedBuildInputs = [ core_unix patience_diff ocaml_pcre ];
     meta = {
       description = "File Diff using the Patience Diff algorithm";
@@ -826,11 +831,11 @@ with self;
 
   pythonlib = janePackage {
     pname = "pythonlib";
-    hash = "0p88vmp19zmr0r58dz6sawsmbn4yi2vyymad2c82kp93kg66nm1v";
+    version = "0.15.1";
+    hash = "sha256-j8WXVTEiBmHtoTjkbnIh31vC4IghfAMaEL19nDLx3mc=";
     meta.description = "A library to help writing wrappers around ocaml code for python";
-    patches = lib.optional (lib.versionAtLeast ocaml.version "4.13") ./pythonlib.patch;
+    buildInputs = [ ppx_optcomp ];
     propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
-    meta.broken = lib.versionAtLeast ocaml.version "4.14";
   };
 
   re2 = janePackage {

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.6.1";
+  version = "0.7.0";
 
   outputs = [ "out" "dev" ];
 
@@ -29,46 +29,10 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "sha256-fTK5hyU9PZ6nigMsfzVugwviihgAXfEcLF+l+n5h+54=";
+    sha256 = "sha256-9DBLQ/gMyy2ZUm7PCWYJ7XOzkgQM0cAewJZzMNo8UPs=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
-
-  patches = [
-    # present in master, see https://github.com/libjxl/libjxl/pull/1403
-    (fetchpatch {
-      name = "prefixless-pkg-config.patch";
-      url = "https://github.com/libjxl/libjxl/commit/0b906564bfbfd8507d61c5d6a447f545f893227c.patch";
-      sha256 = "1g5c6lrsmgxb9j64pjy8lbdgbvw834m5jyfivy9ppmd8iiv0kkq4";
-    })
-
-    # present in master, remove after 0.7?
-    (fetchpatch {
-      name = "fix-link-lld-macho.patch";
-      url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
-      sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
-    })
-
-    # "robust statistics" have been removed in upstream mainline as they are
-    # conidered to cause "interoperability problems". sure enough the tests
-    # fail with precision issues on aarch64.
-    (fetchpatch {
-      name = "remove-robust-and-descriptive-statistics.patch";
-      url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
-      sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
-    })
-
-    # fix build with asciidoc wrapped in shell script
-    (fetchpatch {
-      url = "https://github.com/libjxl/libjxl/commit/b8ec58c58c6281987f42ebec892f513824c0cc0e.patch";
-      hash = "sha256-g8U+YVhLfgSHJ+PWJgvVOI66+FElJSC8IgSRodNnsMw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/libjxl/libjxl/commit/ca8e276aacf63a752346a6a44ba673b0af993237.patch";
-      excludes = [ "AUTHORS" ];
-      hash = "sha256-9VXy1LdJ0JhYbCGPNMySpnGLBxUrr8BYzE+oU3LnUGw=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -136,12 +100,17 @@ stdenv.mkDerivation rec {
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-   "-DJPEGXL_STATIC=ON"
+    "-DJPEGXL_STATIC=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-DJPEGXL_FORCE_NEON=ON"
   ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
 
-  doCheck = !stdenv.hostPlatform.isi686;
+  # FIXME x86_64-darwin:
+  # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
+  doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

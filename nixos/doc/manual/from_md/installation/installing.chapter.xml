@@ -256,7 +256,7 @@ $ sudo -i
       </para>
       <para>
         On the minimal installer, NetworkManager is not available, so
-        configuration must be perfomed manually. To configure the wifi,
+        configuration must be performed manually. To configure the wifi,
         first start wpa_supplicant with
         <literal>sudo systemctl start wpa_supplicant</literal>, then run
         <literal>wpa_cli</literal>. For most home networks, you need to
@@ -345,12 +345,12 @@ OK
           <!-- legacy anchor -->
         </para>
         <para>
-          Here's an example partition scheme for UEFI, using
+          Here’s an example partition scheme for UEFI, using
           <literal>/dev/sda</literal> as the device.
         </para>
         <note>
           <para>
-            You can safely ignore <literal>parted</literal>'s
+            You can safely ignore <literal>parted</literal>’s
             informational message about needing to update /etc/fstab.
           </para>
         </note>
@@ -415,12 +415,12 @@ OK
           <!-- legacy anchor -->
         </para>
         <para>
-          Here's an example partition scheme for Legacy Boot, using
+          Here’s an example partition scheme for Legacy Boot, using
           <literal>/dev/sda</literal> as the device.
         </para>
         <note>
           <para>
-            You can safely ignore <literal>parted</literal>'s
+            You can safely ignore <literal>parted</literal>’s
             informational message about needing to update /etc/fstab.
           </para>
         </note>

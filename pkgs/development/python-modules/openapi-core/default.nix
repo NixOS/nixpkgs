@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.16.2";
+  version = "0.16.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-i1MeKPVWowB12gE4kIWBjq6zvn2aIVW4ZDK8bKNAP1o=";
+    hash = "sha256-aej82CXk0bCE5W0+uuSVSvC08D5yoXv0h1wcoABWRoI=";
   };
 
   postPatch = ''
@@ -91,11 +91,7 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.requests;
 
   disabledTestPaths = [
-    # AttributeError: 'str' object has no attribute '__name__'
-    #"tests/integration/validation"
     # Requires secrets and additional configuration
-    "tests/integration/contrib/django/"
-    # Unable to detect SECRET_KEY and ROOT_URLCONF
     "tests/integration/contrib/django/"
   ];
 

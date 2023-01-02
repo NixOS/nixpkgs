@@ -54,7 +54,7 @@ nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     running Linux Distribution.
   </para>
   <para>
-    Note it’s symlinks pointing elsewhere, so <literal>cd</literal> in,
+    Note its symlinks pointing elsewhere, so <literal>cd</literal> in,
     and use <literal>scp * root@$destination</literal> to copy it over,
     rather than rsync.
   </para>
@@ -69,7 +69,7 @@ nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     instead of the default installer image, you can build your own
     <literal>configuration.nix</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { modulesPath, ... }: {
   imports = [
     (modulesPath + &quot;/installer/netboot/netboot-minimal.nix&quot;)

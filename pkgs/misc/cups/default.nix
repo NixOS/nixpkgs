@@ -26,33 +26,14 @@ with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 
-  # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.4.2";
+  version = "2.4.2";
 
-  src = fetchurl (if stdenv.isDarwin then {
-    url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
-  } else {
+  src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
-  });
+  };
 
   outputs = [ "out" "lib" "dev" "man" ];
-
-  patches = lib.optionals (version == "2.2.6") [
-    ./0001-TargetConditionals.patch
-    (fetchpatch {
-      name = "CVE-2022-26691.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/de4f8c196106033e4c372dce3e91b9d42b0b9444.patch";
-      sha256 = "sha256-IKOtV7bCS6PstwK6YqnYRYTeH562jWwkley86p+6Of8=";
-      excludes = [ "CHANGES.md" ];
-    })
-    (fetchpatch {
-      name = "CVE-2022-26691-fix-comment.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/411b6136f450a583ee08c3880fa09dbe837eb3f1.patch";
-      sha256 = "sha256-dVopmr34c9N5H2ZZz52rXVnHQBuDTNo8M40x9455+jQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
@@ -83,8 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ optional (libusb1 != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper"
-    ++ optional stdenv.isDarwin "--disable-launchd";
+    ++ optional (libpaper != null) "--enable-libpaper";
 
   # AR has to be an absolute path
   preConfigure = ''
@@ -108,6 +88,7 @@ stdenv.mkDerivation rec {
   installFlags =
     [ # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
+      "LAUNCHD_DIR=$(TMPDIR)/dummy"
       "LOGDIR=$(TMPDIR)/dummy"
       "REQUESTS=$(TMPDIR)/dummy"
       "STATEDIR=$(TMPDIR)/dummy"

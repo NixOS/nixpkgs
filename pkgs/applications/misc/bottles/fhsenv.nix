@@ -2,6 +2,7 @@
 , buildFHSUserEnvBubblewrap
 , symlinkJoin
 , bottles-unwrapped
+, gst_all_1
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
@@ -9,6 +10,8 @@
 let fhsEnv = {
   targetPkgs = pkgs: with pkgs; [
     bottles-unwrapped
+    # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
+    # See https://github.com/bottlesdevs/Bottles/issues/2401
     vkbasalt
   ] ++ extraPkgs pkgs;
 
@@ -46,6 +49,9 @@ let fhsEnv = {
       gsm
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-bad
       libgphoto2
       libjpeg_turbo
       libkrb5
@@ -83,6 +89,13 @@ let fhsEnv = {
       zlib # Freetype
     ] ++ xorgDeps pkgs
     ++ extraLibraries pkgs;
+
+  profile = ''
+    # Remove if merged https://github.com/bottlesdevs/Bottles/pull/2415
+    export BOTTLES_USE_SYSTEM_GSTREAMER=1
+    # Dirty hack, may be related with https://github.com/NixOS/nixpkgs/issues/148007
+    export GST_PLUGIN_PATH=${ lib.makeSearchPath "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) }
+  '';
 };
 in
 symlinkJoin {

@@ -1,23 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, dagger }:
 
 buildGoModule rec {
   pname = "dagger";
-  version = "0.2.36";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "dagger";
     repo = "dagger";
     rev = "v${version}";
-    sha256 = "sha256-U+MdX/7RIrhnPjUjzYAQEVeHQUpgMtKanvjPLBjCNSY=";
+    hash = "sha256-67ILrOVG31LrLgMcT+bZyWQ3lSahWOdWRyWpgUYSr4I=";
   };
 
-  vendorSha256 = "sha256-ArdqEHECnGTMs3sJrPIAfmTT0D2V8SHyTYXmDODVtuo=";
+  vendorHash = "sha256-bidJ7V/+yU3pBVXMdD4S0QVh9gKcvRN46Ut5OdSrnNc=";
+  proxyVendor = true;
 
   subPackages = [
     "cmd/dagger"
   ];
 
-  ldflags = [ "-s" "-w" "-X go.dagger.io/dagger/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = dagger;
+    command = "dagger version";
+  };
 
   meta = with lib; {
     description = "A portable devkit for CICD pipelines";

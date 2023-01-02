@@ -14,7 +14,7 @@
     other modules by including them from
     <literal>configuration.nix</literal>, e.g.:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { imports = [ ./vpn.nix ./kde.nix ];
@@ -28,7 +28,7 @@
     <literal>vpn.nix</literal> and <literal>kde.nix</literal>. The
     latter might look like this:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { services.xserver.enable = true;
@@ -50,7 +50,7 @@
     you want it to appear first, you can use
     <literal>mkBefore</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernelModules = mkBefore [ &quot;kvm-intel&quot; ];
 </programlisting>
   <para>
@@ -70,7 +70,7 @@ The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc
     When that happens, it’s possible to force one definition take
     precedence over the others:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 services.httpd.adminAddr = pkgs.lib.mkForce &quot;bob@example.org&quot;;
 </programlisting>
   <para>
@@ -93,7 +93,7 @@ services.httpd.adminAddr = pkgs.lib.mkForce &quot;bob@example.org&quot;;
     <xref linkend="opt-services.xserver.enable" /> is set to
     <literal>true</literal> somewhere else:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { environment.systemPackages =
@@ -137,7 +137,7 @@ nix-repl&gt; map (x: x.hostName) config.services.httpd.virtualHosts
     below would have the same effect as importing a file which sets
     those options.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 let netConfig = hostName: {

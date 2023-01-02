@@ -1,23 +1,32 @@
 {lib, stdenv, fetchurl, xz, dpkg
-, libxslt, docbook_xsl, makeWrapper
+, libxslt, docbook_xsl, makeWrapper, writeShellScript
 , python3Packages
-, perlPackages, curl, gnupg, diffutils
+, perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
 
 let
   inherit (python3Packages) python setuptools;
+  sensible-editor = writeShellScript "sensible-editor" ''
+    exec ''${EDITOR-${nano}/bin/nano} "$@"
+  '';
 in stdenv.mkDerivation rec {
-  version = "2.16.8";
+  version = "2.22.2";
   pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "0xy1nvqrnifx46g8ch69pk31by0va6hn10wpi1fkrsrgncanjjh1";
+    hash = "sha256-Fflalt2JxqLS0gq0wy88pXCqiNvHj7sfP7fLwdSmUCs=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils ] ++
+  postPatch = ''
+    substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
+    substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+    patchShebangs scripts
+  '';
+
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils bash-completion help2man ] ++
     (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
 
   preConfigure = ''
@@ -31,6 +40,7 @@ in stdenv.mkDerivation rec {
       -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
       -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv@g" \
       -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
+      -e "s@sensible-editor@${sensible-editor}@g" \
       -i {} +
     sed -e "s@/usr/share/sgml/[^ ]*/manpages/docbook.xsl@${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl@" -i scripts/Makefile
     sed -r \
@@ -53,7 +63,7 @@ in stdenv.mkDerivation rec {
       wrapProgram "$i" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/lib/python3.4/site-packages" \
+        --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PATH : "${dpkg}/bin"
     done
   '';

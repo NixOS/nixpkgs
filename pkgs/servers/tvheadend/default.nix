@@ -1,32 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, pkg-config
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_4, libiconv, openssl, python2
-, v4l-utils, which, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+
+# buildtime
+, makeWrapper
+, pkg-config
+, python3
+, which
+
+# runtime
+, avahi
+, bzip2
+, dbus
+, dtv-scan-tables
+, ffmpeg
+, gettext
+, gnutar
+, gzip
+, libiconv
+, openssl
+, uriparser
+, zlib
+}:
 
 let
   version = "4.2.8";
-
-  dtv-scan-tables = stdenv.mkDerivation {
-    pname = "dtv-scan-tables";
-    version = "2020-05-18";
-    src = fetchFromGitHub {
-      owner = "tvheadend";
-      repo = "dtv-scan-tables";
-      rev = "e3138a506a064f6dfd0639d69f383e8e576609da";
-      sha256 = "19ac9ds3rfc2xrqcywsbd1iwcpv7vmql7gp01iikxkzcgm2g2b6w";
-    };
-    nativeBuildInputs = [ v4l-utils ];
-    installFlags = [ "DATADIR=$(out)" ];
-  };
 in stdenv.mkDerivation {
   pname = "tvheadend";
   inherit version;
 
   src = fetchFromGitHub {
-    owner  = "tvheadend";
-    repo   = "tvheadend";
-    rev    = "v${version}";
+    owner = "tvheadend";
+    repo = "tvheadend";
+    rev = "v${version}";
     sha256 = "1xq059r2bplaa0nd0wkhw80jfwd962x0h5hgd7fz2yp6largw34m";
   };
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     # Pull upstream fix for -fno-common toolchain
@@ -39,26 +53,50 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [
-    avahi dbus gettext git gnutar gzip bzip2 ffmpeg_4 libiconv openssl python2
-    which zlib
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3
+    which
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  buildInputs = [
+    avahi
+    bzip2
+    dbus
+    ffmpeg
+    gettext
+    gzip
+    libiconv
+    openssl
+    uriparser
+    zlib
+  ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
+  enableParallelBuilding = true;
 
-  # disable dvbscan, as having it enabled causes a network download which
-  # cannot happen during build.  We now include the dtv-scan-tables ourselves
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format-truncation"
+    "-Wno-error=stringop-truncation"
+  ];
+
   configureFlags = [
+    # disable dvbscan, as having it enabled causes a network download which
+    # cannot happen during build.  We now include the dtv-scan-tables ourselves
     "--disable-dvbscan"
     "--disable-bintray_cache"
     "--disable-ffmpeg_static"
+    # incompatible with our libhdhomerun version
     "--disable-hdhomerun_client"
     "--disable-hdhomerun_static"
+    "--disable-libx264_static"
+    "--disable-libx265_static"
+    "--disable-libvpx_static"
+    "--disable-libtheora_static"
+    "--disable-libvorbis_static"
+    "--disable-libfdkaac_static"
+    "--disable-libmfx_static"
   ];
-
-  dontUseCmakeConfigure = true;
 
   preConfigure = ''
     patchShebangs ./configure
@@ -80,13 +118,14 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "TV streaming server";
+    description = "TV streaming server and digital video recorder";
     longDescription = ''
-        Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android
-        supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, SAT>IP and HDHomeRun as input sources.
-        Tvheadend offers the HTTP (VLC, MPlayer), HTSP (Kodi, Movian) and SAT>IP streaming.'';
+      Tvheadend is a TV streaming server for Linux supporting DVB-S,
+      DVB-S2, DVB-C, DVB-T, ATSC, IPTV,SAT>IP and other formats
+      through the unix pipe as input sources.
+    '';
     homepage = "https://tvheadend.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ simonvandel ];
   };

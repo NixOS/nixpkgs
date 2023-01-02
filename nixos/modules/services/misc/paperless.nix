@@ -211,19 +211,15 @@ in
     ];
 
     systemd.services.paperless-scheduler = {
-      description = "Paperless scheduler";
+      description = "Paperless Celery Beat";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = "${pkg}/bin/paperless-ngx qcluster";
+        ExecStart = "${pkg}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
-        # The `mbind` syscall is needed for running the classifier.
-        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
-        # Needs to talk to mail server for automated import rules
-        PrivateNetwork = false;
       };
       environment = env;
       wantedBy = [ "multi-user.target" ];
-      wants = [ "paperless-consumer.service" "paperless-web.service" ];
+      wants = [ "paperless-consumer.service" "paperless-web.service" "paperless-task-queue.service" ];
 
       preStart = ''
         ln -sf ${manage} ${cfg.dataDir}/paperless-manage
@@ -248,6 +244,20 @@ in
       '';
     } // optionalAttrs enableRedis {
       after = [ "redis-paperless.service" ];
+    };
+
+    systemd.services.paperless-task-queue = {
+      description = "Paperless Celery Workers";
+      serviceConfig = defaultServiceConfig // {
+        User = cfg.user;
+        ExecStart = "${pkg}/bin/celery --app paperless worker --loglevel INFO";
+        Restart = "on-failure";
+        # The `mbind` syscall is needed for running the classifier.
+        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
+        # Needs to talk to mail server for automated import rules
+        PrivateNetwork = false;
+      };
+      environment = env;
     };
 
     # Reading the user-provided password file requires root access
@@ -301,7 +311,7 @@ in
       };
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.
-      unitConfig.JoinsNamespaceOf = "paperless-scheduler.service";
+      unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
       # Bind to `paperless-scheduler` so that the web server never runs
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];

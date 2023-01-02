@@ -28,7 +28,7 @@ $ cd nixpkgs
       manual. Finally, you add it to
       <xref linkend="opt-environment.systemPackages" />, e.g.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 environment.systemPackages = [ pkgs.my-package ];
 </programlisting>
     <para>
@@ -45,7 +45,7 @@ environment.systemPackages = [ pkgs.my-package ];
       Hello</link> package directly in
       <literal>configuration.nix</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 environment.systemPackages =
   let
     my-hello = with pkgs; stdenv.mkDerivation rec {
@@ -62,13 +62,13 @@ environment.systemPackages =
       Of course, you can also move the definition of
       <literal>my-hello</literal> into a separate Nix expression, e.g.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 environment.systemPackages = [ (import ./my-hello.nix) ];
 </programlisting>
     <para>
       where <literal>my-hello.nix</literal> contains:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 with import &lt;nixpkgs&gt; {}; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
@@ -98,7 +98,7 @@ Hello, world!
       need to install <literal>appimage-run</literal>: add to
       <literal>/etc/nixos/configuration.nix</literal>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 environment.systemPackages = [ pkgs.appimage-run ];
 </programlisting>
     <para>

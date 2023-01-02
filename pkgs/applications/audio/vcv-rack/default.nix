@@ -115,7 +115,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "VCV-Rack";
-  version = "2.2.0";
+  version = "2.2.1";
 
   desktopItems = [
     (makeDesktopItem {
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "1ag1syjxdzxx13pdcfga9ksc6a5hw9bcdfhbry8qd2pxs9lmv2q6";
+    sha256 = "079alr6y0101k92v5lrnycljcbifh0hsvklbf4w5ax2zrxnyplq8";
   };
 
   patches = [
@@ -203,11 +203,9 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  makeFlags = [
-    ( if stdenv.hostPlatform.system == "aarch64-linux"
-      then "MACHINE=arm64-linux"
-      else "MACHINE=${stdenv.hostPlatform.config}"
-    )
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ [
     "all"
     "plugins"
   ];

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "urlextract";
-  version = "1.7.1";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DYg7Wd5Th4c+o4JeYrNDWDMTE1rGZMP1wNVfF7Kzv30=";
+    hash = "sha256-NXP2uBKBTv4GykbpHoLZhO2qPNB9qqqilqRnrZiBoDc=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collects and extracts URLs from given text";
     homepage = "https://github.com/lipoja/URLExtract";
+    changelog = "https://github.com/lipoja/URLExtract/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ilkecan ];
   };

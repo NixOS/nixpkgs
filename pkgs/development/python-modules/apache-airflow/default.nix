@@ -16,7 +16,6 @@
 , cron-descriptor
 , croniter
 , cryptography
-, dataclasses
 , deprecated
 , dill
 , flask
@@ -137,7 +136,7 @@ buildPythonPackage rec {
   inherit version;
   src = airflow-src;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
     alembic
@@ -203,8 +202,6 @@ buildPythonPackage rec {
     typing-extensions
     unicodecsv
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-metadata
   ] ++ providerDependencies;

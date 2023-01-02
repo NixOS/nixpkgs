@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
           --replace /opt/brave.com $out/opt/brave.com
 
       # Correct icons location
-      icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
+      icon_sizes=("16" "24" "32" "48" "64" "128" "256")
 
       for icon in ''${icon_sizes[*]}
       do

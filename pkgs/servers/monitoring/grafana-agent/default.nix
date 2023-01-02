@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.29.0";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-6CnYoUECT6vcQw2v7GLRzOtlL4tKKpz4VADuz9MxseM=";
+    sha256 = "sha256-QunB14B3HRzB5UL5OZaFsm4WGIOMnByYKblTogVOeHE=";
   };
 
-  vendorSha256 = "sha256-FSxkldMYMmyjVv6UYeZlceygkfKFzZK2udeUNBbpYnc=";
+  vendorSha256 = "sha256-Cl3oygH1RPF+ZdJvkDmr7eyU5daxaZwNE8pQOHK/qP4=";
 
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
@@ -27,8 +27,8 @@ buildGoModule rec {
 
   tags = [
     "nonetwork"
-    "noebpf"
     "nodocker"
+    "promtail_journal_enabled"
   ];
 
   subPackages = [

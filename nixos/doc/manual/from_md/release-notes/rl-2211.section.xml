@@ -1082,7 +1082,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
               removed. This option was an association of environment
               variables for Grafana. If you had an expression like
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 {
   services.grafana.extraOptions.SECURITY_ADMIN_USER = &quot;foobar&quot;;
 }
@@ -1096,7 +1096,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
               For the migration, it is recommended to turn it into the
               INI format, i.e. to declare
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 {
   services.grafana.settings.security.admin_user = &quot;foobar&quot;;
 }
@@ -1280,9 +1280,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          Option descriptions, examples, and defaults writting in
-          DocBook are now deprecated. Using CommonMark is preferred and
-          will become the default in a future release.
+          Option descriptions, examples, and defaults writing in DocBook
+          are now deprecated. Using CommonMark is preferred and will
+          become the default in a future release.
         </para>
       </listitem>
       <listitem>

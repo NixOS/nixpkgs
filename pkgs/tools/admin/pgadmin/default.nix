@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.17";
+  version = "6.18";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-fcMNqki0namB5mRntlJUE9cN+axlw+7b8EA9aactlIw=";
+    sha256 = "sha256-qqilmJLpJ3XNd8dwk7bDAAPxt8sou5zydFMPcJGcGoo=";
   };
 
   yarnDeps = mkYarnModules {
@@ -74,7 +74,7 @@ let
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    # flask 2.2 is incompatible with pgadmin 6.15
+    # flask 2.2 is incompatible with pgadmin 6.18
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.1.3";
@@ -83,7 +83,7 @@ let
         sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
-    # pgadmin 6.15 is incompatible with the major flask-security-too update to 5.0.x
+    # pgadmin 6.18 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
@@ -149,7 +149,7 @@ pythonPackages.buildPythonApplication rec {
     do
       if [ -d ''${DIR}_build/html ]; then
           mkdir -p ../pip-build/pgadmin4/docs/''${DIR}_build
-          cp -Rv ''${DIR}_build/html ../pip-build/pgadmin4/docs/''${DIR}_build
+          cp -R ''${DIR}_build/html ../pip-build/pgadmin4/docs/''${DIR}_build
       fi
     done
     cd ../
@@ -181,7 +181,7 @@ pythonPackages.buildPythonApplication rec {
   # checks will be run through nixos/tests
   doCheck = false;
 
-  # speaklater3 is seperate because when passing buildDeps
+  # speaklater3 is separate because when passing buildDeps
   # to the test, it fails there due to a collision with speaklater
   propagatedBuildInputs = buildDeps ++ [ pythonPackages.speaklater3 ];
 

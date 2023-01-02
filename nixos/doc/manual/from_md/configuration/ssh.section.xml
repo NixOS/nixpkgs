@@ -3,7 +3,7 @@
   <para>
     Secure shell (SSH) access to your machine can be enabled by setting:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 services.openssh.enable = true;
 </programlisting>
   <para>
@@ -16,7 +16,7 @@ services.openssh.enable = true;
     You can declaratively specify authorised RSA/DSA public keys for a
     user as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 users.users.alice.openssh.authorizedKeys.keys =
   [ &quot;ssh-dss AAAAB3NzaC1kc3MAAACBAPIkGWVEt4...&quot; ];
 </programlisting>

@@ -11,7 +11,6 @@
 
 let
   inherit (stdenv) isDarwin;
-  inherit (lib) overrideDerivation;
 
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -761,7 +760,7 @@ self: super:
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
-      darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
+      darwinOtherX = xorgserver.overrideAttrs (oldAttrs: {
         configureFlags = oldAttrs.configureFlags ++ [
           "--disable-xquartz"
           "--enable-xorg"
@@ -813,6 +812,43 @@ self: super:
             name = "CVE-2022-2320.diff";
             url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd8caf39e9e15d8f302e54045dd08d8ebf1025dc.diff";
             sha256 = "rBiiXQRreMvexW9vOKblcfCYzul+9La01EAhir4FND8=";
+          })
+        ]
+        # TODO: remove with xorgserver >= 21.1.5; https://www.mail-archive.com/xorg-announce@lists.x.org/msg01511.html
+        ++ [
+          (fetchpatch {
+            name = "CVE-2022-46340.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/b320ca0ffe4c0c872eeb3a93d9bde21f765c7c63.diff";
+            sha256 = "sha256-XPjLwZcJPLVv1ufgqnUxl73HKcJWWTDy2J/oxFiFnAU=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-46341.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/51eb63b0ee1509c6c6b8922b0e4aa037faa6f78b.diff";
+            sha256 = "sha256-w+tzzoI1TfjjiFw5GNxVBgPc7M2lRY60zl+ySsyV59o=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-46342.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/b79f32b57cc0c1186b2899bce7cf89f7b325161b.diff";
+            sha256 = "sha256-NytCsqRlqhs8xpOL8PGgluU0nKd7VIY26BXgpzN6WqE=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-46343.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/842ca3ccef100ce010d1d8f5f6d6cc1915055900.diff";
+            sha256 = "sha256-oUwKwfN6lAvZ60dylm53+/yDeFnYTVdCINpBAfM6LoY=";
+          })
+          (fetchpatch {
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/b8a84cb0f2807b07ab70ca9915fcdee21301b8ca.diff";
+            sha256 = "sha256-Y2x9/P0SgwUAJRjIXivA32NnMso7gQAid+VjcwNUsa8=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-46344.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8f454b793e1f13c99872c15f0eed1d7f3b823fe8.diff";
+            sha256 = "sha256-Cr760UPwmm8Qr0o/R8/IlgggXQ6ENTHRz3bP/nsIwbU=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-4283.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/ccdd431cd8f1cabae9d744f0514b6533c438908c.diff";
+            sha256 = "sha256-IGPsjS7KgRPLrs1ImBXvIFCa8Iu5ZiAHRZvHlBYP8KQ=";
           })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];

@@ -205,4 +205,23 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
+  # See doc/builders/special/darwin-builder.section.md
+  builder =
+    let
+      toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
+
+      nixos = import ../../nixos {
+        configuration = {
+          imports = [
+            ../../nixos/modules/profiles/macos-builder.nix
+          ];
+
+          virtualisation.host = { inherit pkgs; };
+        };
+
+        system = toGuest stdenv.hostPlatform.system;
+      };
+
+    in
+      nixos.config.system.build.macos-builder-installer;
 })

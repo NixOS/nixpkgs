@@ -9,13 +9,13 @@
   <para>
     NixOS will start wpa_supplicant for you if you enable this setting:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.wireless.enable = true;
 </programlisting>
   <para>
     NixOS lets you specify networks for wpa_supplicant declaratively:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.wireless.networks = {
   echelon = {                # SSID with no spaces or special characters
     psk = &quot;abcdefgh&quot;;
@@ -49,7 +49,7 @@ network={
         psk=dca6d6ed41f4ab5a984c9f55f6f66d4efdc720ebf66959810f4329bb391c5435
 }
 </programlisting>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.wireless.networks = {
   echelon = {
     pskRaw = &quot;dca6d6ed41f4ab5a984c9f55f6f66d4efdc720ebf66959810f4329bb391c5435&quot;;

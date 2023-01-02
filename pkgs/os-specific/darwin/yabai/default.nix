@@ -136,7 +136,7 @@ in
     '';
 
     # Defining this here exposes it as a passthru attribute, which is useful because it allows us to run `builtins.hashFile` on it in pure-eval mode.
-    # With that we can programatically generate an `/etc/sudoers.d` entry which disables the password requirement, so that a user-agent can run it at login.
+    # With that we can programmatically generate an `/etc/sudoers.d` entry which disables the password requirement, so that a user-agent can run it at login.
     loadScriptingAddition = writeShellScript "yabai-load-sa" ''
       # For whatever reason the regular commands to load the scripting addition do not work, yabai will throw an error.
       # The installation command mutably installs binaries to '/System', but then fails to start them. Manually running

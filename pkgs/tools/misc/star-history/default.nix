@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "star-history";
-  version = "1.0.5";
+  version = "1.0.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fmuCmyqw7wubMafkhqL1MltW6jZefgXdnudxdeBRSV4=";
+    sha256 = "sha256-ya2wUcO/2V/JHJ005p63j9Qu6oQehGYDhCYE7a5MBDA=";
   };
 
-  cargoSha256 = "sha256-+wHOBjBQyMuooDey4Py8xmgW3NNI8t8rCwA8A7D6L84=";
+  cargoSha256 = "sha256-zmgOQNaodZrl/rsYOpv6nTu/IDaQYQ94jeUg3LOvvuA=";
 
   nativeBuildInputs = [ pkg-config ];
 

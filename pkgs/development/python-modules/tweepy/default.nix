@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.12.0";
+  version = "4.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ru0DCl9MOrU4uZvLXDxM4txD0D/GR4eYBHvqeMcbTVA=";
+    hash = "sha256-jyH2qJoVFuNwZCOtl2CvuuMCpJXCvlxcaHJd7fT1XzA=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Twitter library for Python";
     homepage = "https://github.com/tweepy/tweepy";
+    changelog = "https://github.com/tweepy/tweepy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

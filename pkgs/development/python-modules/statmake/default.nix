@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "statmake";
-  version = "0.5.1";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "daltonmaag";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BpxjAr65ZQEJ0PSUIPtS78UvJbMG91qkV8py2K/+W2E=";
+    hash = "sha256-3BZ71JVvj7GCojM8ycu160viPj8BLJ1SiW86Df2fzsw=";
   };
 
   nativeBuildInputs = [

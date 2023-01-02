@@ -479,7 +479,7 @@ rec {
       ) (lib.functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
-      # context on the explicited arguments of "args" too. This update
+      # context on the explicit arguments of "args" too. This update
       # operator is used to make the "args@{ ... }: with args.lib;" notation
       # works.
     in f (args // extraArgs)

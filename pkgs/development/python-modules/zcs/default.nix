@@ -4,32 +4,43 @@
 , python
 , yacs
 , boxx
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "zcs";
-  version = "0.1.22";
+  version = "0.1.25";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+0lG2OirfXj55IFA9GMERVWtrWwULfVfdbIg8ebH+7M=";
+    hash = "sha256-/QIyRQtxLDVW+vcQi5bL8rJ0o3+OhqGhQEALR1YO1pg=";
   };
 
   patches = [
     ./fix-test-yaml.patch
   ];
 
-  propagatedBuildInputs = [ yacs ];
+  propagatedBuildInputs = [
+    yacs
+  ];
 
-  pythonImportsCheck = [ "zcs" ];
+  pythonImportsCheck = [
+    "zcs"
+  ];
 
-  checkInputs = [ boxx ];
+  checkInputs = [
+    boxx
+  ];
+
   checkPhase = ''
     ${python.interpreter} test/test_zcs.py
   '';
 
   meta = with lib; {
-    description = "A flexible powerful configuration system which takes advantage of both argparse and yacs";
+    description = "Configuration system which takes advantage of both argparse and yacs";
     homepage = "https://github.com/DIYer22/zcs";
     license = licenses.mit;
     maintainers = with maintainers; [ lucasew ];

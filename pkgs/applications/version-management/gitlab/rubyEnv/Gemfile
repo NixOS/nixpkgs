@@ -336,8 +336,7 @@ gem 'pg_query', '~> 2.2'
 
 gem 'premailer-rails', '~> 1.10.3'
 
-# LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.28.0'
+gem 'gitlab-labkit', '~> 0.29.0'
 gem 'thrift', '>= 0.16.0'
 
 # I18n

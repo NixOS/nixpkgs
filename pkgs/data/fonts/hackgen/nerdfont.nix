@@ -4,10 +4,10 @@
 
 fetchzip rec {
   pname = "hackgen-nf-font";
-  version = "2.7.1";
+  version = "2.8.0";
 
   url = "https://github.com/yuru7/HackGen/releases/download/v${version}/HackGen_NF_v${version}.zip";
-  sha256 = "sha256-9sylGr37kKIGWgThZFqL2y6oI3t2z4kbXYk5DBMIb/g=";
+  sha256 = "sha256-xRFedeavEJY9OZg+gePF5ImpLTYdbSba5Wr9k0ivpkE=";
   postFetch = ''
     install -Dm644 $out/*.ttf -t $out/share/fonts/hackgen-nf
     shopt -s extglob dotglob

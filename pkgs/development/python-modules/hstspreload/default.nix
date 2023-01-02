@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "hstspreload";
-  version = "2022.11.1";
+  version = "2022.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "sethmlarson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4GirKCe84sYV+28ODPipixV3cl7wIV/NOd+iM0Cec4I=";
+    sha256 = "sha256-W1WJWG5R7Sucdw6TzsGFs5mH6BoUfA8URTgWlnRXa14=";
   };
 
   # Tests require network connection

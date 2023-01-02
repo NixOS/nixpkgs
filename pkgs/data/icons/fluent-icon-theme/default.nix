@@ -6,12 +6,13 @@
 , jdupes
 , roundedIcons ? false
 , blackPanelIcons ? false
+, allColorVariants ? false
 , colorVariants ? [ ]
 ,
 }:
 let pname = "Fluent-icon-theme";
 in
-lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "grey" "orange" "pink" "purple" "red" "yellow" "teal" "all" ] colorVariants
+lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "grey" "orange" "pink" "purple" "red" "yellow" "teal" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
@@ -43,10 +44,11 @@ stdenvNoCC.mkDerivation rec {
     ./install.sh --dest $out/share/icons \
       --name Fluent \
       ${builtins.toString colorVariants} \
+      ${lib.optionalString allColorVariants "--all"} \
       ${lib.optionalString roundedIcons "--round"} \
       ${lib.optionalString blackPanelIcons "--black"}
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';

@@ -14,6 +14,7 @@
 , pytest-mock
 , python-json-logger
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 , pyyaml
 , toolz
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.23";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -32,23 +33,29 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FQnyWC7d9h8Ya2BlaTGTrNXkHtJJLdeNL7qXP7scLFA=";
+    hash = "sha256-+UcrkITiRrAKo5MFcsSqEpvzuo4Czv+rHMWsnuvVx5o=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
-      --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
-      --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
-      --replace 'jsonschema = "' 'jsonschema = "^' \
-      --replace 'python-json-logger = "' 'python-json-logger = "^' \
-      --replace 'toolz = "0.11.2' 'toolz = "*' \
-      --replace 'yamllint = "' 'yamllint = "^'
+      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" ""
   '';
+
+  pythonRelaxDeps = [
+    "flake8"
+    "jsonschema"
+    "pathspec"
+    "python-json-logger"
+    "pyyaml"
+    "toolz"
+    "unidiff"
+    "yamllint"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -84,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Best practice scanner for Ansible roles and playbooks";
     homepage = "https://github.com/thegeeklab/ansible-later";
+    changelog = "https://github.com/thegeeklab/ansible-later/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ tboerger ];
   };

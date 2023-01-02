@@ -15,14 +15,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.12.1";
+  version = "2022.12.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-gDAwZhfkXMqU4dbowpPhNl52Kg3Kx9lgBNzhzkQPrN0=";
+    hash = "sha256-9yyfcygEmnOcaooSg9bmGGOP2aph0i6d/Ot4nGlTPw4=";
   };
 
   postPatch = ''
@@ -52,6 +52,7 @@ with python.pkgs; buildPythonApplication rec {
     kconfiglib
     paho-mqtt
     pillow
+    platformio
     protobuf
     pyserial
     pyyaml

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "protoc-gen-connect-go";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "connect-go";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PRJqH+uBcF9SP6ZFcZfLfqJe4LSAbhFrcdBFRhiVTGM=";
+    hash = "sha256-9dLILgDolHgQx33dAtYT3RJ0scWUVh52z+2Fh6FS+K4=";
   };
 
   vendorHash = "sha256-Bh2JCWTaML/QU/sLBsxLKMzzH++K22BTGusfcVW2GBw=";

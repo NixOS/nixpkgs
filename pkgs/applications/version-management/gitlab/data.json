@@ -1,15 +1,15 @@
 {
-  "version": "15.6.1",
-  "repo_hash": "sha256-cdwfljmJvApU2q0pmWSmcMnHkQH4hfN7+cld5oP880g=",
+  "version": "15.6.2",
+  "repo_hash": "sha256-WMDst9BHjqK5UIYKzqJJnhrLPHxV0PmW+r8FGBueBs8=",
   "yarn_hash": "0lgl8rs9mlrwpzq75rywdbjbiib17wxvzlv1jibnx66iw1ym2rvh",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v15.6.1-ee",
+  "rev": "v15.6.2-ee",
   "passthru": {
-    "GITALY_SERVER_VERSION": "15.6.1",
+    "GITALY_SERVER_VERSION": "15.6.2",
     "GITLAB_PAGES_VERSION": "1.63.0",
     "GITLAB_SHELL_VERSION": "14.13.0",
-    "GITLAB_WORKHORSE_VERSION": "15.6.1"
+    "GITLAB_WORKHORSE_VERSION": "15.6.2"
   },
   "vendored_gems": [
     "bundler-checksum",

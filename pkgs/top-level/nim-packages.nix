@@ -26,6 +26,9 @@ lib.makeScope newScope (self:
 
     frosty = callPackage ../development/nim-packages/frosty { };
 
+    getdns = callPackage ../development/nim-packages/getdns {
+      inherit (pkgs) getdns; };
+
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
     jester = callPackage ../development/nim-packages/jester { };

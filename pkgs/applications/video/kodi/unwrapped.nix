@@ -34,19 +34,19 @@
 , buildPackages
 }:
 
-assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
+assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is available
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20220303";
-  kodiVersion = "19.4";
+  kodiReleaseDate = "20221204";
+  kodiVersion = "19.5";
   rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-XDtmY3KthiD91kvueQRSamBcdM7fBpRntmZX6KRsCzE=";
+    sha256 = "sha256-vprhEPxYpY3/AsUgvPNnhBlh0Dl73ekALAblHaUKzd0=";
   };
 
   ffmpeg = stdenv.mkDerivation rec {

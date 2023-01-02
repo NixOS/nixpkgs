@@ -9,17 +9,18 @@
 , libssh2
 , openssl
 , wxGTK32
+, gitUpdater
 }:
 
 gcc12Stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "11.28";
+  version = "11.29";
 
   src = fetchFromGitHub {
     owner = "hkneptune";
     repo = "FreeFileSync";
     rev = "v${version}";
-    sha256 = "sha256-3eYvXClMdOCdl35S1d7nP2kiYZZOjyydi2gKY62K/qM=";
+    sha256 = "sha256-UQ+CWqtcTwMGUTn6t3N+BkXs4qxddZtxDjcq7nz5F6U=";
   };
 
   # Patches from ROSA Linux
@@ -87,6 +88,10 @@ gcc12Stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";

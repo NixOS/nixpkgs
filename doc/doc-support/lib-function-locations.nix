@@ -1,4 +1,4 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs, nixpkgs ? { }, libsets }:
 let
   revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.revision or "master");
 
@@ -16,9 +16,7 @@ let
         subsetname = subsetname;
         functions = libDefPos toplib.${subsetname};
       })
-      (builtins.filter
-        (name: builtins.isAttrs toplib.${name})
-        (builtins.attrNames toplib));
+      (builtins.map (x: x.name) libsets);
 
   nixpkgsLib = pkgs.lib;
 

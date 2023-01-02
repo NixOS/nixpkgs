@@ -12,21 +12,6 @@
 , sqlite
 }:
 
-let
-  os = if stdenv.isDarwin then "osx" else "linux";
-  arch =
-    with stdenv.hostPlatform;
-    if isx86_32 then "x86"
-    else if isx86_64 then "x64"
-    else if isAarch32 then "arm"
-    else if isAarch64 then "arm64"
-    else lib.warn "Unsupported architecture, some image processing features might be unavailable" "unknown";
-  musl = lib.optionalString stdenv.hostPlatform.isMusl
-    (lib.warnIf (arch != "x64") "Some image processing features might be unavailable for non x86-64 with Musl"
-      "musl-");
-  # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
-  runtimeId = "${os}-${musl}${arch}";
-in
 buildDotnetModule rec {
   pname = "jellyfin";
   version = "10.8.8"; # ensure that jellyfin-web has matching version
@@ -57,7 +42,6 @@ buildDotnetModule rec {
   ];
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
-  dotnetFlags = [ "--runtime=${runtimeId}" ];
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   preInstall = ''

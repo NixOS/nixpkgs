@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "3.1.0";
+  version = "3.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OzU3Qv6qdEw0hJdbQ7Q3T6zOGpUt2uZyfy1Fxm3GT0Q=";
+    hash = "sha256-vg1eNxIkdHM1MMTkCof/ED6nqFhwSgEiKjYmqAyHMp0=";
   };
 
   propagatedBuildInputs = [
