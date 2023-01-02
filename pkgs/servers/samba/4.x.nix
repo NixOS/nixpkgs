@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
     ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    ./4.x-fix-talloc-magic-randomization.patch
   ];
 
   nativeBuildInputs = [

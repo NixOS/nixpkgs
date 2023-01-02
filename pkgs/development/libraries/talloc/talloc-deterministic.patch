@@ -1,0 +1,18 @@
+--- a/talloc.c    2022-12-30 20:18:37
++++ b/talloc.c.new        2022-12-30 20:18:53
+@@ -387,13 +387,6 @@
+ }
+
+ #ifdef HAVE_CONSTRUCTOR_ATTRIBUTE
+-#define CONSTRUCTOR __attribute__((constructor))
+-#elif defined(HAVE_PRAGMA_INIT)
+-#define CONSTRUCTOR
+-#pragma init (talloc_lib_init)
+-#endif
+-#if defined(HAVE_CONSTRUCTOR_ATTRIBUTE) || defined(HAVE_PRAGMA_INIT)
+-void talloc_lib_init(void) CONSTRUCTOR;
+ void talloc_lib_init(void)
+ {
+        uint32_t random_value;
+
+
