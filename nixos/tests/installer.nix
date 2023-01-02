@@ -465,8 +465,12 @@ let
     '';
     testSpecialisationConfig = true;
   };
-
-
+  # disable zfs so we can support latest kernel if needed
+  no-zfs-module = {
+    nixpkgs.overlays = [(final: super: {
+      zfs = super.zfs.overrideAttrs(_: {meta.platforms = [];});}
+    )];
+  };
 in {
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
@@ -714,6 +718,7 @@ in {
   bcachefsSimple = makeInstallerTest "bcachefs-simple" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''
@@ -737,13 +742,22 @@ in {
   bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
+
       environment.systemPackages = with pkgs; [ keyutils ];
     };
 
-    # We don't want to use the normal way of unlocking bcachefs defined in tasks/filesystems/bcachefs.nix.
-    # So, override initrd.postDeviceCommands completely and simply unlock with the predefined password.
     extraConfig = ''
-      boot.initrd.postDeviceCommands = lib.mkForce "echo password | bcachefs unlock /dev/vda3";
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("password\n")
     '';
 
     createPartitions = ''
@@ -769,6 +783,9 @@ in {
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''

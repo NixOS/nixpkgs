@@ -669,6 +669,10 @@ self: super: {
     dontBuild = true;
   });
 
+  vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs (old: {
+    passthru.python3Dependencies = [ python3.pkgs.mwclient ];
+  });
+
   nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
