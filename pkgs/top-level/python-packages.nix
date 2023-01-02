@@ -5075,6 +5075,8 @@ self: super: with self; {
 
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
 
+  kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
+
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
   klaus = callPackage ../development/python-modules/klaus { };
