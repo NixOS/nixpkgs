@@ -29316,6 +29316,8 @@ with pkgs;
 
   moe =  callPackage ../applications/editors/moe { };
 
+  molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
+
   pattypan = callPackage ../applications/misc/pattypan {};
 
   praat = callPackage ../applications/audio/praat { };
