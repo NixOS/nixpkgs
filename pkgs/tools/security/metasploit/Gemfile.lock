@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 70f696d7322148eba2fca49c5219dcb9a0133c6e
-  ref: refs/tags/6.2.32
+  revision: c2aca5f1d6a798c3c595ef6953172def7bf532d5
+  ref: refs/tags/6.2.33
   specs:
-    metasploit-framework (6.2.32)
+    metasploit-framework (6.2.33)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -128,7 +128,7 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.684.0)
+    aws-partitions (1.686.0)
     aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -249,7 +249,7 @@ GEM
     metasploit_payloads-mettle (1.0.20)
     method_source (1.0.0)
     mini_portile2 (2.8.1)
-    minitest (5.16.3)
+    minitest (5.17.0)
     mqtt (0.5.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
@@ -290,7 +290,7 @@ GEM
     puma (6.0.1)
       nio4r (~> 2.0)
     racc (1.6.2)
-    rack (2.2.4)
+    rack (2.2.5)
     rack-protection (3.0.5)
       rack
     rack-test (2.0.2)
