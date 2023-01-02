@@ -8061,6 +8061,8 @@ self: super: with self; {
 
   pykakasi = callPackage ../development/python-modules/pykakasi { };
 
+  pykaleidescape = callPackage ../development/python-modules/pykaleidescape { };
+
   pykdl = callPackage ../development/python-modules/pykdl { };
 
   pykdtree = callPackage ../development/python-modules/pykdtree {
