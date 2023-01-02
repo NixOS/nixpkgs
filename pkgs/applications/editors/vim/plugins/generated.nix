@@ -3322,6 +3322,18 @@ final: prev:
     meta.homepage = "https://github.com/gregsexton/gitv/";
   };
 
+  glance-nvim = buildVimPluginFrom2Nix {
+    pname = "glance.nvim";
+    version = "2022-12-05";
+    src = fetchFromGitHub {
+      owner = "DNLHC";
+      repo = "glance.nvim";
+      rev = "cc087d378c3458fd2fb5ddf627af5e8fa1b76458";
+      sha256 = "0608j0kawm641sd7jcccc461wabncxlnssldi976grb5v8mk3kx0";
+    };
+    meta.homepage = "https://github.com/DNLHC/glance.nvim/";
+  };
+
   gleam-vim = buildVimPluginFrom2Nix {
     pname = "gleam.vim";
     version = "2020-06-24";
