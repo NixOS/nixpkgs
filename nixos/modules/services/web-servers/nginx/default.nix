@@ -115,7 +115,7 @@ let
       # The mime type definitions included with nginx are very incomplete, so
       # we use a list of mime types from the mailcap package, which is also
       # used by most other Linux distributions by default.
-      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      include ${cfg.mimeTypesFile};
       # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
       # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
       # overwrite it because nginx does not allow duplicated settings.
@@ -577,6 +577,15 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
+        '';
+      };
+
+      mimeTypesFile = mkOption {
+        default = "${pkgs.mailcap}/etc/nginx/mime.types";
+        defaultText = literalExpression "$''{pkgs.mailcap}/etc/nginx/mime.types";
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to the mime.types file used by nginx.
         '';
       };
 
