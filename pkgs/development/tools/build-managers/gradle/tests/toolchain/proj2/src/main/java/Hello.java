@@ -1,5 +1,10 @@
 class Hello {
     public static void main(String[] args) {
-        System.out.println("Hello, world!");
+        var version = Runtime.version().feature();
+        System.out.println("JDK version: " + version);
+        if (version != 17) {
+            System.out.println("Wrong JDK version!");
+            System.exit(1);
+        }
     }
 }

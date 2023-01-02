@@ -1,9 +1,14 @@
 plugins {
 	id 'java'
+    id 'application'
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
     }
+}
+
+application {
+    mainClass = 'Hello'
 }

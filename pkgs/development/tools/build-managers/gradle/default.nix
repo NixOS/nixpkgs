@@ -25,13 +25,19 @@ rec {
         "x86_64-windows"
       ],
 
-      # If true, will generate a test in passthru.tests that verifies that:
+      # Set to true if this Gradle version supports JVM toolchains
+      # (see here for more info: https://docs.gradle.org/current/userguide/toolchains.html#sec:consuming).
+      #
+      # Toolchains were added in Gradle 6.7. For >=6.7 versions, set this to
+      # true (or false if you want to disable this package's toolchain support).
+      # For <6.7 versions, set this to false or passthru.tests will fail!
+      #
+      # If true, this will enable the 'toolchains' attreibute and generate a
+      # test in passthru.tests that verifies that:
       # a) The package can be used with Java toolchains via the javaToolchains
       #    argument
       # b) Gradle correctly picks up toolchains managed via this package
-      # Obviously, only enable this for Gradle versions that support toolchains
-      # (Gradle 6+)
-      runToolchainTest ? false
+      hasToolchainSupport ? false
     }:
 
     let
@@ -66,7 +72,10 @@ rec {
               let
                 javaHomeProperty = "org.gradle.java.home=" + java;
                 toolchainsProperty = "org.gradle.java.installations.paths=" + (concatStringsSep "," javaToolchains);
-                propDefs = concatStringsSep "\n" [ javaHomeProperty toolchainsProperty ];
+                toolchainsPropertyWithCheck = 
+                if (hasToolchainSupport || (length javaToolchains) == 0) then toolchainsProperty
+                else lib.warn "This Gradle version (${version}) does not have toolchain support, yet the 'javaToolchains' list is not empty. The used toolchain will be ignored by Gradle." toolchainsProperty;
+                propDefs = concatStringsSep "\n" [ javaHomeProperty toolchainsPropertyWithCheck ];
               in
               ''
                 mkdir -pv $out/lib/gradle/
@@ -127,16 +136,15 @@ rec {
               maintainers = with maintainers; [ lorenzleutgeb liff ];
             };
 
-            passthru.tests = (callPackage ./tests.nix { }) {
-              inherit gradle;
-              gradleWithToolchains =
-                let
-                  toolchains = [ jdk11 jdk17 ];
-                in
-                  if !runToolchainTest then null
-                  else if javaToolchains == toolchains then gradle # Avoids infinite recursion
-                  else builder (args // { javaToolchains = [ jdk11 jdk17 ]; });
-            };
+            passthru.tests = (callPackage ./tests.nix { }) { inherit gradle; } //
+              lib.optionalAttrs hasToolchainSupport {
+                gradleWithToolchains =
+                  let
+                    toolchains = [ jdk11 jdk17 ];
+                  in
+                  if javaToolchains == toolchains then gradle # Avoids infinite recursion
+                  else builder (args // { javaToolchains = toolchains; });
+              };
           };
         in
         gradle;
@@ -159,7 +167,7 @@ rec {
     nativeVersion = "0.22-milestone-24";
     sha256 = "11qz1xjfihnlvsblqqnd49kmvjq86pzqcylj6k1zdvxl4dd60iv1";
     defaultJava = jdk17;
-    runToolchainTest = true;
+    hasToolchainSupport = true;
   };
 
   gradle_6 = gen {
@@ -167,6 +175,6 @@ rec {
     nativeVersion = "0.22-milestone-20";
     sha256 = "16iqh4bn7ndch51h2lgkdqyyhnd91fdfjx55fa3z3scdacl0491y";
     defaultJava = jdk11;
-    runToolchainTest = true;
+    hasToolchainSupport = true;
   };
 }

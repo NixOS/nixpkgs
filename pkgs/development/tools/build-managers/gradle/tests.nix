@@ -19,7 +19,15 @@
           mkdir $out
           cp -r * $out
           cd $out
-          ${gradleWithToolchains}/bin/gradle build
+          set -o pipefail
+          ${gradleWithToolchains}/bin/gradle :proj1:run :proj2:run | tee output.log
+          if [ $? != 0 ]; then
+            echo "Non-zero output from Gradle"
+            exit $?
+          fi;
+
+          echo "Correctly detected JDKs (should have 11 and 17):"
+          grep "JDK version: 11" output.log && grep "JDK version: 17" output.log
         '';
       };
     }
