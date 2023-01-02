@@ -90,6 +90,8 @@ lib.makeScope newScope (self:
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
+    taps = callPackage ../development/nim-packages/taps { };
+
     tempfile = callPackage ../development/nim-packages/tempfile { };
 
     tkrzw = callPackage ../development/nim-packages/tkrzw { inherit (pkgs) tkrzw; };
