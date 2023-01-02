@@ -1847,10 +1847,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fpyk1965py77al7iadkn5dibwgvybknkr7r8bii2dj73wvr29rh";
+      sha256 = "sha256-bGRp797+NJYBAACjRvnTv3EOEaxGYeNTz1aFIyb7ECM=";
       type = "gem";
     };
-    version = "2.19.0";
+    version = "2.19.1";
   };
   mab = {
     groups = ["default"];
