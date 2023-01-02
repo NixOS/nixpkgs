@@ -270,7 +270,7 @@ let
     sourceProvenance = either (listOf (attrsOf anything)) (attrsOf anything);
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
-    platforms = listOf str;
+    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;
