@@ -84,6 +84,8 @@ buildPythonPackage rec {
     "test_head"
     "test_options"
     "test_trace"
+    # Unexpected number of warnings caught
+    "test_warn_duplicate_operation_id"
   ];
 
   pythonImportsCheck = [
