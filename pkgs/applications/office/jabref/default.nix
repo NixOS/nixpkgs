@@ -13,14 +13,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.7";
+  version = "5.8";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-wzBaAaxGsMPh64uW+bBOiycYfVCW9H5FCn06r6XdxeE=";
+    hash = "sha256-NOu0/+F3on9A9sybLCMlDb53FU2XVQ2ffiT+8ssvC2s=";
   };
 
   desktopItems = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
     outputHash = {
-      x86_64-linux = "sha256-OicHJVFxHGPE76bEDoLhkEhVcAJmplqjoh2I3nnVaLA=";
+      x86_64-linux = "sha256-X6gcVNsZUov1qDfS8PuOLQM7F/SovpjG+DwugLoJOvQ=";
       aarch64-linux = "sha256-8QWmweptL/+pSO6DhfBLaLcBrfKd4TDsDoXs4TgXvew=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
