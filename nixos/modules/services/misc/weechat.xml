@@ -13,9 +13,9 @@
 
   <para>
    By default, the module creates a
-   <literal><link xlink:href="https://www.freedesktop.org/wiki/Software/systemd/">systemd</link></literal>
+   <link xlink:href="https://www.freedesktop.org/wiki/Software/systemd/"><literal>systemd</literal></link>
    unit which runs the chat client in a detached
-   <literal><link xlink:href="https://www.gnu.org/software/screen/">screen</link></literal>
+   <link xlink:href="https://www.gnu.org/software/screen/"><literal>screen</literal></link>
    session.
   </para>
 

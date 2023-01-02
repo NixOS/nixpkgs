@@ -22,7 +22,7 @@
 
   <para>
    To use the ACME module, you must accept the provider's terms of service
-   by setting <literal><xref linkend="opt-security.acme.acceptTerms" /></literal>
+   by setting <xref linkend="opt-security.acme.acceptTerms" />
    to <literal>true</literal>. The Let's Encrypt ToS can be found
    <link xlink:href="https://letsencrypt.org/repository/">here</link>.
   </para>
@@ -30,18 +30,18 @@
   <para>
    You must also set an email address to be used when creating accounts with
    Let's Encrypt. You can set this for all certs with
-   <literal><xref linkend="opt-security.acme.defaults.email" /></literal>
+   <xref linkend="opt-security.acme.defaults.email" />
    and/or on a per-cert basis with
-   <literal><xref linkend="opt-security.acme.certs._name_.email" /></literal>.
+   <xref linkend="opt-security.acme.certs._name_.email" />.
    This address is only used for registration and renewal reminders,
    and cannot be used to administer the certificates in any way.
   </para>
 
   <para>
    Alternatively, you can use a different ACME server by changing the
-   <literal><xref linkend="opt-security.acme.defaults.server" /></literal> option
+   <xref linkend="opt-security.acme.defaults.server" /> option
    to a provider of your choosing, or just change the server for one cert with
-   <literal><xref linkend="opt-security.acme.certs._name_.server" /></literal>.
+   <xref linkend="opt-security.acme.certs._name_.server" />.
   </para>
 
   <para>
@@ -280,7 +280,7 @@ systemd.services.dns-rfc2136-conf = {
   <para>
    It is possible to use DNS-01 validation with all certificates,
    including those automatically configured via the Nginx/Apache
-   <literal><link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link></literal>
+   <link linkend="opt-services.nginx.virtualHosts._name_.enableACME"><literal>enableACME</literal></link>
    option. This configuration pattern is fully
    supported and part of the module's test suite for Nginx + Apache.
   </para>

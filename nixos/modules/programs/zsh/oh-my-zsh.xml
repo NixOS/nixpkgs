@@ -5,7 +5,7 @@
          xml:id="module-programs-zsh-ohmyzsh">
  <title>Oh my ZSH</title>
  <para>
-  <literal><link xlink:href="https://ohmyz.sh/">oh-my-zsh</link></literal> is a
+  <link xlink:href="https://ohmyz.sh/"><literal>oh-my-zsh</literal></link> is a
   framework to manage your <link xlink:href="https://www.zsh.org/">ZSH</link>
   configuration including completion scripts for several CLI tools or custom
   prompt themes.
@@ -113,7 +113,7 @@
      Completion scripts are supposed to be stored at
      <literal>$out/share/zsh/site-functions</literal>. This directory is part
      of the
-     <literal><link xlink:href="http://zsh.sourceforge.net/Doc/Release/Functions.html">fpath</link></literal>
+     <link xlink:href="http://zsh.sourceforge.net/Doc/Release/Functions.html"><literal>fpath</literal></link>
      and the package should be compatible with pure <literal>ZSH</literal>
      setups. The module will automatically link the contents of
      <literal>site-functions</literal> to completions directory in the proper
