@@ -151,6 +151,7 @@ in buildPythonApplication rec {
     python-uinput
     pyxdg
     rencode
+    invoke
   ] ++ lib.optionals withNvenc [
     pycuda
     pynvml
