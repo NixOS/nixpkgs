@@ -11,16 +11,16 @@
   <para>
    All of Pantheon is working in NixOS and the applications should be available, aside from a few <link xlink:href="https://github.com/NixOS/nixpkgs/issues/58161">exceptions</link>. To enable Pantheon, set
 <programlisting>
-<xref linkend="opt-services.xserver.desktopManager.pantheon.enable"/> = true;
+services.xserver.desktopManager.pantheon.enable = true;
 </programlisting>
    This automatically enables LightDM and Pantheon's LightDM greeter. If you'd like to disable this, set
 <programlisting>
-<xref linkend="opt-services.xserver.displayManager.lightdm.greeters.pantheon.enable"/> = false;
-<xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = false;
+services.xserver.displayManager.lightdm.greeters.pantheon.enable = false;
+services.xserver.displayManager.lightdm.enable = false;
 </programlisting>
    but please be aware using Pantheon without LightDM as a display manager will break screenlocking from the UI. The NixOS module for Pantheon installs all of Pantheon's default applications. If you'd like to not install Pantheon's apps, set
 <programlisting>
-<xref linkend="opt-services.pantheon.apps.enable"/> = false;
+services.pantheon.apps.enable = false;
 </programlisting>
    You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <package>elementary-mail</package>).
   </para>

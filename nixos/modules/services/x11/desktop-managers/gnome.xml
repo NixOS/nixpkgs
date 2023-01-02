@@ -18,8 +18,8 @@
   </para>
 
 <programlisting>
-<xref linkend="opt-services.xserver.desktopManager.gnome.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.gdm.enable"/> = true;
+services.xserver.desktopManager.gnome.enable = true;
+services.xserver.displayManager.gdm.enable = true;
 </programlisting>
 
   <note>
@@ -40,7 +40,7 @@
    </para>
 
 <programlisting>
-<xref linkend="opt-services.gnome.core-utilities.enable"/> = false;
+services.gnome.core-utilities.enable = false;
 </programlisting>
 
    <para>
@@ -61,8 +61,8 @@
    </para>
 
 <programlisting>
-<xref linkend="opt-services.gnome.tracker-miners.enable"/> = false;
-<xref linkend="opt-services.gnome.tracker.enable"/> = false;
+services.gnome.tracker-miners.enable = false;
+services.gnome.tracker.enable = false;
 </programlisting>
 
    <para>
@@ -78,7 +78,7 @@
    </para>
 
 <programlisting>
-<xref linkend="opt-services.gnome.games.enable"/> = true;
+services.gnome.games.enable = true;
 </programlisting>
   </section>
 
@@ -90,7 +90,7 @@
    </para>
 
 <programlisting>
-<xref linkend="opt-services.gnome.core-developer-tools.enable"/> = true;
+services.gnome.core-developer-tools.enable = true;
 </programlisting>
   </section>
  </section>
@@ -103,7 +103,7 @@
   </para>
 
 <programlisting>
-<xref linkend="opt-services.xserver.desktopManager.gnome.flashback.enableMetacity"/> = true;
+services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
 </programlisting>
 
   <para>
@@ -115,7 +115,7 @@
   </para>
 
 <programlisting>
-<xref linkend="opt-services.xserver.desktopManager.gnome.flashback.customSessions"/> = [
+services.xserver.desktopManager.gnome.flashback.customSessions = [
   {
     wmName = "xmonad";
     wmLabel = "XMonad";
@@ -162,7 +162,7 @@
   </para>
 
 <programlisting>
-<xref linkend="opt-environment.systemPackages"/> = [
+environment.systemPackages = [
   gnomeExtensions.dash-to-dock
   gnomeExtensions.gsconnect
   gnomeExtensions.mpris-indicator-button
@@ -211,7 +211,7 @@
 
 <programlisting>
 services.xserver.desktopManager.gnome = {
-  <link xlink:href="#opt-services.xserver.desktopManager.gnome.extraGSettingsOverrides">extraGSettingsOverrides</link> = ''
+  extraGSettingsOverrides = ''
     # Change default background
     [org.gnome.desktop.background]
     picture-uri='file://${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}'
@@ -221,7 +221,7 @@ services.xserver.desktopManager.gnome = {
     favorite-apps=['org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop']
   '';
 
-  <link xlink:href="#opt-services.xserver.desktopManager.gnome.extraGSettingsOverridePackages">extraGSettingsOverridePackages</link> = [
+  extraGSettingsOverridePackages = [
     pkgs.gsettings-desktop-schemas # for org.gnome.desktop
     pkgs.gnome.gnome-shell # for org.gnome.shell
   ];

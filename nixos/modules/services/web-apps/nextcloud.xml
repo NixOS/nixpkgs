@@ -31,22 +31,22 @@
 <programlisting>{ pkgs, ... }:
 {
   services.nextcloud = {
-    <link linkend="opt-services.nextcloud.enable">enable</link> = true;
-    <link linkend="opt-services.nextcloud.hostName">hostName</link> = "nextcloud.tld";
+    enable = true;
+    hostName = "nextcloud.tld";
     config = {
-      <link linkend="opt-services.nextcloud.config.dbtype">dbtype</link> = "pgsql";
-      <link linkend="opt-services.nextcloud.config.dbuser">dbuser</link> = "nextcloud";
-      <link linkend="opt-services.nextcloud.config.dbhost">dbhost</link> = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
-      <link linkend="opt-services.nextcloud.config.dbname">dbname</link> = "nextcloud";
-      <link linkend="opt-services.nextcloud.config.adminpassFile">adminpassFile</link> = "/path/to/admin-pass-file";
-      <link linkend="opt-services.nextcloud.config.adminuser">adminuser</link> = "root";
+      dbtype = "pgsql";
+      dbuser = "nextcloud";
+      dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
+      dbname = "nextcloud";
+      adminpassFile = "/path/to/admin-pass-file";
+      adminuser = "root";
     };
   };
 
   services.postgresql = {
-    <link linkend="opt-services.postgresql.enable">enable</link> = true;
-    <link linkend="opt-services.postgresql.ensureDatabases">ensureDatabases</link> = [ "nextcloud" ];
-    <link linkend="opt-services.postgresql.ensureUsers">ensureUsers</link> = [
+    enable = true;
+    ensureDatabases = [ "nextcloud" ];
+    ensureUsers = [
      { name = "nextcloud";
        ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
      }
@@ -59,7 +59,7 @@
     after = ["postgresql.service"];
   };
 
-  <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 }</programlisting>
   </para>
 
@@ -199,24 +199,24 @@
   <para>
    An exemplary configuration may look like this:
 <programlisting>{ config, lib, pkgs, ... }: {
-  <link linkend="opt-services.nginx.enable">services.nginx.enable</link> = false;
+  services.nginx.enable = false;
   services.nextcloud = {
-    <link linkend="opt-services.nextcloud.enable">enable</link> = true;
-    <link linkend="opt-services.nextcloud.hostName">hostName</link> = "localhost";
+    enable = true;
+    hostName = "localhost";
 
     /* further, required options */
   };
-  <link linkend="opt-services.phpfpm.pools._name_.settings">services.phpfpm.pools.nextcloud.settings</link> = {
+  services.phpfpm.pools.nextcloud.settings = {
     "listen.owner" = config.services.httpd.user;
     "listen.group" = config.services.httpd.group;
   };
   services.httpd = {
-    <link linkend="opt-services.httpd.enable">enable</link> = true;
-    <link linkend="opt-services.httpd.adminAddr">adminAddr</link> = "webmaster@localhost";
-    <link linkend="opt-services.httpd.extraModules">extraModules</link> = [ "proxy_fcgi" ];
+    enable = true;
+    adminAddr = "webmaster@localhost";
+    extraModules = [ "proxy_fcgi" ];
     virtualHosts."localhost" = {
-      <link linkend="opt-services.httpd.virtualHosts._name_.documentRoot">documentRoot</link> = config.services.nextcloud.package;
-      <link linkend="opt-services.httpd.virtualHosts._name_.extraConfig">extraConfig</link> = ''
+      documentRoot = config.services.nextcloud.package;
+      extraConfig = ''
         &lt;Directory "${config.services.nextcloud.package}"&gt;
           &lt;FilesMatch "\.php$"&gt;
             &lt;If "-f %{REQUEST_FILENAME}"&gt;

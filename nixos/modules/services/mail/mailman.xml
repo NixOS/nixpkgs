@@ -28,14 +28,14 @@
     };
   };
   services.mailman = {
-    <link linkend="opt-services.mailman.enable">enable</link> = true;
-    <link linkend="opt-services.mailman.serve.enable">serve.enable</link> = true;
-    <link linkend="opt-services.mailman.hyperkitty.enable">hyperkitty.enable</link> = true;
-    <link linkend="opt-services.mailman.webHosts">webHosts</link> = ["lists.example.org"];
-    <link linkend="opt-services.mailman.siteOwner">siteOwner</link> = "mailman@example.org";
+    enable = true;
+    serve.enable = true;
+    hyperkitty.enable = true;
+    webHosts = ["lists.example.org"];
+    siteOwner = "mailman@example.org";
   };
-  <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">services.nginx.virtualHosts."lists.example.org".enableACME</link> = true;
-  <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 25 80 443 ];
+  services.nginx.virtualHosts."lists.example.org".enableACME = true;
+  networking.firewall.allowedTCPPorts = [ 25 80 443 ];
 }</programlisting>
     </para>
     <para>
@@ -65,7 +65,7 @@
     mailman = {
       enable = true;
       siteOwner = "mailman@example.org";
-      <link linkend="opt-services.mailman.enablePostfix">enablePostfix</link> = false;
+      enablePostfix = false;
       settings.mta = {
         incoming = "mailman.mta.exim4.LMTP";
         outgoing = "mailman.mta.deliver.deliver";

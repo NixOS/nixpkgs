@@ -38,21 +38,21 @@
     endpoint will look like this:
     <programlisting>
 services.prosody = {
-  <link linkend="opt-services.prosody.enable">enable</link> = true;
-  <link linkend="opt-services.prosody.admins">admins</link> = [ "root@example.org" ];
-  <link linkend="opt-services.prosody.ssl.cert">ssl.cert</link> = "/var/lib/acme/example.org/fullchain.pem";
-  <link linkend="opt-services.prosody.ssl.key">ssl.key</link> = "/var/lib/acme/example.org/key.pem";
-  <link linkend="opt-services.prosody.virtualHosts">virtualHosts</link>."example.org" = {
-      <link linkend="opt-services.prosody.virtualHosts._name_.enabled">enabled</link> = true;
-      <link linkend="opt-services.prosody.virtualHosts._name_.domain">domain</link> = "example.org";
-      <link linkend="opt-services.prosody.virtualHosts._name_.ssl.cert">ssl.cert</link> = "/var/lib/acme/example.org/fullchain.pem";
-      <link linkend="opt-services.prosody.virtualHosts._name_.ssl.key">ssl.key</link> = "/var/lib/acme/example.org/key.pem";
+  enable = true;
+  admins = [ "root@example.org" ];
+  ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
+  ssl.key = "/var/lib/acme/example.org/key.pem";
+  virtualHosts."example.org" = {
+      enabled = true;
+      domain = "example.org";
+      ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
+      ssl.key = "/var/lib/acme/example.org/key.pem";
   };
-  <link linkend="opt-services.prosody.muc">muc</link> = [ {
-      <link linkend="opt-services.prosody.muc">domain</link> = "conference.example.org";
+  muc = [ {
+      domain = "conference.example.org";
   } ];
-  <link linkend="opt-services.prosody.uploadHttp">uploadHttp</link> = {
-      <link linkend="opt-services.prosody.uploadHttp.domain">domain</link> = "upload.example.org";
+  uploadHttp = {
+      domain = "upload.example.org";
   };
 };</programlisting>
   </para>
@@ -72,13 +72,13 @@ services.prosody = {
    a TLS certificate for the three endponits:
     <programlisting>
 security.acme = {
-  <link linkend="opt-security.acme.defaults.email">email</link> = "root@example.org";
-  <link linkend="opt-security.acme.acceptTerms">acceptTerms</link> = true;
-  <link linkend="opt-security.acme.certs">certs</link> = {
+  email = "root@example.org";
+  acceptTerms = true;
+  certs = {
     "example.org" = {
-      <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/www/example.org";
-      <link linkend="opt-security.acme.certs._name_.email">email</link> = "root@example.org";
-      <link linkend="opt-security.acme.certs._name_.extraDomainNames">extraDomainNames</link> = [ "conference.example.org" "upload.example.org" ];
+      webroot = "/var/www/example.org";
+      email = "root@example.org";
+      extraDomainNames = [ "conference.example.org" "upload.example.org" ];
     };
   };
 };</programlisting>

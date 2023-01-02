@@ -20,16 +20,16 @@
    For instance, the following configuration could be used to use nginx as
    frontend proxy:
 <programlisting>
-<link linkend="opt-services.nginx.enable">services.nginx</link> = {
-  <link linkend="opt-services.nginx.enable">enable</link> = true;
-  <link linkend="opt-services.nginx.recommendedGzipSettings">recommendedGzipSettings</link> = true;
-  <link linkend="opt-services.nginx.recommendedOptimisation">recommendedOptimisation</link> = true;
-  <link linkend="opt-services.nginx.recommendedProxySettings">recommendedProxySettings</link> = true;
-  <link linkend="opt-services.nginx.recommendedTlsSettings">recommendedTlsSettings</link> = true;
-  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link>."git.example.com" = {
-    <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
-    <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
-    <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.proxyPass">locations."/".proxyPass</link> = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+services.nginx = {
+  enable = true;
+  recommendedGzipSettings = true;
+  recommendedOptimisation = true;
+  recommendedProxySettings = true;
+  recommendedTlsSettings = true;
+  virtualHosts."git.example.com" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
   };
 };
 </programlisting>
@@ -53,26 +53,26 @@
    A basic configuration with some custom settings could look like this:
 <programlisting>
 services.gitlab = {
-  <link linkend="opt-services.gitlab.enable">enable</link> = true;
-  <link linkend="opt-services.gitlab.databasePasswordFile">databasePasswordFile</link> = "/var/keys/gitlab/db_password";
-  <link linkend="opt-services.gitlab.initialRootPasswordFile">initialRootPasswordFile</link> = "/var/keys/gitlab/root_password";
-  <link linkend="opt-services.gitlab.https">https</link> = true;
-  <link linkend="opt-services.gitlab.host">host</link> = "git.example.com";
-  <link linkend="opt-services.gitlab.port">port</link> = 443;
-  <link linkend="opt-services.gitlab.user">user</link> = "git";
-  <link linkend="opt-services.gitlab.group">group</link> = "git";
+  enable = true;
+  databasePasswordFile = "/var/keys/gitlab/db_password";
+  initialRootPasswordFile = "/var/keys/gitlab/root_password";
+  https = true;
+  host = "git.example.com";
+  port = 443;
+  user = "git";
+  group = "git";
   smtp = {
-    <link linkend="opt-services.gitlab.smtp.enable">enable</link> = true;
-    <link linkend="opt-services.gitlab.smtp.address">address</link> = "localhost";
-    <link linkend="opt-services.gitlab.smtp.port">port</link> = 25;
+    enable = true;
+    address = "localhost";
+    port = 25;
   };
   secrets = {
-    <link linkend="opt-services.gitlab.secrets.dbFile">dbFile</link> = "/var/keys/gitlab/db";
-    <link linkend="opt-services.gitlab.secrets.secretFile">secretFile</link> = "/var/keys/gitlab/secret";
-    <link linkend="opt-services.gitlab.secrets.otpFile">otpFile</link> = "/var/keys/gitlab/otp";
-    <link linkend="opt-services.gitlab.secrets.jwsFile">jwsFile</link> = "/var/keys/gitlab/jws";
+    dbFile = "/var/keys/gitlab/db";
+    secretFile = "/var/keys/gitlab/secret";
+    otpFile = "/var/keys/gitlab/otp";
+    jwsFile = "/var/keys/gitlab/jws";
   };
-  <link linkend="opt-services.gitlab.extraConfig">extraConfig</link> = {
+  extraConfig = {
     gitlab = {
       email_from = "gitlab-no-reply@example.com";
       email_display_name = "Example GitLab";

@@ -375,8 +375,8 @@ in [...]
     To install and enable the <command>systemd</command> user service for Emacs
     daemon, add the following to your <filename>configuration.nix</filename>:
 <programlisting>
-<xref linkend="opt-services.emacs.enable"/> = true;
-<xref linkend="opt-services.emacs.package"/> = import /home/cassou/.emacs.d { pkgs = pkgs; };
+services.emacs.enable = true;
+services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
 </programlisting>
    </para>
 
@@ -459,8 +459,8 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     Emacs daemon is not wanted for all users, it is possible to install the
     service but not globally enable it:
 <programlisting>
-<xref linkend="opt-services.emacs.enable"/> = false;
-<xref linkend="opt-services.emacs.install"/> = true;
+services.emacs.enable = false;
+services.emacs.install = true;
 </programlisting>
    </para>
 

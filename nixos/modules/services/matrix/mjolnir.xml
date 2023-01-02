@@ -67,16 +67,16 @@
 {
   services.mjolnir = {
     enable = true;
-    <link linkend="opt-services.mjolnir.homeserverUrl">homeserverUrl</link> = "https://matrix.domain.tld";
-    <link linkend="opt-services.mjolnir.pantalaimon">pantalaimon</link> = {
-       <link linkend="opt-services.mjolnir.pantalaimon.enable">enable</link> = true;
-       <link linkend="opt-services.mjolnir.pantalaimon.username">username</link> = "mjolnir";
-       <link linkend="opt-services.mjolnir.pantalaimon.passwordFile">passwordFile</link> = "/run/secrets/mjolnir-password";
+    homeserverUrl = "https://matrix.domain.tld";
+    pantalaimon = {
+       enable = true;
+       username = "mjolnir";
+       passwordFile = "/run/secrets/mjolnir-password";
     };
-    <link linkend="opt-services.mjolnir.protectedRooms">protectedRooms</link> = [
+    protectedRooms = [
       "https://matrix.to/#/!xxx:domain.tld"
     ];
-    <link linkend="opt-services.mjolnir.managementRoom">managementRoom</link> = "!yyy:domain.tld";
+    managementRoom = "!yyy:domain.tld";
   };
 }
 </programlisting>

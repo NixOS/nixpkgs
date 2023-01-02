@@ -15,11 +15,11 @@
   <para>
    Sourcehut is a Python and Go based set of applications.
    This NixOS module also provides basic configuration integrating Sourcehut into locally running
-   <literal><link linkend="opt-services.nginx.enable">services.nginx</link></literal>,
-   <literal><link linkend="opt-services.redis.servers">services.redis.servers.sourcehut</link></literal>,
-   <literal><link linkend="opt-services.postfix.enable">services.postfix</link></literal>
+   <literal>services.nginx</literal>,
+   <literal>services.redis.servers.sourcehut</literal>,
+   <literal>services.postfix</literal>
    and
-   <literal><link linkend="opt-services.postgresql.enable">services.postgresql</link></literal> services.
+   <literal>services.postgresql</literal> services.
   </para>
 
   <para>
@@ -34,21 +34,21 @@ let
 in {
 
   networking = {
-    <link linkend="opt-networking.hostName">hostName</link> = "srht";
-    <link linkend="opt-networking.domain">domain</link> = "tld";
-    <link linkend="opt-networking.firewall.allowedTCPPorts">firewall.allowedTCPPorts</link> = [ 22 80 443 ];
+    hostName = "srht";
+    domain = "tld";
+    firewall.allowedTCPPorts = [ 22 80 443 ];
   };
 
   services.sourcehut = {
-    <link linkend="opt-services.sourcehut.enable">enable</link> = true;
-    <link linkend="opt-services.sourcehut.git.enable">git.enable</link> = true;
-    <link linkend="opt-services.sourcehut.man.enable">man.enable</link> = true;
-    <link linkend="opt-services.sourcehut.meta.enable">meta.enable</link> = true;
-    <link linkend="opt-services.sourcehut.nginx.enable">nginx.enable</link> = true;
-    <link linkend="opt-services.sourcehut.postfix.enable">postfix.enable</link> = true;
-    <link linkend="opt-services.sourcehut.postgresql.enable">postgresql.enable</link> = true;
-    <link linkend="opt-services.sourcehut.redis.enable">redis.enable</link> = true;
-    <link linkend="opt-services.sourcehut.settings">settings</link> = {
+    enable = true;
+    git.enable = true;
+    man.enable = true;
+    meta.enable = true;
+    nginx.enable = true;
+    postfix.enable = true;
+    postgresql.enable = true;
+    redis.enable = true;
+    settings = {
         "sr.ht" = {
           environment = "production";
           global-domain = fqdn;
@@ -61,26 +61,26 @@ in {
     };
   };
 
-  <link linkend="opt-security.acme.certs._name_.extraDomainNames">security.acme.certs."${fqdn}".extraDomainNames</link> = [
+  security.acme.certs."${fqdn}".extraDomainNames = [
     "meta.${fqdn}"
     "man.${fqdn}"
     "git.${fqdn}"
   ];
 
   services.nginx = {
-    <link linkend="opt-services.nginx.enable">enable</link> = true;
+    enable = true;
     # only recommendedProxySettings are strictly required, but the rest make sense as well.
-    <link linkend="opt-services.nginx.recommendedTlsSettings">recommendedTlsSettings</link> = true;
-    <link linkend="opt-services.nginx.recommendedOptimisation">recommendedOptimisation</link> = true;
-    <link linkend="opt-services.nginx.recommendedGzipSettings">recommendedGzipSettings</link> = true;
-    <link linkend="opt-services.nginx.recommendedProxySettings">recommendedProxySettings</link> = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
 
     # Settings to setup what certificates are used for which endpoint.
-    <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
-      <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">"${fqdn}".enableACME</link> = true;
-      <link linkend="opt-services.nginx.virtualHosts._name_.useACMEHost">"meta.${fqdn}".useACMEHost</link> = fqdn:
-      <link linkend="opt-services.nginx.virtualHosts._name_.useACMEHost">"man.${fqdn}".useACMEHost</link> = fqdn:
-      <link linkend="opt-services.nginx.virtualHosts._name_.useACMEHost">"git.${fqdn}".useACMEHost</link> = fqdn:
+    virtualHosts = {
+      "${fqdn}".enableACME = true;
+      "meta.${fqdn}".useACMEHost = fqdn:
+      "man.${fqdn}".useACMEHost = fqdn:
+      "git.${fqdn}".useACMEHost = fqdn:
     };
   };
 }

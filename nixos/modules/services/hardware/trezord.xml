@@ -19,7 +19,7 @@
  <para>
   To enable Trezor support, add the following to your <filename>configuration.nix</filename>:
 <programlisting>
-<xref linkend="opt-services.trezord.enable"/> = true;
+services.trezord.enable = true;
 </programlisting>
   This will add all necessary udev rules and start Trezor Bridge.
  </para>

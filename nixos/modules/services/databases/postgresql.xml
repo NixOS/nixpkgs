@@ -23,8 +23,8 @@
   <para>
    To enable PostgreSQL, add the following to your <filename>configuration.nix</filename>:
 <programlisting>
-<xref linkend="opt-services.postgresql.enable"/> = true;
-<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_11;
+services.postgresql.enable = true;
+services.postgresql.package = pkgs.postgresql_11;
 </programlisting>
    Note that you are required to specify the desired version of PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for <xref linkend="opt-services.postgresql.package"/> such as the most recent release of PostgreSQL.
   </para>
@@ -45,7 +45,7 @@ Type "help" for help.
   <para>
    By default, PostgreSQL stores its databases in <filename>/var/lib/postgresql/$psqlSchema</filename>. You can override this using <xref linkend="opt-services.postgresql.dataDir"/>, e.g.
 <programlisting>
-<xref linkend="opt-services.postgresql.dataDir"/> = "/data/postgresql";
+services.postgresql.dataDir = "/data/postgresql";
 </programlisting>
   </para>
  </section>
@@ -71,7 +71,7 @@ Type "help" for help.
 <programlisting>
 { config, pkgs, ... }:
 {
-  <xref linkend="opt-environment.systemPackages" /> = [
+  environment.systemPackages = [
     (let
       # XXX specify the postgresql package you'd like to upgrade to.
       # Do not forget to list the extensions you need.
@@ -87,8 +87,8 @@ Type "help" for help.
 
       export NEWBIN="${newPostgres}/bin"
 
-      export OLDDATA="${config.<xref linkend="opt-services.postgresql.dataDir"/>}"
-      export OLDBIN="${config.<xref linkend="opt-services.postgresql.package"/>}/bin"
+      export OLDDATA="${config.services.postgresql.dataDir}"
+      export OLDBIN="${config.services.postgresql.package}/bin"
 
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
@@ -189,8 +189,8 @@ postgresql_11.pkgs.pg_partman        postgresql_11.pkgs.pgroonga
   <para>
    To add plugins via NixOS configuration, set <literal>services.postgresql.extraPlugins</literal>:
 <programlisting>
-<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_11;
-<xref linkend="opt-services.postgresql.extraPlugins"/> = with pkgs.postgresql_11.pkgs; [
+services.postgresql.package = pkgs.postgresql_11;
+services.postgresql.extraPlugins = with pkgs.postgresql_11.pkgs; [
   pg_repack
   postgis
 ];

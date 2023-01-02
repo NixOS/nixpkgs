@@ -60,8 +60,8 @@
 
 <programlisting>
 i18n.inputMethod = {
-  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "ibus";
-  <link linkend="opt-i18n.inputMethod.ibus.engines">ibus.engines</link> = with pkgs.ibus-engines; [ anthy hangul mozc ];
+  enabled = "ibus";
+  ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
 };
 </programlisting>
 
@@ -151,8 +151,8 @@ ibus.engines = with pkgs.ibus-engines; [ table table-others ];
 
 <programlisting>
 i18n.inputMethod = {
-  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "fcitx";
-  <link linkend="opt-i18n.inputMethod.fcitx.engines">fcitx.engines</link> = with pkgs.fcitx-engines; [ mozc hangul m17n ];
+  enabled = "fcitx";
+  fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
 };
 </programlisting>
 
@@ -224,7 +224,7 @@ i18n.inputMethod = {
 
 <programlisting>
 i18n.inputMethod = {
-  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "nabi";
+  enabled = "nabi";
 };
 </programlisting>
  </section>
@@ -242,7 +242,7 @@ i18n.inputMethod = {
 
 <programlisting>
 i18n.inputMethod = {
-  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "uim";
+  enabled = "uim";
 };
 </programlisting>
 
@@ -267,7 +267,7 @@ i18n.inputMethod = {
 
 <programlisting>
 i18n.inputMethod = {
-  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "hime";
+  enabled = "hime";
 };
 </programlisting>
  </section>
@@ -284,7 +284,7 @@ i18n.inputMethod = {
 
 <programlisting>
 i18n.inputMethod = {
-  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "kime";
+  enabled = "kime";
 };
 </programlisting>
  </section>

@@ -12,7 +12,7 @@
   setting <literal>programs.digitalbitbox</literal> to <literal>true</literal>
   in a manner similar to
 <programlisting>
-<xref linkend="opt-programs.digitalbitbox.enable"/> = true;
+programs.digitalbitbox.enable = true;
 </programlisting>
   and bundles the <literal>digitalbitbox</literal> package (see
   <xref
@@ -40,7 +40,7 @@
    <literal>digitalbitbox</literal> package which could be installed as
    follows:
 <programlisting>
-<xref linkend="opt-environment.systemPackages"/> = [
+environment.systemPackages = [
   pkgs.digitalbitbox
 ];
 </programlisting>
@@ -53,7 +53,7 @@
    The digitalbitbox hardware package enables the udev rules for Digital Bitbox
    devices and may be installed as follows:
 <programlisting>
-<xref linkend="opt-hardware.digitalbitbox.enable"/> = true;
+hardware.digitalbitbox.enable = true;
 </programlisting>
   </para>
 
@@ -63,8 +63,8 @@
    by means of overriding as follows:
 <programlisting>
 programs.digitalbitbox = {
-  <link linkend="opt-programs.digitalbitbox.enable">enable</link> = true;
-  <link linkend="opt-programs.digitalbitbox.package">package</link> = pkgs.digitalbitbox.override {
+  enable = true;
+  package = pkgs.digitalbitbox.override {
     udevRule51 = "something else";
   };
 };

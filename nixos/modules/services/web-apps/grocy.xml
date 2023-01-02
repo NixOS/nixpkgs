@@ -17,8 +17,8 @@
 <programlisting>{ pkgs, ... }:
 {
   services.grocy = {
-    <link linkend="opt-services.grocy.enable">enable</link> = true;
-    <link linkend="opt-services.grocy.hostName">hostName</link> = "grocy.tld";
+    enable = true;
+    hostName = "grocy.tld";
   };
 }</programlisting>
     This configures a simple vhost using <link linkend="opt-services.nginx.enable">nginx</link>
@@ -45,19 +45,19 @@
     # The default currency in the system for invoices etc.
     # Please note that exchange rates aren't taken into account, this
     # is just the setting for what's shown in the frontend.
-    <link linkend="opt-services.grocy.settings.currency">currency</link> = "EUR";
+    currency = "EUR";
 
     # The display language (and locale configuration) for grocy.
-    <link linkend="opt-services.grocy.settings.currency">culture</link> = "de";
+    culture = "de";
 
     calendar = {
       # Whether or not to show the week-numbers
       # in the calendar.
-      <link linkend="opt-services.grocy.settings.calendar.showWeekNumber">showWeekNumber</link> = true;
+      showWeekNumber = true;
 
       # Index of the first day to be shown in the calendar (0=Sunday, 1=Monday,
       # 2=Tuesday and so on).
-      <link linkend="opt-services.grocy.settings.calendar.firstDayOfWeek">firstDayOfWeek</link> = 2;
+      firstDayOfWeek = 2;
     };
   };
 }</programlisting>
