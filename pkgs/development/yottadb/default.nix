@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "yottadb";
-  version = "1.34";
+  version = "1.36";
 
   src = fetchFromGitLab {
     owner = "YottaDB";
     repo = "DB/YDB";
     rev = "r${version}";
     leaveDotGit = true;
-    hash = "sha256-i9kK2TsOaMpEMFpyQ1OCpF/cl/DHwEqgBtPNgyPHzPY=";
+    hash = "sha256-8KAvCkMvUyDU1xU+g94/YwHEQpM8249c8qF1GrPqFBA=";
   };
 
   enableParallelBuilding = true;
@@ -227,20 +227,14 @@ stdenv.mkDerivation rec {
         -e s,@@YDB_LIBDIR@@,$out/lib,g \
         ${yottadbPkgConfigTemplate} > $out/lib/pkgconfig/yottadb.pc
 
-    # NOTE: This should not be needed starting from r1.36, see
-    # the following issue: https://gitlab.com/YottaDB/DB/YDB/-/issues/491
-    faketty () {
-      script -qefc "$(printf "%q " "$@")" /dev/null
-    }
-
     # Embed source to OBJs, so that we can drop SRCs
     export ydb_compile="-embed_source -noignore"
 
     # Build M-mode dist
     export ydb_dist=$out/dist ydb_chset=M
     cd $ydb_dist
-    faketty $out/bin/yottadb -r %XCMD 'zhalt $s($zyre["r${version}":0,1:127)&$s($zch="M":0,1:126)'
-    faketty $out/bin/yottadb -r %XCMD 'd SILENT^%RSEL("*","SRC") s x="" f  s x=$o(%ZR(x)) q:x=""  w "["_$zch_"] Building "_x_" ...",! zl $tr(x,"%","_")'
+    $out/bin/yottadb -r %XCMD 'zhalt $s($zyre["r${version}":0,1:127)&$s($zch="M":0,1:126)'
+    $out/bin/yottadb -r %XCMD 'd SILENT^%RSEL("*","SRC") s x="" f  s x=$o(%ZR(x)) q:x=""  w "["_$zch_"] Building "_x_" ...",! zl $tr(x,"%","_")'
 
     # Build UTF8-mode dist
     for rtn in *.m *.gld *.dat ; do
@@ -248,8 +242,8 @@ stdenv.mkDerivation rec {
     done
     unset ydb_chset ydb_icu_version ydb_dist
     cd $out/dist/utf8
-    faketty $out/bin/yottadb -r %XCMD 'zhalt $s($zyre["$r{version}":0,1:127)&$s($zch="UTF-8":0,1:126)'
-    faketty $out/bin/yottadb -r %XCMD 'd SILENT^%RSEL("*","SRC") s x="" f  s x=$o(%ZR(x)) q:x=""  w "["_$zch_"] Building "_x_" ...",! zl $tr(x,"%","_")'
+    $out/bin/yottadb -r %XCMD 'zhalt $s($zyre["$r{version}":0,1:127)&$s($zch="UTF-8":0,1:126)'
+    $out/bin/yottadb -r %XCMD 'd SILENT^%RSEL("*","SRC") s x="" f  s x=$o(%ZR(x)) q:x=""  w "["_$zch_"] Building "_x_" ...",! zl $tr(x,"%","_")'
 
     # Wipe SRCs as Nix is read-only and sets both .o and .m to the same mtime, so compiler tries to compile all the time, but cannot write
     rm -f $out/dist/*.m $out/dist/utf8/*.m
