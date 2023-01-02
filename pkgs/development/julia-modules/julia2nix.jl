@@ -77,7 +77,7 @@ end
 
 function  artifacts_nix(pkg)
     artifacts_toml = joinpath(pkg.source, "Artifacts.toml")
-    artifacts = select_downloadable_artifacts(artifacts_toml)
+    artifacts = select_downloadable_artifacts(artifacts_toml, include_lazy=true)
     server = pkg_server()
     julia_pname = "julia-bin"
     julia_version = Base.VERSION
