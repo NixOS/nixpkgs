@@ -99,7 +99,7 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
   <para>
    You can use other web servers by forwarding calls for
    <filename>index.php</filename> and <filename>piwik.php</filename> to the
-   <literal><link linkend="opt-services.phpfpm.pools._name_.socket">services.phpfpm.pools.&lt;name&gt;.socket</link></literal> fastcgi unix socket. You can use
+   <link linkend="opt-services.phpfpm.pools._name_.socket"><literal>services.phpfpm.pools.&lt;name&gt;.socket</literal></link> fastcgi unix socket. You can use
    the nginx configuration in the module code as a reference to what else
    should be configured.
   </para>

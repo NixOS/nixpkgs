@@ -19,11 +19,11 @@
 
   <para>
    Nextcloud is a PHP-based application which requires an HTTP server
-   (<literal><link linkend="opt-services.nextcloud.enable">services.nextcloud</link></literal>
+   (<link linkend="opt-services.nextcloud.enable"><literal>services.nextcloud</literal></link>
    optionally supports
-   <literal><link linkend="opt-services.nginx.enable">services.nginx</link></literal>)
+   <link linkend="opt-services.nginx.enable"><literal>services.nginx</literal></link>)
    and a database (it's recommended to use
-   <literal><link linkend="opt-services.postgresql.enable">services.postgresql</link></literal>).
+   <link linkend="opt-services.postgresql.enable"><literal>services.postgresql</literal></link>).
   </para>
 
   <para>
@@ -65,7 +65,7 @@
 
   <para>
    The <literal>hostName</literal> option is used internally to configure an HTTP
-   server using <literal><link xlink:href="https://php-fpm.org/">PHP-FPM</link></literal>
+   server using <link xlink:href="https://php-fpm.org/"><literal>PHP-FPM</literal></link>
    and <literal>nginx</literal>. The <literal>config</literal> attribute set is
    used by the imperative installer and all values are written to an additional file
    to ensure that changes can be applied by changing the module's options.
@@ -73,14 +73,14 @@
 
   <para>
    In case the application serves multiple domains (those are checked with
-   <literal><link xlink:href="http://php.net/manual/en/reserved.variables.server.php">$_SERVER['HTTP_HOST']</link></literal>)
+   <link xlink:href="http://php.net/manual/en/reserved.variables.server.php"><literal>$_SERVER['HTTP_HOST']</literal></link>)
    it's needed to add them to
-   <literal><link linkend="opt-services.nextcloud.config.extraTrustedDomains">services.nextcloud.config.extraTrustedDomains</link></literal>.
+   <link linkend="opt-services.nextcloud.config.extraTrustedDomains"><literal>services.nextcloud.config.extraTrustedDomains</literal></link>.
   </para>
 
   <para>
    Auto updates for Nextcloud apps can be enabled using
-   <literal><link linkend="opt-services.nextcloud.autoUpdateApps.enable">services.nextcloud.autoUpdateApps</link></literal>.
+   <link linkend="opt-services.nextcloud.autoUpdateApps.enable"><literal>services.nextcloud.autoUpdateApps</literal></link>.
 </para>
 
  </section>
