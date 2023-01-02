@@ -166,6 +166,26 @@ rec {
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
 
+  /* The earliest possible release date, in YYYY-MM-DD format.
+     (For example, 23.05 would be 2023-05-01).
+
+     This is useful if any derivations need hardcoded build dates, instead
+     of hardcoding things like 1970-01-01. */
+  earliestReleaseIsoDate = let
+    yyMm = let
+      split = lib.strings.splitString "." lib.trivial.release;
+    in
+      if builtins.length split == 2 then split else null;
+    yyyy = if yyMm == null then 1970 else
+      (lib.trivial.mod (lib.trivial.max (lib.strings.toIntBase10 (builtins.elemAt yyMm 0)) 0) 100) + 2000;
+    mm = if yyMm == null then 1 else
+      (lib.trivial.mod ((lib.trivial.max (lib.strings.toIntBase10 (builtins.elemAt yyMm 1)) 1) - 1) 12) + 1;
+  in
+    "${lib.strings.fixedWidthNumber 4 yyyy}-${lib.strings.fixedWidthNumber 2 mm}-01";
+
+  /** Like earliestReleaseIsoDate, but adds a constant suffix of T00:00:00Z. */
+  earliestReleaseIsoDateTime = "${lib.trivial.earliestReleaseDate}T00:00:00Z";
+
   /* The latest release that is supported, at the time of release branch-off,
      if applicable.
 
