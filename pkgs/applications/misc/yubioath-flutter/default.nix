@@ -40,6 +40,10 @@ flutter.mkFlutterApp rec {
     # Swap the authenticator-helper symlink with the correct symlink.
     ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/helper/authenticator-helper"
 
+    # Move the icon.
+    mkdir $out/share/icons
+    mv $out/app/linux_support/com.yubico.yubioath.png $out/share/icons
+
     # Cleanup.
     rm -rf \
       "$out/app/README.adoc" \
@@ -52,7 +56,8 @@ flutter.mkFlutterApp rec {
 
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
-      --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter"
+      --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
+      --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
   '';
 
   buildInputs = [
