@@ -72,7 +72,7 @@ rec {
               let
                 javaHomeProperty = "org.gradle.java.home=" + java;
                 toolchainsProperty = "org.gradle.java.installations.paths=" + (concatStringsSep "," javaToolchains);
-                toolchainsPropertyWithCheck = 
+                toolchainsPropertyWithCheck =
                 if (hasToolchainSupport || (length javaToolchains) == 0) then toolchainsProperty
                 else lib.warn "This Gradle version (${version}) does not have toolchain support, yet the 'javaToolchains' list is not empty. The used toolchain will be ignored by Gradle." toolchainsProperty;
                 propDefs = concatStringsSep "\n" [ javaHomeProperty toolchainsPropertyWithCheck ];
