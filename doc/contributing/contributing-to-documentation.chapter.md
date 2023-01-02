@@ -53,7 +53,7 @@ Additional syntax extensions are available, though not all extensions can be use
   This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
 - []{#ssec-contributing-markup-inline-roles}
-  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`. The references will turn into links when a mapping exists in {file}`doc/build-aux/pandoc-filters/link-unix-man-references.lua`.
+  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`. The references will turn into links when a mapping exists in {file}`doc/manpage-urls.json`.
 
   A few markups for other kinds of literals are also available:
 
