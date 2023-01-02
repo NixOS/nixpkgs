@@ -29,11 +29,12 @@
 , qtkeychain
 , qt3d
 , qscintilla
+, qtlocation
 , qtserialport
 , qtxmlpatterns
 , withGrass ? true
 , grass
-, withWebKit ? true
+, withWebKit ? false
 , qtwebkit
 , pdal
 , zstd
@@ -111,6 +112,7 @@ in mkDerivation rec {
     qca-qt5
     qtkeychain
     qscintilla
+    qtlocation
     qtserialport
     qtxmlpatterns
     qt3d
