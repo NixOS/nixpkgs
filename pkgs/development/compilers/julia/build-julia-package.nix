@@ -5,6 +5,9 @@
 , file
 , julia
 , computeRequiredJuliaPackages
+, computeJuliaDepotPath
+, computeJuliaLoadPath
+, computeJuliaArtifacts
 }:
 
 # Build an individual package
@@ -49,15 +52,14 @@
 
 let
   requiredJuliaPackages' = computeRequiredJuliaPackages requiredJuliaPackages;
+  juliaDepotPath = computeJuliaDepotPath requiredJuliaPackages';
+  juliaLoadPath = computeJuliaLoadPath requiredJuliaPackages';
+  juliaArtifacts = computeJuliaArtifacts requiredJuliaPackages';
 
-  juliaDepotPath = lib.concatMapStringsSep ":" (p: p + "/shared/julia") requiredJuliaPackages';
-  juliaLoadPath = lib.concatMapStringsSep ":" (p: p + "/share/julia/packages") requiredJuliaPackages';
 
   # Must use attrs.nativeBuildInputs before they are removed by the removeAttrs
   # below, or everything fails.
   nativeBuildInputs' = [ julia file patchelf ] ++ nativeBuildInputs;
-
-  juliaArtifacts = lib.filter (p: p ? isJuliaArtifact && p.isJuliaArtifact == true) requiredJuliaPackages';
 
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
@@ -129,6 +131,10 @@ in stdenv.mkDerivation ({
     done
 
     julia -e 'import ${attrs.pname}'
+
+    # these may cause collisions
+    rm -r $out/share/julia/logs || true
+    rm -r $out/share/julia/scratchspaces || true
 
     runHook postBuild
   '';

@@ -14,7 +14,7 @@ makeScope newScope (self:
     buildJuliaPackage = callPackage ../development/compilers/julia/build-julia-package.nix {
       inherit lib stdenv;
       inherit julia;
-      inherit computeRequiredJuliaPackages;
+      inherit computeRequiredJuliaPackages computeJuliaDepotPath computeJuliaLoadPath computeJuliaArtifacts;
     };
 
     # Given a list of required Julia package derivations, get a list of
@@ -27,10 +27,15 @@ makeScope newScope (self:
                   ++ (foldr (p: a: a ++ (dependencies p.requiredJuliaPackages)) [] (filter hasJuliaPackage  packages')));
       in unique packages ++ (dependencies packages);
 
+    computeJuliaDepotPath = jpkgs: lib.concatMapStringsSep ":" (p: p + "/shared/julia") jpkgs;
+    computeJuliaLoadPath = jpkgs: lib.concatMapStringsSep ":" (p: p + "/share/julia/packages") jpkgs;
+    computeJuliaArtifacts = jpkgs: lib.filter (p: p ? isJuliaArtifact && p.isJuliaArtifact == true) jpkgs;
+
     # The pname must correspond to the name 'PkgName' of the package
     # as used in the Julia command "using PkgName".
     juliaPkgsList = callPackage ../development/julia-modules {
-      inherit juliaPkgs;
+      inherit juliaPkgs pkgs lib;
+      inherit computeRequiredJuliaPackages computeJuliaDepotPath computeJuliaLoadPath computeJuliaArtifacts;
     };
 
     # Build the attribute set of the Julia packages from the packages definitions.
@@ -44,6 +49,10 @@ makeScope newScope (self:
 
     inherit callPackage buildJuliaPackage computeRequiredJuliaPackages;
 
-    pkgs = juliaPkgs // { inherit buildJuliaPackage computeRequiredJuliaPackages juliaPackagesFromList; };
+    pkgs = juliaPkgs // {
+      inherit buildJuliaPackage computeRequiredJuliaPackages;
+      inherit juliaPackagesFromList computeJuliaDepotPath;
+      inherit computeJuliaLoadPath computeJuliaArtifacts;
+    };
 
   })

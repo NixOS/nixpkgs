@@ -1,6 +1,11 @@
-{ fetchurl
+{ pkgs
+, lib
+, fetchurl
 , juliaPkgs
 , computeRequiredJuliaPackages
+, computeJuliaDepotPath
+, computeJuliaLoadPath
+, computeJuliaArtifacts
 }:
 
 with juliaPkgs;
