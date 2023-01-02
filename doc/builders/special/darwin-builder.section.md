@@ -20,6 +20,19 @@ To launch the builder, run the following flake:
 $ nix run nixpkgs#darwin.builder
 ```
 
+> Note: The first time you run this macOS will ask you if you want to open your
+> firewall to accept incoming connections.  You can deny that request because it
+> is not necessary to open your firewall to use the builder.
+>
+> This weird behavior is due to an inconsistency in macOS where it only permits
+> unprivileged processes (e.g. `qemu`) to bind to privileged ports (e.g. port
+> 22 for SSH) if they bind the port on all IP addresses (`0.0.0.0`) but not to
+> specific IP addresses (e.g. `127.0.0.1`).  For more details, see:
+> [Binding on priviledged ports on macOS](https://developer.apple.com/forums/thread/674179).
+>
+> This means that the `qemu` VM has to gratuitously request access to all
+> network interfaces even though it only needs to bind to `127.0.0.1`.
+
 That will prompt you to enter your `sudo` password:
 
 ```
