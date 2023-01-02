@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
   #  *** No rule to make target 'patscc.dats', needed by 'patscc_dats.c'.  Stop.
   enableParallelBuilding = false;
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CCOMP=${stdenv.cc.targetPrefix}cc"
+  ];
+
   setupHook = with lib;
     let
       hookFiles =
@@ -55,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
     license     = licenses.gpl3Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ttuegel bbarker ];
   };
 }
