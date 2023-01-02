@@ -1,34 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, boehmgc
+}:
 
+let
+  targetSystem = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
+  staticBoehmgc = boehmgc.overrideAttrs (oldAttrs: {
+    configureFlags = oldAttrs.configureFlags ++ [ "--enable-static" ];
+  });
+in
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "weekly.2022.20";
+  version = "weekly.2023.01";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
+    sha256 = "G/8SF0g/YY0kmDdVSTzuI5ksrrwaFuhxZILIIGRdbyw=";
   };
 
   # Required for bootstrap.
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "167f262866090493650f58832d62d910999dd5a4";
-    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
+    rev = "086ca946e05f0ef6ad1c8bc1cb15d397db4ef2e7";
+    sha256 = "TbivY4zoJKdMDSshvzi4yKhWrvlbUDq1FcKmNbCWZy4=";
   };
 
   # Required for vdoc.
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
-    sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
+    rev = "014724a2e35c0a7e46ea9cc91f5a303f2581b62c";
+    sha256 = "jsL3m6hzNgQPKrQQhnb9mMELK1vYhvyS62sRBRwQ9CE=";
   };
-
-  propagatedBuildInputs = [ glfw freetype openssl ]
-    ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -39,6 +47,18 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    # We need to set the target system, because the auto-detection doesn't work that great.
+    export VFLAGS="-os ${targetSystem} -showcc -skip-unused"
+    # We also need gc.h in the include path.
+    export CFLAGS="-I${staticBoehmgc.dev}/include"
+    export LDFLAGS="-L${staticBoehmgc}/lib"
+
+    # Monkeypatch the source code like an animal to use BoehmGC static files,
+    # instead of the "thirdparty" one.
+    # We should replace "#flag @VEXEROOT/thirdparty/tcc/lib/libgc.a"
+    # to "#flag ${staticBoehmgc}/lib/libgc.a"
+    # in file vlib/builtin/builtin_d_gcboehm.c.v
+    sed -i "s|@VEXEROOT/thirdparty/tcc/lib/libgc.a|${staticBoehmgc}/lib/libgc.a|" vlib/builtin/builtin_d_gcboehm.c.v
   '';
 
   # vcreate_test.v requires git, so we must remove it when building the tools.
@@ -76,12 +96,32 @@ stdenv.mkDerivation rec {
     cp $HOME/vtest.v $out/lib/cmd/tools/vtest.v
   '';
 
-  meta = with lib; {
-    homepage = "https://vlang.io/";
-    description = "Simple, fast, safe, compiled language for developing maintainable software";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
-    mainProgram = "v";
-    platforms = platforms.all;
-  };
+  preFixup = ''
+    # We need to patch the shebang of file "lib/cmd/tools/git_pre_commit_hook.vsh"
+    # and file "lib/vlib/v/tests/script_with_no_extension"
+    # Going from "#!/usr/bin/env -S v -raw-vsh-tmp-prefix tmp"
+    # To "#!$out/v -raw-vsh-tmp-prefix tmp"
+    sed -i "1s|.*|#!$out/bin/v -raw-vsh-tmp-prefix tmp|" $out/lib/cmd/tools/git_pre_commit_hook.vsh
+    sed -i "1s|.*|#!$out/bin/v -raw-vsh-tmp-prefix tmp|" $out/lib/vlib/v/tests/script_with_no_extension
+  '';
+
+  /* Details concerning features:
+    If you want to use `-compress`, you need to add `upx` in your build inputs.
+    If you want to build x11 apps (like examples/2048.v) you will need:
+    - `xorg.libX11.dev`
+    - `xorg.libXi.dev`
+    - `xorg.libXcursor.dev`
+    - `libGL.dev`
+    - `freetype`
+    If you want to build web apps (using `net.http` or `net.websocket`) you will need `openssl`.
+  */
+  meta = with lib;
+    {
+      homepage = "https://vlang.io/";
+      description = "Simple, fast, safe, compiled language for developing maintainable software";
+      license = licenses.mit;
+      maintainers = with maintainers; [ Madouura ];
+      mainProgram = "v";
+      platforms = platforms.all;
+    };
 }
