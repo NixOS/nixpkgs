@@ -18,15 +18,15 @@
    After that, <package>plausible</package> can be deployed like this:
 <programlisting>{
   services.plausible = {
-    <link linkend="opt-services.plausible.enable">enable</link> = true;
+    enable = true;
     adminUser = {
-      <link linkend="opt-services.plausible.adminUser.activate">activate</link> = true; <co xml:id='ex-plausible-cfg-activate' />
-      <link linkend="opt-services.plausible.adminUser.email">email</link> = "admin@localhost";
-      <link linkend="opt-services.plausible.adminUser.passwordFile">passwordFile</link> = "/run/secrets/plausible-admin-pwd";
+      activate = true; <co xml:id='ex-plausible-cfg-activate' />
+      email = "admin@localhost";
+      passwordFile = "/run/secrets/plausible-admin-pwd";
     };
     server = {
-      <link linkend="opt-services.plausible.server.baseUrl">baseUrl</link> = "http://analytics.example.org";
-      <link linkend="opt-services.plausible.server.secretKeybaseFile">secretKeybaseFile</link> = "/run/secrets/plausible-secret-key-base"; <co xml:id='ex-plausible-cfg-secretbase' />
+      baseUrl = "http://analytics.example.org";
+      secretKeybaseFile = "/run/secrets/plausible-secret-key-base"; <co xml:id='ex-plausible-cfg-secretbase' />
     };
   };
 }</programlisting>

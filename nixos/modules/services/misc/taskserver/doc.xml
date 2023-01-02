@@ -91,10 +91,10 @@
    For example, let's say you have the following configuration:
 <screen>
 {
-  <xref linkend="opt-services.taskserver.enable"/> = true;
-  <xref linkend="opt-services.taskserver.fqdn"/> = "server";
-  <xref linkend="opt-services.taskserver.listenHost"/> = "::";
-  <link linkend="opt-services.taskserver.organisations._name_.users">services.taskserver.organisations.my-company.users</link> = [ "alice" ];
+  services.taskserver.enable = true;
+  services.taskserver.fqdn = "server";
+  services.taskserver.listenHost = "::";
+  services.taskserver.organisations.my-company.users = [ "alice" ];
 }
 </screen>
    This creates an organisation called <literal>my-company</literal> with the

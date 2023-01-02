@@ -15,13 +15,13 @@
      A minimal configuration using Let's Encrypt for TLS certificates looks like this:
 <programlisting>{
   services.jitsi-meet = {
-    <link linkend="opt-services.jitsi-meet.enable">enable</link> = true;
-    <link linkend="opt-services.jitsi-meet.enable">hostName</link> = "jitsi.example.com";
+    enable = true;
+    hostName = "jitsi.example.com";
   };
-  <link linkend="opt-services.jitsi-videobridge.openFirewall">services.jitsi-videobridge.openFirewall</link> = true;
-  <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 80 443 ];
-  <link linkend="opt-security.acme.defaults.email">security.acme.email</link> = "me@example.com";
-  <link linkend="opt-security.acme.acceptTerms">security.acme.acceptTerms</link> = true;
+  services.jitsi-videobridge.openFirewall = true;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  security.acme.email = "me@example.com";
+  security.acme.acceptTerms = true;
 }</programlisting>
    </para>
  </section>
@@ -32,22 +32,22 @@
      Here is the minimal configuration with additional configurations:
 <programlisting>{
   services.jitsi-meet = {
-    <link linkend="opt-services.jitsi-meet.enable">enable</link> = true;
-    <link linkend="opt-services.jitsi-meet.enable">hostName</link> = "jitsi.example.com";
-    <link linkend="opt-services.jitsi-meet.config">config</link> = {
+    enable = true;
+    hostName = "jitsi.example.com";
+    config = {
       enableWelcomePage = false;
       prejoinPageEnabled = true;
       defaultLang = "fi";
     };
-    <link linkend="opt-services.jitsi-meet.interfaceConfig">interfaceConfig</link> = {
+    interfaceConfig = {
       SHOW_JITSI_WATERMARK = false;
       SHOW_WATERMARK_FOR_GUESTS = false;
     };
   };
-  <link linkend="opt-services.jitsi-videobridge.openFirewall">services.jitsi-videobridge.openFirewall</link> = true;
-  <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 80 443 ];
-  <link linkend="opt-security.acme.defaults.email">security.acme.email</link> = "me@example.com";
-  <link linkend="opt-security.acme.acceptTerms">security.acme.acceptTerms</link> = true;
+  services.jitsi-videobridge.openFirewall = true;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  security.acme.email = "me@example.com";
+  security.acme.acceptTerms = true;
 }</programlisting>
    </para>
  </section>

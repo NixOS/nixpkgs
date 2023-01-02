@@ -15,18 +15,18 @@
      A minimal configuration using Let's Encrypt for TLS certificates looks like this:
 <programlisting>
 services.discourse = {
-  <link linkend="opt-services.discourse.enable">enable</link> = true;
-  <link linkend="opt-services.discourse.hostname">hostname</link> = "discourse.example.com";
+  enable = true;
+  hostname = "discourse.example.com";
   admin = {
-    <link linkend="opt-services.discourse.admin.email">email</link> = "admin@example.com";
-    <link linkend="opt-services.discourse.admin.username">username</link> = "admin";
-    <link linkend="opt-services.discourse.admin.fullName">fullName</link> = "Administrator";
-    <link linkend="opt-services.discourse.admin.passwordFile">passwordFile</link> = "/path/to/password_file";
+    email = "admin@example.com";
+    username = "admin";
+    fullName = "Administrator";
+    passwordFile = "/path/to/password_file";
   };
-  <link linkend="opt-services.discourse.secretKeyBaseFile">secretKeyBaseFile</link> = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = "/path/to/secret_key_base_file";
 };
-<link linkend="opt-security.acme.defaults.email">security.acme.email</link> = "me@example.com";
-<link linkend="opt-security.acme.acceptTerms">security.acme.acceptTerms</link> = true;
+security.acme.email = "me@example.com";
+security.acme.acceptTerms = true;
 </programlisting>
    </para>
 
@@ -48,17 +48,17 @@ services.discourse = {
 
 <programlisting>
 services.discourse = {
-  <link linkend="opt-services.discourse.enable">enable</link> = true;
-  <link linkend="opt-services.discourse.hostname">hostname</link> = "discourse.example.com";
-  <link linkend="opt-services.discourse.sslCertificate">sslCertificate</link> = "/path/to/ssl_certificate";
-  <link linkend="opt-services.discourse.sslCertificateKey">sslCertificateKey</link> = "/path/to/ssl_certificate_key";
+  enable = true;
+  hostname = "discourse.example.com";
+  sslCertificate = "/path/to/ssl_certificate";
+  sslCertificateKey = "/path/to/ssl_certificate_key";
   admin = {
-    <link linkend="opt-services.discourse.admin.email">email</link> = "admin@example.com";
-    <link linkend="opt-services.discourse.admin.username">username</link> = "admin";
-    <link linkend="opt-services.discourse.admin.fullName">fullName</link> = "Administrator";
-    <link linkend="opt-services.discourse.admin.passwordFile">passwordFile</link> = "/path/to/password_file";
+    email = "admin@example.com";
+    username = "admin";
+    fullName = "Administrator";
+    passwordFile = "/path/to/password_file";
   };
-  <link linkend="opt-services.discourse.secretKeyBaseFile">secretKeyBaseFile</link> = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = "/path/to/secret_key_base_file";
 };
 </programlisting>
 
@@ -108,24 +108,24 @@ services.discourse = {
 
 <programlisting>
 services.discourse = {
-  <link linkend="opt-services.discourse.enable">enable</link> = true;
-  <link linkend="opt-services.discourse.hostname">hostname</link> = "discourse.example.com";
-  <link linkend="opt-services.discourse.sslCertificate">sslCertificate</link> = "/path/to/ssl_certificate";
-  <link linkend="opt-services.discourse.sslCertificateKey">sslCertificateKey</link> = "/path/to/ssl_certificate_key";
+  enable = true;
+  hostname = "discourse.example.com";
+  sslCertificate = "/path/to/ssl_certificate";
+  sslCertificateKey = "/path/to/ssl_certificate_key";
   admin = {
-    <link linkend="opt-services.discourse.admin.email">email</link> = "admin@example.com";
-    <link linkend="opt-services.discourse.admin.username">username</link> = "admin";
-    <link linkend="opt-services.discourse.admin.fullName">fullName</link> = "Administrator";
-    <link linkend="opt-services.discourse.admin.passwordFile">passwordFile</link> = "/path/to/password_file";
+    email = "admin@example.com";
+    username = "admin";
+    fullName = "Administrator";
+    passwordFile = "/path/to/password_file";
   };
   mail.outgoing = {
-    <link linkend="opt-services.discourse.mail.outgoing.serverAddress">serverAddress</link> = "smtp.emailprovider.com";
-    <link linkend="opt-services.discourse.mail.outgoing.port">port</link> = 587;
-    <link linkend="opt-services.discourse.mail.outgoing.username">username</link> = "user@emailprovider.com";
-    <link linkend="opt-services.discourse.mail.outgoing.passwordFile">passwordFile</link> = "/path/to/smtp_password_file";
+    serverAddress = "smtp.emailprovider.com";
+    port = 587;
+    username = "user@emailprovider.com";
+    passwordFile = "/path/to/smtp_password_file";
   };
-  <link linkend="opt-services.discourse.mail.incoming.enable">mail.incoming.enable</link> = true;
-  <link linkend="opt-services.discourse.secretKeyBaseFile">secretKeyBaseFile</link> = "/path/to/secret_key_base_file";
+  mail.incoming.enable = true;
+  secretKeyBaseFile = "/path/to/secret_key_base_file";
 };
 </programlisting>
 
@@ -210,24 +210,24 @@ services.discourse = {
        and changes a few request limits in the backend settings:
 <programlisting>
 services.discourse = {
-  <link linkend="opt-services.discourse.enable">enable</link> = true;
-  <link linkend="opt-services.discourse.hostname">hostname</link> = "discourse.example.com";
-  <link linkend="opt-services.discourse.sslCertificate">sslCertificate</link> = "/path/to/ssl_certificate";
-  <link linkend="opt-services.discourse.sslCertificateKey">sslCertificateKey</link> = "/path/to/ssl_certificate_key";
+  enable = true;
+  hostname = "discourse.example.com";
+  sslCertificate = "/path/to/ssl_certificate";
+  sslCertificateKey = "/path/to/ssl_certificate_key";
   admin = {
-    <link linkend="opt-services.discourse.admin.email">email</link> = "admin@example.com";
-    <link linkend="opt-services.discourse.admin.username">username</link> = "admin";
-    <link linkend="opt-services.discourse.admin.fullName">fullName</link> = "Administrator";
-    <link linkend="opt-services.discourse.admin.passwordFile">passwordFile</link> = "/path/to/password_file";
+    email = "admin@example.com";
+    username = "admin";
+    fullName = "Administrator";
+    passwordFile = "/path/to/password_file";
   };
   mail.outgoing = {
-    <link linkend="opt-services.discourse.mail.outgoing.serverAddress">serverAddress</link> = "smtp.emailprovider.com";
-    <link linkend="opt-services.discourse.mail.outgoing.port">port</link> = 587;
-    <link linkend="opt-services.discourse.mail.outgoing.username">username</link> = "user@emailprovider.com";
-    <link linkend="opt-services.discourse.mail.outgoing.passwordFile">passwordFile</link> = "/path/to/smtp_password_file";
+    serverAddress = "smtp.emailprovider.com";
+    port = 587;
+    username = "user@emailprovider.com";
+    passwordFile = "/path/to/smtp_password_file";
   };
-  <link linkend="opt-services.discourse.mail.incoming.enable">mail.incoming.enable</link> = true;
-  <link linkend="opt-services.discourse.siteSettings">siteSettings</link> = {
+  mail.incoming.enable = true;
+  siteSettings = {
     required = {
       title = "My Cats";
       site_description = "Discuss My Cats (and be nice plz)";
@@ -238,13 +238,13 @@ services.discourse = {
       github_client_secret._secret = /run/keys/discourse_github_client_secret;
     };
   };
-  <link linkend="opt-services.discourse.backendSettings">backendSettings</link> = {
+  backendSettings = {
     max_reqs_per_ip_per_minute = 300;
     max_reqs_per_ip_per_10_seconds = 60;
     max_asset_reqs_per_ip_per_10_seconds = 250;
     max_reqs_per_ip_mode = "warn+block";
   };
-  <link linkend="opt-services.discourse.secretKeyBaseFile">secretKeyBaseFile</link> = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = "/path/to/secret_key_base_file";
 };
 </programlisting>
      </para>
@@ -320,33 +320,33 @@ services.discourse = {
 
 <programlisting>
 services.discourse = {
-  <link linkend="opt-services.discourse.enable">enable</link> = true;
-  <link linkend="opt-services.discourse.hostname">hostname</link> = "discourse.example.com";
-  <link linkend="opt-services.discourse.sslCertificate">sslCertificate</link> = "/path/to/ssl_certificate";
-  <link linkend="opt-services.discourse.sslCertificateKey">sslCertificateKey</link> = "/path/to/ssl_certificate_key";
+  enable = true;
+  hostname = "discourse.example.com";
+  sslCertificate = "/path/to/ssl_certificate";
+  sslCertificateKey = "/path/to/ssl_certificate_key";
   admin = {
-    <link linkend="opt-services.discourse.admin.email">email</link> = "admin@example.com";
-    <link linkend="opt-services.discourse.admin.username">username</link> = "admin";
-    <link linkend="opt-services.discourse.admin.fullName">fullName</link> = "Administrator";
-    <link linkend="opt-services.discourse.admin.passwordFile">passwordFile</link> = "/path/to/password_file";
+    email = "admin@example.com";
+    username = "admin";
+    fullName = "Administrator";
+    passwordFile = "/path/to/password_file";
   };
   mail.outgoing = {
-    <link linkend="opt-services.discourse.mail.outgoing.serverAddress">serverAddress</link> = "smtp.emailprovider.com";
-    <link linkend="opt-services.discourse.mail.outgoing.port">port</link> = 587;
-    <link linkend="opt-services.discourse.mail.outgoing.username">username</link> = "user@emailprovider.com";
-    <link linkend="opt-services.discourse.mail.outgoing.passwordFile">passwordFile</link> = "/path/to/smtp_password_file";
+    serverAddress = "smtp.emailprovider.com";
+    port = 587;
+    username = "user@emailprovider.com";
+    passwordFile = "/path/to/smtp_password_file";
   };
-  <link linkend="opt-services.discourse.mail.incoming.enable">mail.incoming.enable</link> = true;
-  <link linkend="opt-services.discourse.mail.incoming.enable">plugins</link> = with config.services.discourse.package.plugins; [
+  mail.incoming.enable = true;
+  plugins = with config.services.discourse.package.plugins; [
     discourse-spoiler-alert
     discourse-solved
   ];
-  <link linkend="opt-services.discourse.siteSettings">siteSettings</link> = {
+  siteSettings = {
     plugins = {
       spoiler_enabled = false;
     };
   };
-  <link linkend="opt-services.discourse.secretKeyBaseFile">secretKeyBaseFile</link> = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = "/path/to/secret_key_base_file";
 };
 </programlisting>
 

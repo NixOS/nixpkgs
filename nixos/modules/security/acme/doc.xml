@@ -57,37 +57,36 @@
 
   <para>
    NixOS supports fetching ACME certificates for you by setting
-   <literal><link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link>
-   = true;</literal> in a virtualHost config. We first create self-signed
+   <literal>enableACME = true;</literal> in a virtualHost config. We first create self-signed
    placeholder certificates in place of the real ACME certs. The placeholder
    certs are overwritten when the ACME certs arrive. For
    <literal>foo.example.com</literal> the config would look like this:
   </para>
 
 <programlisting>
-<xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
+security.acme.acceptTerms = true;
+security.acme.defaults.email = "admin+acme@example.com";
 services.nginx = {
-  <link linkend="opt-services.nginx.enable">enable</link> = true;
-  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+  enable = true;
+  virtualHosts = {
     "foo.example.com" = {
-      <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
-      <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
-      # All serverAliases will be added as <link linkend="opt-security.acme.certs._name_.extraDomainNames">extra domain names</link> on the certificate.
-      <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [ "bar.example.com" ];
+      forceSSL = true;
+      enableACME = true;
+      # All serverAliases will be added as extra domain names on the certificate.
+      serverAliases = [ "bar.example.com" ];
       locations."/" = {
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/www";
+        root = "/var/www";
       };
     };
 
     # We can also add a different vhost and reuse the same certificate
     # but we have to append extraDomainNames manually beforehand:
-    # <link linkend="opt-security.acme.certs._name_.extraDomainNames">security.acme.certs."foo.example.com".extraDomainNames</link> = [ "baz.example.com" ];
+    # security.acme.certs."foo.example.com".extraDomainNames = [ "baz.example.com" ];
     "baz.example.com" = {
-      <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
-      <link linkend="opt-services.nginx.virtualHosts._name_.useACMEHost">useACMEHost</link> = "foo.example.com";
+      forceSSL = true;
+      useACMEHost = "foo.example.com";
       locations."/" = {
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/www";
+        root = "/var/www";
       };
     };
   };
@@ -114,41 +113,41 @@ services.nginx = {
   </para>
 
 <programlisting>
-<xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
+security.acme.acceptTerms = true;
+security.acme.defaults.email = "admin+acme@example.com";
 
 # /var/lib/acme/.challenges must be writable by the ACME user
 # and readable by the Nginx user. The easiest way to achieve
 # this is to add the Nginx user to the ACME group.
-<link linkend="opt-users.users._name_.extraGroups">users.users.nginx.extraGroups</link> = [ "acme" ];
+users.users.nginx.extraGroups = [ "acme" ];
 
 services.nginx = {
-  <link linkend="opt-services.nginx.enable">enable</link> = true;
-  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+  enable = true;
+  virtualHosts = {
     "acmechallenge.example.com" = {
       # Catchall vhost, will redirect users to HTTPS for all vhosts
-      <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [ "*.example.com" ];
+      serverAliases = [ "*.example.com" ];
       locations."/.well-known/acme-challenge" = {
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/lib/acme/.challenges";
+        root = "/var/lib/acme/.challenges";
       };
       locations."/" = {
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.return">return</link> = "301 https://$host$request_uri";
+        return = "301 https://$host$request_uri";
       };
     };
   };
 }
 # Alternative config for Apache
-<link linkend="opt-users.users._name_.extraGroups">users.users.wwwrun.extraGroups</link> = [ "acme" ];
+users.users.wwwrun.extraGroups = [ "acme" ];
 services.httpd = {
-  <link linkend="opt-services.httpd.enable">enable = true;</link>
-  <link linkend="opt-services.httpd.virtualHosts">virtualHosts</link> = {
+  enable = true;
+  virtualHosts = {
     "acmechallenge.example.com" = {
       # Catchall vhost, will redirect users to HTTPS for all vhosts
-      <link linkend="opt-services.httpd.virtualHosts._name_.serverAliases">serverAliases</link> = [ "*.example.com" ];
+      serverAliases = [ "*.example.com" ];
       # /var/lib/acme/.challenges must be writable by the ACME user and readable by the Apache user.
       # By default, this is the case.
-      <link linkend="opt-services.httpd.virtualHosts._name_.documentRoot">documentRoot</link> = "/var/lib/acme/.challenges";
-      <link linkend="opt-services.httpd.virtualHosts._name_.extraConfig">extraConfig</link> = ''
+      documentRoot = "/var/lib/acme/.challenges";
+      extraConfig = ''
         RewriteEngine On
         RewriteCond %{HTTPS} off
         RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge [NC]
@@ -164,16 +163,16 @@ services.httpd = {
   </para>
 
 <programlisting>
-<xref linkend="opt-security.acme.certs"/>."foo.example.com" = {
-  <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/lib/acme/.challenges";
-  <link linkend="opt-security.acme.certs._name_.email">email</link> = "foo@example.com";
+security.acme.certs."foo.example.com" = {
+  webroot = "/var/lib/acme/.challenges";
+  email = "foo@example.com";
   # Ensure that the web server you use can read the generated certs
-  # Take a look at the <link linkend="opt-services.nginx.group">group</link> option for the web server you choose.
-  <link linkend="opt-security.acme.certs._name_.group">group</link> = "nginx";
+  # Take a look at the group option for the web server you choose.
+  group = "nginx";
   # Since we have a wildcard vhost to handle port 80,
   # we can generate certs for anything!
   # Just make sure your DNS resolves them.
-  <link linkend="opt-security.acme.certs._name_.extraDomainNames">extraDomainNames</link> = [ "mail.example.com" ];
+  extraDomainNames = [ "mail.example.com" ];
 };
 </programlisting>
 
@@ -203,11 +202,11 @@ services.httpd = {
 
 <programlisting>
 services.bind = {
-  <link linkend="opt-services.bind.enable">enable</link> = true;
-  <link linkend="opt-services.bind.extraConfig">extraConfig</link> = ''
+  enable = true;
+  extraConfig = ''
     include "/var/lib/secrets/dnskeys.conf";
   '';
-  <link linkend="opt-services.bind.zones">zones</link> = [
+  zones = [
     rec {
       name = "example.com";
       file = "/var/db/bind/${name}";
@@ -218,14 +217,14 @@ services.bind = {
 }
 
 # Now we can configure ACME
-<xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
-<xref linkend="opt-security.acme.certs" />."example.com" = {
-  <link linkend="opt-security.acme.certs._name_.domain">domain</link> = "*.example.com";
-  <link linkend="opt-security.acme.certs._name_.dnsProvider">dnsProvider</link> = "rfc2136";
-  <link linkend="opt-security.acme.certs._name_.credentialsFile">credentialsFile</link> = "/var/lib/secrets/certs.secret";
+security.acme.acceptTerms = true;
+security.acme.defaults.email = "admin+acme@example.com";
+security.acme.certs."example.com" = {
+  domain = "*.example.com";
+  dnsProvider = "rfc2136";
+  credentialsFile = "/var/lib/secrets/certs.secret";
   # We don't need to wait for propagation since this is a local DNS server
-  <link linkend="opt-security.acme.certs._name_.dnsPropagationCheck">dnsPropagationCheck</link> = false;
+  dnsPropagationCheck = false;
 };
 </programlisting>
 
@@ -296,23 +295,23 @@ systemd.services.dns-rfc2136-conf = {
 
 <programlisting>
 # Configure ACME appropriately
-<xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
-<xref linkend="opt-security.acme.defaults" /> = {
-  <link linkend="opt-security.acme.defaults.dnsProvider">dnsProvider</link> = "rfc2136";
-  <link linkend="opt-security.acme.defaults.credentialsFile">credentialsFile</link> = "/var/lib/secrets/certs.secret";
+security.acme.acceptTerms = true;
+security.acme.defaults.email = "admin+acme@example.com";
+security.acme.defaults = {
+  dnsProvider = "rfc2136";
+  credentialsFile = "/var/lib/secrets/certs.secret";
   # We don't need to wait for propagation since this is a local DNS server
-  <link linkend="opt-security.acme.defaults.dnsPropagationCheck">dnsPropagationCheck</link> = false;
+  dnsPropagationCheck = false;
 };
 
 # For each virtual host you would like to use DNS-01 validation with,
 # set acmeRoot = null
 services.nginx = {
-  <link linkend="opt-services.nginx.enable">enable</link> = true;
-  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+  enable = true;
+  virtualHosts = {
     "foo.example.com" = {
-      <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
-      <link linkend="opt-services.nginx.virtualHosts._name_.acmeRoot">acmeRoot</link> = null;
+      enableACME = true;
+      acmeRoot = null;
     };
   };
 }
@@ -349,8 +348,8 @@ security.acme.certs."mail.example.com".postRun = ''
 
 # Now you must augment OpenSMTPD's systemd service to load
 # the certificate files.
-<link linkend="opt-systemd.services._name_.requires">systemd.services.opensmtpd.requires</link> = ["acme-finished-mail.example.com.target"];
-<link linkend="opt-systemd.services._name_.serviceConfig">systemd.services.opensmtpd.serviceConfig.LoadCredential</link> = let
+systemd.services.opensmtpd.requires = ["acme-finished-mail.example.com.target"];
+systemd.services.opensmtpd.serviceConfig.LoadCredential = let
   certDir = config.security.acme.certs."mail.example.com".directory;
 in [
   "cert.pem:${certDir}/cert.pem"

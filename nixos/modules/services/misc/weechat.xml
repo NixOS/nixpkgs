@@ -25,7 +25,7 @@
 { ... }:
 
 {
-  <link linkend="opt-services.weechat.enable">services.weechat.enable</link> = true;
+  services.weechat.enable = true;
 }
 </programlisting>
   </para>
@@ -46,7 +46,7 @@
    support:
 <programlisting>
 {
-  <link linkend="opt-programs.screen.screenrc">programs.screen.screenrc</link> = ''
+  programs.screen.screenrc = ''
     multiuser on
     acladd normal_user
   '';

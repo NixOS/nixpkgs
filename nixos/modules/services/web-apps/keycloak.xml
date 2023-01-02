@@ -185,15 +185,15 @@
        A basic configuration with some custom settings could look like this:
 <programlisting>
 services.keycloak = {
-  <link linkend="opt-services.keycloak.enable">enable</link> = true;
+  enable = true;
   settings = {
-    <link linkend="opt-services.keycloak.settings.hostname">hostname</link> = "keycloak.example.com";
-    <link linkend="opt-services.keycloak.settings.hostname-strict-backchannel">hostname-strict-backchannel</link> = true;
+    hostname = "keycloak.example.com";
+    hostname-strict-backchannel = true;
   };
-  <link linkend="opt-services.keycloak.initialAdminPassword">initialAdminPassword</link> = "e6Wcm0RrtegMEHl";  # change on first login
-  <link linkend="opt-services.keycloak.sslCertificate">sslCertificate</link> = "/run/keys/ssl_cert";
-  <link linkend="opt-services.keycloak.sslCertificateKey">sslCertificateKey</link> = "/run/keys/ssl_key";
-  <link linkend="opt-services.keycloak.database.passwordFile">database.passwordFile</link> = "/run/keys/db_password";
+  initialAdminPassword = "e6Wcm0RrtegMEHl";  # change on first login
+  sslCertificate = "/run/keys/ssl_cert";
+  sslCertificateKey = "/run/keys/ssl_key";
+  database.passwordFile = "/run/keys/db_password";
 };
 </programlisting>
      </para>

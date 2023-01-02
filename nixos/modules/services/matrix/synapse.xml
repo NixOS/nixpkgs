@@ -47,12 +47,12 @@ let
     return 200 '${builtins.toJSON data}';
   '';
 in {
-  <xref linkend="opt-networking.hostName" /> = "myhostname";
-  <xref linkend="opt-networking.domain" /> = "example.org";
-  <xref linkend="opt-networking.firewall.allowedTCPPorts" /> = [ 80 443 ];
+  networking.hostName = "myhostname";
+  networking.domain = "example.org";
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-  <xref linkend="opt-services.postgresql.enable" /> = true;
-  <xref linkend="opt-services.postgresql.initialScript" /> = pkgs.writeText "synapse-init.sql" ''
+  services.postgresql.enable = true;
+  services.postgresql.initialScript = pkgs.writeText "synapse-init.sql" ''
     CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
     CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
       TEMPLATE template0
@@ -61,42 +61,42 @@ in {
   '';
 
   services.nginx = {
-    <link linkend="opt-services.nginx.enable">enable</link> = true;
-    <link linkend="opt-services.nginx.recommendedTlsSettings">recommendedTlsSettings</link> = true;
-    <link linkend="opt-services.nginx.recommendedOptimisation">recommendedOptimisation</link> = true;
-    <link linkend="opt-services.nginx.recommendedGzipSettings">recommendedGzipSettings</link> = true;
-    <link linkend="opt-services.nginx.recommendedProxySettings">recommendedProxySettings</link> = true;
-    <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+    virtualHosts = {
       "${config.networking.domain}" = { <co xml:id='ex-matrix-synapse-dns' />
-        <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
-        <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."= /.well-known/matrix/server".extraConfig</link> = mkWellKnown serverConfig; <co xml:id='ex-matrix-synapse-well-known-server' />
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."= /.well-known/matrix/client".extraConfig</link> = mkWellKnown clientConfig; <co xml:id='ex-matrix-synapse-well-known-client' />
+        enableACME = true;
+        forceSSL = true;
+        locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig; <co xml:id='ex-matrix-synapse-well-known-server' />
+        locations."= /.well-known/matrix/client".extraConfig = mkWellKnown clientConfig; <co xml:id='ex-matrix-synapse-well-known-client' />
       };
       "${fqdn}" = {
-        <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
-        <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."/".extraConfig</link> = '' <co xml:id='ex-matrix-synapse-rev-default' />
+        enableACME = true;
+        forceSSL = true;
+        locations."/".extraConfig = '' <co xml:id='ex-matrix-synapse-rev-default' />
           return 404;
         '';
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.proxyPass">locations."/_matrix".proxyPass</link> = "http://[::1]:8008"; <co xml:id='ex-matrix-synapse-rev-proxy-pass' />
-        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.proxyPass">locations."/_synapse/client".proxyPass</link> = "http://[::1]:8008"; <co xml:id='ex-matrix-synapse-rev-client' />
+        locations."/_matrix".proxyPass = "http://[::1]:8008"; <co xml:id='ex-matrix-synapse-rev-proxy-pass' />
+        locations."/_synapse/client".proxyPass = "http://[::1]:8008"; <co xml:id='ex-matrix-synapse-rev-client' />
       };
     };
   };
 
   services.matrix-synapse = {
-    <link linkend="opt-services.matrix-synapse.enable">enable</link> = true;
-    <link linkend="opt-services.matrix-synapse.settings.server_name">settings.server_name</link> = config.networking.domain;
-    <link linkend="opt-services.matrix-synapse.settings.listeners">settings.listeners</link> = [
-      { <link linkend="opt-services.matrix-synapse.settings.listeners._.port">port</link> = 8008;
-        <link linkend="opt-services.matrix-synapse.settings.listeners._.bind_addresses">bind_addresses</link> = [ "::1" ];
-        <link linkend="opt-services.matrix-synapse.settings.listeners._.type">type</link> = "http";
-        <link linkend="opt-services.matrix-synapse.settings.listeners._.tls">tls</link> = false;
-        <link linkend="opt-services.matrix-synapse.settings.listeners._.x_forwarded">x_forwarded</link> = true;
-        <link linkend="opt-services.matrix-synapse.settings.listeners._.resources">resources</link> = [ {
-          <link linkend="opt-services.matrix-synapse.settings.listeners._.resources._.names">names</link> = [ "client" "federation" ];
-          <link linkend="opt-services.matrix-synapse.settings.listeners._.resources._.compress">compress</link> = true;
+    enable = true;
+    settings.server_name = config.networking.domain;
+    settings.listeners = [
+      { port = 8008;
+        bind_addresses = [ "::1" ];
+        type = "http";
+        tls = false;
+        x_forwarded = true;
+        resources = [ {
+          names = [ "client" "federation" ];
+          compress = true;
         } ];
       }
     ];
@@ -159,7 +159,7 @@ in {
   <title>Registering Matrix users</title>
   <para>
    If you want to run a server with public registration by anybody, you can
-   then enable <literal><link linkend="opt-services.matrix-synapse.settings.enable_registration">services.matrix-synapse.settings.enable_registration</link> =
+   then enable <literal>services.matrix-synapse.settings.enable_registration =
    true;</literal>. Otherwise, or you can generate a registration secret with
    <command>pwgen -s 64 1</command> and set it with
    <option><link linkend="opt-services.matrix-synapse.settings.registration_shared_secret">services.matrix-synapse.settings.registration_shared_secret</link></option>.
@@ -202,7 +202,7 @@ Success!
         Include the file like this in your configuration:
 <programlisting>
 {
-  <xref linkend="opt-services.matrix-synapse.extraConfigFiles" /> = [
+  services.matrix-synapse.extraConfigFiles = [
     "/run/secrets/matrix-shared-secret"
   ];
 }
@@ -244,13 +244,13 @@ Success!
 <programlisting>
 {
   services.nginx.virtualHosts."element.${fqdn}" = {
-    <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
-    <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
-    <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [
+    enableACME = true;
+    forceSSL = true;
+    serverAliases = [
       "element.${config.networking.domain}"
     ];
 
-    <link linkend="opt-services.nginx.virtualHosts._name_.root">root</link> = pkgs.element-web.override {
+    root = pkgs.element-web.override {
       conf = {
         default_server_config = clientConfig; # see `clientConfig` from the snippet above.
       };
