@@ -1000,7 +1000,9 @@ let
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
     ocamlgraph_gtk = callPackage ../development/ocaml-modules/ocamlgraph/gtk.nix { };
 
-    ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
+    ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt {
+      inherit (pkgs.darwin.apple_sdk.frameworks) Foundation AppKit;
+    };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
