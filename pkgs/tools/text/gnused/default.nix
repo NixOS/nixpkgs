@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, perl
-, gnulib }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
@@ -13,13 +12,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl ];
-
-  patches = [
-    # this change to gnused's vendored copy of gnulib is already
-    # merged upstream; we can drop this patch on the next version bump
-    gnulib.passthru.longdouble-redirect-patch
-  ];
-
   preConfigure = "patchShebangs ./build-aux/help2man";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
