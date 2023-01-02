@@ -3346,6 +3346,10 @@ with pkgs;
 
   wiiload = callPackage ../development/tools/wiiload { };
 
+  winhelpcgi = callPackage ../development/tools/winhelpcgi {
+    libpng = libpng12;
+  };
+
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
   waypoint = callPackage ../applications/networking/cluster/waypoint { };
@@ -9084,6 +9088,8 @@ with pkgs;
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
+  l3afpad = callPackage ../applications/editors/l3afpad { };
+
   leatherman = callPackage ../development/libraries/leatherman { };
 
   ledit = callPackage ../tools/misc/ledit {
@@ -11462,6 +11468,8 @@ with pkgs;
 
   sandboxfs = callPackage ../tools/filesystems/sandboxfs { };
 
+  sanjuuni = callPackage ../tools/graphics/sanjuuni { };
+
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview {};
@@ -12293,6 +12301,8 @@ with pkgs;
   tinc = callPackage ../tools/networking/tinc { };
 
   tie = callPackage ../development/tools/misc/tie { };
+
+  tidb = callPackage ../servers/tidb { };
 
   tikzit = libsForQt5.callPackage ../tools/typesetting/tikzit { };
 
@@ -31381,7 +31391,7 @@ with pkgs;
     boost = boost175;
   };
 
-  openimageio2 = callPackage ../applications/graphics/openimageio/2.x.nix { };
+  openimageio2 = darwin.apple_sdk_11_0.callPackage ../applications/graphics/openimageio/2.x.nix { };
 
   openjump = callPackage ../applications/misc/openjump { };
 

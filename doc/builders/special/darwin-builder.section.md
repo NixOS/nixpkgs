@@ -39,7 +39,8 @@ nixos login:
 ```
 
 > Note: When you need to stop the VM, type `Ctrl`-`a` + `c` to open the `qemu`
-> prompt and then type `quit` followed by `Enter`
+> prompt and then type `system_powerdown` followed by `Enter`, or run `shutdown now`
+> as the `builder` user (e.g. `ssh -i keys/builder_ed25519 builder@localhost shutdown now`)
 
 To delegate builds to the remote builder, add the following options to your
 `nix.conf` file:
