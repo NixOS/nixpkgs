@@ -54,7 +54,7 @@ let
     concatStringsSep
     escapeNixString
     hasInfix
-    isCoercibleToString
+    isStringLike
     ;
   inherit (lib.trivial)
     boolToString
@@ -227,7 +227,7 @@ rec {
       merge = loc: defs:
         let
           getType = value:
-            if isAttrs value && isCoercibleToString value
+            if isAttrs value && isStringLike value
             then "stringCoercibleSet"
             else builtins.typeOf value;
 
@@ -479,7 +479,7 @@ rec {
     path = mkOptionType {
       name = "path";
       descriptionClass = "noun";
-      check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+      check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
 

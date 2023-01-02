@@ -16,8 +16,20 @@
     </para>
     <itemizedlist>
       <listitem>
-<literallayout>Nix has been updated from 2.3 to 2.8. This mainly brings experimental support for Flakes, but also marks the <literal>nix</literal> command as experimental which now has to be enabled via the configuration explicitly. For more information and instructions for upgrades, see the relase notes for <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.4.html">nix-2.4</link>,
-<link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.5.html">nix-2.5</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.6.html">nix-2.6</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.7.html">nix-2.7</link> and <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.8.html">nix-2.8</link></literallayout>
+        <para>
+          Nix has been updated from 2.3 to 2.8. This mainly brings
+          experimental support for Flakes, but also marks the
+          <literal>nix</literal> command as experimental which now has
+          to be enabled via the configuration explicitly. For more
+          information and instructions for upgrades, see the relase
+          notes for
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.4.html">nix-2.4</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.5.html">nix-2.5</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.6.html">nix-2.6</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.7.html">nix-2.7</link>
+          and
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.8.html">nix-2.8</link>
+        </para>
       </listitem>
       <listitem>
         <para>
