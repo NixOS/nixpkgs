@@ -36,6 +36,27 @@ buildPythonPackage rec {
     install -Dm444 tools/*/ya-bin $out
   '';
 
+  test = runCommandNoCC "${pname}-ya-cache-${version}" {
+    inherit src;
+    outputHashMode = "recursive";
+    outputHash = {
+      aarch64-darwin = lib.fakeHash;
+      x86_64-darwin = "sha256-XLW6V4HGLOXoCM+ZOEWxATqfxpHjkBOMhabt/IWGvxs=";
+      x86_64-linux = lib.fakeHash;
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    nativeBuildInputs = [
+      python
+      python.pkgs.setuptools
+      python.pkgs.wheel
+    ];
+  } ''
+    export YA_CACHE_DIR=$(mktemp -d);
+    YA_SOURCE_ROOT="$src" python "$src"/ya make "$src"/catboost/python-package/catboost --no-src-links -DUSE_ARCADIA_PYTHON=no -DOS_SDK=local -DPYTHON_CONFIG=python3-config
+    ls "$YA_CACHE_DIR"
+    mkdir "$out"
+    mv "$YA_CACHE_DIR"/tools "$out"/tools
+  '';
+
   nativeBuildInputs = [
     clang_12
   ];
@@ -48,11 +69,13 @@ buildPythonPackage rec {
 
     cd catboost/python-package
 
+    export YA_CACHE_DIR="$(mktemp -d)"
+    ln -sv "$test"/tools "$YA_CACHE_DIR"/tools
+
     cp "$ya" ./ya-bin
     chmod +x ./ya-bin
     wrapProgram ./ya-bin \
-      --unset PYTHONPATH \
-      --set YA_CACHE_DIR "./"
+      --unset PYTHONPATH
 
     substituteInPlace setup.py \
       --replace "python, ya, " "'./ya-bin', '-v', " \
