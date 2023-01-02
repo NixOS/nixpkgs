@@ -2,7 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, hatchling
+
+# runtime
+, ApplicationServices
 , aiofiles
 , anyio
 , contextlib2
@@ -10,20 +13,22 @@
 , jinja2
 , python-multipart
 , pyyaml
+, typing-extensions
+
+# tests
 , requests
 , aiosqlite
 , databases
+, httpx
 , pytestCheckHook
 , pythonOlder
 , trio
-, typing-extensions
-, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.20.4";
-  format = "setuptools";
+  version = "0.23.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -31,15 +36,11 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vP2TJPn9lRGnLGkO8lUmnsoT6rSnhuWDD3WqNk76SM0=";
+    hash = "sha256-LcFrdaRgFBqcdylCzNlewj/papsg/sZ1FMVxBDLvQWI=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/encode/starlette/commit/ab70211f0e1fb7390668bf4891eeceda8d9723a0.diff";
-      excludes = [ "requirements.txt" ]; # conflicts
-      hash = "sha256-UHf4c4YUWp/1I1vD8J0hMewdlfkmluA+FyGf9ZsSv3Y=";
-    })
+  nativeBuildInputs = [
+    hatchling
   ];
 
   postPatch = ''
@@ -66,12 +67,14 @@ buildPythonPackage rec {
   checkInputs = [
     aiosqlite
     databases
+    httpx
     pytestCheckHook
     trio
     typing-extensions
   ];
 
   pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
     "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
@@ -86,6 +89,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/encode/starlette/releases/tag/${version}";
     homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
