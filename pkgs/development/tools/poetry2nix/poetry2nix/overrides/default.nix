@@ -390,7 +390,7 @@ lib.composeManyExtensions [
           scrypto =
             if isWheel then
               (
-                super.cryptography.override { preferWheel = true; }
+                super.cryptography.overridePythonAttrs { preferWheel = true; }
               ) else super.cryptography;
         in
         scrypto.overridePythonAttrs
@@ -1324,9 +1324,10 @@ lib.composeManyExtensions [
       open3d = super.open3d.overridePythonAttrs (old: {
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.ipywidgets ];
         buildInputs = (old.buildInputs or [ ]) ++ [
-          pkgs.udev
           pkgs.libusb1
-        ] ++ (if lib.versionAtLeast super.open3d.version "0.16.0" then [
+        ] ++ lib.optionals stdenv.isLinux [
+          pkgs.udev
+        ] ++ lib.optionals (lib.versionAtLeast super.open3d.version "0.16.0") [
           pkgs.mesa
           (
             pkgs.symlinkJoin {
@@ -1341,15 +1342,35 @@ lib.composeManyExtensions [
                 )
               ];
             })
-        ] else [ ]);
+        ];
+
+        # Patch the dylib in the binary distribution to point to the nix build of libomp
+        preFixup = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast super.open3d.version "0.16.0") ''
+          install_name_tool -change /opt/homebrew/opt/libomp/lib/libomp.dylib ${pkgs.llvmPackages.openmp}/lib/libomp.dylib $out/lib/python*/site-packages/open3d/cpu/pybind.cpython-*-darwin.so
+        '';
+
         # TODO(Sem Mulder): Add overridable flags for CUDA/PyTorch/Tensorflow support.
         autoPatchelfIgnoreMissingDeps = true;
       });
 
+      # Overrides for building packages based on OpenCV
+      # These flags are inspired by the opencv 4.x package in nixpkgs
       _opencv-python-override =
         old: {
+          # Disable OpenCL on macOS
+          # Can't use cmakeFlags because cmake is called by setup.py
+          CMAKE_ARGS = lib.optionalString stdenv.isDarwin "-DWITH_OPENCL=OFF";
+
           nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
-          buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
+          buildInputs = [
+            self.scikit-build
+          ] ++ lib.optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
+            AVFoundation
+            Cocoa
+            CoreMedia
+            MediaToolbox
+            VideoDecodeAcceleration
+          ]) ++ (old.buildInputs or [ ]);
           dontUseCmakeConfigure = true;
         };
 
@@ -1357,13 +1378,7 @@ lib.composeManyExtensions [
 
       opencv-python-headless = super.opencv-python.overridePythonAttrs self._opencv-python-override;
 
-      opencv-contrib-python = super.opencv-contrib-python.overridePythonAttrs (
-        old: {
-          nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
-          buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
-          dontUseCmakeConfigure = true;
-        }
-      );
+      opencv-contrib-python = super.opencv-contrib-python.overridePythonAttrs self._opencv-python-override;
 
       openexr = super.openexr.overridePythonAttrs (
         old: {
@@ -1774,6 +1789,13 @@ lib.composeManyExtensions [
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ])
           ++ [ pkgs.freetds ];
       });
+
+      pyopencl = super.pyopencl.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.numpy ];
+          propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ pkgs.ocl-icd pkgs.opencl-headers ];
+        }
+      );
 
       pyopenssl = super.pyopenssl.overridePythonAttrs (
         old: {
@@ -2704,6 +2726,10 @@ lib.composeManyExtensions [
             'if self.target_name not in ["wheel", "sdist"]:' \
             'if True:'
         '';
+      });
+
+      mkdocs = super.mkdocs.overridePythonAttrs (old: {
+        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [ self.babel ];
       });
     }
   )
