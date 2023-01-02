@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "whois";
-  version = "0.9.19";
+  version = "0.9.20";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "DannyCork";
     repo = "python-whois";
     rev = "refs/tags/${version}";
-    hash = "sha256-b8OZppynDT0MCwH4ic+wMJzWqyUzsigzxD0yYGfgJmI=";
+    hash = "sha256-J2v2TKTrzhi1XLW2e/N3jAGCy3W8cQEFV5cJAf8gT4g=";
   };
 
   propagatedBuildInputs = [
