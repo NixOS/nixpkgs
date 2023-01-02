@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
-    maintainers = with lib.maintainers; [ astsmtl ];
+    maintainers = with lib.maintainers; [ astsmtl Luflosi ];
     platforms = lib.platforms.linux;
   };
 }
