@@ -5425,7 +5425,6 @@ broken-packages:
   - trivia
   - tropical
   - tropical-geometry
-  - true-name
   - tsession
   - tslib
   - tsparse
