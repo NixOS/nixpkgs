@@ -131,6 +131,8 @@ in rec {
         if baseOptionsJSON == null
         then builtins.toFile "base.json" "{}"
         else baseOptionsJSON;
+
+      MANPAGE_URLS = pkgs.path + "/doc/manpage-urls.json";
     }
     ''
       # Export list of options in different format.
