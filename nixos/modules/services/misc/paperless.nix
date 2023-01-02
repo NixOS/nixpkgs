@@ -258,6 +258,7 @@ in
         PrivateNetwork = false;
       };
       environment = env;
+      after = [ "paperless-scheduler.service" ];
     };
 
     # Reading the user-provided password file requires root access
