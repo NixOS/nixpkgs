@@ -4,6 +4,7 @@
 
 using Pkg
 using Pkg.Artifacts
+using Pkg.Types: PkgError
 using SHA
 using Base.Filesystem: isfile, cp
 
@@ -128,24 +129,28 @@ end
 
 function print_usage()
     println("""
-    julia2nix [--help] [--project project.toml] pkg ...
+    julia2nix [-h | --help] [-p | --project project.toml] pkg ...
 
-    Print to stdout a 'nix' list of expressions for packages 'pkg ...' end their
-    dependencies suitable for importing into a nix Julia environment. If the '--project'
-    option is used then produce definitions for the packages in project.toml (inc.
-    dependencies).
+    Print to stdout a 'nix' list of expressions for packages 'pkg ...'
+    end their dependencies suitable for importing into a nix Julia
+    environment. If the '--project' option is used then produce
+    definitions for the packages in project.toml (inc.  dependencies).
 
     OPTIONS
-    --help           Print this message
-    --project FILE   Produce definitions for packages in FILE (a Project.toml file)
+    -h, --help           Print this message
+    -p, --project FILE   Produce definitions for packages in FILE
+                         (a Project.toml file)
     """)
 end
 
 function main(args = Base.ARGS)
-    if length(args) == 0 || args[1] == "--help"
+    if length(args) == 0 || args[1] == "--help" || args[1] == "-h"
         print_usage()
         exit(0)
-    elseif length(args) == 2 && args[1] == "--project"
+    elseif length(args) >= 2 && (args[1] == "--project" || args[1] == "-p")
+        if length(args) > 2
+            @warn "Ignoring arguments after $(args[2])"
+        end
         nix_definitions_from_project_toml(args[2])
     else
         nix_definitions_from_pkgs_names(args)
@@ -164,16 +169,20 @@ end
 
 function nix_definitions_from_pkgs_names(args)
     path = julia_init()
-    pkgs = map(p -> Pkg.REPLMode.parse_package(Pkg.REPLMode.lex(p), ())[1], args)
     try
+        pkgs = map(p -> Pkg.REPLMode.parse_package(Pkg.REPLMode.lex(p), ())[1], args)
         Pkg.activate(path)
         Pkg.Registry.add()
 
         Pkg.add(pkgs)
         pkgs_deps = Pkg.dependencies()
         nix_pkg_defs(pkgs_deps)
-    catch
-        @error "One or more packages not found, check the names."
+    catch e
+        if isa(e, PkgError)
+            Base.showerror(Base.stdout, e)
+        else
+            @error "One or more packages or package versions not found."
+        end
         exit(1)
     end
 end
@@ -194,8 +203,12 @@ function nix_definitions_from_project_toml(ptoml)
         end
         pkgs_deps = Pkg.dependencies()
         nix_pkg_defs(pkgs_deps)
-    catch
-        @error "Error processing $(ptoml)."
+    catch e
+        if isa(e, PkgError)
+            Base.showerror(Base.stdout, e)
+        else
+            @error "Error processing $(ptoml)."
+        end
         exit(1)
     end
 end
