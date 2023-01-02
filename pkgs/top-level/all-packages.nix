@@ -28661,6 +28661,8 @@ with pkgs;
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassx/community.nix { };
 
+  keepass-diff = callPackage ../applications/misc/keepass-diff { };
+
   keeweb = callPackage ../applications/misc/keeweb { };
 
   inherit (gnome) evince;
