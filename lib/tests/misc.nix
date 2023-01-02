@@ -865,6 +865,39 @@ runTests {
   };
 
 
+  testToLibconfigComprehensive = {
+    expr =
+      let result = generators.toLibconfig {} {
+          simple-top-level-attr = "1.0";
+          nested.attrset.has.a.integer.value = 100;
+          some-floaty = 29.95;
+          ## Same syntax here on these two, but they should get serialized differently:
+          # > A list may have zero or more elements, each of which can be a scalar value, an array, a group, or another list.
+          list1d = [ 1 "mixed!" 5 2 ];
+          list2d = [ 1 [ 1 1.2 "foo" ] [ "bar" 1.2 1 ] ];
+          # > An array may have zero or more elements, but the elements must all be scalar values of the same type.
+          array1d = [ 1 5 2 ];
+          array2d = [ [ 1 1.2 ] [ 1.2 1 ] ];
+
+          weirderTypes = {
+            pi = 3.141592654;
+            bigint = "9223372036854775807L"; # (FYI: pylibconfig2 doesn't support this)
+            hex = "0x1FC3";
+            octal = "0027";
+          };
+        };
+      in builtins.hashString "sha256" result;
+    expected = "bb4cddd312e1aaf897a61c636883a9129dd255bdfc188bcff04b0c795dedefa0";
+    # If this hash changes, look at the result yourself by adding a builtins.trace
+    # to the hashString call, where result is used, and pipe it into your file:
+    #+  in builtins.hashString "sha256" (builtins.trace result result);
+    #   nix-instantiate --eval --strict lib/tests/misc.nix 2>test-output
+    #
+    # The config is usually validated in the //pkgs/pkgs-lib/formats.nix wrapper
+    # to this function, but this uses `generators` directly since `pkgs` is not
+    # supposed to be used in this context. Good luck!
+  };
+
 # CLI
 
   testToGNUCommandLine = {
