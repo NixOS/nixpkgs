@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoPackage
 , fetchurl
 , makeWrapper
@@ -68,5 +69,6 @@ buildGoPackage rec {
     homepage = "https://gitea.io";
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
+    broken = stdenv.isDarwin;
   };
 }
