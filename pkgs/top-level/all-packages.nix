@@ -16283,6 +16283,8 @@ with pkgs;
 
   pipenv = callPackage ../development/tools/pipenv {};
 
+  pipx = with python3.pkgs; toPythonApplication pipx;
+
   pipewire = callPackage ../development/libraries/pipewire {
     # ffmpeg depends on SDL2 which depends on pipewire by default.
     # Break the cycle by depending on ffmpeg-headless.
