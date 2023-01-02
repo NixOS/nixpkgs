@@ -604,12 +604,12 @@
   };
   help = buildGrammar {
     language = "help";
-    version = "61c7505";
+    version = "9dee68e";
     source = fetchFromGitHub {
       owner = "neovim";
       repo = "tree-sitter-vimdoc";
-      rev = "61c75058299f3d1cf565697e4073d7b2cc6a6d6c";
-      hash = "sha256-MTossQzmBoHqXu933suYUUyDbmb20uO5oZlV31BYqIA=";
+      rev = "9dee68e3912d16e9878b06e3cd87e21ada3d9029";
+      hash = "sha256-6XYEC+wKrCbPtcdjFH1O0EdX84M+NpPfTO2tXGFkwtk=";
     };
     meta.homepage = "https://github.com/neovim/tree-sitter-vimdoc";
   };
@@ -1496,12 +1496,12 @@
   };
   v = buildGrammar {
     language = "v";
-    version = "f0aa56e";
+    version = "0e3725a";
     source = fetchFromGitHub {
       owner = "vlang";
       repo = "vls";
-      rev = "f0aa56eec7689f08a389c90ad8d3e5e0d18b3cd7";
-      hash = "sha256-d69SvXDWxeRk2hvou8MhXUpUrSBwYENqFDGpT/Y5UpM=";
+      rev = "0e3725a0c10d357f16b716f9a321a337bc802f02";
+      hash = "sha256-RDG/HFSMF5zxtO/elhtv2oH3OnUx47X3xYRqS1+Oz9U=";
     };
     location = "tree_sitter_v";
     meta.homepage = "https://github.com/vlang/vls";
