@@ -5791,7 +5791,7 @@ with pkgs;
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
     lua = lua5_4;
-    fmt = fmt_7;
+    fmt = fmt_8;
   })
     ceph
     ceph-client;
