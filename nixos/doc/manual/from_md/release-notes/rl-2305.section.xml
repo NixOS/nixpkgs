@@ -272,6 +272,19 @@
       </listitem>
       <listitem>
         <para>
+          <literal>espanso</literal> has been updated from 0.7.3 to
+          2.1.8. Therefore, migration steps may need to be performed.
+          See
+          <link xlink:href="https://espanso.org/docs/migration/overview/">the
+          official migration instructions</link> for how to perform
+          these migrations. This also adds the
+          <literal>waylandSupport</literal> flag, which defaults to
+          <literal>true</literal>. If you want X11 support from espanso,
+          you will need to disable this.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and activated
           swap-formatted instance store devices and partitions in
           stage-1 (initramfs). This behaviour has been removed. Users
