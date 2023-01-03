@@ -1,151 +1,141 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-gitlab">
- <title>GitLab</title>
- <para>
-  GitLab is a feature-rich git hosting service.
- </para>
- <section xml:id="module-services-gitlab-prerequisites">
-  <title>Prerequisites</title>
-
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-gitlab">
+  <title>GitLab</title>
   <para>
-   The <literal>gitlab</literal> service exposes only an Unix socket at
-   <literal>/run/gitlab/gitlab-workhorse.socket</literal>. You need to
-   configure a webserver to proxy HTTP requests to the socket.
+    GitLab is a feature-rich git hosting service.
   </para>
-
-  <para>
-   For instance, the following configuration could be used to use nginx as
-   frontend proxy:
-<programlisting>
+  <section xml:id="module-services-gitlab-prerequisites">
+    <title>Prerequisites</title>
+    <para>
+      The <literal>gitlab</literal> service exposes only an Unix socket
+      at <literal>/run/gitlab/gitlab-workhorse.socket</literal>. You
+      need to configure a webserver to proxy HTTP requests to the
+      socket.
+    </para>
+    <para>
+      For instance, the following configuration could be used to use
+      nginx as frontend proxy:
+    </para>
+    <programlisting>
 services.nginx = {
   enable = true;
   recommendedGzipSettings = true;
   recommendedOptimisation = true;
   recommendedProxySettings = true;
   recommendedTlsSettings = true;
-  virtualHosts."git.example.com" = {
+  virtualHosts.&quot;git.example.com&quot; = {
     enableACME = true;
     forceSSL = true;
-    locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+    locations.&quot;/&quot;.proxyPass = &quot;http://unix:/run/gitlab/gitlab-workhorse.socket&quot;;
   };
 };
 </programlisting>
-  </para>
- </section>
- <section xml:id="module-services-gitlab-configuring">
-  <title>Configuring</title>
-
-  <para>
-   GitLab depends on both PostgreSQL and Redis and will automatically enable
-   both services. In the case of PostgreSQL, a database and a role will be
-   created.
-  </para>
-
-  <para>
-   The default state dir is <literal>/var/gitlab/state</literal>. This is where
-   all data like the repositories and uploads will be stored.
-  </para>
-
-  <para>
-   A basic configuration with some custom settings could look like this:
-<programlisting>
+  </section>
+  <section xml:id="module-services-gitlab-configuring">
+    <title>Configuring</title>
+    <para>
+      GitLab depends on both PostgreSQL and Redis and will automatically
+      enable both services. In the case of PostgreSQL, a database and a
+      role will be created.
+    </para>
+    <para>
+      The default state dir is <literal>/var/gitlab/state</literal>.
+      This is where all data like the repositories and uploads will be
+      stored.
+    </para>
+    <para>
+      A basic configuration with some custom settings could look like
+      this:
+    </para>
+    <programlisting>
 services.gitlab = {
   enable = true;
-  databasePasswordFile = "/var/keys/gitlab/db_password";
-  initialRootPasswordFile = "/var/keys/gitlab/root_password";
+  databasePasswordFile = &quot;/var/keys/gitlab/db_password&quot;;
+  initialRootPasswordFile = &quot;/var/keys/gitlab/root_password&quot;;
   https = true;
-  host = "git.example.com";
+  host = &quot;git.example.com&quot;;
   port = 443;
-  user = "git";
-  group = "git";
+  user = &quot;git&quot;;
+  group = &quot;git&quot;;
   smtp = {
     enable = true;
-    address = "localhost";
+    address = &quot;localhost&quot;;
     port = 25;
   };
   secrets = {
-    dbFile = "/var/keys/gitlab/db";
-    secretFile = "/var/keys/gitlab/secret";
-    otpFile = "/var/keys/gitlab/otp";
-    jwsFile = "/var/keys/gitlab/jws";
+    dbFile = &quot;/var/keys/gitlab/db&quot;;
+    secretFile = &quot;/var/keys/gitlab/secret&quot;;
+    otpFile = &quot;/var/keys/gitlab/otp&quot;;
+    jwsFile = &quot;/var/keys/gitlab/jws&quot;;
   };
   extraConfig = {
     gitlab = {
-      email_from = "gitlab-no-reply@example.com";
-      email_display_name = "Example GitLab";
-      email_reply_to = "gitlab-no-reply@example.com";
+      email_from = &quot;gitlab-no-reply@example.com&quot;;
+      email_display_name = &quot;Example GitLab&quot;;
+      email_reply_to = &quot;gitlab-no-reply@example.com&quot;;
       default_projects_features = { builds = false; };
     };
   };
 };
 </programlisting>
-  </para>
-
-  <para>
-   If you're setting up a new GitLab instance, generate new
-   secrets. You for instance use <literal>tr -dc A-Za-z0-9 &lt;
-   /dev/urandom | head -c 128 &gt; /var/keys/gitlab/db</literal> to
-   generate a new db secret. Make sure the files can be read by, and
-   only by, the user specified by <link
-   linkend="opt-services.gitlab.user">services.gitlab.user</link>. GitLab
-   encrypts sensitive data stored in the database. If you're restoring
-   an existing GitLab instance, you must specify the secrets secret
-   from <literal>config/secrets.yml</literal> located in your GitLab
-   state folder.
-  </para>
-
-  <para>
-    When <literal>incoming_mail.enabled</literal> is set to <literal>true</literal>
-    in <link linkend="opt-services.gitlab.extraConfig">extraConfig</link> an additional
-    service called <literal>gitlab-mailroom</literal> is enabled for fetching incoming mail.
-  </para>
-
-  <para>
-   Refer to <xref linkend="ch-options" /> for all available configuration
-   options for the
-   <link linkend="opt-services.gitlab.enable">services.gitlab</link> module.
-  </para>
- </section>
- <section xml:id="module-services-gitlab-maintenance">
-  <title>Maintenance</title>
-
-  <section xml:id="module-services-gitlab-maintenance-backups">
-   <title>Backups</title>
-   <para>
-     Backups can be configured with the options in <link
-     linkend="opt-services.gitlab.backup.keepTime">services.gitlab.backup</link>. Use
-     the <link
-     linkend="opt-services.gitlab.backup.startAt">services.gitlab.backup.startAt</link>
-     option to configure regular backups.
-   </para>
-
-   <para>
-     To run a manual backup, start the <literal>gitlab-backup</literal> service:
-<screen>
-<prompt>$ </prompt>systemctl start gitlab-backup.service
-</screen>
-   </para>
+    <para>
+      If you're setting up a new GitLab instance, generate new secrets.
+      You for instance use
+      <literal>tr -dc A-Za-z0-9 &lt; /dev/urandom | head -c 128 &gt; /var/keys/gitlab/db</literal>
+      to generate a new db secret. Make sure the files can be read by,
+      and only by, the user specified by
+      <link linkend="opt-services.gitlab.user">services.gitlab.user</link>.
+      GitLab encrypts sensitive data stored in the database. If you're
+      restoring an existing GitLab instance, you must specify the
+      secrets secret from <literal>config/secrets.yml</literal> located
+      in your GitLab state folder.
+    </para>
+    <para>
+      When <literal>incoming_mail.enabled</literal> is set to
+      <literal>true</literal> in
+      <link linkend="opt-services.gitlab.extraConfig">extraConfig</link>
+      an additional service called <literal>gitlab-mailroom</literal> is
+      enabled for fetching incoming mail.
+    </para>
+    <para>
+      Refer to <xref linkend="ch-options"></xref> for all available
+      configuration options for the
+      <link linkend="opt-services.gitlab.enable">services.gitlab</link>
+      module.
+    </para>
   </section>
-
-  <section xml:id="module-services-gitlab-maintenance-rake">
-   <title>Rake tasks</title>
-
-   <para>
-    You can run GitLab's rake tasks with <literal>gitlab-rake</literal>
-    which will be available on the system when GitLab is enabled. You
-    will have to run the command as the user that you configured to run
-    GitLab with.
-   </para>
-
-   <para>
-    A list of all available rake tasks can be obtained by running:
-<screen>
-<prompt>$ </prompt>sudo -u git -H gitlab-rake -T
-</screen>
-   </para>
+  <section xml:id="module-services-gitlab-maintenance">
+    <title>Maintenance</title>
+    <section xml:id="module-services-gitlab-maintenance-backups">
+      <title>Backups</title>
+      <para>
+        Backups can be configured with the options in
+        <link linkend="opt-services.gitlab.backup.keepTime">services.gitlab.backup</link>.
+        Use the
+        <link linkend="opt-services.gitlab.backup.startAt">services.gitlab.backup.startAt</link>
+        option to configure regular backups.
+      </para>
+      <para>
+        To run a manual backup, start the
+        <literal>gitlab-backup</literal> service:
+      </para>
+      <programlisting>
+$ systemctl start gitlab-backup.service
+</programlisting>
+    </section>
+    <section xml:id="module-services-gitlab-maintenance-rake">
+      <title>Rake tasks</title>
+      <para>
+        You can run GitLab's rake tasks with
+        <literal>gitlab-rake</literal> which will be available on the
+        system when GitLab is enabled. You will have to run the command
+        as the user that you configured to run GitLab with.
+      </para>
+      <para>
+        A list of all available rake tasks can be obtained by running:
+      </para>
+      <programlisting>
+$ sudo -u git -H gitlab-rake -T
+</programlisting>
+    </section>
   </section>
- </section>
 </chapter>
