@@ -277,9 +277,9 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      # 2022-08-04: Support range >= 10 && < 14
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-      llvmPackages = pkgs.llvmPackages_12;
+      # 2022-08-04: Support range >= 10 && < 15
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
+      llvmPackages = pkgs.llvmPackages_14;
     };
 
     ghcjs = compiler.ghcjs810;
