@@ -1,22 +1,23 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-plausible">
- <title>Plausible</title>
- <para>
-  <link xlink:href="https://plausible.io/">Plausible</link> is a privacy-friendly alternative to
-  Google analytics.
- </para>
- <section xml:id="module-services-plausible-basic-usage">
-  <title>Basic Usage</title>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-plausible">
+  <title>Plausible</title>
   <para>
-   At first, a secret key is needed to be generated. This can be done with e.g.
-   <screen><prompt>$ </prompt>openssl rand -base64 64</screen>
+    <link xlink:href="https://plausible.io/">Plausible</link> is a
+    privacy-friendly alternative to Google analytics.
   </para>
-  <para>
-   After that, <literal>plausible</literal> can be deployed like this:
-<programlisting>
+  <section xml:id="module-services-plausible-basic-usage">
+    <title>Basic Usage</title>
+    <para>
+      At first, a secret key is needed to be generated. This can be done
+      with e.g.
+    </para>
+    <programlisting>
+$ openssl rand -base64 64
+</programlisting>
+    <para>
+      After that, <literal>plausible</literal> can be deployed like
+      this:
+    </para>
+    <programlisting>
 {
   services.plausible = {
     enable = true;
@@ -26,18 +27,17 @@
       # postgresql is configured by the module. This is done by default, but
       # can be turned off with services.plausible.database.postgres.setup.
       activate = true;
-      email = "admin@localhost";
-      passwordFile = "/run/secrets/plausible-admin-pwd";
+      email = &quot;admin@localhost&quot;;
+      passwordFile = &quot;/run/secrets/plausible-admin-pwd&quot;;
     };
     server = {
-      baseUrl = "http://analytics.example.org";
+      baseUrl = &quot;http://analytics.example.org&quot;;
       # secretKeybaseFile is a path to the file which contains the secret generated
       # with openssl as described above.
-      secretKeybaseFile = "/run/secrets/plausible-secret-key-base";
+      secretKeybaseFile = &quot;/run/secrets/plausible-secret-key-base&quot;;
     };
   };
 }
 </programlisting>
-  </para>
- </section>
+  </section>
 </chapter>
