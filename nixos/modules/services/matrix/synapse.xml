@@ -1,63 +1,61 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-matrix">
- <title>Matrix</title>
- <para>
-  <link xlink:href="https://matrix.org/">Matrix</link> is an open standard for
-  interoperable, decentralised, real-time communication over IP. It can be used
-  to power Instant Messaging, VoIP/WebRTC signalling, Internet of Things
-  communication - or anywhere you need a standard HTTP API for publishing and
-  subscribing to data whilst tracking the conversation history.
- </para>
- <para>
-  This chapter will show you how to set up your own, self-hosted Matrix
-  homeserver using the Synapse reference homeserver, and how to serve your own
-  copy of the Element web client. See the
-  <link xlink:href="https://matrix.org/docs/projects/try-matrix-now.html">Try
-  Matrix Now!</link> overview page for links to Element Apps for Android and iOS,
-  desktop clients, as well as bridges to other networks and other projects
-  around Matrix.
- </para>
- <section xml:id="module-services-matrix-synapse">
-  <title>Synapse Homeserver</title>
-
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-matrix">
+  <title>Matrix</title>
   <para>
-   <link xlink:href="https://github.com/matrix-org/synapse">Synapse</link> is
-   the reference homeserver implementation of Matrix from the core development
-   team at matrix.org. The following configuration example will set up a
-   synapse server for the <literal>example.org</literal> domain, served from
-   the host <literal>myhostname.example.org</literal>. For more information,
-   please refer to the
-   <link xlink:href="https://matrix-org.github.io/synapse/latest/setup/installation.html">
-   installation instructions of Synapse </link>.
-<programlisting>
+    <link xlink:href="https://matrix.org/">Matrix</link> is an open
+    standard for interoperable, decentralised, real-time communication
+    over IP. It can be used to power Instant Messaging, VoIP/WebRTC
+    signalling, Internet of Things communication - or anywhere you need
+    a standard HTTP API for publishing and subscribing to data whilst
+    tracking the conversation history.
+  </para>
+  <para>
+    This chapter will show you how to set up your own, self-hosted
+    Matrix homeserver using the Synapse reference homeserver, and how to
+    serve your own copy of the Element web client. See the
+    <link xlink:href="https://matrix.org/docs/projects/try-matrix-now.html">Try
+    Matrix Now!</link> overview page for links to Element Apps for
+    Android and iOS, desktop clients, as well as bridges to other
+    networks and other projects around Matrix.
+  </para>
+  <section xml:id="module-services-matrix-synapse">
+    <title>Synapse Homeserver</title>
+    <para>
+      <link xlink:href="https://github.com/matrix-org/synapse">Synapse</link>
+      is the reference homeserver implementation of Matrix from the core
+      development team at matrix.org. The following configuration
+      example will set up a synapse server for the
+      <literal>example.org</literal> domain, served from the host
+      <literal>myhostname.example.org</literal>. For more information,
+      please refer to the
+      <link xlink:href="https://matrix-org.github.io/synapse/latest/setup/installation.html">installation
+      instructions of Synapse</link> .
+    </para>
+    <programlisting>
 { pkgs, lib, config, ... }:
 let
-  fqdn = "${config.networking.hostName}.${config.networking.domain}";
+  fqdn = &quot;${config.networking.hostName}.${config.networking.domain}&quot;;
   clientConfig = {
-    "m.homeserver".base_url = "https://${fqdn}";
-    "m.identity_server" = {};
+    &quot;m.homeserver&quot;.base_url = &quot;https://${fqdn}&quot;;
+    &quot;m.identity_server&quot; = {};
   };
-  serverConfig."m.server" = "${config.services.matrix-synapse.settings.server_name}:443";
+  serverConfig.&quot;m.server&quot; = &quot;${config.services.matrix-synapse.settings.server_name}:443&quot;;
   mkWellKnown = data: ''
     add_header Content-Type application/json;
     add_header Access-Control-Allow-Origin *;
     return 200 '${builtins.toJSON data}';
   '';
 in {
-  networking.hostName = "myhostname";
-  networking.domain = "example.org";
+  networking.hostName = &quot;myhostname&quot;;
+  networking.domain = &quot;example.org&quot;;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   services.postgresql.enable = true;
-  services.postgresql.initialScript = pkgs.writeText "synapse-init.sql" ''
-    CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
-    CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+  services.postgresql.initialScript = pkgs.writeText &quot;synapse-init.sql&quot; ''
+    CREATE ROLE &quot;matrix-synapse&quot; WITH LOGIN PASSWORD 'synapse';
+    CREATE DATABASE &quot;matrix-synapse&quot; WITH OWNER &quot;matrix-synapse&quot;
       TEMPLATE template0
-      LC_COLLATE = "C"
-      LC_CTYPE = "C";
+      LC_COLLATE = &quot;C&quot;
+      LC_CTYPE = &quot;C&quot;;
   '';
 
   services.nginx = {
@@ -74,7 +72,7 @@ in {
       # This pattern also allows to seamlessly move the homeserver from
       # myhostname.example.org to myotherhost.example.org by only changing the
       # /.well-known redirection target.
-      "${config.networking.domain}" = {
+      &quot;${config.networking.domain}&quot; = {
         enableACME = true;
         forceSSL = true;
         # This section is not needed if the server_name of matrix-synapse is equal to
@@ -82,26 +80,26 @@ in {
         # is 8448.
         # Further reference can be found in the docs about delegation under
         # https://matrix-org.github.io/synapse/latest/delegate.html
-        locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
+        locations.&quot;= /.well-known/matrix/server&quot;.extraConfig = mkWellKnown serverConfig;
         # This is usually needed for homeserver discovery (from e.g. other Matrix clients).
         # Further reference can be found in the upstream docs at
         # https://spec.matrix.org/latest/client-server-api/#getwell-knownmatrixclient
-        locations."= /.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
+        locations.&quot;= /.well-known/matrix/client&quot;.extraConfig = mkWellKnown clientConfig;
       };
-      "${fqdn}" = {
+      &quot;${fqdn}&quot; = {
         enableACME = true;
         forceSSL = true;
         # It's also possible to do a redirect here or something else, this vhost is not
         # needed for Matrix. It's recommended though to *not put* element
         # here, see also the section about Element.
-        locations."/".extraConfig = ''
+        locations.&quot;/&quot;.extraConfig = ''
           return 404;
         '';
         # Forward all Matrix API calls to the synapse Matrix homeserver. A trailing slash
         # *must not* be used here.
-        locations."/_matrix".proxyPass = "http://[::1]:8008";
+        locations.&quot;/_matrix&quot;.proxyPass = &quot;http://[::1]:8008&quot;;
         # Forward requests for e.g. SSO and password-resets.
-        locations."/_synapse/client".proxyPass = "http://[::1]:8008";
+        locations.&quot;/_synapse/client&quot;.proxyPass = &quot;http://[::1]:8008&quot;;
       };
     };
   };
@@ -111,12 +109,12 @@ in {
     settings.server_name = config.networking.domain;
     settings.listeners = [
       { port = 8008;
-        bind_addresses = [ "::1" ];
-        type = "http";
+        bind_addresses = [ &quot;::1&quot; ];
+        type = &quot;http&quot;;
         tls = false;
         x_forwarded = true;
         resources = [ {
-          names = [ "client" "federation" ];
+          names = [ &quot;client&quot; &quot;federation&quot; ];
           compress = true;
         } ];
       }
@@ -124,103 +122,117 @@ in {
   };
 }
 </programlisting>
-  </para>
- </section>
- <section xml:id="module-services-matrix-register-users">
-  <title>Registering Matrix users</title>
-  <para>
-   If you want to run a server with public registration by anybody, you can
-   then enable <literal>services.matrix-synapse.settings.enable_registration =
-   true;</literal>. Otherwise, or you can generate a registration secret with
-   <command>pwgen -s 64 1</command> and set it with
-   <option><link linkend="opt-services.matrix-synapse.settings.registration_shared_secret">services.matrix-synapse.settings.registration_shared_secret</link></option>.
-   To create a new user or admin, run the following after you have set the secret
-   and have rebuilt NixOS:
-<screen>
-<prompt>$ </prompt>nix-shell -p matrix-synapse
-<prompt>$ </prompt>register_new_matrix_user -k your-registration-shared-secret http://localhost:8008
-<prompt>New user localpart: </prompt>your-username
-<prompt>Password:</prompt>
-<prompt>Confirm password:</prompt>
-<prompt>Make admin [no]:</prompt>
-Success!
-</screen>
-   In the example, this would create a user with the Matrix Identifier
-   <literal>@your-username:example.org</literal>.
-   <warning>
+  </section>
+  <section xml:id="module-services-matrix-register-users">
+    <title>Registering Matrix users</title>
     <para>
-     When using <xref linkend="opt-services.matrix-synapse.settings.registration_shared_secret" />, the secret
-     will end up in the world-readable store. Instead it's recommended to deploy the secret
-     in an additional file like this:
-     <itemizedlist>
-      <listitem>
-       <para>
-        Create a file with the following contents:
-<programlisting>
+      If you want to run a server with public registration by anybody,
+      you can then enable
+      <literal>services.matrix-synapse.settings.enable_registration = true;</literal>.
+      Otherwise, or you can generate a registration secret with
+      <command>pwgen -s 64 1</command> and set it with
+      <xref linkend="opt-services.matrix-synapse.settings.registration_shared_secret"></xref>.
+      To create a new user or admin, run the following after you have
+      set the secret and have rebuilt NixOS:
+    </para>
+    <programlisting>
+$ nix-shell -p matrix-synapse
+$ register_new_matrix_user -k your-registration-shared-secret http://localhost:8008
+New user localpart: your-username
+Password:
+Confirm password:
+Make admin [no]:
+Success!
+</programlisting>
+    <para>
+      In the example, this would create a user with the Matrix
+      Identifier <literal>@your-username:example.org</literal>.
+    </para>
+    <warning>
+      <para>
+        When using
+        <xref linkend="opt-services.matrix-synapse.settings.registration_shared_secret"></xref>,
+        the secret will end up in the world-readable store. Instead it's
+        recommended to deploy the secret in an additional file like
+        this:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Create a file with the following contents:
+          </para>
+          <programlisting>
 registration_shared_secret: your-very-secret-secret
 </programlisting>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Deploy the file with a secret-manager such as <link xlink:href="https://nixops.readthedocs.io/en/latest/overview.html#managing-keys"><option>deployment.keys</option></link>
-        from <citerefentry><refentrytitle>nixops</refentrytitle><manvolnum>1</manvolnum></citerefentry>
-        or <link xlink:href="https://github.com/Mic92/sops-nix/">sops-nix</link> to
-        e.g. <filename>/run/secrets/matrix-shared-secret</filename> and ensure that it's readable
-        by <literal>matrix-synapse</literal>.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Include the file like this in your configuration:
-<programlisting>
+        </listitem>
+        <listitem>
+          <para>
+            Deploy the file with a secret-manager such as
+            <link xlink:href="https://nixops.readthedocs.io/en/latest/overview.html#managing-keys"><option>deployment.keys</option></link>
+            from
+            <citerefentry><refentrytitle>nixops</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+            or
+            <link xlink:href="https://github.com/Mic92/sops-nix/">sops-nix</link>
+            to e.g.
+            <filename>/run/secrets/matrix-shared-secret</filename> and
+            ensure that it's readable by
+            <literal>matrix-synapse</literal>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Include the file like this in your configuration:
+          </para>
+          <programlisting>
 {
   services.matrix-synapse.extraConfigFiles = [
-    "/run/secrets/matrix-shared-secret"
+    &quot;/run/secrets/matrix-shared-secret&quot;
   ];
 }
 </programlisting>
-       </para>
-      </listitem>
-     </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </warning>
+    <note>
+      <para>
+        It's also possible to user alternative authentication mechanism
+        such as
+        <link xlink:href="https://github.com/matrix-org/matrix-synapse-ldap3">LDAP
+        (via <literal>matrix-synapse-ldap3</literal>)</link> or
+        <link xlink:href="https://matrix-org.github.io/synapse/latest/openid.html">OpenID</link>.
+      </para>
+    </note>
+  </section>
+  <section xml:id="module-services-matrix-element-web">
+    <title>Element (formerly known as Riot) Web Client</title>
+    <para>
+      <link xlink:href="https://github.com/vector-im/riot-web/">Element
+      Web</link> is the reference web client for Matrix and developed by
+      the core team at matrix.org. Element was formerly known as
+      Riot.im, see the
+      <link xlink:href="https://element.io/blog/welcome-to-element/">Element
+      introductory blog post</link> for more information. The following
+      snippet can be optionally added to the code before to complete the
+      synapse installation with a web client served at
+      <literal>https://element.myhostname.example.org</literal> and
+      <literal>https://element.example.org</literal>. Alternatively, you
+      can use the hosted copy at
+      <link xlink:href="https://app.element.io/" role="uri">https://app.element.io/</link>,
+      or use other web clients or native client applications. Due to the
+      <literal>/.well-known</literal> urls set up done above, many
+      clients should fill in the required connection details
+      automatically when you enter your Matrix Identifier. See
+      <link xlink:href="https://matrix.org/docs/projects/try-matrix-now.html">Try
+      Matrix Now!</link> for a list of existing clients and their
+      supported featureset.
     </para>
-   </warning>
-  </para>
-  <note>
-   <para>
-    It's also possible to user alternative authentication mechanism such as
-    <link xlink:href="https://github.com/matrix-org/matrix-synapse-ldap3">LDAP (via <literal>matrix-synapse-ldap3</literal>)</link>
-    or <link xlink:href="https://matrix-org.github.io/synapse/latest/openid.html">OpenID</link>.
-   </para>
-  </note>
- </section>
- <section xml:id="module-services-matrix-element-web">
-  <title>Element (formerly known as Riot) Web Client</title>
-
-  <para>
-   <link xlink:href="https://github.com/vector-im/riot-web/">Element Web</link> is
-   the reference web client for Matrix and developed by the core team at
-   matrix.org. Element was formerly known as Riot.im, see the
-   <link xlink:href="https://element.io/blog/welcome-to-element/">Element introductory blog post</link>
-   for more information. The following snippet can be optionally added to the code before
-   to complete the synapse installation with a web client served at
-   <literal>https://element.myhostname.example.org</literal> and
-   <literal>https://element.example.org</literal>. Alternatively, you can use the hosted
-   copy at <link xlink:href="https://app.element.io/">https://app.element.io/</link>,
-   or use other web clients or native client applications. Due to the
-   <literal>/.well-known</literal> urls set up done above, many clients should
-   fill in the required connection details automatically when you enter your
-   Matrix Identifier. See
-   <link xlink:href="https://matrix.org/docs/projects/try-matrix-now.html">Try
-   Matrix Now!</link> for a list of existing clients and their supported
-   featureset.
-<programlisting>
+    <programlisting>
 {
-  services.nginx.virtualHosts."element.${fqdn}" = {
+  services.nginx.virtualHosts.&quot;element.${fqdn}&quot; = {
     enableACME = true;
     forceSSL = true;
     serverAliases = [
-      "element.${config.networking.domain}"
+      &quot;element.${config.networking.domain}&quot;
     ];
 
     root = pkgs.element-web.override {
@@ -231,19 +243,19 @@ registration_shared_secret: your-very-secret-secret
   };
 }
 </programlisting>
-  </para>
-
-  <note>
-   <para>
-    The Element developers do not recommend running Element and your Matrix
-    homeserver on the same fully-qualified domain name for security reasons. In
-    the example, this means that you should not reuse the
-    <literal>myhostname.example.org</literal> virtualHost to also serve Element,
-    but instead serve it on a different subdomain, like
-    <literal>element.example.org</literal> in the example. See the
-    <link xlink:href="https://github.com/vector-im/element-web/tree/v1.10.0#important-security-notes">Element
-    Important Security Notes</link> for more information on this subject.
-   </para>
-  </note>
- </section>
+    <note>
+      <para>
+        The Element developers do not recommend running Element and your
+        Matrix homeserver on the same fully-qualified domain name for
+        security reasons. In the example, this means that you should not
+        reuse the <literal>myhostname.example.org</literal> virtualHost
+        to also serve Element, but instead serve it on a different
+        subdomain, like <literal>element.example.org</literal> in the
+        example. See the
+        <link xlink:href="https://github.com/vector-im/element-web/tree/v1.10.0#important-security-notes">Element
+        Important Security Notes</link> for more information on this
+        subject.
+      </para>
+    </note>
+  </section>
 </chapter>
