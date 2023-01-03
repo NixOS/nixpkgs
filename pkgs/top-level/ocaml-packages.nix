@@ -328,7 +328,11 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    domainslib = callPackage ../development/ocaml-modules/domainslib { };
+
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
+
+    dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
     dssi = callPackage ../development/ocaml-modules/dssi { };
 
@@ -735,6 +739,8 @@ let
 
     lo = callPackage ../development/ocaml-modules/lo { };
 
+    lockfree = callPackage ../development/ocaml-modules/lockfree { };
+
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
@@ -1113,6 +1119,8 @@ let
     opus = callPackage ../development/ocaml-modules/opus { };
 
     ordering = callPackage ../development/ocaml-modules/ordering { };
+
+    oseq = callPackage ../development/ocaml-modules/oseq { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
