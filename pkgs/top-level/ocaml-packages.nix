@@ -707,7 +707,9 @@ let
       then callPackage ../development/ocaml-modules/lablgtk-extras { }
       else callPackage ../development/ocaml-modules/lablgtk-extras/1.4.nix { };
 
-    labltk = callPackage ../development/ocaml-modules/labltk { };
+    labltk = callPackage ../development/ocaml-modules/labltk {
+      inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+    };
 
     lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
