@@ -1,15 +1,12 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3Packages
-, bash
 , dnsmasq
 , gawk
 , getent
 , kmod
 , lxc
 , iproute2
-, iptables
 , nftables
 , util-linux
 , which
