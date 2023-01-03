@@ -1,46 +1,42 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-jitsi-meet">
- <title>Jitsi Meet</title>
- <para>
-   With Jitsi Meet on NixOS you can quickly configure a complete,
-   private, self-hosted video conferencing solution.
- </para>
-
- <section xml:id="module-services-jitsi-basic-usage">
- <title>Basic usage</title>
-   <para>
-     A minimal configuration using Let's Encrypt for TLS certificates looks like this:
-<programlisting>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-jitsi-meet">
+  <title>Jitsi Meet</title>
+  <para>
+    With Jitsi Meet on NixOS you can quickly configure a complete,
+    private, self-hosted video conferencing solution.
+  </para>
+  <section xml:id="module-services-jitsi-basic-usage">
+    <title>Basic usage</title>
+    <para>
+      A minimal configuration using Let's Encrypt for TLS certificates
+      looks like this:
+    </para>
+    <programlisting>
 {
   services.jitsi-meet = {
     enable = true;
-    hostName = "jitsi.example.com";
+    hostName = &quot;jitsi.example.com&quot;;
   };
   services.jitsi-videobridge.openFirewall = true;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
-  security.acme.email = "me@example.com";
+  security.acme.email = &quot;me@example.com&quot;;
   security.acme.acceptTerms = true;
 }
 </programlisting>
-   </para>
- </section>
-
- <section xml:id="module-services-jitsi-configuration">
- <title>Configuration</title>
-   <para>
-     Here is the minimal configuration with additional configurations:
-<programlisting>
+  </section>
+  <section xml:id="module-services-jitsi-configuration">
+    <title>Configuration</title>
+    <para>
+      Here is the minimal configuration with additional configurations:
+    </para>
+    <programlisting>
 {
   services.jitsi-meet = {
     enable = true;
-    hostName = "jitsi.example.com";
+    hostName = &quot;jitsi.example.com&quot;;
     config = {
       enableWelcomePage = false;
       prejoinPageEnabled = true;
-      defaultLang = "fi";
+      defaultLang = &quot;fi&quot;;
     };
     interfaceConfig = {
       SHOW_JITSI_WATERMARK = false;
@@ -49,11 +45,9 @@
   };
   services.jitsi-videobridge.openFirewall = true;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
-  security.acme.email = "me@example.com";
+  security.acme.email = &quot;me@example.com&quot;;
   security.acme.acceptTerms = true;
 }
 </programlisting>
-   </para>
- </section>
-
+  </section>
 </chapter>
