@@ -1,34 +1,31 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-litestream">
- <title>Litestream</title>
- <para>
-  <link xlink:href="https://litestream.io/">Litestream</link> is a standalone streaming
-  replication tool for SQLite.
- </para>
-
- <section xml:id="module-services-litestream-configuration">
-  <title>Configuration</title>
-
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-litestream">
+  <title>Litestream</title>
   <para>
-   Litestream service is managed by a dedicated user named <literal>litestream</literal>
-   which needs permission to the database file. Here's an example config which gives
-   required permissions to access <link linkend="opt-services.grafana.settings.database.path">
-   grafana database</link>:
-<programlisting>
+    <link xlink:href="https://litestream.io/">Litestream</link> is a
+    standalone streaming replication tool for SQLite.
+  </para>
+  <section xml:id="module-services-litestream-configuration">
+    <title>Configuration</title>
+    <para>
+      Litestream service is managed by a dedicated user named
+      <literal>litestream</literal> which needs permission to the
+      database file. Here's an example config which gives required
+      permissions to access
+      <link linkend="opt-services.grafana.settings.database.path">grafana
+      database</link>:
+    </para>
+    <programlisting>
 { pkgs, ... }:
 {
-  users.users.litestream.extraGroups = [ "grafana" ];
+  users.users.litestream.extraGroups = [ &quot;grafana&quot; ];
 
-  systemd.services.grafana.serviceConfig.ExecStartPost = "+" + pkgs.writeShellScript "grant-grafana-permissions" ''
+  systemd.services.grafana.serviceConfig.ExecStartPost = &quot;+&quot; + pkgs.writeShellScript &quot;grant-grafana-permissions&quot; ''
     timeout=10
 
     while [ ! -f /var/lib/grafana/data/grafana.db ];
     do
-      if [ "$timeout" == 0 ]; then
-        echo "ERROR: Timeout while waiting for /var/lib/grafana/data/grafana.db."
+      if [ &quot;$timeout&quot; == 0 ]; then
+        echo &quot;ERROR: Timeout while waiting for /var/lib/grafana/data/grafana.db.&quot;
         exit 1
       fi
 
@@ -44,14 +41,14 @@
   services.litestream = {
     enable = true;
 
-    environmentFile = "/run/secrets/litestream";
+    environmentFile = &quot;/run/secrets/litestream&quot;;
 
     settings = {
       dbs = [
         {
-          path = "/var/lib/grafana/data/grafana.db";
+          path = &quot;/var/lib/grafana/data/grafana.db&quot;;
           replicas = [{
-            url = "s3://mybkt.litestream.io/grafana";
+            url = &quot;s3://mybkt.litestream.io/grafana&quot;;
           }];
         }
       ];
@@ -59,7 +56,5 @@
   };
 }
 </programlisting>
-  </para>
- </section>
-
+  </section>
 </chapter>
