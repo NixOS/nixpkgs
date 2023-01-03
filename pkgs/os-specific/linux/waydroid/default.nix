@@ -50,7 +50,6 @@ python3Packages.buildPythonApplication rec {
       python3Packages.gbinder-python
       python3Packages.pygobject3
       python3Packages.pyclip
-      bash
       gawk
       kmod
       lxc
