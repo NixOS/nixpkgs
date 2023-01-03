@@ -233,8 +233,8 @@ registration_shared_secret: your-very-secret-secret
    <link xlink:href="https://element.io/blog/welcome-to-element/">Element introductory blog post</link>
    for more information. The following snippet can be optionally added to the code before
    to complete the synapse installation with a web client served at
-   <code>https://element.myhostname.example.org</code> and
-   <code>https://element.example.org</code>. Alternatively, you can use the hosted
+   <literal>https://element.myhostname.example.org</literal> and
+   <literal>https://element.example.org</literal>. Alternatively, you can use the hosted
    copy at <link xlink:href="https://app.element.io/">https://app.element.io/</link>,
    or use other web clients or native client applications. Due to the
    <literal>/.well-known</literal> urls set up done above, many clients should

@@ -97,7 +97,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
   <para>The following NixOS snippet creates an hourly backup to the service
     (on the host nixos) as created in the section above. We assume
     that you have stored a secret passphrasse in the file
-    <code>/run/keys/borgbackup_passphrase</code>, which should be only
+    <filename>/run/keys/borgbackup_passphrase</filename>, which should be only
     accessible by root
   </para>
   <para>
