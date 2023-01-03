@@ -1,19 +1,28 @@
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="module-services-blackfire">
- <title>Blackfire profiler</title>
- <para>
-  <emphasis>Source:</emphasis>
-  <filename>modules/services/development/blackfire.nix</filename>
- </para>
- <para>
-  <emphasis>Upstream documentation:</emphasis>
-  <link xlink:href="https://blackfire.io/docs/introduction"/>
- </para>
- <para>
-  <link xlink:href="https://blackfire.io">Blackfire</link> is a proprietary tool for profiling applications. There are several languages supported by the product but currently only PHP support is packaged in Nixpkgs. The back-end consists of a module that is loaded into the language runtime (called <emphasis>probe</emphasis>) and a service (<emphasis>agent</emphasis>) that the probe connects to and that sends the profiles to the server.
- </para>
- <para>
-  To use it, you will need to enable the agent and the probe on your server. The exact method will depend on the way you use PHP but here is an example of NixOS configuration for PHP-FPM:
-<programlisting>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-blackfire">
+  <title>Blackfire profiler</title>
+  <para>
+    <emphasis>Source:</emphasis>
+    <filename>modules/services/development/blackfire.nix</filename>
+  </para>
+  <para>
+    <emphasis>Upstream documentation:</emphasis>
+    <link xlink:href="https://blackfire.io/docs/introduction" role="uri">https://blackfire.io/docs/introduction</link>
+  </para>
+  <para>
+    <link xlink:href="https://blackfire.io">Blackfire</link> is a
+    proprietary tool for profiling applications. There are several
+    languages supported by the product but currently only PHP support is
+    packaged in Nixpkgs. The back-end consists of a module that is
+    loaded into the language runtime (called <emphasis>probe</emphasis>)
+    and a service (<emphasis>agent</emphasis>) that the probe connects
+    to and that sends the profiles to the server.
+  </para>
+  <para>
+    To use it, you will need to enable the agent and the probe on your
+    server. The exact method will depend on the way you use PHP but here
+    is an example of NixOS configuration for PHP-FPM:
+  </para>
+  <programlisting>
 let
   php = pkgs.php.withExtensions ({ enabled, all }: enabled ++ (with all; [
     blackfire
@@ -30,19 +39,21 @@ in {
     settings = {
       # You will need to get credentials at https://blackfire.io/my/settings/credentials
       # You can also use other options described in https://blackfire.io/docs/up-and-running/configuration/agent
-      server-id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
-      server-token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+      server-id = &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;;
+      server-token = &quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;;
     };
   };
 
   # Make the agent run on start-up.
   # (WantedBy= from the upstream unit not respected: https://github.com/NixOS/nixpkgs/issues/81138)
   # Alternately, you can start it manually with `systemctl start blackfire-agent`.
-  systemd.services.blackfire-agent.wantedBy = [ "phpfpm-foo.service" ];
+  systemd.services.blackfire-agent.wantedBy = [ &quot;phpfpm-foo.service&quot; ];
 }
 </programlisting>
- </para>
- <para>
-  On your developer machine, you will also want to install <link xlink:href="https://blackfire.io/docs/up-and-running/installation#install-a-profiling-client">the client</link> (see <literal>blackfire</literal> package) or the browser extension to actually trigger the profiling.
- </para>
+  <para>
+    On your developer machine, you will also want to install
+    <link xlink:href="https://blackfire.io/docs/up-and-running/installation#install-a-profiling-client">the
+    client</link> (see <literal>blackfire</literal> package) or the
+    browser extension to actually trigger the profiling.
+  </para>
 </chapter>
