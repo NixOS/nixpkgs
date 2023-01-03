@@ -182,6 +182,36 @@ let
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
+            ]
+            ++ lib.optionals supportDarwin.aarch64 [
+              jobs.stdenv.aarch64-darwin
+              jobs.cargo.aarch64-darwin
+              jobs.cachix.aarch64-darwin
+              jobs.go.aarch64-darwin
+              jobs.python3.aarch64-darwin
+              jobs.nixpkgs-review.aarch64-darwin
+              jobs.nix.aarch64-darwin
+              jobs.nix-info.aarch64-darwin
+              jobs.nix-info-tested.aarch64-darwin
+              jobs.git.aarch64-darwin
+              jobs.mariadb.aarch64-darwin
+              jobs.vim.aarch64-darwin
+              jobs.inkscape.aarch64-darwin
+              jobs.qt5.qtmultimedia.aarch64-darwin
+              /*
+              jobs.tests.cc-wrapper.x86_64-darwin
+              jobs.tests.cc-wrapper-gcc7.x86_64-darwin
+              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
+              jobs.tests.cc-wrapper-clang.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.stdenv-inputs.x86_64-darwin
+              jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
+              */
             ];
         };
 
