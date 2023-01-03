@@ -251,15 +251,13 @@ in
    <para>
     The list of available packages in the various ELPA repositories can be seen
     with the following commands:
-    <example xml:id="module-services-emacs-querying-packages">
-     <title>Querying Emacs packages</title>
+    <anchor xml:id="module-services-emacs-querying-packages" />
 <programlisting><![CDATA[
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.elpaPackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaPackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaStablePackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 ]]></programlisting>
-    </example>
    </para>
 
    <para>
@@ -267,8 +265,7 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
     adding it to the list of system packages (see
     <xref linkend="sec-declarative-package-mgmt" />). Simply modify your file
     <filename>configuration.nix</filename> to make it contain:
-    <example xml:id="module-services-emacs-configuration-nix">
-     <title>Custom Emacs in <filename>configuration.nix</filename></title>
+    <anchor xml:id="module-services-emacs-configuration-nix" />
 <programlisting><![CDATA[
 {
  environment.systemPackages = [
@@ -277,7 +274,6 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
   ];
 }
 ]]></programlisting>
-    </example>
    </para>
 
    <para>
@@ -296,8 +292,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
     <filename>~/.config/nixpkgs/config.nix</filename> (see
     <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs
     manual</link>):
-    <example xml:id="module-services-emacs-config-nix">
-     <title>Custom Emacs in <filename>~/.config/nixpkgs/config.nix</filename></title>
+    <anchor xml:id="module-services-emacs-config-nix" />
 <programlisting><![CDATA[
 {
   packageOverrides = super: let self = super.pkgs; in {
@@ -305,7 +300,6 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
   };
 }
 ]]></programlisting>
-    </example>
    </para>
 
    <para>
@@ -327,8 +321,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
     <filename>emacs.nix</filename> in this way:
    </para>
 
-   <example xml:id="ex-emacsGtk3Nix">
-    <title>Custom Emacs build</title>
+   <anchor xml:id="ex-emacsGtk3Nix" />
 <programlisting><![CDATA[
 { pkgs ? import <nixpkgs> {} }:
 let
@@ -345,7 +338,6 @@ let
   });
 in [...]
 ]]></programlisting>
-   </example>
 
    <para>
     After building this file as shown in <xref linkend="ex-emacsNix" />, you
@@ -483,8 +475,7 @@ systemctl --user enable emacs
   <para>
    The Emacs init file should be changed to load the extension packages at
    startup:
-   <example xml:id="module-services-emacs-package-initialisation">
-    <title>Package initialization in <filename>.emacs</filename></title>
+   <anchor xml:id="module-services-emacs-package-initialisation" />
 <programlisting><![CDATA[
 (require 'package)
 
@@ -494,7 +485,6 @@ systemctl --user enable emacs
 (setq package-enable-at-startup nil)
 (package-initialize)
 ]]></programlisting>
-   </example>
   </para>
 
   <para>
@@ -556,8 +546,7 @@ systemctl --user enable emacs
     Then customize the variable <varname>rng-schema-locating-files</varname> to
     include <filename>~/.emacs.d/schemas.xml</filename> and put the following
     text into that file:
-    <example xml:id="ex-emacs-docbook-xml">
-     <title>nXML Schema Configuration (<filename>~/.emacs.d/schemas.xml</filename>)</title>
+    <anchor xml:id="ex-emacs-docbook-xml" />
 <programlisting language="xml"><![CDATA[
 <?xml version="1.0"?>
 <!--
@@ -577,7 +566,6 @@ systemctl --user enable emacs
   -->
 </locatingRules>
 ]]></programlisting>
-    </example>
    </para>
   </section>
  </section>
