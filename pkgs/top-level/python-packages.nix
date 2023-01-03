@@ -6568,6 +6568,8 @@ self: super: with self; {
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
+  opentsne = callPackage ../development/python-modules/opentsne { };
+
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
     enablePython = true;
