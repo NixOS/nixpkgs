@@ -103,7 +103,11 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\" " + lib.optionalString stdenv.hostPlatform.is64bit "-DNSS_USE_64=1";
+  NIX_CFLAGS_COMPILE =
+    "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\" "
+    + lib.optionalString stdenv.hostPlatform.is64bit "-DNSS_USE_64=1"
+    + lib.optionalString stdenv.hostPlatform.isILP32 " -DNS_PTR_LE_32=1" # See RNG_RandomUpdate() in drdbg.c
+  ;
 
   installPhase = ''
     runHook preInstall
