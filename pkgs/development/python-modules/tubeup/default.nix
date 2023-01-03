@@ -9,18 +9,20 @@
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "0.0.34";
+  version = "0.0.35";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae1e606b243fd70742f8b5871c497628d258ee9f416caa46544aca9a5fbfbca0";
+    sha256 = "006aea68bb8d967a7427c58ee7862e3f2481dae667c2bbcfb1a1f2fd80e665d1";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "internetarchive==3.0.2" "internetarchive" \
+      --replace "urllib3==1.26.13" "urllib3" \
       --replace "docopt==0.6.2" "docopt"
   '';
 
