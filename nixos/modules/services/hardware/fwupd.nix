@@ -158,6 +158,9 @@ in {
 
     services.udev.packages = [ cfg.package ];
 
+    # required to update the firmware of disks
+    services.udisks2.enable = true;
+
     systemd.packages = [ cfg.package ];
 
     security.polkit.enable = true;
