@@ -3,8 +3,10 @@
 Writing Nix expressions for Qt libraries and applications is largely similar as for other C++ software.
 This section assumes some knowledge of the latter.
 
-However, Qt makes extensive use of runtime dependency detection.
-In nixpkgs, those runtime dependencies are made into build dependencies through wrappers.
+The major caveat with Qt applications is that Qt uses a plugin system to load additional modules at runtime,
+from a list of well-known locations. In Nixpkgs, we patch QtCore to instead use an environment variable,
+and wrap Qt applications to set it to the right paths. This effectively makes the runtime dependencies
+pure and explicit at build-time, at the cost of introducing an extra indirection.
 
 ## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
