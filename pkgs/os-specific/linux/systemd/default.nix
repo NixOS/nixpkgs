@@ -70,9 +70,16 @@
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
+  # Note: llvmPackages is explicitly taken from buildPackages instead of relying
+  # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
+  # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
+  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we explicitly
+  # take buildPackages.llvmPackages, this is no problem because
+  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to us. Working
+  # around this is important, because systemd is in the dependency closure of
+  # GHC via emscripten and jdk.
 , bpftools
 , libbpf
-, llvmPackages
 
 , withAnalyze ? true
 , withApparmor ? true
@@ -86,7 +93,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
+, withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -368,8 +375,8 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals withLibBPF [
       bpftools
-      llvmPackages.clang
-      llvmPackages.libllvm
+      buildPackages.llvmPackages.clang
+      buildPackages.llvmPackages.libllvm
     ]
   ;
 
