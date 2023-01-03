@@ -10,20 +10,22 @@
 }:
 
 let
-  openShiftVersion = "4.10.22";
-  podmanVersion = "4.1.0";
+  openShiftVersion = "4.11.13";
+  okdVersion = "4.11.0-0.okd-2022-11-05-030711";
+  podmanVersion = "4.2.0";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
 in
 buildGoModule rec {
-  version = "2.6.0";
+  version = "2.11.0";
   pname = "crc";
-  gitCommit = "6b954d40ec3280ca63e825805503d4414a3ff55b";
+  gitCommit = "a5f90a25abcacd4aa334490f0d204329abeaa691";
+  modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
-    owner = "code-ready";
+    owner = "crc-org";
     repo = "crc";
     rev = "v${version}";
-    sha256 = "sha256-4EaonL+7/zPEbuM12jQFx8wLR62iLYZ3LkHAibdGQZc=";
+    sha256 = "sha256-0e62mQ01pt0kClrEx4ss2T8BN1+0aQiCFPyDg5agbTU";
   };
 
   vendorSha256 = null;
@@ -41,21 +43,18 @@ buildGoModule rec {
   tags = [ "containers_image_openpgp" ];
 
   ldflags = [
-    "-X github.com/code-ready/crc/pkg/crc/version.crcVersion=${version}"
-    "-X github.com/code-ready/crc/pkg/crc/version.bundleVersion=${openShiftVersion}"
-    "-X github.com/code-ready/crc/pkg/crc/version.podmanVersion=${podmanVersion}"
-    "-X github.com/code-ready/crc/pkg/crc/version.commitSha=${gitCommit}"
-    "-X github.com/code-ready/crc/pkg/crc/segment.WriteKey=${writeKey}"
+    "-X github.com/crc-org/crc/pkg/crc/version.crcVersion=${version}"
+    "-X github.com/crc-org/crc/pkg/crc/version.ocpVersion=${openShiftVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.okdVersion=${okdVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.podmanVersion=${podmanVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.commitSha=${builtins.substring 0 8 gitCommit}"
+    "-X github.com/crc-org/crc/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
 
-  # tests are currently broken on aarch64-darwin
-  # https://github.com/code-ready/crc/issues/3237
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
-  checkFlags = [ "-args --crc-binary=$out/bin/crc" ];
 
   passthru.tests.version = testers.testVersion {
     package = crc;
