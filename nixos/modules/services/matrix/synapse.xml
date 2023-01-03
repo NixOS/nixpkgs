@@ -167,8 +167,8 @@ in {
    and have rebuilt NixOS:
 <screen>
 <prompt>$ </prompt>nix-shell -p matrix-synapse
-<prompt>$ </prompt>register_new_matrix_user -k <replaceable>your-registration-shared-secret</replaceable> http://localhost:8008
-<prompt>New user localpart: </prompt><replaceable>your-username</replaceable>
+<prompt>$ </prompt>register_new_matrix_user -k your-registration-shared-secret http://localhost:8008
+<prompt>New user localpart: </prompt>your-username
 <prompt>Password:</prompt>
 <prompt>Confirm password:</prompt>
 <prompt>Make admin [no]:</prompt>

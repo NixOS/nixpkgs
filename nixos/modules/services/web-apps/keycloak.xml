@@ -29,7 +29,7 @@
        Refer to the <link
        xlink:href="https://www.keycloak.org/docs/latest/server_admin/index.html">
        Keycloak Server Administration Guide</link> for information on
-       how to administer your <productname>Keycloak</productname>
+       how to administer your Keycloak
        instance.
      </para>
    </section>
@@ -37,10 +37,10 @@
    <section xml:id="module-services-keycloak-database">
      <title>Database access</title>
      <para>
-       <productname>Keycloak</productname> can be used with either
-       <productname>PostgreSQL</productname>,
-       <productname>MariaDB</productname> or
-       <productname>MySQL</productname>. Which one is used can be
+       Keycloak can be used with either
+       PostgreSQL,
+       MariaDB or
+       MySQL. Which one is used can be
        configured in <xref
        linkend="opt-services.keycloak.database.type" />. The selected
        database will automatically be enabled and a database and role
@@ -103,7 +103,7 @@
        <xref linkend="opt-services.keycloak.settings.hostname-strict-backchannel" />
        determines whether Keycloak should force all requests to go
        through the frontend URL. By default,
-       <productname>Keycloak</productname> allows backend requests to
+       Keycloak allows backend requests to
        instead use its local hostname or IP address and may also
        advertise it to clients through its OpenID Connect Discovery
        endpoint.
@@ -120,7 +120,7 @@
    <section xml:id="module-services-keycloak-tls">
      <title>Setting up TLS/SSL</title>
      <para>
-       By default, <productname>Keycloak</productname> won't accept
+       By default, Keycloak won't accept
        unsecured HTTP connections originating from outside its local
        network.
      </para>

@@ -68,8 +68,8 @@ services.discourse = {
  <section xml:id="module-services-discourse-database">
    <title>Database access</title>
    <para>
-     <productname>Discourse</productname> uses
-     <productname>PostgreSQL</productname> to store most of its
+     Discourse uses
+     PostgreSQL to store most of its
      data. A database will automatically be enabled and a database
      and role created unless <xref
      linkend="opt-services.discourse.database.host" /> is changed from
@@ -94,9 +94,9 @@ services.discourse = {
    <title>Email</title>
    <para>
      In addition to the basic setup, you'll want to configure an SMTP
-     server <productname>Discourse</productname> can use to send user
+     server Discourse can use to send user
      registration and password reset emails, among others. You can
-     also optionally let <productname>Discourse</productname> receive
+     also optionally let Discourse receive
      email, which enables people to reply to threads and conversations
      via email.
    </para>
@@ -159,7 +159,7 @@ services.discourse = {
    <title>Additional settings</title>
    <para>
      Additional site settings and backend settings, for which no
-     explicit <productname>NixOS</productname> options are provided,
+     explicit NixOS options are provided,
      can be set in <xref linkend="opt-services.discourse.siteSettings" /> and
      <xref linkend="opt-services.discourse.backendSettings" /> respectively.
    </para>
@@ -168,7 +168,7 @@ services.discourse = {
      <title>Site settings</title>
      <para>
        "Site settings" are the settings that can be
-       changed through the <productname>Discourse</productname>
+       changed through the Discourse
        UI. Their <emphasis>default</emphasis> values can be set using
        <xref linkend="opt-services.discourse.siteSettings" />.
      </para>
@@ -205,8 +205,8 @@ services.discourse = {
      <title>Example</title>
      <para>
        The following example sets the title and description of the
-       <productname>Discourse</productname> instance and enables
-       <productname>GitHub</productname> login in the site settings,
+       Discourse instance and enables
+       GitHub login in the site settings,
        and changes a few request limits in the backend settings:
 <programlisting>
 services.discourse = {
@@ -260,7 +260,7 @@ services.discourse = {
   <section xml:id="module-services-discourse-plugins">
     <title>Plugins</title>
     <para>
-      You can install <productname>Discourse</productname> plugins
+      You can install Discourse plugins
       using the <xref linkend="opt-services.discourse.plugins" />
       option. Pre-packaged plugins are provided in
       <literal>&lt;your_discourse_package_here&gt;.plugins</literal>. If
