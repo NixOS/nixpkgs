@@ -38,7 +38,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "bitmap";
     version = "1.0.9";
     builder = ./builder.sh;
@@ -48,13 +48,13 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "editres";
     version = "1.0.7";
     builder = ./builder.sh;
@@ -64,7 +64,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1578,7 +1578,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
+  oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "oclock";
     version = "1.0.4";
     builder = ./builder.sh;
@@ -1588,7 +1588,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libxkbfile libX11 libXext libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1690,7 +1690,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "viewres";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -1700,7 +1700,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1770,7 +1770,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
+  xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xcalc";
     version = "1.1.0";
     builder = ./builder.sh;
@@ -1780,7 +1780,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1914,7 +1914,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xclock";
     version = "1.0.9";
     builder = ./builder.sh;
@@ -1924,7 +1924,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXft libxkbfile libXmu xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1962,7 +1962,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xconsole";
     version = "1.0.7";
     builder = ./builder.sh;
@@ -1972,7 +1972,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -2010,7 +2010,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xdm";
     version = "1.1.12";
     builder = ./builder.sh;
@@ -2020,7 +2020,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -2906,7 +2906,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
+  xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xfd";
     version = "1.1.3";
     builder = ./builder.sh;
@@ -2916,13 +2916,13 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config gettext ];
+    nativeBuildInputs = [ pkg-config gettext wrapWithXFileSearchPathHook ];
     buildInputs = [ libxkbfile fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xfontsel";
     version = "1.0.6";
     builder = ./builder.sh;
@@ -2932,7 +2932,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -2986,7 +2986,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xgc";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -2996,7 +2996,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3146,7 +3146,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
+  xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xload";
     version = "1.1.3";
     builder = ./builder.sh;
@@ -3156,7 +3156,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config gettext ];
+    nativeBuildInputs = [ pkg-config gettext wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3210,7 +3210,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmag";
     version = "1.0.6";
     builder = ./builder.sh;
@@ -3220,13 +3220,13 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmessage";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -3236,7 +3236,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3258,7 +3258,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmore";
     version = "1.0.3";
     builder = ./builder.sh;
@@ -3268,7 +3268,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3466,7 +3466,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
+  xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xsm";
     version = "1.0.4";
     builder = ./builder.sh;
@@ -3476,7 +3476,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libICE libSM libX11 libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};

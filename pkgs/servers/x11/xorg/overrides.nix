@@ -1,4 +1,5 @@
 { abiCompat ? null,
+  callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
@@ -22,23 +23,26 @@ let
 in
 self: super:
 {
+  wrapWithXFileSearchPathHook = callPackage ({ makeBinaryWrapper, makeSetupHook, writeScript }: makeSetupHook {
+      name = "wrapWithXFileSearchPathHook";
+      deps = [ makeBinaryWrapper ];
+    } (writeScript "wrapWithXFileSearchPathHook.sh" ''
+      wrapWithXFileSearchPath() {
+        paths=(
+          "$out/share/X11/%T/%N"
+          "$out/include/X11/%T/%N"
+          "${xorg.xbitmaps}/include/X11/%T/%N"
+        )
+        for exe in $out/bin/*; do
+          wrapProgram "$exe" \
+            --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
+        done
+      }
+      postInstallHooks+=(wrapWithXFileSearchPath)
+  '')) {};
+
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-  });
-
-  bitmap = super.bitmap.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
-    postInstall = ''
-      paths=(
-        "$out/share/X11/%T/%N"
-        "$out/include/X11/%T/%N"
-        "${xorg.xbitmaps}/include/X11/%T/%N"
-      )
-      wrapProgram "$out/bin/bitmap" \
-        --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
-      makeWrapper "$out/bin/bitmap" "$out/bin/bitmap-color" \
-        --suffix XFILESEARCHPATH : "$out/share/X11/%T/%N-color"
-    '';
   });
 
   editres = super.editres.overrideAttrs (attrs: {
@@ -1088,17 +1092,6 @@ self: super:
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone
-    '';
-  });
-
-  xcalc = super.xcalc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [] ++ [
-      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/bin/xcalc \
-        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
 
