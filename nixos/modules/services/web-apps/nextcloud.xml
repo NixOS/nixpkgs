@@ -11,7 +11,7 @@
   desktop client is packaged at <literal>pkgs.nextcloud-client</literal>.
  </para>
  <para>
-  The current default by NixOS is <package>nextcloud25</package> which is also the latest
+  The current default by NixOS is <literal>nextcloud25</literal> which is also the latest
   major version available.
  </para>
  <section xml:id="module-services-nextcloud-basic-usage">
@@ -192,9 +192,9 @@
  <section xml:id="module-services-nextcloud-httpd">
   <title>Using an alternative webserver as reverse-proxy (e.g. <literal>httpd</literal>)</title>
   <para>
-   By default, <package>nginx</package> is used as reverse-proxy for <package>nextcloud</package>.
-   However, it's possible to use e.g. <package>httpd</package> by explicitly disabling
-   <package>nginx</package> using <xref linkend="opt-services.nginx.enable" /> and fixing the
+   By default, <literal>nginx</literal> is used as reverse-proxy for <literal>nextcloud</literal>.
+   However, it's possible to use e.g. <literal>httpd</literal> by explicitly disabling
+   <literal>nginx</literal> using <xref linkend="opt-services.nginx.enable" /> and fixing the
    settings <literal>listen.owner</literal> &amp; <literal>listen.group</literal> in the
    <link linkend="opt-services.phpfpm.pools">corresponding <literal>phpfpm</literal> pool</link>.
   </para>

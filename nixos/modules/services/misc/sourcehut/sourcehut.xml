@@ -53,7 +53,7 @@ in {
           environment = "production";
           global-domain = fqdn;
           origin = "https://${fqdn}";
-          # Produce keys with srht-keygen from <package>sourcehut.coresrht</package>.
+          # Produce keys with srht-keygen from sourcehut.coresrht.
           network-key = "/run/keys/path/to/network-key";
           service-key = "/run/keys/path/to/service-key";
         };
@@ -109,9 +109,9 @@ in {
  <section xml:id="module-services-sourcehut-httpd">
   <title>Using an alternative webserver as reverse-proxy (e.g. <literal>httpd</literal>)</title>
   <para>
-   By default, <package>nginx</package> is used as reverse-proxy for <package>sourcehut</package>.
-   However, it's possible to use e.g. <package>httpd</package> by explicitly disabling
-   <package>nginx</package> using <xref linkend="opt-services.nginx.enable" /> and fixing the
+   By default, <literal>nginx</literal> is used as reverse-proxy for <literal>sourcehut</literal>.
+   However, it's possible to use e.g. <literal>httpd</literal> by explicitly disabling
+   <literal>nginx</literal> using <xref linkend="opt-services.nginx.enable" /> and fixing the
    <literal>settings</literal>.
   </para>
 </section>

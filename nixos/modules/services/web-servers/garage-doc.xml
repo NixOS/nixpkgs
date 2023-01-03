@@ -13,7 +13,7 @@
    the global environment as <literal>garage-manage</literal>.
  </para>
  <para>
-  The current default by NixOS is <package>garage_0_8</package> which is also the latest
+  The current default by NixOS is <literal>garage_0_8</literal> which is also the latest
   major version available.
  </para>
  <section xml:id="module-services-garage-upgrade-scenarios">

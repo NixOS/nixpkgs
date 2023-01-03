@@ -54,7 +54,7 @@ services.postgresql.dataDir = "/data/postgresql";
 
   <note>
    <para>
-    The steps below demonstrate how to upgrade from an older version to <package>pkgs.postgresql_13</package>.
+    The steps below demonstrate how to upgrade from an older version to <literal>pkgs.postgresql_13</literal>.
     These instructions are also applicable to other versions.
    </para>
   </note>

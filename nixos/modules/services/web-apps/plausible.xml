@@ -15,7 +15,7 @@
    <screen><prompt>$ </prompt>openssl rand -base64 64</screen>
   </para>
   <para>
-   After that, <package>plausible</package> can be deployed like this:
+   After that, <literal>plausible</literal> can be deployed like this:
 <programlisting>
 {
   services.plausible = {

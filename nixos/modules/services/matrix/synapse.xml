@@ -122,7 +122,7 @@ in {
    <callout arearefs='ex-matrix-synapse-well-known-server'>
     <para>
      This section is not needed if the <link linkend="opt-services.matrix-synapse.settings.server_name">server_name</link>
-     of <package>matrix-synapse</package> is equal to the domain (i.e.
+     of <literal>matrix-synapse</literal> is equal to the domain (i.e.
      <literal>example.org</literal> from <literal>@foo:example.org</literal>)
      and the federation port is 8448.
      Further reference can be found in the <link xlink:href="https://matrix-org.github.io/synapse/latest/delegate.html">docs
@@ -196,7 +196,7 @@ registration_shared_secret: your-very-secret-secret
         from <citerefentry><refentrytitle>nixops</refentrytitle><manvolnum>1</manvolnum></citerefentry>
         or <link xlink:href="https://github.com/Mic92/sops-nix/">sops-nix</link> to
         e.g. <filename>/run/secrets/matrix-shared-secret</filename> and ensure that it's readable
-        by <package>matrix-synapse</package>.
+        by <literal>matrix-synapse</literal>.
        </para>
       </listitem>
       <listitem>
