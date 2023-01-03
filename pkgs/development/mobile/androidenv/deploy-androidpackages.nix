@@ -45,9 +45,7 @@ stdenv.mkDerivation ({
     ${patchesInstructions.${package.name}}
   '') packages);
 
-  # We never attempt to strip. This is not required since we're doing binary
-  # deployments. Moreover, some executables that have been patched with patchelf
-  # may not work any longer after they have been stripped.
+  # Some executables that have been patched with patchelf may not work any longer after they have been stripped.
   dontStrip = true;
   dontPatchELF = true;
   dontAutoPatchelf = true;
