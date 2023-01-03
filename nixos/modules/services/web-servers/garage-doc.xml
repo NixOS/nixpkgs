@@ -1,141 +1,204 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-garage">
- <title>Garage</title>
- <para>
-  <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>
-  is an open-source, self-hostable S3 store, simpler than MinIO, for geodistributed stores.
-  The server setup can be automated using
-  <link linkend="opt-services.garage.enable">services.garage</link>. A
-   client configured to your local Garage instance is available in
-   the global environment as <literal>garage-manage</literal>.
- </para>
- <para>
-  The current default by NixOS is <literal>garage_0_8</literal> which is also the latest
-  major version available.
- </para>
- <section xml:id="module-services-garage-upgrade-scenarios">
-  <title>General considerations on upgrades</title>
-
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-garage">
+  <title>Garage</title>
   <para>
-    Garage provides a cookbook documentation on how to upgrade:
-   <link xlink:href="https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/">https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/</link>
+    <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link> is
+    an open-source, self-hostable S3 store, simpler than MinIO, for
+    geodistributed stores. The server setup can be automated using
+    <link linkend="opt-services.garage.enable">services.garage</link>. A
+    client configured to your local Garage instance is available in the
+    global environment as <literal>garage-manage</literal>.
   </para>
-
- <warning>
-   <para>Garage has two types of upgrades: patch-level upgrades and minor/major version upgrades.</para>
-
-   <para>In all cases, you should read the changelog and ideally test the upgrade on a staging cluster.</para>
-
-   <para>Checking the health of your cluster can be achieved using <literal>garage-manage repair</literal>.</para>
-  </warning>
-
-
- <warning>
-   <para>Until 1.0 is released, patch-level upgrades are considered as minor version upgrades.
-   Minor version upgrades are considered as major version upgrades.
-    i.e. 0.6 to 0.7 is a major version upgrade.</para>
- </warning>
-
- <itemizedlist>
-  <listitem>
-   <formalpara>
-    <title>Straightforward upgrades (patch-level upgrades)</title>
+  <para>
+    The current default by NixOS is <literal>garage_0_8</literal> which
+    is also the latest major version available.
+  </para>
+  <section xml:id="module-services-garage-upgrade-scenarios">
+    <title>General considerations on upgrades</title>
     <para>
-     Upgrades must be performed one by one, i.e. for each node, stop it, upgrade it : change <link linkend="opt-system.stateVersion">stateVersion</link> or <link linkend="opt-services.garage.package">services.garage.package</link>, restart it if it was not already by switching.
+      Garage provides a cookbook documentation on how to upgrade:
+      <link xlink:href="https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/" role="uri">https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/</link>
     </para>
-   </formalpara>
-  </listitem>
-
-  <listitem>
-   <formalpara>
-    <title>Multiple version upgrades</title>
+    <warning>
+      <para>
+        Garage has two types of upgrades: patch-level upgrades and
+        minor/major version upgrades.
+      </para>
+      <para>
+        In all cases, you should read the changelog and ideally test the
+        upgrade on a staging cluster.
+      </para>
+      <para>
+        Checking the health of your cluster can be achieved using
+        <literal>garage-manage repair</literal>.
+      </para>
+    </warning>
+    <warning>
+      <para>
+        Until 1.0 is released, patch-level upgrades are considered as
+        minor version upgrades. Minor version upgrades are considered as
+        major version upgrades. i.e. 0.6 to 0.7 is a major version
+        upgrade.
+      </para>
+    </warning>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <emphasis role="strong">Straightforward upgrades (patch-level
+          upgrades).</emphasis> Upgrades must be performed one by one,
+          i.e. for each node, stop it, upgrade it : change
+          <link linkend="opt-system.stateVersion">stateVersion</link> or
+          <link linkend="opt-services.garage.package">services.garage.package</link>,
+          restart it if it was not already by switching.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Multiple version upgrades.</emphasis>
+          Garage do not provide any guarantee on moving more than one
+          major-version forward. E.g., if you're on
+          <literal>0.7</literal>, you cannot upgrade to
+          <literal>0.9</literal>. You need to upgrade to
+          <literal>0.8</literal> first. As long as
+          <link linkend="opt-system.stateVersion">stateVersion</link> is
+          declared properly, this is enforced automatically. The module
+          will issue a warning to remind the user to upgrade to latest
+          Garage <emphasis>after</emphasis> that deploy.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="module-services-garage-advanced-upgrades">
+    <title>Advanced upgrades (minor/major version upgrades)</title>
     <para>
-     Garage do not provide any guarantee on moving more than one major-version forward.
-     E.g., if you're on <literal>0.7</literal>, you cannot upgrade to <literal>0.9</literal>.
-     You need to upgrade to <literal>0.8</literal> first.
-
-     As long as <link linkend="opt-system.stateVersion">stateVersion</link> is declared properly,
-     this is enforced automatically. The module will issue a warning to remind the user to upgrade to latest
-     Garage <emphasis>after</emphasis> that deploy.
-   </para>
-  </formalpara>
- </listitem>
-</itemizedlist>
-</section>
-
-<section xml:id="module-services-garage-advanced-upgrades">
- <title>Advanced upgrades (minor/major version upgrades)</title>
- <para>Here are some baseline instructions to handle advanced upgrades in Garage, when in doubt, please refer to upstream instructions.</para>
-
- <itemizedlist>
-   <listitem><para>Disable API and web access to Garage.</para></listitem>
-   <listitem><para>Perform <literal>garage-manage repair --all-nodes --yes tables</literal> and <literal>garage-manage repair --all-nodes --yes blocks</literal>.</para></listitem>
-   <listitem><para>Verify the resulting logs and check that data is synced properly between all nodes.
-    If you have time, do additional checks (<literal>scrub</literal>, <literal>block_refs</literal>, etc.).</para></listitem>
-   <listitem><para>Check if queues are empty by <literal>garage-manage stats</literal> or through monitoring tools.</para></listitem>
-   <listitem><para>Run <literal>systemctl stop garage</literal> to stop the actual Garage version.</para></listitem>
-   <listitem><para>Backup the metadata folder of ALL your nodes, e.g. for a metadata directory (the default one) in <literal>/var/lib/garage/meta</literal>,
-    you can run <literal>pushd /var/lib/garage; tar -acf meta-v0.7.tar.zst meta/; popd</literal>.</para></listitem>
-   <listitem><para>Run the offline migration: <literal>nix-shell -p garage_0_8 --run "garage offline-repair --yes"</literal>, this can take some time depending on how many objects are stored in your cluster.</para></listitem>
-   <listitem><para>Bump Garage version in your NixOS configuration, either by changing <link linkend="opt-system.stateVersion">stateVersion</link> or bumping <link linkend="opt-services.garage.package">services.garage.package</link>, this should restart Garage automatically.</para></listitem>
-   <listitem><para>Perform <literal>garage-manage repair --all-nodes --yes tables</literal> and <literal>garage-manage repair --all-nodes --yes blocks</literal>.</para></listitem>
-   <listitem><para>Wait for a full table sync to run.</para></listitem>
- </itemizedlist>
-
- <para>
-   Your upgraded cluster should be in a working state, re-enable API and web access.
- </para>
-</section>
-
-<section xml:id="module-services-garage-maintainer-info">
-  <title>Maintainer information</title>
-
-  <para>
-   As stated in the previous paragraph, we must provide a clean upgrade-path for Garage
-   since it cannot move more than one major version forward on a single upgrade. This chapter
-   adds some notes how Garage updates should be rolled out in the future.
-
-   This is inspired from how Nextcloud does it.
-  </para>
-
-  <para>
-   While patch-level updates are no problem and can be done directly in the
-   package-expression (and should be backported to supported stable branches after that),
-   major-releases should be added in a new attribute (e.g. Garage <literal>v0.8.0</literal>
-   should be available in <literal>nixpkgs</literal> as <literal>pkgs.garage_0_8_0</literal>).
-   To provide simple upgrade paths it's generally useful to backport those as well to stable
-   branches. As long as the package-default isn't altered, this won't break existing setups.
-   After that, the versioning-warning in the <literal>garage</literal>-module should be
-   updated to make sure that the
-   <link linkend="opt-services.garage.package">package</link>-option selects the latest version
-   on fresh setups.
-  </para>
-
-  <para>
-   If major-releases will be abandoned by upstream, we should check first if those are needed
-   in NixOS for a safe upgrade-path before removing those. In that case we shold keep those
-   packages, but mark them as insecure in an expression like this (in
-   <literal>&lt;nixpkgs/pkgs/tools/filesystem/garage/default.nix&gt;</literal>):
-<programlisting>
+      Here are some baseline instructions to handle advanced upgrades in
+      Garage, when in doubt, please refer to upstream instructions.
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Disable API and web access to Garage.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Perform
+          <literal>garage-manage repair --all-nodes --yes tables</literal>
+          and
+          <literal>garage-manage repair --all-nodes --yes blocks</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Verify the resulting logs and check that data is synced
+          properly between all nodes. If you have time, do additional
+          checks (<literal>scrub</literal>,
+          <literal>block_refs</literal>, etc.).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Check if queues are empty by
+          <literal>garage-manage stats</literal> or through monitoring
+          tools.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Run <literal>systemctl stop garage</literal> to stop the
+          actual Garage version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Backup the metadata folder of ALL your nodes, e.g. for a
+          metadata directory (the default one) in
+          <literal>/var/lib/garage/meta</literal>, you can run
+          <literal>pushd /var/lib/garage; tar -acf meta-v0.7.tar.zst meta/; popd</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Run the offline migration:
+          <literal>nix-shell -p garage_0_8 --run &quot;garage offline-repair --yes&quot;</literal>,
+          this can take some time depending on how many objects are
+          stored in your cluster.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Bump Garage version in your NixOS configuration, either by
+          changing
+          <link linkend="opt-system.stateVersion">stateVersion</link> or
+          bumping
+          <link linkend="opt-services.garage.package">services.garage.package</link>,
+          this should restart Garage automatically.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Perform
+          <literal>garage-manage repair --all-nodes --yes tables</literal>
+          and
+          <literal>garage-manage repair --all-nodes --yes blocks</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Wait for a full table sync to run.
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      Your upgraded cluster should be in a working state, re-enable API
+      and web access.
+    </para>
+  </section>
+  <section xml:id="module-services-garage-maintainer-info">
+    <title>Maintainer information</title>
+    <para>
+      As stated in the previous paragraph, we must provide a clean
+      upgrade-path for Garage since it cannot move more than one major
+      version forward on a single upgrade. This chapter adds some notes
+      how Garage updates should be rolled out in the future. This is
+      inspired from how Nextcloud does it.
+    </para>
+    <para>
+      While patch-level updates are no problem and can be done directly
+      in the package-expression (and should be backported to supported
+      stable branches after that), major-releases should be added in a
+      new attribute (e.g. Garage <literal>v0.8.0</literal> should be
+      available in <literal>nixpkgs</literal> as
+      <literal>pkgs.garage_0_8_0</literal>). To provide simple upgrade
+      paths it's generally useful to backport those as well to stable
+      branches. As long as the package-default isn't altered, this won't
+      break existing setups. After that, the versioning-warning in the
+      <literal>garage</literal>-module should be updated to make sure
+      that the
+      <link linkend="opt-services.garage.package">package</link>-option
+      selects the latest version on fresh setups.
+    </para>
+    <para>
+      If major-releases will be abandoned by upstream, we should check
+      first if those are needed in NixOS for a safe upgrade-path before
+      removing those. In that case we shold keep those packages, but
+      mark them as insecure in an expression like this (in
+      <literal>&lt;nixpkgs/pkgs/tools/filesystem/garage/default.nix&gt;</literal>):
+    </para>
+    <programlisting>
 /* ... */
 {
   garage_0_7_3 = generic {
-    version = "0.7.3";
-    sha256 = "0000000000000000000000000000000000000000000000000000";
+    version = &quot;0.7.3&quot;;
+    sha256 = &quot;0000000000000000000000000000000000000000000000000000&quot;;
     eol = true;
   };
 }
 </programlisting>
-  </para>
-
-  <para>
-   Ideally we should make sure that it's possible to jump two NixOS versions forward:
-   i.e. the warnings and the logic in the module should guard a user to upgrade from a
-   Garage on e.g. 22.11 to a Garage on 23.11.
-  </para>
- </section>
-
+    <para>
+      Ideally we should make sure that it's possible to jump two NixOS
+      versions forward: i.e. the warnings and the logic in the module
+      should guard a user to upgrade from a Garage on e.g. 22.11 to a
+      Garage on 23.11.
+    </para>
+  </section>
 </chapter>
