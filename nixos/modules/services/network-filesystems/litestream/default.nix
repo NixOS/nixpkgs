@@ -94,5 +94,8 @@ in
     };
     users.groups.litestream = {};
   };
+
+  # Don't edit the docbook xml directly, edit the md and generate it:
+  # `pandoc litestream.md -t docbook --top-level-division=chapter --extract-media=media -f markdown-smart --lua-filter ../../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua --lua-filter ../../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua > litestream.xml`
   meta.doc = ./litestream.xml;
 }
