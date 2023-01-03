@@ -31639,7 +31639,7 @@ with pkgs;
   };
 
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-    fmt = fmt_7;
+    fmt = fmt_8;
   };
 
   openjump = callPackage ../applications/misc/openjump { };
