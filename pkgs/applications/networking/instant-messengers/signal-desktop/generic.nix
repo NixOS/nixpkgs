@@ -155,9 +155,12 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
-    # Fix the desktop link
+    # Fix the desktop link - start and remain in background
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "/opt/${dir}/${pname}" $out/bin/${pname}
+      --replace "/opt/${dir}/${pname}" "$out/bin/${pname} --start-in-tray"
+    # Fix end of command - redirect stdout to /dev/zero to avoid crash while running in background
+    substituteInPlace $out/share/applications/signal-desktop.desktop \
+      --replace "%U" "2> /dev/null > /dev/null %U"
 
     autoPatchelf --no-recurse -- "$out/lib/${dir}/"
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node"
