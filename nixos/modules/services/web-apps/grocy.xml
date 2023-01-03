@@ -1,57 +1,58 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-grocy">
-
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-grocy">
   <title>Grocy</title>
   <para>
-    <link xlink:href="https://grocy.info/">Grocy</link> is a web-based self-hosted groceries
-    &amp; household management solution for your home.
+    <link xlink:href="https://grocy.info/">Grocy</link> is a web-based
+    self-hosted groceries &amp; household management solution for your
+    home.
   </para>
-
   <section xml:id="module-services-grocy-basic-usage">
-   <title>Basic usage</title>
-   <para>
-    A very basic configuration may look like this:
-<programlisting>
+    <title>Basic usage</title>
+    <para>
+      A very basic configuration may look like this:
+    </para>
+    <programlisting>
 { pkgs, ... }:
 {
   services.grocy = {
     enable = true;
-    hostName = "grocy.tld";
+    hostName = &quot;grocy.tld&quot;;
   };
 }
 </programlisting>
-    This configures a simple vhost using <link linkend="opt-services.nginx.enable">nginx</link>
-    which listens to <literal>grocy.tld</literal> with fully configured ACME/LE (this can be
-    disabled by setting <link linkend="opt-services.grocy.nginx.enableSSL">services.grocy.nginx.enableSSL</link>
-    to <literal>false</literal>). After the initial setup the credentials <literal>admin:admin</literal>
-    can be used to login.
-   </para>
-   <para>
-    The application's state is persisted at <literal>/var/lib/grocy/grocy.db</literal> in a
-    <literal>sqlite3</literal> database. The migration is applied when requesting the <literal>/</literal>-route
-    of the application.
-   </para>
+    <para>
+      This configures a simple vhost using
+      <link linkend="opt-services.nginx.enable">nginx</link> which
+      listens to <literal>grocy.tld</literal> with fully configured
+      ACME/LE (this can be disabled by setting
+      <link linkend="opt-services.grocy.nginx.enableSSL">services.grocy.nginx.enableSSL</link>
+      to <literal>false</literal>). After the initial setup the
+      credentials <literal>admin:admin</literal> can be used to login.
+    </para>
+    <para>
+      The application's state is persisted at
+      <literal>/var/lib/grocy/grocy.db</literal> in a
+      <literal>sqlite3</literal> database. The migration is applied when
+      requesting the <literal>/</literal>-route of the application.
+    </para>
   </section>
-
   <section xml:id="module-services-grocy-settings">
-   <title>Settings</title>
-   <para>
-    The configuration for <literal>grocy</literal> is located at <literal>/etc/grocy/config.php</literal>.
-    By default, the following settings can be defined in the NixOS-configuration:
-<programlisting>
+    <title>Settings</title>
+    <para>
+      The configuration for <literal>grocy</literal> is located at
+      <literal>/etc/grocy/config.php</literal>. By default, the
+      following settings can be defined in the NixOS-configuration:
+    </para>
+    <programlisting>
 { pkgs, ... }:
 {
   services.grocy.settings = {
     # The default currency in the system for invoices etc.
     # Please note that exchange rates aren't taken into account, this
     # is just the setting for what's shown in the frontend.
-    currency = "EUR";
+    currency = &quot;EUR&quot;;
 
     # The display language (and locale configuration) for grocy.
-    culture = "de";
+    culture = &quot;de&quot;;
 
     calendar = {
       # Whether or not to show the week-numbers
@@ -65,19 +66,17 @@
   };
 }
 </programlisting>
-   </para>
-   <para>
-    If you want to alter the configuration file on your own, you can do this manually with
-    an expression like this:
-<programlisting>
+    <para>
+      If you want to alter the configuration file on your own, you can
+      do this manually with an expression like this:
+    </para>
+    <programlisting>
 { lib, ... }:
 {
-  environment.etc."grocy/config.php".text = lib.mkAfter ''
+  environment.etc.&quot;grocy/config.php&quot;.text = lib.mkAfter ''
     // Arbitrary PHP code in grocy's configuration file
   '';
 }
 </programlisting>
-   </para>
   </section>
-
 </chapter>
