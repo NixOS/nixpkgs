@@ -674,6 +674,8 @@ in
           mkIf createLocalMySQL (mkDefault dbPkg);
       };
 
+  # Don't edit the docbook xml directly, edit the md and generate it:
+  # `pandoc keycloak.md -t docbook --top-level-division=chapter --extract-media=media -f markdown-smart --lua-filter ../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua --lua-filter ../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua > keycloak.xml`
   meta.doc = ./keycloak.xml;
   meta.maintainers = [ maintainers.talyz ];
 }
