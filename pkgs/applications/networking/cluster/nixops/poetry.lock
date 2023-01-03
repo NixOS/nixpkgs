@@ -2,14 +2,14 @@
 
 [[package]]
 name = "apache-libcloud"
-version = "3.6.1"
+version = "3.7.0"
 description = "A standard Python library that abstracts away differences among multiple cloud provider APIs. For more information and documentation, please see https://libcloud.apache.org"
 category = "main"
 optional = false
 python-versions = ">=3.6, <4"
 files = [
-    {file = "apache-libcloud-3.6.1.tar.gz", hash = "sha256:0facf3206568430c998da40e9bbac6d3a0c4fc80dd51674d9e794b381450120c"},
-    {file = "apache_libcloud-3.6.1-py2.py3-none-any.whl", hash = "sha256:d01eee601b6367e711788c47a275ee717f23854f5267d9ba3b3e8ed3bb400e56"},
+    {file = "apache-libcloud-3.7.0.tar.gz", hash = "sha256:148a9e50069654432a7d34997954e91434dd38ebf68832eb9c75d442b3e62fad"},
+    {file = "apache_libcloud-3.7.0-py2.py3-none-any.whl", hash = "sha256:027a9aff2c01db9c8e6f9f94b6eb44b3153d82702c42bfbe7af5624dabf1f950"},
 ]
 
 [package.dependencies]
@@ -29,18 +29,18 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.26.32"
+version = "1.26.45"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.32-py3-none-any.whl", hash = "sha256:672b97a634f3408d455bf94a6dfd59ef0c6150019885bc7107e465f062d58c26"},
-    {file = "boto3-1.26.32.tar.gz", hash = "sha256:e0d6215313b03f09a9a38eccc88c1d3ba9868bcaaeb8b20eeb6d88fc3018b94d"},
+    {file = "boto3-1.26.45-py3-none-any.whl", hash = "sha256:b1bc7db503dc49bdccf5dada080077056a32af9982afdde84578a109cd741d05"},
+    {file = "boto3-1.26.45.tar.gz", hash = "sha256:cc7f652df93e1ce818413fd82ffd645d4f92a64fec67c72946212d3750eaa80f"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.32,<1.30.0"
+botocore = ">=1.29.45,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -49,14 +49,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.32"
+version = "1.29.45"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.32-py3-none-any.whl", hash = "sha256:b1a65edca151665a6844bf9f317440e31d8d5e4cbce3477f2661462e20c213b1"},
-    {file = "botocore-1.29.32.tar.gz", hash = "sha256:27bc3903f7f8c813efd1605ff13ffdfca2c37dc78cadfa488cfda78fca323deb"},
+    {file = "botocore-1.29.45-py3-none-any.whl", hash = "sha256:a5c0e13f266ee9a74335a1e5d3e377f2baae27226ae23d78f023bae0d18f3161"},
+    {file = "botocore-1.29.45.tar.gz", hash = "sha256:62ae03e591ff25555854aa338da35190ffe18c0b1be2ebf5cfb277164233691f"},
 ]
 
 [package.dependencies]
@@ -325,7 +325,7 @@ typing-extensions = "^3.7.4"
 type = "git"
 url = "https://github.com/NixOS/nixops.git"
 reference = "master"
-resolved_reference = "683baa66c613216a662aad3fd58b0cdc5cd41adb"
+resolved_reference = "5013072c5ca34247d7dce545c3a7b1954948fd4d"
 
 [[package]]
 name = "nixops-aws"
@@ -471,7 +471,7 @@ typing-extensions = "^3.7.4"
 type = "git"
 url = "https://github.com/lukebfox/nixops-hetznercloud.git"
 reference = "HEAD"
-resolved_reference = "386f8b7cfe724308a9c1e97e76d238498a279495"
+resolved_reference = "c00533400506d40940f7c1f67bf3973db37d9dd9"
 
 [[package]]
 name = "nixops-virtd"
