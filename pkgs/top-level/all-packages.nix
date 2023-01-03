@@ -3624,6 +3624,8 @@ with pkgs;
 
   blobfuse = callPackage ../tools/filesystems/blobfuse { };
 
+  blobfuse2 = callPackage ../tools/filesystems/blobfuse2 { };
+
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
