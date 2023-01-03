@@ -97,7 +97,7 @@
    uses across an entire homeserver.
   </para>
   <para>
-   To use the Antispam Module, add <package>matrix-synapse-plugins.matrix-synapse-mjolnir-antispam</package>
+   To use the Antispam Module, add <literal>matrix-synapse-plugins.matrix-synapse-mjolnir-antispam</literal>
    to the Synapse plugin list and enable the <literal>mjolnir.Module</literal> module.
   </para>
 <programlisting>

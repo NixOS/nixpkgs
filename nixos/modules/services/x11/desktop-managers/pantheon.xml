@@ -22,7 +22,7 @@ services.xserver.displayManager.lightdm.enable = false;
 <programlisting>
 services.pantheon.apps.enable = false;
 </programlisting>
-   You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <package>elementary-mail</package>).
+   You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <literal>elementary-mail</literal>).
   </para>
  </section>
  <section xml:id="sec-pantheon-wingpanel-switchboard">
