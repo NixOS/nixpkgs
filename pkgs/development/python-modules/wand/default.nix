@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , imagemagickBig
+, py
 , pytestCheckHook
 }:
 
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    py
     pytestCheckHook
   ];
 
