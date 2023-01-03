@@ -11003,6 +11003,8 @@ self: super: with self; {
 
   sysv_ipc = callPackage ../development/python-modules/sysv_ipc { };
 
+  syrupy = callPackage ../development/python-modules/syrupy { };
+
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tables = callPackage ../development/python-modules/tables { };
