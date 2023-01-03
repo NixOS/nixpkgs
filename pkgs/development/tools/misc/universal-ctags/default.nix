@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
     mainProgram = "ctags";
     priority = 1; # over the emacs implementation
   };
