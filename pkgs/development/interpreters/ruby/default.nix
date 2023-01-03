@@ -248,7 +248,7 @@ let
             inherit lib stdenv makeWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
             ruby = self;
-          }) withPackages gems;
+          }) withPackages buildGems gems;
 
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
