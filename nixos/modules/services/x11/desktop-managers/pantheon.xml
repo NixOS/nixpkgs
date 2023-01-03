@@ -85,7 +85,7 @@ switchboard-with-plugs.override {
     </term>
     <listitem>
      <para>
-      Open Switchboard and go to: <guilabel>Administration</guilabel> → <guilabel>About</guilabel> → <guilabel>Restore Default Settings</guilabel> → <guibutton>Restore Settings</guibutton>. This will reset any dconf settings to their Pantheon defaults. Note this could reset certain GNOME specific preferences if that desktop was used prior.
+      Open Switchboard and go to: Administration → About → Restore Default Settings → Restore Settings. This will reset any dconf settings to their Pantheon defaults. Note this could reset certain GNOME specific preferences if that desktop was used prior.
      </para>
     </listitem>
    </varlistentry>

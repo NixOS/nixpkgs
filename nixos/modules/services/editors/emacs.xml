@@ -20,20 +20,20 @@
  <para>
   Emacs runs within a graphical desktop environment using the X Window System,
   but works equally well on a text terminal. Under
-  <productname>macOS</productname>, a "Mac port" edition is available, which
+  macOS, a "Mac port" edition is available, which
   uses Apple's native GUI frameworks.
  </para>
  <para>
-  <productname>Nixpkgs</productname> provides a superior environment for
-  running <application>Emacs</application>. It's simple to create custom builds
+  Nixpkgs provides a superior environment for
+  running Emacs. It's simple to create custom builds
   by overriding the default packages. Chaotic collections of Emacs Lisp code
   and extensions can be brought under control using declarative package
-  management. <productname>NixOS</productname> even provides a
+  management. NixOS even provides a
   <command>systemd</command> user service for automatically starting the Emacs
   daemon.
  </para>
  <section xml:id="module-services-emacs-installing">
-  <title>Installing <application>Emacs</application></title>
+  <title>Installing Emacs</title>
 
   <para>
    Emacs can be installed in the normal way for Nix (see
@@ -45,7 +45,7 @@
    <title>The Different Releases of Emacs</title>
 
    <para>
-    <productname>Nixpkgs</productname> defines several basic Emacs packages.
+    Nixpkgs defines several basic Emacs packages.
     The following are attributes belonging to the <varname>pkgs</varname> set:
     <variablelist>
      <varlistentry>
@@ -115,8 +115,8 @@
     (<filename>package.el</filename>) from
     <link
         xlink:href="https://elpa.gnu.org/">Emacs Lisp Package Archive
-    (<acronym>ELPA</acronym>)</link>,
-    <link xlink:href="https://melpa.org/"><acronym>MELPA</acronym></link>,
+    (ELPA)</link>,
+    <link xlink:href="https://melpa.org/">MELPA</link>,
     <link xlink:href="https://stable.melpa.org/">MELPA Stable</link>, and
     <link xlink:href="http://orgmode.org/elpa.html">Org ELPA</link>. Nixpkgs is
     regularly updated to mirror all these archives.
@@ -357,7 +357,7 @@ in [...]
   <title>Running Emacs as a Service</title>
 
   <para>
-   <productname>NixOS</productname> provides an optional
+   NixOS provides an optional
    <command>systemd</command> service which launches
    <link xlink:href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html">
    Emacs daemon </link> with the user's login session.
