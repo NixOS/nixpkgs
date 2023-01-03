@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rose-pine/gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo the-argus ];
   };
 }
