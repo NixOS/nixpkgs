@@ -29776,8 +29776,6 @@ with pkgs;
 
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
-  i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
-
   i3-rounded = callPackage ../applications/window-managers/i3/rounded.nix { };
 
   i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
