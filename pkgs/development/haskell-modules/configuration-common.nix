@@ -216,10 +216,6 @@ self: super: {
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core = doJailbreak super.hnix-store-core;
 
-  # Too strict upper bound on bytestring
-  # https://github.com/wangbj/hashing/issues/3
-  hashing = doJailbreak super.hashing;
-
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
