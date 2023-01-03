@@ -28,6 +28,7 @@
 /lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
 /lib/asserts.nix            @edolstra @nbp @Profpatsch
+/lib/path.*                 @infinisil @fricklerhandwerk
 
 # Nixpkgs Internals
 /default.nix                                     @nbp

@@ -27,7 +27,6 @@ let
     maintainers = import ../maintainers/maintainer-list.nix;
     teams = callLibs ../maintainers/team-list.nix;
     meta = callLibs ./meta.nix;
-    sources = callLibs ./sources.nix;
     versions = callLibs ./versions.nix;
 
     # module system
@@ -53,7 +52,9 @@ let
     fetchers = callLibs ./fetchers.nix;
 
     # Eval-time filesystem handling
+    path = callLibs ./path;
     filesystem = callLibs ./filesystem.nix;
+    sources = callLibs ./sources.nix;
 
     # back-compat aliases
     platforms = self.systems.doubles;
