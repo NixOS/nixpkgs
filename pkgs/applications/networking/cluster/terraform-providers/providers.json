@@ -48,11 +48,11 @@
     "vendorHash": "sha256-pz+h8vbdCEgNSH9AoPlIP7zprViAMawXk64SV0wnVPo="
   },
   "alicloud": {
-    "hash": "sha256-m5IZ6JiEbyAuNo2LiuuP05yApvoHypjFnGioWJ/4ETQ=",
+    "hash": "sha256-Ym3ZN4bRcLXyjnSvWxq/RNvjkfGdpyfkp4sH1D/Ll28=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.194.1",
+    "rev": "v1.195.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -167,13 +167,13 @@
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-rE9kEMC/b3J5YjF94HBqUhorjcsMAx40jnxgsShNNUc=",
+    "hash": "sha256-xDUL9W6lQGMZPQBe4eghW9JcQeTUgm+3ND6erikVFMM=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.27.0",
+    "rev": "v2.29.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-8/ZEO0cxseXqQHx+/wKjsM0T3l+tBdCTFZqNfjaTOpo="
+    "vendorHash": "sha256-foMmZbNPLww1MN4UZwuynBDgt2w40aMqVINRw//Q0d0="
   },
   "brightbox": {
     "hash": "sha256-ISK6cpE4DVrVzjC0N5BdyR3Z5LfF9qfg/ACTgDP+WqY=",
