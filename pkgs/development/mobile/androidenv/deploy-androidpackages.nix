@@ -1,17 +1,18 @@
 {stdenv, lib, unzip, mkLicenses}:
-{packages, os ? null, buildInputs ? [], patchesInstructions ? {}, meta ? {}, ...}@args:
+{packages, os ? null, nativeBuildInputs ? [], buildInputs ? [], patchesInstructions ? {}, meta ? {}, ...}@args:
 
 let
-  extraParams = removeAttrs args [ "packages" "os" "buildInputs" "patchesInstructions" ];
+  extraParams = removeAttrs args [ "packages" "os" "buildInputs" "nativeBuildInputs" "patchesInstructions" ];
   sortedPackages = builtins.sort (x: y: builtins.lessThan x.name y.name) packages;
 in
 stdenv.mkDerivation ({
+  inherit buildInputs;
   pname = lib.concatMapStringsSep "-" (package: package.name) sortedPackages;
   version = lib.concatMapStringsSep "-" (package: package.revision) sortedPackages;
   src = map (package:
     if os != null && builtins.hasAttr os package.archives then package.archives.${os} else package.archives.all
   ) packages;
-  buildInputs = [ unzip ] ++ buildInputs;
+  nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
   preferLocalBuild = true;
 
   unpackPhase = ''
