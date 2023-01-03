@@ -181,7 +181,13 @@ in
           exit $_status
         '';
       };
+    };
 
+    system.showSystemDiffOnRebuild = mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = lib.mdDoc "Whether to enable diffing the system against the currently activated one on a NixOS system activation";
     };
 
     environment.usrbinenv = mkOption {
@@ -200,6 +206,11 @@ in
   config = {
     system.activationScripts.stdio = ""; # obsolete
 
+    system.userActivationScripts.diff = lib.mkIf config.system.showSystemDiffOnRebuild ''
+      if [[ -e /run/current-system ]]; then
+        ${config.nix.package}/bin/nix ---extra-experimental-features 'nix-command' store diff-closures /run/current-system "$systemConfig" || true
+      fi
+    '';
 
     system.activationScripts.var = ''
       # Various log/runtime directories.
