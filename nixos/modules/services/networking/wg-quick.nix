@@ -273,7 +273,11 @@ let
         after = [ "network.target" "network-online.target" ];
         wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
-        path = [ pkgs.kmod pkgs.wireguard-tools config.networking.resolvconf.package ];
+        path = [
+          pkgs.wireguard-tools
+          config.networking.firewall.package   # iptables or nftables
+          config.networking.resolvconf.package # openresolv or systemd
+        ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -281,7 +285,7 @@ let
         };
 
         script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
+          ${optionalString (!config.boot.isContainer) "${pkgs.kmod}/bin/modprobe wireguard"}
           ${optionalString (values.configFile != null) ''
             cp ${values.configFile} ${configPath}
           ''}
@@ -328,9 +332,6 @@ in {
   config = mkIf (cfg.interfaces != {}) {
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
     environment.systemPackages = [ pkgs.wireguard-tools ];
-    # This is forced to false for now because the default "--validmark" rpfilter we apply on reverse path filtering
-    # breaks the wg-quick routing because wireguard packets leave with a fwmark from wireguard.
-    networking.firewall.checkReversePath = false;
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
 
     # Prevent networkd from clearing the rules set by wg-quick when restarted (e.g. when waking up from suspend).

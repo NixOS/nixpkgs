@@ -8,6 +8,7 @@
 , google-cloud-os-config
 , google-cloud-testutils
 , libcst
+, protobuf
 , proto-plus
 , pytest-asyncio
 , pytestCheckHook
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.13.0";
+  version = "3.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UWy6dC1a9712pxT43JNP2CAbtXUFi2olvEm1eLw+z0g=";
+    hash = "sha256-pwn9fU1kniouSQbDSEDlANkeoBN4gzTeuuhnuD5Puq8=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +36,14 @@ buildPythonPackage rec {
     google-cloud-os-config
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   checkInputs = [
     google-cloud-testutils
@@ -56,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/python-asset";
+    changelog = "https://github.com/googleapis/python-asset/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

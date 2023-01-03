@@ -6,6 +6,7 @@
 , dejavu_fonts
 , SDL2
 , SDL2_ttf
+, SDL2_image
 }:
 let
   pname = "freenukum";
@@ -24,16 +25,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   inherit pname;
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
+    domain = "salsa.debian.org";
     owner = "silwol";
-    repo = pname;
+    repo = "freenukum";
     rev = "v${version}";
-    sha256 = "0yqfzh0c8fqk92q9kmidy15dc5li0ak1gbn3v7p3xw5fkrzf99gy";
+    sha256 = "sha256-Tk9n2gPwyPin6JZ4RSO8d/+xVpEz4rF8C2eGKwrAXU0=";
   };
 
-  cargoSha256 = "1nss5zbdvxkr1mfb6vi6yjxcih99w836kvfr4r3n5dvzlkvga2vf";
+  cargoSha256 = "sha256-8RfiObWDqZJg+sjjDBk+sRoS5CiECIdNPH79T+O8e8M=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,6 +44,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     SDL2
     SDL2_ttf
+    SDL2_image
   ];
 
   postPatch = ''
@@ -55,13 +58,15 @@ rustPlatform.buildRustPackage rec {
       ${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf \
       $out/share/fonts/truetype/dejavu/DejaVuSans.ttf
     mkdir -p $out/share/doc/freenukum
-    install -Dm644 README.md CHANGELOG.md COPYING $out/share/doc/freenukum/
+    install -Dm644 README.md CHANGELOG.md $out/share/doc/freenukum/
     installManPage doc/freenukum.6
     install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
   '';
 
   meta = with lib; {
     description = "Clone of the original Duke Nukum 1 Jump'n Run game";
+    homepage = "https://salsa.debian.org/silwol/freenukum";
+    changelog = "https://salsa.debian.org/silwol/freenukum/-/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     broken = stdenv.isDarwin;

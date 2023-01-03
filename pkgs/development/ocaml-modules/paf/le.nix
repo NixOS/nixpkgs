@@ -17,9 +17,9 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
-    minimumOCamlVersion
   ;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf

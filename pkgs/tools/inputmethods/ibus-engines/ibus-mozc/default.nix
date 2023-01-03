@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
-    rev = "063c41f1d7c1a877f44c1f8caad6be1897350336";
-    sha256 = "sha256-sgsfJZALpPHFB5bXu4OkRssViRDaPcgLfEyGhbqvJbI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sgsfJZALpPHFB5bXu4OkRssViRDaPcgLfEyGhbqvJbI=";
     fetchSubmodules = true;
   };
 

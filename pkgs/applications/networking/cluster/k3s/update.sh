@@ -7,11 +7,11 @@ WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
-NIXPKGS_K3S_FOLDER=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
-cd ${NIXPKGS_K3S_FOLDER}
+NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
+cd ${NIXPKGS_K3S_PATH}
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
-curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 
 LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
@@ -19,7 +19,7 @@ LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
 
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
-K3S_COMMIT=$(curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+K3S_COMMIT=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/k3s-io/k3s/tags \
     | jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
 
@@ -60,7 +60,7 @@ CRI_CTL_VERSION=$(grep github.com/kubernetes-sigs/cri-tools ${FILE_GO_MOD} \
     | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
 
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ${NIXPKGS_K3S_FOLDER}default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ${NIXPKGS_K3S_PATH}default.nix
 }
 
 setKV k3sVersion ${K3S_VERSION}
@@ -90,4 +90,12 @@ if [ -n "${K3S_VENDOR_SHA256:-}" ]; then
 else
     echo "Update failed. K3S_VENDOR_SHA256 is empty."
     exit 1
+fi
+
+# `git` flag here is to be used by local maintainers to speed up the bump process
+if [ $# -eq 1 ] && [ "$1" = "git" ]; then
+    OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
+    git switch -c "package-k3s-${K3S_VERSION}"
+    git add "$NIXPKGS_K3S_PATH"/default.nix
+    git commit -m "k3s: ${OLD_VERSION} -> ${K3S_VERSION}"
 fi

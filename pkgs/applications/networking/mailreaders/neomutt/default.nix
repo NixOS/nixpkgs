@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
+, zstd, enableZstd ? true, enableMixmaster ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
     cyrus_sasl gss gpgme libkrb5 libidn ncurses
     notmuch openssl perl lmdb
     mailcap sqlite
-  ];
+  ]
+  ++ lib.optional enableZstd zstd;
 
   nativeBuildInputs = [
     docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib w3m
@@ -62,7 +64,9 @@ stdenv.mkDerivation rec {
     # https://github.com/neomutt/neomutt/pull/2367
     "--disable-include-path-in-cflags"
     "--zlib"
-  ];
+  ]
+  ++ lib.optional enableZstd "--zstd"
+  ++ lib.optional enableMixmaster "--mixmaster";
 
   # Fix missing libidn in mutt;
   # this fix is ugly since it links all binaries in mutt against libidn
@@ -95,7 +99,7 @@ stdenv.mkDerivation rec {
     description = "A small but very powerful text-based mail client";
     homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 ];
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 raitobezarius ];
     platforms   = platforms.unix;
   };
 }

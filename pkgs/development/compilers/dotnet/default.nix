@@ -14,6 +14,18 @@ let
     buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
   };
 
+  runtimeIdentifierMap = {
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "osx-x64";
+    "aarch64-darwin" = "osx-arm64";
+    "x86_64-windows" = "win-x64";
+    "i686-windows" = "win-x86";
+  };
+
+  # Convert a "stdenv.hostPlatform.system" to a dotnet RID
+  systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+
   ## Files in versions/ are generated automatically by update.sh ##
   dotnet_3_1 = import ./versions/3.1.nix (buildAttrs // { icu = icu70; });
   dotnet_5_0 = import ./versions/5.0.nix (buildAttrs // { inherit icu; });
@@ -21,6 +33,8 @@ let
   dotnet_7_0 = import ./versions/7.0.nix (buildAttrs // { inherit icu; });
 in
 rec {
+  inherit systemToDotnetRid;
+
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
 
   # EOL

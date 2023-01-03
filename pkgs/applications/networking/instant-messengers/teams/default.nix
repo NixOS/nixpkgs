@@ -23,7 +23,14 @@
 
 let
   pname = "teams";
-  version = "1.5.00.10453";
+  versions = {
+    linux = "1.5.00.23861";
+    darwin = "1.5.00.22362";
+  };
+  hashes = {
+    linux = "sha256-h0YnCeJX//l4TegJVZtavV3HrxjYUF2Fa5KmaYmZW8E=";
+    darwin = "sha256-fbw6T+k6R5FyQ7XOKzyNYBvXlxH2xpJsBnsR1L+3Jmw=";
+  };
   meta = with lib; {
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
@@ -35,11 +42,12 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    inherit pname version meta;
+    inherit pname meta;
+    version = versions.linux;
 
     src = fetchurl {
-      url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-      hash = "sha256-fLVw2axSMetuaoRzjg+x4DRYY8WP5TQbL7LbfF6LFfA=";
+      url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb";
+      hash = hashes.linux;
     };
 
     nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];
@@ -130,11 +138,12 @@ let
   appName = "Teams.app";
 
   darwin = stdenv.mkDerivation {
-    inherit pname version meta;
+    inherit pname meta;
+    version = versions.darwin;
 
     src = fetchurl {
-      url = "https://statics.teams.cdn.office.net/production-osx/${version}/Teams_osx.pkg";
-      hash = "sha256-vLUEvOSBUyAJIWHOAIkTqTW/W6TkgmeyRzQbquZP810=";
+      url = "https://statics.teams.cdn.office.net/production-osx/${versions.darwin}/Teams_osx.pkg";
+      hash = hashes.darwin;
     };
 
     nativeBuildInputs = [ xar cpio makeWrapper ];

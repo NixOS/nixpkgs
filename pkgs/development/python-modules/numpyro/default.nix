@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.10.0";
+  version = "0.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-UCgFGHNLQunZgXGgmLWiH9GPEpRMIoSCqJryGIDHTdo=";
+    hash = "sha256-36iW8ByN9D3dQWY68rPi/Erqc0ieZpR06DMpsYOykVA=";
   };
 
   propagatedBuildInputs = [

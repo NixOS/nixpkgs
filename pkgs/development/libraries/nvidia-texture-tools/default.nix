@@ -2,21 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-texture-tools";
-  version = "unstable-2019-10-27";
+  version = "unstable-2020-12-21";
 
   src = fetchFromGitHub {
     owner = "castano";
     repo = "nvidia-texture-tools";
-    rev = "a131e4c6b0b7c9c73ccc3c9e6f1c7e165be86bcc";
-    sha256 = "1qzyr3ib5dpxyq1y33lq02qv4cww075sm9bm4f651d34q5x38sk3";
+    rev = "aeddd65f81d36d8cb7b169b469ef25156666077e";
+    sha256 = "sha256-BYNm8CxPQbfmnnzNmOQ2Dc8HSyO8mkqzYsBZ5T80398=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/castano/nvidia-texture-tools/commit/6474f2593428d89ec152da2502aa136ababe66ca.patch";
-      sha256 = "0akbkvm55hiv58jx71h9hj173rbnqlb5a430y9azjiix7zga42vd";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -26,6 +19,10 @@ stdenv.mkDerivation rec {
     # Make a recently added pure virtual function just virtual,
     # to keep compatibility.
     sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
+  '' + lib.optionalString stdenv.isAarch64 ''
+    # remove x86_64-only libraries
+    sed -i '/bc1enc/d' src/nvtt/tests/CMakeLists.txt
+    sed -i '/libsquish/d;/CMP_Core/d' extern/CMakeLists.txt
   '';
 
   cmakeFlags = [
@@ -42,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/castano/nvidia-texture-tools";
     license = licenses.mit;
     platforms = platforms.unix;
-    broken = stdenv.isAarch64;
+    maintainers = with maintainers; [ wegank ];
   };
 }

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "2.2.0";
+  version = "2.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-dTXTR2H37FDfnpY4Ts6NoYAnJX52yqRZeD2Yf8S/kS8=";
+    hash = "sha256-gZXA+2zW25Dl8JmBgg7APZt6ZdpFOEFZXAkiZ+tn/4g=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     faraday-agent-parameters-types
     faraday-plugins
     itsdangerous
+    psutil
     python-gvm
     python-owasp-zap-v2-4
     pyyaml
@@ -64,6 +65,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
+    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

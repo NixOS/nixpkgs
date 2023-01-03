@@ -1,7 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, pomerium
 }:
 
 let
@@ -9,16 +8,16 @@ let
 in
 buildGoModule rec {
   pname = "pomerium-cli";
-  inherit (pomerium) version;
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-AZeBtHy2MEPE8uZVJv4wLdOt6f9QNbaQnP5a2YVYYAg=";
+    sha256 = "sha256-lWrEWi9wT//9sTEJqo4BnjjzeYnmb2KFbVetXfsYk04=";
   };
 
-  vendorSha256 = "sha256-K0Vdsl6wD0eJeJRsUjiNPuGx1KPkZrlCCzdyAysVonc=";
+  vendorSha256 = "sha256-uME7g7zhA1ir1drmHB1FjLPJ1Km9XcvHHNIsIdOvYfo=";
 
   subPackages = [
     "cmd/pomerium-cli"

@@ -18,7 +18,7 @@
     <para>
       This is an example of using <literal>warnings</literal>.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 { config, lib, ... }:
 {
   config = lib.mkIf config.services.foo.enable {
@@ -42,7 +42,7 @@
       assertion is useful to prevent such a broken system from being
       built.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 { config, lib, ... }:
 {
   config = lib.mkIf config.services.syslogd.enable {

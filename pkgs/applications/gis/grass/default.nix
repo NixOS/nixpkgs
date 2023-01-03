@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK31, wxmac, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
+, cairo, readline, ffmpeg, makeWrapper, wxGTK32, libiconv, netcdf, blas
+, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, proj-datumgrid
 , zstd, pdal, wrapGAppsHook
 }:
 
@@ -15,15 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VK9FCqIwHGmeJe5lk12lpAGcsC1aPRBiI+XjACXjDd4=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite
-  readline ffmpeg netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid zstd wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK31 ]
-    ++ lib.optional stdenv.isDarwin wxmac
-    ++ (with python3Packages; [ python python-dateutil numpy ]
-      ++ lib.optional stdenv.isDarwin wxPython_4_0
-      ++ lib.optional stdenv.isLinux wxPython_4_1);
+  nativeBuildInputs = [
+    pkg-config bison flex makeWrapper wrapGAppsHook
+    gdal geos libmysqlclient netcdf pdal
+  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+
+  buildInputs = [
+    cairo zlib proj libtiff libpng fftw sqlite
+    readline ffmpeg postgresql blas wxGTK32
+    proj-datumgrid zstd
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+
+  strictDeps = true;
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -50,7 +53,6 @@ stdenv.mkDerivation rec {
     "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
     "--with-blas"
-    "--with-liblas=${libLAS}/bin/liblas-config"
     "--with-zstd"
     "--with-fftw"
     "--with-pthread"

@@ -18,5 +18,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];
     license = licenses.lgpl21;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

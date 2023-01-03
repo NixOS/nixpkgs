@@ -6,7 +6,7 @@
 , six
 , decorator
 , nose
-, krb5Full
+, krb5
 , GSS
 , parameterized
 , shouldbe
@@ -30,12 +30,12 @@ buildPythonPackage rec {
   # It's used to locate headers
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5Full}"'
+      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5}"'
   '';
 
   nativeBuildInputs = [
     cython
-    krb5Full
+    krb5
   ];
 
   propagatedBuildInputs =  [

@@ -4,6 +4,7 @@
 , fetch
 , cmake
 , llvm
+, targetLlvm
 , perl
 , version
 }:
@@ -15,7 +16,9 @@ stdenv.mkDerivation rec {
   src = fetch pname "14dh0r6h2xh747ffgnsl4z08h0ri04azi9vf79cbz7ma1r27kzk0";
 
   nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ llvm ];
+  buildInputs = [
+    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+  ];
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";

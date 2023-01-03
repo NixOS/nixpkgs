@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "2.3.0";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "usit-gd";
     repo = "zabbix-cli";
-    rev = version;
-    sha256 = "sha256-t8iVsdoJEHXtq9KK0WUGUX65zekKv8yzNoe8XgeeHd0=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-i4dviSdrHNAn4mSWMn5DOBg4j8BXCfwKVYsDaBd/g6o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

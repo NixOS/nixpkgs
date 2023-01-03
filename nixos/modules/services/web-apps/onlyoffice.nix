@@ -29,7 +29,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.onlyoffice-documentserver;
-      defaultText = "pkgs.onlyoffice-documentserver";
+      defaultText = lib.literalExpression "pkgs.onlyoffice-documentserver";
       description = lib.mdDoc "Which package to use for the OnlyOffice instance.";
     };
 
@@ -54,7 +54,7 @@ in
     postgresName = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = lib.mdDoc "The name of databse OnlyOffice should user.";
+      description = lib.mdDoc "The name of database OnlyOffice should user.";
     };
 
     postgresPasswordFile = mkOption {
@@ -252,7 +252,10 @@ in
               .rabbitmq.url = "${cfg.rabbitmqUrl}"
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
-            if ! psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
+            if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
+              psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/removetbl.sql
+              psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/createdb.sql
+            else
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/createdb.sql
             fi
           '';

@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
 buildPythonPackage rec {
   pname = "OWSLib";
-  version = "0.26.0";
+  version = "0.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jEywYzjrZAXCrs7QttCFaCqmHw8uUo8ceI1o3FDflBs=";
+    sha256 = "sha256-4QKqJETf4MhDmrHhd2zA+kfOoowJuKKCEsiTxgF8F5s=";
   };
 
   # as now upstream https://github.com/geopython/OWSLib/pull/824

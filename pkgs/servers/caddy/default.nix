@@ -1,6 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, caddy
+, testers
+, installShellFiles
+}:
 let
-  version = "2.5.2";
+  version = "2.6.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -12,25 +19,42 @@ buildGoModule {
   pname = "caddy";
   inherit version;
 
-  subPackages = [ "cmd/caddy" ];
-
   src = fetchFromGitHub {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-Z9A2DRdX0LWjIKdHAHk2IRxsUzvC90Gf5ohFLXNHcsw=";
+    sha256 = "sha256-Tbf6RB3106OEZGc/Wx7vk+I82Z8/Q3WqnID4f8uZ6z0=";
   };
 
-  vendorSha256 = "sha256-aB95wEc69nhloF8qoBeIiiitSyiUTc2KpxyCEnge4rc=";
+  vendorSha256 = "sha256-YxGXk3Q1qw6uZxrGc8l2lKExP2GP+nm3eYbHDoEbgdY=";
+
+  subPackages = [ "cmd/caddy" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
 
     substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
     substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+
+    installShellCompletion --cmd metal \
+      --bash <($out/bin/caddy completion bash) \
+      --zsh <($out/bin/caddy completion zsh)
   '';
 
-  passthru.tests = { inherit (nixosTests) caddy; };
+  passthru.tests = {
+    inherit (nixosTests) caddy;
+    version = testers.testVersion {
+      command = "${caddy}/bin/caddy version";
+      package = caddy;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://caddyserver.com";

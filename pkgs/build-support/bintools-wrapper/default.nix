@@ -167,7 +167,8 @@ stdenv.mkDerivation {
 
     # Create symlinks for rest of the binaries.
     + ''
-      for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line ranlib readelf elfedit; do
+      for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line \
+          ranlib readelf elfedit dlltool dllwrap windmc windres; do
         if [ -e $ldPath/${targetPrefix}''${binary} ]; then
           ln -s $ldPath/${targetPrefix}''${binary} $out/bin/${targetPrefix}''${binary}
         fi

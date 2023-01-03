@@ -3,8 +3,8 @@
 buildPecl {
   pname = "grpc";
 
-  version = "1.48.0";
-  sha256 = "sha256-S0zLSRNV+TjSjmOkdt+S1RCSY+pj/+4eAklhZGHiaWM=";
+  version = "1.50.0";
+  sha256 = "sha256-Lgvrw1HZywfvHTaF88T5dtKXu/lGR5xeS+TsqqNQCSc=";
 
   doCheck = true;
   checkTarget = "test";

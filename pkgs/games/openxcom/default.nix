@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, pkg-config
 , libGLU
 , libGL
 , zlib
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-APv49ZT94oeM4KVKGtUdoQ1t8Ly8lsocr+FqXiRXbk0=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
+
   buildInputs = [ SDL SDL_gfx SDL_image SDL_mixer boost libyamlcpp libGLU libGL openssl zlib ];
 
   meta = with lib; {

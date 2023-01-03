@@ -1,15 +1,23 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c1c33e1..208a184 100644
+index eb9be42..220817c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -427,8 +427,8 @@
- install(FILES ../NEWS31 DESTINATION share/${PROJECT_NAME} RENAME NEWS31)
- install(FILES ../ug25.pdf DESTINATION share/${PROJECT_NAME} RENAME ug25.pdf)
- install(FILES ../ug31.pdf DESTINATION share/${PROJECT_NAME} RENAME ug31.pdf)
--install(FILES DreamSourceLab.rules DESTINATION /etc/udev/rules.d/)
--install(FILES DSView.desktop DESTINATION /usr/share/applications/)
-+install(FILES DreamSourceLab.rules DESTINATION etc/udev/rules.d/)
-+install(FILES DSView.desktop DESTINATION share/applications/)
+@@ -662,16 +662,8 @@ install(FILES DSView/icons/logo.svg DESTINATION share/icons/hicolor/scalable/app
+ install(FILES DSView/icons/logo.svg DESTINATION share/pixmaps RENAME dsview.svg)
  
- #===============================================================================
- #= Packaging (handled by CPack)
+ if(CMAKE_SYSTEM_NAME MATCHES "Linux")	
+-	install(FILES DSView/DSView.desktop DESTINATION /usr/share/applications RENAME dsview.desktop)
+-	
+-	if(IS_DIRECTORY /usr/lib/udev/rules.d)
+-		install(FILES DSView/DreamSourceLab.rules DESTINATION /usr/lib/udev/rules.d RENAME 60-dreamsourcelab.rules)
+-	elseif(IS_DIRECTORY /lib/udev/rules.d)
+-		install(FILES DSView/DreamSourceLab.rules DESTINATION /lib/udev/rules.d RENAME 60-dreamsourcelab.rules)
+-	elseif(IS_DIRECTORY /etc/udev/rules.d)
+-		install(FILES DSView/DreamSourceLab.rules DESTINATION /etc/udev/rules.d RENAME 60-dreamsourcelab.rules)
+-	endif()
+-
++	install(FILES DSView/DSView.desktop DESTINATION share/applications RENAME dsview.desktop)
++	install(FILES DSView/DreamSourceLab.rules DESTINATION etc/udev/rules.d RENAME 60-dreamsourcelab.rules)
+ endif()
+ 
+ install(FILES NEWS25 DESTINATION share/DSView RENAME NEWS25)

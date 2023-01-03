@@ -9,13 +9,13 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.10.23";
+  version = "1.10.26";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1fEmtbHKrjuyIVrGr/vTudZ99onkNjEMvyBJt4I8KK4=";
+    sha256 = "sha256-eefQEOeKb6gZIJdK9cq20WnhwZE1qbyd8Cl0Hqh2+u8=";
   };
 
   vendorSha256 = "sha256-Dj+xN8lr98LJyYr2FwJ7yUIJkUeUrr1fkcbj4hShJI0=";
@@ -46,7 +46,7 @@ in buildGoModule rec {
     "cmd/utils"
   ];
 
-  # Following upstream: https://github.com/ethereum/go-ethereum/blob/v1.10.23/build/ci.go#L218
+  # Following upstream: https://github.com/ethereum/go-ethereum/blob/v1.10.26/build/ci.go#L218
   tags = [ "urfave_cli_no_docs" ];
 
   # Fix for usb-related segmentation faults on darwin

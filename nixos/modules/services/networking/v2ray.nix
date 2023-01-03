@@ -34,7 +34,7 @@ with lib;
 
           Either `configFile` or `config` must be specified.
 
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://www.v2fly.org/en_US/v5/config/overview.html>.
         '';
       };
 
@@ -56,7 +56,7 @@ with lib;
 
           Either `configFile` or `config` must be specified.
 
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://www.v2fly.org/en_US/v5/config/overview.html>.
         '';
       };
     };
@@ -71,7 +71,7 @@ with lib;
         name = "v2ray.json";
         text = builtins.toJSON cfg.config;
         checkPhase = ''
-          ${cfg.package}/bin/v2ray -test -config $out
+          ${cfg.package}/bin/v2ray test -c $out
         '';
       };
 
@@ -83,13 +83,15 @@ with lib;
       }
     ];
 
+    environment.etc."v2ray/config.json".source = configFile;
+
+    systemd.packages = [ cfg.package ];
+
     systemd.services.v2ray = {
-      description = "v2ray Daemon";
-      after = [ "network.target" ];
+      restartTriggers = [ config.environment.etc."v2ray/config.json".source ];
+
+      # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/v2ray -config ${configFile}";
-      };
     };
   };
 }

@@ -91,6 +91,10 @@ buildPythonPackage rec {
     "test_spec"
   ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
     "test_type1mm_inputs"
+  ] ++ [
+    # No longer succeeds in 2023
+    # https://github.com/adobe-type-tools/afdko/issues/1589
+    "test_ufo_fontinfo_parsing"
   ];
 
   passthru.tests = {

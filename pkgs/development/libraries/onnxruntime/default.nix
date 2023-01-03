@@ -5,7 +5,7 @@
 , fetchurl
 , pkg-config
 , cmake
-, python3
+, python3Packages
 , libpng
 , zlib
 , eigen
@@ -14,26 +14,29 @@
 , nlohmann_json
 , boost
 , oneDNN
+, abseil-cpp_202111
 , gtest
+, pythonSupport ? false
+, nsync
+, flatbuffers
 }:
 
-let
-  # prefetch abseil
-  # Note: keep URL in sync with `cmake/external/abseil-cpp.cmake`
-  abseil = fetchurl {
-    url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.zip";
-    sha256 = "sha256-pFZ/8C+spnG5XjHTFbqxi0K2xvGmDpHG6oTlohQhEsI=";
-  };
-in
+# Python Support
+#
+# When enabling Python support a wheel is made and stored in a `dist` output.
+# This wheel is then installed in a separate derivation.
+
+assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
+
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.12.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "sha256-wwllEemiHTp9aJcCd1gsTS4WUVMp5wW+4i/+6DzmAeM=";
+    sha256 = "sha256-paaeq6QeiOzwiibbz0GkYZxEI/V80lvYNYTm6AuyAXQ=";
     fetchSubmodules = true;
   };
 
@@ -41,30 +44,41 @@ stdenv.mkDerivation rec {
     # Use dnnl from nixpkgs instead of submodules
     (fetchpatch {
       name = "system-dnnl.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-dnnl.diff?h=python-onnxruntime&id=0185531906bda3a9aba93bbb0f3dcfeb0ae671ad";
-      sha256 = "sha256-58RBrQnAWNtc/1pmFs+PkZ6qCsL1LfMY3P0exMKzotA=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-dnnl.diff?h=python-onnxruntime&id=9c392fb542979981fe0026e0fe3cc361a5f00a36";
+      sha256 = "sha256-+kedzJHLFU1vMbKO9cn8fr+9A5+IxIuiqzOfR2AfJ0k=";
     })
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
+    python3Packages.python
     gtest
-  ];
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    setuptools
+    wheel
+    pip
+    pythonOutputDistHook
+  ]);
 
   buildInputs = [
     libpng
     zlib
-    protobuf
     howard-hinnant-date
     nlohmann_json
     boost
     oneDNN
+    protobuf
+  ] ++ lib.optionals pythonSupport [
+    nsync
+    python3Packages.numpy
+    python3Packages.pybind11
+    python3Packages.packaging
   ];
 
   # TODO: build server, and move .so's to lib output
-  outputs = [ "out" "dev" ];
+  # Python's wheel is stored in a separate dist output
+  outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "dist" ];
 
   enableParallelBuilding = true;
 
@@ -78,14 +92,21 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
     "-Donnxruntime_USE_MPI=ON"
     "-Deigen_SOURCE_PATH=${eigen.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202111.src}"
     "-Donnxruntime_USE_DNNL=YES"
+  ] ++ lib.optionals pythonSupport [
+    "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
 
   doCheck = true;
 
   postPatch = ''
-    substituteInPlace cmake/external/abseil-cpp.cmake \
-      --replace "${abseil.url}" "${abseil}"
+    substituteInPlace cmake/libonnxruntime.pc.cmake.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+  '';
+
+  postBuild = lib.optionalString pythonSupport ''
+    python ../setup.py bdist_wheel
   '';
 
   postInstall = ''
@@ -95,6 +116,13 @@ stdenv.mkDerivation rec {
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
       ../include/onnxruntime/core/session/onnxruntime_*.h
   '';
+
+  passthru = {
+    inherit protobuf;
+    tests = lib.optionalAttrs pythonSupport {
+      python = python3Packages.onnxruntime;
+    };
+  };
 
   meta = with lib; {
     description = "Cross-platform, high performance scoring engine for ML models";

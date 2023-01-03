@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook
-, libuuid, zlib }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libuuid
+, zlib
+
+# tests
+, mu
+}:
 
 let
   generic = version: hash: stdenv.mkDerivation {
@@ -29,9 +37,14 @@ let
         --replace "#define HAVE___EXP10 1" "#undef HAVE___EXP10"
     '';
 
+    passthru.tests = {
+      inherit mu;
+    };
+
     meta = with lib; {
       description = "Search engine library";
       homepage = "https://xapian.org/";
+      changelog = "https://xapian.org/docs/xapian-core-${version}/NEWS";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ ];
       platforms = platforms.unix;
@@ -41,5 +54,5 @@ in {
   # Don't forget to change the hashes in xapian-omega and
   # python3Packages.xapian. They inherit the version from this package, and
   # should always be built with the equivalent xapian version.
-  xapian_1_4 = generic "1.4.20" "sha256-zivl7/cgdcgQbANA5wsQk9vOviq0LcHBvgjdOtQZRC0=";
+  xapian_1_4 = generic "1.4.21" "sha256-gPhgNNL7VZAHlUgd+uaBv6oQ776BirrTYizcDFXgb4g=";
 }

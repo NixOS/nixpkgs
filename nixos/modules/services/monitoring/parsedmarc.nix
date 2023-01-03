@@ -494,7 +494,7 @@ in
             Group = "parsedmarc";
             DynamicUser = true;
             RuntimeDirectory = "parsedmarc";
-            RuntimeDirectoryMode = 0700;
+            RuntimeDirectoryMode = "0700";
             CapabilityBoundingSet = "";
             PrivateDevices = true;
             PrivateMounts = true;

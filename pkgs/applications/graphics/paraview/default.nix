@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchurl
+{ lib, fetchFromGitLab, fetchurl
 , boost, cmake, ffmpeg, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
 , mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL

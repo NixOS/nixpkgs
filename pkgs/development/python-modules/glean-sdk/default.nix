@@ -11,24 +11,25 @@
 , pythonOlder
 , rustc
 , rustPlatform
+, semver
 , setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "51.1.0";
+  version = "51.2.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rt+N/sqX7IyoXbytzF9UkyXsx0vQXbGs+XJkaMhevE0=";
+    hash = "sha256-4EXCYthMabdmxWYltcnO0UTNeAYXwXQeRfwxt1WD3Ug=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-oY94YVs6I+/klogyajBoCrYexp9oUSrQ6znWVbigf2E=";
+    hash = "sha256-qOGoonutuIY+0UVaVSVVt0NbqEICdNs3qHWG0Epmkl0=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     cffi
     glean-parser
     iso8601
+    semver
   ];
 
   checkInputs = [

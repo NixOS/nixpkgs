@@ -1,19 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, which, python3, util-linux, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, nodejs
+, which
+, python39
+, libuv
+, util-linux
+, nixosTests
+}:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "cjdns";
-  version = "21.1";
+  version = "21.4";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
     rev = "cjdns-v${version}";
-    sha256 = "NOmk+vMZ8i0E2MjrUzksk+tkJ9XVVNEXlE5OOTNa+Y0=";
+    sha256 = "sha256-vI3uHZwmbFqxGasKqgCl0PLEEO8RNEhwkn5ZA8K7bxU=";
   };
 
-  buildInputs = [ which python3 nodejs ] ++
+  cargoSha256 = "sha256-x3LxGOhGXrheqdke0eYiQVo/IqgWgcDrDNupdLjRPjA=";
+
+  nativeBuildInputs = [
+    which
+    python39
+    nodejs
+  ] ++
     # for flock
     lib.optional stdenv.isLinux util-linux;
+
+  buildInputs = [
+    libuv
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-O2"
@@ -23,15 +43,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     "-Wno-error=stringop-overread"
   ];
-
-  buildPhase =
-    lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
-    + "bash do";
-  installPhase = ''
-    install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
-    mkdir -p $out/share/cjdns
-    cp -R tools node_build node_modules $out/share/cjdns/
-  '';
 
   passthru.tests.basic = nixosTests.cjdns;
 

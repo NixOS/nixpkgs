@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.5+quick_unstable-2022-07.05";
+  version = "3.0.7+quic1";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "75e940831d0570d6b020cfebf128ae500f424867";
-    sha256 = "sha256-1HBGKafcCbM0RZWLvyl3vpSfGBsAcGDgjz1Nm/qclWM=";
+    rev = "openssl-${version}";
+    sha256 = "sha256-ZRS0ZV+/U4PD2lVE+PsUAWSuk5EFg5mOKYlwgY3Ecus=";
   };
 
   patches = [
@@ -102,12 +102,14 @@ stdenv.mkDerivation rec {
     "shared" # "shared" builds both shared and static libraries
     "--libdir=lib"
     "--openssldir=etc/ssl"
-    "enable-ktls"
   ] ++ lib.optionals withCryptodev [
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
   ] ++ lib.optional enableSSL2 "enable-ssl2"
     ++ lib.optional enableSSL3 "enable-ssl3"
+    # We select KTLS here instead of the configure-time detection (which we patch out).
+    # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+    ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
     ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
     # OpenSSL needs a specific `no-shared` configure flag.
     # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options

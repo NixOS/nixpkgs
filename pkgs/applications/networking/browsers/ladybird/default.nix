@@ -1,43 +1,48 @@
 { lib
-, gcc11Stdenv
+, stdenv
 , fetchFromGitHub
 , cmake
 , ninja
 , unzip
 , wrapQtAppsHook
-, makeWrapper
+, libxcrypt
 , qtbase
-, qttools
+, nixosTests
 }:
 
 let serenity = fetchFromGitHub {
   owner = "SerenityOS";
   repo = "serenity";
-  rev = "094ba6525f0217f3b8d5e467cef326caeb659e8a";
-  hash = "sha256-IHXe2Td9iRSL1oQVwL2gZHxEM2ID4SghZwK6ewjFV1Y=";
+  rev = "a0f3e2c9a2b82117aa7c1a3444ad0d31baa070d5";
+  hash = "sha256-8Xde59ZfdkTD39mYSv0lfFjBHFDWTUwfozE+Q9Yq6C8=";
 };
-
-in gcc11Stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ladybird";
-  version = "unstable-2022-07-20";
+  version = "unstable-2022-09-29";
 
   # Remember to update `serenity` too!
   src = fetchFromGitHub {
-    owner = "awesomekling";
+    owner = "SerenityOS";
     repo = "ladybird";
-    rev = "9e3a1f47d484cee6f23c4dae6c51750af155a8fc";
-    hash = "sha256-1cPWpPvjM/VcVUEf2k+MvGvTgZ3Fc4LFHZCLh1wU78Y=";
+    rev = "d69ad7332477de33bfd1963026e057d55c6f222d";
+    hash = "sha256-XQj2Bohk8F6dGCAManOmmDP5b/SqEeZXZbLDYPfvi2E=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "MACOSX_BUNDLE TRUE" "MACOSX_BUNDLE FALSE"
+  '';
 
   nativeBuildInputs = [
     cmake
     ninja
     unzip
     wrapQtAppsHook
-    makeWrapper
   ];
 
   buildInputs = [
+    libxcrypt
     qtbase
   ];
 
@@ -48,47 +53,29 @@ in gcc11Stdenv.mkDerivation {
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  # error: use of undeclared identifier 'aligned_alloc'
+  NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") [
+    "-include mm_malloc.h"
+    "-Daligned_alloc=_mm_malloc"
+  ]);
 
-  # Upstream install rules are missing
-  # https://github.com/awesomekling/ladybird/issues/36
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 ladybird $out/bin/ladybird
-    mkdir -p $out/lib/ladybird
-    cp -d _deps/lagom-build/*.so* $out/lib/ladybird/
-    runHook postInstall
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
+  # https://github.com/SerenityOS/serenity/issues/10055
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/lib $out/bin/ladybird
   '';
 
-  # Patch rpaths
-  # https://github.com/awesomekling/ladybird/issues/36
-  preFixup = ''
-    for f in $out/bin/ladybird $out/lib/ladybird/*.so; do
-      old_rpath=$(patchelf --print-rpath "$f")
-      # Remove reference to libraries from build directory
-      rpath_without_build=$(sed -e 's@[^:]*/_deps/lagom-build:@@g' <<< $old_rpath)
-      # Add directory where we install those libraries
-      new_rpath=$out/lib/ladybird:$rpath_without_build
-      patchelf --set-rpath "$new_rpath" "$f"
-    done
-  '';
-
-  # According to the readme, the program needs access to the serenity sources
-  # at runtime
-  postFixup = ''
-    wrapProgram $out/bin/ladybird --set SERENITY_SOURCE_DIR "${serenity}"
-  '';
-
-  # Stripping results in a symbol lookup error
-  dontStrip = true;
+  passthru.tests = {
+    nixosTest = nixosTests.ladybird;
+  };
 
   meta = with lib; {
     description = "A browser using the SerenityOS LibWeb engine with a Qt GUI";
     homepage = "https://github.com/awesomekling/ladybird";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    # SerenityOS only works on x86, and can only be built on unix systems.
-    # We also use patchelf in preFixup, so we restrict that to linux only.
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
   };
 }

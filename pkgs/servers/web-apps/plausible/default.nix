@@ -55,6 +55,7 @@ beamPackages.mixRelease {
   };
 
   postBuild = ''
+    export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     ln -sf ${yarnDeps}/node_modules assets/node_modules
     npm run deploy --prefix ./assets
 

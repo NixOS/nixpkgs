@@ -38,5 +38,7 @@ stdenv.mkDerivation {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

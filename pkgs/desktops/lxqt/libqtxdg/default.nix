@@ -5,18 +5,18 @@
 , qtbase
 , qtsvg
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "zrlaOiIsfbwjHFjqhYZ9lCo+oTsddICxl2UAum9Xoi4=";
+    sha256 = "Lynm6Qxy02Os69YQ1cb2W0hV7sq9kBhbACqjHTGj7Tw=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ mkDerivation rec {
     )
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/libqtxdg";

@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow
 , capabilitiesSupport ? true
 , libcap_ng
+, libxcrypt
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
@@ -14,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.38";
+  version = "2.38.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-bREcvk1VszbbLx++/7xluJkIcEwBE2Nx0yqpvsNz62Q=";
+    hash = "sha256-YEkqGbRObPmj3f9oMlszO4tStsWc4+vWoOyqTFEX6E8=";
   };
 
   patches = [
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib libxcrypt ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]

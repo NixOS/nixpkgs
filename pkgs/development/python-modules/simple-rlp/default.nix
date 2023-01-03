@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "simple-rlp";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c4a9c58f1b742f7fa8af0fe4ea6ff9fb02294ae041912f771570dfaf339d2b9";
+    sha256 = "sha256-LfHSt2nwoBd9JiMauL4W5l41RrF7sKmkkO/TUXwIKHY=";
   };
 
   pythonImportsCheck = [ "rlp" ];

@@ -84,13 +84,11 @@ let
     ''
   ) vrrpInstances);
 
-  virtualIpLine = (ip:
-    ip.addr
+  virtualIpLine = ip: ip.addr
     + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
     + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
     + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
-    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}"
-  );
+    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}";
 
   notNullOrEmpty = s: !(s == null || s == "");
 
@@ -268,11 +266,11 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/keepalived.env";
-        description = ''
+        description = lib.mdDoc ''
           Environment variables from this file will be interpolated into the
-          final config file using envsubst with this syntax: <literal>$ENVIRONMENT</literal>
-          or <literal>''${VARIABLE}</literal>.
-          The file should contain lines formatted as <literal>SECRET_VAR=SECRET_VALUE</literal>.
+          final config file using envsubst with this syntax: `$ENVIRONMENT`
+          or `''${VARIABLE}`.
+          The file should contain lines formatted as `SECRET_VAR=SECRET_VALUE`.
           This is useful to avoid putting secrets into the nix store.
         '';
       };

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysnmplib";
-  version = "5.0.17";
+  version = "5.0.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysnmp";
-    rev = "v${version}";
-    hash = "sha256-RG8EJmNDXRozlFx76c7p4wILwkatHg/eAhVojp807uQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SrtOn9zETtobT6nMVHLi6hP7VZGBvXvFzoThTi3ITag=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of v1/v2c/v3 SNMP engine";
     homepage = "https://github.com/pysnmp/pysnmp";
+    changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

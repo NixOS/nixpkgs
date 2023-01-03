@@ -27,7 +27,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+  chronyFlags = [ "-n" "-m" "-u" "chrony" "-f" "${configFile}" ] ++ cfg.extraFlags;
 in
 {
   options = {
@@ -166,7 +166,7 @@ in
         unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
           { Type = "simple";
-            ExecStart = "${chronyPkg}/bin/chronyd ${chronyFlags}";
+            ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
             ProtectHome = "yes";
             ProtectSystem = "full";

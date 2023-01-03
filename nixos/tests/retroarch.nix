@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   {
     name = "retroarch";
-    meta = with pkgs.lib.maintainers; { maintainers = [ j0hax ]; };
+    meta = with pkgs.lib; { maintainers = teams.libretro.members ++ [ maintainers.j0hax ]; };
 
     nodes.machine = { ... }:
 
@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         services.xserver.enable = true;
         services.xserver.desktopManager.retroarch = {
           enable = true;
-          package = pkgs.retroarchFull;
+          package = pkgs.retroarchBare;
         };
         services.xserver.displayManager = {
           sddm.enable = true;

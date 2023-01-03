@@ -2,22 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "range-v3";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ericniebler";
     repo = "range-v3";
     rev = version;
-    sha256 = "18230bg4rq9pmm5f8f65j444jpq56rld4fhmpham8q3vr1c1bdjh";
+    hash = "sha256-bRSX91+ROqG1C3nB9HSQaKgLzOHEFy9mrD2WW3PRBWU=";
   };
-
-  patches = [
-    ./gcc10.patch
-    (fetchpatch {
-      url = "https://github.com/ericniebler/range-v3/commit/66e847d4e14be3a369b7e26a03a172b20e62c003.patch";
-      sha256 = "sha256-JOQptVqNicdMhcDhBrWQRf7MfskBv56cICwvMA8g88Y=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 

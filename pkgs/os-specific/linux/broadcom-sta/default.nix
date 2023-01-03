@@ -43,6 +43,10 @@ stdenv.mkDerivation {
     ./linux-5.17.patch
     # source: https://github.com/archlinux/svntogit-community/blob/2e1fd240f9ce06f500feeaa3e4a9675e65e6b967/trunk/013-linux518.patch
     ./linux-5.18.patch
+    # source: https://gist.github.com/joanbm/207210d74637870c01ef5a3c262a597d
+    ./linux-6.0.patch
+    # source: https://gist.github.com/joanbm/94323ea99eff1e1d1c51241b5b651549
+    ./linux-6.1.patch
     ./pedantic-fix.patch
     ./null-pointer-fix.patch
     ./gcc.patch

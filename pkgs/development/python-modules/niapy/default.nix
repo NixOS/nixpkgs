@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.0.2";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = version;
-    hash = "sha256-b/0TEO27fPuoPzkNBCwgUqBG+8htOR2ipFikpqjYdnM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bZ9bONFntNx5tcm/gR/uPS5CqicJX281WsvSno8aVlY=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Micro framework for building nature-inspired algorithms";
     homepage = "https://niapy.org/";
+    changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

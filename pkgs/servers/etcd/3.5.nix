@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
 
 let
-  version = "3.5.4";
+  version = "3.5.6";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "sha256-mTQHxLLfNiihvHg5zaTeVNWKuzvE0KBiJdY3qMJHMCM=";
+    sha256 = "sha256-KQ3N6HBgdLnS/8UprT99gH9ttsy2cgfaWSL/ILX6t1A=";
   };
 
   CGO_ENABLED = 0;
@@ -25,7 +25,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-4djUQvWp9hScua9l1ZTq298zWSeDYRDojEt2AWmarzw=";
+    vendorSha256 = "sha256-u4N8YXmnVk5flPimdE4olr/1hVZoEDEgUwXRRTlX51o=";
 
     modRoot = "./server";
 
@@ -45,7 +45,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-nk56XGpNsDwcGrTKithKGnPCX0NhpQmzNSXHk3vmdtg=";
+    vendorSha256 = "sha256-J4qW2Dzpwk85XW3oWvT1F5ec/jzkcLbTC+1CMBztWRw=";
 
     modRoot = "./etcdutl";
   };
@@ -55,7 +55,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-WIMYrXfay6DMz+S/tIc/X4ffMizxub8GS1DDgIR40D4=";
+    vendorSha256 = "sha256-+5zWXVErkFAvtkpNQtKn/jLOGUdHkXgeZWI7/RIMgMQ=";
 
     modRoot = "./etcdctl";
   };

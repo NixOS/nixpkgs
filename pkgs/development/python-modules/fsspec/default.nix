@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.5.0";
+  version = "2022.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "intake";
+    owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-WOzw9UPF8LZuOhp5p/CJUUJcYpAfixV6GiI8tfnoklc=";
+    hash = "sha256-+lPt/zqI3Mkt+QRNXq+Dxm3h/ryZJsfrmayVi/BTtbg=";
   };
 
   propagatedBuildInputs = [
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A specification that Python filesystems should adhere to";
-    homepage = "https://github.com/intake/filesystem_spec";
+    homepage = "https://github.com/fsspec/filesystem_spec";
     changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

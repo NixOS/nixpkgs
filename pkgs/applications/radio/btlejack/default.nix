@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "btlejack";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "virtualabs";
     repo = "btlejack";
-    rev = "v${version}";
-    sha256 = "1r17079kx7dvsrbmw5sgvz3vj5m3pn2543gxj2xmw4s0lcihy378";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Q6y9murV1o2i1sluqTVB5+X3B7ywFsI0ZvlJjHrHSpo=";
   };
 
   postPatch = ''

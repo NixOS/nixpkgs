@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.6";
+  version = "9.18.9";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1DoP7QPHdNFoXSA1mCGMC3d0qI/MOQoBcHENX+t/v/E=";
+    sha256 = "sha256-apZlmY1WhgRGDfCRj8jM+tfSk4jU2EJWDAVswhHLskM=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -48,6 +48,15 @@ stdenv.mkDerivation rec {
     for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
+
+    cat <<EOF >$out/etc/rndc.conf
+    include "/etc/bind/rndc.key";
+    options {
+        default-key "rndc-key";
+        default-server 127.0.0.1;
+        default-port 953;
+    };
+    EOF
   '';
 
   doCheck = false; # requires root and the net

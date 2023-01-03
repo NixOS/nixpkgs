@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libzim";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-FSotc2hkWvkYEdZ3HI3JLzjtKFaWOc1Bx6r0WyeS/Kg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ab7UUF+I0/xaGChvdjylEQRHLOjmtg/wk+/JEGehGLE=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
+    changelog = "https://github.com/openzim/libzim/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];
   };

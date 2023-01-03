@@ -13,7 +13,6 @@
 , itstool
 , libhandy
 , libnotify
-, libsoup
 , libxml2
 , pkg-config
 , python3Packages
@@ -54,7 +53,6 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libhandy
     libnotify
-    libsoup
   ];
 
   pythonPath = with python3Packages; [

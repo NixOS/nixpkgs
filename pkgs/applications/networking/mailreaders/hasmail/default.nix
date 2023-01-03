@@ -2,7 +2,6 @@
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
-, gobject-introspection
 , pango
 , cairo
 , gtk2

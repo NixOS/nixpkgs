@@ -35,15 +35,6 @@ gccStdenv.mkDerivation rec {
   # Or wrap relevant programs to add a suitable PATH ?
   #runtimeDeps = [ gnused gnugrep ];
 
-  # disable stackprotector on aarch64-darwin for now
-  # build error:
-  # ```
-  # /private/tmp/nix-build-gambit-unstable-2020-09-20.drv-0/ccIjyeeb.s:207:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x2, [x2, ___stack_chk_guard];momd
-  #                          ^
-  # ```
-  hardeningDisable = lib.optionals (gccStdenv.isAarch64 && gccStdenv.isDarwin) [ "stackprotector" ];
-
   configureFlags = [
     "--enable-targets=${gambit-params.targets}"
     "--enable-single-host"

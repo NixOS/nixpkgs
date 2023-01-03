@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgbinder";
-  version = "1.1.25";
+  version = "1.1.26";
 
   src = fetchFromGitHub {
     owner = "mer-hybris";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yr9FJd1+yJdP3vXHbuaaL5UmXGnKxR319LzXs76LBwk=";
+    sha256 = "sha256-bXptf1ALanzDyhajQtKMs/0M9TWlrjhWQdC1NZiUgd8=";
   };
 
   outputs = [ "out" "dev" ];

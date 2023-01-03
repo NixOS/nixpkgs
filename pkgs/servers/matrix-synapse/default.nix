@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, openssl
+{ lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
 , enableSystemd ? stdenv.isLinux, nixosTests
 , enableRedis ? true
 , callPackage
@@ -11,12 +11,36 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.66.0";
+  version = "1.74.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-jrjNl3NlJ9sWNNM/VYrASPnVZ/U9fn1N1P6Yqd+MQ08=";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "synapse";
+    rev = "v${version}";
+    hash = "sha256-UsYodjykcLOgClHegqH598kPoGAI1Z8bLzV5LLE6yLg=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-XOW9DRUhGIs8x5tQ9l2A85sNv736uMmfC72f8FX3g/I=";
+  };
+
+  postPatch = ''
+    # Remove setuptools_rust from runtime dependencies
+    # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
+    sed -i '/^setuptools_rust =/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+    rustPlatform.cargoSetupHook
+    setuptools-rust
+  ] ++ (with rustPlatform.rust; [
+    cargo
+    rustc
+  ]);
 
   buildInputs = [ openssl ];
 
@@ -41,6 +65,7 @@ buildPythonApplication rec {
     psycopg2
     pyasn1
     pydantic
+    pyicu
     pyjwt
     pymacaroons
     pynacl
@@ -63,7 +88,14 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
+    runHook preCheck
+
+    # remove src module, so tests use the installed module instead
+    rm -rf ./synapse
+
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+
+    runHook postCheck
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };

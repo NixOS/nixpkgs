@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pam
 , six
 , toml
@@ -23,6 +24,10 @@ buildPythonPackage rec {
       --replace 'find_library("pam")' '"${pam}/lib/libpam.so"' \
       --replace 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pam

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "0.47.0";
+  version = "0.48.0";
 
   src = fetchurl {
     url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
-    sha256 = "sha256-NuNkEBjFWUkiFKud1sMFdYkO2z2EA03XPaylC0YxY4Q=";
+    sha256 = "0sdmfdmxgks9bbzg8nn1gdx55g7qiwpdxkx6p9lwa71mdfc14r2z";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ktlint --prefix PATH : "${jre_headless}/bin"
+    wrapProgram $out/bin/ktlint --prefix PATH : "${lib.makeBinPath [ jre_headless gnused ]}"
   '';
 
   meta = with lib; {

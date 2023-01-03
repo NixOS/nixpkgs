@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spaceship-prompt";
-  version = "3.16.7";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dMP7mDzb0xLCP2l9j4SOP47bcpuBNSoXsDecVOvZaL8=";
+    sha256 = "sha256-ZL6z5pj2xbnUZl4SK7wxiJjheUY79hwDNVYm9+biKZU=";
   };
 
   strictDeps = true;
@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation rec {
     find scripts -type f -exec install -Dm644 {} "$out/lib/spaceship-prompt/{}" \;
     find sections -type f -exec install -Dm644 {} "$out/lib/spaceship-prompt/{}" \;
     install -Dm644 spaceship.zsh "$out/lib/spaceship-prompt/spaceship.zsh"
+    install -Dm644 async.zsh "$out/lib/spaceship-prompt/async.zsh"
     install -d "$out/share/zsh/themes/"
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/themes/spaceship.zsh-theme"
     install -d "$out/share/zsh/site-functions/"
@@ -34,6 +35,6 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nyanloutre fortuneteller2k ];
+    maintainers = with maintainers; [ nyanloutre fortuneteller2k kyleondy ];
   };
 }

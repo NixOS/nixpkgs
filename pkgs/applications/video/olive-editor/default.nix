@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "151g6jwhipgbq4llwib92sq23p1s9hm6avr7j4qq3bvykzrm8z1a";
   };
 
+  patches = [
+    ./q-painter-path.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     which
@@ -34,5 +38,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.balsoft ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

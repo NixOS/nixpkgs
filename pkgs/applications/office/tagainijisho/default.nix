@@ -1,11 +1,11 @@
 { lib, mkDerivation, fetchzip, qtbase, qttools, cmake, sqlite }:
 mkDerivation rec {
   pname = "tagainijisho";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchzip {
     url = "https://github.com/Gnurou/tagainijisho/releases/download/${version}/tagainijisho-${version}.tar.gz";
-    hash = "sha256-fLq4Wfpa7Wr62KvHztgLiXE8eopCq+wipgabFm2bq6w=";
+    hash = "sha256-CTDMoYGbVE4W0SDerW//aAdUVsySWFQycSy0I3a9+94=";
   };
 
   nativeBuildInputs = [ cmake ];

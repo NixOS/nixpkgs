@@ -1,16 +1,16 @@
 { lib
 , fetchFromGitLab
-, flutter
+, flutter2
 , olm
 , imagemagick
 , makeDesktopItem
 }:
 
-flutter.mkFlutterApp rec {
+flutter2.mkFlutterApp rec {
   pname = "fluffychat";
   version = "1.2.0";
 
-  vendorHash = "sha256-co+bnsVIyg42JpM9FimfGEjrd6A99GlBeow1Dgv7NBI=";
+  vendorHash = "sha256-1PDX023WXRmRe/b1L+6Du91BvGwYNp3YATqYSQdPrRY=";
 
   src = fetchFromGitLab {
     owner = "famedly";

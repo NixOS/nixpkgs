@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-TYPES="html pdf-a4 pdf-letter text"
-URL=http://docs.python.org/ftp/python/doc/VERSION/python-VERSION-docs-TYPE.tar.bz2
-VERSIONS=$(for major in 2 3; do curl https://docs.python.org/$major/archives/ 2>/dev/null | perl -l -n -e'/<a href="python-([23].[0-9].[0-9]+)-docs-html.tar.bz2/ && print $1' | tail -n 1; done)
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
+
+TYPES="html pdf-a4 pdf-letter text texinfo"
+URL=http://www.python.org/ftp/python/doc/VERSION/python-VERSION-docs-TYPE.tar.bz2
+VERSIONS=$(for major in 2 3; do curl https://docs.python.org/$major/archives/ 2>/dev/null | perl -l -n -e'/<a href="python-([23].[0-9]+.[0-9]+)-docs-html.tar.bz2/ && print $1' | tail -n 1; done)
 echo "Generating expressions for:
 ${VERSIONS}
 "
@@ -24,6 +26,15 @@ EOF
     for version in $VERSIONS; do
         major=$(echo -n ${version}| cut -d. -f1)
         minor=$(echo -n ${version}| cut -d. -f2)
+        if [ "${type}" = "texinfo" ]; then
+            if [ "${major}" = "2" ]; then
+                # Python 2 doesn't have pregenerated texinfos available
+                continue
+            fi
+            template=template-info.nix
+        else
+            template=template.nix
+        fi
         outfile=${major}.${minor}-${type}.nix
         hash=
         if [ -e ${outfile} ]; then
@@ -36,12 +47,13 @@ EOF
         url=$(echo -n $URL |sed -e "s,VERSION,${version},g" -e "s,TYPE,${type},")
         sha=$(nix-prefetch-url ${url} ${hash})
 
+
         sed -e "s,VERSION,${version}," \
             -e "s,MAJOR,${major}," \
             -e "s,MINOR,${minor}," \
             -e "s,TYPE,${type}," \
             -e "s,URL,${url}," \
-            -e "s,SHA,${sha}," < template.nix > ${outfile}
+            -e "s,SHA,${sha}," < ${template} > ${outfile}
 
         attrname=python${major}${minor}
         cat >>default.nix <<EOF

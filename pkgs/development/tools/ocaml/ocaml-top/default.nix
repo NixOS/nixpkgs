@@ -4,8 +4,6 @@ with ocamlPackages; buildDunePackage rec {
   pname = "ocaml-top";
   version = "1.2.0-rc";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocaml-top";
@@ -18,6 +16,11 @@ with ocamlPackages; buildDunePackage rec {
   configurePhase = ''
     export TERM=xterm
     ocp-build -init
+  '';
+
+  postPatch = ''
+    substituteInPlace src/completion.ml \
+      --replace 'LibIndex.load ' 'LibIndex.load ~qualify:false '
   '';
 
   meta = {

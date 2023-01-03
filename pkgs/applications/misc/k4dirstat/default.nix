@@ -1,7 +1,6 @@
 { mkDerivation
 , extra-cmake-modules
 , fetchFromGitHub
-, kdoctools
 , kiconthemes
 , kio
 , kjobwidgets

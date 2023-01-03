@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ozhXy7ftmGz1XvmF8AS1ifWJ3Q5hLSsysB8qLUP60n8=";
   };
 
+  patches = [ ./qobject.patch ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

@@ -4,30 +4,30 @@
 , isPy27
 , setuptools-scm
 , cython
+, entrypoints
 , numpy
 , msgpack
 , pytestCheckHook
 , python
-, gcc8
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.10.0";
+  version = "0.10.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LdQlZOd3KpOFkjsCo2Pjzt8FPOkwlKkGRIXn9ppvHJI=";
+    sha256 = "sha256-IoOMaz/Zhr2cckA5uIhwBX95DiKyDm4cu6oN4ULdWcQ=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
     cython
-    gcc8
   ];
 
   propagatedBuildInputs = [
+    entrypoints
     numpy
     msgpack
   ];

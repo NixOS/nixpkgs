@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PYTHON=python" "STATIC_BUILD=${toString stdenv.hostPlatform.isStatic}" ];
   installFlags = [ "INSTALL=install" "PREFIX=$(out)" "SETUP_PREFIX=$(out)" ];
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libfdt.dylib $out/lib/libfdt-${version}.dylib
+  '';
+
   # Checks are broken on aarch64 darwin
   # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
   doCheck = !stdenv.isDarwin;

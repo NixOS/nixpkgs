@@ -2,20 +2,22 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, libxcrypt
 , ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.24.00";
+  version = "6.24.06";
 
   src = fetchurl {
     url = "mirror://tcsh/${pname}-${version}.tar.gz";
-    hash = "sha256-YL4sUEvY8fpuQksZVkldfnztUqKslNtf0n9La/yPdPA=";
+    hash = "sha256-qM0M0d3JT4cGgcy9CaNREFDppx5f6ZorAHlB9eGyt6U=";
   };
 
   strictDeps = true;
   buildInputs = [
+    libxcrypt
     ncurses
   ];
 

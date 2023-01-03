@@ -12,9 +12,9 @@
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "5.0.4";
+  version = "6.0.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   format = "setuptools";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "flake8";
     rev = version;
-    hash = "sha256-Os8HIoM07/iOBMm+0WxdQj32pJJOJ8mkh+yLHpqkLXg=";
+    hash = "sha256-dN9LlLpQ/ZoVIFrAQ1NxMvsHqWsgdJVLUIAFwkheEL4=";
   };
 
   propagatedBuildInputs = [

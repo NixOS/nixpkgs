@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, nodejs-14_x, pandoc, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, pkgs, pandoc, CoreServices }:
 
 with lib;
 
@@ -9,16 +9,13 @@ let
   sourcePkg = fetchFromGitHub {
     owner = "pacien";
     repo = "ldgallery";
-    rev = "v2.0";
-    sha256 = "1a82wy6ns1434gdba2l04crvr5waf03y02bappcxqci2cfb1cznz";
+    rev = "v2.1";
+    sha256 = "sha256-i+Boo+Mpx/EL+LBajtOQJfpi4EF5AVtRnGtyXKD2n6A=";
   };
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
-
-    # some native node dependencies still require NodeJS 12 with Python 2
-    nodejs = nodejs-14_x;
   };
 
   nodePkg = nodePackages.package.override {
@@ -43,7 +40,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/ldgallery"
     cp -rp "lib/node_modules/ldgallery-viewer/dist" \
       "$out/share/ldgallery/viewer/"
-    cp -rp "lib/node_modules/ldgallery-viewer/examples" \
+    cp -rp "${sourcePkg}/example" \
       "$out/share/ldgallery/viewer/"
 
     mkdir -p "$out/share/man/man7"

@@ -13,7 +13,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorSha256 = "03q5a5lm8zj1523gxkbc0y6a3mjj1z2h7nrr2qcz8nlghvp4cfaz";
+  vendorSha256 = null; #vendorSha256 = "";
 
   patches = [
     (fetchpatch {
@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/Wraparound/wrap";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.austinbutler ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

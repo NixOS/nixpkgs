@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_BENCHMARKS=OFF"
   ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/libvalhalla.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";

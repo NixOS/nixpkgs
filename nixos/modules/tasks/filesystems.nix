@@ -33,7 +33,7 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
-        description = lib.mdDoc "Location of the mounted the file system.";
+        description = lib.mdDoc "Location of the mounted file system.";
       };
 
       device = mkOption {
@@ -54,7 +54,7 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = lib.mdDoc "Options used to mount the file system.";
-        type = types.listOf nonEmptyStr;
+        type = types.nonEmptyListOf nonEmptyStr;
       };
 
       depends = mkOption {
@@ -155,7 +155,7 @@ let
 
   makeFstabEntries =
     let
-      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
+      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "nfs4" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
@@ -167,7 +167,7 @@ let
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape (rootPrefix + fs.mountPoint)
       + " " + fs.fsType
-      + " " + builtins.concatStringsSep "," (fs.options ++ (extraOpts fs))
+      + " " + escape (builtins.concatStringsSep "," (fs.options ++ (extraOpts fs)))
       + " " + (optionalString (!excludeChecks)
         ("0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")))
       + "\n"

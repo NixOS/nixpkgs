@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4 }:
+{ lib, stdenv, fetchurl, m4, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch ];
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    fixDarwinDylibNames $out/lib/libmilter.dylib.1
+  '';
 
   meta = with lib; {
     description = "Sendmail Milter mail filtering API library";

@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "HckYYikXa9+p8l/Y+oLAoFi2pgwcyAfHUH7IqTwPHfg=";
   };
 
+  patches = lib.optionals stdenv.isDarwin [
+    # The flag breaks the build on darwin and doesn't seem necessary
+    ./no-version-script-ld-flag.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
@@ -46,8 +51,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/libgovirt";
     description = "GObject wrapper for the oVirt REST API";
-    maintainers = [ maintainers.amarshall ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ amarshall atemu ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21Plus;
   };
 }

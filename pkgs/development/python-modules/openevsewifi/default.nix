@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "openevsewifi";
-  version = "1.1.0";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "miniconfig";
     repo = "python-openevse-wifi";
     rev = "v${version}";
-    sha256 = "sha256-pNm+zupBGijCXIkdanMk7nE/+SFvSEFp9/Ht5OoxQrU=";
+    sha256 = "sha256-7+BC5WG0JoyHNjgsoJBQRVDpmdXMJCV4bMf6pIaS5qo=";
   };
 
   nativeBuildInputs = [

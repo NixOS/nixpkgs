@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "ptcollab";
-  version = "0.6.2.0";
+  version = "0.6.4.5";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
-    sha256 = "sha256-iSCuFCwOPrvff9N/a2J0kPrxikhyR7yYbD4VaU/TF4M=";
+    sha256 = "sha256-O7CNPMS0eRcqt2xAtyEFyLSV8U2xbxuV1DpBxZAFwQs=";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];
@@ -38,9 +38,7 @@ mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

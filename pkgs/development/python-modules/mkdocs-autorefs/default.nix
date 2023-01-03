@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , markdown
 , mkdocs
@@ -8,7 +8,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-autorefs";
   version = "0.4.1";
   format = "pyproject";

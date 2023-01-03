@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "mob";
-  version = "3.1.5";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FnAocL4Lbg/WxvLJuNR8FDBXvxqD2RMkkRvaCKvka8A=";
+    sha256 = "sha256-P3OxqJNhzO/aPC4Nj3vvBy5cxaahQv0IsjlIKya0p1w=";
   };
 
   vendorSha256 = null;

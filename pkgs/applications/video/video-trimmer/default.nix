@@ -2,66 +2,47 @@
 , lib
 , fetchFromGitLab
 , rustPlatform
-, gnome
 , pkg-config
 , meson
 , wrapGAppsHook4
-, appstream-glib
 , desktop-file-utils
 , blueprint-compiler
 , ninja
-, python3
-, gtk3-x11
-, glib
-, gobject-introspection
 , gtk4
 , libadwaita
 , gst_all_1
+, ffmpeg-full
 }:
 
 stdenv.mkDerivation rec {
   pname = "video-trimmer";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
-    repo = "video-trimmer";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D7wjJkdqqjjwwYEUZnNr7hFQK59wfTnaCLXCy+SK8Jo=";
+    hash = "sha256-0zhQoxzU1GikYP5OwqMl34RsnefJtdZox5EuTqOFnas=";
   };
+
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-cB5dVrEbISvHrOb87uVZSkT694VKtPtyk+c1tYNCTp0=";
+    hash = "sha256-kH9AfEskh7TTXF+PZwOZNWVJmnEeMJrSEEuDGyP5A5o=";
   };
-
-  patches = [
-    # The metainfo.xml file has a URL to a screenshot of the application,
-    # unaccessible in the build's sandbox. We don't need the screenshot, so
-    # it's best to remove it.
-    ./remove-screenshot-metainfo.diff
-  ];
-
-  postPatch = ''
-    patchShebangs \
-      build-aux/meson/postinstall.py \
-      build-aux/cargo.sh \
-      build-aux/dist-vendor.sh
-  '';
 
   nativeBuildInputs = [
     pkg-config
     meson
     wrapGAppsHook4
-    appstream-glib
     desktop-file-utils
     blueprint-compiler
     ninja
-    # For post-install.py
-    python3
-    gtk3-x11 # For gtk-update-icon-cache
-    glib # For glib-compile-schemas
+    # Present here in addition to buildInputs, because meson runs
+    # `gtk4-update-icon-cache` during installPhase, thanks to:
+    # https://gitlab.gnome.org/YaLTeR/video-trimmer/-/merge_requests/12
+    gtk4
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
@@ -69,19 +50,21 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    gobject-introspection
     gtk4
     libadwaita
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good # for scaletempo and webm
     gst_all_1.gst-plugins-bad
   ];
 
   doCheck = true;
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = pname;
-  };
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg-full ]}"
+    )
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";

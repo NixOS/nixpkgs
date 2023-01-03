@@ -53,6 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
+    "test_welcome"
+  ];
+
   postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
   '';

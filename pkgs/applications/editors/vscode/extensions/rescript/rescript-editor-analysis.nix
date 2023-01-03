@@ -1,21 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, bash, ocaml }:
+{ lib, stdenv, fetchFromGitHub, bash, ocaml, dune_3, version }:
 
 stdenv.mkDerivation {
   pname = "rescript-editor-analysis";
-  version = "1.1.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rescript-vscode";
-    rev = "8d0412a72307b220b7f5774e2612760a2d429059";
-    sha256 = "rHQtfuIiEWlSPuZvNpEafsvlXCj2Uv1YRR1IfvKfC2s=";
+    rev = version;
+    sha256 = "sha256-a8otK0BxZbl0nOp4QWQRkjb5fM85JA4nVkLuKAz71xU=";
   };
 
-  nativeBuildInputs = [ ocaml ];
+  nativeBuildInputs = [ ocaml dune_3 ];
 
+  # Skip testing phases because they need to download and install node modules
   postPatch = ''
     cd analysis
-    substituteInPlace Makefile --replace "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace Makefile \
+      --replace "build: build-analysis-binary build-reanalyze build-tests" "build: build-analysis-binary" \
+      --replace "test: test-analysis-binary test-reanalyze" "test: test-analysis-binary"
   '';
 
   installPhase = ''
@@ -25,7 +28,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Analysis binary for the ReScript VSCode plugin";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
-    maintainers = with maintainers; [ dlip ];
+    maintainers = with maintainers; [ dlip jayesh-bhoot ];
     license = licenses.mit;
   };
 }

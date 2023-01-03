@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.11.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LKnv/+6R/RaVdRYYdp+EqVQZtUn8SnYLCr5rqgGrq68=";
+    sha256 = "sha256-R7MhfAnVJJ2NK8zV408xAk8Q6aWn9Gw6DOmFFX26x1Q=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,11 +16,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-ao1WI8M3T/oSxYM0OrW1L3/JQf9S2C7AzE4HA6VIx5w=";
+  vendorSha256 = "sha256-DpPEDttQnRGHVNiIpMGj14KvZEGR0Y80sZOffjQ3UHk=";
 
   subPackages = [
     "cmd/cosign"
-    "cmd/sget"
   ];
 
   tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
@@ -45,10 +44,6 @@ buildGoModule rec {
       --bash <($out/bin/cosign completion bash) \
       --fish <($out/bin/cosign completion fish) \
       --zsh <($out/bin/cosign completion zsh)
-    installShellCompletion --cmd sget \
-      --bash <($out/bin/sget completion bash) \
-      --fish <($out/bin/sget completion fish) \
-      --zsh <($out/bin/sget completion zsh)
   '';
 
   meta = with lib; {

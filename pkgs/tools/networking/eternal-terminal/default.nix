@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optional stdenv.cc.isClang [
+  CXXFLAGS = lib.optionals stdenv.cc.isClang [
     "-std=c++17"
   ];
 

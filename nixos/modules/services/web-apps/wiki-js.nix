@@ -17,7 +17,7 @@ in {
       default = null;
       example = "/root/wiki-js.env";
       description = lib.mdDoc ''
-        Environment fiel to inject e.g. secrets into the configuration.
+        Environment file to inject e.g. secrets into the configuration.
       '';
     };
 
@@ -127,7 +127,7 @@ in {
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.wiki-js}/server";
+        ExecStart = "${pkgs.nodejs-16_x}/bin/node ${pkgs.wiki-js}/server";
       };
     };
   };

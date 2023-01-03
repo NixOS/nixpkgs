@@ -11,7 +11,7 @@
 , portaudio
 , speexdsp
 , hamlib
-, wxGTK31-gtk3
+, wxGTK32
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , AppKit
 , AVFoundation
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.3.1";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-LPCY5gPinxJkfPfumKggI/JQorcW+Qw/ZAP6XQmPkeA=";
+    hash = "sha256-zzzRePBc09fK1ILoDto3EVz7IxJKePi39E18BrQedE0=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     lpcnetfreedv
     speexdsp
     hamlib
-    wxGTK31-gtk3
+    wxGTK32
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
   ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -58,7 +58,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
+    "-DUNITTEST=ON"
   ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "-DAPPLE_OLD_XCODE"
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://freedv.org/";

@@ -79,7 +79,6 @@ in {
         "--verbose"
         "--debug"
         "--unsupported-gpu"
-        "--my-next-gpu-wont-be-nvidia"
       ];
       description = lib.mdDoc ''
         Command line arguments passed to launch Sway. Please DO NOT report

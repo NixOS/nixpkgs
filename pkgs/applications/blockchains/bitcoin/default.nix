@@ -25,23 +25,22 @@
 
 with lib;
 let
-  version = "23.0";
-  majorVersion = versions.major version;
   desktop = fetchurl {
-    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
+    # c2e5f3e is the last commit when the debian/bitcoin-qt.desktop file was changed
+    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/c2e5f3e20a8093ea02b73cbaf113bc0947b4140e/debian/bitcoin-qt.desktop";
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
   };
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  inherit version;
+  version = "24.0.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
-      "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "26748bf49d6d6b4014d0fedccac46bf2bcca42e9d34b3acfd9e3467c415acc05";
+    # hash retrieved from signed SHA256SUMS
+    sha256 = "12d4ad6dfab4767d460d73307e56d13c72997e114fad4f274650f95560f5f2ff";
   };
 
   nativeBuildInputs =
@@ -73,10 +72,6 @@ stdenv.mkDerivation rec {
     "--with-gui=qt5"
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
-
-  # fix "Killed: 9  test/test_bitcoin"
-  # https://github.com/NixOS/nixpkgs/issues/179474
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "fortify" "stackprotector" ];
 
   checkInputs = [ python3 ];
 

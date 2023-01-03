@@ -14,15 +14,18 @@ in
     "${lemmyNodeName}" = {
       services.lemmy = {
         enable = true;
-        jwtSecretPath = pkgs.writeTextFile {
-          name = "lemmy-secret";
-          text = "very-secret-password123";
-        };
         ui.port = uiPort;
+        database.createLocally = true;
         settings = {
           hostname = "http://${lemmyNodeName}";
           port = backendPort;
-          database.createLocally = true;
+          # Without setup, the /feeds/* and /nodeinfo/* API endpoints won't return 200
+          setup = {
+            admin_username = "mightyiam";
+            admin_password = "ThisIsWhatIUseEverywhereTryIt";
+            site_name = "Lemmy FTW";
+            admin_email = "mightyiam@example.com";
+          };
         };
         caddy.enable = true;
       };
@@ -76,7 +79,8 @@ in
         # No path can return 200 until after we upload an image to pict-rs
         assert_http_code("${lemmyNodeName}/pictrs/", 404)
 
-        # The paths `/feeds/*` and `/nodeinfo/*` are not tested because they seem to be misconfigured
+        assert_http_code("${lemmyNodeName}/feeds/all.xml", 200)
+        assert_http_code("${lemmyNodeName}/nodeinfo/2.0.json", 200)
 
         assert_http_code("${lemmyNodeName}/some-other-made-up-path/", 404, "-X POST")
         assert_http_code("${lemmyNodeName}/some-other-path", 404, "-H 'Accept: application/activity+json'")

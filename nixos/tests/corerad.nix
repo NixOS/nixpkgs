@@ -1,5 +1,6 @@
 import ./make-test-python.nix (
   {
+    name = "corerad";
     nodes = {
       router = {config, pkgs, ...}: {
         config = {

@@ -22,9 +22,9 @@ let
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
-        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
-      ) cfg.config));
+      configEnv = concatMapAttrs (name: value: optionalAttrs (value != null) {
+        ${nameToEnvVar name} = if isBool value then boolToString value else toString value;
+      }) cfg.config;
     in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
@@ -162,8 +162,8 @@ in {
 
     webVaultPackage = mkOption {
       type = package;
-      default = pkgs.vaultwarden-vault;
-      defaultText = literalExpression "pkgs.vaultwarden-vault";
+      default = pkgs.vaultwarden.webvault;
+      defaultText = literalExpression "pkgs.vaultwarden.webvault";
       description = lib.mdDoc "Web vault package to use.";
     };
   };
@@ -197,6 +197,7 @@ in {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         StateDirectory = "bitwarden_rs";
         StateDirectoryMode = "0700";
+        Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -209,6 +210,8 @@ in {
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
+      # if both services are started at the same time, vaultwarden fails with "database is locked"
+      before = [ "vaultwarden.service" ];
       serviceConfig = {
         SyslogIdentifier = "backup-vaultwarden";
         Type = "oneshot";
@@ -220,7 +223,7 @@ in {
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.service" ];
+      aliases = [ "backup-bitwarden_rs.timer" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";

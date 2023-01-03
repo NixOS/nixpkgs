@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub{
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NGrz08cpio745oVYtfNO1jpViYLaxZ9ZRXQdQG/f0oM=";
+    sha256 = "sha256-EKW/Cik4La66bI7EVbFnhivk1o0nIudJdBW7F5dbQaI=";
   };
 
-  cargoSha256 = "sha256-UQNe2O664PXvcSu6MI5F8RdYJJholjF9iO2I5OSMm2A=";
+  cargoSha256 = "sha256-zIrvBHPthPAzReojmBLb0odDQGcGwZS10rP15qb/zgs=";
 
   # Some tests need network
   checkFlags = [

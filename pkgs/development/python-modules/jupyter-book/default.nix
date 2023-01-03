@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "0.13.0";
+  version = "0.13.1";
 
   format = "flit";
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a956677e7bbee630dd66641c09a84091277887d6dcdd381a676f00fa9de2074";
+    sha256 = "sha256-RgpC/H4J3kbdZsKuwYu7EOKCqcgM2v4uUsm6PVFknQE=";
   };
 
   postPatch = ''

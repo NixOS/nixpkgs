@@ -1,17 +1,20 @@
-{ lib, stdenv, fetchurl, dune_2, ocamlPackages }:
+{ lib, stdenv, fetchFromGitLab, dune_2, ocamlPackages }:
 
 stdenv.mkDerivation {
 
   pname = "acgtk";
-  version = "1.5.2";
+  version = "1.5.4";
 
-  src = fetchurl {
-    url = "https://acg.loria.fr/software/acg-1.5.2-20201204.tar.gz";
-    sha256 = "09yax7dyw8kgwzlb69r9d20y7rrymzwi3bbq2dh0qdq01vjz2xwq";
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = "acg";
+    repo = "dev/acgtk";
+    rev = "8e630b6d91bad022bd1d1a075e7768034065c428";
+    sha256 = "sha256-W/BDhbng5iYuiB7desMKvRtDFdhoaxiJNvNvtbLlA6E=";
   };
 
   buildInputs = [ dune_2 ] ++ (with ocamlPackages; [
-    ocaml findlib ansiterminal cairo2 cmdliner fmt logs menhir menhirLib mtime yojson
+    ocaml findlib ansiterminal cairo2 cmdliner fmt logs menhir menhirLib mtime sedlex yojson
   ]);
 
   buildPhase = "dune build --profile=release";

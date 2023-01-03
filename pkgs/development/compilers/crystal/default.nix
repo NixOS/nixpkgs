@@ -225,7 +225,7 @@ let
       };
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
+        broken = stdenv.isDarwin && (isAarch64Darwin -> lib.versionOlder version "1.2.0");
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;

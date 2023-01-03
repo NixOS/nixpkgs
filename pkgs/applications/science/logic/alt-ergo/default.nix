@@ -21,6 +21,9 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
+  preBuild = ''
+    substituteInPlace src/lib/util/version.ml --replace 'version="dev"' 'version="${version}"'
+  '';
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
@@ -38,7 +41,7 @@ ocamlPackages.buildDunePackage {
   configureFlags = [ pname ];
 
   nativeBuildInputs = [ which ocamlPackages.menhir ];
-  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner_1_1 ];
+  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

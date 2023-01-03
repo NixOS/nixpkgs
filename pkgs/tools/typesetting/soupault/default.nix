@@ -1,11 +1,13 @@
 { lib
 , fetchFromGitea
 , ocamlPackages
+, soupault
+, testers
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "4.1.0";
+  version = "4.3.1";
 
   minimalOCamlVersion = "4.08";
 
@@ -14,7 +16,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fYobjkruzuUEVuIoH8mkaFdJvYp/I/aRQzgJXnQwX4U=";
+    sha256 = "sha256-P8PGSJ7TOlnMoTcE5ZXqc7pJe4l+zRhBh0A/2iIJLQI=";
   };
 
   buildInputs = with ocamlPackages; [
@@ -36,6 +38,11 @@ ocamlPackages.buildDunePackage rec {
     tsort
     yaml
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = soupault;
+    command = "soupault --version-number";
+  };
 
   meta = {
     description = "A tool that helps you create and manage static websites";

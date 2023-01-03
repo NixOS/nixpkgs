@@ -97,10 +97,15 @@ let
     in
       map (x: "${mountPoint x}.mount") (getPoolFilesystems pool);
 
-  getKeyLocations = pool:
-    if isBool cfgZfs.requestEncryptionCredentials
-    then "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}"
-    else "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}";
+  getKeyLocations = pool: if isBool cfgZfs.requestEncryptionCredentials then {
+    hasKeys = cfgZfs.requestEncryptionCredentials;
+    command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}";
+  } else let
+    keys = filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials;
+  in {
+    hasKeys = keys != [];
+    command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString keys}";
+  };
 
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
@@ -124,7 +129,9 @@ let
         RemainAfterExit = true;
       };
       environment.ZFS_FORCE = optionalString force "-f";
-      script = (importLib {
+      script = let
+        keyLocations = getKeyLocations pool;
+      in (importLib {
         # See comments at importLib definition.
         zpoolCmd = "${cfgZfs.package}/sbin/zpool";
         awkCmd = "${pkgs.gawk}/bin/awk";
@@ -139,10 +146,8 @@ let
         done
         poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
         if poolImported "${pool}"; then
-          ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
-                            then cfgZfs.requestEncryptionCredentials
-                            else cfgZfs.requestEncryptionCredentials != []) ''
-            ${getKeyLocations pool} | while IFS=$'\t' read ds kl ks; do
+          ${optionalString keyLocations.hasKeys ''
+            ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
               {
               if [[ "$ks" != unavailable ]]; then
                 continue
@@ -224,6 +229,15 @@ in
           more likely to hit an undiscovered bug compared to running a released
           version of ZFS on Linux.
           '';
+      };
+
+      allowHibernation = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Allow hibernation support, this may be a unsafe option depending on your
+          setup. Make sure to NOT use Swap on ZFS.
+        '';
       };
 
       extraPools = mkOption {
@@ -494,10 +508,18 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
+        {
+          assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
+          message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
+        }
       ];
 
       boot = {
         kernelModules = [ "zfs" ];
+        # https://github.com/openzfs/zfs/issues/260
+        # https://github.com/openzfs/zfs/issues/12842
+        # https://github.com/NixOS/nixpkgs/issues/106093
+        kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
           (if config.boot.zfs.enableUnstable then
@@ -548,7 +570,7 @@ in
               ''
               else concatMapStrings (fs: ''
                 zfs load-key -- ${escapeShellArg fs}
-              '') cfgZfs.requestEncryptionCredentials}
+              '') (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}
         '') rootPools));
 
         # Systemd in stage 1

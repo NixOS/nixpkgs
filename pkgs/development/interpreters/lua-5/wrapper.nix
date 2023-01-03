@@ -60,6 +60,8 @@ let
     passthru = lua.passthru // {
       interpreter = "${env}/bin/lua";
       inherit lua;
+      luaPath = lua.pkgs.lib.genLuaPathAbsStr env;
+      luaCpath = lua.pkgs.lib.genLuaCPathAbsStr env;
       env = stdenv.mkDerivation {
         name = "interactive-${lua.name}-environment";
         nativeBuildInputs = [ env ];

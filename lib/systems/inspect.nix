@@ -48,6 +48,7 @@ rec {
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
+    isILP32        = map (a: { abi = { abi = a; }; }) [ "n32" "ilp32" "x32" ];
     isBigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     isLittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
@@ -59,7 +60,7 @@ rec {
     isiOS          = { kernel = kernels.ios; };
     isLinux        = { kernel = kernels.linux; };
     isSunOS        = { kernel = kernels.solaris; };
-    isFreeBSD      = { kernel = kernels.freebsd; };
+    isFreeBSD      = { kernel = { name = "freebsd"; }; };
     isNetBSD       = { kernel = kernels.netbsd; };
     isOpenBSD      = { kernel = kernels.openbsd; };
     isWindows      = { kernel = kernels.windows; };

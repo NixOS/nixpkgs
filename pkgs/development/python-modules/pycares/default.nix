@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c1tPdf0PWVxOkYTaGM2Hc39GvIGmTqQfTtzitraNRtI=";
+    sha256 = "sha256-4fV6gAQ3AIBpS9b7lpof/JFxpZxoJNVPeRwbLk0pg4U=";
   };
 
   buildInputs = [

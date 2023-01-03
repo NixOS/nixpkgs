@@ -16,10 +16,9 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+# broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+# broken for the armv7l builder
+, enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
 }:
 
@@ -149,6 +148,13 @@ in stdenv.mkDerivation (rec {
         --replace 'Starting llvm::' 'Starting {{.*}}' \
         --replace 'Finished llvm::' 'Finished {{.*}}'
     done
+  '';
+
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation

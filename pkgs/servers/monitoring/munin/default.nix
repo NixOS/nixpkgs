@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.69";
+  version = "2.0.71";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "sha256-p273O5JLFX1dA2caV3lVVL9YNTcGMSrC7DWieUfUmqI=";
+    sha256 = "sha256-RIWZpvC4bVrm5DXnWyBw7/57oZR+Z3m+NfjmSjLSKi0=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetSSLeay
     perlPackages.NetServer
     perlPackages.LogLog4perl
-    perlPackages.IOSocketInet6
+    perlPackages.IOSocketINET6
     perlPackages.Socket6
     perlPackages.URI
     perlPackages.DBFile
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketINET6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils DBDPg LWP rrdtool
                 ]}"

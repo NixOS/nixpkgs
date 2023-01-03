@@ -266,7 +266,7 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubernetes}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 
@@ -323,7 +323,7 @@ in
           systemctl restart flannel
         ''}
 
-        echo "Node joined succesfully"
+        echo "Node joined successfully"
       '')];
 
       # isolate etcd on loopback at the master node

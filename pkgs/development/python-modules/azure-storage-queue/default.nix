@@ -3,20 +3,23 @@
 , fetchPypi
 , azure-common
 , azure-storage-common
+, msrest
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "2.1.0";
+  version = "12.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14e82d3691f1bbd23f2aff143a6c17af3c297164f6e597d223b65a67051ba278";
+    sha256 = "sha256-OzdEJK9y0y2v+Lr5tkYwB0w6iz/VMypFIWs7yWvHsXI=";
+    extension = "zip";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-storage-common
+    msrest
   ];
 
   # has no tests

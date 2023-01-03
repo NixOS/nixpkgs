@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    autoreconfHook libX11
+    libX11
     pam libgcrypt libXrender imlib2
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Simple screen lock application for X server";
     longDescription = ''
       alock locks the X server until the user enters a password
-      via the keyboard. If the authentification was successful
+      via the keyboard. If the authentication was successful
       the X server is unlocked and the user can continue to work.
 
       alock does not provide any fancy animations like xlock or

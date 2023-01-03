@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "C++ library for zkSNARKs";
     homepage = "https://github.com/scipr-lab/libsnark";
     license = licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

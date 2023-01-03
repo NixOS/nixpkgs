@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, ocamlPackages, gnome2, pkg-config, makeWrapper, glib
-, libtool, libpng, bison, expat, fontconfig, gd, pango, libjpeg, libwebp, xlibsWrapper, libXaw
+, libtool, libpng, bison, expat, fontconfig, gd, pango, libjpeg, libwebp, libX11, libXaw
 }:
 # We need an old version of Graphviz for format compatibility reasons.
 # This version is vulnerable, but monotone-viz will never feed it bad input.
 let graphviz_2_0 = import ./graphviz-2.0.nix {
-      inherit lib stdenv fetchurl pkg-config xlibsWrapper libpng libjpeg expat libXaw
+      inherit lib stdenv fetchurl pkg-config libX11 libpng libjpeg expat libXaw
         bison libtool fontconfig pango gd libwebp;
     }; in
 let inherit (gnome2) libgnomecanvas; in

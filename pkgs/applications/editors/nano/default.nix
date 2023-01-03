@@ -16,11 +16,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "6.4";
+  version = "7.1";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "QZmujKeKd5beVt4aQbgh3EeRLAMH6YFrVswxffNGYcA=";
+    sha256 = "V7p1Hpt1GfD23e5QUgLjh8dd3kQMH3qhuTEMw4FAaDY=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;

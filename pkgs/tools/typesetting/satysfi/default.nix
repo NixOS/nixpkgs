@@ -17,6 +17,7 @@ let
       rev = "v0.3.7+satysfi";
       sha256 = "0y8s0ij1vp1s4h5y1hn3ns76fzki2ba5ysqdib33akdav9krbj8p";
     };
+    propagatedBuildInputs = o.propagatedBuildInputs ++ [ ocamlPackages.result ];
   });
   yojson-with-position = ocamlPackages.buildDunePackage {
     pname = "yojson-with-position";
@@ -35,12 +36,12 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "satysfi";
-    version = "0.0.7";
+    version = "0.0.8";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
       rev = "v${version}";
-      sha256 = "sha256-BmnOIplC24JMb0LSgGPh/j01rXvtl0wni3Chb347eR8=";
+      sha256 = "sha256-cVGe1N3qMlEGAE/jPUji/X3zlijadayka1OL6iFioY4=";
       fetchSubmodules = true;
     };
 

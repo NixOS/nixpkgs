@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, sqlcipher }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, sqlcipher }:
 
 buildPythonPackage rec {
   pname = "pysqlcipher3";
-  version = "1.0.4";
+  version = "1.1.0";
 
-  disabled = pythonAtLeast "3.9";
+  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "75d6b9d023d7ab76c841f97fd9d108d87516e281268e61518411d08cb7062663";
+    sha256 = "sha256-Lo75+2y2jZJrQZj9xrJvVRGWmOo8fI5iXzEURn00Y3E=";
   };
 
   buildInputs = [ sqlcipher ];

@@ -4,6 +4,7 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
@@ -31,6 +32,9 @@ buildPythonPackage rec {
     pytest
   ];
 
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     pytestCheckHook

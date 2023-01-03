@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src =
     let
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       sha256 = selectSystem {
-        x86_64-linux = "sha256-JAwJOu90mrZhWhxQvfRlaWk7dYTC21Z5KQlKWCDJMQg=";
-        aarch64-linux = "sha256-nUIWMt5HPexIlQu5n6LFt1I0WogEdnEhLav6UuLRBXo=";
-        x86_64-darwin = "sha256-rZ2WqbcdcWZ7WXfYowmLZPer3pm74ssK15DEPRA9pPw=";
-        aarch64-darwin = "sha256-zpxdm1Ix+AUl2YCfgI7U9HC01tXtMEV4T/jSDNGDaq8=";
+        x86_64-linux = "sha256-Dje9uSdE0KBX6bqx4nOtkzeeZvlHFqIlETAEbnw2tp0=";
+        aarch64-linux = "sha256-0eSqfTwViFdDEoQ5kKjmJI+3jfmk1ZwJQh/UIM7LsA4=";
+        x86_64-darwin = "sha256-9cxBdp4BxwtfSsvRr5ZSCeMWvttf1r8WaNV38DG0Iog=";
+        aarch64-darwin = "sha256-04Jhvu742jx3yNCLVa1rbgS1A+Zb7CCuYkQ5OyQbVc0=";
       };
     in
     fetchzip {

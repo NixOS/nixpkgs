@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "boltztrap2";
-  version = "22.6.1";
+  version = "22.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BoltzTraP2";
     inherit version;
-    hash = "sha256-zEKRsNg5P+KKQCeB49TiiSXRmusvr1zwssHhppZdkfA=";
+    hash = "sha256-gzjWAMUJcF5AyDS1Qx7opVbYewaqGgmFMDGWCh/2Wz4=";
   };
 
   dontUseCmakeConfigure = true;

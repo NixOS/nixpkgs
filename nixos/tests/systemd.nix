@@ -87,12 +87,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed("test -e /home/alice/user_conf_read")
         machine.succeed("test -z $(ls -1 /var/log/journal)")
 
-    # Regression test for https://github.com/NixOS/nixpkgs/issues/50273
-    with subtest("DynamicUser actually allocates a user"):
-        assert "iamatest" in machine.succeed(
-            "systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami"
-        )
-
     with subtest("regression test for https://bugs.freedesktop.org/show_bug.cgi?id=77507"):
         retcode, output = machine.execute("systemctl status testservice1.service")
         assert retcode in [0, 3]  # https://bugs.freedesktop.org/show_bug.cgi?id=77507

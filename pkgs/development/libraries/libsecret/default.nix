@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
 
     runHook postCheck

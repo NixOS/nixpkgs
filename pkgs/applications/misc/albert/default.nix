@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "albert";
-  version = "0.17.3";
+  version = "0.17.6";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${version}";
-    sha256 = "sha256-UIG6yLkIcdf5IszhNPwkBcSfZe4/CyI5shK/QPOmpPE=";
+    sha256 = "sha256-nbnywrsKvFG8AkayjnylOKSnn7rRWgNv5zE9DDeOmLw=";
     fetchSubmodules = true;
   };
 
@@ -55,9 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A fast and flexible keyboard launcher";

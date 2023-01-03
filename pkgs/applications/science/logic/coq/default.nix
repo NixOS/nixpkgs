@@ -7,7 +7,9 @@
 
 { lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
-, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12, ncurses
+, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
+, ocamlPackages_4_14
+, ncurses
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
 , glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
@@ -49,7 +51,8 @@ let
    "8.15.0".sha256     = "sha256:0q7jl3bn0d1v9cwdkxykw4frccww6wbh1p8hdrfqw489mkxmh5jh";
    "8.15.1".sha256     = "sha256:1janvmnk3czimp0j5qmnfwx6509vhpjc2q7lcza1bc6dm6kn8n42";
    "8.15.2".sha256     = "sha256:0qibbvzrhsvs6w3zpkhyclndp29jnr6bs9i5skjlpp431jdjjfqd";
-   "8.16+rc1".sha256   = "sha256-hmZQ6rFIOZJwnAh23nKScJ3Nn+xqDRn5q2Tn82igpYE=";
+   "8.16.0".sha256   = "sha256-3V6kL9j2rn5FHBxq1mtmWWTZS9X5cAyvtUsS6DaM+is=";
+   "8.16.1".sha256   = "sha256-n7830+zfZeyYHEOGdUo57bH6bb2/SZs8zv8xJhV+iAc=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -68,11 +71,12 @@ let
   '' else "";
   ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
     else with versions; switch coq-version [
-      { case = range "8.14" "8.14"; out = ocamlPackages_4_12; }
+      { case = range "8.16" "8.17"; out = ocamlPackages_4_14; }
+      { case = range "8.14" "8.15"; out = ocamlPackages_4_12; }
       { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
-    ] ocamlPackages_4_12;
+    ] ocamlPackages_4_14;
   ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
     ++ optional (coqAtLeast "8.14") dune_2;
   ocamlPropagatedBuildInputs = [ ]
@@ -85,7 +89,7 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlNativeNuildInputs;
+    inherit ocamlPackages ocamlNativeBuildInputs;
     inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;

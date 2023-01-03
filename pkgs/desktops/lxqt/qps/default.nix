@@ -6,7 +6,7 @@
 , liblxqt
 , libqtxdg
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 , qtbase
 , qttools
 , qtx11extras
@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "qps";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "hkcl9bBQP994TGr4CQQlRZR88IZiRdcbUNOXXf4kXdg=";
+    sha256 = "A0JIZNNv/6lUlKnEp8MbBe+3lIQzyjqSPjlYcwbpENk=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/qps";

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rfcat";
-  version = "1.9.6";
+  version = "1.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "atlas0fd00m";
     repo = "rfcat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
+    hash = "sha256-VOLA/ZZLazW7u0VYkAHzDh4aaHGr3u09bKVOkhYk6Fk=";
   };
 
   propagatedBuildInputs = [

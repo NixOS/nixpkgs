@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , appstream
 , desktop-file-utils
@@ -35,6 +36,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
   };
+
+  patches = [
+    # Fix drag and drop of accented text and between tabs
+    # https://github.com/elementary/code/pull/1194
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/1ed7b590768ea9cb5b4658e27d9dc7ac224442ae.patch";
+      sha256 = "sha256-VrYcEbkzQKi5gFB/Vw/0NITZvSXKXfuEv2R3m0VALVM=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -75,9 +85,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

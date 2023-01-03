@@ -9,5 +9,5 @@ makeInstalledTest {
     virtualisation.memorySize = if pkgs.stdenv.isi686 then 2047 else 4096;
   };
 
-  testRunnerFlags = "--timeout 1800";
+  testRunnerFlags = [ "--timeout" "1800" ];
 }

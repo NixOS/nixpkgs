@@ -4,7 +4,9 @@ let
   generic = {
     version, sha256,
     eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
+  }: let
+    major = lib.versions.major version;
+  in stdenv.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
@@ -12,6 +14,8 @@ let
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
+
+    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
 
     passthru.tests = nixosTests.nextcloud;
 
@@ -33,26 +37,26 @@ let
     };
   };
 in {
-  nextcloud22 = throw ''
-    Nextcloud v22 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2022-07. Please upgrade to at least Nextcloud v23 by declaring
+  nextcloud23 = throw ''
+    Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud23;
+        services.nextcloud.package = pkgs.nextcloud24;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 21 on NixOS 21.11 you have to upgrade to Nextcloud 22
-    first on 21.11 because Nextcloud doesn't support upgrades accross multiple major versions!
+    WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
+    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
-  nextcloud23 = generic {
-    version = "23.0.8";
-    sha256 = "ac3d042253399be25a2aa01c799dec75a1459b6ae453874414f6528cc2ee5061";
+  nextcloud24 = generic {
+    version = "24.0.8";
+    sha256 = "a5c3a070516debba991355e6b737b261396b15b9f2cd939617611ab0bed99299";
   };
 
-  nextcloud24 = generic {
-    version = "24.0.4";
-    sha256 = "d107426f8e1c193db882a04c844f9bc7e7eeb7c21e46c46197e5154d6d6ac28e";
+  nextcloud25 = generic {
+    version = "25.0.2";
+    sha256 = "d6ab40faa108937bda42395f570ff111f4c97343b55be1420024da3177e37d59";
   };
 
   # tip: get the sha with:

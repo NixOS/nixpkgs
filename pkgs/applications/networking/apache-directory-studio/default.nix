@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret }:
+{ lib, stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "apache-directory-studio";
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$dest/ApacheDirectoryStudio" \
         "$out/bin/ApacheDirectoryStudio" \
-        --prefix PATH : "${jdk}/bin"
+        --prefix PATH : "${jdk}/bin" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])}
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
   '';

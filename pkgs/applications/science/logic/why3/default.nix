@@ -1,13 +1,13 @@
-{ callPackage, fetchurl, fetchpatch, lib, stdenv
+{ callPackage, fetchurl, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256:0qjh49pyqmg3xi09fn4lyzz23i6h18y9sgc8ayscvx3bwr3vcqhr";
+    sha256 = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
   };
 
   buildInputs = with ocamlPackages; [

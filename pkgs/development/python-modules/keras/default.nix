@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "wheel";
 
   src = fetchPypi {
     inherit format pname version;
-    sha256 = "sha256-VZESVvic/JNDyfvkth7EWi0z2Jcpy+GrncrPiwe4tqs=";
+    sha256 = "sha256-JqbiwlIudGjd6iJxCpmzKQSTdo/AijnnXRFzoONFL98=";
   };
 
   checkInputs = [

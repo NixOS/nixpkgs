@@ -109,6 +109,37 @@ in
       '';
     };
 
+    autoPrune = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to periodically prune Podman resources. If enabled, a
+          systemd timer will run `podman system prune -f`
+          as specified by the `dates` option.
+        '';
+      };
+
+      flags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--all" ];
+        description = lib.mdDoc ''
+          Any additional flags passed to {command}`podman system prune`.
+        '';
+      };
+
+      dates = mkOption {
+        default = "weekly";
+        type = types.str;
+        description = lib.mdDoc ''
+          Specification (in the format described by
+          {manpage}`systemd.time(7)`) of the time at
+          which the prune will occur.
+        '';
+      };
+    };
+
     package = lib.mkOption {
       type = types.package;
       default = podmanPackage;
@@ -149,6 +180,23 @@ in
 
       systemd.services.podman.serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
+
+      systemd.services.podman-prune = {
+        description = "Prune podman resources";
+
+        restartIfChanged = false;
+        unitConfig.X-StopOnRemoval = false;
+
+        serviceConfig.Type = "oneshot";
+
+        script = ''
+          ${cfg.package}/bin/podman system prune -f ${toString cfg.autoPrune.flags}
+        '';
+
+        startAt = lib.optional cfg.autoPrune.enable cfg.autoPrune.dates;
+        after = [ "podman.service" ];
+        requires = [ "podman.service" ];
       };
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];

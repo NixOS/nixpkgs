@@ -67,7 +67,7 @@ rec {
     #
     # Note:
     #
-    # - The succesors of `skylake` (`cannonlake`, `icelake`, etc) use `avx512`
+    # - The successors of `skylake` (`cannonlake`, `icelake`, etc) use `avx512`
     #   which no current AMD Zen michroarch support.
     # - `znver1` uses `ABM`, `CLZERO`, `CX16`, `MWAITX`, and `SSE4A` which no
     #   current Intel microarch support.

@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "8.3";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-PW6ULiSGNznKS6zw4aa27QSSgbew7TTLCqwNm9bH2LY=";
+    hash = "sha256-SJKDIs6bL8NroSieNeSYBv+8JTGgFdhP4WYKUWYhpbk=";
   };
 
   nativeBuildInputs = [

@@ -60,11 +60,8 @@ in {
 
     hostname = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "bookstack.example.com";
       description = lib.mdDoc ''
         The hostname to serve BookStack on.
@@ -362,7 +359,7 @@ in {
     };
 
     systemd.services.bookstack-setup = {
-      description = "Preperation tasks for BookStack";
+      description = "Preparation tasks for BookStack";
       before = [ "phpfpm-bookstack.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
@@ -372,7 +369,7 @@ in {
         User = user;
         WorkingDirectory = "${bookstack}";
         RuntimeDirectory = "bookstack/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
       };
       path = [ pkgs.replace-secret ];
       script =

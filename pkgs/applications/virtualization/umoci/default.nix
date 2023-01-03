@@ -26,9 +26,7 @@ buildGoModule rec {
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
   postInstall = ''
-    substituteInPlace Makefile --replace \
-      '$(shell which bash)' '${lib.getBin bash}/bin/bash'
-    make docs
+    make docs SHELL="$SHELL"
     installManPage doc/man/*.[1-9]
   '';
 

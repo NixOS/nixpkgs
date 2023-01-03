@@ -30,8 +30,6 @@ in stdenv.mkDerivation rec {
                            else  [ (qtEnv "qvtk-qt-env" [ qtx11extras qttools qtdeclarative ]) ])
     ++ optionals stdenv.isLinux [
       libGLU
-      libGL
-      libX11
       xorgproto
       libXt
     ] ++ optionals stdenv.isDarwin [
@@ -48,10 +46,12 @@ in stdenv.mkDerivation rec {
       ImageIO
       OpenGL
       GLUT
-    ] ++ optional enablePython [
+    ] ++ optionals enablePython [
       pythonInterpreter
     ];
-  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];
+  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ]
+    ++ optionals stdenv.isLinux [ libX11 libGL ];
+    # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
   patches = map fetchpatch patchesToFetch;
 
@@ -96,6 +96,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
     # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
-    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "8");
   };
 }

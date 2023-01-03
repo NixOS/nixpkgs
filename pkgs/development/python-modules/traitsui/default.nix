@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "traitsui";
-  version = "7.4.0";
+  version = "7.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JTNa/+4jQtR+NcJd9ed4XSKlM1hP4b4JQ8y6Rdwa5Yk=";
+    hash = "sha256-IEcb8znD7ed/BrL6l76Qrj0Wbr78zBZ7y9oifHWxZj8=";
   };
 
   propagatedBuildInputs = [

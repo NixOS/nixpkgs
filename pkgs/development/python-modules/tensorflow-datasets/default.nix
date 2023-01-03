@@ -37,6 +37,7 @@
 , termcolor
 , tifffile
 , tqdm
+, zarr
 }:
 
 buildPythonPackage rec {
@@ -99,6 +100,7 @@ buildPythonPackage rec {
     scipy
     tensorflow
     tifffile
+    zarr
   ];
 
   disabledTestPaths = [
@@ -123,6 +125,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/image/lsun_test.py"
 
     # Requires `envlogger` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
     "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`

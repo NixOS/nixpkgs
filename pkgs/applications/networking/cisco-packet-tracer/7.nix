@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildFHSUserEnvBubblewrap
-, callPackage
 , copyDesktopItems
 , dpkg
 , lndir

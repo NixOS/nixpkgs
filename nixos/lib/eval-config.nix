@@ -17,6 +17,8 @@ evalConfigArgs@
   # be set modularly anyway.
   pkgs ? null
 , # !!! what do we gain by making this configurable?
+  #     we can add modules that are included in specialisations, regardless
+  #     of inheritParentConfig.
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}

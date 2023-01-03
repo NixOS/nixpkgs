@@ -11,6 +11,15 @@ buildDotnetModule rec {
     sha256 = "S/3CjXB/fBDzxLuQBQB3CKgEkmzUA8ZzzvzXLN8hfBU=";
   };
 
+  postPatch = ''
+    # this fixes NU1605 errors
+    substituteInPlace \
+      src/BaGet.Azure/BaGet.Azure.csproj \
+      --replace \
+      'Include="Microsoft.Azure.Cosmos.Table" Version="1.0.0"' \
+      'Include="Microsoft.Azure.Cosmos.Table" Version="2.0.0-preview"'
+  '';
+
   projectFile = "src/BaGet/BaGet.csproj";
   nugetDeps = ./deps.nix;
 
@@ -23,7 +32,6 @@ buildDotnetModule rec {
     description = "A lightweight NuGet and symbol server";
     license = licenses.mit;
     homepage = "https://loic-sharma.github.io/BaGet/";
-    platforms = platforms.all;
     maintainers = [ maintainers.abbradar ];
   };
 }

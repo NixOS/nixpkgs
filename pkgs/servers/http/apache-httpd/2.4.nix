@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ perl ] ++
+  buildInputs = [ perl libxcrypt ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag

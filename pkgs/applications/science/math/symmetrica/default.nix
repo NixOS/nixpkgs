@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , autoreconfHook
 }:
 stdenv.mkDerivation rec {

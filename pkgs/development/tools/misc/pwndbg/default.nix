@@ -49,5 +49,7 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

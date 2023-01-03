@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.5.0";
+  version = "0.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,9 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vincegio";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ihNy5Rme20fCO1tG7aqdVFhSF3DI9hAlge54+/nNGLs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5moJ/Pu1Ixy4s7mCbjxQYROafjHVDM2cmpg0imDznl0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'bleak-retry-connector = "^0.15.1"' 'bleak = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core

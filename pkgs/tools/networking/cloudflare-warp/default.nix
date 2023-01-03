@@ -1,23 +1,29 @@
-{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook, dbus }:
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, dbus
+, nftables
+}:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2022.02.24";
+  version = "2022.8.936";
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2022_2_288_1_amd64_a0be7b47b3.deb";
-    sha256 = "sha256-gBXF0EfFMT6BC6ts/6PQYJH3AAQSDsFoZGK3RZIqmOA=";
+    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2022_8_936_1_amd64_1923bb9dba.deb";
+    sha256 = "sha256-ZuJyMl6g8KDwxc9UipH63naJ4dl/84Vhk7ini/VNPno=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    makeWrapper
   ];
 
   buildInputs = [ dbus ];
-
-  dontBuild = true;
-  dontConfigure = true;
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
@@ -27,15 +33,19 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mv usr $out
-    mv lib $out
     mv bin $out
+    mv etc $out
+    mv lib/systemd/system $out/lib/systemd/
+    substituteInPlace $out/lib/systemd/system/warp-svc.service \
+      --replace "ExecStart=" "ExecStart=$out"
+    substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
+      --replace "ExecStart=" "ExecStart=$out"
 
     runHook postInstall
   '';
 
   postInstall = ''
-    substituteInPlace $out/lib/systemd/system/warp-svc.service \
-      --replace "ExecStart=" "ExecStart=$out"
+    wrapProgram $out/bin/warp-svc --prefix PATH : ${lib.makeBinPath [ nftables ]}
   '';
 
   meta = with lib; {

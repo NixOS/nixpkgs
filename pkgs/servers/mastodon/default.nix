@@ -16,11 +16,6 @@ stdenv.mkDerivation rec {
   # Putting the callPackage up in the arguments list also does not work.
   src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-2NSibx026ENAqphGGhNoLwUldWTEPbDBrYu3hgeRlnM=";
-  };
-
   mastodon-gems = bundlerEnv {
     name = "${pname}-gems-${version}";
     inherit version;
@@ -45,6 +40,11 @@ stdenv.mkDerivation rec {
     pname = "${pname}-modules";
     inherit src version;
 
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      sha256 = "sha256-fuU92fydoazSXBHwA+DG//gRgWVYQ1M3m2oNS2iwv4I=";
+    };
+
     nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
 
     RAILS_ENV = "production";
@@ -52,8 +52,11 @@ stdenv.mkDerivation rec {
 
     buildPhase = ''
       export HOME=$PWD
+      # This option is needed for openssl-3 compatibility
+      # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
+      export NODE_OPTIONS=--openssl-legacy-provider
       fixup_yarn_lock ~/yarn.lock
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
       patchShebangs ~/bin
@@ -118,6 +121,6 @@ stdenv.mkDerivation rec {
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ happy-river erictapen izorkin ];
+    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
   };
 }

@@ -16,11 +16,12 @@ in
         group.
       '';
     };
+    package = mkPackageOption pkgs "flashrom" { };
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.flashrom ];
-    environment.systemPackages = [ pkgs.flashrom ];
+    services.udev.packages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
     users.groups.flashrom = { };
   };
 }

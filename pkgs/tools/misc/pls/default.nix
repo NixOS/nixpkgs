@@ -26,6 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich = "^12.5.1"' 'rich = "*"' \
+  '';
+
   pytestFlagsArray = [ "tests/" "--ignore=tests/e2e" ];
 
   pythonImportsCheck = [ "pls" ];

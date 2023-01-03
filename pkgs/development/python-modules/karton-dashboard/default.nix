@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , flask
 , karton-core
 , mistune
@@ -20,8 +21,16 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-XMyQ0mRF4y61hqlqdxC+He+697P1URfOXQUMnV0pT7o=";
+    hash = "sha256-XMyQ0mRF4y61hqlqdxC+He+697P1URfOXQUMnV0pT7o=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update-mistune.patch";
+      url = "https://github.com/CERT-Polska/karton-dashboard/commit/d0a2a1ffd21e9066acca77434acaff7b20e460d0.patch";
+      hash = "sha256-LOqeLWoCXmVTthruBiQUYR03yPOPHhgYF/fJMhhT6Wo=";
+    })
+  ];
 
   propagatedBuildInputs = [
     flask

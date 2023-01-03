@@ -66,8 +66,8 @@ let
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl gmp ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
-      ++ lib.optional withSDL [ SDL2.dev ];
+      ++ lib.optionals withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
+      ++ lib.optionals withSDL [ SDL2.dev ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 
@@ -83,14 +83,14 @@ let
     '';
 
     buildPhase = (lib.optionalString withDedicated ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sv-${target}
+      make -j $NIX_BUILD_CORES sv-${target}
     '' + lib.optionalString withGLX ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cl-${target}
+      make -j $NIX_BUILD_CORES cl-${target}
     '' + lib.optionalString withSDL ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sdl-${target}
+      make -j $NIX_BUILD_CORES sdl-${target}
     '') + ''
       pushd ../d0_blind_id
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+      make -j $NIX_BUILD_CORES
       popd
     '';
 

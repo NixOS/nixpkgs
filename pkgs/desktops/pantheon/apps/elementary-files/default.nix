@@ -29,25 +29,25 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.1.4";
+  version = "6.2.1";
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Fix terminal critical warnings and possible crash when removing bookmark
-    # https://github.com/elementary/files/pull/2062
-    (fetchpatch {
-      url = "https://github.com/elementary/files/commit/daa5ab244b45aafdd7be49eb0bd6f052ded5b5a7.patch";
-      sha256 = "sha256-crGvbo9Ye9656cOy6YqNreMLE2pEMO0Rg8oz81OfJkw=";
-    })
-  ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-3j0b+hExUe6OBmEHQVmd2uBkbOGxMdpgDmymuCiph80=";
+    sha256 = "sha256-pJFeMG2aGaMkS00fSoRlMR2YSg5YzwqwaQT8G7Gk5S4=";
   };
+
+  patches = [
+    # Ensure special user directory icon used for bookmark
+    # https://github.com/elementary/files/pull/2106
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/00b1c2a975aeab378ed6eb1d90c8988f82596add.patch";
+      sha256 = "sha256-F/Vk7dg57uBBMO4WOJ/7kKbRNMZuWZ3QfrBfEIBozbw=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -83,9 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

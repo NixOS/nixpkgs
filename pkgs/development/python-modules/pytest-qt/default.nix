@@ -4,15 +4,19 @@
 , setuptools-scm
 , pytest
 , pyqt5
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "4.1.0";
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-An89P13QSvBTDYRs9Q+4WPcZ9+h8LkocaGq9Tg9yFyo=";
+    hash = "sha256-AKF7WG3VMLbXqTmZI6QEicpKmjCXGQERdfVdxrXcj0E=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     pyqt5
   ];
 
-  # tests require X server
+  pythonImportsCheck = [
+    "pytestqt"
+  ];
+
+  # Tests require X server
   doCheck = false;
 
   meta = with lib; {

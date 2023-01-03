@@ -23,8 +23,9 @@ with pkgs.lib;
 let tests = {
       alacritty.pkg = p: p.alacritty;
 
-      contour.pkg = p: p.contour;
-      contour.cmd = "contour $command";
+      # times out after spending many hours
+      #contour.pkg = p: p.contour;
+      #contour.cmd = "contour $command";
 
       cool-retro-term.pkg = p: p.cool-retro-term;
       cool-retro-term.colourTest = false; # broken by gloss effect
@@ -103,7 +104,8 @@ let tests = {
       wayst.pkg = p: p.wayst;
       wayst.pinkValue = "#FF0066";
 
-      wezterm.pkg = p: p.wezterm;
+      # times out after spending many hours
+      #wezterm.pkg = p: p.wezterm;
 
       xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
 

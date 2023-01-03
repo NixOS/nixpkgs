@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.1";
+  version = "0.5.3";
   pname = "grive2";
 
   src = fetchFromGitHub {
     owner = "vitalif";
     repo = "grive2";
     rev =  "v${version}";
-    sha256 = "1kv34ys8qarjsxpb1kd8dp7b3b4ycyiwjzd6mg97d3jk7405g6nm";
+    sha256 = "sha256-P6gitA5cXfNbNDy4ohRLyXj/5dUXkCkOdE/9rJPzNCg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

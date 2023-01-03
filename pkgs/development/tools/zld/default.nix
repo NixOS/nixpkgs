@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.3.4";
   src = fetchzip {
     url = "https://github.com/michaeleisel/zld/releases/download/${version}/zld.zip";
-    sha256 = "1rzdcrky0dl9n7niv39a5gc7q7rwl8jv6h77nvm6gwdymkjf2973";
+    sha256 = "sha256-w1Pe96sdCbrfYdfBpD0BBXu7cFdW3cpo0PCn1+UyZI8=";
   };
 
   installPhase = ''

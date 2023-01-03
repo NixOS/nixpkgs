@@ -1,22 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, unzip, bintools-unwrapped }:
+{ lib, stdenv, fetchFromGitHub, unzip, bintools-unwrapped, coreutils, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
-  version = "unstable-2022-03-22";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "jart";
-    repo = "cosmopolitan";
-    rev = "5022f9e9207ff2b79ddd6de6d792d3280e12fb3a";
-    sha256 = "sha256-UjL4wR5HhuXiQXg6Orcx2fKiVGRPMJk15P779BP1fRA=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-2Q4lutSIQ6tBwTy01lPSMepNAww9Kb7BwNyEcsSdWZ0=";
   };
+
+  patches = [
+    # make sure tests set PATH correctly
+    (substituteAll { src = ./fix-paths.patch; inherit coreutils; })
+  ];
 
   nativeBuildInputs = [ bintools-unwrapped unzip ];
 
   outputs = [ "out" "dist" ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
-  buildFlags = "o/cosmopolitan.h o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.o o//ape/ape.lds";
+  buildFlags = [ "o/cosmopolitan.h" "o//cosmopolitan.a" "o//libc/crt/crt.o" "o//ape/ape.o" "o//ape/ape.lds" ];
   checkTarget = "o//test";
   enableParallelBuilding = true;
 
@@ -24,11 +29,18 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontFixup = true;
 
+  preCheck = ''
+    # some syscall tests fail because we're in a sandbox
+    rm test/libc/calls/sched_setscheduler_test.c
+    rm test/libc/thread/pthread_create_test.c
+    rm test/libc/calls/getgroups_test.c
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{include,lib}
     install o/cosmopolitan.h $out/include
-    install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} $out/lib
+    install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} o/ape/ape-no-modify-self.o $out/lib
 
     cp -RT . "$dist"
     runHook postInstall

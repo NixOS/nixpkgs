@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, file, zip, wxGTK31-gtk3, gtk3
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, file, zip, wxGTK31, gtk3
 , contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config file zip wrapGAppsHook ];
-  buildInputs = [ wxGTK31-gtk3 gtk3 ]
+  buildInputs = [ wxGTK31 gtk3 ]
     ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [

@@ -11,18 +11,18 @@
 , menu-cache
 , qtx11extras
 , qttools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "libfm-qt";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
     rev = version;
-    sha256 = "kF3u1Eh45l/HvL5R0PazIfGIdOVYyB2VAI33NwRfLJk=";
+    sha256 = "Lg+BQ0VFLF5Nhxzr4eeaDVWQG/pC1/w60pQg+lTddHY=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ mkDerivation rec {
     menu-cache
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/libfm-qt";

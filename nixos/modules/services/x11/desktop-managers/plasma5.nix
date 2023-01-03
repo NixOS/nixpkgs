@@ -228,6 +228,14 @@ in
         is not strictly required for Plasma Mobile to run.
       '';
     };
+
+    bigscreen.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Enable support for running the Plasma Bigscreen session.
+      '';
+    };
   };
 
   imports = [
@@ -237,7 +245,7 @@ in
 
   config = mkMerge [
     # Common Plasma dependencies
-    (mkIf (cfg.enable || cfg.mobile.enable) {
+    (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
 
       security.wrappers = {
         kscreenlocker_greet = {
@@ -339,6 +347,8 @@ in
             plasma-workspace
             plasma-workspace-wallpapers
 
+            oxygen-sounds
+
             breeze-icons
             pkgs.hicolor-icon-theme
 
@@ -373,6 +383,11 @@ in
         ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
+
+      # Extra services for D-Bus activation
+      services.dbus.packages = [
+        plasma5.kactivitymanagerd
+      ];
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -436,17 +451,23 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      # xdg-desktop-portal-kde expects PipeWire to be running.
+      # This does not, by default, replace PulseAudio.
+      services.pipewire.enable = mkDefault true;
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
       services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+    })
 
-      environment.etc = {
-        "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
-        "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
-      };
+    (mkIf (cfg.kwinrc != {}) {
+      environment.etc."xdg/kwinrc".text = lib.generators.toINI {} cfg.kwinrc;
+    })
+
+    (mkIf (cfg.kdeglobals != {}) {
+      environment.etc."xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
     })
 
     # Plasma Desktop
@@ -564,6 +585,8 @@ in
       hardware.bluetooth.enable = true;
       hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
+      # Required for autorotate
+      hardware.sensor.iio.enable = lib.mkDefault true;
 
       # Recommendations can be found here:
       #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
@@ -577,9 +600,9 @@ in
           };
         };
         kwinrc = {
-          Windows = {
-            # Forces windows to be maximized
-            Placement = lib.mkDefault "Maximizing";
+          "Wayland" = {
+            "InputMethod[$e]" = "/run/current-system/sw/share/applications/com.github.maliit.keyboard.desktop";
+            "VirtualKeyboardEnabled" = "true";
           };
           "org.kde.kdecoration2" = {
             # No decorations (title bar)
@@ -589,6 +612,30 @@ in
       };
 
       services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-mobile ];
+    })
+
+    # Plasma Bigscreen
+    (mkIf cfg.bigscreen.enable {
+      environment.systemPackages =
+        with pkgs.plasma5Packages;
+        [
+          plasma-nano
+          plasma-settings
+          plasma-bigscreen
+          plasma-remotecontrollers
+
+          aura-browser
+          plank-player
+
+          plasma-pa
+          plasma-nm
+          kdeconnect-kde
+        ];
+
+      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
+
+      # required for plasma-remotecontrollers to work correctly
+      hardware.uinput.enable = true;
     })
   ];
 }

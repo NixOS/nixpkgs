@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
 stdenv.mkDerivation {
   pname = "spotifywm-unstable";
-  version = "2016-11-28";
+  version = "2022-10-26";
 
   src = fetchFromGitHub {
-    owner  = "dasJ";
-    repo   = "spotifywm";
-    rev    = "91dd5532ffb7a398d775abe94fe7781904ab406f";
-    sha256 = "01z088i83410bpx1vbp7c6cq01r431v55l7340x3izp53lnpp379";
+    owner = "dasJ";
+    repo = "spotifywm";
+    rev = "8624f539549973c124ed18753881045968881745";
+    sha256 = "sha256-AsXqcoqUXUFxTG+G+31lm45gjP6qGohEnUSUtKypew0=";
   };
 
   buildInputs = [ xorg.libX11 ];

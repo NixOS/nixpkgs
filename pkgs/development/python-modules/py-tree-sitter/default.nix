@@ -1,4 +1,9 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "py-tree-sitter";
@@ -12,6 +17,10 @@ buildPythonPackage rec {
     sha256 = "sha256-YDe9m85LIPNumo9mrhMMotUspq/8B3t5kt2ScMJI+hY=";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [ "tree_sitter" ];
 

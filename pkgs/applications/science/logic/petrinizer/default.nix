@@ -1,7 +1,6 @@
 { mkDerivation
 , async, base, bytestring, containers, fetchFromGitLab, mtl
-, parallel-io, parsec, lib, stm, transformers, sbv_7_13, z3
-}:
+, parallel-io, parsec, lib, stm, transformers, sbv_7_13}:
 
 mkDerivation rec {
   pname = "petrinizer";
@@ -25,4 +24,8 @@ mkDerivation rec {
   license = lib.licenses.gpl3;
   maintainers = with lib.maintainers; [ raskin ];
   inherit (sbv_7_13.meta) platforms;
+
+  # dependency sbv no longer builds
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 }

@@ -12,7 +12,7 @@
 , gsettings-desktop-schemas
 , glib
 , gobject-introspection
-# Available plugins (can be overriden)
+# Available plugins (can be overridden)
 , availablePlugins
 # Used in the withPlugins interface at passthru, can be overrided directly, or
 # prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
@@ -103,5 +103,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ doronbehar ];
+    broken = true; # at 2022-09-23
   };
 }

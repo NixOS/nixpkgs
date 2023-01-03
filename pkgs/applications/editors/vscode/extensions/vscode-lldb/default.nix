@@ -1,31 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, callPackage
-, nodePackages, cmake, nodejs, unzip, python3
+{ pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
+, nodePackages, cmake, nodejs, unzip, python3, pkg-config, libsecret
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.6.10";
+  version = "1.8.1";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
+  vscodeExtPublisher = publisher;
+  vscodeExtName = pname;
 
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-4PM/818UFHRZekfbdhS/Rz0Pu6HOjJEldi4YuBWECnI=";
+    sha256 = "sha256-5wrw8LNH14WAyIKIRGFbvrISb5RUXeD5Uh/weja9p4Q=";
   };
 
-  lldb = callPackage ./lldb.nix {};
+  # need to build a custom version of lldb and llvm for enhanced rust support
+  lldb = (import ./lldb.nix { inherit fetchFromGitHub runCommand llvmPackages; });
 
   adapter = rustPlatform.buildRustPackage {
     pname = "${pname}-adapter";
     inherit version src;
 
-    # It will pollute the build environment of `buildRustPackage`.
-    cargoPatches = [ ./reset-cargo-config.patch ];
-
-    cargoSha256 = "sha256-Ch1X2vN+p7oCqSs/GIu5IzG+pcSKmQ+VwP2T8ycRhos=";
+    cargoSha256 = "sha256-Lpo2jaDMaZGwSrpQBvBCscVbWi2Db1Cx1Tv84v1H4Es=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -42,11 +42,19 @@ let
     doCheck = false;
   };
 
-  nodeDeps = nodePackages."vscode-lldb-build-deps-../../applications/editors/vscode/extensions/vscode-lldb/build-deps";
+  nodeDeps = ((import ./build-deps/default.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  }).nodeDependencies.override (old: {
+    inherit src version;
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [libsecret];
+    dontNpmInstall = true;
+  }));
 
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
-  inherit src version vscodeExtUniqueId;
+  inherit src version vscodeExtUniqueId vscodeExtPublisher vscodeExtName;
 
   installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
@@ -55,7 +63,7 @@ in stdenv.mkDerivation {
   patches = [ ./cmake-build-extension-only.patch ];
 
   postConfigure = ''
-    cp -r ${nodeDeps}/lib/node_modules/vscode-lldb/{node_modules,package-lock.json} .
+    cp -r ${nodeDeps}/lib/{node_modules,package-lock.json} .
   '';
 
   cmakeFlags = [
@@ -92,6 +100,7 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit lldb adapter;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {

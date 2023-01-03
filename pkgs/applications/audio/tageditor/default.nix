@@ -1,9 +1,8 @@
 { stdenv
-, pkgs
+, lib
 , fetchFromGitHub
 , pkg-config
 , cmake
-
 , cpp-utilities
 , qtutilities
 , mp4v2
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tageditor";
-  version = "3.3.10";
+  version = "3.7.5";
 
   src = fetchFromGitHub {
     owner = "martchus";
-    repo = "tageditor";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "16cmq7dyalcwc8gx1y9acngw5imjh8ydp4prxy7qpzk4fj3kpsak";
+    hash = "sha256-/0zzzOEkzNr1aIpPFdflFaM/0HTs3TlIRxau3Yt+Hog=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +31,10 @@ stdenv.mkDerivation rec {
     cmake
     wrapQtAppsHook
   ];
+
   buildInputs = [
     mp4v2
     libid3tag
-    pkg-config
     qtbase
     qttools
     qtx11extras
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
     tagparser
   ];
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Martchus/tageditor";
     description = "A tag editor with Qt GUI and command-line interface supporting MP4/M4A/AAC (iTunes), ID3, Vorbis, Opus, FLAC and Matroska";
     license = licenses.gpl2;
@@ -53,4 +52,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

@@ -2,10 +2,12 @@
 , babel
 , buildPythonPackage
 , click
+, deprecated
 , exifread
 , fetchFromGitHub
 , filetype
 , flask
+, importlib-metadata
 , inifile
 , jinja2
 , marshmallow
@@ -21,13 +23,14 @@
 , python-slugify
 , requests
 , setuptools
+, typing-inspect
 , watchdog
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "3.3.5";
+  version = "3.4.0b2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,12 +39,13 @@ buildPythonPackage rec {
     owner = "lektor";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-i3SuvRREuq0EENDtXjQegdmz30RmH1HVqBwdjq/mkTM=";
+    hash = "sha256-5w3tT0celHgjmLlsM3sdBdYlXx57z3kMePVGSQkOP7M=";
   };
 
   propagatedBuildInputs = [
     babel
     click
+    deprecated
     exifread
     filetype
     flask
@@ -55,8 +59,11 @@ buildPythonPackage rec {
     python-slugify
     requests
     setuptools
+    typing-inspect
     watchdog
     werkzeug
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [
@@ -64,6 +71,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "typing.inspect < 0.8.0" "typing.inspect"
+  '';
 
   pythonImportsCheck = [
     "lektor"

@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.10.4";
+  version = "0.10.5";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "sha256-X6DJHH+ZBPw7iWVMa43HvVFh+LDn6shzOU1A2uiAYL4=";
+    sha256 = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     peewee
     prompt-toolkit
     setuptools
-  ] ++ lib.optional enableDbusUi [
+  ] ++ lib.optionals enableDbusUi [
       dbus-python
       notify2
       pygobject3

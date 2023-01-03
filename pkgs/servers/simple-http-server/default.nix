@@ -1,22 +1,17 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.2";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ndLFN9FZZA+zsb+bjZ3gMvQJqo6I92erGOQ44H+/LCg=";
+    sha256 = "sha256-9wssSegekRBUXxpru5WGGu6BLX6BFEgV0QliNJToRFg=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
-
-  patches = [ ./0001-cargo-remove-vendored-openssl.patch ];
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoSha256 = "sha256-P8Zr5KTjXD0qHkf6QfyfN39PjokpZUfywhzVjIO5rE8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,7 +23,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
+    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mephistophiles ];
+    maintainers = with maintainers; [ figsoda mephistophiles ];
   };
 }

@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.13.9";
+  version = "1.14-RC3";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "IP3TSmnRekFebxeBh5JRegeSedx+y24e4X9muMAyhFk=";
+    sha256 = "28xEGjzOKdrTlGF4OBEoDue9VVLrbiVgnoTKICfDp4M=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://github.com/lwindolf/${pname}";
     rev-prefix = "v";
   };

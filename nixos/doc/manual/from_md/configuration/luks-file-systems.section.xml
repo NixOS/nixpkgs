@@ -30,7 +30,7 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
     at boot time as <literal>/</literal>, add the following to
     <literal>configuration.nix</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.initrd.luks.devices.crypted.device = &quot;/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d&quot;;
 fileSystems.&quot;/&quot;.device = &quot;/dev/mapper/crypted&quot;;
 </programlisting>
@@ -39,7 +39,7 @@ fileSystems.&quot;/&quot;.device = &quot;/dev/mapper/crypted&quot;;
     located on an encrypted partition, it is necessary to add the
     following grub option:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.loader.grub.enableCryptodisk = true;
 </programlisting>
   <section xml:id="sec-luks-file-systems-fido2">
@@ -67,7 +67,7 @@ Added to key to device /dev/sda2, slot: 2
       compatible key, add the following to
       <literal>configuration.nix</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 boot.initrd.luks.fido2Support = true;
 boot.initrd.luks.devices.&quot;/dev/sda2&quot;.fido2.credential = &quot;f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7&quot;;
 </programlisting>
@@ -77,7 +77,7 @@ boot.initrd.luks.devices.&quot;/dev/sda2&quot;.fido2.credential = &quot;f1d00200
       protected, such as
       <link xlink:href="https://trezor.io/">Trezor</link>.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 boot.initrd.luks.devices.&quot;/dev/sda2&quot;.fido2.passwordLess = true;
 </programlisting>
   </section>

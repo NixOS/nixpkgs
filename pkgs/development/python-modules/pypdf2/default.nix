@@ -5,16 +5,15 @@
 , glibcLocales
 , typing-extensions
 , unittestCheckHook
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "PyPDF2";
-  version = "2.10.4";
+  version = "2.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8JDF/HmQz1ptY2TOI2KDSXTjITbVIpG6uyNy5dZH0Yg=";
+    sha256 = "sha256-PHut1RLCFxHrF4nC6tv5YnkonA+URS7lSoZHO/vv1zI=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -24,14 +23,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # Tests broken on Python 3.x
-  #doCheck = !(isPy3k);
-
   checkInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [
+    "PyPDF2"
+  ];
 
   meta = with lib; {
     description = "A Pure-Python library built as a PDF toolkit";
-    homepage = "http://mstamy2.github.com/PyPDF2/";
+    homepage = "https://pypdf2.readthedocs.io/";
+    changelog = "https://github.com/py-pdf/PyPDF2/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ desiderius vrthra ];
   };

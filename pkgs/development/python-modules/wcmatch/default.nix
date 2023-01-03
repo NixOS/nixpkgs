@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "wcmatch";
-  version = "8.4";
+  version = "8.4.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uk/FVY+JRr8f/HA0sFuBTYJdaUESSZyGA14OTTmLamc=";
+    sha256 = "sha256-sfBCqJnqTEWLcyHaG14zMePg7HgVg0NN4TAZRs6tuUM=";
   };
 
   nativeBuildInputs = [

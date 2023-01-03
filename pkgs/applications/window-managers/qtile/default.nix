@@ -16,13 +16,13 @@
 let
   unwrapped = python3Packages.buildPythonPackage rec {
     pname = "qtile";
-    version = "0.21.0";
+    version = "0.22.1";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "3QCI1TZIh1LcWuklVQkqgR1MQphi6CzZKc1UZcytV0k=";
+      hash = "sha256-HOyExVKOqZ4OeNM1/AiXQeiUV+EbSJLEjWEibm07ff8=";
     };
 
     patches = [

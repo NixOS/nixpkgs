@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
   useDune2 = true;
 
   buildInputs = with ocamlPackages; [
-    gen sedlex ocaml_extlib dune-build-info linenoise
+    gen sedlex extlib dune-build-info linenoise
   ];
 
   postPatch = ''

@@ -22,6 +22,7 @@
 , libffi
 , libiconv
 , libjpeg
+, libkrb5
 , libpng
 , libsodium
 , libwebp
@@ -29,8 +30,10 @@
 , libxslt
 , libzip
 , net-snmp
+, nix-update-script
 , oniguruma
 , openldap
+, openssl_1_1
 , openssl
 , pam
 , pcre2
@@ -49,35 +52,42 @@ lib.makeScope pkgs.newScope (self: with self; {
   buildPecl = import ../build-support/build-pecl.nix {
     php = php.unwrapped;
     inherit lib;
-    inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
+    inherit (pkgs) stdenv autoreconfHook fetchurl re2c nix-update-script;
   };
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
     pname = "php-${pname}";
+    passthru = {
+      updateScript = nix-update-script {};
+    };
+    meta = args.meta // {
+      mainProgram = args.meta.mainProgram or pname;
+    };
   });
 
   # Function to build an extension which is shipped as part of the php
   # source, based on the php version.
   #
   # Name passed is the name of the extension and is automatically used
-  # to add the configureFlag "--enable-${name}", which can be overriden.
+  # to add the configureFlag "--enable-${name}", which can be overridden.
   #
   # Build inputs is used for extra deps that may be needed. And zendExtension
   # will mark the extension as a zend extension or not.
   mkExtension = lib.makeOverridable
     ({ name
-    , configureFlags ? [ "--enable-${name}" ]
+    , configureFlags ? [ "--enable-${extName}" ]
     , internalDeps ? [ ]
     , postPhpize ? ""
     , buildInputs ? [ ]
     , zendExtension ? false
     , doCheck ? true
+    , extName ? name
     , ...
     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
-      extensionName = name;
+      extensionName = extName;
 
       outputs = [ "out" "dev" ];
 
@@ -100,7 +110,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
       cdToExtensionRootPhase = ''
         # Go to extension source root.
-        cd "ext/${name}"
+        cd "ext/${extName}"
       '';
 
       preConfigure = ''
@@ -136,7 +146,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         runHook preInstall
 
         mkdir -p $out/lib/php/extensions
-        cp modules/${name}.so $out/lib/php/extensions/${name}.so
+        cp modules/${extName}.so $out/lib/php/extensions/${extName}.so
         mkdir -p $dev/include
         ${rsync}/bin/rsync -r --filter="+ */" \
                               --filter="+ *.h" \
@@ -164,6 +174,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     deployer = callPackage ../development/php-packages/deployer { };
 
     grumphp = callPackage ../development/php-packages/grumphp { };
+
+    phan = callPackage ../development/php-packages/phan { };
 
     phing = callPackage ../development/php-packages/phing { };
 
@@ -341,10 +353,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
-          # uwimap doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
         }
         {
           name = "intl";
@@ -409,7 +419,17 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "openssl";
-          buildInputs = [ openssl ];
+          buildInputs = if (lib.versionAtLeast php.version "8.1") then [ openssl ] else [ openssl_1_1 ];
+          configureFlags = [ "--with-openssl" ];
+          doCheck = false;
+        }
+        # This provides a legacy OpenSSL PHP extension
+        # For situations where OpenSSL 3 do not support a set of features
+        # without a specific openssl.cnf file
+        {
+          name = "openssl-legacy";
+          extName = "openssl";
+          buildInputs = [ openssl_1_1 ];
           configureFlags = [ "--with-openssl" ];
           doCheck = false;
         }

@@ -51,7 +51,10 @@ with lib;
     })
 
     (mkIf (!config.services.gnome.at-spi2-core.enable) {
-      environment.variables.NO_AT_BRIDGE = "1";
+      environment.variables = {
+        NO_AT_BRIDGE = "1";
+        GTK_A11Y = "none";
+      };
     })
   ];
 }

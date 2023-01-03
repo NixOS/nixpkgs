@@ -3,18 +3,19 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , python
 , appdirs
 , attrs
 , automat
 , bcrypt
 , constantly
-, contextvars
 , cryptography
 , git
 , glibcLocales
 , h2
 , hyperlink
+, hypothesis
 , idna
 , incremental
 , priority
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "22.4.0";
+  version = "22.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -53,8 +54,10 @@ buildPythonPackage rec {
     pname = "Twisted";
     inherit version;
     extension = "tar.gz";
-    sha256 = "sha256-oEeZD1ffrh4L0rffJSbU8W3NyEN3TcEIt4xS8qXxNoA=";
+    hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   propagatedBuildInputs = [
     attrs
@@ -74,9 +77,6 @@ buildPythonPackage rec {
     echo 'ListingTests.test_oldFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_oldSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
 
-    echo 'PTYProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
-    echo 'PTYProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
-
     echo 'UNIXTestsBuilder_AsyncioSelectorReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
     echo 'UNIXTestsBuilder_SelectReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
 
@@ -89,7 +89,8 @@ buildPythonPackage rec {
     echo 'MulticastTests.test_multicast.skip = "Reactor was unclean"'>> src/twisted/test/test_udp.py
     echo 'MulticastTests.test_multiListen.skip = "No such device"'>> src/twisted/test/test_udp.py
 
-    echo 'DomishExpatStreamTests.test_namespaceWithWhitespace.skip = "syntax error: line 1, column 0"'>> src/twisted/words/test/test_domish.py
+    # fails since migrating to libxcrypt
+    echo 'HelperTests.test_refuteCryptedPassword.skip = "OSError: Invalid argument"' >> src/twisted/conch/test/test_checkers.py
 
     # not packaged
     substituteInPlace src/twisted/test/test_failure.py \
@@ -107,6 +108,11 @@ buildPythonPackage rec {
   '' + lib.optionalString (stdenv.isAarch64 && stdenv.isDarwin) ''
     echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
     echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
+
+    echo 'PosixReactorBaseTests.test_removeAllSkipsInternalReaders.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
+    echo 'PosixReactorBaseTests.test_wakerIsInternalReader.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
+
+    echo 'TCPPortTests.test_connectionLostFailed.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
   '';
 
   # Generate Twisted's plug-in cache. Twisted users must do it as well. See
@@ -119,6 +125,7 @@ buildPythonPackage rec {
   checkInputs = [
     git
     glibcLocales
+    hypothesis
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch
@@ -136,7 +143,6 @@ buildPythonPackage rec {
     optional-dependencies = rec {
       conch = [ appdirs bcrypt cryptography pyasn1 ];
       conch_nacl = conch ++ [ pynacl ];
-      contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
       http2 = [ h2 priority ];
       serial = [ pyserial ];
       tls = [ idna pyopenssl service-identity ];
@@ -160,11 +166,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/twisted/twisted";
-    description = "Twisted, an event-driven networking engine written in Python";
-    longDescription = ''
-      Twisted is an event-driven networking engine written in Python
-      and licensed under the MIT license.
-    '';
+    description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

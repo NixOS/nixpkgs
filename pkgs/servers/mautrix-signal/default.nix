@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "v${version}";
-    sha256 = "sha256-khtvfZbqBRQyHteil+H/b3EktjRet6DRcKMHmCClNq0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WcyBv7b1JxiZJSqxgAUUgTa5Q/aNzU9SfXfdXKVuuXQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -47,8 +47,8 @@ python3.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3}/bin \
-      --set PYTHONPATH "$PYTHONPATH"
+      --prefix PATH : "${python3}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   meta = with lib; {

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "krill";
-  version = "0.9.6";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gMGDZI8uk5E7C2+zGPzn1wz39NUJ4tVExwwvc4Y2wDM=";
+    hash = "sha256-U74x6zEQS/3JjzIeYlosqISZoZM7cOMcheJKtRYnPyo=";
   };
 
-  cargoSha256 = "sha256-vtEobZvOsI18cqExR++DUNEI7J+h9ek1Lc+Q4Db8OrQ=";
+  cargoSha256 = "sha256-CH97R9VGT7SFdJs6kWDIdOaV5Q6FtOPZ1tKcmI+zRgE=";
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
       Authorisations (ROAs) on your own servers or with a third party.
     '';
     homepage = "https://github.com/NLnetLabs/krill";
-    changelog = "https://github.com/NLnetLabs/krill/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ steamwalker ];
   };

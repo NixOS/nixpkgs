@@ -27,23 +27,34 @@ rec {
      For another application, see build-support/vm, where this
      function is used to build arbitrary derivations inside a QEMU
      virtual machine.
+
+     Note that in order to preserve evaluation errors, the new derivation's
+     outPath depends on the old one's, which means that this function cannot
+     be used in circular situations when the old derivation also depends on the
+     new one.
+
+     You should in general prefer `drv.overrideAttrs` over this function;
+     see the nixpkgs manual for more information on overriding.
   */
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in lib.flip (extendDerivation true) newDrv (
+    in lib.flip (extendDerivation (builtins.seq drv.drvPath true)) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
       //
       (drv.passthru or {})
       //
-      (if (drv ? crossDrv && drv ? nativeDrv)
-       then {
-         crossDrv = overrideDerivation drv.crossDrv f;
-         nativeDrv = overrideDerivation drv.nativeDrv f;
-       }
-       else { }));
+      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
+      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
+        crossDrv = overrideDerivation drv.crossDrv f;
+        nativeDrv = overrideDerivation drv.nativeDrv f;
+      })
+      //
+      lib.optionalAttrs (drv ? __spliced) {
+        __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      });
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and

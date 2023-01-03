@@ -48,7 +48,7 @@ let
     ];
 
     # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
-    postInstall = ''
+    postRebuild = ''
       jq '
         .version = $ENV.version |
         .releaseTag = $ENV.releaseTag |
@@ -69,6 +69,8 @@ vscode-utils.buildVscodeExtension {
   name = "${pname}-${version}";
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
+  vscodeExtPublisher = publisher;
+  vscodeExtName = pname;
 
   nativeBuildInputs = lib.optionals setDefaultServerPath [ jq moreutils ];
 

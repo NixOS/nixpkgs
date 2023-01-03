@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ruuda ];
+    mainProgram = "mksquashfs";
   };
 }

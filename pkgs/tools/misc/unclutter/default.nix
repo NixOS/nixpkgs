@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl, xlibsWrapper}:
+{ lib
+, stdenv
+, fetchurl
+, libX11
+}:
 
 stdenv.mkDerivation rec {
   pname = "unclutter";
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "33a78949a7dedf2e8669ae7b5b2c72067896497820292c96afaa60bb71d1f2a6";
   };
 
-  buildInputs = [xlibsWrapper];
+  buildInputs = [ libX11 ];
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

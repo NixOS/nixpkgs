@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
   buildInputs = [ libedit zlib ncurses ]
-    ++ lib.optional stdenv.isDarwin ([
+    ++ lib.optionals stdenv.isDarwin ([
       Accelerate
-    ] ++ lib.optional stdenv.isx86_64 /* && isDarwin */ [
+    ] ++ lib.optionals stdenv.isx86_64 /* && isDarwin */ [
       CoreGraphics CoreVideo
     ]);
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "implicit-function-declaration"
     "gnu-variable-sized-type-not-at-end"
     "unused-result"
-  ] ++ lib.optional stdenv.isDarwin [ "-fcommon" ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
 
   patchPhase = ''
     substituteInPlace ./Makefile \

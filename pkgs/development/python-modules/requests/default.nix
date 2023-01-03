@@ -20,15 +20,12 @@ buildPythonPackage rec {
   version = "2.28.1";
   disabled = pythonOlder "3.7";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
   };
-
-  patches = [
-    # Use the default NixOS CA bundle from the certifi package
-    ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
-  ];
 
   propagatedBuildInputs = [
     brotlicffi

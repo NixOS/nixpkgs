@@ -22,6 +22,12 @@ let
      test '~' = '~' && echo 'success'
     '';
 
+    fish = writeFishBin "test-writers-fish-bin" ''
+      if test "test" = "test"
+        echo "success"
+      end
+    '';
+
     rust = writeRustBin "test-writers-rust-bin" {} ''
       fn main(){
         println!("success")
@@ -92,6 +98,12 @@ let
 
     dash = writeDash "test-writers-dash" ''
      test '~' = '~' && echo 'success'
+    '';
+
+    fish = writeFish "test-writers-fish" ''
+      if test "test" = "test"
+        echo "success"
+      end
     '';
 
     haskell = writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''

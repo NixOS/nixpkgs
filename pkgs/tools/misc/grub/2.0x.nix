@@ -71,6 +71,13 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=b98275138bf4fc250a1c362dfd2c8b1cf2421701";
       sha256 = "001m058bsl2pcb0ii84jfm5ias8zgzabrfy6k2cc9w6w1y51ii82";
     })
+    # Properly handle multiple initrd paths in 30_os-prober
+    # Remove this patch once a new release is cut
+    (fetchpatch {
+      name = "Properly-handle-multiple-initrd-paths-in-os-prober.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=000b5cd04fd228f9741f5dca0491636bc0b89eb8";
+      sha256 = "sha256-Mex3qQ0lW7ZCv7ZI7MSSqbylJXZ5RTbR4Pv1+CJ0ciM=";
+    })
   ];
 
   postPatch = if kbdcompSupport then ''

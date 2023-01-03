@@ -25,5 +25,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ eliasp ];
     platforms = platforms.all;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

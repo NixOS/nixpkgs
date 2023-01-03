@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "epic5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # Darwin needs libiconv, tcl; while Linux build don't
-  buildInputs = [ openssl ncurses ]
+  buildInputs = [ openssl ncurses libxcrypt ]
     ++ lib.optionals stdenv.isDarwin [ libiconv tcl ];
 
   patches = [

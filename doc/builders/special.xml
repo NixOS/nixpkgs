@@ -7,4 +7,5 @@
  </para>
  <xi:include href="special/fhs-environments.section.xml" />
  <xi:include href="special/mkshell.section.xml" />
+ <xi:include href="special/darwin-builder.section.xml" />
 </chapter>

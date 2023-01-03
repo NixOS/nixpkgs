@@ -8,6 +8,10 @@
 , which
 }:
 
+let
+  # avoid "malformed 32-bit x.y.z" error on mac when using clang
+  isCleanVer = version: builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
+in
 stdenv.mkDerivation rec {
   pname = "tcc";
   version = "unstable-2022-07-15";
@@ -62,7 +66,11 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    echo ${version} > VERSION
+    ${
+      if stdenv.isDarwin && ! isCleanVer version
+      then "echo 'not overwriting VERSION since it would upset ld'"
+      else "echo ${version} > VERSION"
+    }
     configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
   '';
 
@@ -70,6 +78,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+  # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    rm tests/tests2/{108,114}*
+  '';
 
   meta = with lib; {
     homepage = "https://repo.or.cz/tinycc.git";
@@ -98,7 +110,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ joachifm AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
 # TODO: more multiple outputs

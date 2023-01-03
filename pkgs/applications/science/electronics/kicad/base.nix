@@ -5,6 +5,7 @@
 , libGL
 , zlib
 , wxGTK
+, gtk3
 , libX11
 , gettext
 , glew
@@ -20,6 +21,7 @@
 , libpthreadstubs
 , libXdmcp
 , lndir
+, unixODBC
 
 , util-linux
 , libselinux
@@ -31,8 +33,9 @@
 , dbus
 , at-spi2-core
 , libXtst
+, pcre2
 
-, swig
+, swig4
 , python
 , wxPython
 , opencascade-occt
@@ -65,19 +68,26 @@ stdenv.mkDerivation rec {
 
   src = kicadSrc;
 
+  patches = [
+    # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
+    ./writable.patch
+  ];
+
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = ''
-    substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}" \
-  '';
+  postPatch = if (!stable) then ''
+    substituteInPlace cmake/KiCadVersion.cmake \
+      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+  ''
+  else "";
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DKICAD_USE_EGL=ON"
   ]
   ++ optionals (withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
@@ -110,6 +120,9 @@ stdenv.mkDerivation rec {
   ]
   ++ optionals (!withPCM && stable) [
     "-DKICAD_PCM=OFF"
+  ]
+  ++ optionals (!stable) [ # upstream issue 12491
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
   ];
 
   nativeBuildInputs = [
@@ -129,9 +142,10 @@ stdenv.mkDerivation rec {
     libdatrie
     libxkbcommon
     libepoxy
-    dbus.daemon
+    dbus
     at-spi2-core
     libXtst
+    pcre2
   ];
 
   buildInputs = [
@@ -140,7 +154,7 @@ stdenv.mkDerivation rec {
     zlib
     libX11
     wxGTK
-    wxGTK.gtk
+    gtk3
     pcre
     libXdmcp
     gettext
@@ -151,18 +165,17 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
-    swig
+    swig4
     python
   ]
+  ++ optional (!stable) unixODBC
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
   ++ optional (withOCC) opencascade-occt
-  ++ optional (debug) valgrind
-  ;
+  ++ optional (debug) valgrind;
 
   # debug builds fail all but the python test
-  # stable release doesn't have the fix for upstream issue 9888 yet
-  doInstallCheck = !debug && !stable;
+  doInstallCheck = !(debug);
   installCheckTarget = "test";
 
   dontStrip = debug;

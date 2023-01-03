@@ -71,7 +71,7 @@ with lib;
       package = mkOption {
         type = package;
         default = pkgs.ddclient;
-        defaultText = "pkgs.ddclient";
+        defaultText = lib.literalExpression "pkgs.ddclient";
         description = lib.mdDoc ''
           The ddclient executable package run by the service.
         '';
@@ -200,6 +200,10 @@ with lib;
         type = lines;
         description = lib.mdDoc ''
           Extra configuration. Contents will be added verbatim to the configuration file.
+
+          ::: {.note}
+          `daemon` should not be added here because it does not work great with the systemd-timer approach the service uses.
+          :::
         '';
       };
     };

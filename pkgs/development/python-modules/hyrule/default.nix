@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.2";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "hylang";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/YHgJq+C5+yc+44s76OR0WELUm8KHL2xxtJmGDTChCM=";
+    sha256 = "sha256-UvLk5d1lhoXBP2y3YfxVBCoKb3PMHUeNnnbAX6iypiU=";
   };
 
   propagatedBuildInputs = [

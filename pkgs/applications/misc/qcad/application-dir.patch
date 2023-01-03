@@ -33,16 +33,3 @@ index c6c31cbf5..c51b59ce6 100644
  }
  
  int RSettings::getSnapRange() {
-diff --git a/qcad.desktop b/qcad.desktop
-index 93c5e9720..2d0e6bf32 100644
---- a/qcad.desktop
-+++ b/qcad.desktop
-@@ -48,7 +48,7 @@ Comment[sv]=2D CAD-system
- Comment[sl]=Sistem 2D CAD
- Comment[uk]=2D САПР
- Comment[tr]=2D CAD Sistemi
--Exec=qcad %F
-+Exec=qcad-bin %F
- X-MultipleArgs=true
- Icon=qcad_icon
- Terminal=false

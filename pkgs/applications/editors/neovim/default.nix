@@ -12,12 +12,10 @@
 , nodejs ? null, fish ? null, python3 ? null
 }:
 
-with lib;
-
 let
   neovimLuaEnv = lua.withPackages(ps:
     (with ps; [ lpeg luabitop mpack ]
-    ++ optionals doCheck [
+    ++ lib.optionals doCheck [
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
@@ -26,13 +24,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.7.2";
+    version = "0.8.2";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-eKKQNM02Vhy+3yL2QV+0FSEpcniEa5Aq6hkAUIgLo1k=";
+      sha256 = "sha256-eqiH/K8w0FZNHLBBMjiTSQjNQyONqcx3X+d85gPnFJg=";
     };
 
     patches = [
@@ -61,8 +59,8 @@ in
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ optionals doCheck [ glibcLocales procps ]
+    ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
+      ++ lib.optionals doCheck [ glibcLocales procps ]
     ;
 
     inherit doCheck;
@@ -86,7 +84,6 @@ in
       pyEnv      # for src/clint.py
     ];
 
-
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
@@ -101,11 +98,8 @@ in
       # third-party/CMakeLists.txt is not read at all.
       "-DUSE_BUNDLED=OFF"
     ]
-    ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
+    ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
-
-    # triggers on buffer overflow bug while running tests
-    hardeningDisable = [ "fortify" ];
 
     preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
@@ -115,7 +109,7 @@ in
       export VIMRUNTIME=$PWD/runtime
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";
       longDescription = ''
         Neovim is a project that seeks to aggressively refactor Vim in order to:

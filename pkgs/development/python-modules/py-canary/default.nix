@@ -6,6 +6,7 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-873XAf0jOX5pjrNRELEcTWCauk80FUYxTu7G7jc3MHE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

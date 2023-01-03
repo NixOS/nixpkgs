@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
           --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
           --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
           --replace "-DGNU_RUNTIME=1" "" \
-          --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
+          --replace "-fgnu-runtime" "-fobjc-runtime=gnustep-2.0"
       done
 
       # we need to build inside this directory as well, so we have to make it writeable

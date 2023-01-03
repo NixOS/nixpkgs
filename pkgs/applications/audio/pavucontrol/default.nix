@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , pkg-config

@@ -6,21 +6,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.0";
+  version = "2.7.0";
   pname = "tinygltf";
 
   src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
     rev = "v${version}";
-    sha256 = "sha256-Pw4iNJs0bKALVPFBYUJe5/WjHxdffungCKfJFJEpDas=";
+    sha256 = "sha256-pIymkC+LzoSPU0jnpBH07ag/04W0c9TmPeDUSYQdgx4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Header only C++11 tiny glTF 2.0 library";

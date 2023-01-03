@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Sxqr5rqxWCs/6nmigpvOfyQVu25QYvJTV67t1TF6UNw=";
+    sha256 = "UsaGQRj1aX9aVzaILc2ifbIuciC8SSg43uzGmSRs2yY=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

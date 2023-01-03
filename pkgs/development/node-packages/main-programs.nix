@@ -9,6 +9,7 @@
   coffee-script = "coffee";
   typescript = "tsc";
   vue-cli = "vue";
+  "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable whose name differs from the package's `name`.
   "@angular/cli" = "ng";
@@ -56,6 +57,7 @@
   kaput-cli = "kaput";
   leetcode-cli = "leetcode";
   less = "lessc";
+  localtunnel = "lt";
   lua-fmt = "luafmt";
   markdownlint-cli = "markdownlint";
   near-cli = "near";
@@ -79,4 +81,5 @@
   vscode-json-languageserver-bin = "json-languageserver";
   vue-language-server = "vls";
   webtorrent-cli = "webtorrent";
+  "@zwave-js/server" = "zwave-server";
 }

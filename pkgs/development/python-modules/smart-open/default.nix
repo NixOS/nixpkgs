@@ -9,12 +9,13 @@
 , google-cloud-storage
 , requests
 , moto
+, paramiko
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.0.0";
+  version = "6.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
-    rev = "v${version}";
-    sha256 = "sha256-FEIJ1DBW0mz7n+J03C1Lg8uAs2ZxI0giM7+mvuNPyGg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-sVKrCph5M7xsE7gtzsP/eVEbZyFfoucW3p30YYpwVFI=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     moto
+    paramiko
     pytestCheckHook
   ];
 

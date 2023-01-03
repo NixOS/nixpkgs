@@ -35,8 +35,9 @@ stdenv.mkDerivation rec {
     export _REL_PYTHON_MODULE_PATH=$(toPythonPath $out)
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
+  ] ++ [
     cmake
     doxygen
     pkg-config

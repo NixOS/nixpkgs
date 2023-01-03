@@ -14,6 +14,7 @@
 , python3
 , ncurses
 , libuuid
+, libxcrypt
 , icu
 , libgcc
 , libblocksruntime
@@ -195,6 +196,7 @@ let
     libedit
     libgcc
     libuuid
+    libxcrypt
     libxml2
     ncurses
     sqlite

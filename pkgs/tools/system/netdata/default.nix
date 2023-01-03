@@ -19,14 +19,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.36.1";
+  version = "1.37.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-Msbzfcxq9hqerA9eXuMle+pAhDAAWWE/v0DKXgnhEnM=";
+    sha256 = "sha256-SsrdjFENPkI7Ed1gKt28sygJ5NgZ5un+5baIQ3Kv7yE=";
     fetchSubmodules = true;
   };
 
@@ -99,9 +99,9 @@ in stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
-  ] ++ optional (!withDBengine) [
+  ] ++ optionals (!withDBengine) [
     "--disable-dbengine"
-  ] ++ optional (!withCloud) [
+  ] ++ optionals (!withCloud) [
     "--disable-cloud"
   ];
 

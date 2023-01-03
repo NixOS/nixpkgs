@@ -8,6 +8,7 @@
 , imlib
 , libICE
 , libSM
+, libxcrypt
 , libXinerama
 , libXrandr
 , libXtst
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     imlib
     libICE
     libSM
+    libxcrypt
     libXinerama
     libXrandr
     libXtst

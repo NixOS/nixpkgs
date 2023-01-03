@@ -3,29 +3,40 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
 , google-cloud-testutils
+, libcst
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.8.1";
+  version = "2.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AohJ0TAQy3GFALvzqd4i2BiyaCzfTjMMAVIe1ZUZ5eI=";
+    hash = "sha256-8/gmeLpdheW7M9nhM0uTlxrpeRcODSgLVOVKPj9O870=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   checkInputs = [
     google-cloud-testutils
@@ -57,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Datastore API client library";
     homepage = "https://github.com/googleapis/python-datastore";
+    changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

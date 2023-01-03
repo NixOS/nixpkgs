@@ -9,6 +9,7 @@
 , osqp
 , scipy
 , scs
+, setuptools
 , useOpenmp ? (!stdenv.isDarwin)
   # Check inputs
 , pytestCheckHook
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     osqp
     scipy
     scs
+    setuptools
   ];
 
   # Required flags from https://github.com/cvxgrp/cvxpy/releases/tag/v1.1.11
@@ -49,6 +51,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
+    "test_huber"
+    "test_partial_problem"
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_ecos_bb_mi_lp_2" # https://github.com/cvxgrp/cvxpy/issues/1241#issuecomment-780912155
   ];

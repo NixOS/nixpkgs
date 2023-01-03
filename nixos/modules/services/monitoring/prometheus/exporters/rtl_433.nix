@@ -16,7 +16,7 @@ in
           };
           "${field}" = lib.mkOption {
             type = int;
-            inherit description;
+            description = lib.mdDoc description;
           };
           location = lib.mkOption {
             type = str;

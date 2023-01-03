@@ -9,7 +9,7 @@ let
     inherit name;
     value = mkOption {
       default = null;
-      inherit description;
+      description = lib.mdDoc description;
       type = types.nullOr types.lines;
     } // (if example == null then {} else { inherit example; });
   };

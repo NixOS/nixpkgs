@@ -24,5 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/libffcall/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sofia-sip";
-  version = "1.13.8";
+  version = "1.13.10";
 
   src = fetchFromGitHub {
     owner = "freeswitch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RtYeZFQu0YvD709KNmwPPlOLMl01Ox58cpNYygvDn78=";
+    sha256 = "sha256-UVyjeIIS0WwnY3GoZLIYTgf7R+C8SCuykDozaxCpog0=";
   };
 
   buildInputs = [ glib openssl ] ++ lib.optional stdenv.isDarwin SystemConfiguration;

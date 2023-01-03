@@ -3,17 +3,21 @@
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
+, aiohttp
 , async-timeout
-, dbus-next
+, bleak
+, dbus-fast
+, mac-vendor-lookup
 , myst-parser
 , pytestCheckHook
 , sphinxHook
 , sphinx-rtd-theme
+, usb-devices
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.3.0";
+  version = "0.15.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +26,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PRYu3PTmSg25DiSuLnv1tp1cOZsXHGTmxRA2V39ab4k=";
+    hash = "sha256-vwcOMg10XRT6wNkQQF6qkbWSG2rsUXaDSEiIevii1eA=";
   };
 
   postPatch = ''
@@ -43,8 +47,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohttp
     async-timeout
-    dbus-next
+    bleak
+    dbus-fast
+    mac-vendor-lookup
+    usb-devices
   ];
 
   pythonImportsCheck = [
@@ -56,9 +64,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/main/CHANGELOG.md";
     description = "Tools to enumerate and find Bluetooth Adapters";
     homepage = "https://bluetooth-adapters.readthedocs.io/";
+    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

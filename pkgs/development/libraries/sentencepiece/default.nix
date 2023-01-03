@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
+  # https://github.com/google/sentencepiece/issues/754
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/google/sentencepiece";
     description = "Unsupervised text tokenizer for Neural Network-based text generation";

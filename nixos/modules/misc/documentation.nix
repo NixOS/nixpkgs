@@ -48,14 +48,20 @@ let
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
+            let
+              wholeName = "${namePrefix}.${name}";
+              guard = lib.warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption` or `literalExpression` instead.";
+            in if isAttrs value then
               scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+              // optionalAttrs (isDerivation value) {
+                outPath = guard "\${${wholeName}}";
+                drvPath = guard drvPath;
+              }
             else value
           )
           pkgSet;
       in scrubbedEval.options;
+
     baseOptionsJSON =
       let
         filter =
@@ -67,9 +73,9 @@ let
             );
       in
         pkgs.runCommand "lazy-options.json" {
-          libPath = filter "${toString pkgs.path}/lib";
-          pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
-          nixosPath = filter "${toString pkgs.path}/nixos";
+          libPath = filter (pkgs.path + "/lib");
+          pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
+          nixosPath = filter (pkgs.path + "/nixos");
           modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
@@ -99,7 +105,8 @@ let
               exit 1
             } >&2
         '';
-    inherit (cfg.nixos.options) warningsAreErrors;
+
+    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
   };
 
 
@@ -252,6 +259,23 @@ in
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
+        '';
+      };
+
+      nixos.options.allowDocBook = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether to allow DocBook option docs. When set to `false` all option using
+          DocBook documentation will cause a manual build error; additionally a new
+          renderer may be used.
+
+          ::: {.note}
+          The `false` setting for this option is not yet fully supported. While it
+          should work fine and produce the same output as the previous toolchain
+          using DocBook it may not work in all circumstances. Whether markdown option
+          documentation is allowed is independent of this option.
+          :::
         '';
       };
 

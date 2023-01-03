@@ -1,18 +1,18 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools-scm }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "5.2.0";
+  version = "5.3.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b35798fdf1713f1c3139016cfcbc461f09edbf099d1fb658d4b7479fcaa3daa";
+    sha256 = "sha256-i+JngktUHAmwjbEkkX9Iq1JabD6DcBHzEweBoiTFcJA=";
   };
 
-  # No tests available
-  doCheck = false;
-
   nativeBuildInputs = [ setuptools-scm ];
+
+  checkInputs = [ pytestCheckHook ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8
@@ -20,7 +20,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Updated configparser from Python 3.7 for Python 2.6+.";
-    license = licenses.mit;
     homepage = "https://github.com/jaraco/configparser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

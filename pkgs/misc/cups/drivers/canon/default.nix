@@ -44,7 +44,7 @@ let
     sha256 = "sha256:069z6ijmql62mcdyxnzc9mf0dxa6z1107cd0ab4i1adk8kr3d75k";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 pkg-config gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
+  buildInputs = [ cups zlib jbigkit glib gtk3 gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 ];
+  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 pkg-config ];
 
   inherit buildInputs;
 

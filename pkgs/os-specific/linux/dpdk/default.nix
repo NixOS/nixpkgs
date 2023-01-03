@@ -9,14 +9,14 @@
 
 let
   mod = kernel != null;
-  dpdkVersion = "22.03";
+  dpdkVersion = "22.07";
 in stdenv.mkDerivation rec {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
-    sha256 = "sha256-st5fCLzVcz+Q1NfmwDJRWQja2PyNJnrGolNELZuDp8U=";
+    sha256 = "sha256-n2Tf3gdf21cIy2Leg4uP+4kVdf7R4dKusma6yj38m+o=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +91,6 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
-    broken = mod && kernel.kernelAtLeast "5.18";
+    broken = mod && kernel.isHardened;
   };
 }

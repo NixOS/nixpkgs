@@ -2,7 +2,7 @@
 , cmake
 , bc-decaf
 , fetchFromGitLab
-, mbedtls
+, mbedtls_2
 , lib
 , stdenv
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # Vendored by BC
     bc-decaf
 
-    mbedtls
+    mbedtls_2
   ];
 
   src = fetchFromGitLab {

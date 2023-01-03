@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gopass-hibp";
-  version = "1.14.3";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JwZZ2VaSD9xkLny5sFeku5rN4FitI1dyW56JSWPMagM=";
+    hash = "sha256-2F1OqVxXrQpwg2M1o8gQzczXI2JKVFCA1K6kGUc+e5U=";
   };
 
-  vendorSha256 = "sha256-YySkVWdfGIT5qz0jTGlLEHoO0vGY0iNZ/oG9IZCjwRE=";
+  vendorHash = "sha256-3KYEn4+YI5KwAlfokUF5hU801xylWVtmJwocVl6QfhM=";
 
   subPackages = [ "." ];
 
@@ -27,7 +27,8 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/gopass-hibp --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/gopass-hibp \
+      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
   meta = with lib; {

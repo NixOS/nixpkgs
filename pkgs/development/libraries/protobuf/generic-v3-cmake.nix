@@ -53,6 +53,8 @@ let
         url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
         sha256 = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
       })
+    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+      ./static-executables-have-no-rpath.patch
     ];
 
     nativeBuildInputs = let
@@ -101,6 +103,7 @@ let
       platforms = lib.platforms.unix;
       homepage = "https://developers.google.com/protocol-buffers/";
       maintainers = with lib.maintainers; [ jonringer ];
+      mainProgram = "protoc";
     };
   };
 in

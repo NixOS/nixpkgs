@@ -12,8 +12,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   ucdtxt = fetchurl {
-    url = "https://www.unicode.org/Public/14.0.0/ucd/UnicodeData.txt";
-    sha256 = "sha256-NgGOaGV/3LNIX2NmMP/oyFMuAcl3cD0oA/W4nWxf6vs=";
+    url = "https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt";
+    sha256 = "sha256-gG6a7WUDcZfx7IXhK+bozYcPxWCLTeD//ZkPaJ83anM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -28,8 +28,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit version;
-    pname = "unicode-paracode";
     rev-prefix = "v";
   };
 

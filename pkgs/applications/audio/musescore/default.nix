@@ -31,7 +31,7 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936
-    "--set QT_QPA_PLATFORM xcb"
+    "--set-default QT_QPA_PLATFORM xcb"
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -13,7 +13,7 @@ buildPecl {
   meta = with lib; {
     description = "YAML-1.1 parser and emitter";
     license = licenses.mit;
-    homepage = "http://bd808.com/pecl-file_formats-yaml/";
+    homepage = "https://bd808.com/pecl-file_formats-yaml/";
     maintainers = teams.php.members;
   };
 }

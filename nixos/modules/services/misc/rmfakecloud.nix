@@ -138,7 +138,7 @@ in {
         SystemCallArchitectures = "native";
         WorkingDirectory = serviceDataDir;
         StateDirectory = baseNameOf serviceDataDir;
-        UMask = 0027;
+        UMask = "0027";
       };
     };
   };

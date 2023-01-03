@@ -245,7 +245,7 @@ in {
         NotifyAccess = "main";
         Type = "notify";
 
-        # FIXME: Which of these do we actualy need, can we drop the chroot flag?
+        # FIXME: Which of these do we actually need, can we drop the chroot flag?
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW"

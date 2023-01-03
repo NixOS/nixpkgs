@@ -1,18 +1,22 @@
 { lib, stdenv, fetchurl, fontforge }:
 
 stdenv.mkDerivation {
-  name = "linux-libertine-5.3.0";
+  pname = "linux-libertine";
+  version = "5.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxlibertine/5.3.0/LinLibertineSRC_5.3.0_2012_07_02.tgz";
-    sha256 = "0x7cz6hvhpil1rh03rax9zsfzm54bh7r4bbrq8rz673gl9h47v0v";
+    hash = "sha256-G+xDYKJvHPMzwnktkg9cpNTv9E9d5QFgDjReuKH57HQ=";
   };
 
   sourceRoot = ".";
 
   nativeBuildInputs = [ fontforge ];
 
+  dontConfigure = true;
+
   buildPhase = ''
+    runHook preBuild
     for i in *.sfd; do
       fontforge -lang=ff -c \
         'Open($1);
@@ -28,20 +32,23 @@ stdenv.mkDerivation {
         Generate($1:r + ".enc");
         ' $i;
     done
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -m444 -Dt $out/share/fonts/opentype/public *.otf
     install -m444 -Dt $out/share/fonts/truetype/public *.ttf
     install -m444 -Dt $out/share/fonts/type1/public    *.pfb
     install -m444 -Dt $out/share/texmf/fonts/enc       *.enc
     install -m444 -Dt $out/share/texmf/fonts/map       *.map
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Linux Libertine Fonts";
     homepage = "http://linuxlibertine.sf.net";
-    maintainers = [ ];
+    maintainers = with maintainers; [ erdnaxe ];
     license = licenses.ofl;
   };
 }

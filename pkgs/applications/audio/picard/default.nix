@@ -1,6 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, fetchpatch
 , gettext
 , chromaprint
 , qt5
@@ -18,13 +19,13 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.8.3";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    sha256 = "sha256-KUHciIlwaKXvyCCkAzdh1vpe9cunDizrMUl0SoCpxgY=";
+    sha256 = "sha256-ukqlAXGaqX89U77cM9Ux0RYquT31Ho8ri1Ue7S3+MwQ=";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
@@ -61,6 +62,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://picard.musicbrainz.org/";
+    changelog = "https://picard.musicbrainz.org/changelog/";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2Plus;

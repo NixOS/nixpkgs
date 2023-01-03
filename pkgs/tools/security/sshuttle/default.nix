@@ -11,11 +11,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IfuRvfOStQ5422uNdelbc6ydr9Nh4mV+eE5nRWEhkxU=";
+    sha256 = "sha256-9aPtHlqxITx6bfhgr0HxqQOrLK+/73Hzcazc/yHmnuY=";
   };
 
   patches = [ ./sudo.patch ];

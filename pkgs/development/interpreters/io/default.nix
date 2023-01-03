@@ -24,13 +24,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [
     zlib sqlite gmp libffi cairo ncurses freetype
     libGLU libGL libpng libtiff libjpeg readline libsndfile libxml2
     freeglut libsamplerate pcre libevent libedit yajl
-    pkg-config glfw openssl libpthreadstubs libXdmcp
+    glfw openssl libpthreadstubs libXdmcp
     libmemcached python3
   ];
 

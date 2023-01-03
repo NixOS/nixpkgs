@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -64,9 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -83,5 +80,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "com.github.parnold_x.nasc";
+    broken = true; # at 2022-09-23
   };
 }

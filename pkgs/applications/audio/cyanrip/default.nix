@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, ffmpeg
+, ffmpeg-headless
 , libcdio
 , libcdio-paranoia
 , libmusicbrainz5
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ ffmpeg libcdio libcdio-paranoia libmusicbrainz5 curl ];
+  buildInputs = [ ffmpeg-headless libcdio libcdio-paranoia libmusicbrainz5 curl ];
 
   meta = with lib; {
     homepage = "https://github.com/cyanreg/cyanrip";

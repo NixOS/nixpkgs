@@ -288,7 +288,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 49152;
         description = lib.mdDoc ''
           The network port to listen on.
@@ -362,7 +362,9 @@ in {
     in mkIf cfg.enable {
     systemd.services.mediatomb = {
       description = "${cfg.serverName} media Server";
-      after = [ "network.target" ];
+      # Gerbera might fail if the network interface is not available on startup
+      # https://github.com/gerbera/gerbera/issues/1324
+      after = [ "network.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = cfg.user;

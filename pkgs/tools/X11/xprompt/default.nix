@@ -36,11 +36,9 @@ stdenv.mkDerivation rec {
     in
     optionalString (conf != null) "cp ${configFile} config.h";
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A dmenu rip-off with contextual completion";

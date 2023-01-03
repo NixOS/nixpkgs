@@ -5,7 +5,9 @@
 , fetchFromGitHub
 , lib
 , python
-, pythonOlder }:
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "django-cryptography";
@@ -19,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-C3E2iT9JdLvF+1g+xhZ8dPDjjh25JUxLAtTMnalIxPk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography

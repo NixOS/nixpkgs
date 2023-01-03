@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "numdifftools";
-  version = "0.9.40";
+  version = "0.9.41";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pbrod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YLi9cNHcZ/PlhrhvYOMfRTOt4kinQcfxvqInT8/0Qpg=";
+    hash = "sha256-HYacLaowSDdrwkxL1h3h+lw/8ahzaecpXEnwrCqMCWk=";
   };
 
   propagatedBuildInputs = [

@@ -1,15 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, unixODBC }:
+{ lib, stdenv, fetchFromGitHub, catch2, cmake, unixODBC }:
 
 stdenv.mkDerivation rec {
   pname = "nanodbc";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "nanodbc";
     repo = "nanodbc";
     rev = "v${version}";
-    sha256 = "1q80p7yv9mcl4hyvnvcjdr70y8nc940ypf368lp97vpqn5yckkgm";
+    hash = "sha256-dVUOwA7LfLqcQq2nc6OAha0krmgTy5RUHupBVrNdo4g=";
   };
+
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp test/catch/catch.hpp
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -19,15 +23,6 @@ stdenv.mkDerivation rec {
     [ "-DBUILD_STATIC_LIBS=ON" ]
   else
     [ "-DBUILD_SHARED_LIBS=ON" ];
-
-  # fix compilation on macOS
-  # https://github.com/nanodbc/nanodbc/issues/274
-  # remove after the next version update
-  postUnpack = if stdenv.isDarwin then ''
-    mv $sourceRoot/VERSION $sourceRoot/VERSION.txt
-    substituteInPlace $sourceRoot/CMakeLists.txt \
-       --replace 'file(STRINGS VERSION' 'file(STRINGS VERSION.txt'
-  '' else "";
 
   meta = with lib; {
     homepage = "https://github.com/nanodbc/nanodbc";

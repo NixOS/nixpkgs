@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.42";
+  version = "0.1.43";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UNquetZ1sCLO9T5p5b3jTSu+52xuc5XdyHNKsvvPdck=";
+    hash = "sha256-t0mdw8cBGUZ33BWOSeEHyFAGga/Tf1F/gATFSfCpAJQ=";
   };
 
   propagatedBuildInputs = [

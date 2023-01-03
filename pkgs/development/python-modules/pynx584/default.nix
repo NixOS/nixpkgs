@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pynx584";
-  version = "0.8";
+  version = "0.8.1";
   disabled = pythonOlder "3.6";
 
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "kk7ds";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aTwAQnz3my58MgXNe61lStLth6PZXLVLLDI2HUJiNm8=";
+    sha256 = "sha256-nF8+LbKqy/GrnPpykS5wEQMPoFYxi40pfM3Ys/UXCeo=";
   };
 
   propagatedBuildInputs = [

@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
+, ddt
 , fetchFromGitHub
 , importlib-metadata
 , jsonschema
 , lxml
 , packageurl-python
 , poetry-core
+, pytestCheckHook
 , python
 , pythonOlder
 , requirements-parser
@@ -14,13 +16,12 @@
 , toml
 , types-setuptools
 , types-toml
-, unittestCheckHook
 , xmldiff
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "2.7.1";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
+    hash = "sha256-DajXu8aZAZyr7o0fGH9do9i/z+UqMMkcMXjbETtWa1g=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +49,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    unittestCheckHook
+    ddt
     jsonschema
     lxml
+    pytestCheckHook
     xmldiff
   ];
 
@@ -59,12 +61,23 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    rm tests/test_output_json.py
+    export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
+
+  pytestFlagsArray = [
+    "tests/"
+  ];
+
+  disabledTests = [
+    # These tests require network access.
+    "test_bom_v1_3_with_metadata_component"
+    "test_bom_v1_4_with_metadata_component"
+  ];
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
+    changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

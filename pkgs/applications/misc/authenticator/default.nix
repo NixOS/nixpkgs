@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , appstream-glib
 , clang
 , desktop-file-utils
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream-glib
-    clang
     desktop-file-utils
     meson
     ninja
@@ -53,6 +51,7 @@ stdenv.mkDerivation rec {
     cargoSetupHook
     rust.cargo
     rust.rustc
+    bindgenHook
   ]);
 
   buildInputs = [
@@ -69,8 +68,6 @@ stdenv.mkDerivation rec {
     wayland
     zbar
   ];
-
-  LIBCLANG_PATH = "${lib.getLib libclang}/lib";
 
   meta = {
     description = "Two-factor authentication code generator for GNOME";

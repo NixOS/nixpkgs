@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "o";
-  version = "2.55.1";
+  version = "2.57.0";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "o";
     rev = "v${version}";
-    hash = "sha256-owueLd6kR/bDFxKI9QOUgriH63XRsEEpIFfp5aRTSbI=";
+    hash = "sha256-UKFquf5h1e7gRAZgtcTdEpoNv+TOC8BYb2ED26X274s=";
   };
 
   postPatch = ''

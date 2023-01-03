@@ -1,28 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flaky
+, hatch-vcs
+, hatchling
 , httpx
 , importlib-metadata
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "5.0.0";
-  format = "setuptools";
+  version = "5.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UBi2bCtGMtcavYEDtz5m5N0UxmCaj3un5aomxzbfLfg=";
+  src = fetchFromGitHub {
+    owner = "pylast";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-LRZYLo9h7Z8WXemLgKR5qzAmtL4x/AQQJpta3e0WHcc=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -44,6 +50,6 @@ buildPythonPackage rec {
     description = "Python interface to last.fm (and compatibles)";
     homepage = "https://github.com/pylast/pylast";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [ fab rvolosatovs ];
   };
 }

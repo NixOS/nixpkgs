@@ -18,10 +18,9 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+# broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+# broken for the armv7l builder
+, enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? false
 } @args:
 
@@ -113,6 +112,13 @@ in stdenv.mkDerivation (rec {
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
 
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
+  '';
+
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/
@@ -148,6 +154,7 @@ in stdenv.mkDerivation (rec {
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
     "-DLLVM_BUILD_STATIC=ON"
+    "-DLLVM_LINK_LLVM_DYLIB=off"
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812

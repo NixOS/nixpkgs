@@ -1,24 +1,44 @@
-{ fetchurl, lib, stdenv, pkg-config, darwin, cairo, fontconfig, freetype, libsigcxx, meson, ninja }:
+{ fetchurl
+, stdenv
+, lib
+, pkg-config
+, darwin
+, cairo
+, fontconfig
+, freetype
+, libsigcxx
+, meson
+, ninja
+}:
 
 stdenv.mkDerivation rec {
   pname = "cairomm";
-  version = "1.14.3";
-
-  src = fetchurl {
-    url = "https://www.cairographics.org/releases/${pname}-${version}.tar.xz";
-    # gnome doesn't have the latest version ATM; beware: same name but different hash
-    #url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DTfgZ8XEyngIt87dq/4ZMsW9KnUK1k+zIeEhNTYpfng=";
-  };
+  version = "1.14.4";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  propagatedBuildInputs = [ cairo libsigcxx ];
-  buildInputs = [ fontconfig freetype ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  src = fetchurl {
+    url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
+    sha256 = "R0nSWisu9nzAwBTKr1yH+kZ5L8Sz7eGG+w/JMtIFUVg=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    fontconfig
+    freetype
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
   ]);
+
+  propagatedBuildInputs = [
+    cairo
+    libsigcxx
+  ];
 
   doCheck = true;
 

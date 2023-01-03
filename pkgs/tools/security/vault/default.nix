@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.11.3";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "sha256-L86wV47xGf3W6LEhFuH6cP30dtvETRbEGsmQNCHviCI=";
+    sha256 = "sha256-P/mQoW4lG6U83WEjn5urpFa7q5mN+XOrIOkzf2pslwQ=";
   };
 
-  vendorSha256 = "sha256-fKHo/m2QKEclNMeDxlM8kmOxAWbKu1lsXC4cKDaImdg=";
+  vendorSha256 = "sha256-Z1iwJXbnSqIu/zo7iKLnh0yy1Dh0e5HwXoBkkt9xaqA=";
 
   subPackages = [ "." ];
 
@@ -44,7 +44,6 @@ buildGoModule rec {
     homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
-    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man techknowlogick ];
   };

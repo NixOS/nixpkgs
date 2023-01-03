@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, readline, rsh, ssh, slurm, slurmSupport ? false }:
+{ lib, stdenv, fetchurl, autoreconfHook, perl, readline, rsh, ssh, slurm, slurmSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "pdsh";
@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl readline ssh ]
     ++ (lib.optional slurmSupport slurm);
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # Do not use git to derive a version.
+  postPatch = ''
+    sed -i 's/m4_esyscmd(\[git describe.*/[${version}])/' configure.ac
+  '';
 
   preConfigure = ''
     configureFlagsArray=(

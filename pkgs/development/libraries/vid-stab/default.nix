@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "vid.stab";
-  version = "1.1.0";
+  version = "unstable-2022-05-30";
 
   src = fetchFromGitHub {
     owner = "georgmartius";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0a3frpm2kdbx7vszhg64p3alisag73bcspl7fp3a2f1kgq7rbh38";
+    rev = "90c76aca2cb06c3ff6f7476a7cd6851b39436656";
+    sha256 = "sha256-p1VRnkBeUpET3O2FmaJMyN5/EoSOQLdmRIVbzZcQaKY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
+  propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
 
   meta = with lib; {
     description = "Video stabilization library";

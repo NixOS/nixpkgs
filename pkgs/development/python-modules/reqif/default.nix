@@ -1,13 +1,11 @@
 { lib
 , buildPythonPackage
 , python
-, pythonOlder
 , fetchFromGitHub
 , poetry-core
 , beautifulsoup4
 , lxml
 , jinja2
-, dataclasses
 , pytestCheckHook
 }:
 
@@ -39,8 +37,6 @@ buildPythonPackage rec {
     beautifulsoup4
     lxml
     jinja2
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   pythonImportsCheck = [

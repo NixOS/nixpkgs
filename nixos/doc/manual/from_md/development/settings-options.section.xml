@@ -19,10 +19,10 @@
     </listitem>
     <listitem>
       <para>
-        Non-nix-representable ones: These can't be trivially mapped to a
+        Non-nix-representable ones: These can’t be trivially mapped to a
         subset of Nix syntax. Most generic programming languages are in
         this group, e.g. bash, since the statement
-        <literal>if true; then echo hi; fi</literal> doesn't have a
+        <literal>if true; then echo hi; fi</literal> doesn’t have a
         trivial representation in Nix.
       </para>
       <para>
@@ -42,8 +42,7 @@
     </listitem>
   </itemizedlist>
   <section xml:id="sec-settings-nix-representable">
-    <title>Nix-representable Formats (JSON, YAML, TOML, INI,
-    ...)</title>
+    <title>Nix-representable Formats (JSON, YAML, TOML, INI, …)</title>
     <para>
       By convention, formats like this are handled with a generic
       <literal>settings</literal> option, representing the full program
@@ -318,7 +317,7 @@
       used, along with some other related best practices. See the
       comments for explanations.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 { options, config, lib, pkgs, ... }:
 let
   cfg = config.services.foo;
@@ -391,7 +390,7 @@ in {
         <emphasis role="strong">Example: Declaring a type-checked
         <literal>settings</literal> attribute</emphasis>
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 settings = lib.mkOption {
   type = lib.types.submodule {
 

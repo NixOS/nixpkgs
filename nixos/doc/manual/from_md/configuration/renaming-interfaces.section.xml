@@ -30,7 +30,7 @@
       the interface with MAC address
       <literal>52:54:00:12:01:01</literal> using a netword link unit:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 systemd.network.links.&quot;10-wan&quot; = {
   matchConfig.PermanentMACAddress = &quot;52:54:00:12:01:01&quot;;
   linkConfig.Name = &quot;wan&quot;;
@@ -43,7 +43,7 @@ systemd.network.links.&quot;10-wan&quot; = {
     <para>
       Alternatively, we can use a plain old udev rule:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.udev.initrdRules = ''
   SUBSYSTEM==&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, \
   ATTR{address}==&quot;52:54:00:12:01:01&quot;, KERNEL==&quot;eth*&quot;, NAME=&quot;wan&quot;

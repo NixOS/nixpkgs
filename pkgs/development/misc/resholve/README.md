@@ -94,8 +94,9 @@ resholve.mkDerivation rec {
 
 ## Basic `resholve.writeScript` and `resholve.writeScriptBin` examples
 
-Both of these functions have the same basic API. This example is a little
-trivial for now. If you have a real usage that you find helpful, please PR it.
+Both of these functions have the same basic API. The examples are a little
+trivial, so I'll also link to some real-world examples:
+- [shell.nix from abathur/tdverpy](https://github.com/abathur/tdverpy/blob/e1f956df3ed1c7097a5164e0c85b178772e277f5/shell.nix#L6-L13)
 
 ```nix
 resholvedScript = resholve.writeScript "name" {
@@ -183,6 +184,7 @@ handle any potential problems it encounters with directives. There are currently
      scripts from using the latest current-system symlinks.)
    - resolve commands in a variable definition
    - resolve an absolute command path from inputs as if it were a bare reference
+   - force resholve to resolve known security wrappers
 3. `keep` directives tell resholve not to raise an error (i.e., ignore)
    something it would usually object to. Common examples:
    - variables used as/within the first word of a command

@@ -24,13 +24,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "2022-07-17";
+  version = "2022-11-09";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "NGgTToaSJBwmHnZjWbJ3dSJg9Mmfchj3W0xgK0CMb9M=";
+    sha256 = "VmMlebERe6LDyfD/lo8o4TvNrJ37m2OHC25JkUc6sig=";
   };
 
   nativeBuildInputs = [
@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
 
     rm $out/share/themes/*/{AUTHORS,COPYING}
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";

@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.21";
+  version = "1.9.23";
 
   src = fetchFromGitHub {
     owner = "psd-tools";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+nqN7DJHbr7XkfG0oUQkWcxv+krR8DlQndAQCvnBk3s=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-pJUf5rE5QMnfNytU1P0Zbj1iztrK5xrX4CJ/WvIG8mY=";
   };
 
   nativeBuildInputs = [ cython ];

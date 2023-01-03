@@ -23,7 +23,7 @@ $ nix-collect-garbage
     this unit automatically at certain points in time, for instance,
     every night at 03:15:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 nix.gc.automatic = true;
 nix.gc.dates = &quot;03:15&quot;;
 </programlisting>

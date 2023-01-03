@@ -15,19 +15,18 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.55.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3r955nZu/nNHnFQJy8bSswtd4N0JxGZA8RLU0CXZT7o=";
+    sha256 = "sha256-KG2eCwGZWVtepJQdsSwFziWsT1AbV6rYWRIO/I/CR8g=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "acme==" "acme>=" \
-      --replace "cryptography>=2.8,<37.0" "cryptography" \
       --replace "pycognito==" "pycognito>=" \
       --replace "snitun==" "snitun>=" \
   '';

@@ -2,6 +2,7 @@
 , stdenv
 , bokeh
 , buildPythonPackage
+, click
 , cloudpickle
 , distributed
 , fastparquet
@@ -26,19 +27,28 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.7.0";
+  version = "2022.10.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-O5/TNeta0V0v9WTpPmF/kJMJ40ANo6rcRtzurr5/SwA=";
+    hash = "sha256-zHJR2WjHigUMWtRJW25+gk1fKGKedU53BBjwx5zaodA=";
   };
 
+  patches = [
+    (fetchpatch {
+      # Fix test_repartition_npartitions on platforms other than x86-64
+      url = "https://github.com/dask/dask/commit/65f40ad461c57065f981e6213e33b1d13cc9bc8f.patch";
+      hash = "sha256-KyTSms4ik1kYtL+I/huAxD+zK2AAuPkwmHA9FYk601Y=";
+    })
+  ];
+
   propagatedBuildInputs = [
+    click
     cloudpickle
     fsspec
     packaging
@@ -97,9 +107,8 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # Ignore warning about pyarrow 5.0.0 feautres
-    "-W"
-    "ignore::FutureWarning"
+    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
+    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -110,6 +119,8 @@ buildPythonPackage rec {
     "test_read_dir_nometa"
   ] ++ [
     "test_chunksize_files"
+    # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
+    "test_set_index_string"
   ];
 
   __darwinAllowLocalNetworking = true;

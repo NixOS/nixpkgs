@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "SCSI Tape Encryption Manager";

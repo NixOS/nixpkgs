@@ -50,9 +50,6 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp \
       --replace 'optionalHeight > 0' 'optionalHeight != NULL'
-
-    substituteInPlace ./tools/linguist/linguist/messagemodel.cpp \
-      --replace 'm->comment()) >= 0' 'm->comment()) != NULL'
   '';
 
   patches =
@@ -237,6 +234,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 sander ];
     platforms   = lib.platforms.unix;
-    badPlatforms = [ "x86_64-darwin" ];
+    badPlatforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }

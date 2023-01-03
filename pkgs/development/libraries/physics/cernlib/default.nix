@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, imake, makedepend, motif, xorg }:
+{ lib, stdenv, fetchurl, gfortran, imake, makedepend, motif, xorg, libxcrypt }:
 
 stdenv.mkDerivation rec {
   version = "2006";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0awla1rl96z82br7slcmg8ks1d2a7slk6dj79ywb871j2ksi3fky";
   };
 
-  buildInputs = with xorg; [ gfortran motif libX11 libXft libXt ];
+  buildInputs = with xorg; [ gfortran motif libX11 libXft libXt libxcrypt ];
   nativeBuildInputs = [ imake makedepend ];
   sourceRoot = ".";
 

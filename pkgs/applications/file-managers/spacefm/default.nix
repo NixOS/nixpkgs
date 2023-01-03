@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [
-    gtk3 udev desktop-file-utils shared-mime-info intltool
+    gtk3 udev desktop-file-utils shared-mime-info
     wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2
   ] ++ (if ifuseSupport then [ ifuse ] else []);
   # Introduced because ifuse doesn't build due to CVEs in libplist

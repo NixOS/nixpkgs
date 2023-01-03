@@ -1,4 +1,4 @@
-{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgs_i686 }:
+{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux }:
 
 deployAndroidPackage {
   inherit package os;
@@ -13,7 +13,7 @@ deployAndroidPackage {
       zlib
       ncurses5
       stdenv.cc.cc
-      pkgs_i686.glibc
+      pkgsi686Linux.glibc
       expat
       freetype
       nss

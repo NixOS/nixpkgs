@@ -34,12 +34,11 @@ stdenv.mkDerivation {
     "-Wno-error=incompatible-pointer-types"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [
     which
     gnome.gnome-common
     glib
-    intltool
     libtool
     cairo
     gtk3

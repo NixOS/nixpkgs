@@ -7,7 +7,7 @@ pythonDocs = {
     python27 = import ./2.7-html.nix {
       inherit stdenv fetchurl lib;
     };
-    python37 = import ./3.7-html.nix {
+    python310 = import ./3.10-html.nix {
       inherit stdenv fetchurl lib;
     };
   };
@@ -16,7 +16,7 @@ pythonDocs = {
     python27 = import ./2.7-pdf-a4.nix {
       inherit stdenv fetchurl lib;
     };
-    python37 = import ./3.7-pdf-a4.nix {
+    python310 = import ./3.10-pdf-a4.nix {
       inherit stdenv fetchurl lib;
     };
   };
@@ -25,7 +25,7 @@ pythonDocs = {
     python27 = import ./2.7-pdf-letter.nix {
       inherit stdenv fetchurl lib;
     };
-    python37 = import ./3.7-pdf-letter.nix {
+    python310 = import ./3.10-pdf-letter.nix {
       inherit stdenv fetchurl lib;
     };
   };
@@ -34,7 +34,13 @@ pythonDocs = {
     python27 = import ./2.7-text.nix {
       inherit stdenv fetchurl lib;
     };
-    python37 = import ./3.7-text.nix {
+    python310 = import ./3.10-text.nix {
+      inherit stdenv fetchurl lib;
+    };
+  };
+  texinfo = {
+    recurseForDerivations = true;
+    python310 = import ./3.10-texinfo.nix {
       inherit stdenv fetchurl lib;
     };
   };

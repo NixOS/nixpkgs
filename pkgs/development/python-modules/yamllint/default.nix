@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.27.1";
+  version = "1.28.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5ogyS1hWCraKGjz/LApHTj/tNx3+jaXRuYF7ffVQOc4=";
+    sha256 = "sha256-nj2N3RbQWDIUxf3/6AbJNECGch8QdDX2i62ZDlqIgms=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   disabledTests = [
     # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373
     "test_find_files_recursively"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # locale tests are broken on BSDs; see https://github.com/adrienverge/yamllint/issues/307
     "test_locale_accents"
     "test_locale_case"

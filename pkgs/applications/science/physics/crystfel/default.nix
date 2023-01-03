@@ -54,7 +54,7 @@ let
     # We hard-code this by providing a little patch and then passing the absolute path to syminfo.lib as a
     # preprocessor flag.
     preBuild = ''
-      makeFlagsArray+=(CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"$out/share/syminfo.lib\"')
+      makeFlagsArray+=(CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/syminfo.lib\"')
       export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
     '';
     makeFlags = [ "CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/syminfo.lib\"" ];
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     url = "https://www.desy.de/~twhite/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0i9d5ggalic7alj97dxjdys7010kxhm2cb4lwakvigl023j8ms79";
   };
-  nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers ]
+  nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook ];
   buildInputs = [
     hdf5

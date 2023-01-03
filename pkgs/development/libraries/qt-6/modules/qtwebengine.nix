@@ -64,11 +64,12 @@
 , lcms2
 , re2
 , libkrb5
+, mesa
 , xkeyboard_config
 , enableProprietaryCodecs ? true
 }:
 
-qtModule rec {
+qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
@@ -101,7 +102,7 @@ qtModule rec {
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
         --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-      substituteInPlace third_party/webgpu-cts/src/tools/deno \
+      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
         --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
       patchShebangs .
     )
@@ -212,6 +213,7 @@ qtModule rec {
     pipewire
 
     libkrb5
+    mesa
   ];
 
   buildInputs = [
@@ -220,6 +222,10 @@ qtModule rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  preConfigure = ''
+    export NINJAFLAGS="-j$NIX_BUILD_CORES"
+  '';
+
   postInstall = ''
     # This is required at runtime
     mkdir $out/libexec
@@ -227,7 +233,6 @@ qtModule rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
     # This build takes a long time; particularly on slow architectures

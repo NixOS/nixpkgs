@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , mkDerivation
-, fetchurl
 , fetchFromGitHub
 , chromaprint
 , cmake

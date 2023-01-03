@@ -1,4 +1,4 @@
-{ version, ldcSha256 }:
+{ version, sha256 }:
 { lib, stdenv, fetchurl, cmake, ninja, llvm_11, curl, tzdata
 , libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, runCommand, targetPackages
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ldc-developers/ldc/releases/download/v${version}/ldc-${version}-src.tar.gz";
-    sha256 = ldcSha256;
+    inherit sha256;
   };
 
   # https://issues.dlang.org/show_bug.cgi?id=19553

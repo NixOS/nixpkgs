@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "remodel";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "remodel";
     rev = "v${version}";
-    sha256 = "sha256-bUwTryGc4Y614nXKToPXp5KZqO12MmtdT3FUST4OvQY=";
+    sha256 = "sha256-tZ6ptGeNBULJaoFomMFN294wY8YUu1SrJh4UfOL/MnI=";
   };
 
-  cargoSha256 = "sha256-b9+eV2co4hcKLZxJRqDIX2U0O25Ba5UHQiNpfjE4fN4=";
+  cargoSha256 = "sha256-YCYs+MMTxnJEKhzjddBp7lnSYPrpf3G+ktr1ez/ZKkg=";
 
   nativeBuildInputs = [
     pkg-config

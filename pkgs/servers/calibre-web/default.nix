@@ -6,21 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.18";
+  version = "0.6.19";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    sha256 = "sha256-KjmpFetNhNM5tL34e/Pn1i3hc86JZglubSMsHZWu198=";
+    hash = "sha256-mNYLQ+3u6xRaoZ5oH6HdylFfgz1fq1ZB86AWk9vULWQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
+    APScheduler
     advocate
-    backports_abc
     chardet
     flask-babel
-    flask_login
+    flask-login
     flask_principal
     flask-wtf
     iso-639
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     sqlalchemy
     tornado
     unidecode
-    Wand
+    wand
     werkzeug
   ];
 
@@ -53,11 +53,13 @@ python3.pkgs.buildPythonApplication rec {
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
 
+    sed -i "/backports_abc/d" setup.cfg
+
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
       --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
       --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
-      --replace "Flask-Login>=0.3.2,<0.5.1" "Flask-Login>=0.3.2" \
+      --replace "Flask-Login>=0.3.2,<0.6.2" "Flask-Login>=0.3.2" \
       --replace "flask-wtf>=0.14.2,<1.1.0" "flask-wtf>=0.14.2" \
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
       --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \

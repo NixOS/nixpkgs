@@ -29,6 +29,43 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
+  # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
+  # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  compressMimeTypes = [
+    "application/atom+xml"
+    "application/geo+json"
+    "application/json"
+    "application/ld+json"
+    "application/manifest+json"
+    "application/rdf+xml"
+    "application/vnd.ms-fontobject"
+    "application/wasm"
+    "application/x-rss+xml"
+    "application/x-web-app-manifest+json"
+    "application/xhtml+xml"
+    "application/xliff+xml"
+    "application/xml"
+    "font/collection"
+    "font/otf"
+    "font/ttf"
+    "image/bmp"
+    "image/svg+xml"
+    "image/vnd.microsoft.icon"
+    "text/cache-manifest"
+    "text/calendar"
+    "text/css"
+    "text/csv"
+    "text/html"
+    "text/javascript"
+    "text/markdown"
+    "text/plain"
+    "text/vcard"
+    "text/vnd.rim.location.xloc"
+    "text/vtt"
+    "text/x-component"
+    "text/xml"
+  ];
+
   defaultFastcgiParams = {
     SCRIPT_FILENAME   = "$document_root$fastcgi_script_name";
     QUERY_STRING      = "$query_string";
@@ -140,6 +177,16 @@ let
         ssl_stapling_verify on;
       ''}
 
+      ${optionalString (cfg.recommendedBrotliSettings) ''
+        brotli on;
+        brotli_static on;
+        brotli_comp_level 5;
+        brotli_window 512k;
+        brotli_min_length 256;
+        brotli_types ${lib.concatStringsSep " " compressMimeTypes};
+        brotli_buffers 32 8k;
+      ''}
+
       ${optionalString (cfg.recommendedGzipSettings) ''
         gzip on;
         gzip_proxied any;
@@ -192,14 +239,22 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
+      ${optionalString (cfg.proxyCache.enable) ''
+        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
+                                          levels=${cfg.proxyCache.levels}
+                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
+                                          inactive=${cfg.proxyCache.inactive}
+                                          max_size=${cfg.proxyCache.maxSize};
+      ''}
+
       ${cfg.commonHttpConfig}
 
       ${vhosts}
 
       ${optionalString cfg.statusPage ''
         server {
-          listen 80;
-          ${optionalString enableIPv6 "listen [::]:80;" }
+          listen ${toString cfg.defaultHTTPListenPort};
+          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
 
           server_name localhost;
 
@@ -233,7 +288,7 @@ let
 
   configPath = if cfg.enableReload
     then "/etc/nginx/nginx.conf"
-    else configFile;
+    else finalConfigFile;
 
   execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
@@ -246,8 +301,8 @@ let
           if vhost.listen != [] then vhost.listen
           else
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
-            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLListenPort; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultHTTPListenPort; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -275,7 +330,10 @@ let
         redirectListen = filter (x: !x.ssl) defaultListen;
 
         acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
-          location /.well-known/acme-challenge {
+          # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
+          # We use ^~ here, so that we don't check any regexes (which could
+          # otherwise easily override this intended match accidentally).
+          location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
             auth_basic off;
@@ -307,7 +365,9 @@ let
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
-            return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            location / {
+              return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
@@ -380,6 +440,38 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+
+  snakeOilCert = pkgs.runCommand "nginx-config-validate-cert" { nativeBuildInputs = [ pkgs.openssl.bin ]; } ''
+    mkdir $out
+    openssl genrsa -des3 -passout pass:xxxxx -out server.pass.key 2048
+    openssl rsa -passin pass:xxxxx -in server.pass.key -out $out/server.key
+    openssl req -new -key $out/server.key -out server.csr \
+    -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
+    openssl x509 -req -days 1 -in server.csr -signkey $out/server.key -out $out/server.crt
+  '';
+  validatedConfigFile = pkgs.runCommand "validated-nginx.conf" { nativeBuildInputs = [ cfg.package ]; } ''
+    # nginx absolutely wants to read the certificates even when told to only validate config, so let's provide fake certs
+    sed ${configFile} \
+    -e "s|ssl_certificate .*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
+    -e "s|ssl_trusted_certificate .*;|ssl_trusted_certificate ${snakeOilCert}/server.crt;|g" \
+    -e "s|ssl_certificate_key .*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
+    > conf
+
+    LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so \
+      NIX_REDIRECTS="/etc/resolv.conf=/dev/null" \
+      nginx -t -c $(readlink -f ./conf) > out 2>&1 || true
+    if ! grep -q "syntax is ok" out; then
+      echo nginx config validation failed.
+      echo config was ${configFile}.
+      echo 'in case of false positive, set `services.nginx.validateConfig` to false.'
+      echo nginx output:
+      cat out
+      exit 1
+    fi
+    cp ${configFile} $out
+  '';
+
+  finalConfigFile = if cfg.validateConfig then validatedConfigFile else configFile;
 in
 
 {
@@ -408,6 +500,16 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Enable recommended optimisation settings.
+        '';
+      };
+
+      recommendedBrotliSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+
+          This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -446,6 +548,24 @@ in
         '';
       };
 
+      defaultHTTPListenPort = mkOption {
+        type = types.port;
+        default = 80;
+        example = 8080;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for HTTP by default.
+        '';
+      };
+
+      defaultSSLListenPort = mkOption {
+        type = types.port;
+        default = 443;
+        example = 8443;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for SSL by default.
+        '';
+      };
+
       package = mkOption {
         default = pkgs.nginxStable;
         defaultText = literalExpression "pkgs.nginxStable";
@@ -460,14 +580,24 @@ in
         '';
       };
 
+      validateConfig = mkOption {
+        # FIXME: re-enable if we can make of the configurations work.
+        #default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
+        default = false;
+        defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
+        type = types.bool;
+        description = lib.mdDoc ''
+          Validate the generated nginx config at build time. The check is not very robust and can be disabled in case of false positives. This is notably the case when cross-compiling or when using `include` with files outside of the store.
+        '';
+      };
+
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExpression "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.echo ]";
         description = lib.mdDoc ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
-          to install. Packaged modules are available in
-          `pkgs.nginxModules`.
+          to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
       };
 
@@ -686,6 +816,72 @@ in
           '';
       };
 
+      proxyCache = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+
+            keysZoneName = mkOption {
+              type = types.str;
+              default = "cache";
+              example = "my_cache";
+              description = lib.mdDoc "Set name to shared memory zone.";
+            };
+
+            keysZoneSize = mkOption {
+              type = types.str;
+              default = "10m";
+              example = "32m";
+              description = lib.mdDoc "Set size to shared memory zone.";
+            };
+
+            levels = mkOption {
+              type = types.str;
+              default = "1:2";
+              example = "1:2:2";
+              description = lib.mdDoc ''
+                The levels parameter defines structure of subdirectories in cache: from
+                1 to 3, each level accepts values 1 or 2. Сan be used any combination of
+                1 and 2 in these formats: x, x:x and x:x:x.
+              '';
+            };
+
+            useTempPath = mkOption {
+              type = types.bool;
+              default = false;
+              example = true;
+              description = lib.mdDoc ''
+                Nginx first writes files that are destined for the cache to a temporary
+                storage area, and the use_temp_path=off directive instructs Nginx to
+                write them to the same directories where they will be cached. Recommended
+                that you set this parameter to off to avoid unnecessary copying of data
+                between file systems.
+              '';
+            };
+
+            inactive = mkOption {
+              type = types.str;
+              default = "10m";
+              example = "1d";
+              description = lib.mdDoc ''
+                Cached data that has not been accessed for the time specified by
+                the inactive parameter is removed from the cache, regardless of
+                its freshness.
+              '';
+            };
+
+            maxSize = mkOption {
+              type = types.str;
+              default = "1g";
+              example = "2048m";
+              description = lib.mdDoc "Set maximum cache size";
+            };
+          };
+        };
+        default = {};
+        description = lib.mdDoc "Configure proxy cache";
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
@@ -859,6 +1055,8 @@ in
       groups = config.users.groups;
     }) dependentCertNames;
 
+    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli;
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
@@ -932,7 +1130,7 @@ in
     };
 
     environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
-      source = configFile;
+      source = finalConfigFile;
     };
 
     # This service waits for all certificates to be available
@@ -951,7 +1149,7 @@ in
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
-      restartTriggers = optionals (cfg.enableReload) [ configFile ];
+      restartTriggers = optionals (cfg.enableReload) [ finalConfigFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);

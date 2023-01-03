@@ -28,7 +28,8 @@ buildPythonPackage rec {
     uritemplate
     python-dateutil
     pyjwt
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   checkInputs = [
     pytestCheckHook

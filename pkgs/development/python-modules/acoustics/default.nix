@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , matplotlib
 , numpy
 , pandas
@@ -20,6 +21,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-0CvMhCUc+i7dPiHH+IXdlj+OjFh/l1wvnU4dmxQrzFI=";
   };
+  format = "pyproject";
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     matplotlib
@@ -44,8 +48,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # All tests fail with TypeError
-    "tests/test_aio.py"
+    # ValueError: Unknown window type: "hanning"
+    "tests/standards/test_iso_1996_2_2007.py"
   ];
 
   pythonImportsCheck = [ "acoustics" ];

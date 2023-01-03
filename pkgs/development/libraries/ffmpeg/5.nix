@@ -1,12 +1,7 @@
-{ callPackage
-# Darwin frameworks
-, Cocoa, CoreMedia, VideoToolbox
-, ...
-}@args:
+{ callPackage, ... }@args:
 
 callPackage ./generic.nix (rec {
-  version = "5.1.1";
+  version = "5.1.2";
   branch = version;
-  sha256 = "sha256-zQ4W+QNCEmbVzN3t97g7nldUrvS596fwbOnkyALwVFs=";
-  darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
+  sha256 = "sha256-OaC8yNmFSfFsVwYkZ4JGpqxzbAZs69tAn5UC6RWyLys=";
 } // args)

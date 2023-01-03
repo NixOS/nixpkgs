@@ -42,7 +42,7 @@ let
     makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set \"${key}\" \"${value}\"") hydraEnv);
   in pkgs.buildEnv rec {
     name = "hydra-env";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     paths = [ cfg.package ];
 
     postBuild = ''
@@ -122,7 +122,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = lib.mdDoc ''
           TCP port the web server should listen to.

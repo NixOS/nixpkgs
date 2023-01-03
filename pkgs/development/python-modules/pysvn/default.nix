@@ -19,21 +19,21 @@
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.12";
+  version = "1.9.18";
   format = "other";
 
   src = fetchurl {
     url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
-    sha256 = "sRPa4wNyjDmGdF1gTOgLS0pnrdyZwkkH4/9UCdh/R9Q=";
+    hash = "sha256-lUPsNumMYwZoiR1Gt/hqdLLoHOZybRxwvu9+eU1CY78=";
   };
+
+  patches = [
+    ./replace-python-first.patch
+  ];
 
   buildInputs = [ bash subversion apr aprutil expat neon openssl ]
     ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
     ++ lib.optionals stdenv.isDarwin [ gcc ];
-
-  postPatch = ''
-    sed -i "117s|append(|insert(0, |" Tests/benchmark_diff.py
-  '';
 
   preConfigure = ''
     cd Source
@@ -47,11 +47,10 @@ buildPythonPackage rec {
       --apr-lib-dir=${apr.out}/lib \
       --svn-lib-dir=${subversion.out}/lib \
       --svn-bin-dir=${subversion.out}/bin
-  '' + (lib.optionalString (stdenv.isDarwin && !isPy3k) ''
-    sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-  '');
+  '';
 
-  checkInputs = [ glibcLocales  ];
+  checkInputs = [ glibcLocales ];
+
   checkPhase = ''
     runHook preCheck
 
@@ -60,10 +59,11 @@ buildPythonPackage rec {
     sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
     make -C ../Tests
 
-    ${python.interpreter} -c "import pysvn"
-
     runHook postCheck
   '';
+
+  # FIXME https://github.com/NixOS/nixpkgs/issues/175227
+  # pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
@@ -77,8 +77,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Subversion";
-    homepage = "http://pysvn.tigris.org/";
+    homepage = "https://pysvn.sourceforge.io/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
     # g++: command not found
     broken = stdenv.isDarwin;
   };

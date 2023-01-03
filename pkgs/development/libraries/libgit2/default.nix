@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DTHREADSAFE=ON"
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"

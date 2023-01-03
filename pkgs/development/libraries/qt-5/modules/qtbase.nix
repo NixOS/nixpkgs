@@ -14,7 +14,7 @@
 
   # optional dependencies
 , cups ? null, libmysqlclient ? null, postgresql ? null
-, withGtk3 ? false, dconf ? null, gtk3 ? null
+, withGtk3 ? false, dconf, gtk3
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -25,9 +25,6 @@
 , developerBuild ? false
 , decryptSslTraffic ? false
 }:
-
-assert withGtk3 -> dconf != null;
-assert withGtk3 -> gtk3 != null;
 
 let
   compareVersion = v: builtins.compareVersions version v;
@@ -368,7 +365,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
-    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
+    license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
     # Qt5 is broken on aarch64-darwin

@@ -13,9 +13,10 @@
 , testscenarios
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "openstacksdk-tests";
   inherit (openstacksdk) version;
+  format = "other";
 
   src = openstacksdk.src;
 

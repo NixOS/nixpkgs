@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , python3
 , openssl
 , fetchpatch
@@ -9,16 +10,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004.2";
+  version = "3005.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-L6ZE9iANTja1WEbLNytuZ7bKD77AaX8djXPncbZl7XA=";
+    hash = "sha256-+hTF2HP4Y7UJUBIdfiOiRJUCdFSQx8SMDPBFQGz+V8E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
+    jmespath
     markupsafe
     msgpack
     psutil
@@ -30,29 +32,17 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./fix-libcrypto-loading.patch
-    (fetchpatch {
-      url = "https://github.com/saltstack/salt/commit/6ec8b90e402ff3fa8f27c7da70ece898592416bc.patch";
-      hash = "sha256-OQCJeG12cp2EZ0BErp6yqsqhv023923rVFDHAFUfF6c=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto.so"
+      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}"
     substituteInPlace requirements/base.txt \
       --replace contextvars ""
 
     # Don't require optional dependencies on Darwin, let's use
     # `extraInputs` like on any other platform
     echo -n > "requirements/darwin.txt"
-
-    # Bug in 3004.1: https://github.com/saltstack/salt/pull/61839
-    substituteInPlace "salt/utils/entrypoints.py" \
-      --replace 'if sys.version_info >= (3, 10):' 'if False:'
-
-    # Bug in 3004.1: https://github.com/saltstack/salt/issues/61865
-    substituteInPlace "salt/transport/tcp.py" \
-      --replace 'payload = self.pack_publish(package)' 'package = self.pack_publish(package)'
 
     # 3004.1: requirement of pyzmq was restricted to <22.0.0; looks like that req was incorrect
     # https://github.com/saltstack/salt/commit/070597e525bb7d56ffadede1aede325dfb1b73a4

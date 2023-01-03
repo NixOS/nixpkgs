@@ -43,7 +43,12 @@ stdenv.mkDerivation rec {
       sha256 = "1jvs7dkdqs97qnsqc6hk088alhv8j4c638k65dbib9chh40jd7pf";
     })
     (fetchurl {
-      url = "https://sources.debian.org/data/main/u/unzip/6.0-26/debian/patches/06-initialize-the-symlink-flag.patch";
+      urls = [
+        # original link (will be dead eventually):
+        "https://sources.debian.org/data/main/u/unzip/6.0-26%2Bdeb11u1/debian/patches/06-initialize-the-symlink-flag.patch"
+
+        "https://gist.github.com/veprbl/41261bb781571e2246ea42d3f37795f5/raw/d8533d8c6223150f76b0f31aec03e185fcde3579/06-initialize-the-symlink-flag.patch"
+      ];
       sha256 = "1h00djdvgjhwfb60wl4qrxbyfsbbnn1qw6l2hkldnif4m8f8r1zj";
     })
   ] ++ lib.optional enableNLS

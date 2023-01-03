@@ -10,18 +10,18 @@
 , liblxqt
 , libqtxdg
 , polkit-qt
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-admin";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "A5dpw/vG92tC4W1q1wpDyMdRn1ScEH7m287MCEGOp9w=";
+    sha256 = "0b6I45O4hUSnhP+IJJV8jesJgWpg3Y53TEaROhGQctY=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-admin";

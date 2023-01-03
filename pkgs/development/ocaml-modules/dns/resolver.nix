@@ -1,6 +1,6 @@
 { buildDunePackage, dns, dns-server, dns-mirage, lru, duration
 , randomconv, lwt, mirage-time, mirage-clock, mirage-random
-, tcpip, tls, tls-mirage
+, tcpip, tls, tls-mirage, dnssec
 , alcotest
 }:
 
@@ -13,6 +13,7 @@ buildDunePackage {
     dns
     dns-server
     dns-mirage
+    dnssec
     lru
     duration
     randomconv

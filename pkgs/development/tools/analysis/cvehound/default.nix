@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkInputs = with python3.pkgs; [
-    GitPython
+    gitpython
     psutil
     pytestCheckHook
   ];

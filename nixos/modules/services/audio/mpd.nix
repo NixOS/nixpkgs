@@ -142,7 +142,7 @@ in {
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 6600;
           description = lib.mdDoc ''
             This setting is the TCP port that is desired for the daemon to get assigned

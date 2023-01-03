@@ -40,7 +40,7 @@ Exported variables:
 
 Bash-only variables:
 
- - `postgresqlTestUserOptions`: SQL options to use when creating the `$PGUSER` role, default: `LOGIN`.
+ - `postgresqlTestUserOptions`: SQL options to use when creating the `$PGUSER` role, default: `"LOGIN"`. Example: `"LOGIN SUPERUSER"`
  - `postgresqlTestSetupSQL`: SQL commands to run as database administrator after startup, default: statements that create `$PGUSER` and `$PGDATABASE`.
  - `postgresqlTestSetupCommands`: bash commands to run after database start, defaults to running `$postgresqlTestSetupSQL` as database administrator.
  - `postgresqlEnableTCP`: set to `1` to enable TCP listening. Flaky; not recommended.

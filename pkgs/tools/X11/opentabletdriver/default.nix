@@ -115,7 +115,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "otd";
   };
 }

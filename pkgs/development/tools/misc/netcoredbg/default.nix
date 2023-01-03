@@ -64,6 +64,10 @@ stdenvNoCC.mkDerivation {
     ln -s $out/share/netcoredbg/netcoredbg $out/bin/netcoredbg
   '';
 
+  passthru = {
+    inherit (managed) fetch-deps;
+  };
+
   meta = with lib; {
     description = "Managed code debugger with MI interface for CoreCLR";
     homepage = "https://github.com/Samsung/netcoredbg";

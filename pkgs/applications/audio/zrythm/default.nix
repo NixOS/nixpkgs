@@ -4,7 +4,6 @@
 , SDL2
 , alsa-lib
 , libaudec
-, bash
 , bash-completion
 , breeze-icons
 , carla
@@ -161,6 +160,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
              )
   '';
 

@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
     "tests.py"
   ];
 

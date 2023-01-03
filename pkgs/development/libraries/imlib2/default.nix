@@ -1,14 +1,16 @@
 { lib, stdenv, fetchurl
 # Image file formats
-, libjpeg, libtiff, giflib, libpng, libwebp
+, libjpeg, libtiff, giflib, libpng, libwebp, libjxl
+, libspectre
 # imlib2 can load images from ID3 tags.
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
-, x11Support ? true, xlibsWrapper ? null
-# Compilation error on Darwin with librsvg. For more information see:
-# https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
-, svgSupport ? !stdenv.isDarwin
-, heifSupport ? !stdenv.isDarwin
+, x11Support ? true
+, webpSupport ? true
+, svgSupport ? false
+, heifSupport ? false
+, jxlSupport ? false
+, psSupport ? false
 
 # for passthru.tests
 , libcaca
@@ -18,10 +20,11 @@
 , openbox
 , fluxbox
 , enlightenment
+, xorg
 }:
 
 let
-  inherit (lib) optional;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
@@ -33,11 +36,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libjpeg libtiff giflib libpng libwebp
+    libjpeg libtiff giflib libpng
     bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper
+  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
     ++ optional heifSupport libheif
-    ++ optional svgSupport librsvg;
+    ++ optional svgSupport librsvg
+    ++ optional webpSupport libwebp
+    ++ optional jxlSupport libjxl
+    ++ optional psSupport libspectre;
 
   nativeBuildInputs = [ pkg-config ];
 

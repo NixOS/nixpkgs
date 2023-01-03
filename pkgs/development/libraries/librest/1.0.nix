@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
     json-glib
     libsoup_3
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {

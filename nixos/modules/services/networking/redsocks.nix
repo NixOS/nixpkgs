@@ -81,7 +81,7 @@ in
           };
 
           port = mkOption {
-            type = types.int;
+            type = types.port;
             default = 12345;
             description = lib.mdDoc "Port on which redsocks should listen.";
           };

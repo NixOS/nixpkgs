@@ -22,7 +22,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     six
-  ] ++ lib.optional (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     mock
   ];
 

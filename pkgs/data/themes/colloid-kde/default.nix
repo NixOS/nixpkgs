@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A clean and concise theme for KDE Plasma desktop";

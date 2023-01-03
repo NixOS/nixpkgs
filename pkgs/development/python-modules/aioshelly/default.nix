@@ -1,14 +1,15 @@
 { lib
 , aiohttp
+, bluetooth-data-tools
 , buildPythonPackage
 , fetchFromGitHub
-, netifaces
+, orjson
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "3.0.0";
+  version = "5.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,12 +18,13 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Id4qg7uSvpjXpEx0/EvSMvFxgkR78/NOoOmmwngj7Qw=";
+    hash = "sha256-pa7ijfT/VbXNxwf9RITWxhUVUbimuBEjlU3xnDm3Zzk=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    netifaces
+    bluetooth-data-tools
+    orjson
   ];
 
   # Project has no test

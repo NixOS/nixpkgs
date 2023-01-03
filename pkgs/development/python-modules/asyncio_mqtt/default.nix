@@ -1,31 +1,66 @@
 { lib
+, anyio
 , buildPythonPackage
-, pythonOlder
-, fetchPypi
-, async_generator
+, fetchFromGitHub
 , paho-mqtt
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-mqtt";
-  version = "0.12.1";
-  format = "setuptools";
+  version = "0.14.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    pname = "asyncio_mqtt";
-    inherit version;
-    sha256 = "sha256-bb+FpF+U0m50ZUEWgK2jlHtQVG6YII1dUuegp+16fDg=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "sbtinstruments";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ByVslOx/XsxVan2/xdRi+wOQR9oVpIGtHPcHlIcHMEk=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     paho-mqtt
-  ] ++ lib.optional (pythonOlder "3.7") [
-    async_generator
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ];
 
-  doCheck = false; # no tests
+  checkInputs = [
+    anyio
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "asyncio_mqtt" ];
+  pythonImportsCheck = [
+    "asyncio_mqtt"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_client_filtered_messages"
+    "test_client_unfiltered_messages"
+    "test_client_unsubscribe"
+    "test_client_will"
+    "test_client_tls_context"
+    "test_client_tls_params"
+    "test_client_username_password "
+    "test_client_logger"
+    "test_client_max_concurrent_outgoing_calls"
+    "test_client_websockets"
+    "test_client_pending_calls_threshold"
+    "test_client_no_pending_calls_warnings_with_max_concurrent_outgoing_calls"
+  ];
 
   meta = with lib; {
     description = "Idomatic asyncio wrapper around paho-mqtt";

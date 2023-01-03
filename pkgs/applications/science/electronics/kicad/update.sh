@@ -65,7 +65,11 @@ tmp="${here}/,versions.nix.${RANDOM}"
 libs=( symbols templates footprints packages3d )
 
 get_rev() {
-  git ls-remote --tags "$@"
+  if [[ ${version} == "master" ]]; then
+    git ls-remote --heads "$@"
+  else
+    git ls-remote --tags "$@"
+  fi
 }
 
 gitlab="https://gitlab.com/kicad"

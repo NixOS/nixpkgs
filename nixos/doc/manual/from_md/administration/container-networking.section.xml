@@ -31,7 +31,7 @@ $ ping -c1 10.233.4.2
     address. This can be accomplished using the following configuration
     on the host:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.nat.enable = true;
 networking.nat.internalInterfaces = [&quot;ve-+&quot;];
 networking.nat.externalInterface = &quot;eth0&quot;;
@@ -45,7 +45,7 @@ networking.nat.externalInterface = &quot;eth0&quot;;
     If you are using Network Manager, you need to explicitly prevent it
     from managing container interfaces:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.networkmanager.unmanaged = [ &quot;interface-name:ve-*&quot; ];
 </programlisting>
   <para>

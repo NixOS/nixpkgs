@@ -5,6 +5,9 @@
 , pythonOlder
 , substituteAll
 
+# build
+, setuptools
+
 # patched in
 , fetchpatch
 , geos
@@ -40,24 +43,17 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.1";
+  version = "4.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ay+Kb8fPBczRIU5KLiHfzWojudV1xlc8rMjGeCjb5kI=";
+    hash = "sha256-04pOEI0jhsuWN9pmqC3I0HM8rt5Mg8Sv29p4r0IUIRs=";
   };
 
   patches = [
-    (fetchpatch {
-      # Fix regression in sqlite backend introduced in 4.1.
-      # https://github.com/django/django/pull/15925
-      url = "https://github.com/django/django/commit/c0beff21239e70cbdcc9597e5be09e505bb8f76c.patch";
-      hash = "sha256-QE7QnfYAK74wvK8gDJ15FtQ+BCIWRQKAVvM7v1FzwlE=";
-      excludes = [ "docs/releases/4.1.1.txt" ];
-    })
     (substituteAll {
       src = ./django_4_set_zoneinfo_dir.patch;
       zoneinfo = tzdata + "/share/zoneinfo";
@@ -69,6 +65,10 @@ buildPythonPackage rec {
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -113,6 +113,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design.";
     homepage = "https://www.djangoproject.com";
     license = licenses.bsd3;

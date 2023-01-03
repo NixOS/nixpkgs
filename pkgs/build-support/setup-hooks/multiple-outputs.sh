@@ -88,7 +88,7 @@ NIX_NO_SELF_RPATH=1
 
 
 # Move subpaths that match pattern $1 from under any output/ to the $2 output/
-# Beware: only globbing patterns are accepted, e.g.: * ? {foo,bar}
+# Beware: only globbing patterns are accepted, e.g.: * ? [abc]
 # A special target "REMOVE" is allowed: moveToOutput foo REMOVE
 moveToOutput() {
     local patt="$1"

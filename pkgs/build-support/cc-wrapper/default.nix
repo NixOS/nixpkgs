@@ -251,19 +251,12 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
     ''
 
-    + optionalString cc.langFortran or false (''
+    + optionalString cc.langFortran or false ''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
       export named_fc=${targetPrefix}gfortran
     ''
-    # Darwin aarch64 fortran compilations seem to fail otherwise, see:
-    # https://github.com/NixOS/nixpkgs/issues/140041
-    + (if (stdenvNoCC.isDarwin && stdenvNoCC.isAarch64) then ''
-      export fortran_hardening="pic strictoverflow relro bindnow"
-    '' else ''
-      export fortran_hardening="pic strictoverflow relro bindnow stackprotector"
-    ''))
 
     + optionalString cc.langJava or false ''
       wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
@@ -373,10 +366,10 @@ stdenv.mkDerivation {
       touch "$out/nix-support/libcxx-ldflags"
     ''
     + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}/include/c++/*; do
+      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''

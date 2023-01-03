@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, fontconfig, autoreconfHook, DiskArbitration
 , withJava ? false, jdk, ant
 , withAACS ? false, libaacs
 , withBDplus ? false, libbdplus
@@ -20,6 +20,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./BDJ-JARFILE-path.patch
+    (fetchpatch {
+      name = "Initial-support-for-Java-18.patch";
+      url = "https://code.videolan.org/videolan/libbluray/-/commit/3187c3080096e107f0a27eed1843232b58342577.patch";
+      hash = "sha256-2TSciAoPzELkgmFGB38h1RgynOCJueyCL8hIADxAPHo=";
+    })
+    (fetchpatch {
+      name = "bd-j-BDJSecurityManager-Change-setSecurityManager-de.patch";
+      url = "https://code.videolan.org/videolan/libbluray/-/commit/9a2d23d049760ef9cc9661ff90011a84d90368f1.patch";
+      hash = "sha256-xCc2h5ocXCqnpVMPQaybT2Ncs2YOzifQ0mlCCUhYlc8=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]

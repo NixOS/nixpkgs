@@ -45,6 +45,12 @@ buildPythonPackage rec {
       url = "https://github.com/ecederstrand/exchangelib/commit/d5d386f54adec8ab02f871332b89e1176c214ba2.diff";
       hash = "sha256-E3Ys6IDJ/yMsvi+1GKbwckkhbNrc9JLM/+GrPtUz+mY=";
     })
+    (fetchpatch {
+      name = "tests-timezones-2.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/419eafcd9261bfd0617823ee437204d5556a8271.diff";
+      excludes = [ "tests/test_ewsdatetime.py" ];
+      hash = "sha256-dSp6NkNT5dHOg8XgDi8sR3t3hq46sNtPjUXva2YfFSU=";
+    })
   ];
 
   propagatedBuildInputs = [

@@ -3,7 +3,7 @@
 , fetchurl
 , buildDunePackage
 , bwd
-, cmdliner_1_1
+, cmdliner
 , containers
 , ezjsonm
 , menhir
@@ -70,7 +70,7 @@ buildDunePackage {
   };
 
   nativeBuildInputs = [
-    cmdliner_1_1
+    cmdliner
     menhir
     ppxlib
   ];

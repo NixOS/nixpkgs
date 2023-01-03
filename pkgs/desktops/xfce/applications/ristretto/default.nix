@@ -1,14 +1,28 @@
-{ lib, mkXfceDerivation, gtk3, glib, libexif
-, libxfce4ui, libxfce4util, xfconf }:
+{ lib
+, mkXfceDerivation
+, gtk3
+, glib
+, libexif
+, libxfce4ui
+, libxfce4util
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.12.3";
+  version = "0.12.4";
 
-  sha256 = "sha256-Tkjl01OD6yDbKAHzZVRG7c7KnP0MURmsc0d0DbcFuFk=";
+  sha256 = "sha256-pspS9zRvDOMz4+Ud43uT4gsDQhB51bwmaXPXcGlOhsY=";
 
-  buildInputs = [ glib gtk3 libexif libxfce4ui libxfce4util xfconf ];
+  buildInputs = [
+    glib
+    gtk3
+    libexif
+    libxfce4ui
+    libxfce4util
+    xfconf
+  ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 

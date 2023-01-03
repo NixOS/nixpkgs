@@ -6,7 +6,6 @@
 , numpy
 , pyphotonfile
 , shiboken2
-, which
 }:
 let
   version = "0.1.3";

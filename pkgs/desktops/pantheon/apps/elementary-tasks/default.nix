@@ -61,9 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -73,5 +71,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.tasks";
+    broken = true; # https://github.com/elementary/tasks/issues/340
   };
 }

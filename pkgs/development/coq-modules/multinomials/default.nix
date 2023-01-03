@@ -1,5 +1,5 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
-  lib, version ? null, useDune2 ? false }@args:
+  lib, version ? null, useDune ? false }@args:
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
@@ -31,7 +31,7 @@ with lib; mkCoqDerivation {
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  useDune2ifVersion = v: versions.isGe "1.5.3" v || v == "dev";
+  useDuneifVersion = v: versions.isGe "1.5.3" v || v == "dev";
 
   preConfigure = ''
     patchShebangs configure || true
@@ -45,4 +45,4 @@ with lib; mkCoqDerivation {
     license = licenses.cecill-c;
   };
 }
-// optionalAttrs (args?useDune2) { inherit useDune2; }
+// optionalAttrs (args?useDune) { inherit useDune; }

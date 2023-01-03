@@ -1,17 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, perl, ocaml, findlib, camlidl, gmp, mpfr }:
+{ stdenv, lib, fetchFromGitHub, perl, ocaml, findlib, camlidl, gmp, mpfr, bigarray-compat }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-mlgmpidl";
-  version = "1.2.12";
+  version = "1.2.15";
   src = fetchFromGitHub {
     owner = "nberth";
     repo = "mlgmpidl";
     rev = version;
-    sha256 = "17xqiclaqs4hmnb92p9z6z9a1xfr31vcn8nlnj8ykk57by31vfza";
+    sha256 = "sha256-85wy5eVWb5qdaa2lLDcfqlUTIY7vnN3nGMdxoj5BslU=";
   };
 
   nativeBuildInputs = [ perl ocaml findlib camlidl ];
   buildInputs = [ gmp mpfr ];
+  propagatedBuildInputs = [ bigarray-compat ];
 
   strictDeps = true;
 
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--gmp-prefix ${gmp.dev}"
     "--mpfr-prefix ${mpfr.dev}"
+    "-disable-profiling"
   ];
 
   postConfigure = ''

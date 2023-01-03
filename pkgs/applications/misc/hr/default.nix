@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hr";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "LuRsT";
     repo = "hr";
     rev = version;
-    sha256 = "068kq37lbqfjzh28rlvkprni38ii991naawylwvq6d43y9dpzs2b";
+    sha256 = "sha256-Pcnkiq7ipLoz6MFWZkCIxneUuZ3w/d+iqiyTz55WZvs=";
   };
 
   dontBuild = true;

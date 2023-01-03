@@ -55,9 +55,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
 #### DESKTOP
 
-  # Removed from recent GNOME releases, but still required
-  scrollkeeper = callPackage ./desktop/scrollkeeper { };
-
   gtksourceview = callPackage ./desktop/gtksourceview {
     autoreconfHook = pkgs.autoreconfHook269;
   };

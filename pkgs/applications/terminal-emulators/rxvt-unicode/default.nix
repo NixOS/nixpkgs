@@ -44,9 +44,10 @@ stdenv.mkDerivation {
     sha256 = "0badnkjsn3zps24r5iggj8k5v4f00npc77wqg92pcn1q5z8r677y";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ libX11 libXt libXft ncurses  # required to build the terminfo file
-      fontconfig freetype pkg-config libXrender
+      fontconfig freetype libXrender
       libptytty
     ] ++ optional perlSupport perl
       ++ optional gdkPixbufSupport gdk-pixbuf;

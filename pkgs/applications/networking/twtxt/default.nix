@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "twtxt";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "buckket";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-AdM95G2Vz3UbVPI7fs8/D78BMxscbTGrCpIyyHzSmho=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-CbFh1o2Ijinfb8X+h1GP3Tp+8D0D3/Czt/Uatd1B4cw=";
   };
 
   # Relax some dependencies

@@ -1,27 +1,26 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchpatch, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = "urbica";
-    repo = pname;
+    owner = "maplibre";
+    repo = "martin";
     rev = "v${version}";
-    sha256 = "1i9zhmjkgid4s90n52wqmrl3lwswcaxd6d47ssycgjl1nv0jla4k";
+    hash = "sha256-+XD4w6W6dyKuTItLQS0P/waksIVsPXVswcrCQ7jpw90=";
   };
 
-  cargoSha256 = "1jgl8s6h4pqhn189swrhn896kw1rkmqpf7dq52ry2rdci80g02nq";
+  cargoHash = "sha256-U3oNyMS4S44ybAtt1/b0AXDLiag41XWt9DT5mKLQzm8=";
 
-  buildInputs = with stdenv; lib.optional isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   doCheck = false;
 
   meta = with lib; {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
-    homepage = "https://martin.urbica.co/";
-    license = licenses.mit;
+    homepage = "https://martin.maplibre.org/";
+    license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ sikmir ];
-    platforms = with platforms; linux ++ darwin;
   };
 }

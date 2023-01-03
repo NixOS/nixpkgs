@@ -1,11 +1,12 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
+
 mkDerivation rec {
   pname = "grumphp";
-  version = "1.8.1";
+  version = "1.15.0";
 
   src = fetchurl {
     url = "https://github.com/phpro/${pname}/releases/download/v${version}/${pname}.phar";
-    sha256 = "sha256-3XPMyH2F3ZfRr8DmvlBY3Z6uolhaRraQxwKIskIwPq8=";
+    sha256 = "sha256-EqzJb7DYZb7PnebErLVI/EZLxj0m26cniZlsu1feif0=";
   };
 
   dontUnpack = true;
@@ -22,6 +23,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/phpro/grumphp/releases/tag/v${version}";
     description = "A PHP code-quality tool";
     homepage = "https://github.com/phpro/grumphp";
     license = licenses.mit;

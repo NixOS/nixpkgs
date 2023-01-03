@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.benley ];
+    maintainers = [ ];
     homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''
@@ -39,5 +39,7 @@ stdenv.mkDerivation rec {
 
      There is a 15-day free trial, and it is a paid application after that.
     '';
+    # download URL removed
+    broken = true;
   };
 }

@@ -46,7 +46,6 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
@@ -127,43 +126,34 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-08-08";
+  version = "2022-12-23";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "2b1c1e65d5fbbe25625a31ee93cb14c9a9edf969";
-    sha256 = "sha256-mjCdJPB4t5OLGZ0r5usJTVs1BBr4cWeGGE7imyUfQnQ=";
+    rev = "f48f00ee6d5727ae3e488cbf9ce157460853fea8";
+    sha256 = "sha256-hXsgJj0Cy0ZiCiYdW2OdBz5WmFyOMKuw4zyxKpgUKm4=";
   };
 
-  patches = [
-    # https://github.com/NixOS/hydra/pull/1215: scmdiff: Hardcode --git-dir
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/commit/b6ea85a601ddac9cb0716d8cb4d446439fa0778f.patch";
-      sha256 = "sha256-QHjwLYQucdkBs6OsFI8kWo5ugkPXXlTgdbGFxKBHAHo=";
-    })
+  buildInputs = [
+    libpqxx
+    top-git
+    mercurial
+    darcs
+    subversion
+    breezy
+    openssl
+    bzip2
+    libxslt
+    nix
+    perlDeps
+    perl
+    pixz
+    boost
+    postgresql
+    nlohmann_json
+    prometheus-cpp
   ];
-
-  buildInputs =
-    [
-      libpqxx
-      top-git
-      mercurial
-      darcs
-      subversion
-      breezy
-      openssl
-      bzip2
-      libxslt
-      nix
-      perlDeps
-      perl
-      pixz
-      boost
-      postgresql
-      nlohmann_json
-      prometheus-cpp
-    ];
 
   hydraPath = lib.makeBinPath (
     [

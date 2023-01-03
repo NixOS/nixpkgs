@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       --replace "5E048E021001" "6F0E13020001"
   '';
 
-  makeFlags = "build-core";
+  makeFlags = [ "build-core" ];
   installPhase = ''
     runHook preInstall
 

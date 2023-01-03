@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "lupupy";
-  version = "0.1.9";
+  version = "0.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UclKPuWcIa1nNFKqPIEnqlnJh0aXP50k2nMbHhT1aFs=";
+    hash = "sha256-11BdMhUhxbzkSrBEFdqpjkgcOcCZG498ylEHIMbomW4=";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, strace, which }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, strace, which }:
 
 stdenv.mkDerivation rec {
   pname = "libeatmydata";
@@ -11,9 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "0sx803h46i81h67xbpd3c7ky0nhaw4gij214nsx4lqig70223v9r";
   };
 
-  patches = [ ./find-shell-lib.patch ];
+  patches = [
+    ./find-shell-lib.patch
 
-  patchFlags = "-p0";
+    # Fixes "error: redefinition of 'open'" on musl
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/861ac185a6b60134292ff93d40e40b5391d0aa8e/srcpkgs/libeatmydata/patches/musl.patch";
+      stripLen = 1;
+      sha256 = "sha256-yfMfISbYL7r/R2C9hYPjvGcpUB553QSiW0rMrxG11Oo=";
+    })
+  ];
+
+  patchFlags = [ "-p0" ];
 
   postPatch = ''
     substituteInPlace eatmydata.in \

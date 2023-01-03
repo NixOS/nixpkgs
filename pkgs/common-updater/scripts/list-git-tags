@@ -2,21 +2,23 @@
 
 # lists all available tags from a git repository
 
-echo "# pname=$UPDATE_NIX_ATTR_PATH" > /tmp/test.txt
-
+pname=""  # package name
+attr_path="" # package attribute path
 url="" # git repository url
-pname="" # package name
 file="" # file for writing debugging information
 
 while (( $# > 0 )); do
     flag="$1"
     shift 1
     case "$flag" in
-        --url=*)
-            url="${flag#*=}"
-            ;;
         --pname=*)
             pname="${flag#*=}"
+            ;;
+        --attr-path=*)
+            attr_path="${flag#*=}"
+            ;;
+        --url=*)
+            url="${flag#*=}"
             ;;
         --file=*)
             file="${flag#*=}"
@@ -28,15 +30,19 @@ while (( $# > 0 )); do
     esac
 done
 
+if [[ -z "$pname" ]]; then
+    pname="$UPDATE_NIX_PNAME"
+fi
+
+if [[ -z "$attr_path" ]]; then
+    attr_path="$UPDATE_NIX_ATTR_PATH"
+fi
+
 # By default we set url to src.url or src.meta.homepage
 if [[ -z "$url" ]]; then
     url="$(nix-instantiate $systemArg --eval -E \
-               "with import ./. {}; $UPDATE_NIX_ATTR_PATH.src.meta.homepage or $UPDATE_NIX_ATTR_PATH.src.url" \
+               "with import ./. {}; $attr_path.src.meta.homepage or $attr_path.src.url" \
         | tr -d '"')"
-fi
-
-if [[ -z "$pname" ]]; then
-    pname="$UPDATE_NIX_ATTR_PATH"
 fi
 
 # print a debugging message

@@ -7,10 +7,10 @@
 # - VLAN 1 is the connection between the ISP and the router
 # - VLAN 2 is the connection between the router and the client
 
-import ./make-test-python.nix ({pkgs, ...}: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "systemd-networkd-ipv6-prefix-delegation";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ andir ];
+  meta = with lib.maintainers; {
+    maintainers = [ andir hexa ];
   };
   nodes = {
 
@@ -22,26 +22,38 @@ import ./make-test-python.nix ({pkgs, ...}: {
     #
     # Note: On the ISPs device we don't really care if we are using networkd in
     # this example. That being said we can't use it (yet) as networkd doesn't
-    # implement the serving side of DHCPv6. We will use ISC's well aged dhcpd6
-    # for that task.
+    # implement the serving side of DHCPv6. We will use ISC Kea for that task.
     isp = { lib, pkgs, ... }: {
       virtualisation.vlans = [ 1 ];
       networking = {
         useDHCP = false;
         firewall.enable = false;
-        interfaces.eth1.ipv4.addresses = lib.mkForce []; # no need for legacy IP
-        interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "2001:DB8::1"; prefixLength = 64; }
-        ];
+        interfaces.eth1 = lib.mkForce {}; # Don't use scripted networking
+      };
+
+      systemd.network = {
+        enable = true;
+
+        networks = {
+          "eth1" = {
+            matchConfig.Name = "eth1";
+            address = [
+              "2001:DB8::1/64"
+            ];
+            networkConfig.IPForward = true;
+          };
+        };
       };
 
       # Since we want to program the routes that we delegate to the "customer"
-      # into our routing table we must give dhcpd the required privs.
-      systemd.services.dhcpd6.serviceConfig.AmbientCapabilities =
-        [ "CAP_NET_ADMIN" ];
+      # into our routing table we must provide kea with the required capability.
+      systemd.services.kea-dhcp6-server.serviceConfig = {
+        AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+      };
 
       services = {
-        # Configure the DHCPv6 server
+        # Configure the DHCPv6 server to hand out both IA_NA and IA_PD.
         #
         # We will hand out /48 prefixes from the subnet 2001:DB8:F000::/36.
         # That gives us ~8k prefixes. That should be enough for this test.
@@ -49,31 +61,70 @@ import ./make-test-python.nix ({pkgs, ...}: {
         # Since (usually) you will not receive a prefix with the router
         # advertisements we also hand out /128 leases from the range
         # 2001:DB8:0000:0000:FFFF::/112.
-        dhcpd6 = {
+        kea.dhcp6 = {
           enable = true;
-          interfaces = [ "eth1" ];
-          extraConfig = ''
-            subnet6 2001:DB8::/36 {
-              range6 2001:DB8:0000:0000:FFFF:: 2001:DB8:0000:0000:FFFF::FFFF;
-              prefix6 2001:DB8:F000:: 2001:DB8:FFFF:: /48;
-            }
+          settings = {
+            interfaces-config.interfaces = [ "eth1" ];
+            subnet6 = [ {
+              interface = "eth1";
+              subnet = "2001:DB8:F::/36";
+              pd-pools = [ {
+                prefix = "2001:DB8:F::";
+                prefix-len = 36;
+                delegated-len = 48;
+              } ];
+              pools = [ {
+                pool = "2001:DB8:0000:0000:FFFF::-2001:DB8:0000:0000:FFFF::FFFF";
+              } ];
+            } ];
 
-            # This is the secret sauce. We have to extract the prefix and the
-            # next hop when commiting the lease to the database.  dhcpd6
-            # (rightfully) has not concept of adding routes to the systems
-            # routing table. It really depends on the setup.
+            # This is the glue between Kea and the Kernel FIB. DHCPv6
+            # rightfully has no concept of setting up a route in your
+            # FIB. This step really depends on your setup.
             #
-            # In a production environment your DHCPv6 server is likely not the
-            # router. You might want to consider BGP, custom NetConf calls, …
-            # in those cases.
-            on commit {
-              set IP = pick-first-value(binary-to-ascii(16, 16, ":", substring(option dhcp6.ia-na, 16, 16)), "n/a");
-              set Prefix = pick-first-value(binary-to-ascii(16, 16, ":", suffix(option dhcp6.ia-pd, 16)), "n/a");
-              set PrefixLength = pick-first-value(binary-to-ascii(10, 8, ":", substring(suffix(option dhcp6.ia-pd, 17), 0, 1)), "n/a");
-              log(concat(IP, " ", Prefix, " ", PrefixLength));
-              execute("${pkgs.iproute2}/bin/ip", "-6", "route", "replace", concat(Prefix,"/",PrefixLength), "via", IP);
-            }
-          '';
+            # In a production environment your DHCPv6 server is likely
+            # not the router. You might want to consider BGP, NETCONF
+            # calls, … in those cases.
+            #
+            # In this example we use the run script hook, that lets use
+            # execute anything and passes information via the environment.
+            # https://kea.readthedocs.io/en/kea-2.2.0/arm/hooks.html#run-script-run-script-support-for-external-hook-scripts
+            hooks-libraries = [ {
+              library = "${pkgs.kea}/lib/kea/hooks/libdhcp_run_script.so";
+              parameters = {
+                name = pkgs.writeShellScript "kea-run-hooks" ''
+                  export PATH="${lib.makeBinPath (with pkgs; [ coreutils iproute2 ])}"
+
+                  set -euxo pipefail
+
+                  leases6_committed() {
+                    for i in $(seq $LEASES6_SIZE); do
+                      idx=$((i-1))
+                      prefix_var="LEASES6_AT''${idx}_ADDRESS"
+                      plen_var="LEASES6_AT''${idx}_PREFIX_LEN"
+
+                      ip -6 route replace ''${!prefix_var}/''${!plen_var} via $QUERY6_REMOTE_ADDR dev $QUERY6_IFACE_NAME
+                    done
+                  }
+
+                  unknown_handler() {
+                    echo "Unhandled function call ''${*}"
+                    exit 123
+                  }
+
+                  case "$1" in
+                      "leases6_committed")
+                          leases6_committed
+                          ;;
+                      *)
+                          unknown_handler "''${@}"
+                          ;;
+                  esac
+                '';
+                sync = false;
+              };
+            } ];
+          };
         };
 
         # Finally we have to set up the router advertisements. While we could be
@@ -176,7 +227,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
               IPv6AcceptRA = false;
 
               # Delegate prefixes from the DHCPv6 PD pool.
-              DHCPv6PrefixDelegation = true;
+              DHCPPrefixDelegation = true;
               IPv6SendRA = true;
             };
 

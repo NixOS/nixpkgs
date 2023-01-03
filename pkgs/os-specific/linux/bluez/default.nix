@@ -23,12 +23,20 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.64";
+  version = "5.66";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rkN+ZbazBwwZi8WwEJ/pzeueqjhzgOIHL53mX+ih3jQ=";
+    sha256 = "sha256-Of6mS1kMlJKYSgwnqJ/CA+HNx0hmCG77j0aYZ3qytXQ=";
   };
+
+  patches = [
+    # replace use of a non-standard symbol to fix build with musl libc (pkgsMusl.bluez)
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
+      sha256 = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
+    })
+  ];
 
   buildInputs = [
     alsa-lib
@@ -49,17 +57,6 @@ in stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" "test" ];
-
-  patches = [
-    # https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5
-    # which fixes https://github.com/bluez/bluez/issues/329
-    # and is already merged upstream and not yet in a release.
-    (fetchpatch {
-      name = "StateDirectory_and_ConfigurationDirectory.patch";
-      url = "https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5.patch";
-      sha256 = "sha256-MI6yPTiDLHsSTjLvNqtWnuy2xUMYpSat1WhMbeoedSM=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \

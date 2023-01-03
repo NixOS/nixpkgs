@@ -6,13 +6,14 @@
 , six
 , python-dateutil
 , kitchen
+, pytestCheckHook
 , pytz
 , pkgs
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
   pname = "taskw";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +26,11 @@ buildPythonPackage rec {
       --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
   '';
 
-  # https://github.com/ralphbean/taskw/issues/98
-  doCheck = false;
+  buildInputs = [ pkgs.taskwarrior ];
 
-  buildInputs = [ nose pkgs.taskwarrior tox ];
   propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage =  "https://github.com/ralphbean/taskw";
@@ -37,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pierron ];
   };
-
 }

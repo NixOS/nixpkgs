@@ -12,18 +12,18 @@
 , libfm-qt
 , menu-cache
 , lxmenu-data
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "AgNupKdjSigrgY2U9bnkQCV0BrRCw2X9WR4jUH6YmEU=";
+    sha256 = "3N+4rhmvVUvQ6svtyOMY0+eP2Kz7EpkmZ3Ua+W4gg0Y=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ mkDerivation rec {
     lxmenu-data
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   postPatch = ''
     substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt

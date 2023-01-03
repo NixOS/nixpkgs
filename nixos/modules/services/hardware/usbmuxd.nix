@@ -13,6 +13,7 @@ in
 
 {
   options.services.usbmuxd = {
+
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -39,6 +40,15 @@ in
         The group usbmuxd should use to run after startup.
       '';
     };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.usbmuxd;
+      defaultText = literalExpression "pkgs.usbmuxd";
+      description = lib.mdDoc "Which package to use for the usbmuxd daemon.";
+      relatedPackages = [ "usbmuxd" "usbmuxd2" ];
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -68,7 +78,7 @@ in
         # Trigger the udev rule manually. This doesn't require replugging the
         # device when first enabling the option to get it to work
         ExecStartPre = "${pkgs.udev}/bin/udevadm trigger -s usb -a idVendor=${apple}";
-        ExecStart = "${pkgs.usbmuxd}/bin/usbmuxd -U ${cfg.user} -f";
+        ExecStart = "${cfg.package}/bin/usbmuxd -U ${cfg.user} -v";
       };
     };
 

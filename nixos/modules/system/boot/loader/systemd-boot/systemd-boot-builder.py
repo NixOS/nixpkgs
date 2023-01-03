@@ -16,6 +16,7 @@ import datetime
 import glob
 import os.path
 from typing import NamedTuple, List, Optional
+from packaging import version
 
 class SystemIdentifier(NamedTuple):
     profile: Optional[str]
@@ -175,22 +176,22 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
 
 def remove_old_entries(gens: List[SystemIdentifier]) -> None:
     rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
+    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))
         known_paths.append(copy_from_profile(*gen, "initrd", True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
+        if rex_profile.match(path):
+            prof = rex_profile.sub(r"\1", path)
+        else:
+            prof = None
         try:
-            if rex_profile.match(path):
-                prof = rex_profile.sub(r"\1", path)
-            else:
-                prof = "system"
             gen_number = int(rex_generation.sub(r"\1", path))
-            if not (prof, gen_number) in gens:
-                os.unlink(path)
         except ValueError:
-            pass
+            continue
+        if not (prof, gen_number, None) in gens:
+            os.unlink(path)
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
@@ -258,12 +259,18 @@ def main() -> None:
         if available_match is None:
             raise Exception("could not determine systemd-boot version")
 
-        installed_version = installed_match.group(1)
-        available_version = available_match.group(1)
+        installed_version = version.parse(installed_match.group(1))
+        available_version = version.parse(available_match.group(1))
 
+        # systemd 252 has a regression that leaves some machines unbootable, so we skip that update.
+        # The fix is in 252.2
+        # See https://github.com/systemd/systemd/issues/25363 and https://github.com/NixOS/nixpkgs/pull/201558#issuecomment-1348603263
         if installed_version < available_version:
-            print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
+            if version.parse('252') <= available_version < version.parse('252.2'):
+                print("skipping systemd-boot update to %s because of known regression" % available_version)
+            else:
+                print("updating systemd-boot from %s to %s" % (installed_version, available_version))
+                subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")

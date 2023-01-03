@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.1.10";
+  version = "1.2.0";
 
   buildInputs = [ AppKit Foundation Metal QuartzCore cereal ]
     ++ lib.attrValues finalAttrs.passthru;
@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "glslang";
-        rev = "adbf0d3106b26daa237b10b9bf72b1af7c31092d";
-        hash = "sha256-sjidkiPtRADhyOEKDb2cHCBXnFjLwk2F5Lppv5/fwNQ=";
+        rev = "5755de46b07e4374c05fb1081f65f7ae1f8cca81";
+        hash = "sha256-huPrQr+lPi7QCF8CufAavHEKGDDimGrcskiojhH9QYk=";
       };
     })).override { inherit (finalAttrs.passthru) spirv-headers spirv-tools; };
     spirv-cross = spirv-cross.overrideAttrs (old: {
@@ -49,32 +49,32 @@ stdenv.mkDerivation (finalAttrs: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Cross";
-        rev = "50b4d5389b6a06f86fb63a2848e1a7da6d9755ca";
-        hash = "sha256-SsupPHJ3VHxJhEAUl3EeQwN4texYhdDjxTnGD+bkNAw=";
+        rev = "f09ba2777714871bddb70d049878af34b94fa54d";
+        hash = "sha256-yVpLW1DbcHDuM9Bm3uGhAC0v9XjmpBoU9x7kmWdg6/o=";
       };
     });
     spirv-headers = spirv-headers.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "spirv-headers";
-        rev = "5a121866927a16ab9d49bed4788b532c7fcea766";
-        hash = "sha256-X4GuFesX015mrzutguhZLrIGlllCgAZ+DUBGSADt8xU=";
+        rev = "85a1ed200d50660786c1a88d9166e871123cce39";
+        hash = "sha256-lUWgZYGPu+IaLUrbtyC7R0o3Hq/q7C7BE8r7DAsiC30=";
       };
     });
     spirv-tools = (spirv-tools.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "spirv-tools";
-        rev = "b930e734ea198b7aabbbf04ee1562cf6f57962f0";
-        hash = "sha256-NWpFSRoxtYWi+hLUt9gpw0YScM3shcUwv9yUmbivRb0=";
+        rev = "eb0a36633d2acf4de82588504f951ad0f2cecacb";
+        hash = "sha256-sqjQoz9v9alSPc0ujEcWZxDAWh2S6oAPP1+JZmNCpA0=";
       };
     })).override { inherit (finalAttrs.passthru) spirv-headers; };
     vulkan-headers = vulkan-headers.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "Vulkan-Headers";
-        rev = "3ef4c97fd6ea001d75a8e9da408ee473c180e456";
-        hash = "sha256-jHzW3m9smuzEGbZrSyBI74K9rFozxiG3M5Xql/WOw7U=";
+        rev = "98f440ce6868c94f5ec6e198cc1adda4760e8849";
+        hash = "sha256-EoD48jBoJmIet4BDC6bYxOsKK2358SZ/NcZeM61q/5g=";
       };
     });
   };
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LZvCCP2yelTaWcNt+WvG+RZnVLHRgMDTlNWwRIey7ZM=";
+    hash = "sha256-PqrKGNGw7nJbirRgIargIV6Jbgoblu+2fn5qdHKI6BI=";
   };
 
   patches = [

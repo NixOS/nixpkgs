@@ -1,5 +1,6 @@
 { alcotest-lwt
 , buildDunePackage
+, ocaml
 , dune-site
 , fetchzip
 , gluten-lwt-unix
@@ -8,12 +9,14 @@
 , lwt_ssl
 , magic-mime
 , mrmime
-, openssl
 , pecu
 , psq
 , ssl
 , uri
 }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "piaf is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "piaf";
@@ -28,8 +31,6 @@ buildDunePackage rec {
     substituteInPlace ./vendor/dune --replace "mrmime.prettym" "prettym"
   '';
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     logs
     magic-mime
@@ -43,7 +44,8 @@ buildDunePackage rec {
     alcotest-lwt
     dune-site
   ];
-  doCheck = true;
+  # Check fails with OpenSSL 3
+  doCheck = false;
 
   meta = {
     description = "An HTTP library with HTTP/2 support written entirely in OCaml";

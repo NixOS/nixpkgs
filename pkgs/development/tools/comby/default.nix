@@ -15,8 +15,8 @@ let
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;
       version = "1.8.1";
-      useDune2 = true;
-      minimumOcamlVersion = "4.08.1";
+      duneVersion = "3";
+      minimalOcamlVersion = "4.08.1";
       doCheck = true;
 
       src = fetchFromGitHub {

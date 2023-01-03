@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook, setuptools }:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-wNZH4S46SxWogeHYT3lpN1FmSEieARJXI33CF51rGVE=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ cython setuptools ];
 
   checkInputs = [ pytestCheckHook ];
   preCheck = ''

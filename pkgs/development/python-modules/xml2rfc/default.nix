@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.14.1";
+  version = "3.15.1";
 
   disabled = pythonOlder "3.6";
 
@@ -34,19 +34,15 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-v8wvmAV5t2dEWFWtbM68Npe+QzwXksRUl0H+tP0RgFc=";
+    sha256 = "sha256-/0Y49ZSaPM3IAFJGmWKiKD+mziA0LYQ3fvGFrkPkl9Y=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "SHELL := /bin/bash" "SHELL := bash" \
-      --replace "test flaketest" "test" \
-      --replace "python setup.py --quiet install" ""
+      --replace "test flaketest" "test"
     substituteInPlace setup.py \
       --replace "'tox'," ""
-    substituteInPlace requirements.txt \
-      --replace "jinja2>=2.11,<3.0" "jinja2" \
-      --replace "markupsafe==2.0.1" "markupsafe"
   '';
 
   propagatedBuildInputs = [

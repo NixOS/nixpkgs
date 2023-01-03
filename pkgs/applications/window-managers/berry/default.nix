@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "berry";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
     repo = pname;
     rev = version;
-    hash = "sha256-cs1NVwaANMIteCQuGqPcEWuUbfJulhjmfWnlU8Eb2OM=";
+    hash = "sha256-xMJRiLNtwVRQf9HiCF3ClLKEmdDNxcY35IYxe+L7+Hk=";
   };
 
   nativeBuildInputs = [

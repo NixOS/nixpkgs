@@ -162,7 +162,7 @@ in
 
     environment.systemPackages = with pkgs; [
       (runCommand "etebase-server" {
-        buildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${pythonEnv}/bin/etebase-server \
           $out/bin/etebase-server \

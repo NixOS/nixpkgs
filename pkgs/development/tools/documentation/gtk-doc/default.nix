@@ -32,6 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     passthru.respect_xml_catalog_files_var_patch
   ];
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   strictDeps = true;
 
   depsBuildBuild = [

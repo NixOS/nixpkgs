@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "pygtkspellcheck";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kfhoOLnKbA9jH4DUtQw0nATjK21pMNxyAOzYDLQkR4U=";
+    sha256 = "sha256-hIHf1LBmFhPWN138jaAAOpmx+frbe6XM22+jG+OWcvw=";
   };
 
-  nativeBuildInputs = [ gobject-introspection gtk3 ];
-  propagatedBuildInputs = [ pyenchant pygobject3 ];
+  nativeBuildInputs = [ gobject-introspection ];
+  propagatedBuildInputs = [ pyenchant pygobject3 gtk3 ];
 
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "gtkspellcheck" ];

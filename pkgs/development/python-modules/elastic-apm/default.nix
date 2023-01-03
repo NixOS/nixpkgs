@@ -24,11 +24,12 @@
 , tornado
 , urllib3
 , webob
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.11.0";
+  version = "6.13.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "v${version}";
-    hash = "sha256-ZmvOyEkXp0PEDHWcuGT91mhXwV2E6SPlrWBY/sNiRmc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HbIra8Cxgn/2xOVEvtcc7rMtSLBmWMxxHlIM44Oy+8U=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     starlette
     tornado
     urllib3
+    wrapt
   ];
 
   checkInputs = [
@@ -84,6 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

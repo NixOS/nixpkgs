@@ -2,13 +2,14 @@
 , lib
 , stdenv
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gnome
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_91
+, spidermonkey_102
 , pango
 , cairo
 , readline
@@ -31,13 +32,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.72.2";
+  version = "1.74.1";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3e43m9xafTA6XYlL4rKBvrisVFCGBOfT8geBqGnaOXc=";
+    sha256 = "sha256-8h+c0zN6ZypEx+ZL+ajYrXfBuIuVKythhMevmx8+9Fk=";
   };
 
   patches = [
@@ -55,15 +56,17 @@ in stdenv.mkDerivation rec {
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     cairo
     readline
     libsysprof-capture
-    spidermonkey_91
-    dbus # for dbus-run-session
+    spidermonkey_102
   ];
 
   checkInputs = [
@@ -76,13 +79,18 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [
+    "-Dprofiler=disabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace installed-tests/js/meson.build \
+      --replace "'Encoding'," "#'Encoding',"
   '';
 
   preCheck = ''
@@ -136,6 +144,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

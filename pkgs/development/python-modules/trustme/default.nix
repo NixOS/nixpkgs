@@ -21,9 +21,10 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pyopenssl
     service-identity
     pytestCheckHook
+  ] ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [
+    pyopenssl
   ];
 
   propagatedBuildInputs = [
@@ -38,6 +39,11 @@ buildPythonPackage rec {
   disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     "test_pyopenssl_end_to_end"
   ];
+
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    substituteInPlace "tests/test_trustme.py" \
+      --replace "import OpenSSL.SSL" ""
+  '';
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

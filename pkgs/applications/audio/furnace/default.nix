@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre1";
+  version = "0.6pre3";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-7MrzSC8PYQ4X8fyX1hB8mOoSCtLpY+o1x42v9HLdoao=";
+    sha256 = "sha256-bHVeTw69k6LLcrfkmGxvjlFfR/hWiCfm/P3utknid1o=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
     };
     tests.version = testers.testVersion {

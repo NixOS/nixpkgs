@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeBinaryWrapper, jre_headless }:
+{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre_headless }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "bundletool";
-  version = "1.11.0";
+  version = "1.13.2";
 
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${version}/bundletool-all-${version}.jar";
-    sha256 = "sha256-xCw2Wuc2ndTcLrwR7uv5FFnwImxTcG/STeTQBiaKuIw=";
+    sha256 = "sha256-sbX7IYFcU9gwKzHKC8xtmZKVE2XImeNT4RYOx+cSI2Y=";
   };
 
   dontUnpack = true;

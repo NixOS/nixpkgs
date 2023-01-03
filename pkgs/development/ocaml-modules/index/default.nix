@@ -6,15 +6,14 @@
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "sha256:150mcsh8vj2hapfnxbjmacanjy4avrv8yk1lyaxmqj3fpmn1y32y";
+    sha256 = "sha256-rPwNzqkWqDak2mDTDIBqIvachY1vfOIzFmwaXjZea+4=";
   };
 
   minimalOCamlVersion = "4.08";
-  useDune2 = true;
 
   buildInputs = [
     stdlib-shims

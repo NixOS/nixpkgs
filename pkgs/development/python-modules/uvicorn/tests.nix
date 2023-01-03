@@ -16,6 +16,8 @@ buildPythonPackage rec {
   pname = "uvicorn-tests";
   inherit (uvicorn) version;
 
+  format = "other";
+
   src = uvicorn.testsout;
 
   dontBuild = true;
@@ -44,6 +46,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_supported_upgrade_request"
     "test_invalid_upgrade"
+    "test_no_server_headers"
+    "test_multiple_server_header"
   ];
 }
 

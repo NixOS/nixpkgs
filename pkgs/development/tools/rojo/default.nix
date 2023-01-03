@@ -38,5 +38,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ wackbyte ];
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

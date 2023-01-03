@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
   version = "1.12.1";
+  format = "other";
 
   nativeBuildInputs = [ installShellFiles ];
   propagatedBuildInputs = [ python3Packages.packaging ];

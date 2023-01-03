@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
-  version = "2.0.0b1";
+  version = "3.0.3";
 
   src = fetchPypi {
     pname = "jupyterlab_widgets";
     inherit version;
-    sha256 = "1xinfk3bhqmfp9ygfpi8b87h4ky8dv3sdr96035psx1jjgyyw8bi";
+    sha256 = "sha256-x2cYE5m0yotke+/i2ROxJg9Rv52O+behRjLUwae1Nr0=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,7 @@
     To facilitate network configuration, some desktop environments use
     NetworkManager. You can enable NetworkManager by setting:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.networkmanager.enable = true;
 </programlisting>
   <para>
@@ -15,7 +15,7 @@ networking.networkmanager.enable = true;
     All users that should have permission to change network settings
     must belong to the <literal>networkmanager</literal> group:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 users.users.alice.extraGroups = [ &quot;networkmanager&quot; ];
 </programlisting>
   <para>
@@ -36,7 +36,7 @@ users.users.alice.extraGroups = [ &quot;networkmanager&quot; ];
       used together if desired. To do this you need to instruct
       NetworkManager to ignore those interfaces like:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 networking.networkmanager.unmanaged = [
    &quot;*&quot; &quot;except:type:wwan&quot; &quot;except:type:gsm&quot;
 ];

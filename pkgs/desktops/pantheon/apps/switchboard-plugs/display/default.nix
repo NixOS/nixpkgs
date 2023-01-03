@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3sYZCazGnTjIi3Iry5673TMI13sD0GuY+46AK+NJH70=";
+    sha256 = "sha256-d25++3msaS9dg2Rsl7mrAezDn8Lawd3/X0XPH5Zy6Rc=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

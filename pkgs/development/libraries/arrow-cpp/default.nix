@@ -3,7 +3,6 @@
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
-, abseil-cpp
 , autoconf
 , aws-sdk-cpp
 , boost
@@ -39,7 +38,7 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
-, enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
+, enableJemalloc ? !stdenv.isDarwin
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
@@ -147,10 +146,9 @@ stdenv.mkDerivation rec {
     protobuf
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
   ++ lib.optionals enableGcs [
-    abseil-cpp
     crc32c
     curl
-    google-cloud-cpp
+    google-cloud-cpp grpc
     nlohmann_json
   ];
 
@@ -207,7 +205,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF"
-  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h";
+  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h"
+  ++ lib.optionals enableGcs [ "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}" ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";

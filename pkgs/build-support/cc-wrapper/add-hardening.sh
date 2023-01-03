@@ -38,7 +38,9 @@ for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
     fortify)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-      hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+      # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
+      # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
+      hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE' '-D_FORTIFY_SOURCE=2')
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi

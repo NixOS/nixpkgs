@@ -45,11 +45,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.18.5";
+  version = "1.18.9";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-mSDTMGoaxTbN0seW1ss8VLxVnCJvw8w5wy8eC9f1DSo=";
+    sha256 = "sha256-++fwm5aso9tvrq8YDai7Yyho7ASXMeNV/2FpUZfA4+o=";
   };
 
   strictDeps = true;
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
 
   postPatch = ''
     patchShebangs .

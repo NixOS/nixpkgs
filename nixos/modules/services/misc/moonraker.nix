@@ -123,7 +123,11 @@ in {
           host = cfg.address;
           port = cfg.port;
           klippy_uds_address = cfg.klipperSocket;
+        };
+        file_manager = {
           config_path = cfg.configDir;
+        };
+        database = {
           database_path = "${cfg.stateDir}/database";
         };
       };
@@ -153,6 +157,7 @@ in {
 
       serviceConfig = {
         WorkingDirectory = cfg.stateDir;
+        PrivateTmp = true;
         Group = cfg.group;
         User = cfg.user;
       };
@@ -175,4 +180,9 @@ in {
       });
     '';
   };
+
+  meta.maintainers = with maintainers; [
+    cab404
+    vtuan10
+  ];
 }

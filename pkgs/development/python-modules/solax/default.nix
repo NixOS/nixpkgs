@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "0.2.10";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DUXaz9BF1NOG+RSeks9CxLGDz/wWwpZBxwWh4MQapio=";
+    sha256 = "sha256-lqzFY2Rfmc/9KUuFfq07DZkIIS2cJ1JqZ/8gP3+pu5U=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

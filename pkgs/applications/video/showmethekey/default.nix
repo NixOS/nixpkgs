@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , glib
 , meson
 , ninja
@@ -10,10 +11,11 @@
 , pango
 , libinput
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook4
 , libxkbcommon
 , pkg-config
 }:
+
 stdenv.mkDerivation rec {
   pname = "showmethekey";
   version = "1.7.3";
@@ -24,6 +26,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-hq4X4dG25YauMjsNXC6Flco9pEpVj3EM2JiFWbRrPaA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "use-gtk4-update-icon-cache.patch";
+      url = "https://github.com/alynxzhou/showmethekey/commit/c73102dc2825d00cbaf323fcfc96736381dc67ae.patch";
+      sha256 = "sha256-6QDY5eQ9A8q3LZeD7v6WI/4vYXc/XXVY/WENA1nvIKo=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib
@@ -36,7 +46,7 @@ stdenv.mkDerivation rec {
     libevdev
     libinput
     libxkbcommon
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

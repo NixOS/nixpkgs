@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-eI/zUhZDTd2SiFltjrs8kxvQQOPHpqhArGyOW+och3E=";
+    sha256 = "sha256-WBAVgjQjW4x9JGx6xotPoTVOePsPjBJEyBYA7TCTBvc=";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ];

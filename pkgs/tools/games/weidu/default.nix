@@ -5,6 +5,7 @@
 , ocaml-ng
 , perl
 , which
+, gnumake42
 }:
 
 let
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     mkdir -p obj/{.depend,x86_LINUX}
   '';
 
-  nativeBuildInputs = [ elkhound ocaml' perl which ];
+  nativeBuildInputs = [ elkhound ocaml' perl which gnumake42 ];
 
   buildFlags = [ "weidu" "weinstall" "tolower" ];
 

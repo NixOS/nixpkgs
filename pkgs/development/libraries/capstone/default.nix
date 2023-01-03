@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
@@ -31,6 +36,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   enableParallelBuilding = true;

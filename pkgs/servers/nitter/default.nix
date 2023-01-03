@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , nimPackages
 , nixosTests
+, substituteAll
 }:
 
 nimPackages.buildNimPackage rec {
@@ -14,6 +15,15 @@ nimPackages.buildNimPackage rec {
     rev = "138826fb4fbdec73fc6fee2e025fda88f7f2fb49";
     hash = "sha256-fdzVfzmEFIej6Kb/K9MQyvbN8aN3hO7RetHL53cD59k=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./nitter-version.patch;
+      inherit version;
+      inherit (src) rev;
+      url = builtins.replaceStrings [ "archive" ".tar.gz" ] [ "commit" "" ] src.url;
+    })
+  ];
 
   buildInputs = with nimPackages; [
     flatty

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.39.0";
+  version = "0.39.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,14 +19,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = version;
-    hash = "sha256-R6q5fq8P91q+qhy+lOCuoKUMFBvkKFsKLVCoqIy7Qpk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CUHpTtCQBuuy8E8bjxfhGOIKr9n2Gdhg/RIyv6OWGvI=";
   };
 
   propagatedBuildInputs = [
     async-timeout
     ifaddr
   ];
+
+  # OSError: [Errno 48] Address already in use
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = [
     pytest-asyncio

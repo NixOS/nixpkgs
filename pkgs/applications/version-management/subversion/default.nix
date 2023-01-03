@@ -40,7 +40,7 @@ let
       ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl
-      ++ lib.optional stdenv.hostPlatform.isDarwin [ CoreServices Security ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
     patches = [ ./apr-1.patch ] ++ extraPatches;
 

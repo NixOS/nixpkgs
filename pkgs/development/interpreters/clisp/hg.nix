@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.cons.org";
-    maintainers = with lib.maintainers; [raskin tohl];
+    maintainers = with lib.maintainers; [ raskin ];
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = lib.platforms.linux;
   };

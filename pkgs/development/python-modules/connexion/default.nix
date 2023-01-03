@@ -11,6 +11,7 @@
 , inflection
 , jsonschema
 , openapi-spec-validator
+, packaging
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.14.0";
+  version = "2.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "spec-first";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5+OZvJG68jZZsfOuOqsCUSPLV6vvjk9msJzjsCwo0jw=";
+    hash = "sha256-8nWNFYW4DWAzIAsxgWPXOodlc2tuuGOktNo4N1G1oOc=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     inflection
     jsonschema
     openapi-spec-validator
+    packaging
     pyyaml
     requests
     swagger-ui-bundle

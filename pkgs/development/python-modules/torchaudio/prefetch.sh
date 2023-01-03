@@ -18,9 +18,9 @@ url_and_key_list=(
   "x86_64-darwin-38 $darwin_bucket/torchaudio-${version}-cp38-cp38-macosx_10_9_x86_64.whl torchaudio-${version}-cp38-cp38-macosx_10_9_x86_64.whl"
   "x86_64-darwin-39 $darwin_bucket/torchaudio-${version}-cp39-cp39-macosx_10_9_x86_64.whl torchaudio-${version}-cp39-cp39-macosx_10_9_x86_64.whl"
   "x86_64-darwin-310 $darwin_bucket/torchaudio-${version}-cp310-cp310-macosx_10_9_x86_64.whl torchaudio-${version}-cp310-cp310-macosx_10_9_x86_64.whl"
-  "aarch64-darwin-38 $darwin_bucket/cpu/torchaudio-${version}-cp38-cp38-macosx_11_0_arm64.whl torchaudio-${version}-cp38-cp38-macosx_11_0_arm64.whl"
-  "aarch64-darwin-39 $darwin_bucket/cpu/torchaudio-${version}-cp39-cp39-macosx_11_0_arm64.whl torchaudio-${version}-cp39-cp39-macosx_11_0_arm64.whl"
-  "aarch64-darwin-310 $darwin_bucket/cpu/torchaudio-${version}-cp310-cp310-macosx_11_0_arm64.whl torchaudio-${version}-cp310-cp310-macosx_11_0_arm64.whl"
+  "aarch64-darwin-38 $darwin_bucket/cpu/torchaudio-${version}-cp38-cp38-macosx_12_0_arm64.whl torchaudio-${version}-cp38-cp38-macosx_12_0_arm64.whl"
+  "aarch64-darwin-39 $darwin_bucket/cpu/torchaudio-${version}-cp39-cp39-macosx_12_0_arm64.whl torchaudio-${version}-cp39-cp39-macosx_12_0_arm64.whl"
+  "aarch64-darwin-310 $darwin_bucket/cpu/torchaudio-${version}-cp310-cp310-macosx_12_0_arm64.whl torchaudio-${version}-cp310-cp310-macosx_12_0_arm64.whl"
 )
 
 hashfile=binary-hashes-"$version".nix

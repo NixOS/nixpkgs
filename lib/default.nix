@@ -23,6 +23,7 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
+    derivations = callLibs ./derivations.nix;
     maintainers = import ../maintainers/maintainer-list.nix;
     teams = callLibs ../maintainers/team-list.nix;
     meta = callLibs ./meta.nix;
@@ -62,7 +63,7 @@ let
 
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
-      hasAttr head isAttrs isBool isInt isList isString length
+      hasAttr head isAttrs isBool isInt isList isPath isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
@@ -77,7 +78,7 @@ let
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
-      mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
+      mapAttrs' mapAttrsToList concatMapAttrs mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting showAttrPath getOutput getBin
@@ -95,19 +96,23 @@ let
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs isValidPosixName toShellVar toShellVars
+      escapeShellArg escapeShellArgs
+      isStorePath isStringLike
+      isValidPosixName toShellVar toShellVars
       escapeRegex escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
+      mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
-      withFeatureAs fixedWidthString fixedWidthNumber isStorePath
-      toInt readPathsFromFile fileContents;
+      withFeatureAs fixedWidthString fixedWidthNumber
+      toInt toIntBase10 readPathsFromFile fileContents;
     inherit (self.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing;
+    inherit (self.derivations) lazyDerivation;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId getExe;

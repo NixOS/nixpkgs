@@ -13,5 +13,5 @@ makeInstalledTest {
     virtualisation.diskSize = 3072;
   };
 
-  testRunnerFlags = "--timeout 3600";
+  testRunnerFlags = [ "--timeout" "3600" ];
 }

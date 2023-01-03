@@ -6,13 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "credslayer";
-  version = "0.1.2";
+  version = "0.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ShellCode33";
     repo = "CredSLayer";
-    rev = "v${version}";
-    sha256 = "1rbfy0h9c2gra1r2b39kngj3m7g177nmzzs5xy9np8lxixrh17pc";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gryV9MHULY6ZHy6YDFQDIkZsfIX8La0tHT0vrrQJNDQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -24,7 +25,9 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  pytestFlagsArray = [
+    "tests/tests.py"
+  ];
 
   disabledTests = [
     # Requires a telnet setup
@@ -36,7 +39,9 @@ python3.pkgs.buildPythonApplication rec {
     "test_ntlmssp"
   ];
 
-  pythonImportsCheck = [ "credslayer" ];
+  pythonImportsCheck = [
+    "credslayer"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/credslayer \

@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchFromGitLab
 , camlzip, ocamlgraph, parmap, re, stdlib-shims
-, base64, bz2, ocaml_extlib, cudf
+, base64, bz2, extlib, cudf
 , dpkg, git, ocaml, ounit, python39, python39Packages
 }:
 
@@ -27,7 +27,7 @@ buildDunePackage rec {
     bz2
     camlzip
     cudf
-    ocaml_extlib
+    extlib
     ocamlgraph
     re
     stdlib-shims

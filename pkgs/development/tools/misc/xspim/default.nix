@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, imake, bison, flex, xlibsWrapper, libXaw, libXpm, ... }:
+{ lib, stdenv, fetchsvn, imake, bison, flex, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xspim";
@@ -11,7 +11,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ imake bison flex ];
-  buildInputs = [ xlibsWrapper libXaw libXpm ];
+  buildInputs = [
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libXaw
+    xorg.libXext
+    xorg.libXmu
+    xorg.libXpm
+    xorg.libXt
+  ];
 
   preConfigure = ''
     cd xspim

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, fennel, lua }:
+{ lib, stdenv, fetchFromSourcehut, luaPackages, lua }:
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FKmr5Xihyk+ikYN8WXBq5UFJziwEb8xaUBswNt/JMBg=";
   };
 
-  nativeBuildInputs = [ fennel ];
+  nativeBuildInputs = [ luaPackages.fennel ];
 
   buildInputs = [ lua ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     echo "#!${lua}/bin/lua" > fnlfmt
-    ${fennel}/bin/fennel --require-as-include --compile cli.fnl >> fnlfmt
+    ${luaPackages.fennel}/bin/fennel --require-as-include --compile cli.fnl >> fnlfmt
     chmod +x fnlfmt
 
     runHook postBuild

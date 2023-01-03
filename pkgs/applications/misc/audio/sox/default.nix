@@ -44,10 +44,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-9cpOwio69GvzVeDq79BSmJgds9WU5kA/KUlAkHcpN5c=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
-  ] ++ lib.optional enableOpusfile [
+  ] ++ lib.optionals enableOpusfile [
     # configure.ac uses pkg-config only to locate libopusfile
     pkg-config
   ];

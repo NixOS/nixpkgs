@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, gitUpdater }:
 
 let
   category = "panel-plugins";
@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-timer-plugin";

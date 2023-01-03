@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "plugincode";
-  version = "30.0.0";
+  version = "31.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QjcQCvhlaBzcbBB8MIhbsx4cRy7XkdvUcmG7rM48Sos=";
+    hash = "sha256-0BfdHQn/Kgct4ZT34KhMgMC3nS0unE3iL7DiWDhXDSk=";
   };
 
   dontConfigure = true;

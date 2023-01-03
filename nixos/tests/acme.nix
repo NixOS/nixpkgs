@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+{ pkgs, lib, ... }: let
   commonConfig = ./common/acme/client;
 
-  dnsServerIP = nodes: nodes.dnsserver.config.networking.primaryIPAddress;
+  dnsServerIP = nodes: nodes.dnsserver.networking.primaryIPAddress;
 
   dnsScript = nodes: let
     dnsAddress = dnsServerIP nodes;
@@ -39,6 +39,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   vhostBaseHttpd = {
     forceSSL = true;
     inherit documentRoot;
+  };
+
+  simpleConfig = {
+    security.acme = {
+      certs."http.example.test" = {
+        listenHTTP = ":80";
+      };
+    };
+
+    networking.firewall.allowedTCPPorts = [ 80 ];
   };
 
   # Base specialisation config for testing general ACME features
@@ -134,7 +144,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
 
 in {
   name = "acme";
-  meta.maintainers = lib.teams.acme.members;
+  meta = {
+    maintainers = lib.teams.acme.members;
+    # Hard timeout in seconds. Average run time is about 7 minutes.
+    timeout = 1800;
+  };
 
   nodes = {
     # The fake ACME server which will respond to client requests
@@ -153,7 +167,7 @@ in {
         description = "Pebble ACME challenge test server";
         wantedBy = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
+          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.networking.primaryIPAddress}'";
           # Required to bind on privileged ports.
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
@@ -173,9 +187,29 @@ in {
       services.nginx.logError = "stderr info";
 
       specialisation = {
+        # Tests HTTP-01 verification using Lego's built-in web server
+        http01lego.configuration = simpleConfig;
+
+        renew.configuration = lib.mkMerge [
+          simpleConfig
+          {
+            # Pebble provides 5 year long certs,
+            # needs to be higher than that to test renewal
+            security.acme.certs."http.example.test".validMinDays = 9999;
+          }
+        ];
+
+        # Tests that account creds can be safely changed.
+        accountchange.configuration = lib.mkMerge [
+          simpleConfig
+          {
+            security.acme.certs."http.example.test".email = "admin@example.test";
+          }
+        ];
+
         # First derivation used to test general ACME features
         general.configuration = { ... }: let
-          caDomain = nodes.acme.config.test-support.acme.caDomain;
+          caDomain = nodes.acme.test-support.acme.caDomain;
           email = config.security.acme.defaults.email;
           # Exit 99 to make it easier to track if this is the reason a renew failed
           accountCreateTester = ''
@@ -247,7 +281,7 @@ in {
           };
         };
 
-      # Test compatiblity with Caddy
+      # Test compatibility with Caddy
       # It only supports useACMEHost, hence not using mkServerConfigs
       } // (let
         baseCaddyConfig = { nodes, config, ... }: {
@@ -316,7 +350,7 @@ in {
 
   testScript = { nodes, ... }:
     let
-      caDomain = nodes.acme.config.test-support.acme.caDomain;
+      caDomain = nodes.acme.test-support.acme.caDomain;
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
@@ -325,6 +359,30 @@ in {
     # reaches the active state. Targets do not have this issue.
     ''
       import time
+
+
+      TOTAL_RETRIES = 20
+
+
+      class BackoffTracker(object):
+          delay = 1
+          increment = 1
+
+          def handle_fail(self, retries, message) -> int:
+              assert retries < TOTAL_RETRIES, message
+
+              print(f"Retrying in {self.delay}s, {retries + 1}/{TOTAL_RETRIES}")
+              time.sleep(self.delay)
+
+              # Only increment after the first try
+              if retries == 0:
+                  self.delay += self.increment
+                  self.increment *= 2
+
+              return retries + 1
+
+
+      backoff = BackoffTracker()
 
 
       def switch_to(node, name):
@@ -374,9 +432,7 @@ in {
           assert False
 
 
-      def check_connection(node, domain, retries=3):
-          assert retries >= 0, f"Failed to connect to https://{domain}"
-
+      def check_connection(node, domain, retries=0):
           result = node.succeed(
               "openssl s_client -brief -verify 2 -CAfile /tmp/ca.crt"
               f" -servername {domain} -connect {domain}:443 < /dev/null 2>&1"
@@ -384,13 +440,11 @@ in {
 
           for line in result.lower().split("\n"):
               if "verification" in line and "error" in line:
-                  time.sleep(3)
-                  return check_connection(node, domain, retries - 1)
+                  retries = backoff.handle_fail(retries, f"Failed to connect to https://{domain}")
+                  return check_connection(node, domain, retries)
 
 
-      def check_connection_key_bits(node, domain, bits, retries=3):
-          assert retries >= 0, f"Did not find expected number of bits ({bits}) in key"
-
+      def check_connection_key_bits(node, domain, bits, retries=0):
           result = node.succeed(
               "openssl s_client -CAfile /tmp/ca.crt"
               f" -servername {domain} -connect {domain}:443 < /dev/null"
@@ -399,13 +453,11 @@ in {
           print("Key type:", result)
 
           if bits not in result:
-              time.sleep(3)
-              return check_connection_key_bits(node, domain, bits, retries - 1)
+              retries = backoff.handle_fail(retries, f"Did not find expected number of bits ({bits}) in key")
+              return check_connection_key_bits(node, domain, bits, retries)
 
 
-      def check_stapling(node, domain, retries=3):
-          assert retries >= 0, "OCSP Stapling check failed"
-
+      def check_stapling(node, domain, retries=0):
           # Pebble doesn't provide a full OCSP responder, so just check the URL
           result = node.succeed(
               "openssl s_client -CAfile /tmp/ca.crt"
@@ -415,21 +467,19 @@ in {
           print("OCSP Responder URL:", result)
 
           if "${caDomain}:4002" not in result.lower():
-              time.sleep(3)
-              return check_stapling(node, domain, retries - 1)
+              retries = backoff.handle_fail(retries, "OCSP Stapling check failed")
+              return check_stapling(node, domain, retries)
 
 
-      def download_ca_certs(node, retries=5):
-          assert retries >= 0, "Failed to connect to pebble to download root CA certs"
-
+      def download_ca_certs(node, retries=0):
           exit_code, _ = node.execute("curl https://${caDomain}:15000/roots/0 > /tmp/ca.crt")
           exit_code_2, _ = node.execute(
               "curl https://${caDomain}:15000/intermediate-keys/0 >> /tmp/ca.crt"
           )
 
           if exit_code + exit_code_2 > 0:
-              time.sleep(3)
-              return download_ca_certs(node, retries - 1)
+              retries = backoff.handle_fail(retries, "Failed to connect to pebble to download root CA certs")
+              return download_ca_certs(node, retries)
 
 
       start_all()
@@ -438,7 +488,7 @@ in {
       client.wait_for_unit("default.target")
 
       client.succeed(
-          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
+          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
       acme.wait_for_unit("network-online.target")
@@ -446,7 +496,35 @@ in {
 
       download_ca_certs(client)
 
-      # Perform general tests first
+      # Perform http-01 w/ lego test first
+      with subtest("Can request certificate with Lego's built in web server"):
+          switch_to(webserver, "http01lego")
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+
+      # Perform renewal test
+      with subtest("Can renew certificates when they expire"):
+          hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          switch_to(webserver, "renew")
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+          hash_after = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          assert hash != hash_after
+
+      # Perform account change test
+      with subtest("Handles email change correctly"):
+          hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          switch_to(webserver, "accountchange")
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+          hash_after = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          # Has to do a full run to register account, which creates new certs.
+          assert hash != hash_after
+
+      # Perform general tests
       switch_to(webserver, "general")
 
       with subtest("Can request certificate with HTTP-01 challenge"):
@@ -594,4 +672,4 @@ in {
               wait_for_server()
               check_connection_key_bits(client, test_domain, "384")
     '';
-})
+}

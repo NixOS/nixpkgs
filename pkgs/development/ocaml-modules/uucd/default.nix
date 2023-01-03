@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "14.0.0";
+  version = "15.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256:0fc737v5gj3339jx4x9xr096lxrpwvp6vaiylhavcvsglcwbgm30";
+    sha256 = "sha256-DksDi6Dfe/fNGBmeubwxv9dScTHPJRuaPrlX7M8QRrw=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];

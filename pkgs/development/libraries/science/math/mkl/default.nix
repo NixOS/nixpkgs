@@ -131,9 +131,10 @@ in stdenvNoCC.mkDerivation ({
     install -Dm0655 -t $out/share/doc/mkl opt/intel/oneapi/mkl/2021.1.1/licensing/en/license.txt
 
     # Dynamic libraries
-    install -Dm0755 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so*
-    install -Dm0755 -t $out/lib opt/intel/oneapi/compiler/2021.1.1/linux/compiler/lib/intel64_lin/*.so*
-    install -Dm0755 -t $out/lib opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8/*.so*
+    mkdir -p $out/lib
+    cp -a opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so* $out/lib
+    cp -a opt/intel/oneapi/compiler/2021.1.1/linux/compiler/lib/intel64_lin/*.so* $out/lib
+    cp -a opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8/*.so* $out/lib
 
     # Headers
     cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/

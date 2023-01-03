@@ -46,8 +46,8 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc.xonshrc.text = ''
-      # /etc/xonshrc: DO NOT EDIT -- this file has been generated automatically.
+    environment.etc."xonsh/xonshrc".text = ''
+      # /etc/xonsh/xonshrc: DO NOT EDIT -- this file has been generated automatically.
 
 
       if not ''${...}.get('__NIXOS_SET_ENVIRONMENT_DONE'):
