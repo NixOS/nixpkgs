@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cons
 , multipledispatch
+, py
 , pytestCheckHook
 , pytest-html
 }:
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    py
     pytestCheckHook
     pytest-html
   ];
