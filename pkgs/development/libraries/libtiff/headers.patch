@@ -2,15 +2,16 @@ diff --git i/libtiff/Makefile.am w/libtiff/Makefile.am
 index 44522b62..d66e5948 100644
 --- i/libtiff/Makefile.am
 +++ w/libtiff/Makefile.am
-@@ -36,8 +36,11 @@ EXTRA_DIST = \
+@@ -36,8 +36,12 @@ EXTRA_DIST = \
  	tiffconf.h.cmake.in
- 
+
  libtiffinclude_HEADERS = \
 +	tif_config.h \
 +	tif_dir.h \
++	tif_hash_set.h \
  	tiff.h \
  	tiffio.h \
 +	tiffiop.h \
  	tiffvers.h
- 
+
  if HAVE_CXX
