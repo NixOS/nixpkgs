@@ -120,6 +120,7 @@ let
               jobs.cargo.x86_64-linux
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
+              jobs.nix.x86_64-linux
               jobs.pandoc.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by contributors to test PRs (by inclusion of the PR template)
@@ -158,6 +159,7 @@ let
               jobs.go.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
+              jobs.nix.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.git.x86_64-darwin
