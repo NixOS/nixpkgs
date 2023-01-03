@@ -9759,6 +9759,8 @@ self: super: with self; {
 
   reolink = callPackage ../development/python-modules/reolink { };
 
+  reolink-aio = callPackage ../development/python-modules/reolink-aio { };
+
   reparser = callPackage ../development/python-modules/reparser { };
 
   repeated-test = callPackage ../development/python-modules/repeated-test { };

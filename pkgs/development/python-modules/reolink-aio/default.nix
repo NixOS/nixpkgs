@@ -10,17 +10,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "reolink";
-  version = "0.61";
+  pname = "reolink-aio";
+  version = "0.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "fwestenberg";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XUYTDHh0oTro6BT+h4LjRdMukOZTlWP+giFpjLciZNQ=";
+    owner = "starkillerOG";
+    repo = "reolink_aio";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-KUsBCV8OVPj0QC1DKUBVRqtt1dpGq+JunuBZsZKfQno=";
   };
 
   propagatedBuildInputs = [
@@ -40,11 +40,8 @@ buildPythonPackage rec {
       --replace "ffmpeg" "ffmpeg-python"
   '';
 
-  # https://github.com/fwestenberg/reolink/issues/83
-  doCheck = false;
-
   pytestFlagsArray = [
-    "test.py"
+    "tests/test.py"
   ];
 
   disabledTests = [
@@ -57,13 +54,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "reolink"
+    "reolink_aio"
   ];
 
   meta = with lib; {
     description = "Module to interact with the Reolink IP camera API";
-    homepage = "https://github.com/fwestenberg/reolink";
-    changelog = "https://github.com/fwestenberg/reolink/releases/tag/v${version}";
+    homepage = "https://github.com/starkillerOG/reolink_aio";
+    changelog = "https://github.com/starkillerOG/reolink_aio/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
