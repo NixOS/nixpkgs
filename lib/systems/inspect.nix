@@ -48,6 +48,7 @@ rec {
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
+    isILP32        = map (a: { abi = { abi = a; }; }) [ "n32" "ilp32" "x32" ];
     isBigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     isLittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
