@@ -9,6 +9,7 @@
 , pygments
 , pyserial
 , pyserial-asyncio
+, pytest-asyncio
 , pytestCheckHook
 , redis
 , sqlalchemy
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   checkInputs = [
     asynctest
     mock
+    pytest-asyncio
     pytestCheckHook
     redis
     sqlalchemy
