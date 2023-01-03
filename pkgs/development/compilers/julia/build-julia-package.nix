@@ -2,7 +2,6 @@
 , stdenv
 , config
 , patchelf
-, file
 , julia
 , computeRequiredJuliaPackages
 , computeJuliaDepotPath
@@ -59,7 +58,7 @@ let
 
   # Must use attrs.nativeBuildInputs before they are removed by the removeAttrs
   # below, or everything fails.
-  nativeBuildInputs' = [ julia file patchelf ] ++ nativeBuildInputs;
+  nativeBuildInputs' = [ julia patchelf ] ++ nativeBuildInputs;
 
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
@@ -130,7 +129,14 @@ in stdenv.mkDerivation ({
         ln -s $path $out/share/julia/artifacts/$(basename $path);
     done
 
-    julia -e 'import ${attrs.pname}'
+    pushd $out/share/julia/packages/${attrs.pname}
+    if [[ -f ./deps/build.jl ]]; then
+      pushd deps
+      $NIX_JULIA_PRECMD julia -- build.jl
+      popd
+    fi
+    $NIX_JULIA_PRECMD julia -e 'import ${attrs.pname}'
+    popd
 
     # these may cause collisions
     rm -r $out/share/julia/logs || true
