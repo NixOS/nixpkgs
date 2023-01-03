@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
     cmake
     pkg-config
+    ruby
     erlang
     elixir
     beamPackages.hex
@@ -94,7 +95,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     parallel
-    ruby
     supercollider-with-sc3-plugins
     jack2
   ];
