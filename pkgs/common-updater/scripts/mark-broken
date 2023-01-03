@@ -48,7 +48,6 @@ denyFileList=(
 # to be conditionally disabled
 denyAttrList=(
         python27Packages
-        python37Packages
         linuxPackages_
         rubyPackages_
 )

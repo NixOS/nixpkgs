@@ -16279,12 +16279,6 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
-  python37Full = python37.override {
-    self = python37Full;
-    pythonAttr = "python37Full";
-    bluezSupport = true;
-    x11Support = true;
-  };
   python38Full = python38.override {
     self = python38Full;
     pythonAttr = "python38Full";
@@ -16311,13 +16305,12 @@ with pkgs;
   };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python312 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
+  inherit (pythonInterpreters) python27 python38 python39 python310 python311 python312 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
 
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
   # Python package sets.
   python27Packages = python27.pkgs;
-  python37Packages = python37.pkgs;
   python38Packages = python38.pkgs;
   python39Packages = python39.pkgs;
   python310Packages = recurseIntoAttrs python310.pkgs;
