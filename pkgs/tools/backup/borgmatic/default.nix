@@ -34,10 +34,10 @@ python3Packages.buildPythonApplication rec {
 
     mkdir -p $out/lib/systemd/system
     substitute sample/systemd/borgmatic.service \
-               $out/lib/systemd/system/borgmatic.service \
-               --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-               --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-               --replace sleep ${coreutils}/bin/sleep
+      $out/lib/systemd/system/borgmatic.service \
+      --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
+      --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
+      --replace sleep ${coreutils}/bin/sleep
   '';
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };
