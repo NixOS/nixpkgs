@@ -16299,6 +16299,12 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
+  python311Full = python310.override {
+    self = python311Full;
+    pythonAttr = "python311Full";
+    bluezSupport = true;
+    x11Support = true;
+  };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python312 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
