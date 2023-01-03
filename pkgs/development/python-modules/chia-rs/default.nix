@@ -16,6 +16,11 @@ buildPythonPackage rec {
     sha256 = "sha256-WIt7yGceILzVhegluiSb7w3F9qQvI5DjulheGsJrcf8=";
   };
 
+  patches = [
+    # undo a hack from upstream that confuses our build hook
+    ./fix-build.patch
+  ];
+
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
