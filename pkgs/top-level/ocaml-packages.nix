@@ -524,7 +524,9 @@ let
       inherit (pkgs) gsl;
     };
 
-    gstreamer = callPackage ../development/ocaml-modules/gstreamer { };
+    gstreamer = callPackage ../development/ocaml-modules/gstreamer {
+      inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
+    };
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
