@@ -1720,7 +1720,8 @@
     "kaiterra" = ps: with ps; [
     ]; # missing inputs: kaiterra-async-client
     "kaleidescape" = ps: with ps; [
-    ]; # missing inputs: pykaleidescape
+      pykaleidescape
+    ];
     "kankun" = ps: with ps; [
     ];
     "keba" = ps: with ps; [
@@ -1776,7 +1777,8 @@
       pykira
     ];
     "kiwi" = ps: with ps; [
-    ]; # missing inputs: kiwiki-client
+      kiwiki-client
+    ];
     "kmtronic" = ps: with ps; [
       pykmtronic
     ];
@@ -4380,6 +4382,7 @@
     "jewish_calendar"
     "juicenet"
     "justnimbus"
+    "kaleidescape"
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
