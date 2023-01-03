@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     license = licenses.asl20;
