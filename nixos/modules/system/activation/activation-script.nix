@@ -99,14 +99,9 @@ let
 in
 
 {
-
-  ###### interface
-
   options = {
-
     system.activationScripts = mkOption {
       default = {};
-
       example = literalExpression ''
         { stdio.text =
           '''
@@ -119,7 +114,7 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         A set of shell script fragments that are executed when a NixOS
         system configuration is activated.  Examples are updating
         /etc, creating accounts, and so on.  Since these are executed
@@ -144,7 +139,6 @@ in
 
     system.userActivationScripts = mkOption {
       default = {};
-
       example = literalExpression ''
         { plasmaSetup = {
             text = '''
@@ -155,7 +149,7 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         A set of shell script fragments that are executed by a systemd user
         service when a NixOS system configuration is activated. Examples are
         rebuilding the .desktop file cache for showing applications in the menu.
@@ -163,7 +157,6 @@ in
         {command}`nixos-rebuild`, it's important that they are
         idempotent and fast.
       '';
-
       type = with types; attrsOf (scriptType false);
 
       apply = set: {
@@ -223,11 +216,7 @@ in
 
   };
 
-
-  ###### implementation
-
   config = {
-
     system.activationScripts.stdio = ""; # obsolete
     system.activationScripts.var = ""; # obsolete
 
@@ -238,6 +227,21 @@ in
       "D /var/empty 0555 root root -"
       "h /var/empty - - - - +i"
     ];
+
+    system.activationScripts.var = ''
+      # Various log/runtime directories.
+
+      mkdir -m 1777 -p /var/tmp
+
+      # Empty, immutable home directory of many system accounts.
+      mkdir -p /var/empty
+      # Make sure it's really empty
+      ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
+      find /var/empty -mindepth 1 -delete
+      chmod 0555 /var/empty
+      chown root:root /var/empty
+      ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
+    '';
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
       then ''
@@ -251,13 +255,12 @@ in
         rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
 
-    system.activationScripts.specialfs =
-      ''
-        specialMount() {
-          local device="$1"
-          local mountPoint="$2"
-          local options="$3"
-          local fsType="$4"
+    system.activationScripts.specialfs = ''
+      specialMount() {
+        local device="$1"
+        local mountPoint="$2"
+        local options="$3"
+        local fsType="$4"
 
           if mountpoint -q "$mountPoint"; then
             local options="remount,$options"
@@ -268,7 +271,7 @@ in
           mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }
         source ${config.system.build.earlyMountScript}
-      '';
+    '';
 
     systemd.user = {
       services.nixos-activation = {
@@ -280,5 +283,4 @@ in
       };
     };
   };
-
 }
