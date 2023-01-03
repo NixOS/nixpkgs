@@ -3,6 +3,7 @@
 , llvmPackages
 , symlinkJoin, makeWrapper, substituteAll
 , mkYarnModules
+, emscripten
 }:
 
 stdenv.mkDerivation rec {
@@ -115,6 +116,13 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    # HACK: Make emscripten look more like a cc-wrapper to GHC
+    # when building the javascript backend.
+    targetPrefix = "em";
+    bintools = emscripten;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/emscripten-core/emscripten";
