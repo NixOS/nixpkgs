@@ -34,8 +34,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    description = "A Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
-    description = "A Rust port of shadowsocks";
+    changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };
