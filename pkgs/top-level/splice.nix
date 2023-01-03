@@ -108,9 +108,7 @@ let
     inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
-  splicedPackagesWithXorg = splicedPackages // builtins.removeAttrs splicedPackages.xorg [
-    "callPackage" "newScope" "overrideScope" "packages"
-  ];
+  splicedPackagesWithXorg = splicedPackages // splicedPackages.xorg.packages splicedPackages.xorg;
 
 in
 
