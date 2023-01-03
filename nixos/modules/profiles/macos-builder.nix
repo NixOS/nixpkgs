@@ -60,7 +60,7 @@ in
   };
 
   services = {
-    getty.autologinUser = "builder";
+    getty.autologinUser = user;
 
     openssh = {
       enable = true;
