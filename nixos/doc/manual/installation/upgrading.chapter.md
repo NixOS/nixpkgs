@@ -6,7 +6,7 @@ expressions and associated binaries. The NixOS channels are updated
 automatically from NixOS's Git repository after certain tests have
 passed and all packages have been built. These channels are:
 
--   *Stable channels*, such as [`nixos-22.11`](https://nixos.org/channels/nixos-22.05).
+-   *Stable channels*, such as [`nixos-22.11`](https://nixos.org/channels/nixos-22.11).
     These only get conservative bug fixes and package upgrades. For
     instance, a channel update may cause the Linux kernel on your system
     to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
@@ -19,7 +19,7 @@ passed and all packages have been built. These channels are:
     radical changes between channel updates. It's not recommended for
     production systems.
 
--   *Small channels*, such as [`nixos-22.11-small`](https://nixos.org/channels/nixos-22.05-small)
+-   *Small channels*, such as [`nixos-22.11-small`](https://nixos.org/channels/nixos-22.11-small)
     or [`nixos-unstable-small`](https://nixos.org/channels/nixos-unstable-small).
     These are identical to the stable and unstable channels described above,
     except that they contain fewer binary packages. This means they get updated
