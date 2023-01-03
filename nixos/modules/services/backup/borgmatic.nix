@@ -10,6 +10,16 @@ in {
   options.services.borgmatic = {
     enable = mkEnableOption (lib.mdDoc "borgmatic");
 
+    frequency = mkOption {
+      default = "daily";
+      type = types.str;
+      description = lib.mdDoc ''
+        Frequency at which borgmatic should be run. See 
+	https://man7.org/linux/man-pages/man7/systemd.time.7.html for 
+	options.
+      '';
+    };
+
     settings = mkOption {
       description = lib.mdDoc ''
         See https://torsion.org/borgmatic/docs/reference/configuration/
@@ -53,6 +63,8 @@ in {
     environment.etc."borgmatic/config.yaml".source = cfgfile;
 
     systemd.packages = [ pkgs.borgmatic ];
+
+    systemd.services.borgmatic.startAt = cfg.frequency;
 
   };
 }

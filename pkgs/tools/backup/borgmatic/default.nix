@@ -33,7 +33,6 @@ python3Packages.buildPythonApplication rec {
       --bash <($out/bin/borgmatic --bash-completion)
 
     mkdir -p $out/lib/systemd/system
-    cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
     substitute sample/systemd/borgmatic.service \
                $out/lib/systemd/system/borgmatic.service \
                --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
