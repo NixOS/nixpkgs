@@ -642,6 +642,8 @@ in {
 
   meta = {
     maintainers = with lib.maintainers; [ lheckemann qyliss ma27 ];
+    # Don't edit the docbook xml directly, edit the md and generate it:
+    # `pandoc mailman.md -t docbook --top-level-division=chapter --extract-media=media -f markdown-smart --lua-filter ../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua --lua-filter ../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua > mailman.xml`
     doc = ./mailman.xml;
   };
 
