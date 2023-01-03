@@ -1,240 +1,225 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-discourse">
- <title>Discourse</title>
- <para>
-   <link xlink:href="https://www.discourse.org/">Discourse</link> is a
-   modern and open source discussion platform.
- </para>
-
- <section xml:id="module-services-discourse-basic-usage">
-   <title>Basic usage</title>
-   <para>
-     A minimal configuration using Let's Encrypt for TLS certificates looks like this:
-<programlisting>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-discourse">
+  <title>Discourse</title>
+  <para>
+    <link xlink:href="https://www.discourse.org/">Discourse</link> is a
+    modern and open source discussion platform.
+  </para>
+  <section xml:id="module-services-discourse-basic-usage">
+    <title>Basic usage</title>
+    <para>
+      A minimal configuration using Let's Encrypt for TLS certificates
+      looks like this:
+    </para>
+    <programlisting>
 services.discourse = {
   enable = true;
-  hostname = "discourse.example.com";
+  hostname = &quot;discourse.example.com&quot;;
   admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+    email = &quot;admin@example.com&quot;;
+    username = &quot;admin&quot;;
+    fullName = &quot;Administrator&quot;;
+    passwordFile = &quot;/path/to/password_file&quot;;
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = &quot;/path/to/secret_key_base_file&quot;;
 };
-security.acme.email = "me@example.com";
+security.acme.email = &quot;me@example.com&quot;;
 security.acme.acceptTerms = true;
 </programlisting>
-   </para>
-
-   <para>
-     Provided a proper DNS setup, you'll be able to connect to the
-     instance at <literal>discourse.example.com</literal> and log in
-     using the credentials provided in
-     <literal>services.discourse.admin</literal>.
-   </para>
- </section>
-
- <section xml:id="module-services-discourse-tls">
-   <title>Using a regular TLS certificate</title>
-   <para>
-     To set up TLS using a regular certificate and key on file, use
-     the <xref linkend="opt-services.discourse.sslCertificate" />
-     and <xref linkend="opt-services.discourse.sslCertificateKey" />
-     options:
-
-<programlisting>
+    <para>
+      Provided a proper DNS setup, you'll be able to connect to the
+      instance at <literal>discourse.example.com</literal> and log in
+      using the credentials provided in
+      <literal>services.discourse.admin</literal>.
+    </para>
+  </section>
+  <section xml:id="module-services-discourse-tls">
+    <title>Using a regular TLS certificate</title>
+    <para>
+      To set up TLS using a regular certificate and key on file, use the
+      <xref linkend="opt-services.discourse.sslCertificate"></xref> and
+      <xref linkend="opt-services.discourse.sslCertificateKey"></xref>
+      options:
+    </para>
+    <programlisting>
 services.discourse = {
   enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
+  hostname = &quot;discourse.example.com&quot;;
+  sslCertificate = &quot;/path/to/ssl_certificate&quot;;
+  sslCertificateKey = &quot;/path/to/ssl_certificate_key&quot;;
   admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+    email = &quot;admin@example.com&quot;;
+    username = &quot;admin&quot;;
+    fullName = &quot;Administrator&quot;;
+    passwordFile = &quot;/path/to/password_file&quot;;
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = &quot;/path/to/secret_key_base_file&quot;;
 };
 </programlisting>
-
-   </para>
- </section>
-
- <section xml:id="module-services-discourse-database">
-   <title>Database access</title>
-   <para>
-     Discourse uses
-     PostgreSQL to store most of its
-     data. A database will automatically be enabled and a database
-     and role created unless <xref
-     linkend="opt-services.discourse.database.host" /> is changed from
-     its default of <literal>null</literal> or <xref
-     linkend="opt-services.discourse.database.createLocally" /> is set
-     to <literal>false</literal>.
-   </para>
-
-   <para>
-     External database access can also be configured by setting
-     <xref linkend="opt-services.discourse.database.host" />, <xref
-     linkend="opt-services.discourse.database.username" /> and <xref
-     linkend="opt-services.discourse.database.passwordFile" /> as
-     appropriate. Note that you need to manually create a database
-     called <literal>discourse</literal> (or the name you chose in
-     <xref linkend="opt-services.discourse.database.name" />) and
-     allow the configured database user full access to it.
-   </para>
- </section>
-
- <section xml:id="module-services-discourse-mail">
-   <title>Email</title>
-   <para>
-     In addition to the basic setup, you'll want to configure an SMTP
-     server Discourse can use to send user
-     registration and password reset emails, among others. You can
-     also optionally let Discourse receive
-     email, which enables people to reply to threads and conversations
-     via email.
-   </para>
-
-   <para>
-     A basic setup which assumes you want to use your configured <link
-     linkend="opt-services.discourse.hostname">hostname</link> as
-     email domain can be done like this:
-
-<programlisting>
+  </section>
+  <section xml:id="module-services-discourse-database">
+    <title>Database access</title>
+    <para>
+      Discourse uses PostgreSQL to store most of its data. A database
+      will automatically be enabled and a database and role created
+      unless
+      <xref linkend="opt-services.discourse.database.host"></xref> is
+      changed from its default of <literal>null</literal> or
+      <xref linkend="opt-services.discourse.database.createLocally"></xref>
+      is set to <literal>false</literal>.
+    </para>
+    <para>
+      External database access can also be configured by setting
+      <xref linkend="opt-services.discourse.database.host"></xref>,
+      <xref linkend="opt-services.discourse.database.username"></xref>
+      and
+      <xref linkend="opt-services.discourse.database.passwordFile"></xref>
+      as appropriate. Note that you need to manually create a database
+      called <literal>discourse</literal> (or the name you chose in
+      <xref linkend="opt-services.discourse.database.name"></xref>) and
+      allow the configured database user full access to it.
+    </para>
+  </section>
+  <section xml:id="module-services-discourse-mail">
+    <title>Email</title>
+    <para>
+      In addition to the basic setup, you'll want to configure an SMTP
+      server Discourse can use to send user registration and password
+      reset emails, among others. You can also optionally let Discourse
+      receive email, which enables people to reply to threads and
+      conversations via email.
+    </para>
+    <para>
+      A basic setup which assumes you want to use your configured
+      <link linkend="opt-services.discourse.hostname">hostname</link> as
+      email domain can be done like this:
+    </para>
+    <programlisting>
 services.discourse = {
   enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
+  hostname = &quot;discourse.example.com&quot;;
+  sslCertificate = &quot;/path/to/ssl_certificate&quot;;
+  sslCertificateKey = &quot;/path/to/ssl_certificate_key&quot;;
   admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+    email = &quot;admin@example.com&quot;;
+    username = &quot;admin&quot;;
+    fullName = &quot;Administrator&quot;;
+    passwordFile = &quot;/path/to/password_file&quot;;
   };
   mail.outgoing = {
-    serverAddress = "smtp.emailprovider.com";
+    serverAddress = &quot;smtp.emailprovider.com&quot;;
     port = 587;
-    username = "user@emailprovider.com";
-    passwordFile = "/path/to/smtp_password_file";
+    username = &quot;user@emailprovider.com&quot;;
+    passwordFile = &quot;/path/to/smtp_password_file&quot;;
   };
   mail.incoming.enable = true;
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = &quot;/path/to/secret_key_base_file&quot;;
 };
 </programlisting>
-
-     This assumes you have set up an MX record for the address you've
-     set in <link linkend="opt-services.discourse.hostname">hostname</link> and
-     requires proper SPF, DKIM and DMARC configuration to be done for
-     the domain you're sending from, in order for email to be reliably delivered.
-   </para>
-
-   <para>
-     If you want to use a different domain for your outgoing email
-     (for example <literal>example.com</literal> instead of
-     <literal>discourse.example.com</literal>) you should set
-     <xref linkend="opt-services.discourse.mail.notificationEmailAddress" /> and
-     <xref linkend="opt-services.discourse.mail.contactEmailAddress" /> manually.
-   </para>
-
-   <note>
-     <para>
-       Setup of TLS for incoming email is currently only configured
-       automatically when a regular TLS certificate is used, i.e. when
-       <xref linkend="opt-services.discourse.sslCertificate" /> and
-       <xref linkend="opt-services.discourse.sslCertificateKey" /> are
-       set.
-     </para>
-   </note>
-
- </section>
-
- <section xml:id="module-services-discourse-settings">
-   <title>Additional settings</title>
-   <para>
-     Additional site settings and backend settings, for which no
-     explicit NixOS options are provided,
-     can be set in <xref linkend="opt-services.discourse.siteSettings" /> and
-     <xref linkend="opt-services.discourse.backendSettings" /> respectively.
-   </para>
-
-   <section xml:id="module-services-discourse-site-settings">
-     <title>Site settings</title>
-     <para>
-       "Site settings" are the settings that can be
-       changed through the Discourse
-       UI. Their <emphasis>default</emphasis> values can be set using
-       <xref linkend="opt-services.discourse.siteSettings" />.
-     </para>
-
-     <para>
-       Settings are expressed as a Nix attribute set which matches the
-       structure of the configuration in
-       <link xlink:href="https://github.com/discourse/discourse/blob/master/config/site_settings.yml">config/site_settings.yml</link>.
-       To find a setting's path, you only need to care about the first
-       two levels; i.e. its category (e.g. <literal>login</literal>)
-       and name (e.g. <literal>invite_only</literal>).
-     </para>
-
-     <para>
-       Settings containing secret data should be set to an attribute
-       set containing the attribute <literal>_secret</literal> - a
-       string pointing to a file containing the value the option
-       should be set to. See the example.
-     </para>
-   </section>
-
-   <section xml:id="module-services-discourse-backend-settings">
-     <title>Backend settings</title>
-     <para>
-       Settings are expressed as a Nix attribute set which matches the
-       structure of the configuration in
-       <link xlink:href="https://github.com/discourse/discourse/blob/stable/config/discourse_defaults.conf">config/discourse.conf</link>.
-       Empty parameters can be defined by setting them to
-       <literal>null</literal>.
-     </para>
-   </section>
-
-   <section xml:id="module-services-discourse-settings-example">
-     <title>Example</title>
-     <para>
-       The following example sets the title and description of the
-       Discourse instance and enables
-       GitHub login in the site settings,
-       and changes a few request limits in the backend settings:
-<programlisting>
+    <para>
+      This assumes you have set up an MX record for the address you've
+      set in
+      <link linkend="opt-services.discourse.hostname">hostname</link>
+      and requires proper SPF, DKIM and DMARC configuration to be done
+      for the domain you're sending from, in order for email to be
+      reliably delivered.
+    </para>
+    <para>
+      If you want to use a different domain for your outgoing email (for
+      example <literal>example.com</literal> instead of
+      <literal>discourse.example.com</literal>) you should set
+      <xref linkend="opt-services.discourse.mail.notificationEmailAddress"></xref>
+      and
+      <xref linkend="opt-services.discourse.mail.contactEmailAddress"></xref>
+      manually.
+    </para>
+    <note>
+      <para>
+        Setup of TLS for incoming email is currently only configured
+        automatically when a regular TLS certificate is used, i.e. when
+        <xref linkend="opt-services.discourse.sslCertificate"></xref>
+        and
+        <xref linkend="opt-services.discourse.sslCertificateKey"></xref>
+        are set.
+      </para>
+    </note>
+  </section>
+  <section xml:id="module-services-discourse-settings">
+    <title>Additional settings</title>
+    <para>
+      Additional site settings and backend settings, for which no
+      explicit NixOS options are provided, can be set in
+      <xref linkend="opt-services.discourse.siteSettings"></xref> and
+      <xref linkend="opt-services.discourse.backendSettings"></xref>
+      respectively.
+    </para>
+    <section xml:id="module-services-discourse-site-settings">
+      <title>Site settings</title>
+      <para>
+        &quot;Site settings&quot; are the settings that can be changed
+        through the Discourse UI. Their <emphasis>default</emphasis>
+        values can be set using
+        <xref linkend="opt-services.discourse.siteSettings"></xref>.
+      </para>
+      <para>
+        Settings are expressed as a Nix attribute set which matches the
+        structure of the configuration in
+        <link xlink:href="https://github.com/discourse/discourse/blob/master/config/site_settings.yml">config/site_settings.yml</link>.
+        To find a setting's path, you only need to care about the first
+        two levels; i.e. its category (e.g. <literal>login</literal>)
+        and name (e.g. <literal>invite_only</literal>).
+      </para>
+      <para>
+        Settings containing secret data should be set to an attribute
+        set containing the attribute <literal>_secret</literal> - a
+        string pointing to a file containing the value the option should
+        be set to. See the example.
+      </para>
+    </section>
+    <section xml:id="module-services-discourse-backend-settings">
+      <title>Backend settings</title>
+      <para>
+        Settings are expressed as a Nix attribute set which matches the
+        structure of the configuration in
+        <link xlink:href="https://github.com/discourse/discourse/blob/stable/config/discourse_defaults.conf">config/discourse.conf</link>.
+        Empty parameters can be defined by setting them to
+        <literal>null</literal>.
+      </para>
+    </section>
+    <section xml:id="module-services-discourse-settings-example">
+      <title>Example</title>
+      <para>
+        The following example sets the title and description of the
+        Discourse instance and enables GitHub login in the site
+        settings, and changes a few request limits in the backend
+        settings:
+      </para>
+      <programlisting>
 services.discourse = {
   enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
+  hostname = &quot;discourse.example.com&quot;;
+  sslCertificate = &quot;/path/to/ssl_certificate&quot;;
+  sslCertificateKey = &quot;/path/to/ssl_certificate_key&quot;;
   admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+    email = &quot;admin@example.com&quot;;
+    username = &quot;admin&quot;;
+    fullName = &quot;Administrator&quot;;
+    passwordFile = &quot;/path/to/password_file&quot;;
   };
   mail.outgoing = {
-    serverAddress = "smtp.emailprovider.com";
+    serverAddress = &quot;smtp.emailprovider.com&quot;;
     port = 587;
-    username = "user@emailprovider.com";
-    passwordFile = "/path/to/smtp_password_file";
+    username = &quot;user@emailprovider.com&quot;;
+    passwordFile = &quot;/path/to/smtp_password_file&quot;;
   };
   mail.incoming.enable = true;
   siteSettings = {
     required = {
-      title = "My Cats";
-      site_description = "Discuss My Cats (and be nice plz)";
+      title = &quot;My Cats&quot;;
+      site_description = &quot;Discuss My Cats (and be nice plz)&quot;;
     };
     login = {
       enable_github_logins = true;
-      github_client_id = "a2f6dfe838cb3206ce20";
+      github_client_id = &quot;a2f6dfe838cb3206ce20&quot;;
       github_client_secret._secret = /run/keys/discourse_github_client_secret;
     };
   };
@@ -242,99 +227,93 @@ services.discourse = {
     max_reqs_per_ip_per_minute = 300;
     max_reqs_per_ip_per_10_seconds = 60;
     max_asset_reqs_per_ip_per_10_seconds = 250;
-    max_reqs_per_ip_mode = "warn+block";
+    max_reqs_per_ip_mode = &quot;warn+block&quot;;
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = &quot;/path/to/secret_key_base_file&quot;;
 };
 </programlisting>
-     </para>
-     <para>
-       In the resulting site settings file, the
-       <literal>login.github_client_secret</literal> key will be set
-       to the contents of the
-       <filename>/run/keys/discourse_github_client_secret</filename>
-       file.
-     </para>
-   </section>
- </section>
+      <para>
+        In the resulting site settings file, the
+        <literal>login.github_client_secret</literal> key will be set to
+        the contents of the
+        <filename>/run/keys/discourse_github_client_secret</filename>
+        file.
+      </para>
+    </section>
+  </section>
   <section xml:id="module-services-discourse-plugins">
     <title>Plugins</title>
     <para>
-      You can install Discourse plugins
-      using the <xref linkend="opt-services.discourse.plugins" />
-      option. Pre-packaged plugins are provided in
+      You can install Discourse plugins using the
+      <xref linkend="opt-services.discourse.plugins"></xref> option.
+      Pre-packaged plugins are provided in
       <literal>&lt;your_discourse_package_here&gt;.plugins</literal>. If
       you want the full suite of plugins provided through
-      <literal>nixpkgs</literal>, you can also set the <xref
-      linkend="opt-services.discourse.package" /> option to
+      <literal>nixpkgs</literal>, you can also set the
+      <xref linkend="opt-services.discourse.package"></xref> option to
       <literal>pkgs.discourseAllPlugins</literal>.
     </para>
-
     <para>
       Plugins can be built with the
       <literal>&lt;your_discourse_package_here&gt;.mkDiscoursePlugin</literal>
       function. Normally, it should suffice to provide a
       <literal>name</literal> and <literal>src</literal> attribute. If
       the plugin has Ruby dependencies, however, they need to be
-      packaged in accordance with the <link
-      xlink:href="https://nixos.org/manual/nixpkgs/stable/#developing-with-ruby">Developing
-      with Ruby</link> section of the Nixpkgs manual and the
-      appropriate gem options set in <literal>bundlerEnvArgs</literal>
-      (normally <literal>gemdir</literal> is sufficient). A plugin's
-      Ruby dependencies are listed in its
-      <filename>plugin.rb</filename> file as function calls to
-      <literal>gem</literal>. To construct the corresponding
-      <filename>Gemfile</filename> manually, run <command>bundle
-      init</command>, then add the <literal>gem</literal> lines to it
-      verbatim.
+      packaged in accordance with the
+      <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#developing-with-ruby">Developing
+      with Ruby</link> section of the Nixpkgs manual and the appropriate
+      gem options set in <literal>bundlerEnvArgs</literal> (normally
+      <literal>gemdir</literal> is sufficient). A plugin's Ruby
+      dependencies are listed in its <filename>plugin.rb</filename> file
+      as function calls to <literal>gem</literal>. To construct the
+      corresponding <filename>Gemfile</filename> manually, run
+      <command>bundle init</command>, then add the
+      <literal>gem</literal> lines to it verbatim.
     </para>
-
     <para>
       Much of the packaging can be done automatically by the
       <filename>nixpkgs/pkgs/servers/web-apps/discourse/update.py</filename>
       script - just add the plugin to the <literal>plugins</literal>
-      list in the <literal>update_plugins</literal> function and run
-      the script:
-      <programlisting language="bash">
+      list in the <literal>update_plugins</literal> function and run the
+      script:
+    </para>
+    <programlisting language="bash">
 ./update.py update-plugins
 </programlisting>
-    </para>
-
     <para>
-      Some plugins provide <link
-      linkend="module-services-discourse-site-settings">site
-      settings</link>. Their defaults can be configured using <xref
-      linkend="opt-services.discourse.siteSettings" />, just like
-      regular site settings. To find the names of these settings, look
-      in the <literal>config/settings.yml</literal> file of the plugin
-      repo.
+      Some plugins provide
+      <link linkend="module-services-discourse-site-settings">site
+      settings</link>. Their defaults can be configured using
+      <xref linkend="opt-services.discourse.siteSettings"></xref>, just
+      like regular site settings. To find the names of these settings,
+      look in the <literal>config/settings.yml</literal> file of the
+      plugin repo.
     </para>
-
     <para>
-      For example, to add the <link
-      xlink:href="https://github.com/discourse/discourse-spoiler-alert">discourse-spoiler-alert</link>
-      and <link
-      xlink:href="https://github.com/discourse/discourse-solved">discourse-solved</link>
-      plugins, and disable <literal>discourse-spoiler-alert</literal>
-      by default:
-
-<programlisting>
+      For example, to add the
+      <link xlink:href="https://github.com/discourse/discourse-spoiler-alert">discourse-spoiler-alert</link>
+      and
+      <link xlink:href="https://github.com/discourse/discourse-solved">discourse-solved</link>
+      plugins, and disable <literal>discourse-spoiler-alert</literal> by
+      default:
+    </para>
+    <programlisting>
 services.discourse = {
   enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
+  hostname = &quot;discourse.example.com&quot;;
+  sslCertificate = &quot;/path/to/ssl_certificate&quot;;
+  sslCertificateKey = &quot;/path/to/ssl_certificate_key&quot;;
   admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+    email = &quot;admin@example.com&quot;;
+    username = &quot;admin&quot;;
+    fullName = &quot;Administrator&quot;;
+    passwordFile = &quot;/path/to/password_file&quot;;
   };
   mail.outgoing = {
-    serverAddress = "smtp.emailprovider.com";
+    serverAddress = &quot;smtp.emailprovider.com&quot;;
     port = 587;
-    username = "user@emailprovider.com";
-    passwordFile = "/path/to/smtp_password_file";
+    username = &quot;user@emailprovider.com&quot;;
+    passwordFile = &quot;/path/to/smtp_password_file&quot;;
   };
   mail.incoming.enable = true;
   plugins = with config.services.discourse.package.plugins; [
@@ -346,10 +325,8 @@ services.discourse = {
       spoiler_enabled = false;
     };
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
+  secretKeyBaseFile = &quot;/path/to/secret_key_base_file&quot;;
 };
 </programlisting>
-
-    </para>
   </section>
 </chapter>
