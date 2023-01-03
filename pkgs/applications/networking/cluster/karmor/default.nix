@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-VvjcGiBxK2OVvIEc/ScwUT6zJZTccnXu/JfXKXc5WNY=";
 
-  nativeBuildInputs = [installShellFiles];
+  nativeBuildInputs = [ installShellFiles ];
 
   # integration tests require network access
   doCheck = false;
@@ -29,7 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A client tool to help manage KubeArmor";
     homepage = "https://kubearmor.io";
-    changelog = "https://github.com/${src.owner}/${src.repo}/-/releases/v${version}";
+    changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ urandom ];
   };
