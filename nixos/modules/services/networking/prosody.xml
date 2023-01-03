@@ -54,7 +54,8 @@ services.prosody = {
   uploadHttp = {
       domain = "upload.example.org";
   };
-};</programlisting>
+};
+</programlisting>
   </para>
  </section>
  <section xml:id="module-services-prosody-letsencrypt">
@@ -81,7 +82,8 @@ security.acme = {
       extraDomainNames = [ "conference.example.org" "upload.example.org" ];
     };
   };
-};</programlisting>
+};
+</programlisting>
  </para>
 </section>
 </chapter>

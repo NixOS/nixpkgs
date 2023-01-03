@@ -28,7 +28,8 @@
 
   <para>
    A very basic configuration may look like this:
-<programlisting>{ pkgs, ... }:
+<programlisting>
+{ pkgs, ... }:
 {
   services.nextcloud = {
     enable = true;
@@ -60,7 +61,8 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
-}</programlisting>
+}
+</programlisting>
   </para>
 
   <para>
@@ -198,7 +200,8 @@
   </para>
   <para>
    An exemplary configuration may look like this:
-<programlisting>{ config, lib, pkgs, ... }: {
+<programlisting>
+{ config, lib, pkgs, ... }: {
   services.nginx.enable = false;
   services.nextcloud = {
     enable = true;
@@ -238,7 +241,8 @@
       '';
     };
   };
-}</programlisting>
+}
+</programlisting>
   </para>
  </section>
 
@@ -286,14 +290,16 @@
    in NixOS for a safe upgrade-path before removing those. In that case we should keep those
    packages, but mark them as insecure in an expression like this (in
    <literal>&lt;nixpkgs/pkgs/servers/nextcloud/default.nix&gt;</literal>):
-<programlisting>/* ... */
+<programlisting>
+/* ... */
 {
   nextcloud17 = generic {
     version = "17.0.x";
     sha256 = "0000000000000000000000000000000000000000000000000000";
     eol = true;
   };
-}</programlisting>
+}
+</programlisting>
   </para>
 
   <para>

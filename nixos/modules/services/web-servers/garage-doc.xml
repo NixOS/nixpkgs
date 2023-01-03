@@ -119,14 +119,16 @@
    in NixOS for a safe upgrade-path before removing those. In that case we shold keep those
    packages, but mark them as insecure in an expression like this (in
    <literal>&lt;nixpkgs/pkgs/tools/filesystem/garage/default.nix&gt;</literal>):
-<programlisting>/* ... */
+<programlisting>
+/* ... */
 {
   garage_0_7_3 = generic {
     version = "0.7.3";
     sha256 = "0000000000000000000000000000000000000000000000000000";
     eol = true;
   };
-}</programlisting>
+}
+</programlisting>
   </para>
 
   <para>
