@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , cmake
+, docbook-xsl-nons
+, libxslt
 , pkg-config
 , alsa-lib
 , faac
@@ -15,13 +17,14 @@
 , libX11
 , libXcursor
 , libXdamage
+, libXdmcp
 , libXext
 , libXi
 , libXinerama
 , libXrandr
 , libXrender
-, libXv
 , libXtst
+, libXv
 , libxkbcommon
 , libxkbfile
 , wayland
@@ -30,7 +33,6 @@
 , gst-plugins-good
 , libunwind
 , orc
-, libxslt
 , cairo
 , libusb1
 , libpulseaudio
@@ -112,6 +114,7 @@ stdenv.mkDerivation rec {
     libX11
     libXcursor
     libXdamage
+    libXdmcp
     libXext
     libXi
     libXinerama
@@ -125,7 +128,6 @@ stdenv.mkDerivation rec {
     libusb1
     libxkbcommon
     libxkbfile
-    libxslt
     openh264
     openssl
     orc
@@ -147,16 +149,19 @@ stdenv.mkDerivation rec {
     faac
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake libxslt docbook-xsl-nons pkg-config ];
 
   doCheck = true;
 
   # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
-  cmakeFlags = [ "-Wno-dev" "-DCMAKE_INSTALL_LIBDIR=lib" ]
-    ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
+  cmakeFlags = [
+    "-Wno-dev"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
+  ]
+  ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
     WITH_CAIRO = (cairo != null);
-    WITH_CUNIT = doCheck;
     WITH_CUPS = (cups != null);
     WITH_FAAC = (withUnfree && faac != null);
     WITH_FAAD2 = (faad2 != null);
