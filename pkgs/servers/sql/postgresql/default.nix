@@ -3,7 +3,7 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
@@ -22,6 +22,7 @@ let
   let
     atLeast = lib.versionAtLeast version;
     lz4Enabled = atLeast "14";
+    zstdEnabled = atLeast "15";
 
   in stdenv.mkDerivation rec {
     pname = "postgresql";
@@ -45,6 +46,7 @@ let
       icu
     ]
       ++ lib.optionals lz4Enabled [ lz4 ]
+      ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
@@ -76,6 +78,7 @@ let
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
+      ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
