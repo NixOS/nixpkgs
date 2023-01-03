@@ -6088,6 +6088,8 @@ self: super: with self; {
 
   nampa = callPackage ../development/python-modules/nampa { };
 
+  nanoid = callPackage ../development/python-modules/nanoid { };
+
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
