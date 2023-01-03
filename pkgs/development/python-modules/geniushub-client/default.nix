@@ -20,11 +20,14 @@ buildPythonPackage rec {
   # tests only implemented after 0.6.30
   doCheck = false;
 
-  pythonImportsCheck = [ "geniushubclient" ];
+  pythonImportsCheck = [
+    "geniushubclient"
+  ];
 
   meta = with lib; {
     description = "Aiohttp-based client for Genius Hub systems";
     homepage = "https://github.com/zxdavb/geniushub-client";
+    changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
