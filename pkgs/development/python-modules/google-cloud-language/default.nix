@@ -2,34 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, libcst
-, mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KAZmikDsTmNarRo9fxrTR5EtGfSYm1i4rP1iX8pa6Zo=";
+    hash = "sha256-2BVkbQt6y9WGLjFBCt4pXPtGcmcsF8FxThOUIu7CgR8=";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
-    mock
     pytestCheckHook
     pytest-asyncio
   ];
@@ -43,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Natural Language API client library";
     homepage = "https://github.com/googleapis/python-language";
+    changelog = "https://github.com/googleapis/python-language/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

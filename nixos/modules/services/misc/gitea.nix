@@ -395,7 +395,7 @@ in
           ROOT_URL = cfg.rootUrl;
         }
         (mkIf cfg.enableUnixSocket {
-          PROTOCOL = "unix";
+          PROTOCOL = "http+unix";
           HTTP_ADDR = "/run/gitea/gitea.sock";
         })
         (mkIf (!cfg.enableUnixSocket) {
@@ -404,7 +404,6 @@ in
         })
         (mkIf cfg.lfs.enable {
           LFS_START_SERVER = true;
-          LFS_CONTENT_PATH = cfg.lfs.contentDir;
         })
 
       ];
@@ -425,6 +424,10 @@ in
 
       oauth2 = {
         JWT_SECRET = "#oauth2jwtsecret#";
+      };
+
+      lfs = mkIf (cfg.lfs.enable) {
+        PATH = cfg.lfs.contentDir;
       };
     };
 

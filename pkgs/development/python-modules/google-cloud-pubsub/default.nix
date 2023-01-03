@@ -1,15 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , google-api-core
 , google-cloud-testutils
 , grpc-google-iam-v1
+, grpcio
 , grpcio-status
 , libcst
-, mock
 , proto-plus
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -26,16 +27,23 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    grpc-google-iam-v1
     google-api-core
+    grpc-google-iam-v1
+    grpcio
     grpcio-status
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   checkInputs = [
     google-cloud-testutils
-    mock
     pytestCheckHook
     pytest-asyncio
   ];
@@ -56,7 +64,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";
-    homepage = "https://pypi.org/project/google-cloud-pubsub";
+    homepage = "https://github.com/googleapis/python-pubsub";
+    changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
