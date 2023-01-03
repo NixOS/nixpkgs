@@ -4,10 +4,13 @@
 , cmake
 , pkg-config
 , alsa-lib
+, faac
+, faad2
 , ffmpeg
 , glib
+, openh264
 , openssl
-, pcre
+, pcre2
 , zlib
 , libX11
 , libXcursor
@@ -42,6 +45,7 @@
 , Carbon
 , Cocoa
 , CoreMedia
+, withUnfree ? false
 }:
 
 let
@@ -58,6 +62,8 @@ let
       file = "TestGetComputerName.c";
     }
   ];
+
+  inherit (lib) optionals;
 
 in
 stdenv.mkDerivation rec {
@@ -97,6 +103,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     cups
+    faad2
     ffmpeg
     glib
     gst-plugins-base
@@ -119,40 +126,47 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxkbfile
     libxslt
+    openh264
     openssl
     orc
-    pcre
+    pcre2
     pcsclite
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     alsa-lib
     systemd
     wayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     AudioToolbox
     AVFoundation
     Carbon
     Cocoa
     CoreMedia
+  ]
+  ++ optionals withUnfree [
+    faac
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   doCheck = true;
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ]
-    ++ lib.mapAttrsToList (k: v: "-D${k}=${if v then "ON" else "OFF"}") {
-    BUILD_TESTING = doCheck;
+  # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
+  cmakeFlags = [ "-Wno-dev" "-DCMAKE_INSTALL_LIBDIR=lib" ]
+    ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
+    BUILD_TESTING = false; # false is recommended by upstream
+    WITH_CAIRO = (cairo != null);
     WITH_CUNIT = doCheck;
     WITH_CUPS = (cups != null);
+    WITH_FAAC = (withUnfree && faac != null);
+    WITH_FAAD2 = (faad2 != null);
+    WITH_JPEG = (libjpeg_turbo != null);
+    WITH_OPENH264 = (openh264 != null);
     WITH_OSS = false;
     WITH_PCSC = (pcsclite != null);
     WITH_PULSE = (libpulseaudio != null);
     WITH_SERVER = buildServer;
-    WITH_SSE2 = stdenv.isx86_64;
-    WITH_VAAPI = true;
-    WITH_JPEG = (libjpeg_turbo != null);
-    WITH_CAIRO = (cairo != null);
+    WITH_VAAPI = false; # false is recommended by upstream
     WITH_X11 = true;
   };
 
