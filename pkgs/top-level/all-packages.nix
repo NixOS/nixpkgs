@@ -37299,7 +37299,7 @@ with pkgs;
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
   kompute = callPackage ../development/libraries/kompute {
-    fmt = fmt_7;
+    fmt = fmt_8;
   };
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
