@@ -86,7 +86,9 @@ let
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
 
-    bjack = callPackage ../development/ocaml-modules/bjack { };
+    bjack = callPackage ../development/ocaml-modules/bjack {
+      inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreAudio;
+    };
 
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
