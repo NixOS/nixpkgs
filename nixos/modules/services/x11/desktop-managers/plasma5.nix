@@ -32,7 +32,7 @@ let
   inherit (lib)
     getBin optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption types;
+    mkDefault mkIf mkMerge mkOption mkPackageOption types;
 
   ini = pkgs.formats.ini { };
 
@@ -196,6 +196,11 @@ in
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
+    };
+
+    notoPackage = mkPackageOption pkgs "Noto fonts" {
+      default = [ "noto-fonts" ];
+      example = "noto-fonts-lgc-plus";
     };
 
     # Internally allows configuring kdeglobals globally
@@ -401,7 +406,7 @@ in
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-      fonts.fonts = with pkgs; [ noto-fonts hack-font ];
+      fonts.fonts = with pkgs; [ cfg.notoPackage hack-font ];
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
@@ -545,7 +550,7 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable;
+          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
           message = "Plasma Mobile requires pulseaudio.";
         }
       ];

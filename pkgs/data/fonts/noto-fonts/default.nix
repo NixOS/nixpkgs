@@ -11,20 +11,42 @@
 , imagemagick
 , zopfli
 , buildPackages
+, variants ? [ ]
 }:
-
 let
-  mkNoto = { pname, weights }:
-    stdenvNoCC.mkDerivation {
+  notoLongDescription = ''
+    When text is rendered by a computer, sometimes characters are
+    displayed as “tofu”. They are little boxes to indicate your device
+    doesn’t have a font to display the text.
+
+    Google has been developing a font family called Noto, which aims to
+    support all languages with a harmonious look and feel. Noto is
+    Google’s answer to tofu. The name noto is to convey the idea that
+    Google’s goal is to see “no more tofu”.  Noto has multiple styles and
+    weights, and freely available to all.
+
+    This package also includes the Arimo, Cousine, and Tinos fonts.
+  '';
+in
+rec {
+  mkNoto =
+    { pname
+    , weights
+    , variants ? [ ]
+    , longDescription ? notoLongDescription
+    }:
+    stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "2020-01-23";
+      version = "20201206-phase3";
 
       src = fetchFromGitHub {
         owner = "googlefonts";
         repo = "noto-fonts";
-        rev = "f4726a2ec36169abd02a6d8abe67c8ff0236f6d8";
-        sha256 = "0zc1r7zph62qmvzxqfflsprazjf6x1qnwc2ma27kyzh6v36gaykw";
+        rev = "v${version}";
+        hash = "sha256-x60RvCRFLoGe0CNvswROnDkIsUFbWH+/laN8q2qkUPk=";
       };
+
+      _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
       installPhase = ''
         # We copy in reverse preference order -- unhinted first, then
@@ -33,29 +55,24 @@ let
         #
         # TODO: install OpenType, variable versions?
         local out_ttf=$out/share/fonts/truetype/noto
-        install -m444 -Dt $out_ttf phaseIII_only/unhinted/ttf/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf phaseIII_only/hinted/ttf/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf unhinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf hinted/*/*-${weights}.ttf
-      '';
+      '' + (if _variants == [ ] then ''
+        install -m444 -Dt $out_ttf archive/unhinted/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf archive/hinted/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf unhinted/*/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf hinted/*/*/*-${weights}.ttf
+      '' else ''
+        for variant in $_variants; do
+          install -m444 -Dt $out_ttf archive/unhinted/$variant/*-${weights}.ttf
+          install -m444 -Dt $out_ttf archive/hinted/$variant/*-${weights}.ttf
+          install -m444 -Dt $out_ttf unhinted/*/$variant/*-${weights}.ttf
+          install -m444 -Dt $out_ttf hinted/*/$variant/*-${weights}.ttf
+        done
+      '');
 
       meta = with lib; {
         description = "Beautiful and free fonts for many languages";
         homepage = "https://www.google.com/get/noto/";
-        longDescription =
-        ''
-          When text is rendered by a computer, sometimes characters are
-          displayed as “tofu”. They are little boxes to indicate your device
-          doesn’t have a font to display the text.
-
-          Google has been developing a font family called Noto, which aims to
-          support all languages with a harmonious look and feel. Noto is
-          Google’s answer to tofu. The name noto is to convey the idea that
-          Google’s goal is to see “no more tofu”.  Noto has multiple styles and
-          weights, and freely available to all.
-
-          This package also includes the Arimo, Cousine, and Tinos fonts.
-        '';
+        inherit longDescription;
         license = licenses.ofl;
         platforms = platforms.all;
         maintainers = with maintainers; [ mathnerd314 emily ];
@@ -100,12 +117,32 @@ let
         maintainers = with maintainers; [ mathnerd314 emily ];
       };
     };
-in
 
-{
   noto-fonts = mkNoto {
     pname = "noto-fonts";
     weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
+  };
+
+  noto-fonts-lgc-plus = mkNoto {
+    pname = "noto-fonts-lgc-plus";
+    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
+    variants = [
+      "Noto Sans"
+      "Noto Serif"
+      "Noto Sans Display"
+      "Noto Serif Display"
+      "Noto Sans Mono"
+      "Noto Music"
+      "Noto Sans Symbols"
+      "Noto Sans Symbols 2"
+      "Noto Sans Math"
+    ];
+    longDescription = ''
+      This package provides the Noto Fonts, but only for latin, greek
+      and cyrillic scripts, as well as some extra fonts. To create a
+      custom Noto package with custom variants, see the `mkNoto`
+      helper function.
+    '';
   };
 
   noto-fonts-extra = mkNoto {
@@ -127,64 +164,66 @@ in
     sha256 = "sha256-1w66Ge7DZjbONGhxSz69uFhfsjMsDiDkrGl6NsoB7dY=";
   };
 
-  noto-fonts-emoji = let
-    version = "2.038";
-    emojiPythonEnv =
-      buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
-  in stdenvNoCC.mkDerivation {
-    pname = "noto-fonts-emoji";
-    inherit version;
+  noto-fonts-emoji =
+    let
+      version = "2.038";
+      emojiPythonEnv =
+        buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
+    in
+    stdenvNoCC.mkDerivation {
+      pname = "noto-fonts-emoji";
+      inherit version;
 
-    src = fetchFromGitHub {
-      owner = "googlefonts";
-      repo = "noto-emoji";
-      rev = "v${version}";
-      sha256 = "1rgmcc6nqq805iqr8kvxxlk5cf50q714xaxk3ld6rjrd69kb8ix9";
+      src = fetchFromGitHub {
+        owner = "googlefonts";
+        repo = "noto-emoji";
+        rev = "v${version}";
+        sha256 = "1rgmcc6nqq805iqr8kvxxlk5cf50q714xaxk3ld6rjrd69kb8ix9";
+      };
+
+      depsBuildBuild = [
+        buildPackages.stdenv.cc
+        pkg-config
+        cairo
+      ];
+
+      nativeBuildInputs = [
+        imagemagick
+        zopfli
+        pngquant
+        which
+        emojiPythonEnv
+      ];
+
+      postPatch = ''
+        patchShebangs *.py
+        patchShebangs third_party/color_emoji/*.py
+        # remove check for virtualenv, since we handle
+        # python requirements using python.withPackages
+        sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
+
+        # Make the build verbose so it won't get culled by Hydra thinking that
+        # it somehow got stuck doing nothing.
+        sed -i 's;\t@;\t;' Makefile
+      '';
+
+      enableParallelBuilding = true;
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/share/fonts/noto
+        cp NotoColorEmoji.ttf $out/share/fonts/noto
+        runHook postInstall
+      '';
+
+      meta = with lib; {
+        description = "Color and Black-and-White emoji fonts";
+        homepage = "https://github.com/googlefonts/noto-emoji";
+        license = with licenses; [ ofl asl20 ];
+        platforms = platforms.all;
+        maintainers = with maintainers; [ mathnerd314 sternenseemann ];
+      };
     };
-
-    depsBuildBuild = [
-      buildPackages.stdenv.cc
-      pkg-config
-      cairo
-    ];
-
-    nativeBuildInputs = [
-      imagemagick
-      zopfli
-      pngquant
-      which
-      emojiPythonEnv
-    ];
-
-    postPatch = ''
-      patchShebangs *.py
-      patchShebangs third_party/color_emoji/*.py
-      # remove check for virtualenv, since we handle
-      # python requirements using python.withPackages
-      sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
-
-      # Make the build verbose so it won't get culled by Hydra thinking that
-      # it somehow got stuck doing nothing.
-      sed -i 's;\t@;\t;' Makefile
-    '';
-
-    enableParallelBuilding = true;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/share/fonts/noto
-      cp NotoColorEmoji.ttf $out/share/fonts/noto
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "Color and Black-and-White emoji fonts";
-      homepage = "https://github.com/googlefonts/noto-emoji";
-      license = with licenses; [ ofl asl20 ];
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 sternenseemann ];
-    };
-  };
 
   noto-fonts-emoji-blob-bin =
     let
