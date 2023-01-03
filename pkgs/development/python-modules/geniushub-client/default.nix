@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to interact with Genius Hub systems";
-    homepage = "https://github.com/zxdavb/geniushub-client";
+    homepage = "https://github.com/manzanotti/geniushub-client";
     changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
