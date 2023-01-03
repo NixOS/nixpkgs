@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "etebase-server";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    rev = "v${version}";
-    sha256 = "sha256-z6aiXSWdLcDfOpqC5epsclXWxJq59MqWDQOnnFqGwz4=";
+    rev = version;
+    sha256 = "sha256-+MSNX+CFmIQII+SFjM2TQKCgRMOTdsOIVAP8ur4WjQY=";
   };
 
   patches = [ ./secret.patch ];
