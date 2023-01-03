@@ -9656,7 +9656,9 @@ self: super: with self; {
 
   qiskit = callPackage ../development/python-modules/qiskit { };
 
-  qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
+  qiskit-aer = callPackage ../development/python-modules/qiskit-aer {
+    fmt = pkgs.fmt_7;
+  };
 
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
@@ -12007,7 +12009,9 @@ self: super: with self; {
 
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 
-  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
+  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
+    fmt = pkgs.fmt_7;
+  };
 
   vpk = callPackage ../development/python-modules/vpk { };
 

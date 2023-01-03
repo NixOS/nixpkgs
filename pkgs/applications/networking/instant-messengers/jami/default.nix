@@ -10,6 +10,7 @@
 , jack
 , udev
 , qt6Packages
+, fmt
 }:
 
 let
@@ -105,7 +106,7 @@ rec {
   };
 
   jami-daemon = callPackage ./daemon.nix {
-    inherit version src udev jack jami-meta ffmpeg-jami pjsip-jami opendht-jami;
+    inherit version src udev jack jami-meta ffmpeg-jami pjsip-jami opendht-jami fmt;
   };
 
   jami-client = qt6Packages.callPackage ./client.nix {
