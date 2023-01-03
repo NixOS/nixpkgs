@@ -5968,6 +5968,8 @@ self: super: with self; {
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
+  mrjob = callPackage ../development/python-modules/mrjob { };
+
   mrkd = callPackage ../development/python-modules/mrkd { };
 
   ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
