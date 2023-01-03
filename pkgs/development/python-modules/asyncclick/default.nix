@@ -36,6 +36,10 @@ buildPythonPackage rec {
     trio
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
+  ];
+
   disabledTests = [
     # RuntimeWarning: coroutine 'Context.invoke' was never awaited
     "test_context_invoke_type"
