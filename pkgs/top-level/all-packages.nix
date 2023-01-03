@@ -1191,7 +1191,6 @@ with pkgs;
 
   adlplug = callPackage ../applications/audio/adlplug {
     inherit (darwin.apple_sdk.frameworks) Foundation Cocoa Carbon CoreServices ApplicationServices CoreAudio CoreMIDI AudioToolbox Accelerate CoreImage IOKit AudioUnit QuartzCore WebKit DiscRecording CoreAudioKit;
-    fmt = fmt_7;
     jack = libjack2;
   };
   opnplug = adlplug.override {
@@ -2113,7 +2112,6 @@ with pkgs;
 
   pcsx2 = callPackage ../applications/emulators/pcsx2 {
     wxGTK = wxGTK30;
-    fmt = fmt_7;
   };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
@@ -4046,9 +4044,7 @@ with pkgs;
 
   wdomirror = callPackage ../tools/wayland/wdomirror { };
 
-  wdt = callPackage ../applications/networking/sync/wdt {
-    fmt = fmt_7;
-  };
+  wdt = callPackage ../applications/networking/sync/wdt { };
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
@@ -6932,10 +6928,7 @@ with pkgs;
 
   eris-go = callPackage ../servers/eris-go { };
 
-  ericw-tools = callPackage ../applications/misc/ericw-tools {
-    stdenv = gcc10StdenvCompat;
-    fmt = fmt_7;
-  };
+  ericw-tools = callPackage ../applications/misc/ericw-tools { stdenv = gcc10StdenvCompat; };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
 
@@ -7078,15 +7071,11 @@ with pkgs;
 
   chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
 
-  fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 {
-    fmt = fmt_7;
-  };
+  fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
 
   fcitx5-with-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
 
-  fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix {
-    fmt = fmt_7;
-  };
+  fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
   fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
     abseil-cpp = abseil-cpp.override {
@@ -7104,13 +7093,9 @@ with pkgs;
 
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
 
-  fcitx5-m17n = callPackage ../tools/inputmethods/fcitx5/fcitx5-m17n.nix {
-    fmt = fmt_7;
-  };
+  fcitx5-m17n = callPackage ../tools/inputmethods/fcitx5/fcitx5-m17n.nix { };
 
-  fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix {
-    fmt = fmt_7;
-  };
+  fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
   fcitx5-hangul = callPackage ../tools/inputmethods/fcitx5/fcitx5-hangul.nix { };
 
@@ -10284,7 +10269,6 @@ with pkgs;
 
   opendht = callPackage ../development/libraries/opendht  {
     inherit (darwin.apple_sdk.frameworks) Security;
-    fmt = fmt_7;
   };
 
   opendkim = callPackage ../development/libraries/opendkim { };
@@ -12569,9 +12553,7 @@ with pkgs;
 
   trdl-client = callPackage ../tools/misc/trdl-client { };
 
-  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
-    fmt = fmt_7;
-  };
+  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom { };
 
   trickle = callPackage ../tools/networking/trickle {};
 
@@ -15383,7 +15365,6 @@ with pkgs;
 
   rocsolver = callPackage ../development/libraries/rocsolver {
     stdenv = rocmClangStdenv;
-    fmt = fmt_7;
   };
 
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
@@ -18876,7 +18857,6 @@ with pkgs;
 
   bencode = callPackage ../development/libraries/bencode {
     stdenv = gcc10StdenvCompat;
-    fmt = fmt_7;
   };
 
   bencodetools = callPackage ../development/libraries/bencodetools { };
@@ -21983,9 +21963,7 @@ with pkgs;
 
   minizip-ng = callPackage ../development/libraries/minizip-ng { };
 
-  mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix {
-    fmt = fmt_7;
-  };
+  mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
@@ -24435,7 +24413,6 @@ with pkgs;
 
   inherit (callPackages ../servers/mpd {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit;
-    fmt = fmt_7;
   }) mpd mpd-small mpdWithFeatures;
 
   libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
@@ -25689,9 +25666,7 @@ with pkgs;
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx {
-    fmt = fmt_7;
-  };
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
@@ -32535,9 +32510,7 @@ with pkgs;
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
-  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi {
-    fmt = fmt_7;
-  };
+  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
@@ -34216,7 +34189,6 @@ with pkgs;
   litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     boost = pkgs.boost174;
-    fmt = fmt_7;
   };
   litecoind = litecoin.override { withGui = false; };
 
@@ -34677,7 +34649,6 @@ with pkgs;
     SDL2 = SDL2.override {
       withStatic = true;
     };
-    fmt = fmt_7;
   };
 
   dhewm3 = callPackage ../games/dhewm3 { };
@@ -34702,9 +34673,7 @@ with pkgs;
     d1x-rebirth-full
     d2x-rebirth-full;
 
-  easyrpg-player = callPackage ../games/easyrpg-player {
-    fmt = fmt_7;
-  };
+  easyrpg-player = callPackage ../games/easyrpg-player { };
 
   eboard = callPackage ../games/eboard { };
 
@@ -35614,7 +35583,6 @@ with pkgs;
 
   zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK32;
-    fmt = fmt_7;
   });
 
   zeroad = zeroadPackages.zeroad;
@@ -35746,9 +35714,7 @@ with pkgs;
 
   cp2k = callPackage ../applications/science/chemistry/cp2k { };
 
-  d-seams = callPackage ../applications/science/chemistry/d-seams {
-    fmt = fmt_7;
-  };
+  d-seams = callPackage ../applications/science/chemistry/d-seams {};
 
   ergoscf = callPackage ../applications/science/chemistry/ergoscf { };
 
@@ -38650,7 +38616,6 @@ with pkgs;
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
-    fmt = fmt_7;
   };
   inherit (jami) jami-daemon jami-client;
 
