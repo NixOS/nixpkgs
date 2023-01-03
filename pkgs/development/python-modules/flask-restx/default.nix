@@ -10,6 +10,7 @@
 , faker
 , mock
 , blinker
+, py
 , pytest-flask
 , pytest-mock
 , pytest-benchmark
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     blinker
     faker
     mock
+    py
     pytest-benchmark
     pytest-flask
     pytest-mock
