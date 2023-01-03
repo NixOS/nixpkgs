@@ -30853,10 +30853,6 @@ with pkgs;
   bitscope = recurseIntoAttrs
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
 
-  bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
-    inherit (gnome) zenity;
-    libxkbcommon = libxkbcommon_7;
-  };
   bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
     libjpeg = libjpeg8;
