@@ -185,7 +185,9 @@ Success!
       <listitem>
        <para>
         Create a file with the following contents:
-<programlisting>registration_shared_secret: your-very-secret-secret</programlisting>
+<programlisting>
+registration_shared_secret: your-very-secret-secret
+</programlisting>
        </para>
       </listitem>
       <listitem>

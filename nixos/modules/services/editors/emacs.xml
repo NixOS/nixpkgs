@@ -446,7 +446,9 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
    <para>
     If you have formed certain bad habits when editing files, these can be
     corrected with a shell alias to the wrapper script:
-<programlisting>alias vi=$EDITOR</programlisting>
+    <programlisting>
+alias vi=$EDITOR
+</programlisting>
    </para>
   </section>
 
@@ -467,7 +469,9 @@ services.emacs.install = true;
    <para>
     To enable the <command>systemd</command> user service for just the
     currently logged in user, run:
-<programlisting>systemctl --user enable emacs</programlisting>
+    <programlisting>
+systemctl --user enable emacs
+</programlisting>
     This will add the symlink
     <filename>~/.config/systemd/user/emacs.service</filename>.
    </para>

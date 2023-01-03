@@ -53,7 +53,8 @@
         };
       }
     };
-}</programlisting>
+}
+</programlisting>
   </para>
   <warning>
     <para>
@@ -86,7 +87,8 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
       path = "/var/lib/my_borg_repo" ;
     };
   };
-}</programlisting>
+}
+</programlisting>
     </para>
 </section>
 
@@ -115,7 +117,8 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
       startAt = "hourly";
     };
   };
-};</programlisting>
+};
+</programlisting>
   </para>
   <para>The following few commands (run as root) let you test your backup.
       <programlisting>
@@ -127,7 +130,8 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
 > export BORG_PASSPHRASE=topSecrect
 > borg list --rsh='ssh -i /run/keys/id_ed25519_my_borg_repo' borg@nixos:.
 nixos-backupToLocalServer-2020-03-30T21:46:17 Mon, 2020-03-30 21:46:19 [84feb97710954931ca384182f5f3cb90665f35cef214760abd7350fb064786ac]
-nixos-backupToLocalServer-2020-03-30T21:46:30 Mon, 2020-03-30 21:46:32 [e77321694ecd160ca2228611747c6ad1be177d6e0d894538898de7a2621b6e68]</programlisting>
+nixos-backupToLocalServer-2020-03-30T21:46:30 Mon, 2020-03-30 21:46:32 [e77321694ecd160ca2228611747c6ad1be177d6e0d894538898de7a2621b6e68]
+</programlisting>
     </para>
 </section>
 
@@ -148,7 +152,9 @@ nixos-backupToLocalServer-2020-03-30T21:46:30 Mon, 2020-03-30 21:46:32 [e7732169
       Generate a SSH key without a password, to access the remote server. E.g.
     </para>
     <para>
-        <programlisting>sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_borgbase</programlisting>
+        <programlisting>
+sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_borgbase
+</programlisting>
     </para>
   </listitem>
   <listitem>
@@ -163,7 +169,8 @@ nixos-backupToLocalServer-2020-03-30T21:46:30 Mon, 2020-03-30 21:46:32 [e7732169
       <programlisting>
 sudo borg init --encryption=repokey-blake2  \
     -rsh "ssh -i /run/keys/id_ed25519_borgbase" \
-    zzz2aaaaa@zzz2aaaaa.repo.borgbase.com:repo</programlisting>
+    zzz2aaaaa@zzz2aaaaa.repo.borgbase.com:repo
+</programlisting>
   </para>
   </listitem>
   <listitem>
@@ -184,7 +191,8 @@ sudo borg init --encryption=repokey-blake2  \
         startAt = "daily";
     };
   };
-}}</programlisting>
+}}
+</programlisting>
   </para>
   </listitem>
 </itemizedlist>

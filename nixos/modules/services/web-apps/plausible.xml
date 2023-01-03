@@ -16,7 +16,8 @@
   </para>
   <para>
    After that, <package>plausible</package> can be deployed like this:
-<programlisting>{
+<programlisting>
+{
   services.plausible = {
     enable = true;
     adminUser = {
@@ -29,7 +30,8 @@
       secretKeybaseFile = "/run/secrets/plausible-secret-key-base"; <co xml:id='ex-plausible-cfg-secretbase' />
     };
   };
-}</programlisting>
+}
+</programlisting>
    <calloutlist>
     <callout arearefs='ex-plausible-cfg-activate'>
      <para>

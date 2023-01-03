@@ -14,13 +14,15 @@
    <title>Basic usage</title>
    <para>
     A very basic configuration may look like this:
-<programlisting>{ pkgs, ... }:
+<programlisting>
+{ pkgs, ... }:
 {
   services.grocy = {
     enable = true;
     hostName = "grocy.tld";
   };
-}</programlisting>
+}
+</programlisting>
     This configures a simple vhost using <link linkend="opt-services.nginx.enable">nginx</link>
     which listens to <literal>grocy.tld</literal> with fully configured ACME/LE (this can be
     disabled by setting <link linkend="opt-services.grocy.nginx.enableSSL">services.grocy.nginx.enableSSL</link>
@@ -39,7 +41,8 @@
    <para>
     The configuration for <literal>grocy</literal> is located at <literal>/etc/grocy/config.php</literal>.
     By default, the following settings can be defined in the NixOS-configuration:
-<programlisting>{ pkgs, ... }:
+<programlisting>
+{ pkgs, ... }:
 {
   services.grocy.settings = {
     # The default currency in the system for invoices etc.
@@ -60,17 +63,20 @@
       firstDayOfWeek = 2;
     };
   };
-}</programlisting>
+}
+</programlisting>
    </para>
    <para>
     If you want to alter the configuration file on your own, you can do this manually with
     an expression like this:
-<programlisting>{ lib, ... }:
+<programlisting>
+{ lib, ... }:
 {
   environment.etc."grocy/config.php".text = lib.mkAfter ''
     // Arbitrary PHP code in grocy's configuration file
   '';
-}</programlisting>
+}
+</programlisting>
    </para>
   </section>
 

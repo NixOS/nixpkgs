@@ -13,7 +13,8 @@
  <title>Basic usage</title>
    <para>
      A minimal configuration using Let's Encrypt for TLS certificates looks like this:
-<programlisting>{
+<programlisting>
+{
   services.jitsi-meet = {
     enable = true;
     hostName = "jitsi.example.com";
@@ -22,7 +23,8 @@
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   security.acme.email = "me@example.com";
   security.acme.acceptTerms = true;
-}</programlisting>
+}
+</programlisting>
    </para>
  </section>
 
@@ -30,7 +32,8 @@
  <title>Configuration</title>
    <para>
      Here is the minimal configuration with additional configurations:
-<programlisting>{
+<programlisting>
+{
   services.jitsi-meet = {
     enable = true;
     hostName = "jitsi.example.com";
@@ -48,7 +51,8 @@
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   security.acme.email = "me@example.com";
   security.acme.acceptTerms = true;
-}</programlisting>
+}
+</programlisting>
    </para>
  </section>
 

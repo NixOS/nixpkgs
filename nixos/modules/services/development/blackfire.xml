@@ -13,7 +13,8 @@
  </para>
  <para>
   To use it, you will need to enable the agent and the probe on your server. The exact method will depend on the way you use PHP but here is an example of NixOS configuration for PHP-FPM:
-<programlisting>let
+<programlisting>
+let
   php = pkgs.php.withExtensions ({ enabled, all }: enabled ++ (with all; [
     blackfire
   ]));
@@ -38,7 +39,8 @@ in {
   # (WantedBy= from the upstream unit not respected: https://github.com/NixOS/nixpkgs/issues/81138)
   # Alternately, you can start it manually with `systemctl start blackfire-agent`.
   systemd.services.blackfire-agent.wantedBy = [ "phpfpm-foo.service" ];
-}</programlisting>
+}
+</programlisting>
  </para>
  <para>
   On your developer machine, you will also want to install <link xlink:href="https://blackfire.io/docs/up-and-running/installation#install-a-profiling-client">the client</link> (see <package>blackfire</package> package) or the browser extension to actually trigger the profiling.
