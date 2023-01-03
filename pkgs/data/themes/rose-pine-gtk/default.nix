@@ -4,17 +4,28 @@
 , gnome-themes-extra
 , gtk-engine-murrine
 , gtk_engines
-}:
+, variant ? "default"
+}: let
+  source-locations = {
+    default = "gtk3/rose-pine-gtk";
+    moon = "gtk3/rose-pine-moon-gtk";
+    dawn = "gtk3/rose-pine-dawn-gtk";
+  };
 
+  source-location =
+    if builtins.hasAttr variant source-locations
+    then source-locations.${variant}
+    else abort "unknown rose-pine variant ${variant}";
+in
 stdenv.mkDerivation rec {
-  pname = "rose-pine-gtk-theme";
-  version = "unstable-2021-02-22";
+  pname = "rose-pine-${variant}-gtk-theme";
+  version = "unstable-2022-09-01";
 
   src = fetchFromGitHub {
     owner = "rose-pine";
     repo = "gtk";
-    rev = "9cd2dd449f911973ec549231a57a070d256da9fd";
-    sha256 = "0lqx8dmv754ix3xbg7h440x964n0bg4lb06vbzvsydnbx79h7lvy";
+    rev = "7a4c40989fd42fd8d4a797f460c79fc4a085c304";
+    sha256 = "0q74wjyrsjyym770i3sqs071bvanwmm727xzv50wk6kzvpyqgi67";
   };
 
   buildInputs = [
@@ -26,11 +37,20 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine # murrine engine for Gtk2
   ];
 
+  # avoid the makefile which is only for theme maintainers
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/themes
-    cp -a Rose-Pine $out/share/themes
-    rm $out/share/themes/*/LICENSE
+    mv ${source-location} $out/share/themes/rose-pine
+    ${
+    if variant == "moon"
+    then "mv gnome_shell/moon/gnome-shell $out/share/themes/rose-pine"
+    else ""
+    }
+
     runHook postInstall
   '';
 
