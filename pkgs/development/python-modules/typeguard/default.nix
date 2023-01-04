@@ -5,12 +5,16 @@
 , setuptools-scm
 , pytestCheckHook
 , typing-extensions
+, sphinxHook
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
   version = "2.13.3";
+  outputs = [ "out" "doc" ];
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +22,12 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools-scm ];
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [
+    glibcLocales
+    sphinxHook
+    sphinx-autodoc-typehints
+    sphinx-rtd-theme
+  ];
 
   LC_ALL="en_US.utf-8";
 
