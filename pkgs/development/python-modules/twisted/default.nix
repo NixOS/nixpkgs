@@ -57,6 +57,13 @@ buildPythonPackage rec {
     hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/pull/11787.diff";
+      hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
+    })
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   propagatedBuildInputs = [
