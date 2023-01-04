@@ -55,11 +55,16 @@ let
     tk-8_5
   ];
 
+  downloadUrls = {
+    aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.bz2";
+    x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+  };
+
 in with passthru; stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+    url = downloadUrls.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
     inherit sha256;
   };
 
@@ -124,7 +129,7 @@ in with passthru; stdenv.mkDerivation {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.mapAttrsToList (arch: _: arch) downloadUrls;
   };
 
 }

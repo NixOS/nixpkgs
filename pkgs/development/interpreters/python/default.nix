@@ -293,7 +293,10 @@ in {
       patch = "11";
     };
 
-    sha256 = "sha256-uo7ZWKkFwHNaTP/yh1wlCJlU3AIOCH2YKw/6W52jFs0="; # linux64
+    sha256 = {
+      aarch64-linux = "sha256-6pJNod7+kyXvdg4oiwT5hGFOQFWA9TIetqXI9Tm9QVo=";
+      x86_64-linux = "sha256-uo7ZWKkFwHNaTP/yh1wlCJlU3AIOCH2YKw/6W52jFs0=";
+    }.${stdenv.system};
     pythonVersion = "2.7";
     inherit passthruFun;
   };
