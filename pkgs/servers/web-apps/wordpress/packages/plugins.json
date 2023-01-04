@@ -150,10 +150,10 @@
     "version": "3.7.0"
   },
   "wp-statistics": {
-    "path": "wp-statistics/tags/13.2.10",
-    "rev": "2838980",
-    "sha256": "02wg8y4zfx0h87k38dy21gfys1g99r4dswwv6g308vflcml68ma1",
-    "version": "13.2.10"
+    "path": "wp-statistics/tags/13.2.11",
+    "rev": "2841966",
+    "sha256": "0bdg63q9wq82rpj7lxiwsvbpxa03r2v1pngs2pxifd4632b7ikni",
+    "version": "13.2.11"
   },
   "wp-user-avatars": {
     "path": "wp-user-avatars/trunk",
