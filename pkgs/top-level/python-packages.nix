@@ -4133,6 +4133,8 @@ self: super: with self; {
 
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
+  hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
+
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
