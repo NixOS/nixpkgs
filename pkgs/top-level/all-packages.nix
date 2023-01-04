@@ -12450,6 +12450,8 @@ with pkgs;
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
+  ttdl = callPackage ../applications/misc/ttdl { };
+
   ttp = with python3.pkgs; toPythonApplication ttp;
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
