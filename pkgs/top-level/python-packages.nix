@@ -5727,6 +5727,8 @@ self: super: with self; {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  meshcat = callPackage ../development/python-modules/meshcat { };
+
   meshio = callPackage ../development/python-modules/meshio { };
 
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
