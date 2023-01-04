@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "spyder-ide";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KcYCXrTP8ED5j/VTLTw7a8zotDSqIu9ultmwp8Ip5nM=";
+    hash = "sha256-zXwIwYG76aCKPTE8mGiAOK8kQUCzJbqnjJszmIqByaA=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Iconic fonts in PyQt and PySide applications";
     homepage = "https://github.com/spyder-ide/qtawesome";
+    changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux; # fails on Darwin
