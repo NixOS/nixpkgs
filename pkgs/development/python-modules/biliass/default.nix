@@ -16,6 +16,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    # relax protobuf version constraint
     sed -i -e 's/4.21.9/4.21.8/' setup.py
   '';
 
