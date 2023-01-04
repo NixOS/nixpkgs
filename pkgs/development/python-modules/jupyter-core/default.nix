@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_core";
+  pname = "jupyter-core";
   version = "5.1.1";
   disabled = pythonOlder "3.7";
 

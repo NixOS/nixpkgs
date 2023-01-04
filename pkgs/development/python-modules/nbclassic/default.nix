@@ -6,7 +6,7 @@
 , ipython_genutils
 , jinja2
 , jupyter-client
-, jupyter_core
+, jupyter-core
 , jupyter_server
 , nbconvert
 , nbformat
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ipython_genutils
     jinja2
     jupyter-client
-    jupyter_core
+    jupyter-core
     jupyter_server
     nbconvert
     nbformat

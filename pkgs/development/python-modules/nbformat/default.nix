@@ -6,7 +6,7 @@
 , hatch-nodejs-version
 , fastjsonschema
 , jsonschema
-, jupyter_core
+, jupyter-core
 , traitlets
 , pep440
 , pytestCheckHook
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     fastjsonschema
     jsonschema
-    jupyter_core
+    jupyter-core
     traitlets
   ];
 
