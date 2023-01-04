@@ -5731,7 +5731,7 @@ with pkgs;
 
   bup = callPackage ../tools/backup/bup { };
 
-  bupstash = callPackage ../tools/backup/bupstash { };
+  bupstash = darwin.apple_sdk_11_0.callPackage ../tools/backup/bupstash { };
 
   burp = callPackage ../tools/backup/burp { };
 
