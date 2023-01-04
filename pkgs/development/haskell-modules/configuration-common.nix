@@ -1899,18 +1899,6 @@ self: super: {
   # 2022-12-30: Restrictive upper bound on optparse-applicative
   retrie = doJailbreak super.retrie;
 
-  # Fixes https://github.com/NixOS/nixpkgs/issues/140613
-  # https://github.com/recursion-schemes/recursion-schemes/issues/128
-  recursion-schemes = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      ./patches/recursion-schemes-128.patch
-    ];
-    # make sure line endings don't break the patch
-    prePatch = drv.prePatch or "" + ''
-      "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-    '';
-  }) super.recursion-schemes;
-
   # 2022-08-30 Too strict bounds on finite-typelits
   # https://github.com/jumper149/blucontrol/issues/1
   blucontrol = doJailbreak super.blucontrol;
