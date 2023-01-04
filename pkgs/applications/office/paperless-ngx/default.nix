@@ -10,6 +10,7 @@
 , qpdf
 , tesseract5
 , unpaper
+, poppler
 , liberation_ttf
 , fetchFromGitHub
 }:
@@ -75,6 +76,7 @@ let
     qpdf
     tesseract5
     unpaper
+    poppler
   ];
 in
 python.pkgs.pythonPackages.buildPythonApplication rec {
