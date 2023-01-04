@@ -21,6 +21,10 @@
 , ghc_filesystem
 , msaClientID ? ""
 , jdks ? [ jdk17 jdk8 ]
+, withMangohud ? false
+, mangohud
+, withGamemode ? false
+, gamemode
 }:
 
 let
@@ -51,7 +55,10 @@ stdenv.mkDerivation rec {
     quazip
     ghc_filesystem
     tomlplusplus
-  ] ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
+  ]
+  ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland
+  ++ lib.optional withMangohud mangohud;
+
 
   cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
     ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       libpath = with xorg;
-        lib.makeLibraryPath [
+        lib.makeLibraryPath ([
           libX11
           libXext
           libXcursor
@@ -79,7 +86,8 @@ stdenv.mkDerivation rec {
           glfw
           openal
           stdenv.cc.cc.lib
-        ];
+        ]
+        ++ lib.optional withGamemode gamemode);
     in
     ''
       # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
