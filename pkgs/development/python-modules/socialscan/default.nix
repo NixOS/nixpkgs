@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iojw";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "rT+/j6UqDOzuNBdN3I74YIxS6qkhd7BjHCGX+gGjprc=";
   };
 
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library and CLI for accurately querying username and email usage on online platforms";
     homepage = "https://github.com/iojw/socialscan";
+    changelog = "https://github.com/iojw/socialscan/releases/tag/v${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ fab ];
   };
