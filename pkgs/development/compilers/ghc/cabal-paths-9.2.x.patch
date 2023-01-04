@@ -68,7 +68,7 @@ index b2be7e1a8..bf218dbc1 100644
      supports_rebindable_syntax   = ghc_newer_than (mkVersion [7,0,1])
      supports_language_pragma     = ghc_newer_than (mkVersion [6,6,1])
 diff --git a/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs b/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
-index 69efbda87..067287b1c 100644
+index 6488ea061..9d4218b28 100644
 --- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
 +++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
 @@ -19,6 +19,10 @@ data Z
@@ -104,7 +104,7 @@ index 69efbda87..067287b1c 100644
    tell "  ) where\n"
    tell "\n"
    if (zNot z_root (zAbsolute z_root))
-@@ -97,16 +109,21 @@ render z_root = execWriter $ do
+@@ -97,13 +97,16 @@ render z_root = execWriter $ do
    tell (zVersionDigits z_root)
    tell " []\n"
    tell "\n"
@@ -114,6 +114,7 @@ index 69efbda87..067287b1c 100644
 -  tell "  return (dir `joinFileName` name)\n"
 -  tell "\n"
 -  tell "getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath\n"
+-  tell "\n"
 +  if (zShouldEmitDataDir z_root)
 +  then do
 +    tell "getDataFileName :: FilePath -> IO FilePath\n"
@@ -123,7 +124,11 @@ index 69efbda87..067287b1c 100644
 +    return ()
 +  else do
 +    return ()
-   tell "\n"
++    tell "\n"
+   let
+     z_var0_function_defs = do
+       tell "minusFileName :: FilePath -> String -> FilePath\n"
+@@ -130,6 +133,8 @@ render z_root = execWriter $ do
    tell "\n"
    if (zRelocatable z_root)
    then do
@@ -132,7 +137,7 @@ index 69efbda87..067287b1c 100644
      tell "\n"
      tell "getPrefixDirReloc :: FilePath -> IO FilePath\n"
      tell "getPrefixDirReloc dirRel = do\n"
-@@ -152,44 +169,16 @@ render z_root = execWriter $ do
+@@ -177,44 +182,16 @@ render z_root = execWriter $ do
      if (zAbsolute z_root)
      then do
        tell "\n"
