@@ -72,10 +72,10 @@
     "version": "5.0.18"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/4.3.0",
-    "rev": "2836720",
-    "sha256": "0igaq34gq5ysk5ai39b641kx7rqsj052m6r55zl6z7xjpxhf37aw",
-    "version": "4.3.0"
+    "path": "mailpoet/tags/4.3.1",
+    "rev": "2843001",
+    "sha256": "0nnmfk1rxhf31makfc0v7mlh30799saxpf8agqdlavrmqpvypvzb",
+    "version": "4.3.1"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
@@ -150,15 +150,21 @@
     "version": "3.7.0"
   },
   "wp-statistics": {
-    "path": "wp-statistics/tags/13.2.10",
-    "rev": "2838980",
-    "sha256": "02wg8y4zfx0h87k38dy21gfys1g99r4dswwv6g308vflcml68ma1",
-    "version": "13.2.10"
+    "path": "wp-statistics/tags/13.2.11",
+    "rev": "2841966",
+    "sha256": "0bdg63q9wq82rpj7lxiwsvbpxa03r2v1pngs2pxifd4632b7ikni",
+    "version": "13.2.11"
   },
   "wp-user-avatars": {
     "path": "wp-user-avatars/trunk",
     "rev": "2540784",
     "sha256": "1g21nl6xs9zyq0ainjwa06wl90975l8f9rj0fa20zkmw17w2mdgl",
     "version": "1.4.1"
+  },
+  "wpforms-lite": {
+    "path": "wpforms-lite/tags/1.7.8",
+    "rev": "2815943",
+    "sha256": "0xqnjxlj2m6zpcasj3gksg9qzjm8pynjr8sar8xbgfz8ichs5m6m",
+    "version": "1.7.8"
   }
 }

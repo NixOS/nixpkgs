@@ -34,13 +34,14 @@ in stdenv.mkDerivation rec {
     tgtpy="$out/lib/${python.libPrefix}/site-packages"
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
-    find po4a scripts -type f -exec sed -r \
+    find lib po4a scripts -type f -exec sed -r \
       -e "s@/usr/bin/gpg(2|)@${gnupg}/bin/gpg@g" \
       -e "s@/usr/(s|)bin/sendmail@${sendmailPath}@g" \
       -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
       -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv@g" \
       -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
       -e "s@sensible-editor@${sensible-editor}@g" \
+      -e "s@(^|\W)/bin/bash@\1${stdenv.shell}@g" \
       -i {} +
     sed -e "s@/usr/share/sgml/[^ ]*/manpages/docbook.xsl@${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl@" -i scripts/Makefile
     sed -r \
@@ -66,6 +67,9 @@ in stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PATH : "${dpkg}/bin"
     done
+    ln -s cvs-debi $out/bin/cvs-debc
+    ln -s debchange $out/bin/dch
+    ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
   meta = with lib; {
