@@ -167,7 +167,7 @@ services.discourse = {
    <section xml:id="module-services-discourse-site-settings">
      <title>Site settings</title>
      <para>
-       <quote>Site settings</quote> are the settings that can be
+       "Site settings" are the settings that can be
        changed through the <productname>Discourse</productname>
        UI. Their <emphasis>default</emphasis> values can be set using
        <xref linkend="opt-services.discourse.siteSettings" />.
