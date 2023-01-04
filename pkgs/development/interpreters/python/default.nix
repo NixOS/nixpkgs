@@ -247,13 +247,13 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "9";
+      patch = "11";
     };
 
-    sha256 = "sha256-ObCXKVb2VIzlgoAZ264SUDwy1svpGivs+I0+QsxSGXs=";
+    sha256 = "sha256-ERevtmgx2k6m852NIIR4enRon9AineC+MB+e2bJVCTw=";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
-    python = __splicedPackages.python27;
+    python = __splicedPackages.pythonInterpreters.pypy27_prebuilt;
     inherit passthruFun;
     inherit (darwin) libunwind;
     inherit (darwin.apple_sdk.frameworks) Security;
