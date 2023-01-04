@@ -46,6 +46,8 @@ self: with self; {
 
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
+  lsp-bridge = callPackage ./manual-packages/lsp-bridge { };
+
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
   };
