@@ -12,7 +12,7 @@
 # optionals
 , jupyter-client
 , ipykernel
-, jupyter_server
+, jupyter-server
 , nbformat
 
 # tests
@@ -50,7 +50,7 @@ let self = buildPythonPackage rec {
       ipykernel
     ];
     server = [
-      jupyter_server
+      jupyter-server
       nbformat
     ] ++ client;
   };

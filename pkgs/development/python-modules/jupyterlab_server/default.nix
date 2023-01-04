@@ -8,7 +8,7 @@
 , pytestCheckHook
 , json5
 , babel
-, jupyter_server
+, jupyter-server
 , tomli
 , openapi-core
 , pytest-timeout
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     jsonschema
     json5
     babel
-    jupyter_server
+    jupyter-server
     tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata

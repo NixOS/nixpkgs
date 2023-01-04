@@ -4940,7 +4940,7 @@ self: super: with self; {
 
   jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
 
-  jupyter_server = callPackage ../development/python-modules/jupyter_server { };
+  jupyter-server = callPackage ../development/python-modules/jupyter-server { };
 
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
 

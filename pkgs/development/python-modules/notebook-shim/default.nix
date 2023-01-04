@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, jupyter_server
+, jupyter-server
 , pytestCheckHook
 , pytest-tornasync
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-/z4vXSBqeL2wSqJ0kFNgU0TSGUGByhxHNya8EO55+7s=";
   };
 
-  propagatedBuildInputs = [ jupyter_server ];
+  propagatedBuildInputs = [ jupyter-server ];
 
   preCheck = ''
     mv notebook_shim/conftest.py notebook_shim/tests

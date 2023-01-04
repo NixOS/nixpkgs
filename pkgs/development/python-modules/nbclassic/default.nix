@@ -7,7 +7,7 @@
 , jinja2
 , jupyter-client
 , jupyter-core
-, jupyter_server
+, jupyter-server
 , nbconvert
 , nbformat
 , nest-asyncio
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     jinja2
     jupyter-client
     jupyter-core
-    jupyter_server
+    jupyter-server
     nbconvert
     nbformat
     nest-asyncio

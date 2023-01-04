@@ -34,13 +34,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_server";
+  pname = "jupyter-server";
   version = "2.0.6";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyter_server";
+    inherit version;
     hash= "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
   };
 
