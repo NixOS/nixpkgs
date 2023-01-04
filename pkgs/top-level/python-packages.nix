@@ -9876,6 +9876,8 @@ self: super: with self; {
 
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
+  rfc3986-validator = callPackage ../development/python-modules/rfc3986-validator { };
+
   rfc3987 = callPackage ../development/python-modules/rfc3987 { };
 
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
