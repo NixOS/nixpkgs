@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.15";
+  version = "0.7.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "alengwenus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OuM/r9rxIl4niY87cEcbZ73x2ZIQbaPZqbMrQ7hZE/g=";
+    hash = "sha256-OcXMVgG62JUH28BGvfO/rpnC++/klhBLJ2HafDu9R40=";
   };
 
   checkInputs = [
