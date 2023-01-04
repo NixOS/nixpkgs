@@ -8461,6 +8461,8 @@ self: super: with self; {
 
   pypykatz = callPackage ../development/python-modules/pypykatz { };
 
+  pytoolconfig = callPackage ../development/python-modules/pytoolconfig { };
+
   pypytools = callPackage ../development/python-modules/pypytools { };
 
   pyqldb = callPackage ../development/python-modules/pyqldb { };
