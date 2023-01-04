@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;
+    changelog = "https://github.com/mobile-dev-inc/maestro/blob/main/CHANGELOG.md";
     maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
   };
 }
