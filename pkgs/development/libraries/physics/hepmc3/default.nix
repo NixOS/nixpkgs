@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withPython python;
 
+  # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
+  preConfigure = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
+
   cmakeFlags = [
     "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
   ] ++ lib.optionals withPython [
@@ -57,7 +62,5 @@ stdenv.mkDerivation rec {
     homepage = "http://hepmc.web.cern.ch/hepmc/";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
