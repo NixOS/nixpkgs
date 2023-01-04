@@ -18,4 +18,7 @@
 
   # Also expose CoreSymbolication; used by `root` package.
   CoreSymbolication = {};
+
+  # Also expose DebugSymbols; used by `llvmPackages_8.lldb` package.
+  DebugSymbols = {};
 }

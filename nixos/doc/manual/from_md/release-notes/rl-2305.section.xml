@@ -341,6 +341,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.chronyd</literal> is now started with
+          additional systemd sandbox/hardening options for better
+          security.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The module <literal>services.headscale</literal> was
           refactored to be compliant with
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC

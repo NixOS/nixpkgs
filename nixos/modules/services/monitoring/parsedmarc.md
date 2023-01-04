@@ -17,7 +17,6 @@ services.parsedmarc = {
     host = "imap.example.com";
     user = "alice@example.com";
     password = "/path/to/imap_password_file";
-    watch = true;
   };
   provision.geoIp = false; # Not recommended!
 };
