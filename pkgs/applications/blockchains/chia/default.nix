@@ -54,6 +54,7 @@ let chia = python3Packages.buildPythonApplication rec {
     fasteners
     filelock
     keyrings-cryptfile
+    psutil
     pyyaml
     setproctitle
     setuptools # needs pkg_resources at runtime
