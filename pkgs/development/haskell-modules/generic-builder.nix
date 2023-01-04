@@ -11,7 +11,12 @@ let
 in
 
 { pname
-, dontStrip ? (ghc.isGhcjs or false)
+# Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
+# ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
+# (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
+# backend. The latter is a normal cross compilation backend and needs little
+# special accomodation.
+, dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
