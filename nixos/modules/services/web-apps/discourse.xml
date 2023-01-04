@@ -293,7 +293,7 @@ services.discourse = {
       Much of the packaging can be done automatically by the
       <filename>nixpkgs/pkgs/servers/web-apps/discourse/update.py</filename>
       script - just add the plugin to the <literal>plugins</literal>
-      list in the <function>update_plugins</function> function and run
+      list in the <literal>update_plugins</literal> function and run
       the script:
       <programlisting language="bash">
 ./update.py update-plugins
