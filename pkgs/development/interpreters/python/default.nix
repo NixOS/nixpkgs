@@ -279,7 +279,7 @@ in {
   pypy38 = __splicedPackages.pypy39.override {
     self = __splicedPackages.pythonInterpreters.pypy38;
     pythonVersion = "3.8";
-    sha256 = "sha256-W12dklbxKhKa+DhOL1gb36s7wPu+OgpIDZwdLpVJDrE=";
+    sha256 = "sha256-TWdpv8pzc06GZv1wUDt86wam4lkRDmFzMbs4mcpOYFg=";
   };
 
   pypy37 = throw "pypy37 has been removed from nixpkgs since it is no longer supported upstream"; # Added 2023-01-04
