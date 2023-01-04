@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.craftos-pc.cc";
     license = with licenses; [ mit free ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.siraben ];
+    maintainers = with maintainers; [ siraben tomodachi94 ];
     mainProgram = "craftos";
   };
 }
