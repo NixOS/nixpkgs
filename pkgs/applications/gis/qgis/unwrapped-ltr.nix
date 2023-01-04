@@ -28,11 +28,12 @@
 , qtkeychain
 , qt3d
 , qscintilla
+, qtlocation
 , qtserialport
 , qtxmlpatterns
 , withGrass ? true
 , grass
-, withWebKit ? true
+, withWebKit ? false
 , qtwebkit
 , pdal
 , zstd
@@ -109,6 +110,7 @@ in mkDerivation rec {
     qca-qt5
     qtkeychain
     qscintilla
+    qtlocation
     qtserialport
     qtxmlpatterns
     qt3d
@@ -132,7 +134,11 @@ in mkDerivation rec {
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
+    ++ lib.optional withGrass (let
+        gmajor = lib.versions.major grass.version;
+        gminor = lib.versions.minor grass.version;
+      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+    );
 
   dontWrapGApps = true; # wrapper params passed below
 
