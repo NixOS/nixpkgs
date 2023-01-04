@@ -19,7 +19,7 @@
    Taskserver does all of its authentication via TLS using client certificates,
    so you either need to roll your own CA or purchase a certificate from a
    known CA, which allows creation of client certificates. These certificates
-   are usually advertised as <quote>server certificates</quote>.
+   are usually advertised as "server certificates".
   </para>
 
   <para>
