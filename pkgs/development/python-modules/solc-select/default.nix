@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, packaging
+, pycryptodome
 }:
 
 buildPythonPackage rec {
@@ -11,6 +13,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-zrpWHQdoCVDGaDGDf9fWhnRsTe1GVwqk1qls1PyvlLw=";
   };
+
+  propagatedBuildInputs = [
+    packaging
+    pycryptodome
+  ];
 
   # no tests
   doCheck = false;
