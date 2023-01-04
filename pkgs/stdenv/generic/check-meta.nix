@@ -93,14 +93,14 @@ let
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
-    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+    isNonSource attrs.meta.sourceProvenance;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
   # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
@@ -269,7 +269,7 @@ let
     license = let
       licenseType = either (attrsOf anything) str; # TODO disallow `str` licenses, use a module
     in either licenseType (listOf licenseType);
-    sourceProvenance = either (listOf (attrsOf anything)) (attrsOf anything);
+    sourceProvenance = listOf lib.types.attrs;
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
     platforms = listOf str;
