@@ -10,11 +10,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trufflesecurity";
     repo = "trufflehog";
-    rev = "v${version}";
-    sha256 = "sha256-rse5uyQ7EUBhs0IyC92B/Z7YCeNIXTlZEqrlcjFekgA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rse5uyQ7EUBhs0IyC92B/Z7YCeNIXTlZEqrlcjFekgA=";
   };
 
-  vendorSha256 = "sha256-KyyJ7hUWF29L8oB9GkJ918/BQoLMsz+tStT2T9Azunk=";
+  vendorHash = "sha256-KyyJ7hUWF29L8oB9GkJ918/BQoLMsz+tStT2T9Azunk=";
 
   # Test cases run git clone and require network access
   doCheck = false;
@@ -26,6 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Find credentials all over the place";
     homepage = "https://github.com/trufflesecurity/trufflehog";
+    changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/v${version}";
     license = with licenses; [ agpl3 ];
     maintainers = with maintainers; [ ];
   };
