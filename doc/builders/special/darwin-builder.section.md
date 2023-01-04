@@ -42,7 +42,7 @@ nixos login: builder (automatic login)
 [builder@nixos:~]$
 ```
 
-> Note: When you need to stop the VM, run `shutdown now` as the builder user.
+> Note: When you need to stop the VM, run `shutdown now` as the `builder` user.
 
 To delegate builds to the remote builder, add the following options to your
 `nix.conf` file:
