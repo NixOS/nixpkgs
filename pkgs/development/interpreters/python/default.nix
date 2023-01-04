@@ -281,11 +281,8 @@ in {
     pythonVersion = "3.8";
     sha256 = "sha256-W12dklbxKhKa+DhOL1gb36s7wPu+OgpIDZwdLpVJDrE=";
   };
-  pypy37 = __splicedPackages.pypy39.override {
-    self = __splicedPackages.pythonInterpreters.pypy37;
-    pythonVersion = "3.7";
-    sha256 = "sha256-cEJhY7GU7kYAmYbuptlCYJij/7VS2c29PfqmSkc3P0k=";
-  };
+
+  pypy37 = throw "pypy37 has been removed from nixpkgs since it is no longer supported upstream"; # Added 2023-01-04
 
   pypy27_prebuilt = callPackage ./pypy/prebuilt_2_7.nix {
     # Not included at top-level
