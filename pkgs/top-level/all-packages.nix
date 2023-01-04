@@ -8790,6 +8790,8 @@ with pkgs;
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
+  lookatme = python3Packages.callPackage ../development/python-modules/lookatme { };
+
   lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
   loudgain = callPackage ../tools/audio/loudgain/default.nix { };
