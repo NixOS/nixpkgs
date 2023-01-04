@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "temporal_tables";
-  version = "1.2.0";
+  version = "unstable-2021-02-20";
 
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "mlt";
+    owner  = "arkhipov";
     repo   = pname;
-    rev    = "6cc86eb03d618d6b9fc09ae523f1a1e5228d22b5";
-    sha256 = "0ykv37rm511n5955mbh9dcp7pgg88z1nwgszav7z6pziaj3nba8x";
+    rev    = "3ce22da51f2549e8f8b8fbf2850c63eb3a2f1fbb";
+    sha256 = "sha256-kmcl6vVHRZj2G5GijEyaZgDpZBDcdIUKzXv0rYYqUu4=";
   };
 
   installPhase = ''
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Temporal Tables PostgreSQL Extension ";
     homepage    = "https://github.com/mlt/temporal_tables";
     maintainers = with maintainers; [ ggpeti ];
