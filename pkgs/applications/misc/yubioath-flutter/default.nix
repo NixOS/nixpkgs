@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , stdenv
 , pcre2
+, gnome
+, makeWrapper
 }:
 let
   vendorHashes = {
@@ -54,11 +56,19 @@ flutter.mkFlutterApp rec {
     # Symlink binary.
     ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
 
+    # Needed for QR scanning to work.
+    wrapProgram "$out/bin/yubioath-flutter" \
+      --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
+
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
   '';
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   buildInputs = [
     pcre2
