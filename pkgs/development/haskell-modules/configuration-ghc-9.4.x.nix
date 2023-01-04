@@ -60,8 +60,6 @@ in {
 
   # consequences of doctest breakage follow:
 
-  double-conversion = markBroken super.double-conversion;
-  blaze-textual = checkAgainAfter super.double-conversion "2.0.4.1" "double-conversion fails to build; required for testsuite" (dontCheck super.blaze-textual);
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
   lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
