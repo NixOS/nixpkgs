@@ -59,10 +59,14 @@ in
     trusted-users = [ "root" user ];
   };
 
-  services.openssh = {
-    enable = true;
+  services = {
+    getty.autologinUser = user;
 
-    authorizedKeysFiles = [ "${keysDirectory}/%u_${keyType}.pub" ];
+    openssh = {
+      enable = true;
+
+      authorizedKeysFiles = [ "${keysDirectory}/%u_${keyType}.pub" ];
+    };
   };
 
   system.build.macos-builder-installer =

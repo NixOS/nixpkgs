@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "roonapi";
-  version = "0.1.2";
+  version = "0.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pavoni";
     repo = "pyroon";
     rev = version;
-    hash = "sha256-HcHs9UhRbSKTxW5qEvmMrQ+kWIBAqVpyldapx635uNM=";
+    hash = "sha256-QOFBNTz8g3f6C8Vjkblrd3QFCRrA1WqOCv6xS4GbFC4=";
   };
 
   nativeBuildInputs = [
