@@ -11209,6 +11209,8 @@ self: super: with self; {
     cudnnSupport = false;
   };
 
+  thefuzz = callPackage ../development/python-modules/thefuzz { };
+
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
   thermopro-ble = callPackage ../development/python-modules/thermopro-ble { };
