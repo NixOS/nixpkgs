@@ -12,17 +12,17 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
     rev = version;
-    hash = "sha256-pUp/hW4Kk3pixGfbQvphLJM9Dc/w01T1KPRewOicPqM=";
+    hash = "sha256-qC7lNqjgljUqRUp+S7vBVLPyRB3+Ie5UOxuio+Q88hg=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-Nx+k0PLPIx7Ia0LobXUOw7oOFVz1FXV49haAkRAVOcM=";
+  vendorHash = "sha256-MVek3TQpE3AChGyQ4z01fLfkcGKJcckmFV21ww9zT7M=";
 
   doCheck = false;
 
