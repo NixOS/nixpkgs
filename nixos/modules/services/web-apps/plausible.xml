@@ -21,33 +21,23 @@
   services.plausible = {
     enable = true;
     adminUser = {
-      activate = true; <co xml:id='ex-plausible-cfg-activate' />
+      # activate is used to skip the email verification of the admin-user that's
+      # automatically created by plausible. This is only supported if
+      # postgresql is configured by the module. This is done by default, but
+      # can be turned off with services.plausible.database.postgres.setup.
+      activate = true;
       email = "admin@localhost";
       passwordFile = "/run/secrets/plausible-admin-pwd";
     };
     server = {
       baseUrl = "http://analytics.example.org";
-      secretKeybaseFile = "/run/secrets/plausible-secret-key-base"; <co xml:id='ex-plausible-cfg-secretbase' />
+      # secretKeybaseFile is a path to the file which contains the secret generated
+      # with openssl as described above.
+      secretKeybaseFile = "/run/secrets/plausible-secret-key-base";
     };
   };
 }
 </programlisting>
-   <calloutlist>
-    <callout arearefs='ex-plausible-cfg-activate'>
-     <para>
-      <varname>activate</varname> is used to skip the email verification of the admin-user that's
-      automatically created by <package>plausible</package>. This is only supported if
-      <package>postgresql</package> is configured by the module. This is done by default, but
-      can be turned off with <xref linkend="opt-services.plausible.database.postgres.setup" />.
-     </para>
-    </callout>
-    <callout arearefs='ex-plausible-cfg-secretbase'>
-     <para>
-      <varname>secretKeybaseFile</varname> is a path to the file which contains the secret generated
-      with <package>openssl</package> as described above.
-     </para>
-    </callout>
-   </calloutlist>
   </para>
  </section>
 </chapter>
