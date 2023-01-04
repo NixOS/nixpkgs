@@ -307,9 +307,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "9";
+      patch = "11";
     };
-    sha256 = "sha256-RoGMs9dLlrNHh1SDQ9Jm4lYrUx3brzMDg7qTD/GTDtU="; # linux64
+    sha256 = "sha256-1QYXLKEQcSdBdddOnFgcMWZDLQF5sDZHDjuejSDq5YE="; # linux64
     pythonVersion = "3.9";
     inherit passthruFun;
   };
