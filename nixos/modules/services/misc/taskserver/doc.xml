@@ -16,7 +16,7 @@
       certificates, so you either need to roll your own CA or purchase a
       certificate from a known CA, which allows creation of client
       certificates. These certificates are usually advertised as
-      &quot;server certificates&quot;.
+      <quote>server certificates</quote>.
     </para>
     <para>
       So in order to make it easier to handle your own CA, there is a
@@ -54,7 +54,7 @@
       For example if you add a new organisation using
       <command>nixos-taskserver org add foo</command>, the organisation
       is not modified and deleted no matter what you define in
-      <option>services.taskserver.organisations</option>, even if you're
+      <option>services.taskserver.organisations</option>, even if you’re
       adding the same organisation in that option.
     </para>
     <para>
@@ -80,7 +80,7 @@
       client machine.
     </para>
     <para>
-      For example, let's say you have the following configuration:
+      For example, let’s say you have the following configuration:
     </para>
     <programlisting>
 {
@@ -121,7 +121,7 @@ $ ssh server nixos-taskserver user export my-company alice | sh
     <para>
       If you set any options within
       <link linkend="opt-services.taskserver.pki.manual.ca.cert">service.taskserver.pki.manual</link>.*,
-      <command>nixos-taskserver</command> won't issue certificates, but
+      <command>nixos-taskserver</command> won’t issue certificates, but
       you can still use it for adding or removing user accounts.
     </para>
   </section>

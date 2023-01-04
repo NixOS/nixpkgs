@@ -7,7 +7,7 @@
   </para>
   <para>
     As an all-in-one moderation tool, it can protect your server from
-    malicious invites, spam messages, and whatever else you don't want.
+    malicious invites, spam messages, and whatever else you don’t want.
     In addition to server-level protection, Mjolnir is great for
     communities wanting to protect their rooms without having to use
     their personal accounts for moderation.
@@ -21,7 +21,7 @@
     See the
     <link xlink:href="https://github.com/matrix-org/mjolnir#readme">README</link>
     page and the
-    <link xlink:href="https://github.com/matrix-org/mjolnir/blob/main/docs/moderators.md">Moderator's
+    <link xlink:href="https://github.com/matrix-org/mjolnir/blob/main/docs/moderators.md">Moderator’s
     guide</link> for additional instructions on how to setup and use
     Mjolnir.
   </para>
@@ -36,7 +36,7 @@
     <para>
       First create a new Room which will be used as a management room
       for Mjolnir. In this room, Mjolnir will log possible errors and
-      debugging information. You'll need to set this Room-ID in
+      debugging information. You’ll need to set this Room-ID in
       <link linkend="opt-services.mjolnir.managementRoom">services.mjolnir.managementRoom</link>.
     </para>
     <para>
@@ -51,7 +51,7 @@
     </para>
     <para>
       If you want Mjolnir to be able to deactivate users, move room
-      aliases, shutdown rooms, etc. you'll need to make the Mjolnir user
+      aliases, shutdown rooms, etc. you’ll need to make the Mjolnir user
       a Matrix server admin.
     </para>
     <para>
@@ -93,10 +93,10 @@
       <title>Element Matrix Services (EMS)</title>
       <para>
         If you are using a managed
-        <link xlink:href="https://ems.element.io/">&quot;Element Matrix
-        Services (EMS)&quot;</link> server, you will need to consent to
-        the terms and conditions. Upon startup, an error log entry with
-        a URL to the consent page will be generated.
+        <link xlink:href="https://ems.element.io/"><quote>Element Matrix
+        Services (EMS)</quote></link> server, you will need to consent
+        to the terms and conditions. Upon startup, an error log entry
+        with a URL to the consent page will be generated.
       </para>
     </section>
   </section>

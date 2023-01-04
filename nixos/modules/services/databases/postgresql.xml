@@ -23,7 +23,7 @@ services.postgresql.package = pkgs.postgresql_11;
 </programlisting>
     <para>
       Note that you are required to specify the desired version of
-      PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since
+      PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since
       upgrading your PostgreSQL version requires a database dump and
       reload (see below), NixOS cannot provide a default value for
       <xref linkend="opt-services.postgresql.package"></xref> such as
@@ -51,7 +51,7 @@ services.postgresql.dataDir = &quot;/data/postgresql&quot;;
     <para>
       Major PostgreSQL upgrades require a downtime and a few imperative
       steps to be called. This is the case because each major version
-      has some internal changes in the databases' state during major
+      has some internal changes in the databases’ state during major
       releases. Because of that, NixOS places the state into
       <filename>/var/lib/postgresql/&lt;version&gt;</filename> where
       each <literal>version</literal> can be obtained like this:
@@ -138,7 +138,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
       </listitem>
       <listitem>
         <para>
-          After the upgrade it's advisable to analyze the new cluster.
+          After the upgrade it’s advisable to analyze the new cluster.
         </para>
         <itemizedlist>
           <listitem>
@@ -228,7 +228,7 @@ self: super: {
 }
 </programlisting>
     <para>
-      Here's a recipe on how to override a particular plugin through an
+      Here’s a recipe on how to override a particular plugin through an
       overlay:
     </para>
     <programlisting>

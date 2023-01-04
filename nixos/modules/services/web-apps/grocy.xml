@@ -29,7 +29,7 @@
       credentials <literal>admin:admin</literal> can be used to login.
     </para>
     <para>
-      The application's state is persisted at
+      The application’s state is persisted at
       <literal>/var/lib/grocy/grocy.db</literal> in a
       <literal>sqlite3</literal> database. The migration is applied when
       requesting the <literal>/</literal>-route of the application.

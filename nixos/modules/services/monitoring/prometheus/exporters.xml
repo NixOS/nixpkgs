@@ -11,7 +11,7 @@
       One of the most common exporters is the
       <link xlink:href="https://github.com/prometheus/node_exporter">node
       exporter</link>, it provides hardware and OS metrics from the host
-      it's running on. The exporter could be configured as follows:
+      it’s running on. The exporter could be configured as follows:
     </para>
     <programlisting>
   services.prometheus.exporters.node = {
@@ -34,7 +34,7 @@
       <link xlink:href="https://github.com/prometheus/node_exporter#enabled-by-default">enabled
       by default</link>, via http under <literal>/metrics</literal>. In
       this example the firewall should just allow incoming connections
-      to the exporter's port on the bridge interface
+      to the exporter’s port on the bridge interface
       <literal>br0</literal> (this would have to be configured
       separately of course). For more information about configuration
       see <literal>man configuration.nix</literal> or search through the
@@ -194,9 +194,9 @@ in
         <para>
           This should already be enough for the postfix exporter.
           Additionally one could now add assertions and conditional
-          default values. This can be done in the 'meta-module' that
-          combines all exporter definitions and generates the
-          submodules:
+          default values. This can be done in the
+          <quote>meta-module</quote> that combines all exporter
+          definitions and generates the submodules:
           <literal>nixpkgs/nixos/modules/services/prometheus/exporters.nix</literal>
         </para>
       </listitem>

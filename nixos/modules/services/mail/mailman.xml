@@ -61,7 +61,7 @@
       up, the Postorius mailing list manager and the Hyperkitty archive
       browser will be available at https://lists.example.org/. Note that
       this setup is not sufficient to deliver emails to most email
-      providers nor to avoid spam -- a number of additional measures for
+      providers nor to avoid spam – a number of additional measures for
       authenticating incoming and outgoing mails, such as SPF, DMARC and
       DKIM are necessary, but outside the scope of the Mailman module.
     </para>
@@ -100,7 +100,7 @@
 </programlisting>
     <para>
       The exim config needs some special additions to work with Mailman.
-      Currently NixOS can't manage Exim config with such granularity.
+      Currently NixOS can’t manage Exim config with such granularity.
       Please refer to
       <link xlink:href="https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html">Mailman
       documentation</link> for more info on configuring Mailman for

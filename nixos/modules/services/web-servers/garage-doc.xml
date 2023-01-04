@@ -36,7 +36,7 @@
       <para>
         Until 1.0 is released, patch-level upgrades are considered as
         minor version upgrades. Minor version upgrades are considered as
-        major version upgrades. i.e. 0.6 to 0.7 is a major version
+        major version upgrades. i.e. 0.6 to 0.7 is a major version
         upgrade.
       </para>
     </warning>
@@ -45,7 +45,7 @@
         <para>
           <emphasis role="strong">Straightforward upgrades (patch-level
           upgrades).</emphasis> Upgrades must be performed one by one,
-          i.e. for each node, stop it, upgrade it : change
+          i.e. for each node, stop it, upgrade it : change
           <link linkend="opt-system.stateVersion">stateVersion</link> or
           <link linkend="opt-services.garage.package">services.garage.package</link>,
           restart it if it was not already by switching.
@@ -55,7 +55,7 @@
         <para>
           <emphasis role="strong">Multiple version upgrades.</emphasis>
           Garage do not provide any guarantee on moving more than one
-          major-version forward. E.g., if you're on
+          major-version forward. E.g., if you’re on
           <literal>0.7</literal>, you cannot upgrade to
           <literal>0.9</literal>. You need to upgrade to
           <literal>0.8</literal> first. As long as
@@ -110,7 +110,7 @@
       </listitem>
       <listitem>
         <para>
-          Backup the metadata folder of ALL your nodes, e.g. for a
+          Backup the metadata folder of ALL your nodes, e.g. for a
           metadata directory (the default one) in
           <literal>/var/lib/garage/meta</literal>, you can run
           <literal>pushd /var/lib/garage; tar -acf meta-v0.7.tar.zst meta/; popd</literal>.
@@ -166,11 +166,11 @@
       While patch-level updates are no problem and can be done directly
       in the package-expression (and should be backported to supported
       stable branches after that), major-releases should be added in a
-      new attribute (e.g. Garage <literal>v0.8.0</literal> should be
+      new attribute (e.g. Garage <literal>v0.8.0</literal> should be
       available in <literal>nixpkgs</literal> as
       <literal>pkgs.garage_0_8_0</literal>). To provide simple upgrade
-      paths it's generally useful to backport those as well to stable
-      branches. As long as the package-default isn't altered, this won't
+      paths it’s generally useful to backport those as well to stable
+      branches. As long as the package-default isn’t altered, this won’t
       break existing setups. After that, the versioning-warning in the
       <literal>garage</literal>-module should be updated to make sure
       that the
@@ -195,9 +195,9 @@
 }
 </programlisting>
     <para>
-      Ideally we should make sure that it's possible to jump two NixOS
-      versions forward: i.e. the warnings and the logic in the module
-      should guard a user to upgrade from a Garage on e.g. 22.11 to a
+      Ideally we should make sure that it’s possible to jump two NixOS
+      versions forward: i.e. the warnings and the logic in the module
+      should guard a user to upgrade from a Garage on e.g. 22.11 to a
       Garage on 23.11.
     </para>
   </section>

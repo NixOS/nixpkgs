@@ -200,7 +200,7 @@ sudo borg init --encryption=repokey-blake2  \
       protect your data from disk failure, ransomware and theft.
     </para>
     <para>
-      It can be installed in NixOS e.g. by adding
+      It can be installed in NixOS e.g. by adding
       <literal>pkgs.vorta</literal> to
       <xref linkend="opt-environment.systemPackages"></xref>.
     </para>

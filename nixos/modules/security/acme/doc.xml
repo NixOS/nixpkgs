@@ -3,7 +3,7 @@
   <para>
     NixOS supports automatic domain validation &amp; certificate
     retrieval and renewal using the ACME protocol. Any provider can be
-    used, but by default NixOS uses Let's Encrypt. The alternative ACME
+    used, but by default NixOS uses Let’s Encrypt. The alternative ACME
     client
     <link xlink:href="https://go-acme.github.io/lego/">lego</link> is
     used under the hood.
@@ -17,15 +17,15 @@
   <section xml:id="module-security-acme-prerequisites">
     <title>Prerequisites</title>
     <para>
-      To use the ACME module, you must accept the provider's terms of
+      To use the ACME module, you must accept the provider’s terms of
       service by setting
       <xref linkend="opt-security.acme.acceptTerms"></xref> to
-      <literal>true</literal>. The Let's Encrypt ToS can be found
+      <literal>true</literal>. The Let’s Encrypt ToS can be found
       <link xlink:href="https://letsencrypt.org/repository/">here</link>.
     </para>
     <para>
       You must also set an email address to be used when creating
-      accounts with Let's Encrypt. You can set this for all certs with
+      accounts with Let’s Encrypt. You can set this for all certs with
       <xref linkend="opt-security.acme.defaults.email"></xref> and/or on
       a per-cert basis with
       <xref linkend="opt-security.acme.certs._name_.email"></xref>. This
@@ -93,7 +93,7 @@ services.nginx = {
     <para>
       Using ACME certificates with Apache virtual hosts is identical to
       using them with Nginx. The attribute names are all the same, just
-      replace &quot;nginx&quot; with &quot;httpd&quot; where
+      replace <quote>nginx</quote> with <quote>httpd</quote> where
       appropriate.
     </para>
   </section>
@@ -257,7 +257,7 @@ systemd.services.dns-rfc2136-conf = {
 };
 </programlisting>
     <para>
-      Now you're all set to generate certs! You should monitor the first
+      Now you’re all set to generate certs! You should monitor the first
       invocation by running
       <literal>systemctl start acme-example.com.service &amp; journalctl -fu acme-example.com.service</literal>
       and watching its log output.
@@ -270,15 +270,14 @@ systemd.services.dns-rfc2136-conf = {
       including those automatically configured via the Nginx/Apache
       <link linkend="opt-services.nginx.virtualHosts._name_.enableACME"><literal>enableACME</literal></link>
       option. This configuration pattern is fully supported and part of
-      the module's test suite for Nginx + Apache.
+      the module’s test suite for Nginx + Apache.
     </para>
     <para>
       You must follow the guide above on configuring DNS-01 validation
       first, however instead of setting the options for one certificate
-      (e.g.
-      <xref linkend="opt-security.acme.certs._name_.dnsProvider"></xref>)
-      you will set them as defaults (e.g.
-      <xref linkend="opt-security.acme.defaults.dnsProvider"></xref>).
+      (e.g. <xref linkend="opt-security.acme.certs._name_.dnsProvider"></xref>)
+      you will set them as defaults
+      (e.g. <xref linkend="opt-security.acme.defaults.dnsProvider"></xref>).
     </para>
     <programlisting>
 # Configure ACME appropriately
@@ -304,7 +303,7 @@ services.nginx = {
 }
 </programlisting>
     <para>
-      And that's it! Next time your configuration is rebuilt, or when
+      And that’s it! Next time your configuration is rebuilt, or when
       you add a new virtualHost, it will be DNS-01 validated.
     </para>
   </section>
@@ -316,7 +315,7 @@ services.nginx = {
       are not owned by root. PostgreSQL and OpenSMTPD are examples of
       these. There is no way to change the user the ACME module uses (it
       will always be <literal>acme</literal>), however you can use
-      systemd's <literal>LoadCredential</literal> feature to resolve
+      systemd’s <literal>LoadCredential</literal> feature to resolve
       this elegantly. Below is an example configuration for OpenSMTPD,
       but this pattern can be applied to any service.
     </para>
@@ -360,7 +359,7 @@ in {
     <title>Regenerating certificates</title>
     <para>
       Should you need to regenerate a particular certificate in a hurry,
-      such as when a vulnerability is found in Let's Encrypt, there is
+      such as when a vulnerability is found in Let’s Encrypt, there is
       now a convenient mechanism for doing so. Running
       <literal>systemctl clean --what=state acme-example.com.service</literal>
       will remove all certificate files and the account data for the

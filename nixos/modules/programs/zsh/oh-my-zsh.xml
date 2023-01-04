@@ -63,7 +63,7 @@
     </para>
     <para>
       Rather than using a single mutable path for
-      <literal>ZSH_CUSTOM</literal>, it's also possible to generate this
+      <literal>ZSH_CUSTOM</literal>, it’s also possible to generate this
       path from a list of Nix packages:
     </para>
     <programlisting>
@@ -93,7 +93,7 @@
   <section xml:id="module-programs-oh-my-zsh-packaging-customizations">
     <title>Package your own customizations</title>
     <para>
-      If third-party customizations (e.g. new themes) are supposed to be
+      If third-party customizations (e.g. new themes) are supposed to be
       added to <literal>oh-my-zsh</literal> there are several pitfalls
       to keep in mind:
     </para>

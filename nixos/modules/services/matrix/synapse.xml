@@ -152,7 +152,7 @@ Success!
       <para>
         When using
         <xref linkend="opt-services.matrix-synapse.settings.registration_shared_secret"></xref>,
-        the secret will end up in the world-readable store. Instead it's
+        the secret will end up in the world-readable store. Instead it’s
         recommended to deploy the secret in an additional file like
         this:
       </para>
@@ -173,9 +173,9 @@ registration_shared_secret: your-very-secret-secret
             <citerefentry><refentrytitle>nixops</refentrytitle><manvolnum>1</manvolnum></citerefentry>
             or
             <link xlink:href="https://github.com/Mic92/sops-nix/">sops-nix</link>
-            to e.g.
-            <filename>/run/secrets/matrix-shared-secret</filename> and
-            ensure that it's readable by
+            to
+            e.g. <filename>/run/secrets/matrix-shared-secret</filename>
+            and ensure that it’s readable by
             <literal>matrix-synapse</literal>.
           </para>
         </listitem>
@@ -195,7 +195,7 @@ registration_shared_secret: your-very-secret-secret
     </warning>
     <note>
       <para>
-        It's also possible to user alternative authentication mechanism
+        It’s also possible to user alternative authentication mechanism
         such as
         <link xlink:href="https://github.com/matrix-org/matrix-synapse-ldap3">LDAP
         (via <literal>matrix-synapse-ldap3</literal>)</link> or
