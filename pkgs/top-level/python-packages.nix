@@ -4942,6 +4942,9 @@ self: super: with self; {
 
   jupyter_server = callPackage ../development/python-modules/jupyter_server { };
 
+  jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
+
+
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
