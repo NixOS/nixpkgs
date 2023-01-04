@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.8.0";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-J5B5THfB/yPG1JSCpO2HTHTH0jn0nbKFzXpZMGJ/dKA=";
+    hash = "sha256-rMQjsGqdiXe8zS18hZQAro3UWyHPjNJYyQ/NAoxbE7k=";
   };
 
   propagatedBuildInputs = [
