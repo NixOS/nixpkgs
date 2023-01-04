@@ -13988,6 +13988,8 @@ with pkgs;
 
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server {};
 
+  devpi-web = python3Packages.callPackage ../development/tools/devpi-web {};
+
   dictu = callPackage ../development/compilers/dictu { };
 
   ecl = callPackage ../development/compilers/ecl { };
