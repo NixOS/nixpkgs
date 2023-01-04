@@ -71,6 +71,10 @@ let
         apple_sdk = prev.darwin.apple_sdk_11_0;
         CF = prev.darwin.apple_sdk_11_0.CoreFoundation;
       });
+      rustPlatform = pkgs.makeRustPlatform {
+        inherit (pkgs) rustc cargo;
+        inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+      };
       xcbuild = xcodebuild;
     });
 
