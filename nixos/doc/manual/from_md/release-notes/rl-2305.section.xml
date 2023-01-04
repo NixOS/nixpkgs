@@ -379,6 +379,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.dhcpcd</literal> service now don’t solicit
+          or accept IPv6 Router Advertisements on interfaces that use
+          static IPv6 addresses.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The module <literal>services.headscale</literal> was
           refactored to be compliant with
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC

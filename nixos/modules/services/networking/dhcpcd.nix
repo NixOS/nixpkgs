@@ -33,6 +33,13 @@ let
     (if !config.networking.useDHCP && enableDHCP then
       map (i: i.name) (filter (i: i.useDHCP == true) interfaces) else null);
 
+  staticIPv6Addresses = map (i: i.name) (filter (i: i.ipv6.addresses != [ ]) interfaces);
+
+  noIPv6rs = concatStringsSep "\n" (map (name: ''
+    interface ${name}
+    noipv6rs
+  '') staticIPv6Addresses);
+
   # Config file adapted from the one that ships with dhcpcd.
   dhcpcdConf = pkgs.writeText "dhcpcd.conf"
     ''
@@ -75,6 +82,8 @@ let
       ''}
 
       ${cfg.extraConfig}
+
+      ${optionalString config.networking.enableIPv6 noIPv6rs}
     '';
 
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
