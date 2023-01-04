@@ -161,7 +161,9 @@ stdenv.mkDerivation rec {
     "-DSLIC3R_GTK=3"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s "$out/bin/PrusaSlicer" "$out/bin/prusa-slicer"
+  '' + ''
     ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"
 
     mkdir -p "$out/lib"
