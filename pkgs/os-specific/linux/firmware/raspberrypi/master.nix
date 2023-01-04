@@ -1,9 +1,9 @@
 { lib, stdenvNoCC, fetchFromGitHub }:
 
 let verinfo = {
-  version = "2022-12-19";
-  rev = "4849b548c1ffda841481c54e62fff249ed00b32c";
-  hash = "sha256-us8pQmJn16YwfVpE3CPVh9vqV0PxFI9MBhzko2AFg3M=";
+  version = "2023-01-04";
+  rev = "03e04372dea46d38e42d3208a11f8ee37bff09bf";
+  hash = "sha256-jt4CJ5IZksJKPZF1wNhwLHlreGXJfeuuF29CRpx67gw=";
 }; in
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
