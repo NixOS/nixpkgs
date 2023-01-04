@@ -17,8 +17,8 @@
 services.xserver.desktopManager.pantheon.enable = true;
 </programlisting>
     <para>
-      This automatically enables LightDM and Pantheon's LightDM greeter.
-      If you'd like to disable this, set
+      This automatically enables LightDM and Pantheon’s LightDM greeter.
+      If you’d like to disable this, set
     </para>
     <programlisting>
 services.xserver.displayManager.lightdm.greeters.pantheon.enable = false;
@@ -27,8 +27,8 @@ services.xserver.displayManager.lightdm.enable = false;
     <para>
       but please be aware using Pantheon without LightDM as a display
       manager will break screenlocking from the UI. The NixOS module for
-      Pantheon installs all of Pantheon's default applications. If you'd
-      like to not install Pantheon's apps, set
+      Pantheon installs all of Pantheon’s default applications. If you’d
+      like to not install Pantheon’s apps, set
     </para>
     <programlisting>
 services.pantheon.apps.enable = false;
@@ -86,7 +86,7 @@ switchboard-with-plugs.override {
     <para>
       please note that, like how the NixOS options describe these as
       extra plugins, this would only add to the default plugins included
-      with the programs. If for some reason you'd like to configure
+      with the programs. If for some reason you’d like to configure
       which plugins to use exactly, both packages have an argument for
       this:
     </para>

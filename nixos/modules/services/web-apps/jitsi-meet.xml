@@ -7,7 +7,7 @@
   <section xml:id="module-services-jitsi-basic-usage">
     <title>Basic usage</title>
     <para>
-      A minimal configuration using Let's Encrypt for TLS certificates
+      A minimal configuration using Let’s Encrypt for TLS certificates
       looks like this:
     </para>
     <programlisting>

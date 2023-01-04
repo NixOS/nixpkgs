@@ -24,7 +24,7 @@
       <link xlink:href="https://xmpp.org/extensions/xep-0045.html">Multi
       User Chat (MUC)</link> and the
       <link xlink:href="https://xmpp.org/extensions/xep-0363.html">HTTP
-      File Upload</link> ones. You'll need to create a DNS subdomain for
+      File Upload</link> ones. You’ll need to create a DNS subdomain for
       each of those. The current convention is to name your MUC endpoint
       <literal>conference.example.org</literal> and your HTTP upload
       domain <literal>upload.example.org</literal>.
@@ -58,18 +58,18 @@ services.prosody = {
 </programlisting>
   </section>
   <section xml:id="module-services-prosody-letsencrypt">
-    <title>Let's Encrypt Configuration</title>
+    <title>Let’s Encrypt Configuration</title>
     <para>
       As you can see in the code snippet from the
       <link linkend="module-services-prosody-basic-usage">previous
-      section</link>, you'll need a single TLS certificate covering your
+      section</link>, you’ll need a single TLS certificate covering your
       main endpoint, the MUC one as well as the HTTP Upload one. We can
       generate such a certificate by leveraging the ACME
       <link linkend="opt-security.acme.certs._name_.extraDomainNames">extraDomainNames</link>
       module option.
     </para>
     <para>
-      Provided the setup detailed in the previous section, you'll need
+      Provided the setup detailed in the previous section, you’ll need
       the following acme configuration to generate a TLS certificate for
       the three endponits:
     </para>

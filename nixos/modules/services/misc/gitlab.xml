@@ -78,13 +78,13 @@ services.gitlab = {
 };
 </programlisting>
     <para>
-      If you're setting up a new GitLab instance, generate new secrets.
+      If you’re setting up a new GitLab instance, generate new secrets.
       You for instance use
       <literal>tr -dc A-Za-z0-9 &lt; /dev/urandom | head -c 128 &gt; /var/keys/gitlab/db</literal>
       to generate a new db secret. Make sure the files can be read by,
       and only by, the user specified by
       <link linkend="opt-services.gitlab.user">services.gitlab.user</link>.
-      GitLab encrypts sensitive data stored in the database. If you're
+      GitLab encrypts sensitive data stored in the database. If you’re
       restoring an existing GitLab instance, you must specify the
       secrets secret from <literal>config/secrets.yml</literal> located
       in your GitLab state folder.
@@ -125,7 +125,7 @@ $ systemctl start gitlab-backup.service
     <section xml:id="module-services-gitlab-maintenance-rake">
       <title>Rake tasks</title>
       <para>
-        You can run GitLab's rake tasks with
+        You can run GitLab’s rake tasks with
         <literal>gitlab-rake</literal> which will be available on the
         system when GitLab is enabled. You will have to run the command
         as the user that you configured to run GitLab with.

@@ -136,7 +136,7 @@ config :web_push_encryption, :vapid_details,
 </programlisting>
     <para>
       Note that the lines of the same configuration group are comma
-      separated (i.e. all the lines end with a comma, except the last
+      separated (i.e. all the lines end with a comma, except the last
       one), so when the lines with passwords are added or removed,
       commas must be adjusted accordingly.
     </para>
@@ -179,7 +179,7 @@ $ pleroma_ctl user new &lt;nickname&gt; &lt;email&gt;  --admin --moderator --pas
       4000. Nginx can be configured as a Reverse Proxy, for forwarding
       requests from public ports to the Pleroma service. This is an
       example of configuration, using
-      <link xlink:href="https://letsencrypt.org/">Let's Encrypt</link>
+      <link xlink:href="https://letsencrypt.org/">Let’s Encrypt</link>
       for the TLS certificates
     </para>
     <programlisting>

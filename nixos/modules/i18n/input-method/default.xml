@@ -114,7 +114,7 @@ ibus.engines = with pkgs.ibus-engines; [ table table-others ];
       To use any input method, the package must be added in the
       configuration, as shown above, and also (after running
       <literal>nixos-rebuild</literal>) the input method must be added
-      from IBus' preference dialog.
+      from IBus’ preference dialog.
     </para>
     <section xml:id="module-services-input-methods-troubleshooting">
       <title>Troubleshooting</title>
@@ -221,7 +221,7 @@ i18n.inputMethod = {
   <section xml:id="module-services-input-methods-uim">
     <title>Uim</title>
     <para>
-      Uim (short for &quot;universal input method&quot;) is a
+      Uim (short for <quote>universal input method</quote>) is a
       multilingual input method framework. Applications can use it
       through so-called bridges.
     </para>
@@ -244,7 +244,7 @@ i18n.inputMethod = {
       Hime is an extremely easy-to-use input method framework. It is
       lightweight, stable, powerful and supports many commonly used
       input methods, including Cangjie, Zhuyin, Dayi, Rank, Shrimp,
-      Greek, Korean Pinyin, Latin Alphabet, etc...
+      Greek, Korean Pinyin, Latin Alphabet, etc…
     </para>
     <para>
       The following snippet can be used to configure Hime:
@@ -258,7 +258,7 @@ i18n.inputMethod = {
   <section xml:id="module-services-input-methods-kime">
     <title>Kime</title>
     <para>
-      Kime is Korean IME. it's built with Rust language and let you get
+      Kime is Korean IME. it’s built with Rust language and let you get
       simple, safe, fast Korean typing
     </para>
     <para>

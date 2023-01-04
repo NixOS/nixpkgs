@@ -41,8 +41,8 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
       <link xlink:href="https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/" role="uri">https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/</link>.
     </para>
     <para>
-      Of course, you can use password based authentication as well, e.g.
-      when the database is not on the same host.
+      Of course, you can use password based authentication as well,
+      e.g. when the database is not on the same host.
     </para>
   </section>
   <section xml:id="module-services-matomo-archive-processing">
@@ -84,7 +84,7 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
       <listitem>
         <para>
           Matomo will warn you that the JavaScript tracker is not
-          writable. This is because it's located in the read-only nix
+          writable. This is because it’s located in the read-only nix
           store. You can safely ignore this, unless you need a plugin
           that needs JavaScript tracker access.
         </para>

@@ -15,7 +15,7 @@
     <emphasis>Available version(s):</emphasis> 5.1.x, 5.2.x, 6.0.x
   </para>
   <para>
-    FoundationDB (or &quot;FDB&quot;) is an open source, distributed,
+    FoundationDB (or <quote>FDB</quote>) is an open source, distributed,
     transactional key-value store.
   </para>
   <section xml:id="module-services-foundationdb-configuring">
@@ -115,8 +115,8 @@ a@link&gt;
       SSD-storage based database for development and basic usage. This
       storage engine is designed for SSDs and will perform poorly on
       HDDs; however it can handle far more data than the alternative
-      &quot;memory&quot; engine and is a better default choice for most
-      deployments. (Note that you can change the storage backend
+      <quote>memory</quote> engine and is a better default choice for
+      most deployments. (Note that you can change the storage backend
       on-the-fly for a given FoundationDB cluster using
       <command>fdbcli</command>.)
     </para>
@@ -151,7 +151,7 @@ services.foundationdb.dataDir = &quot;/data/fdb&quot;;
     <para>
       FoundationDB worker processes typically require 4GB of RAM
       per-process at minimum for good performance, so this option is set
-      to 1 by default since the maximum amount of RAM is unknown. You're
+      to 1 by default since the maximum amount of RAM is unknown. You’re
       advised to abide by this restriction, so pick a number of
       processes so that each has 4GB or more.
     </para>
@@ -282,7 +282,7 @@ fdbcli&gt; coordinators auto
       FoundationDB uses a pluggable design to transport security, and
       out of the box it supports a LibreSSL-based plugin for TLS
       support. This plugin not only does in-flight encryption, but also
-      performs client authorization based on the given endpoint's
+      performs client authorization based on the given endpoint’s
       certificate chain. For example, a FoundationDB server may be
       configured to only accept client connections over TLS, where the
       client TLS certificate is from organization <emphasis>Acme
@@ -303,7 +303,7 @@ fdbcli&gt; coordinators auto
     </para>
     <para>
       After you have a key and certificate file in place, it is not
-      enough to simply set the NixOS module options -- you must also
+      enough to simply set the NixOS module options – you must also
       configure the <command>fdb.cluster</command> file to specify that
       a given set of coordinators use TLS. This is as simple as adding
       the suffix <command>:tls</command> to your cluster coordinator
@@ -333,7 +333,7 @@ XXXXXX:XXXXXX@127.0.0.1:4500:tls
     </para>
     <para>
       However, a side effect of this is that the
-      <command>fdbbackup</command> command doesn't work properly for
+      <command>fdbbackup</command> command doesn’t work properly for
       local filesystem backups: FoundationDB uses a server process
       alongside the database processes to perform backups and copy the
       backups to the filesystem. As a result, this process is put under
@@ -403,7 +403,7 @@ $ sudo -u foundationdb fdbbackup status -t default
   <section xml:id="module-services-foundationdb-options">
     <title>Options</title>
     <para>
-      NixOS's FoundationDB module allows you to configure all of the
+      NixOS’s FoundationDB module allows you to configure all of the
       most relevant configuration options for
       <command>fdbmonitor</command>, matching it quite closely. A
       complete list of options for the FoundationDB module may be found

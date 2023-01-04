@@ -7,7 +7,7 @@
   <section xml:id="module-services-discourse-basic-usage">
     <title>Basic usage</title>
     <para>
-      A minimal configuration using Let's Encrypt for TLS certificates
+      A minimal configuration using Let’s Encrypt for TLS certificates
       looks like this:
     </para>
     <programlisting>
@@ -26,7 +26,7 @@ security.acme.email = &quot;me@example.com&quot;;
 security.acme.acceptTerms = true;
 </programlisting>
     <para>
-      Provided a proper DNS setup, you'll be able to connect to the
+      Provided a proper DNS setup, you’ll be able to connect to the
       instance at <literal>discourse.example.com</literal> and log in
       using the credentials provided in
       <literal>services.discourse.admin</literal>.
@@ -82,7 +82,7 @@ services.discourse = {
   <section xml:id="module-services-discourse-mail">
     <title>Email</title>
     <para>
-      In addition to the basic setup, you'll want to configure an SMTP
+      In addition to the basic setup, you’ll want to configure an SMTP
       server Discourse can use to send user registration and password
       reset emails, among others. You can also optionally let Discourse
       receive email, which enables people to reply to threads and
@@ -116,11 +116,11 @@ services.discourse = {
 };
 </programlisting>
     <para>
-      This assumes you have set up an MX record for the address you've
+      This assumes you have set up an MX record for the address you’ve
       set in
       <link linkend="opt-services.discourse.hostname">hostname</link>
       and requires proper SPF, DKIM and DMARC configuration to be done
-      for the domain you're sending from, in order for email to be
+      for the domain you’re sending from, in order for email to be
       reliably delivered.
     </para>
     <para>
@@ -135,7 +135,7 @@ services.discourse = {
     <note>
       <para>
         Setup of TLS for incoming email is currently only configured
-        automatically when a regular TLS certificate is used, i.e. when
+        automatically when a regular TLS certificate is used, i.e. when
         <xref linkend="opt-services.discourse.sslCertificate"></xref>
         and
         <xref linkend="opt-services.discourse.sslCertificateKey"></xref>
@@ -155,18 +155,18 @@ services.discourse = {
     <section xml:id="module-services-discourse-site-settings">
       <title>Site settings</title>
       <para>
-        &quot;Site settings&quot; are the settings that can be changed
-        through the Discourse UI. Their <emphasis>default</emphasis>
-        values can be set using
+        <quote>Site settings</quote> are the settings that can be
+        changed through the Discourse UI. Their
+        <emphasis>default</emphasis> values can be set using
         <xref linkend="opt-services.discourse.siteSettings"></xref>.
       </para>
       <para>
         Settings are expressed as a Nix attribute set which matches the
         structure of the configuration in
         <link xlink:href="https://github.com/discourse/discourse/blob/master/config/site_settings.yml">config/site_settings.yml</link>.
-        To find a setting's path, you only need to care about the first
-        two levels; i.e. its category (e.g. <literal>login</literal>)
-        and name (e.g. <literal>invite_only</literal>).
+        To find a setting’s path, you only need to care about the first
+        two levels; i.e. its category (e.g. <literal>login</literal>)
+        and name (e.g. <literal>invite_only</literal>).
       </para>
       <para>
         Settings containing secret data should be set to an attribute
@@ -263,7 +263,7 @@ services.discourse = {
       <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#developing-with-ruby">Developing
       with Ruby</link> section of the Nixpkgs manual and the appropriate
       gem options set in <literal>bundlerEnvArgs</literal> (normally
-      <literal>gemdir</literal> is sufficient). A plugin's Ruby
+      <literal>gemdir</literal> is sufficient). A plugin’s Ruby
       dependencies are listed in its <filename>plugin.rb</filename> file
       as function calls to <literal>gem</literal>. To construct the
       corresponding <filename>Gemfile</filename> manually, run

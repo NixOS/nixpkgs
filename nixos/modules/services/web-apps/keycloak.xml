@@ -76,8 +76,8 @@
     </para>
     <note>
       <para>
-        If you're migrating an old Wildfly based Keycloak instance and
-        want to keep compatibility with your current clients, you'll
+        If you’re migrating an old Wildfly based Keycloak instance and
+        want to keep compatibility with your current clients, you’ll
         likely want to set
         <xref linkend="opt-services.keycloak.settings.http-relative-path"></xref>
         to <literal>/auth</literal>. See the option description for more
@@ -102,7 +102,7 @@
   <section xml:id="module-services-keycloak-tls">
     <title>Setting up TLS/SSL</title>
     <para>
-      By default, Keycloak won't accept unsecured HTTP connections
+      By default, Keycloak won’t accept unsecured HTTP connections
       originating from outside its local network.
     </para>
     <para>
