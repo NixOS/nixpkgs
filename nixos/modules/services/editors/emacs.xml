@@ -124,8 +124,8 @@
 
    <para>
     Under NixOS, you can continue to use
-    <function>package-list-packages</function> and
-    <function>package-install</function> to install packages. You can also
+    <literal>package-list-packages</literal> and
+    <literal>package-install</literal> to install packages. You can also
     declare the set of Emacs packages you need using the derivations from
     Nixpkgs. The rest of this section discusses declarative installation of
     Emacs packages through nixpkgs.
@@ -383,7 +383,7 @@ services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
    <para>
     The <varname>services.emacs.package</varname> option allows a custom
     derivation to be used, for example, one created by
-    <function>emacsWithPackages</function>.
+    <literal>emacsWithPackages</literal>.
    </para>
 
    <para>
@@ -523,7 +523,7 @@ systemctl --user enable emacs
    <title>Accessing man pages</title>
 
    <para>
-    You can use <function>woman</function> to get completion of all available
+    You can use <literal>woman</literal> to get completion of all available
     man pages. For example, type <literal>M-x woman &lt;RET&gt; nixos-rebuild
     &lt;RET&gt;.</literal>
    </para>
