@@ -4,7 +4,8 @@
 , fetchPypi
 , yt-dlp
 , docopt
-, isPy27
+, pythonOlder
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   version = "0.0.35";
   format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,9 +27,16 @@ buildPythonPackage rec {
       --replace "docopt==0.6.2" "docopt"
   '';
 
-  propagatedBuildInputs = [ internetarchive docopt yt-dlp ];
+  propagatedBuildInputs = [
+    internetarchive
+    docopt
+    urllib3
+    yt-dlp
+  ];
 
-  pythonImportsCheck = [ "tubeup" ];
+  pythonImportsCheck = [
+    "tubeup"
+  ];
 
   # Tests failing upstream
   doCheck = false;
@@ -36,7 +44,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Youtube (and other video site) to Internet Archive Uploader";
     homepage = "https://github.com/bibanon/tubeup";
+    changelog = "https://github.com/bibanon/tubeup/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }
