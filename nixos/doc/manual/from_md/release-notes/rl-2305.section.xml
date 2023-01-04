@@ -250,16 +250,6 @@
       </listitem>
       <listitem>
         <para>
-          The Nginx module now validates the syntax of config files at
-          build time. For more complex configurations (using
-          <literal>include</literal> with out-of-store files notably)
-          you may need to disable this check by setting
-          <link linkend="opt-services.nginx.validateConfig">services.nginx.validateConfig</link>
-          to <literal>false</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The EC2 image module previously detected and automatically
           mounted ext3-formatted instance store devices and partitions
           in stage-1 (initramfs), storing <literal>/tmp</literal> on the
