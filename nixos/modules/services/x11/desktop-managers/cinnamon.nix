@@ -180,6 +180,7 @@ in
         mint-themes
         mint-x-icons
         mint-y-icons
+        xapp # provides some xapp-* icons
       ] config.environment.cinnamon.excludePackages);
 
       xdg.mime.enable = true;
