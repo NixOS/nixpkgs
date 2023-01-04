@@ -4,20 +4,18 @@ with lib;
 
 let
   cfg = config.services.traefik;
-  jsonValue = with types;
-    let
-      valueType = nullOr (oneOf [
-        bool
-        int
-        float
-        str
-        (lazyAttrsOf valueType)
-        (listOf valueType)
-      ]) // {
-        description = "JSON value";
-        emptyValue.value = { };
-      };
-    in valueType;
+  jsonValue = with types; recursive (t:
+    nullOr (oneOf [
+      bool
+      int
+      float
+      str
+      (lazyAttrsOf t)
+      (listOf t)
+    ])) // {
+      description = "JSON value";
+      emptyValue.value = { };
+    };
   dynamicConfigFile = if cfg.dynamicConfigFile == null then
     pkgs.runCommand "config.toml" {
       buildInputs = [ pkgs.remarshal ];

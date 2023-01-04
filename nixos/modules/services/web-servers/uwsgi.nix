@@ -90,25 +90,24 @@ in {
       };
 
       instance = mkOption {
-        type =  with types; let
-          valueType = nullOr (oneOf [
+        type =  with types; recursive (t:
+          nullOr (oneOf [
             bool
             int
             float
             str
-            (lazyAttrsOf valueType)
-            (listOf valueType)
+            (lazyAttrsOf t)
+            (listOf t)
             (mkOptionType {
               name = "function";
               description = "function";
               check = x: isFunction x;
               merge = mergeOneOption;
             })
-          ]) // {
-            description = "Json value or lambda";
+          ])) // {
+            description = "JSON value or lambda";
             emptyValue.value = {};
           };
-        in valueType;
         default = {
           type = "normal";
         };

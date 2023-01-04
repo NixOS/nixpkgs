@@ -36,8 +36,8 @@ rec {
 
   json = {}: {
 
-    type = with lib.types; let
-      valueType = nullOr (oneOf [
+    type = with lib.types;
+      recursive (valueType: nullOr (oneOf [
         bool
         int
         float
@@ -45,10 +45,10 @@ rec {
         path
         (attrsOf valueType)
         (listOf valueType)
-      ]) // {
+      ])) // {
         description = "JSON value";
+        descriptionClass = "noun";
       };
-    in valueType;
 
     generate = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
       nativeBuildInputs = [ jq ];
@@ -70,8 +70,8 @@ rec {
       json2yaml "$valuePath" "$out"
     '') {};
 
-    type = with lib.types; let
-      valueType = nullOr (oneOf [
+    type = with lib.types;
+      recursive (valueType: nullOr (oneOf [
         bool
         int
         float
@@ -79,10 +79,10 @@ rec {
         path
         (attrsOf valueType)
         (listOf valueType)
-      ]) // {
+      ])) // {
         description = "YAML value";
+        descriptionClass = "noun";
       };
-    in valueType;
 
   };
 
@@ -106,6 +106,7 @@ rec {
         str
       ]) // {
         description = "INI atom (null, bool, int, float or string)";
+        descriptionClass = "noun";
       };
 
       iniAtom =
@@ -155,6 +156,7 @@ rec {
         str
       ]) // {
         description = "atom (null, bool, int, float or string)";
+        descriptionClass = "noun";
       };
 
       atom =
@@ -196,8 +198,8 @@ rec {
   };
 
   toml = {}: json {} // {
-    type = with lib.types; let
-      valueType = oneOf [
+    type = with lib.types;
+      recursive (valueType: oneOf [
         bool
         int
         float
@@ -205,10 +207,10 @@ rec {
         path
         (attrsOf valueType)
         (listOf valueType)
-      ] // {
+      ]) // {
         description = "TOML value";
+        descriptionClass = "noun";
       };
-    in valueType;
 
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
@@ -311,17 +313,18 @@ rec {
     in
     {
       type = with lib.types; let
-        valueType = nullOr
+        valueType = recursive (t: nullOr
           (oneOf [
             bool
             int
             float
             str
-            (attrsOf valueType)
-            (listOf valueType)
-          ]) // {
-          description = "Elixir value";
-        };
+            (attrsOf t)
+            (listOf t)
+          ])) // {
+            description = "Elixir value";
+            descriptionClass = "noun";
+          };
       in
       attrsOf (attrsOf (valueType));
 
@@ -376,6 +379,7 @@ rec {
             rawElixir = mkOptionType {
               name = "rawElixir";
               description = "raw elixir";
+              descriptionClass = "noun";
               check = isElixirType "raw";
             };
 
@@ -387,18 +391,21 @@ rec {
             atom = elixirOr (mkOptionType {
               name = "elixirAtom";
               description = "elixir atom";
+              descriptionClass = "noun";
               check = isElixirType "atom";
             });
 
             tuple = elixirOr (mkOptionType {
               name = "elixirTuple";
               description = "elixir tuple";
+              descriptionClass = "noun";
               check = isElixirType "tuple";
             });
 
             map = elixirOr (mkOptionType {
               name = "elixirMap";
               description = "elixir map";
+              descriptionClass = "noun";
               check = isElixirType "map";
             });
             # Wrap standard types, since anything in the Elixir configuration

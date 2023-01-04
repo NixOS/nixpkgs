@@ -231,7 +231,7 @@ in {
       scalar = oneOf [ bool int float str ]
         // { description = "scalar types"; };
 
-      libConfig = oneOf [ scalar (listOf libConfig) (attrsOf libConfig) ]
+      libConfig = recursive (t: oneOf [ scalar (listOf t) (attrsOf t) ])
         // { description = "libconfig type"; };
 
       topLevel = attrsOf libConfig

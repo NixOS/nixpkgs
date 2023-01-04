@@ -106,7 +106,7 @@ in
                   '';
                 };
                 settings = mkOption {
-                  type = let t = types.attrsOf (types.either types.str (t // { description = "instances of this type recursively"; })); in t;
+                  type = types.recursive (t: types.attrsOf (types.either types.str t));
                   default = { };
                   example = {
                     snapshot_preserve_min = "2d";

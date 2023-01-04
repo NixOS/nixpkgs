@@ -53,7 +53,7 @@ in {
           desktop = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = lib.mkDoc ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
+            description = lib.mdDoc ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
             example = literalExpression ''"''${pkgs.firefox}/share/applications/firefox.desktop"'';
           };
           profile = mkOption {

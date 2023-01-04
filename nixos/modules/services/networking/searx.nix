@@ -7,6 +7,8 @@ let
 
   cfg = config.services.searx;
 
+  settingsFormat = pkgs.formats.json {};
+
   settingsFile = pkgs.writeText "settings.yml"
     (builtins.toJSON cfg.settings);
 
@@ -24,12 +26,6 @@ let
       sed "s#@$n@#$v#g" -i settings.yml
     done
   '';
-
-  settingType = with types; (oneOf
-    [ bool int float str
-      (listOf settingType)
-      (attrsOf settingType)
-    ]) // { description = "JSON value"; };
 
 in
 
@@ -66,7 +62,7 @@ in
       };
 
       settings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf settingsFormat.type;
         default = { };
         example = literalExpression ''
           { server.port = 8080;

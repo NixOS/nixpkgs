@@ -39,12 +39,10 @@ let
     inherit (str) merge;
   };
 
-  elixirValue = let
-    elixirValue' = with types;
-      nullOr (oneOf [ bool int float str (attrsOf elixirValue') (listOf elixirValue') ]) // {
-        description = "Elixir value";
-      };
-  in elixirValue';
+  elixirValue = with types; recursive (t:
+    nullOr (oneOf [ bool int float str (attrsOf t) (listOf t) ])) // {
+      description = "Elixir value";
+    };
 
   frontend = {
     options = {

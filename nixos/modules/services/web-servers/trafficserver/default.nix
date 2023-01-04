@@ -140,12 +140,9 @@ in
     };
 
     records = mkOption {
-      type = with types;
-        let valueType = (attrsOf (oneOf [ int float str valueType ])) // {
-          description = "Traffic Server records value";
-        };
-        in
-        valueType;
+      type = with types; recursive (t: attrsOf (oneOf [ int float str t ])) // {
+        description = "Traffic Server records value";
+      };
       default = { };
       example = { proxy.config.proxy_name = "my_server"; };
       description = lib.mdDoc ''
