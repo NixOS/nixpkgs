@@ -72,10 +72,10 @@
     "version": "5.0.18"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/4.3.0",
-    "rev": "2836720",
-    "sha256": "0igaq34gq5ysk5ai39b641kx7rqsj052m6r55zl6z7xjpxhf37aw",
-    "version": "4.3.0"
+    "path": "mailpoet/tags/4.3.1",
+    "rev": "2843001",
+    "sha256": "0nnmfk1rxhf31makfc0v7mlh30799saxpf8agqdlavrmqpvypvzb",
+    "version": "4.3.1"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
