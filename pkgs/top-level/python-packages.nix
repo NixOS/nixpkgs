@@ -6967,6 +6967,8 @@ self: super: with self; {
 
   pyproject-api = callPackage ../development/python-modules/pyproject-api { };
 
+  pyproject-hooks = callPackage ../development/python-modules/pyproject-hooks { };
+
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
