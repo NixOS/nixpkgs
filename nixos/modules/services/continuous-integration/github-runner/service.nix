@@ -20,6 +20,9 @@
 
 with lib;
 
+let
+  workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
+in
 {
   description = "GitHub Actions runner";
 
@@ -28,7 +31,7 @@ with lib;
   after = [ "network.target" "network-online.target" ];
 
   environment = {
-    HOME = runtimeDir;
+    HOME = workDir;
     RUNNER_ROOT = stateDir;
   } // cfg.extraEnvironment;
 
@@ -42,7 +45,7 @@ with lib;
     config.nix.package
   ] ++ cfg.extraPackages;
 
-  serviceConfig = rec {
+  serviceConfig = {
     ExecStart = "${cfg.package}/bin/Runner.Listener run --startuptype service";
 
     # Does the following, sequentially:
@@ -54,7 +57,7 @@ with lib;
     # - Set up the directory structure by creating the necessary symlinks.
     ExecStartPre =
       let
-        # Wrapper script which expects the full path of the state, runtime and logs
+        # Wrapper script which expects the full path of the state, working and logs
         # directory as arguments. Overrides the respective systemd variables to provide
         # unambiguous directory names. This becomes relevant, for example, if the
         # caller overrides any of the StateDirectory=, RuntimeDirectory= or LogDirectory=
@@ -65,12 +68,12 @@ with lib;
           set -euo pipefail
 
           STATE_DIRECTORY="$1"
-          RUNTIME_DIRECTORY="$2"
+          WORK_DIRECTORY="$2"
           LOGS_DIRECTORY="$3"
 
           ${lines}
         '';
-        runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" "ephemeral" ] cfg;
+        runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" "ephemeral" "workDir" ] cfg;
         newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
         currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
         newConfigTokenPath= "$STATE_DIRECTORY/.new-token";
@@ -119,14 +122,15 @@ with lib;
           else
             # The state directory is entirely empty which indicates a first start
             copy_tokens
-          fi        '';
+          fi
+        '';
         configureRunner = writeScript "configure" ''
           if [[ -e "${newConfigTokenPath}" ]]; then
             echo "Configuring GitHub Actions Runner"
             args=(
               --unattended
               --disableupdate
-              --work "$RUNTIME_DIRECTORY"
+              --work "$WORK_DIRECTORY"
               --url ${escapeShellArg cfg.url}
               --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)}
               --name ${escapeShellArg cfg.name}
@@ -153,18 +157,21 @@ with lib;
             ln -s '${newConfigPath}' "${currentConfigPath}"
           fi
         '';
-        setupRuntimeDir = writeScript "setup-runtime-dirs" ''
-          # Link _diag dir
-          ln -s "$LOGS_DIRECTORY" "$RUNTIME_DIRECTORY/_diag"
+        setupWorkDir = writeScript "setup-work-dirs" ''
+          # Cleanup previous service
+          ${pkgs.findutils}/bin/find -H "$WORK_DIRECTORY" -mindepth 1 -delete
 
-          # Link the runner credentials to the runtime dir
-          ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$RUNTIME_DIRECTORY/"
+          # Link _diag dir
+          ln -s "$LOGS_DIRECTORY" "$WORK_DIRECTORY/_diag"
+
+          # Link the runner credentials to the work dir
+          ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$WORK_DIRECTORY/"
         '';
       in
-        map (x: "${x} ${escapeShellArgs [ stateDir runtimeDir logsDir ]}") [
+        map (x: "${x} ${escapeShellArgs [ stateDir workDir logsDir ]}") [
           "+${unconfigureRunner}" # runs as root
           configureRunner
-          setupRuntimeDir
+          setupWorkDir
         ];
 
     # If running in ephemeral mode, restart the service on-exit (i.e., successful de-registration of the runner)
@@ -181,7 +188,7 @@ with lib;
     # Home of persistent runner data, e.g., credentials
     StateDirectory = [ systemdDir ];
     StateDirectoryMode = "0700";
-    WorkingDirectory = runtimeDir;
+    WorkingDirectory = workDir;
 
     InaccessiblePaths = [
       # Token file path given in the configuration, if visible to the service
@@ -231,6 +238,8 @@ with lib;
       "~sethostname"
     ];
     RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
+
+    BindPaths = lib.optionals (cfg.workDir != null) [ cfg.workDir ];
 
     # Needs network access
     PrivateNetwork = false;
