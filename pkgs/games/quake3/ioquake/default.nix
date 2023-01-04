@@ -50,10 +50,10 @@ stdenv.mkDerivation {
 
   installTargets = [ "copyfiles" ];
 
-  installFlags = [ "COPYDIR=$(out)" ];
+  installFlags = [ "COPYDIR=$(out)" "COPYBINDIR=$(out)/bin" ];
 
   preInstall = ''
-    mkdir -p $out/baseq3
+    mkdir -p $out/baseq3 $out/bin
   '';
 
   meta = with lib; {
