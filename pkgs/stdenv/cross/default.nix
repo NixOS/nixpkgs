@@ -64,11 +64,17 @@ in lib.init bootStages ++ [
            else if crossSystem.useAndroidPrebuilt or false
              then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
            else if targetPlatform.isGhcjs
-             # Need to use `throw` so tryEval for splicing works, ugh.  Using
-             # `null` or skipping the attribute would cause an eval failure
-             # `tryEval` wouldn't catch, wrecking accessing previous stages
-             # when there is a C compiler and everything should be fine.
-             then throw "no C compiler provided for this platform"
+             then {
+               # Need to use `throw` for the `outputs` attribute so tryEval for
+               # splicing works.  Using `null` or skipping the attribute would
+               # cause an eval failure that `tryEval` wouldn't catch, wrecking
+               # accessing previous stages when there is a C compiler and
+               # everything should be fine.
+               outputs = throw "no C compiler provided for this platform";
+               libc = "none";
+               isClang = false;
+               isGNU = false;
+             }
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.libcxxClang
            else if crossSystem.useLLVM or false

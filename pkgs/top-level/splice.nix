@@ -64,9 +64,9 @@ let
             # on {}
             tryGetOutputs = value0:
               let
-                inherit (builtins.tryEval value0) success value;
+                inherit (builtins.tryEval (getOutputs value0)) success value;
               in
-              getOutputs (lib.optionalAttrs success value);
+                lib.optionalAttrs success value;
             getOutputs = value: lib.genAttrs
               (value.outputs or (lib.optional (value ? out) "out"))
               (output: value.${output});
