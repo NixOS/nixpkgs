@@ -1,14 +1,14 @@
 {
   "twentytwentyone": {
-    "path": "twentytwentyone/1.6",
-    "rev": "168450",
-    "sha256": "0wfqdyd59hifnncjv59ywjak050gaggsvjx7r01agh44nzkr84fs",
-    "version": "1.6"
+    "path": "twentytwentyone/1.7",
+    "rev": "178738",
+    "sha256": "090j6xb2hpq4qjis4yismgzip893ihdqs5r58a13nngl17xilmxw",
+    "version": "1.7"
   },
   "twentytwentytwo": {
-    "path": "twentytwentytwo/1.2",
-    "rev": "168451",
-    "sha256": "0ry7h5bd9h97q38jmsgymm05dfml0ycdhqn7iskpdlc1nnrjrk04",
-    "version": "1.2"
+    "path": "twentytwentytwo/1.3",
+    "rev": "178733",
+    "sha256": "11lwmirh83yv8wlgacrb9w1qmczkfqxpnl3dn15n38z494kx7zdg",
+    "version": "1.3"
   }
 }
