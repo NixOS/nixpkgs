@@ -76,11 +76,16 @@ in
     # - clang-wrapper in cross-compilation
     # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
     preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
+      if [ -f ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
-          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+          cp ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
           # the .so It used to be a symlink, but now it is a script
-          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
+          cp -a ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
+          # wipe out reference to previous libc it was built against
+          chmod +w $out/lib/libgcc_s.so.1
+          # rely on default RUNPATHs of the binary and other libraries
+          # Do no force-pull wrong glibc.
+          patchelf --remove-rpath $out/lib/libgcc_s.so.1
       fi
     '';
 
