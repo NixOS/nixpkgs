@@ -8852,6 +8852,8 @@ with pkgs;
 
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
+  mautrix-googlechat = callPackage ../servers/mautrix-googlechat { };
+
   mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
@@ -12892,6 +12894,8 @@ with pkgs;
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
+  wireproxy = callPackage ../tools/networking/wireproxy { };
+
   wiringpi = callPackage ../os-specific/linux/wiringpi { };
 
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
@@ -14492,7 +14496,7 @@ with pkgs;
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
-  gccgo = wrapCC (gcc.cc.override {
+  gccgo = wrapCC ((if stdenv.hostPlatform.isMusl then gcc_latest else gcc).cc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
@@ -19699,6 +19703,8 @@ with pkgs;
 
   mpfi = callPackage ../development/libraries/mpfi { };
 
+  mpdecimal = callPackage ../development/libraries/mpdecimal { };
+
   mpfshell = callPackage ../development/tools/mpfshell { };
 
   # A GMP fork
@@ -21494,6 +21500,8 @@ with pkgs;
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libusbsio = callPackage ../development/libraries/libusbsio { };
+
+  libucontext = callPackage ../development/libraries/libucontext { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
 
@@ -37963,7 +37971,7 @@ with pkgs;
 
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
-  wordpress = callPackage ../servers/web-apps/wordpress { };
+  inherit (callPackage ../servers/web-apps/wordpress {}) wordpress wordpress6_1;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;

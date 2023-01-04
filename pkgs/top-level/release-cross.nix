@@ -92,7 +92,7 @@ let
   # with their host distribution's versions of nix's numerous
   # build dependencies.
   nixCrossStatic = {
-    nixStatic = platforms.linux;  # no need for buildPlatform=*-darwin
+    nixStatic = linux;  # no need for buildPlatform=*-darwin
   };
 
 in

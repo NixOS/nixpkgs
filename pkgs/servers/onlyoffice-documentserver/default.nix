@@ -144,7 +144,7 @@ let
       homepage = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       license = licenses.agpl3;
       platforms = [ "x86_64-linux" ];
-      sourceProvenance = sourceTypes.binaryNativeCode;
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
       maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
