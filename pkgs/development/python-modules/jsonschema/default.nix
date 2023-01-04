@@ -11,6 +11,17 @@
 , pythonOlder
 , twisted
 , typing-extensions
+
+# optionals
+, fqdn
+, idna
+, isoduration
+, jsonpointer
+, rfc3339-validator
+, rfc3986-validator
+, rfc3987
+, uri-template
+, webcolors
 }:
 
 buildPythonPackage rec {
@@ -44,6 +55,29 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
+
+  passthru.optional-dependencies = {
+    format = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3987
+      uri-template
+      webcolors
+    ];
+    format-nongpl = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3986-validator
+      uri-template
+      webcolors
+    ];
+  };
 
   checkInputs = [
     twisted
