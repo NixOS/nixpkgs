@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "socialscan";
-  version = "1.4.2";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "iojw";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "rT+/j6UqDOzuNBdN3I74YIxS6qkhd7BjHCGX+gGjprc=";
+    sha256 = "sha256-jiyTcpJ00DvfweChawj1ugdCVHHAdwDbHEp9jivH7gs=";
   };
 
   propagatedBuildInputs = [
