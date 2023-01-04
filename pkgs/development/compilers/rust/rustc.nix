@@ -52,7 +52,9 @@ in stdenv.mkDerivation rec {
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
-    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
+    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib"
+       # https://github.com/NixOS/nixpkgs/issues/201254
+    ++ optional (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc");
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
