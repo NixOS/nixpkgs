@@ -39,11 +39,6 @@ let
     inherit (str) merge;
   };
 
-  elixirValue = with types; recursive (t:
-    nullOr (oneOf [ bool int float str (attrsOf t) (listOf t) ])) // {
-      description = "Elixir value";
-    };
-
   frontend = {
     options = {
       package = mkOption {
@@ -633,7 +628,7 @@ in {
               };
 
               "Pleroma.Repo" = mkOption {
-                type = elixirValue;
+                type = format.valueType;
                 default = {
                   adapter = format.lib.mkRaw "Ecto.Adapters.Postgres";
                   socket_dir = "/run/postgresql";
@@ -761,7 +756,7 @@ in {
               };
 
               ":frontends" = mkOption {
-                type = elixirValue;
+                type = format.valueType;
                 default = mapAttrs
                   (key: val: format.lib.mkMap { name = val.name; ref = val.ref; })
                   cfg.frontends;
@@ -791,7 +786,7 @@ in {
                 ```
               '';
               type = types.submodule {
-                freeformType = elixirValue;
+                freeformType = format.valueType;
                 options = {
                   ":vapid_details" = {
                     subject = mkOption {
@@ -843,7 +838,7 @@ in {
 
             ":logger" = {
               ":backends" = mkOption {
-                type = types.listOf elixirValue;
+                type = types.listOf format.valueType;
                 visible = false;
                 default = with format.lib; [
                   (mkTuple [ (mkRaw "ExSyslogger") (mkAtom ":ex_syslogger") ])
@@ -875,7 +870,7 @@ in {
 
             ":tzdata" = {
               ":data_dir" = mkOption {
-                type = elixirValue;
+                type = format.valueType;
                 internal = true;
                 default = format.lib.mkRaw ''
                   Path.join(System.fetch_env!("CACHE_DIRECTORY"), "tzdata")

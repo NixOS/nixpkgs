@@ -310,23 +310,23 @@ rec {
 
           ${concatStringsSep "\n" rootConfigs}
         '';
+
+      valueType = with lib.types; recursive (t: nullOr
+        (oneOf [
+          bool
+          int
+          float
+          str
+          (attrsOf t)
+          (listOf t)
+        ])) // {
+          description = "Elixir value";
+          descriptionClass = "noun";
+        };
     in
     {
-      type = with lib.types; let
-        valueType = recursive (t: nullOr
-          (oneOf [
-            bool
-            int
-            float
-            str
-            (attrsOf t)
-            (listOf t)
-          ])) // {
-            description = "Elixir value";
-            descriptionClass = "noun";
-          };
-      in
-      attrsOf (attrsOf (valueType));
+      inherit valueType;
+      type = with lib.types; attrsOf (attrsOf (valueType));
 
       lib =
         let
