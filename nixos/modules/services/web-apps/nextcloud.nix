@@ -196,6 +196,14 @@ in {
         See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
       '';
     };
+    bulkUpload = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Enables bulk upload feature.
+        Don't enable because of desktop client bug (see [nextcloud issues](https://github.com/nextcloud/desktop/issues/5094).
+      '';
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -825,6 +833,7 @@ in {
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => '${cfg.logType}',
               'loglevel' => '${builtins.toString cfg.logLevel}',
+              'bulkupload.enabled' => ${boolToString cfg.bulkUpload},
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
