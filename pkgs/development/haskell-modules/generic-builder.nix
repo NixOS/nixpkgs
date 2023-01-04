@@ -324,7 +324,9 @@ stdenv.mkDerivation ({
   inherit src;
 
   inherit depsBuildBuild nativeBuildInputs;
-  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
+  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs
+    # For patchShebangsAuto in fixupPhase
+    ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ];
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
