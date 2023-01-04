@@ -838,6 +838,17 @@ rec {
           else if all (x: t2.check x) defList
                then t2.merge loc defs
           else mergeOneOption loc defs;
+      getSubOptions = prefix: t2.getSubOptions prefix // t1.getSubOptions prefix;
+      getSubModules =
+        if t1.getSubModules == null && t2.getSubModules == null then null
+        else if t1.getSubModules == null then t2.getSubModules
+        # FIXME If both t1 and t2 have submodules, we should return the concatenation of both lists;
+        # however this causes "option is already defined" errors seemingly due to `fixupOptionType`
+        # for types of the form `either someSubmodule (listOf someSubmodule)`.
+        else t1.getSubModules;
+      substSubModules = let
+        maybeSubstModules = t: m: let t' = t.substSubModules m; in if t' == null then t else t';
+      in m: either (maybeSubstModules t1 m) (maybeSubstModules t2 m);
       typeMerge = f':
         let mt1 = t1.typeMerge (elemAt f'.wrapped 0).functor;
             mt2 = t2.typeMerge (elemAt f'.wrapped 1).functor;
