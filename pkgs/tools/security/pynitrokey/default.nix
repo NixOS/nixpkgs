@@ -33,11 +33,14 @@ buildPythonApplication rec {
     tlv8
   ];
 
-  # spsdk is patched to allow for newer cryptography
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-        --replace "cryptography >=3.4.4,<37" "cryptography"
-  '';
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+    "spsdk"
+  ];
 
   # no tests
   doCheck = false;
