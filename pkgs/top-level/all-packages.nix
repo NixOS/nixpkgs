@@ -20029,10 +20029,6 @@ with pkgs;
 
   imtui = callPackage ../development/libraries/imtui { };
 
-  imlib = callPackage ../development/libraries/imlib {
-    libpng = libpng12;
-  };
-
   imv = callPackage ../applications/graphics/imv { };
 
   iml = callPackage ../development/libraries/iml { };
