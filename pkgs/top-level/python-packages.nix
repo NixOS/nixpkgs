@@ -4936,6 +4936,8 @@ self: super: with self; {
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
+  jupyter-events = callPackage ../development/python-modules/jupyter-events { };
+
   jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
 
   jupyter_server = callPackage ../development/python-modules/jupyter_server { };
