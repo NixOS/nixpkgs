@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_BUILD_SHARED=ON"
     "-DENABLE_BUILD_DYNAMIC=ON"
+    "-DENABLE_OPENMP=ON"
   ];
 
   nativeBuildInputs = [ cmake gfortran ];
