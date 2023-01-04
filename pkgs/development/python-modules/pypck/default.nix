@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-OuM/r9rxIl4niY87cEcbZ73x2ZIQbaPZqbMrQ7hZE/g=";
   };
 
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
+    changelog = "https://github.com/alengwenus/pypck/releases/tag/${version}";
     license = with licenses; [ epl20 ];
     maintainers = with maintainers; [ fab ];
   };
