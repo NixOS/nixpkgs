@@ -51,10 +51,13 @@ let
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
       (import ./grammars { inherit lib; }))));
+
+  buildGrammar = callPackage ./grammar.nix { };
+
   builtGrammars =
     let
-      change = name: grammar:
-        callPackage ./grammar.nix { } {
+      build = name: grammar:
+        buildGrammar {
           language = if grammar ? language then grammar.language else name;
           inherit version;
           source = if grammar ? src then grammar.src else fetchGrammar grammar;
@@ -70,7 +73,7 @@ let
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
         { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
     in
-    lib.mapAttrs change (grammars);
+    lib.mapAttrs build (grammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -142,7 +145,7 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars builtGrammars withPlugins allGrammars;
+    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
 
     tests = {
       # make sure all grammars build
