@@ -1,28 +1,20 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , rocmUpdateScript
 , addOpenGLRunpath
 , cmake
-, rocm-cmake
-, clang
-, glew
-, libglvnd
-, libX11
-, llvm
-, mesa
-, numactl
-, python3
-, rocclr
 , rocm-comgr
-, rocm-device-libs
 , rocm-runtime
-, rocm-thunk
+, rocclr
+, glew
+, libX11
+, numactl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-opencl-runtime";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -31,27 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E1+Y/fgp5b+7H1LN+O1fwVi0/XRCgvsiSxTY3u/q+8I=";
   };
 
-  nativeBuildInputs = [ cmake rocm-cmake ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    clang
-    glew
-    libglvnd
-    libX11
-    llvm
-    mesa
-    numactl
-    python3
     rocm-comgr
-    rocm-device-libs
     rocm-runtime
-    rocm-thunk
+    glew
+    libX11
+    numactl
   ];
 
   cmakeFlags = [
     "-DAMD_OPENCL_PATH=${finalAttrs.src}"
     "-DROCCLR_PATH=${rocclr}"
-    "-DCPACK_PACKAGING_INSTALL_PREFIX=/opt/rocm/opencl"
   ];
 
   dontStrip = true;
@@ -80,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken = finalAttrs.version != stdenv.cc.version;
   };
 })

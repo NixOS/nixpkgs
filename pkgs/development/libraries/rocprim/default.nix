@@ -4,9 +4,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , hip
 , gtest
 , gbenchmark
@@ -16,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"
@@ -39,11 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     hip
   ];
 
-  buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-  ] ++ lib.optionals buildTests [
+  buildInputs = lib.optionals buildTests [
     gtest
   ] ++ lib.optionals buildBenchmarks [
     gbenchmark

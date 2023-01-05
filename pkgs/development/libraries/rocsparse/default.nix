@@ -5,9 +5,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocprim
 , hip
 , gfortran
@@ -21,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"
@@ -46,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocprim
     git
   ] ++ lib.optionals (buildTests || buildBenchmarks) [

@@ -79,6 +79,10 @@ with self; with super; {
 
   typing = callPackage ../development/python2-modules/typing { };
 
+  six = super.six.overridePythonAttrs (_: {
+    doCheck = false;  # circular dependency with pytest
+  });
+
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.3.2";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    hash = "sha256-3Ryfq0MwrL/mKP8DmkhLOyFlulf3c73z9fFIzMuqOrg=";
+    hash = "sha256-SCzs2v0LIgx3vBYTavPqc7uwAQdWsdmkbDyHgIjOxrk=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;

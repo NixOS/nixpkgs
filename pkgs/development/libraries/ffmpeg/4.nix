@@ -1,15 +1,8 @@
-{ callPackage, fetchpatch, ... }@args:
+{ callPackage, ... }@args:
 
 callPackage ./generic.nix (rec {
-  version = "4.4.2";
+  version = "4.4.3";
   branch = version;
-  sha256 = "sha256-+YpIJSDEdQdSGpB5FNqp77wThOBZG1r8PaGKqJfeKUg=";
+  sha256 = "sha256-M7jC281TD+HbVxBBU0Vgm0yiJ70NoeOpMy27DxH9Jzo=";
 
-  patches = [
-    # SDL2 recently changed their versioning
-    (fetchpatch {
-      url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=e5163b1d34381a3319214a902ef1df923dd2eeba";
-      hash = "sha256-nLhP2+34cj5EgpnUrePZp60nYAxmbhZAEDfay4pBVk0=";
-    })
-  ];
 } // args)

@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9NS0/fLW2zEmEXhI9GfNN3C/CeI5xibFHwMoUebI90U=";
+    hash = "sha256-YxAkozyWNTKMCIEk3AhHZbRHtzhRrCSB3wh/Qy9CIyU=";
   };
 
   postPatch = ''

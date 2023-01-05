@@ -10,11 +10,15 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.8.1";
+  version = "1.8.2";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-r4h4RbjC4GDrVgX/crby3SqrenYTeTc/2J0xT0dSq78=";
+    hash = "sha256-SdQ0AsbjATrQl4YCv2v1MoU1xI0ZIwS5G5ejxnkLFWI=";
   };
 
   postPatch = ''
@@ -44,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "yarl" ];
 
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/yarl/blob/v${version}/CHANGES.rst";
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl";
     license = licenses.asl20;

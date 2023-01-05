@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cups/testfile.c \
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
+
+      # The cups.socket unit shouldn't be part of cups.service: stopping the
+      # service would stop the socket and break subsequent socket activations.
+      # See https://github.com/apple/cups/issues/6005
+      sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
   '';
 
   nativeBuildInputs = [ pkg-config removeReferencesTo ];

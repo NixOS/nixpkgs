@@ -1,37 +1,36 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, pathtools
-, pyyaml
-, flaky
-, pytest-timeout
-, pytestCheckHook
 , CoreServices
 , fetchpatch
+, fetchPypi
+, flaky
+, pathtools
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.9";
+  version = "2.2.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Q84g67NqUfIfo3b3bR1GkkUrJSfM1gGVDWntNrniFgk=";
+    hash = "sha256-g8+Lxg2cYTtmpMAYBRhz1ic9nkXQQO7QbWqWJBvY7AE=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     ./force-kqueue.patch
-  ] ++ [
-    (fetchpatch {
-      url = "https://github.com/gorakhargosh/watchdog/commit/255d1e45c17929dd5ba8a6f91aa28771109931cd.patch";
-      sha256 = "sha256-gGgEGuB/0g+4Pv1dXMvIdObjqKruWKkxtufS/dzSlY8=";
-      excludes = [ "changelog.rst" ];
-    })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   propagatedBuildInputs = [
     pathtools
@@ -70,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";
     homepage = "https://github.com/gorakhargosh/watchdog";
+    changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
   };

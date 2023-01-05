@@ -20,7 +20,6 @@
 , openapi-spec-validator
 , python-dateutil
 , python-jose
-, pytz
 , pyyaml
 , requests
 , responses
@@ -37,20 +36,15 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.0.3";
+  version = "4.0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iutWdX5oavPkpj+Qr7yXPLIxrarYfFzonmiTbBCbC+k=";
+    hash = "sha256-MPjzFljxjNsV62JsjLOgdSDw2MIZMib7yzMmrhL7okY=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "werkzeug>=0.5,<2.2.0" "werkzeug>=0.5"
-  '';
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -68,7 +62,6 @@ buildPythonPackage rec {
     openapi-spec-validator
     python-dateutil
     python-jose
-    pytz
     pyyaml
     requests
     responses
@@ -139,6 +132,8 @@ buildPythonPackage rec {
     "tests/test_awslambda/test_lambda_eventsourcemapping.py"
     "tests/test_awslambda/test_lambda_invoke.py"
     "tests/test_batch/test_batch_jobs.py"
+    "tests/test_kinesis/test_kinesis.py"
+    "tests/test_kinesis/test_kinesis_stream_consumers.py"
   ];
 
   disabledTests = [

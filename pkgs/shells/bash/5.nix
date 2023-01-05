@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPackages
 , fetchurl
 , binutils
@@ -14,25 +15,25 @@
 }:
 
 let
-  upstreamPatches = import ./bash-5.1-patches.nix (nr: sha256: fetchurl {
-    url = "mirror://gnu/bash/bash-5.1-patches/bash51-${nr}";
+  upstreamPatches = import ./bash-5.2-patches.nix (nr: sha256: fetchurl {
+    url = "mirror://gnu/bash/bash-5.2-patches/bash52-${nr}";
     inherit sha256;
   });
 in
 stdenv.mkDerivation rec {
   name = "bash-${lib.optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    sha256 = "1alv68wplnfdm6mh39hm57060xgssb9vqca4yr1cyva0c342n0fc";
+    sha256 = "sha256-oTnBZt9/9EccXgczBRZC7lVWwcyKSnjxRVg8XIGrMvs=";
   };
 
   hardeningDisable = [ "format" ]
-  # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
-  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
-  # or you can check libc/include/sys/cdefs.h in bionic source code
-  ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+    # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+    # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+    # or you can check libc/include/sys/cdefs.h in bionic source code
+    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   patches = upstreamPatches
-    ++ [ ./pgrp-pipe-5.1.patch ];
+    ++ [ ./pgrp-pipe-5.patch ];
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")

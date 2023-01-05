@@ -13,7 +13,6 @@ rec {
   };
 
   buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
-    git = buildPackages.gitMinimal;
     inherit stdenv cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook
       fetchCargoTarball importCargoLock rustc;
   };

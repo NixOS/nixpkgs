@@ -1,13 +1,12 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , rocmUpdateScript
-, fetchpatch
 , cmake
-, rocm-runtime
-, python3
 , rocm-cmake
+, rocm-runtime
 , busybox
+, python3
 , gnugrep
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
@@ -19,7 +18,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.4.0";
+  version = "5.4.1";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
@@ -29,25 +28,21 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-4wZTm5AZgG8xEd6uYqxWq4bWZgcSYZ2WYA1z4RAPF8U=";
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ rocm-cmake rocm-runtime ];
-
-  cmakeFlags = [
-    "-DROCM_DIR=${rocm-runtime}"
-    "-DROCRTST_BLD_TYPE=Release"
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
   ];
 
+  buildInputs = [ rocm-runtime ];
+  propagatedBuildInputs = [ python3 ];
+  cmakeFlags = [ "-DROCRTST_BLD_TYPE=Release" ];
+
   prePatch = ''
-    sed 's,#!/usr/bin/env python3,#!${python3}/bin/python,' -i rocm_agent_enumerator
+    patchShebangs rocm_agent_enumerator
     sed 's,lsmod | grep ,${busybox}/bin/lsmod | ${gnugrep}/bin/grep ,' -i rocminfo.cc
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp rocminfo $out/bin
-    cp rocm_agent_enumerator $out/bin
-  '' + lib.optionalString (defaultTargets != []) ''
+  postInstall = lib.optionalString (defaultTargets != [ ]) ''
     echo '${lib.concatStringsSep "\n" defaultTargets}' > $out/bin/target.lst
   '';
 
@@ -63,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 || finalAttrs.version != stdenv.cc.version;
   };
 })

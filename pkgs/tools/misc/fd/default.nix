@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-PT95U1l+BVX7sby3GKktZMmbNNQoPYR8nL+H90EnqZY=";
 
+  auditable = true; # TODO: remove when this is the default
+
   nativeBuildInputs = [ installShellFiles ];
 
   # skip flaky test

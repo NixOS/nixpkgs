@@ -18,17 +18,18 @@
 , typing-extensions
 , argcomplete
 , nix-update-script
+, pre-commit
 }:
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.37.0";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wo1I6QDWLxByHISmkPdass+BcKh0oxR5hD31UN/5+WQ=";
+    hash = "sha256-Fri5WdLfDCn3NOtCGneKnAN+eOkLAJgPYBR+WBmc/bo=";
     deepClone = true;
   };
 
@@ -52,6 +53,7 @@ buildPythonApplication rec {
   doCheck = true;
 
   checkInputs = [
+    pre-commit
     pytestCheckHook
     pytest-freezegun
     pytest-mock

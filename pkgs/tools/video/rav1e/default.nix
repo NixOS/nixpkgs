@@ -22,6 +22,8 @@ in rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-iHOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkgCdgw=";
 
+  auditable = true; # TODO: remove when this is the default
+
   nativeBuildInputs = [ nasm cargo-c ];
 
   buildInputs = lib.optionals stdenv.isDarwin [

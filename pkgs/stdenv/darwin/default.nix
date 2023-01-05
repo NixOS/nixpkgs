@@ -262,11 +262,12 @@ rec {
           ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
         '';
 
-        binutils-unwrapped = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
+        binutils-unwrapped = bootstrapTools // {
+          name = "bootstrap-stage0-binutils";
+        };
 
-        cctools = {
+        cctools = bootstrapTools // {
           name = "bootstrap-stage0-cctools";
-          outPath = bootstrapTools;
           targetPrefix = "";
         };
 

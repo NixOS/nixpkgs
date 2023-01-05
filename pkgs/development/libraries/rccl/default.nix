@@ -4,9 +4,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocm-smi
 , hip
 , gtest
@@ -16,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"
@@ -28,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rccl";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-NbHzRmrUe4kJwkHZtZ+zHjIy2uk+dpN9caE0L5hUnbc=";
+    hash = "sha256-y9gTGk8LyX7owb2xdtb6VlnIXu/CYHOjnNa/wrNl02g=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocm-smi
     gtest
   ] ++ lib.optionals buildTests [

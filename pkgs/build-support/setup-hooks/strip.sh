@@ -12,11 +12,20 @@ _doStrip() {
     local -ra stripCmds=(STRIP STRIP_FOR_TARGET)
     local -ra ranlibCmds=(RANLIB RANLIB_FOR_TARGET)
 
+    # TODO(structured-attrs): This doesn't work correctly if one of
+    #   the items in strip*List or strip*Flags contains a space,
+    #   even with structured attrs enabled.  This is OK for now
+    #   because very few packages set any of these, and it doesn't
+    #   affect any of them.
+    #
+    #   After __structuredAttrs = true is universal, come back and
+    #   push arrays all the way through this logic.
+
     # Strip only host paths by default. Leave targets as is.
-    stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
-    stripDebugListTarget=${stripDebugListTarget:-}
-    stripAllList=${stripAllList:-}
-    stripAllListTarget=${stripAllListTarget:-}
+    stripDebugList=${stripDebugList[*]:-lib lib32 lib64 libexec bin sbin}
+    stripDebugListTarget=${stripDebugListTarget[*]:-}
+    stripAllList=${stripAllList[*]:-}
+    stripAllListTarget=${stripAllListTarget[*]:-}
 
     local i
     for i in ${!stripCmds[@]}; do
@@ -30,8 +39,8 @@ _doStrip() {
         if [[ "${dontStrip-}" || "${flag-}" ]] || ! type -f "${stripCmd-}" 2>/dev/null
         then continue; fi
 
-        stripDirs "$stripCmd" "$ranlibCmd" "$debugDirList" "${stripDebugFlags:--S}"
-        stripDirs "$stripCmd" "$ranlibCmd" "$allDirList" "${stripAllFlags:--s}"
+        stripDirs "$stripCmd" "$ranlibCmd" "$debugDirList" "${stripDebugFlags[*]:--S}"
+        stripDirs "$stripCmd" "$ranlibCmd" "$allDirList" "${stripAllFlags[*]:--s}"
     done
 }
 

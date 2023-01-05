@@ -35,7 +35,7 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 # -----------------------------------------
 # Write the build log to the default output
 
-outs=( $outputs )
+outs=( $(getAllOutputNames) )
 defOut=${outs[0]}
 defOutPath=${!defOut}
 

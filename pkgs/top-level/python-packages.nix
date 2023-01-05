@@ -5634,6 +5634,7 @@ self: super: with self; {
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+    ghostscript = pkgs.ghostscript_headless;
   };
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
@@ -10614,7 +10615,9 @@ self: super: with self; {
 
   spinners = callPackage ../development/python-modules/spinners { };
 
-  sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi { };
+  sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi {
+    graphviz = pkgs.graphviz;
+  };
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
@@ -10719,6 +10722,8 @@ self: super: with self; {
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
+
+  sphinx-markdown-tables = callPackage ../development/python-modules/sphinx-markdown-tables { };
 
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
@@ -11440,6 +11445,8 @@ self: super: with self; {
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
   troposphere = callPackage ../development/python-modules/troposphere { };
+
+  trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 

@@ -4,9 +4,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocprim
 , hip
 , gtest
@@ -16,16 +13,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "5.4.0";
+  version = "5.4.1";
 
-  # Comment out these outputs until tests/benchmarks are fixed (upstream?)
-  # outputs = [
-  #   "out"
-  # ] ++ lib.optionals buildTests [
-  #   "test"
-  # ] ++ lib.optionals buildBenchmarks [
-  #   "benchmark"
-  # ];
+  outputs = [
+    "out"
+  ] ++ lib.optionals buildTests [
+    "test"
+  ] ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
@@ -41,11 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hip
   ];
 
-  buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-  ] ++ lib.optionals buildTests [
+  buildInputs = lib.optionals buildTests [
     gtest
   ];
 
@@ -61,18 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_TEST=ON"
   ] ++ lib.optionals buildBenchmarks [
     "-DBUILD_BENCHMARKS=ON"
+  ] ++ lib.optionals (buildTests || buildBenchmarks) [
+    "-DCMAKE_CXX_FLAGS=-Wno-deprecated-builtins" # Too much spam
   ];
 
-  # Comment out these outputs until tests/benchmarks are fixed (upstream?)
-  # postInstall = lib.optionalString buildTests ''
-  #   mkdir -p $test/bin
-  #   mv $out/bin/test_* $test/bin
-  # '' + lib.optionalString buildBenchmarks ''
-  #   mkdir -p $benchmark/bin
-  #   mv $out/bin/benchmark_* $benchmark/bin
-  # '' + lib.optionalString (buildTests || buildBenchmarks) ''
-  #   rmdir $out/bin
-  # '';
+  postInstall = lib.optionalString buildTests ''
+    mkdir -p $test/bin
+    mv $out/bin/{test_*,*.hip} $test/bin
+  '' + lib.optionalString buildBenchmarks ''
+    mkdir -p $benchmark/bin
+    mv $out/bin/benchmark_* $benchmark/bin
+  '' + lib.optionalString (buildTests || buildBenchmarks) ''
+    rm -rf $out/bin
+  '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -85,8 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    # Tests/Benchmarks don't seem to work, thousands of errors compiling with no clear fix
-    # Is this an upstream issue? We don't seem to be missing dependencies
-    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
+    broken = finalAttrs.version != hip.version;
   };
 })
