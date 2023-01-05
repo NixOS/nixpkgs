@@ -9,7 +9,7 @@
     <para>
       A minimal configuration for Mosquitto is
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.mosquitto = {
   enable = true;
   listeners = [ {
@@ -31,7 +31,7 @@ services.mosquitto = {
       restricted write access to a user <literal>service</literal> could
       look like
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.mosquitto = {
   enable = true;
   listeners = [ {
@@ -52,7 +52,7 @@ services.mosquitto = {
       TLS authentication is configured by setting TLS-related options of
       the listener:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.mosquitto = {
   enable = true;
   listeners = [ {
