@@ -212,7 +212,7 @@ in
 
     services.certmgr = {
       enable = true;
-      package = pkgs.certmgr-selfsigned;
+      package = pkgs.certmgr;
       svcManager = "command";
       specs =
         let
