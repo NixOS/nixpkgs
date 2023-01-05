@@ -7065,6 +7065,8 @@ with pkgs;
 
   ferm = callPackage ../tools/networking/ferm { };
 
+  fennel = callPackage ../development/tools/fennel-language-server { };
+
   feroxbuster = callPackage ../tools/security/feroxbuster {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
