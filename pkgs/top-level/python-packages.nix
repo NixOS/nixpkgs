@@ -1917,6 +1917,8 @@ self: super: with self; {
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
 
+  comm = callPackage ../development/python-modules/comm { };
+
   commandparse = callPackage ../development/python-modules/commandparse { };
 
   commentjson = callPackage ../development/python-modules/commentjson { };
@@ -1974,6 +1976,8 @@ self: super: with self; {
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
+
+  contourpy = callPackage ../development/python-modules/contourpy { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
 
@@ -2089,6 +2093,8 @@ self: super: with self; {
   cssutils = callPackage ../development/python-modules/cssutils { };
 
   csvw = callPackage ../development/python-modules/csvw { };
+
+  cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
@@ -4181,9 +4187,13 @@ self: super: with self; {
 
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
+  hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
+
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
+
+  hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
 
   haversine = callPackage ../development/python-modules/haversine { };
 
@@ -4924,11 +4934,16 @@ self: super: with self; {
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
-  jupyter_core = callPackage ../development/python-modules/jupyter_core { };
+  jupyter-core = callPackage ../development/python-modules/jupyter-core { };
+
+  jupyter-events = callPackage ../development/python-modules/jupyter-events { };
 
   jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
 
-  jupyter_server = callPackage ../development/python-modules/jupyter_server { };
+  jupyter-server = callPackage ../development/python-modules/jupyter-server { };
+
+  jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
+
 
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
@@ -5960,6 +5975,8 @@ self: super: with self; {
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
+  mrjob = callPackage ../development/python-modules/mrjob { };
+
   mrkd = callPackage ../development/python-modules/mrkd { };
 
   ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
@@ -6081,6 +6098,8 @@ self: super: with self; {
   name-that-hash = callPackage ../development/python-modules/name-that-hash { };
 
   nampa = callPackage ../development/python-modules/nampa { };
+
+  nanoid = callPackage ../development/python-modules/nanoid { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
@@ -6952,6 +6971,10 @@ self: super: with self; {
   pypemicro = callPackage ../development/python-modules/pypemicro { };
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
+
+  pyproject-api = callPackage ../development/python-modules/pyproject-api { };
+
+  pyproject-hooks = callPackage ../development/python-modules/pyproject-hooks { };
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
@@ -8447,6 +8470,8 @@ self: super: with self; {
 
   pypykatz = callPackage ../development/python-modules/pypykatz { };
 
+  pytoolconfig = callPackage ../development/python-modules/pytoolconfig { };
+
   pypytools = callPackage ../development/python-modules/pypytools { };
 
   pyqldb = callPackage ../development/python-modules/pyqldb { };
@@ -8913,6 +8938,8 @@ self: super: with self; {
 
   pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
 
+  pytest-jupyter = callPackage ../development/python-modules/pytest-jupyter { };
+
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
@@ -9153,8 +9180,6 @@ self: super: with self; {
   };
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
-
-  python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
@@ -9858,6 +9883,8 @@ self: super: with self; {
 
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
+  rfc3986-validator = callPackage ../development/python-modules/rfc3986-validator { };
+
   rfc3987 = callPackage ../development/python-modules/rfc3987 { };
 
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
@@ -10274,6 +10301,8 @@ self: super: with self; {
   setupmeta = callPackage ../development/python-modules/setupmeta { };
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
+
+  setuptools-gettext = callPackage ../development/python-modules/setuptools-gettext { };
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
@@ -10996,6 +11025,8 @@ self: super: with self; {
   };
 
   sysv_ipc = callPackage ../development/python-modules/sysv_ipc { };
+
+  syrupy = callPackage ../development/python-modules/syrupy { };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
@@ -12260,6 +12291,8 @@ self: super: with self; {
   };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
 

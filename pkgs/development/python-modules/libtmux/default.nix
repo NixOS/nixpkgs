@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , poetry-core
+, pytest-rerunfailures
 , pytestCheckHook
 , procps
 , tmux
@@ -10,15 +11,19 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.13.0";
+  version = "0.18.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-u08lxVMuyO5CwFbmxn69QqdSWcvGaSMZgizRJlsHa0k=";
+    hash = "sha256-OhNyJcnxjbyP/Kpt70qLv3ZtZvXXVTWEMcjv/pa50/4=";
   };
+
+  postPatch = ''
+    sed -i '/addopts/d' setup.cfg
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -27,11 +32,15 @@ buildPythonPackage rec {
   checkInputs = [
     procps
     tmux
-
+    pytest-rerunfailures
     pytestCheckHook
   ];
 
-  pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_test.py" ];
+  pytestFlagsArray = [
+    "tests"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--ignore=tests/test_test.py"
+  ];
 
   pythonImportsCheck = [ "libtmux" ];
 

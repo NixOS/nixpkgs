@@ -7,6 +7,7 @@
 , lib
 , packaging
 , poetry-core
+, py
 , pytest-freezegun
 , pytest-mock
 , pytest-regressions
@@ -29,13 +30,18 @@ buildPythonApplication rec {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Fri5WdLfDCn3NOtCGneKnAN+eOkLAJgPYBR+WBmc/bo=";
+    hash = "sha256-W+k+hqH0TKQAXf1Em6A1/VdqzJkhYp99I3lbqH6iDDc=";
     deepClone = true;
   };
 
   format = "pyproject";
 
   nativeBuildInputs = [ poetry-core ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"'
+  '';
 
   propagatedBuildInputs = [
     termcolor
@@ -54,6 +60,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pre-commit
+    py
     pytestCheckHook
     pytest-freezegun
     pytest-mock
@@ -81,6 +88,8 @@ buildPythonApplication rec {
     "test_bump_pre_commit_changelog"
     "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
+    # fatal: not a git repository (or any of the parent directories): .git
+    "test_commitizen_debug_excepthook"
   ];
 
   passthru.updateScript = nix-update-script { };

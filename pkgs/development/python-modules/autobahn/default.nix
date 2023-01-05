@@ -83,8 +83,6 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-    # FIXME: remove the following dependencies when web3 gets added
-    eth-account
   ] ++ passthru.optional-dependencies.scram
   ++ passthru.optional-dependencies.serialization
   ++ passthru.optional-dependencies.xbr;

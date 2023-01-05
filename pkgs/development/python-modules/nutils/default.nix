@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "7.0";
+  version = "7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "evalf";
     repo = "nutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V7lSMhwzc9+36uXMCy5uF241XwJ62Pdf59RUulOt4i8=";
+    hash = "sha256-KCvUBE3qbX6v1HahBj4/jjM8ujvFGtWNuH1D+bTHrQ0=";
   };
 
   propagatedBuildInputs = [

@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python_http_client";
+  pname = "python-http-client";
   version = "3.3.7";
   format = "setuptools";
 
@@ -23,6 +23,11 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # checks date in license file and subsequently fails after new years
+    "test_daterange"
   ];
 
   pythonImportsCheck = [

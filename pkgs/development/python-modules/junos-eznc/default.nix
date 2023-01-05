@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.6.5";
+  version = "2.6.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
-    rev = version;
-    hash = "sha256-BoHT6ejccInfREbYtW6psm3fvsQxLS1vpj/aPDqqpnY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0JF9/lSIquXp25bM3GESqLC//aorSVT0hHccaOmQuM8=";
   };
 
   propagatedBuildInputs = [

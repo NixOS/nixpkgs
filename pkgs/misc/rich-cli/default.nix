@@ -29,7 +29,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'rich = "^12.4.0"' 'rich = "*"'
+      --replace 'rich = "^12.4.0"' 'rich = "*"' \
+      --replace 'textual = "^0.1.18"' 'textual = "*"'
   '';
 
   pythonImportsCheck = [

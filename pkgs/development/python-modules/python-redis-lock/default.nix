@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
-  version = "3.7.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4265a476e39d476a8acf5c2766485c44c75f3a1bd6cf73bb195f3079153b8374";
+    sha256 = "sha256-Sr0Lz0kTasrWZye/VIbdJJQHjKVeSe+mk/eUB3MZCRo=";
   };
 
   propagatedBuildInputs = [

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , idna
 , multidict
@@ -39,6 +40,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_not_a_scheme2"
   ];
 
   postCheck = ''

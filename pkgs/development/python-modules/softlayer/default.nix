@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.1.0";
+  version = "6.1.3";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "softlayer-python";
-    rev = "v${version}";
-    sha256 = "sha256-T49KVAsgcAZySkaJi47IrFcMHGZvEkGDjPWsdMarzwM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-msNW0PeDbs5iq77FBPKKWH0js/PAQz6xfbM0ycMVg5U=";
   };
 
   postPatch = ''

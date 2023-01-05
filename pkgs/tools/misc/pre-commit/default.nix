@@ -50,6 +50,7 @@ buildPythonPackage rec {
     go
     nodejs
     pytest-env
+    pytest-forked
     pytest-xdist
     pytestCheckHook
     re-assert

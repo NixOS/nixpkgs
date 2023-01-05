@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Avsqaev3LMoymU06y+u8MMv38ZI2cWk5tc/MkO+9oyA=";
+    sha256 = "sha256-mflUF2ZKYhCiQEoG+fKI+K266dukuSzG9cyg6gwBcTo=";
   };
 
   propagatedBuildInputs = [
