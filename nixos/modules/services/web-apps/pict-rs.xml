@@ -8,7 +8,7 @@
     <para>
       the minimum to start pict-rs is
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.pict-rs.enable = true;
 </programlisting>
     <para>
@@ -18,34 +18,21 @@ services.pict-rs.enable = true;
   <section xml:id="module-services-pict-rs-usage">
     <title>Usage</title>
     <para>
-      pict-rs offers the following endpoints: -
-      <literal>POST /image</literal> for uploading an image. Uploaded
-      content must be valid multipart/form-data with an image array
-      located within the <literal>images[]</literal> key
+      pict-rs offers the following endpoints:
     </para>
-    <programlisting>
-This endpoint returns the following JSON structure on success with a 201 Created status
-```json
-{
-    &quot;files&quot;: [
-        {
-            &quot;delete_token&quot;: &quot;JFvFhqJA98&quot;,
-            &quot;file&quot;: &quot;lkWZDRvugm.jpg&quot;
-        },
-        {
-            &quot;delete_token&quot;: &quot;kAYy9nk2WK&quot;,
-            &quot;file&quot;: &quot;8qFS0QooAn.jpg&quot;
-        },
-        {
-            &quot;delete_token&quot;: &quot;OxRpM3sf0Y&quot;,
-            &quot;file&quot;: &quot;1hJaYfGE01.jpg&quot;
-        }
-    ],
-    &quot;msg&quot;: &quot;ok&quot;
-}
-```
-</programlisting>
     <itemizedlist>
+      <listitem>
+        <para>
+          <literal>POST /image</literal> for uploading an image.
+          Uploaded content must be valid multipart/form-data with an
+          image array located within the <literal>images[]</literal> key
+        </para>
+        <para>
+          This endpoint returns the following JSON structure on success
+          with a 201 Created status
+          <literal>json   {       &quot;files&quot;: [           {               &quot;delete_token&quot;: &quot;JFvFhqJA98&quot;,               &quot;file&quot;: &quot;lkWZDRvugm.jpg&quot;           },           {               &quot;delete_token&quot;: &quot;kAYy9nk2WK&quot;,               &quot;file&quot;: &quot;8qFS0QooAn.jpg&quot;           },           {               &quot;delete_token&quot;: &quot;OxRpM3sf0Y&quot;,               &quot;file&quot;: &quot;1hJaYfGE01.jpg&quot;           }       ],       &quot;msg&quot;: &quot;ok&quot;   }</literal>
+        </para>
+      </listitem>
       <listitem>
         <para>
           <literal>GET /image/download?url=...</literal> Download an

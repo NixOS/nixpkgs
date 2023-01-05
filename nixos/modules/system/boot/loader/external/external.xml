@@ -29,7 +29,7 @@
   };
 }
 </programlisting>
-  <section xml:id="developing-custom-bootloader-backends">
+  <section xml:id="sec-bootloader-external-developing">
     <title>Developing Custom Bootloader Backends</title>
     <para>
       Bootloaders should use

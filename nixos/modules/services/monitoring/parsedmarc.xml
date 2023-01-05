@@ -15,7 +15,7 @@
       email address and saves them to a local Elasticsearch instance
       looks like this:
     </para>
-    <programlisting>
+    <programlisting language="nix">
 services.parsedmarc = {
   enable = true;
   settings.imap = {
@@ -44,7 +44,7 @@ services.parsedmarc = {
       email address that should be configured in the domain’s dmarc
       policy is <literal>dmarc@monitoring.example.com</literal>.
     </para>
-    <programlisting>
+    <programlisting language="nix">
 services.parsedmarc = {
   enable = true;
   provision = {
@@ -67,7 +67,7 @@ services.parsedmarc = {
       Elasticsearch instance is automatically added as a Grafana
       datasource, and the dashboard is added to Grafana as well.
     </para>
-    <programlisting>
+    <programlisting language="nix">
 services.parsedmarc = {
   enable = true;
   provision = {
