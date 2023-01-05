@@ -1,6 +1,7 @@
-{ lib, buildPythonApplication, fetchPypi, fetchFromGitHub, python3Packages, qt5 }:
+{ lib, fetchPypi, fetchFromGitHub, python3, qt5, rustPlatform }:
+
 let
-  pypdf2 = python3Packages.pypdf2.overrideAttrs (oldAttrs: rec {
+  pypdf2 = python3.pkgs.pypdf2.overrideAttrs (oldAttrs: rec {
     pname = "PyPDF2";
     version = "1.28.4";
     src = fetchPypi {
@@ -11,10 +12,49 @@ let
     unittestCheckPhase = "true";
     doCheck = false;
   });
+  librdp = rustPlatform.buildRustPackage rec {
+    pname = "rdp";
+    version = "v0.9.3";
+
+    src = fetchFromGitHub {
+      owner = "urschrei";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-0gNjQeGscMW93VP312yO55qxtjubh/OFSvE3rDhkKf0=";
+    };
+    cargoSha256 = "sha256-7L8LqFvxfuwvi3Pj4Vq9WVSLTmvoIHosnHYEMUq6VdE=";
+    cargoPatches = [
+      ./add-Cargo.lock.patch
+    ];
+
+    meta = with lib; {
+      description = "A library providing FFI access to fast Ramer–Douglas–Peucker and Visvalingam-Whyatt line simplification algorithms";
+      homepage = "https://github.com/urschrei/rdp";
+      license = licenses.mit;
+      maintainers = [ maintainers.phaer ];
+    };
+  };
+  simplification = python3.pkgs.buildPythonPackage rec {
+    pname = "simplification";
+    version = "v0.6.2";
+    src = fetchFromGitHub {
+      owner = "urschrei";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-e6FyXdBCiwGZZcQeKX9DKzMnwOHNoiEXJlSmsYUSZnE=";
+    };
+    buildInputs = [librdp];
+    doCheck = false;
+    propagatedBuildInputs = with python3.pkgs; [
+      numpy
+      setuptools-scm
+      cython
+    ];
+  };
 in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "remy";
-  version = "0.5";
+  version = "df2c1ae";
 
   src = fetchFromGitHub {
     owner = "bordaigorl";
@@ -25,7 +65,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
+    simplification
     requests
     sip
     arrow
@@ -39,7 +80,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "remy" ];
 
   preBuild = ''
-      ${python3Packages.pyqt5}/bin/pyrcc5 -o remy/gui/resources.py resources.qrc
+      ${python3.pkgs.pyqt5}/bin/pyrcc5 -o remy/gui/resources.py resources.qrc
   '';
 
   postFixup = ''
