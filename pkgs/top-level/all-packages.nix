@@ -31486,6 +31486,8 @@ with pkgs;
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
+  keepass-keeotp2 = callPackage ../applications/misc/keepass-plugins/keeotp2 { };
+
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
 
   keepass-keepassrpc = callPackage ../applications/misc/keepass-plugins/keepassrpc { };
