@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-lJYbbF6b1CazD/aVTNoZvyfH/XQf5jWBsddDdrP+FKA=";
   };
 
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for bluemaestro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bluemaestro-ble";
+    changelog = "https://github.com/Bluetooth-Devices/bluemaestro-ble/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
