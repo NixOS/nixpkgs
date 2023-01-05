@@ -239,6 +239,7 @@ dont-distribute-packages:
  - JsContracts
  - JsonGrammar
  - JuPyTer-notebook
+ - JuicyPixels-scale-dct
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
  - KiCS
@@ -694,6 +695,7 @@ dont-distribute-packages:
  - audiovisual
  - aura
  - authoring
+ - autodocodec-openapi3
  - automata
  - autonix-deps-kf5
  - avers
@@ -1357,15 +1359,11 @@ dont-distribute-packages:
  - essence-of-live-coding-PortMidi
  - essence-of-live-coding-gloss
  - essence-of-live-coding-gloss-example
- - essence-of-live-coding-gloss_0_2_7
  - essence-of-live-coding-pulse
  - essence-of-live-coding-pulse-example
- - essence-of-live-coding-pulse_0_2_7
  - essence-of-live-coding-quickcheck
- - essence-of-live-coding-quickcheck_0_2_7
  - essence-of-live-coding-vivid
  - essence-of-live-coding-warp
- - essence-of-live-coding-warp_0_2_7
  - estimators
  - estreps
  - eternity
@@ -1404,7 +1402,6 @@ dont-distribute-packages:
  - exinst-serialise
  - exist
  - exist-instances
- - exon
  - expand
  - expat-enumerator
  - expiring-containers
@@ -2427,6 +2424,8 @@ dont-distribute-packages:
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
  - join
+ - jordan-openapi
+ - jordan-servant-openapi
  - jot
  - jsaddle-hello
  - jsc
@@ -2875,6 +2874,7 @@ dont-distribute-packages:
  - nakadi-client
  - named-servant-client
  - named-servant-server
+ - named-text
  - nats-queue
  - natural-number
  - nemesis-titan
@@ -3349,6 +3349,7 @@ dont-distribute-packages:
  - remotion
  - repa-array
  - repa-convert
+ - repa-fftw
  - repa-flow
  - repa-plugin
  - repa-stream
@@ -3394,6 +3395,7 @@ dont-distribute-packages:
  - ribosome-root
  - ribosome-test
  - ridley-extras
+ - rio-process-pool
  - riot
  - ripple
  - ripple-federation
@@ -3535,6 +3537,7 @@ dont-distribute-packages:
  - servant-matrix-param
  - servant-oauth2
  - servant-oauth2-examples
+ - servant-openapi3
  - servant-postgresql
  - servant-pushbullet-client
  - servant-rate-limit
@@ -3547,6 +3550,8 @@ dont-distribute-packages:
  - servant-streamly
  - servant-swagger-tags
  - servant-to-elm
+ - servant-util
+ - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -3721,6 +3726,7 @@ dont-distribute-packages:
  - statsd-client
  - statsdi
  - stern-brocot
+ - stm-actor
  - stm-supply
  - stmcontrol
  - storablevector-carray
@@ -4133,6 +4139,7 @@ dont-distribute-packages:
  - webcloud
  - webcrank-wai
  - webdriver-w3c
+ - webgear-openapi
  - webify
  - webserver
  - websockets-rpc

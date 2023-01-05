@@ -1485,6 +1485,7 @@ broken-packages:
   - Feval
   - fez-conf
   - ffeed
+  - fft
   - ffunctor
   - fgl-extras-decompositions
   - fib
@@ -2217,7 +2218,6 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
-  - hevm
   - HExcel
   - hexchat
   - hexif
@@ -2323,6 +2323,7 @@ broken-packages:
   - HLogger
   - hlongurl
   - hls-brittany-plugin
+  - hls-call-hierarchy-plugin
   - hls-haddock-comments-plugin
   - hls-selection-range-plugin
   - hls-stan-plugin
@@ -3667,6 +3668,7 @@ broken-packages:
   - OddWord
   - oden-go-packages
   - oeis2
+  - OGDF
   - OGL
   - ogma-language-c
   - ogma-language-cocospec
@@ -3702,6 +3704,7 @@ broken-packages:
   - open-adt
   - OpenAFP
   - openai-hs
+  - openapi3
   - openapi3-code-generator
   - openapi-petstore
   - openapi-typed
@@ -4269,6 +4272,7 @@ broken-packages:
   - QuickAnnotate
   - quickbooks
   - quickcheck-arbitrary-template
+  - quickcheck-monoid-subclasses
   - quickcheck-property-comb
   - quickcheck-property-monad
   - quickcheck-rematch
@@ -4895,6 +4899,7 @@ broken-packages:
   - SNet
   - snipcheck
   - snorkels
+  - snowchecked
   - snowtify
   - socket-activation
   - socketed
@@ -5009,6 +5014,7 @@ broken-packages:
   - stm-firehose
   - stm-incremental
   - stm-promise
+  - stm-queue
   - stm-stats
   - stochastic
   - Stomp
@@ -5426,7 +5432,6 @@ broken-packages:
   - trivia
   - tropical
   - tropical-geometry
-  - true-name
   - tsession
   - tslib
   - tsparse
@@ -5547,6 +5552,7 @@ broken-packages:
   - unix-recursive
   - unlift
   - unlifted-list
+  - unliftio-messagebox
   - unlift-stm
   - unm-hip
   - unordered-containers-rematch

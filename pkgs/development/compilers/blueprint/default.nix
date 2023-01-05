@@ -1,14 +1,13 @@
-{ gtk4
-, python3
-, stdenv
-, fetchFromGitLab
+{ fetchFromGitLab
 , gobject-introspection
+, gtk4
 , lib
 , meson
 , ninja
+, python3
+, stdenv
 , testers
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
   version = "0.6.0";
@@ -21,31 +20,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-L6EGterkZ8EB6xSnJDZ3IMuOumpTpEGnU74X3UgC7k0=";
   };
 
-  doCheck = true;
-
   nativeBuildInputs = [
     meson
     ninja
   ];
 
   buildInputs = [
-    python3
-    gtk4
-  ] ++ (with python3.pkgs; [
-    pygobject3
-    wrapPython
-  ]);
+    (python3.withPackages (ps: with ps; [
+      pygobject3
+    ]))
+  ];
 
   propagatedBuildInputs = [
+    # For setup hook, so that the compiler can find typelib files
     gobject-introspection
   ];
 
-  postFixup = ''
-    makeWrapperArgs="\
-      --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
-      --prefix PYTHONPATH : \"$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3})\""
-    wrapPythonPrograms
-  '';
+  doCheck = true;
+
+  checkInputs = [
+    gtk4
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
