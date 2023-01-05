@@ -23224,8 +23224,6 @@ with pkgs;
     gtkVersion = "4";
   };
 
-  vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
-
   vtk_8 = libsForQt5.callPackage ../development/libraries/vtk/8.x.nix {
     stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
