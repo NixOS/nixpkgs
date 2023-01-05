@@ -9569,6 +9569,8 @@ with pkgs;
 
   minijail-tools = python3.pkgs.callPackage ../tools/system/minijail/tools.nix { };
 
+  minilibx = callPackage ../development/libraries/minilibx { };
+
   minixml = callPackage ../development/libraries/minixml { };
 
   mir-qualia = callPackage ../tools/text/mir-qualia {
@@ -12823,6 +12825,8 @@ with pkgs;
   };
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
+
+  twilio-cli = callPackage ../development/tools/twilio-cli { };
 
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
     inherit (darwin.apple_sdk.frameworks) OpenCL;

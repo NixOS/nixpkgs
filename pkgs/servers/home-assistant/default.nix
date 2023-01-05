@@ -85,17 +85,6 @@ let
         };
       });
 
-      hap-python = super.hap-python.overridePythonAttrs (oldAtrs: rec {
-        pname = "ha-hap-python";
-        version = "4.5.2";
-        src = fetchFromGitHub {
-          owner = "bdraco";
-          repo = "ha-HAP-python";
-          rev = "refs/tags/v4.5.2";
-          hash = "sha256-xCmx5QopNShKIuXewT+T86Bxyi4P0ddh8r2UlJ48Wig=";
-        };
-      });
-
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -216,7 +205,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.12.9";
+  hassVersion = "2023.1.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -234,7 +223,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-tf2H4+79CGTmbKZtJpzYOzAgi90RpSy89hoDNS24m0Q=";
+    hash = "sha256-uYQnymJQ893F5fX/yi8S3OZL4LkT5z7QNOzkoedXllM=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -311,11 +300,13 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
+    pytest-asyncio
     pytest-aiohttp
     pytest-freezegun
     pytest-mock
     pytest-rerunfailures
     pytest-socket
+    pytest-unordered
     pytest-xdist
     pytestCheckHook
     requests-mock

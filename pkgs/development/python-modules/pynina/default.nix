@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyNINA";
     inherit version;
-    sha256 = "sha256-2Ujq2+6xQXPjKzK3HQbJnjz8cX3ALUV+22gdQflFxFY=";
+    hash = "sha256-2Ujq2+6xQXPjKzK3HQbJnjz8cX3ALUV+22gdQflFxFY=";
   };
 
   propagatedBuildInputs = [
