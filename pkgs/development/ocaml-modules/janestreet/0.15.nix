@@ -131,6 +131,7 @@ with self;
   };
 
   async_smtp = janePackage {
+    duneVersion = "3";
     pname = "async_smtp";
     hash = "1m00j7wcb0blipnc1m6by70gd96a1k621b4dgvgffp8as04a461r";
     minimumOCamlVersion = "4.12";
