@@ -1,12 +1,24 @@
-{ alsa-lib, autoPatchelfHook, fetchurl, gtk3, libnotify
-, makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg-utils
-, xorg, qtbase, wrapQtAppsHook, mesa
+{ alsa-lib
+, autoPatchelfHook
+, fetchurl
+, gtk3
+, gtk4
+, libnotify
+, makeDesktopItem
+, makeWrapper
+, mesa
+, nss
+, lib
+, libdrm
+, qt5
+, stdenv
+, udev
+, xdg-utils
+, xorg
 }:
 
 let
-  bits = "x86_64";
-
-  version = "10.107.10";
+  version = "10.108.19-2";
 
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
@@ -14,55 +26,64 @@ let
     icon = "wavebox";
     desktopName = name;
     genericName = name;
-    categories = [ "Network" ];
+    categories = [ "Network" "WebBrowser" ];
   };
 
-  tarball = "Wavebox_${version}-2.tar.gz";
+  tarball = "Wavebox_${version}.tar.gz";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "wavebox";
   inherit version;
   src = fetchurl {
     url = "https://download.wavebox.app/stable/linux/tar/${tarball}";
-    sha256 = "17q72bmq461bh75dwawwfpc7pd73pahx6gm6rd89kb5xgad01dvi";
+    sha256 = "sha256-VI2/qhD5EK3e00lexcsGXt72Vm6ncVNqMkUmGbDATWc=";
   };
 
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper qt5.wrapQtAppsHook ];
 
   buildInputs = with xorg; [
-    libXdmcp libXScrnSaver libXtst libXdamage libXrandr
+    libXdmcp
+    libXScrnSaver
+    libXtst
+    libxshmfence
+    libXdamage
   ] ++ [
-    alsa-lib qtbase nss stdenv.cc.cc.lib gtk3 mesa
+    alsa-lib
+    gtk3
+    nss
+    libdrm
+    mesa
+    gtk4
+    qt5.qtbase
   ];
 
-  runtimeDependencies = [ (lib.getLib udev) libnotify ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify gtk4 ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox
     cp -r * $out/opt/wavebox
 
     # provide desktop item and icon
-    mkdir -p $out/share/applications $out/share/pixmaps
+    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
     ln -s ${desktopItem}/share/applications/* $out/share/applications
-    ln -s $out/opt/wavebox/Wavebox-linux-x64/wavebox_icon.png $out/share/pixmaps/wavebox.png
+    ln -s $out/opt/wavebox/product_logo_128.png $out/share/icons/hicolor/128x128/apps/wavebox.png
   '';
 
   postFixup = ''
-    # make xdg-open overrideable at runtime
-    makeWrapper $out/opt/wavebox/wavebox $out/bin/wavebox \
-      --suffix PATH : ${xdg-utils}/bin
+    makeWrapper $out/opt/wavebox/wavebox-launcher $out/bin/wavebox \
+    --prefix PATH : ${xdg-utils}/bin
   '';
 
   meta = with lib; {
-    description = "Browser application for webapps";
-    homepage = https://wavebox.io;
-    changelog = https://wavebox.io/blog/tag/releases/;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ rawkode eddsteel ];
-    platforms = ["x86_64-linux"];
-    hydraPlatforms = [];
+    description = "Wavebox messaging application";
+    homepage = "https://wavebox.io";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ rawkode ];
+    platforms = [ "x86_64-linux" ];
+    hydraPlatforms = [ ];
   };
 }
