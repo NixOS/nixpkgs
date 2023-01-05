@@ -25476,7 +25476,6 @@ with pkgs;
   fuse = fuse2;
   fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
   fuse3 = fusePackages.fuse_3;
-  fuse-common = hiPrio fusePackages.fuse_3.common;
 
   fxload = callPackage ../os-specific/linux/fxload { };
 
