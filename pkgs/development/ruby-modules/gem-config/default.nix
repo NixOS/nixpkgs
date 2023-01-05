@@ -161,6 +161,10 @@ in
   exiv2 = attrs: {
     buildFlags = [ "--with-exiv2-lib=${exiv2}/lib" "--with-exiv2-include=${exiv2.dev}/include" ];
   };
+  
+  fast_excel = attrs: {
+    buildInputs = [ zlib ];
+  };
 
   fog-dnsimple = attrs:
     lib.optionalAttrs (lib.versionOlder attrs.version "1.0.1") {
