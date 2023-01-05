@@ -8994,6 +8994,8 @@ in {
 
   sharkiqpy = callPackage ../development/python-modules/sharkiqpy { };
 
+  show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
+
   sh = callPackage ../development/python-modules/sh { };
 
   shellescape = callPackage ../development/python-modules/shellescape { };
