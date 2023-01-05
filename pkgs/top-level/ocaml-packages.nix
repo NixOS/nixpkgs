@@ -468,6 +468,7 @@ let
     };
     ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
       inherit (pkgs) ffmpeg;
+      inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
     ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
       inherit (pkgs) ffmpeg;
