@@ -1246,7 +1246,7 @@ with pkgs;
   aflplusplus = callPackage ../tools/security/aflplusplus {
     clang = clang_9;
     llvm = llvm_9;
-    python = python37;
+    python = python3;
     wine = null;
   };
 
@@ -16280,12 +16280,6 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
-  python37Full = python37.override {
-    self = python37Full;
-    pythonAttr = "python37Full";
-    bluezSupport = true;
-    x11Support = true;
-  };
   python38Full = python38.override {
     self = python38Full;
     pythonAttr = "python38Full";
@@ -16304,19 +16298,24 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
+  python311Full = python310.override {
+    self = python311Full;
+    pythonAttr = "python311Full";
+    bluezSupport = true;
+    x11Support = true;
+  };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python312 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
+  inherit (pythonInterpreters) python27 python38 python39 python310 python311 python312 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
 
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
   # Python package sets.
   python27Packages = python27.pkgs;
-  python37Packages = python37.pkgs;
   python38Packages = python38.pkgs;
-  python39Packages = recurseIntoAttrs python39.pkgs;
+  python39Packages = python39.pkgs;
   python310Packages = recurseIntoAttrs python310.pkgs;
-  python311Packages = python311.pkgs;
+  python311Packages = recurseIntoAttrs python311.pkgs;
   python312Packages = python312.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
@@ -28317,9 +28316,7 @@ with pkgs;
 
   cplay-ng = callPackage ../applications/audio/cplay-ng { };
 
-  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
-    python3Packages = python37Packages;
-  };
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
 
   cqrlog = callPackage ../applications/radio/cqrlog {
     hamlib = hamlib_4;

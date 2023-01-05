@@ -39,6 +39,11 @@ buildPythonPackage rec {
     "MongoEngineTestCase"
   ];
 
+  disabledTestPaths = [
+    # incompatible with latest flask-sqlalchemy
+    "examples/flask_alchemy/test_demoapp.py"
+  ];
+
   pythonImportsCheck = [
     "factory"
   ];

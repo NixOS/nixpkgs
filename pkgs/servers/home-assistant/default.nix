@@ -43,6 +43,22 @@ let
         };
       });
 
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        pname = "astral";
+        version = "2.2";
+        src = self.fetchPypi {
+          inherit pname version;
+          hash = "sha256-5B2ZZ9XEi+QhNGVS8PTe2tQ/85qDV09f8q0ytmJ7b74=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry" "poetry.core.masonry"
+        '';
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          self.pytz
+        ];
+      });
+
       caldav = super.caldav.overridePythonAttrs (old: rec {
         version = "0.9.1";
         src = fetchFromGitHub {
@@ -98,6 +114,16 @@ let
           repo = "pyatag";
           rev = version;
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
+        };
+      });
+
+      pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.3";
+        src = fetchFromGitHub {
+          owner = "riptideio";
+          repo = "pymodbus";
+          rev= "refs/tags/v${version}";
+          hash = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
         };
       });
 
@@ -225,6 +251,7 @@ in python.pkgs.buildPythonApplication rec {
       "attrs"
       "awesomeversion"
       "bcrypt"
+      "ciso8601"
       "cryptography"
       "home-assistant-bluetooth"
       "httpx"

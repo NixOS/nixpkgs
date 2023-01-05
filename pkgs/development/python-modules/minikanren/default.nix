@@ -6,6 +6,7 @@
 , multipledispatch
 , etuples
 , logical-unification
+, py
 , pytestCheckHook
 , pytest-html
 }:
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    py
     pytestCheckHook
     pytest-html
   ];

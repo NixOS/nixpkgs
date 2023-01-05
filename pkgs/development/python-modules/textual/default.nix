@@ -2,15 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, importlib-metadata
+, nanoid
 , rich
 , typing-extensions
+, aiohttp
+, click
+, jinja2
+, msgpack
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, syrupy
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.1.18";
+  version = "0.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,28 +27,37 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XVmbt8r5HL8r64ISdJozmM+9HuyvqbpdejWICzFnfiw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-a32H5X3VsfYuU1TkOH5uGn1eDLvGUDI6WhXEQ0AKwq8=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'importlib-metadata = "^4.11.3"' 'importlib-metadata = "*"'
+  '';
+
   propagatedBuildInputs = [
+    importlib-metadata
+    nanoid
     rich
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 
   checkInputs = [
+    aiohttp
+    click
+    jinja2
+    msgpack
+    pytest-aiohttp
     pytestCheckHook
+    syrupy
+    time-machine
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'rich = "^12.3.0"' 'rich = "*"'
-  '';
 
   pythonImportsCheck = [
     "textual"

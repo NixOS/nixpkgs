@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-37GptqqBSIFOpm6SpS61ZZ9C4iU5AiOduVq255mTRNo=";
+    hash = "sha256-1EAkE2uYjo8sUbSrF6E1AGZkKPTxkSre3ov2RU8YhfM=";
   };
 
   nativeBuildInputs = [

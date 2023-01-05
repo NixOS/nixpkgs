@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "dasbus";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FJrY/Iw9KYMhq1AVm1R6soNImaieR+IcbULyyS5W6U0=";
+    hash = "sha256-qIUNhBrf6O5fe7n4LPRJq5tJUNwGM4lwcXGODQA2tvY=";
   };
 
   propagatedBuildInputs = [ pygobject3 ];

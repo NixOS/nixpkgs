@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "anybadge";
-  version = "1.11.1";
+  version = "1.14.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jongracecox";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6br4WUwE1ovAneYUeTHcUN3PH5Wm1rnLYCpXDUshk7Q=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-+CkkFCShCYtxKiCWRQcgTFcekc/g7ujQj9MdnG1+a0A=";
   };
 
   # setup.py reads its version from the TRAVIS_TAG environment variable

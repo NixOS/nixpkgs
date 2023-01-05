@@ -20,13 +20,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.7";
+  version = "0.5.8";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y0PKDGIeL8xdHAQsi+MgBmTFMllWqDvqdRzxvMddHak=";
+    sha256 = "sha256-1VqDw+XyyhEydE4UCSM/th2a8MWpXet7KR5uNAcSuGs=";
   };
 
   nativeBuildInputs = [ cython ];

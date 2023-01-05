@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.6.0";
+  version = "13.0.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-g3tXftEoBCJ1pMdLyDBXQvY9haGMQkuY1/UBOtUqrLE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Mc2ZTpn2cPGXIBblwwukJGiD8etdVi8ag9Xb77gG62A=";
   };
 
   nativeBuildInputs = [ poetry-core ];

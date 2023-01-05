@@ -6,8 +6,8 @@
 , ipython_genutils
 , jinja2
 , jupyter-client
-, jupyter_core
-, jupyter_server
+, jupyter-core
+, jupyter-server
 , nbconvert
 , nbformat
 , nest-asyncio
@@ -42,8 +42,8 @@ buildPythonPackage rec {
     ipython_genutils
     jinja2
     jupyter-client
-    jupyter_core
-    jupyter_server
+    jupyter-core
+    jupyter-server
     nbconvert
     nbformat
     nest-asyncio

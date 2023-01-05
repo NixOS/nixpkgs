@@ -7,11 +7,12 @@
 , packaging
 , pytestCheckHook
 , setuptools
+, git
 }:
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.13.1";
+  version = "1.15.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = "dunamai";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UoqVfRdwOgxNLY17+dPgYO1GIPw3ZUwE/tiVzHjBxcY=";
+    sha256 = "sha256-dqMI51UHbkyfkxAPojRlS6qew2Ob4LbUkYua6zmcQgc=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +37,14 @@ buildPythonPackage rec {
   # needs to be able to run dunami from PATH
   preCheck = ''
     export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+
+    git config --global user.email "nobody@example.com"
+    git config --global user.name "Nobody"
   '';
 
   checkInputs = [
+    git
     pytestCheckHook
     setuptools
   ];

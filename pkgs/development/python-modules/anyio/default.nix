@@ -71,9 +71,17 @@ buildPythonPackage rec {
     mock
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
+  ];
+
   disabledTests = [
     # block devices access
     "test_is_block_device"
+    # INTERNALERROR> AttributeError: 'NonBaseMultiError' object has no attribute '_exceptions'. Did you mean: 'exceptions'?
+    "test_exception_group_children"
+    "test_exception_group_host"
+    "test_exception_group_filtering"
   ];
 
   disabledTestPaths = [

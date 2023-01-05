@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.3.0.post3";
+  version = "1.3.0.post4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "fonttools";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-viBnmzbCAH9QaVHwUq43rm11e8o3N/jtGsGpmRZokaw=";
+    hash = "sha256-FMqOZ0WOorTtbdweeu9UdoUNWOPrcwc+0SK+55XxyQQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

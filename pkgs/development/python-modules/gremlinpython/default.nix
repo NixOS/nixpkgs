@@ -6,7 +6,6 @@
 , importlib-metadata
 , isodate
 , nest-asyncio
-, six
 , pytestCheckHook
 , mock
 , pyhamcrest
@@ -31,19 +30,20 @@ buildPythonPackage rec {
     sed -i '/pytest-runner/d' setup.py
 
     substituteInPlace setup.py \
-      --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp'
+      --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp' \
+      --replace 'importlib-metadata<5.0.0' 'importlib-metadata'
   '';
 
   # setup-requires requirements
   nativeBuildInputs = [
     importlib-metadata
   ];
+
   propagatedBuildInputs = [
     aenum
     aiohttp
     isodate
     nest-asyncio
-    six
   ];
 
   checkInputs = [

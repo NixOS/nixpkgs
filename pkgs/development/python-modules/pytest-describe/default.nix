@@ -6,6 +6,7 @@
 , pytest
 
 # tests
+, py
 , pytestCheckHook
 }:
 
@@ -27,6 +28,7 @@ buildPythonPackage {
   ];
 
   checkInputs = [
+    py
     pytestCheckHook
   ];
 

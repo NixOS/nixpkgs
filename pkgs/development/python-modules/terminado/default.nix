@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "terminado";
-  version = "0.15.0";
+  version = "0.17.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-q07u3M/MHmE0v+6GEGr5CFLGnWAohOo6Hoym1Ehum/4=";
+    sha256 = "sha256-bMu806T4olpewEmR85oLjbUt/NSH6g5XjZd+Z1I4AzM=";
   };
 
   nativeBuildInputs = [

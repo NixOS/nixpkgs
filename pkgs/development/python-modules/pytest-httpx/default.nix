@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.21.0";
+  version = "0.21.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
-    rev = "v${version}";
-    hash = "sha256-mUzmtZCguaab4fAE7VcUhv+NQVYiPpxxHpiVVlzwrIo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pIYSXmOxLfWknWTfrnhslx76UMSSlnqzFE7qvJo1mz4=";
   };
 
   buildInputs = [
