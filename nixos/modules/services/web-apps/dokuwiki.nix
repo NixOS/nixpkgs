@@ -73,28 +73,16 @@ let
     ${if isString pc then pc else pc_gen pc}
   '';
 
-  pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
-    pname = "dokuwiki-${hostName}";
-    version = src.version;
-    src = cfg.package;
 
-    installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
+  pkg = hostName: cfg: cfg.package.combine {
+    inherit (cfg) plugins templates;
 
-      # symlink the dokuwiki config
-      ln -sf ${dokuwikiLocalConfig hostName cfg} $out/share/dokuwiki/conf/local.php
+    pname = p: "${p.pname}-${hostName}";
 
-      # symlink plugins config
-      ln -sf ${dokuwikiPluginsLocalConfig hostName cfg} $out/share/dokuwiki/conf/plugins.local.php
-
-      # symlink acl (if needed)
-      ${optionalString (cfg.mergedConfig.useacl && cfg.acl != null) "ln -sf ${dokuwikiAclAuthConfig hostName cfg} $out/share/dokuwiki/acl.auth.php"}
-
-      # symlink additional plugin(s) and templates(s)
-      ${concatMapStringsSep "\n" (template: "ln -sf ${template} $out/share/dokuwiki/lib/tpl/${template.name}") cfg.templates}
-      ${concatMapStringsSep "\n" (plugin: "ln -sf ${plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}") cfg.plugins}
-    '';
+    basePackage = cfg.package;
+    localConfig = dokuwikiLocalConfig hostName cfg;
+    pluginsConfig = dokuwikiPluginsLocalConfig hostName cfg;
+    aclConfig = if cfg.aclUse && cfg.acl != null then dokuwikiAclAuthConfig hostName cfg else null;
   };
 
   aclOpts = { ... }: {
