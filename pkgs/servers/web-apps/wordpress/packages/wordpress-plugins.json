@@ -26,4 +26,5 @@
 , "wp-mail-smtp"
 , "wp-statistics"
 , "wp-user-avatars"
+, "wpforms-lite"
 ]
