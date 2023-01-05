@@ -110,6 +110,7 @@ with self;
   };
 
   async_rpc_websocket = janePackage {
+    duneVersion = "3";
     pname = "async_rpc_websocket";
     hash = "1n93jhkz5r76xcc40c4i4sxcyfz1dbppz8sjfxpwcwjyi6lyhp1p";
     meta.description = "Library to serve and dispatch Async RPCs over websockets";
