@@ -69,7 +69,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
-      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
+      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH:${lib.makeSearchPath "lib/girepository-1.0" [ libnotify gdk-pixbuf libgudev udisks gexiv2 gst_all_1.gstreamer.out ]}"
       --set PYTHONPATH "$PYTHONPATH"
       --prefix PATH : "${lib.makeBinPath [ exiftool vmtouch ]}"
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmediainfo ]}"
