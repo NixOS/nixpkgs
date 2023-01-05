@@ -6,6 +6,7 @@
 , setuptools
 , setuptools-scm
 , pyqt5
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyqt5 ];
 
-  doCheck = false;
-
   pythonImportsCheck = [ "qasync" ];
+
+  doCheck = true;
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  # FIXME Cannot get `test_qeventloop.py` to work, perhaps due to bad OS detection in test
+  # https://github.com/CabbageDevelopment/qasync/blob/master/tests/test_qeventloop.py
+  pytestFlagsArray = [
+    "tests/test_qthreadexec.py"
+  ];
 
   meta = with lib; {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation \

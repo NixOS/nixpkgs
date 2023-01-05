@@ -11,6 +11,7 @@
 , docutils
 , lockfile
 , qasync
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,29 @@ buildPythonPackage rec {
     qasync
   ];
 
-  doCheck = false;
-
   pythonImportsCheck = [ "orangecanvas" ];
+
+  doCheck = true;
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+   # Other tests fail because Qt modules cannot be imported
+  pytestFlagsArray = [
+    "orangecanvas/registry/tests/test_base.py"
+    "orangecanvas/registry/tests/test_discovery.py"
+    "orangecanvas/scheme/tests/test_annotations.py"
+    "orangecanvas/scheme/tests/test_signalmanager.py"
+    "orangecanvas/utils/tests/test_after_exit.py"
+    "orangecanvas/utils/tests/test_graph.py"
+    "orangecanvas/utils/tests/test_markup.py"
+    "orangecanvas/utils/tests/test_qinvoke.py"
+    "orangecanvas/utils/tests/test_qobjref.py"
+    "orangecanvas/utils/tests/test_shtools.py"
+    "orangecanvas/utils/tests/test_utils.py"
+    "orangecanvas/canvas/items/tests/test_utils.py"
+  ];
 
   meta = with lib; {
     description = "A framework for building graphical user interfaces for editing workflows";
