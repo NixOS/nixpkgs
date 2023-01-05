@@ -16,6 +16,14 @@ buildGoModule rec {
 
   doCheck = false;
 
+  postUnpack = ''
+     pwd
+     grep -rl "please use https://github.com/MichaelMure/git-bug-migration to upgrade" \
+     | xargs \
+       sed -r -i \
+           -e 's@(please use https://github.com/MichaelMure/git-bug-migration to upgrade[^"]*)"@\1 (hint: install nixpkgs#git-bug-migration)"@'
+  '';
+
   ldflags = [
     "-X github.com/MichaelMure/git-bug/commands.GitCommit=${rev}"
     "-X github.com/MichaelMure/git-bug/commands.GitLastTag=${version}"
