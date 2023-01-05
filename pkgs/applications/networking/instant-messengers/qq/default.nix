@@ -17,20 +17,18 @@
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
-, copyDesktopItems
-, makeDesktopItem
 }:
 
 let
-  version = "2.0.3-543";
+  version = "3.0.0-565";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/50eed662/QQ-v${version}_x64.deb";
-      sha256 = "sha256-O8zaVHt/oXserPVHe/r6pAFpWFeLDVsiaazgaX7kxu8=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/64bd2578/linuxqq_${version}_amd64.deb";
+      sha256 = "sha256-IfBbheVwg4b5PuLX9bzqSuTcElxNaV3tmbGd3v/NkCY=";
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/50eed662/QQ-v${version}_arm64.deb";
-      sha256 = "sha256-01ZpcoSDc5b0MCKAMq16N4cXzbouHNckOGsv+Z4et7w=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/64bd2578/linuxqq_${version}_arm64.deb";
+      sha256 = "sha256-6IlAJdPknaQzOE48sdxb5QbB+ZF1xKstF3ARGHM30GY=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -44,7 +42,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook
-    copyDesktopItems
     dpkg
   ];
 
@@ -67,27 +64,17 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p "$out/share/icons/hicolor/0x0/apps"
-    cp usr/share/icons/hicolor/0x0/apps/qq.png $out/share/icons/hicolor/0x0/apps
 
-    mkdir -p "$out/opt"
-    cp -r "opt/"* $out/opt
+    mkdir -p $out/bin
+    cp -r opt $out/opt
+    cp -r usr/share $out/share
+    substituteInPlace $out/share/applications/qq.desktop \
+      --replace "/opt/QQ/qq" "$out/bin/qq" \
+      --replace "/usr/share" "$out/share"
+    ln -s $out/opt/QQ/qq $out/bin/qq
 
-    mkdir -p "$out/bin"
-    ln -s "$out/opt/QQ/qq" "$out/bin/qq"
     runHook postInstall
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      desktopName = "Tencent QQ";
-      genericName = "A messaging app";
-      categories = [ "Network" ];
-      icon = "qq";
-      exec = "qq";
-      name = "qq";
-    })
-  ];
 
   meta = with lib; {
     homepage = "https://im.qq.com/linuxqq/";
