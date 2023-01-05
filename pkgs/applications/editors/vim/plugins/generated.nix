@@ -4497,6 +4497,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/lsp-status.nvim/";
   };
 
+  lsp-zero-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-zero.nvim";
+    version = "2023-01-05";
+    src = fetchFromGitHub {
+      owner = "VonHeikemen";
+      repo = "lsp-zero.nvim";
+      rev = "cd508abf461b895740f0946b65315e5eef07eb8c";
+      sha256 = "074hfpw78ziaq9xl9kbix70k1zmhf36icf0ycfvc72f1992ixg9d";
+    };
+    meta.homepage = "https://github.com/VonHeikemen/lsp-zero.nvim/";
+  };
+
   lsp_extensions-nvim = buildVimPluginFrom2Nix {
     pname = "lsp_extensions.nvim";
     version = "2022-07-07";
