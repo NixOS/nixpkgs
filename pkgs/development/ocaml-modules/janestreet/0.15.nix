@@ -318,6 +318,7 @@ with self;
   };
 
   email_message = janePackage {
+    duneVersion = "3";
     pname = "email_message";
     hash = "00h66l2g5rjaay0hbyqy4v9i866g779miriwv20h9k4mliqdq7in";
     meta.description = "E-mail message parser";
