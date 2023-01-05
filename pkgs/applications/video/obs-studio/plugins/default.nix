@@ -6,6 +6,8 @@
 # - Add plugin to it's own directory (because of future patches).
 
 {
+  droidcam-obs = callPackage ./droidcam-obs { };
+
   input-overlay = qt6Packages.callPackage ./input-overlay.nix { };
 
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
