@@ -30,6 +30,8 @@ let
         echo -e "    githubId = $id;\n"
       '' ++ lib.optional (checkedAttrs.email == null && checkedAttrs.github == null && checkedAttrs.matrix == null) ''
         echo ${lib.escapeShellArg (lib.showOption prefix)}': At least one of `email`, `github` or `matrix` must be specified, so that users know how to reach you.'
+      '' ++ lib.optional (checkedAttrs.email != null && lib.hasSuffix "noreply.github.com" checkedAttrs.email) ''
+        echo ${lib.escapeShellArg (lib.showOption prefix)}': If an email address is given, it should allow people to reach you. If you do not want that, you can just provide `github` or `matrix` instead.'
       '';
     in lib.deepSeq checkedAttrs checks;
 
