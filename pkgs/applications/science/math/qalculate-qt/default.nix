@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qalculate-qt";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
     rev = "v${version}";
-    sha256 = "sha256-oUteOAtNjmYzHeIg4xdMAlMW/lLRV0DZCK1RqHVvYEQ=";
+    sha256 = "sha256-1MU/Wici+NQWbjoNpE9q6jKx8aKt85OAfb+ZsN/oK5w=";
   };
 
   nativeBuildInputs = [ qmake intltool pkg-config wrapQtAppsHook ];
