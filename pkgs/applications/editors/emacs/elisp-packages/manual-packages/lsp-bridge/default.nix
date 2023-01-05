@@ -2,17 +2,20 @@
 , trivialBuild
 , fetchFromGitHub
 , writeText
+, python310
 , python310Packages
 , posframe
 , markdown-mode
 , yasnippet
+, org
+, which-key
 }:
 
 let
   rev = "7dfeeb640d14697755e2ac7997af0ec6c413197f";
 in trivialBuild {
   pname = "lsp-bridge";
-  version = "20230103";
+  version = "20230104";
 
   commit = rev;
 
@@ -24,14 +27,35 @@ in trivialBuild {
   };
 
   packageRequires = [
+    posframe
+    markdown-mode
+    yasnippet
+    org
+    which-key
+  ];
+
+  propagatedBuildInputs = [ 
+    python310
     python310Packages.epc
     python310Packages.orjson
     python310Packages.sexpdata
     python310Packages.six
-    posframe
-    markdown-mode
-    yasnippet
   ];
+
+  buildPhase = ''
+    runHook preInstall
+
+    install -d $out/share/emacs/site-lisp/
+    install *.el $out/share/emacs/site-lisp/
+    install acm/*.el $out/share/emacs/site-lisp/
+    install *.py $out/share/emacs/site-lisp/
+    cp -r core $out/share/emacs/site-lisp/
+    cp -r langserver $out/share/emacs/site-lisp/
+    cp -r multiserver $out/share/emacs/site-lisp/
+    cp -r resources $out/share/emacs/site-lisp/
+ 
+    runHook postInstall
+  '';
   
   meta = {
     description = "Lsp-bridge's goal is to become the fastest LSP client in Emacs.";
