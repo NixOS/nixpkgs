@@ -5,6 +5,7 @@
 , installShellFiles
 , qemu
 , makeBinaryWrapper
+, autoPatchelfHook
 }:
 
 let
@@ -46,12 +47,14 @@ stdenvNoCC.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
+  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ]
+    ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
     cp -r bin share $out
+    chmod +x $out/bin/limactl
     wrapProgram $out/bin/limactl \
       --prefix PATH : ${lib.makeBinPath [ qemu ]}
     installShellCompletion --cmd limactl \
