@@ -2323,7 +2323,6 @@ broken-packages:
   - HLogger
   - hlongurl
   - hls-brittany-plugin
-  - hls-call-hierarchy-plugin
   - hls-haddock-comments-plugin
   - hls-selection-range-plugin
   - hls-stan-plugin

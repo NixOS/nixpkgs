@@ -1357,9 +1357,7 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
-    (assert super.hls-call-hierarchy-plugin.version == "1.1.0.0"; disableCabalFlag "callHierarchy") # Disabled temporarily: https://github.com/haskell/haskell-language-server/pull/3431
   ]).overrideScope (lself: lsuper: {
-    hls-call-hierarchy-plugin = null;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
