@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -8,6 +9,8 @@
 , numpy
 , scikit-learn
 , scipy
+, pytestCheckHook
+, fetchurl
 }:
 
 buildPythonPackage rec {
@@ -35,10 +38,30 @@ buildPythonPackage rec {
     scipy
   ];
 
-  # No such file or directory: 'data/macosko_2015.pkl.gz'
-  doCheck = false;
-
   pythonImportsCheck = [ "openTSNE" ];
+
+  doCheck = true;
+
+  checkInputs = [ pytestCheckHook ];
+
+  preCheck = let
+    macosko2015 = fetchurl {
+      url = "https://file.biolab.si/opentsne/benchmark/macosko_2015.pkl.gz";
+      hash = "sha256-WFhQwfdmtaNRR1olTj6EWlWceajoL/12WA+t1HzDrvA=";
+    };
+  in ''
+    mkdir -p data
+    ln -s ${macosko2015} data/macosko_2015.pkl.gz
+
+    # ensure tests find installed package, not source dir
+    mv openTSNE openTSNE.hidden
+  '';
+
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # overly precise comparison against reference
+    # presumably calculated on x86
+    "test_iris"
+  ];
 
   meta = with lib; {
     description = "A modular Python implementation of t-Distributed Stochasitc Neighbor Embedding (t-SNE)";
