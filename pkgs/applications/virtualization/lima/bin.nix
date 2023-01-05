@@ -4,7 +4,7 @@
 , writeScript
 , installShellFiles
 , qemu
-, makeWrapper
+, makeBinaryWrapper
 }:
 
 let
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
 
   installPhase = ''
     runHook preInstall
