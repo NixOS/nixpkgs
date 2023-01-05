@@ -20,7 +20,7 @@ buildDunePackage rec {
   version = "5.0.1";
   pname = "ocsigenserver";
 
-  useDune2 = true;
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
