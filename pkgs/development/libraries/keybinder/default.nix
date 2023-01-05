@@ -6,13 +6,13 @@ let
   inherit (python2Packages) python pygtk;
 in stdenv.mkDerivation rec {
   pname = "keybinder";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "engla";
     repo = "keybinder";
     rev = "v${version}";
-    sha256 = "sha256-q/+hqhvXIknT+/5oENcWSr1OuF00kaZlXFUP1fdCMlk=";
+    sha256 = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf automake ];
