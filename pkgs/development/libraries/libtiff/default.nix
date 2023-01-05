@@ -18,7 +18,6 @@
 , gdal
 , openimageio
 , freeimage
-, imlib
 }:
 
 stdenv.mkDerivation rec {
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
-    inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage imlib;
+    inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
     inherit (python3Packages) pillow imread;
   };
 
