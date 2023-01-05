@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevincar";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-lC1M6/9uawi4KpcK4/fAygENa9rZv9c7qCVdsZYtl5Q=";
   };
 
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for creating a BLE Generic Attribute Profile (GATT) server";
     homepage = "https://github.com/kevincar/bless";
+    changelog = "https://github.com/kevincar/bless/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
