@@ -11,8 +11,7 @@ let
 in {
   meta = {
     maintainers = pkgs.blackfire.meta.maintainers;
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc blackfire.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart --lua-filter ../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua --lua-filter ../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua > blackfire.xml`
+    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./blackfire.xml;
   };
 

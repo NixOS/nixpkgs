@@ -30,8 +30,26 @@ services.pict-rs.enable = true;
         <para>
           This endpoint returns the following JSON structure on success
           with a 201 Created status
-          <literal>json   {       &quot;files&quot;: [           {               &quot;delete_token&quot;: &quot;JFvFhqJA98&quot;,               &quot;file&quot;: &quot;lkWZDRvugm.jpg&quot;           },           {               &quot;delete_token&quot;: &quot;kAYy9nk2WK&quot;,               &quot;file&quot;: &quot;8qFS0QooAn.jpg&quot;           },           {               &quot;delete_token&quot;: &quot;OxRpM3sf0Y&quot;,               &quot;file&quot;: &quot;1hJaYfGE01.jpg&quot;           }       ],       &quot;msg&quot;: &quot;ok&quot;   }</literal>
         </para>
+        <programlisting language="json">
+{
+    &quot;files&quot;: [
+        {
+            &quot;delete_token&quot;: &quot;JFvFhqJA98&quot;,
+            &quot;file&quot;: &quot;lkWZDRvugm.jpg&quot;
+        },
+        {
+            &quot;delete_token&quot;: &quot;kAYy9nk2WK&quot;,
+            &quot;file&quot;: &quot;8qFS0QooAn.jpg&quot;
+        },
+        {
+            &quot;delete_token&quot;: &quot;OxRpM3sf0Y&quot;,
+            &quot;file&quot;: &quot;1hJaYfGE01.jpg&quot;
+        }
+    ],
+    &quot;msg&quot;: &quot;ok&quot;
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>
@@ -53,8 +71,20 @@ services.pict-rs.enable = true;
           <literal>GET /image/details/original/{file}</literal> for
           getting the details of a full-resolution image. The returned
           JSON is structured like so:
-          <literal>json     {         &quot;width&quot;: 800,         &quot;height&quot;: 537,         &quot;content_type&quot;: &quot;image/webp&quot;,         &quot;created_at&quot;: [             2020,             345,             67376,             394363487         ]     }</literal>
         </para>
+        <programlisting language="json">
+{
+    &quot;width&quot;: 800,
+    &quot;height&quot;: 537,
+    &quot;content_type&quot;: &quot;image/webp&quot;,
+    &quot;created_at&quot;: [
+        2020,
+        345,
+        67376,
+        394363487
+    ]
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>
@@ -111,7 +141,11 @@ services.pict-rs.enable = true;
         </para>
         <para>
           An example of usage could be
-          <literal>GET /image/process.jpg?src=asdf.png&amp;thumbnail=256&amp;blur=3.0</literal>
+        </para>
+        <programlisting>
+GET /image/process.jpg?src=asdf.png&amp;thumbnail=256&amp;blur=3.0
+</programlisting>
+        <para>
           which would create a 256x256px JPEG thumbnail and blur it
         </para>
       </listitem>

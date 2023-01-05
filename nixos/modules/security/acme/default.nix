@@ -916,8 +916,7 @@ in {
 
   meta = {
     maintainers = lib.teams.acme.members;
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc doc.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart --lua-filter ../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua --lua-filter ../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua > doc.xml`
-    doc = ./doc.xml;
+    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
+    doc = ./default.xml;
   };
 }

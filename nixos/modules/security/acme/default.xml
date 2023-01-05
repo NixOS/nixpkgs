@@ -19,25 +19,24 @@
     <para>
       To use the ACME module, you must accept the provider’s terms of
       service by setting
-      <xref linkend="opt-security.acme.acceptTerms"></xref> to
+      <xref linkend="opt-security.acme.acceptTerms" /> to
       <literal>true</literal>. The Let’s Encrypt ToS can be found
       <link xlink:href="https://letsencrypt.org/repository/">here</link>.
     </para>
     <para>
       You must also set an email address to be used when creating
       accounts with Let’s Encrypt. You can set this for all certs with
-      <xref linkend="opt-security.acme.defaults.email"></xref> and/or on
-      a per-cert basis with
-      <xref linkend="opt-security.acme.certs._name_.email"></xref>. This
+      <xref linkend="opt-security.acme.defaults.email" /> and/or on a
+      per-cert basis with
+      <xref linkend="opt-security.acme.certs._name_.email" />. This
       address is only used for registration and renewal reminders, and
       cannot be used to administer the certificates in any way.
     </para>
     <para>
       Alternatively, you can use a different ACME server by changing the
-      <xref linkend="opt-security.acme.defaults.server"></xref> option
-      to a provider of your choosing, or just change the server for one
-      cert with
-      <xref linkend="opt-security.acme.certs._name_.server"></xref>.
+      <xref linkend="opt-security.acme.defaults.server" /> option to a
+      provider of your choosing, or just change the server for one cert
+      with <xref linkend="opt-security.acme.certs._name_.server" />.
     </para>
     <para>
       You will need an HTTP server or DNS server for verification. For
@@ -173,7 +172,7 @@ security.acme.certs.&quot;foo.example.com&quot; = {
       <filename>/var/lib/acme/foo.example.com</filename>.
     </para>
     <para>
-      Refer to <xref linkend="ch-options"></xref> for all available
+      Refer to <xref linkend="ch-options" /> for all available
       configuration options for the
       <link linkend="opt-security.acme.certs">security.acme</link>
       module.
@@ -275,9 +274,10 @@ systemd.services.dns-rfc2136-conf = {
     <para>
       You must follow the guide above on configuring DNS-01 validation
       first, however instead of setting the options for one certificate
-      (e.g. <xref linkend="opt-security.acme.certs._name_.dnsProvider"></xref>)
-      you will set them as defaults
-      (e.g. <xref linkend="opt-security.acme.defaults.dnsProvider"></xref>).
+      (e.g.
+      <xref linkend="opt-security.acme.certs._name_.dnsProvider" />) you
+      will set them as defaults (e.g.
+      <xref linkend="opt-security.acme.defaults.dnsProvider" />).
     </para>
     <programlisting>
 # Configure ACME appropriately

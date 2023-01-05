@@ -6,10 +6,10 @@
   </para>
   <para>
     <emphasis>Upstream documentation:</emphasis>
-    <link xlink:href="http://www.postgresql.org/docs/" role="uri">http://www.postgresql.org/docs/</link>
+    <link xlink:href="http://www.postgresql.org/docs/">http://www.postgresql.org/docs/</link>
   </para>
   <para>
-    PostgreSQL is an advanced, free relational database. <!-- MORE -->
+    PostgreSQL is an advanced, free relational database.
   </para>
   <section xml:id="module-services-postgres-configuring">
     <title>Configuring</title>
@@ -23,17 +23,17 @@ services.postgresql.package = pkgs.postgresql_11;
 </programlisting>
     <para>
       Note that you are required to specify the desired version of
-      PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since
+      PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since
       upgrading your PostgreSQL version requires a database dump and
       reload (see below), NixOS cannot provide a default value for
-      <xref linkend="opt-services.postgresql.package"></xref> such as
-      the most recent release of PostgreSQL.
+      <xref linkend="opt-services.postgresql.package" /> such as the
+      most recent release of PostgreSQL.
     </para>
     <para>
       By default, PostgreSQL stores its databases in
       <filename>/var/lib/postgresql/$psqlSchema</filename>. You can
       override this using
-      <xref linkend="opt-services.postgresql.dataDir"></xref>, e.g.
+      <xref linkend="opt-services.postgresql.dataDir" />, e.g.
     </para>
     <programlisting>
 services.postgresql.dataDir = &quot;/data/postgresql&quot;;
@@ -122,7 +122,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
           the new one. You may supply arguments like
           <literal>--jobs 4</literal> and <literal>--link</literal> to
           speedup migration process. See
-          <link xlink:href="https://www.postgresql.org/docs/current/pgupgrade.html" role="uri">https://www.postgresql.org/docs/current/pgupgrade.html</link>
+          <link xlink:href="https://www.postgresql.org/docs/current/pgupgrade.html">https://www.postgresql.org/docs/current/pgupgrade.html</link>
           for details.
         </para>
       </listitem>
@@ -130,10 +130,9 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
         <para>
           Change postgresql package in NixOS configuration to the one
           you were upgrading to via
-          <xref linkend="opt-services.postgresql.package"></xref>.
-          Rebuild NixOS. This should start new postgres using upgraded
-          data directory and all services you stopped during the
-          upgrade.
+          <xref linkend="opt-services.postgresql.package" />. Rebuild
+          NixOS. This should start new postgres using upgraded data
+          directory and all services you stopped during the upgrade.
         </para>
       </listitem>
       <listitem>
@@ -151,9 +150,8 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
             <para>
               For PostgreSQL &lt; 14, run (as
               <literal>su -l postgres</literal> in the
-              <xref linkend="opt-services.postgresql.dataDir"></xref>,
-              in this example
-              <filename>/var/lib/postgresql/13</filename>):
+              <xref linkend="opt-services.postgresql.dataDir" />, in
+              this example <filename>/var/lib/postgresql/13</filename>):
             </para>
             <programlisting>
 $ ./analyze_new_cluster.sh

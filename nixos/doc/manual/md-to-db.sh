@@ -50,3 +50,18 @@ for mf in ${MD_FILES[*]}; do
 done
 
 popd
+
+# now handle module chapters. we'll need extra checks to ensure that we don't process
+# markdown files we're not interested in, so we'll require an x.nix file for ever x.md
+# that we'll convert to xml.
+pushd "$DIR/../../modules"
+
+mapfile -t MD_FILES < <(find . -type f -regex '.*\.md$')
+
+for mf in ${MD_FILES[*]}; do
+  [ -f "${mf%.md}.nix" ] || continue
+
+  pandoc --top-level-division=chapter "$mf" "${pandoc_flags[@]}" -o "${mf%.md}.xml"
+done
+
+popd

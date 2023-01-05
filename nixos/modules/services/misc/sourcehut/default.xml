@@ -97,14 +97,14 @@ in {
     </para>
   </section>
   <section xml:id="module-services-sourcehut-httpd">
-    <title>Using an alternative webserver as reverse-proxy
-    (e.g. <literal>httpd</literal>)</title>
+    <title>Using an alternative webserver as reverse-proxy (e.g.
+    <literal>httpd</literal>)</title>
     <para>
       By default, <literal>nginx</literal> is used as reverse-proxy for
-      <literal>sourcehut</literal>. However, it’s possible to use
-      e.g. <literal>httpd</literal> by explicitly disabling
+      <literal>sourcehut</literal>. However, it’s possible to use e.g.
+      <literal>httpd</literal> by explicitly disabling
       <literal>nginx</literal> using
-      <xref linkend="opt-services.nginx.enable"></xref> and fixing the
+      <xref linkend="opt-services.nginx.enable" /> and fixing the
       <literal>settings</literal>.
     </para>
   </section>

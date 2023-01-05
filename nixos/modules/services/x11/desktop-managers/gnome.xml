@@ -48,9 +48,9 @@ services.gnome.core-utilities.enable = false;
       <para>
         If you’d only like to omit a subset of the core utilities, you
         can use
-        <xref linkend="opt-environment.gnome.excludePackages"></xref>.
-        Note that this mechanism can only exclude core utilities, games
-        and core developer tools.
+        <xref linkend="opt-environment.gnome.excludePackages" />. Note
+        that this mechanism can only exclude core utilities, games and
+        core developer tools.
       </para>
     </section>
     <section xml:id="sec-gnome-disabling-services">
@@ -103,7 +103,7 @@ services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
     <para>
       It is also possible to create custom sessions that replace
       Metacity with a different window manager using
-      <xref linkend="opt-services.xserver.desktopManager.gnome.flashback.customSessions"></xref>.
+      <xref linkend="opt-services.xserver.desktopManager.gnome.flashback.customSessions" />.
     </para>
     <para>
       The following example uses <literal>xmonad</literal> window
@@ -128,8 +128,8 @@ services.xserver.desktopManager.gnome.flashback.customSessions = [
     </para>
     <para>
       You can add them to
-      <xref linkend="opt-environment.systemPackages"></xref> and switch
-      to them with GNOME Tweaks. If you’d like to do this manually in
+      <xref linkend="opt-environment.systemPackages" /> and switch to
+      them with GNOME Tweaks. If you’d like to do this manually in
       dconf, change the values of the following keys:
     </para>
     <programlisting>
@@ -204,13 +204,13 @@ environment.systemPackages = [
     </warning>
     <para>
       You can override the default GSettings values using the
-      <xref linkend="opt-services.xserver.desktopManager.gnome.extraGSettingsOverrides"></xref>
+      <xref linkend="opt-services.xserver.desktopManager.gnome.extraGSettingsOverrides" />
       option.
     </para>
     <para>
       Take note that whatever packages you want to override GSettings
       for, you need to add them to
-      <xref linkend="opt-services.xserver.desktopManager.gnome.extraGSettingsOverridePackages"></xref>.
+      <xref linkend="opt-services.xserver.desktopManager.gnome.extraGSettingsOverridePackages" />.
     </para>
     <para>
       You can use <literal>dconf-editor</literal> tool to explore which

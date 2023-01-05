@@ -13,11 +13,11 @@ programs.digitalbitbox.enable = true;
 </programlisting>
   <para>
     and bundles the <literal>digitalbitbox</literal> package (see
-    <xref linkend="sec-digitalbitbox-package"></xref>), which contains
-    the <literal>dbb-app</literal> and <literal>dbb-cli</literal>
-    binaries, along with the hardware module (see
-    <xref linkend="sec-digitalbitbox-hardware-module"></xref>) which
-    sets up the necessary udev rules to access the device.
+    <xref linkend="sec-digitalbitbox-package" />), which contains the
+    <literal>dbb-app</literal> and <literal>dbb-cli</literal> binaries,
+    along with the hardware module (see
+    <xref linkend="sec-digitalbitbox-hardware-module" />) which sets up
+    the necessary udev rules to access the device.
   </para>
   <para>
     Enabling the digitalbitbox module is pretty much the easiest way to
@@ -25,7 +25,7 @@ programs.digitalbitbox.enable = true;
   </para>
   <para>
     For more information, see
-    <link xlink:href="https://digitalbitbox.com/start_linux" role="uri">https://digitalbitbox.com/start_linux</link>.
+    <link xlink:href="https://digitalbitbox.com/start_linux">https://digitalbitbox.com/start_linux</link>.
   </para>
   <section xml:id="sec-digitalbitbox-package">
     <title>Package</title>

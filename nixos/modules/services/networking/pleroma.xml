@@ -60,9 +60,8 @@ $ sudo -u postgres psql -f setup.psql
     </para>
     <para>
       This is an example of configuration, where
-      <xref linkend="opt-services.pleroma.configs"></xref> option
-      contains the content of the file <literal>config.exs</literal>,
-      generated
+      <xref linkend="opt-services.pleroma.configs" /> option contains
+      the content of the file <literal>config.exs</literal>, generated
       <link linkend="module-services-pleroma-generate-config">in the
       first section</link>, but with the secrets (database password,
       endpoint secret key, salts, etc.) removed. Removing secrets is
@@ -109,9 +108,9 @@ services.pleroma = {
 </programlisting>
     <para>
       Secrets must be moved into a file pointed by
-      <xref linkend="opt-services.pleroma.secretConfigFile"></xref>, in
-      our case <literal>/var/lib/pleroma/secrets.exs</literal>. This
-      file can be created copying the previously generated
+      <xref linkend="opt-services.pleroma.secretConfigFile" />, in our
+      case <literal>/var/lib/pleroma/secrets.exs</literal>. This file
+      can be created copying the previously generated
       <literal>config.exs</literal> file and then removing all the
       settings, except the secrets. This is an example
     </para>
@@ -136,7 +135,7 @@ config :web_push_encryption, :vapid_details,
 </programlisting>
     <para>
       Note that the lines of the same configuration group are comma
-      separated (i.e. all the lines end with a comma, except the last
+      separated (i.e. all the lines end with a comma, except the last
       one), so when the lines with passwords are added or removed,
       commas must be adjusted accordingly.
     </para>
@@ -156,7 +155,7 @@ $ ssh -L 4000:localhost:4000 myuser@example.net
 </programlisting>
     <para>
       and then accessing
-      <link xlink:href="http://localhost:4000" role="uri">http://localhost:4000</link>
+      <link xlink:href="http://localhost:4000">http://localhost:4000</link>
       from a web browser.
     </para>
   </section>

@@ -35,8 +35,8 @@ services.pantheon.apps.enable = false;
 </programlisting>
     <para>
       You can also use
-      <xref linkend="opt-environment.pantheon.excludePackages"></xref>
-      to remove any other app (like <literal>elementary-mail</literal>).
+      <xref linkend="opt-environment.pantheon.excludePackages" /> to
+      remove any other app (like <literal>elementary-mail</literal>).
     </para>
   </section>
   <section xml:id="sec-pantheon-wingpanel-switchboard">
@@ -51,12 +51,12 @@ services.pantheon.apps.enable = false;
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          <xref linkend="opt-services.xserver.desktopManager.pantheon.extraWingpanelIndicators"></xref>
+          <xref linkend="opt-services.xserver.desktopManager.pantheon.extraWingpanelIndicators" />
         </para>
       </listitem>
       <listitem>
         <para>
-          <xref linkend="opt-services.xserver.desktopManager.pantheon.extraSwitchboardPlugs"></xref>
+          <xref linkend="opt-services.xserver.desktopManager.pantheon.extraSwitchboardPlugs" />
         </para>
       </listitem>
     </itemizedlist>
@@ -108,7 +108,7 @@ switchboard-with-plugs.override {
   </section>
   <section xml:id="sec-pantheon-faq">
     <title>FAQ</title>
-    <variablelist>
+    <variablelist spacing="compact">
       <varlistentry>
         <term>
           <anchor xml:id="sec-pantheon-faq-messed-up-theme" />I have

@@ -97,7 +97,7 @@ services.gitlab = {
       enabled for fetching incoming mail.
     </para>
     <para>
-      Refer to <xref linkend="ch-options"></xref> for all available
+      Refer to <xref linkend="ch-options" /> for all available
       configuration options for the
       <link linkend="opt-services.gitlab.enable">services.gitlab</link>
       module.
