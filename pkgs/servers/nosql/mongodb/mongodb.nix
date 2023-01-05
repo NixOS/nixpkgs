@@ -47,7 +47,7 @@ let
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else if versionAtLeast version "4.2" then rec {
+    } else rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
         cheetah3
@@ -61,17 +61,7 @@ let
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else rec {
-      python = scons.python.withPackages (ps: with ps; [
-        setuptools
-        typing
-        cheetah3
-      ]);
-
-      scons = sconsPackages.scons_3_1_2;
-      mozjsVersion = "45";
-      mozjsReplace = "defined(HAVE_SINCOS)";
-   };
+    };
 
   system-libraries = [
     "boost"
