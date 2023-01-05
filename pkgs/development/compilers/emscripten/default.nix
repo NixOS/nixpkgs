@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
 , jre, binaryen
 , llvmPackages
-, symlinkJoin, makeWrapper, substituteAll
+, symlinkJoin, makeWrapper, substituteAll, fetchpatch
 , buildNpmPackage
 , emscripten
 }:
@@ -43,6 +43,16 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
       resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
+    })
+    # https://github.com/emscripten-core/emscripten/pull/18219
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/commit/afbc14950f021513c59cbeaced8807ef8253530a.patch";
+      sha256 = "sha256-+gJNTQJng9rWcGN3GAcMBB0YopKPnRp/r8CN9RSTClU=";
+    })
+    # https://github.com/emscripten-core/emscripten/pull/18220
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/commit/852982318f9fb692ba1dd1173f62e1eb21ae61ca.patch";
+      sha256 = "sha256-hmIOtpRx3PD3sDAahUcreSydydqcdSqArYvyLGgUgd8=";
     })
   ];
 
