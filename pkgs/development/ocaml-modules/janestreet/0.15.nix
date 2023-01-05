@@ -161,6 +161,7 @@ with self;
   };
 
   async_websocket = janePackage {
+    duneVersion = "3";
     pname = "async_websocket";
     hash = "16ixqfnx9jp77bvx11dlzsq0pzfpyiif60hl2q06zncyswky9xgb";
     meta.description = "A library that implements the websocket protocol on top of Async";
