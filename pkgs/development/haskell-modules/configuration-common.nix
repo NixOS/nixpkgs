@@ -66,10 +66,6 @@ self: super: {
   # > https://github.com/roelvandijk/numerals
   numerals = doJailbreak (dontCheck super.numerals);
 
-  # Too stricut upper bound on time
-  # https://github.com/acw/rate-limit/issues/9
-  rate-limit = doJailbreak super.rate-limit;
-
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
