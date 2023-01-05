@@ -203,6 +203,10 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
+        badPlatforms = lib.optionals (kernel == null || kernel.kernelOlder "5.19") [
+          # can be removed if/when https://github.com/NixOS/nixpkgs/pull/192668 is merged
+          "powerpc64le-linux"
+        ];
         maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
