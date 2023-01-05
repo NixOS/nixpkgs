@@ -9074,7 +9074,9 @@ with pkgs;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
-  npmHooks = callPackage ../build-support/node/build-npm-package/hooks { };
+  buildYarnPackage = callPackage ../build-support/node/build-yarn-package { };
+
+  nodeHooks = callPackage ../build-support/node/hooks { };
 
   inherit (callPackage ../build-support/node/fetch-npm-deps {
     inherit (darwin.apple_sdk.frameworks) Security;

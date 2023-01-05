@@ -8,7 +8,7 @@
 , enumer
 , mockgen
 , nodejs
-, npmHooks
+, nodeHooks
 , nix-update-script
 , nixosTests
 , stdenv
@@ -34,7 +34,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     nodejs
-    npmHooks.npmConfigHook
+    nodeHooks.npmConfigHook
   ];
 
   overrideModAttrs = _: {

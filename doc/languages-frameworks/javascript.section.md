@@ -157,9 +157,9 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 ## Tool specific instructions {#javascript-tool-specific}
 
-### buildNpmPackage {#javascript-buildNpmPackage}
+### buildNpmPackage and buildYarnPackage {#javascript-buildNpmPackage}
 
-`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+`buildNpmPackage` and `buildYarnPackage` allow you to package npm and Yarn based projects (respectively) in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). They work by utilizing their cache functionalies -- creating a reproducible cache that contains the dependencies of a project, and pointing the package manager to it.
 
 ```nix
 { lib, buildNpmPackage, fetchFromGitHub }:
@@ -191,9 +191,32 @@ buildNpmPackage rec {
 }
 ```
 
+```nix
+{ lib, buildYarnPackage, sqlite, python3 }:
+
+buildYarnPackage {
+  pname = "thelounge";
+  version = "unstable-2022-12-29";
+
+  src = fetchFromGitHub {
+    owner = "thelounge";
+    repo = "thelounge";
+    rev = "8b1a4f72fa79e12b43ff3073f0d48b13d93008e7";
+    hash = "sha256-aEx3HZMLCRbH3J3+aodBs8wzOtWOoYHOW2t+MAFWHwo=";
+  };
+
+  yarnDepsHash = "sha256-IucuXHOdzbca5LVxiFzi/ig+dGJs0xFKBxVTv79ubU0=";
+
+  npmRebuildFlags = [ "--sqlite=${sqlite.dev}" ];
+
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ sqlite ];
+}
+```
+
 #### Arguments {#javascript-buildNpmPackage-arguments}
 
-* `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
+* `npmDepsHash`/`yarnDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
 * `npmFlags`: Flags to pass to all npm commands.
