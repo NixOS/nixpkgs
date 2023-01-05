@@ -32,8 +32,8 @@
 , openjpeg
 , enableEigen ? true
 , eigen
-, enableOpenblas ? true
-, openblas
+, enableBlas ? true
+, blas
 , enableContrib ? true
 
 , enableCuda ? (config.cudaSupport or false) && stdenv.hostPlatform.isx86_64
@@ -220,6 +220,10 @@ let
   runAccuracyTests = true;
   runPerformanceTests = false;
   printEnabled = enabled: if enabled then "ON" else "OFF";
+  withOpenblas = (enableBlas && blas.provider.pname == "openblas");
+  #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
+  #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+  openblas_ = blas.provider.override { singleThreaded = true; };
 in
 
 stdenv.mkDerivation {
@@ -284,7 +288,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableGPhoto2 libgphoto2
     ++ lib.optional enableDC1394 libdc1394
     ++ lib.optional enableEigen eigen
-    ++ lib.optional enableOpenblas openblas
+    ++ lib.optional enableBlas blas.provider
     # There is seemingly no compile-time flag for Tesseract.  It's
     # simply enabled automatically if contrib is built, and it detects
     # tesseract & leptonica.
@@ -306,7 +310,8 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
-  OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
+  OpenBLAS_HOME = lib.optionalString withOpenblas openblas_.dev;
+  OpenBLAS = lib.optionalString withOpenblas openblas_;
 
   cmakeFlags = [
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
