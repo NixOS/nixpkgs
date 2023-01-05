@@ -116,7 +116,7 @@ let
   };
 in {
   options.networking.openconnect = {
-    package = mkPackageOption pkgs "openconnect" { };
+    package = mkPackageOptionMD pkgs "openconnect" { };
 
     interfaces = mkOption {
       description = lib.mdDoc "OpenConnect interfaces.";
