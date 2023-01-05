@@ -6,7 +6,7 @@ let
 in {
   options.programs.iay = {
     enable = mkEnableOption (lib.mdDoc "iay");
-    package = mkPackageOption pkgs (lib.mkDoc "iay") {};
+    package = mkPackageOptionMD pkgs "iay" {};
 
     minimalPrompt = mkOption {
       type = types.bool;
