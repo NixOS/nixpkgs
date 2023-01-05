@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    rev = "v${version}";
-    sha256 = "sha256-FBcDEEWgfV+OgHriSOZKWZPt0O89nDe2CsY3oqX/6zo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FBcDEEWgfV+OgHriSOZKWZPt0O89nDe2CsY3oqX/6zo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
+    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
