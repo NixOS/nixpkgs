@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-rbxYTpB6ieZBYbbE1AKVEc/lapWlOUMOrSHCkuwkzLg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rbxYTpB6ieZBYbbE1AKVEc/lapWlOUMOrSHCkuwkzLg=";
   };
 
   # Module has no tests
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HomeMatic CCU XML-RPC Server with fake devices";
     homepage = "https://github.com/danielperna84/pydevccu";
+    changelog = "https://github.com/danielperna84/pydevccu/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
