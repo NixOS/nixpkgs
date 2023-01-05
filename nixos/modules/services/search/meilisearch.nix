@@ -9,8 +9,7 @@ in
 {
 
   meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc meilisearch.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > meilisearch.xml`
+  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./meilisearch.xml;
 
   ###### interface

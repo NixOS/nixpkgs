@@ -10,11 +10,11 @@
   <para>
     Emacs runs within a graphical desktop environment using the X Window
     System, but works equally well on a text terminal. Under macOS, a
-    &quot;Mac port&quot; edition is available, which uses Apple's native
-    GUI frameworks.
+    <quote>Mac port</quote> edition is available, which uses Apple’s
+    native GUI frameworks.
   </para>
   <para>
-    Nixpkgs provides a superior environment for running Emacs. It's
+    Nixpkgs provides a superior environment for running Emacs. It’s
     simple to create custom builds by overriding the default packages.
     Chaotic collections of Emacs Lisp code and extensions can be brought
     under control using declarative package management. NixOS even
@@ -25,8 +25,8 @@
     <title>Installing Emacs</title>
     <para>
       Emacs can be installed in the normal way for Nix (see
-      <xref linkend="sec-package-management"></xref>). In addition, a
-      NixOS <emphasis>service</emphasis> can be enabled.
+      <xref linkend="sec-package-management" />). In addition, a NixOS
+      <emphasis>service</emphasis> can be enabled.
     </para>
     <section xml:id="module-services-emacs-releases">
       <title>The Different Releases of Emacs</title>
@@ -63,14 +63,14 @@
           </term>
           <listitem>
             <para>
-              Emacs with the &quot;Mac port&quot; patches, providing a
-              more native look and feel under macOS.
+              Emacs with the <quote>Mac port</quote> patches, providing
+              a more native look and feel under macOS.
             </para>
           </listitem>
         </varlistentry>
       </variablelist>
       <para>
-        If those aren't suitable, then the following imitation Emacs
+        If those aren’t suitable, then the following imitation Emacs
         editors are also available in Nixpkgs:
         <link xlink:href="https://www.gnu.org/software/zile/">Zile</link>,
         <link xlink:href="http://homepage.boetes.org/software/mg/">mg</link>,
@@ -207,9 +207,9 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A emacs.pkgs.orgPackages
       <para>
         If you are on NixOS, you can install this particular Emacs for
         all users by adding it to the list of system packages (see
-        <xref linkend="sec-declarative-package-mgmt"></xref>). Simply
-        modify your file <filename>configuration.nix</filename> to make
-        it contain:
+        <xref linkend="sec-declarative-package-mgmt" />). Simply modify
+        your file <filename>configuration.nix</filename> to make it
+        contain:
         <anchor xml:id="module-services-emacs-configuration-nix" />
       </para>
       <programlisting>
@@ -224,7 +224,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A emacs.pkgs.orgPackages
         In this case, the next <command>nixos-rebuild switch</command>
         will take care of adding your <command>emacs</command> to the
         <varname>PATH</varname> environment variable (see
-        <xref linkend="sec-changing-config"></xref>).
+        <xref linkend="sec-changing-config" />).
       </para>
       <para>
         If you are not on NixOS or want to install this particular Emacs
@@ -292,7 +292,7 @@ in [...]
       NixOS provides an optional <command>systemd</command> service
       which launches
       <link xlink:href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html">Emacs
-      daemon</link> with the user's login session.
+      daemon</link> with the user’s login session.
     </para>
     <para>
       <emphasis>Source:</emphasis>
@@ -315,7 +315,7 @@ services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
         <literal>emacsWithPackages</literal>.
       </para>
       <para>
-        Ensure that the Emacs server is enabled for your user's Emacs
+        Ensure that the Emacs server is enabled for your user’s Emacs
         configuration, either by customizing the
         <varname>server-mode</varname> variable, or by adding
         <literal>(server-start)</literal> to
@@ -353,7 +353,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     <section xml:id="module-services-emacs-editor-variable">
       <title>Configuring the <varname>EDITOR</varname> variable</title>
       <para>
-        If <xref linkend="opt-services.emacs.defaultEditor"></xref> is
+        If <xref linkend="opt-services.emacs.defaultEditor" /> is
         <literal>true</literal>, the <varname>EDITOR</varname> variable
         will be set to a wrapper script which launches
         <command>emacsclient</command>.
@@ -452,7 +452,7 @@ systemctl --user enable emacs
       <para>
         To install the DocBook 5.0 schemas, either add
         <varname>pkgs.docbook5</varname> to
-        <xref linkend="opt-environment.systemPackages"></xref>
+        <xref linkend="opt-environment.systemPackages" />
         (<link linkend="sec-declarative-package-mgmt">NixOS</link>), or
         run <literal>nix-env -f '&lt;nixpkgs&gt;' -iA docbook5</literal>
         (<link linkend="sec-ad-hoc-packages">Nix</link>).

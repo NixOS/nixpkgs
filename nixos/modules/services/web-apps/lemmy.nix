@@ -6,8 +6,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc lemmy.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > lemmy.xml`
+  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./lemmy.xml;
 
   imports = [

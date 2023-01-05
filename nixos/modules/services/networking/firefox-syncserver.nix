@@ -311,8 +311,7 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc firefox-syncserver.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > firefox-syncserver.xml`
+    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./firefox-syncserver.xml;
   };
 }

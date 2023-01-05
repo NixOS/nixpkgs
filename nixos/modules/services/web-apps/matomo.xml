@@ -38,11 +38,11 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
       <literal>matomo</literal> database user (without needing a
       password), but no other users. For more information on
       passwordless login, see
-      <link xlink:href="https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/" role="uri">https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/</link>.
+      <link xlink:href="https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/">https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/</link>.
     </para>
     <para>
-      Of course, you can use password based authentication as well,
-      e.g. when the database is not on the same host.
+      Of course, you can use password based authentication as well, e.g.
+      when the database is not on the same host.
     </para>
   </section>
   <section xml:id="module-services-matomo-archive-processing">
@@ -75,7 +75,7 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
       <filename>/var/lib/matomo/config/config.ini.php</filename> file.
       Use a user in the <literal>matomo</literal> group or root to
       access the file. For more information, see
-      <link xlink:href="https://matomo.org/faq/how-to-install/faq_138/" role="uri">https://matomo.org/faq/how-to-install/faq_138/</link>.
+      <link xlink:href="https://matomo.org/faq/how-to-install/faq_138/">https://matomo.org/faq/how-to-install/faq_138/</link>.
     </para>
   </section>
   <section xml:id="module-services-matomo-issues">

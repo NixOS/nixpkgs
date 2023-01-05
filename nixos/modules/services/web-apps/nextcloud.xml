@@ -192,24 +192,24 @@
           external storage such as S3. Please note that this won’t work
           anymore when using OpenSSL 3 for PHP’s openssl extension
           because this is implemented using the legacy cipher RC4. If
-          <xref linkend="opt-system.stateVersion"></xref> is
+          <xref linkend="opt-system.stateVersion" /> is
           <emphasis>above</emphasis> <literal>22.05</literal>, this is
           disabled by default. To turn it on again and for further
           information please refer to
-          <xref linkend="opt-services.nextcloud.enableBrokenCiphersForSSE"></xref>.
+          <xref linkend="opt-services.nextcloud.enableBrokenCiphersForSSE" />.
         </para>
       </listitem>
     </itemizedlist>
   </section>
   <section xml:id="module-services-nextcloud-httpd">
-    <title>Using an alternative webserver as reverse-proxy
-    (e.g. <literal>httpd</literal>)</title>
+    <title>Using an alternative webserver as reverse-proxy (e.g.
+    <literal>httpd</literal>)</title>
     <para>
       By default, <literal>nginx</literal> is used as reverse-proxy for
-      <literal>nextcloud</literal>. However, it’s possible to use
-      e.g. <literal>httpd</literal> by explicitly disabling
+      <literal>nextcloud</literal>. However, it’s possible to use e.g.
+      <literal>httpd</literal> by explicitly disabling
       <literal>nginx</literal> using
-      <xref linkend="opt-services.nginx.enable"></xref> and fixing the
+      <xref linkend="opt-services.nginx.enable" /> and fixing the
       settings <literal>listen.owner</literal> &amp;
       <literal>listen.group</literal> in the
       <link linkend="opt-services.phpfpm.pools">corresponding
@@ -268,13 +268,13 @@
       Nextcloud apps are installed statefully through the web interface.
       Some apps may require extra PHP extensions to be installed. This
       can be configured with the
-      <xref linkend="opt-services.nextcloud.phpExtraExtensions"></xref>
+      <xref linkend="opt-services.nextcloud.phpExtraExtensions" />
       setting.
     </para>
     <para>
       Alternatively, extra apps can also be declared with the
-      <xref linkend="opt-services.nextcloud.extraApps"></xref> setting.
-      When using this setting, apps can no longer be managed statefully
+      <xref linkend="opt-services.nextcloud.extraApps" /> setting. When
+      using this setting, apps can no longer be managed statefully
       because this can lead to Nextcloud updating apps that are managed
       by Nix. If you want automatic updates it is recommended that you
       use web interface to install apps.
@@ -292,7 +292,7 @@
       While minor and patch-level updates are no problem and can be done
       directly in the package-expression (and should be backported to
       supported stable branches after that), major-releases should be
-      added in a new attribute (e.g. Nextcloud
+      added in a new attribute (e.g. Nextcloud
       <literal>v19.0.0</literal> should be available in
       <literal>nixpkgs</literal> as
       <literal>pkgs.nextcloud19</literal>). To provide simple upgrade
@@ -323,8 +323,8 @@
 </programlisting>
     <para>
       Ideally we should make sure that it’s possible to jump two NixOS
-      versions forward: i.e. the warnings and the logic in the module
-      should guard a user to upgrade from a Nextcloud on e.g. 19.09 to a
+      versions forward: i.e. the warnings and the logic in the module
+      should guard a user to upgrade from a Nextcloud on e.g. 19.09 to a
       Nextcloud on 20.09.
     </para>
   </section>

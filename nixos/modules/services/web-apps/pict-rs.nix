@@ -5,8 +5,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc pict-rs.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > pict-rs.xml`
+  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./pict-rs.xml;
 
   options.services.pict-rs = {

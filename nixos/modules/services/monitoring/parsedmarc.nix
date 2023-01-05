@@ -539,8 +539,7 @@ in
     };
   };
 
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc parsedmarc.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > parsedmarc.xml`
+  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./parsedmarc.xml;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

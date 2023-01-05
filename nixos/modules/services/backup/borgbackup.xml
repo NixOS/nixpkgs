@@ -6,7 +6,7 @@
   </para>
   <para>
     <emphasis>Upstream documentation:</emphasis>
-    <link xlink:href="https://borgbackup.readthedocs.io/" role="uri">https://borgbackup.readthedocs.io/</link>
+    <link xlink:href="https://borgbackup.readthedocs.io/">https://borgbackup.readthedocs.io/</link>
   </para>
   <para>
     <link xlink:href="https://www.borgbackup.org/">BorgBackup</link>
@@ -200,9 +200,9 @@ sudo borg init --encryption=repokey-blake2  \
       protect your data from disk failure, ransomware and theft.
     </para>
     <para>
-      It can be installed in NixOS e.g. by adding
+      It can be installed in NixOS e.g. by adding
       <literal>pkgs.vorta</literal> to
-      <xref linkend="opt-environment.systemPackages"></xref>.
+      <xref linkend="opt-environment.systemPackages" />.
     </para>
     <para>
       Details about using Vorta can be found under

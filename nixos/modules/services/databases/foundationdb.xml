@@ -6,7 +6,7 @@
   </para>
   <para>
     <emphasis>Upstream documentation:</emphasis>
-    <link xlink:href="https://apple.github.io/foundationdb/" role="uri">https://apple.github.io/foundationdb/</link>
+    <link xlink:href="https://apple.github.io/foundationdb/">https://apple.github.io/foundationdb/</link>
   </para>
   <para>
     <emphasis>Maintainer:</emphasis> Austin Seipp
@@ -417,7 +417,7 @@ $ sudo -u foundationdb fdbbackup status -t default
       FoundationDB is a complex piece of software, and requires careful
       administration to properly use. Full documentation for
       administration can be found here:
-      <link xlink:href="https://apple.github.io/foundationdb/" role="uri">https://apple.github.io/foundationdb/</link>.
+      <link xlink:href="https://apple.github.io/foundationdb/">https://apple.github.io/foundationdb/</link>.
     </para>
   </section>
 </chapter>

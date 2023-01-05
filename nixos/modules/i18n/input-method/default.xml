@@ -234,7 +234,7 @@ i18n.inputMethod = {
 };
 </programlisting>
     <para>
-      Note: The <xref linkend="opt-i18n.inputMethod.uim.toolbar"></xref>
+      Note: The <xref linkend="opt-i18n.inputMethod.uim.toolbar" />
       option can be used to choose uim toolbar.
     </para>
   </section>

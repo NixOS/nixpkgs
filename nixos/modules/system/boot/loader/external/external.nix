@@ -8,8 +8,7 @@ in
 {
   meta = {
     maintainers = with maintainers; [ cole-h grahamc raitobezarius ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc external.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > external.xml`
+    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./external.xml;
   };
 

@@ -7,8 +7,7 @@ let
   cfg = config.services.flatpak;
 in {
   meta = {
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc flatpak.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart --lua-filter ../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua --lua-filter ../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua > flatpak.xml`
+    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./flatpak.xml;
     maintainers = pkgs.flatpak.meta.maintainers;
   };

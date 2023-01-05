@@ -7,7 +7,7 @@
   </para>
   <para>
     <emphasis>Upstream documentation:</emphasis>
-    <link xlink:href="https://taskwarrior.org/docs/#taskd" role="uri">https://taskwarrior.org/docs/#taskd</link>
+    <link xlink:href="https://taskwarrior.org/docs/#taskd">https://taskwarrior.org/docs/#taskd</link>
   </para>
   <section xml:id="module-services-taskserver-configuration">
     <title>Configuration</title>
@@ -43,8 +43,8 @@
       imperatively, the <command>nixos-taskserver</command> tool is used
       for addition and deletion of organisations along with users and
       groups defined by
-      <xref linkend="opt-services.taskserver.organisations"></xref> and
-      as well for imperative set up.
+      <xref linkend="opt-services.taskserver.organisations" /> and as
+      well for imperative set up.
     </para>
     <para>
       The tool is designed to not interfere if the command is used to

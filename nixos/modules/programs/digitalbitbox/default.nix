@@ -33,9 +33,8 @@ in
   };
 
   meta = {
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc doc.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > doc.xml`
-    doc = ./doc.xml;
+    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
+    doc = ./default.xml;
     maintainers = with lib.maintainers; [ vidbina ];
   };
 }

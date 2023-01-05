@@ -6,7 +6,7 @@
   </para>
   <para>
     <emphasis>Upstream documentation:</emphasis>
-    <link xlink:href="https://github.com/flatpak/flatpak/wiki" role="uri">https://github.com/flatpak/flatpak/wiki</link>
+    <link xlink:href="https://github.com/flatpak/flatpak/wiki">https://github.com/flatpak/flatpak/wiki</link>
   </para>
   <para>
     Flatpak is a system for building, distributing, and running
