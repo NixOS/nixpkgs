@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , pyqt-builder
+, libsForQt5
 , setuptools
 , setuptools-scm
 , baycomp
@@ -10,20 +11,28 @@
 , chardet
 , cython
 , httpx
+, joblib
 , keyring
 , keyrings-alt
+, matplotlib
+, numpy
 , openpyxl
 , opentsne
 , orange-canvas-core
 , orange-widget-base
 , pandas
+, pyqt5
+, pyqtwebengine
 , pyqtgraph
 , python-louvain
 , pyyaml
 , qtconsole
+, scikit-learn
+, scipy
 , serverfiles
 , xlrd
 , XlsxWriter
+, xgboost
 }:
 
 buildPythonPackage rec {
@@ -42,6 +51,7 @@ buildPythonPackage rec {
   buildInputs = [ pyqt-builder ];
 
   nativeBuildInputs = [
+    libsForQt5.qt5.wrapQtAppsHook
     setuptools
     setuptools-scm
   ];
@@ -52,25 +62,42 @@ buildPythonPackage rec {
     chardet
     cython
     httpx
+    joblib
     keyring
     keyrings-alt
+    matplotlib
+    numpy
     openpyxl
     opentsne
     orange-canvas-core
     orange-widget-base
     pandas
+    pyqt5
     pyqtgraph
+    pyqtwebengine
     python-louvain
     pyyaml
     qtconsole
+    scikit-learn
+    scipy
     serverfiles
     xlrd
     XlsxWriter
   ];
 
-  doCheck = false;
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "Orange" ];
+
+  doCheck = false;
+
+  checkInputs = [
+    xgboost
+  ];
+
+  checkPhase = ''
+    python -m unittest Orange.tests Orange.widgets.tests
+  '';
 
   meta = with lib; {
     description = "A data mining and visualization toolbox for novice and expert alike";
