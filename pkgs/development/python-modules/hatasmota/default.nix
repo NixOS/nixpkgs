@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "hatasmota";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8B3xdSvvxmbjpPk6aWHQTraf2J1oCBvP0/UxTxaN0jY=";
+    hash = "sha256-viMqtrqyM+O2VEwHp4FJRlJcfj58GjSD37gtv01/sOo=";
   };
 
   propagatedBuildInputs = [
