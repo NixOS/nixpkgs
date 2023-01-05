@@ -245,6 +245,7 @@ with self;
   };
 
   cohttp_async_websocket = janePackage {
+    duneVersion = "3";
     pname = "cohttp_async_websocket";
     hash = "0d0smavnxpnwrmhlcf3b5a3cm3n9kz1y8fh6l28xv6zrn4sc7ik8";
     meta.description = "Websocket library for use with cohttp and async";
