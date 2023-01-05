@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "meross-iot";
-  version = "0.4.5.6";
+  version = "0.4.5.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "albertogeniola";
     repo = "MerossIot";
     rev = "refs/tags/${version}";
-    hash = "sha256-rCV2C+kseCU0AGqpjbF3bs+H2T8Xr6F3v1edQdHqZSY=";
+    hash = "sha256-nheTAMXX0IZE1XH2+o9ML1Qt9zMw7oTZi4Cba+LdG4s=";
   };
 
   propagatedBuildInputs = [
