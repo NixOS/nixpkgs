@@ -28,6 +28,8 @@ let
     DOCUMENTATION_URL = "https://nixos.org/learn.html";
     SUPPORT_URL = "https://nixos.org/community.html";
     BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+  } // lib.optionalAttrs (cfg.variant_id != null) {
+    VARIANT_ID = cfg.variant_id;
   };
 
   initrdReleaseContents = osReleaseContents // {
@@ -85,6 +87,13 @@ in
       type = types.str;
       default = trivial.codeName;
       description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
+    };
+
+    nixos.variant_id = mkOption {
+      type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+      default = null;
+      description = lib.mdDoc "A lower-case string identifying a specific variant or edition of the operating system";
+      example = "installer";
     };
 
     stateVersion = mkOption {
