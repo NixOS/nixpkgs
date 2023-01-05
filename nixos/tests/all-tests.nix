@@ -694,6 +694,7 @@ in {
   vsftpd = handleTest ./vsftpd.nix {};
   warzone2100 = handleTest ./warzone2100.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
+  webhook = runTest ./webhook.nix;
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};
