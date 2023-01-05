@@ -20,7 +20,7 @@ let
         ];
       }).config;
 
-      checkGithubId = lib.optional (checkedAttrs.github != null && checkedAttrs.githubId == null) ''
+      checks = lib.optional (checkedAttrs.github != null && checkedAttrs.githubId == null) ''
         echo ${lib.escapeShellArg (lib.showOption prefix)}': If `github` is specified, `githubId` must be too.'
         # Calling this too often would hit non-authenticated API limits, but this
         # shouldn't happen since such errors will get fixed rather quickly
@@ -28,8 +28,10 @@ let
         id=$(jq -r '.id' <<< "$info")
         echo "The GitHub ID for GitHub user ${checkedAttrs.github} is $id:"
         echo -e "    githubId = $id;\n"
+      '' ++ lib.optional (checkedAttrs.email == null && checkedAttrs.github == null && checkedAttrs.matrix == null) ''
+        echo ${lib.escapeShellArg (lib.showOption prefix)}': At least one of `email`, `github` or `matrix` must be specified, so that users know how to reach you.'
       '';
-    in lib.deepSeq checkedAttrs checkGithubId;
+    in lib.deepSeq checkedAttrs checks;
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
