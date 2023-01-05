@@ -6,11 +6,11 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.18";
+  version = "0.9.34";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "15p7sssg6vmqbm5xnc4j5dr89d7gl7y5qyq44a240yl5aqkjnybw";
+    sha256 = "JFWshKilHtkVAO2q0a+1D3rf8qQ39BBTYKwWMR77J54=";
   };
 
   # Disable version check and fix install tests
@@ -55,11 +55,14 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     psutil
     pyxdg
     arrow
+    babel
     python-dateutil
     easygui
     colour
+    packaging
     pymediainfo
     sortedcontainers
+    show-in-file-manager
     rawkit
     requests
     colorlog
