@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   # fix "argb_paint_i386.c:53:Incorrect register `%rax' used with `l' suffix"
   # errors
-  configureFlags = lib.optional stdenv.isDarwin "--build=x86_64";
+  configureFlags = lib.optional (stdenv.isDarwin && stdenv.isx86_64) "--build=x86_64";
 
   # fixes a cast in inline asm: easier than patching
   buildFlags = lib.optional stdenv.isDarwin "CFLAGS=-fheinous-gnu-extensions";
@@ -29,7 +29,5 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
