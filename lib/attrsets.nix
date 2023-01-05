@@ -88,7 +88,7 @@ rec {
         else { ${elemAt attrPath n} = atDepth (n + 1); };
     in atDepth 0;
 
-  /* Like `attrByPath', but without a default value. If it doesn't find the
+  /* Like `attrByPath`, but without a default value. If it doesn't find the
      path it will throw an error.
 
      Example:
@@ -274,7 +274,7 @@ rec {
     # The set to get the named attributes from
     attrs: genAttrs names (name: attrs.${name});
 
-  /* Collect each attribute named `attr' from a list of attribute
+  /* Collect each attribute named `attr` from a list of attribute
      sets.  Sets that don't contain the named attribute are ignored.
 
      Example:
@@ -357,8 +357,8 @@ rec {
     ) {} list_of_attrs;
 
 
-  /* Recursively collect sets that verify a given predicate named `pred'
-     from the set `attrs'.  The recursion is stopped when the predicate is
+  /* Recursively collect sets that verify a given predicate named `pred`
+     from the set `attrs`.  The recursion is stopped when the predicate is
      verified.
 
      Example:
@@ -439,9 +439,9 @@ rec {
       listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set)));
 
 
-  /* Like `mapAttrs', but allows the name of each attribute to be
+  /* Like `mapAttrs`, but allows the name of each attribute to be
      changed in addition to the value.  The applied function should
-     return both the new name and value as a `nameValuePair'.
+     return both the new name and value as a `nameValuePair`.
 
      Example:
        mapAttrs' (name: value: nameValuePair ("foo_" + name) ("bar-" + value))
@@ -479,7 +479,7 @@ rec {
     map (name: f name attrs.${name}) (attrNames attrs);
 
 
-  /* Like `mapAttrs', except that it recursively applies itself to
+  /* Like `mapAttrs`, except that it recursively applies itself to
      attribute sets.  Also, the first argument of the argument
      function is a *list* of the names of the containing attributes.
 
@@ -499,9 +499,9 @@ rec {
     mapAttrsRecursiveCond (as: true) f set;
 
 
-  /* Like `mapAttrsRecursive', but it takes an additional predicate
+  /* Like `mapAttrsRecursive`, but it takes an additional predicate
      function that tells it whether to recurse into an attribute
-     set.  If it returns false, `mapAttrsRecursiveCond' does not
+     set.  If it returns false, `mapAttrsRecursiveCond` does not
      recurse, but does apply the map function.  If it returns true, it
      does recurse, and does not apply the map function.
 
@@ -655,7 +655,7 @@ rec {
 
   /* Merge sets of attributes and combine each attribute value in to a list.
 
-     Like `lib.attrsets.zipAttrsWith' with `(name: values: values)' as the function.
+     Like `lib.attrsets.zipAttrsWith` with `(name: values: values)` as the function.
 
      Example:
        zipAttrs [{a = "x";} {a = "y"; b = "z";}]
