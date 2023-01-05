@@ -1965,12 +1965,6 @@ self: super: {
       "--skip" "/toJsonSerializer/should generate valid JSON/"
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
-  # https://github.com/ssadler/aeson-quick/issues/3
-  aeson-quick = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/asLens.set/&&!/complex.set/&&!/multipleKeys.set/"
-    ] ++ drv.testFlags or [];
-  }) super.aeson-quick;
   # https://github.com/minio/minio-hs/issues/165
   minio-hs = overrideCabal (drv: {
     testFlags = [
