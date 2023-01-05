@@ -6394,6 +6394,17 @@ final: prev:
     meta.homepage = "https://github.com/p00f/nvim-ts-rainbow/";
   };
 
+  nvim-ts-rainbow2 = buildVimPluginFrom2Nix {
+    pname = "nvim-ts-rainbow2";
+    version = "2023-01-05";
+    src = fetchgit {
+      url = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
+      rev = "5060c12084c75bdcdc6a5e1186651ea1a3e8e376";
+      sha256 = "0x6hq5vi9i85sg1yzx5jz4nk1zxm3nqcdv5zb7vsgmra5vyr3xb5";
+    };
+    meta.homepage = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
+  };
+
   nvim-web-devicons = buildVimPluginFrom2Nix {
     pname = "nvim-web-devicons";
     version = "2022-12-09";
