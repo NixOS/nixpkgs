@@ -1253,7 +1253,7 @@ buildPhase() {
     runHook preBuild
 
     if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
-        echo "no Makefile, doing nothing"
+        echo "no Makefile or custom buildPhase, doing nothing"
     else
         foundMakefile=1
 
@@ -1322,6 +1322,15 @@ checkPhase() {
 
 installPhase() {
     runHook preInstall
+
+    # Dont reuse 'foundMakefile' set in buildPhase, a makefile may have been created in buildPhase
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+        echo "no Makefile or custom installPhase, doing nothing"
+        runHook postInstall
+        return
+    else
+        foundMakefile=1
+    fi
 
     if [ -n "$prefix" ]; then
         mkdir -p "$prefix"
