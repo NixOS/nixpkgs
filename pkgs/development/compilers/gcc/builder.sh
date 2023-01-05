@@ -203,6 +203,17 @@ preInstall() {
         ln -s lib "$out/${targetConfig}/lib32"
         ln -s lib "${!outputLib}/${targetConfig}/lib32"
     fi
+
+    # cc-wrappers uses --sysroot=/nix/store/does/not/exist as a way to
+    # drop default sysheaders search path. Unfortunately that switches
+    # clang++ into searching libraries in gcc in cross-compiler paths:
+    #   from ${!outputLib}/lib (native)
+    #   to ${!outputLib}/${targetPlatformConfig}/lib
+    # We create the symlink to make both native and cross paths
+    # available even if the toolchain is not the cross-compiler.
+    if [ ! -e ${!outputLib}/${targetPlatformConfig} ] ; then
+        ln -s . ${!outputLib}/${targetPlatformConfig}
+    fi
 }
 
 
