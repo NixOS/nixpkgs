@@ -3622,8 +3622,6 @@ self: super: with self; {
 
   gast = callPackage ../development/python-modules/gast { };
 
-  garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
-
   gatt = callPackage ../development/python-modules/gatt { };
 
   gattlib = callPackage ../development/python-modules/gattlib {
@@ -6451,6 +6449,8 @@ self: super: with self; {
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
+
+  odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
