@@ -200,5 +200,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil dotlambda ];
+  meta.maintainers = with lib.maintainers; [ infinisil dotlambda ];
 }
