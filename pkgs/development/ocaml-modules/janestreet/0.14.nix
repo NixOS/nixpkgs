@@ -120,6 +120,7 @@ with self;
   };
 
   async_smtp = janePackage {
+    duneVersion = "3";
     pname = "async_smtp";
     hash = "1xf3illn7vikdxldpnc29n4z8sv9f0wsdgdvl4iv93qlvjk8gzck";
     meta.description = "SMTP client and server";
