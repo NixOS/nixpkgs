@@ -471,6 +471,7 @@ let
     };
     ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
       inherit (pkgs) ffmpeg;
+      inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
       inherit (pkgs) ffmpeg;
