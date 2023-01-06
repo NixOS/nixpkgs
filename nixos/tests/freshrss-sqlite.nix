@@ -7,6 +7,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       enable = true;
       baseUrl = "http://localhost";
       passwordFile = pkgs.writeText "password" "secret";
+      dataDir = "/srv/freshrss";
     };
   };
 
