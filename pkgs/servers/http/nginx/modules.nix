@@ -204,8 +204,8 @@ let self = {
       name = "geoip2";
       owner = "leev";
       repo = "ngx_http_geoip2_module";
-      rev = "3.3";
-      sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
+      rev = "3.4";
+      sha256 = "CAs1JZsHY7RymSBYbumC2BENsXtZP3p4ljH5QKwz5yg=";
     };
     inputs = [ libmaxminddb ];
 
