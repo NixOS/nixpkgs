@@ -10744,6 +10744,8 @@ self: super: with self; {
 
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
 
+  sphinx-tabs = callPackage ../development/python-modules/sphinx-tabs { };
+
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
