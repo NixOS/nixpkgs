@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, boost165, zlib }:
+{ lib, stdenv, fetchFromGitHub, boost, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "starspace";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0sc7a37z1skb9377a1qs8ggwrkz0nmpybx7sms38xj05b702kbvj";
   };
 
-  buildInputs = [ boost165 zlib ];
+  buildInputs = [ boost zlib ];
 
   makeFlags = [
     "CXX=${stdenv.cc.targetPrefix}c++"
-    "BOOST_DIR=${boost165.dev}/include"
+    "BOOST_DIR=${boost.dev}/include"
   ];
 
   preBuild = ''
