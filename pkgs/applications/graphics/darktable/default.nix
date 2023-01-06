@@ -27,6 +27,7 @@
 , libpng
 , librsvg
 , libtiff
+, libjxl
 , openexr_3
 , osm-gps-map
 , pkg-config
@@ -57,12 +58,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.2.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "0bfcag6bj5vcmg4z4xjirs43iafcx89al6jl41i5mrhpjzszh5hl";
+    sha256 = "18b0917fdfe9b09f66c279a681cc3bd52894a566852bbf04b2e179ecfdb11af9";
   };
 
   nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     libpng
     librsvg
     libtiff
+    libjxl
     openexr_3
     sqlite
     libxslt
