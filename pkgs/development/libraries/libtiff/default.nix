@@ -19,7 +19,6 @@
 , gdal
 , openimageio
 , freeimage
-, imlib
 }:
 
 stdenv.mkDerivation rec {
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage imlib;
+      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
       inherit (python3Packages) pillow imread;
     };
     updateScript = nix-update-script { };

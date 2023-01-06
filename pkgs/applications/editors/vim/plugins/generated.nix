@@ -4497,6 +4497,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/lsp-status.nvim/";
   };
 
+  lsp-zero-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-zero.nvim";
+    version = "2023-01-05";
+    src = fetchFromGitHub {
+      owner = "VonHeikemen";
+      repo = "lsp-zero.nvim";
+      rev = "cd508abf461b895740f0946b65315e5eef07eb8c";
+      sha256 = "074hfpw78ziaq9xl9kbix70k1zmhf36icf0ycfvc72f1992ixg9d";
+    };
+    meta.homepage = "https://github.com/VonHeikemen/lsp-zero.nvim/";
+  };
+
   lsp_extensions-nvim = buildVimPluginFrom2Nix {
     pname = "lsp_extensions.nvim";
     version = "2022-07-07";
@@ -6392,6 +6404,17 @@ final: prev:
       sha256 = "0ldv8g9i25286n0xqa1cj7a2lglcz9564dawz6ixd4ipsysjj571";
     };
     meta.homepage = "https://github.com/p00f/nvim-ts-rainbow/";
+  };
+
+  nvim-ts-rainbow2 = buildVimPluginFrom2Nix {
+    pname = "nvim-ts-rainbow2";
+    version = "2023-01-05";
+    src = fetchgit {
+      url = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
+      rev = "5060c12084c75bdcdc6a5e1186651ea1a3e8e376";
+      sha256 = "0x6hq5vi9i85sg1yzx5jz4nk1zxm3nqcdv5zb7vsgmra5vyr3xb5";
+    };
+    meta.homepage = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
   };
 
   nvim-web-devicons = buildVimPluginFrom2Nix {

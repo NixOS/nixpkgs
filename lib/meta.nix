@@ -27,7 +27,7 @@ rec {
   setName = name: drv: drv // {inherit name;};
 
 
-  /* Like `setName', but takes the previous name as an argument.
+  /* Like `setName`, but takes the previous name as an argument.
 
      Example:
        updateName (oldName: oldName + "-experimental") somePkg
