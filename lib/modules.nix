@@ -157,6 +157,11 @@ rec {
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
+            # TODO: hidden during the markdown transition to not expose downstream
+            # users of the docs infra to markdown if they're not ready for it.
+            # we don't make this visible conditionally because it can impact
+            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
+            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -1107,6 +1112,15 @@ rec {
     visible = true;
     warn = false;
     use = id;
+    wrapDescription = lib.id;
+  };
+
+  /* Transitional version of mkAliasOptionModule that uses MD docs. */
+  mkAliasOptionModuleMD = from: to: doRename {
+    inherit from to;
+    visible = true;
+    warn = false;
+    use = id;
   };
 
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
@@ -1129,7 +1143,7 @@ rec {
       (opt.highestPrio or defaultPriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  doRename = { from, to, visible, warn, use, withPriority ? true, wrapDescription ? lib.mdDoc }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1140,7 +1154,7 @@ rec {
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = lib.mdDoc "Alias of {option}`${showOption to}`.";
+        description = wrapDescription "Alias of {option}`${showOption to}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;

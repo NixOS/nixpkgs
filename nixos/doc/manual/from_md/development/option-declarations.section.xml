@@ -138,7 +138,8 @@ lib.mkOption {
 }
 </programlisting>
       <section xml:id="sec-option-declarations-util-mkPackageOption">
-        <title><literal>mkPackageOption</literal></title>
+        <title><literal>mkPackageOption</literal>,
+        <literal>mkPackageOptionMD</literal></title>
         <para>
           Usage:
         </para>
@@ -171,6 +172,15 @@ mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&qu
         <para>
           You can omit the default path if the name of the option is
           also attribute path in nixpkgs.
+        </para>
+        <para>
+          During the transition to CommonMark documentation
+          <literal>mkPackageOption</literal> creates an option with a
+          DocBook description attribute, once the transition is
+          completed it will create a CommonMark description instead.
+          <literal>mkPackageOptionMD</literal> always creates an option
+          with a CommonMark description attribute and will be removed
+          some time after the transition is completed.
         </para>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption" />
         <para>

@@ -136,13 +136,18 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = lib.mdDoc "The ${name} package to use.";
+        description = "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
         ${if example != null then "example" else null} = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       };
+
+  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
+  mkPackageOptionMD = args: name: extra:
+    let option = mkPackageOption args name extra;
+    in option // { description = lib.mdDoc option.description; };
 
   /* This option accepts anything, but it does not produce any result.
 
