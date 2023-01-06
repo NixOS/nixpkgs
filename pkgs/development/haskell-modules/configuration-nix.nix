@@ -875,17 +875,16 @@ self: super: builtins.intersectAttrs super {
   ];
 
   cachix = super.cachix.override {
-    nix = pkgs.nixVersions.nix_2_10;
+    nix = self.hercules-ci-cnix-store.passthru.nixPackage;
     fsnotify = super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   };
 
-  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_10; };
-  hercules-ci-cnix-expr =
-    addTestToolDepend pkgs.git (
-      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_10; }
-    );
-  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_10; };
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
+  hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
+  hercules-ci-cnix-store = (super.hercules-ci-cnix-store.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }).overrideAttrs (_: {
+    passthru.nixPackage = pkgs.nixVersions.nix_2_12;
+  });
 
   # the testsuite fails because of not finding tsc without some help
   aeson-typescript = overrideCabal (drv: {
