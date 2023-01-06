@@ -514,6 +514,14 @@ runTests {
     };
   };
 
+  testGenAttrs' = {
+    expr = genAttrs' (v: nameValuePair "key-${v}" "val-${v}") [ "foo" "bar" ];
+    expected = {
+      key-foo = "val-foo";
+      key-bar = "val-bar";
+    };
+  };
+
   # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {

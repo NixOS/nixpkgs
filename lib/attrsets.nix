@@ -552,6 +552,22 @@ rec {
     f:
     listToAttrs (map (n: nameValuePair n (f n)) names);
 
+  /* Generate an attribute set by mapping a `NameValuePair` over a list of values.
+
+     Example:
+       genAttrs' (v: lib.nameValuePair "key-${v}" "val-${v}") [ "foo" "bar" ]
+       => { key-bar = "val-bar"; key-foo = "val-foo"; }
+
+     Type:
+       genAttrs' :: (Any -> NameValuePair) -> [Any] -> AttrSet
+  */
+  genAttrs' =
+    # A function, given a value, returns a new `nameValuePair`
+    f:
+    # Values to map into resources
+    list:
+    listToAttrs (map f list);
+
 
   /* Check whether the argument is a derivation. Any set with
      `{ type = "derivation"; }` counts as a derivation.
