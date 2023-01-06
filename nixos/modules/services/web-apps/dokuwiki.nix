@@ -8,6 +8,13 @@ let
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
 
+  mkPhpIni = generators.toKeyValue {
+    mkKeyValue = generators.mkKeyValueDefault {} " = ";
+  };
+  mkPhpPackage = cfg: cfg.phpPackage.buildEnv {
+    extraConfig = mkPhpIni cfg.phpOptions;
+  };
+
   dokuwikiAclAuthConfig = hostName: cfg: pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
     # <?php exit()?>
@@ -238,6 +245,33 @@ let
           '';
         };
 
+        phpPackage = mkOption {
+          type = types.package;
+          relatedPackages = [ "php80" "php81" ];
+          default = pkgs.php81;
+          defaultText = "pkgs.php81";
+          description = lib.mdDoc ''
+            PHP package to use for this dokuwiki site.
+          '';
+        };
+
+        phpOptions = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = lib.mdDoc ''
+            Options for PHP's php.ini file for this dokuwiki site.
+          '';
+          example = literalExpression ''
+          {
+            "opcache.interned_strings_buffer" = "8";
+            "opcache.max_accelerated_files" = "10000";
+            "opcache.memory_consumption" = "128";
+            "opcache.revalidate_freq" = "15";
+            "opcache.fast_shutdown" = "1";
+          }
+          '';
+        };
+
         extraConfig = mkOption {
           type = types.nullOr types.lines;
           default = null;
@@ -303,7 +337,7 @@ in
         inherit user;
         group = webserver.group;
 
-        phpPackage = pkgs.php81;
+        phpPackage = mkPhpPackage cfg;
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig hostName cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig hostName cfg}";
