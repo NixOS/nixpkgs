@@ -8,6 +8,7 @@
 , "co-authors-plus"
 , "disable-xml-rpc"
 , "gutenberg"
+, "hkdev-maintenance-mode"
 , "jetpack"
 , "jetpack-lite"
 , "lightbox-photoswipe"
@@ -26,4 +27,5 @@
 , "wp-mail-smtp"
 , "wp-statistics"
 , "wp-user-avatars"
+, "wpforms-lite"
 ]

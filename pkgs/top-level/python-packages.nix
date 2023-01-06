@@ -278,6 +278,8 @@ self: super: with self; {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopurpleair = callPackage ../development/python-modules/aiopurpleair { };
+
   aiopvapi = callPackage ../development/python-modules/aiopvapi { };
 
   aiopvpc = callPackage ../development/python-modules/aiopvpc { };
@@ -3622,8 +3624,6 @@ self: super: with self; {
 
   gast = callPackage ../development/python-modules/gast { };
 
-  garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
-
   gatt = callPackage ../development/python-modules/gatt { };
 
   gattlib = callPackage ../development/python-modules/gattlib {
@@ -5052,6 +5052,8 @@ self: super: with self; {
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
 
+  keyrings-passwordstore = callPackage ../development/python-modules/keyrings-passwordstore { };
+
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
   keyutils = callPackage ../development/python-modules/keyutils {
@@ -6451,6 +6453,8 @@ self: super: with self; {
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
+
+  odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
@@ -9604,6 +9608,8 @@ self: super: with self; {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  quadprog = callPackage ../development/python-modules/quadprog { };
+
   qualysclient = callPackage ../development/python-modules/qualysclient { };
 
   quamash = callPackage ../development/python-modules/quamash { };
@@ -9758,6 +9764,8 @@ self: super: with self; {
   reorder-python-imports = callPackage ../development/python-modules/reorder-python-imports { };
 
   reolink = callPackage ../development/python-modules/reolink { };
+
+  reolink-aio = callPackage ../development/python-modules/reolink-aio { };
 
   reparser = callPackage ../development/python-modules/reparser { };
 

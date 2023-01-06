@@ -4497,6 +4497,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/lsp-status.nvim/";
   };
 
+  lsp-zero-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-zero.nvim";
+    version = "2023-01-05";
+    src = fetchFromGitHub {
+      owner = "VonHeikemen";
+      repo = "lsp-zero.nvim";
+      rev = "cd508abf461b895740f0946b65315e5eef07eb8c";
+      sha256 = "074hfpw78ziaq9xl9kbix70k1zmhf36icf0ycfvc72f1992ixg9d";
+    };
+    meta.homepage = "https://github.com/VonHeikemen/lsp-zero.nvim/";
+  };
+
   lsp_extensions-nvim = buildVimPluginFrom2Nix {
     pname = "lsp_extensions.nvim";
     version = "2022-07-07";
@@ -4663,6 +4675,43 @@ final: prev:
       sha256 = "1df3c2apc4gsgrysdya99294c5h5lxibr9xifnv26rgbcqqk7njh";
     };
     meta.homepage = "https://github.com/chentoast/marks.nvim/";
+  };
+
+  mason-lspconfig-nvim = buildVimPluginFrom2Nix {
+    pname = "mason-lspconfig.nvim";
+    version = "2022-07-25";
+    src = fetchFromGitHub {
+      owner = "williamboman";
+      repo = "mason-lspconfig.nvim";
+      rev = "ad3b109cff22af979ab3d15564cd63dc3ae2f0f0";
+      sha256 = "0jvnc9zlr5cazdrhjm1v0bjkrz5lb2z8dzlkq59b433f52qv9zrf";
+    };
+    meta.homepage = "https://github.com/williamboman/mason-lspconfig.nvim/";
+  };
+
+  mason-tool-installer-nvim = buildVimPluginFrom2Nix {
+    pname = "mason-tool-installer.nvim";
+    version = "2022-07-26";
+    src = fetchFromGitHub {
+      owner = "WhoIsSethDaniel";
+      repo = "mason-tool-installer.nvim";
+      rev = "6d9276655c09ef2358ddb105cac4a34cfa8853c0";
+      sha256 = "0j5k9fhjffkx3b5asnwxzj22fvncs69vs0rkx13ii3gdvwczbc5w";
+    };
+    meta.homepage = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim/";
+  };
+
+
+  mason-nvim = buildVimPluginFrom2Nix {
+    pname = "mason.nvim";
+    version = "2022-07-27";
+    src = fetchFromGitHub {
+      owner = "williamboman";
+      repo = "mason.nvim";
+      rev = "269ee222f76e705619da2c0130c0a06e76419b88";
+      sha256 = "1bngr68gfv33p989dqhz6xmhips7i2yjni96qgnqwhdjczfw865v";
+    };
+    meta.homepage = "https://github.com/williamboman/mason.nvim/";
   };
 
   matchit-zip = buildVimPluginFrom2Nix {
@@ -6355,6 +6404,17 @@ final: prev:
       sha256 = "0ldv8g9i25286n0xqa1cj7a2lglcz9564dawz6ixd4ipsysjj571";
     };
     meta.homepage = "https://github.com/p00f/nvim-ts-rainbow/";
+  };
+
+  nvim-ts-rainbow2 = buildVimPluginFrom2Nix {
+    pname = "nvim-ts-rainbow2";
+    version = "2023-01-05";
+    src = fetchgit {
+      url = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
+      rev = "5060c12084c75bdcdc6a5e1186651ea1a3e8e376";
+      sha256 = "0x6hq5vi9i85sg1yzx5jz4nk1zxm3nqcdv5zb7vsgmra5vyr3xb5";
+    };
+    meta.homepage = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
   };
 
   nvim-web-devicons = buildVimPluginFrom2Nix {

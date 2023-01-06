@@ -121,6 +121,12 @@
     githubId = 7414843;
     name = "Nicholas von Klitzing";
   };
+  _3JlOy-PYCCKUi = {
+    name = "3JlOy-PYCCKUi";
+    email = "3jl0y_pycckui@riseup.net";
+    github = "3JlOy-PYCCKUi";
+    githubId = 46464602;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
@@ -4552,6 +4558,12 @@
     githubId = 225893;
     name = "James Cook";
   };
+  farcaller = {
+    name = "Vladimir Pouzanov";
+    email = "farcaller@gmail.com";
+    github = "farcaller";
+    githubId = 693;
+  };
   fare = {
     email = "fahree@gmail.com";
     github = "fare";
@@ -4593,6 +4605,16 @@
     github = "fdns";
     githubId = 541748;
     name = "Felipe Espinoza";
+  };
+  federicoschonborn = {
+    name = "Federico Damián Schonborn";
+    email = "fdschonborn@gmail.com";
+    github = "FedericoSchonborn";
+    githubId = 62166915;
+    matrix = "@FedericoDSchonborn:matrix.org";
+    keys = [
+      { fingerprint = "517A 8A6A 09CA A11C 9667  CEE3 193F 70F1 5C9A B0A0"; }
+    ];
   };
   fedx-sudo = {
     email = "fedx-sudo@pm.me";

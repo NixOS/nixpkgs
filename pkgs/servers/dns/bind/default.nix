@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # requires root and the net
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit (nixosTests) bind;

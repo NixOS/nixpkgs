@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-XUYTDHh0oTro6BT+h4LjRdMukOZTlWP+giFpjLciZNQ=";
+    hash = "sha256-XUYTDHh0oTro6BT+h4LjRdMukOZTlWP+giFpjLciZNQ=";
   };
 
   propagatedBuildInputs = [
@@ -61,8 +61,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python module to interact with the Reolink IP camera API";
+    description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/fwestenberg/reolink";
+    changelog = "https://github.com/fwestenberg/reolink/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

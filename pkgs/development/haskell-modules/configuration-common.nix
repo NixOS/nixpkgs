@@ -216,10 +216,6 @@ self: super: {
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core = doJailbreak super.hnix-store-core;
 
-  # Too strict upper bound on bytestring
-  # https://github.com/wangbj/hashing/issues/3
-  hashing = doJailbreak super.hashing;
-
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
@@ -1460,16 +1456,6 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (appendPatches [
-      # haskell-updates branch, will be merged in 0.9.10
-      (fetchpatch2 {
-        name = "hercules-ci-agent-cachix-1.1";
-        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/b76d888548da37a96ae47f1be871de6605d38edd.patch";
-        sha256 = "sha256-kqEkDHbatcYS8LuQlGV/1j/6LXWviQoDQAHDr6DBbDU=";
-        stripLen = 1;
-        includes = [ "*.hs" ];
-      })
-    ])
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 
@@ -1913,18 +1899,6 @@ self: super: {
   # 2022-12-30: Restrictive upper bound on optparse-applicative
   retrie = doJailbreak super.retrie;
 
-  # Fixes https://github.com/NixOS/nixpkgs/issues/140613
-  # https://github.com/recursion-schemes/recursion-schemes/issues/128
-  recursion-schemes = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      ./patches/recursion-schemes-128.patch
-    ];
-    # make sure line endings don't break the patch
-    prePatch = drv.prePatch or "" + ''
-      "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-    '';
-  }) super.recursion-schemes;
-
   # 2022-08-30 Too strict bounds on finite-typelits
   # https://github.com/jumper149/blucontrol/issues/1
   blucontrol = doJailbreak super.blucontrol;
@@ -2003,12 +1977,6 @@ self: super: {
       "--skip" "/toJsonSerializer/should generate valid JSON/"
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
-  # https://gitlab.com/k0001/xmlbf/-/issues/32
-  xmlbf = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/xml: <x b=\"\" a=\"y\"><\\/x>/&&!/xml: <x b=\"z\" a=\"y\"><\\/x>/"
-    ] ++ drv.testFlags or [];
-  }) super.xmlbf;
   # https://github.com/ssadler/aeson-quick/issues/3
   aeson-quick = overrideCabal (drv: {
     testFlags = [
@@ -2141,12 +2109,6 @@ self: super: {
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
-
-  # Doesn't support aeson >= 2.0
-  # https://github.com/channable/vaultenv/issues/118
-  vaultenv = super.vaultenv.overrideScope (self: super: {
-    aeson = self.aeson_1_5_6_0;
-  });
 
   # Support network >= 3.1.2
   # https://github.com/erebe/wstunnel/pull/107
@@ -2363,4 +2325,16 @@ self: super: {
   } super.postgrest));
 
   html-charset = dontCheck super.html-charset;
+
+  # true-name-0.1.0.4 has been tagged, but has not been released to Hackage.
+  # Also, beyond 0.1.0.4 an additional patch is required to make true-name
+  # compatible with current versions of template-haskell
+  # https://github.com/liyang/true-name/pull/4
+  true-name = appendPatch (fetchpatch {
+    url = "https://github.com/liyang/true-name/compare/0.1.0.3...nuttycom:true-name:update_template_haskell.patch";
+    hash = "sha256-ZMBXGGc2X5AKXYbqgkLXkg5BhEwyj022E37sUEWahtc=";
+  }) (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.true-name);
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

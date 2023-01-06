@@ -598,6 +598,14 @@ self: super: {
     '';
   });
 
+  mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs (old: {
+    dependencies = with self; [ mason-nvim nvim-lspconfig ];
+  });
+
+  mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs (old: {
+    dependencies = with self; [ mason-nvim ];
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
@@ -702,6 +710,13 @@ self: super: {
   });
 
   inherit parinfer-rust;
+
+  playground = super.playground.overrideAttrs (old: {
+    dependencies = with self; [
+      # we need the 'query' grammer to make
+      (nvim-treesitter.withPlugins (p: [ p.query ]))
+    ];
+  });
 
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
     postPatch = ''

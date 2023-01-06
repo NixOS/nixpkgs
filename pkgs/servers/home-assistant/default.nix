@@ -43,6 +43,22 @@ let
         };
       });
 
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        pname = "astral";
+        version = "2.2";
+        src = self.fetchPypi {
+          inherit pname version;
+          hash = "sha256-5B2ZZ9XEi+QhNGVS8PTe2tQ/85qDV09f8q0ytmJ7b74=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry" "poetry.core.masonry"
+        '';
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          self.pytz
+        ];
+      });
+
       caldav = super.caldav.overridePythonAttrs (old: rec {
         version = "0.9.1";
         src = fetchFromGitHub {
@@ -66,17 +82,6 @@ let
           repo = "python-gridnet";
           rev = "refs/tags/v${version}";
           hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
-        };
-      });
-
-      hap-python = super.hap-python.overridePythonAttrs (oldAtrs: rec {
-        pname = "ha-hap-python";
-        version = "4.5.2";
-        src = fetchFromGitHub {
-          owner = "bdraco";
-          repo = "ha-HAP-python";
-          rev = "refs/tags/v4.5.2";
-          hash = "sha256-xCmx5QopNShKIuXewT+T86Bxyi4P0ddh8r2UlJ48Wig=";
         };
       });
 
@@ -190,7 +195,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.12.8";
+  hassVersion = "2023.1.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -208,7 +213,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-oJwA0YELlgMbnf1XiLDGlMLrvFaLP7WMv9/0KOI4XDI=";
+    hash = "sha256-qgrUVPh/lSOwRm0FIU6kLuj591XdtNCtA2IMOfhKw/0=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -225,6 +230,7 @@ in python.pkgs.buildPythonApplication rec {
       "attrs"
       "awesomeversion"
       "bcrypt"
+      "ciso8601"
       "cryptography"
       "home-assistant-bluetooth"
       "httpx"
@@ -284,11 +290,13 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
+    pytest-asyncio
     pytest-aiohttp
     pytest-freezegun
     pytest-mock
     pytest-rerunfailures
     pytest-socket
+    pytest-unordered
     pytest-xdist
     pytestCheckHook
     requests-mock

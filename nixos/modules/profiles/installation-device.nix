@@ -20,6 +20,7 @@ with lib;
     ];
 
   config = {
+    system.nixos.variant_id = lib.mkDefault "installer";
 
     # Enable in installer, even if the minimal profile disables it.
     documentation.enable = mkImageMediaOverride true;

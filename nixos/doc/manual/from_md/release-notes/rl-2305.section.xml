@@ -117,6 +117,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>podman</literal> now uses the
+          <literal>netavark</literal> network stack. Users will need to
+          delete all of their local containers, images, volumes, etc, by
+          running <literal>podman system reset --force</literal> once
+          before upgrading their systems.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module no longer fetches instance metadata in
           stage-1. This results in a significantly smaller initramfs,
           since network drivers no longer need to be included, and
