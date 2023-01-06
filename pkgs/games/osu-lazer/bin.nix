@@ -29,7 +29,9 @@ appimageTools.wrapType2 rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = [ maintainers.delan ];
+    mainProgram = "osu!";
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -151,6 +151,14 @@ in {
       ];
     };
 
+    linux_rt_5_15 = callPackage ../os-specific/linux/kernel/linux-rt-5.15.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.export-rt-sched-migrate
+      ];
+    };
+
     linux_5_17 = throw "linux 5.17 was removed because it has reached its end of life upstream";
 
     linux_5_18 = throw "linux 5.18 was removed because it has reached its end of life upstream";
@@ -534,6 +542,7 @@ in {
      # realtime kernel packages
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
+     linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
   };
 
   rpiPackages = {

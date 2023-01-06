@@ -8,6 +8,13 @@ let
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
 
+  mkPhpIni = generators.toKeyValue {
+    mkKeyValue = generators.mkKeyValueDefault {} " = ";
+  };
+  mkPhpPackage = cfg: cfg.phpPackage.buildEnv {
+    extraConfig = mkPhpIni cfg.phpOptions;
+  };
+
   dokuwikiAclAuthConfig = hostName: cfg: pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
     # <?php exit()?>
@@ -173,18 +180,14 @@ let
           '';
           example = literalExpression ''
                 let
-                  # Let's package the icalevents plugin
-                  plugin-icalevents = pkgs.stdenv.mkDerivation {
+                  plugin-icalevents = pkgs.stdenv.mkDerivation rec {
                     name = "icalevents";
-                    # Download the plugin from the dokuwiki site
-                    src = pkgs.fetchurl {
-                      url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
-                      sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
+                    version = "2017-06-16";
+                    src = pkgs.fetchzip {
+                      stripRoot = false;
+                      url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/''${version}/dokuwiki-plugin-icalevents-''${version}.zip";
+                      hash = "sha256-IPs4+qgEfe8AAWevbcCM9PnyI0uoyamtWeg4rEb+9Wc=";
                     };
-                    sourceRoot = ".";
-                    # We need unzip to build this package
-                    buildInputs = [ pkgs.unzip ];
-                    # Installing simply means copying all files to the output directory
                     installPhase = "mkdir -p $out; cp -R * $out/";
                   };
                 # And then pass this theme to the plugin list like this:
@@ -204,19 +207,17 @@ let
           '';
           example = literalExpression ''
                 let
-                  # Let's package the bootstrap3 theme
-                  template-bootstrap3 = pkgs.stdenv.mkDerivation {
-                    name = "bootstrap3";
-                    # Download the theme from the dokuwiki site
-                    src = pkgs.fetchurl {
-                      url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
-                      sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
-                    };
-                    # We need unzip to build this package
-                    buildInputs = [ pkgs.unzip ];
-                    # Installing simply means copying all files to the output directory
-                    installPhase = "mkdir -p $out; cp -R * $out/";
+                  template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
+                  name = "bootstrap3";
+                  version = "2022-07-27";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "giterlizzi";
+                    repo = "dokuwiki-template-bootstrap3";
+                    rev = "v''${version}";
+                    hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
                   };
+                  installPhase = "mkdir -p $out; cp -R * $out/";
+                };
                 # And then pass this theme to the template list like this:
                 in [ template-bootstrap3 ]
           '';
@@ -235,6 +236,33 @@ let
           description = lib.mdDoc ''
             Options for the DokuWiki PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
+          '';
+        };
+
+        phpPackage = mkOption {
+          type = types.package;
+          relatedPackages = [ "php80" "php81" ];
+          default = pkgs.php81;
+          defaultText = "pkgs.php81";
+          description = lib.mdDoc ''
+            PHP package to use for this dokuwiki site.
+          '';
+        };
+
+        phpOptions = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = lib.mdDoc ''
+            Options for PHP's php.ini file for this dokuwiki site.
+          '';
+          example = literalExpression ''
+          {
+            "opcache.interned_strings_buffer" = "8";
+            "opcache.max_accelerated_files" = "10000";
+            "opcache.memory_consumption" = "128";
+            "opcache.revalidate_freq" = "15";
+            "opcache.fast_shutdown" = "1";
+          }
           '';
         };
 
@@ -276,8 +304,8 @@ in
           Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
           See [](#opt-services.nginx.virtualHosts) for further information.
 
-          Further apache2 configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
-          See [](#opt-services.httpd.virtualHosts) for further information.
+          Further caddy configuration can be done by adapting `services.caddy.virtualHosts.<name>`.
+          See [](#opt-services.caddy.virtualHosts) for further information.
         '';
       };
 
@@ -303,7 +331,7 @@ in
         inherit user;
         group = webserver.group;
 
-        phpPackage = pkgs.php81;
+        phpPackage = mkPhpPackage cfg;
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig hostName cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig hostName cfg}";

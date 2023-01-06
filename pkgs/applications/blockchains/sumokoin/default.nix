@@ -1,33 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, cmake, unbound, openssl, boost
-, libunwind, lmdb, miniupnpc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, openssl
+, libsodium
+, libunwind
+, lmdb
+, unbound
+, zeromq
+}:
 
 stdenv.mkDerivation rec {
   pname = "sumokoin";
-  version = "0.2.0.0";
+  version = "0.8.1.0";
 
   src = fetchFromGitHub {
     owner = "sumoprojects";
     repo = "sumokoin";
     rev = "v${version}";
-    sha256 = "0ndgcawhxh3qb3llrrilrwzhs36qpxv7f53rxgcansbff9b3za6n";
+    hash = "sha256-CHZ6hh60U6mSR68CYDKMWTYyX1koF4gA7YrA1P5f0Dk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ unbound openssl boost libunwind lmdb miniupnpc ];
-
+  # disable POST_BUILD
   postPatch = ''
-    substituteInPlace src/blockchain_db/lmdb/db_lmdb.cpp --replace mdb_size_t size_t
+    sed -i 's/if (UNIX)/if (0)/g' src/utilities/*_utilities/CMakeLists.txt
   '';
 
-  cmakeFlags = [
-    "-DLMDB_INCLUDE=${lmdb}/include"
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+
+  buildInputs = [
+    boost
+    openssl
+    libsodium
+    libunwind
+    lmdb
+    unbound
+    zeromq
+  ];
+
+  # cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     description = "A fork of Monero and a truely fungible cryptocurrency";
     homepage = "https://www.sumokoin.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };
 }

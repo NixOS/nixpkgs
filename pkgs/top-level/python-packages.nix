@@ -278,6 +278,8 @@ self: super: with self; {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopurpleair = callPackage ../development/python-modules/aiopurpleair { };
+
   aiopvapi = callPackage ../development/python-modules/aiopvapi { };
 
   aiopvpc = callPackage ../development/python-modules/aiopvpc { };
@@ -5049,6 +5051,8 @@ self: super: with self; {
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
+
+  keyrings-passwordstore = callPackage ../development/python-modules/keyrings-passwordstore { };
 
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
