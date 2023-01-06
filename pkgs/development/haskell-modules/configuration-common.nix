@@ -663,7 +663,10 @@ self: super: {
   #   removed when the next idris release (1.3.4 probably) comes
   #   around.
   idris = self.generateOptparseApplicativeCompletions [ "idris" ]
-    (doJailbreak (dontCheck super.idris));
+    (appendPatch (fetchpatch {
+      url = "https://github.com/idris-lang/Idris-dev/pull/4920/commits/6d6017f906c5aa95594dba0fd75e7a512f87883a.patch";
+      hash = "sha256-wyLjqCyLh5quHMOwLM5/XjlhylVC7UuahAM79D8+uls=";
+    }) (doJailbreak (dontCheck super.idris)));
 
   # Too strict bound on hspec
   # https://github.com/lspitzner/multistate/issues/9#issuecomment-1367853016
