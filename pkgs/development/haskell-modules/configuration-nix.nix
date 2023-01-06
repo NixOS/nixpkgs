@@ -851,7 +851,11 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
-  cachix = super.cachix.override { nix = pkgs.nixVersions.nix_2_9; };
+  cachix = super.cachix.override {
+    nix = pkgs.nixVersions.nix_2_9;
+    fsnotify = super.fsnotify_0_4_1_0;
+    hnix-store-core = super.hnix-store-core_0_6_1_0;
+  };
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
   hercules-ci-cnix-expr =
