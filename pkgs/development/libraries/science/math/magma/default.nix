@@ -8,14 +8,14 @@ assert let majorIs = lib.versions.major cudatoolkit.version;
        in majorIs == "9" || majorIs == "10" || majorIs == "11";
 
 let
-  version = "2.6.2";
+  version = "2.7.0";
 
 in stdenv.mkDerivation {
   pname = "magma";
   inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    hash = "sha256-dbVU2rAJA+LRC5cskT5Q5/iMvGLzrkMrWghsfk7aCnE=";
+    hash = "sha256-/aHLxGB+d8rNj+scD2M8WCa6IAoBj2R/HFQ2l1s5/Rg=";
     name = "magma-${version}.tar.gz";
   };
 
