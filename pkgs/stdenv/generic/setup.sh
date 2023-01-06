@@ -1348,6 +1348,10 @@ showPhaseFooter() {
 
 
 genericBuild() {
+    # variable used by our gzip wrapper to add -n.
+    # gzip is in common-path.nix and is added to nix-shell but we only want to change its behaviour in nix builds. do not move to a setupHook in gzip.
+    export GZIP_NO_TIMESTAMPS=1
+
     if [ -f "${buildCommandPath:-}" ]; then
         source "$buildCommandPath"
         return
