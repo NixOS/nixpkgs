@@ -5,21 +5,15 @@
 , apparmorRulesFromClosure
 }:
 
-let
-  version = "20211215";
-  sunAsIsLicense = {
-    fullName = "AS-IS, SUN MICROSYSTEMS license";
-    url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "iputils";
-  inherit version;
+  version = "20221126";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1vzdch1xi2x2j8mvnsr4wwwh7kdkgf926xafw5kkb74yy1wac5qv";
+    hash = "sha256-XVoQhdjBmEK8TbCpaKLjebPw7ZT8iEvyLJDTCkzezeE=";
   };
 
   outputs = ["out" "apparmor"];
@@ -29,7 +23,6 @@ in stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [
-    "-DBUILD_RARPD=true"
     "-DNO_SETCAP_OR_SUID=true"
     "-Dsystemdunitdir=etc/systemd/system"
     "-DINSTALL_SYSTEMD_UNITS=true"
@@ -68,20 +61,17 @@ in stdenv.mkDerivation rec {
     description = "A set of small useful utilities for Linux networking";
     inherit (src.meta) homepage;
     changelog = "https://github.com/iputils/iputils/releases/tag/s${version}";
-    license = with licenses; [ gpl2Plus bsd3 sunAsIsLicense ];
+    license = with licenses; [ gpl2Plus bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos lheckemann ];
 
     longDescription = ''
       A set of small useful utilities for Linux networking including:
 
-      arping
-      clockdiff
-      ninfod
-      ping
-      rarpd
-      rdisc
-      tracepath
+      - arping: send ARP REQUEST to a neighbour host
+      - clockdiff: measure clock difference between hosts
+      - ping: send ICMP ECHO_REQUEST to network hosts
+      - tracepath: traces path to a network host discovering MTU along this path
     '';
   };
 }
