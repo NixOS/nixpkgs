@@ -173,18 +173,14 @@ let
           '';
           example = literalExpression ''
                 let
-                  # Let's package the icalevents plugin
-                  plugin-icalevents = pkgs.stdenv.mkDerivation {
+                  plugin-icalevents = pkgs.stdenv.mkDerivation rec {
                     name = "icalevents";
-                    # Download the plugin from the dokuwiki site
-                    src = pkgs.fetchurl {
-                      url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
-                      sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
+                    version = "2017-06-16";
+                    src = pkgs.fetchzip {
+                      stripRoot = false;
+                      url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/''${version}/dokuwiki-plugin-icalevents-''${version}.zip";
+                      hash = "sha256-IPs4+qgEfe8AAWevbcCM9PnyI0uoyamtWeg4rEb+9Wc=";
                     };
-                    sourceRoot = ".";
-                    # We need unzip to build this package
-                    buildInputs = [ pkgs.unzip ];
-                    # Installing simply means copying all files to the output directory
                     installPhase = "mkdir -p $out; cp -R * $out/";
                   };
                 # And then pass this theme to the plugin list like this:
@@ -204,19 +200,17 @@ let
           '';
           example = literalExpression ''
                 let
-                  # Let's package the bootstrap3 theme
-                  template-bootstrap3 = pkgs.stdenv.mkDerivation {
-                    name = "bootstrap3";
-                    # Download the theme from the dokuwiki site
-                    src = pkgs.fetchurl {
-                      url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
-                      sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
-                    };
-                    # We need unzip to build this package
-                    buildInputs = [ pkgs.unzip ];
-                    # Installing simply means copying all files to the output directory
-                    installPhase = "mkdir -p $out; cp -R * $out/";
+                  template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
+                  name = "bootstrap3";
+                  version = "2022-07-27";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "giterlizzi";
+                    repo = "dokuwiki-template-bootstrap3";
+                    rev = "v''${version}";
+                    hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
                   };
+                  installPhase = "mkdir -p $out; cp -R * $out/";
+                };
                 # And then pass this theme to the template list like this:
                 in [ template-bootstrap3 ]
           '';
@@ -276,8 +270,8 @@ in
           Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
           See [](#opt-services.nginx.virtualHosts) for further information.
 
-          Further apache2 configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
-          See [](#opt-services.httpd.virtualHosts) for further information.
+          Further caddy configuration can be done by adapting `services.caddy.virtualHosts.<name>`.
+          See [](#opt-services.caddy.virtualHosts) for further information.
         '';
       };
 
