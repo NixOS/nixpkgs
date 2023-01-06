@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cchardet
 , chardet
 , pandas
@@ -18,9 +19,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "v${version}";
-    sha256 = "sha256-2OLvVJbqV/wR+Quq0cAlR/vCUe1/Km/nALwfoHD9B+U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2OLvVJbqV/wR+Quq0cAlR/vCUe1/Km/nALwfoHD9B+U=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fixes compat with setuptools>=65.6.0
+      # https://github.com/alan-turing-institute/CleverCSV/issues/77
+      url = "https://github.com/alan-turing-institute/CleverCSV/commit/0614fe16fa0e8e08c4c916efc956209fe2aa8ce6.patch";
+      hash = "sha256-ZL0cc5Si8ga6kd3JhfaIUOWXdnEgep9tvHBVpXjsI+w=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cchardet
@@ -30,7 +40,9 @@ buildPythonPackage rec {
     tabview
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "clevercsv"

@@ -582,7 +582,7 @@ rec {
     let
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash python3
+          gnumake gzip gnused bzip2 ed xz patch bash python3
           ncurses libffi zlib gmp pcre gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
 

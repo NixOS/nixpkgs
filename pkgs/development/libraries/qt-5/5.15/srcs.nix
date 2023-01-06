@@ -1,7 +1,7 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.7";
+  version = "5.15.8";
   overrides = {};
 
   mk = name: args:
