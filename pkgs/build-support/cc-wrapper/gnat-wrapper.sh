@@ -29,6 +29,9 @@ if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
+if [ -z "${NIX_GNAT_WRAPPER_EXTRA_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @out@/nix-support/add-gnat-extra-flags.sh
+fi
 
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.
@@ -126,7 +129,7 @@ fi
 
 if [ "$(basename $0)x" = "gnatmakex" ]; then
     extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
-    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@ -cargs $NIX_GNATMAKE_CARGS_@suffixSalt@)
 fi
 
 if [ "$(basename $0)x" = "gnatbindx" ]; then

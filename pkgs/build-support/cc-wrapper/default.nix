@@ -519,6 +519,10 @@ stdenv.mkDerivation {
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
 
+    + optionalString cc.langAda or false ''
+      substituteAll ${./add-gnat-extra-flags.sh} $out/nix-support/add-gnat-extra-flags.sh
+    ''
+
     ##
     ## General Clang support
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
