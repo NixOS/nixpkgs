@@ -101,7 +101,7 @@ let
     interpreter = "${pkgs.bash}/bin/bash";
   };
 
-  # Like writeScriptBIn but the first line is a shebang to bash
+  # Like writeScriptBin but the first line is a shebang to bash
   writeBashBin = name:
     writeBash "/bin/${name}";
 
