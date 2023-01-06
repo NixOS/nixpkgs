@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/janmojzis/tinyssh/releases/tag/${version}";
     license = licenses.cc0;
     platforms = platforms.unix;
-    maintainers = with maintainers: [ kaction ];
+    maintainers = with maintainers; [ kaction ];
   };
 }
