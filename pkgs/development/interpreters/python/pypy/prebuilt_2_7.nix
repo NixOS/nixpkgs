@@ -105,8 +105,8 @@ in with passthru; stdenv.mkDerivation {
   '' + lib.optionalString (stdenv.isDarwin) ''
     install_name_tool \
       -change \
-        @rpath/libpypy${optionalString isPy3k "3"}-c.dylib \
-        $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib \
+        @rpath/lib${executable}-c.dylib \
+        $out/lib/lib${executable}-c.dylib \
         $out/bin/${executable}
   '';
 
