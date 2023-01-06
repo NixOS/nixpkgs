@@ -174,6 +174,7 @@ in with passthru; stdenv.mkDerivation rec {
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     maintainers = with maintainers; [ andersk ];
   };
 }
