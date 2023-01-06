@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     xorg.libICE
   ];
 
+  enableParallelBuilding = true;
+
   # N.B. the shared object is used by bindings
   cmakeFlags = [
     "-DENABLE_BUILD_SHARED=ON"
