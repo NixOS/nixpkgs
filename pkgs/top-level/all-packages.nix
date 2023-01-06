@@ -10407,7 +10407,7 @@ with pkgs;
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_8; };
+  packagekit = callPackage ../tools/package-management/packagekit { };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
@@ -16662,7 +16662,7 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
-  rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { nix = nixVersions.nix_2_9; };
+  rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
   sumneko-lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/sumneko-lua-language-server {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;

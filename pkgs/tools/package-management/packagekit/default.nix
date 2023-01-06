@@ -10,7 +10,6 @@
 , gobject-introspection
 , vala
 , gtk-doc
-, nix
 , boost
 , meson
 , ninja
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gtk3
     sqlite
-    nix
     boost
   ] ++ lib.optional enableSystemd systemd
   ++ lib.optional enableBashCompletion bash-completion;
@@ -69,7 +67,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
-    "-Dpackaging_backend=nix"
+    # often fails to build with nix updates
+    # and remounts /nix/store as rw
+    # https://github.com/NixOS/nixpkgs/issues/177946
+    #"-Dpackaging_backend=nix"
     "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
