@@ -97,6 +97,7 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [
       "-DWITH_ALEMBIC=ON"
+      "-DWITH_USD=ON"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
