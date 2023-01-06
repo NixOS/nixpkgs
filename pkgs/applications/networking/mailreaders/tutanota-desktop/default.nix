@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${electron}/bin/electron \
       $out/bin/tutanota-desktop \
       --add-flags $out/share/tutanota-desktop/resources/app.asar \
-      --run "mkdir /tmp/tutanota" \
+      --run "mkdir -p /tmp/tutanota" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}
 
     runHook postInstall
