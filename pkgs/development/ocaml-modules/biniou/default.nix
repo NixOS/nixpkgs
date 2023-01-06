@@ -5,7 +5,7 @@ buildDunePackage rec {
   version = "1.2.2";
 
   src = fetchurl {
-    url = "https://github.com/mjambon/biniou/releases/download/${version}/biniou-${version}.tbz";
+    url = "https://github.com/ocaml-community/biniou/releases/download/${version}/biniou-${version}.tbz"
     hash = "sha256-i/P/F80Oyy1rbR2UywjvCJ1Eyu+W6brmvmg51Cj6MY8=";
   };
 
