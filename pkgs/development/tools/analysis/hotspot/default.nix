@@ -22,13 +22,13 @@
 
 mkDerivation rec {
   pname = "hotspot";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
     rev = "v${version}";
-    hash = "sha256-7GuIe8F3QqosW/XaN3KC1WeWcI7woUiEc9Nw0b+fSk0=";
+    hash = "sha256-DW4R7+rnonmEMbCkNS7TGodw+3mEyHl6OlFK3kbG5HM=";
     fetchSubmodules = true;
   };
 
