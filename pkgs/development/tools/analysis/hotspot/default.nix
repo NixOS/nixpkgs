@@ -27,7 +27,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-DW4R7+rnonmEMbCkNS7TGodw+3mEyHl6OlFK3kbG5HM=";
     fetchSubmodules = true;
   };
@@ -62,7 +62,7 @@ mkDerivation rec {
     mkdir -p 3rdparty/{perfparser,PrefixTickLabels}/.git
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A GUI for Linux perf";
     longDescription = ''
       hotspot is a GUI replacement for `perf report`.
@@ -70,8 +70,9 @@ mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    license = with lib.licenses; [ gpl2Only gpl3Only ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nh2 ];
+    changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
+    license = with licenses; [ gpl2Only gpl3Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nh2 ];
   };
 }
