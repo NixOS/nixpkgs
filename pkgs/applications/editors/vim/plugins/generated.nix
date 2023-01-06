@@ -6632,6 +6632,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-orgmode/orgmode/";
   };
 
+  oxocarbon-nvim = buildVimPluginFrom2Nix {
+    pname = "oxocarbon.nvim";
+    version = "2023-01-03";
+    src = fetchFromGitHub {
+      owner = "nyoom-engineering";
+      repo = "oxocarbon.nvim";
+      rev = "71cd5475050ddf173a8d94dd0ea067b78d88397b";
+      sha256 = "0nqvq33ljpjq3m54l31zhd6givq524pgyzp5vf8f19ky7bvd833f";
+    };
+    meta.homepage = "https://github.com/nyoom-engineering/oxocarbon.nvim/";
+  };
+
   package-info-nvim = buildVimPluginFrom2Nix {
     pname = "package-info.nvim";
     version = "2022-11-17";
