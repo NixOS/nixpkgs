@@ -51,6 +51,15 @@ stdenv.mkDerivation rec {
       ];
       sha256 = "1h00djdvgjhwfb60wl4qrxbyfsbbnn1qw6l2hkldnif4m8f8r1zj";
     })
+    (fetchurl {
+      urls = [
+        # original link (will be dead eventually):
+        "https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
+
+        "https://web.archive.org/web/20230106200319/https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
+      ];
+      sha256 = "sha256-on79jElQ+z2ULWAq14RpluAqr9d6itHiZwDkKubBzTc=";
+    })
   ] ++ lib.optional enableNLS
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
