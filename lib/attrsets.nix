@@ -534,35 +534,38 @@ rec {
         in mapAttrs g;
     in recurse [] set;
 
-
   /* Generate an attribute set by mapping a function over a list of
      attribute names.
 
      Example:
-       genAttrs [ "foo" "bar" ] (name: "x_" + name)
-       => { foo = "x_foo"; bar = "x_bar"; }
+       mapListToAttrs [ "foo" "bar" ] (name: "x_" + name)
+       => { bar = "x_bar"; foo = "x_foo"; }
 
      Type:
-       genAttrs :: [ String ] -> (String -> Any) -> AttrSet
+       mapListToAttrs :: [String] -> (String -> Any) -> AttrSet
   */
-  genAttrs =
-    # Names of values in the resulting attribute set.
-    names:
-    # A function, given the name of the attribute, returns the attribute's value.
+  mapListToAttrs =
+    # A function, given a string, that produces a corresponding value
     f:
-    listToAttrs (map (n: nameValuePair n (f n)) names);
+    # The list of strings to map
+    list:
+    listToAttrs (map (n: nameValuePair n (f n)) list);
+
+  # DEPRECATED
+  genAttrs = lib.warn
+    "lib.genAttrs is deprecated, use lib.mapListToAttrs instead" (flip mapListToAttrs);
 
   /* Generate an attribute set by mapping a `NameValuePair` over a list of values.
 
      Example:
-       genAttrs' (v: lib.nameValuePair "key-${v}" "val-${v}") [ "foo" "bar" ]
+       mapListToAttrs' (v: lib.nameValuePair "key-${v}" "val-${v}") [ "foo" "bar" ]
        => { key-bar = "val-bar"; key-foo = "val-foo"; }
 
      Type:
-       genAttrs' :: (Any -> NameValuePair) -> [Any] -> AttrSet
+       mapListToAttrs' :: (Any -> NameValuePair) -> [Any] -> AttrSet
   */
-  genAttrs' =
-    # A function, given a value, returns a new `nameValuePair`
+  mapListToAttrs' =
+    # A function, given a value, returns a `nameValuePair`
     f:
     # Values to map into resources
     list:
