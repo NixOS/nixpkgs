@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Analyze power consumption on Intel-based laptops";
     homepage = "https://01.org/powertop";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz anthonyroussel ];
     platforms = platforms.linux;
   };
 }
