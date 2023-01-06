@@ -4690,6 +4690,8 @@ self: super: with self; {
 
   intellifire4py = callPackage ../development/python-modules/intellifire4py { };
 
+  interface-meta = callPackage ../development/python-modules/interface-meta { };
+
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive { };
