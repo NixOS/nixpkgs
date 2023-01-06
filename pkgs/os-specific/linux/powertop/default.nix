@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, gettext, libnl, ncurses, pciutils
-, pkg-config, zlib, autoreconfHook, autoconf-archive, nix-update-script, testers, powertop }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, libnl
+, ncurses
+, pciutils
+, pkg-config
+, zlib
+, autoreconfHook
+, autoconf-archive
+, nix-update-script
+, testers
+, powertop
+}:
 
 stdenv.mkDerivation rec {
   pname = "powertop";
