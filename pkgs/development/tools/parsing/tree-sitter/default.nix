@@ -58,10 +58,10 @@ let
     let
       build = name: grammar:
         buildGrammar {
-          language = if grammar ? language then grammar.language else name;
+          language = grammar.language or name;
           inherit version;
-          source = if grammar ? src then grammar.src else fetchGrammar grammar;
-          location = if grammar ? location then grammar.location else null;
+          src = grammar.src or fetchGrammar grammar;
+          location = grammar.location or null;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
