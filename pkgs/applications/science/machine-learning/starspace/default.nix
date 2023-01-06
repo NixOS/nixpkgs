@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "starspace";
-  version = "unstable-2021-01-17";
+  version = "unstable-2019-12-13";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
