@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
+    changelog = "https://github.com/hbldh/bleak/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ oxzi ];
