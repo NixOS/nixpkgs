@@ -6854,8 +6854,6 @@ with pkgs;
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
 
-  emem = callPackage ../applications/misc/emem { };
-
   empty = callPackage ../tools/misc/empty { };
 
   emulsion = callPackage ../applications/graphics/emulsion {
@@ -8171,8 +8169,6 @@ with pkgs;
   bc-decaf = callPackage ../development/libraries/bc-decaf { };
 
   deckmaster = callPackage ../applications/misc/deckmaster { };
-
-  deco = callPackage ../applications/misc/deco { };
 
   decoder = callPackage ../tools/security/decoder { };
 
@@ -10486,8 +10482,6 @@ with pkgs;
 
   peep = callPackage ../tools/misc/peep { };
 
-  pell = callPackage ../applications/misc/pell { };
-
   perccli = callPackage ../tools/misc/perccli { };
 
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
@@ -12668,8 +12662,6 @@ with pkgs;
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 {};
 
   ustreamer = callPackage ../applications/video/ustreamer { };
-
-  usync = callPackage ../applications/misc/usync { };
 
   uwc = callPackage ../tools/text/uwc { };
 

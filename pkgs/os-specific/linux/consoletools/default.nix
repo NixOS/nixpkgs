@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "A set of tools for joysticks and serial peripherals";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ebzzry ];
+    maintainers = with maintainers; [ ebzzry ];
 
     longDescription = ''
       The included tools are:

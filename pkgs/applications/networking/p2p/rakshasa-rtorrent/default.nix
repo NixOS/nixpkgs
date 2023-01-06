@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel ];
+    maintainers = with maintainers; [ codyopel ];
     platforms = platforms.unix;
   };
 }
