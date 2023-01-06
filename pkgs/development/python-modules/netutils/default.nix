@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3c44ZJIEBhKggtqs77gt2fY3tI00ZGmFGLIGR8LF6aE=";
+    hash = "sha256-RT6KAliRlH285sEx2fbIXJNwe1gcyH6CrQ8pXKgY/hQ=";
   };
 
   nativeBuildInputs = [
