@@ -10736,6 +10736,8 @@ self: super: with self; {
 
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
 
+  sphinx-notfound-page = callPackage ../development/python-modules/sphinx-notfound-page { };
+
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
