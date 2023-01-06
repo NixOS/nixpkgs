@@ -30,6 +30,39 @@ let
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
 
+  acronymsFile = pkgs.writeText "acronyms.local.conf" ''
+    r13y  reproducibility
+  '';
+
+  dwWithAcronyms = pkgs.dokuwiki.overrideAttrs (prev: {
+    installPhase = prev.installPhase or "" + ''
+      ln -sf ${acronymsFile} $out/share/dokuwiki/conf/acronyms.local.conf
+    '';
+  });
+
+  mkNode = webserver: { ... }: {
+    services.dokuwiki = {
+      inherit webserver;
+
+      sites = {
+        "site1.local" = {
+          aclUse = false;
+          superUser = "admin";
+        };
+        "site2.local" = {
+          package = dwWithAcronyms;
+          usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
+          superUser = "admin";
+          templates = [ template-bootstrap3 ];
+          plugins = [ plugin-icalevents ];
+        };
+      };
+    };
+
+    networking.firewall.allowedTCPPorts = [ 80 ];
+    networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+  };
+
 in {
   name = "dokuwiki";
   meta = with pkgs.lib; {
@@ -40,47 +73,8 @@ in {
   };
 
   nodes = {
-    dokuwiki_nginx = {...}: {
-      services.dokuwiki = {
-        sites = {
-          "site1.local" = {
-            aclUse = false;
-            superUser = "admin";
-          };
-          "site2.local" = {
-            usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
-            superUser = "admin";
-            templates = [ template-bootstrap3 ];
-            plugins = [ plugin-icalevents ];
-          };
-        };
-      };
-
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
-    };
-
-    dokuwiki_caddy = {...}: {
-      services.dokuwiki = {
-        webserver = "caddy";
-        sites = {
-          "site1.local" = {
-            aclUse = false;
-            superUser = "admin";
-          };
-          "site2.local" = {
-            usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
-            superUser = "admin";
-            templates = [ template-bootstrap3 ];
-            plugins = [ plugin-icalevents ];
-          };
-        };
-      };
-
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
-    };
-
+    dokuwiki_nginx = mkNode "nginx";
+    dokuwiki_caddy = mkNode "caddy";
   };
 
   testScript = ''
@@ -102,10 +96,24 @@ in {
         machine.succeed("curl -sSfL http://site2.local/ | grep 'DokuWiki'")
         machine.succeed("curl -sSfL 'http://site2.local/doku.php?do=login' | grep 'Login'")
 
-        machine.succeed(
+        with subtest("ACL Operations"):
+          machine.succeed(
             "echo 'admin:$2y$10$ijdBQMzSVV20SrKtCna8gue36vnsbVm2wItAXvdm876sshI4uwy6S:Admin:admin@example.test:user' >> /var/lib/dokuwiki/site2.local/users.auth.php",
             "curl -sSfL -d 'u=admin&p=password' --cookie-jar cjar 'http://site2.local/doku.php?do=login'",
             "curl -sSfL --cookie cjar --cookie-jar cjar 'http://site2.local/doku.php?do=login' | grep 'Logged in as: <bdi>Admin</bdi>'",
-        )
+          )
+
+        with subtest("Customizing Dokuwiki"):
+          machine.succeed(
+            "echo 'r13y is awesome!' >> /var/lib/dokuwiki/site2.local/data/pages/acronyms-test.txt",
+            "curl -sSfL 'http://site2.local/doku.php?id=acronyms-test' | grep '<abbr title=\"reproducibility\">r13y</abbr>'",
+          )
+
+        # Just to ensure both Webserver configurations are consistent in allowing that
+        with subtest("Rewriting"):
+          machine.succeed(
+            "echo 'Hello, NixOS!' >> /var/lib/dokuwiki/site1.local/data/pages/rewrite-test.txt",
+            "curl -sSfL http://site1.local/rewrite-test | grep 'Hello, NixOS!'",
+          )
   '';
 })
