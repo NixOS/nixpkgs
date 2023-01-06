@@ -130,7 +130,7 @@ buildPythonPackage rec {
 
   #pytestFlagsArray = ["-x" "-W" "ignore"]; # uncomment this to debug
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "shap"
     "shap.explainers"
     "shap.explainers.other"
