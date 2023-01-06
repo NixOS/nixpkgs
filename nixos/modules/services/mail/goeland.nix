@@ -34,14 +34,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [ "d ${cfg.databaseDirectory} 0750 goeland goeland -" ];
-
     services.goeland.settings.database = "${cfg.databaseDirectory}/goeland.db";
 
     systemd.services.goeland = {
       serviceConfig = let confFile = tomlFormat.generate "config.toml" cfg.settings; in {
         ExecStart = "${pkgs.goeland}/bin/goeland run -c ${confFile}";
         User = "goeland";
+        Group = "goeland";
+        StateDirectory = "goeland";
+        StateDirectoryMode = "0750";
       };
       startAt = cfg.schedule;
     };
