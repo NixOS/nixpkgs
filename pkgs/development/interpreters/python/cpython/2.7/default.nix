@@ -123,13 +123,6 @@ let
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
 
-      # remove once 2.7.18.6 is released
-      (fetchpatch {
-        name = "CVE-2021-3733.patch";
-        url = "https://github.com/ActiveState/cpython/commit/eeb7fe50450f08a782921f3229abed2f23e7b2d7.patch";
-        sha256 = "sha256-ch4cMoFythDmyvlVxOAVw3Ow4PPWVDq5o9c1qox2824=";
-      })
-
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
       # * https://bugs.python.org/issue35523
@@ -194,11 +187,10 @@ let
     "--enable-shared"
   ] ++ [
     "--with-threads"
-    "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
     "--with-system-ffi"
-  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--with-system-expat"
+    "--enable-unicode=ucs${toString ucsEncoding}"
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
@@ -233,10 +225,7 @@ let
   strictDeps = true;
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl zlib ]
-    ++ optional (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) libffi
-    ++ optional stdenv.hostPlatform.isCygwin expat
-    ++ [ db gdbm ncurses sqlite readline ]
+    [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk libX11 ]
     ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =

@@ -11,7 +11,7 @@
 , pyotherside
 , pcsclite
 , yubikey-personalization
-, yubikey-manager
+, yubikey-manager4
 , makeWrapper
 }:
 
@@ -35,7 +35,7 @@ mkDerivation rec {
       --replace 'target.path = $$PREFIX/lib' 'target.path = $$PREFIX/bin'
   '';
 
-  pythonPath = [ yubikey-manager ];
+  pythonPath = [ yubikey-manager4 ];
 
   # Need LD_PRELOAD for libykpers as the Nix cpython disables ctypes.cdll.LoadLibrary
   # support that the yubicommon library uses to load libykpers
