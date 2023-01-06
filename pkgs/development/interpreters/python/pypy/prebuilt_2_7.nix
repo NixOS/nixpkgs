@@ -6,13 +6,13 @@
 , self
 # Dependencies
 , bzip2
-, gdbm
-, sqlite
-, zlib
 , expat
+, gdbm
 , ncurses6
+, sqlite
 , tcl-8_5
 , tk-8_5
+, zlib
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , sourceVersion
@@ -46,22 +46,13 @@ let
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
 
-  majorVersion = substring 0 1 pythonVersion;
-
-  deps = [
-    bzip2
-    gdbm
-    sqlite
-    zlib
-    expat
-    ncurses6
-    tcl-8_5
-    tk-8_5
-  ];
+  majorVersion = lib.versions.major pythonVersion;
 
   downloadUrls = {
     aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.bz2";
     x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+    aarch64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_arm64.tar.bz2";
+    x86_64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_x86_64.tar.bz2";
   };
 
 in with passthru; stdenv.mkDerivation {
@@ -72,9 +63,18 @@ in with passthru; stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = deps;
+  buildInputs = [
+    bzip2
+    expat
+    gdbm
+    ncurses6
+    sqlite
+    tcl-8_5
+    tk-8_5
+    zlib
+  ];
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -82,11 +82,11 @@ in with passthru; stdenv.mkDerivation {
     mkdir -p $out/lib
     echo "Moving files to $out"
     mv -t $out bin include lib-python lib_pypy site-packages
-    mv lib/libffi.so.6* $out/lib/
-
-    mv $out/bin/libpypy*-c.so $out/lib/
-
-    rm $out/bin/*.debug
+    mv $out/bin/libpypy*-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+    ${lib.optionalString stdenv.isLinux ''
+      mv lib/libffi.so.6* $out/lib/
+      rm $out/bin/*.debug
+    ''}
 
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -delete
@@ -97,14 +97,21 @@ in with passthru; stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString (stdenv.isLinux) ''
     find $out/{lib,lib_pypy*} -name "*.so" \
       -exec patchelf \
         --replace-needed libtinfow.so.6 libncursesw.so.6 \
         --replace-needed libgdbm.so.4 libgdbm_compat.so.4 {} \;
+  '' + lib.optionalString (stdenv.isDarwin) ''
+    install_name_tool \
+      -change \
+        @rpath/libpypy${optionalString isPy3k "3"}-c.dylib \
+        $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib \
+        $out/bin/${executable}
   '';
 
-  doInstallCheck = true;
+  # Native libraries are not working in darwin
+  doInstallCheck = !stdenv.isDarwin;
 
   # Check whether importing of (extension) modules functions
   installCheckPhase = let
