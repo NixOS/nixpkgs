@@ -18,7 +18,7 @@
 }:
 
 let
-  release_version = "15.0.0";
+  release_version = "15.0.7";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   rev = ""; # When using a Git commit
@@ -30,7 +30,7 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1sh5xihdfdn2hp7ds3lkaq1bfrl4alj36gl1aidmhlw65p5rdvl7";
+    sha256 = "12sggw15sxq1krh1mfk3c1f07h895jlxbcifpwk3pznh4m1rjfy2";
   };
 
   llvm_meta = {
