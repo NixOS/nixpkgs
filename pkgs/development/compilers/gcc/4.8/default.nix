@@ -192,7 +192,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform langJava langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
