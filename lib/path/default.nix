@@ -5,6 +5,9 @@ let
   inherit (builtins)
     isString
     isPath
+    isAttrs
+    typeOf
+    seq
     split
     match
     ;
@@ -18,6 +21,8 @@ let
     all
     concatMap
     foldl'
+    take
+    drop
     ;
 
   inherit (lib.strings)
@@ -33,10 +38,16 @@ let
     isValid
     ;
 
+  inherit (lib.attrsets)
+    mapAttrsToList
+    listToAttrs
+    nameValuePair
+    ;
+
   # Return the reason why a subpath is invalid, or `null` if it's valid
   subpathInvalidReason = value:
     if ! isString value then
-      "The given value is of type ${builtins.typeOf value}, but a string was expected"
+      "The given value is of type ${typeOf value}, but a string was expected"
     else if value == "" then
       "The given string is empty"
     else if substring 0 1 value == "/" then
@@ -100,6 +111,19 @@ let
     # An empty string is not a valid relative path, so we need to return a `.` when we have no components
     (if components == [] then "." else concatStringsSep "/" components);
 
+
+  # Takes a Nix path value and deconstructs it into the filesystem root
+  # (generally `/`) and a subpath
+  deconstructPath =
+    let
+      go = components: path:
+        # If the parent of a path is the path itself, then it's a filesystem root
+        if path == dirOf path then { root = path; inherit components; }
+        else go ([ (baseNameOf path) ] ++ components) (dirOf path);
+    in go [];
+
+
+
 in /* No rec! Add dependencies on this file at the top. */ {
 
   /* Append a subpath string to a path.
@@ -148,6 +172,67 @@ in /* No rec! Add dependencies on this file at the top. */ {
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
+
+  difference = paths:
+    let
+      # Deconstruct every path into its root + subpath
+      deconstructed = mapAttrsToList (name: value:
+        # Check each item to be an actual path
+        assert assertMsg (isPath value) "lib.path.difference: Given attribute ${name} is of type ${typeOf value}, but a path value was expected";
+        deconstructPath value // { inherit name value; }
+      ) paths;
+
+      first = head deconstructed;
+
+      # The common root to all paths, errors if there are different roots
+      commonRoot =
+        # Fast happy path in case all roots are the same
+        if all (dec: dec.root == first.root) deconstructed then first.root
+        # Slower sad path when that's not the case and we need to throw an error
+        else let
+          trigger = foldl'
+            (skip: dec:
+              if dec.root == first.root then skip
+              else throw "lib.path.difference: Path ${first.name} = ${toString first.value} (root ${toString first.root}) has a different filesystem root than path ${toString dec.name} = ${toString dec.value} (root ${toString dec.root})")
+            null
+            deconstructed;
+          fallbackAbort =
+            abort "lib.path.difference: This should never happen and indicates a bug! Some paths don't have the same filesystem root but it couldn't be found!";
+        in seq trigger fallbackAbort;
+
+      goCommonAncestorLength = level:
+        let headComponent = elemAt first.components level; in
+        if all (dec:
+            # If all paths have another level of components
+            length dec.components > level
+            # And they all match
+            && elemAt dec.components level == headComponent
+          ) deconstructed
+        then goCommonAncestorLength (level + 1)
+        else level;
+
+      commonAncestorLength =
+        # Ensure that we have a common root before trying to find a common ancestor
+        # If we didn't do this one could evaluate `relativePaths` without an error even when there's no common root
+        seq commonRoot
+        (goCommonAncestorLength 0);
+
+      commonAncestor = commonRoot
+        + ("/" + joinRelPath (take commonAncestorLength first.components));
+
+      subpaths = listToAttrs (map (dec:
+        nameValuePair dec.name (joinRelPath (drop commonAncestorLength dec.components))
+      ) deconstructed);
+    in
+    assert assertMsg
+      (isAttrs paths)
+      "lib.path.difference: The given argument is of type ${typeOf paths}, but an attribute set was expected";
+    assert assertMsg
+      (paths != {})
+      "lib.path.difference: An empty attribute set was given, but was expecting a non-empty attribute set";
+    {
+      inherit commonAncestor subpaths;
+    };
 
   /* Whether a value is a valid subpath string.
 
