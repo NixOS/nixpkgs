@@ -32,7 +32,7 @@ let
   inherit (lib)
     getBin optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption mkPackageOption types;
+    mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
 
   ini = pkgs.formats.ini { };
 
@@ -198,7 +198,7 @@ in
       example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
     };
 
-    notoPackage = mkPackageOption pkgs "Noto fonts" {
+    notoPackage = mkPackageOptionMD pkgs "Noto fonts" {
       default = [ "noto-fonts" ];
       example = "noto-fonts-lgc-plus";
     };

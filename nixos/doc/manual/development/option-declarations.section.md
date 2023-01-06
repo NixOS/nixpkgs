@@ -88,7 +88,7 @@ lib.mkOption {
 }
 ```
 
-### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
+### `mkPackageOption`, `mkPackageOptionMD` {#sec-option-declarations-util-mkPackageOption}
 
 Usage:
 
@@ -105,6 +105,8 @@ The default package is specified as a list of strings representing its attribute
 The second argument is the name of the option, used in the description "The \<name\> package to use.". You can also pass an example value, either a literal string or a package's attribute path.
 
 You can omit the default path if the name of the option is also attribute path in nixpkgs.
+
+During the transition to CommonMark documentation `mkPackageOption` creates an option with a DocBook description attribute, once the transition is completed it will create a CommonMark description instead. `mkPackageOptionMD` always creates an option with a CommonMark description attribute and will be removed some time after the transition is completed.
 
 ::: {#ex-options-declarations-util-mkPackageOption .title}
 Examples:

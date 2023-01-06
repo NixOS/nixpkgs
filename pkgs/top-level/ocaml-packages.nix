@@ -1517,12 +1517,6 @@ let
 
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
-    wodan = callPackage ../development/ocaml-modules/wodan { };
-
-    wodan-irmin = callPackage ../development/ocaml-modules/wodan/irmin.nix { };
-
-    wodan-unix = callPackage ../development/ocaml-modules/wodan/unix.nix { };
-
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };

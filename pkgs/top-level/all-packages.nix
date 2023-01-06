@@ -9571,6 +9571,8 @@ with pkgs;
 
   minijail-tools = python3.pkgs.callPackage ../tools/system/minijail/tools.nix { };
 
+  minilibx = callPackage ../development/libraries/minilibx { };
+
   minixml = callPackage ../development/libraries/minixml { };
 
   mir-qualia = callPackage ../tools/text/mir-qualia {
@@ -12826,6 +12828,8 @@ with pkgs;
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
 
+  twilio-cli = callPackage ../development/tools/twilio-cli { };
+
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
@@ -15587,7 +15591,8 @@ with pkgs;
   sbcl_2_2_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.9"; };
   sbcl_2_2_10 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.10"; };
   sbcl_2_2_11 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.11"; };
-  sbcl = sbcl_2_2_11;
+  sbcl_2_3_0 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.0"; };
+  sbcl = sbcl_2_3_0;
 
   roswell = callPackage ../development/tools/roswell { };
 
@@ -20041,10 +20046,6 @@ with pkgs;
   imgui = callPackage ../development/libraries/imgui { };
 
   imtui = callPackage ../development/libraries/imtui { };
-
-  imlib = callPackage ../development/libraries/imlib {
-    libpng = libpng12;
-  };
 
   imv = callPackage ../applications/graphics/imv { };
 
