@@ -1,0 +1,15 @@
+diff --git a/cmake/builtin-config-ix.cmake b/cmake/builtin-config-ix.cmake
+index 56f46f3..656ad79 100644
+--- a/cmake/builtin-config-ix.cmake
++++ b/cmake/builtin-config-ix.cmake
+@@ -118,10 +118,6 @@ if(APPLE)
+       ${DARWIN_ios_MIN_VER_FLAG}=${DARWIN_ios_BUILTIN_MIN_VER})
+     set(DARWIN_ios_BUILTIN_ALL_POSSIBLE_ARCHS ${ARM64} ${ARM32})
+     set(DARWIN_iossim_BUILTIN_ALL_POSSIBLE_ARCHS ${X86} ${X86_64})
+-    find_darwin_sdk_version(iossim_sdk_version "iphonesimulator")
+-    if ("${iossim_sdk_version}" VERSION_GREATER 14.0 OR "${iossim_sdk_version}" VERSION_EQUAL 14.0)
+-      list(APPEND DARWIN_iossim_BUILTIN_ALL_POSSIBLE_ARCHS arm64)
+-    endif()
+   endif()
+   if(COMPILER_RT_ENABLE_WATCHOS)
+     list(APPEND DARWIN_EMBEDDED_PLATFORMS watchos)

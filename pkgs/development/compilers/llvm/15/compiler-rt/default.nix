@@ -77,6 +77,8 @@ stdenv.mkDerivation {
     ./darwin-targetconditionals.patch
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     ./armv7l.patch
+    # it fail if it doesn't detect simulator sdk
+    ./iphoneos_simulator.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

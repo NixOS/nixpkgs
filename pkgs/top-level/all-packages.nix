@@ -15142,6 +15142,9 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_15.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_15.libraries or llvmPackages_15.libraries;
+    # Clang 12 is required because it support __attribute__((using_if_exists))
+    # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/include/__config#L423-L424
+    stdenv = if stdenv.isDarwin then llvmPackages_13.stdenv else stdenv;
   }));
 
   llvmPackages_latest = llvmPackages_14;
