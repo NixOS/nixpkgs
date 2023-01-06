@@ -10740,6 +10740,8 @@ self: super: with self; {
 
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
+  sphinx-prompt = callPackage ../development/python-modules/sphinx-prompt { };
+
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
