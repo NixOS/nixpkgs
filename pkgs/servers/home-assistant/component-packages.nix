@@ -2674,7 +2674,8 @@
       gridnet
     ];
     "purpleair" = ps: with ps; [
-    ]; # missing inputs: aiopurpleair
+      aiopurpleair
+    ];
     "push" = ps: with ps; [
       aiohttp-cors
     ];
@@ -4551,6 +4552,7 @@
     "proximity"
     "prusalink"
     "pure_energie"
+    "purpleair"
     "push"
     "pushbullet"
     "pushover"

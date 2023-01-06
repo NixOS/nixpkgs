@@ -16,7 +16,6 @@
 , requests
 , setuptools
 , six
-, typing
 , watchdog
 , websocket-client
 , wheel
@@ -24,20 +23,21 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.27.1";
+  version = "1.27.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-Qz8kYXu2NmcgtW8GbmLPfB4BOearEycE6EMmQRXmWeI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-izzoYxzkaQqcEM5e8BhZeZIxtAGRDNH/qvqwvrx250s=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "attrs>=19.3.0,<21.5.0" "attrs" \
-      --replace "pip>=9,<22.2" "pip" \
-      --replace "typing==3.6.4" "typing"
+      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
+      --replace "pip>=9,<22.3" "pip" \
   '';
 
   propagatedBuildInputs = [
@@ -53,8 +53,6 @@ buildPythonPackage rec {
     six
     wheel
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
   checkInputs = [
