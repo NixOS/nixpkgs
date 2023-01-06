@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , lxml
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
@@ -11,11 +12,13 @@ buildPythonPackage rec {
   version = "2.3.2";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-grsyHqt7ahiNsYKcZN/c5cJaag/nTWTBcaHaXnW1SpU=";
+    hash = "sha256-grsyHqt7ahiNsYKcZN/c5cJaag/nTWTBcaHaXnW1SpU=";
   };
 
   propagatedBuildInputs = [
@@ -27,11 +30,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "inscriptis" ];
+  pythonImportsCheck = [
+    "inscriptis"
+  ];
 
   meta = with lib; {
-    description = "inscriptis - HTML to text converter";
+    description = "HTML to text converter";
     homepage = "https://github.com/weblyzard/inscriptis";
+    changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
