@@ -4,18 +4,40 @@
 , installShellFiles
 }:
 
+let config-module = "github.com/f1bonacc1/process-compose/src/config";
+in
 buildGoModule rec {
   pname = "process-compose";
-  version = "0.24.1";
+  version = "0.29.7";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "TKLLq6I+Mcvdz51m8nydTWcslBcQlJCJFoJ10SgfVWU=";
+    hash = "sha256-gVXil6Gc65/6VMuONfVyxU6SSV0vCbJKXDvtG4a+pbU=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      # in format of 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  ldflags = [ "-X main.version=v${version}" ];
+  # ldflags based on metadata from git and source
+  preBuild = ''
+    ldflags+=" -X ${config-module}.Commit=$(cat COMMIT)"
+    ldflags+=" -X ${config-module}.Date=$(cat SOURCE_DATE_EPOCH)"
+  '';
+
+  ldflags = [
+    "-X ${config-module}.Version=v${version}"
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
