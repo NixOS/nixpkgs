@@ -41,31 +41,6 @@ let
   readLinesToList = with builtins; file: filter (s: isString s && stringLength s > 0) (split "\n" (readFile file));
 in
 rec {
-  ffmpeg-jami = (ffmpeg_5.override rec {
-    version = "5.0.1";
-    branch = version;
-    sha256 = "sha256-KN8z1AChwcGyDQepkZeAmjuI73ZfXwfcH/Bn+sZMWdY=";
-    doCheck = false;
-  }).overrideAttrs (old:
-    let
-      patch-src = src + "/daemon/contrib/src/ffmpeg/";
-    in
-    {
-      patches = old.patches ++ (map (x: patch-src + x) (readLinesToList ./config/ffmpeg_patches)) ++
-        # SDL2 recently changed their versioning
-        [
-          (fetchpatch {
-            url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=e5163b1d34381a3319214a902ef1df923dd2eeba";
-            hash = "sha256-nLhP2+34cj5EgpnUrePZp60nYAxmbhZAEDfay4pBVk0=";
-          })
-        ];
-      configureFlags = old.configureFlags
-        ++ (readLinesToList ./config/ffmpeg_args_common)
-        ++ lib.optionals stdenv.isLinux (readLinesToList ./config/ffmpeg_args_linux)
-        ++ lib.optionals (stdenv.isx86_32 || stdenv.isx86_64) (readLinesToList ./config/ffmpeg_args_x86);
-      outputs = [ "out" "doc" ];
-    });
-
   pjsip-jami = pjsip.overrideAttrs (old:
     let
       patch-src = src + "/daemon/contrib/src/pjproject/";
@@ -105,10 +80,10 @@ rec {
   };
 
   jami-daemon = callPackage ./daemon.nix {
-    inherit version src udev jack jami-meta ffmpeg-jami pjsip-jami opendht-jami;
+    inherit version src udev jack jami-meta pjsip-jami opendht-jami;
   };
 
   jami-client = qt6Packages.callPackage ./client.nix {
-    inherit version src ffmpeg-jami jami-meta;
+    inherit version src jami-meta;
   };
 }

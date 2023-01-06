@@ -9,7 +9,7 @@
 , asio
 , dbus
 , dbus_cplusplus
-, ffmpeg-jami
+, ffmpeg_5
 , fmt
 , gmp
 , gnutls
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     dbus
     dbus_cplusplus
     fmt
-    ffmpeg-jami
+    ffmpeg_5
     gmp
     gnutls
     http-parser
