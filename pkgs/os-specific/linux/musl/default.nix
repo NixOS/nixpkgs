@@ -73,6 +73,12 @@ stdenv.mkDerivation rec {
       url = "https://git.musl-libc.org/cgit/musl/patch/?id=751bee0ee727e8d8b003c87cff77ac76f1dbecd6";
       sha256 = "sha256-qCw132TCSaZrkISmtDb8Q8ufyt8sAJdwACkvfwuoi/0=";
     })
+
+    # Make behaviour of strverscmp(3) to match glibc.
+    (fetchurl {
+      url = "https://git.musl-libc.org/cgit/musl/patch/?id=b50eb8c36c20f967bd0ed70c0b0db38a450886ba";
+      sha256 = "sha256-QGCMTRyePDGZ/PScG2xhhl2C2htMJqWi2SwKLYaNfpw=";
+    })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
