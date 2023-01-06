@@ -1,4 +1,12 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, libglvnd, pkg-config, xorg }:
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, libglvnd
+, pkg-config
+, subPackages ? ["." "netclient"]
+, xorg
+}:
 
 buildGoModule rec {
   pname = "netmaker";
@@ -13,10 +21,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-4LaGwwDu3pKd6I6r/F3isCi9CuFqPGvc5SdVTV34qOI=";
 
-  subPackages = [
-    "."
-    "netclient"
-  ];
+  inherit subPackages;
 
   nativeBuildInputs = [ pkg-config ];
 
