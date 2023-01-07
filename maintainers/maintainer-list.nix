@@ -3487,6 +3487,12 @@
     githubId = 17111639;
     name = "Devin Singh";
   };
+  devplayer0 = {
+    email = "dev@nul.ie";
+    github = "devplayer0";
+    githubId = 1427254;
+    name = "Jack O'Sullivan";
+  };
   devusb = {
     email = "mhelton@devusb.us";
     github = "devusb";
