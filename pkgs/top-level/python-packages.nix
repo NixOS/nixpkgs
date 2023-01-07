@@ -10848,6 +10848,8 @@ self: super: with self; {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinx-version-warning = callPackage ../development/python-modules/sphinx-version-warning { };
+
   sphinxext-opengraph = callPackage ../development/python-modules/sphinxext-opengraph { };
 
   spidev = callPackage ../development/python-modules/spidev { };
