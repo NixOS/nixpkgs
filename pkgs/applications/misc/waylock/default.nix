@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "waylock";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yWjWcnGa4a+Dpc82H65yr8H7v88g/tDq0FSguubhbEI=";
+    sha256 = "sha256-nOukfqKGJ5q7aGQJtBiF0PQN8BiVP4dENHwQC2ouMQQ=";
     fetchSubmodules = true;
   };
 
