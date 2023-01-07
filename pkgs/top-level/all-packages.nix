@@ -35393,6 +35393,8 @@ with pkgs;
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
   inherit (cinnamon) mint-x-icons mint-y-icons;
 
+  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
+
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });
 
   gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
