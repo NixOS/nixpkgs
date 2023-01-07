@@ -89,6 +89,7 @@ in {
     maintainers = with maintainers; [
       _1000101
       onny
+      e1mo
     ];
   };
 
