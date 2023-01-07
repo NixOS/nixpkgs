@@ -334,20 +334,30 @@
       </listitem>
       <listitem>
         <para>
-          <literal>i18n.supportedLocales</literal> is now only generated
-          with the locales set in <literal>i18n.defaultLocale</literal>
-          and <literal>i18n.extraLocaleSettings</literal>.
+          locales generated through
+          <literal>i18n.supportedLocales</literal> now only contain the
+          locales set in <literal>i18n.defaultLocale</literal> and
+          <literal>i18n.extraLocaleSettings</literal>.
         </para>
         <itemizedlist spacing="compact">
           <listitem>
             <para>
-              This reduces the final system closure size by up to 200MB.
+              Previously by default all locales where generated which
+              used about 200MB.
             </para>
           </listitem>
           <listitem>
             <para>
-              If you require all locales installed, set the option to
-              <literal>[ &quot;all&quot; ]</literal>.
+              If you set a different locale in your desktop environment
+              or <literal>LC_*</literal> variables then defined in the
+              above listed options, you need to adjust your config to
+              avoid breakages.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If you require all locales installed, set
+              <literal>i18n.supportedLocales = [ &quot;all&quot; ]</literal>.
             </para>
           </listitem>
         </itemizedlist>
