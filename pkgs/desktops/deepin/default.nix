@@ -8,6 +8,7 @@ let
     dtkcommon = callPackage ./library/dtkcommon { };
     dtkcore = callPackage ./library/dtkcore { };
     dtkgui = callPackage ./library/dtkgui { };
+    dtkwidget = callPackage ./library/dtkwidget { };
 
   };
 in
