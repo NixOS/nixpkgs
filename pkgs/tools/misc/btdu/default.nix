@@ -1,4 +1,12 @@
-{stdenv, lib, fetchurl, dub, ncurses, ldc, zlib, removeReferencesTo }:
+{ lib
+, stdenv
+, fetchurl
+, dub
+, ncurses
+, ldc
+, zlib
+, removeReferencesTo
+}:
 
 let
     _d_ae_ver              = "0.0.3228";
@@ -76,6 +84,7 @@ stdenv.mkDerivation rec {
     meta = with lib; {
       description = "Sampling disk usage profiler for btrfs";
       homepage = "https://github.com/CyberShadow/btdu";
+      changelog = "https://github.com/CyberShadow/btdu/releases/tag/v${version}";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
       maintainers = with maintainers; [ atila ];
