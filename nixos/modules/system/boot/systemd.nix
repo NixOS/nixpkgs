@@ -26,6 +26,9 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit;
+  enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
+
+  knownEnabledServices = [ "nix-daemon" ];
 
   upstreamSystemUnits =
     [ # Targets.
@@ -726,6 +729,12 @@ in
             type = service.serviceConfig.Type or "";
             restart = service.serviceConfig.Restart or "no";
             hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
+            hasStartCmd = svc:
+              svc.script != ""
+              || svc.serviceConfig?ExecStart
+              || svc.serviceConfig?ExecStop;
+            templateUnit = builtins.match "^(.*@).*" name;
+            template = builtins.elemAt templateUnit 0;
           in
             concatLists [
               (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
@@ -737,6 +746,14 @@ in
               (optional (service.reloadIfChanged && service.reloadTriggers != [])
                 "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
               )
+              (optional
+                (service.enable
+                  && !hasStartCmd service
+                  && !(lib.elem name knownEnabledServices)
+                  && !(!isNull templateUnit && cfg.services?${template} && hasStartCmd cfg.services.${template})
+                  && !(lib.elem "${name}.service" enabledUpstreamSystemUnits)
+                  && builtins.all (p: isNull ((builtins.match "^${name}.*") p.name)) cfg.packages)
+                "Service `${name}' is enabled and missing a `script' or one of ExecStart, ExecStop or SuccessAction.")
             ]
         )
         cfg.services
@@ -778,7 +795,6 @@ in
         ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
       '';
 
-      enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
       enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedSystemUnits) cfg.units;
     in ({
       "systemd/system".source = generateUnits "system" enabledUnits enabledUpstreamSystemUnits upstreamSystemWants;
