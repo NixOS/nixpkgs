@@ -341,7 +341,6 @@ mapAliases ({
 
   debian_devscripts = throw "'debian_devscripts' has been renamed to/replaced by 'debian-devscripts'"; # Converted to throw 2022-02-22
   debugedit-unstable = debugedit; # Added 2021-11-22
-  deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
   deisctl = throw "deisctl was removed ; the service does not exist anymore"; # added 2022-02-06
   deis = throw "deis was removed ; the service does not exist anymore"; # added 2022-02-06
