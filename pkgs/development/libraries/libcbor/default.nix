@@ -29,7 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=on"
   ] ++ lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON";
 
-  doCheck = (!stdenv.hostPlatform.isStatic) && stdenv.hostPlatform == stdenv.buildPlatform;
+  # 2 tests are not 32-bit clean: overflow size_t:
+  #   https://github.com/PJK/libcbor/issues/263
+  doCheck =
+    !stdenv.hostPlatform.is32bit
+    && (!stdenv.hostPlatform.isStatic)
+    && stdenv.hostPlatform == stdenv.buildPlatform;
   checkInputs = [ cmocka ];
 
   passthru.tests = {
