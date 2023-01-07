@@ -359,6 +359,17 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
   }) super.ghcide;
 
+  # At least on 1.3.4 version on 32-bit architectures tasty requires
+  # unbounded-delays via .cabal file conditions.
+  tasty = overrideCabal (drv: {
+    libraryHaskellDepends =
+      (drv.libraryHaskellDepends or [])
+      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64
+                          || pkgs.stdenv.hostPlatform.isx86_64)) [
+        self.unbounded-delays
+      ];
+  }) super.tasty;
+
   tasty-discover = overrideCabal (drv: {
     # Depends on itself for testing
     preBuild = ''
