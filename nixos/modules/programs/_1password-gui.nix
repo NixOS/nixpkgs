@@ -27,7 +27,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "1Password GUI" {
+      package = mkPackageOptionMD pkgs "1Password GUI" {
         default = [ "_1password-gui" ];
       };
     };

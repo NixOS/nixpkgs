@@ -48,10 +48,16 @@
     "version": "1.0.1"
   },
   "gutenberg": {
-    "path": "gutenberg/tags/14.8.4",
-    "rev": "2841225",
-    "sha256": "1nyyqrf61l17crw6pjq5pf9wa657sm0r85b0lxp0vzlpsfsvvw47",
-    "version": "14.8.4"
+    "path": "gutenberg/tags/14.9.0",
+    "rev": "2843613",
+    "sha256": "1aa27nmks0b411n13qsgk0xhh82n8cjpqxj6r4v55lfr835rr4av",
+    "version": "14.9.0"
+  },
+  "hkdev-maintenance-mode": {
+    "path": "hkdev-maintenance-mode/trunk",
+    "rev": "2826725",
+    "sha256": "1y70wksgj07n2yd10sg7vf0nddjw9g3vhyfxfbm57m1bb0826zpd",
+    "version": "2.2.6"
   },
   "jetpack": {
     "path": "jetpack/tags/11.6",
@@ -102,10 +108,10 @@
     "version": "0.9.3"
   },
   "webp-converter-for-media": {
-    "path": "webp-converter-for-media/tags/5.6.1",
-    "rev": "2840699",
-    "sha256": "1srrlrwxkv00j0wj0br5xjzfgwa2n4n0qr6b7xyzavxf7v0lnm7q",
-    "version": "5.6.1"
+    "path": "webp-converter-for-media/tags/5.6.2",
+    "rev": "2843800",
+    "sha256": "0yki15slmvvnc9511gsg7kkvmnic3cb0p7iz2lm90j4pdchz0api",
+    "version": "5.6.2"
   },
   "webp-express": {
     "path": "webp-express/tags/0.25.5",
@@ -162,9 +168,9 @@
     "version": "1.4.1"
   },
   "wpforms-lite": {
-    "path": "wpforms-lite/tags/1.7.8",
-    "rev": "2815943",
-    "sha256": "0xqnjxlj2m6zpcasj3gksg9qzjm8pynjr8sar8xbgfz8ichs5m6m",
-    "version": "1.7.8"
+    "path": "wpforms-lite/tags/1.7.9",
+    "rev": "2844054",
+    "sha256": "1hhcl75cb7njgch0app9kifl9fjznan1m4gqa3yc6kdhicjb5sz6",
+    "version": "1.7.9"
   }
 }
