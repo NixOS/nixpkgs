@@ -2171,6 +2171,8 @@ self: super: with self; {
 
   dask = callPackage ../development/python-modules/dask { };
 
+  dask-awkward = callPackage ../development/python-modules/dask-awkward { };
+
   dask-gateway = callPackage ../development/python-modules/dask-gateway { };
 
   dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server { };
