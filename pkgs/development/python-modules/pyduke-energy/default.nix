@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mjmeli";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-g+s9YaVFOCKaBGR5o9cPk4kcIW4BffFHTtmDNE8f/zE=";
+    hash = "sha256-g+s9YaVFOCKaBGR5o9cPk4kcIW4BffFHTtmDNE8f/zE=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Duke Energy API";
     homepage = "https://github.com/mjmeli/pyduke-energy";
+    changelog = "https://github.com/mjmeli/pyduke-energy/releases/tag/v${version}"
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
