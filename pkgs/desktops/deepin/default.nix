@@ -4,7 +4,8 @@ let
   let
     inherit (self) callPackage;
   in {
-
+    #### LIBRARIES
+    dtkcommon = callPackage ./library/dtkcommon { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
