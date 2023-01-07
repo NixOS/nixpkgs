@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-NnDpSOEIqPuPLIr0Ty6yjrs9WRKyhykcdyiRPB/cHEw=";
   };
 
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
+    changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];
   };
