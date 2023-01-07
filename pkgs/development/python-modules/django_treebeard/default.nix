@@ -1,24 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
 , django
+, fetchPypi
+, pytest-django
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "django-treebeard";
   version = "4.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-frHrcbJCFPLn3DvSFfDDrjL9Z2QXnNR3SveqtJE53qA=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [
+    django
+  ];
 
-  # tests fail  "AppRegistryNotReady("Apps aren't loaded yet.")"
-  doCheck = false;
+  checkInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "treebeard"
+  ];
 
   meta = with lib; {
     description = "Efficient tree implementations for Django";
