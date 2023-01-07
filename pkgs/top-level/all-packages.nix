@@ -24548,13 +24548,6 @@ with pkgs;
 
   mongodb = hiPrio mongodb-6_0;
 
-  mongodb-4_0 = callPackage ../servers/nosql/mongodb/v4_0.nix {
-    sasl = cyrus_sasl;
-    boost = boost169;
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
-
   mongodb-4_2 = callPackage ../servers/nosql/mongodb/v4_2.nix {
     sasl = cyrus_sasl;
     boost = boost169;
@@ -25077,13 +25070,6 @@ with pkgs;
   };
 
   xorg = let
-    otherSplices = {
-      selfBuildBuild = pkgsBuildBuild.xorg;
-      selfBuildHost = pkgsBuildHost.xorg;
-      selfBuildTarget = pkgsBuildTarget.xorg;
-      selfHostHost = pkgsHostHost.xorg;
-      selfTargetTarget = pkgsTargetTarget.xorg or { };
-    };
     keep = _self: { };
     extra = _spliced0: { };
 
@@ -25102,10 +25088,8 @@ with pkgs;
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix {};
 
-    xorgPackages = lib.makeScopeWithSplicing
-      splicePackages
-      newScope
-      otherSplices
+    xorgPackages = makeScopeWithSplicing
+      (generateSplicesForMkScope "xorg")
       keep
       extra
       (lib.extends overrides generatedPackages);
@@ -28579,6 +28563,8 @@ with pkgs;
   ed = callPackage ../applications/editors/ed { };
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
+
+  edlin = callPackage ../applications/editors/edlin { };
 
   o = callPackage ../applications/editors/o { };
 
@@ -32604,11 +32590,6 @@ with pkgs;
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
-  swift-im = libsForQt5.callPackage ../applications/networking/instant-messengers/swift-im {
-    inherit (gnome2) GConf;
-    boost = boost168;
-  };
-
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
@@ -33948,11 +33929,11 @@ with pkgs;
   besu = callPackage ../applications/blockchains/besu { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
-    boost = boost165;
+    boost = boost17x;
     withGui = true;
   };
   bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
-    boost = boost165;
+    boost = boost17x;
     mkDerivation = stdenv.mkDerivation;
     withGui = false;
   };
@@ -33976,11 +33957,11 @@ with pkgs;
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
   dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
-    boost = boost165;
+    boost = boost17x;
     withGui = true;
   };
   dogecoind = callPackage ../applications/blockchains/dogecoin {
-    boost = boost165;
+    boost = boost17x;
     withGui = false;
   };
 
@@ -34122,11 +34103,11 @@ with pkgs;
   tessera = callPackage ../applications/blockchains/tessera { };
 
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
-    boost = boost165;
+    boost = boost17x;
     withGui = true;
   };
   vertcoind = callPackage ../applications/blockchains/vertcoin {
-    boost = boost165;
+    boost = boost17x;
     withGui = false;
   };
 
@@ -38475,9 +38456,7 @@ with pkgs;
 
   treefmt = callPackage ../development/tools/treefmt { };
 
-  bottom = callPackage ../tools/system/bottom {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
-  };
+  bottom = callPackage ../tools/system/bottom { };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
     wlroots = wlroots_0_14;
