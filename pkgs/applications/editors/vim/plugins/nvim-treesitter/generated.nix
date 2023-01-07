@@ -448,12 +448,12 @@
   };
   gitcommit = buildGrammar {
     language = "gitcommit";
-    version = "f838621";
+    version = "74b4077";
     source = fetchFromGitHub {
       owner = "gbprod";
       repo = "tree-sitter-gitcommit";
-      rev = "f838621d00831967a39ac8293cd3c23b0f49252e";
-      hash = "sha256-9OulAtUDMP1jKYPOFBfctBVX2TWktkmwPtE3sCh1qD8=";
+      rev = "74b40770e6299564f0b7ca474105d7d5238d0583";
+      hash = "sha256-WpPJ1EfTd5QavXiEtBIu6RBCtzN9MoklyU+/055NfOI=";
     };
     meta.homepage = "https://github.com/gbprod/tree-sitter-gitcommit";
   };
@@ -947,12 +947,12 @@
   };
   norg = buildGrammar {
     language = "norg";
-    version = "8ad2005";
+    version = "6348056";
     source = fetchFromGitHub {
       owner = "nvim-neorg";
       repo = "tree-sitter-norg";
-      rev = "8ad20059c6f128861c4506fff866150ffee1d6f4";
-      hash = "sha256-1cKH3k/nbZhZleINZ91M+glG1m2SlBJR/AP7mz/SAvI=";
+      rev = "6348056b999f06c2c7f43bb0a5aa7cfde5302712";
+      hash = "sha256-5g4K+pYpS0DyYShKAoBCe6PD1wEZ+bvYMuI+ZbNPgJI=";
     };
     meta.homepage = "https://github.com/nvim-neorg/tree-sitter-norg";
   };
@@ -1236,12 +1236,12 @@
   };
   scala = buildGrammar {
     language = "scala";
-    version = "140c96c";
+    version = "314bc06";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-scala";
-      rev = "140c96cf398693189d4e50f76d19ddfcd8a018f8";
-      hash = "sha256-Sr4+avj0v1y8K6XXPAVwJDTa6+RmbKe/4dzd0k0y3cE=";
+      rev = "314bc06e59b3e0a37f224b1d391fd764757abd70";
+      hash = "sha256-+qR4bOhJOUDBudR9LlLvH5a4W7jRgCV1XrxxFwHf+Fs=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-scala";
   };
@@ -1496,12 +1496,12 @@
   };
   v = buildGrammar {
     language = "v";
-    version = "0e3725a";
+    version = "e5ec6a4";
     source = fetchFromGitHub {
       owner = "vlang";
       repo = "vls";
-      rev = "0e3725a0c10d357f16b716f9a321a337bc802f02";
-      hash = "sha256-RDG/HFSMF5zxtO/elhtv2oH3OnUx47X3xYRqS1+Oz9U=";
+      rev = "e5ec6a42f1af42d4101fb226a98b8db0f4f21c88";
+      hash = "sha256-Nl2c18MFhqbHp2jkUfUSCB6DwBoQD34AhKz6IQcSvKM=";
     };
     location = "tree_sitter_v";
     meta.homepage = "https://github.com/vlang/vls";
