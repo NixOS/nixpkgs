@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin "$bin"
     moveToOutput cmake "$dev"
-    moveToOutput OpenColorIOConfig.cmake "$dev"
+    mv $out/OpenColorIOConfig.cmake $dev/cmake/
 
     substituteInPlace "$dev/cmake/OpenColorIO-release.cmake" \
       --replace "$out/bin" "$bin/bin"
