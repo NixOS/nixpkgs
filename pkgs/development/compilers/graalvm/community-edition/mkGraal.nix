@@ -319,6 +319,7 @@ let
       homepage = "https://www.graalvm.org/";
       description = "High-Performance Polyglot VM";
       license = with licenses; [ upl gpl2Classpath bsd3 ];
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       maintainers = with maintainers; [
         bandresen
         hlolli
