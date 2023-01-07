@@ -1,4 +1,20 @@
-{ pkgs ? import ../../.. {} }:
+{ pkgs ? import ../../.. {}
+, busyboxMinimal ? "${pkgs.busybox.override {
+    useMusl = !pkgs.stdenv.targetPlatform.isRiscV;
+    enableStatic = true;
+    enableMinimal = true;
+    extraConfig = ''
+      CONFIG_ASH y
+      CONFIG_ASH_ECHO y
+      CONFIG_ASH_TEST y
+      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
+      CONFIG_MKDIR y
+      CONFIG_TAR y
+      CONFIG_UNXZ y
+    '';
+  }}/bin/busybox"
+, bootGCC ? pkgs.gcc.cc.override { enableLTO = false; }
+}:
 
 let
   libc = pkgs.stdenv.cc.libc;
@@ -15,22 +31,6 @@ in with pkgs; rec {
 
   tarMinimal = gnutar.override { acl = null; };
 
-  busyboxMinimal = busybox.override {
-    useMusl = !stdenv.targetPlatform.isRiscV;
-    enableStatic = true;
-    enableMinimal = true;
-    extraConfig = ''
-      CONFIG_ASH y
-      CONFIG_ASH_ECHO y
-      CONFIG_ASH_TEST y
-      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
-      CONFIG_MKDIR y
-      CONFIG_TAR y
-      CONFIG_UNXZ y
-    '';
-  };
-
-  bootGCC = gcc.cc.override { enableLTO = false; };
   bootBinutils = binutils.bintools.override {
     withAllTargets = false;
     # Don't need two linkers, disable whatever's not primary/default.
@@ -196,7 +196,7 @@ in with pkgs; rec {
 
         mkdir $out/on-server
         XZ_OPT="-9 -e" tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
-        cp ${busyboxMinimal}/bin/busybox $out/on-server
+        cp ${busyboxMinimal} $out/on-server/busybox
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
       ''; # */
