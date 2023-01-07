@@ -28204,7 +28204,7 @@ with pkgs;
   csound-manual = callPackage ../applications/audio/csound/csound-manual { };
 
   csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
-    python = python27;
+    python = python3;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
