@@ -3,6 +3,10 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+
+  # popular downstream dependencies
+, aiohttp
+, requests
 }:
 
 buildPythonPackage rec {
@@ -31,6 +35,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "charset_normalizer"
   ];
+
+  passthru.tests = { inherit aiohttp requests; };
 
   meta = with lib; {
     description = "Python module for encoding and language detection";
