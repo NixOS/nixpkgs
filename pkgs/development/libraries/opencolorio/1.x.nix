@@ -33,7 +33,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DCMAKE_OSX_ARCHITECTURES=arm64";
 
   postInstall = ''
-    mkdir -p $bin/bin; mv $out/bin $bin/
+    moveToOutput bin "$bin"
+    moveToOutput cmake "$dev"
+    moveToOutput OpenColorIOConfig.cmake "$dev"
+
+    substituteInPlace "$dev/cmake/OpenColorIO-release.cmake" \
+      --replace "$out/bin" "$bin/bin"
   '';
 
   meta = with lib; {
