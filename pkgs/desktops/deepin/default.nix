@@ -12,6 +12,7 @@ let
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
     disomaster = callPackage ./library/disomaster { };
+    docparser = callPackage ./library/docparser { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
