@@ -1,4 +1,4 @@
-{ runCommand, fetchurl, appimage-run, glibcLocales, file }:
+{ runCommand, fetchurl, appimage-run, glibcLocales, file, xdg-utils }:
 let
   # any AppImage usable on cli, really
   sample-appImage = fetchurl {
@@ -11,7 +11,7 @@ let
   };
 in
   runCommand "appimage-run-tests" {
-    buildInputs = [ appimage-run glibcLocales file ];
+    buildInputs = [ appimage-run glibcLocales file xdg-utils ];
     meta.platforms = [ "x86_64-linux" ];
   }
   ''
@@ -28,7 +28,10 @@ in
     gunzip owdtest.AppImage.gz
     appimage-run owdtest.AppImage
 
+    # Verify desktop entry
+    XDG_DATA_DIRS="${appimage-run}/share"
+    [[ "$(xdg-mime query default application/vnd.appimage)" == '${appimage-run.name}.desktop' ]]
+
     set +x
     touch $out
   ''
-
