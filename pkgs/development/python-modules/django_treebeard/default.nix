@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-frHrcbJCFPLn3DvSFfDDrjL9Z2QXnNR3SveqtJE53qA=";
+    hash = "sha256-frHrcbJCFPLn3DvSFfDDrjL9Z2QXnNR3SveqtJE53qA=";
   };
 
   buildInputs = [ pytest ];
@@ -21,10 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Efficient tree implementations for Django 1.6+";
+    description = "Efficient tree implementations for Django";
     homepage = "https://tabo.pe/projects/django-treebeard/";
-    maintainers = with maintainers; [ desiderius ];
+    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ desiderius ];
   };
-
 }
