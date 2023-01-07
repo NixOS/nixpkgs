@@ -11,6 +11,7 @@ let
     dtkwidget = callPackage ./library/dtkwidget { };
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
+    deepin-wayland-protocols = callPackage ./library/deepin-wayland-protocols { };
     dde-qt-dbus-factory = callPackage ./library/dde-qt-dbus-factory { };
     disomaster = callPackage ./library/disomaster { };
     docparser = callPackage ./library/docparser { };
