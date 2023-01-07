@@ -15,6 +15,10 @@ buildPythonPackage rec {
     sha256 = "b2e4a33b80569d093b513f5804db0c7f40cfc86f15a013ae7a8e99c5e175d5dd";
   };
 
+  patches = [
+    ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch
+  ];
+
   propagatedBuildInputs = [ cudatoolkit ];
 
   doCheck = false;  # no tests in PyPi dist
