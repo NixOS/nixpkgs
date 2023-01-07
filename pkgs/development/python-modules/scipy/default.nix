@@ -15,24 +15,33 @@
 , pytest-xdist
 , numpy
 , pybind11
+, pooch
 , libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.9.3";
+  version = "1.10.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+8XAXIXBoCvnex/1kQh8g7xEV5xtK9n7eYu2TqXhoCc=";
+    sha256 = "sha256-LPnfuAp7RYm6TEDOdYiYbW1c68VFfK0sKID2vC1C86U=";
   };
+
+  patches = [
+    # These tests require internet connection, currently impossible to disable
+    # them otherwise, see:
+    # https://github.com/scipy/scipy/pull/17965
+    ./disable-datasets-tests.patch
+  ];
 
   nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
 
   buildInputs = [
     numpy.blas
     pybind11
+    pooch
   ] ++ lib.optionals (pythonOlder "3.9") [
     libxcrypt
   ];
