@@ -130,11 +130,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-xrP3znKMbS4jwtKxIobo8IIeiDp+clFboPrJY6aVYlA=",
+    "hash": "sha256-ZLQV8hHh5U+qvBQovPxisPZ1BDUBH5YoKEt240bzQ0Y=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.37.0",
+    "rev": "v3.38.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -149,11 +149,11 @@
   },
   "baiducloud": {
     "deleteVendor": true,
-    "hash": "sha256-g3+n0Q0Hl4yRaYK0snl4um5B5FS54Y6aMM7LeluPik4=",
+    "hash": "sha256-tEvD70BbN/4376HjE2Yez2qHOM2o3/Uu925HRnmJNwg=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.19.2",
+    "rev": "v1.19.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-3PLBs8LSE5JPtrhmdx+jQsnCrfZQQEUGA7wnf9M72yY="
   },
@@ -167,11 +167,11 @@
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-xDUL9W6lQGMZPQBe4eghW9JcQeTUgm+3ND6erikVFMM=",
+    "hash": "sha256-i9Ka0RoHWcrctgJIusQyySirLSXVbD9MFJ6gljzgSl4=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.29.0",
+    "rev": "v2.29.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-foMmZbNPLww1MN4UZwuynBDgt2w40aMqVINRw//Q0d0="
   },
@@ -969,13 +969,13 @@
     "vendorHash": null
   },
   "scaleway": {
-    "hash": "sha256-2991jDjOlyJuVcgzTmfKfMt4NfLc1QP7TY9mw+5Z5aM=",
+    "hash": "sha256-dxXEGAkmemTHmGvKOwe3+xVE+nP4CAr82JmL3Nh+BQA=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.8.0",
+    "rev": "v2.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-YlZSM3duS2QEZo5j+WvCw5KFPbY+NadYonylpB8Zw+o="
+    "vendorHash": "sha256-bzx/Hl2JobtIa+ndvu1ssKg+faxt+JmJe4BL/go/0WY="
   },
   "secret": {
     "hash": "sha256-MmAnA/4SAPqLY/gYcJSTnEttQTsDd2kEdkQjQj6Bb+A=",
@@ -1014,13 +1014,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "signalfx": {
-    "hash": "sha256-alLC61bEaFiVtoH0Fczj7G0m70ie1RNvTBR+MgYZGkQ=",
+    "hash": "sha256-qzLP+IGZU5bms8zjtcUg9rApZW2+TCF7KrtqSQvr3lw=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v6.18.0",
+    "rev": "v6.20.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ESUNfkllwkS1NcAD30tO90VQcHR5XhdIeyXXHmU/byc="
+    "vendorHash": "sha256-zIF5NA5kHXEr3aUleWrCYg8PZTKnrFubaRlALnbTLHQ="
   },
   "skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",

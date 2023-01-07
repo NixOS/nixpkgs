@@ -13,8 +13,6 @@ let
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 
-  kernelModVersion = lib.versions.majorMinor kernel.modDirVersion;
-
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version
     then b
     else a;
@@ -27,11 +25,11 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "525.60.11";
-    sha256_64bit = "sha256-gW7mwuCBPMw9SnlY9x/EmjfGDv4dUdYUbBznJAOYPV0=";
-    openSha256 = "sha256-33ATZuYu+SOOxM6UKXp6J+f1+zbmHvaK4v13X3UZTTM=";
-    settingsSha256 = "sha256-gA1x6oEpnkr/OPP4eR1L5gC5srvEKtDrSpnv2QEaEpE=";
-    persistencedSha256 = "sha256-AFMy3agoJ6yVsGgUvTfOzHlz30iApBpAReckq9iS7AA=";
+    version = "525.78.01";
+    sha256_64bit = "sha256-Q9pC0r9pvDfqnHwPoC9S2w3MSDwnL1LtrK2JpctJWpM=";
+    openSha256 = "sha256-fxpyXVl735ZJ3NnK7jN95gPstu7YopYH/K7UK0iAC7k=";
+    settingsSha256 = "sha256-1d3Cn+7Gm1ORQxmTKr18GFmYHVb8t050XVLler1dCtw=";
+    persistencedSha256 = "sha256-t6dViuvA2fw28w4kh4koIoxh9pQ8f7KI1PIUFJcGlYA=";
   };
 
   latest = selectHighestVersion production (generic {

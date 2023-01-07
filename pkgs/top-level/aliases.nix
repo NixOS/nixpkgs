@@ -959,6 +959,7 @@ mapAliases ({
   monero = monero-cli; # Added 2021-11-28
   mongodb-3_4 = throw "mongodb-3_4 has been removed, it's end of life since January 2020"; # Added 2022-11-30
   mongodb-3_6 = throw "mongodb-3_6 has been removed, it's end of life since April 2021"; # Added 2022-11-30
+  mongodb-4_0 = throw "mongodb-4_0 has been removed, it's end of life since April 2022"; # Added 2023-01-05
   monodevelop = throw "monodevelop has been removed from nixpkgs"; # Added 2022-01-15
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension"; # Added 2020-10-18
@@ -1458,6 +1459,7 @@ mapAliases ({
   surf-webkit2 = throw "'surf-webkit2' has been renamed to/replaced by 'surf'"; # Converted to throw 2022-02-22
   swec = throw "swec has been removed; broken and abandoned upstream"; # Added 2021-10-14
   sweep-visualizer = throw "'sweep-visualizer' is abondoned upstream and depends on deprecated GNOME2/GTK2"; # Added 2022-06-15
+  swift-im = throw "swift-im has been removed as it is unmaintained and depends on deprecated Python 2 / Qt WebKit"; # Added 2023-01-06
   swfdec = throw "swfdec has been removed as broken and unmaintained"; # Added 2020-08-23
   swtpm-tpm2 = swtpm; # Added 2021-02-26
   syncthing-cli = syncthing; # Added 2021-04-06
