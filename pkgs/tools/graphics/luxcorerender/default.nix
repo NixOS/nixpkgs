@@ -1,6 +1,6 @@
 { lib, config, stdenv, fetchFromGitHub, symlinkJoin, wrapGAppsHook, cmake, boost172
 , pkg-config, flex, bison, libpng, libtiff, zlib, python3, embree, openexr
-, openimagedenoise, openimageio, tbb, c-blosc, gtk3, pcre, doxygen
+, openimagedenoise, openimageio_1, tbb, c-blosc, gtk3, pcre, doxygen
 # OpenCL Support
 , withOpenCL ? true, ocl-icd
 # Cuda Support
@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
     c-blosc
     gtk3
     pcre
-    openimageio.dev
-    openimageio.out
+    openimageio_1.dev
+    openimageio_1.out
   ] ++ lib.optionals withOpenCL [ ocl-icd ]
     ++ lib.optionals withCuda [ cudatoolkit ];
 

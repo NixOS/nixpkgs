@@ -309,6 +309,20 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>dokuwiki</literal> service now takes
+          configuration via the
+          <literal>services.dokuwiki.sites.&lt;name&gt;.settings</literal>
+          attribute set, <literal>extraConfig</literal> is deprecated
+          and will be removed. The
+          <literal>{aclUse,superUser,disableActions}</literal>
+          attributes have been renamed, <literal>pluginsConfig</literal>
+          now also accepts an attribute set of booleans, passing plain
+          PHP is deprecated. Same applies to <literal>acl</literal>
+          which now also accepts structured settings.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           To reduce closure size in
           <literal>nixos/modules/profiles/minimal.nix</literal> profile
           disabled installation documentations and manuals. Also

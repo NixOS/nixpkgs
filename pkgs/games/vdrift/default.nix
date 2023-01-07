@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchsvn
 , pkg-config
 , sconsPackages
@@ -17,12 +16,12 @@
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
-    rev = "1386";
-    sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
+    rev = "1446";
+    sha256 = "sha256-KEu49GAOfenPyuaUItt6W9pkuqUNpXgmTSFuc7ThljQ=";
   }
 }:
 let
-  version = "unstable-2017-12-09";
+  version = "unstable-2021-09-05";
   bin = stdenv.mkDerivation {
     pname = "vdrift";
     inherit version;
@@ -30,8 +29,8 @@ let
     src = fetchFromGitHub {
       owner = "vdrift";
       repo = "vdrift";
-      rev = "12d444ed18395be8827a21b96cc7974252fce6d1";
-      sha256 = "001wq3c4n9wzxqfpq40b1jcl16sxbqv2zbkpy9rq2wf9h417q6hg";
+      rev = "7e9e00c8612b2014d491f026dd86b03f9fb04dcd";
+      sha256 = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
     };
 
     nativeBuildInputs = [ pkg-config sconsPackages.scons_latest ];
@@ -39,16 +38,6 @@ let
 
     patches = [
       ./0001-Ignore-missing-data-for-installation.patch
-      (fetchpatch {
-        name = "scons-python-3-fixes.patch";
-        url = "https://github.com/VDrift/vdrift/commit/2f1f72f2a7ce992b0aad30dc55509b966d1bb63d.patch";
-        sha256 = "sha256-gpIB95b1s+wpThbNMFXyftBPXkZs9SIjuCcvt068uR8=";
-      })
-      (fetchpatch {
-        name = "sconstruct-python-3-fix.patch";
-        url = "https://github.com/VDrift/vdrift/commit/7d04c723a165109e015204642f4984a1a4452ccb.patch";
-        sha256 = "sha256-ASEV46HnR90HXqI9SgHmkH2bPy5Y+vWN57vEN4hJMts=";
-      })
     ];
 
     buildPhase = ''

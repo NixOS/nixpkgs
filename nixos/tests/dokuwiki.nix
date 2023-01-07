@@ -41,15 +41,39 @@ let
 
       sites = {
         "site1.local" = {
-          aclUse = false;
-          superUser = "admin";
+          templates = [ template-bootstrap3 ];
+          settings = {
+            useacl = false;
+            userewrite = true;
+            template = "bootstrap3";
+          };
         };
         "site2.local" = {
           package = dwWithAcronyms;
           usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
-          superUser = "admin";
-          templates = [ template-bootstrap3 ];
           plugins = [ plugin-icalevents ];
+          settings = {
+            useacl = true;
+            superuser = "admin";
+            title._file = titleFile;
+            plugin.dummy.empty = "This is just for testing purposes";
+          };
+          acl = [
+            { page = "*";
+              actor = "@ALL";
+              level = "read"; }
+            { page = "acl-test";
+              actor = "@ALL";
+              level = "none"; }
+          ];
+          pluginsConfig = {
+            authad = false;
+            authldap = false;
+            authmysql = false;
+            authpgsql = false;
+            tag = false;
+            icalevents = true;
+          };
         };
       };
     };
@@ -58,6 +82,7 @@ let
     networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
   };
 
+  titleFile = pkgs.writeText "dokuwiki-title" "DokuWiki on site2";
 in {
   name = "dokuwiki";
   meta = with pkgs.lib; {
@@ -88,7 +113,7 @@ in {
         machine.succeed("curl -sSfL http://site1.local/ | grep 'DokuWiki'")
         machine.fail("curl -sSfL 'http://site1.local/doku.php?do=login' | grep 'Login'")
 
-        machine.succeed("curl -sSfL http://site2.local/ | grep 'DokuWiki'")
+        machine.succeed("curl -sSfL http://site2.local/ | grep 'DokuWiki on site2'")
         machine.succeed("curl -sSfL 'http://site2.local/doku.php?do=login' | grep 'Login'")
 
         with subtest("ACL Operations"):
@@ -98,10 +123,23 @@ in {
             "curl -sSfL --cookie cjar --cookie-jar cjar 'http://site2.local/doku.php?do=login' | grep 'Logged in as: <bdi>Admin</bdi>'",
           )
 
+          # Ensure the generated ACL is valid
+          machine.succeed(
+            "echo 'No Hello World! for @ALL here' >> /var/lib/dokuwiki/site2.local/data/pages/acl-test.txt",
+            "curl -sSL 'http://site2.local/doku.php?id=acl-test' | grep 'Permission Denied'"
+          )
+
         with subtest("Customizing Dokuwiki"):
           machine.succeed(
             "echo 'r13y is awesome!' >> /var/lib/dokuwiki/site2.local/data/pages/acronyms-test.txt",
             "curl -sSfL 'http://site2.local/doku.php?id=acronyms-test' | grep '<abbr title=\"reproducibility\">r13y</abbr>'",
+          )
+
+          # Testing if plugins (a) be correctly loaded and (b) configuration to enable them works
+          machine.succeed(
+              "echo '~~INFO:syntaxplugins~~' >> /var/lib/dokuwiki/site2.local/data/pages/plugin-list.txt",
+              "curl -sSfL 'http://site2.local/doku.php?id=plugin-list' | grep 'plugin:icalevents'",
+              "curl -sSfL 'http://site2.local/doku.php?id=plugin-list' | (! grep 'plugin:tag')",
           )
 
         # Just to ensure both Webserver configurations are consistent in allowing that
