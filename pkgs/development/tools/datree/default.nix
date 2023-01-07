@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-xuaiho5hKSFcwCj2P5QGyvGmPUbcErIbVkkX5kGii8E=";
   };
 
@@ -51,6 +51,7 @@ buildGoModule rec {
       objects.
     '';
     homepage = "https://datree.io/";
+    changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ azahi jceb ];
   };
