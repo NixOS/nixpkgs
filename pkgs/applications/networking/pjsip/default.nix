@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/pjsip/pjproject/commit/450baca94f475345542c6953832650c390889202.patch";
       sha256 = "sha256-30kHrmB51UIw4x/J6/CD+vPKf/gBYDCcFoUpwEWkDMY=";
     })
+    ./1.12.1-CVE-2022-23537.patch
+    ./1.12.1-CVE-2022-23547.patch
   ];
 
   buildInputs = [ openssl libsamplerate ]
