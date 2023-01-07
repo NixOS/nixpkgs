@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.21.0";
+  version = "5.21.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7zVYki4sA5jsnxWye0ouUwAOwKUBf/TiZDqFuXTm45w=";
+    hash = "sha256-QxepFU/ZQWVH19AeoSnXAAUhLO6VKmrZIIpVw1tTft4=";
   };
 
   vendorHash = "sha256-UP6IdJLc93gRP4vwKKOJl3sNt4sOFeYXjvwk8QM+D48=";
