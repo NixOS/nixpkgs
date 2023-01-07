@@ -800,6 +800,14 @@ self: super: builtins.intersectAttrs super {
   # time
   random = dontCheck super.random;
 
+  # https://github.com/Gabriella439/nix-diff/pull/74
+  nix-diff = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace src/Nix/Diff/Types.hs \
+        --replace "{-# OPTIONS_GHC -Wno-orphans #-}" "{-# OPTIONS_GHC -Wno-orphans -fconstraint-solver-iterations=0 #-}"
+      '';
+  }) (doJailbreak (dontCheck super.nix-diff));
+
   # mockery's tests depend on hspec-discover which dependso on mockery for its tests
   mockery = dontCheck super.mockery;
   # same for logging-facade
