@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.0.0-beta";
+  version = "1.0.0-beta1";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-1+1hKOY8unu6Z7LLv/WQ86JlwWUubQuhPP9OUjyXOrM=";
+    sha256 = "sha256-5ZIzxo2UvE+aKznF9ZLYFg5z3JkYCB+9rGdVDJl14Hw=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

@@ -98,6 +98,8 @@ let
 
     brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
 
+    brr = callPackage ../development/ocaml-modules/brr { };
+
     bwd = callPackage ../development/ocaml-modules/bwd { };
 
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -664,6 +666,8 @@ let
 
     js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix { };
 
+    js_of_ocaml-toplevel = callPackage ../development/tools/ocaml/js_of_ocaml/toplevel.nix {};
+
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
@@ -949,6 +953,8 @@ let
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
+
+    note = callPackage ../development/ocaml-modules/note { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
 
