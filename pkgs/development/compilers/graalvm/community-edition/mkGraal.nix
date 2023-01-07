@@ -320,6 +320,7 @@ let
       description = "High-Performance Polyglot VM";
       license = with licenses; [ upl gpl2Classpath bsd3 ];
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      mainProgram = "java";
       maintainers = with maintainers; [
         bandresen
         hlolli
