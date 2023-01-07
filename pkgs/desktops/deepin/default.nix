@@ -14,6 +14,7 @@ let
     dde-qt-dbus-factory = callPackage ./library/dde-qt-dbus-factory { };
     disomaster = callPackage ./library/disomaster { };
     docparser = callPackage ./library/docparser { };
+    gio-qt = callPackage ./library/gio-qt { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
