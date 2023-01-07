@@ -58,7 +58,15 @@
 #     $ nix-tree --derivation $(nix-instantiate -A stdenv)
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-, rebootstrap ? false
+
+# ARMv8.0 backward compatibility (`-moutline-intrinsics`) currently
+# requires regenerating bootstrapFiles; see:
+#
+#   https://github.com/NixOS/nixpkgs/issues/108111
+#   https://github.com/NixOS/nixpkgs/pull/108200
+#   https://bugzilla.redhat.com/show_bug.cgi?id=1830472
+, rebootstrap ? localSystem.isAarch64
+
 , bootstrapFiles ?
   let table = {
     glibc = {
