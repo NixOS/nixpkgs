@@ -11,7 +11,12 @@ let
 in
 
 { pname
-, dontStrip ? (ghc.isGhcjs or false)
+# Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
+# ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
+# (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
+# backend. The latter is a normal cross compilation backend and needs little
+# special accomodation.
+, dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
@@ -171,7 +176,7 @@ let
     # Pass the "wrong" C compiler rather than none at all so packages that just
     # use the C preproccessor still work, see
     # https://github.com/haskell/cabal/issues/6466 for details.
-    "--with-gcc=${(if stdenv.hasCC then stdenv else buildPackages.stdenv).cc.targetPrefix}cc"
+    "--with-gcc=${if stdenv.hasCC then "$CC" else "$CC_FOR_BUILD"}"
   ] ++ optionals stdenv.hasCC [
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
     "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
@@ -246,7 +251,10 @@ let
   allPkgconfigDepends = pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  depsBuildBuild = [ nativeGhc ];
+  depsBuildBuild = [ nativeGhc ]
+    # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
+    # platform. See crossCabalFlags above for more details.
+    ++ lib.optionals (!stdenv.hasCC) [ buildPackages.stdenv.cc ];
   collectedToolDepends =
     buildTools ++ libraryToolDepends ++ executableToolDepends ++
     optionals doCheck testToolDepends ++
@@ -316,7 +324,9 @@ stdenv.mkDerivation ({
   inherit src;
 
   inherit depsBuildBuild nativeBuildInputs;
-  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
+  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs
+    # For patchShebangsAuto in fixupPhase
+    ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ];
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.

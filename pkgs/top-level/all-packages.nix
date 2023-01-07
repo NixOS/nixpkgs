@@ -14558,10 +14558,13 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = dontRecurseIntoAttrs
-    # Prefer native-bignum to avoid linking issues with gmp
-    (if stdenv.hostPlatform.isStatic
-       then haskell.packages.native-bignum.ghc92
-       else haskell.packages.ghc92);
+    # JS backend is only available for GHC >= 9.6
+    (if stdenv.hostPlatform.isGhcjs
+     then haskell.packages.native-bignum.ghcHEAD
+     # Prefer native-bignum to avoid linking issues with gmp
+     else if stdenv.hostPlatform.isStatic
+     then haskell.packages.native-bignum.ghc92
+     else haskell.packages.ghc92);
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more

@@ -560,6 +560,7 @@ broken-packages:
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
+  - cabal-plan-bounds
   - cabal-progdeps
   - cabalQuery
   - CabalSearch
@@ -853,6 +854,7 @@ broken-packages:
   - Conscript
   - consistent
   - console-program
+  - constable
   - const-math-ghc-plugin
   - constrained
   - constrained-categories
@@ -2323,7 +2325,6 @@ broken-packages:
   - HLogger
   - hlongurl
   - hls-brittany-plugin
-  - hls-call-hierarchy-plugin
   - hls-haddock-comments-plugin
   - hls-selection-range-plugin
   - hls-stan-plugin
@@ -2661,7 +2662,6 @@ broken-packages:
   - identifiers
   - idiii
   - idna2008
-  - idris
   - IDynamic
   - ieee-utils
   - iexcloud
@@ -4327,6 +4327,7 @@ broken-packages:
   - rattle
   - rattletrap
   - raven-haskell-scotty
+  - raylib-imgui
   - raz
   - rbst
   - rclient
