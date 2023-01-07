@@ -81,12 +81,12 @@ let
 in
 python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.10.2";
+  version = "1.11.3";
 
   # Fetch the release tarball instead of a git ref because it contains the prebuilt frontend
   src = fetchurl {
     url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-uOrRHHNqIYsDbzKcA7EsYZjadpLyAB4Ks+PU+BNsTWE=";
+    hash = "sha256-wGNkdczgV+UDd9ZO+BXMSWotpetE/+c/jJAAH+6SXps=";
   };
 
   format = "other";
@@ -99,6 +99,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     attrs
     autobahn
     automat
+    bleach
     blessed
     celery
     certifi
@@ -128,6 +129,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     httptools
     humanfriendly
     hyperlink
+    imagehash
     idna
     imap-tools
     img2pdf
@@ -138,6 +140,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     langdetect
     lxml
     msgpack
+    nltk
     numpy
     ocrmypdf
     pathvalidate
