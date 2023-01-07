@@ -560,6 +560,7 @@ broken-packages:
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
+  - cabal-plan-bounds
   - cabal-progdeps
   - cabalQuery
   - CabalSearch
@@ -853,6 +854,7 @@ broken-packages:
   - Conscript
   - consistent
   - console-program
+  - constable
   - const-math-ghc-plugin
   - constrained
   - constrained-categories
@@ -4325,6 +4327,7 @@ broken-packages:
   - rattle
   - rattletrap
   - raven-haskell-scotty
+  - raylib-imgui
   - raz
   - rbst
   - rclient
