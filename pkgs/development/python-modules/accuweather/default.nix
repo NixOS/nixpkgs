@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-NnDpSOEIqPuPLIr0Ty6yjrs9WRKyhykcdyiRPB/cHEw=";
+    hash = "sha256-v4mFvW+p0g+5IeZT8o0Z60MafHyYZ62d4lNH27wlAeI=";
   };
 
   postPatch = ''
