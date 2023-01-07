@@ -41,8 +41,7 @@ let
         pymongo
       ]);
 
-      # 4.2 < mongodb <= 6.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
@@ -55,8 +54,7 @@ let
         setuptools
       ]);
 
-      # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
