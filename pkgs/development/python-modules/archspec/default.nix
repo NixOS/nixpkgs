@@ -18,18 +18,31 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-ScigEpYNArveqi5tlqiA7LwsVs2RkjT+GChxhSy/ndw=";
+    hash = "sha256-ScigEpYNArveqi5tlqiA7LwsVs2RkjT+GChxhSy/ndw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
-  propagatedBuildInputs = [ click six ];
-  checkInputs = [ pytestCheckHook jsonschema ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  pythonImportsCheck = [ "archspec" ];
+  propagatedBuildInputs = [
+    click
+    six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    jsonschema
+  ];
+
+  pythonImportsCheck = [
+    "archspec"
+  ];
 
   meta = with lib; {
-    description = "A library for detecting, labeling, and reasoning about microarchitectures";
-    homepage = "https://archspec.readthedocs.io/en/latest/";
+    description = "Library for detecting, labeling, and reasoning about microarchitectures";
+    homepage = "https://archspec.readthedocs.io/";
+    changelog = "";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ atila ];
   };
