@@ -6,6 +6,7 @@ let
   in {
     #### LIBRARIES
     dtkcommon = callPackage ./library/dtkcommon { };
+    dtkcore = callPackage ./library/dtkcore { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
