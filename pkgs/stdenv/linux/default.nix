@@ -55,7 +55,7 @@
 #     $ nix-tree --derivation $(nix-instantiate -A stdenv)
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-
+, rebootstrap ? false
 , bootstrapFiles ?
   let table = {
     glibc = {
@@ -93,7 +93,7 @@
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
     else (abort "unsupported platform for the pure Linux stdenv"));
   in files
-}:
+} @args:
 
 assert crossSystem == localSystem;
 
@@ -140,7 +140,7 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+  unpackBootstrapTools = bootstrapFiles: (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
     inherit system bootstrapFiles;
     extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
@@ -156,10 +156,9 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
+    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [], bootstrapTools ? prevStage.bootstrapTools }:
 
     let
-
       thisStdenv = import ../generic {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
@@ -203,30 +202,44 @@ let
           '';
         });
 
-        overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
+        overrides = self: super: (overrides self super) // {
+          fetchurl = thisStdenv.fetchurlBoot;
+          inherit bootstrapTools;
+        };
       };
-
     in {
       inherit config overlays;
       stdenv = thisStdenv;
     };
 
 in
-  assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
+
+# when rebootstrapping, we first prepend a copy of the stdenv stages
+# that use the fetched bootstrapFiles:
+lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
+
 [
-
-  ({}: {
+  (prevStage: {
     __raw = true;
-
     gcc-unwrapped = null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
+    bootstrapTools =
+      unpackBootstrapTools
+        (if   rebootstrap
+         then prevStage.freshBootstrapTools.bootstrapFiles // { passthru.isFromBootstrapFiles = true; }
+         else bootstrapFiles);
   })
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
-  (prevStage: stageFun prevStage {
+  #
+  # resulting stage0 stdenv:
+  # - coreutils, binutils, glibc, gcc: from bootstrapFiles
+  ({ bootstrapTools, ...}@prevStage:
+    assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
+    stageFun prevStage {
     name = "bootstrap-stage0";
 
     overrides = self: super: {
@@ -326,7 +339,7 @@ in
       name = "bootstrap-stage-xgcc";
       overrides = final: prev: {
         inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl;
-        patchelf = bootstrapTools;
+        patchelf = prevStage.bootstrapTools;
         ${localSystem.libc} = getLibc prevStage;
         gmp      = prev.gmp.override { cxx = false; };
         gcc-unwrapped =
@@ -561,7 +574,7 @@ in
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
   #
-  (prevStage:
+  ({ bootstrapTools, ...}@prevStage:
     # previous stage4 stdenv; see stage3 comment regarding gcc,
     # which applies here as well.
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;

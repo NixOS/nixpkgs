@@ -8,6 +8,13 @@
   lib
   # Args to pass on to the pkgset builder, too
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+
+# If true, the bootstrapFiles will be rebuilt, resulting in a stdenv
+# built by the same compiler as its bootstrap tools.  Turning this
+# feature on will considerably increase the rebuild cycle, but may
+# help with troubleshooting the bootstrap.
+, rebootstrap ? false
+
 } @ args:
 
 let

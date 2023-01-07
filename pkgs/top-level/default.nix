@@ -38,6 +38,8 @@
   # list it returns.
   stdenvStages ? import ../stdenv
 
+, rebootstrap ? false
+
 , # Ignore unexpected args.
   ...
 } @ args:
@@ -123,7 +125,7 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays crossOverlays;
+    inherit lib localSystem crossSystem config overlays crossOverlays rebootstrap;
   };
 
   pkgs = boot stages;

@@ -1,8 +1,10 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+, rebootstrap
 }:
 
 assert crossSystem == localSystem;
+assert rebootstrap -> throw "stdenv/native does not yet support automatic rebootstrapping";
 
 let
   inherit (localSystem) system;
