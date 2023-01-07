@@ -2339,9 +2339,9 @@ with pkgs;
 
   kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
 
-  kitty = callPackage ../applications/terminal-emulators/kitty {
+  kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel UniformTypeIdentifiers OpenGL UserNotifications;
   };
 
   kitty-themes  = callPackage ../misc/kitty-themes {};
@@ -10405,7 +10405,7 @@ with pkgs;
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_8; };
+  packagekit = callPackage ../tools/package-management/packagekit { };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
@@ -16744,7 +16744,7 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
-  rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { nix = nixVersions.nix_2_9; };
+  rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
   sumneko-lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/sumneko-lua-language-server {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
@@ -28269,6 +28269,8 @@ with pkgs;
 
   corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
+  coreth = callPackage ../applications/networking/coreth {};
+
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome2) libgnomeui GConf;
   };
@@ -31097,7 +31099,8 @@ with pkgs;
 
   nerd-font-patcher = callPackage ../applications/misc/nerd-font-patcher { };
 
-  netmaker = callPackage ../applications/networking/netmaker {};
+  netmaker = callPackage ../applications/networking/netmaker {subPackages = ["."];};
+  netmaker-full = callPackage ../applications/networking/netmaker {};
 
   newsflash = callPackage ../applications/networking/feedreaders/newsflash {
     webkitgtk = webkitgtk_5_0;
@@ -31457,6 +31460,8 @@ with pkgs;
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
+  oculante = callPackage ../applications/graphics/oculante { };
+
   ocr-a = callPackage ../data/fonts/ocr-a {};
 
   ocrad = callPackage ../applications/graphics/ocrad { };
@@ -31485,11 +31490,11 @@ with pkgs;
 
   openfx = callPackage ../development/libraries/openfx {};
 
-  openimageio = callPackage ../applications/graphics/openimageio {
+  openimageio_1 = callPackage ../development/libraries/openimageio/1.x.nix {
     boost = boost175;
   };
 
-  openimageio2 = darwin.apple_sdk_11_0.callPackage ../applications/graphics/openimageio/2.x.nix { };
+  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
 
@@ -32604,7 +32609,9 @@ with pkgs;
     boost = boost168;
   };
 
-  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
+  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   symbolic-preview = callPackage ../applications/graphics/symbolic-preview { };
 
@@ -33124,7 +33131,7 @@ with pkgs;
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
     CoreServices =  darwin.apple_sdk.frameworks.CoreServices;
-    lua = if (stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isRiscV64) then lua5_1 else luajit;
+    lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
@@ -34086,7 +34093,9 @@ with pkgs;
 
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
-  sumokoin = callPackage ../applications/blockchains/sumokoin { boost = boost165; };
+  sumokoin = callPackage ../applications/blockchains/sumokoin {
+    boost = boost17x;
+  };
 
   solana-testnet = callPackage ../applications/blockchains/solana {
     inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
@@ -34273,7 +34282,7 @@ with pkgs;
 
   osu-lazer = callPackage ../games/osu-lazer { };
 
-  osu-lazer-bin = callPackage ../games/osu-lazer-bin { };
+  osu-lazer-bin = callPackage ../games/osu-lazer/bin.nix { };
 
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
@@ -34643,9 +34652,7 @@ with pkgs;
 
   gl117 = callPackage ../games/gl-117 { };
 
-  globulation2 = callPackage ../games/globulation {
-    boost = boost168; # breaks with >= boost169
-  };
+  globulation2 = callPackage ../games/globulation { };
 
   gltron = callPackage ../games/gltron { };
 
@@ -36202,6 +36209,7 @@ with pkgs;
     coqPackages_8_14 coq_8_14
     coqPackages_8_15 coq_8_15
     coqPackages_8_16 coq_8_16
+    coqPackages_8_17 coq_8_17
     coqPackages      coq
   ;
 

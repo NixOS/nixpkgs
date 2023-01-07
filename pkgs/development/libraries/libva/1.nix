@@ -18,6 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "-minimal";
+  # nixpkgs-update: no auto update
   version = "1.8.3";
 
   src = fetchFromGitHub {

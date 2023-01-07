@@ -1,5 +1,6 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, fetchpatch
 }:
 
 let
@@ -103,7 +104,17 @@ let
         ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
         ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
         # Fixes determinism by normalizing metadata for the archive of kheaders
-        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
+        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch
+        # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
+        # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
+        # https://github.com/openzfs/zfs/pull/13367
+        ++ optional (lib.versionAtLeast version "5.12" &&
+                     lib.versionOlder version "5.19" &&
+                     stdenv.hostPlatform.isPower)
+          (fetchpatch {
+            url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
+            hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
+          });
 
       postPatch = ''
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
