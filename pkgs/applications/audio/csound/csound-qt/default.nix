@@ -1,28 +1,23 @@
 { lib, stdenv, csound, desktop-file-utils,
   fetchFromGitHub, python, python-qt, qmake,
-  qtwebengine, qtxmlpatterns, rtmidi, fetchpatch }:
+  qtwebengine, qtxmlpatterns, rtmidi, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "csound-qt";
-  version = "0.9.6-beta3";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
-    rev = version;
-    sha256 = "007jhkh0k6qk52r77i067999dwdiimazix6ggp2hvyc4pj6n5dip";
+    rev = "v${version}";
+    hash = "sha256-PdylVOnunbB36dbZX/wzd9A8CJPDv/xH5HPLAUkRu28=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "examplepath.patch";
-      url = "https://github.com/CsoundQt/CsoundQt/commit/09f2d515bff638cbcacb450979d66e273a59fdec.diff";
-      sha256 = "0y23kf8m1mh9mklsvf908b2b8m2w2rji8qvws44paf1kpwnwdmgm";
-    })
     ./rtmidipath.patch
   ];
 
-  nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns ];
+  nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns wrapQtAppsHook ];
 
   buildInputs = [ csound desktop-file-utils rtmidi ];
 
@@ -35,12 +30,10 @@ stdenv.mkDerivation rec {
                  "PYTHONQT_LIB_DIR=${python-qt}/lib"
                  "LIBS+=-L${python-qt}/lib"
                  "INCLUDEPATH+=${python-qt}/include/PythonQt"
-                 "INCLUDEPATH+=${python}/include/python2.7"
+                 "INCLUDEPATH+=${python}/include/python${python.pythonVersion}"
                  "INSTALL_DIR=${placeholder "out"}"
                  "SHARE_DIR=${placeholder "out"}/share"
                  ];
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
