@@ -28503,6 +28503,8 @@ with pkgs;
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
 
+  edlin = callPackage ../applications/editors/edlin { };
+
   o = callPackage ../applications/editors/o { };
 
   oed = callPackage ../applications/editors/oed { };
