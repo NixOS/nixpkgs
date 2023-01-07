@@ -33955,6 +33955,8 @@ with pkgs;
 
   songrec = callPackage ../applications/audio/songrec { };
 
+  storj-uplink = callPackage ../applications/networking/sync/storj-uplink {};
+
   storrent = callPackage ../applications/networking/p2p/storrent { };
 
   speedread = callPackage ../applications/misc/speedread { };
