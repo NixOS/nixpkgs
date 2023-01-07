@@ -95,7 +95,6 @@ let
     ) env))));
 
   mastodonTootctl = pkgs.writeShellScriptBin "mastodon-tootctl" ''
-    #! ${pkgs.runtimeShell}
     set -a
     export RAILS_ROOT="${cfg.package}"
     source "${envFile}"
