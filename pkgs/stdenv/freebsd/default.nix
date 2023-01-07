@@ -1,6 +1,9 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+, rebootstrap ? false
 }:
+
+assert rebootstrap -> throw "stdenv/freebsd does not yet support automatic rebootstrapping";
 
 assert crossSystem == localSystem;
 let inherit (localSystem) system;

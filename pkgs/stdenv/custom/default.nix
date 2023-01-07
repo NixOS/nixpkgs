@@ -1,6 +1,9 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+, rebootstrap ? false
 }:
+
+assert rebootstrap -> throw "bootstrapping is not relevant to stdenv/custom";
 
 assert crossSystem == localSystem;
 

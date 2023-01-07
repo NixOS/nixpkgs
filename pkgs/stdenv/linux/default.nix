@@ -58,7 +58,7 @@
 #     $ nix-tree --derivation $(nix-instantiate -A stdenv)
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-
+, rebootstrap ? false
 , bootstrapFiles ?
   let table = {
     glibc = {
@@ -93,7 +93,7 @@
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
     else (abort "unsupported platform for the pure Linux stdenv"));
   in files
-}:
+} @args:
 
 assert crossSystem == localSystem;
 
@@ -117,7 +117,7 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+  unpackBootstrapTools = bootstrapFiles: import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
     inherit system bootstrapFiles;
     extraAttrs = lib.optionalAttrs
       config.contentAddressedByDefault
@@ -135,10 +135,9 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
+    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [], bootstrapTools ? prevStage.bootstrapTools }:
 
     let
-
       thisStdenv = import ../generic {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
@@ -177,9 +176,11 @@ let
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
-        overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
+        overrides = self: super: (overrides self super) // {
+          fetchurl = thisStdenv.fetchurlBoot;
+          inherit bootstrapTools;
+        };
       };
-
     in {
       inherit config overlays;
       stdenv = thisStdenv;
@@ -187,15 +188,22 @@ let
 
 in
 
+# when rebootstrapping, we first prepend a copy of the stdenv stages
+# that use the fetched bootstrapFiles:
+lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
+
 [
-
-  ({}: {
+  (prevStage: {
     __raw = true;
-
     gcc-unwrapped = null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
+    bootstrapTools =
+      unpackBootstrapTools
+        (if   rebootstrap
+         then prevStage.freshBootstrapTools.bootstrapFiles
+         else bootstrapFiles);
   })
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
@@ -203,7 +211,7 @@ in
   #
   # resulting stage0 stdenv:
   # - coreutils, binutils, glibc, gcc: from bootstrapFiles
-  (prevStage: stageFun prevStage {
+  ({ bootstrapTools, ...}@prevStage: stageFun prevStage {
     name = "bootstrap-stage0";
 
     overrides = self: super: {
@@ -477,7 +485,7 @@ in
   #        and the bootstrapTools-built, statically-linked
   #        lib{mpfr,mpc,gmp,isl}.a which are linked into the final gcc
   #        (see commit cfde88976ba4cddd01b1bb28b40afd12ea93a11d).
-  (prevStage: {
+  ({ bootstrapTools, ...}@prevStage: {
     inherit config overlays;
     stdenv = import ../generic rec {
       name = "stdenv-linux";

@@ -34,9 +34,11 @@
       cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
       tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kRC/bhCmlD4L7KAvJQgcukk7AinkMz4IwmG1rqlh5tA="; executable = false; };
     }
+, rebootstrap ? false
 }:
 
 assert crossSystem == localSystem;
+assert rebootstrap -> throw "darwin does not yet support automatic rebootstrapping";
 
 let
   inherit (localSystem) system;
