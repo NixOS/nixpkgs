@@ -839,8 +839,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "utilyre";
       repo = "barbecue.nvim";
-      rev = "0705c6dd2f29550066ddff3bdf42cf67c5405fb7";
-      sha256 = "1b1vdzj1ygmhwsg44bg46v9y59wrb8y8ilh6njy8w1hnic3yhsyw";
+      rev = "fc72ed04e87df12efbdcea25e6f0dce9d5229b6b";
+      sha256 = "0cfa2cqvscaai26yfjmxnv740p351v1dgqdg1v3snrmhj3m5i7bw";
     };
     meta.homepage = "https://github.com/utilyre/barbecue.nvim/";
   };
