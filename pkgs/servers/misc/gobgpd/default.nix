@@ -1,4 +1,7 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "gobgpd";
@@ -7,8 +10,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
-    rev = "v${version}";
-    sha256 = "sha256-aVvzbWMh/r1k3AKDHipWkwEevYPj8Xfix8PfIMYXiTM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aVvzbWMh/r1k3AKDHipWkwEevYPj8Xfix8PfIMYXiTM=";
   };
 
   vendorHash = "sha256-9Vi8qrcFC2SazcGVgAf1vbKvxd8rTMgye63wSCaFonk=";
@@ -18,10 +21,14 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-extldflags '-static'"
+    "-s"
+    "-w"
+    "-extldflags '-static'"
   ];
 
-  subPackages = [ "cmd/gobgpd" ];
+  subPackages = [
+    "cmd/gobgpd"
+  ];
 
   meta = with lib; {
     description = "BGP implemented in Go";
