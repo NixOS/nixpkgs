@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, nix-update-script }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "smiley-sans";
@@ -17,6 +17,10 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 -t $out/share/fonts/woff2 *.woff2
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "A condensed and oblique Chinese typeface seeking a visual balance between the humanist and the geometric";
