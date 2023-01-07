@@ -16,6 +16,7 @@ let
     docparser = callPackage ./library/docparser { };
     gio-qt = callPackage ./library/gio-qt { };
     image-editor = callPackage ./library/image-editor { };
+    udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
