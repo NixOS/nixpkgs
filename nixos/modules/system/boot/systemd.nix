@@ -26,6 +26,10 @@ let
     sliceToUnit
     ;
 
+  enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
+
+  knownEnabledServices = [ "nix-daemon" ];
+
   upstreamSystemUnits =
     [
       # Targets.
@@ -213,6 +217,27 @@ let
     "multi-user.target.wants"
     "timers.target.wants"
   ];
+
+  serviceFilesCreatedByPackages =
+    [
+      # pkgs/os-specific/linux/nfs-utils/default.nix
+      "auth-rpcgss-module"
+      "nfs-blkmap"
+      "nfs-idmapd"
+      "rpc-gssd"
+      "rpc-statd"
+      # pkgs/os-specific/linux/zfs/default.nix
+      "zfs-mount"
+      "zfs-share"
+      "zfs-zed"
+      # pkgs/tools/virtualization/google-guest-agent/default.nix
+      "google-guest-agent"
+      "google-shutdown-scripts"
+      "google-startup-scripts"
+      # here :)
+      "systemd-makefs@"
+      "systemd-mkswap@"
+    ];
 
   proxy_env = config.networking.proxy.envVars;
 
@@ -512,6 +537,13 @@ in
             type = service.serviceConfig.Type or "";
             restart = service.serviceConfig.Restart or "no";
             hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
+            hasStartCmd = svc:
+              svc.script != ""
+              || svc.serviceConfig?ExecStart
+              || svc.serviceConfig?ExecStop;
+            templateUnit = builtins.match "^(.*@).*" name;
+            template = builtins.elemAt templateUnit 0;
+
           in
           concatLists [
             (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
@@ -520,6 +552,16 @@ in
             (optional hasDeprecated "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786.")
             (optional (service.reloadIfChanged && service.reloadTriggers != [ ])
               "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
+            )
+            (optional
+              (service.enable
+                && !hasStartCmd service
+                && !(lib.elem name knownEnabledServices)
+                && !(!isNull templateUnit && cfg.services?${template} && hasStartCmd cfg.services.${template})
+                && !(lib.elem "${name}.service" enabledUpstreamSystemUnits)
+                && builtins.all (p: isNull ((builtins.match "^${name}.*") p.name)) cfg.packages
+                && !(lib.elem name serviceFilesCreatedByPackages))
+              "Service `${name}.service' is enabled and missing a `script' or one of ExecStart, ExecStop or SuccessAction."
             )
           ]
         ) cfg.services
@@ -600,7 +642,6 @@ in
               ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
             '';
 
-        enabledUpstreamSystemUnits = filter (n: !elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
         enabledUnits = filterAttrs (n: v: !elem n cfg.suppressedSystemUnits) cfg.units;
 
       in
