@@ -22346,7 +22346,7 @@ with pkgs;
   pylode = callPackage ../misc/pylode {};
 
   python-qt = callPackage ../development/libraries/python-qt {
-    python = python27;
+    python = python3;
     inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
   };
 
