@@ -210,8 +210,15 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
     bootstrapTools =
       unpackBootstrapTools
         (if   rebootstrap
-         then prevStage.freshBootstrapTools.bootstrapFiles
-         else bootstrapFiles);
+         then (prevStage.freshBootstrapTools.override {
+           # Copy busybox from the original bootstrapFiles; it is
+           # safe to do this because it is statically linked.  This
+           # avoids having to rebuild a musl-gcc compiler (glibc
+           # doesn't know how to do static linking).
+           busyboxMinimal = prevStage.stdenv.bootstrapFiles.busybox;
+           # don't rebuild a custom compiler
+           bootGCC = prevStage.gcc.cc;
+         }).bootstrapFiles else bootstrapFiles);
   })
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
@@ -521,7 +528,7 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        inherit bootstrapTools;
+        inherit bootstrapTools bootstrapFiles;
         shellPackage = prevStage.bash;
       };
 
