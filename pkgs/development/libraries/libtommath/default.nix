@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   makefile = "makefile.shared";
 
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-DTARGET_OS_IPHONE=0";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -31,7 +33,5 @@ stdenv.mkDerivation rec {
     description = "A library for integer-based number-theoretic applications";
     license = with licenses; [ publicDomain wtfpl ];
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

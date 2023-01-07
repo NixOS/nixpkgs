@@ -851,14 +851,14 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
-  cachix = super.cachix.override { nix = pkgs.nixVersions.nix_2_9; };
+  cachix = super.cachix.override { nix = pkgs.nixVersions.nix_2_10; };
 
-  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_10; };
   hercules-ci-cnix-expr =
     addTestToolDepend pkgs.git (
-      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_9; }
+      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_10; }
     );
-  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_10; };
 
   # the testsuite fails because of not finding tsc without some help
   aeson-typescript = overrideCabal (drv: {

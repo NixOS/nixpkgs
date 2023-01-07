@@ -16,12 +16,12 @@
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
-    rev = "1386";
-    sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
+    rev = "1446";
+    sha256 = "sha256-KEu49GAOfenPyuaUItt6W9pkuqUNpXgmTSFuc7ThljQ=";
   }
 }:
 let
-  version = "unstable-2017-12-09";
+  version = "unstable-2021-09-05";
   bin = stdenv.mkDerivation {
     pname = "vdrift";
     inherit version;
@@ -29,14 +29,16 @@ let
     src = fetchFromGitHub {
       owner = "vdrift";
       repo = "vdrift";
-      rev = "12d444ed18395be8827a21b96cc7974252fce6d1";
-      sha256 = "001wq3c4n9wzxqfpq40b1jcl16sxbqv2zbkpy9rq2wf9h417q6hg";
+      rev = "7e9e00c8612b2014d491f026dd86b03f9fb04dcd";
+      sha256 = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
     };
 
-    nativeBuildInputs = [ pkg-config sconsPackages.scons_3_1_2 ];
+    nativeBuildInputs = [ pkg-config sconsPackages.scons_latest ];
     buildInputs = [ libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
 
-    patches = [ ./0001-Ignore-missing-data-for-installation.patch ];
+    patches = [
+      ./0001-Ignore-missing-data-for-installation.patch
+    ];
 
     buildPhase = ''
       sed -i -e s,/usr/local,$out, SConstruct

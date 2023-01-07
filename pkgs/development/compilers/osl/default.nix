@@ -6,7 +6,7 @@
 , libclang
 , zlib
 , openexr
-, openimageio2
+, openimageio
 , llvm
 , boost
 , flex
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     libclang
     llvm
     openexr
-    openimageio2
+    openimageio
     partio
     pugixml
     python3.pkgs.pybind11
