@@ -9,6 +9,7 @@ let
     dtkcore = callPackage ./library/dtkcore { };
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
+    qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
 
   };
 in
