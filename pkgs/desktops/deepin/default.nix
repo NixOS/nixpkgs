@@ -15,6 +15,7 @@ let
     disomaster = callPackage ./library/disomaster { };
     docparser = callPackage ./library/docparser { };
     gio-qt = callPackage ./library/gio-qt { };
+    image-editor = callPackage ./library/image-editor { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
