@@ -20428,6 +20428,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  lagui = callPackage ../development/libraries/lagui { };
+
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix {
     inherit pkgs;
   });
