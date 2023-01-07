@@ -34851,7 +34851,7 @@ with pkgs;
 
   otto-matic = callPackage ../games/otto-matic { };
 
-  openraPackages = import ../games/openra pkgs;
+  openraPackages = import ../games/openra pkgs.__splicedPackages;
 
   openra = openraPackages.engines.release;
 
