@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p "$out/bin"
     cp 'src/ClassiCube' "$out/bin"
     # ClassiCube puts downloaded resources
@@ -90,10 +91,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/ClassiCube" \
       --run 'mkdir -p "$HOME/.local/share/ClassiCube"' \
       --run 'cd       "$HOME/.local/share/ClassiCube"'
-    runHook postInstall
 
     mkdir -p "$out/share/icons/hicolor/256x256/apps"
     cp misc/CCicon.png "$out/share/icons/hicolor/256x256/apps"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
