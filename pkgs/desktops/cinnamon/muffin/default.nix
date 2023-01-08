@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , cairo
 , cinnamon-desktop
@@ -36,7 +35,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "5.6.2";
+  version = "5.6.3";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -44,20 +43,13 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-bHEBzl0aBXsHOhSWJUz428pG5M6L0s/Q6acKO+2oMXo=";
+    hash = "sha256-qcm1CRUMKFx4KDXBnaIVLHuZTzSMEWEBFTWMe85pJDE=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       zenity = gnome.zenity;
-    })
-
-    # compositor: Fix crash when restarting Cinnamon
-    # https://github.com/linuxmint/muffin/pull/655
-    (fetchpatch {
-      url = "https://github.com/linuxmint/muffin/commit/1a941ec603a1565dbd2f943f7da6e877d1541bcb.patch";
-      sha256 = "sha256-6x64rWQ20ZjM9z79Pg6QMDPeFN5VNdDHBueRvy2kA6c=";
     })
   ];
 
