@@ -19,9 +19,13 @@
 , curl
 , openssl
 , file
+, darwin
 , gitUpdater
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation rec {
   pname = "pwsafe";
   version = "1.16.0"; # do NOT update to 3.x Windows releases
@@ -33,6 +37,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-5/TOg+hiy22vlPJHheE638abhS3B5Jrul0Umgwu+gi0=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     gettext
@@ -42,24 +48,29 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    wxGTK32
+    curl
+    qrencode
+    openssl
+    xercesc
+    file
+  ] ++ lib.optionals stdenv.isLinux [
     libXext
     libXi
     libXt
     libXtst
-    wxGTK32
-    curl
-    qrencode
     libuuid
-    openssl
-    xercesc
     libyubikey
     yubikey-personalization
-    file
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
   ];
 
   cmakeFlags = [
     "-DNO_GTEST=ON"
     "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DNO_YUBI=ON"
   ];
 
   postPatch = ''
@@ -79,6 +90,8 @@ stdenv.mkDerivation rec {
     for f in $(grep -Rl /usr/bin/ .) ; do
       substituteInPlace $f --replace /usr/bin/ ""
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -99,7 +112,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pwsafe.org/";
     maintainers = with maintainers; [ c0bw3b pjones ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.artistic2;
   };
 }
