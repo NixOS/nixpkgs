@@ -69,10 +69,9 @@ in trivialBuild {
          '';
   
   meta = {
-    description = "Lsp-bridge's goal is to become the fastest LSP client in Emacs.";
+    description = "Fastest LSP client in Emacs.";
     longDescription = ''
-        Lsp-bridge uses python's threading technology to build caches that bridge Emacs and LSP server.
-        Lsp-bridge will provide smooth completion experience without compromise to slow down emacs' performance.
+        Using python's threading technology to build caches that bridge Emacs and LSP server.
       '';
     license = lib.licenses.gpl3;
   };
