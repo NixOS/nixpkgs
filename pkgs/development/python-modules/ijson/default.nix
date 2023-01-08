@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "3.1.4";
+  version = "3.2.0.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d1003ae3c6115ec9b587d29dd136860a81a23c7626b682e2b5b12c9fd30e4ea";
+    sha256 = "sha256-gKW9fpkjyrIAcB9nrSNyEEMouZ3fJJ276INBAshS0xY=";
   };
 
   buildInputs = [ yajl ];
