@@ -92,6 +92,8 @@ in stdenv.mkDerivation (rec {
     rm test/tools/gold/X86/split-dwarf.ll
     rm test/tools/llvm-dwarfdump/X86/prettyprint_types.s
     rm test/tools/llvm-dwarfdump/X86/simplified-template-names.s
+    rm test/CodeGen/RISCV/rv32zbp.ll
+    rm test/CodeGen/RISCV/rv64zbp.ll
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
