@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     wrapQtAppsHook
   ];
-  
+ 
   buildInputs = [
     zlib
     potrace
