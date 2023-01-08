@@ -22,7 +22,7 @@ assert zlibSupport -> zlib != null;
 with lib;
 
 let
-  isPy3k = substring 0 1 pythonVersion == "3";
+  isPy3k = (lib.versions.major pythonVersion) == "3";
   isPy39OrNewer = versionAtLeast pythonVersion "3.9";
   passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
@@ -64,8 +64,6 @@ in with passthru; stdenv.mkDerivation rec {
     libunwind Security
   ];
 
-  hardeningDisable = optional stdenv.isi686 "pic";
-
   # Remove bootstrap python from closure
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
@@ -96,14 +94,47 @@ in with passthru; stdenv.mkDerivation rec {
     substituteInPlace lib_pypy/pypy_tools/build_cffi_imports.py \
       --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
-    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" \
+      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
       -Ojit \
       --batch pypy/goal/targetpypystandalone.py
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,include,lib,${executable}-c}
+
+    cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
+    cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+    ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
+    ${optionalString isPy39OrNewer "ln -s $out/bin/${executable}-c $out/bin/pypy3"}
+
+    # other packages expect to find stuff according to libPrefix
+    ln -s $out/${executable}-c/include $out/include/${libPrefix}
+    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
+
+    runHook postInstall
+  '';
+
+  preFixup = lib.optionalString (stdenv.isDarwin) ''
+    install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    mkdir -p $out/${executable}-c/pypy/bin
+    mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
+    ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
   '';
 
   setupHook = python-setup-hook sitePackages;
@@ -143,32 +174,22 @@ in with passthru; stdenv.mkDerivation rec {
     ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
   '';
 
-  installPhase = ''
-    mkdir -p $out/{bin,include,lib,${executable}-c}
-
-    cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
-    cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
-    ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
-    ${optionalString isPy39OrNewer "ln -s $out/bin/${executable}-c $out/bin/pypy3"}
-
-    # other packages expect to find stuff according to libPrefix
-    ln -s $out/${executable}-c/include $out/include/${libPrefix}
-    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
-
-    ${lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
-    ''}
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-      mkdir -p $out/${executable}-c/pypy/bin
-      mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
-      ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
-    ''}
-
-    # verify cffi modules
-    $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
-
-    # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
+  # verify cffi modules
+  doInstallCheck = true;
+  installCheckPhase = let
+    modules = [
+      "curses"
+      "sqlite3"
+    ] ++ optionals (!isPy3k) [
+      "Tkinter"
+    ] ++ optionals isPy3k [
+      "tkinter"
+      "lzma"
+    ];
+    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+  in ''
+    echo "Testing whether we can import modules"
+    $out/bin/${executable} -c '${imports}'
   '';
 
   inherit passthru;
