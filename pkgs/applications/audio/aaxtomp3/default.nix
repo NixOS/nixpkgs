@@ -1,31 +1,22 @@
-{ coreutils
+{ bash
+, bc
+, coreutils
 , fetchFromGitHub
 , ffmpeg
 , findutils
+, gawk
 , gnugrep
 , gnused
 , jq
 , lame
 , lib
-, makeWrapper
 , mediainfo
 , mp4v2
-, stdenv
+, ncurses
+, resholve
 }:
-let
-  runtimeInputs = [
-    coreutils
-    ffmpeg
-    findutils
-    gnugrep
-    gnused
-    jq
-    lame
-    mediainfo
-    mp4v2
-  ];
-in
-stdenv.mkDerivation rec {
+
+resholve.mkDerivation rec {
   pname = "aaxtomp3";
   version = "1.3";
 
@@ -36,16 +27,51 @@ stdenv.mkDerivation rec {
     hash = "sha256-7a9ZVvobWH/gPxa3cFiPL+vlu8h1Dxtcq0trm3HzlQg=";
   };
 
-  dontBuild = false;
+  # use whitespace to show osh arithmetic is not file redirection
+  # see: https://github.com/oilshell/oil/issues/1446
+  patches = [./osh.patch];
 
-  nativeBuildInputs = [ makeWrapper ];
+  postPatch = ''
+    substituteInPlace AAXtoMP3 \
+      --replace 'AAXtoMP3' 'aaxtomp3'
+    substituteInPlace interactiveAAXtoMP3 \
+      --replace 'AAXtoMP3' 'aaxtomp3' \
+      --replace 'call="./aaxtomp3"' 'call="$AAXTOMP3"'
+  '';
 
   installPhase = ''
-    install -Dm755 AAXtoMP3 $out/bin/aaxtomp3
-    wrapProgram $out/bin/aaxtomp3 --prefix PATH : ${lib.makeBinPath runtimeInputs}
-    install -Dm755 interactiveAAXtoMP3 $out/bin/interactiveaaxtomp3
-    wrapProgram $out/bin/interactiveaaxtomp3 --prefix PATH : ${lib.makeBinPath runtimeInputs}
+    install -Dm 755 AAXtoMP3 $out/bin/aaxtomp3
+    install -Dm 755 interactiveAAXtoMP3 $out/bin/interactiveaaxtomp3
   '';
+
+  solutions.default = {
+    scripts = [
+      "bin/aaxtomp3"
+      "bin/interactiveaaxtomp3"
+    ];
+    interpreter = "${bash}/bin/bash";
+    inputs = [
+      bc
+      coreutils
+      ffmpeg
+      findutils
+      gawk
+      gnugrep
+      gnused
+      jq
+      lame
+      mediainfo
+      mp4v2
+      ncurses
+    ];
+    keep."$call" = true;
+    fix = {
+      "$AAXTOMP3" = [ "${placeholder "out"}/bin/aaxtomp3" ];
+      "$FIND" = [ "find" ];
+      "$GREP" = [ "grep" ];
+      "$SED" = [ "sed" ];
+    };
+  };
 
   meta = with lib; {
     description = "Convert Audible's .aax filetype to MP3, FLAC, M4A, or OPUS";

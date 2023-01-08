@@ -1,0 +1,15 @@
+diff --git a/AAXtoMP3 b/AAXtoMP3
+index 90566ad..71e94da 100755
+--- a/AAXtoMP3
++++ b/AAXtoMP3
+@@ -200,8 +200,8 @@ progressbar() {
+ 
+   #draw progressbar with one # for every 5% and blank spaces for the missing part.
+   progressbar=""
+-  for (( n=0; n<(percentage/5); n++ )) ; do progressbar="$progressbar#"; done
+-  for (( n=0; n<(20-(percentage/5)); n++ )) ; do progressbar="$progressbar "; done
++  for (( n=0; n< (percentage/5); n++ )) ; do progressbar="$progressbar#"; done
++  for (( n=0; n< (20-(percentage/5)); n++ )) ; do progressbar="$progressbar "; done
+ 
+   #print progressbar
+   echo -ne "Chapter splitting: |$progressbar| $print_percentage% ($part/$total chapters)\r"
