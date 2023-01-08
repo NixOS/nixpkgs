@@ -111,6 +111,10 @@ stdenv.mkDerivation rec {
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
       --prefix PATH : "${wrapperPath}"
+  '' + lib.optionalString (ydotool == pkgs.wtype) ''
+    # Replace ydotool with wtype
+    substituteInPlace $out/bin/passmenu --replace \
+      "ydotool type --file" "${pkgs.wtype}/bin/wtype"
   '' + lib.optionalString dmenuSupport ''
     # We just wrap passmenu with the same PATH as pass. It doesn't
     # need all the tools in there but it doesn't hurt either.

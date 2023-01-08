@@ -3274,6 +3274,12 @@ with pkgs;
     pass = pass-wayland;
   };
 
+  pass-wayland-wtype = callPackage ../tools/security/pass {
+    waylandSupport = true;
+    pass = pass-wayland;
+    ydotool = wtype;
+  };
+
   passExtensions = recurseIntoAttrs pass.extensions;
 
   pdepend = callPackage ../development/php-packages/pdepend { };
