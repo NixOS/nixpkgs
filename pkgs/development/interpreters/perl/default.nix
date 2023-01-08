@@ -1,7 +1,7 @@
 { config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
-, enableCrypt ? true, libxcrypt ? null
+, enableCrypt ? libxcrypt!=null, libxcrypt ? null
 , zlib
 }:
 
