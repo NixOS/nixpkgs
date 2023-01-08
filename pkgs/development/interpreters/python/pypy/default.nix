@@ -158,6 +158,11 @@ in with passthru; stdenv.mkDerivation rec {
     ${lib.optionalString stdenv.isDarwin ''
       install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
     ''}
+    ${lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      mkdir -p $out/${executable}-c/pypy/bin
+      mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
+      ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
+    ''}
 
     # verify cffi modules
     $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
@@ -174,7 +179,6 @@ in with passthru; stdenv.mkDerivation rec {
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    broken = stdenv.isDarwin && stdenv.isAarch64;
     maintainers = with maintainers; [ andersk ];
   };
 }
