@@ -833,6 +833,18 @@ final: prev:
     meta.homepage = "https://github.com/chriskempson/base16-vim/";
   };
 
+  bat-vim = buildVimPluginFrom2Nix {
+    pname = "bat.vim";
+    version = "2022-11-14";
+    src = fetchFromGitHub {
+      owner = "jamespwilliams";
+      repo = "bat.vim";
+      rev = "cc038af97410bfc8da2e29f7eefa51f565346993";
+      sha256 = "17f9vwy3qfyl553hddah5zbj8gwww772frlvw51zskf9phdg17la";
+    };
+    meta.homepage = "https://github.com/jamespwilliams/bat.vim/";
+  };
+
   bats-vim = buildVimPluginFrom2Nix {
     pname = "bats.vim";
     version = "2013-07-03";
