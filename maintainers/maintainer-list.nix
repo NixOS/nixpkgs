@@ -13455,6 +13455,12 @@
     githubId = 48666;
     name = "Matthew \"strager\" Glazar";
   };
+  strangeglyph = {
+    email = "mail@strangegly.ph";
+    github = "strangeglyph";
+    githubId = 974869;
+    name = "strangeglyph";
+  };
   strikerlulu = {
     email = "strikerlulu7@gmail.com";
     github = "strikerlulu";
