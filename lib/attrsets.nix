@@ -551,9 +551,20 @@ rec {
     list:
     listToAttrs (map (n: nameValuePair n (f n)) list);
 
-  # DEPRECATED
-  genAttrs = lib.warn
-    "lib.genAttrs is deprecated, use lib.mapListToAttrs instead" (flip mapListToAttrs);
+  /* Generate an attribute set by mapping a function over a list of
+     attribute names.
+
+     Example:
+       genAttrs [ "foo" "bar" ] (name: "x_" + name)
+       => { bar = "x_bar"; foo = "x_foo"; }
+
+     Type:
+       genAttrs :: [String] -> (String -> Any) -> AttrSet
+  */
+  # TODO: DEPRECATE ON RELEASE
+  genAttrs =
+  #  lib.warn "lib.genAttrs is deprecated, use lib.mapListToAttrs instead"
+  (flip mapListToAttrs);
 
   /* Generate an attribute set by mapping a `NameValuePair` over a list of values.
 
