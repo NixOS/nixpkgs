@@ -1,6 +1,17 @@
-{ mkDerivation, lib, stdenv, fetchurl
-, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets
-, qtx11extras, qtwayland
+{ lib
+, stdenv
+, fetchurl
+, qmake
+, qttools
+, qtbase
+, qtdeclarative
+, qtsvg
+, qtwayland
+, qtwebsockets
+, qtx11extras
+, qtxmlpatterns
+, makeWrapper
+, wrapQtAppsHook
 }:
 
 let
@@ -24,8 +35,14 @@ stdenv.mkDerivation {
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
-  buildInputs = [ qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+    qtsvg
+    qtwebsockets
+    qtx11extras
+    qtxmlpatterns
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   postInstall =
   # Create a lowercase symlink for Linux
