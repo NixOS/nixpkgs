@@ -1435,6 +1435,8 @@ with pkgs;
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
+  paperview = callPackage ../tools/X11/paperview { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout {};
