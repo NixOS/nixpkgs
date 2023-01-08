@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "posix_ipc";
+  pname = "posix-ipc";
   version = "1.1.1";
   format = "setuptools";
 
