@@ -25885,6 +25885,8 @@ with pkgs;
 
   gotest = callPackage ../development/tools/gotest { };
 
+  gotestfmt = callPackage ../development/tools/gotestfmt { };
+
   gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop {
