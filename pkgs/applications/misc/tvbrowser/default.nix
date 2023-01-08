@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
+{ lib
+, fetchurl
+, makeDesktopItem
+, stdenv
+, fetchzip
+, ant
+, jdk
+, makeWrapper
+}:
 
 let
   minimalJavaVersion = "11";
+
+  newsPlugin = fetchurl {
+    url = "https://www.tvbrowser.org/data/uploads/1372016422809_543/NewsPlugin.jar";
+    hash = "sha256-5XoypuMd2AFBE2SJ6EdECuvq6D81HLLuu9UoA9kcKAM=";
+  };
 
   desktopItem = makeDesktopItem {
     name = "tvbrowser";
@@ -16,25 +29,32 @@ let
   };
 
 in
-assert lib.versionAtLeast jre.version minimalJavaVersion;
+assert lib.versionAtLeast jdk.version minimalJavaVersion;
 stdenv.mkDerivation rec {
   pname = "tvbrowser";
   version = "4.2.7";
-  name = "${pname}-bin-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%20${minimalJavaVersion}%20and%20higher%29/${version}/${pname}_${version}_bin.tar.gz";
-    hash = "sha256-A1ZLGHA1sSSafwWy6MlPikQMk+6CechftzFTLDaBfrs=";
+  src = fetchzip {
+    url = "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%20${minimalJavaVersion}%20and%20higher%29/${version}/${pname}_${version}_src.tar.gz";
+    hash = "sha256-dmNfI6T0MU7UtMH+C/2hiAeDwZlFCB4JofQViZezoqI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ ant jdk makeWrapper ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    ant runtime-linux -Dnewsplugin.url=file://${newsPlugin}
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/java/${pname}
-    cp -R * $out/share/java/${pname}
-    rm $out/share/java/${pname}/${pname}.{sh,desktop}
+    cp -R runtime/tvbrowser_linux/* $out/share/java/${pname}
+    rm $out/share/java/${pname}/${pname}.sh
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
@@ -45,7 +65,7 @@ stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk}/bin/java $out/bin/${pname}  \
       --add-flags "--module-path=lib:${pname}.jar -m ${pname}/tvbrowser.TVBrowser"  \
       --chdir "$out/share/java/${pname}"
 
@@ -55,7 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electronic TV Program Guide";
     homepage = "https://www.tvbrowser.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau yarny ];
