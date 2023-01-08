@@ -1041,11 +1041,11 @@
     "vendorHash": "sha256-bYHvuzj3ShX55cgrYobqADxcRDgese+n24p14z82CLA="
   },
   "sops": {
-    "hash": "sha256-6FuThi6iuuUGcMhswAk3Z6Lxth/2nuI57A02Xu2s+/U=",
+    "hash": "sha256-D1Yzs8hDimMP9y8ZRbizEhic3vGtLcZjOVSuSMUAqPk=",
     "homepage": "https://registry.terraform.io/providers/carlpett/sops",
     "owner": "carlpett",
     "repo": "terraform-provider-sops",
-    "rev": "v0.7.1",
+    "rev": "v0.7.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
