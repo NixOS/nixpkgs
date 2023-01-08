@@ -2,7 +2,7 @@
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages_latest, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
 , vulkan-loader, glslang
@@ -23,6 +23,8 @@
 , rustc
 , rust-bindgen
 , spirv-llvm-translator_14
+, pkgsHostHost
+, pkgsCross
 }:
 
 /** Packaging design:
@@ -45,6 +47,10 @@ let
   branch  = versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
+
+  # We cannot set this in `callPackage` arguments of `all-packages.nix`.
+  # Or LLVM packages will not be spliced.
+  llvmPackages = pkgsHostHost.llvmPackages_latest;
 
   rust-bindgen' = rust-bindgen.override {
     rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
@@ -148,12 +154,21 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator_14 ]
     ++ lib.optional withValgrind valgrind-light
     # Mesa will not build zink when gallium-drivers=auto
     ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
 
   depsBuildBuild = [ pkg-config ];
+
+  # For OpenCL, clang is both run and targeting hostPlatform, thus goes depsHostHost.
+  depsHostHost = lib.optionals enableOpenCL [
+    libclc
+    llvmPackages.clang
+    llvmPackages.clang-unwrapped
+    rustc
+    rust-bindgen'
+    spirv-llvm-translator_14
+  ];
 
   nativeBuildInputs = [
     meson pkg-config ninja
@@ -270,6 +285,19 @@ self = stdenv.mkDerivation {
           echo ${self.dev} >>$out
         '';
         disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+      };
+    } // lib.optionalAttrs (stdenv.isLinux && stdenv.isx86_64) {
+      doesNotRelyOnTargetPlatform = stdenv.mkDerivation {
+        name = "mesa-does-not-rely-on-target-platform";
+        # Is there any better way to reference cross-compiled `self`?
+        ok = pkgsCross.aarch64-multiplatform.buildPackages.mesa == self;
+        buildCommand = ''
+          if ! (( $ok )); then
+            echo 'Must not depends on target platform'
+            exit 1
+          fi
+          touch $out
+        '';
       };
     };
   };
