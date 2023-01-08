@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
+, unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
 
@@ -72,7 +72,8 @@ let
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
         nodePackages.asar
-        (wrapGAppsHook.override { inherit makeWrapper; })
+        # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+        (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
       ];
 
     dontBuild = true;
