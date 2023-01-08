@@ -9,14 +9,14 @@ let
   The hash is recorded in the runner's name because we can't do better yet
   See https://gitlab.com/gitlab-org/gitlab-runner/-/issues/29350 for more details
   */
-  genRunnerName = service: let
+  genRunnerName = name: service: let
       hash = substring 0 12 (hashString "md5" (unsafeDiscardStringContext (toJSON service)));
-    in if service ? description
+    in if service ? description && service.description != null
     then "${hash} ${service.description}"
     else "${name}_${config.networking.hostName}_${hash}";
 
   hashedServices = mapAttrs'
-    (name: service: nameValuePair (genRunnerName service) service) cfg.services;
+    (name: service: nameValuePair (genRunnerName name service) service) cfg.services;
   configPath = ''"$HOME"/.gitlab-runner/config.toml'';
   configureScript = pkgs.writeShellApplication {
     name = "gitlab-runner-configure";
@@ -38,7 +38,7 @@ let
     '' else ''
       export CONFIG_FILE=${configPath}
 
-      mkdir -p "$(dirname "${configPath}")"
+      mkdir -p "$(dirname ${configPath})"
       touch ${configPath}
 
       # update global options
