@@ -41,6 +41,7 @@
 # characteristics but (hopefully) indistinguishable output.
 , allowDocBook ? true
 # whether lib.mdDoc is required for descriptions to be read as markdown.
+# !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
 , markdownByDefault ? false
 }:
 
