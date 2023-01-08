@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell, writeScriptBin }:
 
-stdenv.mkDerivation rec {
+let
   pname = "zap";
+  # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
+  version_tag = "2010000";
+  # Copying config and adding version tag before first use to avoid permission
+  # issues if zap tries to copy config on it's own.
+  runner = writeScriptBin "zap" ''
+    #!${runtimeShell}
+    export PATH="${lib.makeBinPath [ jre ]}:$PATH"
+    export JAVA_HOME='${jre}'
+    if ! [ -f "$HOME/.ZAP/config.xml" ];then
+      mkdir -p "$HOME/.ZAP"
+      head -n 2 deriv_folder/share/${pname}/xml/config.xml > "$HOME/.ZAP/config.xml"
+      echo "<version>${version_tag}</version>" >> "$HOME/.ZAP/config.xml"
+      tail -n +3 deriv_folder/share/${pname}/xml/config.xml >> "$HOME/.ZAP/config.xml"
+    fi
+    exec "deriv_folder/share/${pname}/zap.sh"  "$@"'';
+in
+stdenv.mkDerivation rec {
+  inherit pname;
   version = "2.11.1";
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
@@ -10,29 +28,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jre ];
 
-  # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
-  version_tag = "2010000";
-
-  # Copying config and adding version tag before first use to avoid permission
-  # issues if zap tries to copy config on it's own.
   installPhase = ''
     mkdir -p "$out/bin" "$out/share"
     cp -pR . "$out/share/${pname}/"
-
-    cat >> "$out/bin/${pname}" << EOF
-    #!${runtimeShell}
-    export PATH="${lib.makeBinPath [ jre ]}:\$PATH"
-    export JAVA_HOME='${jre}'
-    if ! [ -f "\$HOME/.ZAP/config.xml" ];then
-      mkdir -p "\$HOME/.ZAP"
-      head -n 2 $out/share/${pname}/xml/config.xml > "\$HOME/.ZAP/config.xml"
-      echo "<version>${version_tag}</version>" >> "\$HOME/.ZAP/config.xml"
-      tail -n +3 $out/share/${pname}/xml/config.xml >> "\$HOME/.ZAP/config.xml"
-    fi
-    exec "$out/share/${pname}/zap.sh"  "\$@"
-    EOF
-
-    chmod u+x  "$out/bin/${pname}"
+    cp "${runner}/bin/${pname}" "$out/bin/${pname}"
+    substituteInPlace "$out/bin/${pname}" --replace "deriv_folder" "$out"
   '';
 
   meta = with lib; {
