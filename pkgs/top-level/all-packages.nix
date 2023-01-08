@@ -688,6 +688,8 @@ with pkgs;
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
+  qdmr = libsForQt5.callPackage ../applications/radio/qdmr { };
+
   edwin = callPackage ../data/fonts/edwin { };
 
   etBook = callPackage ../data/fonts/et-book { };
