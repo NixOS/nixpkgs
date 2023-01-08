@@ -75,6 +75,5 @@ in trivialBuild {
         Lsp-bridge will provide smooth completion experience without compromise to slow down emacs' performance.
       '';
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ fxttr ];
   };
 }
