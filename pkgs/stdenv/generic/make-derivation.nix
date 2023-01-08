@@ -210,7 +210,10 @@ let
             # > pkgsCross.aarch64-multiplatform.buildPackages.__splicedPackages.perl.mini.__spliced
             # { targetTarget = «derivation ...perl-aarch64-unknown-linux-gnu...»; }
             if (!dep ? __spliced) then
-              lib.warn "${dep.name} in ${attrs.name or attrs.pname}'s ${listName} not executable on build" dep
+              # workaround overrideAttrs not preserving splicing https://github.com/NixOS/nixpkgs/issues/132651
+              if (!dep ? pythonSitePackages && !dep ? provides && !dep ? pythonAttr) then
+                lib.warn "${dep.name} in ${attrs.name or attrs.pname}'s ${listName} not executable on build" dep
+              else dep
             else dep
         else dep;
 
