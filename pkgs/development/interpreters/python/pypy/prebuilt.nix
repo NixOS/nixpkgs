@@ -1,18 +1,18 @@
 { lib
 , stdenv
 , fetchurl
+, autoPatchelfHook
 , python-setup-hook
 , self
-, which
 # Dependencies
 , bzip2
-, sqlite
-, zlib
-, openssl
 , expat
+, gdbm
 , ncurses6
+, sqlite
 , tcl-8_5
 , tk-8_5
+, zlib
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , sourceVersion
@@ -46,18 +46,7 @@ let
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
 
-  majorVersion = substring 0 1 pythonVersion;
-
-  deps = [
-    bzip2
-    sqlite
-    zlib
-    openssl
-    expat
-    ncurses6
-    tcl-8_5
-    tk-8_5
-  ];
+  majorVersion = lib.versions.major pythonVersion;
 
 in with passthru; stdenv.mkDerivation {
   inherit pname version;
@@ -67,9 +56,22 @@ in with passthru; stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = [ which ];
+  buildInputs = [
+    bzip2
+    expat
+    gdbm
+    ncurses6
+    sqlite
+    tcl-8_5
+    tk-8_5
+    zlib
+  ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     echo "Moving files to $out"
     mv -t $out bin include lib
@@ -78,24 +80,20 @@ in with passthru; stdenv.mkDerivation {
 
     rm $out/bin/*.debug
 
-    echo "Patching binaries"
-    interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
-    patchelf --set-interpreter $interpreter \
-             --set-rpath $out/lib \
-             $out/bin/pypy*
-
-    pushd $out
-
-    find ./lib -name "*.so" -exec patchelf --remove-needed libncursesw.so.6 --replace-needed libtinfow.so.6 libncursesw.so.6 {} \;
-    find ./lib -name "*.so" -exec patchelf --set-rpath ${lib.makeLibraryPath deps}:$out/lib {} \;
-
     echo "Removing bytecode"
-    find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
-    popd
+    find . -name "__pycache__" -type d -depth -delete
 
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
 
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    find $out/{lib,lib_pypy*} -name "*.so" \
+      -exec patchelf \
+        --replace-needed libtinfow.so.6 libncursesw.so.6 \
+        --replace-needed libgdbm.so.4 libgdbm_compat.so.4 {} \;
   '';
 
   doInstallCheck = true;

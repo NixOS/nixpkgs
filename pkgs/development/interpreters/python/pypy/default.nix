@@ -156,7 +156,7 @@ in with passthru; stdenv.mkDerivation rec {
     ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
     ${lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change @rpath/libpypy${optionalString isPy3k "3"}-c.dylib $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib $out/bin/${executable}
+      install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
     ''}
 
     # verify cffi modules
@@ -173,7 +173,8 @@ in with passthru; stdenv.mkDerivation rec {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     maintainers = with maintainers; [ andersk ];
   };
 }
