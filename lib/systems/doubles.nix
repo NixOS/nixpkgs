@@ -88,6 +88,8 @@ in {
   s390x         = filterDoubles predicates.isS390x;
   js            = filterDoubles predicates.isJavaScript;
 
+  "32bit"       = filterDoubles predicates.is32bit;
+  "64bit"       = filterDoubles predicates.is64bit;
   bigEndian     = filterDoubles predicates.isBigEndian;
   littleEndian  = filterDoubles predicates.isLittleEndian;
 
