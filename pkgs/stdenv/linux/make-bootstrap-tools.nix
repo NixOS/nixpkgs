@@ -14,20 +14,16 @@
     '';
   }}/bin/busybox"
 , bootGCC ? pkgs.gcc.cc.override { enableLTO = false; }
+, nukeReferences ? pkgs.buildPackages.nukeReferences
+, cpio ? pkgs.buildPackages.cpio
+, rebootstrap ? false
 }:
 
 let
   libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 
-
-  coreutilsMinimal = coreutils.override (args: {
-    # We want coreutils without ACL/attr support.
-    aclSupport = false;
-    attrSupport = false;
-    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
-    singleBinary = "symlinks";
-  });
+  inherit (pkgs) coreutilsMinimal;
 
   tarMinimal = gnutar.override { acl = null; };
 
@@ -50,7 +46,7 @@ in with pkgs; rec {
         schedulingPriority = 200;
       };
 
-      nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
+      nativeBuildInputs = [ nukeReferences cpio ];
 
       buildCommand = ''
         set -x

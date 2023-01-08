@@ -6139,6 +6139,13 @@ with pkgs;
   coreutils =  callPackage ../tools/misc/coreutils { };
   coreutils-full = coreutils.override { minimal = false; };
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
+  coreutilsMinimal = callPackage ../tools/misc/coreutils {  # this is for the bootstrapFiles
+    # We want coreutils without ACL/attr support.
+    aclSupport = false;
+    attrSupport = false;
+    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
+    singleBinary = "symlinks";
+  };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
 
