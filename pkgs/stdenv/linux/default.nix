@@ -348,7 +348,8 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
         # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
-          inherit (prevStage.bintools.bintools) name;
+          pname = prevStage.bintools.bintools.pname + "-patchelfed";
+          inherit (prevStage.bintools.bintools) version;
           enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
