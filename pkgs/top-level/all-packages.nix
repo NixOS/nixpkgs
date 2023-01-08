@@ -16658,7 +16658,9 @@ with pkgs;
 
   srelay = callPackage ../tools/networking/srelay { };
 
-  xidel = callPackage ../tools/text/xidel { };
+  xidel = callPackage ../tools/text/xidel {
+    openssl = openssl_1_1;
+  };
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
@@ -28392,9 +28394,7 @@ with pkgs;
 
   dht = callPackage ../applications/networking/p2p/dht { };
 
-  dia = callPackage ../applications/graphics/dia {
-    inherit (gnome2) libart_lgpl libgnomeui;
-  };
+  dia = callPackage ../applications/graphics/dia { };
 
   direwolf = callPackage ../applications/radio/direwolf {
     hamlib = hamlib_4;
