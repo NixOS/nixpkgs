@@ -2708,10 +2708,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/nvim-lua/plenary.nvim",
-  "rev": "4b7e52044bbb84242158d977a50c4cbcd85070c7",
-  "date": "2022-10-01T09:05:53+02:00",
-  "path": "/nix/store/hkj69cqq4qg3d98irg8wszgl7i1bg6lv-plenary.nvim",
-  "sha256": "11815h0h2mf5ym282ghk7xav90635r88qbgaflpgbyk2banl31wl",
+  "rev": "9d81624fbcedd3dd43b38d7e13a1e7b3f873d8cd",
+  "date": "2023-01-06T19:47:51+01:00",
+  "path": "/nix/store/r6a56xvn5dkrsnswpg7297ihdfc1qsgy-plenary.nvim",
+  "sha256": "0y3qn0rwlwp720517lwg35f09b30b591hprbvb6hgvn1waw2ljzc",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
