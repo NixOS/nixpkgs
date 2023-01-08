@@ -20,7 +20,7 @@ args@
 , makeWrapper
 , ncurses5
 , perl
-, python27
+, python3
 , requireFile
 , stdenv
 , unixODBC
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
+    ncurses5 expat python3 zlib glibc
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
     gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
