@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost166, opencl-clhpp, ocl-icd }:
+{ lib, stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost, opencl-clhpp, ocl-icd, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) OpenCL;
+in
 stdenv.mkDerivation rec {
   pname = "clfft";
   version = "2.12.2";
@@ -7,15 +10,24 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "clMathLibraries";
     repo = "clFFT";
-    rev = "refs/tags/v${version}";
-    sha256 = "134vb6214hn00qy84m4djg4hqs6hw19gkp8d0wlq8gb9m3mfx7na";
+    rev = "v${version}";
+    hash = "sha256-yp7u6qhpPYQpBw3d+VLg0GgMyZONVII8BsBCEoRZm4w=";
   };
 
   sourceRoot = "source/src";
 
+  postPatch = ''
+    sed -i '/-m64/d;/-m32/d' CMakeLists.txt
+  '';
+
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ fftw fftwFloat boost166 opencl-clhpp ocl-icd ];
+  buildInputs = [ fftw fftwFloat boost ]
+    ++ lib.optionals stdenv.isLinux [ opencl-clhpp ocl-icd ]
+    ++ lib.optionals stdenv.isDarwin [ OpenCL ];
+
+  # https://github.com/clMathLibraries/clFFT/issues/237
+  CXXFLAGS = "-std=c++98";
 
   meta = with lib; {
     description = "Library containing FFT functions written in OpenCL";
@@ -25,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     homepage = "http://clmathlibraries.github.io/clFFT/";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ chessai ];
   };
 }

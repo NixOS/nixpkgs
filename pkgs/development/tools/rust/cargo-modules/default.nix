@@ -1,26 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, stdenv, darwin }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QRBhlSHqOTJCdzZhqpcfLeCDuCfJsjyxa2+6yzzN52g=";
+    sha256 = "sha256-xjAjm23hzuyvxU0S7m9AsfvXui/jb0oFrAqcY8m9Cq0=";
   };
 
-  cargoSha256 = "sha256-+asFAkUOHP9u/nOoHsr81KeqQkLqaRXhJH32oTG5vYo=";
-
-  cargoPatches = [
-    # https://github.com/regexident/cargo-modules/pull/161;
-    (fetchpatch {
-      name = "update-outdated-lock-file.patsh";
-      url = "https://github.com/regexident/cargo-modules/commit/ea9029b79acdadddbaf4067076690153c38cd09c.patch";
-      sha256 = "sha256-DOLvo/PP+4/6i1IYbl9oGC6BAnXNI88hK5he9549EJk=";
-    })
-  ];
+  cargoSha256 = "sha256-XU4kNP0xODuY5I16zLZeQqpxS37HJI67YF3enB/5N+s=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices

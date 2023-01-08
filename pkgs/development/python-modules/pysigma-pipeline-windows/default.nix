@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to support Windows service pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-windows";
+    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-windows/releases/tag/v${version}";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };

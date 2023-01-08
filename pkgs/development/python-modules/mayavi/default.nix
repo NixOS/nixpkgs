@@ -4,6 +4,7 @@
 , envisage
 , fetchPypi
 , numpy
+, packaging
 , pyface
 , pygments
 , pyqt5
@@ -43,12 +44,15 @@ buildPythonPackage rec {
     apptools
     envisage
     numpy
+    packaging
     pyface
     pygments
     pyqt5
     traitsui
     vtk
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # Needs X server
   doCheck = false;

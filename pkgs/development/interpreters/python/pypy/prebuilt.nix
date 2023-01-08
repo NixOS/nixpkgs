@@ -12,6 +12,8 @@
 , sqlite
 , tcl-8_5
 , tk-8_5
+, tcl-8_6
+, tk-8_6
 , zlib
 # For the Python package set
 , packageOverrides ? (self: super: {})
@@ -48,11 +50,18 @@ let
 
   majorVersion = lib.versions.major pythonVersion;
 
+  downloadUrls = {
+    aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.bz2";
+    x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+    aarch64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_arm64.tar.bz2";
+    x86_64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_x86_64.tar.bz2";
+  };
+
 in with passthru; stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+    url = downloadUrls.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
     inherit sha256;
   };
 
@@ -62,12 +71,16 @@ in with passthru; stdenv.mkDerivation {
     gdbm
     ncurses6
     sqlite
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
     tcl-8_5
     tk-8_5
-    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    tcl-8_6
+    tk-8_6
   ];
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -75,10 +88,10 @@ in with passthru; stdenv.mkDerivation {
     mkdir -p $out
     echo "Moving files to $out"
     mv -t $out bin include lib
-
-    mv $out/bin/libpypy*-c.so $out/lib/
-
-    rm $out/bin/*.debug
+    mv $out/bin/libpypy*-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+    ${lib.optionalString stdenv.isLinux ''
+      rm $out/bin/*.debug
+    ''}
 
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -delete
@@ -89,11 +102,32 @@ in with passthru; stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     find $out/{lib,lib_pypy*} -name "*.so" \
       -exec patchelf \
         --replace-needed libtinfow.so.6 libncursesw.so.6 \
         --replace-needed libgdbm.so.4 libgdbm_compat.so.4 {} \;
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool \
+      -change \
+        @rpath/lib${libPrefix}-c.dylib \
+        $out/lib/lib${libPrefix}-c.dylib \
+        $out/bin/${executable}
+    install_name_tool \
+      -change \
+        @rpath/lib${libPrefix}-c.dylib \
+        $out/lib/lib${libPrefix}-c.dylib \
+        $out/bin/${libPrefix}
+    install_name_tool \
+      -change \
+        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtcl8.6.dylib \
+        ${tcl-8_6}/lib/libtcl8.6.dylib \
+        $out/lib/${libPrefix}/_tkinter/*.so
+    install_name_tool \
+      -change \
+        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtk8.6.dylib \
+        ${tk-8_6}/lib/libtk8.6.dylib \
+        $out/lib/${libPrefix}/_tkinter/*.so
   '';
 
   doInstallCheck = true;
@@ -126,7 +160,7 @@ in with passthru; stdenv.mkDerivation {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.mapAttrsToList (arch: _: arch) downloadUrls;
   };
 
 }

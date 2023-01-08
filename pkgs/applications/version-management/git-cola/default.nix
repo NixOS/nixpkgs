@@ -5,13 +5,13 @@ let
 
 in buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.0.4";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "refs/tags/v${version}";
-    hash = "sha256-++cpzspN7REp9dOcsostcaJPnFHUW624hlgngQWjQCs=";
+    hash = "sha256-s+acQo9b+ZQ31qXBf0m8ajXYuYEQzNybmX9nw+c0DQY=";
   };
 
   buildInputs = [ git gettext ];
