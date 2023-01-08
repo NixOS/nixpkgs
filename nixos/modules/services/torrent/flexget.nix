@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.flexget;
-  pkg = pkgs.flexget;
+  pkg = cfg.package;
   ymlFile = pkgs.writeText "flexget.yml" ''
     ${cfg.config}
 
@@ -15,6 +15,8 @@ in {
   options = {
     services.flexget = {
       enable = mkEnableOption (lib.mdDoc "Run FlexGet Daemon");
+
+      package = mkPackageOptionMD pkgs "flexget" {};
 
       user = mkOption {
         default = "deluge";
