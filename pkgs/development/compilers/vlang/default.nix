@@ -3,6 +3,11 @@
 , fetchFromGitHub
 , makeWrapper
 , boehmgc
+, upx
+, xorg
+, libGL
+, freetype
+, openssl
 }:
 
 let
@@ -12,6 +17,10 @@ let
   });
 in
 stdenv.mkDerivation rec {
+  buildWithUpx = false; # Enable "-compress" flag.
+  buildWithX11 = false; # Enable X11 support.
+  buildWithWeb = false; # Enable web support.
+
   pname = "vlang";
   version = "weekly.2023.01";
 
@@ -40,6 +49,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  buildInputs = [ staticBoehmgc ];
+
+  propagatedBuildInputs = [
+  ] ++ lib.optional buildWithUpx [
+    upx
+  ] ++ lib.optional buildWithX11 [
+    xorg.libX11.dev
+    xorg.libXi.dev
+    xorg.libXcursor.dev
+    libGL.dev
+    freetype
+  ] ++ lib.optional buildWithWeb [
+    openssl
+  ];
+
   makeFlags = [
     "local=1"
     "VC=${vc}"
@@ -47,11 +71,9 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+
     # We need to set the target system, because the auto-detection doesn't work that great.
     export VFLAGS="-os ${targetSystem} -showcc -skip-unused"
-    # We also need gc.h in the include path.
-    export CFLAGS="-I${staticBoehmgc.dev}/include"
-    export LDFLAGS="-L${staticBoehmgc}/lib"
 
     # patch the code to use our static compiled BoehmGC
     sed -i "s|@VEXEROOT/thirdparty/tcc/lib/libgc.a|${staticBoehmgc}/lib/libgc.a|" vlib/builtin/builtin_d_gcboehm.c.v
@@ -93,24 +115,11 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # We need to patch the shebang of file "lib/cmd/tools/git_pre_commit_hook.vsh"
-    # and file "lib/vlib/v/tests/script_with_no_extension"
-    # Going from "#!/usr/bin/env -S v -raw-vsh-tmp-prefix tmp"
-    # To "#!$out/v -raw-vsh-tmp-prefix tmp"
+    # We need to patch the shebangs to point to our v
     sed -i "1s|.*|#!$out/bin/v -raw-vsh-tmp-prefix tmp|" $out/lib/cmd/tools/git_pre_commit_hook.vsh
     sed -i "1s|.*|#!$out/bin/v -raw-vsh-tmp-prefix tmp|" $out/lib/vlib/v/tests/script_with_no_extension
   '';
 
-  /* Details concerning features:
-    If you want to use `-compress`, you need to add `upx` in your build inputs.
-    If you want to build x11 apps (like examples/2048.v) you will need:
-    - `xorg.libX11.dev`
-    - `xorg.libXi.dev`
-    - `xorg.libXcursor.dev`
-    - `libGL.dev`
-    - `freetype`
-    If you want to build web apps (using `net.http` or `net.websocket`) you will need `openssl`.
-  */
   meta = with lib; {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
