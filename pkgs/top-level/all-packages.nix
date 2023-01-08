@@ -18771,7 +18771,9 @@ with pkgs;
     };
   });
 
-  cubeb = callPackage ../development/libraries/audio/cubeb { };
+  cubeb = callPackage ../development/libraries/audio/cubeb {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
+  };
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
