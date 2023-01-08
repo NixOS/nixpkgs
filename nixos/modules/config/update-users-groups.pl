@@ -215,10 +215,12 @@ foreach my $u (@{$spec->{users}}) {
     } else {
         $u->{uid} = allocUid($name, $u->{isSystemUser}) if !defined $u->{uid};
 
-        if (defined $u->{initialPassword}) {
-            $u->{hashedPassword} = hashPassword($u->{initialPassword});
-        } elsif (defined $u->{initialHashedPassword}) {
-            $u->{hashedPassword} = $u->{initialHashedPassword};
+        if (!defined $u->{hashedPassword}) {
+            if (defined $u->{initialPassword}) {
+                $u->{hashedPassword} = hashPassword($u->{initialPassword});
+            } elsif (defined $u->{initialHashedPassword}) {
+                $u->{hashedPassword} = $u->{initialHashedPassword};
+            }
         }
     }
 
