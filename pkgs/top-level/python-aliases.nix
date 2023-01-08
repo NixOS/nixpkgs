@@ -224,6 +224,7 @@ mapAliases ({
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
   uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
+  virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
   Wand = wand; # added 2022-11-13
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   weakrefmethod = throw "weakrefmethod was removed since it's not needed in Python >= 3.4"; # added 2022-12-01
