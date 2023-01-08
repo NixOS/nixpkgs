@@ -1,19 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
+{ lib
+, stdenv
 , autoreconfHook
 , cairo
+, fetchFromGitHub
 , giflib
 , glib
 , gtk2-x11
 , libjpeg
 , libpcap
 , libpng
-, libwebsockets
-, pkg-config
 , libuv
+, libwebsockets
 , openssl
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "0kd22aqb25kf54jjv3ml8wy8xm7lmbf0xz1wfp31m08cbzsbizib";
   };
 
@@ -41,7 +40,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   buildInputs = [
     cairo
@@ -51,16 +53,17 @@ stdenv.mkDerivation rec {
     libjpeg
     libpcap
     libpng
+    libuv
     libwebsockets
     openssl
-    libuv
   ];
 
   meta = with lib; {
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
+    changelog = "https://github.com/deiv/driftnet/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2Plus;
   };
 }
