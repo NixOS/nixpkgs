@@ -538,11 +538,11 @@ rec {
      attribute names.
 
      Example:
-       mapListToAttrs [ "foo" "bar" ] (name: "x_" + name)
+       mapListToAttrs (name: "x_" + name) [ "foo" "bar" ]
        => { bar = "x_bar"; foo = "x_foo"; }
 
      Type:
-       mapListToAttrs :: [String] -> (String -> Any) -> AttrSet
+       mapListToAttrs :: (String -> Any) -> [String] -> AttrSet
   */
   mapListToAttrs =
     # A function, given a string, that produces a corresponding value
