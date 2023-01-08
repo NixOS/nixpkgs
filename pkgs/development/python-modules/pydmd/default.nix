@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4.0.post2212";
+  version = "0.4.0.post2301";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "PyDMD";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-VaBITKRSyMlBoaH0ej4tMob0CjStUsED2/G1iqpkG4c=";
+    hash = "sha256-0ss7yyT6u0if+YjBYNbKtx5beJU43JC1LD9rqHPKBS8=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Dynamic Mode Decomposition";
     homepage = "https://mathlab.github.io/PyDMD/";
+    changelog = "https://github.com/mathLab/PyDMD/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ yl3dy ];
     broken = stdenv.hostPlatform.isAarch64;
