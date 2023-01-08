@@ -27,8 +27,8 @@ in trivialBuild {
   };
 
   patches = [ ./wrapper.patch ];
-  
-  packageRequires = 
+
+  packageRequires =
     [
       posframe
       markdown-mode
@@ -55,7 +55,7 @@ in trivialBuild {
     cp -r multiserver $out/share/emacs/site-lisp/
     cp -r resources $out/share/emacs/site-lisp/
     cp -r acm/icons $out/share/emacs/site-lisp/
- 
+
     runHook postInstall
   '';
 
@@ -67,7 +67,7 @@ in trivialBuild {
               --prefix PYTHONPATH : "${sexpdata}" \
               --prefix PYTHONPATH : "${six}";
          '';
-  
+
   meta = {
     description = "Fastest LSP client in Emacs.";
     longDescription = ''
