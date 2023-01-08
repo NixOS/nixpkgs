@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.28.1";
+  version = "0.29.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "SoCo";
     repo = "SoCo";
     rev = "v${version}";
-    hash = "sha256-Po9ns+XQ8WuILKrinllm/lqZFWEBnylesCoqs+cnKs4=";
+    hash = "sha256-6xyJY+qgwMsOgnh+PTVCf4F442hnBwlFnW+bt/cWxGc=";
   };
 
   propagatedBuildInputs = [
