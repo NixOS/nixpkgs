@@ -534,9 +534,9 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    warnings = (mapAttrsToList
+    warnings = mapAttrsToList
       (n: v: "services.gitlab-runner.services.${n}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this.")
-      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services));
+      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services);
 
     environment.systemPackages = [ cfg.package ];
     systemd.services.gitlab-runner = {
@@ -570,7 +570,7 @@ in {
         ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
         ExecStart = "${startScript}/bin/gitlab-runner-start";
         ExecReload = "!${configureScript}/bin/gitlab-runner-configure";
-      } // optionalAttrs (cfg.gracefulTermination) {
+      } // optionalAttrs cfg.gracefulTermination {
         TimeoutStopSec = "${cfg.gracefulTimeout}";
         KillSignal = "SIGQUIT";
         KillMode = "process";
