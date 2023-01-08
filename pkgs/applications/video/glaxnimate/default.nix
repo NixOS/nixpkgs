@@ -10,6 +10,8 @@
 , qtbase
 , qttools
 , wrapQtAppsHook
+, testers
+, glaxnimate
 }:
 
 stdenv.mkDerivation rec {
