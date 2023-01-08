@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "posix_ipc";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+GoVsys4Vzx44wXr2RANgZij2frMA/+v457cNYM3OOM=";
+    sha256 = "sha256-4kVroM+y7luhQSFFDo2CWzxKFGH8oHYSIKq2bUERy7c=";
   };
 
   pythonImportsCheckHook = [ "posix_ipc" ];
