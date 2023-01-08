@@ -14752,8 +14752,7 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_15.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_15.libraries or llvmPackages_15.libraries;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
+    targetLlvm = targetPackages.llvmPackages_15.llvm or llvmPackages_15.llvm;
   }));
 
   llvmPackages_latest = llvmPackages_14;
