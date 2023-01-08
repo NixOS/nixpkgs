@@ -4,7 +4,7 @@
 , fetchFromGitLab
 , gobject-introspection
 , idna
-, libsoup
+, libsoup_3
 , precis-i18n
 , pygobject3
 , pyopenssl
@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "3.2.5";
+  version = "4.0.0";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
     rev = version;
-    sha256 = "sha256-HIPvZu8Zj69k1FCbkrlSeGtur5cT0TNIYfdXcRbYLwQ=";
+    hash = "sha256-6PYJGlNOZMwHMXwf05IWekJ+haMfg+ooH5On+aYOWSI=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     gobject-introspection
     idna
-    libsoup
+    libsoup_3
     pygobject3
     pyopenssl
   ];
