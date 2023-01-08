@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
-, coreutils, findutils, gnugrep, gawk, icu, pcre, m4
+, coreutils, findutils, gnugrep, gawk, icu, pcre2, m4
 , fetchpatch
 , buildPackages, nixosTests
 , withLDAP ? true, openldap
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
-  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
+  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre2 ]
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withSQLite sqlite
