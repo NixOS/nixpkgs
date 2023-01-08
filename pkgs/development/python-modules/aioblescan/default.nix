@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frawau";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-n1FiBsuVpVJrIq6+kuMNugpEaUOFQ/Gk/QU7Hry4YrU=";
   };
 
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to listen for BLE advertized packets";
     homepage = "https://github.com/frawau/aioblescan";
+    changelog = "https://github.com/frawau/aioblescan/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
