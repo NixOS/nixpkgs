@@ -9,7 +9,6 @@ let
 in
 {
   options.services.n8n = {
-
     enable = mkEnableOption (lib.mdDoc "n8n server");
 
     openFirewall = mkOption {
@@ -22,7 +21,7 @@ in
       type = format.type;
       default = {};
       description = lib.mdDoc ''
-        Configuration for n8n, see <https://docs.n8n.io/reference/configuration.html>
+        Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
         for supported values.
       '';
     };
@@ -45,6 +44,10 @@ in
         N8N_USER_FOLDER = "/var/lib/n8n";
         HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
+
+        # Don't phone home
+        N8N_DIAGNOSTICS_ENABLED = "false";
+        N8N_VERSION_NOTIFICATIONS_ENABLED = "false";
       };
       serviceConfig = {
         Type = "simple";

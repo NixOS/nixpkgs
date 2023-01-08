@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.29";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    hash = "sha256-/R+ahUOgQR71kTZIpsic1gEYxJzbnY8x6AxtkzYTCDo=";
+    hash = "sha256-hiZN3wWknshP8MG4ThhbMLyhQkuFozzoETs3mYaMVro=";
   };
 
-  cargoHash = "sha256-uHhP5XurJHM31fJqsqW9tumPzzMMOEeEWAAsllazcME=";
+  cargoHash = "sha256-Ap8i8hLqrUi6aSn4wKAdG3Z/5or+bF+epDaWUdWYt78";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     make prefix="$out" install
-    cp -r contrib $out
   '' + lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
