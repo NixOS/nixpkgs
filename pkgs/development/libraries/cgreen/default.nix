@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cgreen";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
     rev = version;
-    sha256 = "sha256-BXch/V73a35Y6MqUlmR8mDp3ttwEAQTnqDC+ygLbIPY=";
+    sha256 = "sha256-uyw5beBZ3MnDyaxBWIDGl/L/0yv0ROafXwgxhQ+A+n4=";
   };
 
   postPatch = ''
