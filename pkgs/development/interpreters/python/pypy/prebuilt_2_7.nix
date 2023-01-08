@@ -26,8 +26,6 @@
 # This version of PyPy is primarily added to speed-up translation of
 # our PyPy source build when developing that expression.
 
-with lib;
-
 let
   isPy3k = majorVersion == "3";
   passthru = passthruFun {
@@ -134,12 +132,12 @@ in with passthru; stdenv.mkDerivation {
       "ssl"
       "sys"
       "curses"
-    ] ++ optionals (!isPy3k) [
+    ] ++ lib.optionals (!isPy3k) [
       "Tkinter"
-    ] ++ optionals isPy3k [
+    ] ++ lib.optionals isPy3k [
       "tkinter"
     ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+    imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
   in ''
     echo "Testing whether we can import modules"
     $out/bin/${executable} -c '${imports}'
