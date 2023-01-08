@@ -4,6 +4,7 @@
 , runCommand
 , fetchpatch
 , cmake
+, darwin
 , ninja
 , python3
 , libffi
@@ -143,6 +144,15 @@ in stdenv.mkDerivation (rec {
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
+
+    # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
+    # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
+    rm test/MC/ELF/cfi-version.ll
+
+    # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
+    # thus fails under the sandbox:
+    substituteInPlace unittests/Support/Host.cpp \
+      --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
