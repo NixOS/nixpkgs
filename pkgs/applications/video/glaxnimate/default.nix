@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     description = "Simple vector animation program.";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tobiasBora ];
-    platforms = platforms.linux;
   };
 }
