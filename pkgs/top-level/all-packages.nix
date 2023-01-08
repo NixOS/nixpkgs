@@ -31407,7 +31407,10 @@ with pkgs;
 
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
-  opencpn = callPackage ../applications/misc/opencpn { };
+  opencpn = darwin.apple_sdk_11_0.callPackage ../applications/misc/opencpn {
+    inherit (darwin) DarwinTools;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
+  };
 
   openfx = callPackage ../development/libraries/openfx {};
 
