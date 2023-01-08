@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "HTTP load tester";
     homepage = "https://www.joedog.org/siege-home/";
+    changelog = "https://github.com/JoeDog/siege/blob/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
