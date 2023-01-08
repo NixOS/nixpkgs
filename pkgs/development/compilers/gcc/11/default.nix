@@ -190,7 +190,7 @@ stdenv.mkDerivation ({
   preConfigure = (import ../common/pre-configure.nix {
     inherit lib;
     inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
-  }) + ''
+  }) + lib.optionalString (libxcrypt!=null) ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
