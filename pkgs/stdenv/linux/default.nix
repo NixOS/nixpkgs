@@ -67,6 +67,8 @@
 #   https://bugzilla.redhat.com/show_bug.cgi?id=1830472
 , rebootstrap ? localSystem.isAarch64
 
+, minimal ? false
+
 , bootstrapFiles ?
   let table = {
     glibc = {
@@ -198,7 +200,19 @@ in
 
 # when rebootstrapping, we first prepend a copy of the stdenv stages
 # that use the fetched bootstrapFiles:
-lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
+lib.optionals rebootstrap (import ./. (args // {
+  rebootstrap = false;
+  minimal = true;
+  overlays = overlays ++ [ (final: prev: {
+    gettext = null;
+    help2man = null;
+    texinfo = null;
+    python3Minimal = null;
+    python3 = null;
+    libxcrypt = null;
+    coreutils = prev.coreutilsMinimal;
+  }) ];
+})) ++
 
 [
   (prevStage: {
@@ -218,6 +232,7 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
            busyboxMinimal = prevStage.stdenv.bootstrapFiles.busybox;
            # don't rebuild a custom compiler
            bootGCC = prevStage.gcc.cc;
+           nukeReferences = prevStage.nukeReferences.override { perl = prevStage.stdenv.bootstrapTools; };
          }).bootstrapFiles else bootstrapFiles);
   })
 
@@ -267,6 +282,8 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
+    } // lib.optionalAttrs minimal {
+      nukeReferences = prevStage.nukeReferences.override { perl = prevStage.bootstrapTools; };
     };
   })
 
@@ -303,7 +320,7 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
       # This is not an issue for the final stdenv, because this perl
       # won't be included in the final stdenv and won't be exported to
       # top-level pkgs as an override either.
-      perl = super.perl.override { enableThreading = false; enableCrypt = false; };
+      perl = if minimal then prevStage.bootstrapTools else super.perl.override { enableThreading = false; enableCrypt = false; };
     };
   })
 
@@ -568,7 +585,12 @@ lib.optionals rebootstrap (import ./. (args // { rebootstrap = false; })) ++
           inherit (self) stdenv runCommandLocal patchelf libunistring;
         };
 
+      } // lib.optionalAttrs (!minimal) {
         gnumake = super.gnumake.override { inBootstrap = false; };
+      } // lib.optionalAttrs minimal {
+        fetchurl = prevStage.stdenv.fetchurlBoot;
+        cpio = prevStage.bootstrapTools;
+        nukeReferences = prevStage.nukeReferences.override { perl = prevStage.bootstrapTools; };
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-unwrapped;
