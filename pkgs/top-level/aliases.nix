@@ -1764,6 +1764,7 @@ mapAliases ({
   zyn-fusion = zynaddsubfx; # Added 2022-08-05
 
   inherit (stdenv.hostPlatform) system; # Added 2021-10-22
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
   llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
