@@ -9,18 +9,20 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.21.0";
+  version = "5.21.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-7zVYki4sA5jsnxWye0ouUwAOwKUBf/TiZDqFuXTm45w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QxepFU/ZQWVH19AeoSnXAAUhLO6VKmrZIIpVw1tTft4=";
   };
 
-  vendorSha256 = "sha256-UP6IdJLc93gRP4vwKKOJl3sNt4sOFeYXjvwk8QM+D48=";
+  vendorHash = "sha256-UP6IdJLc93gRP4vwKKOJl3sNt4sOFeYXjvwk8QM+D48=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -50,7 +52,8 @@ buildGoModule rec {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
+    changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab maintainers.zowoq ];
+    maintainers = with maintainers; [ fab zowoq ];
   };
 }

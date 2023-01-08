@@ -225,7 +225,8 @@ in {
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
-  freshrss = handleTest ./freshrss.nix {};
+  freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
+  freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
