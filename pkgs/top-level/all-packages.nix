@@ -909,6 +909,8 @@ with pkgs;
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
+  openbbterminal = python3Packages.callPackage ../applications/finance/openbbterminal { };
+
   opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
 
   owl = callPackage ../tools/networking/owl { };
