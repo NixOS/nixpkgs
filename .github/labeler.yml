@@ -65,6 +65,11 @@
   - pkgs/development/lua-modules/**/*
   - pkgs/top-level/lua-packages.nix
 
+"6.topic: mate":
+  - nixos/modules/services/x11/desktop-managers/mate.nix
+  - nixos/tests/mate.nix
+  - pkgs/desktops/mate/**/*
+
 "6.topic: nixos":
   - nixos/**/*
   - pkgs/os-specific/linux/nixos-rebuild/**/*
