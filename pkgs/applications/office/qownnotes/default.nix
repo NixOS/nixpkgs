@@ -24,8 +24,6 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    # Fetch the checksum of current version with curl:
-    # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
     sha256 = "sha256-fpI7RYOGmWwmau6tF8FPmY2/FtN9foWRX8/WgrNU6E8=";
   };
 
@@ -59,6 +57,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
+    changelog = "https://www.qownnotes.org/changelog.html";
+    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ totoroot ];
     platforms = platforms.unix;
