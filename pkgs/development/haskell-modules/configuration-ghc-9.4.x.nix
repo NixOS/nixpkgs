@@ -181,7 +181,7 @@ in {
   ghc-exactprint = overrideCabal (drv: {
     libraryHaskellDepends = with self; [ HUnit data-default fail filemanip free ghc-paths ordered-containers silently syb Diff ];
   })
-    self.ghc-exactprint_1_6_1;
+    self.ghc-exactprint_1_6_1_1;
 
   # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
