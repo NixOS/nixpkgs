@@ -4,6 +4,7 @@
 , envisage
 , fetchPypi
 , numpy
+, packaging
 , pyface
 , pygments
 , pyqt5
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.8.0";
+  version = "4.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TGBDYdn1+juBvhjVvxTzBlCw7jju1buhbMikQ5QXj2M=";
+    sha256 = "sha256-n0J+8spska542S02ibpr7KJMhGDicG2KHJuEKJrT/Z4=";
   };
 
   postPatch = ''
@@ -43,12 +44,15 @@ buildPythonPackage rec {
     apptools
     envisage
     numpy
+    packaging
     pyface
     pygments
     pyqt5
     traitsui
     vtk
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # Needs X server
   doCheck = false;
