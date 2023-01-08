@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aioblescan";
-  version = "0.2.13";
+  version = "0.2.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "frawau";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-n1FiBsuVpVJrIq6+kuMNugpEaUOFQ/Gk/QU7Hry4YrU=";
+    hash = "sha256-JeA9jX566OSRiejdnlifbcNGm0J0C+xzA6zXDUyZ6jc=";
   };
 
   checkInputs = [
