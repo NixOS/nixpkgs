@@ -115,7 +115,7 @@ in with passthru; stdenv.mkDerivation rec {
     cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
     cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
     ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
-    ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable}-c $out/bin/pypy3"}
+    ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable} $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
     ln -s $out/${executable}-c/include $out/include/${libPrefix}
