@@ -1588,6 +1588,7 @@ mapAliases ({
   vkBasalt = vkbasalt; # Added 2022-11-22
   vnc2flv = throw "vnc2flv has been removed: abandoned by upstream"; # Added 2022-03-21
   vorbisTools = throw "'vorbisTools' has been renamed to/replaced by 'vorbis-tools'"; # Converted to throw 2022-02-22
+  vte_290 = throw "'vte_290' has been renamed to/replaced by 'vte'"; # Added 2023-01-05
   vtun = throw "vtune has been removed as it's unmaintained upstream"; # Added 2021-10-29
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
 
