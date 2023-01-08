@@ -2186,7 +2186,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
-  retroarchBare = callPackage ../applications/emulators/retroarch { };
+  retroarchBare = qt5.callPackage ../applications/emulators/retroarch { };
 
   retroarchFull = retroarch.override {
     cores = builtins.filter

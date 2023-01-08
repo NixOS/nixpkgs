@@ -33,12 +33,15 @@
 , nvidia_cg_toolkit
 , pkg-config
 , python3
+, qtbase
 , retroarch-assets
 , SDL2
+, spirv-tools
 , substituteAll
 , udev
 , vulkan-loader
 , wayland
+, wrapQtAppsHook
 , zlib
 }:
 
@@ -71,7 +74,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ] ++
+  nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
     lib.optional withWayland wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
@@ -84,7 +87,9 @@ stdenv.mkDerivation rec {
     libxml2
     mbedtls_2
     python3
+    qtbase
     SDL2
+    spirv-tools
     zlib
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
