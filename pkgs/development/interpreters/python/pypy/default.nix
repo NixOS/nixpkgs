@@ -19,11 +19,9 @@
 
 assert zlibSupport -> zlib != null;
 
-with lib;
-
 let
   isPy3k = (lib.versions.major pythonVersion) == "3";
-  isPy39OrNewer = versionAtLeast pythonVersion "3.9";
+  isPy39OrNewer = lib.versionAtLeast pythonVersion "3.9";
   passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
@@ -54,13 +52,13 @@ in with passthru; stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl libX11 gdbm db
-  ]  ++ optionals isPy3k [
+  ]  ++ lib.optionals isPy3k [
     xz
-  ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
+  ] ++ lib.optionals (stdenv ? cc && stdenv.cc.libc != null) [
     stdenv.cc.libc
-  ] ++ optionals zlibSupport [
+  ] ++ lib.optionals zlibSupport [
     zlib
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libunwind Security
   ];
 
@@ -68,9 +66,9 @@ in with passthru; stdenv.mkDerivation rec {
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
 
-  C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
-  LIBRARY_PATH = makeLibraryPath buildInputs;
-  LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
+  C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
+  LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+  LD_LIBRARY_PATH = lib.makeLibraryPath (builtins.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
   patches = [
     ./dont_fetch_vendored_deps.patch
@@ -117,7 +115,7 @@ in with passthru; stdenv.mkDerivation rec {
     cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
     cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
     ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
-    ${optionalString isPy39OrNewer "ln -s $out/bin/${executable}-c $out/bin/pypy3"}
+    ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable}-c $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
     ln -s $out/${executable}-c/include $out/include/${libPrefix}
@@ -148,12 +146,12 @@ in with passthru; stdenv.mkDerivation rec {
       "test_shutil"
       # disable socket because it has two actual network tests that fail
       "test_socket"
-    ] ++ optionals (!isPy3k) [
+    ] ++ lib.optionals (!isPy3k) [
       # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
       "test_urllib2net"
       "test_urllibnet"
       "test_urllib2_localnet"
-    ] ++ optionals isPy3k [
+    ] ++ lib.optionals isPy3k [
       # disable asyncio due to https://github.com/NixOS/nix/issues/1238
       "test_asyncio"
       # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
@@ -171,7 +169,7 @@ in with passthru; stdenv.mkDerivation rec {
     export TERM="xterm";
     export HOME="$TMPDIR";
 
-    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
+    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${lib.concatStringsSep " or " disabledTests})' lib-python
   '';
 
   # verify cffi modules
@@ -180,13 +178,13 @@ in with passthru; stdenv.mkDerivation rec {
     modules = [
       "curses"
       "sqlite3"
-    ] ++ optionals (!isPy3k) [
+    ] ++ lib.optionals (!isPy3k) [
       "Tkinter"
-    ] ++ optionals isPy3k [
+    ] ++ lib.optionals isPy3k [
       "tkinter"
       "lzma"
     ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+    imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
   in ''
     echo "Testing whether we can import modules"
     $out/bin/${executable} -c '${imports}'
