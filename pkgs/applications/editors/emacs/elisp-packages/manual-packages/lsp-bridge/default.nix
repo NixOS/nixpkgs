@@ -1,14 +1,14 @@
 { lib
 , trivialBuild
 , fetchFromGitHub
-, writeText
-, python310
 , python310Packages
+, python310
 , posframe
 , markdown-mode
 , yasnippet
 , org
 , which-key
+, makeWrapper
 }:
 
 let
@@ -26,21 +26,22 @@ in trivialBuild {
     sha256 = "sha256-sB5niigN0rdtqeprlZAJEKgAuQDkcUMbbL9yTnrdoLg=";
   };
 
-  packageRequires = [
-    posframe
-    markdown-mode
-    yasnippet
-    org
-    which-key
-  ];
+  patches = [ ./wrapper.patch ];
+  
+  packageRequires = 
+    [
+      posframe
+      markdown-mode
+      yasnippet
+      org
+      which-key
+    ];
 
-  propagatedBuildInputs = [ 
-    python310
-    python310Packages.epc
-    python310Packages.orjson
-    python310Packages.sexpdata
-    python310Packages.six
-  ];
+  buildInputs =
+    [
+      (python310.withPackages (ps: with ps; [ epc orjson sexpdata six ]))
+      makeWrapper
+    ];
 
   buildPhase = ''
     runHook preInstall
@@ -53,9 +54,19 @@ in trivialBuild {
     cp -r langserver $out/share/emacs/site-lisp/
     cp -r multiserver $out/share/emacs/site-lisp/
     cp -r resources $out/share/emacs/site-lisp/
+    cp -r acm/icons $out/share/emacs/site-lisp/
  
     runHook postInstall
   '';
+
+  postInstall = with python310Packages; ''
+          wrapProgram $out/share/emacs/site-lisp/lsp_bridge.py \
+              --prefix PYTHONPATH : "${python310}" \
+              --prefix PYTHONPATH : "${epc}" \
+              --prefix PYTHONPATH : "${orjson}" \
+              --prefix PYTHONPATH : "${sexpdata}" \
+              --prefix PYTHONPATH : "${six}";
+         '';
   
   meta = {
     description = "Lsp-bridge's goal is to become the fastest LSP client in Emacs.";
