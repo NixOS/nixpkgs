@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rob ];
+    maintainers = with maintainers; [ rob anthonyroussel ];
   };
 }
