@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
 
   postBuild = ''
-    make prefix="$out"
+    make -j $NIX_BUILD_CORES prefix="$out"
   '';
 
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   preCheck = ''
-    make test
+    make -j $NIX_BUILD_CORES test
   '';
 
   postInstall = ''
-    make prefix="$out" install
+    make -j $NIX_BUILD_CORES prefix="$out" install
   '' + lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
