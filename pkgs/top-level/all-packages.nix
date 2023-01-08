@@ -3119,6 +3119,8 @@ with pkgs;
 
   glasstty-ttf = callPackage ../data/fonts/glasstty-ttf { };
 
+  glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
+
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
