@@ -19,10 +19,12 @@ args@
   version
 , # Example: "jdk11"
   classifier ? null
+, # Example: "pom"
+  type ? "jar"
 , # List of maven repositories from where to fetch the artifact.
   # Example: [ http://oss.sonatype.org/content/repositories/public ].
   repos ? defaultRepos
-  # The `url` and `urls` parameters, if specified should point to the JAR
+  # The `url` and `urls` parameters, if specified should point to the artifact
   # file and will take precedence over the `repos` parameter. Only one of `url`
   # and `urls` can be specified, not both.
 , url ? ""
@@ -43,34 +45,36 @@ let
       (lib.replaceStrings ["."] ["_"] artifactId) "-"
       version
     ];
-  mkJarUrl = repoUrl:
+  mkArtifactUrl = repoUrl:
     lib.concatStringsSep "/" [
       (lib.removeSuffix "/" repoUrl)
       (lib.replaceStrings ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"
+      "${artifactId}-${version}${
+        lib.optionalString (!isNull classifier) "-${classifier}"
+      }.${type}"
     ];
   urls_ =
     if url != "" then [url]
     else if urls != [] then urls
-    else map mkJarUrl repos;
-  jar =
+    else map mkArtifactUrl repos;
+  artifact =
     fetchurl (
-      builtins.removeAttrs args ["groupId" "artifactId" "version" "classifier" "repos" "url" ]
-        // { urls = urls_; name = "${name_}.jar"; }
+      builtins.removeAttrs args
+        ["groupId" "artifactId" "version" "classifier" "repos" "type" "url"]
+        // { urls = urls_; name = "${name_}.${type}"; }
     );
 in
   stdenv.mkDerivation {
     name = name_;
     phases = "installPhase fixupPhase";
-    # By moving the jar to $out/share/java we make it discoverable by java
-    # packages packages that mention this derivation in their buildInputs.
+    # By moving the artifact to $out/share/java we make it discoverable by java
+    # packages that mention this derivation in their buildInputs.
     installPhase = ''
       mkdir -p $out/share/java
-      ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
+      ln -s ${artifact} $out/share/java/${artifactId}-${version}.${type}
     '';
-    # We also add a `jar` attribute that can be used to easily obtain the path
-    # to the downloaded jar file.
-    passthru.jar = jar;
+    # We also add an attribute to easily obtain the path to the artifact
+    passthru."${type}" = artifact;
   }
