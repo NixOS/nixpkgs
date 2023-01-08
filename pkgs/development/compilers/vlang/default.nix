@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "G/8SF0g/YY0kmDdVSTzuI5ksrrwaFuhxZILIIGRdbyw=";
+    sha256 = "sha256-baHN9m2vrjPH0cIf7WoHcH5JH1HUFNpabQklY0jjKgQ=";
   };
 
   # Required for bootstrap.
@@ -53,11 +53,7 @@ stdenv.mkDerivation rec {
     export CFLAGS="-I${staticBoehmgc.dev}/include"
     export LDFLAGS="-L${staticBoehmgc}/lib"
 
-    # Monkeypatch the source code like an animal to use BoehmGC static files,
-    # instead of the "thirdparty" one.
-    # We should replace "#flag @VEXEROOT/thirdparty/tcc/lib/libgc.a"
-    # to "#flag ${staticBoehmgc}/lib/libgc.a"
-    # in file vlib/builtin/builtin_d_gcboehm.c.v
+    # patch the code to use our static compiled BoehmGC
     sed -i "s|@VEXEROOT/thirdparty/tcc/lib/libgc.a|${staticBoehmgc}/lib/libgc.a|" vlib/builtin/builtin_d_gcboehm.c.v
   '';
 
@@ -115,13 +111,12 @@ stdenv.mkDerivation rec {
     - `freetype`
     If you want to build web apps (using `net.http` or `net.websocket`) you will need `openssl`.
   */
-  meta = with lib;
-    {
-      homepage = "https://vlang.io/";
-      description = "Simple, fast, safe, compiled language for developing maintainable software";
-      license = licenses.mit;
-      maintainers = with maintainers; [ Madouura ];
-      mainProgram = "v";
-      platforms = platforms.all;
-    };
+  meta = with lib; {
+    homepage = "https://vlang.io/";
+    description = "Simple, fast, safe, compiled language for developing maintainable software";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Madouura ];
+    mainProgram = "v";
+    platforms = platforms.unix;
+  };
 }
