@@ -10720,6 +10720,8 @@ self: super: with self; {
 
   sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
 
+  sphinx-codeautolink = callPackage ../development/python-modules/sphinx-codeautolink { };
+
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
   sphinx-design = callPackage ../development/python-modules/sphinx-design { };
