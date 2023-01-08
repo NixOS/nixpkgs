@@ -10,7 +10,6 @@
 , qtbase
 , qttools
 , wrapQtAppsHook
-  # Python3
 }:
 
 stdenv.mkDerivation rec {
