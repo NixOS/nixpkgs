@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
+passthru.tests.version = testers.testVersion {
+    package = glaxnimate;
+    command = "glaxnimate --version";
+  };
   meta = with lib; {
     homepage = "https://gitlab.com/mattbas/glaxnimate";
     description = "Simple vector animation program.";
