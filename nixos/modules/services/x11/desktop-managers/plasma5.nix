@@ -505,6 +505,7 @@ in
             spectacle
             systemsettings
 
+            ark
             dolphin
             dolphin-plugins
             ffmpegthumbs
