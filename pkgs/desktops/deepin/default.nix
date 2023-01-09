@@ -37,6 +37,7 @@ let
     #### Go Packages
     go-lib = callPackage ./go-package/go-lib { inherit replaceAll; };
     go-gir-generator = callPackage ./go-package/go-gir-generator { };
+    go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
 
     #### ARTWORK
     dde-account-faces = callPackage ./artwork/dde-account-faces { };
