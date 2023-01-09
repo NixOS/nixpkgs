@@ -26,6 +26,7 @@
 # written.
 
 import datetime
+import math
 from textwrap import TextWrapper
 
 CAT_ADJECTIVE = 0
@@ -227,7 +228,7 @@ original version.\n\n
       rv = ''
       while (e > 0):
          e -= 1
-         d = (i / 64**e)
+         d = math.floor(i / 64**e)
          rv += cls.base64_map[d]
          i = i % (64**e)
       return rv
