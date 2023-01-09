@@ -10,6 +10,7 @@
 buildDunePackage {
   pname = "dns-client";
   inherit (dns) src version;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ cstruct fmt logs dns randomconv domain-name ipaddr
                             lwt mirage-random mirage-time mirage-clock
