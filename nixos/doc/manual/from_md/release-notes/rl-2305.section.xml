@@ -137,6 +137,15 @@
           are met, or not met.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/parvardegr/sharing">sharing</link>,
+          a command-line tool to share directories and files from the
+          CLI to iOS and Android devices without the need of an extra
+          client app. Available as
+          <link linkend="opt-programs.sharing.enable">programs.sharing</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
