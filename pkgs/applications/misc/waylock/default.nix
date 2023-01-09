@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "waylock";
-  version = "0.4.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yWjWcnGa4a+Dpc82H65yr8H7v88g/tDq0FSguubhbEI=";
+    hash = "sha256-AujBvDy10e5HhezCQcXpBUVlktRKNseLxRKdI+gtH6w=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dman-pages --prefix $out install
+    zig build -Drelease-safe -Dman-pages -Dcpu=baseline --prefix $out install
     runHook postInstall
   '';
 
