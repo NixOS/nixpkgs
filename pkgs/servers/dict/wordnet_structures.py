@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #Copyright 2007 Sebastian Hagen
 # This file is part of wordnet_tools.
 
@@ -49,7 +49,7 @@ class WordIndex:
       self.ptrs = ptrs
       self.synsets = synsets
       self.tagsense_count = tagsense_count
-   
+
    @classmethod
    def build_from_line(cls, line_data, synset_map):
       line_split = line_data.split()
@@ -61,14 +61,14 @@ class WordIndex:
       tagsense_count = int(line_split[5 + ptr_count],10)
       synsets = [synset_map[int(line_split[i],10)] for i in range(6 + ptr_count, 6 + ptr_count + synset_count)]
       return cls(lemma, category, ptrs, synsets, tagsense_count)
-   
+
    @classmethod
    def build_from_file(cls, f, synset_map, rv_base=None):
       if (rv_base is None):
          rv = {}
       else:
          rv = rv_base
-         
+
       for line in f:
          if (line.startswith('  ')):
             continue
@@ -81,8 +81,8 @@ class WordIndex:
 
    def __repr__(self):
       return '%s%s' % (self.__class__.__name__, (self.lemma, self.category, self.ptrs, self.synsets, self.tagsense_count))
-   
-   
+
+
 class WordIndexDictFormatter(WordIndex):
    category_map_rev = {
       CAT_NOUN: 'n',
@@ -96,12 +96,12 @@ class WordIndexDictFormatter(WordIndex):
    prefix_fmtn_line_first = '         '
    prefix_fmtf_line_nonfirst = '%5d: '
    prefix_fmtn_line_nonfirst = '       '
-   
+
    def dict_str(self):
       tw = TextWrapper(width=self.LINE_WIDTH_MAX,
          initial_indent=(self.prefix_fmtf_line_first % self.category_map_rev[self.category]),
          subsequent_indent=self.prefix_fmtn_line_first)
-         
+
       lines = (tw.wrap(self.synsets[0].dict_str()))
       i = 2
       for synset in self.synsets[1:]:
@@ -122,7 +122,7 @@ class Synset:
       self.gloss = gloss
       self.frames = frames
       self.comments = []
-   
+
    @classmethod
    def build_from_line(cls, line_data):
       line_split = line_data.split()
@@ -132,7 +132,7 @@ class Synset:
       words = [line_split[i] for i in range(4, 4 + word_count*2,2)]
       ptr_count = int(line_split[4 + word_count*2],10)
       ptrs = [(line_split[i], line_split[i+1], line_split[i+2], line_split[i+3]) for i in range(5 + word_count*2,4 + word_count*2 + ptr_count*4,4)]
-     
+
       tok = line_split[5 + word_count*2 + ptr_count*4]
       base = 6 + word_count*2 + ptr_count*4
       if (tok != '|'):
@@ -141,20 +141,20 @@ class Synset:
          base += frame_count*3 + 1
       else:
          frames = []
-     
+
       line_split2 = line_data.split(None, base)
       if (len(line_split2) < base):
          gloss = None
       else:
          gloss = line_split2[-1]
-     
+
       return cls(synset_offset, ss_type, words, ptrs, gloss, frames)
-   
+
    @classmethod
    def build_from_file(cls, f):
       rv = {}
       comments = []
-     
+
       for line in f:
          if (line.startswith('  ')):
             line_s = line.lstrip().rstrip('\n')
@@ -197,14 +197,14 @@ original version.\n\n
 
    datetime_fmt = '%Y-%m-%dT%H:%M:%S'
    base64_map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-   
+
    def __init__(self, wn_url, desc_short, desc_long):
       self.word_data = {}
       self.wn_url = wn_url
       self.desc_short = desc_short
       self.desc_long = desc_long
       self.wn_license = None
-   
+
    def wn_dict_add(self, file_index, file_data):
       file_data.seek(0)
       file_index.seek(0)
@@ -212,7 +212,7 @@ original version.\n\n
       WordIndexDictFormatter.build_from_file(file_index, synsets, self.word_data)
       if (license_lines):
          self.wn_license = '\n'.join(license_lines) + '\n'
-   
+
    @classmethod
    def base64_encode(cls, i):
       """Encode a non-negative integer into a dictd compatible base64 string"""
@@ -223,7 +223,7 @@ original version.\n\n
       while (r < i):
          e += 1
          r = 64**e - 1
-     
+
       rv = ''
       while (e > 0):
          e -= 1
@@ -231,7 +231,7 @@ original version.\n\n
          rv += cls.base64_map[d]
          i = i % (64**e)
       return rv
-     
+
    @classmethod
    def dict_entry_write(cls, file_index, file_data, key, entry, linesep='\n'):
       """Write a single dict entry for <key> to index and data files"""
@@ -240,7 +240,7 @@ original version.\n\n
       entry_len = len(entry)
       file_index.write('%s\t%s\t%s%s' % (key, cls.base64_encode(entry_start),
             cls.base64_encode(entry_len), linesep))
-     
+
    def dict_generate(self, file_index, file_data):
       file_index.seek(0)
       file_data.seek(0)
@@ -261,7 +261,7 @@ original version.\n\n
       self.dict_entry_write(file_index, file_data, '00-database-short', '00-database-short\n%s\n' % self.desc_short)
       self.dict_entry_write(file_index, file_data, '00-database-url', '00-database-url\n%s\n' % self.wn_url)
 
-     
+
       words = list(self.word_data.keys())
       words.sort()
       for word in words:
@@ -280,14 +280,14 @@ original version.\n\n
             else:
                continue
             break
-           
+
          outstr = ''
          for wi in self.word_data[word]:
             outstr += wi.dict_str() + '\n'
-         
+
          outstr = '%s%s%s' % (word_cs, wi.linesep, outstr)
          self.dict_entry_write(file_index, file_data, word_cs, outstr, wi.linesep)
-     
+
       file_index.truncate()
       file_data.truncate()
 
@@ -300,11 +300,11 @@ if (__name__ == '__main__'):
    op.add_option('--wn_url', dest='wn_url', default='ftp://ftp.cogsci.princeton.edu/pub/wordnet/2.0', help='URL for wordnet sources')
    op.add_option('--db_desc_short', dest='desc_short', default='     WordNet (r) 2.1 (2005)', help='short dict DB description')
    op.add_option('--db_desc_long', dest='desc_long', default='    WordNet (r): A Lexical Database for English from the\n     Cognitive Science Laboratory at Princeton University', help='long dict DB description')
-   
+
    (options, args) = op.parse_args()
-   
+
    wnd = WordnetDict(wn_url=options.wn_url, desc_short=options.desc_short, desc_long=options.desc_long)
-   
+
    for i in range(0,len(args),2):
       print('Opening index file %r...' % args[i])
       file_index = file(args[i])
@@ -314,6 +314,6 @@ if (__name__ == '__main__'):
       wnd.wn_dict_add(file_index, file_data)
 
    print('All input files parsed. Writing output to index file %r and data file %r.' % (options.oi, options.od))
-   
+
    wnd.dict_generate(file(options.oi, 'w'),file(options.od, 'w'))
-   print('All done.') 
+   print('All done.')
