@@ -23,6 +23,8 @@
 , rubberband
 , mkDerivation
 , which
+, glaxnimate
+, enableGlaxnimate ? true
 }:
 
 mkDerivation rec {
@@ -33,7 +35,8 @@ mkDerivation rec {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "sha256-Y7lbfwA0lkQB3PjYQIQaQ0BeXGcgyCmMnDqqZJ8zUaA=";
+    sha256 = "sha256-rio8HpSa3CpyyrrbaaEmHzM+xJgCl1CCAlVs/9IXq9U=";
+    fetchSubmodules = true; # For now only contains glaxnimate… not sure how/if it's possible to use directly the packaged glaxnimate.
   };
 
   buildInputs = [
@@ -55,7 +58,11 @@ mkDerivation rec {
     ladspa-sdk
     ladspaPlugins
     rubberband
-  ];
+  ] ++ lib.optionals enableGlaxnimate ([
+    # Enable glaxnimate https://github.com/NixOS/nixpkgs/issues/209923;
+    glaxnimate
+    # Not sure why, but mlt needs to compile itself glaxinate, instead of picking the parent project (that, admitingly, only contains the binary)
+  ] ++ glaxnimate.buildInputs);
 
   nativeBuildInputs = [ cmake which pkg-config ];
 
@@ -65,7 +72,7 @@ mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DMOD_OPENCV=ON"
-  ];
+  ] ++ lib.optional enableGlaxnimate "-DMOD_GLAXNIMATE=ON"; # Enable glaxnimate https://github.com/NixOS/nixpkgs/issues/209923;
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"

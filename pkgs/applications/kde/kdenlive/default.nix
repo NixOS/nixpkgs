@@ -33,6 +33,9 @@
 , kpurpose
 , kdeclarative
 , wrapGAppsHook
+, mediainfo
+, glaxnimate
+, enableGlaxnimate ? true
 }:
 
 mkDerivation {
@@ -73,6 +76,7 @@ mkDerivation {
     kpurpose
     kdeclarative
     wrapGAppsHook
+    glaxnimate
   ];
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
@@ -94,7 +98,7 @@ mkDerivation {
   # https://github.com/NixOS/nixpkgs/issues/29614#issuecomment-488849325
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
-  ];
+  ] ++ lib.optional enableGlaxnimate "--prefix PATH : ${lib.makeBinPath [ mediainfo glaxnimate ]}";
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
