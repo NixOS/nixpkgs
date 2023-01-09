@@ -36143,9 +36143,7 @@ with pkgs;
 
   crypto-org-wallet = callPackage ../applications/blockchains/crypto-org-wallet { };
 
-  cubicle = callPackage ../applications/science/logic/cubicle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
-  };
+  cubicle = callPackage ../applications/science/logic/cubicle { };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (_: { dontDisableStatic = true; });
