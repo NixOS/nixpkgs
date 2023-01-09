@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
+    hash = "sha256-9cyzJxyCris7FsVni5IZCCL6IAcsN8tMakNoKPeWv7s=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" "" \
-      --replace "autopep8>=1.6.0,<1.7.0" "autopep8" \
+      --replace "autopep8>=1.7.0,<1.7.0" "autopep8" \
       --replace "flake8>=5.0.0,<5.1.0" "flake8" \
       --replace "mccabe>=0.7.0,<0.8.0" "mccabe" \
       --replace "pycodestyle>=2.9.0,<2.10.0" "pycodestyle" \
