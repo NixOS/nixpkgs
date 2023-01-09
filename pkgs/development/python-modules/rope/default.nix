@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "rope";
@@ -18,7 +23,10 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    nose
+  ];
+
   checkPhase = ''
     # tracked upstream here https://github.com/python-rope/rope/issues/247
     NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
@@ -27,7 +35,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
-    maintainers = with maintainers; [ goibhniu ];
+    changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }
