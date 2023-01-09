@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.0.11";
+  version = "3.0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "automicus";
     repo = "PyISY";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oJ6Y4Bo4OLPVEy8vygU1FeRpZskfkCFBObvzTMuif5M=";
+    hash = "sha256-i9xC1Vijf/pU7WmRaosdEs5tPNos2hq3cGkT8MGM1Ro=";
   };
 
   postPatch = ''
