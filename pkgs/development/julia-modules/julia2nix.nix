@@ -4,5 +4,5 @@
 
 writeScriptBin "julia2nix"
   ''
-  ${julia}/bin/julia -- ${./julia2nix.jl} "$@"
+  ${julia.withPackages (ps: with ps; [ ArgParse ]) (ps: [ ])}/bin/julia -- ${./julia2nix.jl} "$@"
   ''

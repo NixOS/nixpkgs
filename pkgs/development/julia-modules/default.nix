@@ -2190,5 +2190,25 @@ with juliaPkgs;
     juliaPath = "595f9476b128877ab5bf73883ff6c8dc8dacfe66";
   }
 
+  {
+    pname = "TextWrap";
+    version = "1.0.1";
+    src = fetchurl {
+      url = "https://pkg.julialang.org/package/b718987f-49a8-5099-9789-dcd902bef87d/9250ef9b01b66667380cf3275b3f7488d0e25faf";
+      name = "julia-bin-1.8.3-TextWrap-1.0.1.tar.gz";
+      sha256 = "6aadf30bb836806a57e3e4c356dcfff9d00ac3011a58e3a0944eaa0587f526a9";
+    };
+  }
+
+  {
+    pname = "ArgParse";
+    version = "1.1.4";
+    src = fetchurl {
+      url = "https://pkg.julialang.org/package/c7e460c6-2fb9-53a9-8c5b-16f535851c63/3102bce13da501c9104df33549f511cd25264d7d";
+      name = "julia-bin-1.8.3-ArgParse-1.1.4.tar.gz";
+      sha256 = "49844c982b493f6751cfae5c23f72fd481ad9ae8da05d93ef4628e8e4dcc3213";
+    };
+    requiredJuliaPackages = [ TextWrap ];
+  }
 
 ]
