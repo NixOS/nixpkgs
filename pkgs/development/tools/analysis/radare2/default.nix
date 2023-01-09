@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildPackages
 , pkg-config
 , meson
@@ -55,6 +56,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-+/9SeILuDCUaYwPhhN6z3vQFicd1Bh8N/yicZTybR5o=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-4843.patch";
+      url = "https://github.com/radareorg/radare2/commit/842f809d4ec6a12af2906f948657281c9ebc8a24.patch";
+      sha256 = "sha256-asEXW9Ox48w9WQhOA9tleXIvynIjsWb6ItKmFTojgbQ=";
+    })
+  ];
 
   preBuild = ''
     cp -r ${arm64} ../libr/asm/arch/arm/v35arm64/arch-arm64
