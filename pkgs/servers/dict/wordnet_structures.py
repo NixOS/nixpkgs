@@ -307,13 +307,13 @@ if (__name__ == '__main__'):
 
    for i in range(0,len(args),2):
       print('Opening index file %r...' % args[i])
-      file_index = file(args[i])
+      file_index = open(args[i])
       print('Opening data file %r...' % args[i+1])
-      file_data = file(args[i+1])
+      file_data = open(args[i+1])
       print('Parsing index file and data file...')
       wnd.wn_dict_add(file_index, file_data)
 
    print('All input files parsed. Writing output to index file %r and data file %r.' % (options.oi, options.od))
 
-   wnd.dict_generate(file(options.oi, 'w'),file(options.od, 'w'))
+   wnd.dict_generate(open(options.oi, 'w'),open(options.od, 'w'))
    print('All done.')
