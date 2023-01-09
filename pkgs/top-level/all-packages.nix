@@ -38452,4 +38452,6 @@ with pkgs;
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
 
   tuner = callPackage ../applications/audio/tuner { };
+
+  oscclip = callPackage ../tools/misc/oscclip { };
 }
