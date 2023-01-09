@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre }:
+{ lib, stdenv, fetchurl, autoreconfHook, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "classads";
@@ -9,18 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ pcre ];
 
   configureFlags = [
     "--enable-namespace" "--enable-flexible-member"
   ];
 
+  # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+
   meta = {
     homepage = "http://www.cs.wisc.edu/condor/classad/";
     description = "The Classified Advertisements library provides a generic means for matching resources";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
