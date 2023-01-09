@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spacy_legacy" ];
 
   meta = with lib; {
-    description = "A Path interface for local and cloud bucket storage";
+    description = "Legacy registered functions for spaCy backwards compatibility";
     homepage = "https://github.com/justindujardin/pathy";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];
