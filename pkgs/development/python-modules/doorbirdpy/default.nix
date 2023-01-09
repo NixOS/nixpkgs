@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     pname = "DoorBirdPy";
     inherit version;
-    sha256 = "ed0e94953cdf96111c7f73c5fcf358f65dc0ff5e47f63fc057bf18ca7512e606";
+    sha256 = "sha256-ZGIIko5Ac0Q4Jhz+z7FREJ4MhPF9ADDWgQFRtcZ+dWY=";
   };
 
   propagatedBuildInputs = [
