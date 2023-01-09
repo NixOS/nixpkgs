@@ -3,6 +3,15 @@ let
   packages = self:
   let
     inherit (self) callPackage;
+
+    replaceAll = x: y: ''
+      echo Replacing "${x}" to "${y}":
+      for file in $(grep -rl "${x}"); do
+        echo -- $file
+        substituteInPlace $file \
+          --replace "${x}" "${y}"
+      done
+    '';
   in {
     #### LIBRARIES
     dtkcommon = callPackage ./library/dtkcommon { };
@@ -24,6 +33,9 @@ let
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
+
+    #### Go Packages
+    go-lib = callPackage ./go-package/go-lib { inherit replaceAll; };
 
     #### ARTWORK
     dde-account-faces = callPackage ./artwork/dde-account-faces { };
