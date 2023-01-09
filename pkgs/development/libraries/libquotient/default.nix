@@ -1,24 +1,19 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, qtmultimedia }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtmultimedia, qtkeychain }:
 
 mkDerivation rec {
   pname = "libquotient";
-  version = "0.6.11";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    sha256 = "sha256-FPtxeZOfChIPi4e/h/eZkByH1QL3Fn0OJxe0dnMcTRw=";
+    sha256 = "sha256-9NAWphpAI7/qWDMjsx26s+hOaQh0hbzjePfESC7PtXc=";
   };
 
-  buildInputs = [ qtmultimedia ];
+  buildInputs = [ qtmultimedia qtkeychain ];
 
   nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = [
-    # we need libqtolm for this
-    "-DQuotient_ENABLE_E2EE=OFF"
-  ];
 
   # https://github.com/quotient-im/libQuotient/issues/551
   postPatch = ''
