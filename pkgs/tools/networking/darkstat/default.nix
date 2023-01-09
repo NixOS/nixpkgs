@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchpatch, fetchurl, libpcap, zlib }:
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, fetchpatch
+, libpcap
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.0.719";
   pname = "darkstat";
+  version = "3.0.721";
 
-  src = fetchurl {
-    url = "${meta.homepage}/${pname}-${version}.tar.bz2";
-    sha256 = "1mzddlim6dhd7jhr4smh0n2fa511nvyjhlx76b03vx7phnar1bxf";
+  src = fetchFromGitHub {
+    owner = "emikulic";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-kKj4fCgphoe3lojJfARwpITxQh7E6ehUew9FVEW63uQ=";
   };
 
   patches = [
@@ -18,7 +27,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libpcap zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  buildInputs = [
+    libpcap
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
@@ -34,7 +50,8 @@ stdenv.mkDerivation rec {
       - Supports IPv6.
     '';
     homepage = "http://unix4lyfe.org/darkstat";
-    license = licenses.gpl2;
+    changelog = "https://github.com/emikulic/darkstat/releases/tag/3.0.721";
+    license = licenses.gpl2Only;
     platforms = with platforms; unix;
   };
 }
