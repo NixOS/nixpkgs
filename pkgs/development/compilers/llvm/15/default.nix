@@ -15,6 +15,7 @@
     then null
     else pkgs.bintools
 , darwin
+, libxcrypt
 }:
 
 let
@@ -231,7 +232,7 @@ let
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
-      inherit llvm_meta;
+      inherit llvm_meta libxcrypt;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;

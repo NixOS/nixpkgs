@@ -2,6 +2,7 @@
 , monorepoSrc, runCommand
 , cmake, python3, xcbuild, libllvm, libcxxabi
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+, libxcrypt
 }:
 
 let
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi ++ lib.optional stdenv.hostPlatform.isLinux libxcrypt;
 
   NIX_CFLAGS_COMPILE = [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
