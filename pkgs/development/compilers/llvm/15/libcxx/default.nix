@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}${cxxabi.pname}"
+    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else "system-${cxxabi.pname}"}"
   ] ++ lib.optional (!headersOnly && cxxabi.pname == "libcxxabi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
