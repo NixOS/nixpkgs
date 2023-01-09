@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
   postInstall = optionalString enablePython ''
     substitute \
       ${./vtk.egg-info} \
-      $out/lib/python${python.pythonVersion}/site-packages/vtk-${version}.egg-info \
+      $out/${python.sitePackages}/vtk-${version}.egg-info \
       --subst-var-by VTK_VER "${version}"
   '';
 
