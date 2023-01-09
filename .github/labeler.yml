@@ -19,6 +19,11 @@
   - pkgs/build-support/emacs/**/*
   - pkgs/top-level/emacs-packages.nix
 
+"6.topic: Enlightenment DE":
+  - nixos/modules/services/x11/desktop-managers/enlightenment.nix
+  - pkgs/desktops/enlightenment/**/*
+  - pkgs/development/python-modules/python-efl/*
+
 "6.topic: erlang":
   - doc/languages-frameworks/beam.section.md
   - pkgs/development/beam-modules/**/*
