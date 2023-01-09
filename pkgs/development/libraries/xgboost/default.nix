@@ -15,14 +15,14 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "xgboost";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-nXF6IYaK13n8fuNt1wOXoJCVNve/lwUROV7UE5W3RKA=";
+    hash = "sha256-unTss2byytG8KUQfg5s34YpRuHHDLo7D/ZickHhz1AE=";
   };
 
   nativeBuildInputs = [
