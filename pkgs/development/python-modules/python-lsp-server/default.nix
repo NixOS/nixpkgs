@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
+    hash = "sha256-9cyzJxyCris7FsVni5IZCCL6IAcsN8tMakNoKPeWv7s=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -51,10 +51,10 @@ buildPythonPackage rec {
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" "" \
       --replace "autopep8>=1.6.0,<1.7.0" "autopep8" \
-      --replace "flake8>=5.0.0,<5.1.0" "flake8" \
+      --replace "flake8>=5.0.0,<7" "flake8" \
       --replace "mccabe>=0.7.0,<0.8.0" "mccabe" \
-      --replace "pycodestyle>=2.9.0,<2.10.0" "pycodestyle" \
-      --replace "pyflakes>=2.5.0,<2.6.0" "pyflakes"
+      --replace "pycodestyle>=2.9.0,<2.11.0" "pycodestyle" \
+      --replace "pyflakes>=2.5.0,<3.1.0" "pyflakes"
   '';
 
   nativeBuildInputs = [
@@ -150,6 +150,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/python-lsp/python-lsp-server";
+    changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
