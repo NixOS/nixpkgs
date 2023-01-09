@@ -196,7 +196,7 @@ stdenvNoCC.mkDerivation (args // {
            TMPDIR=
         fi
 
-        export tmp=$(mktemp -d "deps-${pname}-XXXXXX")
+        export tmp=$(mktemp -td "deps-${pname}-XXXXXX")
         HOME=$tmp/home
 
         exitTrap() {
