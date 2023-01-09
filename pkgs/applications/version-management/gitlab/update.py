@@ -199,6 +199,14 @@ def update_gitaly():
     _call_nix_update('gitaly', gitaly_server_version)
 
 
+@cli.command('update-gitlab-pages')
+def update_gitlab_pages():
+    """Update gitlab-shell"""
+    data = _get_data_json()
+    gitlab_pages_version = data['passthru']['GITLAB_PAGES_VERSION']
+    _call_nix_update('gitlab-pages', gitlab_pages_version)
+
+
 @cli.command('update-gitlab-shell')
 def update_gitlab_shell():
     """Update gitlab-shell"""
@@ -223,6 +231,7 @@ def update_all(ctx, rev: str):
     ctx.invoke(update_data, rev=rev)
     ctx.invoke(update_rubyenv)
     ctx.invoke(update_gitaly)
+    ctx.invoke(update_gitlab_pages)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
 
