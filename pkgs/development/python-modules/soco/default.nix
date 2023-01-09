@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-6xyJY+qgwMsOgnh+PTVCf4F442hnBwlFnW+bt/cWxGc=";
   };
 
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CLI and library to control Sonos speakers";
     homepage = "http://python-soco.com/";
+    changelog = "https://github.com/SoCo/SoCo/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
   };
