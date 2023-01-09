@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , future
@@ -6,7 +7,6 @@
 , numpy
 , pyserial
 , pyusb
-, hostPlatform
 , pytestCheckHook
 , pythonOlder
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pyusb
   ];
 
-  postInstall = lib.optionalString hostPlatform.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/etc/udev/rules.d
     cp etc/udev/rules.d/20-rfcat.rules $out/etc/udev/rules.d
   '';

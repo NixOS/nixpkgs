@@ -13,7 +13,7 @@
 , alsa-lib, cairo, acl, gpm, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
 , recurseIntoAttrs, emacsPackagesFor
-, libgccjit, targetPlatform, makeWrapper # native-comp params
+, libgccjit, makeWrapper # native-comp params
 , fetchFromSavannah, fetchFromBitbucket
 
   # macOS dependencies for NS and macPort

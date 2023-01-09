@@ -819,10 +819,10 @@ in
 
         system-features = mkDefault (
           [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-          optionals (pkgs.hostPlatform ? gcc.arch) (
+          optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
             # a builder can run code for `gcc.arch` and inferior architectures
-            [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
-            map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch} or [])
+            [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
+            map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
           )
         );
       }
