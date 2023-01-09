@@ -7,16 +7,20 @@
 , six
 , paste
 , pastedeploy
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pastescript";
   version = "3.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PasteScript";
     inherit version;
-    sha256 = "sha256-3eyAGhOsZn4JTt3ij5AhLN6nvcmhjUNxsI9abvfS66I=";
+    hash = "sha256-3eyAGhOsZn4JTt3ij5AhLN6nvcmhjUNxsI9abvfS66I=";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +31,15 @@ buildPythonPackage rec {
 
   # test suite seems to unset PYTHONPATH
   doCheck = false;
-  checkInputs = [ nose pytestCheckHook ];
 
-  pythonNamespaces = [ "paste" ];
+  checkInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  pythonNamespaces = [
+    "paste"
+  ];
 
   disabledTestPaths = [
     "appsetup/testfiles"
