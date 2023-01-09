@@ -137,8 +137,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       checkPhase = ''
         runHook preCheck
 
-        NO_INTERACTON=yes SKIP_PERF_SENSITIVE=yes make test
-
+        NO_INTERACTION=yes SKIP_PERF_SENSITIVE=yes make test
         runHook postCheck
       '';
 
@@ -414,6 +413,14 @@ lib.makeScope pkgs.newScope (self: with self; {
             valgrind.dev
           ];
           zendExtension = true;
+          patches = [ ] ++ lib.optionals (lib.versionAtLeast php.version "8.1") [
+            (fetchpatch {
+              # See https://github.com/php/php-src/pull/10266
+              name = "avoid-opcache-test-failures.patch";
+              url = "https://github.com/PHP/php-src/commit/9216d14b3abfc727b0668592b48699440137aa74.patch";
+              sha256 = "sha256-/U6LMn/QGM8BXlh+Etl1z97v3qZFiWL2G3ZopNYShGU=";
+            })
+          ];
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }
