@@ -7300,8 +7300,6 @@ self: super: with self; {
 
   podcats = callPackage ../development/python-modules/podcats { };
 
-  poetry = callPackage ../development/python-modules/poetry { };
-
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
   poetry-dynamic-versioning = callPackage ../development/python-modules/poetry-dynamic-versioning { };

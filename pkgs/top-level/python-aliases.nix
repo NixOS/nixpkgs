@@ -134,6 +134,7 @@ mapAliases ({
   pathpy = path; # added 2022-04-12
   pdfminer = pdfminer-six; # added 2022-05-25
   pep257 = pydocstyle; # added 2022-04-12
+  poetry = throw "poetry was promoted to a top-level attribute, use poetry-core to build Python packages"; # added 2023-01-09
   poetry2conda = throw "poetry2conda was promoted to a top-level attribute"; # Added 2022-10-02
   poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29

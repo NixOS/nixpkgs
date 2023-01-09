@@ -1,52 +1,18 @@
 { lib
-, backports-cached-property
-, buildPythonPackage
-, cachecontrol
-, cachy
-, cleo
-, crashtest
-, deepdiff
-, dulwich
-, fetchFromGitHub
-, filelock
-, flatdict
-, html5lib
-, httpretty
-, importlib-metadata
-, installShellFiles
-, intreehooks
-, jsonschema
-, keyring
-, lockfile
-, packaging
-, pexpect
-, pkginfo
-, platformdirs
-, poetry-core
-, poetry-plugin-export
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, requests
-, requests-toolbelt
-, shellingham
 , stdenv
-, tomli
-, tomlkit
-, trove-classifiers
-, urllib3
-, virtualenv
-, xattr
+, python3
+, fetchFromGitHub
+, installShellFiles
 }:
 
-buildPythonPackage rec {
+let
+  python = python3;
+in python.pkgs.buildPythonApplication rec {
   pname = "poetry";
   version = "1.3.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = python.pkgs.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
@@ -59,7 +25,7 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     cachecontrol
     cleo
     crashtest
@@ -97,7 +63,7 @@ buildPythonPackage rec {
       --zsh <($out/bin/poetry completions zsh) \
   '';
 
-  checkInputs = [
+  checkInputs = with python.pkgs; [
     cachy
     deepdiff
     flatdict
@@ -132,7 +98,7 @@ buildPythonPackage rec {
     "lock"
     # fs permission errors
     "test_builder_should_execute_build_scripts"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
+  ] ++ lib.optionals (python.pythonAtLeast "3.10") [
     # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
     "test_info_setup_complex_pep517_error"
   ];

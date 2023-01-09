@@ -16363,7 +16363,7 @@ with pkgs;
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = with python3.pkgs; toPythonApplication poetry;
+  poetry = callPackage ../tools/package-management/poetry { };
 
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
