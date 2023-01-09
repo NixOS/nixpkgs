@@ -27,6 +27,9 @@
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
 , Foundation, Security, cctools, llvmPackages_11
+# Override fetchAttrs. For example, fetchAttrs.sha256 may need to be overridden
+# when supported features change.
+, fetchAttrs ? { }
 }:
 
 let
@@ -360,8 +363,9 @@ let
 
       # workaround for https://github.com/bazelbuild/bazel/issues/15359
       "--spawn_strategy=sandboxed"
-    ]
-    ++ lib.optionals (mklSupport) [ "--config=mkl" ];
+    ];
+
+    bazelFlags = lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
@@ -371,14 +375,19 @@ let
 
     fetchAttrs = {
       sha256 = {
-      x86_64-linux = if cudaSupport
-        then "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
-        else "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
+      x86_64-linux = if cudaSupport && mklSupport then
+        "sha256-BwKp4U60RJie+Xx8wmUppHrGrzDAdG/A3sdIzxHo+0A="
+      else if cudaSupport then
+        "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
+      else if mklSupport then
+        "sha256-gGAAPbD/yQREThRHWAJYqYs9+RO6EDlbwpX+GwTtpus="
+      else
+        "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
       aarch64-linux = "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg=";
       x86_64-darwin = "sha256-ZfZQjLdqo8VVlfKfkdolvSHQvKe4IbQSLc/4cNzHr3E=";
       aarch64-darwin = "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-    };
+    } // fetchAttrs;
 
     buildAttrs = {
       outputs = [ "out" "python" ];
