@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iN5ePKMnYh1VzGbKtwdIx1tG74T+8ax/AqDGgermr90=";
+    hash = "sha256-W1tLFFb9wa7vPSw5cL6qB4yPfyZIyXppvPYMWi+VyJc=";
   };
 
   nativeBuildInputs = [
