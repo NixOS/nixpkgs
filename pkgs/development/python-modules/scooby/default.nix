@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/banesullivan/scooby";
-    description = "Report hardware information and Python package versions";
+    description = "A lightweight tool for reporting Python package versions and hardware resources";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];
   };
