@@ -9507,9 +9507,7 @@ with pkgs;
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
-  mcron = callPackage ../tools/system/mcron {
-    guile = guile_1_8;
-  };
+  mcron = callPackage ../tools/system/mcron { };
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
@@ -17858,6 +17856,8 @@ with pkgs;
 
   malt = callPackage ../development/tools/profiling/malt {};
 
+  marksman = callPackage ../development/tools/marksman { };
+
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
@@ -18804,11 +18804,12 @@ with pkgs;
     boost178
     boost179
     boost180
+    boost181
   ;
 
   boost16x = boost169;
   boost17x = boost179;
-  boost18x = boost180;
+  boost18x = boost181;
   boost = boost17x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -18852,7 +18853,9 @@ with pkgs;
     };
   });
 
-  cubeb = callPackage ../development/libraries/audio/cubeb { };
+  cubeb = callPackage ../development/libraries/audio/cubeb {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
+  };
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
@@ -21839,7 +21842,9 @@ with pkgs;
 
   micropython = callPackage ../development/interpreters/micropython { };
 
-  MIDIVisualizer = callPackage ../applications/audio/midi-visualizer { };
+  MIDIVisualizer = callPackage ../applications/audio/midi-visualizer {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
+  };
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
@@ -25954,6 +25959,8 @@ with pkgs;
 
   gotest = callPackage ../development/tools/gotest { };
 
+  gotestfmt = callPackage ../development/tools/gotestfmt { };
+
   gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop {
@@ -28226,6 +28233,8 @@ with pkgs;
 
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
+  pokemon-colorscripts-mac = callPackage ../applications/misc/pokemon-colorscripts-mac { };
+
   cmctl = callPackage ../applications/networking/cluster/cmctl { };
 
   cmus = callPackage ../applications/audio/cmus {
@@ -29809,6 +29818,8 @@ with pkgs;
   swayws = callPackage ../applications/window-managers/sway/ws.nix { };
   swaywsr = callPackage ../applications/window-managers/sway/wsr.nix { };
   sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
+
+  swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
@@ -31469,7 +31480,10 @@ with pkgs;
 
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
-  opencpn = callPackage ../applications/misc/opencpn { };
+  opencpn = darwin.apple_sdk_11_0.callPackage ../applications/misc/opencpn {
+    inherit (darwin) DarwinTools;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
+  };
 
   openfx = callPackage ../development/libraries/openfx {};
 
@@ -32691,7 +32705,7 @@ with pkgs;
   taskopen = callPackage ../applications/misc/taskopen { };
 
   tdesktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
-    abseil-cpp = abseil-cpp_202111;
+    abseil-cpp = abseil-cpp_202206;
   };
 
   telegram-bot-api = callPackage ../servers/telegram-bot-api { };

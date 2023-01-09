@@ -1,5 +1,7 @@
 { stdenv
 , lib
+, AppKit
+, DarwinTools
 , alsa-utils
 , at-spi2-core
 , cmake
@@ -59,12 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/TargetSetup.cmake \
-      --replace '"sw_vers" "-productVersion"' '"echo" "1"'
     sed -i '/fixup_bundle/d' CMakeLists.txt
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'DARWIN_VERSION LESS 16' 'TRUE'
   '';
 
   nativeBuildInputs = [
@@ -73,6 +70,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     lsb-release
   ] ++ lib.optionals stdenv.isDarwin [
+    DarwinTools
     makeWrapper
   ];
 
@@ -81,6 +79,10 @@ stdenv.mkDerivation rec {
     curl
     dbus
     flac
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # gtk3 propagates AppKit from the 10.12 SDK
+    AppKit
+  ] ++ [
     gtk3
     jasper
     libGLU
