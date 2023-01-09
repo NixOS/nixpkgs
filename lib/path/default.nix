@@ -182,7 +182,11 @@ in /* No rec! Add dependencies on this file at the top. */ {
         deconstructPath value // { inherit name value; }
       ) paths;
 
-      first = head deconstructed;
+      first =
+        assert assertMsg
+          (paths != {})
+          "lib.path.difference: An empty attribute set was given, but was expecting a non-empty attribute set";
+        head deconstructed;
 
       # The common root to all paths, errors if there are different roots
       commonRoot =
@@ -227,9 +231,6 @@ in /* No rec! Add dependencies on this file at the top. */ {
     assert assertMsg
       (isAttrs paths)
       "lib.path.difference: The given argument is of type ${typeOf paths}, but an attribute set was expected";
-    assert assertMsg
-      (paths != {})
-      "lib.path.difference: An empty attribute set was given, but was expecting a non-empty attribute set";
     {
       inherit commonAncestor subpaths;
     };
