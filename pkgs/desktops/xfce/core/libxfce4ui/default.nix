@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.18.0";
+  version = "4.18.1";
 
-  sha256 = "sha256-AYjnIi9l3l4g+wqGrPhS2AEsYNJwK1KMofCeyEz+VHs=";
+  sha256 = "sha256-1kzvFr/WeTl3HpVMJZRBgsvmG8VtYkdEbIQSniJIaHA=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
   buildInputs =  [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
