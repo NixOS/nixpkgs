@@ -1,8 +1,16 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq
 
-# usage:
-#   generate-sdk-packages.sh macos 11.0.1
+usage() {
+    cat <<EOF
+usage: $0 macos 11.0.1
+EOF
+}
+
+if [ "$#" != 2 ]; then
+    usage
+    exit 1
+fi
 
 cd $(dirname "$0")
 
