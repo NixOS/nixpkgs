@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "graphtage";
-  version = "0.2.6";
+  version = "0.2.7";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ZazqtrrCsoeJK7acj7Unpl+ZI2JL/khMN2aOSHdCHl0=";
+    sha256 = "sha256-3PJSjK8citdsfTyTLtDOlLeXWhkOW/4ajLC+j8F0BZw=";
   };
 
   propagatedBuildInputs = [
