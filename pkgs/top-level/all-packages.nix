@@ -23716,6 +23716,8 @@ with pkgs;
     ];
     # Override this attribute to register additional libraries.
     packages = [];
+    rprofileSite = "";
+    renvironSite = "";
   };
 
   rstudioWrapper = libsForQt5.callPackage ../development/r-modules/wrapper-rstudio.nix {
@@ -23725,6 +23727,8 @@ with pkgs;
     ];
     # Override this attribute to register additional libraries.
     packages = [];
+    rprofileSite = "";
+    renvironSite = "";
   };
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
