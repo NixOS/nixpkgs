@@ -332,7 +332,7 @@ in
         # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
-          pname = prevStage.bintools.bintools.pname + "-patchelfed";
+          pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
           inherit (prevStage.bintools.bintools) version;
           enableParallelBuilding = true;
           dontUnpack = true;
