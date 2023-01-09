@@ -5481,6 +5481,18 @@ final: prev:
     meta.homepage = "https://github.com/zah/nim.vim/";
   };
 
+  nix-develop-nvim = buildVimPluginFrom2Nix {
+    pname = "nix-develop.nvim";
+    version = "2023-01-10";
+    src = fetchFromGitHub {
+      owner = "figsoda";
+      repo = "nix-develop.nvim";
+      rev = "456f0b202cc179390bc9ed84fbd589832849e983";
+      sha256 = "0yk7661336sjlvmsk7p7v6ssr5242r6xy5cm4d22pvk9zz5yzxwc";
+    };
+    meta.homepage = "https://github.com/figsoda/nix-develop.nvim/";
+  };
+
   nlsp-settings-nvim = buildVimPluginFrom2Nix {
     pname = "nlsp-settings.nvim";
     version = "2023-01-09";
@@ -6327,8 +6339,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "5b8b711926d1f3ef5c63fbe5db2d8f33b912025e";
-      sha256 = "0dmrq5hp129w1ylr41hwc9bmcii0l1scim58ps1p8g54jm0hghqr";
+      rev = "5fb315df12a3091f241b0326aed0ec70381adbd8";
+      sha256 = "00cpr1qalmgp6qbs0nhyj082dpndyir0ck2i3p09qqah2bfb1sy8";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
