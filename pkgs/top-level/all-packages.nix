@@ -25193,6 +25193,8 @@ with pkgs;
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
+  sharing = callPackage ../servers/sharing { };
+
   showoff = callPackage ../servers/http/showoff {};
 
   serfdom = callPackage ../servers/serf { };
