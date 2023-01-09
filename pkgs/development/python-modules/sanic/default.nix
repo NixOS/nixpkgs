@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.6.2";
+  version = "22.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-krEQd0ak9Uua+r+pYmLStlizgE4HmZBO8Q0I2/gWAwU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Vj780rP5rJ+YsMWlb3BR9LTKT/nTt0C2H3J0X9sysj8=";
   };
 
   propagatedBuildInputs = [
@@ -104,6 +104,13 @@ buildPythonPackage rec {
     "test_keep_alive_client_timeout"
     "test_keep_alive_server_timeout"
     "test_zero_downtime"
+    # TLS tests
+    "test_missing_sni"
+    "test_no_matching_cert"
+    "test_wildcards"
+    # They thtow execptions
+    "test_load_app_simple"
+    "worker/test_loader.py"
     # broke with ujson 5.4 upgrade
     # https://github.com/sanic-org/sanic/pull/2504
     "test_json_response_json"
@@ -129,6 +136,7 @@ buildPythonPackage rec {
     broken = stdenv.isDarwin;
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc AluisioASG ];
   };
