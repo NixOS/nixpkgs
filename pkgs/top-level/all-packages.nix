@@ -6798,6 +6798,8 @@ with pkgs;
 
   d2 = callPackage ../tools/text/d2 { };
 
+  d2lang = callPackage ../development/d2lang { };
+
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {
