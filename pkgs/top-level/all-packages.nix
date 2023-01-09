@@ -2644,7 +2644,7 @@ with pkgs;
 
   authenticator = callPackage ../applications/misc/authenticator { };
 
-  autoflake = callPackage ../development/tools/analysis/autoflake { };
+  autoflake = with python3.pkgs; toPythonApplication autoflake;
 
   autospotting = callPackage ../applications/misc/autospotting { };
 
