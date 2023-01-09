@@ -111,6 +111,13 @@ let
   isBuiltByBootstrapFilesCompiler =
     pkg: isFromNixpkgs pkg && isFromBootstrapFiles pkg.stdenv.cc.cc;
 
+  commonGccOverrides = {
+    # Use a deterministically built compiler
+    # see https://github.com/NixOS/nixpkgs/issues/108475 for context
+    reproducibleBuild = true;
+    profiledCompiler = false;
+  };
+
   commonPreHook =
     ''
       export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -396,7 +403,7 @@ in
         let makeStaticLibrariesAndMark = pkg:
               lib.makeOverridable (pkg.override { stdenv = self.makeStaticLibraries self.stdenv; })
                 .overrideAttrs (a: { pname = "${a.pname}-stage3"; });
-        in super.gcc-unwrapped.override {
+        in super.gcc-unwrapped.override (commonGccOverrides // {
         # Link GCC statically against GMP etc.  This makes sense because
         # these builds of the libraries are only used by GCC, so it
         # reduces the size of the stdenv closure.
@@ -404,11 +411,7 @@ in
         mpfr = makeStaticLibrariesAndMark super.mpfr;
         libmpc = makeStaticLibrariesAndMark super.libmpc;
         isl = makeStaticLibrariesAndMark super.isl_0_20;
-        # Use a deterministically built compiler
-        # see https://github.com/NixOS/nixpkgs/issues/108475 for context
-        reproducibleBuild = true;
-        profiledCompiler = false;
-      };
+        });
     };
     extraNativeBuildInputs = [ prevStage.patchelf ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
