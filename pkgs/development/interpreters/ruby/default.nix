@@ -91,7 +91,7 @@ let
         enableParallelBuilding = true;
 
         patches =
-          lib.optionals (import ./patchsets.nix {
+          ops useRailsExpress (import ./patchsets.nix {
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
