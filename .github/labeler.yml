@@ -70,6 +70,9 @@
   - pkgs/development/lua-modules/**/*
   - pkgs/top-level/lua-packages.nix
 
+"6.topic: Lumina DE":
+  - nixos/modules/services/x11/desktop-managers/lumina.nix
+  - pkgs/desktops/lumina/**/*
 "6.topic: mate":
   - nixos/modules/services/x11/desktop-managers/mate.nix
   - nixos/tests/mate.nix
