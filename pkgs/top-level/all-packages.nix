@@ -2684,6 +2684,8 @@ with pkgs;
 
   aws-sso-cli = callPackage ../tools/admin/aws-sso-cli { };
 
+  aws-sso-creds = callPackage ../tools/admin/aws-sso-creds { };
+
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
