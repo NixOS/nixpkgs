@@ -46,7 +46,7 @@ in {
       type = types.lines;
       example = "DefaultCPUAccounting=yes";
       description = lib.mdDoc ''
-        Extra config options for systemd user instances. See man systemd-user.conf for
+        Extra config options for systemd user instances. See {manpage}`systemd-user.conf(5)` for
         available options.
       '';
     };
