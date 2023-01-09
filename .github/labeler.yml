@@ -73,6 +73,11 @@
 "6.topic: Lumina DE":
   - nixos/modules/services/x11/desktop-managers/lumina.nix
   - pkgs/desktops/lumina/**/*
+
+"6.topic: LXQt":
+  - nixos/modules/services/x11/desktop-managers/lxqt.nix
+  - pkgs/desktops/lxqt/**/*
+
 "6.topic: mate":
   - nixos/modules/services/x11/desktop-managers/mate.nix
   - nixos/tests/mate.nix
