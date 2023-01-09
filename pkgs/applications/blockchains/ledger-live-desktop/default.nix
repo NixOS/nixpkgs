@@ -1,12 +1,12 @@
-{ lib, fetchurl, appimageTools, imagemagick, systemd }:
+{ lib, fetchurl, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";
-  version = "2.50.0";
+  version = "2.51.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-Xh0UwE2rgFmUI4mx/PHqhRkgw51/CuNPxrsxI9al2E8=";
+    hash = "sha256-qpgzGJsj7hrrK2i+xP0T+hcw7WMlGBILbHVJBHD5duo=";
   };
 
   appimageContents = appimageTools.extractType2 {

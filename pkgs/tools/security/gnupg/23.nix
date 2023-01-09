@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
   ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ lib.optional withTpm2Tss "--with-tss=intel";
+  ++ lib.optional withTpm2Tss "--with-tss=intel"
+  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}

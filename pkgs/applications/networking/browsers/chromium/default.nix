@@ -231,6 +231,5 @@ in stdenv.mkDerivation {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
     inherit chromeSrc sandboxExecutableName;
-    updateScript = ./update.py;
   };
 }

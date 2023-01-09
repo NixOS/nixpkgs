@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

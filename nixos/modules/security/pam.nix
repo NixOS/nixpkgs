@@ -282,7 +282,7 @@ let
         defaultText = literalExpression "config.security.pam.mount.enable";
         type = types.bool;
         description = lib.mdDoc ''
-          Enable PAM mount (pam_mount) system to mount fileystems on user login.
+          Enable PAM mount (pam_mount) system to mount filesystems on user login.
         '';
       };
 
@@ -305,7 +305,7 @@ let
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Wheather the delay after typing a wrong password should be disabled.
+          Whether the delay after typing a wrong password should be disabled.
         '';
       };
 

@@ -27,6 +27,10 @@ let
     , system-sendmail
     , valgrind
     , xcbuild
+    , writeShellScript
+    , common-updater-scripts
+    , curl
+    , jq
 
     , version
     , hash
@@ -300,6 +304,19 @@ let
           outputs = [ "out" "dev" ];
 
           passthru = {
+            updateScript =
+              let
+                script = writeShellScript "php${lib.versions.major version}${lib.versions.minor version}-update-script" ''
+                  set -o errexit
+                  PATH=${lib.makeBinPath [ common-updater-scripts curl jq ]}
+                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
+                '';
+              in [
+                script
+                # Passed as an argument so that update.nix can ensure it does not become a store path.
+                (./. + "/${lib.versions.majorMinor version}.nix")
+              ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
             overrideAttrs =

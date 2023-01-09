@@ -5,6 +5,7 @@
 , async-timeout
 , buildPythonPackage
 , construct
+, exceptiongroup
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-X2WcyBjJbS2WuaaYeBpWM+Tw4mmFOjNX/s070u8LN/4=";
+    hash = "sha256-6pQsVGb26FpoV2LgOrs+Cfq2rATRqbljrVJ+NsZUSuc=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     async-modbus
     async-timeout
     construct
+    exceptiongroup
     tenacity
   ];
 

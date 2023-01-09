@@ -168,8 +168,7 @@ in
           inherit originRequest;
 
           credentialsFile = mkOption {
-            type = with types; nullOr str;
-            default = null;
+            type = types.str;
             description = lib.mdDoc ''
               Credential file.
 
@@ -190,8 +189,7 @@ in
           };
 
           default = mkOption {
-            type = with types; nullOr str;
-            default = null;
+            type = types.str;
             description = lib.mdDoc ''
               Catch-all service if no ingress matches.
 
@@ -262,12 +260,12 @@ in
     systemd.targets =
       mapAttrs'
         (name: tunnel:
-          nameValuePair "cloudflared-tunnel-${name}" ({
-            description = lib.mdDoc "Cloudflare tunnel '${name}' target";
+          nameValuePair "cloudflared-tunnel-${name}" {
+            description = "Cloudflare tunnel '${name}' target";
             requires = [ "cloudflared-tunnel-${name}.service" ];
             after = [ "cloudflared-tunnel-${name}.service" ];
             unitConfig.StopWhenUnneeded = true;
-          })
+          }
         )
         config.services.cloudflared.tunnels;
 
@@ -304,13 +302,14 @@ in
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
           nameValuePair "cloudflared-tunnel-${name}" ({
-            after = [ "network.target" ];
+            after = [ "network.target" "network-online.target" ];
+            wants = [ "network.target" "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig = {
               User = cfg.user;
               Group = cfg.group;
               ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
-              Restart = "always";
+              Restart = "on-failure";
             };
           })
         )

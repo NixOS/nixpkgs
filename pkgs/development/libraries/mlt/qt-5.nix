@@ -16,7 +16,7 @@
 , qtsvg
 , fftw
 , vid-stab
-, opencv3
+, opencv4
 , ladspa-sdk
 , gitUpdater
 , ladspaPlugins
@@ -51,7 +51,7 @@ mkDerivation rec {
     sox
     fftw
     vid-stab
-    opencv3
+    opencv4
     ladspa-sdk
     ladspaPlugins
     rubberband
@@ -64,6 +64,7 @@ mkDerivation rec {
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMOD_OPENCV=ON"
   ];
 
   qtWrapperArgs = [

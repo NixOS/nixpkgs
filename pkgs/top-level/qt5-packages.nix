@@ -152,6 +152,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
 
+  maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
+
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
   phonon = callPackage ../development/libraries/phonon { };

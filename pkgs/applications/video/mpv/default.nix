@@ -8,7 +8,7 @@
 , ninja
 , pkg-config
 , python3
-, ffmpeg
+, ffmpeg_5
 , freefont_ttf
 , freetype
 , libass
@@ -99,21 +99,19 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
-  mesonFlags = let
-    inherit (lib) mesonOption mesonBool mesonEnable;
-  in [
-    (mesonOption "default_library" "shared")
-    (mesonBool "libmpv" true)
-    (mesonEnable "libarchive" archiveSupport)
-    (mesonEnable "manpage-build" true)
-    (mesonEnable "cdda" cddaSupport)
-    (mesonEnable "dvbin" dvbinSupport)
-    (mesonEnable "dvdnav" dvdnavSupport)
-    (mesonEnable "openal" openalSupport)
-    (mesonEnable "sdl2" sdl2Support)
+  mesonFlags = [
+    (lib.mesonOption "default_library" "shared")
+    (lib.mesonBool "libmpv" true)
+    (lib.mesonEnable "libarchive" archiveSupport)
+    (lib.mesonEnable "manpage-build" true)
+    (lib.mesonEnable "cdda" cddaSupport)
+    (lib.mesonEnable "dvbin" dvbinSupport)
+    (lib.mesonEnable "dvdnav" dvdnavSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "sdl2" sdl2Support)
     # Disable whilst Swift isn't supported
-    (mesonEnable "swift-build" swiftSupport)
-    (mesonEnable "macos-cocoa-cb" swiftSupport)
+    (lib.mesonEnable "swift-build" swiftSupport)
+    (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -131,7 +129,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_5
     freetype
     libass
     libpthreadstubs

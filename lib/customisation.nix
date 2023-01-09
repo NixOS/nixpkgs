@@ -3,13 +3,13 @@
 rec {
 
 
-  /* `overrideDerivation drv f' takes a derivation (i.e., the result
-     of a call to the builtin function `derivation') and returns a new
+  /* `overrideDerivation drv f` takes a derivation (i.e., the result
+     of a call to the builtin function `derivation`) and returns a new
      derivation in which the attributes of the original are overridden
-     according to the function `f'.  The function `f' is called with
+     according to the function `f`.  The function `f` is called with
      the original derivation attributes.
 
-     `overrideDerivation' allows certain "ad-hoc" customisation
+     `overrideDerivation` allows certain "ad-hoc" customisation
      scenarios (e.g. in ~/.config/nixpkgs/config.nix).  For instance,
      if you want to "patch" the derivation returned by a package
      function in Nixpkgs to build another version than what the
@@ -27,11 +27,19 @@ rec {
      For another application, see build-support/vm, where this
      function is used to build arbitrary derivations inside a QEMU
      virtual machine.
+
+     Note that in order to preserve evaluation errors, the new derivation's
+     outPath depends on the old one's, which means that this function cannot
+     be used in circular situations when the old derivation also depends on the
+     new one.
+
+     You should in general prefer `drv.overrideAttrs` over this function;
+     see the nixpkgs manual for more information on overriding.
   */
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in lib.flip (extendDerivation true) newDrv (
+    in lib.flip (extendDerivation (builtins.seq drv.drvPath true)) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
@@ -96,10 +104,10 @@ rec {
       else result;
 
 
-  /* Call the package function in the file `fn' with the required
+  /* Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
-    arguments `args', but any missing arguments are obtained from
-    `autoArgs'.  This function is intended to be partially
+    arguments `args`, but any missing arguments are obtained from
+    `autoArgs`.  This function is intended to be partially
     parameterised, e.g.,
 
       callPackage = callPackageWith pkgs;
@@ -108,9 +116,9 @@ rec {
         libbar = callPackage ./bar.nix { };
       };
 
-    If the `libbar' function expects an argument named `libfoo', it is
+    If the `libbar` function expects an argument named `libfoo`, it is
     automatically passed as an argument.  Overrides or missing
-    arguments can be supplied in `args', e.g.
+    arguments can be supplied in `args`, e.g.
 
       libbar = callPackage ./bar.nix {
         libfoo = null;
@@ -247,13 +255,13 @@ rec {
     in lib.deepSeq drv' drv';
 
   /* Make a set of packages with a common scope. All packages called
-     with the provided `callPackage' will be evaluated with the same
+     with the provided `callPackage` will be evaluated with the same
      arguments. Any package in the set may depend on any other. The
      `overrideScope'` function allows subsequent modification of the package
      set in a consistent way, i.e. all packages in the set will be
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
-     provided by `newScope' and the set provides a `newScope' attribute
+     provided by `newScope` and the set provides a `newScope` attribute
      which can form the parent scope for later package sets. */
   makeScope = newScope: f:
     let self = f self // {

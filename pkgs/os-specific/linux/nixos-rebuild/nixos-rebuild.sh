@@ -28,7 +28,7 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=localhost
+buildHost=
 targetHost=
 remoteSudo=
 verboseScript=
@@ -150,12 +150,6 @@ fi
 
 if [[ -z "$buildHost" && -n "$targetHost" ]]; then
     buildHost="$targetHost"
-fi
-if [ "$targetHost" = localhost ]; then
-    targetHost=
-fi
-if [ "$buildHost" = localhost ]; then
-    buildHost=
 fi
 
 # log the given argument to stderr if verbose mode is on

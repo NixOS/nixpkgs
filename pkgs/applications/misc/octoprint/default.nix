@@ -200,7 +200,7 @@ let
 
               passthru = {
                 python = self.python;
-                updateScript = nix-update-script { attrPath = "octoprint"; };
+                updateScript = nix-update-script { };
               };
 
               meta = with lib; {

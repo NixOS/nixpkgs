@@ -45,7 +45,7 @@ updateBranch() {
 
     sed -i "s,${oldVersion},${newVersion}," "$DEFAULT_NIX"
     sed -i "s,${oldHash},${newHash},g" "$DEFAULT_NIX"
-    echo "  succesfully updated $attribute. new hash: $newHash"
+    echo "  successfully updated $attribute. new hash: $newHash"
 }
 
 updateCompatibilityList() {
@@ -72,7 +72,7 @@ updateCompatibilityList() {
     sed -i "s,${oldUrl},${newUrl},g" "$DEFAULT_NIX"
     sed -i "s,${oldHash},${newHash},g" "$DEFAULT_NIX"
     sed -i "s,${oldDate},${newDate},g" "$DEFAULT_NIX"
-    echo "  succesfully updated compatibility_list. new hash: $newHash"
+    echo "  successfully updated compatibility_list. new hash: $newHash"
 }
 
 if [[ "$BRANCH" = "mainline" ]] || [[ "$BRANCH" = "early-access" ]]; then

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva
+, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva, libGL
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
@@ -8,10 +8,10 @@
 , libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
+, wayland, pipewire
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
-, forceDarkMode ? false
 , commandLineArgs ? ""
 , pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
@@ -39,9 +39,10 @@ in stdenv.mkDerivation rec {
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
-    freetype fontconfig libXrender libuuid expat glib nss nspr
+    freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
     libdrm mesa
+    wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio;
 
@@ -80,7 +81,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
     substituteInPlace "$out"/share/applications/*.desktop \
-      --replace vivaldi-stable "vivaldi ${lib.optionalString forceDarkMode "--force-dark-mode"}"
+      --replace vivaldi-stable vivaldi
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
@@ -90,6 +91,7 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''

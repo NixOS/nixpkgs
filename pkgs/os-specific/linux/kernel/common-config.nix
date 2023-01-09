@@ -939,6 +939,9 @@ let
 
       SCHED_CORE = whenAtLeast "5.14" yes;
 
+      LRU_GEN = whenAtLeast "6.1"  yes;
+      LRU_GEN_ENABLED =  whenAtLeast "6.1" yes;
+
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
       ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};

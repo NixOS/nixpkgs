@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Library for rendering DVC plots";
     homepage = "https://github.com/iterative/dvc-render";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab anthonyroussel ];
+    maintainers = with maintainers; [ fab ];
   };
 }

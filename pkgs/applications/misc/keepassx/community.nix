@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , qttools
@@ -81,8 +82,9 @@ stdenv.mkDerivation rec {
     export LC_ALL="en_US.UTF-8"
     export QT_QPA_PLATFORM=offscreen
     export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
-    # testcli and testgui are flaky - skip them both
-    make test ARGS+="-E 'testcli|testgui' --output-on-failure"
+    # testcli, testgui and testkdbx4 are flaky - skip them all
+    # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
+    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
 
     runHook postCheck
   '';
@@ -92,6 +94,8 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '' + lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
   '';
 
   buildInputs = [
@@ -128,6 +132,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato turion srapenne ];
     platforms = platforms.linux ++ platforms.darwin;
-    broken = stdenv.isDarwin;  # see to https://github.com/NixOS/nixpkgs/issues/172165
   };
 }

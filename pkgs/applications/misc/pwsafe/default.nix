@@ -6,7 +6,7 @@
 , zip
 , gettext
 , perl
-, wxGTK30
+, wxGTK32
 , libXext
 , libXi
 , libXt
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.15.0"; # do NOT update to 3.x Windows releases
+  version = "1.16.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-EyyQHp2MlGgUnikClgvP7I313Bh6H3yVPXel8Z/U6gQ=";
+    hash = "sha256-5/TOg+hiy22vlPJHheE638abhS3B5Jrul0Umgwu+gi0=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libXi
     libXt
     libXtst
-    wxGTK30
+    wxGTK32
     curl
     qrencode
     libuuid

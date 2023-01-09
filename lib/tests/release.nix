@@ -15,6 +15,9 @@ pkgs.runCommand "nixpkgs-lib-tests" {
       inherit pkgs;
       lib = import ../.;
     })
+    (import ../path/tests {
+      inherit pkgs;
+    })
   ];
 } ''
     datadir="${pkgs.nix}/share"

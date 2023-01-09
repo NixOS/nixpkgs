@@ -18,8 +18,7 @@
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
-# update script
-, runCommand, git, coccinelle
+, makeHardcodeGsettingsPatch
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -32,7 +31,7 @@ assert stdenv.isLinux -> util-linuxMinimal != null;
 #       $out/bin/gtester-report' to postInstall if this is solved
 /*
   * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests runned by Hydra
+      and use them as a separately installed tests run by Hydra
       (they should test an already installed package)
       https://wiki.gnome.org/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
@@ -271,55 +270,18 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };
-    /*
-      can be used as part of an update script to automatically create a patch
-      hardcoding the path of all gsettings schemas in C code.
-      For example:
-      passthru = {
-        hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
-          inherit src;
-          glib-schema-to-var = {
-             ...
-          };
-        };
 
-        updateScript =
-          let
-            updateSource = ...;
-            patch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
-          in
-          _experimental-update-script-combinators.sequence [
-            updateSource
-            patch
-          ];
-        };
-      }
-      takes as input a mapping from schema path to variable name.
-      For example `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`
-      hardcodes looking for `org.gnome.evolution` into `@EVOLUTION_SCHEMA_PATH@`.
-      All schemas must be listed.
-    */
-    mkHardcodeGsettingsPatch = { src, glib-schema-to-var }:
-      runCommand
-        "hardcode-gsettings.patch"
-        {
+    mkHardcodeGsettingsPatch =
+      {
+        src,
+        glib-schema-to-var,
+      }:
+      builtins.trace
+        "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"
+        (makeHardcodeGsettingsPatch {
           inherit src;
-          nativeBuildInputs = [
-            git
-            coccinelle
-            python3 # For patch script
-          ];
-        }
-        ''
-          unpackPhase
-          cd "''${sourceRoot:-.}"
-          set -x
-          cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON glib-schema-to-var)} ./glib-schema-to-var.json
-          git init
-          git add -A
-          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
-          git diff > "$out"
-        '';
+          schemaIdToVariableMapping = glib-schema-to-var;
+        });
   };
 
   meta = with lib; {

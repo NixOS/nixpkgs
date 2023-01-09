@@ -18,7 +18,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
-  passthru.updateScript = nix-update-script { attrPath = pname; };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";

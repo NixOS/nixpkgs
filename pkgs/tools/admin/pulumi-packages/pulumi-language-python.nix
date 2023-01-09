@@ -4,13 +4,13 @@
 , python3
 }:
 buildGoModule rec {
-  inherit (pulumi) version src;
+  inherit (pulumi) version src sdkVendorHash;
 
   pname = "pulumi-language-python";
 
   sourceRoot = "${src.name}/sdk";
 
-  vendorHash = "sha256-gM3VpX6r/BScUyvk/XefAfbx0qYzdzSBGaWZN+89BS8=";
+  vendorHash = sdkVendorHash;
 
   postPatch = ''
     # Requires network

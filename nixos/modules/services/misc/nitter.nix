@@ -47,7 +47,7 @@ in
 {
   options = {
     services.nitter = {
-      enable = mkEnableOption (lib.mdDoc "If enabled, start Nitter.");
+      enable = mkEnableOption (lib.mdDoc "Nitter");
 
       package = mkOption {
         default = pkgs.nitter;

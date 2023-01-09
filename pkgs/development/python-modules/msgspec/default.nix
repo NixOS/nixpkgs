@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.10.1";
+  version = "0.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jcrist";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/tu29RIszjzYQKeyYe+8Zkud3L/HBoWdXdpNcilWERs=";
+    hash = "sha256-9k1lpx5pb9idMwgYAZjVEM915w5wsmLWQ/tnHNSKHAs=";
   };
 
   # Requires libasan to be accessible

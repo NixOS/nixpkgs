@@ -24,7 +24,7 @@
   </itemizedlist>
   <para>
     System images, such as the live installer ones, know how to enforce
-    configuration settings on wich they immediately depend in order to
+    configuration settings on which they immediately depend in order to
     work correctly.
   </para>
   <para>
@@ -62,7 +62,7 @@ $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd
       can create the following file at
       <literal>modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 { config, ... }:
 
 {
@@ -102,7 +102,7 @@ $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd
       it needs at a minimum for correct functioning, while the installer
       base image overrides the entire file system layout because there
       can’t be any other guarantees on a live medium than those given by
-      the live medium itself. The latter is especially true befor
+      the live medium itself. The latter is especially true before
       formatting the target block device(s). On the other hand, the
       netboot iso only overrides its minimum dependencies since netboot
       images are always made-to-target.

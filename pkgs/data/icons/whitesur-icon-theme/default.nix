@@ -6,6 +6,7 @@
 , jdupes
 , boldPanelIcons ? false
 , blackPanelIcons ? false
+, alternativeIcons ? false
 , themeVariants ? []
 }:
 
@@ -54,6 +55,7 @@ stdenvNoCC.mkDerivation rec {
     ./install.sh --dest $out/share/icons \
       --name WhiteSur \
       --theme ${builtins.toString themeVariants} \
+      ${lib.optionalString alternativeIcons "--alternative"} \
       ${lib.optionalString boldPanelIcons "--bold"} \
       ${lib.optionalString blackPanelIcons "--black"}
 

@@ -14,6 +14,7 @@ let
     generic = [ av ];
     google_translate = [ mutagen ];
     google_sheets = [ oauth2client ];
+    govee_ble = [ ibeacon-ble ];
     hassio = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];

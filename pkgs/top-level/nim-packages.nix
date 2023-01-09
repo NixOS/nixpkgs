@@ -14,17 +14,24 @@ lib.makeScope newScope (self:
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
+    base32 = callPackage ../development/nim-packages/base32 { };
+
     bumpy = callPackage ../development/nim-packages/bumpy { };
 
-    chroma = callPackage ../development/nim-packages/chroma { };
-
     c2nim = callPackage ../development/nim-packages/c2nim { };
+
+    cbor = callPackage ../development/nim-packages/cbor { };
+
+    chroma = callPackage ../development/nim-packages/chroma { };
 
     docopt = callPackage ../development/nim-packages/docopt { };
 
     flatty = callPackage ../development/nim-packages/flatty { };
 
     frosty = callPackage ../development/nim-packages/frosty { };
+
+    getdns = callPackage ../development/nim-packages/getdns {
+      inherit (pkgs) getdns; };
 
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
@@ -44,9 +51,13 @@ lib.makeScope newScope (self:
 
     nimbox = callPackage ../development/nim-packages/nimbox { };
 
+    nimSHA2 = callPackage ../development/nim-packages/nimSHA2 { };
+
     nimsimd = callPackage ../development/nim-packages/nimsimd { };
 
     noise = callPackage ../development/nim-packages/noise { };
+
+    npeg = callPackage ../development/nim-packages/npeg { };
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
@@ -79,7 +90,11 @@ lib.makeScope newScope (self:
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
+    taps = callPackage ../development/nim-packages/taps { };
+
     tempfile = callPackage ../development/nim-packages/tempfile { };
+
+    tkrzw = callPackage ../development/nim-packages/tkrzw { inherit (pkgs) tkrzw; };
 
     ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 

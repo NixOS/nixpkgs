@@ -61,7 +61,10 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    HOME=$TMPDIR xvfb-run meson test --print-errorlogs
+    env \
+      HOME="$TMPDIR" \
+      GTK_A11Y=none \
+      xvfb-run meson test --print-errorlogs
 
     runHook postCheck
   '';

@@ -4,7 +4,7 @@
 , text-unidecode
 , chardet
 , banal
-, PyICU
+, pyicu
 , pytestCheckHook
 }:
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     text-unidecode
     chardet
     banal
-    PyICU
+    pyicu
   ];
 
   checkInputs = [

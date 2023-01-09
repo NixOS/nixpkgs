@@ -98,6 +98,8 @@ let
 
     brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
 
+    brr = callPackage ../development/ocaml-modules/brr { };
+
     bwd = callPackage ../development/ocaml-modules/bwd { };
 
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -328,7 +330,11 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    domainslib = callPackage ../development/ocaml-modules/domainslib { };
+
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
+
+    dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
     dssi = callPackage ../development/ocaml-modules/dssi { };
 
@@ -610,6 +616,8 @@ let
 
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
+    httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
     index = callPackage ../development/ocaml-modules/index { };
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
@@ -657,6 +665,8 @@ let
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
     js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix { };
+
+    js_of_ocaml-toplevel = callPackage ../development/tools/ocaml/js_of_ocaml/toplevel.nix {};
 
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
@@ -734,6 +744,8 @@ let
     };
 
     lo = callPackage ../development/ocaml-modules/lo { };
+
+    lockfree = callPackage ../development/ocaml-modules/lockfree { };
 
     logs = callPackage ../development/ocaml-modules/logs { };
 
@@ -934,11 +946,15 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
+
     mustache =  callPackage ../development/ocaml-modules/mustache { };
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
+
+    note = callPackage ../development/ocaml-modules/note { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
 
@@ -1104,8 +1120,6 @@ let
 
     opium = callPackage ../development/ocaml-modules/opium { };
 
-    opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
-
     opti = callPackage ../development/ocaml-modules/opti { };
 
     optint = callPackage ../development/ocaml-modules/optint { };
@@ -1113,6 +1127,8 @@ let
     opus = callPackage ../development/ocaml-modules/opus { };
 
     ordering = callPackage ../development/ocaml-modules/ordering { };
+
+    oseq = callPackage ../development/ocaml-modules/oseq { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
@@ -1199,6 +1215,8 @@ let
     repr = callPackage ../development/ocaml-modules/repr { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
+
+    rock = callPackage ../development/ocaml-modules/rock { };
 
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
@@ -1505,12 +1523,6 @@ let
 
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
-    wodan = callPackage ../development/ocaml-modules/wodan { };
-
-    wodan-irmin = callPackage ../development/ocaml-modules/wodan/irmin.nix { };
-
-    wodan-unix = callPackage ../development/ocaml-modules/wodan/unix.nix { };
-
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
@@ -1570,7 +1582,7 @@ let
     if lib.versionOlder "4.10.2" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.15.nix {
       inherit self;
-      inherit (pkgs) fetchpatch lib openssl zstd;
+      inherit (pkgs) bash fetchpatch lib openssl zstd;
     }
     else if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {

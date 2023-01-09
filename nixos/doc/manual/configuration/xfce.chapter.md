@@ -31,8 +31,8 @@ enabled. To enable Thunar without enabling Xfce, use the configuration
 option [](#opt-programs.thunar.enable) instead of simply adding
 `pkgs.xfce.thunar` to [](#opt-environment.systemPackages).
 
-If you\'d like to add extra plugins to Thunar, add them to
-[](#opt-programs.thunar.plugins). You shouldn\'t just add them to
+If you'd like to add extra plugins to Thunar, add them to
+[](#opt-programs.thunar.plugins). You shouldn't just add them to
 [](#opt-environment.systemPackages).
 
 ## Troubleshooting {#sec-xfce-troubleshooting .unnumbered}
@@ -46,7 +46,7 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
 ```
 
 This is caused by some needed GNOME services not running. This is all
-fixed by enabling \"Launch GNOME services on startup\" in the Advanced
+fixed by enabling "Launch GNOME services on startup" in the Advanced
 tab of the Session and Startup settings panel. Alternatively, you can
 run this command to do the same thing.
 

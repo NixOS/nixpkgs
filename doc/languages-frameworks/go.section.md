@@ -16,7 +16,8 @@ In the following is an example expression using `buildGoModule`, the following a
   `vendorHash` can also be set to `null`.
   In that case, rather than fetching the dependencies and vendoring them, the dependencies vendored in the source repo will be used.
 
-  To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`  
+  To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`
+
   To obtain the actual hash, set `vendorHash = lib.fakeSha256;` and run the build ([more details here](#sec-source-hashes)).
 - `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform dependant `vendorHash` checksums.
 

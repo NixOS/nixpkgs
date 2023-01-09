@@ -1,28 +1,28 @@
 { lib
 , python3
+, fetchFromGitHub
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "0.6.1";
+  version = "0.8.0";
 
   disabled = python3.pythonOlder "3.7";
 
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    hash = "sha256-VYmSHDde3zLq7NcsX7xp1JYe6x6RKFEravpakIzW390=";
+  src = fetchFromGitHub {
+    owner = "jgosmann";
+    repo = "dmarc-metrics-exporter";
+    rev = "v${version}";
+    hash = "sha256-uZCPEUoWNrcSz5qV24eFdZOOxKkoz+Qn6HpELBwOK2I=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'uvicorn = {extras = ["standard"], version = "^0.15.0"}' 'uvicorn = {version = "^0.15.0"}' \
-      --replace '"^' '">='
-  '';
+  pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

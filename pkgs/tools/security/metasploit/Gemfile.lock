@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 2654f6f02a0ce6150e623804b9fab9576fe008f6
-  ref: refs/tags/6.2.31
+  revision: ef77e9e4b96d16ae52524f0810a95262ae2aaad3
+  ref: refs/tags/6.2.34
   specs:
-    metasploit-framework (6.2.31)
+    metasploit-framework (6.2.34)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -128,13 +128,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.679.0)
+    aws-partitions (1.688.0)
     aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.355.0)
+    aws-sdk-ec2 (1.356.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.73.0)
@@ -171,9 +171,9 @@ GEM
       http_parser.rb (>= 0.6.0)
     em-socksify (0.3.2)
       eventmachine (>= 1.0.0.beta.4)
-    erubi (1.11.0)
+    erubi (1.12.0)
     eventmachine (1.2.7)
-    faker (3.0.0)
+    faker (3.1.0)
       i18n (>= 1.8.11, < 2)
     faraday (2.7.2)
       faraday-net_http (>= 2.0, < 3.1)
@@ -203,7 +203,7 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
-    irb (1.6.1)
+    irb (1.6.2)
       reline (>= 0.3.0)
     jmespath (1.6.2)
     jsobfu (0.4.2)
@@ -248,8 +248,8 @@ GEM
       webrick
     metasploit_payloads-mettle (1.0.20)
     method_source (1.0.0)
-    mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    mini_portile2 (2.8.1)
+    minitest (5.17.0)
     mqtt (0.5.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
@@ -287,10 +287,10 @@ GEM
       ttfunk
     pg (1.4.5)
     public_suffix (5.0.1)
-    puma (6.0.0)
+    puma (6.0.2)
       nio4r (~> 2.0)
-    racc (1.6.1)
-    rack (2.2.4)
+    racc (1.6.2)
+    rack (2.2.5)
     rack-protection (3.0.5)
       rack
     rack-test (2.0.2)
@@ -435,4 +435,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.3.26
+   2.4.2

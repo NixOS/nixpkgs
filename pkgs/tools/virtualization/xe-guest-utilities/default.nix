@@ -1,82 +1,49 @@
-{ lib, stdenv, fetchurl, bzip2, lzo, zlib, xz, bash, python2, gnutar, gnused, gnugrep, which }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, runtimeShell
+}:
 
-stdenv.mkDerivation (rec {
+buildGoModule rec {
   pname = "xe-guest-utilities";
-  version = "6.2.0";
-  meta = {
-    description = "Citrix XenServer Tools";
-    homepage = "http://citrix.com/English/ps2/products/product.asp?contentID=683148&ntref=hp_nav_US";
-    maintainers = with lib.maintainers; [ benwbooth ];
-    platforms = lib.platforms.linux;
-    license = [ lib.licenses.gpl2 lib.licenses.lgpl21 ];
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+  version = "7.30.0";
+
+  src = fetchFromGitHub {
+    owner = "xenserver";
+    repo = "xe-guest-utilities";
+    rev = "v${version}";
+    hash = "sha256-gMb8QIUg8t0SiTtUzqeh4XM5hHgCXuf5KlV3OeoU0LI=";
   };
-  src = fetchurl {
-    url = "https://sources.archlinux.org/other/community/xe-guest-utilities/xe-guest-utilities_${version}-1120.tar.gz";
-    sha256 = "f9593cd9588188f80253e736f48d8dd94c5b517abb18316085f86acffab48794";
-  };
-  buildInputs = [ bzip2 gnutar gnused python2 lzo zlib xz gnugrep which ];
-  patches = [ ./ip-address.patch ];
+
+  vendorHash = "sha256-zhpDvo8iujE426/gxJY+Pqfv99vLNKHqyMQbbXIKodY=";
+
   postPatch = ''
-    tar xf "$NIX_BUILD_TOP/$name/xenstore-sources.tar.bz2"
+    substituteInPlace mk/xen-vcpu-hotplug.rules \
+      --replace "/bin/sh" "${runtimeShell}"
   '';
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: utils.o:xenstore/utils.h:27:
-  #     multiple definition of `xprintf'; xenstored_core.o:xenstore/utils.h:27: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
-
   buildPhase = ''
-    export CC=gcc
-    export CFLAGS='-Wall -Wstrict-prototypes -Wno-unused-local-typedefs -Wno-sizeof-pointer-memaccess'
-    export PYTHON=python2
-    cd "$NIX_BUILD_TOP/$name/uclibc-sources"
-    for file in Config.mk tools/libxc/Makefile tools/misc/Makefile tools/misc/lomount/Makefile tools/xenstore/Makefile; do
-      substituteInPlace "$file" --replace -Werror ""
-    done
-    make -C tools/include
-    make -C tools/libxc
-    make -C tools/xenstore
+    runHook preBuild
+
+    make RELEASE=nixpkgs
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    export CFLAGS+='-Wall -Wstrict-prototypes -Wno-unused-local-typedefs -Wno-sizeof-pointer-memaccess'
-    if [[ $CARCH == x86_64 ]]; then
-      export LIBLEAFDIR_x86_64=lib
-    fi
-    for f in include libxc xenstore; do
-      [[ ! -d $NIX_BUILD_TOP/$name/uclibc-sources/tools/$f ]] && continue
-      make -C "$NIX_BUILD_TOP/$name/uclibc-sources/tools/$f" DESTDIR="$out" BINDIR=/bin SBINDIR=/bin INCLUDEDIR=/include LIBDIR=/lib install
-    done
-    rm -r "$out"/var
+    runHook preInstall
 
-    cd "$NIX_BUILD_TOP/$name"
-    install -Dm755 xe-update-guest-attrs "$out/bin/xe-update-guest-attrs"
-    install -Dm755 xe-daemon "$out/bin/xe-daemon"
-    install -Dm644 xen-vcpu-hotplug.rules "$out/lib/udev/rules.d/10-xen-vcpu-hotplug.rules"
-    substituteInPlace "$out/bin/xe-daemon" --replace sbin bin
-    substituteInPlace "$out/bin/xe-daemon" --replace /usr/ "$out/"
-    substituteInPlace "$out/bin/xe-update-guest-attrs" --replace /usr/ "$out/"
-    substituteInPlace "$out/bin/xe-update-guest-attrs" --replace 'export PATH=' 'export PATH=$PATH:'
-    substituteInPlace "$out/lib/udev/rules.d/10-xen-vcpu-hotplug.rules" --replace /bin/sh '${bash}/bin/sh'
+    install -Dt "$out"/bin build/stage/usr/{,s}bin/*
+    install -Dt "$out"/etc/udev/rules.d build/stage/etc/udev/rules.d/*
 
-    cat <<'EOS' >"$out/bin/xe-linux-distribution"
-    #!${bash}/bin/bash -eu
-    . /etc/os-release
-    if [[ $# -gt 0 ]]; then
-      mkdir -p "$(dirname "$1")"
-      exec 1>"$1"
-    fi
-    cat <<EOF
-    os_distro="$ID"
-    os_majorver="''${VERSION_ID%%.*}"
-    os_minorver="''${VERSION_ID#*.}"
-    os_uname="$(uname -r)"
-    os_name="$PRETTY_NAME"
-    EOF
-    EOS
-    chmod 0755 "$out/bin/xe-linux-distribution"
+    runHook postInstall
   '';
 
-})
+  meta = {
+    description = "XenServer guest utilities";
+    homepage = "https://github.com/xenserver/xe-guest-utilities";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
+  };
+}

@@ -8,7 +8,7 @@
 , liblinphone
 , mediastreamer
 , mediastreamer-openh264
-, minizip2
+, minizip-ng
 , mkDerivation
 , qtgraphicaleffects
 , qtquickcontrols2
@@ -70,7 +70,7 @@ mkDerivation rec {
     mediastreamer
     mediastreamer-openh264
 
-    minizip2
+    minizip-ng
     qtgraphicaleffects
     qtquickcontrols2
     qttranslations
@@ -81,7 +81,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
+    "-DMINIZIP_INCLUDE_DIRS=${minizip-ng}/include"
     "-DMINIZIP_LIBRARIES=minizip"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/

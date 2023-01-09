@@ -12,7 +12,7 @@
     <listitem>
       <para>
         <emphasis>Stable channels</emphasis>, such as
-        <link xlink:href="https://nixos.org/channels/nixos-22.05"><literal>nixos-22.11</literal></link>.
+        <link xlink:href="https://nixos.org/channels/nixos-22.11"><literal>nixos-22.11</literal></link>.
         These only get conservative bug fixes and package upgrades. For
         instance, a channel update may cause the Linux kernel on your
         system to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix),
@@ -33,7 +33,7 @@
     <listitem>
       <para>
         <emphasis>Small channels</emphasis>, such as
-        <link xlink:href="https://nixos.org/channels/nixos-22.05-small"><literal>nixos-22.11-small</literal></link>
+        <link xlink:href="https://nixos.org/channels/nixos-22.11-small"><literal>nixos-22.11-small</literal></link>
         or
         <link xlink:href="https://nixos.org/channels/nixos-unstable-small"><literal>nixos-unstable-small</literal></link>.
         These are identical to the stable and unstable channels
@@ -128,7 +128,7 @@ nixos https://nixos.org/channels/nixos-unstable
       You can keep a NixOS system up-to-date automatically by adding the
       following to <literal>configuration.nix</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 system.autoUpgrade.enable = true;
 system.autoUpgrade.allowReboot = true;
 </programlisting>
@@ -145,7 +145,7 @@ system.autoUpgrade.allowReboot = true;
       contains a different kernel, initrd or kernel modules. You can
       also specify a channel explicitly, e.g.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.11;
 </programlisting>
   </section>

@@ -42,7 +42,7 @@ updateNightly() {
 
     NEW_NIGHTLY_HASH="$(nix-prefetch-git --quiet --fetch-submodules --rev "nightly-${NEW_NIGHTLY_VERSION}" "https://github.com/citra-emu/citra-nightly" | jq -r '.sha256')"
 
-    echo "  Succesfully fetched. hash: ${NEW_NIGHTLY_HASH}"
+    echo "  Successfully fetched. hash: ${NEW_NIGHTLY_HASH}"
 
     sed -i "s/${OLD_NIGHTLY_VERSION}/${NEW_NIGHTLY_VERSION}/" ./default.nix
     sed -i "s/${OLD_NIGHTLY_HASH}/${NEW_NIGHTLY_HASH}/" ./default.nix
@@ -67,7 +67,7 @@ updateCanary() {
 
     NEW_CANARY_HASH="$(nix-prefetch-git --quiet --fetch-submodules --rev "canary-${NEW_CANARY_VERSION}" "https://github.com/citra-emu/citra-canary" | jq -r '.sha256')"
 
-    echo "  Succesfully fetched. hash: ${NEW_CANARY_HASH}"
+    echo "  Successfully fetched. hash: ${NEW_CANARY_HASH}"
 
     sed -i "s/${OLD_CANARY_VERSION}/${NEW_CANARY_VERSION}/" ./default.nix
     sed -i "s/${OLD_CANARY_HASH}/${NEW_CANARY_HASH}/" ./default.nix

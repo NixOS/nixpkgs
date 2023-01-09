@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.12.6";
+  version = "2023.1.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -77,6 +77,9 @@
       airtouch4pyapi
     ];
     "airvisual" = ps: with ps; [
+      pyairvisual
+    ];
+    "airvisual_pro" = ps: with ps; [
       pyairvisual
     ];
     "airzone" = ps: with ps; [
@@ -429,7 +432,8 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-    ]; # missing inputs: btsmarthub_devicelist
+      btsmarthub_devicelist
+    ];
     "bthome" = ps: with ps; [
       aiohttp-cors
       bleak-retry-connector
@@ -656,9 +660,6 @@
     ];
     "derivative" = ps: with ps; [
     ];
-    "deutsche_bahn" = ps: with ps; [
-      schiene
-    ];
     "device_automation" = ps: with ps; [
     ];
     "device_sun_light_trigger" = ps: with ps; [
@@ -727,6 +728,7 @@
       aiohttp-cors
       async-upnp-client
       fnvhash
+      getmac
       ifaddr
       sqlalchemy
       zeroconf
@@ -1146,7 +1148,7 @@
     "garadget" = ps: with ps; [
     ];
     "garages_amsterdam" = ps: with ps; [
-      garages-amsterdam
+      odp-amsterdam
     ];
     "gaviota" = ps: with ps; [
     ];
@@ -1228,6 +1230,11 @@
       pyturbojpeg
       aiohttp-cors
     ];
+    "google_assistant_sdk" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      sqlalchemy
+    ]; # missing inputs: gassist-text
     "google_cloud" = ps: with ps; [
       google-cloud-texttospeech
     ];
@@ -1458,12 +1465,12 @@
       zigpy
     ];
     "homekit" = ps: with ps; [
+      hap-python
       pyqrcode
       pyturbojpeg
       aiohttp-cors
       base36
       fnvhash
-      hap-python
       ha-ffmpeg
       ifaddr
       sqlalchemy
@@ -1585,13 +1592,13 @@
     "ihc" = ps: with ps; [
       defusedxml
     ]; # missing inputs: ihcsdk
-    "image" = ps: with ps; [
-      aiohttp-cors
-      pillow
-    ];
     "image_processing" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
+    ];
+    "image_upload" = ps: with ps; [
+      aiohttp-cors
+      pillow
     ];
     "imap" = ps: with ps; [
       aioimaplib
@@ -1719,7 +1726,8 @@
     "kaiterra" = ps: with ps; [
     ]; # missing inputs: kaiterra-async-client
     "kaleidescape" = ps: with ps; [
-    ]; # missing inputs: pykaleidescape
+      pykaleidescape
+    ];
     "kankun" = ps: with ps; [
     ];
     "keba" = ps: with ps; [
@@ -1775,7 +1783,8 @@
       pykira
     ];
     "kiwi" = ps: with ps; [
-    ]; # missing inputs: kiwiki-client
+      kiwiki-client
+    ];
     "kmtronic" = ps: with ps; [
       pykmtronic
     ];
@@ -2664,6 +2673,9 @@
     "pure_energie" = ps: with ps; [
       gridnet
     ];
+    "purpleair" = ps: with ps; [
+      aiopurpleair
+    ];
     "push" = ps: with ps; [
       aiohttp-cors
     ];
@@ -2797,6 +2809,9 @@
     ]; # missing inputs: pigpio
     "renault" = ps: with ps; [
       renault-api
+    ];
+    "reolink" = ps: with ps; [
+      reolink-aio
     ];
     "repairs" = ps: with ps; [
       aiohttp-cors
@@ -3616,7 +3631,7 @@
       pytrafikverket
     ];
     "transmission" = ps: with ps; [
-      transmissionrpc
+      transmission-rpc
     ];
     "transport_nsw" = ps: with ps; [
       pytransportnsw
@@ -4099,6 +4114,7 @@
     "airthings_ble"
     "airtouch4"
     "airvisual"
+    "airvisual_pro"
     "airzone"
     "aladdin_connect"
     "alarm_control_panel"
@@ -4351,8 +4367,8 @@
     "icloud"
     "ifttt"
     "ign_sismologia"
-    "image"
     "image_processing"
+    "image_upload"
     "imap_email_content"
     "influxdb"
     "inkbird"
@@ -4379,6 +4395,7 @@
     "jewish_calendar"
     "juicenet"
     "justnimbus"
+    "kaleidescape"
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
@@ -4535,6 +4552,7 @@
     "proximity"
     "prusalink"
     "pure_energie"
+    "purpleair"
     "push"
     "pushbullet"
     "pushover"
@@ -4548,6 +4566,7 @@
     "radarr"
     "radio_browser"
     "radiotherm"
+    "rainbird"
     "rainforest_eagle"
     "rainmachine"
     "random"
@@ -4558,6 +4577,7 @@
     "reddit"
     "remote"
     "renault"
+    "reolink"
     "repairs"
     "rest"
     "rest_command"

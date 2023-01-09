@@ -8,7 +8,10 @@ let
   configFile = toml.generate "garage.toml" cfg.settings;
 in
 {
-  meta.maintainers = [ maintainers.raitobezarius ];
+  meta = {
+    doc = ./garage-doc.xml;
+    maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+  };
 
   options.services.garage = {
     enable = mkEnableOption (lib.mdDoc "Garage Object Storage (S3 compatible)");
@@ -56,10 +59,12 @@ in
     };
 
     package = mkOption {
-      default = pkgs.garage;
-      defaultText = literalExpression "pkgs.garage";
+      # TODO: when 23.05 is released and if Garage 0.9 is the default, put a stateVersion check.
+      default = if versionAtLeast stateVersion "23.05" then pkgs.garage_0_8_0
+                else pkgs.garage_0_7;
+      defaultText = literalExpression "pkgs.garage_0_7";
       type = types.package;
-      description = lib.mdDoc "Garage package to use.";
+      description = lib.mdDoc "Garage package to use, if you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
     };
   };
 

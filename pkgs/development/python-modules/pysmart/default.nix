@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysmart";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "truenas";
     repo = "py-SMART";
     rev = "refs/tags/v${version}";
-    hash = "sha256-slLk4zoW0ht9hiOxyBt0caekjrPgih9G99pRiD2vIxE=";
+    hash = "sha256-qZJwUxU9LSKXpftBuKFnxI4gygHIuJEwGJqFaBlCudc=";
   };
 
   postPatch = ''

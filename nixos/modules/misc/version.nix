@@ -28,6 +28,8 @@ let
     DOCUMENTATION_URL = "https://nixos.org/learn.html";
     SUPPORT_URL = "https://nixos.org/community.html";
     BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+  } // lib.optionalAttrs (cfg.variant_id != null) {
+    VARIANT_ID = cfg.variant_id;
   };
 
   initrdReleaseContents = osReleaseContents // {
@@ -87,8 +89,21 @@ in
       description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
     };
 
+    nixos.variant_id = mkOption {
+      type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+      default = null;
+      description = lib.mdDoc "A lower-case string identifying a specific variant or edition of the operating system";
+      example = "installer";
+    };
+
     stateVersion = mkOption {
       type = types.str;
+      # TODO Remove this and drop the default of the option so people are forced to set it.
+      # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
+      apply = v:
+        lib.warnIf (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
+          "system.stateVersion is not set, defaulting to ${v}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion."
+          v;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
       description = lib.mdDoc ''
@@ -149,14 +164,6 @@ in
       "os-release".text = attrsToText osReleaseContents;
     };
 
-    # We have to use `warnings` because when warning in the default of the option
-    # the warning would also be shown when building the manual since the manual
-    # has to evaluate the default.
-    #
-    # TODO Remove this and drop the default of the option so people are forced to set it.
-    # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
-    warnings = lib.optional (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
-      "system.stateVersion is not set, defaulting to ${config.system.stateVersion}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion.";
   };
 
   # uses version info nixpkgs, which requires a full nixpkgs path

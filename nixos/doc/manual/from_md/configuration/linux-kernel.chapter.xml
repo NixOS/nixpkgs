@@ -5,7 +5,7 @@
     option <literal>boot.kernelPackages</literal>. For instance, this
     selects the Linux 3.10 kernel:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
 </programlisting>
   <para>
@@ -48,7 +48,7 @@ zcat /proc/config.gz
     <xref linkend="sec-customising-packages" />). For instance, to
     enable support for the kernel debugger KGDB:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
   linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
     extraConfig = ''
@@ -69,7 +69,7 @@ nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
     automatically by <literal>udev</literal>. You can force a module to
     be loaded via <xref linkend="opt-boot.kernelModules" />, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quot; ];
 </programlisting>
   <para>
@@ -77,7 +77,7 @@ boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quo
     root file system), you can use
     <xref linkend="opt-boot.initrd.kernelModules" />:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.initrd.kernelModules = [ &quot;cifs&quot; ];
 </programlisting>
   <para>
@@ -88,7 +88,7 @@ boot.initrd.kernelModules = [ &quot;cifs&quot; ];
     Kernel runtime parameters can be set through
     <xref linkend="opt-boot.kernel.sysctl" />, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
 </programlisting>
   <para>
@@ -96,65 +96,82 @@ boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
     available parameters, run <literal>sysctl -a</literal>.
   </para>
   <section xml:id="sec-linux-config-customizing">
-    <title>Customize your kernel</title>
+    <title>Building a custom kernel</title>
     <para>
-      The first step before compiling the kernel is to generate an
-      appropriate <literal>.config</literal> configuration. Either you
-      pass your own config via the <literal>configfile</literal> setting
-      of <literal>linuxKernel.manualConfig</literal>:
+      You can customize the default kernel configuration by overriding
+      the arguments for your kernel package:
     </para>
-    <programlisting language="bash">
-custom-kernel = let base_kernel = linuxKernel.kernels.linux_4_9;
-  in super.linuxKernel.manualConfig {
-    inherit (super) stdenv hostPlatform;
-    inherit (base_kernel) src;
-    version = &quot;${base_kernel.version}-custom&quot;;
-
-    configfile = /home/me/my_kernel_config;
-    allowImportFromDerivation = true;
-};
-</programlisting>
-    <para>
-      You can edit the config with this snippet (by default
-      <literal>make menuconfig</literal> won't work out of the box on
-      nixos):
-    </para>
-    <programlisting>
-nix-shell -E 'with import &lt;nixpkgs&gt; {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkg-config ncurses ];})'
-</programlisting>
-    <para>
-      or you can let nixpkgs generate the configuration. Nixpkgs
-      generates it via answering the interactive kernel utility
-      <literal>make config</literal>. The answers depend on parameters
-      passed to
-      <literal>pkgs/os-specific/linux/kernel/generic.nix</literal>
-      (which you can influence by overriding
-      <literal>extraConfig, autoModules, modDirVersion, preferBuiltin, extraConfig</literal>).
-    </para>
-    <programlisting language="bash">
-mptcp93.override ({
-  name=&quot;mptcp-local&quot;;
-
+    <programlisting language="nix">
+pkgs.linux_latest.override {
   ignoreConfigErrors = true;
   autoModules = false;
   kernelPreferBuiltin = true;
-
-  enableParallelBuilding = true;
-
-  extraConfig = ''
-    DEBUG_KERNEL y
-    FRAME_POINTER y
-    KGDB y
-    KGDB_SERIAL_CONSOLE y
-    DEBUG_INFO y
-  '';
-});
+  extraStructuredConfig = with lib.kernel; {
+    DEBUG_KERNEL = yes;
+    FRAME_POINTER = yes;
+    KGDB = yes;
+    KGDB_SERIAL_CONSOLE = yes;
+    DEBUG_INFO = yes;
+  };
+}
+</programlisting>
+    <para>
+      See <literal>pkgs/os-specific/linux/kernel/generic.nix</literal>
+      for details on how these arguments affect the generated
+      configuration. You can also build a custom version of Linux by
+      calling <literal>pkgs.buildLinux</literal> directly, which
+      requires the <literal>src</literal> and <literal>version</literal>
+      arguments to be specified.
+    </para>
+    <para>
+      To use your custom kernel package in your NixOS configuration, set
+    </para>
+    <programlisting language="nix">
+boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
+</programlisting>
+    <para>
+      Note that this method will use the common configuration defined in
+      <literal>pkgs/os-specific/linux/kernel/common-config.nix</literal>,
+      which is suitable for a NixOS system.
+    </para>
+    <para>
+      If you already have a generated configuration file, you can build
+      a kernel that uses it with
+      <literal>pkgs.linuxManualConfig</literal>:
+    </para>
+    <programlisting language="nix">
+let
+  baseKernel = pkgs.linux_latest;
+in pkgs.linuxManualConfig {
+  inherit (baseKernel) src modDirVersion;
+  version = &quot;${baseKernel.version}-custom&quot;;
+  configfile = ./my_kernel_config;
+  allowImportFromDerivation = true;
+}
+</programlisting>
+    <note>
+      <para>
+        The build will fail if <literal>modDirVersion</literal> does not
+        match the source’s <literal>kernel.release</literal> file, so
+        <literal>modDirVersion</literal> should remain tied to
+        <literal>src</literal>.
+      </para>
+    </note>
+    <para>
+      To edit the <literal>.config</literal> file for Linux X.Y, proceed
+      as follows:
+    </para>
+    <programlisting>
+$ nix-shell '&lt;nixpkgs&gt;' -A linuxKernel.kernels.linux_X_Y.configEnv
+$ unpackPhase
+$ cd linux-*
+$ make nconfig
 </programlisting>
   </section>
   <section xml:id="sec-linux-config-developing-modules">
     <title>Developing kernel modules</title>
     <para>
-      When developing kernel modules it's often convenient to run
+      When developing kernel modules it’s often convenient to run
       edit-compile-run loop as quickly as possible. See below snippet as
       an example of developing <literal>mellanox</literal> drivers.
     </para>
@@ -181,7 +198,7 @@ $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox module
       available kernel version <emphasis>that is supported by
       ZFS</emphasis> like this:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
 }

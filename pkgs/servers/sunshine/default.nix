@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, autoPatchelfHook
+, buildNpmPackage
 , cmake
 , avahi
 , libevdev
@@ -17,25 +19,53 @@
 , libffi
 , libcap
 , mesa
+, curl
+, libva
+, libvdpau
+, numactl
 , cudaSupport ? false
 , cudaPackages ? {}
 }:
 
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-/eekvpjopCivb2FJqh5W1G54GznLwdjk8ANOosdfuxw=";
+    sha256 = "sha256-o489IPza1iLoe74Onn2grP5oeNy0ZYdrvBoMEWlbwCE=";
     fetchSubmodules = true;
+  };
+
+  # remove pre-built ffmpeg; use ffmpeg from nixpkgs
+  patches = [ ./ffmpeg.diff ];
+
+  # fetch node_modules needed for webui
+  ui = buildNpmPackage {
+    inherit src version;
+    pname = "sunshine-ui";
+    sourceRoot = "source/src_assets/common/assets/web";
+    npmDepsHash = "sha256-fg/turcpPMHUs6GBwSoJl4Pxua/lGfCA1RzT1R5q53M=";
+
+    dontNpmBuild = true;
+
+    # use generated package-lock.json upstream does not provide one
+    postPatch = ''
+      cp ${./package-lock.json} ./package-lock.json
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r node_modules $out/
+    '';
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchelfHook
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
   ];
@@ -59,9 +89,20 @@ stdenv.mkDerivation rec {
     libevdev
     libcap
     libdrm
+    curl
+    libva
+    libvdpau
+    numactl
     mesa
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
+  ];
+
+  runtimeDependencies = [
+    avahi
+    mesa
+    xorg.libXrandr
+    libxcb
   ];
 
   CXXFLAGS = [
@@ -72,18 +113,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-D" "FFMPEG_LIBRARIES=${ffmpeg-full}/lib"
-    "-D" "FFMPEG_INCLUDE_DIRS=${ffmpeg-full}/include"
-    "-D" "LIBAVCODEC_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVCODEC_LIBRARIES=${ffmpeg-full}/lib/libavcodec.so"
-    "-D" "LIBAVDEVICE_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVDEVICE_LIBRARIES=${ffmpeg-full}/lib/libavdevice.so"
-    "-D" "LIBAVFORMAT_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVFORMAT_LIBRARIES=${ffmpeg-full}/lib/libavformat.so"
-    "-D" "LIBAVUTIL_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVUTIL_LIBRARIES=${ffmpeg-full}/lib/libavutil.so"
-    "-D" "LIBSWSCALE_LIBRARIES=${ffmpeg-full}/lib/libswscale.so"
-    "-D" "LIBSWSCALE_INCLUDE_DIR=${ffmpeg-full}/include"
+    "-Wno-dev"
   ];
 
   postPatch = ''
@@ -91,20 +121,17 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace 'set(Boost_USE_STATIC_LIBS ON)' '# set(Boost_USE_STATIC_LIBS ON)' \
       --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+  '';
 
-    # fix libgbm path
-    substituteInPlace src/platform/linux/graphics.cpp \
-      --replace 'handle = dyn::handle({ "libgbm.so.1", "libgbm.so" });' 'handle = dyn::handle({ "${mesa}/lib/libgbm.so.1", "${mesa}/lib/libgbm.so" });'
-
-    # fix avahi path
-    substituteInPlace src/platform/linux/publish.cpp \
-      --replace 'handle = dyn::handle({ "libavahi-client.so.3", "libavahi-client.so" });' 'handle = dyn::handle({ "${avahi}/lib/libavahi-client.so.3", "${avahi}/lib/libavahi-client.so" });' \
-      --replace 'handle = dyn::handle({ "libavahi-common.so.3", "libavahi-common.so" });' 'handle = dyn::handle({ "${avahi}/lib/libavahi-common.so.3", "${avahi}/lib/libavahi-common.so" });'
+  preBuild = ''
+    # copy node_modules where they can be picked up by build
+    mkdir -p ../src_assets/common/assets/web/node_modules
+    cp -r ${ui}/node_modules/* ../src_assets/common/assets/web/node_modules
   '';
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight.";
-    homepage = "https://docs.lizardbyte.dev/projects/sunshine/";
+    homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;

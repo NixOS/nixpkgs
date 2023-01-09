@@ -47,7 +47,7 @@ in
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -86,7 +86,7 @@ in
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -146,7 +146,7 @@ in
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -207,7 +207,7 @@ in
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 

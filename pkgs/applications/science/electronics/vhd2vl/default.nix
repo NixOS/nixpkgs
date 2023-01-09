@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
@@ -9,23 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vhd2vl";
-  version = "unstable-2018-09-01";
+  version = "unstable-2022-12-26";
 
   src = fetchFromGitHub {
     owner = "ldoolitt";
     repo = pname;
-    rev = "37e3143395ce4e7d2f2e301e12a538caf52b983c";
-    sha256 = "17va2pil4938j8c93anhy45zzgnvq3k71a7glj02synfrsv6fs8n";
+    rev = "869d442987dff6b9730bc90563ede89c1abfd28f";
+    sha256 = "sha256-Hz2XkT5m4ri5wVR2ciL9Gx73zr+RdW5snjWnUg300c8=";
   };
-
-  patches = lib.optionals (!stdenv.isAarch64) [
-    # fix build with verilog 11.0 - https://github.com/ldoolitt/vhd2vl/pull/15
-    # for some strange reason, this is not needed for aarch64
-    (fetchpatch {
-      url = "https://github.com/ldoolitt/vhd2vl/commit/ce9b8343ffd004dfe8779a309f4b5a594dbec45e.patch";
-      sha256 = "1qaqhm2mk66spb2dir9n91b385rarglc067js1g6pcg8mg5v3hhf";
-    })
-  ];
 
   nativeBuildInputs = [
     bison

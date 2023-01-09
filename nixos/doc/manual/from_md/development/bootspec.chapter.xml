@@ -43,7 +43,7 @@
       <literal>/etc/os-release</literal> in order to bake it into a
       unified kernel image:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 { config, lib, ... }: {
   boot.bootspec.extensions = {
     &quot;org.secureboot.osRelease&quot; = config.environment.etc.&quot;os-release&quot;.source;

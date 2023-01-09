@@ -24,6 +24,7 @@ assert if type == "sdk" then packages != null else true;
 , testers
 , runCommand
 , writeShellScript
+, mkNugetDeps
 }:
 
 let
@@ -40,6 +41,12 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
+
+  packageDeps = mkNugetDeps {
+    name = "${pname}-${version}-deps";
+    nugetDeps = packages;
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
@@ -120,14 +127,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = rec {
-    inherit icu packages;
-
-    runtimeIdentifierMap = {
-      "x86_64-linux" = "linux-x64";
-      "aarch64-linux" = "linux-arm64";
-      "x86_64-darwin" = "osx-x64";
-      "aarch64-darwin" = "osx-arm64";
-    };
+    inherit icu;
+    packages = packageDeps;
 
     updateScript =
       if type == "sdk" then
@@ -140,9 +141,6 @@ stdenv.mkDerivation (finalAttrs: rec {
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
       '' else null;
-
-    # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-    systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 
     tests = {
       version = testers.testVersion {

@@ -50,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils
     gettext
     glib
+    gobject-introspection
     gtk4
     meson
     ninja
@@ -58,7 +59,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

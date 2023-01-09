@@ -3,10 +3,12 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
+, grpcio
 , grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
+, protobuf
 , pytestCheckHook
 , pythonOlder
 }:
@@ -27,11 +29,18 @@ buildPythonPackage rec {
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
 
   checkInputs = [
+    grpcio
     mock
     pytestCheckHook
   ];

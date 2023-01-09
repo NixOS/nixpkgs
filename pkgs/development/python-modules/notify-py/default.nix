@@ -18,17 +18,16 @@
 
 buildPythonPackage rec {
   pname = "notify-py";
-  version = "0.3.38";
+  version = "0.3.39";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ms7m";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wlA7a10f4PYP3dYYwZqMULQ5FMCXpOUOTxXzEEVZCsI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QIK5MCCOsD8SStoh7TRw+l9k28SjChwV2J/T7gMKnAs=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -89,6 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cross-platform desktop notification library for Python";
     homepage = "https://github.com/ms7m/notify-py";
+    changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ austinbutler dotlambda ];
   };

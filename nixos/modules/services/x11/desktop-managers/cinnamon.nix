@@ -105,7 +105,7 @@ in
       services.dbus.packages = with pkgs.cinnamon; [
         cinnamon-common
         cinnamon-screensaver
-        nemo
+        nemo-with-extensions
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
@@ -154,7 +154,7 @@ in
         polkit_gnome
 
         # packages
-        nemo
+        nemo-with-extensions
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
@@ -180,6 +180,7 @@ in
         mint-themes
         mint-x-icons
         mint-y-icons
+        xapp # provides some xapp-* icons
       ] config.environment.cinnamon.excludePackages);
 
       xdg.mime.enable = true;

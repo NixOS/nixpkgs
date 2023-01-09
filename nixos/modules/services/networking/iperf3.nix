@@ -7,7 +7,7 @@ let
     port = mkOption {
       type        = types.ints.u16;
       default     = 5201;
-      description = lib.mdDoc "Server port to listen on for iperf3 client requsts.";
+      description = lib.mdDoc "Server port to listen on for iperf3 client requests.";
     };
     affinity = mkOption {
       type        = types.nullOr types.ints.unsigned;

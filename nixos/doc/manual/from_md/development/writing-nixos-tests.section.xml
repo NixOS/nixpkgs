@@ -3,7 +3,7 @@
   <para>
     A NixOS test is a module that has the following structure:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
 
   # One or more machines:
@@ -58,14 +58,14 @@
         Tests that are part of NixOS are added to
         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix"><literal>nixos/tests/all-tests.nix</literal></link>.
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
   hostname = runTest ./hostname.nix;
 </programlisting>
       <para>
         Overrides can be added by defining an anonymous module in
         <literal>all-tests.nix</literal>.
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
   hostname = runTest {
     imports = [ ./hostname.nix ];
     defaults.networking.firewall.enable = false;
@@ -87,7 +87,7 @@ nix-build -A nixosTests.hostname
         Outside the <literal>nixpkgs</literal> repository, you can
         instantiate the test by first importing the NixOS library,
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 let nixos-lib = import (nixpkgs + &quot;/nixos/lib&quot;) { };
 in
 
@@ -255,7 +255,7 @@ start_all()
         <listitem>
           <para>
             Return a list of different interpretations of what is
-            currently visible on the machine's screen using optical
+            currently visible on the machine’s screen using optical
             character recognition. The number and order of the
             interpretations is not specified and is subject to change,
             but if no exception is raised at least one will be returned.
@@ -276,7 +276,7 @@ start_all()
         <listitem>
           <para>
             Return a textual representation of what is currently visible
-            on the machine's screen using optical character recognition.
+            on the machine’s screen using optical character recognition.
           </para>
           <note>
             <para>
@@ -483,8 +483,8 @@ start_all()
         </term>
         <listitem>
           <para>
-            Wait until a process is listening on the given TCP port (on
-            <literal>localhost</literal>, at least).
+            Wait until a process is listening on the given TCP port and
+            IP address (default <literal>localhost</literal>).
           </para>
         </listitem>
       </varlistentry>
@@ -494,7 +494,8 @@ start_all()
         </term>
         <listitem>
           <para>
-            Wait until nobody is listening on the given TCP port.
+            Wait until nobody is listening on the given TCP port and IP
+            address (default <literal>localhost</literal>).
           </para>
         </listitem>
       </varlistentry>
@@ -536,7 +537,7 @@ start_all()
           <para>
             Wait until the supplied regular expressions match a line of
             the serial console output. This method is useful when OCR is
-            not possibile or accurate enough.
+            not possible or accurate enough.
           </para>
         </listitem>
       </varlistentry>
@@ -630,10 +631,10 @@ machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
       <literal>stop_job</literal>.
     </para>
     <para>
-      For faster dev cycles it's also possible to disable the
-      code-linters (this shouldn't be commited though):
+      For faster dev cycles it’s also possible to disable the
+      code-linters (this shouldn’t be committed though):
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   skipLint = true;
   nodes.machine =
@@ -650,10 +651,10 @@ machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
     <para>
       This will produce a Nix warning at evaluation time. To fully
       disable the linter, wrap the test script in comment directives to
-      disable the Black linter directly (again, don't commit this within
+      disable the Black linter directly (again, don’t commit this within
       the Nixpkgs repository):
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
   testScript =
     ''
       # fmt: off
@@ -665,7 +666,7 @@ machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
       Similarly, the type checking of test scripts can be disabled in
       the following way:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   skipTypeCheck = true;
   nodes.machine =
@@ -700,25 +701,37 @@ with foo_running:
       <literal>polling_condition</literal> takes the following
       (optional) arguments:
     </para>
-    <para>
-      <literal>seconds_interval</literal>
-    </para>
-    <para>
-      : specifies how often the condition should be polled:
-    </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <literal>seconds_interval</literal>
+        </term>
+        <listitem>
+          <para>
+            specifies how often the condition should be polled:
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
     <programlisting language="python">
 @polling_condition(seconds_interval=10)
 def foo_running():
     machine.succeed(&quot;pgrep -x foo&quot;)
 </programlisting>
-    <para>
-      <literal>description</literal>
-    </para>
-    <para>
-      : is used in the log when the condition is checked. If this is not
-      provided, the description is pulled from the docstring of the
-      function. These two are therefore equivalent:
-    </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <literal>description</literal>
+        </term>
+        <listitem>
+          <para>
+            is used in the log when the condition is checked. If this is
+            not provided, the description is pulled from the docstring
+            of the function. These two are therefore equivalent:
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
     <programlisting language="python">
 @polling_condition
 def foo_running():
@@ -739,7 +752,7 @@ def foo_running():
       <literal>extraPythonPackages</literal>. For example, you could add
       <literal>numpy</literal> like this:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   extraPythonPackages = p: [ p.numpy ];
 

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = version;
-    hash = "sha256-NnDpSOEIqPuPLIr0Ty6yjrs9WRKyhykcdyiRPB/cHEw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-v4mFvW+p0g+5IeZT8o0Z60MafHyYZ62d4lNH27wlAeI=";
   };
 
   postPatch = ''
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
+    changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];
   };

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.54.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/c7WP9m+8AULjmchpZmcTcnXG0K8gGxjseXS/QJXj+k=";
+    hash = "sha256-Y72h1YCf42RinGw2mKZb8Bz8ip+LUW377xwJht67Q1s=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
   };
   proxyVendor = true;
 
-  vendorHash = "sha256-+WMaQaBf4uMCCQTyycHlkYeKbRtk6oAlqbHBYBqh64M=";
+  vendorHash = "sha256-xzBOZyzwxVFTFgtmu7DLBpdkV9bwzJ9RETkdyV2HtQo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -70,14 +70,6 @@ buildGoModule rec {
       --replace "TestCmd" "SkipCmd"
     substituteInPlace grype/pkg/provider_test.go \
       --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
-    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
-      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
-    substituteInPlace grype/presenter/cyclonedxvex/presenter_test.go \
-      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
-    substituteInPlace grype/presenter/sarif/presenter_test.go \
-      --replace "Test_imageToSarifReport" "Skip_imageToSarifReport" \
-      --replace "TestSarifPresenterImage" "SkipSarifPresenterImage"
-
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
       --replace "TestDBValidations" "SkipDBValidations"

@@ -6,6 +6,8 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, testers
+, cve
 }:
 
 buildPythonPackage rec {
@@ -38,10 +40,13 @@ buildPythonPackage rec {
     "cvelib"
   ];
 
+  passthru.tests.version = testers.testVersion { package = cve; };
+
   meta = with lib; {
     description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
     license = licenses.mit;
     maintainers = with maintainers; [ raboof ];
+    mainProgram = "cve";
   };
 }

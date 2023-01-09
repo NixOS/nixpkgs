@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gojq";
-  version = "0.12.10";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JlxxfazVNJzQzG2p8L+5MoevSNNWf5mi14n3f/Q+MZU=";
+    sha256 = "sha256-xJx3ge+8cIGL1j5vnU4JhCcwmXIRhJ66PYnEG223Fbc=";
   };
 
   vendorSha256 = "sha256-BnDtHqqU/kFJyeG1g4UZ51eSnUlbQ6eRKTFoz6kxl0s=";

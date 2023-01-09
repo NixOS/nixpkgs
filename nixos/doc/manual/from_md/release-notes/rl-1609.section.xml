@@ -78,7 +78,7 @@
         LTS Haskell package set. That support has been dropped. The
         previously provided <literal>haskell.packages.lts-x_y</literal>
         package sets still exist in name to aviod breaking user code,
-        but these package sets don't actually contain the versions
+        but these package sets don’t actually contain the versions
         mandated by the corresponding LTS release. Instead, our package
         set it loosely based on the latest available LTS release, i.e.
         LTS 7.x at the time of this writing. New releases of NixOS and
@@ -119,7 +119,7 @@
     </listitem>
     <listitem>
       <para>
-        Gitlab's maintainance script <literal>gitlab-runner</literal>
+        Gitlab’s maintainance script <literal>gitlab-runner</literal>
         was removed and split up into the more clearer
         <literal>gitlab-run</literal> and <literal>gitlab-rake</literal>
         scripts, because <literal>gitlab-runner</literal> is a component
@@ -164,7 +164,7 @@
       <para>
         <literal>goPackages</literal> was replaced with separated Go
         applications in appropriate <literal>nixpkgs</literal>
-        categories. Each Go package uses its own dependency set. There's
+        categories. Each Go package uses its own dependency set. There’s
         also a new <literal>go2nix</literal> tool introduced to generate
         a Go package definition from its Go source automatically.
       </para>
@@ -192,7 +192,7 @@
         interface has been streamlined. Desktop users should be able to
         simply set
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   security.grsecurity.enable = true;
 }

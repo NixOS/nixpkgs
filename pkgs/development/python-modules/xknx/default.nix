@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-a8hC63G+FZBe6yePgrmzRsRTzpHWS+tBQmVUS/uHfzI=";
+    hash = "sha256-vz24saI0wuhax4/zCBDM3HB+ZjZI8bGOWr2va4V3zV8=";
   };
 
   propagatedBuildInputs = [

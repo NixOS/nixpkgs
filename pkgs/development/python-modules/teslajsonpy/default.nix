@@ -10,12 +10,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, tenacity
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "3.5.1";
+  version = "3.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "zabuldon";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rLpjzH5YI+pTW5SxPOqXXnjDxWv0SBzShOvuBXbvF4c=";
+    hash = "sha256-aQKoSvnCZNAqXf2tUsdlkHpkRJ8k7BVOOK3TQlV7OoM=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     backoff
     beautifulsoup4
     httpx
+    tenacity
     wrapt
   ];
 

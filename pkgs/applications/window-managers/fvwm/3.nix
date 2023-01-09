@@ -7,7 +7,6 @@
 , fontconfig
 , freetype
 , fribidi
-, imlib
 , libSM
 , libX11
 , libXcursor
@@ -53,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     fribidi
-    imlib
     libSM
     libX11
     libXcursor

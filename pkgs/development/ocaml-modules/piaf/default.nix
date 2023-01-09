@@ -1,5 +1,6 @@
 { alcotest-lwt
 , buildDunePackage
+, ocaml
 , dune-site
 , fetchzip
 , gluten-lwt-unix
@@ -13,6 +14,9 @@
 , ssl
 , uri
 }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "piaf is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "piaf";

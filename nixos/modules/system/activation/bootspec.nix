@@ -19,13 +19,15 @@ let
           (builtins.toJSON
           {
             v1 = {
+              system = config.boot.kernelPackages.stdenv.hostPlatform.system;
               kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
               kernelParams = config.boot.kernelParams;
-              initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
-              initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
               label = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
 
               inherit (cfg) extensions;
+            } // lib.optionalAttrs config.boot.initrd.enable {
+              initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+              initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
             };
           });
 
@@ -54,7 +56,7 @@ let
           specialisationInjector =
             let
               specialisationLoader = (lib.mapAttrsToList
-                (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/bootspec/${filename}" ])
+                (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/${filename}" ])
                 children);
             in
             lib.escapeShellArgs [
@@ -66,7 +68,7 @@ let
         ''
           mkdir -p $out/bootspec
 
-          ${toplevelInjector} | ${specialisationInjector} > $out/bootspec/${filename}
+          ${toplevelInjector} | ${specialisationInjector} > $out/${filename}
         '';
 
       validator = pkgs.writeCueValidator ./bootspec.cue {
@@ -80,7 +82,7 @@ in
     enable = lib.mkEnableOption (lib.mdDoc "Enable generation of RFC-0125 bootspec in $system/bootspec, e.g. /run/current-system/bootspec");
 
     extensions = lib.mkOption {
-      type = lib.types.attrs;
+      type = lib.types.attrsOf lib.types.attrs; # <namespace>: { ...namespace-specific fields }
       default = { };
       description = lib.mdDoc ''
         User-defined data that extends the bootspec document.

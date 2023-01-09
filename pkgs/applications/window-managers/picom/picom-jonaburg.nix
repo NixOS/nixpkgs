@@ -13,6 +13,6 @@ picom.overrideAttrs (oldAttrs: rec {
   meta = with lib; {
     description = "A fork of picom featuring animations and improved rounded corners.";
     homepage = "https://github.com/jonaburg/picom";
-    maintainers = with maintainers; oldAttrs.meta.maintainers ++ [ quasigod-io ];
+    maintainers = with maintainers; oldAttrs.meta.maintainers ++ [ michaelBelsanti ];
   };
 })

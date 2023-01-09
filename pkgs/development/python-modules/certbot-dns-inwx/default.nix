@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "certbot-dns-inwx";
-  version = "2.1.3";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yAgualY4J92pJ8PIkICg8w0eYHmT5L3qAUOCW/cAitw=";
+    sha256 = "sha256-v03QBHsxhl6R8YcwWIKD+pf4APy9S2vFcQe3ZEc6AjI=";
   };
 
   propagatedBuildInputs = [

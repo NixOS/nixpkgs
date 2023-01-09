@@ -22,13 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.9.0";
+  version = "6.10.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FO+RmSDErMmAVH3tC9Qjp6J6CyMnc45ZM0P0RvOxJsY=";
+    hash = "sha256-4ihEmsLxDRwW3zXEdpKCtSmsH+K1B2czP60chaYt9nE=";
   };
 
   postPatch = ''
@@ -91,15 +92,15 @@ buildPythonPackage rec {
     "test_run_inside_role_dir"
     "test_run_multiple_role_path_no_trailing_slash"
     "test_runner_exclude_globs"
-
     "test_discover_lintables_umlaut"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
+    homepage = "https://github.com/ansible/ansible-lint";
+    changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sengaya ];
   };

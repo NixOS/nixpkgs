@@ -23,16 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.6.1";
-
-  # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ztx3Y+n9Bpzuz06mbkis3kdlM/0JrOaMDbRF5glzkDE=";
+    sha256 = "sha256-JwwSeY+TsbYc2ZXoxR9aja0Hb8AmrWK79cv1ApAgcpQ=";
   };
+
+  patches = [
+    # Load extensions from NEMO_EXTENSION_DIR environment variable
+    # https://github.com/NixOS/nixpkgs/issues/78327
+    ./load-extensions-from-env.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -63,12 +67,16 @@ stdenv.mkDerivation rec {
     "--localedir=${cinnamon-translations}/share/locale"
   ];
 
+  # Taken from libnemo-extension.pc.
+  passthru.extensiondir = "lib/nemo/extensions-3.0";
+
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
+    mainProgram = "nemo";
   };
 }
 

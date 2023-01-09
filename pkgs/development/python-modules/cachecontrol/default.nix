@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "ionrock";
     repo = pname;

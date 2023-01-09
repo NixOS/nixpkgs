@@ -260,6 +260,10 @@ When in doubt, consider refactoring the `pkgs/` tree, e.g. creating new categori
 
     - `development/tools/build-managers` (e.g. `gnumake`)
 
+  - **If it’s a _language server_:**
+
+    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
+
   - **Else:**
 
     - `development/tools/misc` (e.g. `binutils`)

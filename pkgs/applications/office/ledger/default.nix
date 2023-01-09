@@ -41,6 +41,13 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-vwVQnY9EUCXPzhDJ4PSOmQStb9eF6H0yAOiEmL6sAlk=";
       excludes = [ "doc/NEWS.md" ];
     })
+
+    # Fix included bug with boost >= 1.76. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/ledger/ledger/commit/1cb9b84fdecc5604bd1172cdd781859ff3871a52.patch";
+      sha256 = "sha256-ipVkRcTmnEvpfyPgMzLVJ9Sz8QxHeCURQI5dX8xh758=";
+      excludes = [ "test/regress/*" ];
+    })
   ];
 
   installTargets = [ "doc" "install" ];

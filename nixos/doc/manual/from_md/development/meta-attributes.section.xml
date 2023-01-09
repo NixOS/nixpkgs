@@ -15,7 +15,7 @@
     Each of the meta-attributes must be defined at most once per module
     file.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, lib, pkgs, ... }:
 {
   options = {

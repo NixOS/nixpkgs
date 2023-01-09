@@ -73,7 +73,7 @@ let
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
   # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitely allowed by the
+  # package has an unfree license and is not explicitly allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     hasUnfreeLicense attrs &&
@@ -93,14 +93,14 @@ let
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
-    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+    isNonSource attrs.meta.sourceProvenance;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
   # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
@@ -247,16 +247,16 @@ let
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
+  # Deep type-checking. Note that calling `type.check` is not enough: see `lib.mkOptionType`'s documentation.
+  # We don't include this in lib for now because this function is flawed: it accepts things like `mkIf true 42`.
+  typeCheck = type: value: let
+    merged = lib.mergeDefinitions [ ] type [
+      { file = lib.unknownModule; inherit value; }
+    ];
+    eval = builtins.tryEval (builtins.deepSeq merged.mergedValue null);
+  in eval.success;
 
-  # A shallow type check. We are using NixOS'
-  # option types here, which however have the major drawback
-  # of not providing full type checking (part of the type check is
-  # done by the module evaluation itself). Therefore, the checks
-  # will not recurse into attributes.
-  # We still provide the full type for documentation
-  # purposes and in the hope that they will be used eventually.
-  # See https://github.com/NixOS/nixpkgs/pull/191171 for an attempt
-  # to fix this, or mkOptionType in lib/types.nix for more information.
+  # TODO make this into a proper module and use the generic option documentation generation?
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
@@ -266,9 +266,11 @@ let
     homepage = either (listOf str) str;
     downloadPage = str;
     changelog = either (listOf str) str;
-    license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    sourceProvenance = either (listOf lib.types.attrs) lib.types.attrs;
-    maintainers = listOf (attrsOf str);
+    license = let
+      licenseType = either (attrsOf anything) str; # TODO disallow `str` licenses, use a module
+    in either licenseType (listOf licenseType);
+    sourceProvenance = listOf lib.types.attrs;
+    maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
     platforms = listOf str;
     hydraPlatforms = listOf str;
@@ -310,16 +312,16 @@ let
     badPlatforms = platforms;
   };
 
-  # WARNING: this does not check inner values of the attribute, like list elements or nested attributes.
-  # See metaTypes above and mkOptionType in lib/types.nix for more information
   checkMetaAttr = k: v:
     if metaTypes?${k} then
-      if metaTypes.${k}.check v then
+      if typeCheck metaTypes.${k} v then
         null
       else
-        "key 'meta.${k}' has a value of invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+        "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.description}, got\n    ${
+          lib.generators.toPretty { indent = "    "; } v
+        }"
     else
-      "key 'meta.${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
+      "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if config.checkMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
   checkOutputsToInstall = attrs: let
@@ -333,25 +335,27 @@ let
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
   #
-  # Return { valid: Bool } and additionally
+  # Return { valid: "yes", "warn" or "no" } and additionally
   # { reason: String; errormsg: String } if it is not valid, where
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
+  # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity = attrs:
-    {
+    # Check meta attribute types first, to make sure it is always called even when there are other issues
+    # Note that this is not a full type check and functions below still need to by careful about their inputs!
+    let res = checkMeta (attrs.meta or {}); in if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n  - " + x) res}\n";
+        unfree = false; nonSource = false; broken = false; unsupported = false; insecure = false;
+      }
+    else {
       unfree = hasUnfreeLicense attrs;
       nonSource = hasNonSourceProvenance attrs;
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
-    }
-    // (
-    # Check meta attribute types first, to make sure it is always called even when there are other issues
-    # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    } // (
     # --- Put checks that cannot be ignored here ---
-    else if checkOutputsToInstall attrs then
+    if checkOutputsToInstall attrs then
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
 
     # --- Put checks that can be ignored here ---

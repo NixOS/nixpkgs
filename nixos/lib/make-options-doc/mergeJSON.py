@@ -1,5 +1,6 @@
 import collections
 import json
+import os
 import sys
 from typing import Any, Dict, List
 
@@ -45,6 +46,8 @@ def unpivot(options: Dict[Key, Option]) -> Dict[str, JSON]:
             )
         result[opt.name] = opt.value
     return result
+
+manpage_urls = json.load(open(os.getenv('MANPAGE_URLS')))
 
 admonitions = {
     '.warning': 'warning',
@@ -119,9 +122,14 @@ class Renderer(mistune.renderers.BaseRenderer):
     def env(self, text):
         return f"<envar>{escape(text)}</envar>"
     def manpage(self, page, section):
+        man = f"{page}({section})"
         title = f"<refentrytitle>{escape(page)}</refentrytitle>"
         vol = f"<manvolnum>{escape(section)}</manvolnum>"
-        return f"<citerefentry>{title}{vol}</citerefentry>"
+        ref = f"<citerefentry>{title}{vol}</citerefentry>"
+        if man in manpage_urls:
+            return self.link(manpage_urls[man], text=ref)
+        else:
+            return ref
 
     def finalize(self, data):
         return "".join(data)
@@ -306,14 +314,17 @@ if hasDocBookErrors:
     print("Explanation: The documentation contains descriptions, examples, or defaults written in DocBook. " +
         "NixOS is in the process of migrating from DocBook to Markdown, and " +
         "DocBook is disallowed for in-tree modules. To change your contribution to "+
-        "use Markdown, apply mdDoc and literalMD. For example:\n" +
+        "use Markdown, apply mdDoc and literalMD and use the *MD variants of option creation " +
+        "functions where they are available. For example:\n" +
         "\n" +
         "  example.foo = mkOption {\n" +
         "    description = lib.mdDoc ''your description'';\n" +
         "    defaultText = lib.literalMD ''your description of default'';\n" +
-        "  }\n" +
+        "  };\n" +
         "\n" +
-        "  example.enable = mkEnableOption (lib.mdDoc ''your thing'');",
+        "  example.enable = mkEnableOption (lib.mdDoc ''your thing'');\n" +
+        "  example.package = mkPackageOptionMD pkgs \"your-package\" {};\n" +
+        "  imports = [ (mkAliasOptionModuleMD [ \"example\" \"args\" ] [ \"example\" \"settings\" ]) ];",
         file = sys.stderr)
 
 if hasErrors:

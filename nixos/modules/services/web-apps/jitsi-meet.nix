@@ -28,7 +28,7 @@ let
     '');
 
   # Essential config - it's probably not good to have these as option default because
-  # types.attrs doesn't do merging. Let's merge explicitly, can still be overriden if
+  # types.attrs doesn't do merging. Let's merge explicitly, can still be overridden if
   # user desires.
   defaultCfg = {
     hosts = {
