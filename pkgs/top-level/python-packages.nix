@@ -10163,6 +10163,8 @@ self: super: with self; {
 
   scour = callPackage ../development/python-modules/scour { };
 
+  scooby = callPackage ../development/python-modules/scooby { };
+
   scp = callPackage ../development/python-modules/scp { };
 
   scramp = callPackage ../development/python-modules/scramp { };
