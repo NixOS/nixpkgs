@@ -13,7 +13,9 @@
 , testers
 , qtsvg
 , qtimageformats
+# For the tests
 , glaxnimate # Call itself, for the tests
+, xvfb-run
 }:
 let
   # TODO: try to add a python library, see toPythonModule in doc/languages-frameworks/python.section.md
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
   
   passthru.tests.version = testers.testVersion {
     package = glaxnimate;
-    command = "glaxnimate --version";
+    command = "${xvfb-run}/bin/xvfb-run glaxnimate --version";
   };
 
   meta = with lib; {
