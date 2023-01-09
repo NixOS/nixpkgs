@@ -2450,6 +2450,12 @@
     githubId = 89596;
     name = "Florian Friesdorf";
   };
+  ChaosAttractor = {
+    email = "lostattractor@gmail.com";
+    github = "LostAttractor";
+    githubId = 46527539;
+    name = "ChaosAttractor";
+  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
