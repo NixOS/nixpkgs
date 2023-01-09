@@ -13892,7 +13892,7 @@ with pkgs;
     llvmPackages = llvmPackages_13;
   })
     crystal_1_2
-    crystal_1_6
+    crystal_1_7
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };

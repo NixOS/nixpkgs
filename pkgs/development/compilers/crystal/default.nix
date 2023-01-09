@@ -268,11 +268,11 @@ rec {
     extraBuildInputs = [ libatomic_ops ];
   };
 
-  crystal_1_6 = generic {
-    version = "1.6.2";
-    sha256 = "sha256-WgU6Y8ww1IYyB0vd5tXwmWBEL5RiPjHA7YzPd21jlsY=";
+  crystal_1_7 = generic {
+    version = "1.7.0";
+    sha256 = "sha256-no6b6PGmc/dhicMLVZIHwi/HOKCVTiWHZ5I+ImBjoQc=";
     binary = binaryCrystal_1_2;
   };
 
-  crystal = crystal_1_6;
+  crystal = crystal_1_7;
 }
