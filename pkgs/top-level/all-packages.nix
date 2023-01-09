@@ -11178,6 +11178,8 @@ with pkgs;
 
   retext = qt6Packages.callPackage ../applications/editors/retext { };
 
+  rewrk = callPackage ../tools/networking/rewrk { };
+
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
     rekor-server;
