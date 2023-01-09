@@ -10302,6 +10302,8 @@ self: super: with self; {
 
   sfepy = callPackage ../development/python-modules/sfepy { };
 
+  sfrbox-api = callPackage ../development/python-modules/sfrbox-api { };
+
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
   sgp4 = callPackage ../development/python-modules/sgp4 { };
