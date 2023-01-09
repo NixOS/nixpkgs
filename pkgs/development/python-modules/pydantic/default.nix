@@ -54,6 +54,7 @@ buildPythonPackage rec {
     cython
   ] ++ lib.optionals withDocs [
     # dependencies for building documentation
+    autoflake
     ansi2html
     markdown-include
     mdx-truly-sane-lists
@@ -67,7 +68,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    autoflake
     devtools
     email-validator
     pyupgrade

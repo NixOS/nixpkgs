@@ -1,21 +1,24 @@
 { lib
-, python3
+, buildPythonPackage
+, fetchPypi
+, pyflakes
+, pytestCheckHook
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "autoflake";
   version = "1.4";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-YaNTASz/arlMoGKCPR+y9pLErNpRx2/4Oo13kV+6Ueo=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     pyflakes
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = [
     pytestCheckHook
   ];
 
