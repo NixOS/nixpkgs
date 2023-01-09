@@ -452,7 +452,7 @@ self: super: {
   #
   # # Depends on itself for testing
   # doctest-discover = addBuildTool super.doctest-discover
-  #   (if pkgs.buildPlatform != pkgs.hostPlatform
+  #   (if pkgs.stdenv.buildPlatform != pkgs.stdenv.hostPlatform
   #    then self.buildHaskellPackages.doctest-discover
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
