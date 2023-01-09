@@ -64,6 +64,8 @@ in {
       # don't stop the service if the unit disappears
       unitConfig.X-StopOnRemoval = false;
 
+      restartIfChanged = false;
+
       serviceConfig = {
         # we don't want to kill children processes as those are deployments
         KillMode = "process";
