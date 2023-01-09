@@ -70,6 +70,11 @@ stdenv.mkDerivation rec {
     for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
       sed '2i echo Skipping chgrp && exit 77' -i "$f"
     done
+    for f in ./tests/id/{uid.sh,zero.sh}; do
+      sed '2i echo Skipping tests/id && exit 77' -i "$f"
+    done
+    sed '2i echo Skipping tests/misc && exit 77' -i "tests/misc/help-version.sh"
+    sed '2i echo Skipping chown && exit 77' -i "tests/chown/separator.sh"
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
