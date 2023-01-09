@@ -43,9 +43,11 @@ buildPythonPackage rec {
       --replace "tornado==6.1" "tornado"
   '';
 
-  setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
+  setupPyGlobalFlags = [
+    "--with-upstream-urllib3"
+  ];
 
-  # tests not included with release
+  # Tests not included with release
   doCheck = false;
 
   pythonImportsCheck = [
@@ -55,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
+    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ veprbl pingiun ];
   };
