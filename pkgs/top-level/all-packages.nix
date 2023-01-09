@@ -36303,9 +36303,7 @@ with pkgs;
 
   proverif = callPackage ../applications/science/logic/proverif { };
 
-  satallax = callPackage ../applications/science/logic/satallax {
-    ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;
-  };
+  satallax = callPackage ../applications/science/logic/satallax { };
 
   saw-tools = callPackage ../applications/science/logic/saw-tools {};
 
