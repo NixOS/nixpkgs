@@ -6289,6 +6289,8 @@ self: super: with self; {
 
   nocaselist = callPackage ../development/python-modules/nocaselist { };
 
+  nocturne = callPackage ../development/python-modules/nocturne { };
+
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   nodepy-runtime = callPackage ../development/python-modules/nodepy-runtime { };
@@ -9460,6 +9462,8 @@ self: super: with self; {
 
   pyvicare = callPackage ../development/python-modules/pyvicare { };
 
+  PyVirtualDisplay = callPackage ../development/python-modules/PyVirtualDisplay { };
+
   pyvis = callPackage ../development/python-modules/pyvis { };
 
   pyvisa = callPackage ../development/python-modules/pyvisa { };
@@ -11857,8 +11861,6 @@ self: super: with self; {
   vine = callPackage ../development/python-modules/vine { };
 
   virtkey = callPackage ../development/python-modules/virtkey { };
-
-  virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
