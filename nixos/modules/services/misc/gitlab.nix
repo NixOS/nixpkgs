@@ -88,11 +88,6 @@ let
     };
   };
 
-  pagesArgs = [
-    "-pages-domain" gitlabConfig.production.pages.host
-    "-pages-root" "${gitlabConfig.production.shared.path}/pages"
-  ] ++ cfg.pagesExtraArgs;
-
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
     production = flip recursiveUpdate cfg.extraConfig {
@@ -160,6 +155,12 @@ let
       };
       extra = {};
       uploads.storage_path = cfg.statePath;
+      pages = {
+        enabled = cfg.pages.enable;
+        port = 8090;
+        host = cfg.pages.settings.pages-domain;
+        secret_file = cfg.pages.settings.api-secret-key;
+      };
     };
   };
 
@@ -245,6 +246,7 @@ in {
     (mkRenamedOptionModule [ "services" "gitlab" "backupPath" ] [ "services" "gitlab" "backup" "path" ])
     (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
     (mkRemovedOptionModule [ "services" "gitlab" "logrotate" "extraConfig" ] "Modify services.logrotate.settings.gitlab directly instead")
+    (mkRemovedOptionModule [ "services" "gitlab" "pagesExtraArgs" ] "Use services.gitlab.pages.settings instead")
   ];
 
   options = {
@@ -666,10 +668,107 @@ in {
         };
       };
 
-      pagesExtraArgs = mkOption {
-        type = types.listOf types.str;
-        default = [ "-listen-proxy" "127.0.0.1:8090" ];
-        description = lib.mdDoc "Arguments to pass to the gitlab-pages daemon";
+      pages.enable = mkEnableOption (lib.mdDoc "the GitLab Pages service");
+
+      pages.settings = mkOption {
+        description = lib.mdDoc ''
+          Configuration options to set in the GitLab Pages config
+          file.
+        '';
+
+        type = types.submodule {
+          freeformType = with types; attrsOf (nullOr (oneOf [ str int bool ]));
+
+          options = {
+            listen-http = mkOption {
+              type = with types; listOf str;
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              default = [];
+              description = lib.mdDoc ''
+                The address(es) to listen on for HTTP requests.
+              '';
+            };
+
+            listen-https = mkOption {
+              type = with types; listOf str;
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              default = [];
+              description = lib.mdDoc ''
+                The address(es) to listen on for HTTPS requests.
+              '';
+            };
+
+            listen-proxy = mkOption {
+              type = with types; listOf str;
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              default = [ "127.0.0.1:8090" ];
+              description = lib.mdDoc ''
+                The address(es) to listen on for proxy requests.
+              '';
+            };
+
+            artifacts-server = mkOption {
+              type = with types; nullOr str;
+              default = "http${optionalString cfg.https "s"}://${cfg.host}/api/v4";
+              defaultText = "http(s)://<services.gitlab.host>/api/v4";
+              example = "https://gitlab.example.com/api/v4";
+              description = lib.mdDoc ''
+                API URL to proxy artifact requests to.
+              '';
+            };
+
+            gitlab-server = mkOption {
+              type = with types; nullOr str;
+              default = "http${optionalString cfg.https "s"}://${cfg.host}";
+              defaultText = "http(s)://<services.gitlab.host>";
+              example = "https://gitlab.example.com";
+              description = lib.mdDoc ''
+                Public GitLab server URL.
+              '';
+            };
+
+            internal-gitlab-server = mkOption {
+              type = with types; nullOr str;
+              default = null;
+              defaultText = "http(s)://<services.gitlab.host>";
+              example = "https://gitlab.example.internal";
+              description = lib.mdDoc ''
+                Internal GitLab server used for API requests, useful
+                if you want to send that traffic over an internal load
+                balancer. By default, the value of
+                `services.gitlab.pages.settings.gitlab-server` is
+                used.
+              '';
+            };
+
+            api-secret-key = mkOption {
+              type = with types; nullOr str;
+              default = "${cfg.statePath}/gitlab_pages_secret";
+              internal = true;
+              description = lib.mdDoc ''
+                File with secret key used to authenticate with the
+                GitLab API.
+              '';
+            };
+
+            pages-domain = mkOption {
+              type = with types; nullOr str;
+              example = "example.com";
+              description = lib.mdDoc ''
+                The domain to serve static pages on.
+              '';
+            };
+
+            pages-root = mkOption {
+              type = types.str;
+              default = "${gitlabConfig.production.shared.path}/pages";
+              defaultText = literalExpression ''config.${opt.extraConfig}.production.shared.path + "/pages"'';
+              description = lib.mdDoc ''
+                The directory where pages are stored.
+              '';
+            };
+          };
+        };
       };
 
       secrets.secretFile = mkOption {
@@ -1209,6 +1308,9 @@ in {
             umask u=rwx,g=,o=
 
             openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
+            ${optionalString cfg.pages.enable ''
+                openssl rand -base64 32 > ${cfg.pages.settings.api-secret-key}
+            ''}
 
             rm -f '${cfg.statePath}/config/database.yml'
 
@@ -1357,27 +1459,36 @@ in {
       };
     };
 
-    systemd.services.gitlab-pages = mkIf (gitlabConfig.production.pages.enabled or false) {
-      description = "GitLab static pages daemon";
-      after = [ "network.target" "gitlab-config.service" ];
-      bindsTo = [ "gitlab-config.service" ];
-      wantedBy = [ "gitlab.target" ];
-      partOf = [ "gitlab.target" ];
-
-      path = [ pkgs.unzip ];
-
-      serviceConfig = {
-        Type = "simple";
-        TimeoutSec = "infinity";
-        Restart = "on-failure";
-
-        User = cfg.user;
-        Group = cfg.group;
-
-        ExecStart = "${cfg.packages.pages}/bin/gitlab-pages ${escapeShellArgs pagesArgs}";
-        WorkingDirectory = gitlabEnv.HOME;
-      };
+    services.gitlab.pages.settings = {
+      api-secret-key = "${cfg.statePath}/gitlab_pages_secret";
     };
+
+    systemd.services.gitlab-pages =
+      let
+        filteredConfig = filterAttrs (_: v: v != null) cfg.pages.settings;
+        configFile = pkgs.writeText "gitlab-pages.conf" (lib.generators.toKeyValue {} filteredConfig);
+      in
+        mkIf cfg.pages.enable {
+          description = "GitLab static pages daemon";
+          after = [ "network.target" "gitlab-config.service" "gitlab.service" ];
+          bindsTo = [ "gitlab-config.service" "gitlab.service" ];
+          wantedBy = [ "gitlab.target" ];
+          partOf = [ "gitlab.target" ];
+
+          path = [ pkgs.unzip ];
+
+          serviceConfig = {
+            Type = "simple";
+            TimeoutSec = "infinity";
+            Restart = "on-failure";
+
+            User = cfg.user;
+            Group = cfg.group;
+
+            ExecStart = "${cfg.packages.pages}/bin/gitlab-pages -config=${configFile}";
+            WorkingDirectory = gitlabEnv.HOME;
+          };
+        };
 
     systemd.services.gitlab-workhorse = {
       after = [ "network.target" ];
