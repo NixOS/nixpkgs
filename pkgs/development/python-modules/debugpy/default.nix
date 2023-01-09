@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.4";
+  version = "1.6.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Microsoft";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-THhu6Oa4x2b0chLFrJR7FF1z8X3/dsHzXosBmSqaDeI=";
+    sha256 = "sha256-98hyNer2Xtx6D2R3pFhLC3tb/2DFTawXO36xfwhIfEg=";
   };
 
   patches = [
