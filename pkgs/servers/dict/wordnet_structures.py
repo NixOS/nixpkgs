@@ -262,7 +262,7 @@ original version.\n\n
       self.dict_entry_write(file_index, file_data, '00-database-url', '00-database-url\n%s\n' % self.wn_url)
 
      
-      words = self.word_data.keys()
+      words = list(self.word_data.keys())
       words.sort()
       for word in words:
          for wi in self.word_data[word]:
@@ -306,14 +306,14 @@ if (__name__ == '__main__'):
    wnd = WordnetDict(wn_url=options.wn_url, desc_short=options.desc_short, desc_long=options.desc_long)
    
    for i in range(0,len(args),2):
-      print 'Opening index file %r...' % args[i]
+      print('Opening index file %r...' % args[i])
       file_index = file(args[i])
-      print 'Opening data file %r...' % args[i+1]
+      print('Opening data file %r...' % args[i+1])
       file_data = file(args[i+1])
-      print 'Parsing index file and data file...'
+      print('Parsing index file and data file...')
       wnd.wn_dict_add(file_index, file_data)
 
-   print 'All input files parsed. Writing output to index file %r and data file %r.' % (options.oi, options.od)
+   print('All input files parsed. Writing output to index file %r and data file %r.' % (options.oi, options.od))
    
    wnd.dict_generate(file(options.oi, 'w'),file(options.od, 'w'))
-   print 'All done.' 
+   print('All done.') 
