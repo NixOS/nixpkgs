@@ -98,6 +98,8 @@ let
       runHook preConfigure
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      # https://sourcehut.org/blog/2023-01-09-gomodulemirror/
+      export GOPRIVATE=git.sr.ht
       cd "${modRoot}"
       runHook postConfigure
     '';
