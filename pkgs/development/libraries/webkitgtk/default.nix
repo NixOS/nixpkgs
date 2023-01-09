@@ -223,11 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin ''
-    # It needs malloc_good_size.
-    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
-    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
-    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
   postFixup = ''

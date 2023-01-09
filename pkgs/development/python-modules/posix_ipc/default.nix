@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "posix_ipc";
-  version = "1.1.0";
+  pname = "posix-ipc";
+  version = "1.1.1";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+GoVsys4Vzx44wXr2RANgZij2frMA/+v457cNYM3OOM=";
+    hash = "sha256-4kVroM+y7luhQSFFDo2CWzxKFGH8oHYSIKq2bUERy7c=";
   };
 
-  pythonImportsCheckHook = [ "posix_ipc" ];
+  pythonImportsCheckHook = [
+    "posix_ipc"
+  ];
 
   meta = with lib; {
     description = "POSIX IPC primitives (semaphores, shared memory and message queues)";

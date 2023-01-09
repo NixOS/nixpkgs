@@ -170,4 +170,16 @@ with lib;
     default = null;
     defaultText = literalExpression "username";
   };
+
+  workDir = mkOption {
+    type = with types; nullOr str;
+    description = lib.mdDoc ''
+      Working directory, available as `$GITHUB_WORKSPACE` during workflow runs
+      and used as a default for [repository checkouts](https://github.com/actions/checkout).
+      The service cleans this directory on every service start.
+
+      A value of `null` will default to the systemd `RuntimeDirectory`.
+    '';
+    default = null;
+  };
 }

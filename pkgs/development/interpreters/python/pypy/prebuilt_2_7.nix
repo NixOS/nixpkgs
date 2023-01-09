@@ -12,6 +12,8 @@
 , sqlite
 , tcl-8_5
 , tk-8_5
+, tcl-8_6
+, tk-8_6
 , zlib
 # For the Python package set
 , packageOverrides ? (self: super: {})
@@ -23,8 +25,6 @@
 
 # This version of PyPy is primarily added to speed-up translation of
 # our PyPy source build when developing that expression.
-
-with lib;
 
 let
   isPy3k = majorVersion == "3";
@@ -69,9 +69,13 @@ in with passthru; stdenv.mkDerivation {
     gdbm
     ncurses6
     sqlite
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
     tcl-8_5
     tk-8_5
-    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    tcl-8_6
+    tk-8_6
   ];
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
@@ -108,10 +112,19 @@ in with passthru; stdenv.mkDerivation {
         @rpath/lib${executable}-c.dylib \
         $out/lib/lib${executable}-c.dylib \
         $out/bin/${executable}
+    install_name_tool \
+      -change \
+        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtcl8.6.dylib \
+        ${tcl-8_6}/lib/libtcl8.6.dylib \
+        $out/lib_pypy/_tkinter/*.so
+    install_name_tool \
+      -change \
+        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtk8.6.dylib \
+        ${tk-8_6}/lib/libtk8.6.dylib \
+        $out/lib_pypy/_tkinter/*.so
   '';
 
-  # Native libraries are not working in darwin
-  doInstallCheck = !stdenv.isDarwin;
+  doInstallCheck = true;
 
   # Check whether importing of (extension) modules functions
   installCheckPhase = let
@@ -119,12 +132,12 @@ in with passthru; stdenv.mkDerivation {
       "ssl"
       "sys"
       "curses"
-    ] ++ optionals (!isPy3k) [
+    ] ++ lib.optionals (!isPy3k) [
       "Tkinter"
-    ] ++ optionals isPy3k [
+    ] ++ lib.optionals isPy3k [
       "tkinter"
     ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+    imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
   in ''
     echo "Testing whether we can import modules"
     $out/bin/${executable} -c '${imports}'
