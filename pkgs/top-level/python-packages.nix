@@ -5147,8 +5147,6 @@ self: super: with self; {
 
   lcov_cobertura = callPackage ../development/python-modules/lcov_cobertura { };
 
-  ld2410-ble = callPackage ../development/python-modules/ld2410-ble { };
-
   ldap3 = callPackage ../development/python-modules/ldap3 { };
 
   ldapdomaindump = callPackage ../development/python-modules/ldapdomaindump { };
@@ -9366,6 +9364,8 @@ self: super: with self; {
   pytoml = callPackage ../development/python-modules/pytoml { };
 
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
+
+  pytoolconfig = callPackage ../development/python-modules/pytoolconfig { };
 
   pytools = callPackage ../development/python-modules/pytools { };
 
