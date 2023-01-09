@@ -5435,6 +5435,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  tickets-rs = callPackage ../servers/tickets-rs {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
   rsbep = callPackage ../tools/backup/rsbep { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
