@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     cmake
     wrapQtAppsHook
   ];
+
   buildInputs = [
     zlib
     potrace
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
-  
+
   passthru.tests.version = testers.testVersion {
     package = glaxnimate;
     command = "${xvfb-run}/bin/xvfb-run glaxnimate --version";
