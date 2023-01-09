@@ -19,10 +19,9 @@
 buildPythonPackage rec {
   pname = "notify-py";
   version = "0.3.39";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ms7m";
@@ -89,6 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cross-platform desktop notification library for Python";
     homepage = "https://github.com/ms7m/notify-py";
+    changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ austinbutler dotlambda ];
   };
