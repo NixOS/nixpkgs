@@ -8,15 +8,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "${version}";
-  version = "0.0.23";
+  pname = "pybotvac";
+  version = "0.0.24";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VLT+VlwQAAxU1WRNCB4t4fhQ2u+6w5zqdM6mSbR7+xI=";
+    hash = "sha256-SXIs9AUXWm1H49MVDT4z6msNPaW5sAU20rcsWZ7ERdU=";
   };
 
   propagatedBuildInputs = [
