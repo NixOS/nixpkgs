@@ -514,8 +514,24 @@ runTests {
     };
   };
 
-  testGenAttrs' = {
-    expr = genAttrs' (v: nameValuePair "key-${v}" "val-${v}") [ "foo" "bar" ];
+  testGenAttrs = {
+    expr = genAttrs [ "foo" "bar" ] (v: "val-${v}");
+    expected = {
+      foo = "val-foo";
+      bar = "val-bar";
+    };
+  };
+
+  testMapListToAttrs = {
+    expr = mapListToAttrs (v: "val-${v}") [ "foo" "bar" ];
+    expected = {
+      foo = "val-foo";
+      bar = "val-bar";
+    };
+  };
+
+  testMapListToAttrs' = {
+    expr = mapListToAttrs' (v: nameValuePair "key-${v}" "val-${v}") [ "foo" "bar" ];
     expected = {
       key-foo = "val-foo";
       key-bar = "val-bar";
