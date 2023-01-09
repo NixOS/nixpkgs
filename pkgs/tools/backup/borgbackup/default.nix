@@ -10,6 +10,7 @@
 , zstd
 , installShellFiles
 , nixosTests
+, exitcodeZeroOnWarning ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,6 +22,10 @@ python3.pkgs.buildPythonApplication rec {
     inherit pname version;
     sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
   };
+
+  patches = lib.optionals exitcodeZeroOnWarning [
+    ./exitcode-zero-on-warning.patch
+  ];
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits

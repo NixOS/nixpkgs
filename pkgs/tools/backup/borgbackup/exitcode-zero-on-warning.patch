@@ -1,0 +1,179 @@
+diff --git a/src/borg/constants.py b/src/borg/constants.py
+index a1aa3da9..7bc91d85 100644
+--- a/src/borg/constants.py
++++ b/src/borg/constants.py
+@@ -89,7 +89,7 @@
+ # return codes returned by borg command
+ # when borg is killed by signal N, rc = 128 + N
+ EXIT_SUCCESS = 0  # everything done, no problems
+-EXIT_WARNING = 1  # reached normal end of operation, but there were issues
++EXIT_WARNING = 0  # reached normal end of operation, but there were issues
+ EXIT_ERROR = 2  # terminated abruptly, did not reach end of operation
+ EXIT_SIGNAL_BASE = 128  # terminated due to signal, rc = 128 + sig_no
+ 
+diff --git a/src/borg/testsuite/archiver.py b/src/borg/testsuite/archiver.py
+index 1105a3b6..00702ea9 100644
+--- a/src/borg/testsuite/archiver.py
++++ b/src/borg/testsuite/archiver.py
+@@ -1474,7 +1474,7 @@ def test_overwrite(self):
+         os.mkdir('output/input/file1')
+         os.mkdir('output/input/file1/dir')
+         with changedir('output'):
+-            self.cmd('extract', self.repository_location + '::test', exit_code=1)
++            self.cmd('extract', self.repository_location + '::test', exit_code=0)
+ 
+     def test_rename(self):
+         self.create_regular_file('file1', size=1024 * 80)
+@@ -1655,7 +1655,7 @@ def test_corrupted_repository(self):
+         with open(os.path.join(self.tmpdir, 'repository', 'data', '0', name), 'r+b') as fd:
+             fd.seek(100)
+             fd.write(b'XXXX')
+-        output = self.cmd('check', '--info', self.repository_location, exit_code=1)
++        output = self.cmd('check', '--info', self.repository_location, exit_code=0)
+         self.assert_in('Starting repository check', output)  # --info given for root logger
+ 
+     def test_readonly_check(self):
+@@ -2851,7 +2851,7 @@ def raise_eof(*args):
+             raise EOFError
+ 
+         with patch.object(KeyfileKeyBase, 'create', raise_eof):
+-            self.cmd('init', '--encryption=repokey', self.repository_location, exit_code=1)
++            self.cmd('init', '--encryption=repokey', self.repository_location, exit_code=0)
+         assert not os.path.exists(self.repository_location)
+ 
+     def test_init_requires_encryption_option(self):
+@@ -3344,7 +3344,7 @@ def test_config(self):
+         self.assert_in('id', output)
+         self.assert_not_in('last_segment_checked', output)
+ 
+-        output = self.cmd('config', self.repository_location, 'last_segment_checked', exit_code=1)
++        output = self.cmd('config', self.repository_location, 'last_segment_checked', exit_code=0)
+         self.assert_in('No option ', output)
+         self.cmd('config', self.repository_location, 'last_segment_checked', '123')
+         output = self.cmd('config', self.repository_location, 'last_segment_checked')
+@@ -3363,11 +3363,11 @@ def test_config(self):
+             output = self.cmd('config', self.repository_location, cfg_key)
+             assert output == cfg_value + '\n'
+             self.cmd('config', '--delete', self.repository_location, cfg_key)
+-            self.cmd('config', self.repository_location, cfg_key, exit_code=1)
++            self.cmd('config', self.repository_location, cfg_key, exit_code=0)
+ 
+         self.cmd('config', '--list', '--delete', self.repository_location, exit_code=2)
+         self.cmd('config', self.repository_location, exit_code=2)
+-        self.cmd('config', self.repository_location, 'invalid-option', exit_code=1)
++        self.cmd('config', self.repository_location, 'invalid-option', exit_code=0)
+ 
+     requires_gnutar = pytest.mark.skipif(not have_gnutar(), reason='GNU tar must be installed for this test.')
+     requires_gzip = pytest.mark.skipif(not shutil.which('gzip'), reason='gzip must be installed for this test.')
+@@ -3660,7 +3660,7 @@ def test_missing_file_chunk(self):
+             else:
+                 self.fail('should not happen')
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         output = self.cmd('check', '--repair', self.repository_location, exit_code=0)
+         self.assert_in('New missing file chunk detected', output)
+         self.cmd('check', self.repository_location, exit_code=0)
+@@ -3703,7 +3703,7 @@ def test_missing_archive_item_chunk(self):
+         with repository:
+             repository.delete(archive.metadata.items[0])
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         self.cmd('check', '--repair', self.repository_location, exit_code=0)
+         self.cmd('check', self.repository_location, exit_code=0)
+ 
+@@ -3712,7 +3712,7 @@ def test_missing_archive_metadata(self):
+         with repository:
+             repository.delete(archive.id)
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         self.cmd('check', '--repair', self.repository_location, exit_code=0)
+         self.cmd('check', self.repository_location, exit_code=0)
+ 
+@@ -3721,7 +3721,7 @@ def test_missing_manifest(self):
+         with repository:
+             repository.delete(Manifest.MANIFEST_ID)
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         output = self.cmd('check', '-v', '--repair', self.repository_location, exit_code=0)
+         self.assert_in('archive1', output)
+         self.assert_in('archive2', output)
+@@ -3734,7 +3734,7 @@ def test_corrupted_manifest(self):
+             corrupted_manifest = manifest + b'corrupted!'
+             repository.put(Manifest.MANIFEST_ID, corrupted_manifest)
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         output = self.cmd('check', '-v', '--repair', self.repository_location, exit_code=0)
+         self.assert_in('archive1', output)
+         self.assert_in('archive2', output)
+@@ -3751,7 +3751,7 @@ def test_manifest_rebuild_corrupted_chunk(self):
+             corrupted_chunk = chunk + b'corrupted!'
+             repository.put(archive.id, corrupted_chunk)
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         output = self.cmd('check', '-v', '--repair', self.repository_location, exit_code=0)
+         self.assert_in('archive2', output)
+         self.cmd('check', self.repository_location, exit_code=0)
+@@ -3776,7 +3776,7 @@ def test_manifest_rebuild_duplicate_archive(self):
+             archive_id = key.id_hash(archive)
+             repository.put(archive_id, key.encrypt(archive))
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+         self.cmd('check', '--repair', self.repository_location, exit_code=0)
+         output = self.cmd('list', self.repository_location)
+         self.assert_in('archive1', output)
+@@ -3788,8 +3788,8 @@ def test_extra_chunks(self):
+         with Repository(self.repository_location, exclusive=True) as repository:
+             repository.put(b'01234567890123456789012345678901', b'xxxx')
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
++        self.cmd('check', self.repository_location, exit_code=0)
+         self.cmd('check', '--repair', self.repository_location, exit_code=0)
+         self.cmd('check', self.repository_location, exit_code=0)
+         self.cmd('extract', '--dry-run', self.repository_location + '::archive1', exit_code=0)
+@@ -3808,7 +3808,7 @@ def _test_verify_data(self, *init_args):
+                     break
+             repository.commit(compact=False)
+         self.cmd('check', self.repository_location, exit_code=0)
+-        output = self.cmd('check', '--verify-data', self.repository_location, exit_code=1)
++        output = self.cmd('check', '--verify-data', self.repository_location, exit_code=0)
+         assert bin_to_hex(chunk.id) + ', integrity error' in output
+         # repair (heal is tested in another test)
+         output = self.cmd('check', '--repair', '--verify-data', self.repository_location, exit_code=0)
+@@ -3826,7 +3826,7 @@ def test_empty_repository(self):
+             for id_ in repository.list():
+                 repository.delete(id_)
+             repository.commit(compact=False)
+-        self.cmd('check', self.repository_location, exit_code=1)
++        self.cmd('check', self.repository_location, exit_code=0)
+ 
+     def test_attic013_acl_bug(self):
+         # Attic up to release 0.13 contained a bug where every item unintentionally received
+@@ -4060,7 +4060,7 @@ def test_chunks_archive(self):
+             config.write(fd)
+ 
+         # Cache sync notices corrupted archive chunks, but automatically recovers.
+-        out = self.cmd('create', '-v', self.repository_location + '::test3', 'input', exit_code=1)
++        out = self.cmd('create', '-v', self.repository_location + '::test3', 'input', exit_code=0)
+         assert 'Reading cached archive chunk index for test1' in out
+         assert 'Cached archive chunk index of test1 is corrupted' in out
+         assert 'Fetching and building archive index for test1' in out
+@@ -4284,8 +4284,8 @@ def get_changes(filename, data):
+                 assert not any(get_changes('input/hardlink_target_replaced', joutput))
+ 
+         do_asserts(self.cmd('diff', self.repository_location + '::test0', 'test1a'), True)
+-        # We expect exit_code=1 due to the chunker params warning
+-        do_asserts(self.cmd('diff', self.repository_location + '::test0', 'test1b', exit_code=1), False)
++        # We expect exit_code=0 due to the chunker params warning
++        do_asserts(self.cmd('diff', self.repository_location + '::test0', 'test1b', exit_code=0), False)
+         do_json_asserts(self.cmd('diff', self.repository_location + '::test0', 'test1a', '--json-lines'), True)
+ 
+     def test_sort_option(self):

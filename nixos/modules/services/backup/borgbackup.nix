@@ -84,7 +84,8 @@ let
     in nameValuePair backupJobName {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
-        borgbackup openssh
+        (borgbackup.override { exitcodeZeroOnWarning = true; })
+        openssh
       ];
       script = "exec " + optionalString cfg.inhibitsSleep ''\
         ${pkgs.systemd}/bin/systemd-inhibit \
