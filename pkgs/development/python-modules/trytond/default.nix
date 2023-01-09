@@ -13,7 +13,7 @@
 , wrapt
 , passlib
 , pydot
-, python-Levenshtein
+, levenshtein
 , html2text
 , weasyprint
 , gevent
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
     # extra dependencies
     pydot
-    python-Levenshtein
+    levenshtein
     html2text
     weasyprint
     gevent
