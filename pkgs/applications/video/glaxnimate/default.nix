@@ -11,9 +11,28 @@
 , qttools
 , wrapQtAppsHook
 , testers
-, glaxnimate
+, qtsvg
+, qtimageformats
+, glaxnimate # Call itself, for the tests
 }:
-
+let
+  # TODO: try to add a python library, see toPythonModule in doc/languages-frameworks/python.section.md
+  python3WithLibs = python3.withPackages (ps: with ps; [
+    # In data/lib/python-lottie/requirements.txt
+    numpy
+    pillow
+    cairosvg
+    fonttools
+    grapheme
+    opencv4
+    pyqt5
+    qscintilla
+    # Not sure if needed, but appears in some files
+    pyyaml
+    requests
+    pybind11
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "glaxnimate";
   version = "0.5.1";
@@ -36,15 +55,20 @@ stdenv.mkDerivation rec {
     # Upstream asks for libav dependency, which is fulfilled by ffmpeg
     ffmpeg
     libarchive
-    python3
     qtbase
     qttools
+    qtsvg
+    qtimageformats
+    python3WithLibs
   ];
 
-passthru.tests.version = testers.testVersion {
+  qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
+  
+  passthru.tests.version = testers.testVersion {
     package = glaxnimate;
     command = "glaxnimate --version";
   };
+
   meta = with lib; {
     homepage = "https://gitlab.com/mattbas/glaxnimate";
     description = "Simple vector animation program.";
