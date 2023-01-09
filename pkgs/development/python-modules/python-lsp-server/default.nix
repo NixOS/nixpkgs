@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
+    hash = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -150,6 +150,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/python-lsp/python-lsp-server";
+    changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
