@@ -10,6 +10,7 @@
 buildDunePackage rec {
   pname = "telegraml";
   version = "unstable-2021-06-17";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "nv-vn";
