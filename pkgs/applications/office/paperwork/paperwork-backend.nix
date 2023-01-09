@@ -7,7 +7,7 @@
 , pycountry
 , whoosh
 , termcolor
-, python-Levenshtein
+, levenshtein
 , pygobject3
 , pyocr
 , natsort
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pygobject3
     pyocr
     pypillowfight
-    python-Levenshtein
+    levenshtein
     poppler_gi
     scikit-learn
     termcolor
