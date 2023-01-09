@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       - Supports IPv6.
     '';
     homepage = "http://unix4lyfe.org/darkstat";
-    changelog = "https://github.com/emikulic/darkstat/releases/tag/3.0.721";
+    changelog = "https://github.com/emikulic/darkstat/releases/tag/${version}";
     license = licenses.gpl2Only;
     platforms = with platforms; unix;
   };
