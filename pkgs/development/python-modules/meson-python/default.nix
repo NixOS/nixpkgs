@@ -7,6 +7,8 @@
 , ninja
 , pyproject-metadata
 , tomli
+, typing-extensions
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -25,6 +27,8 @@ buildPythonPackage rec {
     ninja
     pyproject-metadata
     tomli
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ];
 
   propagatedBuildInputs = [
@@ -42,8 +46,9 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
-    homepage = "https://github.com/FFY00/meson-python";
+    homepage = "https://github.com/mesonbuild/meson-python";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.fridh ];
   };
