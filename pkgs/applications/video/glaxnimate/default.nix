@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     potrace
+    # Upstream asks for libav dependency, which is fulfilled by ffmpeg
     ffmpeg
-    # gst_all_1.gst-libav # Note that since gst-libav-1.6, libav is actually ffmpeg
     libarchive
     python3
     qtbase
