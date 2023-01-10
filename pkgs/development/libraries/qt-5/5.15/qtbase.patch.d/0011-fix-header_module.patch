@@ -8,11 +8,11 @@ Subject: [PATCH 11/11] fix header_module
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index b9e5d35026..9924271042 100644
+index 0b2a30d159..37271e09d9 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
 @@ -84,7 +84,7 @@ header_module {
-         CONFIG  += qt_no_install_library
+         qt_no_install_library
  
      # Allow creation of .prl, .la and .pc files.
 -    target.path = $$[QT_INSTALL_LIBS]
@@ -20,6 +20,3 @@ index b9e5d35026..9924271042 100644
      target.CONFIG += dummy_install
      INSTALLS    += target
  } else {
--- 
-2.25.4
-

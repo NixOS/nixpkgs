@@ -118,16 +118,6 @@ qtModule {
     "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
     "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
     "-Wno-elaborated-enum-base"
-
-    #
-    # Prevent errors like
-    # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
-    # error: pointer to non-const type 'id' with no explicit ownership
-    #     id** _kvcPropertyAccessors;
-    #
-    # TODO remove when new Apple SDK is in
-    #
-    "-fno-objc-arc"
   ];
 
   preConfigure = ''
