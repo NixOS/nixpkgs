@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
-  ] ++ lib.optional stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     "lib"
     "dev"
   ];
