@@ -371,7 +371,7 @@ services.systemd.akkoma.confinement.enable = true;
         and
         <option>services.systemd.akkoma.serviceConfig.BindReadOnlyPaths</option>
         permit access to outside paths through bind mounts. Refer to
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#BindPaths="><link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html"><citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry></link></link>
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#BindPaths="><citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry></link>
         for details.
       </para>
     </section>
