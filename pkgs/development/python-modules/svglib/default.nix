@@ -13,14 +13,13 @@
 buildPythonPackage rec {
   pname = "svglib";
   version = "1.5.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Oudl06lAnuYMD7TSTC3raoBheqknBU9bzX/JjwaV5Yc=";
+    hash = "sha256-Oudl06lAnuYMD7TSTC3raoBheqknBU9bzX/JjwaV5Yc=";
   };
 
   propagatedBuildInputs = [
@@ -35,18 +34,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore tests that require network access (TestWikipediaFlags and TestW3CSVG), and tests that
-  # require files missing in the 1.0.0 PyPI release (TestOtherFiles).
-  pytestFlagsArray = [
-    "-k 'not TestWikipediaFlags and not TestW3CSVG and not TestOtherFiles'"
+  disabledTests = [
+    # Ignore tests that require network access (TestWikipediaFlags and TestW3CSVG), and tests that
+    # require files missing in the 1.0.0 PyPI release (TestOtherFiles).
+    "TestWikipediaFlags"
+    "TestW3CSVG"
+    "TestOtherFiles"
   ];
 
-  pythonImportsCheck = [ "svglib.svglib" ];
+  pythonImportsCheck = [
+    "svglib.svglib"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/deeplook/svglib";
     description = "A pure-Python library for reading and converting SVG";
-    license = licenses.lgpl3;
+    homepage = "https://github.com/deeplook/svglib";
+    changelog = "https://github.com/deeplook/svglib/blob/v${version}/CHANGELOG.rst";
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ trepetti ];
   };
 }
