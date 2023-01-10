@@ -296,7 +296,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage)
-        ccWrapperStdenv
+        ccWrapperStdenv gettext
         gcc-unwrapped coreutils gnugrep
         perl gnum4 bison;
       dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
@@ -369,7 +369,7 @@ in
     overrides = self: super: rec {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils coreutils gnugrep
+        binutils coreutils gnugrep gettext
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
       gcc-unwrapped =
