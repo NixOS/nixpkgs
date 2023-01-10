@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OnGzAUfIop/3/0qAAm5rgTlpCdZ/1fwWPJ/KLfGUy8U=";
+    sha256 = "sha256-nUUbGNxr2pGiEoYbArHppNE29rki9SM/3MZWMS9HmqY=";
   };
 
   outputs = [ "out" "dev" "doc" ];
