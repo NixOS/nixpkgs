@@ -16,6 +16,7 @@ let
     self = python27';
     pkgsBuildHost = pkgsBuildHost // { python27 = python27'; };
     # strip down that python version as much as possible
+    openssl = null;
     bzip2 = null;
     readline = null;
     ncurses = null;
