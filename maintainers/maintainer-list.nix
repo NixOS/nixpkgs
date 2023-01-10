@@ -8029,6 +8029,15 @@
       fingerprint = "CC50 F82C 985D 2679 0703  AF15 19B0 82B3 DEFE 5451";
     }];
   };
+  leifhelm = {
+    email = "jakob.leifhelm@gmail.com";
+    github = "leifhelm";
+    githubId = 31693262;
+    name = "Jakob Leifhelm";
+    keys =[{
+      fingerprint = "4A82 F68D AC07 9FFD 8BF0  89C4 6817 AA02 3810 0822";
+    }];
+  };
   leixb = {
     email = "abone9999+nixpkgs@gmail.com";
     matrix = "@leix_b:matrix.org";
