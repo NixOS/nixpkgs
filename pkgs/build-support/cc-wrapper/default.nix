@@ -331,11 +331,18 @@ stdenv.mkDerivation {
     # compile, because it uses "#include_next <limits.h>" to find the
     # limits.h file in ../includes-fixed. To remedy the problem,
     # another -idirafter is necessary to add that directory again.
+    #
+    # We use --sysroot=/nix/store/does/not/exist to drop embedded default
+    # path to glibc headers gcc was built against. Without it -idirafter
+    # only appends to the list and outdated glibc headers end up being
+    # used. 'cc-cflags-before' is used to allow user's --sysroot= option
+    # to override our default.
     + optionalString (libc != null) (''
       touch "$out/nix-support/libc-cflags"
       touch "$out/nix-support/libc-ldflags"
       echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
     '' + optionalString (!(cc.langD or false)) ''
+      echo "--sysroot=/nix/store/does/not/exist" >> $out/nix-support/cc-cflags-before
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
     '' + optionalString (isGNU && (!(cc.langD or false))) ''
       for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
