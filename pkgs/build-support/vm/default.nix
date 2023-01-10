@@ -72,8 +72,8 @@ rec {
 
     for o in $(cat /proc/cmdline); do
       case $o in
-        mountDisk=1)
-          mountDisk=1
+        mountDisk=*)
+          mountDisk=''${mountDisk#mountDisk=}
           ;;
         command=*)
           set -- $(IFS==; echo $o)
@@ -103,6 +103,8 @@ rec {
 
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
+    elif [[ -e "$mountDisk" ]]; then
+      mount "$mountDisk" /fs
     else
       mount /dev/${hd} /fs
     fi
@@ -388,7 +390,7 @@ rec {
      filesystem containing a non-NixOS Linux distribution. */
 
   runInLinuxImage = drv: runInLinuxVM (lib.overrideDerivation drv (attrs: {
-    mountDisk = true;
+    mountDisk = attrs.mountDisk or true;
 
     /* Mount `image' as the root FS, but use a temporary copy-on-write
        image since we don't want to (and can't) write to `image'. */
