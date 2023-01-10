@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "precis-i18n";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byllyfish";
     repo = "precis_i18n";
-    rev = "v${version}";
-    hash = "sha256-90yNusUyz8qJi7WWYIFhHzrpvu1TqxfpT+lv2CVhSR8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DSm+KomveGs9ZzNFiT0B1gAjx2fh0BaUdKW0J+kW24U=";
   };
 
   pythonImportsCheck = [
