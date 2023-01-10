@@ -15669,6 +15669,8 @@ with pkgs;
 
   stalin = callPackage ../development/compilers/stalin { };
 
+  stanc = callPackage ../development/compilers/stanc { };
+
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
   svd2rust = callPackage ../development/tools/rust/svd2rust { };
