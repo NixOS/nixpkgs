@@ -13,7 +13,7 @@
 , testers
 , qtsvg
 , qtimageformats
-# For the tests
+  # For the tests
 , glaxnimate # Call itself, for the tests
 , xvfb-run
 }:
@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
 
-  passthru.tests.version = testers.testVersion {
+  passthru.tests.version = lib.optionalAttrs stdenv.isLinux (testers.testVersion {
     package = glaxnimate;
     command = "${xvfb-run}/bin/xvfb-run glaxnimate --version";
-  };
+  });
 
   meta = with lib; {
     homepage = "https://gitlab.com/mattbas/glaxnimate";
