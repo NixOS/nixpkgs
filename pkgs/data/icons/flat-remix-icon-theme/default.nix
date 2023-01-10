@@ -39,6 +39,6 @@ stdenvNoCC.mkDerivation rec  {
     license = with licenses; [ gpl3Only ];
     # breeze-icons and pantheon.elementary-icon-theme dependencies are restricted to linux
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mschneider ];
   };
 }
