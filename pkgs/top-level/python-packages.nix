@@ -2161,6 +2161,8 @@ self: super: with self; {
 
   dash = callPackage ../development/python-modules/dash { };
 
+  dash-bootstrap-components = callPackage ../development/python-modules/dash-bootstrap-components { };
+
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
 
   dash-html-components = callPackage ../development/python-modules/dash-html-components { };
