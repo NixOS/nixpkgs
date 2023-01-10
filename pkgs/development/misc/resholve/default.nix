@@ -33,18 +33,22 @@ let
   deps = callPackage ./deps.nix { };
 in
 rec {
+  # not exposed in all-packages
+  resholveBuildTimeOnly = removeKnownVulnerabilities resholve;
   # resholve itself
   resholve = callPackage ./resholve.nix {
     inherit (source) rSrc version;
     inherit (deps.oil) oildev;
     inherit (deps) configargparse;
     inherit resholve-utils;
+    # used only in tests
+    resholve = resholveBuildTimeOnly;
   };
   # funcs to validate and phrase invocations of resholve
   # and use those invocations to build packages
   resholve-utils = callPackage ./resholve-utils.nix {
     # we can still use resholve-utils without triggering a security warn
     # this is safe since we will only use `resholve` at build time
-    resholve = removeKnownVulnerabilities resholve;
+    resholve = resholveBuildTimeOnly;
   };
 }

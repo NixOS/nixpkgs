@@ -8,6 +8,7 @@
 , oildev
 , configargparse
 , binlore
+, resholve
 , resholve-utils
 }:
 
@@ -41,7 +42,7 @@ python27.pkgs.buildPythonApplication {
 
   passthru = {
     inherit (resholve-utils) mkDerivation phraseSolution writeScript writeScriptBin;
-    tests = callPackage ./test.nix { inherit rSrc binlore python27; };
+    tests = callPackage ./test.nix { inherit rSrc binlore python27 resholve; };
   };
 
   meta = with lib; {
