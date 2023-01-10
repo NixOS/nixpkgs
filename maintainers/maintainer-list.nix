@@ -4176,6 +4176,12 @@
     githubId = 5300871;
     name = "Leon Kowarschick";
   };
+  elnudev = {
+    email = "elnu@elnu.com";
+    github = "elnudev";
+    githubId = 9874955;
+    name = "Elnu";
+  };
   elohmeier = {
     email = "elo-nixos@nerdworks.de";
     github = "elohmeier";
