@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
     # Replace removed sys_nerr and sys_errlist with strerror
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
       sha256 = "sha256-HGJIS+vTn6456KtaETutIgTPPBm2C9OHf1anG8yaJPo=";
     })
   ];
