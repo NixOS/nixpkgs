@@ -1,6 +1,4 @@
 { lib
-, aeppl
-, aesara
 , arviz
 , buildPythonPackage
 , cachetools
@@ -8,6 +6,7 @@
 , fastprogress
 , fetchFromGitHub
 , numpy
+, pytensor
 , pythonOlder
 , pythonRelaxDepsHook
 , scipy
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "4.4.0";
+  version = "5.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +24,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZBltvvKXfqHYLeYOEYFK8kQc0wHM9+UHLRJFMSYX4Ow=";
+    hash = "sha256-uWvzWbZyRRE8L9X9+azmN+1JYahwwNSYCk2fQ/C8Yi0=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +32,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aeppl
-    aesara
     arviz
     cachetools
     cloudpickle
     fastprogress
     numpy
+    pytensor
     scipy
     typing-extensions
   ];
