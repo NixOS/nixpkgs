@@ -1431,6 +1431,8 @@ with pkgs;
 
   mnc = callPackage ../tools/misc/mnc { };
 
+  mgmt = callPackage ../applications/system/mgmt {};
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   nominatim = callPackage ../servers/nominatim { };
@@ -17844,6 +17846,8 @@ with pkgs;
   nailgun = callPackage ../development/tools/nailgun { };
 
   nap = callPackage ../development/tools/nap { };
+
+  nex = callPackage ../development/tools/parsing/nex {};
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
