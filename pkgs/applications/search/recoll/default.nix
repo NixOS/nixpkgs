@@ -19,7 +19,9 @@
 , libwpd
 , libxslt
 , lyx
+, makeWrapper
 , perl
+, perlPackages
 , pkg-config
 , poppler_utils
 , python3Packages
@@ -54,13 +56,15 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    file pkg-config python3Packages.setuptools which
+    file pkg-config python3Packages.setuptools which makeWrapper
   ];
 
   buildInputs = [
     bison chmlib python3Packages.python xapian zlib
   ] ++ lib.optional withGui qtbase
     ++ lib.optional stdenv.isDarwin libiconv;
+
+  perlPath = with perlPackages; makePerlPath [ ImageExifTool ];
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
@@ -92,6 +96,7 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
       fi
     done
+    wrapProgram $out/bin/recollindex --prefix PERL5LIB : "$perlPath"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
