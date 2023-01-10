@@ -837,6 +837,10 @@ The distribution phase is intended to produce a source distribution of the packa
 
 #### Variables controlling the distribution phase {#variables-controlling-the-distribution-phase}
 
+##### `doDist` {#var-stdenv-doDist}
+
+If set, the distribution phase is executed.
+
 ##### `distTarget` {#var-stdenv-distTarget}
 
 The make target that produces the distribution. Defaults to `dist`.
