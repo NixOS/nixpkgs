@@ -31159,7 +31159,6 @@ with pkgs;
     iwSupport = false;
     nlSupport = true;
     i3Support = true;
-    i3GapsSupport = false;
   };
 
   yambar = callPackage ../applications/misc/yambar { };
