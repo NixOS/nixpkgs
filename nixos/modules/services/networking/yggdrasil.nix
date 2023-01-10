@@ -193,7 +193,6 @@ in {
     environment.systemPackages = [ cfg.package ];
   });
   meta = {
-    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./yggdrasil.xml;
     maintainers = with lib.maintainers; [ gazally ehmry ];
   };

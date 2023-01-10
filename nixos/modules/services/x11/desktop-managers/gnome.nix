@@ -66,7 +66,6 @@ in
 {
 
   meta = {
-    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./gnome.xml;
     maintainers = teams.gnome.members;
   };

@@ -11,7 +11,6 @@ let
 in {
   meta = {
     maintainers = pkgs.blackfire.meta.maintainers;
-    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./blackfire.xml;
   };
 

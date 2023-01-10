@@ -33,7 +33,6 @@ in
   };
 
   meta = {
-    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./default.xml;
     maintainers = with lib.maintainers; [ vidbina ];
   };

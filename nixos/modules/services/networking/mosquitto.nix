@@ -671,7 +671,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./mosquitto.xml;
   };
 }

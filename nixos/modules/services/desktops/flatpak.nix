@@ -7,7 +7,6 @@ let
   cfg = config.services.flatpak;
 in {
   meta = {
-    # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
     doc = ./flatpak.xml;
     maintainers = pkgs.flatpak.meta.maintainers;
   };

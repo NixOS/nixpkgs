@@ -226,7 +226,6 @@ let
 
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
-  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./borgbackup.xml;
 
   ###### interface
