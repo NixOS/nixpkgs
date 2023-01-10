@@ -1,4 +1,7 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "auth0-cli";
@@ -7,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
-    rev = "v${version}";
+    rev = "tags/release/v${version}";
     hash = "sha256-FotjdMbQXDwkURSeye86sIFN60V//UlF7kZrwfkvTGY=";
   };
 
@@ -31,6 +34,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Supercharge your developer workflow";
     homepage = "https://auth0.github.io/auth0-cli";
+    changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
     mainProgram = "auth0";
