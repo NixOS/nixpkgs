@@ -277,6 +277,7 @@ stdenv.mkDerivation ({
     })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
+    hostEqualsTarget
     ;
 
   passthru = {

@@ -96,7 +96,7 @@ if test "$noSysDirs" = "1"; then
         declare EXTRA_FLAGS${post}="${extraFlags[*]}"
     done
 
-    if test -z "${targetConfig-}"; then
+    if test "$hostEqualsTarget" == 1; then
         # host = target, so the flags are the same
         EXTRA_FLAGS_FOR_TARGET="$EXTRA_FLAGS"
         EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
@@ -128,7 +128,7 @@ if test "$noSysDirs" = "1"; then
         "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
     )
 
-    if test -z "${targetConfig-}"; then
+    if test "$hostEqualsTarget" == 1; then
         makeFlagsArray+=(
             "BOOT_CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
             "BOOT_LDFLAGS=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
