@@ -22,6 +22,25 @@ in {
       '';
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
+
+        Secrets may be passed to the service without adding them to Nix store.
+        You can use environment variable references in the configuration by
+        adding `-config.expand-env=true` to `extraFlags` and use `\''${VAR}` in
+        the configuration.
+
+        ```
+        clients = [{
+          url = "https://\''${GRAFANA_API_KEY}@logs-prod-011.grafana.net/api/prom/push";
+        }];
+        ```
+      '';
+    };
+
     extraFlags = mkOption {
       type = listOf str;
       default = [];
@@ -45,6 +64,7 @@ in {
         Restart = "on-failure";
         TimeoutStopSec = 10;
 
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
 
         ProtectSystem = "strict";
