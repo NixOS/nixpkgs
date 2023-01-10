@@ -24,6 +24,7 @@
 , perlPackages
 , pkg-config
 , poppler_utils
+, python3
 , python3Packages
 , qtbase
 , unrtf
@@ -60,7 +61,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    bison chmlib python3Packages.python xapian zlib
+    bison chmlib (python3.withPackages (p: with p; [ mutagen pylzma icalendar rarfile pychm ])) xapian zlib
   ] ++ lib.optional withGui qtbase
     ++ lib.optional stdenv.isDarwin libiconv;
 
