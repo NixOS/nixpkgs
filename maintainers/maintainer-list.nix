@@ -8346,6 +8346,13 @@
     githubId = 4969294;
     name = "Louis Tim Larsen";
   };
+  loveisgrief = {
+    name = "LoveIsGrief";
+    email = "loveisgrief@tuta.io";
+    keys = [{
+      fingerprint = "9847 4F48 18C6 4E0A F0C5  3529 E96D 1EDF A053 45EB";
+    }];
+  };
   lovek323 = {
     email = "jason@oconal.id.au";
     github = "lovek323";
