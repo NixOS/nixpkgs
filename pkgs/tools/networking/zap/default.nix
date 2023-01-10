@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell, writeScriptBin }:
+{ lib, stdenv, fetchurl, jre, writeShellApplication }:
 
 let
   pname = "zap";
@@ -6,17 +6,19 @@ let
   version_tag = "2010000";
   # Copying config and adding version tag before first use to avoid permission
   # issues if zap tries to copy config on it's own.
-  runner = writeScriptBin "zap" ''
-    #!${runtimeShell}
-    export PATH="${lib.makeBinPath [ jre ]}:$PATH"
-    export JAVA_HOME='${jre}'
-    if ! [ -f "$HOME/.ZAP/config.xml" ];then
-      mkdir -p "$HOME/.ZAP"
-      head -n 2 deriv_folder/share/${pname}/xml/config.xml > "$HOME/.ZAP/config.xml"
-      echo "<version>${version_tag}</version>" >> "$HOME/.ZAP/config.xml"
-      tail -n +3 deriv_folder/share/${pname}/xml/config.xml >> "$HOME/.ZAP/config.xml"
-    fi
-    exec "deriv_folder/share/${pname}/zap.sh"  "$@"'';
+  runner = writeShellApplication {
+    name = pname;
+    runtimeInputs = [ jre ];
+    text = ''
+      export JAVA_HOME='${jre}'
+      if ! [ -f "$HOME/.ZAP/config.xml" ];then
+        mkdir -p "$HOME/.ZAP"
+        head -n 2 deriv_folder/share/${pname}/xml/config.xml > "$HOME/.ZAP/config.xml"
+        echo "<version>${version_tag}</version>" >> "$HOME/.ZAP/config.xml"
+        tail -n +3 deriv_folder/share/${pname}/xml/config.xml >> "$HOME/.ZAP/config.xml"
+      fi
+      exec "deriv_folder/share/${pname}/zap.sh"  "$@"'';
+  };
 in
 stdenv.mkDerivation rec {
   inherit pname;
