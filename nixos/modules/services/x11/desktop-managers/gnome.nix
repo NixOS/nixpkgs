@@ -352,13 +352,6 @@ in
         })
       ];
 
-      # Harmonize Qt application style and also make them use the portal for file chooser dialog.
-      qt = {
-        enable = mkDefault true;
-        platformTheme = mkDefault "gnome";
-        style = mkDefault "adwaita";
-      };
-
       networking.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
