@@ -9587,7 +9587,9 @@ with pkgs;
 
   mole = callPackage ../tools/networking/mole { };
 
-  morgen = callPackage ../applications/office/morgen { };
+  morgen = callPackage ../applications/office/morgen {
+    electron = electron_22;
+  };
 
   mosh = callPackage ../tools/networking/mosh { };
 
