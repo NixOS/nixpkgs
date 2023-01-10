@@ -16225,4 +16225,10 @@
     github = "ziguana";
     githubId = 45833444;
   };
+  RossComputerGuy = {
+    name = "Tristan Ross";
+    email = "tristan.ross@midstall.com";
+    github = "RossComputerGuy";
+    githubId = 19699320;
+  };
 }
