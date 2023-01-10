@@ -33,12 +33,10 @@ symlinkJoin {
       rm "$out/bin/$exe"
 
       makeWrapper "${R}/bin/$exe" "$out/bin/$exe" \
-        --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
+        --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE" \
+        --set "R_PROFILE" "${rsetup}/Rprofile.site" \
+        --set "R_ENVIRON" "${rsetup}/Renviron.site"
     done
-
-    makeWrapper "${R}/bin/R" "$out/bin/R" \
-      --set "R_PROFILE" "${rsetup}/Rprofile.site" \
-      --set "R_ENVIRON" "${rsetup}/Renviron.site"
   '';
 
   # Make the list of recommended R packages accessible to other packages such as rpy2
