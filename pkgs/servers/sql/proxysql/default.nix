@@ -68,10 +68,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # otherwise, it looks for …-1.15
-  ACLOCAL = "aclocal";
-  AUTOMAKE = "automake";
-
   GIT_VERSION = version;
 
   dontConfigure = true;
@@ -139,6 +135,18 @@ stdenv.mkDerivation rec {
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
+
+    pushd libmicrohttpd/libmicrohttpd
+    autoreconf
+    popd
+
+    pushd libconfig/libconfig
+    autoreconf
+    popd
+
+    pushd libdaemon/libdaemon
+    autoreconf
+    popd
 
     popd
     patchShebangs .
