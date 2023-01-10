@@ -23,24 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.6.1";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ztx3Y+n9Bpzuz06mbkis3kdlM/0JrOaMDbRF5glzkDE=";
+    sha256 = "sha256-JwwSeY+TsbYc2ZXoxR9aja0Hb8AmrWK79cv1ApAgcpQ=";
   };
 
   patches = [
     # Load extensions from NEMO_EXTENSION_DIR environment variable
     # https://github.com/NixOS/nixpkgs/issues/78327
     ./load-extensions-from-env.patch
-
-    # Don't populate nemo actions from /run/current-system/sw/share
-    # They should only be loaded exactly once from $out/share
-    # https://github.com/NixOS/nixpkgs/issues/190781
-    ./fix-nemo-actions-duplicate-menu-items.patch
   ];
 
   outputs = [ "out" "dev" ];

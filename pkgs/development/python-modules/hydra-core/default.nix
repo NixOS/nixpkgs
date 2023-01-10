@@ -7,6 +7,7 @@
 , importlib-resources
 , jre_headless
 , omegaconf
+, packaging
 , pytestCheckHook
 , pythonOlder
 , substituteAll
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     antlr4-python3-runtime
     omegaconf
+    packaging
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
@@ -69,6 +71,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "hydra"
+    # See https://github.com/NixOS/nixpkgs/issues/208843
+    "hydra.version"
   ];
 
   meta = with lib; {

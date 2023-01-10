@@ -3119,6 +3119,8 @@ with pkgs;
 
   glasstty-ttf = callPackage ../data/fonts/glasstty-ttf { };
 
+  glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
+
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
@@ -11034,7 +11036,7 @@ with pkgs;
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
 
-  qalculate-qt = libsForQt5.callPackage ../applications/science/math/qalculate-qt { };
+  qalculate-qt = qt6Packages.callPackage ../applications/science/math/qalculate-qt { };
 
   qastools = libsForQt5.callPackage ../tools/audio/qastools { };
 
@@ -13384,8 +13386,9 @@ with pkgs;
 
   yarn = callPackage ../development/tools/yarn  { };
 
-  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { };
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
   yarn2nix-moretea-openssl_1_1 = callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+    pkgs = pkgs.__splicedPackages;
     nodejs = nodejs.override { openssl = openssl_1_1; };
   };
 
@@ -33726,6 +33729,8 @@ with pkgs;
 
   youtube-music = callPackage ../applications/audio/youtube-music { };
 
+  youki = callPackage ../applications/virtualization/youki { };
+
   yt-dlp = with python3Packages; toPythonApplication yt-dlp;
 
   yt-dlp-light = with python3Packages; toPythonApplication yt-dlp-light;
@@ -33889,6 +33894,8 @@ with pkgs;
   };
 
   btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
+
+  btcpayserver-altcoins = callPackage ../applications/blockchains/btcpayserver { altcoinSupport = true; };
 
   charge-lnd = callPackage ../applications/blockchains/charge-lnd { };
 
@@ -34847,7 +34854,7 @@ with pkgs;
 
   otto-matic = callPackage ../games/otto-matic { };
 
-  openraPackages = import ../games/openra pkgs;
+  openraPackages = import ../games/openra pkgs.__splicedPackages;
 
   openra = openraPackages.engines.release;
 
@@ -35665,6 +35672,8 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
+  kasmweb = callPackage ../servers/web-apps/kasmweb { };
+
   kssd = callPackage ../applications/science/biology/kssd { };
 
   last = callPackage ../applications/science/biology/last { };
@@ -36141,9 +36150,7 @@ with pkgs;
 
   crypto-org-wallet = callPackage ../applications/blockchains/crypto-org-wallet { };
 
-  cubicle = callPackage ../applications/science/logic/cubicle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
-  };
+  cubicle = callPackage ../applications/science/logic/cubicle { };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (_: { dontDisableStatic = true; });
