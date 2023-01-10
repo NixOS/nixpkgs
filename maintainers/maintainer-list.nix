@@ -12730,6 +12730,15 @@
     githubId = 893474;
     name = "Stefan Wiehler";
   };
+  sephi = {
+    name = "Sylvain Fankhauser";
+    email = "sephi@fhtagn.top";
+    github = "sephii";
+    githubId = 754333;
+    keys = [{
+      fingerprint = "2A9D 8E76 5EE2 237D 7B6B  A2A5 4228 AB9E C061 2ADA";
+    }];
+  };
   sepi = {
     email = "raffael@mancini.lu";
     github = "sepi";
