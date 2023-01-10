@@ -96,6 +96,9 @@ let
         # to pass in java explicitly.
         "-DCONNECT_WITH_JDBC=OFF"
         "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+      ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10.6") [
+        # workaround for https://jira.mariadb.org/browse/MDEV-29925
+        "-Dhave_C__Wl___as_needed="
       ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
         # revisit this if nixpkgs supports any architecture whose stack grows upwards
         "-DSTACK_DIRECTION=-1"
