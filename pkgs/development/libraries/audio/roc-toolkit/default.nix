@@ -34,10 +34,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libuv
-    libunwind
-    openfec
-    libpulseaudio
-  ];
+  ] ++ lib.optional openfecSupport openfec
+    ++ lib.optional libunwindSupport libunwind
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   sconsFlags =
     [ "--build=${stdenv.buildPlatform.config}"
