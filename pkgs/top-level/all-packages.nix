@@ -1455,6 +1455,8 @@ with pkgs;
 
   sgrep = callPackage ../tools/text/sgrep { };
 
+  simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
+
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smbscan = callPackage ../tools/security/smbscan { };
