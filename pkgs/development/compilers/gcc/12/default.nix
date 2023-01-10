@@ -112,6 +112,9 @@ let majorVersion = "12";
       # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
       ++ optional (stdenv.isDarwin && langAda) ../ada-cctools-as-detection-configure.patch
 
+      # Use absolute path in GNAT dylib install names on Darwin
+      ++ optional (stdenv.isDarwin && langAda) ../gnat-darwin-dylib-install-name.patch
+
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
