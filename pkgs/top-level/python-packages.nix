@@ -8817,6 +8817,8 @@ self: super: with self; {
 
   pytenable = callPackage ../development/python-modules/pytenable { };
 
+  pytensor = callPackage ../development/python-modules/pytensor { };
+
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
