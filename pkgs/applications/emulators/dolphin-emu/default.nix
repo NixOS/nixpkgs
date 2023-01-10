@@ -24,7 +24,7 @@
 , wxGTK30
 , soundtouch
 , miniupnpc
-, mbedtls
+, mbedtls_2
 , curl
 , lzo
 , sfml
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     wxGTK30
     soundtouch
     miniupnpc
-    mbedtls
+    mbedtls_2
     curl
     lzo
     sfml

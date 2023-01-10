@@ -42,7 +42,6 @@ stdenvNoCC.mkDerivation {
   passthru = {
     scriptName = "sponsorblock.lua";
     updateScript = nix-update-script {
-      attrPath = "mpvScripts.sponsorblock";
       extraArgs = [ "--version=branch" ];
     };
   };

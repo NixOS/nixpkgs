@@ -27,6 +27,11 @@ buildGoModule rec {
     sha256 = "sha256-UOAQtGDoZe+Av4+9RQCJiV3//B/pdF0pEsca4FonGxY=";
   };
 
+  patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ];
+
   vendorSha256 = null;
 
   doCheck = false;
@@ -63,7 +68,6 @@ buildGoModule rec {
     ${if stdenv.isDarwin then ''
       mv bin/{darwin/podman,podman}
     '' else ''
-      install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
       install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
       for s in contrib/systemd/**/*.in; do
         substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
@@ -87,7 +91,6 @@ buildGoModule rec {
     # related modules
     inherit (nixosTests)
       podman-tls-ghostunnel
-      podman-dnsname
       ;
     oci-containers-podman = nixosTests.oci-containers.podman;
   };

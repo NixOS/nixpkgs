@@ -83,6 +83,8 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
   passthru.updateScript = ./update.sh;
 }

@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 }:
 
@@ -16,6 +17,11 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./test-call-bin-directly.patch
+    (fetchpatch {
+      name = "bitstring-4-compatibility.patch";
+      url = "https://github.com/espressif/esptool/commit/ee27a6437576797d5f58c31e1c39f3a232a71df0.patch";
+      hash = "sha256-8/AzR3HK79eQQRSaGEKU4YKn/piPCPjm/G9pvizKuUE=";
+    })
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.1.5";
+  version = "8.1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    hash = "sha256-jt2ZZV63s7LL0R9ay/tvMH3cIDElYXiNPBuHlxj/Z8E=";
+    hash = "sha256-2Q/NcsGupYV80byrKmuoxA0d6/z7Z+fmGB6bfzDRvqQ=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Table of contents generator for Markdown";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
+    changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

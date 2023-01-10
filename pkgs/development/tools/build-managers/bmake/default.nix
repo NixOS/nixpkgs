@@ -3,18 +3,18 @@
 , fetchurl
 , fetchpatch
 , getopt
-, tzdata
 , ksh
+, tzdata
 , pkgsMusl # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20220726";
+  version = "20220928";
 
   src = fetchurl {
     url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-G/N3B4lyJyHcp7C/+K/EqVINog8CGbt7xSNQrwEz8KA=";
+    hash = "sha256-yAS3feP+uOMd7ipMn7Hp7CTFo0dk56KBXIi07QFlDpA=";
   };
 
   # Make tests work with musl
@@ -41,13 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "separate-tests.patch";
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
-      sha256 = "00s76jwyr83c6rkvq67b1lxs8jhm0gj2rjgy77xazqr5400slj9a";
+      hash = "sha256-KkmqASAl46/6Of7JLOQDFUqkOw3rGLxnNmyg7Lk0RwM=";
     })
     # add a shebang to bmake's install(1) replacement
     (fetchpatch {
       name = "install-sh.patch";
       url = "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
-      sha256 = "0z8icd6akb96r4cksqnhynkn591vbxlmrrs4w6wil3r6ggk6mwa6";
+      hash = "sha256-RvFq5nsmDxq54UTnXGlfO6Rip/XQYj0ZySatqUxjEX0=";
     })
   ];
 

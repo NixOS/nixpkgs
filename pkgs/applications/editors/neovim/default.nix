@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, fetchpatch
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
@@ -12,27 +13,35 @@
 , nodejs ? null, fish ? null, python3 ? null
 }:
 
-with lib;
-
 let
   neovimLuaEnv = lua.withPackages(ps:
     (with ps; [ lpeg luabitop mpack ]
-    ++ optionals doCheck [
+    ++ lib.optionals doCheck [
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
+  codegenLua =
+    if lua.pkgs.isLuaJIT
+      then
+        let deterministicLuajit =
+          lua.override {
+            deterministicStringIds = true;
+            self = deterministicLuajit;
+          };
+        in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
+      else lua;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.8.1";
+    version = "0.8.2";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-B2ZpwhdmdvPOnxVyJDfNzUT5rTVuBhJXyMwwzCl9Fac=";
+      sha256 = "sha256-eqiH/K8w0FZNHLBBMjiTSQjNQyONqcx3X+d85gPnFJg=";
     };
 
     patches = [
@@ -40,6 +49,13 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+      # make the build reproducible, rebased version of
+      # https://github.com/neovim/neovim/pull/21586
+      (fetchpatch {
+        name = "neovim-build-make-generated-source-files-reproducible.patch";
+        url = "https://github.com/raboof/neovim/commit/485dd2af3efbfd174163583c46e0bb2a01ff04f1.patch";
+        hash = "sha256-9aRVK4lDkL/W4RVjeKptrZFY7rYYBx6/RGR4bQSbCsM=";
+      })
     ];
 
     dontFixCmake = true;
@@ -61,8 +77,8 @@ in
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ optionals doCheck [ glibcLocales procps ]
+    ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
+      ++ lib.optionals doCheck [ glibcLocales procps ]
     ;
 
     inherit doCheck;
@@ -86,13 +102,12 @@ in
       pyEnv      # for src/clint.py
     ];
 
-
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
     '';
     # check that the above patching actually works
-    disallowedReferences = [ stdenv.cc ];
+    disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
@@ -101,10 +116,15 @@ in
       # third-party/CMakeLists.txt is not read at all.
       "-DUSE_BUNDLED=OFF"
     ]
-    ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
+    ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
 
-    preConfigure = lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString lua.pkgs.isLuaJIT ''
+      cmakeFlagsArray+=(
+        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
+        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+      )
+    '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
@@ -112,7 +132,7 @@ in
       export VIMRUNTIME=$PWD/runtime
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";
       longDescription = ''
         Neovim is a project that seeks to aggressively refactor Vim in order to:

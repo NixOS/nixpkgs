@@ -52,17 +52,22 @@ let
 
   runConfigPath = "/run/rslsync/config.json";
 
-  createConfig = pkgs.writeShellScriptBin "create-resilio-config" ''
-    ${pkgs.jq}/bin/jq \
-      '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
-      ${
-        lib.concatMapStringsSep " \\\n  "
-        (entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"'')
-        sharedFoldersSecretFiles
-      } \
-      <${configFile} \
-      >${runConfigPath}
-  '';
+  createConfig = pkgs.writeShellScriptBin "create-resilio-config" (
+    if cfg.sharedFolders != [ ] then ''
+      ${pkgs.jq}/bin/jq \
+        '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
+        ${
+          lib.concatMapStringsSep " \\\n  "
+          (entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"'')
+          sharedFoldersSecretFiles
+        } \
+        <${configFile} \
+        >${runConfigPath}
+    '' else ''
+      # no secrets, passing through config
+      cp ${configFile} ${runConfigPath};
+    ''
+  );
 
 in
 {

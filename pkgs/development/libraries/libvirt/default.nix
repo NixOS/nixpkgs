@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.9.0";
+  version = "8.10.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-79frEYItbf1weOkrcyI/Z/TjTg6kLMQbteaTi9LAt0g=";
+    sha256 = "sha256-MboJLQ0R3l9lUQDjNVACvmxISjypvfxxMHSKF0+k6WM=";
     fetchSubmodules = true;
   };
 
@@ -341,6 +341,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
       --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+      --replace 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
       --replace "$out/bin"              '${gettext}/bin' \
       --replace 'lock/subsys'           'lock' \
       --replace 'gettext.sh'            'gettext.sh
@@ -372,8 +373,9 @@ stdenv.mkDerivation rec {
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = {
-    homepage = "https://libvirt.org/";
     description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
+    homepage = "https://libvirt.org/";
+    changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin lovesegfault ];

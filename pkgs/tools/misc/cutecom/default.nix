@@ -1,6 +1,6 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtserialport, cmake }:
+{ stdenv, lib, fetchFromGitLab, qtserialport, cmake, wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cutecom";
   version = "0.51.0+patch";
 
@@ -11,10 +11,17 @@ mkDerivation rec {
     sha256 = "X8jeESt+x5PxK3rTNC1h1Tpvue2WH09QRnG2g1eMoEE=";
   };
 
-  buildInputs = [ qtbase qtserialport ];
-  nativeBuildInputs = [ cmake ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "/Applications" "$out/Applications"
+  '';
 
-  postInstall = ''
+  buildInputs = [ qtserialport ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+
+  postInstall = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+  '' else ''
     cd ..
     mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps,man/man1}
     cp cutecom.desktop "$out/share/applications"
@@ -25,8 +32,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "A graphical serial terminal";
     homepage = "https://gitlab.com/cutecom/cutecom/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bennofs ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

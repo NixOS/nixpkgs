@@ -10,6 +10,7 @@
 , protobuf
 , rustPlatform
 , Security
+, CoreFoundation
 , stdenv
 , testers
 , unzip
@@ -17,7 +18,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.2.1";
+  version = "3.3.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -27,10 +28,10 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    sha256 = "sha256-Aqc3kk1rquhLKNZDlEun4bQpKI4Nsk7+Wr7E2IkJQEs=";
+    hash = "sha256-py64CWY3k5Z2mm9WduJ4Fh7lQ8b3sF6iIFsYYjndU5I=";
   };
 
-  cargoSha256 = "sha256-wGEk7OfEmyeRW65kq5stvKCdnCjfssyXUmNWGkGq42M=";
+  cargoHash = "sha256-0gWTniLkhuPpgdUkE6gpF9uHYT6BeWWgH6Mu7KpFx9w=";
 
   buildFeatures = [ "modern" "gnosis" ];
 
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    CoreFoundation
   ];
 
   depositContractSpec = fetchurl {

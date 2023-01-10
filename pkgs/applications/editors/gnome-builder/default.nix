@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.2";
+  version = "43.4";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "dzIhF6ERsnR7zOitYFeKZ5wgIeSGkRz29OY0FjKKuzM=";
+    sha256 = "Hg1tZ4RcGb7J463VlpX5pTHXKg5UKyA6zJD7OBInwrw=";
   };
 
   patches = [
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    GTK_A11Y=none \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs

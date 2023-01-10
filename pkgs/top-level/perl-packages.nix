@@ -1207,15 +1207,15 @@ let
       url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/Authen-Krb5-Admin-0.17.tar.gz";
       hash = "sha256-XdScrNmD79YajD8aVlcbtzeF6xVZCLXXvsl+7XjfDFQ=";
     };
-    propagatedBuildInputs = [ pkgs.krb5Full.dev AuthenKrb5 ];
+    propagatedBuildInputs = [ pkgs.krb5.dev AuthenKrb5 ];
     # The following ENV variables are required by Makefile.PL to find
-    # programs in krb5Full.dev. It is not enough to just specify the
-    # path to krb5-config as this tool returns the prefix of krb5Full,
+    # programs in krb5.dev. It is not enough to just specify the
+    # path to krb5-config as this tool returns the prefix of krb5,
     # which implies a working value for KRB5_LIBDIR, but not the others.
     perlPreHook = ''
-      export KRB5_CONFTOOL=${pkgs.krb5Full.dev}/bin/krb5-config
-      export KRB5_BINDIR=${pkgs.krb5Full.dev}/bin
-      export KRB5_INCDIR=${pkgs.krb5Full.dev}/include
+      export KRB5_CONFTOOL=${pkgs.krb5.dev}/bin/krb5-config
+      export KRB5_BINDIR=${pkgs.krb5.dev}/bin
+      export KRB5_INCDIR=${pkgs.krb5.dev}/include
     '';
     # Tests require working Kerberos infrastructure so replace with a
     # simple attempt to exercise the module.
@@ -10529,8 +10529,8 @@ let
       url = "mirror://cpan/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz";
       hash = "sha256-fY8se2F2L7TsctLsKBKQ8vh/nH0pgnPaRSVDKmXncNY=";
     };
-    propagatedBuildInputs = [ pkgs.krb5Full.dev ];
-    makeMakerFlags = [ "--gssapiimpl" "${pkgs.krb5Full.dev}" ];
+    propagatedBuildInputs = [ pkgs.krb5.dev ];
+    makeMakerFlags = [ "--gssapiimpl" "${pkgs.krb5.dev}" ];
     meta = {
       description = "Perl extension providing access to the GSSAPIv2 library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -12242,7 +12242,7 @@ let
     };
   };
 
-  IOSocketInet6 = buildPerlModule {
+  IOSocketINET6 = buildPerlModule {
     pname = "IO-Socket-INET6";
     version = "2.72";
     src = fetchurl {
@@ -12507,11 +12507,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.51";
+    version = "12.52";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-76meNQp9c0Z+81gNSMnDTtJmd/qOGu4uqeHsGhTnDkQ=";
+      hash = "sha256-yH8RlkTRAanHYNyq5Vi52W8mGKIJwmGZsWhzyokz+ao=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -22638,12 +22638,12 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "8.9.0";
+    version = "8.10.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-s3N4KU0JnIXHKOme+2Vxapd6o8QeT6lUAb+r5i9Ogv0=";
+      hash = "sha256-rVTofRtnYDF5CmWp3SB2+kJZz4u6+OTzNAUwiDrqdTo=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -27816,7 +27816,7 @@ let
       hash = "sha256-RdIExtrXzZAXYIS/JCe6qM5QNoSlaZ6+sjbk0zvAuoY=";
     };
     buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
-    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
 
     preCheck = ''
       # disable dnssec test as it fails
@@ -27927,6 +27927,7 @@ let
   DistZillaPluginNoTabsTests = self.DistZillaPluginTestNoTabs;
   EmailMIMEModifier = self.EmailMIME;
   ExtUtilsCommand = self.ExtUtilsMakeMaker;
+  IOSocketInet6 = self.IOSocketINET6;
   IOstringy = self.IOStringy;
   libintl_perl = self.libintl-perl;
   libintlperl = self.libintl-perl;

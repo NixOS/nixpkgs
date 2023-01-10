@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva
+, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva, libGL
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
@@ -8,6 +8,7 @@
 , libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
+, wayland, pipewire
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
@@ -20,11 +21,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.4.2753.47";
+  version = "5.6.2867.36";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_amd64.deb";
-    sha256 = "1p155mcrmfz395yajxa6fqjk1paac216kim26i3r56wah5329gmr";
+    sha256 = "sha256-dTXppRn/bl+HYVzqyrKBXb2YAaw0lRJkwAeukalv3a4=d";
   };
 
   unpackPhase = ''
@@ -38,9 +39,10 @@ in stdenv.mkDerivation rec {
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
-    freetype fontconfig libXrender libuuid expat glib nss nspr
+    freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
     libdrm mesa
+    wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio;
 
@@ -89,6 +91,7 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''

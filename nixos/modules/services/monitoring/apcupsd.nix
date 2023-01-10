@@ -62,6 +62,21 @@ let
 
   );
 
+  # Ensure the CLI uses our generated configFile
+  wrappedBinaries = pkgs.runCommandLocal "apcupsd-wrapped-binaries"
+    { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+    ''
+      for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
+          bname=$(basename "$p")
+          makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
+      done
+    '';
+
+  apcupsdWrapped = pkgs.symlinkJoin {
+    name = "apcupsd-wrapped";
+    # Put wrappers first so they "win"
+    paths = [ wrappedBinaries pkgs.apcupsd ];
+  };
 in
 
 {
@@ -138,7 +153,7 @@ in
     } ];
 
     # Give users access to the "apcaccess" tool
-    environment.systemPackages = [ pkgs.apcupsd ];
+    environment.systemPackages = [ apcupsdWrapped ];
 
     # NOTE 1: apcupsd runs as root because it needs permission to run
     # "shutdown"

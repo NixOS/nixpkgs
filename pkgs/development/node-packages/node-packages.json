@@ -11,6 +11,7 @@
 , "@forge/cli"
 , "@google/clasp"
 , "@medable/mdctl-cli"
+, "@microsoft/rush"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"

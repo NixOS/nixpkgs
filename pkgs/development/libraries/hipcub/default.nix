@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -18,7 +18,7 @@
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "hipCUB";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-/GMZKbMD1sZQCM2FulM9jiJQ8ByYZinn0C8d/deFh0g=";
+    hash = "sha256-ctt7jbVqHNHcOm/Lhg0IFbMZ6JChnMylG7fJgZtzFuM=";
   };
 
   nativeBuildInputs = [
@@ -76,13 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/hipCUB/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version hipcub "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Thin wrapper library on top of rocPRIM or CUB";

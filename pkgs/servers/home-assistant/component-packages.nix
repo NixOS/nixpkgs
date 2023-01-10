@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.11.5";
+  version = "2023.1.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -50,6 +50,9 @@
     "airnow" = ps: with ps; [
       pyairnow
     ];
+    "airq" = ps: with ps; [
+      aioairq
+    ];
     "airthings" = ps: with ps; [
       airthings-cloud
     ];
@@ -60,9 +63,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -72,6 +77,9 @@
       airtouch4pyapi
     ];
     "airvisual" = ps: with ps; [
+      pyairvisual
+    ];
+    "airvisual_pro" = ps: with ps; [
       pyairvisual
     ];
     "airzone" = ps: with ps; [
@@ -151,12 +159,16 @@
     ];
     "apple_tv" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
       pyatv
+      sqlalchemy
       zeroconf
     ];
     "application_credentials" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      sqlalchemy
     ];
     "apprise" = ps: with ps; [
       apprise
@@ -170,6 +182,23 @@
     ];
     "aquostv" = ps: with ps; [
     ]; # missing inputs: sharp_aquos_rc
+    "aranet" = ps: with ps; [
+      aiohttp-cors
+      aranet4
+      bleak-retry-connector
+      bleak
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      fnvhash
+      home-assistant-frontend
+      janus
+      pillow
+      pyserial
+      pyudev
+      sqlalchemy
+    ];
     "arcam_fmj" = ps: with ps; [
       arcam-fmj
     ];
@@ -183,6 +212,7 @@
     ];
     "arwn" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "aseko_pool_live" = ps: with ps; [
@@ -207,20 +237,8 @@
       pyatome
     ];
     "august" = ps: with ps; [
-      aiohttp-cors
-      bleak-retry-connector
-      bleak
-      bluetooth-adapters
-      bluetooth-auto-recovery
-      dbus-fast
-      fnvhash
-      home-assistant-frontend
-      pillow
-      pyserial
-      pyudev
-      sqlalchemy
-      yalexs-ble
       yalexs
+      yalexs-ble
     ];
     "august_ble" = ps: with ps; [
     ];
@@ -254,6 +272,7 @@
     "axis" = ps: with ps; [
       aiohttp-cors
       axis
+      janus
       paho-mqtt
     ];
     "azure_devops" = ps: with ps; [
@@ -267,7 +286,9 @@
     ];
     "backup" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       securetar
+      sqlalchemy
     ];
     "baf" = ps: with ps; [
     ]; # missing inputs: aiobafi6
@@ -317,9 +338,11 @@
       bluemaestro-ble
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -336,9 +359,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -350,9 +375,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -371,8 +398,12 @@
     "bosch_shc" = ps: with ps; [
       aiohttp-cors
       boschshcpy
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
+    ];
+    "brandt" = ps: with ps; [
     ];
     "braviatv" = ps: with ps; [
       pybravia
@@ -401,17 +432,20 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-    ]; # missing inputs: btsmarthub_devicelist
+      btsmarthub_devicelist
+    ];
     "bthome" = ps: with ps; [
       aiohttp-cors
       bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       bthome-ble
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -443,6 +477,7 @@
     "cast" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
+      fnvhash
       hass-nabucasa
       ifaddr
       mutagen
@@ -450,6 +485,7 @@
       plexauth
       plexwebsocket
       PyChromecast
+      sqlalchemy
       zeroconf
     ];
     "cert_expiry" = ps: with ps; [
@@ -544,8 +580,10 @@
       crownstone-cloud
       crownstone-sse
       crownstone-uart
+      fnvhash
       pyserial
       pyudev
+      sqlalchemy
     ];
     "cups" = ps: with ps; [
       pycups
@@ -589,11 +627,13 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       hass-nabucasa
       home-assistant-frontend
       ifaddr
+      janus
       pillow
       psutil-home-assistant
       pyserial
@@ -620,9 +660,6 @@
     ];
     "derivative" = ps: with ps; [
     ];
-    "deutsche_bahn" = ps: with ps; [
-      schiene
-    ];
     "device_automation" = ps: with ps; [
     ];
     "device_sun_light_trigger" = ps: with ps; [
@@ -634,7 +671,9 @@
     "devolo_home_control" = ps: with ps; [
       aiohttp-cors
       devolo-home-control-api
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "devolo_home_network" = ps: with ps; [
@@ -671,8 +710,10 @@
     ];
     "discovery" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
       netdisco
+      sqlalchemy
       zeroconf
     ];
     "dlib_face_detect" = ps: with ps; [
@@ -686,13 +727,18 @@
     "dlna_dmr" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
+      getmac
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "dlna_dms" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "dnsip" = ps: with ps; [
@@ -720,6 +766,7 @@
     ];
     "dsmr_reader" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "dte_energy_bridge" = ps: with ps; [
@@ -788,7 +835,9 @@
     "elkm1" = ps: with ps; [
       aiohttp-cors
       elkm1-lib
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "elmax" = ps: with ps; [
       elmax-api
@@ -808,7 +857,9 @@
     ];
     "emulated_hue" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "emulated_kasa" = ps: with ps; [
       sense-energy
@@ -816,7 +867,9 @@
     "emulated_roku" = ps: with ps; [
       aiohttp-cors
       emulated-roku
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "energy" = ps: with ps; [
       aiohttp-cors
@@ -855,10 +908,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       construct
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -874,10 +929,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
       ifaddr
+      janus
       pillow
       pyserial
       pyudev
@@ -940,6 +997,7 @@
     ];
     "file_upload" = ps: with ps; [
       aiohttp-cors
+      janus
     ];
     "filesize" = ps: with ps; [
     ];
@@ -972,10 +1030,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fjaraskupan
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -1011,7 +1071,9 @@
     "flux_led" = ps: with ps; [
       aiohttp-cors
       flux-led
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "folder" = ps: with ps; [
     ];
@@ -1026,7 +1088,9 @@
     ];
     "forked_daapd" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       spotipy
+      sqlalchemy
     ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [
       fortiosapi
@@ -1049,8 +1113,10 @@
     ];
     "fritz" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       fritzconnection
       ifaddr
+      sqlalchemy
       xmltodict
     ];
     "fritzbox" = ps: with ps; [
@@ -1066,6 +1132,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -1081,7 +1148,7 @@
     "garadget" = ps: with ps; [
     ];
     "garages_amsterdam" = ps: with ps; [
-      garages-amsterdam
+      odp-amsterdam
     ];
     "gaviota" = ps: with ps; [
     ];
@@ -1114,7 +1181,9 @@
     ];
     "geocaching" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       geocachingapi
+      sqlalchemy
     ];
     "geofency" = ps: with ps; [
       aiohttp-cors
@@ -1152,13 +1221,20 @@
     ];
     "google" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       gcal-sync
       oauth2client
+      sqlalchemy
     ];
     "google_assistant" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
     ];
+    "google_assistant_sdk" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      sqlalchemy
+    ]; # missing inputs: gassist-text
     "google_cloud" = ps: with ps; [
       google-cloud-texttospeech
     ];
@@ -1172,7 +1248,9 @@
     ];
     "google_sheets" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       gspread
+      sqlalchemy
     ];
     "google_translate" = ps: with ps; [
       gtts
@@ -1188,10 +1266,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       govee-ble
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -1207,8 +1287,10 @@
     ];
     "gree" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       greeclimate
       ifaddr
+      sqlalchemy
     ];
     "greeneye_monitor" = ps: with ps; [
       greeneye-monitor
@@ -1231,13 +1313,11 @@
     "habitica" = ps: with ps; [
       habitipy
     ];
-    "hangouts" = ps: with ps; [
-      hangups
-    ];
     "hardkernel" = ps: with ps; [
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -1255,6 +1335,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -1275,7 +1356,10 @@
       pyheos
     ];
     "here_travel_time" = ps: with ps; [
-      herepy
+      here-routing
+      here-transit
+    ];
+    "hexaom" = ps: with ps; [
     ];
     "hi_kumo" = ps: with ps; [
     ];
@@ -1306,7 +1390,9 @@
     ];
     "home_connect" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       homeconnect
+      sqlalchemy
     ];
     "home_plus_control" = ps: with ps; [
       aiohttp-cors
@@ -1316,29 +1402,78 @@
     ];
     "homeassistant_alerts" = ps: with ps; [
     ];
-    "homeassistant_sky_connect" = ps: with ps; [
+    "homeassistant_hardware" = ps: with ps; [
       aiohttp-cors
-      psutil-home-assistant
+      bellows
+      fnvhash
+      home-assistant-frontend
+      ifaddr
+      janus
+      pillow
+      pyserial-asyncio
       pyserial
       pyudev
+      sqlalchemy
+      zeroconf
+      zha-quirks
+      zigpy-deconz
+      zigpy-xbee
+      zigpy-zigate
+      zigpy-znp
+      zigpy
+    ];
+    "homeassistant_sky_connect" = ps: with ps; [
+      aiohttp-cors
+      bellows
+      fnvhash
+      home-assistant-frontend
+      ifaddr
+      janus
+      pillow
+      psutil-home-assistant
+      pyserial-asyncio
+      pyserial
+      pyudev
+      sqlalchemy
+      zeroconf
+      zha-quirks
+      zigpy-deconz
+      zigpy-xbee
+      zigpy-zigate
+      zigpy-znp
+      zigpy
     ];
     "homeassistant_yellow" = ps: with ps; [
       aiohttp-cors
+      bellows
       fnvhash
       home-assistant-frontend
+      ifaddr
+      janus
       pillow
       psutil-home-assistant
+      pyserial-asyncio
+      pyserial
+      pyudev
       sqlalchemy
+      zeroconf
+      zha-quirks
+      zigpy-deconz
+      zigpy-xbee
+      zigpy-zigate
+      zigpy-znp
+      zigpy
     ];
     "homekit" = ps: with ps; [
+      hap-python
       pyqrcode
       pyturbojpeg
       aiohttp-cors
       base36
       fnvhash
-      hap-python
       ha-ffmpeg
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "homekit_controller" = ps: with ps; [
@@ -1348,10 +1483,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
       ifaddr
+      janus
       pillow
       pyserial
       pyudev
@@ -1427,10 +1564,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
       ibeacon-ble
+      janus
       pillow
       pyserial
       pyudev
@@ -1453,13 +1592,13 @@
     "ihc" = ps: with ps; [
       defusedxml
     ]; # missing inputs: ihcsdk
-    "image" = ps: with ps; [
-      aiohttp-cors
-      pillow
-    ];
     "image_processing" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
+    ];
+    "image_upload" = ps: with ps; [
+      aiohttp-cors
+      pillow
     ];
     "imap" = ps: with ps; [
       aioimaplib
@@ -1479,10 +1618,12 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
       inkbird-ble
+      janus
       pillow
       pyserial
       pyudev
@@ -1507,6 +1648,7 @@
       fnvhash
       home-assistant-frontend
       insteon-frontend-home-assistant
+      janus
       pillow
       pyinsteon
       pyserial
@@ -1528,7 +1670,9 @@
     ];
     "ios" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "iotawatt" = ps: with ps; [
@@ -1582,7 +1726,8 @@
     "kaiterra" = ps: with ps; [
     ]; # missing inputs: kaiterra-async-client
     "kaleidescape" = ps: with ps; [
-    ]; # missing inputs: pykaleidescape
+      pykaleidescape
+    ];
     "kankun" = ps: with ps; [
     ];
     "keba" = ps: with ps; [
@@ -1600,9 +1745,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       kegtron-ble
       pillow
       pyserial
@@ -1622,9 +1769,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -1634,7 +1783,8 @@
       pykira
     ];
     "kiwi" = ps: with ps; [
-    ]; # missing inputs: kiwiki-client
+      kiwiki-client
+    ];
     "kmtronic" = ps: with ps; [
       pykmtronic
     ];
@@ -1669,8 +1819,15 @@
     "lametric" = ps: with ps; [
       aiohttp-cors
       demetriek
+      fnvhash
+      sqlalchemy
     ];
     "landisgyr_heat_meter" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      pyserial
+      pyudev
+      sqlalchemy
       ultraheat-api
     ];
     "lannouncer" = ps: with ps; [
@@ -1693,9 +1850,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       led-ble
       pillow
       pyserial
@@ -1721,7 +1880,9 @@
       aiolifx
       aiolifx-effects
       aiolifx-themes
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "lifx_cloud" = ps: with ps; [
     ];
@@ -1748,13 +1909,21 @@
     "litterrobot" = ps: with ps; [
       pylitterbot
     ];
+    "livisi" = ps: with ps; [
+      aiolivisi
+    ];
     "llamalab_automate" = ps: with ps; [
+    ];
+    "local_calendar" = ps: with ps; [
+      ical
     ];
     "local_file" = ps: with ps; [
     ];
     "local_ip" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "locative" = ps: with ps; [
       aiohttp-cors
@@ -1765,6 +1934,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -1808,6 +1978,8 @@
     "lyric" = ps: with ps; [
       aiohttp-cors
       aiolyric
+      fnvhash
+      sqlalchemy
     ];
     "magicseaweed" = ps: with ps; [
     ]; # missing inputs: magicseaweed
@@ -1822,12 +1994,14 @@
     ];
     "manual_mqtt" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "map" = ps: with ps; [
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -1843,6 +2017,11 @@
     "matrix" = ps: with ps; [
       matrix-client
     ];
+    "matter" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      sqlalchemy
+    ]; # missing inputs: python-matter-server
     "maxcube" = ps: with ps; [
       maxcube-api
     ];
@@ -1876,9 +2055,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -1953,9 +2134,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       moat-ble
       pillow
       pyserial
@@ -1966,8 +2149,10 @@
       pynacl
       pyturbojpeg
       aiohttp-cors
+      fnvhash
       hass-nabucasa
       pillow
+      sqlalchemy
     ];
     "mochad" = ps: with ps; [
     ]; # missing inputs: pymochad
@@ -1976,9 +2161,11 @@
     ];
     "modem_callerid" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       phone-modem
       pyserial
       pyudev
+      sqlalchemy
     ];
     "modern_forms" = ps: with ps; [
       aiomodernforms
@@ -1993,8 +2180,10 @@
     ];
     "motion_blinds" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
       motionblinds
+      sqlalchemy
     ];
     "motioneye" = ps: with ps; [
       aiohttp-cors
@@ -2005,22 +2194,27 @@
     ];
     "mqtt" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "mqtt_eventstream" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "mqtt_json" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "mqtt_room" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "mqtt_statestream" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "msteams" = ps: with ps; [
@@ -2039,6 +2233,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -2049,6 +2244,7 @@
     ];
     "mysensors" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
       pymysensors
     ];
@@ -2073,7 +2269,9 @@
     ];
     "neato" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       pybotvac
+      sqlalchemy
     ];
     "nederlandse_spoorwegen" = ps: with ps; [
       nsapi
@@ -2083,15 +2281,19 @@
     ];
     "nest" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       google-nest-sdm
       ha-ffmpeg
       python-nest
+      sqlalchemy
     ];
     "netatmo" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
+      fnvhash
       hass-nabucasa
       pyatmo
+      sqlalchemy
     ];
     "netdata" = ps: with ps; [
       netdata
@@ -2107,7 +2309,9 @@
     ]; # missing inputs: pynetio
     "network" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "neurio_energy" = ps: with ps; [
     ]; # missing inputs: neurio
@@ -2129,7 +2333,6 @@
     ]; # missing inputs: notifications-android-tv
     "nibe_heatpump" = ps: with ps; [
       nibe
-      tenacity
     ];
     "nightscout" = ps: with ps; [
       py-nightscout
@@ -2148,10 +2351,12 @@
     ];
     "nmap_tracker" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       getmac
       ifaddr
       mac-vendor-lookup
       netmap
+      sqlalchemy
     ];
     "nmbs" = ps: with ps; [
     ]; # missing inputs: pyrail
@@ -2225,6 +2430,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -2299,9 +2505,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       oralb-ble
       pillow
       pyserial
@@ -2329,6 +2537,7 @@
       pyturbojpeg
       aiohttp-cors
       hass-nabucasa
+      janus
       paho-mqtt
     ];
     "p1_monitor" = ps: with ps; [
@@ -2347,6 +2556,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -2354,6 +2564,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -2462,6 +2673,9 @@
     "pure_energie" = ps: with ps; [
       gridnet
     ];
+    "purpleair" = ps: with ps; [
+      aiopurpleair
+    ];
     "push" = ps: with ps; [
       aiohttp-cors
     ];
@@ -2492,9 +2706,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -2556,6 +2772,7 @@
       aiohttp-cors
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -2592,6 +2809,9 @@
     ]; # missing inputs: pigpio
     "renault" = ps: with ps; [
       renault-api
+    ];
+    "reolink" = ps: with ps; [
+      reolink-aio
     ];
     "repairs" = ps: with ps; [
       aiohttp-cors
@@ -2674,6 +2894,23 @@
     ]; # missing inputs: russound_rio
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
+    "ruuvitag_ble" = ps: with ps; [
+      aiohttp-cors
+      bleak-retry-connector
+      bleak
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      fnvhash
+      home-assistant-frontend
+      janus
+      pillow
+      pyserial
+      pyudev
+      ruuvitag-ble
+      sqlalchemy
+    ];
     "sabnzbd" = ps: with ps; [
       pysabnzbd
     ];
@@ -2683,6 +2920,7 @@
       fnvhash
       hass-nabucasa
       home-assistant-frontend
+      janus
       pillow
       sqlalchemy
     ];
@@ -2692,10 +2930,12 @@
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
       getmac
       ifaddr
       samsungctl
       samsungtvws
+      sqlalchemy
       wakeonlan
       zeroconf
     ]
@@ -2727,6 +2967,8 @@
     ]; # missing inputs: scsgate
     "search" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      sqlalchemy
     ];
     "season" = ps: with ps; [
       ephem
@@ -2745,6 +2987,22 @@
     "sensibo" = ps: with ps; [
       pysensibo
     ];
+    "sensirion_ble" = ps: with ps; [
+      aiohttp-cors
+      bleak-retry-connector
+      bleak
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      fnvhash
+      home-assistant-frontend
+      janus
+      pillow
+      pyserial
+      pyudev
+      sqlalchemy
+    ]; # missing inputs: sensirion-ble
     "sensor" = ps: with ps; [
       fnvhash
       sqlalchemy
@@ -2757,9 +3015,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -2772,9 +3032,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -2787,6 +3049,8 @@
     "senz" = ps: with ps; [
       aiohttp-cors
       aiosenz
+      fnvhash
+      sqlalchemy
     ];
     "serial" = ps: with ps; [
       pyserial-asyncio
@@ -2810,6 +3074,19 @@
     "shelly" = ps: with ps; [
       aiohttp-cors
       aioshelly
+      bleak-retry-connector
+      bleak
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      fnvhash
+      home-assistant-frontend
+      janus
+      pillow
+      pyserial
+      pyudev
+      sqlalchemy
     ];
     "shiftr" = ps: with ps; [
       paho-mqtt
@@ -2838,6 +3115,8 @@
       simplisafe-python
     ];
     "simply_automated" = ps: with ps; [
+    ];
+    "simu" = ps: with ps; [
     ];
     "simulated" = ps: with ps; [
     ];
@@ -2911,6 +3190,7 @@
     ];
     "snips" = ps: with ps; [
       aiohttp-cors
+      janus
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
@@ -2922,9 +3202,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pysnooz
@@ -2960,12 +3242,14 @@
     "sonos" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
       ifaddr
       plexapi
       plexauth
       plexwebsocket
       soco
       spotipy
+      sqlalchemy
       zeroconf
     ];
     "sony_projector" = ps: with ps; [
@@ -2990,7 +3274,9 @@
     ]; # missing inputs: hass_splunk
     "spotify" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       spotipy
+      sqlalchemy
     ];
     "sql" = ps: with ps; [
       sqlalchemy
@@ -3004,7 +3290,9 @@
     "ssdp" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "starline" = ps: with ps; [
@@ -3029,7 +3317,9 @@
       aiohttp-cors
       aiosteamist
       discovery30303
+      fnvhash
       ifaddr
+      sqlalchemy
     ];
     "stiebel_eltron" = ps: with ps; [
       pymodbus
@@ -3041,6 +3331,7 @@
       pyturbojpeg
       aiohttp-cors
       av
+      numpy
     ];
     "streamlabswater" = ps: with ps; [
       streamlabswater
@@ -3084,9 +3375,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -3117,7 +3410,9 @@
     ];
     "system_bridge" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ]; # missing inputs: systembridgeconnector
     "system_health" = ps: with ps; [
@@ -3147,6 +3442,7 @@
     "tasmota" = ps: with ps; [
       aiohttp-cors
       hatasmota
+      janus
       paho-mqtt
     ];
     "tautulli" = ps: with ps; [
@@ -3188,6 +3484,8 @@
     "tesla_wall_connector" = ps: with ps; [
       tesla-wall-connector
     ];
+    "text" = ps: with ps; [
+    ];
     "tfiac" = ps: with ps; [
     ]; # missing inputs: pytfiac
     "thermobeacon" = ps: with ps; [
@@ -3196,9 +3494,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -3213,9 +3513,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -3251,9 +3553,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -3296,8 +3600,10 @@
     ]; # missing inputs: pytouchline
     "tplink" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
       python-kasa
+      sqlalchemy
     ];
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
@@ -3325,7 +3631,7 @@
       pytrafikverket
     ];
     "transmission" = ps: with ps; [
-      transmissionrpc
+      transmission-rpc
     ];
     "transport_nsw" = ps: with ps; [
       pytransportnsw
@@ -3366,6 +3672,8 @@
     ];
     "twitter" = ps: with ps; [
       twitterapi
+    ];
+    "ubiwizz" = ps: with ps; [
     ];
     "ubus" = ps: with ps; [
       openwrt-ubus-rpc
@@ -3409,8 +3717,10 @@
     "upnp" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
       getmac
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "uprise_smart_shades" = ps: with ps; [
@@ -3422,8 +3732,10 @@
     ];
     "usb" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       pyserial
       pyudev
+      sqlalchemy
     ];
     "usgs_earthquakes_feed" = ps: with ps; [
       aio-geojson-usgs-earthquakes
@@ -3443,8 +3755,10 @@
     ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       pyserial
       pyudev
+      sqlalchemy
       velbus-aio
     ];
     "velux" = ps: with ps; [
@@ -3542,6 +3856,8 @@
     ];
     "websocket_api" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      sqlalchemy
     ];
     "wemo" = ps: with ps; [
       pywemo
@@ -3562,12 +3878,16 @@
     ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      sqlalchemy
       withings-api
     ];
     "wiz" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
       pywizlight
+      sqlalchemy
     ];
     "wled" = ps: with ps; [
       wled
@@ -3592,6 +3912,8 @@
     ];
     "xbox" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      sqlalchemy
       xbox-webapi
     ];
     "xbox_live" = ps: with ps; [
@@ -3606,8 +3928,10 @@
     "xiaomi_aqara" = ps: with ps; [
       pyxiaomigateway
       aiohttp-cors
+      fnvhash
       ifaddr
       netdisco
+      sqlalchemy
       zeroconf
     ];
     "xiaomi_ble" = ps: with ps; [
@@ -3616,9 +3940,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -3647,9 +3973,11 @@
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      bluetooth-data-tools
       dbus-fast
       fnvhash
       home-assistant-frontend
+      janus
       pillow
       pyserial
       pyudev
@@ -3663,7 +3991,9 @@
       aiohttp-cors
       aiomusiccast
       async-upnp-client
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "yandex_transport" = ps: with ps; [
@@ -3674,7 +4004,9 @@
     "yeelight" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      fnvhash
       ifaddr
+      sqlalchemy
       yeelight
       zeroconf
     ];
@@ -3686,6 +4018,8 @@
     ];
     "yolink" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      sqlalchemy
       yolink-api
     ];
     "youless" = ps: with ps; [
@@ -3702,7 +4036,9 @@
     ]; # missing inputs: zengge
     "zeroconf" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
       zeroconf
     ];
     "zerproc" = ps: with ps; [
@@ -3717,6 +4053,7 @@
       fnvhash
       home-assistant-frontend
       ifaddr
+      janus
       pillow
       pyserial-asyncio
       pyserial
@@ -3743,13 +4080,17 @@
     ];
     "zwave_js" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       pyserial
       pyudev
+      sqlalchemy
       zwave-js-server-python
     ];
     "zwave_me" = ps: with ps; [
       aiohttp-cors
+      fnvhash
       ifaddr
+      sqlalchemy
       url-normalize
       zeroconf
       zwave-me-ws
@@ -3768,10 +4109,12 @@
     "air_quality"
     "airly"
     "airnow"
+    "airq"
     "airthings"
     "airthings_ble"
     "airtouch4"
     "airvisual"
+    "airvisual_pro"
     "airzone"
     "aladdin_connect"
     "alarm_control_panel"
@@ -3792,6 +4135,7 @@
     "application_credentials"
     "apprise"
     "aprs"
+    "aranet"
     "arcam_fmj"
     "aseko_pool_live"
     "asuswrt"
@@ -3982,7 +4326,6 @@
     "growatt_server"
     "guardian"
     "habitica"
-    "hangouts"
     "hardkernel"
     "hardware"
     "harmony"
@@ -4000,6 +4343,7 @@
     "home_plus_control"
     "homeassistant"
     "homeassistant_alerts"
+    "homeassistant_hardware"
     "homeassistant_sky_connect"
     "homeassistant_yellow"
     "homekit"
@@ -4023,8 +4367,8 @@
     "icloud"
     "ifttt"
     "ign_sismologia"
-    "image"
     "image_processing"
+    "image_upload"
     "imap_email_content"
     "influxdb"
     "inkbird"
@@ -4051,6 +4395,7 @@
     "jewish_calendar"
     "juicenet"
     "justnimbus"
+    "kaleidescape"
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
@@ -4074,6 +4419,8 @@
     "lifx"
     "light"
     "litterrobot"
+    "livisi"
+    "local_calendar"
     "local_file"
     "local_ip"
     "locative"
@@ -4205,6 +4552,7 @@
     "proximity"
     "prusalink"
     "pure_energie"
+    "purpleair"
     "push"
     "pushbullet"
     "pushover"
@@ -4218,6 +4566,7 @@
     "radarr"
     "radio_browser"
     "radiotherm"
+    "rainbird"
     "rainforest_eagle"
     "rainmachine"
     "random"
@@ -4228,6 +4577,7 @@
     "reddit"
     "remote"
     "renault"
+    "reolink"
     "repairs"
     "rest"
     "rest_command"
@@ -4246,6 +4596,7 @@
     "rss_feed_template"
     "rtsp_to_webrtc"
     "ruckus_unleashed"
+    "ruuvitag_ble"
     "sabnzbd"
     "safe_mode"
     "samsungtv"
@@ -4343,6 +4694,7 @@
     "tellduslive"
     "template"
     "tesla_wall_connector"
+    "text"
     "thermobeacon"
     "thermopro"
     "threshold"

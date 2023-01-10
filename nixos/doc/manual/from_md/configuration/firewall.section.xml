@@ -6,14 +6,14 @@
     both IPv4 and IPv6 traffic. It is enabled by default. It can be
     disabled as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.firewall.enable = false;
 </programlisting>
   <para>
     If the firewall is enabled, you can open specific TCP ports to the
     outside world:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.firewall.allowedTCPPorts = [ 80 443 ];
 </programlisting>
   <para>
@@ -26,7 +26,7 @@ networking.firewall.allowedTCPPorts = [ 80 443 ];
   <para>
     To open ranges of TCP ports:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.firewall.allowedTCPPortRanges = [
   { from = 4000; to = 4007; }
   { from = 8000; to = 8010; }

@@ -1,24 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, CoreServices, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.14.3";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "sha256-tRiziyCw1Qpm22RtZHeKt4VFReJidFHsPxPSjxIA3hA=";
+    hash = "sha256-CvAOvtC5U2njQuUjFxjnGeqhuxrCw4XI6goo1TxIhIU=";
   };
 
-  cargoSha256 = "sha256-snnzNb1yJ8L5pMvNNEIf5hZOpFV6DKOWGtGP1T3YTWg=";
+  cargoHash = "sha256-ctZlYo82M7GKVvrEkw/7+aH9R0MeEsyv3IKl9k4SbiA=";
 
-  RUSTC_BOOTSTRAP = 1;
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
   cargoBuildFlags = [
     "--features=aead-cipher-extra,local-dns,local-http-native-tls,local-redir,local-tun"
@@ -36,8 +34,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    description = "A Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
-    description = "A Rust port of shadowsocks";
+    changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

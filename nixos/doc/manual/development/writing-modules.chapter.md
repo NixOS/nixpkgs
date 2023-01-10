@@ -71,7 +71,7 @@ The meaning of each part is as follows.
 -   This `imports` list enumerates the paths to other NixOS modules that
     should be included in the evaluation of the system configuration. A
     default set of modules is defined in the file `modules/module-list.nix`.
-    These don\'t need to be added in the import list.
+    These don't need to be added in the import list.
 
 -   The attribute `options` is a nested set of *option declarations*
     (described below).

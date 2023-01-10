@@ -1,4 +1,5 @@
 { self
+, bash
 , fetchpatch
 , lib
 , openssl
@@ -283,7 +284,8 @@ with self;
 
   core_unix = janePackage {
     pname = "core_unix";
-    hash = "1xzxqzg23in5ivz0v3qshzpr4w92laayscqj9im7jylh2ar1xi0a";
+    version = "0.15.2";
+    hash = "sha256-9f2PiLo+4Bjnfvh3scvIiPHj0wPZozmMMiCTe7vC1EA=";
     meta.description = "Unix-specific portions of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ core_kernel expect_test_helpers_core ocaml_intrinsics ppx_jane timezone spawn ];
@@ -294,7 +296,8 @@ with self;
 
   csvfields = janePackage {
     pname = "csvfields";
-    hash = "0z47pq17bw776hzvk48ypbd92ps9vlvl86mnhw3j6cqx4ahbjik3";
+    version = "0.15.1";
+    hash = "sha256-bBupsarwjte2NCncNDFSkrrmMR3EYPn+D7xI9zQOhFA=";
     propagatedBuildInputs = [ core num ];
     meta.description = "Runtime support for ppx_xml_conv and ppx_csv_conv";
   };
@@ -485,6 +488,10 @@ with self;
   patdiff = janePackage {
     pname = "patdiff";
     hash = "0623a7n5r659rkxbp96g361mvxkcgc6x9lcbkm3glnppplk5kxr9";
+
+    # Used by patdiff-git-wrapper.  Providing it here also causes the shebang
+    # line to be automatically patched.
+    buildInputs = [ bash ];
     propagatedBuildInputs = [ core_unix patience_diff ocaml_pcre ];
     meta = {
       description = "File Diff using the Patience Diff algorithm";
@@ -824,11 +831,11 @@ with self;
 
   pythonlib = janePackage {
     pname = "pythonlib";
-    hash = "0p88vmp19zmr0r58dz6sawsmbn4yi2vyymad2c82kp93kg66nm1v";
+    version = "0.15.1";
+    hash = "sha256-j8WXVTEiBmHtoTjkbnIh31vC4IghfAMaEL19nDLx3mc=";
     meta.description = "A library to help writing wrappers around ocaml code for python";
-    patches = lib.optional (lib.versionAtLeast ocaml.version "4.13") ./pythonlib.patch;
+    buildInputs = [ ppx_optcomp ];
     propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
-    meta.broken = lib.versionAtLeast ocaml.version "4.14";
   };
 
   re2 = janePackage {
@@ -904,7 +911,8 @@ with self;
 
   sexp_pretty = janePackage {
     pname = "sexp_pretty";
-    hash = "1p1jspwjvrhm8li22xl0n8wngs12d9g7nc1svk6xc32jralnxblg";
+    version = "0.15.1";
+    hash = "sha256-UJEO2P4C7ZaD110MEfkG4FXfGDVAAW2TAK489faV6SM=";
     minimumOCamlVersion = "4.07";
     meta.description = "S-expression pretty-printer";
     propagatedBuildInputs = [ ppx_base re sexplib ];

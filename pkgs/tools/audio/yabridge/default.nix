@@ -142,9 +142,7 @@ in multiStdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A modern and transparent way to use Windows VST2 and VST3 plugins on Linux";

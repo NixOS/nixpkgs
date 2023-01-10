@@ -8,7 +8,7 @@
 , ninja
 , pkg-config
 , python3
-, ffmpeg
+, ffmpeg_5
 , freefont_ttf
 , freetype
 , libass
@@ -17,7 +17,6 @@
 , lua
 , libuchardet
 , libiconv
-, CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 , xcbuild
 
 , waylandSupport ? stdenv.isLinux
@@ -75,11 +74,12 @@
 , xineramaSupport    ? stdenv.isLinux, libXinerama
 , xvSupport          ? stdenv.isLinux, libXv
 , zimgSupport        ? true,           zimg
+, darwin
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-
 in stdenv.mkDerivation rec {
   pname = "mpv";
   version = "0.35.0";
@@ -99,21 +99,19 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
-  mesonFlags = let
-    mesonFeatureFlag = feature: flag: "-D${feature}=${if flag then "enabled" else "disabled"}";
-  in [
-    "-Ddefault_library=shared"
-    "-Dlibmpv=true"
-    (mesonFeatureFlag "libarchive" archiveSupport)
-    (mesonFeatureFlag "manpage-build" true)
-    (mesonFeatureFlag "cdda" cddaSupport)
-    (mesonFeatureFlag "dvbin" dvbinSupport)
-    (mesonFeatureFlag "dvdnav" dvdnavSupport)
-    (mesonFeatureFlag "openal" openalSupport)
-    (mesonFeatureFlag "sdl2" sdl2Support)
+  mesonFlags = [
+    (lib.mesonOption "default_library" "shared")
+    (lib.mesonBool "libmpv" true)
+    (lib.mesonEnable "libarchive" archiveSupport)
+    (lib.mesonEnable "manpage-build" true)
+    (lib.mesonEnable "cdda" cddaSupport)
+    (lib.mesonEnable "dvbin" dvbinSupport)
+    (lib.mesonEnable "dvdnav" dvdnavSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "sdl2" sdl2Support)
     # Disable whilst Swift isn't supported
-    (mesonFeatureFlag "swift-build" swiftSupport)
-    (mesonFeatureFlag "macos-cocoa-cb" swiftSupport)
+    (lib.mesonEnable "swift-build" swiftSupport)
+    (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -125,13 +123,13 @@ in stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild.xcrun
-  ] ++ lib.optionals swiftSupport [ swift ]
-    ++ lib.optionals waylandSupport [ wayland-scanner ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals swiftSupport [ swift ]
+  ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_5
     freetype
     libass
     libpthreadstubs

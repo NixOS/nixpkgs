@@ -1,33 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, openssl, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, openssl, makeWrapper, runtimeShell }:
 
-let
-  version = "3.0.8";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "easyrsa";
-  inherit version;
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
     rev = "v${version}";
-    sha256 = "05q60s343ydh9j6hzj0840qdcq8fkyz06q68yw4pqgqg4w68rbgs";
+    sha256 = "sha256-errF7bNhX3oYEMDwB/B1W5hBWhOD+GCgET3lA121PHc=";
   };
 
-  patches = [ ./fix-paths.patch ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/share/easyrsa
-    cp -r easyrsa3/{*.cnf,x509-types,vars.example} $out/share/easyrsa
-    cp easyrsa3/openssl-easyrsa.cnf $out/share/easyrsa/safessl-easyrsa.cnf
+    mkdir -p $out/share/easy-rsa
+    cp -r easyrsa3/{*.cnf,x509-types,vars.example} $out/share/easy-rsa
     install -D -m755 easyrsa3/easyrsa $out/bin/easyrsa
+
     substituteInPlace $out/bin/easyrsa \
-      --subst-var out \
-      --subst-var-by openssl ${openssl.bin}/bin/openssl
+      --replace /usr/ $out/ \
+      --replace '~VER~' '${version}' \
+      --replace '~GITHEAD~' 'v${version}' \
+      --replace '~DATE~' '1970-01-01'
+
+    # Wrap it with the correct OpenSSL binary.
+    wrapProgram $out/bin/easyrsa \
+      --set EASYRSA_OPENSSL ${openssl.bin}/bin/openssl
 
     # Helper utility
     cat > $out/bin/easyrsa-init <<EOF
     #!${runtimeShell} -e
-    cp -r $out/share/easyrsa/* .
+    cp -r $out/share/easy-rsa/* .
     EOF
     chmod +x $out/bin/easyrsa-init
   '';

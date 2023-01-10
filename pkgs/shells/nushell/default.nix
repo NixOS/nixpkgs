@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , runCommand
 , rustPlatform
 , openssl
@@ -20,20 +21,21 @@
 , withExtraFeatures ? true
 , testers
 , nushell
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.72.1";
+  version = "0.73.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-OVJr+usN+47yBHFAy94rIVlU2F+Klo6xdrV2MwUoKUE=";
+    sha256 = "sha256-hxcB5nzhVjsC5XYR4Pt3GN4ZEgWpetQQZr0mj3bAnRc=";
   };
 
-  cargoSha256 = "sha256-v6mPr+gOT64rKYuog+hS7/AqUZDailoOBXX3Sfeo+sk=";
+  cargoSha256 = "sha256-pw+pBZeXuKSaP/qC3aiauXAH/BRR1rQZ2jVVmR1JQhU=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
@@ -66,9 +68,7 @@ rustPlatform.buildRustPackage rec {
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
   # outside of TMPDIR
-  # doCheck = ! stdenv.isDarwin;
-  # TODO tests are not guaranteed while package is in beta
-  doCheck = false;
+  doCheck = ! stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -90,5 +90,6 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion {
       package = nushell;
     };
+    updateScript = nix-update-script { };
   };
 }

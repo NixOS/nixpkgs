@@ -3,6 +3,8 @@
 , libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
+, mods-dat ? null
+, versionsJson ? ./versions.json
 , username ? "", token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
 }:
@@ -60,7 +62,7 @@ let
 
   # NB `experimental` directs us to take the latest build, regardless of its branch;
   # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
-  versions = importJSON ./versions.json;
+  versions = importJSON versionsJson;
   binDists = makeBinDists versions;
 
   actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
@@ -129,7 +131,7 @@ let
     fi
   '';
 
-  modDir = factorio-utils.mkModDirDrv mods;
+  modDir = factorio-utils.mkModDirDrv mods mods-dat;
 
   base = with actual; {
     pname = "factorio-${releaseType}";

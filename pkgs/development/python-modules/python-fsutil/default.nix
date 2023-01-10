@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.7.0";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2T2C2bIOAdxppZxqI+QGE2R/+46LoqB7eNdlt4sVAd8=";
+    hash = "sha256-rMQjsGqdiXe8zS18hZQAro3UWyHPjNJYyQ/NAoxbE7k=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with file-system utilities";
     homepage = "https://github.com/fabiocaccamo/python-fsutil";
+    changelog = "https://github.com/fabiocaccamo/python-fsutil/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

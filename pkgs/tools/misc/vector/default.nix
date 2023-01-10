@@ -32,7 +32,8 @@
 
 let
   pname = "vector";
-  version = "0.25.2";
+  pinData = lib.importJSON ./pin.json;
+  version = pinData.version;
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -41,10 +42,15 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gkhVabfAV250zofss7b/3ulb09Wk5EMGz9GSaS5eCzA=";
+    sha256 = pinData.sha256;
   };
 
-  cargoHash = "sha256-zxwwXFCdcbB+Kx2SNyAIDsII6SN5+QHJQlzOUx+us2o=";
+  patches = [
+    # replace with https://github.com/vectordotdev/vector/pull/15093 when ready
+    ./fix-for-rust-1.66.diff
+  ];
+
+  cargoSha256 = pinData.cargoSha256;
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -102,7 +108,10 @@ rustPlatform.buildRustPackage {
     ''}
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    inherit features;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "A high-performance logs, metrics, and events router";

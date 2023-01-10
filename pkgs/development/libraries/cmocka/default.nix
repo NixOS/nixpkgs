@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, cmake }:
+{ fetchurl, fetchpatch, lib, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "cmocka";
@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
     sha256 = "1dm8pdvkyfa8dsbz9bpq7wwgixjij4sii9bbn5sgvqjm5ljdik7h";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "musl-uintptr.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/cmocka/musl_uintptr.patch?id=6a15dd0d0ba9cc354a621fb359ca5e315ff2eabd";
+      sha256 = "sha256-fhb2Tax30kRTGuaKvzSzglSd/ntxiNeGFJt5I8poa24=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

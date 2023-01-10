@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "2.2.1";
+  version = "2.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = pname;
-    rev = version;
-    hash = "sha256-dn5814eRZ9456Fn7blf1UzXPii4dXu3sjoXBV7CmwSs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
+    changelog = "https://github.com/jeeftor/intellifire4py/blob/${version}/CHANGELOG";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

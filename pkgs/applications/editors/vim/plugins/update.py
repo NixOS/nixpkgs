@@ -137,11 +137,15 @@ def main():
         subprocess.check_call([nvim_treesitter_dir.joinpath("update.py")])
 
         if editor.nixpkgs_repo:
-            msg = "vimPlugins.nvim-treesitter: update grammars"
-            print(f"committing to nixpkgs: {msg}")
             index = editor.nixpkgs_repo.index
-            index.add([str(nvim_treesitter_dir.joinpath("generated.nix"))])
-            index.commit(msg)
+            for diff in index.diff(None):
+                if diff.a_path == "pkgs/applications/editors/vim/plugins/nvim-treesitter/generated.nix":
+                    msg = "vimPlugins.nvim-treesitter: update grammars"
+                    print(f"committing to nixpkgs: {msg}")
+                    index.add([str(nvim_treesitter_dir.joinpath("generated.nix"))])
+                    index.commit(msg)
+                    return
+            print("no updates to nvim-treesitter grammars")
 
 
 if __name__ == "__main__":

@@ -103,16 +103,17 @@ in
 
     openFirewall = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = lib.mdDoc ''
         Whether to open the firewall for UDP port 5353.
+        Disabling this setting also disables discovering of network devices.
       '';
     };
 
     allowPointToPoint = mkOption {
       type = types.bool;
       default = false;
-      description= lib.mdDoc ''
+      description = lib.mdDoc ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
         latencies with such links and opens a potential security hole by allowing mDNS access from Internet
         connections.

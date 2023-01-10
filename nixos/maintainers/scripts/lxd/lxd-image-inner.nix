@@ -94,9 +94,4 @@ with lib;
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05"; # Did you read the comment?
-
-  # As this is intended as a stadalone image, undo some of the minimal profile stuff
-  documentation.enable = true;
-  documentation.nixos.enable = true;
-  environment.noXlibs = false;
 }

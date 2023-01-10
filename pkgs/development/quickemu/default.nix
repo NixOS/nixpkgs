@@ -50,13 +50,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    hash = "sha256-82ojq1WTcgkVh+DQup2ymmqa6d6+LVR2p5cqEHA3hSM=";
+    hash = "sha256-31f4BIIYCh2acbueUtGZShKnlhctd1FfKkFqsNiUqrI=";
   };
 
   postPatch = ''

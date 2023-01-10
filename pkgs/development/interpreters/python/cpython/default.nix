@@ -121,7 +121,7 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl' ]
+    zlib bzip2 expat xz libffi libxcrypt gdbm sqlite readline ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
@@ -180,7 +180,7 @@ let
       if isDarwin then "darwin"
       else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
 
-    abiFlags = optionalString (isPy36 || isPy37) "m";
+    abiFlags = optionalString isPy37 "m";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
     pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
@@ -214,7 +214,19 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
-  patches = [
+  patches = optionals (version == "3.10.9") [
+    # https://github.com/python/cpython/issues/100160
+    ./3.10/asyncio-deprecation.patch
+  ] ++ optionals (version == "3.11.1") [
+    # https://github.com/python/cpython/issues/100160
+    (fetchpatch {
+      name = "asyncio-deprecation-3.11.patch";
+      url = "https://github.com/python/cpython/commit/3fae04b10e2655a20a3aadb5e0d63e87206d0c67.diff";
+      revert = true;
+      excludes = [ "Misc/NEWS.d/*" ];
+      sha256 = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
+    })
+  ] ++ [
     # Disable the use of ldconfig in ctypes.util.find_library (since
     # ldconfig doesn't work on NixOS), and don't use
     # ctypes.util.find_library during the loading of the uuid module
@@ -228,13 +240,7 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals (isPy35 || isPy36) [
-    # Determinism: Write null timestamps when compiling python files.
-    ./3.5/force_bytecode_determinism.patch
-  ] ++ optionals isPy35 [
-    # Backports support for LD_LIBRARY_PATH from 3.6
-    ./3.5/ld_library_path.patch
-  ] ++ optionals (isPy35 || isPy36 || isPy37) [
+  ] ++ optionals isPy37 [
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
@@ -250,12 +256,7 @@ in with passthru; stdenv.mkDerivation {
     ./3.11/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
     # Backport from CPython 3.8 of a good list of tests to run for PGO.
-    (
-      if isPy36 || isPy37 then
-        ./3.6/profile-task.patch
-      else
-        ./3.5/profile-task.patch
-    )
+    ./3.7/profile-task.patch
   ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
@@ -265,9 +266,7 @@ in with passthru; stdenv.mkDerivation {
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (
-      if isPy35 then
-        ./3.5/python-3.x-distutils-C++.patch
-      else if pythonAtLeast "3.7" && pythonOlder "3.11" then
+      if pythonAtLeast "3.7" && pythonOlder "3.11" then
         ./3.7/python-3.x-distutils-C++.patch
       else if pythonAtLeast "3.11" then
         ./3.11/python-3.x-distutils-C++.patch
@@ -277,19 +276,11 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
-  ] ++ [
+  ] ++ optionals (pythonOlder "3.12") [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
-    (
-      if isPy36 then
-        ./3.6/fix-finding-headers-when-cross-compiling.patch
-      else
-        ./3.7/fix-finding-headers-when-cross-compiling.patch
-    )
-  ] ++ optionals (isPy36) [
-    # Backport a fix for ctypes.util.find_library.
-    ./3.6/find_library.patch
+    ./3.7/fix-finding-headers-when-cross-compiling.patch
   ];
 
   postPatch = ''
@@ -329,6 +320,9 @@ in with passthru; stdenv.mkDerivation {
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl' != null) [
     "--with-openssl=${openssl'.dev}"
+  ] ++ optionals (libxcrypt != null) [
+    "CFLAGS=-I${libxcrypt}/include"
+    "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -354,14 +348,11 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
-  ] ++ optionals (libxcrypt != null) [
-    "CFLAGS=-I${libxcrypt}/include"
-    "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
 
-  preConfigure = ''
+  preConfigure = optionalString (pythonOlder "3.12") ''
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
@@ -507,7 +498,15 @@ in with passthru; stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://python.org";
+    homepage = "https://www.python.org";
+    changelog = let
+      majorMinor = lib.versions.majorMinor version;
+      dashedVersion = lib.replaceStrings [ "." "a" ] [ "-" "-alpha-" ] version;
+    in
+      if sourceVersion.suffix == "" then
+        "https://docs.python.org/release/${version}/whatsnew/changelog.html"
+      else
+        "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
     description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

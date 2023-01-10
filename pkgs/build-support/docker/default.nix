@@ -74,7 +74,7 @@ let
   # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
   # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
   # mapping from the go package.
-  defaultArch = go.GOARCH;
+  defaultArchitecture = go.GOARCH;
 
 in
 rec {
@@ -101,8 +101,8 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? defaultArch
-
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      arch ? defaultArchitecture
       # This is used to set name to the pulled image
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
@@ -486,7 +486,7 @@ rec {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nT > $out";
+      } "${stream} | pigz -nTR > $out";
 
   # 1. extract the base image
   # 2. create the layer
@@ -514,6 +514,8 @@ rec {
       keepContentsDirlinks ? false
     , # Docker config; e.g. what command to run on the container.
       config ? null
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      architecture ? defaultArchitecture
     , # Optional bash script to run on the files prior to fixturizing the layer.
       extraCommands ? ""
     , uid ? 0
@@ -546,8 +548,7 @@ rec {
       baseJson =
         let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
-            inherit created config;
-            architecture = defaultArch;
+            inherit created config architecture;
             preferLocalBuild = true;
             os = "linux";
           });
@@ -734,7 +735,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nT > $out
+        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
 
         echo "Finished."
       '';
@@ -774,7 +775,7 @@ rec {
     mv repositories image/repositories
     mv manifest.json image/manifest.json
     # Create tarball and gzip
-    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nT > $out
+    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
   '';
 
 
@@ -838,6 +839,8 @@ rec {
       contents ? [ ]
     , # Docker config; e.g. what command to run on the container.
       config ? { }
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      architecture ? defaultArchitecture
     , # Time of creation of the image. Passing "now" will make the
       # created date be the time of building.
       created ? "1970-01-01T00:00:01Z"
@@ -869,15 +872,14 @@ rec {
 
         streamScript = writePython3 "stream" { } ./stream_layered_image.py;
         baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
-          inherit config;
-          architecture = defaultArch;
+          inherit config architecture;
           os = "linux";
         });
 
         contentsList = if builtins.isList contents then contents else [ contents ];
 
         # We store the customisation layer as a tarball, to make sure that
-        # things like permissions set on 'extraCommands' are not overriden
+        # things like permissions set on 'extraCommands' are not overridden
         # by Nix. Then we precompute the sha256 for performance.
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";
@@ -1218,5 +1220,5 @@ rec {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nT > $out";
+      } "${stream} | pigz -nTR > $out";
 }

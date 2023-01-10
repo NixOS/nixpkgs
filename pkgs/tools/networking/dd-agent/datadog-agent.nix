@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , cmake
-, buildGoModule
+, buildGo118Module
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
@@ -35,7 +35,7 @@ let
     cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
-in buildGoModule rec {
+in buildGo118Module rec {
   pname = "datadog-agent";
   inherit src version;
 
@@ -100,8 +100,7 @@ in buildGoModule rec {
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
-      --prefix LD_LIBRARY_PATH : ${lib.getLib systemd}/lib
-  '';
+      --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
 
   meta = with lib; {
     description = ''
@@ -111,5 +110,7 @@ in buildGoModule rec {
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

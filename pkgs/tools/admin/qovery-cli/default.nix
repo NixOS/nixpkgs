@@ -1,23 +1,23 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, lib
 , qovery-cli
 , testers
 }:
 
 buildGoModule rec {
   pname = "qovery-cli";
-  version = "0.46.4";
+  version = "0.48.3";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ROUMFpAgUmcKt7QG+Lfd3OipJQK8DLezvCxvev1yNlo=";
+    hash = "sha256-1qX/Ec4KJzEzjqxO83/Fhed1kOoKNGja5+1oULGvkaw=";
   };
 
-  vendorSha256 = "sha256-4TY7/prMbvw5zVPJRoMLg7Omrxvh1HPGsdz1wqPn4uU=";
+  vendorHash = "sha256-6/TT3/98wBH9oMbPOzgvwN2nxj4RSbL2vxSMFlM5sgo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,6 +36,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Qovery Command Line Interface";
     homepage = "https://github.com/Qovery/qovery-cli";
+    changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

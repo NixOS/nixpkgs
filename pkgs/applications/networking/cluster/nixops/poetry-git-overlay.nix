@@ -5,8 +5,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops.git";
-        rev = "683baa66c613216a662aad3fd58b0cdc5cd41adb";
-        sha256 = "00yyzsybn1fjhkar64albxqp46d1v9c6lf1gd10lh9q72xq979sf";
+        rev = "5013072c5ca34247d7dce545c3a7b1954948fd4d";
+        sha256 = "0417xq7s0qkh9ali8grlahpxl4sgg4dla302dda4768wbp0wagcz";
       };
     }
   );
@@ -67,6 +67,16 @@ self: super: {
         url = "https://github.com/NixOS/nixops-hetzner";
         rev = "bc7a68070c7371468bcc8bf6e36baebc6bd2da35";
         sha256 = "0kmzv5dzh828yh5jwjs5klfslx3lklrqvpvbh29b398m5r9bbqkn";
+      };
+    }
+  );
+
+  nixops-hetznercloud = super.nixops-hetznercloud.overridePythonAttrs (
+    _: {
+      src = pkgs.fetchgit {
+        url = "https://github.com/lukebfox/nixops-hetznercloud.git";
+        rev = "c00533400506d40940f7c1f67bf3973db37d9dd9";
+        sha256 = "1xfwhiyay7x1r3q6rxn2f3h0llgwf73vl8fxp0ww13rgny2w0dgj";
       };
     }
   );

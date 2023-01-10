@@ -6,6 +6,7 @@
 , rSrc
 , version
 , oildev
+, configargparse
 , binlore
 , resholve-utils
 }:
@@ -19,7 +20,7 @@ python27.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = [
     oildev
-    python27.pkgs.configargparse
+    configargparse
   ];
 
   postPatch = ''

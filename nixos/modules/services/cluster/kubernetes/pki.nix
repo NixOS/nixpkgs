@@ -323,7 +323,7 @@ in
           systemctl restart flannel
         ''}
 
-        echo "Node joined succesfully"
+        echo "Node joined successfully"
       '')];
 
       # isolate etcd on loopback at the master node

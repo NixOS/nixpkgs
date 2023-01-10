@@ -1,5 +1,5 @@
 { config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk-pixbuf, xlibsWrapper, gobject-introspection
+, gdk-pixbuf, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
        ]
-    ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
+    ++ optionals stdenv.isDarwin [ libXdamage ]
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];

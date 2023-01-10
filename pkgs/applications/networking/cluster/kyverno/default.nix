@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kyverno";
-  version = "1.8.2";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${version}";
-    sha256 = "sha256-U0VcLxI5hSVqU9N+99/qOjueKi6EdVMT2dTyZUSpNXw=";
+    sha256 = "sha256-oEy1SNlYHDuZG2urbXEfROwzfNzdbu0Yjsq98Dw+Mws=";
   };
 
   ldflags = [

@@ -39,7 +39,7 @@ in
       '';
 
       description = lib.mdDoc ''
-        The package which contains roundcube's sources. Can be overriden to create
+        The package which contains roundcube's sources. Can be overridden to create
         an environment which contains roundcube and third-party plugins.
       '';
     };
@@ -92,7 +92,7 @@ in
       default = [];
       example = literalExpression "with pkgs.aspellDicts; [ en fr de ]";
       description = lib.mdDoc ''
-        List of aspell dictionnaries for spell checking. If empty, spell checking is disabled.
+        List of aspell dictionaries for spell checking. If empty, spell checking is disabled.
       '';
     };
 

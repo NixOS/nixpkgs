@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetSSLeay
     perlPackages.NetServer
     perlPackages.LogLog4perl
-    perlPackages.IOSocketInet6
+    perlPackages.IOSocketINET6
     perlPackages.Socket6
     perlPackages.URI
     perlPackages.DBFile
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketINET6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils DBDPg LWP rrdtool
                 ]}"

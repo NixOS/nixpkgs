@@ -19,6 +19,8 @@ buildDunePackage {
     src
   ;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     paf
     duration

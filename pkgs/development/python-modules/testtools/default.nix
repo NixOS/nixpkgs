@@ -5,7 +5,6 @@
 , pbr
 , python-mimeparse
 , extras
-, unittest2
 , traceback2
 , testscenarios
 }:

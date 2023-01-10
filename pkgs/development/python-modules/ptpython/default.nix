@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.21";
+  version = "3.0.22";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pXuZUurEoSVApN+0zNSiQ0A+zrJ7DRMkW15BRMhzHTI=";
+    hash = "sha256-wJezJEBgFKAFxrCfSTu73eVx5BI2CvK6FVGHOhDDbPg=";
   };
 
   propagatedBuildInputs = [

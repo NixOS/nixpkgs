@@ -479,7 +479,7 @@ let
         Directories to be scanned for further config files to include.
         Directories will processed in the order given,
         `*.conf` files in the directory will be
-        read in case-sensistive alphabetical order.
+        read in case-sensitive alphabetical order.
       '';
       default = [];
     };

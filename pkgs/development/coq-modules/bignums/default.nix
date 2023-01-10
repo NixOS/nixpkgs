@@ -8,6 +8,7 @@ with lib; mkCoqDerivation {
   defaultVersion = if versions.isGe "8.6" coq.coq-version
     then "${coq.coq-version}.0" else null;
 
+  release."8.17.0".sha256 = "sha256-MXYjqN86+3O4hT2ql62U83T5H03E/8ysH8erpvC/oyw=";
   release."8.16.0".sha256 = "sha256-DH3iWwatPlhhCVYVlgL2WLkvneSVzSXUiKo2e0+1zR4=";
   release."8.15.0".sha256 = "093klwlhclgyrba1iv18dyz1qp5f0lwiaa7y0qwvgmai8rll5fns";
   release."8.14.0".sha256 = "0jsgdvj0ddhkls32krprp34r64y1rb5mwxl34fgaxk2k4664yq06";

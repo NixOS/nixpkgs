@@ -264,6 +264,17 @@
     };
     version = "2.0.0";
   };
+  jekyll-favicon = {
+    dependencies = ["jekyll" "mini_magick" "rexml"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0dyksm4i11n0qshd7wh6dvk8d0fc70dd32ir2dxs6igxq0gd6hi1";
+      type = "gem";
+    };
+    version = "1.1.0";
+  };
   jekyll-feed = {
     dependencies = ["jekyll"];
     groups = ["default"];
@@ -525,6 +536,16 @@
       type = "gem";
     };
     version = "3.2022.0105";
+  };
+  mini_magick = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1aj604x11d9pksbljh0l38f70b558rhdgji1s9i763hiagvvx2hs";
+      type = "gem";
+    };
+    version = "4.11.0";
   };
   mini_portile2 = {
     groups = ["default"];

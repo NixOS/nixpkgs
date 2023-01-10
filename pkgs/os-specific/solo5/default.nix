@@ -2,7 +2,7 @@
 , pkg-config, qemu, syslinux, util-linux }:
 
 let
-  version = "0.7.4";
+  version = "0.7.5";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-ovDdaS2cDufe5gTgi+t2C8waWiRC40/2flLLJlz+NvU=";
+    sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -33,6 +33,9 @@ in stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
+
+  separateDebugInfo = true;
+    # debugging requires information for both the unikernel and the tender
 
   installPhase = ''
     runHook preInstall

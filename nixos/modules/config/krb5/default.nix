@@ -82,8 +82,8 @@ in {
 
       kerberos = mkOption {
         type = types.package;
-        default = pkgs.krb5Full;
-        defaultText = literalExpression "pkgs.krb5Full";
+        default = pkgs.krb5;
+        defaultText = literalExpression "pkgs.krb5";
         example = literalExpression "pkgs.heimdal";
         description = lib.mdDoc ''
           The Kerberos implementation that will be present in

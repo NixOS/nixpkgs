@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "PySDL2";
-  version = "0.9.14";
+  version = "0.9.15";
 
   # The tests use OpenGL using find_library, which would have to be
   # patched; also they seem to actually open X windows and test stuff
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JAkfjZ5DdkZZHH921bru49OqbNiuSSpRxwJuUzifGHo=";
+    sha256 = "sha256-kIp946iMKyKiwhppkXxTIVKJW9GkkFJ6Jw7hTK1A5kc=";
   };
 
   # Deliberately not in propagated build inputs; users can decide

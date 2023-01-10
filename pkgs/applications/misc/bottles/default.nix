@@ -14,55 +14,32 @@
 , gtk4
 , gtksourceview5
 , libadwaita
-, steam
 , cabextract
 , p7zip
 , xdpyinfo
 , imagemagick
+, lsb-release
+, pciutils
 , procps
 , gamescope
 , mangohud
+, vkbasalt-cli
 , vmtouch
-, wine
-, bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
-, bottlesExtraPkgs ? pkgs: [ ] # extra packages to add to steam.run targetPkgs
 }:
-
-let
-  steam-run = (steam.override {
-    # required by wine runner `caffe`
-    extraLibraries = pkgs: with pkgs; [ libunwind libusb1 gnutls ]
-      ++ bottlesExtraLibraries pkgs;
-    extraPkgs = pkgs: [ ]
-      ++ bottlesExtraPkgs pkgs;
-  }).run;
-in
 python3Packages.buildPythonApplication rec {
-  pname = "bottles";
-  version = "2022.10.14.1";
+  pname = "bottles-unwrapped";
+  version = "2022.12.14.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
-    repo = pname;
+    repo = "bottles";
     rev = version;
-    sha256 = "sha256-FO91GSGlc2f3TSLrlmRDPi5p933/Y16tdEpX4RcKhL0=";
+    sha256 = "sha256-hoWyXCP7/0m8akUGBJyuF2yQcRKR8C7MDBLUdPdtBgE=";
   };
 
   patches = [ ./vulkan_icd.patch ];
 
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-
-    substituteInPlace bottles/backend/wine/winecommand.py \
-      --replace \
-        "command = f\"{runner} {command}\"" \
-        "command = f\"{''' if runner == 'wine' or runner == 'wine64' else '${steam-run}/bin/steam-run '}{runner} {command}\"" \
-      --replace \
-        "command = f\"{_picked['entry_point']} {command}\"" \
-        "command = f\"${steam-run}/bin/steam-run {_picked['entry_point']} {command}\""
-    '';
-
+  # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
     blueprint-compiler
     meson
@@ -82,6 +59,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pycurl
     pyyaml
     requests
     pygobject3
@@ -101,12 +79,16 @@ python3Packages.buildPythonApplication rec {
     p7zip
     xdpyinfo
     imagemagick
-    procps
+    vkbasalt-cli
 
     gamescope
     mangohud
     vmtouch
-    wine
+
+    # Undocumented (subprocess.Popen())
+    lsb-release
+    pciutils
+    procps
   ];
 
   format = "other";

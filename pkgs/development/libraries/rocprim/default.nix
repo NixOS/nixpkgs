@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocPRIM";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-jfTuGEPyssARpdo0ZnfVJt0MBkoHnmBtf6Zg4xXNJ1U=";
+    hash = "sha256-VGTrMllQguIJKexdQNXC07KX7TxU/e5oT6VZdlSRcQY=";
   };
 
   nativeBuildInputs = [
@@ -72,13 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocPRIM/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocprim "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "ROCm parallel primitives";

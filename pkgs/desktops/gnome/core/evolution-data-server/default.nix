@@ -45,17 +45,18 @@
 , boost
 , protobuf
 , libiconv
+, makeHardcodeGsettingsPatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.46.1";
+  version = "3.46.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "xV5yz/QZC0LmPdbqvG3OSKGh95BAUx8a9tUcHvpKpus=";
+    sha256 = "+b1SAIt+U12BaSDPzscKDlViveKK9x+ZbiA/9qhuRuA=";
   };
 
   patches = [
@@ -150,8 +151,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
-      glib-schema-to-var = {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
         "org.gnome.Evolution.DefaultSources" = "EDS";
         "org.gnome.evolution.shell.network-config" = "EDS";
         "org.gnome.evolution-data-server.addressbook" = "EDS";

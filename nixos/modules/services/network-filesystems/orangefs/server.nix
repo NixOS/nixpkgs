@@ -209,7 +209,7 @@ in {
       after = [ "network-online.target" ];
 
       serviceConfig = {
-        # Run as "simple" in forground mode.
+        # Run as "simple" in foreground mode.
         # This is more reliable
         ExecStart = ''
           ${pkgs.orangefs}/bin/pvfs2-server -d \

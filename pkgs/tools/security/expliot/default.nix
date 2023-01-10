@@ -55,7 +55,8 @@ buildPythonApplication rec {
       --replace "pynetdicom>=1.5.1,<2" "pynetdicom>=2,<3" \
       --replace "cryptography>=3.0,<4" "cryptography>=35,<40" \
       --replace "python-can>=3.3.3,<4" "python-can>=3.3.3,<5" \
-      --replace "pyparsing>=2.4.7,<3" "pyparsing>=2.4.7,<4"
+      --replace "pyparsing>=2.4.7,<3" "pyparsing>=2.4.7,<4" \
+      --replace "zeroconf>=0.30,<0.40" "zeroconf"
   '';
 
   # Project has no tests

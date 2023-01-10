@@ -18,7 +18,7 @@
 , withDevdoc ? false
 , doxygen
 , dblatex # Extra developer documentation
-, withNcurses
+, withNcurses ? false
 , ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
 , withTsm ? false
 , tsm-client # Tivoli Storage Manager Backup Client from IBM
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     bison
   ] ++ optionals withDevdoc [ doxygen dblatex ];
 
-  buildInputs = [ libkrb5 ncurses ];
+  buildInputs = [ libkrb5 ] ++ optional withNcurses ncurses;
 
   patches = [ ./bosserver.patch ./cross-build.patch ]
     ++ optional withTsm ./tsmbac.patch;
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
       "--disable-fuse-client"
       "--with-docbook-stylesheets=${docbook_xsl}/share/xml/docbook-xsl"
       ${optionalString withTsm "--enable-tivoli-tsm"}
-      ${optionalString withNcurses "--disable-gtx"}
+      ${optionalString (!withNcurses) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
     )
   '' + optionalString withTsm ''

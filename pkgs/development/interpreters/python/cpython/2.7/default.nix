@@ -31,6 +31,11 @@
 , rebuildBytecode ? true
 , reproducibleBuild ? false
 , enableOptimizations ? false
+, strip2to3 ? false
+, stripConfig ? false
+, stripIdlelib ? false
+, stripTests ? false
+, stripLibs ? [ ]
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
@@ -123,13 +128,6 @@ let
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
 
-      # remove once 2.7.18.6 is released
-      (fetchpatch {
-        name = "CVE-2021-3733.patch";
-        url = "https://github.com/ActiveState/cpython/commit/eeb7fe50450f08a782921f3229abed2f23e7b2d7.patch";
-        sha256 = "sha256-ch4cMoFythDmyvlVxOAVw3Ow4PPWVDq5o9c1qox2824=";
-      })
-
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
       # * https://bugs.python.org/issue35523
@@ -194,11 +192,10 @@ let
     "--enable-shared"
   ] ++ [
     "--with-threads"
-    "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
     "--with-system-ffi"
-  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--with-system-expat"
+    "--enable-unicode=ucs${toString ucsEncoding}"
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
@@ -233,10 +230,7 @@ let
   strictDeps = true;
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl zlib ]
-    ++ optional (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) libffi
-    ++ optional stdenv.hostPlatform.isCygwin expat
-    ++ [ db gdbm ncurses sqlite readline ]
+    [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk libX11 ]
     ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
@@ -318,7 +312,25 @@ in with passthru; stdenv.mkDerivation ({
     postFixup = ''
       # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
       cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-    '';
+    '' + optionalString strip2to3 ''
+      rm -R $out/bin/2to3 $out/lib/python*/lib2to3
+    '' + optionalString stripConfig ''
+      rm -R $out/bin/python*-config $out/lib/python*/config*
+    '' + optionalString stripIdlelib ''
+      # Strip IDLE
+      rm -R $out/bin/idle* $out/lib/python*/idlelib
+    '' + optionalString stripTests ''
+      # Strip tests
+      rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
+    '' + (concatStringsSep "\n"
+          (map
+            (lib:
+              ''
+                rm -vR $out/lib/python*/${lib}
+                # libraries in dynload (C libraries) may not exist,
+                # but when they exist they may be prefixed with _
+                rm -vfR $out/lib/python*/lib-dynload/{,_}${lib}
+              '') stripLibs));
 
     enableParallelBuilding = true;
 
@@ -339,8 +351,14 @@ in with passthru; stdenv.mkDerivation ({
       license = lib.licenses.psfl;
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ fridh thiagokokada ];
-      # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
-      # in case both 2 and 3 are installed.
-      priority = -100;
+      knownVulnerabilities = [
+        "Python 2.7 has reached its end of life after 2020-01-01. See https://www.python.org/doc/sunset-python-2/."
+        # Quote: That means that we will not improve it anymore after that day,
+        # even if someone finds a security problem in it. You should upgrade to
+        # Python 3 as soon as you can. [..] So, in 2008, we announced that we
+        # would sunset Python 2 in 2015, and asked people to upgrade before
+        # then. Some did, but many did not. So, in 2014, we extended that
+        # sunset till 2020.
+      ];
     };
   } // crossCompileEnv)

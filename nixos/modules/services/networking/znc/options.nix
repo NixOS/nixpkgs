@@ -18,7 +18,7 @@ let
       };
 
       port = mkOption {
-        type = types.ints.u16;
+        type = types.port;
         default = 6697;
         description = lib.mdDoc ''
           IRC server port.
@@ -188,7 +188,7 @@ in
 
         port = mkOption {
           default = 5000;
-          type = types.int;
+          type = types.port;
           description = lib.mdDoc ''
             Specifies the port on which to listen.
           '';

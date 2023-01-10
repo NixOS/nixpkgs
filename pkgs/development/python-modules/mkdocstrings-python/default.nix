@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "0.8.0";
+  version = "0.8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = version;
-    hash = "sha256-KAVBK0ZR1R27cWH99DVOYNFWKa4ubBXzgM0hVpGRIpE=";
+    hash = "sha256-JGk6oJQ6mcLtn7SDtltsLPT+CxPZNRbq8bnY9pMcXHc=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python handler for mkdocstrings";
     homepage = "https://github.com/mkdocstrings/python";
+    changelog = "https://github.com/mkdocstrings/python/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

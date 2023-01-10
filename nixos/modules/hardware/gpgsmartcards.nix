@@ -8,7 +8,7 @@ let
   # https://salsa.debian.org/debian/gnupg2/-/blob/debian/main/debian/scdaemon.udev
 
   # the latest rev of the entire debian gnupg2 repo as of 2021-04-28
-  # the scdaemon.udev file was last commited on 2021-01-05 (7817a03):
+  # the scdaemon.udev file was last committed on 2021-01-05 (7817a03):
   scdaemonUdevRev = "01898735a015541e3ffb43c7245ac1e612f40836";
 
   scdaemonRules = pkgs.fetchurl {

@@ -44,7 +44,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 }) // rec {
   inherit version src;
 
-  pname = prevName + lib.optionalString supportFlags.waylandSupport "wayland";
+  pname = prevName + lib.optionalString supportFlags.waylandSupport "-wayland";
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
@@ -185,6 +185,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   passthru = {
     inherit pkgArches;
+    inherit (src) updateScript;
     tests = { inherit (nixosTests) wine; };
   };
   meta = {

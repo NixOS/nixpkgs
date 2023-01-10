@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , addOpenGLRunpath
 , cmake
 , pkg-config
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-26E7vA2JlC50zmpaQfDrFMlgjAqmfTdp9/A8g5caDqI=";
+    hash = "sha256-M9kv1Oe5ZZfd9H/+KUJUoK9L1EdyS2qRp2mJDK0dnPE=";
   };
 
   sourceRoot = "source/src";
@@ -48,12 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/hsa
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/ROCR-Runtime/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocm-runtime "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Platform runtime for ROCm";

@@ -67,11 +67,11 @@ in
 
         # Taken from mint-artwork.gschema.override
         theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
-          name = mkDefault "Mint-X";
+          name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
         iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
-          name = mkDefault "Mint-X-Dark";
+          name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-x-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
@@ -105,7 +105,7 @@ in
       services.dbus.packages = with pkgs.cinnamon; [
         cinnamon-common
         cinnamon-screensaver
-        nemo
+        nemo-with-extensions
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
@@ -154,7 +154,7 @@ in
         polkit_gnome
 
         # packages
-        nemo
+        nemo-with-extensions
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
@@ -180,6 +180,7 @@ in
         mint-themes
         mint-x-icons
         mint-y-icons
+        xapp # provides some xapp-* icons
       ] config.environment.cinnamon.excludePackages);
 
       xdg.mime.enable = true;
@@ -197,10 +198,10 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Cinnamon
-      qt5.enable = true;
-      qt5.platformTheme = "gnome";
-      qt5.style = "adwaita";
+      # Harmonize Qt applications under Cinnamon
+      qt.enable = true;
+      qt.platformTheme = "gnome";
+      qt.style = "adwaita";
 
       # Default Fonts
       fonts.fonts = with pkgs; [

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fulcrum";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
     rev = "v${version}";
-    sha256 = "sha256-sX9GeY+c/mcsAWApQ0E5LwoXZgWUC4w7YY8/PEzMhl8=";
+    sha256 = "sha256-HAA5YRShLzxVP9aIP1RdDH09cZqjiZhZOxxc2EVGvx8=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

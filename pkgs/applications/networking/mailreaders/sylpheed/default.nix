@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, gtk2, openssl ? null, gpgme ? null
-, gpgSupport ? true, sslSupport ? true, fetchpatch }:
+, gpgSupport ? true, sslSupport ? true, fetchpatch, Foundation }:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
@@ -34,10 +34,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2 ]
     ++ optionals gpgSupport [ gpgme ]
-    ++ optionals sslSupport [ openssl ];
+    ++ optionals sslSupport [ openssl ]
+    ++ optionals stdenv.isDarwin [ Foundation ];
 
   configureFlags = optional gpgSupport "--enable-gpgme"
     ++ optional sslSupport "--enable-ssl";
+
+  # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Foundation";
 
   meta = {
     homepage = "https://sylpheed.sraoss.jp/en/";

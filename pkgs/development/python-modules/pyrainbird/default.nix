@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , parameterized
 , pycryptodome
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "0.6.2";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -22,12 +23,15 @@ buildPythonPackage rec {
     owner = "jbarrancos";
     repo = pname;
     rev = version;
-    hash = "sha256-MikJDW5Fo2DNpn9/Hyc1ecIIMEwE8GD5LKpka2t7aCk=";
+    hash = "sha256-pN/QILpXJoQAccB7CSDLxCDYfijf/VJbYw+NRUI4kvs=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--cov=pyrainbird --cov-report=term-missing" ""
+
+    substituteInPlace setup.cfg \
+      --replace "pycryptodome>=3.16.0" "pycryptodome"
   '';
 
   propagatedBuildInputs = [
@@ -38,6 +42,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     parameterized
+    pytest-aiohttp
     pytestCheckHook
     requests-mock
     responses
@@ -50,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Rainbird controllers";
     homepage = "https://github.com/jbarrancos/pyrainbird/";
+    changelog = "https://github.com/jbarrancos/pyrainbird/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

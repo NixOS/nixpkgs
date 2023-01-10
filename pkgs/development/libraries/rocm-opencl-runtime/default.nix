@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , addOpenGLRunpath
 , cmake
 , rocm-cmake
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-opencl-runtime";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-QvAF25Zfq9d1M/KIsr2S+Ggxzqw/MQ2OVcm9ZNfjTa8=";
+    hash = "sha256-E1+Y/fgp5b+7H1LN+O1fwVi0/XRCgvsiSxTY3u/q+8I=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -68,12 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'ICD_VENDOR_PATH' '"${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors/"'
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-OpenCL-Runtime/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocm-opencl-runtime "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "OpenCL runtime for AMD GPUs, part of the ROCm stack";

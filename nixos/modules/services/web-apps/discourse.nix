@@ -820,10 +820,10 @@ in
 
     services.nginx = lib.mkIf cfg.nginx.enable {
       enable = true;
-      additionalModules = [ pkgs.nginxModules.brotli ];
 
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
+      recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 

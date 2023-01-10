@@ -26,7 +26,7 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ zed lwt_log lwt_react mew_vi ]
-    ++ lib.optional (lib.versionAtLeast version "3.3.1") [ uucp logs ] ;
+    ++ lib.optionals (lib.versionAtLeast version "3.3.1") [ uucp logs ] ;
 
   meta = {
     description = "Terminal manipulation library for OCaml";

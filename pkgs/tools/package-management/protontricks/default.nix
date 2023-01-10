@@ -56,9 +56,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "protontricks" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";

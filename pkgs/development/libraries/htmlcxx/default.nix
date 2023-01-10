@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libiconv }:
+{ lib, stdenv, fetchurl, autoreconfHook, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "htmlcxx";
@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XTj5OM9N+aKYpTRq8nGV//q/759GD8KgIjPLz6j8dcg=";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libiconv ];
   patches = [
     ./ptrdiff.patch

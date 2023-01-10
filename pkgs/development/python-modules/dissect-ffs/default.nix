@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-ffs";
-  version = "3.1";
+  version = "3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ffs";
     rev = version;
-    hash = "sha256-JI0i0pvOOChWCDB8rynDuf0txvPQT7z2JJ1EsE4VNLw=";
+    hash = "sha256-kcYSoY3a8ljY9LWzOUekLBzokE+wJrG1KEr0p5CCj0U=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

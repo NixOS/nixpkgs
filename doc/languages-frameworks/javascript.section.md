@@ -330,13 +330,16 @@ mkYarnPackage rec {
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
 
-## Outside of nixpkgs {#javascript-outside-nixpkgs}
+## Outside Nixpkgs {#javascript-outside-nixpkgs}
 
-There are some other options available that can't be used inside nixpkgs. Those other options are written in Nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](https://nixos.wiki/wiki/Import_From_Derivation) is not allowed in Hydra at present. If you are packaging something outside nixpkgs, those can be considered
+There are some other tools available, which are written in the Nix language.
+These that can't be used inside Nixpkgs because they require [Import From Derivation](#ssec-import-from-derivation), which is not allowed in Nixpkgs.
+
+If you are packaging something outside Nixpkgs, consider the following:
 
 ### npmlock2nix {#javascript-npmlock2nix}
 
-[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might be subject to change.
+[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API might be subject to change.
 
 #### Pitfalls {#javascript-npmlock2nix-pitfalls}
 
@@ -344,7 +347,7 @@ There are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issue
 
 ### nix-npm-buildpackage {#javascript-nix-npm-buildpackage}
 
-[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might change. It supports both package-lock.json and yarn.lock.
+[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API might change. It supports both `package-lock.json` and yarn.lock.
 
 #### Pitfalls {#javascript-nix-npm-buildpackage-pitfalls}
 

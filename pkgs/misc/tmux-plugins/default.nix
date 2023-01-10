@@ -101,7 +101,7 @@ in rec {
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
-      description = "continous saving of tmux environment";
+      description = "continuous saving of tmux environment";
       longDescription =
       ''
         Features:
@@ -155,12 +155,12 @@ in rec {
 
   cpu = mkTmuxPlugin {
     pluginName = "cpu";
-    version = "unstable-2021-12-15";
+    version = "unstable-2023-01-06";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
-      rev = "9eb3dba66672c5b43065e144cc3a1031f77ad67e";
-      sha256 = "sha256-v/jZxsa+JwsSKjmA32VK/4gBNHP/SyOzTaYSSz2c0+4=";
+      rev = "98d787191bc3e8f19c3de54b96ba1caf61385861";
+      sha256 = "sha256-ymmCI6VYvf94Ot7h2GAboTRBXPIREP+EB33+px5aaJk=";
     };
   };
 
@@ -257,6 +257,32 @@ in rec {
     '';
   };
 
+  fuzzback = mkTmuxPlugin {
+    pluginName = "fuzzback";
+    version = "unstable-2022-11-21";
+    src = fetchFromGitHub {
+      owner = "roosta";
+      repo = "tmux-fuzzback";
+      rev = "bfd9cf0ef1c35488f0080f0c5ca4fddfdd7e18ec";
+      sha256 = "w788xDBkfiLdUVv1oJi0YikFPqVk6LiN6PDfHu8on5E=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in fuzzback.sh preview.sh supported.sh; do
+        chmod +x $target/scripts/$f
+        wrapProgram $target/scripts/$f \
+          --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils fzf gawk gnused ]}
+      done
+    '';
+    meta = {
+      homepage = "https://github.com/roosta/tmux-fuzzback";
+      description = "Fuzzy search for terminal scrollback";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ deejayem ];
+    };
+  };
+
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
@@ -311,6 +337,24 @@ in rec {
       repo = "tmux-logging";
       rev = "b085ad423b5d59a2c8b8d71772352e7028b8e1d0";
       sha256 = "0p0sawysalhi8k2a5hdxniqx6kb24kd8rnvfzkjqigzid5ik37js";
+    };
+  };
+
+  mode-indicator = mkTmuxPlugin rec {
+    pluginName = "mode-indicator";
+    version = "unstable-2021-10-01";
+    src = fetchFromGitHub {
+      owner = "MunifTanjim";
+      repo = "tmux-mode-indicator";
+      rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
+      sha256 = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
+      description = "Plugin that displays prompt indicating currently active Tmux mode";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ aacebedo ];
     };
   };
 

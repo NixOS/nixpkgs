@@ -282,7 +282,7 @@ let
         defaultText = literalExpression "config.security.pam.mount.enable";
         type = types.bool;
         description = lib.mdDoc ''
-          Enable PAM mount (pam_mount) system to mount fileystems on user login.
+          Enable PAM mount (pam_mount) system to mount filesystems on user login.
         '';
       };
 
@@ -305,7 +305,7 @@ let
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Wheather the delay after typing a wrong password should be disabled.
+          Whether the delay after typing a wrong password should be disabled.
         '';
       };
 
@@ -694,7 +694,7 @@ let
           optionalString (cfg.limits != []) ''
             session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf cfg.limits}
           '' +
-          optionalString (cfg.showMotd && config.users.motd != null) ''
+          optionalString (cfg.showMotd && (config.users.motd != null || config.users.motdFile != null)) ''
             session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}
           '' +
           optionalString (cfg.enableAppArmor && config.security.apparmor.enable) ''
@@ -775,7 +775,9 @@ let
     };
   }));
 
-  motd = pkgs.writeText "motd" config.users.motd;
+  motd = if isNull config.users.motdFile
+         then pkgs.writeText "motd" config.users.motd
+         else config.users.motdFile;
 
   makePAMService = name: service:
     { name = "pam.d/${name}";
@@ -1199,12 +1201,26 @@ in
       description = lib.mdDoc "Message of the day shown to users when they log in.";
     };
 
+    users.motdFile = mkOption {
+      default = null;
+      example = "/etc/motd";
+      type = types.nullOr types.path;
+      description = lib.mdDoc "A file containing the message of the day shown to users when they log in.";
+    };
   };
 
 
   ###### implementation
 
   config = {
+    assertions = [
+      {
+        assertion = isNull config.users.motd || isNull config.users.motdFile;
+        message = ''
+          Only one of users.motd and users.motdFile can be set.
+        '';
+      }
+    ];
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.

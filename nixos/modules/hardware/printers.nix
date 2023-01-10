@@ -100,7 +100,7 @@ in {
               default = {};
               description = lib.mdDoc ''
                 Sets PPD options for the printer.
-                {command}`lpoptions [-p printername] -l` shows suported PPD options for the given printer.
+                {command}`lpoptions [-p printername] -l` shows supported PPD options for the given printer.
               '';
             };
           };

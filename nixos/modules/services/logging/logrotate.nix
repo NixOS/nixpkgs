@@ -163,7 +163,7 @@ in
               default = null;
               description = lib.mdDoc ''
                 How often to rotate the logs. Defaults to previously set global setting,
-                which itself defauts to weekly.
+                which itself defaults to weekly.
               '';
             };
 

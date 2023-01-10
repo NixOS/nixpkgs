@@ -12,11 +12,14 @@
 }:
 
 let
+  # iverilog-test has been merged to the main iverilog main source tree
+  # in January 2022, so it won't be longer necessary.
+  # For now let's fetch it from the separate repo, since 11.0 was released in 2020.
   iverilog-test = fetchFromGitHub {
     owner  = "steveicarus";
     repo   = "ivtest";
-    rev    = "253609b89576355b3bef2f91e90db62223ecf2be";
-    sha256 = "18i7jlr2csp7mplcrwjhllwvb6w3v7x7mnx7vdw48nd3g5scrydx";
+    rev    = "a19e629a1879801ffcc6f2e6256ca435c20570f3";
+    sha256 = "sha256-3EkmrAXU0/mRxrxp5Hy7C3yWTVK16L+tPqqeEryY/r8=";
   };
 in
 stdenv.mkDerivation rec {
@@ -37,10 +40,6 @@ stdenv.mkDerivation rec {
   preConfigure = "sh autoconf.sh";
 
   enableParallelBuilding = true;
-
-  # tests try to access /proc/ which does not exist on darwin
-  # Cannot locate IVL modules : couldn't get command path from OS.
-  doCheck = !stdenv.isDarwin;
 
   installCheckInputs = [ perl ];
 

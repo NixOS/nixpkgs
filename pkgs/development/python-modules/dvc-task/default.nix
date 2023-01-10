@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Celery task queue used in DVC";
     homepage = "https://github.com/iterative/dvc-task";
     license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    maintainers = with maintainers; [ ];
   };
 }

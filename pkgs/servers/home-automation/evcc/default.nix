@@ -16,20 +16,20 @@
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.108.3";
+  version = "0.110.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-jBUKMsSpcMoW4v9S5pCpojoYzFASj8hmWPzUcqL3doQ=";
+    hash = "sha256-SIBVvVl1O+vqQug6LTzKEzFAay82ot4e+rXd17Djvqc=";
   };
 
-  vendorHash = "sha256-10W1BNHcdP77m7lJ/mc+jQeUigoUid3K0wI4bUm5y+s=";
+  vendorHash = "sha256-YP6/3+jVbavBE6ZSopryC1SgQc5kzE+gWpNbwptBMG8=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-+l5LuxJAjrTvOL5XEQ4OIktdupSpn6IqrNX5x4MRmNw=";
+    hash = "sha256-hc3IkWiafKBGtGPEPWWbj4XQsGh+PrGGnBV2bzEAn0s=";
   };
 
   nativeBuildInputs = [
@@ -81,9 +81,7 @@ buildGoModule rec {
     tests = {
       inherit (nixosTests) evcc;
     };
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

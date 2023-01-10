@@ -12,7 +12,6 @@
 , platformdirs
 , pluggy
 , pyramid
-, pytest-flake8
 , pytestCheckHook
 , repoze_lru
 , setuptools
@@ -37,6 +36,11 @@ buildPythonApplication rec {
 
   sourceRoot = "source/server";
 
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--flake8" ""
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     appdirs
@@ -58,7 +62,6 @@ buildPythonApplication rec {
   checkInputs = [
     beautifulsoup4
     nginx
-    pytest-flake8
     pytestCheckHook
     webtest
   ];

@@ -3,7 +3,7 @@ GEM
   specs:
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
-    faraday (2.6.0)
+    faraday (2.7.1)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
@@ -24,4 +24,4 @@ DEPENDENCIES
   sawyer (= 0.9.2)
 
 BUNDLED WITH
-   2.3.24
+   2.3.25

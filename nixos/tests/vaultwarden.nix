@@ -87,6 +87,9 @@ let
                 testRunner = pkgs.writers.writePython3Bin "test-runner"
                   {
                     libraries = [ pkgs.python3Packages.selenium ];
+                    flakeIgnore = [
+                      "E501"
+                    ];
                   } ''
 
                   from selenium.webdriver.common.by import By
@@ -106,25 +109,25 @@ let
 
                   wait.until(EC.title_contains("Create Account"))
 
-                  driver.find_element(By.CSS_SELECTOR, 'input#email').send_keys(
-                    '${userEmail}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_email').send_keys(
+                      '${userEmail}'
                   )
-                  driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
-                    'A Cat'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_name').send_keys(
+                      'A Cat'
                   )
-                  driver.find_element(By.CSS_SELECTOR, 'input#masterPassword').send_keys(
-                    '${userPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_master-password').send_keys(
+                      '${userPassword}'
                   )
-                  driver.find_element(By.CSS_SELECTOR, 'input#masterPasswordRetype').send_keys(
-                    '${userPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_confirm-master-password').send_keys(
+                      '${userPassword}'
                   )
 
-                  driver.find_element(By.XPATH, "//button[contains(., 'Submit')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Create Account')]").click()
 
                   wait.until_not(EC.title_contains("Create Account"))
 
-                  driver.find_element(By.CSS_SELECTOR, 'input#masterPassword').send_keys(
-                    '${userPassword}'
+                  driver.find_element(By.CSS_SELECTOR, 'input#login_input_master-password').send_keys(
+                      '${userPassword}'
                   )
                   driver.find_element(By.XPATH, "//button[contains(., 'Log In')]").click()
 
@@ -133,10 +136,10 @@ let
                   driver.find_element(By.XPATH, "//button[contains(., 'Add Item')]").click()
 
                   driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
-                    'secrets'
+                      'secrets'
                   )
                   driver.find_element(By.CSS_SELECTOR, 'input#loginPassword').send_keys(
-                    '${storedPassword}'
+                      '${storedPassword}'
                   )
 
                   driver.find_element(By.XPATH, "//button[contains(., 'Save')]").click()
@@ -161,7 +164,7 @@ let
       with subtest("configure the cli"):
           client.succeed("bw --nointeraction config server http://server")
 
-      with subtest("can't login to nonexistant account"):
+      with subtest("can't login to nonexistent account"):
           client.fail(
               "bw --nointeraction --raw login ${userEmail} ${userPassword}"
           )

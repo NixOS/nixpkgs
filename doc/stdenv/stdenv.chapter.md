@@ -719,11 +719,11 @@ If set, libraries and executables are not stripped. By default, they are.
 
 ##### `dontStripHost` {#var-stdenv-dontStripHost}
 
-Like `dontStrip`, but only affects the `strip` command targetting the package’s host platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
+Like `dontStrip`, but only affects the `strip` command targeting the package’s host platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
 
 ##### `dontStripTarget` {#var-stdenv-dontStripTarget}
 
-Like `dontStrip`, but only affects the `strip` command targetting the packages’ target platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
+Like `dontStrip`, but only affects the `strip` command targeting the packages’ target platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
 
 ##### `dontMoveSbin` {#var-stdenv-dontMoveSbin}
 
@@ -836,6 +836,10 @@ Hook executed at the end of the installCheck phase.
 The distribution phase is intended to produce a source distribution of the package. The default `distPhase` first calls `make dist`, then it copies the resulting source tarballs to `$out/tarballs/`. This phase is only executed if the attribute `doDist` is set.
 
 #### Variables controlling the distribution phase {#variables-controlling-the-distribution-phase}
+
+##### `doDist` {#var-stdenv-doDist}
+
+If set, the distribution phase is executed.
 
 ##### `distTarget` {#var-stdenv-distTarget}
 

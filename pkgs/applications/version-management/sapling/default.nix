@@ -17,6 +17,8 @@
 , CoreFoundation
 , CoreServices
 , Security
+
+, enableMinimal ? false
 }:
 
 let
@@ -123,6 +125,25 @@ let
       sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
     '';
 
+    # Now, copy the "sl web" (aka edenscm-isl) results into the output of this
+    # package, so that the command can actually work. NOTES:
+    #
+    # 1) This applies on all systems (so no conditional a la postFixup)
+    # 2) This doesn't require any kind of fixup itself, so we leave it out
+    #    of postFixup for that reason, too
+    # 3) If asked, we optionally patch in a hardcoded path to the 'nodejs' package,
+    #    so that 'sl web' always works
+    # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
+    preFixup = ''
+      sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
+      chmod +w $sitepackages
+      cp -r ${isl} $sitepackages/edenscm-isl
+    '' + lib.optionalString (!enableMinimal) ''
+      chmod +w $sitepackages/edenscm-isl/run-isl
+      substituteInPlace $sitepackages/edenscm-isl/run-isl \
+        --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
+    '';
+
     postFixup = lib.optionalString stdenv.isLinux ''
       wrapProgram $out/bin/sl \
         --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
@@ -138,9 +159,9 @@ let
     ]);
 
     buildInputs = [
-      curl
       openssl
     ] ++ lib.optionals stdenv.isDarwin [
+      curl
       libiconv
       CoreFoundation
       CoreServices
@@ -165,12 +186,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-
     cp -r ${sapling}/* $out
-
-    sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
-    chmod +w $sitepackages
-    cp -r ${isl} $sitepackages/edenscm-isl
 
     runHook postInstall
   '';

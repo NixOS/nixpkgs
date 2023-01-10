@@ -26,10 +26,10 @@
           The module option
           <literal>services.xserver.xrandrHeads</literal> now causes the
           first head specified in this list to be set as the primary
-          head. Apart from that, it's now possible to also set
+          head. Apart from that, it’s now possible to also set
           additional options by using an attribute set, for example:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 { services.xserver.xrandrHeads = [
     &quot;HDMI-0&quot;
     {
@@ -543,7 +543,7 @@
           </listitem>
           <listitem>
             <para>
-              Radicale's default package has changed from 1.x to 2.x.
+              Radicale’s default package has changed from 1.x to 2.x.
               Instructions to migrate can be found
               <link xlink:href="http://radicale.org/1to2/"> here
               </link>. It is also possible to use the newer version by
@@ -582,7 +582,7 @@
       </listitem>
       <listitem>
         <para>
-          <literal>flexget</literal>'s state database cannot be upgraded
+          <literal>flexget</literal>’s state database cannot be upgraded
           to its new internal format, requiring removal of any existing
           <literal>db-config.sqlite</literal> which will be
           automatically recreated.
@@ -590,9 +590,9 @@
       </listitem>
       <listitem>
         <para>
-          The <literal>ipfs</literal> service now doesn't ignore the
-          <literal>dataDir</literal> option anymore. If you've ever set
-          this option to anything other than the default you'll have to
+          The <literal>ipfs</literal> service now doesn’t ignore the
+          <literal>dataDir</literal> option anymore. If you’ve ever set
+          this option to anything other than the default you’ll have to
           either unset it (so the default gets used) or migrate the old
           data manually with
         </para>
@@ -651,22 +651,22 @@ rmdir /var/lib/ipfs/.ipfs
       </listitem>
       <listitem>
         <para>
-          <literal>cc-wrapper</literal>'s setup-hook now exports a
+          <literal>cc-wrapper</literal><quote>s setup-hook now exports a
           number of environment variables corresponding to binutils
           binaries, (e.g. <literal>LD</literal>,
           <literal>STRIP</literal>, <literal>RANLIB</literal>, etc).
-          This is done to prevent packages' build systems guessing,
-          which is harder to predict, especially when cross-compiling.
-          However, some packages have broken due to this—their build
-          systems either not supporting, or claiming to support without
-          adequate testing, taking such environment variables as
-          parameters.
+          This is done to prevent packages</quote> build systems
+          guessing, which is harder to predict, especially when
+          cross-compiling. However, some packages have broken due to
+          this—their build systems either not supporting, or claiming to
+          support without adequate testing, taking such environment
+          variables as parameters.
         </para>
       </listitem>
       <listitem>
         <para>
           <literal>services.firefox.syncserver</literal> now runs by
-          default as a non-root user. To accomodate this change, the
+          default as a non-root user. To accommodate this change, the
           default sqlite database location has also been changed.
           Migration should work automatically. Refer to the description
           of the options for more details.
@@ -688,10 +688,10 @@ rmdir /var/lib/ipfs/.ipfs
       </listitem>
       <listitem>
         <para>
-          grsecurity/PaX support has been dropped, following upstream's
+          grsecurity/PaX support has been dropped, following upstream’s
           decision to cease free support. See
           <link xlink:href="https://grsecurity.net/passing_the_baton.php">
-          upstream's announcement</link> for more information. No
+          upstream’s announcement</link> for more information. No
           complete replacement for grsecurity/PaX is available
           presently.
         </para>
@@ -794,7 +794,7 @@ FLUSH PRIVILEGES;
         <para>
           Modules can now be disabled by using
           <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-replace-modules">
-          disabledModules</link>, allowing another to take it's place.
+          disabledModules</link>, allowing another to take it’s place.
           This can be used to import a set of modules from another
           channel while keeping the rest of the system on a stable
           release.
@@ -808,7 +808,7 @@ FLUSH PRIVILEGES;
           provided by fontconfig-penultimate, replacing
           fontconfig-ultimate; the new defaults are less invasive and
           provide rendering that is more consistent with other systems
-          and hopefully with each font designer's intent. Some
+          and hopefully with each font designer’s intent. Some
           system-wide configuration has been removed from the Fontconfig
           NixOS module where user Fontconfig settings are available.
         </para>

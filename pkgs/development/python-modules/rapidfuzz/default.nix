@@ -8,10 +8,8 @@
 , ninja
 , scikit-build
 , setuptools
-, jarowinkler
 , numpy
 , hypothesis
-, jarowinkler-cpp
 , pandas
 , pytestCheckHook
 , rapidfuzz-cpp
@@ -20,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "2.13.3";
+  version = "2.13.7";
 
   disabled = pythonOlder "3.7";
 
@@ -30,7 +28,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hx8DNFxzD41tvxcKaSqqKkxJMlcrxAaihulUdkzyOt0=";
+    hash = "sha256-ZovXYOoLriAmJHptolD135qCn7XHeVvzLJNzI08mqwY=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +42,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    jarowinkler-cpp
     rapidfuzz-cpp
     taskflow
   ];
@@ -60,9 +57,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jarowinkler
     numpy
   ];
+
+  preCheck = ''
+    export RAPIDFUZZ_IMPLEMENTATION=cpp
+  '';
 
   checkInputs = [
     hypothesis
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

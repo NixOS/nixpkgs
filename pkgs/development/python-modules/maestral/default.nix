@@ -9,24 +9,25 @@
 , desktop-notifier
 , dropbox
 , fasteners
+, importlib-metadata
 , keyring
 , keyrings-alt
 , packaging
 , pathspec
 , Pyro5
 , requests
+, rich
 , setuptools
-, sdnotify
 , survey
+, typing-extensions
 , watchdog
-, importlib-metadata
 , pytestCheckHook
 , nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.6.3";
+  version = "1.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JVzaWwdHAn5JOruLEN9Z2/5eV1oh3J2NQffNI3RqYfA=";
+    hash = "sha256-YCPMPkvMaZ0uzTiiCbXFDpgDS0yGlfF0wKK2HhYmH+Y=";
   };
 
   propagatedBuildInputs = [
@@ -44,18 +45,18 @@ buildPythonPackage rec {
     dbus-python
     dropbox
     fasteners
+    importlib-metadata
     keyring
     keyrings-alt
     packaging
     pathspec
     Pyro5
     requests
+    rich
     setuptools
-    sdnotify
     survey
+    typing-extensions
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   makeWrapperArgs = [

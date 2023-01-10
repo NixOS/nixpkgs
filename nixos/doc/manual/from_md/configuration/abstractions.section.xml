@@ -4,7 +4,7 @@
     If you find yourself repeating yourself over and over, it’s time to
     abstract. Take, for instance, this Apache HTTP Server configuration:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   services.httpd.virtualHosts =
     { &quot;blog.example.org&quot; = {
@@ -29,7 +29,7 @@
     the only difference is the document root directories. To prevent
     this duplication, we can use a <literal>let</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 let
   commonConfig =
     { adminAddr = &quot;alice@example.org&quot;;
@@ -55,7 +55,7 @@ in
     You can write a <literal>let</literal> wherever an expression is
     allowed. Thus, you also could have written:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   services.httpd.virtualHosts =
     let commonConfig = ...; in
@@ -74,7 +74,7 @@ in
     of different virtual hosts, all with identical configuration except
     for the document root. This can be done as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   services.httpd.virtualHosts =
     let

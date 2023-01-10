@@ -1,4 +1,4 @@
-# NixOS module for Buildbot continous integration server.
+# NixOS module for Buildbot continuous integration server.
 
 { config, lib, options, pkgs, ... }:
 
@@ -206,7 +206,7 @@ in {
 
       port = mkOption {
         default = 8010;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc "Specifies port number on which the buildbot HTTP interface listens.";
       };
 

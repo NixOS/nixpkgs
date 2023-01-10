@@ -40,7 +40,7 @@ buildPythonPackage rec {
     babel
     jupyter_server
     tomli
-  ] ++ lib.optional (pythonOlder "3.10") [
+  ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
 

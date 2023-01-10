@@ -67,7 +67,7 @@
 let
   tg_owt = callPackage ./tg_owt.nix {
     abseil-cpp = abseil-cpp.override {
-      cxxStandard = "17";
+      cxxStandard = "20";
     };
   };
   # Aarch64 default gcc9 will cause ICE. For reference #108305
@@ -75,7 +75,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.3.4";
+  version = "4.5.3";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -84,7 +84,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0x18m48k6abpbfgavjad5sg3mf3j0kfmyayyvkqxr31viw8kq6m5";
+    sha256 = "060ajv9dd87qs202jr09i842vww1x25mg7vriyvmyw6rz0qf0d8l";
   };
 
   postPatch = ''

@@ -2,7 +2,7 @@
 
 let
   cfg = config.services.supergfxd;
-  ini = pkgs.formats.ini { };
+  json = pkgs.formats.json { };
 in
 {
   options = {
@@ -10,7 +10,7 @@ in
       enable = lib.mkEnableOption (lib.mdDoc "Enable the supergfxd service");
 
       settings = lib.mkOption {
-        type = lib.types.nullOr ini.type;
+        type = lib.types.nullOr json.type;
         default = null;
         description = lib.mdDoc ''
           The content of /etc/supergfxd.conf.
@@ -23,7 +23,10 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.supergfxctl ];
 
-    environment.etc."supergfxd.conf" = lib.mkIf (cfg.settings != null) (ini.generate "supergfxd.conf" cfg.settings);
+    environment.etc."supergfxd.conf" = lib.mkIf (cfg.settings != null) {
+      source = json.generate "supergfxd.conf" cfg.settings;
+      mode = "0644";
+    };
 
     services.dbus.enable = true;
 

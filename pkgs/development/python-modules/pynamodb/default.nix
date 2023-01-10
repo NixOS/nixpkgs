@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "5.3.3";
+  version = "5.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pynamodb";
     repo = "PynamoDB";
     rev = "refs/tags/${version}";
-    hash = "sha256-j21CCPTRj7c7vClujHYEkmH31B48gDFYQbBXoChNSaI=";
+    hash = "sha256-qg/aFK7rt2a/ZcLm+VSlq8UYBh6zS0/VVLqRAN7kLus=";
   };
 
   propagatedBuildInputs = [

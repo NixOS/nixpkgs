@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.17.3";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-7F6Pqq/iFmI3JzDKoMmSyVm6BUr+Ev9GPidOofcLNV4=";
+    sha256 = "sha256-3dJ16G1PCLAV1sxtDt+eru+Chg7SWt+K/crJgXMO++k=";
   };
 
   # patch Cargo.toml to not vendor libgit2 and openssl
   cargoPatches = [ ./no-vendor.patch ];
 
-  cargoSha256 = "sha256-kC8BGobS1iMq+vIwE24Lip+HGdVnA/NjHFAb6cqOz44=";
+  cargoSha256 = "sha256-eLPLBBytzjKfJk0pbPBC0kJrxkelfDrAj5kaM6g9z9w=";
 
   nativeBuildInputs = [ pkg-config ];
 

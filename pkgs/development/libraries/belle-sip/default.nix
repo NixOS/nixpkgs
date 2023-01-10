@@ -4,7 +4,7 @@
 , fetchFromGitLab
 , lib
 , libantlr3c
-, mbedtls
+, mbedtls_2
 , stdenv
 , zlib
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=stringop-overflow"
   ];
 
-  propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox belr ];
+  propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];
 
   meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";

@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , substituteAll
 , alsa-utils
 , libnotify
 , which
+, poetry-core
+, pythonRelaxDepsHook
 , jeepney
 , loguru
 , pytest
@@ -16,15 +18,16 @@
 
 buildPythonPackage rec {
   pname = "notify-py";
-  version = "0.3.3";
+  version = "0.3.39";
+  format = "pyproject";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ms7m";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1n35adwsyhz304n4ifnsz6qzkymwhyqc8sg8d76qv5psv2xsnzlf";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QIK5MCCOsD8SStoh7TRw+l9k28SjChwV2J/T7gMKnAs=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -40,6 +43,15 @@ buildPythonPackage rec {
       src = ./darwin-paths.patch;
       which = "${which}/bin/which";
     })
+  ];
+
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "loguru"
   ];
 
   propagatedBuildInputs = [
@@ -67,11 +79,16 @@ buildPythonPackage rec {
     pytest
   '';
 
+  # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
+  # org.freedesktop.Notifications was not provided by any .service files
+  doCheck = false;
+
   pythonImportsCheck = [ "notifypy" ];
 
   meta = with lib; {
     description = "Cross-platform desktop notification library for Python";
     homepage = "https://github.com/ms7m/notify-py";
+    changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ austinbutler dotlambda ];
   };

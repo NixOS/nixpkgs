@@ -48,7 +48,7 @@ rec {
       };
 
       buildInputs = oldAttrs.buildInputs
-        ++ lib.optional withSeccomp [ libseccomp ];
+        ++ lib.optionals withSeccomp [ libseccomp ];
     });
 
     docker-tini = tini.overrideAttrs (oldAttrs: {

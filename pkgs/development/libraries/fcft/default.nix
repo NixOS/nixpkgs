@@ -13,10 +13,6 @@ let
     "grapheme"
     "run"
   ];
-
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = feature: flag:
-    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 
 stdenv.mkDerivation rec {
@@ -40,7 +36,7 @@ stdenv.mkDerivation rec {
 
   mesonBuildType = "release";
   mesonFlags = builtins.map (t:
-    mesonFeatureFlag "${t}-shaping" (lib.elem t withShapingTypes)
+    lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
   ) availableShapingTypes;
 
   doCheck = true;

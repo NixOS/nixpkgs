@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchurl, python3, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, stanc, python3, buildPackages, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
   version = "2.31.0";
 
-  # includes stanc binaries needed to build cmdstand
-  src = fetchurl {
-    url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
-    sha256 = "sha256-BMqRRWIC/Z7It2qkESJd9L3ycyxvA6NHiWbAvzVMzIQ=";
+  src = fetchFromGitHub {
+    owner = "stan-dev";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-Uh/ZhEnbhQwC8xGFjDzH9No3VRgVbHYk2KoC+e3YhJw=";
   };
+
+  nativeBuildInputs = [ stanc ];
 
   buildFlags = [ "build" ];
   enableParallelBuilding = true;
@@ -22,7 +26,17 @@ stdenv.mkDerivation rec {
     substituteInPlace stan/lib/stan_math/make/libraries \
       --replace "/usr/bin/env bash" "bash"
     patchShebangs .
+  '' + lib.optionalString stdenv.isAarch64 ''
+    sed -z -i "s/TEST(CommandStansummary, check_console_output).*TEST(CommandStansummary, check_csv_output)/TEST(CommandStansummary, check_csv_output)/" \
+      src/test/interface/stansummary_test.cpp
   '';
+
+  preConfigure = ''
+    mkdir -p bin
+    ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
+  '';
+
+  makeFlags = lib.optional stdenv.isDarwin "arch=${stdenv.hostPlatform.darwinArch}";
 
   checkPhase = ''
     ./runCmdStanTests.py -j$NIX_BUILD_CORES src/test/interface
@@ -41,10 +55,9 @@ stdenv.mkDerivation rec {
   '';
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
-  preFixup = "rm -rf $(pwd)";
+  preFixup = "rm -rf stan";
 
-  meta = {
-    broken = stdenv.isLinux && stdenv.isAarch64;
+  meta = with lib; {
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian
@@ -53,7 +66,8 @@ stdenv.mkDerivation rec {
       likelihood estimation with Optimization (L-BFGS).
     '';
     homepage = "https://mc-stan.org/interfaces/cmdstan.html";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

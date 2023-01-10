@@ -13,10 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HlT/78LUiTkRUB2jHmYrnQY+bBiv4stcZlMyUnelSpc=";
   };
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "gcc" "cc"
-    substituteInPlace Makefile --replace "-arch i386" ""
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "-arch x86_64" "-arch ${stdenv.hostPlatform.darwinArch}"
   '';
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,include/hdhomerun}

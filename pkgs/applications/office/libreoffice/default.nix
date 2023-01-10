@@ -119,7 +119,7 @@ let
     flatten flip
     concatMapStrings concatStringsSep
     getDev getLib
-    optional optionals optionalString;
+    optionals optionalString;
 
   jre' = jre17_minimal.override {
     modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
@@ -195,7 +195,7 @@ in
     tar -xf ${srcs.translations}
   '';
 
-  patches = optional (variant == "still") [ ./skip-failed-test-with-icu70.patch ./gpgme-1.18.patch ]
+  patches = optionals (variant == "still") [ ./skip-failed-test-with-icu70.patch ./gpgme-1.18.patch ]
   ;
 
   ### QT/KDE

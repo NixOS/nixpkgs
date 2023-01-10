@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
-    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654 (merged)
     ./0001-Make-gio-2.0-optional-16.patch
-    # TODO (not sent upstream)
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/746 (merged)
     ./0002-Ignore-SCM_CREDS-on-darwin.patch
     ./0003-Ignore-HAVE_CPUID_H-on-aarch64-darwin.patch
     ./0004-Prefer-HAVE_CLOCK_GETTIME-on-darwin.patch

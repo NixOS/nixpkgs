@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.19.0";
+  version = "0.19.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7OF1CrRnE4MYHuYD/pasnZpLe9lrbieGp4agnWAaKVo=";
+    sha256 = "sha256-VCWUV+3vXmKbAXImAqY/K4vsA64gHBg83VkxbJua/ao=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace 'dynamic = ["version"]' 'version = "${version}"' \
+      --replace 'license = "ISC"' 'license = {text = "ISC"}'
   '';
 
   pythonImportsCheck = [
@@ -60,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

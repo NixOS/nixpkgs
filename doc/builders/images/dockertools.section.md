@@ -62,6 +62,8 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
+- `architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
+
 - `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
 
 - `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
@@ -140,6 +142,8 @@ Create a Docker image with many of the store paths being on their own layer to i
     *Default:* `[]`
 
 `config` _optional_
+
+`architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
 
 : Run-time configuration of the container. A full list of the options are available at in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 

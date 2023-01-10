@@ -1,49 +1,57 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
-, hip
+, clang
+, git
+, libxml2
+, libedit
 , python3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-s/5gAH5vh2tgATZemPP66juQFDg8BR2sipzX2Q6pOOQ=";
+    hash = "sha256-MokE7Ej8mLHTQeLYvKr7PPlsNG6ul91fqfXDlGu5JpI=";
   };
 
   nativeBuildInputs = [
     cmake
-    hip
+    clang
   ];
 
   buildInputs = [
+    git
+    libxml2
+    libedit
     python3
   ];
 
   cmakeFlags = [
-    "-DBUILD_FAT_LIBMLIRMIOPEN=ON"
+    "-DCMAKE_C_COMPILER=clang"
+    "-DCMAKE_CXX_COMPILER=clang++"
+    "-DBUILD_FAT_LIBROCKCOMPILER=ON"
   ];
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocMLIR/tags?per_page=2" | jq '.[1].name | split("-") | .[1]' --raw-output)"
-    update-source-version rocmlir "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+    page = "tags?per_page=2";
+    filter = ".[1].name | split(\"-\") | .[1]";
+  };
 
   meta = with lib; {
     description = "MLIR-based convolution and GEMM kernel generator";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    broken = finalAttrs.version != clang.version;
   };
 })

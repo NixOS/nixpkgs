@@ -1,21 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytz
+, unittestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
-  version = "1.0.0";
+  version = "2.0.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0p0gyhfqq6gssf3prsy0pcfq5w0wx2w3pcjqbwx3imvc92ls4xwm";
+  src = fetchFromGitHub {
+    owner = "movermeyer";
+    repo = "backports.datetime_fromisoformat";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aHF3E/fLN+j/T4W9lvuVSMy6iRSEn+ARWmL01rY+ixs=";
   };
 
-  # no tests in pypi package
-  doCheck = false;
+  checkInputs = [
+    pytz
+    unittestCheckHook
+  ];
 
-  pythonImportsCheck = [ "backports.datetime_fromisoformat" ];
+  pythonImportsCheck = [
+    "backports.datetime_fromisoformat"
+  ];
 
   meta = with lib; {
-    description = "Backport of Python 3.7's datetime.fromisoformat";
+    changelog = "https://github.com/movermeyer/backports.datetime_fromisoformat/releases/tag/v${version}";
+    description = "Backport of Python 3.11's datetime.fromisoformat";
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];

@@ -105,7 +105,7 @@ in
     systemd.packages = [ pkgs.asusctl ];
     services.dbus.packages = [ pkgs.asusctl ];
     services.udev.packages = [ pkgs.asusctl ];
-    services.supergfxd.enable = true;
+    services.supergfxd.enable = lib.mkDefault true;
 
     systemd.user.services.asusd-user.enable = cfg.enableUserService;
   };

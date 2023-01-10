@@ -14,12 +14,15 @@ let
     generic = [ av ];
     google_translate = [ mutagen ];
     google_sheets = [ oauth2client ];
-    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
+    govee_ble = [ ibeacon-ble ];
+    hassio = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
+    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ PyChromecast ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
     raspberry_pi = [ rpi-bad-power ];
+    shelly = [ pyswitchbot ];
     tilt_ble = [ govee-ble ibeacon-ble ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
@@ -69,6 +72,10 @@ let
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
+    ];
+    unifiprotect = [
+      # "TypeError: object Mock can't be used in 'await' expression
+      "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
     ];
     skybell = [
       # Sandbox network limitations: Cannot connect to host cloud.myskybell.com:443

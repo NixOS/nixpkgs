@@ -18,7 +18,7 @@ let
 
     sourceRoot = "source/web";
 
-    npmDepsHash = "sha256-Ao/kDryui4thurqap/d/+82z058HoF2ZJSVKQqVwfVg=";
+    npmDepsHash = "sha256-clRijS+hxWc1LwlAKjEEk/6XPBYC6CcLq5g/ry4a04g=";
 
     CYPRESS_INSTALL_BINARY = 0; # cypress tries to download binaries otherwise
 

@@ -378,7 +378,7 @@
         You will need to add an import statement to your NixOS
         configuration in order to use it, e.g.
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   imports = [ &lt;nixpkgs/nixos/modules/services/misc/gitit.nix&gt; ];
 }
@@ -395,7 +395,7 @@
         to be built in. All modules now reside in
         <literal>nginxModules</literal> set. Example configuration:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 nginx.override {
   modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
 }
@@ -403,7 +403,7 @@ nginx.override {
     </listitem>
     <listitem>
       <para>
-        <literal>s3sync</literal> is removed, as it hasn't been
+        <literal>s3sync</literal> is removed, as it hasn’t been
         developed by upstream for 4 years and only runs with ruby 1.8.
         For an actively-developer alternative look at
         <literal>tarsnap</literal> and others.
@@ -411,7 +411,7 @@ nginx.override {
     </listitem>
     <listitem>
       <para>
-        <literal>ruby_1_8</literal> has been removed as it's not
+        <literal>ruby_1_8</literal> has been removed as it’s not
         supported from upstream anymore and probably contains security
         issues.
       </para>
@@ -439,7 +439,7 @@ nginx.override {
     <listitem>
       <para>
         The <literal>Ctrl+Alt+Backspace</literal> key combination no
-        longer kills the X server by default. There's a new option
+        longer kills the X server by default. There’s a new option
         <literal>services.xserver.enableCtrlAltBackspace</literal>
         allowing to enable the combination again.
       </para>
@@ -457,7 +457,7 @@ nginx.override {
         <literal>/var/lib/postfix</literal>. Old configurations are
         migrated automatically. <literal>service.postfix</literal>
         module has also received many improvements, such as correct
-        directories' access rights, new <literal>aliasFiles</literal>
+        directories’ access rights, new <literal>aliasFiles</literal>
         and <literal>mapFiles</literal> options and more.
       </para>
     </listitem>
@@ -468,7 +468,7 @@ nginx.override {
         continue to work, but print a warning, until the 16.09 release.
         An example of the new style:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   fileSystems.&quot;/example&quot; = {
     device = &quot;/dev/sdc&quot;;
@@ -497,7 +497,7 @@ nginx.override {
       <para>
         There are also Gutenprint improvements; in particular, a new
         option <literal>services.printing.gutenprint</literal> is added
-        to enable automatic updating of Gutenprint PPMs; it's greatly
+        to enable automatic updating of Gutenprint PPMs; it’s greatly
         recommended to enable it instead of adding
         <literal>gutenprint</literal> to the <literal>drivers</literal>
         list.
@@ -524,7 +524,7 @@ nginx.override {
         used input method name, <literal>&quot;ibus&quot;</literal> for
         ibus. An example of the new style:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   i18n.inputMethod.enabled = &quot;ibus&quot;;
   i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ anthy mozc ];
@@ -533,7 +533,7 @@ nginx.override {
       <para>
         That is equivalent to the old version:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   programs.ibus.enable = true;
   programs.ibus.plugins = with pkgs; [ ibus-anthy mozc ];
@@ -545,7 +545,7 @@ nginx.override {
         <literal>services.udev.extraRules</literal> option now writes
         rules to <literal>99-local.rules</literal> instead of
         <literal>10-local.rules</literal>. This makes all the user rules
-        apply after others, so their results wouldn't be overriden by
+        apply after others, so their results wouldn’t be overridden by
         anything else.
       </para>
     </listitem>
@@ -587,7 +587,7 @@ $TTL 1800
         point to exact folder where syncthing is writing to. Example
         configuration should look something like:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   services.syncthing = {
       enable = true;
@@ -632,8 +632,8 @@ error: path ‘/nix/store/*-broadcom-sta-*’ does not exist and cannot be creat
         The <literal>services.xserver.startGnuPGAgent</literal> option
         has been removed. GnuPG 2.1.x changed the way the gpg-agent
         works, and that new approach no longer requires (or even
-        supports) the &quot;start everything as a child of the
-        agent&quot; scheme we've implemented in NixOS for older
+        supports) the <quote>start everything as a child of the
+        agent</quote> scheme we’ve implemented in NixOS for older
         versions. To configure the gpg-agent for your X session, add the
         following code to <literal>~/.bashrc</literal> or some file
         that’s sourced when your shell is started:
@@ -670,7 +670,7 @@ export GPG_TTY
 </programlisting>
       <para>
         The <literal>gpg-agent(1)</literal> man page has more details
-        about this subject, i.e. in the &quot;EXAMPLES&quot; section.
+        about this subject, i.e. in the <quote>EXAMPLES</quote> section.
       </para>
     </listitem>
   </itemizedlist>

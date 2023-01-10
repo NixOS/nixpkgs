@@ -7,14 +7,14 @@
 
 let
   pname = "liquidsoap";
-  version = "2.1.2";
+  version = "2.1.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/savonet/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-e7iCBY9xKQZrkQ+IlahE1KEbDW89tTIlpGvHZubh3bM=";
+    sha256 = "sha256-2ti/ZF1tPI+3dpwG6IZLBcg0C19ffnJA3Dog5ngrEgQ=";
   };
 
   postFixup = ''

@@ -32,7 +32,7 @@ let version_ = lib.splitString "-" crateVersion;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
     envFeatures = lib.concatStringsSep " " (
-      map (f: lib.replaceChars ["-"] ["_"] (lib.toUpper f)) crateFeatures
+      map (f: lib.replaceStrings ["-"] ["_"] (lib.toUpper f)) crateFeatures
     );
 in ''
   ${echo_colored colors}
@@ -186,7 +186,10 @@ in ''
      set +e
      EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
      EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS=$(sed -n "s/^cargo:rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo:rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo:rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_LIBS=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
      EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
 
      # We want to read part of every line that has cargo:rustc-env= prefix and

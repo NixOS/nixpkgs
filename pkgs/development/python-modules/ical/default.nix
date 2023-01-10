@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.2.1";
+  version = "4.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Ws5P6NTkqrJDSlKrmumdFg/Ud+DwlJafYR9ZOZXwV3M=";
+    hash = "sha256-p1cvs+xLin2WK2zyqQFd1vWKzt+LU2mpDSieOgA7Qf8=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,9 @@ buildPythonPackage rec {
     pytest-golden
     pytestCheckHook
   ];
+
+  # https://github.com/allenporter/ical/issues/136
+  disabledTests = [ "test_all_zoneinfo" ];
 
   pythonImportsCheck = [
     "ical"

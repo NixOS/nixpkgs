@@ -77,7 +77,11 @@ with pkgs;
 
   dhall = callPackage ./dhall { };
 
+  cue-validation = callPackage ./cue {};
+
   coq = callPackage ./coq {};
+
+  makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 
   makeWrapper = callPackage ./make-wrapper { };
   makeBinaryWrapper = callPackage ./make-binary-wrapper {

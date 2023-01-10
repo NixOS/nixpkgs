@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2022.10.4";
+  version = "2022.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6Sg2t8UmIyVCfjTW3GDldOk09gVg2ngV9sXhyQI4Kz4=";
+    hash = "sha256-hhomNynH2X2tnCzVBmyF/sYsHLHyGGaR9oX6M7kcWVc=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to support the Velbus home automation system";
     homepage = "https://github.com/Cereal2nd/velbus-aio";
+    changelog = "https://github.com/Cereal2nd/velbus-aio/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

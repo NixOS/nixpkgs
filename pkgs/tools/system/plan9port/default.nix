@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub
 , fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools
 , perl # For building web manuals
 , which, ed
+, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -117,8 +117,6 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "9";
     platforms = platforms.unix;
-    # TODO: revisit this when the sdk situation on x86_64-darwin changes
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
 # TODO: investigate the mouse chording support patch

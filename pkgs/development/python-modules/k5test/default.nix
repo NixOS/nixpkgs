@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , substituteAll
-, krb5Full
+, krb5
 , findutils
 , which
 , pythonOlder
@@ -23,9 +23,9 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit findutils krb5Full;
+      inherit findutils krb5;
       # krb5-config is in dev output
-      krb5FullDev = krb5Full.dev;
+      krb5Dev = krb5.dev;
       which = "${which}/bin/which";
     })
   ];

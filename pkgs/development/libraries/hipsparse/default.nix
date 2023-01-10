@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -18,7 +18,7 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "hipSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Phcihat774ZSAe1QetE/GSZzGlnCnvS9GwsHBHCaD4c=";
+    hash = "sha256-JWjmMvqIm4in1aPq2UgYmL0eWjrrRBiU6vH3FnCZZ40=";
   };
 
   nativeBuildInputs = [
@@ -112,13 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/hipSPARSE/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version hipsparse "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "ROCm SPARSE marshalling library";

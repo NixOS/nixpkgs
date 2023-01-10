@@ -138,82 +138,6 @@
   </xsl:template>
 
 
-  <xsl:template match="string[contains(@value, '&#010;')]" mode="top">
-    <programlisting>
-      <xsl:text>''&#010;</xsl:text>
-      <xsl:value-of select='str:replace(str:replace(@value, "&apos;&apos;", "&apos;&apos;&apos;"), "${", "&apos;&apos;${")' />
-      <xsl:text>''</xsl:text>
-    </programlisting>
-  </xsl:template>
-
-
-  <xsl:template match="*" mode="top">
-    <literal><xsl:apply-templates select="." /></literal>
-  </xsl:template>
-
-
-  <xsl:template match="null">
-    <xsl:text>null</xsl:text>
-  </xsl:template>
-
-
-  <xsl:template match="string">
-    <xsl:choose>
-      <xsl:when test="(contains(@value, '&quot;') or contains(@value, '\')) and not(contains(@value, '&#010;'))">
-        <xsl:text>''</xsl:text><xsl:value-of select='str:replace(str:replace(@value, "&apos;&apos;", "&apos;&apos;&apos;"), "${", "&apos;&apos;${")' /><xsl:text>''</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n'), '${', '\${')" /><xsl:text>"</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-
-  <xsl:template match="int">
-    <xsl:value-of select="@value" />
-  </xsl:template>
-
-
-  <xsl:template match="bool[@value = 'true']">
-    <xsl:text>true</xsl:text>
-  </xsl:template>
-
-
-  <xsl:template match="bool[@value = 'false']">
-    <xsl:text>false</xsl:text>
-  </xsl:template>
-
-
-  <xsl:template match="list">
-    [
-    <xsl:for-each select="*">
-      <xsl:apply-templates select="." />
-      <xsl:text> </xsl:text>
-    </xsl:for-each>
-    ]
-  </xsl:template>
-
-
-  <xsl:template match="attrs[attr[@name = '_type' and string[@value = 'literalExpression']]]">
-    <xsl:value-of select="attr[@name = 'text']/string/@value" />
-  </xsl:template>
-
-
-  <xsl:template match="attrs">
-    {
-    <xsl:for-each select="attr">
-      <xsl:value-of select="@name" />
-      <xsl:text> = </xsl:text>
-      <xsl:apply-templates select="*" /><xsl:text>; </xsl:text>
-    </xsl:for-each>
-    }
-  </xsl:template>
-
-
-  <xsl:template match="attrs[attr[@name = '_type' and string[@value = 'derivation']]]">
-    <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
-  </xsl:template>
-
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">
     <simplelist>
       <!--
@@ -274,11 +198,5 @@
       </xsl:for-each>
     </simplelist>
   </xsl:template>
-
-
-  <xsl:template match="function">
-    <xsl:text>λ</xsl:text>
-  </xsl:template>
-
 
 </xsl:stylesheet>

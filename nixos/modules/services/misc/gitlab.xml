@@ -141,7 +141,7 @@ services.gitlab = {
    </para>
 
    <para>
-    A list of all availabe rake tasks can be obtained by running:
+    A list of all available rake tasks can be obtained by running:
 <screen>
 <prompt>$ </prompt>sudo -u git -H gitlab-rake -T
 </screen>

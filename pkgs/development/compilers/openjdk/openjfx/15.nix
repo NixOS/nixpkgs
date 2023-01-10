@@ -72,7 +72,6 @@ let
     # Downloaded AWT jars differ by platform.
     outputHash = {
       x86_64-linux = "0hmyr5nnjgwyw3fcwqf0crqg9lny27jfirycg3xmkzbcrwqd6qkw";
-      i686-linux = "0hx69p2z96p7jbyq4r20jykkb8gx6r8q2cj7m30pldlsw3650bqx";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
@@ -121,6 +120,6 @@ in makePackage {
     license = licenses.gpl2;
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

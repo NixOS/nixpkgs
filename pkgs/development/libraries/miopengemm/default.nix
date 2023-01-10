@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-opencl-runtime
@@ -32,7 +32,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
-  version = "5.3.3";
+  version = "5.4.0";
 
   outputs = [
     "out"
@@ -110,13 +110,11 @@ in stdenv.mkDerivation (finalAttrs: {
     patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib $benchmark/bin/*
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpenGEMM/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version miopengemm "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "OpenCL general matrix multiplication API for ROCm";

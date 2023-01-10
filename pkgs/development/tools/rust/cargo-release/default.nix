@@ -10,25 +10,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.24.0";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
-    rev = "v${version}";
-    sha256 = "sha256-+sMlbihareVn//TaCTEMU0iDnboneRhb8FcPmY0Q04A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ggB6gDlIuHPgJJg9TsHXHOKAm7+6OjXzoAT74YUB1n8=";
   };
 
-  cargoSha256 = "sha256-MqS8jSjukZfD86onInFZJOtI5ntNmpb/tvwAil2rAZA=";
+  cargoHash = "sha256-gBVcQzuJNDwdC59gaOYqvaJDP46wJ9CglYbSPt3zkZ8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security curl ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    curl
+  ];
 
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
     homepage = "https://github.com/sunng87/cargo-release";
+    changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gerschtli ];
   };

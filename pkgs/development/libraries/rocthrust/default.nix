@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "5.3.3";
+  version = "5.4.0";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
+    hash = "sha256-3OcJUL6T1HJz6TQb1//lumsTxqfwbWbQ4lGuZoKmqbY=";
   };
 
   nativeBuildInputs = [
@@ -74,13 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   #   rmdir $out/bin
   # '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocThrust/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocthrust "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "ROCm parallel algorithm library";

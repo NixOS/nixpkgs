@@ -1,32 +1,20 @@
-{ lib, fetchurl, appimageTools, imagemagick, systemd }:
+{ lib, fetchurl, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";
-  version = "2.50.0";
+  version = "2.51.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-Xh0UwE2rgFmUI4mx/PHqhRkgw51/CuNPxrsxI9al2E8=";
+    hash = "sha256-qpgzGJsj7hrrK2i+xP0T+hcw7WMlGBILbHVJBHD5duo=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-
-  # Hotplug events from udevd are fired into the kernel, which then re-broadcasts them over a
-  # special socket, to every libudev client listening for hotplug when the kernel does that. It will
-  # try to preserve the uid of the sender but a non-root namespace (like the fhs-env) cant map root
-  # to a uid, for security reasons, so the uid of the sender becomes nobody and libudev actively
-  # rejects such messages. This patch disables that bit of security in libudev.
-  # See: https://github.com/NixOS/nixpkgs/issues/116361
-  systemdPatched = systemd.overrideAttrs ({ patches ? [ ], ... }: {
-    patches = patches ++ [ ./systemd.patch ];
-  });
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;
-
-  extraPkgs = pkgs: [ systemdPatched ];
 
   extraInstallCommands = ''
     mv $out/bin/${pname}-${version} $out/bin/${pname}

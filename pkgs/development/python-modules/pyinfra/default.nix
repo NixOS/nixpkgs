@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.5.3";
+  version = "2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Fizzadar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1buLaBhhmc4FnROr5M+bqSlsbkfjl58a1/4qWBXE97Y=";
+    hash = "sha256-SNeucJvjnwQ0o+gukXwEKybBaW01hPtYXCFcPeOuXA8=";
   };
 
   propagatedBuildInputs = [
@@ -64,6 +64,7 @@ buildPythonPackage rec {
       ad-hoc command execution, service deployment, configuration management and more.
     '';
     homepage = "https://github.com/Fizzadar/pyinfra";
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ totoroot ];
     license = licenses.mit;
   };

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hoard";
-  version = "1.0.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Hyde46";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xXZ1bbCRhS8/rb1eIErvw2wEWF1unLXSP/YKn5Z4Vwo=";
+    sha256 = "sha256-WCyu6vW0l8J2Xh8OGXMXVDBs287m2nPlRHeA0j8uvlk=";
   };
 
   buildInputs = [ ncurses openssl ]
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-c60yxbZG258R5iH6x0LhipbyXal/kDxddEzTfl82hCE=";
+  cargoSha256 = "sha256-Cku9NnrjWT7VmOCryb0sbCQibG+iU9CHT3Cvd6M/9f4=";
 
   meta = with lib; {
     description = "CLI command organizer written in rust";

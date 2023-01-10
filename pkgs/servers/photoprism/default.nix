@@ -42,7 +42,7 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
   ];
 

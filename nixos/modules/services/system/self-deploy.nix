@@ -18,7 +18,7 @@ let
     in
     lib.concatStrings (lib.mapAttrsToList toArg args);
 
-  isPathType = x: lib.strings.isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+  isPathType = x: lib.types.path.check x;
 
 in
 {

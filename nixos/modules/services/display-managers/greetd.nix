@@ -45,7 +45,7 @@ in
       default = !(cfg.settings ? initial_session);
       defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
       description = lib.mdDoc ''
-        Wether to restart greetd when it terminates (e.g. on failure).
+        Whether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
         because every greetd restart will trigger the autologin again.
       '';
@@ -89,6 +89,8 @@ in
         SendSIGHUP = true;
         TimeoutStopSec = "30s";
         KeyringMode = "shared";
+
+        Type = "idle";
       };
 
       # Don't kill a user session when using nixos-rebuild

@@ -9,11 +9,11 @@
 , libX11
 , libXcursor
 , libXinerama
-, libXi
-, libXrandr
 , libXext
+, libXrandr
+, libXrender
+, libXi
 , libXfixes
-, libGLU
 , freetype
 , alsa-lib
 , libpulseaudio
@@ -21,6 +21,9 @@
 , speechd
 , fontconfig
 , udev
+, withPlatform ? "linuxbsd"
+, withTarget ? "editor"
+, withPrecision ? "single"
 , withPulseaudio ? false
 , withDbus ? true
 , withSpeechd ? false
@@ -29,9 +32,16 @@
 , withTouch ? true
 }:
 
+assert lib.asserts.assertOneOf "withPrecision" withPrecision [ "single" "double" ];
+
 let
-  # Options from godot/platform/linuxbsd/detect.py
   options = {
+    # Options from 'godot/SConstruct'
+    platform = withPlatform;
+    target = withTarget;
+    precision = withPrecision; # Floating-point precision level
+
+    # Options from 'godot/platform/linuxbsd/detect.py'
     pulseaudio = withPulseaudio;
     dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
     speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
@@ -42,13 +52,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "4.0-beta3";
+  version = "4.0-beta10";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "01ae26d31befb6679ecd92cd3c73aa5a76162e95";
-    sha256 = "sha256-Q+zMviGevezjcQKJPOm7zAu4liJ5z8Rl73TYmjRR3MY=";
+    rev = "d0398f62f08ce0cfba80990b21c6af4181f93fe9";
+    sha256 = "sha256-h4DpK7YC7/qMc6GAD2nvNVmrlGjKT5d7OK+1NcuZCMg=";
   };
 
   nativeBuildInputs = [
@@ -59,27 +69,26 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     scons
-    libGLU
+  ]
+  ++ runtimeDependencies;
+
+  runtimeDependencies = [
     libX11
     libXcursor
     libXinerama
-    libXi
-    libXrandr
     libXext
+    libXrandr
+    libXrender
+    libXi
     libXfixes
-  ]
-  ++ runtimeDependencies
-  # Necessary to make godot see fontconfig.lib and dbus.lib
-  ++ lib.optional withFontconfig fontconfig
-  ++ lib.optional withDbus dbus;
-
-  runtimeDependencies = [
-    vulkan-loader
     alsa-lib
+    vulkan-loader
   ]
   ++ lib.optional withPulseaudio libpulseaudio
+  ++ lib.optional withDbus dbus
   ++ lib.optional withDbus dbus.lib
   ++ lib.optional withSpeechd speechd
+  ++ lib.optional withFontconfig fontconfig
   ++ lib.optional withFontconfig fontconfig.lib
   ++ lib.optional withUdev udev;
 
@@ -91,7 +100,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sconsFlags = "platform=linuxbsd target=editor production=true";
+  # Options from 'godot/SConstruct' and 'godot/platform/linuxbsd/detect.py'
+  sconsFlags = [ "production=true" ];
   preConfigure = ''
     sconsFlags+=" ${
       lib.concatStringsSep " "

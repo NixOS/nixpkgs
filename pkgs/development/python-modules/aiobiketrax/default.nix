@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "basilfx";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-P8BExzL22rRj1IFPpojKR8ITdVq0RF8e3qLgb+H1PzE=";
+    hash = "sha256-exxpJJA+JnVuehCnWs/ihk/SSPUqV7ODXZxvbmuHe8U=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for interacting with the PowUnity BikeTrax GPS tracker";
     homepage = "https://github.com/basilfx/aiobiketrax";
+    changelog = "https://github.com/basilfx/aiobiketrax/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

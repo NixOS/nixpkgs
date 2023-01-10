@@ -6,12 +6,15 @@
     url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
   }),
-  pkgs ? import nixpkgsSource {},
-  pkgs_i686 ? import nixpkgsSource { system = "i686-linux"; },*/
+  pkgs ? import nixpkgsSource {
+      config.allowUnfree = true;
+  },
+  */
 
   # If you want to use the in-tree version of nixpkgs:
-  pkgs ? import ../../../../.. {},
-  pkgs_i686 ? import ../../../../.. { system = "i686-linux"; },
+  pkgs ? import ../../../../.. {
+      config.allowUnfree = true;
+  },
 
   config ? pkgs.config
 }:
@@ -23,17 +26,17 @@ let
   android = {
     versions = {
       tools = "26.1.1";
-      platformTools = "31.0.2";
+      platformTools = "33.0.3";
       buildTools = "30.0.3";
       ndk = [
-        "22.1.7171670"
-        "21.3.6528147" # LTS NDK
+        "25.1.8937393" # LTS NDK
+        "24.0.8215888"
       ];
-      cmake = "3.18.1";
-      emulator = "30.6.3";
+      cmake = "3.22.1";
+      emulator = "31.3.14";
     };
 
-    platforms = ["23" "24" "25" "26" "27" "28" "29" "30"];
+    platforms = ["23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33"];
     abis = ["armeabi-v7a" "arm64-v8a"];
     extras = ["extras;google;gcm"];
   };
@@ -46,13 +49,13 @@ let
   };
 
   androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-    inherit config pkgs pkgs_i686;
+    inherit config pkgs;
     licenseAccepted = true;
   };*/
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs pkgs_i686;
+    inherit config pkgs;
     licenseAccepted = true;
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nimPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tkrzw";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # memory intensive
 
+  passthru.tests.nim = nimPackages.tkrzw;
   meta = with lib; {
     description = "A set of implementations of DBM";
     homepage = "https://dbmx.net/tkrzw/";

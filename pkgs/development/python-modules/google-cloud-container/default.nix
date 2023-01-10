@@ -2,42 +2,42 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.13.0";
+  version = "2.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rq4DuCbXX4DSIr01AFYo0O4+wQv4B5yzrrX9a2ecAFI=";
+    hash = "sha256-r/AmdcXIChEqp3AvO2xU2lsM3pqmn/Tmv8/cQJ+kuCE=";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    grpc-google-iam-v1
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_list_clusters"
   ];
 
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Container Engine API client library";
     homepage = "https://github.com/googleapis/python-container";
+    changelog = "https://github.com/googleapis/python-container/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -605,6 +605,21 @@ let
         };
       };
 
+      bmewburn.vscode-intelephense-client = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-intelephense-client";
+          publisher = "bmewburn";
+          version = "1.8.2";
+          sha256 = "OvWdDQfhprQNve017pNSksMuCK3Ccaar5Ko5Oegdiuo=";
+        };
+        meta = with lib; {
+          description = "PHP code intelligence for Visual Studio Code";
+          license = licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client";
+          maintainers = with maintainers; [ drupol ];
+        };
+      };
+
       catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "catppuccin-vsc";
@@ -1468,8 +1483,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.1.0";
-          sha256 = "sha256-a/v8/5ztB9DXqYpGWMYSRIwZIj1D+iebG35fO0yDjQQ=";
+          version = "9.4.4";
+          sha256 = "sha256-EA3OABn80GciNecXwLcorWP7K3+jI+wgujpmvvFcNOA=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1567,8 +1582,8 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.18";
-          sha256 = "0sqzz5bbqqg60aypvwxcqnxrr72gmwfj9sv0amgkyaf60zg5sf7w";
+          version = "0.6.36";
+          sha256 = "sha256-4712BPibXJkkq0XEO9n0ZrdXAcID7IAabu/FOTiTeTo=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2995,6 +3010,22 @@ let
       };
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
+
+      waderyan.gitblame = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitblame";
+          publisher = "waderyan";
+          version = "10.1.0";
+          sha256 = "TTYBaJ4gcMVICz4bGZTvbNRPpWD4tXuAJbI8QcHNDv0=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";
+          description = "Visual Studio Code Extension - See Git Blame info in status bar";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=waderyan.gitblame";
+          homepage = "https://github.com/Sertion/vscode-gitblame";
+          license = lib.licenses.mit;
+        };
+      };
 
       WakaTime.vscode-wakatime = callPackage ./wakatime { };
 

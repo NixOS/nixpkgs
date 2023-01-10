@@ -212,6 +212,21 @@ runTests {
     expected = [ "1" "2" "3" ];
   };
 
+  testPadVersionLess = {
+    expr = versions.pad 3 "1.2";
+    expected = "1.2.0";
+  };
+
+  testPadVersionLessExtra = {
+    expr = versions.pad 3 "1.3-rc1";
+    expected = "1.3.0-rc1";
+  };
+
+  testPadVersionMore = {
+    expr = versions.pad 3 "1.2.3.4";
+    expected = "1.2.3";
+  };
+
   testIsStorePath =  {
     expr =
       let goodPath =
@@ -339,6 +354,8 @@ runTests {
     (0 == toInt " 0")
     (0 == toInt "0 ")
     (0 == toInt " 0 ")
+    (-1 == toInt "-1")
+    (-1 == toInt " -1 ")
   ];
 
   testToIntFails = testAllTrue [
@@ -383,6 +400,8 @@ runTests {
     (0 == toIntBase10 " 000000")
     (0 == toIntBase10 "000000 ")
     (0 == toIntBase10 " 000000 ")
+    (-1 == toIntBase10 "-1")
+    (-1 == toIntBase10 " -1 ")
   ];
 
   testToIntBase10Fails = testAllTrue [
@@ -727,7 +746,7 @@ runTests {
       float = 0.1337;
       bool = true;
       emptystring = "";
-      string = ''fno"rd'';
+      string = "fn\${o}\"r\\d";
       newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
@@ -735,16 +754,16 @@ runTests {
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
       emptylist = [];
-      attrs = { foo = null; "foo bar" = "baz"; };
+      attrs = { foo = null; "foo b/ar" = "baz"; };
       emptyattrs = {};
       drv = deriv;
     };
     expected = rec {
       int = "42";
-      float = "~0.133700";
+      float = "0.1337";
       bool = "true";
       emptystring = ''""'';
-      string = ''"fno\"rd"'';
+      string = ''"fn\''${o}\"r\\d"'';
       newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
@@ -752,9 +771,9 @@ runTests {
       functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       emptylist = "[ ]";
-      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
       emptyattrs = "{ }";
-      drv = "<derivation ${deriv.drvPath}>";
+      drv = "<derivation ${deriv.name}>";
     };
   };
 
@@ -799,8 +818,8 @@ runTests {
       newlinestring = "\n";
       multilinestring = ''
         hello
-        there
-        test
+        ''${there}
+        te'''st
       '';
       multilinestring' = ''
         hello
@@ -827,8 +846,8 @@ runTests {
       multilinestring = ''
         '''
           hello
-          there
-          test
+          '''''${there}
+          te''''st
         ''''';
       multilinestring' = ''
         '''

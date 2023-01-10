@@ -205,8 +205,9 @@ let
       # Copy ld manually since it isn't detected correctly
       cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
-      # Copy all of the needed libraries
-      find $out/bin $out/lib -type f | while read BIN; do
+      # Copy all of the needed libraries in a consistent order so
+      # duplicates are resolved the same way.
+      find $out/bin $out/lib -type f | sort | while read BIN; do
         echo "Copying libs for executable $BIN"
         for LIB in $(${findLibs}/bin/find-libs $BIN); do
           TGT="$out/lib/$(basename $LIB)"

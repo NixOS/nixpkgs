@@ -39,14 +39,14 @@ assert (repos != []) || (url != "") || (urls != []);
 let
   name_ =
     lib.concatStrings [
-      (lib.replaceChars ["."] ["_"] groupId) "_"
-      (lib.replaceChars ["."] ["_"] artifactId) "-"
+      (lib.replaceStrings ["."] ["_"] groupId) "_"
+      (lib.replaceStrings ["."] ["_"] artifactId) "-"
       version
     ];
   mkJarUrl = repoUrl:
     lib.concatStringsSep "/" [
       (lib.removeSuffix "/" repoUrl)
-      (lib.replaceChars ["."] ["/"] groupId)
+      (lib.replaceStrings ["."] ["/"] groupId)
       artifactId
       version
       "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"

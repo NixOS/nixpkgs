@@ -56,7 +56,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "osc_lib" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
     license = licenses.asl20;

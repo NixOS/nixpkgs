@@ -132,7 +132,7 @@ in
             OnCalendar = "daily";
           };
           description = lib.mdDoc ''
-            When to run the backup. See man systemd.timer for details.
+            When to run the backup. See {manpage}`systemd.timer(5)` for details.
           '';
           example = {
             OnCalendar = "00:05";

@@ -18,6 +18,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-B6FeY5pWW5+y/0HlVedkm8ol2z9GXgEYe5j7/uMhqsw=";
   };
 
+  # disable linker overrides on aarch64-linux
+  postPatch = ''
+    rm .cargo/config
+  '';
+
   cargoSha256 = "sha256-OFgt8yu2wlvkP/wjlmRRl8UyD9MUx9/0Rcs6K8jLkjo=";
 
   OPENSSL_NO_VENDOR = true;
@@ -38,8 +43,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Fast, simple, recursive content discovery tool";
     homepage = "https://github.com/epi052/feroxbuster";
+    changelog = "https://github.com/epi052/feroxbuster/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.unix;
   };
 }
 

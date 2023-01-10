@@ -25,7 +25,7 @@
       Apache HTTP, setting
       <xref linkend="opt-services.httpd.adminAddr" /> appropriately:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.httpd.enable = true;
 services.httpd.adminAddr = ...;
 networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -40,7 +40,7 @@ networking.firewall.allowedTCPPorts = [ 80 443 ];
       <literal>.authz</literal> file describing access permission, and
       <literal>AuthUserFile</literal> to the password file.
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 services.httpd.extraModules = [
     # note that order is *super* important here
     { name = &quot;dav_svn&quot;; path = &quot;${pkgs.apacheHttpdPackages.subversion}/modules/mod_dav_svn.so&quot;; }
@@ -106,7 +106,7 @@ $ htpasswd -s PASSWORD_FILE USER_NAME
       <literal>ACCESS_FILE</literal> will look something like the
       following:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 [/]
 * = r
 

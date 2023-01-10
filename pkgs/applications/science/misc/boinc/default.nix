@@ -24,21 +24,16 @@
 , libxcb
 }:
 
-let
-  majorVersion = "7.20";
-  minorVersion = "2";
-in
-
 stdenv.mkDerivation rec {
-  version = "${majorVersion}.${minorVersion}";
   pname = "boinc";
+  version = "7.20.5";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
-    rev = "client_release/${majorVersion}/${version}";
-    sha256 = "sha256-vMb5Vq/6I6lniG396wd7+FfslsByedMRPIpiItp1d1s=";
+    rev = "client_release/${lib.versions.majorMinor version}/${version}";
+    hash = "sha256-KqD986Q7npKTnh0DdNgMHro+1M/UQHiNsXaRl9WjONw=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];

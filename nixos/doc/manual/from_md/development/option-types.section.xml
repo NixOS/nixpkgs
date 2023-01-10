@@ -81,14 +81,14 @@
           <para>
             Two definitions of this type like
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 {
   str = lib.mkDefault &quot;foo&quot;;
   pkg.hello = pkgs.hello;
   fun.fun = x: x + 1;
 }
 </programlisting>
-          <programlisting language="bash">
+          <programlisting language="nix">
 {
   str = lib.mkIf true &quot;bar&quot;;
   pkg.gcc = pkgs.gcc;
@@ -98,7 +98,7 @@
           <para>
             will get merged to
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 {
   str = &quot;bar&quot;;
   pkg.gcc = pkgs.gcc;
@@ -152,13 +152,13 @@
           <warning>
             <para>
               This type will be deprecated in the future because it
-              doesn't recurse into attribute sets, silently drops
-              earlier attribute definitions, and doesn't discharge
+              doesn’t recurse into attribute sets, silently drops
+              earlier attribute definitions, and doesn’t discharge
               <literal>lib.mkDefault</literal>,
               <literal>lib.mkIf</literal> and co. For allowing arbitrary
               attribute sets, prefer
               <literal>types.attrsOf types.anything</literal> instead
-              which doesn't have these problems.
+              which doesn’t have these problems.
             </para>
           </warning>
         </listitem>
@@ -453,7 +453,7 @@
                 <literal>_module.args</literal> should be used instead
                 for most arguments since it allows overriding.
                 <emphasis><literal>specialArgs</literal></emphasis>
-                should only be used for arguments that can't go through
+                should only be used for arguments that can’t go through
                 the module fixed-point, because of infinite recursion or
                 other problems. An example is overriding the
                 <literal>lib</literal> argument, because
@@ -477,7 +477,7 @@
                 instead of requiring
                 <literal>the-submodule.config.config = &quot;value&quot;</literal>.
                 This is because only when modules
-                <emphasis>don't</emphasis> set the
+                <emphasis>don’t</emphasis> set the
                 <literal>config</literal> or <literal>options</literal>
                 keys, all keys are interpreted as option definitions in
                 the <literal>config</literal> section. Enabling this
@@ -668,7 +668,7 @@
       <varlistentry>
         <term>
           <literal>types.oneOf</literal> [
-          <emphasis><literal>t1 t2</literal></emphasis> ... ]
+          <emphasis><literal>t1 t2</literal></emphasis> … ]
         </term>
         <listitem>
           <para>
@@ -712,7 +712,7 @@
       <literal>options</literal> key defining the sub-options. Submodule
       option definitions are type-checked accordingly to the
       <literal>options</literal> declarations. Of course, you can nest
-      submodule option definitons for even higher modularity.
+      submodule option definitions for even higher modularity.
     </para>
     <para>
       The option set can be defined directly
@@ -732,7 +732,7 @@
       <emphasis role="strong">Example: Directly defined
       submodule</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 options.mod = mkOption {
   description = &quot;submodule example&quot;;
   type = with types; submodule {
@@ -752,7 +752,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Submodule defined as a
       reference</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 let
   modOptions = {
     options = {
@@ -787,7 +787,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Declaration of a list of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 options.mod = mkOption {
   description = &quot;submodule example&quot;;
   type = with types; listOf (submodule {
@@ -807,7 +807,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Definition of a list of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 config.mod = [
   { foo = 1; bar = &quot;one&quot;; }
   { foo = 2; bar = &quot;two&quot;; }
@@ -827,7 +827,7 @@ config.mod = [
       <emphasis role="strong">Example: Declaration of attribute sets of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 options.mod = mkOption {
   description = &quot;submodule example&quot;;
   type = with types; attrsOf (submodule {
@@ -847,7 +847,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Definition of attribute sets of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 config.mod.one = { foo = 1; bar = &quot;one&quot;; };
 config.mod.two = { foo = 2; bar = &quot;two&quot;; };
 </programlisting>
@@ -878,7 +878,7 @@ config.mod.two = { foo = 2; bar = &quot;two&quot;; };
             <emphasis role="strong">Example: Adding a type
             check</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 byte = mkOption {
   description = &quot;An integer between 0 and 255.&quot;;
   type = types.addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
@@ -889,7 +889,7 @@ byte = mkOption {
             <emphasis role="strong">Example: Overriding a type
             check</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 nixThings = mkOption {
   description = &quot;words that start with 'nix'&quot;;
   type = types.str // {

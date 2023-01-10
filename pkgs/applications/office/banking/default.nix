@@ -18,14 +18,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
-  version = "0.5.1";
+  version = "0.6.0";
   format = "other";
 
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "banking";
     rev = version;
-    sha256 = "sha256-tZlBpDcwQ/aWroP2sFQBZcvmBD26PiY7q/8xFA8GnVc=";
+    hash = "sha256-x/um40sRD58d5LuuJlyietCV1Rw4H5VSO0I3ZwD5kO8=";
   };
 
   postPatch = ''
@@ -54,8 +54,8 @@ python3.pkgs.buildPythonApplication rec {
     cryptography
     fints
     mt-940
+    onetimepad
     pygobject3
-    pysqlitecipher
     schwifty
   ];
 

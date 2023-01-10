@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "ofxtools";
-  version = "0.8.20";
+  version = "0.9.5";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   # PyPI distribution does not include tests
   src = fetchFromGitHub {
     owner = "csingley";
     repo = pname;
     rev = version;
-    sha256 = "1s3fhhmj1acnmqglh39003db0bi451m4hcrkcpyrkqf5m32lslz8";
+    sha256 = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };
 
   checkInputs = [ nose ];

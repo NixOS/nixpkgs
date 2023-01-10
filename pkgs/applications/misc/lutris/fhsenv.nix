@@ -30,7 +30,7 @@ in buildFHSUserEnv {
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
+    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls_2 lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
