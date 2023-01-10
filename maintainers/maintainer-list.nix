@@ -9394,6 +9394,12 @@
     githubId = 1776903;
     name = "Andrew Abbott";
   };
+  mislavzanic = {
+    email = "mislavzanic3@gmail.com";
+    github = "mislavzanic";
+    githubId = 48838244;
+    name = "Mislav Zanic";
+  };
   misterio77 = {
     email = "eu@misterio.me";
     github = "Misterio77";
