@@ -49,7 +49,6 @@ mkDerivation rec {
     repo = "sdrangel";
     rev = "v${version}";
     sha256 = "sha256-m5b51rR2l4EdF2kMogHIi1ojoy3UwuU0Q3pfB1ev300=";
-    fetchSubmodules = false;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
