@@ -37689,6 +37689,8 @@ with pkgs;
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
 
+  terraspace = callPackage ../applications/networking/cluster/terraspace {};
+
   tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
   tgswitch = callPackage ../applications/networking/cluster/tgswitch {};
