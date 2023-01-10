@@ -7,6 +7,7 @@
 , computeJuliaDepotPath
 , computeJuliaLoadPath
 , computeJuliaArtifacts
+, xvfb-run
 }:
 
 # Build an individual package
@@ -85,8 +86,6 @@ in stdenv.mkDerivation ({
 
   inherit dontPatch patches patchPhase;
 
-  dontConfigure = true;
-
   enableParallelBuilding = enableParallelBuilding;
 
   requiredJuliaPackages = requiredJuliaPackages';
@@ -104,6 +103,15 @@ in stdenv.mkDerivation ({
 
   setSourceRoot = ''
     sourceRoot=$PWD
+  '';
+
+  # Set NIX_JULIA_PRECMD to the currntly only known command needed so
+  # as to maximize the number of packages that compile without extra
+  # configuration (see https://github.com/JuliaGraphics/Gtk.jl/issues/346)
+  configurePhase = ''
+    runHook preConfigure
+    export NIX_JULIA_PRECMD=${xvfb-run}/bin/xvfb-run
+    runHook postConfigure
   '';
 
   # Julia installs compiled cache in the first path in DEPOT_PATH.
