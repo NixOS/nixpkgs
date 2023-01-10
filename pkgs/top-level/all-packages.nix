@@ -16466,6 +16466,8 @@ with pkgs;
 
   trealla = callPackage ../development/interpreters/trealla { };
 
+  waagent = callPackage ../applications/networking/cluster/waagent { };
+
   wapm-cli = callPackage ../tools/package-management/wapm/cli {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
