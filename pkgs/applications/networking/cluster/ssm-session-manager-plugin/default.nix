@@ -6,15 +6,15 @@
 
 buildGo120Package rec {
   pname = "ssm-session-manager-plugin";
-  version = "1.2.331.0";
+  version = "1.2.398.0";
 
-  goPackagePath = "github.com/aws/SSMCLI";
+  goPackagePath = "github.com/aws/session-manager-plugin";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "session-manager-plugin";
     rev = version;
-    sha256 = "MnTiczFdiP9Xn9fkElVp6tPl7K7PWNyOGjsyLnQHreY=";
+    sha256 = "ufNnr/sxOHUDUsGXwxp1yloVAI6DMtuEdjcQZ2XaHRg=";
   };
 
   postPatch = ''
