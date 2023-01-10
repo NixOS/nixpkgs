@@ -23216,6 +23216,8 @@ with pkgs;
 
   vkdisplayinfo = callPackage ../tools/graphics/vkdisplayinfo { };
 
+  vkdt = callPackage ../applications/graphics/vkdt { };
+
   vlock = callPackage ../misc/screensavers/vlock { };
 
   virtualpg = callPackage ../development/libraries/virtualpg { };
