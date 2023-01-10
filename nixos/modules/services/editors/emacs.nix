@@ -99,6 +99,5 @@ in
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
   };
 
-  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./emacs.xml;
 }

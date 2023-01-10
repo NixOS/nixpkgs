@@ -674,7 +674,6 @@ in
           mkIf createLocalMySQL (mkDefault dbPkg);
       };
 
-  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./keycloak.xml;
   meta.maintainers = [ maintainers.talyz ];
 }

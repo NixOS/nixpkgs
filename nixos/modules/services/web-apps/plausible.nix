@@ -292,6 +292,5 @@ in {
   };
 
   meta.maintainers = with maintainers; [ ma27 ];
-  # Don't edit the docbook xml directly, edit the md and generate it using md-to-db.sh
   meta.doc = ./plausible.xml;
 }
