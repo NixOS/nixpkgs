@@ -127,11 +127,10 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
-  ] ++ lib.optionals stdenv.isLinux [
-    util-linux
   ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ [
+  ] ++ lib.optionals stdenv.isLinux [
+    util-linux
     mtdev
     lksctp-tools
     libselinux
@@ -223,8 +222,6 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    # build as a set of dynamic libraries
-    "-DFEATURE_framework=OFF"
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
   ];
@@ -272,8 +269,10 @@ stdenv.mkDerivation rec {
     moveToOutput libexec "$dev"
 
     # fixup .pc file (where to find 'moc' etc.)
-    sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-      -e "/^bindir=/ c bindir=$dev/bin"
+    if [ -d "$dev/lib/pkgconfig" ]; then
+      sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
+        -e "/^bindir=/ c bindir=$dev/bin"
+    fi
 
     patchShebangs $out $dev
 
