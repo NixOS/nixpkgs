@@ -29,7 +29,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ trakt cvc4 veriT' zchaff ] ++ (with coq.ocamlPackages; [ num zarith ]);
   mlPlugin = true;
-  nativeBuildInputs = with coq.ocamlPackages; [ ocamlbuild ];
+  nativeBuildInputs = (with pkgs; [ gnumake42 ]) ++ (with coq.ocamlPackages; [ ocamlbuild ]);
 
   # This is meant to ease future troubleshooting of cvc4 build failures
   passthru = { inherit cvc4; };
