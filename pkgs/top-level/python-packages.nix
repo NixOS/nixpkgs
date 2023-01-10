@@ -2943,6 +2943,8 @@ self: super: with self; {
     inherit (pkgs) edlib;
   };
 
+  eduvpn-client = callPackage ../development/python-modules/eduvpn-client { };
+
   edward = callPackage ../development/python-modules/edward { };
 
   effect = callPackage ../development/python-modules/effect { };

@@ -1409,6 +1409,8 @@ with pkgs;
 
   copier = callPackage ../tools/misc/copier { };
 
+  eduvpn-client = with python3Packages; toPythonApplication eduvpn-client;
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };

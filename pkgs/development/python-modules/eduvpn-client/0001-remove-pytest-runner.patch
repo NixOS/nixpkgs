@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index f35017d..60bd4d5 100644
+--- a/setup.py
++++ b/setup.py
+@@ -73,7 +73,6 @@ setup(
+     long_description=long_description,
+     long_description_content_type="text/markdown",
+     license="GPL3",
+-    setup_requires=['pytest-runner'],
+     tests_require=tests_require,
+     test_suite="tests",
+     keywords="vpn openvpn networking security",
