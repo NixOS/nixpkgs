@@ -5,11 +5,9 @@
 , decorator
 , fetchFromGitHub
 , future
-, nose
 , pysmt
 , pythonOlder
 , pytestCheckHook
-, six
 , z3
 }:
 
@@ -23,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ItWL2DGoMkOMOMsTTfal8W9DZCmXMuZs0cZbYESlFU4=";
   };
 
@@ -40,15 +38,13 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose
     pytestCheckHook
-    six
   ];
 
   postPatch = ''
     # Use upstream z3 implementation
     substituteInPlace setup.cfg \
-      --replace "z3-solver == 4.10.2.0" ""
+      --replace "z3-solver==4.10.2.0" ""
   '';
 
   pythonImportsCheck = [
