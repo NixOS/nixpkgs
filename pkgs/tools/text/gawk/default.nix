@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
+  ]
+  # nixpkgs on musl targets defaults to CFLAGS=-fPIE. That is incompatible with
+  # LDFLAGS=-no-pie that --enable-pma requests. Until gawk is fixed let's disable
+  # pma on affected targets. Can be dropped when patch is upstreamed:
+  #   https://lists.gnu.org/archive/html/bug-gawk/2023-01/msg00014.html
+  ++ lib.optionals (stdenv.hostPlatform.isMusl) [
+    "--disable-pma"
   ];
 
   makeFlags = [
