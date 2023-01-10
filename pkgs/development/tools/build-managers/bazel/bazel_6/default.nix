@@ -41,7 +41,7 @@ let
     let
       srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        urls = d.urls;
+        urls = d.urls or [d.url];
         sha256 = d.sha256;
       });
     in builtins.listToAttrs (map toFetchurl [
@@ -54,8 +54,8 @@ let
       srcs.remote_java_tools_for_testing
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.27.0.tar.gz"
-      srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
+      srcs.android_tools_for_testing
+      srcs.openjdk_linux_vanilla
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -69,9 +69,9 @@ let
       srcs.com_google_absl
       srcs.com_googlesource_code_re2
       srcs.com_github_cares_cares
-      srcs."4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz"
-      srcs."2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz"
-      srcs."bazel-gazelle-v0.24.0.tar.gz"
+      srcs.com_envoyproxy_protoc_gen_validate
+      srcs.com_google_googleapis
+      srcs.bazel_gazelle
     ]);
 
   distDir = runCommand "bazel-deps" {} ''
