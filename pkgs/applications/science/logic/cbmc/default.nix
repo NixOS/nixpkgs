@@ -78,5 +78,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.unix;
+    # https://github.com/diffblue/cbmc/issues/7423
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
