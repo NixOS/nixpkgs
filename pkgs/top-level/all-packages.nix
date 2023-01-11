@@ -36317,7 +36317,9 @@ with pkgs;
   drat-trim = callPackage ../applications/science/logic/drat-trim {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
-    inherit (ocaml-ng.ocamlPackages_4_02) ocaml;
+    ocaml = ocaml-ng.ocamlPackages_4_14.ocaml.override {
+      unsafeStringSupport = true;
+    };
   };
 
   eprover = callPackage ../applications/science/logic/eprover { };
