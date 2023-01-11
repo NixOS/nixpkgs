@@ -27,8 +27,8 @@ makeScope newScope (self:
                   ++ (foldr (p: a: a ++ (dependencies p.requiredJuliaPackages)) [] (filter hasJuliaPackage  packages')));
       in unique packages ++ (dependencies packages);
 
-    computeJuliaDepotPath = jpkgs: lib.concatMapStringsSep ":" (p: p + "/shared/julia") jpkgs;
-    computeJuliaLoadPath = jpkgs: lib.concatMapStringsSep ":" (p: p + "/share/julia/packages") jpkgs;
+    computeJuliaDepotPath = jpkgs: lib.concatMapStringsSep ":" (p: p + "/shared/julia/${p.packageCollection}") jpkgs;
+    computeJuliaLoadPath = jpkgs: lib.concatMapStringsSep ":" (p: p + "/share/julia/${p.packageCollection}/packages") jpkgs;
     computeJuliaArtifacts = jpkgs: lib.filter (p: p ? isJuliaArtifact && p.isJuliaArtifact == true) jpkgs;
 
     # The pname must correspond to the name 'PkgName' of the package

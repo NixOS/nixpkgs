@@ -63,7 +63,8 @@ function pkg_nix(name, version, uuid, tree_hash, deps)
                 url = "$(pkg_url(uuid, tree_hash))";
                 name = "$(julia_pname)-$(julia_version)-$(name)-$(version).tar.gz";
                 sha256 = "$(pkg_sha256(uuid, tree_hash))";
-            };$(if deps != "" "\n        " * deps else "" end)
+            };
+            juliaPath = "$(path)";$(if deps != "" "\n        " * deps else "" end)
         }
     """
     return nix

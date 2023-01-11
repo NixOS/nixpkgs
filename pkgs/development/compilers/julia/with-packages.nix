@@ -13,6 +13,7 @@
 #         name = "julia-bin-1.8.3-Tokenize-0.5.25.tar.gz";
 #         sha256 = "00437718f09d81958e86c2131f3f8b63e0975494e505f6c7b62f872a5a102f51";
 #       };
+#       juliaPath = "Tokenize/d4Pxs";
 #     }
 #
 #     { pname = "CSTParser";
@@ -22,6 +23,7 @@
 #         name = "julia-bin-1.8.3-CSTParser-3.3.6.tar.gz";
 #         sha256 = "647fc5588cb87362d216401a0a4124d41b80a85618a94098a737ad38ae5786c4";
 #       };
+#       juliaPath = "CSTParser/VcYj6";
 #       requiredJuliaPackages = [ Tokenize ];
 #     }
 #   ])
@@ -36,24 +38,33 @@
 #
 # Packages artifacts are specified in a similar way with the addition of the
 # `isArtifact` attribute. This is so because they need to be treated differently.
+# The attribute 'juliaPath' is the relative path in the collection of packages
+# and is calculated by Julia's package manager and uniquely identify a package.
 
 let juliaPackages = lib.recurseIntoAttrs
       (callPackage ../../../top-level/julia-packages.nix { inherit julia; }).pkgs;
 
+    dropDuplicates = nixPkgsList: upPkgsList:
+      let isInNixList = p: lib.elem p.juliaPath nixPkgsPath;
+          nixPkgsPath = builtins.catAttrs "juliaPath" nixPkgsList;
+      in lib.foldl' (acc: e: if isInNixList e then acc else acc ++ [ e ]) nixPkgsList upPkgsList;
+
     withPackages = nix: upstream:
       let nixPackages = (nix juliaPackages);
-          upstreamPackages = (packagesFromUpstream upstreamPkgsList);
-
           packagesFromUpstream = ps: builtins.map (p: upstreamPkgs."${p.pname}") ps;
+
+          juliaUpstreamPackagesFromList = pkgsList:
+            lib.foldr (p: a: a // { ${p.pname} = juliaPackages.buildJuliaPackage (p // { packageCollection = "upstream"; }); }) {} pkgsList;
+
+          upstreamPackages = (packagesFromUpstream upstreamPkgsList);
 
           upstreamPkgsList = upstream upstreamPkgs;
 
-          upstreamPkgs = juliaPackages.juliaPackagesFromList upstreamPkgsList;
+          upstreamPkgs = juliaUpstreamPackagesFromList upstreamPkgsList;
 
       in callPackage ./build-env.nix {
         inherit julia;
-        extraPackages = lib.unique nixPackages ++ upstreamPackages;
-        computeRequiredJuliaPackages = juliaPackages.computeRequiredJuliaPackages;
+        extraPackages = dropDuplicates (juliaPackages.computeRequiredJuliaPackages nixPackages) upstreamPackages;
       };
 
     juliaWithPkgs = julia.overrideAttrs (finalAttrs: previousAttrs:

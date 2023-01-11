@@ -48,6 +48,10 @@
 # differ from the rest of the packages in that they don't get compiled
 # and the package providing it expect to find them in a specific location.
 , isJuliaArtifact ? false
+
+# Relative path from $out/share/julia to avoid name clashes between
+# packages provided by nixpkgs and upstream ones added by the user.
+, packageCollection ? "nixpkgs"
 , ... } @ attrs:
 
 let
@@ -81,6 +85,8 @@ in stdenv.mkDerivation ({
   isJuliaPackage = true;
   # Julia Artifacts need to be treated specially.
   isJuliaArtifact = isJuliaArtifact;
+
+  inherit packageCollection;
 
   inherit src;
 
@@ -119,25 +125,27 @@ in stdenv.mkDerivation ({
   buildPhase = if isJuliaArtifact then ''
     runHook preBuild
 
-    mkdir -p $out/share/julia/artifacts/${attrs.juliaPath}
-    cp -r * $out/share/julia/artifacts/${attrs.juliaPath}
+    mkdir -p $out/share/julia/${packageCollection}/artifacts/${attrs.juliaPath}
+    cp -r * $out/share/julia/${packageCollection}/artifacts/${attrs.juliaPath}
 
     runHook postBuild
   '' else ''
     runHook preBuild
 
-    mkdir -p $out/share/julia/packages/${attrs.pname}
-    cp -r * $out/share/julia/packages/${attrs.pname}
+    mkdir -p $out/share/julia/${packageCollection}/packages/${attrs.pname}
+    cp -r * $out/share/julia/${packageCollection}/packages/${attrs.pname}
+    # 'Pkg' searches in 'packageName/slug' which is stored in the attribute 'juliaPath'
+    ln -s $out/share/julia/${packageCollection}/packages/${attrs.pname} $out/share/julia/${packageCollection}/packages/${attrs.juliaPath}
 
-    export JULIA_LOAD_PATH=$out/share/julia/packages:${juliaLoadPath}:$JULIA_LOAD_PATH
-    export JULIA_DEPOT_PATH=$out/share/julia:${julia}/share/julia:${juliaDepotPath}
+    export JULIA_LOAD_PATH=$out/share/julia/${packageCollection}/packages:${juliaLoadPath}:$JULIA_LOAD_PATH
+    export JULIA_DEPOT_PATH=$out/share/julia/${packageCollection}:${julia}/share/julia:${juliaDepotPath}
 
-    mkdir -p $out/share/julia/artifacts
-    for path in ${lib.concatMapStringsSep " " (p: p + "/share/julia/artifacts/*") juliaArtifacts}; do
-        ln -s $path $out/share/julia/artifacts/$(basename $path);
+    mkdir -p $out/share/julia/${packageCollection}/artifacts
+    for path in ${lib.concatMapStringsSep " " (p: p + "/share/julia/${packageCollection}/artifacts/*") juliaArtifacts}; do
+        ln -s $path $out/share/julia/${packageCollection}/artifacts/$(basename $path);
     done
 
-    pushd $out/share/julia/packages/${attrs.pname}
+    pushd $out/share/julia/${packageCollection}/packages/${attrs.pname}
     if [[ -f ./deps/build.jl ]]; then
       pushd deps
       $NIX_JULIA_PRECMD julia -- build.jl
@@ -147,8 +155,8 @@ in stdenv.mkDerivation ({
     popd
 
     # these may cause collisions
-    rm -r $out/share/julia/logs || true
-    rm -r $out/share/julia/scratchspaces || true
+    rm -r $out/share/julia/${packageCollection}/logs || true
+    rm -r $out/share/julia/${packageCollection}/scratchspaces || true
 
     runHook postBuild
   '';
@@ -158,8 +166,8 @@ in stdenv.mkDerivation ({
 
   # Patch interpreter of bundled binary files
   postFixup = if isJuliaArtifact  then ''
-    if [[ -d "$out"/share/julia/artifacts/${attrs.juliaPath}/bin ]]; then
-      for fn in $(echo $out/share/julia/artifacts/${attrs.juliaPath}/bin/*); do
+    if [[ -d "$out"/share/julia/${packageCollection}/artifacts/${attrs.juliaPath}/bin ]]; then
+      for fn in $out/share/julia/${packageCollection}/artifacts/${attrs.juliaPath}/bin/*; do
           isELF $fn && patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} $fn || true
       done;
     fi

@@ -2,12 +2,11 @@
 , makeWrapper
 , extraPackages ? []
 , julia
-, computeRequiredJuliaPackages
 }:
 
 buildEnv {
     name = "julia-env";
-    paths = computeRequiredJuliaPackages extraPackages;
+    paths = extraPackages;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -22,8 +21,8 @@ buildEnv {
     # backends.
     postBuild = ''
       makeWrapper ${julia}/bin/julia $out/bin/julia \
-        --set JULIA_LOAD_PATH "$JULIA_LOAD_PATH:$out/share/julia/packages" \
-        --set JULIA_DEPOT_PATH "$JULIA_DEPOT_PATH:$out/share/julia" \
+        --set JULIA_LOAD_PATH "$JULIA_LOAD_PATH:$out/share/julia/upstream/packages:$out/share/julia/nixpkgs/packages" \
+        --set JULIA_DEPOT_PATH "$JULIA_DEPOT_PATH:$out/share/julia/upstream:$out/share/julia/nixpkgs" \
         --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
         --set GDK_BACKEND "x11,*"
     '';
