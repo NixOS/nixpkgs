@@ -13496,6 +13496,8 @@ with pkgs;
 
   zim-tools = callPackage ../tools/text/zim-tools { };
 
+  zimfw = callPackage ../shells/zsh/zimfw { };
+
   zld = callPackage ../development/tools/zld { };
 
   par = callPackage ../tools/text/par { };
