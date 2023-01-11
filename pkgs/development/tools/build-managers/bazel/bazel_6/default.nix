@@ -26,22 +26,22 @@
 }:
 
 let
-  version = "6.0.0";
+  version = "6.0.0-pre.20220720.3";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-e8DFFFwZpW2CoI/OaQjF4aDnXk+/s7bxK03q5/SzjLw=";
+    hash = "sha256-i8d4yLSq8fL+YT11wYmBvLDLSprq1gVfyjsKBYci1bk=";
   };
 
-  # Update with `eval $(nix-build -A bazel_6.updater)`,
+  # Update with `eval $(nix-build -A bazel_5.updater)`,
   # then add new dependencies from the dict in ./src-deps.json as required.
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
       srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        urls = d.urls or [d.url];
+        urls = d.urls;
         sha256 = d.sha256;
       });
     in builtins.listToAttrs (map toFetchurl [
@@ -54,8 +54,8 @@ let
       srcs.remote_java_tools_for_testing
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
-      srcs.android_tools_for_testing
-      srcs.openjdk_linux_vanilla
+      srcs."android_tools_pkg-0.26.0.tar.gz"
+      srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -69,9 +69,6 @@ let
       srcs.com_google_absl
       srcs.com_googlesource_code_re2
       srcs.com_github_cares_cares
-      srcs.com_envoyproxy_protoc_gen_validate
-      srcs.com_google_googleapis
-      srcs.bazel_gazelle
     ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -389,7 +386,7 @@ stdenv.mkDerivation rec {
       sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
 
       sed -i -e 's;"/usr/bin/libtool";_find_generic(repository_ctx, "libtool", "LIBTOOL", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
-      wrappers=( tools/cpp/osx_cc_wrapper.sh.tpl )
+      wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
