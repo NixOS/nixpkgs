@@ -16841,7 +16841,7 @@ with pkgs;
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = darwin.apple_sdk_11_0.callPackage ../development/tools/bazel-watcher {
+  bazel-watcher = callPackage ../development/tools/bazel-watcher {
     go = go_1_18;
   };
 
