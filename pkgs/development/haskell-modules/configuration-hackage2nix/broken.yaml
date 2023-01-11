@@ -400,7 +400,6 @@ broken-packages:
   - bindings-wlc
   - bind-marshal
   - binembed
-  - binrep
   - binsm
   - bio
   - BiobaseNewick
