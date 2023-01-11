@@ -270,7 +270,8 @@ stdenv.mkDerivation rec {
 
     # fixup .pc file (where to find 'moc' etc.)
     sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-      -e "/^bindir=/ c bindir=$dev/bin"
+      -e "/^bindir=/ c bindir=$dev/bin" \
+      -e "/^libexecdir=/ c libexecdir=$dev/libexec"
 
     patchShebangs $out $dev
   '';
