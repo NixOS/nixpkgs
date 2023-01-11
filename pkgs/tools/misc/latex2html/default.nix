@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "latex2html";
-  version = "2022.2";
+  version = "2023";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Vl7ozawd4Ra+yDarRpmPhjF7deJELaxo07L4/qVV4fw=";
+    sha256 = "sha256-VQ416ieqZ+UqI2sgsh+YPkcdn2SmtXFhPqJd1tp49EQ=";
   };
 
   buildInputs = [ ghostscript netpbm perl ];
