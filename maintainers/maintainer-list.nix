@@ -3475,6 +3475,13 @@
     githubId = 10042482;
     name = "Louis Pearson";
   };
+  Dettorer = {
+    name = "Paul Hervot";
+    email = "paul.hervot@dettorer.net";
+    matrix = "@dettorer:matrix.org";
+    github = "Dettorer";
+    githubId = 2761682;
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";
@@ -7868,6 +7875,15 @@
     }];
     name = "Yaroslav Bolyukin";
   };
+  lafrenierejm = {
+    email = "joseph@lafreniere.xyz";
+    github = "lafrenierejm";
+    githubId = 11155300;
+    keys = [{
+      fingerprint = "0375 DD9A EDD1 68A3 ADA3  9EBA EE23 6AA0 141E FCA3";
+    }];
+    name = "Joseph LaFreniere";
+  };
   laikq = {
     email = "gwen@quasebarth.de";
     github = "laikq";
@@ -8011,6 +8027,15 @@
     name = "legendofmiracles";
     keys = [{
       fingerprint = "CC50 F82C 985D 2679 0703  AF15 19B0 82B3 DEFE 5451";
+    }];
+  };
+  leifhelm = {
+    email = "jakob.leifhelm@gmail.com";
+    github = "leifhelm";
+    githubId = 31693262;
+    name = "Jakob Leifhelm";
+    keys =[{
+      fingerprint = "4A82 F68D AC07 9FFD 8BF0  89C4 6817 AA02 3810 0822";
     }];
   };
   leixb = {
@@ -12720,6 +12745,15 @@
     github = "sephalon";
     githubId = 893474;
     name = "Stefan Wiehler";
+  };
+  sephi = {
+    name = "Sylvain Fankhauser";
+    email = "sephi@fhtagn.top";
+    github = "sephii";
+    githubId = 754333;
+    keys = [{
+      fingerprint = "2A9D 8E76 5EE2 237D 7B6B  A2A5 4228 AB9E C061 2ADA";
+    }];
   };
   sepi = {
     email = "raffael@mancini.lu";

@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "d6edc166d63204e39135c0e9f00c0f7a6875db89d34a936e16b513c749ac8b8d",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v3.5.2/calendar-v3.5.2.tar.gz",
-    "version": "3.5.2",
+    "sha256": "0zlpm7vgsh96wn7pnya04ylfhakvywwdq4605i6vssbw96ibg18d",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v3.5.4/calendar-v3.5.4.tar.gz",
+    "version": "3.5.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "1938b266c5070573e0435ec31c08a19add96fd99c08c3c1f8309ee8e447093a0",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v4.2.2/contacts-v4.2.2.tar.gz",
-    "version": "4.2.2",
+    "sha256": "0qv3c7wmf9j74562xbjvhk6kbpna6ansiw3724dh4w8j5sldqysd",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v4.2.3/contacts-v4.2.3.tar.gz",
+    "version": "4.2.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -30,11 +30,61 @@
     ]
   },
   "deck": {
-    "sha256": "82d8816595a89e3d11be3e076d6d26ad75f0c9e31d91b89df5fb34acdc111aab",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.7.2/deck-v1.7.2.tar.gz",
-    "version": "1.7.2",
-    "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
+    "sha256": "1q21vpq9fv6p9harn96fq7cn68qixw3d08s9yf25mnxzpynrwv50",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.7.3/deck-v1.7.3.tar.gz",
+    "version": "1.7.3",
+    "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "files_markdown": {
+    "sha256": "1dhl83vxk6aznakmvbcx52gl8slhy6jz1vqwiv8nwfjh75aczzxy",
+    "url": "https://github.com/icewind1991/files_markdown/releases/download/v2.3.6/files_markdown.tar.gz",
+    "version": "2.3.6",
+    "description": "Markdown Editor extends the Nextcloud text editor with a live preview for markdown files.\n\nA full list of features can be found [in the README](https://github.com/icewind1991/files_markdown)",
+    "homepage": "https://github.com/icewind1991/files_markdown",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "files_texteditor": {
+    "sha256": "0rmk14iw34pd81snp3lm01k07wm5j2nh9spcd4j0m43l20b7kxss",
+    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.0/files_texteditor.tar.gz",
+    "version": "2.15.0",
+    "description": "This application enables Nextcloud users to open, save and edit text files in the web browser. If enabled, an entry called \"Text file\" in the \"New\" button menu at the top of the web browser appears. When clicked, a new text file opens in the browser and the file can be saved into the current Nextcloud directory. Further, when a text file is clicked in the web browser, it will be opened and editable. If the privileges allow, a user can also edit shared files and save these changes back into the web browser.\nMore information is available in the text editor documentation.",
+    "homepage": "https://github.com/nextcloud/files_texteditor",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "forms": {
+    "sha256": "1cwf3445qivig293m6yqr92r25hwjyif5sgw0b6nvccqqpyk6vdd",
+    "url": "https://github.com/nextcloud/forms/releases/download/v2.5.1/forms.tar.gz",
+    "version": "2.5.1",
+    "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
+    "homepage": "https://github.com/nextcloud/forms",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "groupfolders": {
+    "sha256": "0i7jp351lpxx7jv5rj47gkfrs2915nj6fwni919nniqqnz4yml7p",
+    "url": "https://github.com/nextcloud/groupfolders/releases/download/v12.0.2/groupfolders.tar.gz",
+    "version": "12.0.2",
+    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
+    "homepage": "https://github.com/nextcloud/groupfolders",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "impersonate": {
+    "sha256": "1k1qm3jilys548g813y179x6rs8aglkvss8b0cmfvjlpmlaxpssx",
+    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v1.11.0/impersonate-v1.11.0.tar.gz",
+    "version": "1.11.0",
+    "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud\n2. Open the user administration interface\n3. Select the impersonate button on the affected user\n4. Confirm the impersonation\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.",
+    "homepage": "https://github.com/nextcloud/impersonate",
     "licenses": [
       "agpl"
     ]
@@ -50,9 +100,9 @@
     ]
   },
   "mail": {
-    "sha256": "0e2c5465436b894ac916222391d94d364592c18b4258fd3aa4b760afa8fa6ad7",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v1.14.3.alpha.1/mail-v1.14.3.alpha.1.tar.gz",
-    "version": "1.14.3-alpha.1",
+    "sha256": "10wbi0q23a5qqc7a0ppqi71qrimczay2s5pzl7r94z5c715ag0yv",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v1.15.1/mail-v1.15.1.tar.gz",
+    "version": "1.15.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -60,9 +110,9 @@
     ]
   },
   "news": {
-    "sha256": "9551781fdbfb6d2c3cd77ee57eae0fb1583c7b54e9720bc955053f51541f4a86",
-    "url": "https://github.com/nextcloud/news/releases/download/19.0.0/news.tar.gz",
-    "version": "19.0.0",
+    "sha256": "0pnriarr2iqci2v2hn6vpvszf4m4pkcxsd2i13bp7n1zqkg6swd7",
+    "url": "https://github.com/nextcloud/news/releases/download/20.0.0/news.tar.gz",
+    "version": "20.0.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -99,6 +149,26 @@
       "agpl"
     ]
   },
+  "registration": {
+    "sha256": "0m45limwsk8a86fqjxj2w1753hd2vc5icpv0wcbwrlr0mxxdc46f",
+    "url": "https://github.com/nextcloud-releases/registration/releases/download/v1.5.0/registration-v1.5.0.tar.gz",
+    "version": "1.5.0",
+    "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
+    "homepage": "https://github.com/nextcloud/registration",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "spreed": {
+    "sha256": "0frilxny4mvp34fxw0k8al3r5apy3q6vq7z35jkph3vaq1889m9k",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v14.0.7/spreed-v14.0.7.tar.gz",
+    "version": "14.0.7",
+    "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
+    "homepage": "https://github.com/nextcloud/spreed",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "tasks": {
     "sha256": "fdfa3168ac80eaef3e2de5009eee02a369acc8d35dfd8283d1f25423bdf3c532",
     "url": "https://github.com/nextcloud/tasks/releases/download/v0.14.5/tasks.tar.gz",
@@ -109,12 +179,42 @@
       "agpl"
     ]
   },
+  "twofactor_nextcloud_notification": {
+    "sha256": "1zdx7khsa22k6g9zhcxrgr1mykl16064z0scr5jbgq5ms3hh2q9w",
+    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.4.0/twofactor_nextcloud_notification-v3.4.0.tar.gz",
+    "version": "3.4.0",
+    "description": "Allows using any of your logged in devices as second factor",
+    "homepage": "https://github.com/nextcloud/twofactor_nextcloud_notification",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "twofactor_totp": {
+    "sha256": "189cwq78dqanqxhsl69dahdkh230zhz2r285lvf0b7pg0sxcs0yc",
+    "url": "https://github.com/nextcloud-releases/twofactor_totp/releases/download/v6.4.1/twofactor_totp-v6.4.1.tar.gz",
+    "version": "6.4.1",
+    "description": "A Two-Factor-Auth Provider for TOTP (RFC 6238)",
+    "homepage": "https://github.com/nextcloud/twofactor_totp#readme",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "twofactor_webauthn": {
     "sha256": "291c20032cfc1f2fb081cc8721e272bc503d103987c6abb7ce442e497d278d0a",
     "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v0.3.3/twofactor_webauthn-v0.3.3.tar.gz",
     "version": "0.3.3",
     "description": "A two-factor provider for WebAuthn devices",
     "homepage": "https://github.com/nextcloud/twofactor_webauthn#readme",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "unsplash": {
+    "sha256": "1xlqpzry2qq0msrq8alg0mywlhjh09m3z5glh4rgwmh3p5b0777c",
+    "url": "https://github.com/nextcloud/unsplash/releases/download/v2.0.1/unsplash.tar.gz",
+    "version": "2.0.1",
+    "description": "Show a new random featured nature photo in your nextcloud. Now with choosable motives!",
+    "homepage": "https://github.com/nextcloud/unsplash/",
     "licenses": [
       "agpl"
     ]

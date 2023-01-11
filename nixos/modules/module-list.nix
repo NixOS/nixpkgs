@@ -20,9 +20,10 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
-  ./config/qt5.nix
+  ./config/qt.nix
   ./config/resolvconf.nix
   ./config/shells-environment.nix
+  ./config/stevenblack.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix

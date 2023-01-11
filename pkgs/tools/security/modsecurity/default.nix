@@ -11,13 +11,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "modsecurity";
-  version = "2.9.6";
+  version = "2.9.7";
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-C/D/UWaI4GsXjfhLmNnYhRJoUvlsps1551SqhmZUc/4=";
+    sha256 = "sha256-hJ8wYeC83dl85bkUXGZKHpHzw9QRgtusj1/+Coxsx0k=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

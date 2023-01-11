@@ -280,6 +280,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  asn1c = callPackage ../development/compilers/asn1c { };
+
   authy = callPackage ../applications/misc/authy { };
 
   authz0 = callPackage ../tools/security/authz0 { };
@@ -1329,6 +1331,8 @@ with pkgs;
 
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
+  cfonts = callPackage ../tools/misc/cfonts { };
+
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
   cie-middleware-linux = callPackage ../tools/security/cie-middleware-linux { };
@@ -1428,6 +1432,8 @@ with pkgs;
   midi-trigger = callPackage ../applications/audio/midi-trigger { };
 
   mnc = callPackage ../tools/misc/mnc { };
+
+  mgmt = callPackage ../applications/system/mgmt {};
 
   mprocs = callPackage ../tools/misc/mprocs { };
 
@@ -2683,6 +2689,8 @@ with pkgs;
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
   aws-sso-cli = callPackage ../tools/admin/aws-sso-cli { };
+
+  aws-sso-creds = callPackage ../tools/admin/aws-sso-creds { };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
@@ -6574,8 +6582,6 @@ with pkgs;
 
   easyrsa = callPackage ../tools/networking/easyrsa { };
 
-  easyrsa2 = callPackage ../tools/networking/easyrsa/2.x.nix { };
-
   easysnap = callPackage ../tools/backup/easysnap { };
 
   ebook_tools = callPackage ../tools/text/ebook-tools { };
@@ -8873,6 +8879,8 @@ with pkgs;
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -11177,6 +11185,8 @@ with pkgs;
   reredirect = callPackage ../tools/misc/reredirect { };
 
   retext = qt6Packages.callPackage ../applications/editors/retext { };
+
+  rewrk = callPackage ../tools/networking/rewrk { };
 
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
@@ -15667,6 +15677,8 @@ with pkgs;
 
   stalin = callPackage ../development/compilers/stalin { };
 
+  stanc = callPackage ../development/compilers/stanc { };
+
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
   svd2rust = callPackage ../development/tools/rust/svd2rust { };
@@ -16454,6 +16466,8 @@ with pkgs;
 
   trealla = callPackage ../development/interpreters/trealla { };
 
+  waagent = callPackage ../applications/networking/cluster/waagent { };
+
   wapm-cli = callPackage ../tools/package-management/wapm/cli {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -16841,7 +16855,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  buildBazelPackage = callPackage ../build-support/build-bazel-package { };
+  buildBazelPackage = darwin.apple_sdk_11_0.callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
@@ -17840,6 +17854,8 @@ with pkgs;
   nailgun = callPackage ../development/tools/nailgun { };
 
   nap = callPackage ../development/tools/nap { };
+
+  nex = callPackage ../development/tools/parsing/nex {};
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
@@ -22550,6 +22566,10 @@ with pkgs;
 
   qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
+  qgnomeplatform-qt6 = qt6Packages.callPackage ../development/libraries/qgnomeplatform {
+    useQt6 = true;
+  };
+
   randomx = darwin.apple_sdk_11_0.callPackage ../development/libraries/randomx { };
 
   remodel = callPackage ../development/tools/remodel {
@@ -23203,6 +23223,8 @@ with pkgs;
   };
 
   vkdisplayinfo = callPackage ../tools/graphics/vkdisplayinfo { };
+
+  vkdt = callPackage ../applications/graphics/vkdt { };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
@@ -25151,6 +25173,10 @@ with pkgs;
 
   audit = callPackage ../os-specific/linux/audit { };
 
+  ath9k-htc-blobless-firmware = callPackage ../os-specific/linux/firmware/ath9k { };
+  ath9k-htc-blobless-firmware-unstable =
+    callPackage ../os-specific/linux/firmware/ath9k { enableUnstable = true; };
+
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
@@ -26416,6 +26442,10 @@ with pkgs;
   adementary-theme = callPackage ../data/themes/adementary { };
 
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
+
+  adwaita-qt6 = qt6Packages.callPackage ../data/themes/adwaita-qt {
+    useQt6 = true;
+  };
 
   adw-gtk3 = callPackage ../data/themes/adw-gtk3 { };
 
@@ -28332,6 +28362,8 @@ with pkgs;
 
   dia = callPackage ../applications/graphics/dia { };
 
+  digital = callPackage ../applications/science/electronics/digital {};
+
   direwolf = callPackage ../applications/radio/direwolf {
     hamlib = hamlib_4;
   };
@@ -28993,12 +29025,12 @@ with pkgs;
 
   gpx = callPackage ../applications/misc/gpx { };
 
-  gqrx = callPackage ../applications/radio/gqrx { };
-  gqrx-portaudio = callPackage ../applications/radio/gqrx {
+  gqrx = qt6Packages.callPackage ../applications/radio/gqrx { };
+  gqrx-portaudio = qt6Packages.callPackage ../applications/radio/gqrx {
     portaudioSupport = true;
     pulseaudioSupport = false;
   };
-  gqrx-gr-audio = callPackage ../applications/radio/gqrx {
+  gqrx-gr-audio = qt6Packages.callPackage ../applications/radio/gqrx {
     portaudioSupport = false;
     pulseaudioSupport = false;
   };
@@ -31151,7 +31183,6 @@ with pkgs;
     iwSupport = false;
     nlSupport = true;
     i3Support = true;
-    i3GapsSupport = false;
   };
 
   yambar = callPackage ../applications/misc/yambar { };
@@ -32839,7 +32870,10 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission = callPackage ../applications/networking/p2p/transmission {
+    # https://github.com/NixOS/nixpkgs/issues/207047
+    openssl = openssl_legacy;
+  };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
@@ -36269,9 +36303,7 @@ with pkgs;
 
   proverif = callPackage ../applications/science/logic/proverif { };
 
-  satallax = callPackage ../applications/science/logic/satallax {
-    ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;
-  };
+  satallax = callPackage ../applications/science/logic/satallax { };
 
   saw-tools = callPackage ../applications/science/logic/saw-tools {};
 
