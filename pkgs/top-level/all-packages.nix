@@ -38682,6 +38682,8 @@ with pkgs;
 
   tuner = callPackage ../applications/audio/tuner { };
 
+  locate-dominating-file = callPackage ../tools/misc/locate-dominating-file { };
+
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 
   ov = callPackage ../tools/text/ov { };
