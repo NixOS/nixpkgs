@@ -56,6 +56,10 @@ buildPythonPackage rec {
     hash = "sha256-kQBOYRXhjz+OQk7Vlxb/UKiDi92mA8ialsFQ+QzqhlE=";
   };
 
+  patches = [
+    ./dont-clear-pythonpath.patch
+  ];
+
   nativeBuildInputs = [
     pyqtwebengine.wrapQtAppsHook
   ];

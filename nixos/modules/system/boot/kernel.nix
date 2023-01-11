@@ -78,7 +78,7 @@ in
           {
             name = "foo";
             patch = ./foo.patch;
-            structuredExtraConfig.FOO = lib.kernel.yes;
+            extraStructuredConfig.FOO = lib.kernel.yes;
             features.foo = true;
           }
         ]
@@ -96,16 +96,17 @@ in
                                         # (required, but can be null if only config changes
                                         # are needed)
 
-          structuredExtraConfig = {     # attrset of extra configuration parameters
+          extraStructuredConfig = {     # attrset of extra configuration parameters
             FOO = lib.kernel.yes;       # (without the CONFIG_ prefix, optional)
-          };                            # values should generally be lib.kernel.yes or lib.kernel.no
+          };                            # values should generally be lib.kernel.yes,
+                                        # lib.kernel.no or lib.kernel.module
 
           features = {                  # attrset of extra "features" the kernel is considered to have
             foo = true;                 # (may be checked by other NixOS modules, optional)
           };
 
           extraConfig = "CONFIG_FOO y"; # extra configuration options in string form
-                                        # (deprecated, use structuredExtraConfig instead, optional)
+                                        # (deprecated, use extraStructuredConfig instead, optional)
         }
         ```
 
