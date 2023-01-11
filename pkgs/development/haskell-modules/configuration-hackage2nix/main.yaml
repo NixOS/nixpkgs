@@ -357,6 +357,10 @@ package-maintainers:
     - persistent-sqlite
     - persistent-template
     - shakespeare
+  raehik:
+    - strongweak
+    - binrep
+    - bytepatch
   roberth:
     - arion-compose
     - cabal-pkg-config-version-hook
