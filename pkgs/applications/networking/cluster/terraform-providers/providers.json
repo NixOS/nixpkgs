@@ -1032,13 +1032,13 @@
     "vendorHash": null
   },
   "snowflake": {
-    "hash": "sha256-2VE4/M50KKNH+ZqZM7C4Ed1H17zauQrJVxF54q1ER2o=",
+    "hash": "sha256-Ku6r5yUi30R7bXmChF+F+8YuMe/KKdrXrOIUtGMM1Fk=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.54.0",
+    "rev": "v0.55.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-bYHvuzj3ShX55cgrYobqADxcRDgese+n24p14z82CLA="
+    "vendorHash": "sha256-ulgTRY8qQ5oXONkwYtffRl1QMNnbvyn0zYiYqqvwrUU="
   },
   "sops": {
     "hash": "sha256-D1Yzs8hDimMP9y8ZRbizEhic3vGtLcZjOVSuSMUAqPk=",
