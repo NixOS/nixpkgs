@@ -17381,6 +17381,8 @@ with pkgs;
 
   malt = callPackage ../development/tools/profiling/malt {};
 
+  marksman = callPackage ../development/tools/marksman { };
+
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
