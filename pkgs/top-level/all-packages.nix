@@ -38491,4 +38491,6 @@ with pkgs;
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
 
   tuner = callPackage ../applications/audio/tuner { };
+
+  jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 }
