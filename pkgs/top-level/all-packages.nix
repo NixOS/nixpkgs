@@ -18553,6 +18553,8 @@ with pkgs;
 
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
+  antic = callPackage ../development/libraries/antic {};
+
   anttweakbar = callPackage ../development/libraries/AntTweakBar { };
 
   appstream = callPackage ../development/libraries/appstream { };
