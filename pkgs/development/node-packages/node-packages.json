@@ -120,6 +120,7 @@
 , "dhcp"
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
+, "doctoc"
 , "elasticdump"
 , "@electron-forge/cli"
 , "eas-cli"
