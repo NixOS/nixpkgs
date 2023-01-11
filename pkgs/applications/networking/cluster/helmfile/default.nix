@@ -22,14 +22,10 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    mkdir completions
-    $out/bin/helmfile completion bash > completions/helmfile || true
-    $out/bin/helmfile completion zsh > completions/_helmfile || true
-    $out/bin/helmfile completion fish > completions/helmfile.fish || true
     installShellCompletion --cmd helmfile \
-      --bash completions/helmfile  \
-      --zsh completions/_helmfile \
-      --fish completions/helmfile.fish
+      --bash <($out/bin/helmfile completion bash) \
+      --fish <($out/bin/helmfile completion fish) \
+      --zsh <($out/bin/helmfile completion zsh)
   '';
 
   meta = {
