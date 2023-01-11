@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.0.2";
+  version = "1.1.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4OGcnuajGdBRlXCYwbTK/zLNQRrir60qCYajHRRCpkU=";
+    hash = "sha256-5hVRyZCA5VzufiYh1l9ezob1iuT8/VXhuFjC0OjGsbQ=";
   };
 
   propagatedBuildInputs = [
