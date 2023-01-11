@@ -3,7 +3,7 @@
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
-, makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
+, makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl, openssl_1_1
 } @ args:
 
@@ -47,7 +47,7 @@ let
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
-      , makeWrapper, buildRubyGem, defaultGemConfig
+      , makeBinaryWrapper, buildRubyGem, defaultGemConfig
       , baseRuby ? buildPackages.ruby_3_1.override {
           useRailsExpress = false;
           docSupport = false;
@@ -245,7 +245,7 @@ let
           };
 
           inherit (import ../../ruby-modules/with-packages {
-            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
             ruby = self;
           }) withPackages buildGems gems;
