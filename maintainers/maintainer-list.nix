@@ -6852,6 +6852,12 @@
     githubId = 3967312;
     name = "Jocelyn Thode";
   };
+  joedevivo = {
+     email = "55951+joedevivo@users.noreply.github.com";
+     github = "joedevivo";
+     githubId = 55951;
+     name = "Joe DeVivo";
+   };
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
