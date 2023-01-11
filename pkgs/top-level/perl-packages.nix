@@ -25137,7 +25137,7 @@ let
     };
     meta = {
       description = "Various subroutines to format text";
-      homepage = "https://www.shlomifish.org/open-source/projects/Text-Format";
+      homepage = "https://github.com/shlomif/perl-Module-Format";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
     };
