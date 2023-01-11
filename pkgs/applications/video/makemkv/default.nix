@@ -55,7 +55,7 @@ in mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin                              out/makemkv out/mmccextr ../makemkv-bin-${version}/bin/amd64/makemkvcon
+    install -Dm555 -t $out/bin                              out/makemkv out/mmccextr out/mmgplsrv ../makemkv-bin-${version}/bin/amd64/makemkvcon
     install -D     -t $out/lib                              out/lib{driveio,makemkv,mmbd}.so.*
     install -D     -t $out/share/MakeMKV                    ../makemkv-bin-${version}/src/share/*
     install -Dm444 -t $out/share/applications               ../makemkv-oss-${version}/makemkvgui/share/makemkv.desktop

@@ -10,7 +10,6 @@ trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
 
 pkgName=$1
 depsFile=$2
-customFlags=$3
 
 : ${getVersionFromTags:=}
 : ${refetch:=}
@@ -75,5 +74,4 @@ fi
 echo
 
 # Create deps file
-storeSrc="$(nix-build "$nixpkgs" -A $pkgName.src --no-out-link)"
-. "$scriptDir"/create-deps.sh "$storeSrc" "$depsFile" "$customFlags"
+$(nix-build "$nixpkgs" -A $pkgName.fetch-deps --no-out-link) "$depsFile"

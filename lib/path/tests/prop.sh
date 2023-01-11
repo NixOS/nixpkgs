@@ -55,7 +55,7 @@ fi
 declare -a strings=()
 mkdir -p "$tmp/strings"
 while IFS= read -r -d $'\0' str; do
-    echo -n "$str" > "$tmp/strings/${#strings[@]}"
+    printf "%s" "$str" > "$tmp/strings/${#strings[@]}"
     strings+=("$str")
 done < <(awk \
     -f "$SCRIPT_DIR"/generate.awk \

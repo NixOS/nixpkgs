@@ -19,6 +19,11 @@
   - pkgs/build-support/emacs/**/*
   - pkgs/top-level/emacs-packages.nix
 
+"6.topic: Enlightenment DE":
+  - nixos/modules/services/x11/desktop-managers/enlightenment.nix
+  - pkgs/desktops/enlightenment/**/*
+  - pkgs/development/python-modules/python-efl/*
+
 "6.topic: erlang":
   - doc/languages-frameworks/beam.section.md
   - pkgs/development/beam-modules/**/*
@@ -64,6 +69,14 @@
   - pkgs/development/interpreters/luajit/**/*
   - pkgs/development/lua-modules/**/*
   - pkgs/top-level/lua-packages.nix
+
+"6.topic: Lumina DE":
+  - nixos/modules/services/x11/desktop-managers/lumina.nix
+  - pkgs/desktops/lumina/**/*
+
+"6.topic: LXQt":
+  - nixos/modules/services/x11/desktop-managers/lxqt.nix
+  - pkgs/desktops/lxqt/**/*
 
 "6.topic: mate":
   - nixos/modules/services/x11/desktop-managers/mate.nix

@@ -46,6 +46,7 @@ stdenv.mkDerivation ({
       $CC -fPIC -c src/scanner.c -o scanner.o $CFLAGS
     fi
     $CC -fPIC -c src/parser.c -o parser.o $CFLAGS
+    rm -rf parser
     $CXX -shared -o parser *.o
     runHook postBuild
   '';

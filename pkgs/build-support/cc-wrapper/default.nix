@@ -73,6 +73,7 @@ let
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
+    if targetPlatform.isPower then false else # powerpc does not allow -march=
     if isGNU then
       { # Intel
         skylake        = versionAtLeast ccVersion "6.0";
@@ -433,8 +434,9 @@ stdenv.mkDerivation {
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
-    # -mcpu is not very useful. You should use mtune and march
-    # instead. It’s provided here for backwards compatibility.
+    # -mcpu is not very useful, except on PowerPC where it is used
+    # instead of march. On all other platforms you should use mtune
+    # and march instead.
     # TODO: aarch64-darwin has mcpu incompatible with gcc
     + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64))) ''
       echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before

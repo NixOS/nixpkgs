@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 
 # build
@@ -29,14 +28,16 @@
 
 buildPythonPackage rec {
   pname = "pytoolconfig";
-  version = "1.2.4";
+  version = "1.2.5";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bagel897";
     repo = "pytoolconfig";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UdBPp9Ur3+hYn2CBY91jK1hT/GHyA8qbQ3w0OuLBrFU=";
+    hash = "sha256-b7er/IgXr2j9dSnI87669BXWA5CXNTzwa1DTpl8PBZ4=";
   };
 
   outputs = [
@@ -56,14 +57,6 @@ buildPythonPackage rec {
     sphinxHook
   ] ++ passthru.optional-dependencies.doc;
 
-  patches = [
-    (fetchpatch {
-      # Fix documentation build
-      url = "https://github.com/bagel897/pytoolconfig/commit/c8a010842d738242d6bb8deb28ecd62342a60e03.patch";
-      hash = "sha256-hYcPjQeHYGtSPy363RVS5YgQ+obJQuC+Q9ZuOGvKRAY=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "packaging>=22.0" "packaging"
@@ -76,9 +69,16 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    validation = [ pydantic ];
-    global = [ platformdirs ];
-    doc = [ sphinx tabulate ];
+    validation = [
+      pydantic
+    ];
+    global = [
+      platformdirs
+    ];
+    doc = [
+      sphinx
+      tabulate
+    ];
   };
 
   pythonImportsCheck = [
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
     description = "Python tool configuration";
     homepage = "https://github.com/bagel897/pytoolconfig";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fab hexa ];
   };
 }
