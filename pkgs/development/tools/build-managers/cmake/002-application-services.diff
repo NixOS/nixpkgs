@@ -5,8 +5,8 @@ index 9a18184fd3..278d146dd1 100644
 @@ -933,7 +933,6 @@ endif()
  # On Apple we need CoreFoundation and CoreServices
  if(APPLE)
-   target_link_libraries(CMakeLib "-framework CoreFoundation")
--  target_link_libraries(CMakeLib "-framework CoreServices")
+   target_link_libraries(CMakeLib PUBLIC "-framework CoreFoundation")
+-  target_link_libraries(CMakeLib PUBLIC "-framework CoreServices")
  endif()
  
  if(WIN32 AND NOT UNIX)
