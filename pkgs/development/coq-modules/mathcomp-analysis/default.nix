@@ -6,9 +6,10 @@
   coqPackages, coq, version ? null }@args:
 with builtins // lib;
 let
-  repo  = "math-comp";
+  repo  = "analysis";
   owner = "math-comp";
 
+  release."0.6.0".sha256 = "sha256-0msICcIrK6jbOSiBu0gIVU3RHwoEEvB88CMQqW/06rg=";
   release."0.5.3".sha256 = "sha256-1NjFsi5TITF8ZWx1NyppRmi8g6YaoUtTdS9bU/sUe5k=";
   release."0.5.2".sha256 = "0yx5p9zyl8jv1vg7rgkyq8dqzkdnkqv969mi62whmhkvxbavgzbw";
   release."0.5.1".sha256 = "1hnzqb1gxf88wgj2n1b0f2xm6sxg9j0735zdsv6j12hlvx5lwk68";
@@ -22,7 +23,7 @@ let
   release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (isGe "8.14") (isGe "1.13.0") ];               out = "0.5.3"; }
+      { cases = [ (isGe "8.14") (isGe "1.13.0") ];               out = "0.6.0"; }
       { cases = [ (isGe "8.14") (range "1.13" "1.15") ];         out = "0.5.2"; }
       { cases = [ (isGe "8.13") (range "1.13" "1.14") ];         out = "0.5.1"; }
       { cases = [ (range "8.13" "8.15") (range "1.12" "1.14") ]; out = "0.3.13"; }
