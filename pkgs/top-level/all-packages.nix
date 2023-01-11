@@ -28399,6 +28399,8 @@ with pkgs;
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
 
+  dracut = callPackage ../os-specific/linux/dracut { };
+
   dragonflydb = callPackage ../servers/nosql/dragonflydb { };
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
