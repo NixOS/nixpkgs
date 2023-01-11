@@ -2,6 +2,7 @@
 , stdenv
 , expat
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , gnome2
 , gst_all_1
@@ -60,6 +61,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-k6td/8pF7ad7+gVm7L0jX79fHKwR7/qrOBpSFggyaI0=";
   };
+
+  # Workaround for pkgsMusl.wxGTK32 failing as:
+  #   "./src/unix/uilocale.cpp:650:37: error: ‘_NL_IDENTIFICATION_TERRITORY’ was not declared in this scope"
+  # On upgrade, please test building wxwidgets for pkgsMusl, and remove this patch if unnecessary.
+  patches = lib.optional stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://github.com/wxWidgets/wxWidgets/commit/1faf1796b23b2503296d9b1e9ad39047d633f8c9.patch";
+      sha256 = "sha256-0FbfzGzzkriLD2iDcRcBXgYqjHtxFsmSlhGE5d18/bo=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
