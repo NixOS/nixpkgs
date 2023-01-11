@@ -266,8 +266,8 @@ in {
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "4" "";
-    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+    version = rubyVersion "3" "0" "5" "";
+    sha256 = "sha256-mvxjgKAnpP4a4aPi7MtrSXucWsBjHBLKVvm3vrSEh3Y=";
   };
 
   ruby_3_1 = generic {
