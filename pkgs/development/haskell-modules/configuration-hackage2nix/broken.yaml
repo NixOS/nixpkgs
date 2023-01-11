@@ -4080,7 +4080,6 @@ broken-packages:
   - posit
   - positron
   - posix-acl
-  - posix-api
   - posix-realtime
   - posix-waitpid
   - postcodes
