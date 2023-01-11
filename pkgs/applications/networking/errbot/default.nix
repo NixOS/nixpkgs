@@ -39,7 +39,7 @@ in python3.pkgs.buildPythonApplication rec {
     pyopenssl
     requests
     slackclient
-    sleekxmpp
+    slixmpp
     telegram
     webtest
   ];
