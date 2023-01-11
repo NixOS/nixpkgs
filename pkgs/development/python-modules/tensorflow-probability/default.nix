@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, bazel_3
 , buildBazelPackage
 , buildPythonPackage
 , python
@@ -44,6 +45,8 @@ let
       absl-py
       tensorflow
     ];
+
+    bazel = bazel_3;
 
     bazelTarget = ":pip_pkg";
 
