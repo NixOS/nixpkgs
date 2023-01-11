@@ -39,6 +39,9 @@ let
     go-gir-generator = callPackage ./go-package/go-gir-generator { };
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
 
+    #### TOOLS
+    deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
+
     #### ARTWORK
     dde-account-faces = callPackage ./artwork/dde-account-faces { };
     deepin-icon-theme = callPackage ./artwork/deepin-icon-theme { };
