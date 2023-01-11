@@ -15181,7 +15181,7 @@ with pkgs;
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_04;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
