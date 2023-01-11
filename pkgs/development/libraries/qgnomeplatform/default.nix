@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     qtbase
+    qtwayland
   ] ++ lib.optionals (!useQt6) [
     adwaita-qt
   ] ++ lib.optionals useQt6 [
     adwaita-qt6
-    qtwayland
   ];
 
   # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
