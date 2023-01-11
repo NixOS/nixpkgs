@@ -26249,7 +26249,9 @@ with pkgs;
   };
 
 
-  udev = systemd; # TODO: change to systemdMinimal
+  udev =
+    if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
+    else systemd; # TODO: change to systemdMinimal
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
