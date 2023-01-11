@@ -4,10 +4,10 @@
 
 # propagates
 , django
-, dateutil
+, python-dateutil
 , scim2-filter-parser
 , gssapi
-, ldap
+, python-ldap
 , sssd
 
 # tests
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    dateutil
+    python-dateutil
     scim2-filter-parser
     gssapi
-    ldap
+    python-ldap
     sssd
   ];
 
