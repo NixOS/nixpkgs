@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config cmake installShellFiles makeWrapper
     (lib.getDev pkgsHostHost.curl)
+    zlib
   ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
