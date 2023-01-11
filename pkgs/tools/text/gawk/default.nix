@@ -16,7 +16,7 @@
 
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
   version = "5.2.1";
 
@@ -83,4 +83,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
   };
-}
+} // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  # PIE is incompatible with the "persistent malloc" ("pma") feature.
+  # FIXME: make unconditional in staging (added to avoid rebuilds in staging-next)
+  hardeningDisable = [ "pie" ];
+})
