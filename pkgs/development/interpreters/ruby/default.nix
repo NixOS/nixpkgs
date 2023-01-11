@@ -96,7 +96,8 @@ let
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
+          ++ op (lib.versionAtLeast ver.majMin "3.2" && useBaseRuby) ./do-not-update-gems-baseruby-3-2.patch
+          ++ op (lib.versionOlder ver.majMin "3.2" && atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
           ++ ops (!atLeast30 && rubygemsSupport) [
             # We upgrade rubygems to a version that isn't compatible with the
             # ruby 2.7 installer. Backport the upstream fix.
@@ -273,5 +274,10 @@ in {
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "2" "";
     sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
+  };
+
+  ruby_3_2 = generic {
+    version = rubyVersion "3" "2" "0" "";
+    sha256 = "sha256-2qp44TYLJ4P5je7OtnetkA86NsD/puK2sZCQvnerwnI=";
   };
 }

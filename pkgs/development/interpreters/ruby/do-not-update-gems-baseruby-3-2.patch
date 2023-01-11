@@ -1,0 +1,17 @@
+ common.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/common.mk b/common.mk
+index e89d12757d..4d07b28aa4 100644
+--- a/common.mk
++++ b/common.mk
+@@ -1374,8 +1374,7 @@ update-config_files: PHONY
+ 	    config.guess config.sub
+ 
+ refresh-gems: update-bundled_gems prepare-gems
+-prepare-gems: $(HAVE_BASERUBY:yes=update-gems) $(HAVE_BASERUBY:yes=extract-gems)
+-prepare-gems: $(DOT_WAIT) $(HAVE_BASERUBY:yes=outdate-bundled-gems)
++prepare-gems:
+ extract-gems: $(HAVE_BASERUBY:yes=update-gems)
+ 
+ update-gems$(gnumake:yes=-sequential): PHONY
