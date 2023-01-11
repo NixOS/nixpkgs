@@ -7,7 +7,7 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "juicipp";
-  version = "1.2.3";
+  version = "1.4.4";
 
   meta = {
     homepage = "https://github.com/cppit/jucipp";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/cppit/jucipp.git";
     rev = "refs/tags/v${version}";
     deepClone = true;
-    sha256 = "0xp6ijnrggskjrvscp204bmdpz48l5a8nxr9abp17wni6akb5wiq";
+    sha256 = "sha256-gjYpv5Qt3KLZmw5YfS4IjSQFRMYXoF3ZU5o4IE4tf8w=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook cmake ];
