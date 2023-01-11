@@ -13,15 +13,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.11.4";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-GxlUhfzGIKHSTNcSme/mQums6yI4ev8V0L1bXAWt8pw=";
+    sha256 = "sha256-PrrhxY+Hk1XfdV0u4GgIsbo8oNOFnqbCeivY2Ix6g+k=";
   };
-  cargoSha256 = "sha256-nCMUnhxNAMdk3Mi6eebrViQ1G5jcc3jk+CPRTUvcWRc=";
+  cargoHash = "sha256-D3upXhKFkuZfEVOPJ9mCwoZkbkX9s2MltyTkKcBvb6I=";
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv curl ];
