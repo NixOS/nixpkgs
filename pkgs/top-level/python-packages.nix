@@ -4878,6 +4878,8 @@ self: super: with self; {
 
   json-stream = callPackage ../development/python-modules/json-stream { };
 
+  json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
