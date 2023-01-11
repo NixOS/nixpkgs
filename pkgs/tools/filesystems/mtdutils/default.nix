@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
+  outputs = [ "out" "dev" ];
+
+  postInstall = ''
+    mkdir -p $dev/lib
+    mv *.a $dev/lib/
+    mv include $dev/
+  '';
+
   meta = with lib; {
     description = "Tools for MTD filesystems";
     downloadPage = "https://git.infradead.org/mtd-utils.git";
