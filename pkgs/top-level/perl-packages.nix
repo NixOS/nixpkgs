@@ -8,7 +8,7 @@
 { config
 , stdenv, lib, buildPackages, pkgs, darwin
 , fetchurl, fetchpatch, fetchFromGitHub, fetchFromGitLab
-, perl, overrides, buildPerl, shortenPerlShebang
+, perl, overrides, shortenPerlShebang
 , nixosTests
 }:
 
@@ -41,9 +41,7 @@ let
       };
     });
 
-  buildPerlPackage = callPackage ../development/perl-modules/generic {
-    inherit buildPerl;
-  };
+  buildPerlPackage = callPackage ../development/perl-modules/generic { inherit perl; };
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = args:
