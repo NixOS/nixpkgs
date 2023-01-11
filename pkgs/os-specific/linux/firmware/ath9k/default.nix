@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       inherit (lib) toUpper splitString last listToAttrs pipe;
       inherit (builtins) map;
-      urls-and-hashes = import ./urls-and-hashes-${finalAttrs.version}.nix;
+      urls-and-hashes = import (./. + "/urls-and-hashes-${finalAttrs.version}.nix");
       make-links = pipe
         [ "gcc" "binutils" "gmp" "mpfr" "mpc" ]
         [ (map (vname: fetchurl rec {
