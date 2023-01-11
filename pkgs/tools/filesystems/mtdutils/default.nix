@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
   buildInputs = [ acl libuuid lzo zlib zstd ];
 
+  enableParallelBuilding = true;
+
   configureFlags = with lib; [
     (enableFeature doCheck "unit-tests")
     (enableFeature doCheck "tests")
