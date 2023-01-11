@@ -29,22 +29,60 @@ final: prev: let
       else throw "tensorrt-${tensorRTDefaultVersion} does not support your cuda version ${cudaVersion}"; };
   in allBuilds // defaultBuild;
 
+  tarballURL = {fullVersion, fileVersionCuda, fileVersionCudnn} : "TensorRT-${fullVersion}.Linux.x86_64-gnu.cuda-${fileVersionCuda}.cudnn${fileVersionCudnn}.tar.gz";
+
   tensorRTVersions = {
+    "8.5.2" = [
+      rec {
+        fileVersionCuda = "11.8";
+        fileVersionCudnn = "8.6";
+        fullVersion = "8.5.2.2";
+        sha256 = "sha256-Ov5irNS/JETpEz01FIFNMs9YVmjGHL7lSXmDpgCdgao=";
+        tarball = tarballURL {inherit fileVersionCuda fileVersionCudnn fullVersion;};
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
+      }
+      rec {
+        fileVersionCuda = "10.2";
+        fileVersionCudnn = "8.6";
+        fullVersion = "8.5.2.2";
+        sha256 = "sha256-UruwQShYcHLY5d81lKNG7XaoUsZr245c+PUpUN6pC5E=";
+        tarball = tarballURL {inherit fileVersionCuda fileVersionCudnn fullVersion;};
+        supportedCudaVersions = [ "10.2" ];
+      }
+    ];
+    "8.5.1" = [
+      rec {
+        fileVersionCuda = "11.8";
+        fileVersionCudnn = "8.6";
+        fullVersion = "8.5.1.7";
+        sha256 = "sha256-Ocx/B3BX0TY3lOj/UcTPIaXb7M8RFrACC6Da4PMGMHY=";
+        tarball = tarballURL {inherit fileVersionCuda fileVersionCudnn fullVersion;};
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
+      }
+      rec {
+        fileVersionCuda = "10.2";
+        fileVersionCudnn = "8.6";
+        fullVersion = "8.5.1.7";
+        sha256 = "sha256-CcFGJhw7nFdPnSYYSxcto2MHK3F84nLQlJYjdIw8dPM=";
+        tarball = tarballURL {inherit fileVersionCuda fileVersionCudnn fullVersion;};
+        supportedCudaVersions = [ "10.2" ];
+      }
+    ];
     "8.4.0" = [
       rec {
         fileVersionCuda = "11.6";
         fileVersionCudnn = "8.3";
         fullVersion = "8.4.0.6";
         sha256 = "sha256-DNgHHXF/G4cK2nnOWImrPXAkOcNW6Wy+8j0LRpAH/LQ=";
-        tarball = "TensorRT-${fullVersion}.Linux.x86_64-gnu.cuda-${fileVersionCuda}.cudnn${fileVersionCudnn}.tar.gz";
-        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
+        tarball = tarballURL {inherit fileVersionCuda fileVersionCudnn fullVersion;};
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" ];
       }
       rec {
         fileVersionCuda = "10.2";
         fileVersionCudnn = "8.3";
         fullVersion = "8.4.0.6";
         sha256 = "sha256-aCzH0ZI6BrJ0v+e5Bnm7b8mNltA7NNuIa8qRKzAQv+I=";
-        tarball = "TensorRT-${fullVersion}.Linux.x86_64-gnu.cuda-${fileVersionCuda}.cudnn${fileVersionCudnn}.tar.gz";
+        tarball = tarballURL {inherit fileVersionCuda fileVersionCudnn fullVersion;};
         supportedCudaVersions = [ "10.2" ];
       }
     ];
@@ -60,7 +98,8 @@ final: prev: let
     "11.4" = "8.4.0";
     "11.5" = "8.4.0";
     "11.6" = "8.4.0";
-    "11.7" = "8.4.0";
+    "11.7" = "8.5.2";
+    "11.8" = "8.5.2";
   }.${cudaVersion} or "8.4.0";
 
 in tensorRTPackages
