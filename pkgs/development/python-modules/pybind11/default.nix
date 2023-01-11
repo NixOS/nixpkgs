@@ -78,6 +78,12 @@ buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # expects KeyError, gets RuntimeError
+    # https://github.com/pybind/pybind11/issues/4243
+    "test_cross_module_exception_translator"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
     changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";

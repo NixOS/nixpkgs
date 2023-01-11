@@ -18654,6 +18654,8 @@ with pkgs;
 
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
+  antic = callPackage ../development/libraries/antic {};
+
   anttweakbar = callPackage ../development/libraries/AntTweakBar { };
 
   appstream = callPackage ../development/libraries/appstream { };
@@ -35490,6 +35492,8 @@ with pkgs;
   ### DESKTOP ENVIRONMENTS
 
   arcanPackages = recurseIntoAttrs (callPackage ../desktops/arcan { });
+
+  budgie = recurseIntoAttrs (callPackage ../desktops/budgie { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
