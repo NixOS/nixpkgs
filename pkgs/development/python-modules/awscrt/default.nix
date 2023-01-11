@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.15.1";
+  version = "0.16.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2VBdad9NL19eW2Djot2gkynyjSCUvG4f0KnEub6M0vg=";
+    hash = "sha256-w39Qt046dWDzbt41t9LVMCJNM2uGOv9VTZf3yfWUlNM=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -32,11 +32,6 @@ buildPythonPackage rec {
   hardeningDisable = lib.optionals stdenv.cc.isClang [
     "strictoverflow"
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "extra_link_args += ['-Wl,-fatal_warnings']" ""
-  '';
 
   # gcc <10 is not supported, LLVM on darwin is just fine
   nativeBuildInputs = [
@@ -58,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/aws-crt-python";
+    changelog = "https://github.com/awslabs/aws-crt-python/releases/tag/v${version}";
     description = "Python bindings for the AWS Common Runtime";
     license = licenses.asl20;
     maintainers = with maintainers; [ davegallant ];

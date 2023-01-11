@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
   patches = [
     # Needed for wingpanel-indicator-network and switchboard-plug-network
     ./hardcode-gsettings.patch
+    # Removing path from eap schema to fix bug when creating new VPN connection
+    # https://gitlab.gnome.org/GNOME/libnma/-/issues/18
+    ./remove-path-from-eap.patch
   ];
 
   nativeBuildInputs = [

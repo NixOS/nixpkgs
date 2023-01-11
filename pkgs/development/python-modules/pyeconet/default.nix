@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyeconet";
-  version = "0.1.17";
+  version = "0.1.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "w1ll1am23";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ntxITedoJOt5d7V9TSFQHg0oqBEw8jNGeDLM00RRWHI=";
+    hash = "sha256-nKXYjv1a6nEuy8X0HnLSrvQDV2XVQhQuEm/gqnEVaoY=";
   };
 
   nativeBuildInputs = [

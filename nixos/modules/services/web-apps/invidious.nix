@@ -171,7 +171,7 @@ in
       description = lib.mdDoc ''
         A file including Invidious settings.
 
-        It gets merged with the setttings specified in {option}`services.invidious.settings`
+        It gets merged with the settings specified in {option}`services.invidious.settings`
         and can be used to store secrets like `hmac_key` outside of the nix store.
       '';
     };

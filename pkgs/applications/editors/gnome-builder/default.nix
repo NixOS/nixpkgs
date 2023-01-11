@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    GTK_A11Y=none \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs

@@ -8,14 +8,14 @@
 
 buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.10.0";
+  version = "0.13.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BChN92gZ1Ga7hIPWmdzkrg31S0iqWwXGkWb3mmRugY8=";
+    sha256 = "sha256-7kIHMGtsbC7CIlJPA7F1HwAXlqHf61mfjvnvA/v1Uno=";
   };
 
   makeWrapperArgs = [
@@ -29,8 +29,9 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Swiss-knife for updating nix packages";
     inherit (src.meta) homepage;
+    changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 zowoq ];
+    maintainers = with maintainers; [ figsoda mic92 zowoq ];
     platforms = platforms.all;
   };
 }

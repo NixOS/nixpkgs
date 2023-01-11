@@ -20,10 +20,8 @@
 , ntfs3g
 , parted
 , procps
-, qtbase
 , util-linux
 , which
-, wrapQtAppsHook
 , xfsprogs
 , xz
 , defaultGuiType ? ""
@@ -33,6 +31,7 @@
 , withNtfs ? false
 , withGtk3 ? false
 , withQt5 ? false
+, libsForQt5
 }:
 
 assert lib.elem defaultGuiType [ "" "gtk3" "qt5" ];
@@ -40,6 +39,8 @@ assert defaultGuiType == "gtk3" -> withGtk3;
 assert defaultGuiType == "qt5" -> withQt5;
 
 let
+  inherit (lib) optional optionalString;
+  inherit (libsForQt5) qtbase wrapQtAppsHook;
   arch = {
     x86_64-linux = "x86_64";
     i686-linux = "i386";
@@ -47,17 +48,16 @@ let
     mipsel-linux = "mips64el";
   }.${stdenv.hostPlatform.system}
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-  inherit (lib) optional optionalString;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.84";
+  version = "1.0.87";
 
   src = let
     inherit (finalAttrs) version;
   in fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-ygIAw270Px5nRrSrsD3yLBRFBKGwzdxXzQ6udS9g2ZI=";
+    hash = "sha256-0m7MXLtSuq8GdDFXzKeY86DIglgeQ6wyEtpOyB/thkc=";
   };
 
   patches = [

@@ -164,7 +164,7 @@ let
       with subtest("configure the cli"):
           client.succeed("bw --nointeraction config server http://server")
 
-      with subtest("can't login to nonexistant account"):
+      with subtest("can't login to nonexistent account"):
           client.fail(
               "bw --nointeraction --raw login ${userEmail} ${userPassword}"
           )

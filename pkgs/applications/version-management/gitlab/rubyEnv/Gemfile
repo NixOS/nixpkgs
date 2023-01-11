@@ -8,18 +8,18 @@ if ENV['BUNDLER_CHECKSUM_VERIFICATION_OPT_IN'] # this verification is still expe
   Bundler::Checksum.patch!
 end
 
-gem 'bundler-checksum', '~> 0.1.0', path: 'bundler-checksum', require: false
+gem 'bundler-checksum', '~> 0.1.0', path: 'vendor/gems/bundler-checksum', require: false
 
 # NOTE: When incrementing the major or minor version here, also increment activerecord_version
 # in vendor/gems/attr_encrypted/attr_encrypted.gemspec until we resolve
 # https://gitlab.com/gitlab-org/gitlab/-/issues/375713
 gem 'rails', '~> 6.1.6.1'
 
-gem 'bootsnap', '~> 1.13.0', require: false
+gem 'bootsnap', '~> 1.15.0', require: false
 
 # Pin openssl to match the version bundled with our supported Rubies.
 # See https://stdgems.org/openssl/#gem-version.
-gem 'openssl', '2.2.1'
+gem 'openssl', '2.2.2'
 # This gem was originally bundled with Ruby 2.7, but is unbundled as of Ruby 3.
 # Since the latest version caused problems with GitLab, we pin this to an older
 # version for now.
@@ -50,31 +50,31 @@ gem 'declarative_policy', '~> 1.1.0'
 
 # Authentication libraries
 gem 'devise', '~> 4.8.1'
-gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'devise-pbkdf2-encryptable'
+gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-encryptable'
 gem 'bcrypt', '~> 3.1', '>= 3.1.14'
-gem 'doorkeeper', '~> 5.5.0.rc2'
-gem 'doorkeeper-openid_connect', '~> 1.7.5'
+gem 'doorkeeper', '~> 5.5'
+gem 'doorkeeper-openid_connect', '~> 1.8'
 gem 'rexml', '~> 3.2.5'
 gem 'ruby-saml', '~> 1.13.0'
 gem 'omniauth', '~> 2.1.0'
 gem 'omniauth-auth0', '~> 2.0.0'
 gem 'omniauth-azure-activedirectory-v2', '~> 2.0'
-gem 'omniauth-azure-oauth2', '~> 0.0.9', path: 'omniauth-azure-oauth2' # See gem README.md
-gem 'omniauth-cas3', '~> 1.1.4', path: 'omniauth-cas3' # See vendor/gems/omniauth-cas3/README.md
+gem 'omniauth-azure-oauth2', '~> 0.0.9', path: 'vendor/gems/omniauth-azure-oauth2' # See gem README.md
+gem 'omniauth-cas3', '~> 1.1.4', path: 'vendor/gems/omniauth-cas3' # See vendor/gems/omniauth-cas3/README.md
 gem 'omniauth-dingtalk-oauth2', '~> 1.0'
 gem 'omniauth-alicloud', '~> 2.0.0'
 gem 'omniauth-facebook', '~> 4.0.0'
 gem 'omniauth-github', '2.0.1'
-gem 'omniauth-gitlab', '~> 4.0.0', path: 'omniauth-gitlab' # See vendor/gems/omniauth-gitlab/README.md
+gem 'omniauth-gitlab', '~> 4.0.0', path: 'vendor/gems/omniauth-gitlab' # See vendor/gems/omniauth-gitlab/README.md
 gem 'omniauth-google-oauth2', '~> 1.1'
 gem 'omniauth-oauth2-generic', '~> 0.2.2'
 gem 'omniauth-saml', '~> 2.0.0'
 gem 'omniauth-shibboleth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.4'
-gem 'omniauth_crowd', '~> 2.4.0', path: 'omniauth_crowd' # See vendor/gems/omniauth_crowd/README.md
+gem 'omniauth_crowd', '~> 2.4.0', path: 'vendor/gems/omniauth_crowd' # See vendor/gems/omniauth_crowd/README.md
 gem 'omniauth-authentiq', '~> 0.3.3'
 gem 'gitlab-omniauth-openid-connect', '~> 0.10.0', require: 'omniauth_openid_connect'
-gem 'omniauth-salesforce', '~> 1.0.5', path: 'omniauth-salesforce' # See gem README.md
+gem 'omniauth-salesforce', '~> 1.0.5', path: 'vendor/gems/omniauth-salesforce' # See gem README.md
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0'
 gem 'rack-oauth2', '~> 1.21.3'
 gem 'jwt', '~> 2.1.0'
@@ -91,7 +91,7 @@ gem 'invisible_captcha', '~> 2.0.0'
 # Two-factor authentication
 gem 'devise-two-factor', '~> 4.0.2'
 gem 'rqrcode-rails3', '~> 0.1.7'
-gem 'attr_encrypted', '~> 3.2.4', path: 'attr_encrypted'
+gem 'attr_encrypted', '~> 3.2.4', path: 'vendor/gems/attr_encrypted'
 gem 'u2f', '~> 0.2.1'
 
 # GitLab Pages
@@ -107,7 +107,7 @@ gem 'browser', '~> 5.3.1'
 gem 'ohai', '~> 16.10'
 
 # GPG
-gem 'gpgme', '~> 2.0.19'
+gem 'gpgme', '~> 2.0.22'
 
 # LDAP Auth
 # GitLab fork with several improvements to original library. For full list of changes
@@ -166,9 +166,9 @@ gem 'seed-fu', '~> 2.3.7'
 gem 'elasticsearch-model', '~> 7.2'
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation'
 gem 'elasticsearch-api',   '7.13.3'
-gem 'aws-sdk-core', '~> 3.167.0'
+gem 'aws-sdk-core', '~> 3.168.4'
 gem 'aws-sdk-cloudformation', '~> 1'
-gem 'aws-sdk-s3', '~> 1.117.1'
+gem 'aws-sdk-s3', '~> 1.117.2'
 gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
 gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections
 
@@ -190,7 +190,7 @@ gem 'asciidoctor-kroki', '~> 0.7.0', require: false
 gem 'rouge', '~> 3.30.0'
 gem 'truncato', '~> 0.7.12'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.13.9'
+gem 'nokogiri', '~> 1.13.10'
 
 # Calendar rendering
 gem 'icalendar'
@@ -242,7 +242,7 @@ gem 're2', '~> 1.6.0'
 
 # Misc
 
-gem 'version_sorter', '~> 2.2.4'
+gem 'version_sorter', '~> 2.3'
 
 # Export Ruby Regex to Javascript
 gem 'js_regex', '~> 3.8'
@@ -264,9 +264,6 @@ gem 'discordrb-webhooks', '~> 3.4', require: false
 gem 'jira-ruby', '~> 2.1.4'
 gem 'atlassian-jwt', '~> 0.2.0'
 
-# Flowdock integration
-gem 'flowdock', '~> 0.7'
-
 # Slack integration
 gem 'slack-messenger', '~> 2.3.4'
 
@@ -280,14 +277,14 @@ gem 'asana', '~> 0.10.13'
 gem 'ruby-fogbugz', '~> 0.3.0'
 
 # Kubernetes integration
-gem 'kubeclient', '~> 4.9.3'
+gem 'kubeclient', '~> 4.9.3', path: 'vendor/gems/kubeclient'
 
 # Sanitize user input
 gem 'sanitize', '~> 6.0'
 gem 'babosa', '~> 1.0.4'
 
 # Sanitizes SVG input
-gem 'loofah', '~> 2.19.0'
+gem 'loofah', '~> 2.19.1'
 
 # Working with license
 # Detects the open source license the repository includes
@@ -336,8 +333,7 @@ gem 'pg_query', '~> 2.2'
 
 gem 'premailer-rails', '~> 1.10.3'
 
-# LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.28.0'
+gem 'gitlab-labkit', '~> 0.29.0'
 gem 'thrift', '>= 0.16.0'
 
 # I18n
@@ -353,16 +349,16 @@ gem 'batch-loader', '~> 2.0.1'
 gem 'peek', '~> 1.1'
 
 # Snowplow events tracking
-gem 'snowplow-tracker', '~> 0.6.1'
+gem 'snowplow-tracker', '~> 0.8.0'
 
 # Metrics
 gem 'webrick', '~> 1.6.1', require: false
-gem 'prometheus-client-mmap', '~> 0.16', require: 'prometheus/client'
+gem 'prometheus-client-mmap', '~> 0.17', require: 'prometheus/client'
 
 gem 'warning', '~> 1.3.0'
 
 group :development do
-  gem 'lefthook', '~> 1.2.0', require: false
+  gem 'lefthook', '~> 1.2.6', require: false
   gem 'rubocop'
   gem 'solargraph', '~> 0.47.2', require: false
 
@@ -373,6 +369,8 @@ group :development do
   gem 'better_errors', '~> 2.9.1'
 
   gem 'sprite-factory', '~> 1.7'
+
+  gem "listen", "~> 3.7"
 end
 
 group :development, :test do
@@ -394,10 +392,10 @@ group :development, :test do
   # Generate Fake data
   gem 'ffaker', '~> 2.10'
 
-  gem 'spring', '~> 2.1.0'
+  gem 'spring', '~> 4.1.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 9.0.0', require: false
+  gem 'gitlab-styles', '~> 9.1.0', require: false
 
   gem 'haml_lint', '~> 0.40.0', require: false
   gem 'bundler-audit', '~> 0.7.0.1', require: false
@@ -411,8 +409,6 @@ group :development, :test do
 
   gem 'simple_po_parser', '~> 1.1.6', require: false
 
-  gem 'timecop', '~> 0.9.1'
-
   gem 'png_quantizator', '~> 0.2.1', require: false
 
   gem 'parallel', '~> 1.19', require: false
@@ -425,7 +421,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 3.6.2', require: false
+  gem 'gitlab-dangerfiles', '~> 3.6.4', require: false
 end
 
 group :development, :test, :coverage do
@@ -507,7 +503,7 @@ gem 'kas-grpc', '~> 0.0.2'
 
 gem 'grpc', '~> 1.42.0'
 
-gem 'google-protobuf', '~> 3.21', '>= 3.21.9'
+gem 'google-protobuf', '~> 3.21', '>= 3.21.12'
 
 gem 'toml-rb', '~> 2.2.0'
 
@@ -526,7 +522,7 @@ gem 'grape_logging', '~> 1.8'
 gem 'gitlab-net-dns', '~> 0.9.1'
 
 # Countries list
-gem 'countries', '~> 3.0'
+gem 'countries', '~> 4.0.0'
 
 gem 'retriable', '~> 3.1.2'
 
@@ -537,9 +533,9 @@ gem 'lru_redux'
 # Monkey-patched in `config/initializers/mail_encoding_patch.rb`
 # See https://gitlab.com/gitlab-org/gitlab/issues/197386
 gem 'mail', '= 2.7.1'
-gem 'mail-smtp_pool', '~> 0.1.0', path: 'mail-smtp_pool', require: false
+gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: false
 
-gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'microsoft_graph_mailer'
+gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer'
 
 # File encryption
 gem 'lockbox', '~> 0.6.2'
@@ -562,13 +558,13 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'parslet', '~> 1.8'
 
-gem 'ipynbdiff', path: 'ipynbdiff'
+gem 'ipynbdiff', path: 'vendor/gems/ipynbdiff'
 
 gem 'ed25519', '~> 1.3.0'
 
 # Error Tracking OpenAPI client
 # See https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/rake_tasks.md#update-openapi-client-for-error-tracking-feature
-gem 'error_tracking_open_api', path: 'error_tracking_open_api'
+gem 'error_tracking_open_api', path: 'vendor/gems/error_tracking_open_api'
 
 # Vulnerability advisories
 gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite'

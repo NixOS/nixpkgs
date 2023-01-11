@@ -76,9 +76,7 @@ rustPlatform.buildRustPackage rec {
     categories = [ "Development" "Utility" "TextEditor" ];
   }) ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lightning-fast and Powerful Code Editor written in Rust";

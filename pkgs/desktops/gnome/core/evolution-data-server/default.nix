@@ -45,6 +45,7 @@
 , boost
 , protobuf
 , libiconv
+, makeHardcodeGsettingsPatch
 }:
 
 stdenv.mkDerivation rec {
@@ -150,8 +151,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
-      glib-schema-to-var = {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
         "org.gnome.Evolution.DefaultSources" = "EDS";
         "org.gnome.evolution.shell.network-config" = "EDS";
         "org.gnome.evolution-data-server.addressbook" = "EDS";

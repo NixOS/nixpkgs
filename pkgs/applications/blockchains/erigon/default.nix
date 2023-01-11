@@ -29,6 +29,8 @@ buildGoModule rec {
     "cmd/rlpdump"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";

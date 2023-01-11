@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.19.1";
+  version = "0.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3uYAyItZ1X18pw3h3rTJpcv2H7O+e4sFCv1R7vb8QPI=";
+    hash = "sha256-BObJQTt1l+fFh02/zhcKRNRs0LQl+oJelMQq9EW2XuY=";
   };
 
   nativeBuildInputs = [

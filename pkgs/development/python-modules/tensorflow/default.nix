@@ -22,8 +22,6 @@
 , tensorboardSupport ? true
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
-# Default from ./configure script
-, cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
@@ -32,7 +30,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
 assert cudaSupport -> cudatoolkit != null
@@ -305,7 +303,7 @@ let
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
     GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
-    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+    TF_CUDA_COMPUTE_CAPABILITIES = builtins.concatStringsSep "," cudaFlags.cudaRealArchs;
 
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
@@ -374,11 +372,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
-        else "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
-      aarch64-linux = "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg=";
-      x86_64-darwin = "sha256-ZfZQjLdqo8VVlfKfkdolvSHQvKe4IbQSLc/4cNzHr3E=";
-      aarch64-darwin = "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E=";
+        then "sha256-Q6a/Q4fr5cmqqkIoL8ZBJOKfF4NXnrhqFi2VgUpHC3E="
+        else "sha256-RBrmxWBn5Yj5fIHlPYXuWOFMTqDGbgk+IvUXk7kIXHM=";
+      aarch64-linux = "sha256-MEkn2DplUW1R95q+A6uuIKNtMEBv08jU8kvTbMgIKJU=";
+      x86_64-darwin = "sha256-bqZTu0AABeg6M2IVwlkUPuF8EMsbQXurcmjWZY0EN9E=";
+      aarch64-darwin = "sha256-q1PfVqyZ3KG65aKw6l9vhxCfPoxH6Nb5y1Eh9P8Ovqk=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 

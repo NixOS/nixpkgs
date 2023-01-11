@@ -1,22 +1,26 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl, nix-update-script }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "clash-geoip";
-  version = "20220912";
+  version = "20221212";
 
-  src = ./.;
-
-  data = fetchurl {
+  src = fetchurl {
     url = "https://github.com/Dreamacro/maxmind-geoip/releases/download/${version}/Country.mmdb";
-    sha256 = "sha256-YIQjuWbizheEE9kgL+hBS1GAGf2PbpaW5mu/lim9Q9A";
+    sha256 = "sha256-pApPPRIvG8qak5chupTN2u1IUKANXtkcEMlSAPedjH4=";
   };
+
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/etc/clash
-    install -Dm 0644 $data -D $out/etc/clash/Country.mmdb
+    install -Dm 0644 $src -D $out/etc/clash/Country.mmdb
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A GeoLite2 data created by MaxMind";

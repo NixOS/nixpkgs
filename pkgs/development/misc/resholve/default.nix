@@ -16,19 +16,71 @@ let
     self = python27';
     pkgsBuildHost = pkgsBuildHost // { python27 = python27'; };
     # strip down that python version as much as possible
-    openssl = null;
     bzip2 = null;
     readline = null;
     ncurses = null;
     gdbm = null;
     sqlite = null;
-    libffi = null;
     rebuildBytecode = false;
     stripBytecode = true;
     strip2to3 = true;
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
+    stripLibs = [
+      # directories
+      "bsddb*"
+      "curses"
+      "compiler"
+      "ensurepip"
+      "hotshot"
+      "lib-tk"
+      "sqlite3"
+      # files
+      "aifc*"
+      "antigravity*"
+      "async*"
+      "*audio*"
+      "BaseHTTPServer*"
+      "Bastion*"
+      "binhex*"
+      "bdb*"
+      "CGIHTTPServer*"
+      "cgitb*"
+      "chunk*"
+      "colorsys*"
+      "dbhash*"
+      "dircache*"
+      "*dbm*"
+      "ftplib*"
+      "*hdr*"
+      "imaplib*"
+      "imputil*"
+      "MimeWriter*"
+      "mailbox*"
+      "mhlib*"
+      "mimify*"
+      "multifile*"
+      "netrc*"
+      "nntplib*"
+      "os2emxpath*"
+      "pyclbr*"
+      "pydoc*"
+      "SimpleHTTPServer*"
+      "sgmllib*"
+      "smtp*"
+      "ssl*"
+      "sun*"
+      "tabnanny*"
+      "telnetlib*"
+      "this*"
+      "wave*"
+      "webbrowser*"
+      "whichdb*"
+      "wsgiref*"
+      "xdrlib*"
+      "*XMLRPC*"
+    ];
     enableOptimizations = false;
   };
   callPackage = lib.callPackageWith (pkgs // { python27 = python27'; });

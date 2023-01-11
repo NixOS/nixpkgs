@@ -2,19 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "libversion";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "repology";
     repo = "libversion";
     rev = version;
-    sha256 = "13x5djdpv6aryxsbw6a3b6vwzi9f4aa3gn9dqb7axzppggayawyk";
+    hash = "sha256-P/ykRy+LgcfWls4Zw8noel/K9mh/PnKy3smoQtuSi00=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
+  cmakeFlags = [
+    # https://github.com/NixOS/nixpkgs/issues/144170
+    # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+    # (setting it to an absolute path causes include files to go to $out/$out/include,
+    #  because the absolute path is interpreted with root at $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+
   checkTarget = "test";
+  doCheck = true;
 
   meta = with lib; {
     description = "Advanced version string comparison library";

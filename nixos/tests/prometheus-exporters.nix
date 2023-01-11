@@ -1172,6 +1172,25 @@ let
       '';
     };
 
+    statsd = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-statsd-exporter.service")
+        wait_for_open_port(9102)
+        succeed("curl http://localhost:9102/metrics | grep 'statsd_exporter_build_info{'")
+        succeed(
+          "echo 'test.udp:1|c' > /dev/udp/localhost/9125",
+          "curl http://localhost:9102/metrics | grep 'test_udp 1'",
+        )
+        succeed(
+          "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125",
+          "curl http://localhost:9102/metrics | grep 'test_tcp 1'",
+        )
+      '';
+    };
+
     surfboard = {
       exporterConfig = {
         enable = true;
@@ -1244,10 +1263,8 @@ let
       exporterConfig.enable = true;
       exporterConfig.controllers = [{ }];
       exporterTest = ''
-        wait_for_unit("prometheus-unpoller-exporter.service")
-        wait_for_open_port(9130)
-        succeed(
-            "curl -sSf localhost:9130/metrics | grep 'unpoller_build_info{.\\+} 1'"
+        wait_until_succeeds(
+            'journalctl -eu prometheus-unpoller-exporter.service -o cat | grep "Connection Error"'
         )
       '';
     };

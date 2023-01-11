@@ -43,7 +43,7 @@ in {
         type = types.listOf types.str;
         default = [];
         description = lib.mdDoc ''
-          List of additional command line paramters for knotd
+          List of additional command line parameters for knotd
         '';
       };
 

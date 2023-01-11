@@ -25,9 +25,32 @@
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://akkoma.social">Akkoma</link>, an
+          ActivityPub microblogging server. Available as
+          <link xlink:href="options.html#opt-services.akkoma.enable">services.akkoma</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/akinomyoga/ble.sh">blesh</link>,
           a line editor written in pure bash. Available as
           <link linkend="opt-programs.bash.blesh.enable">programs.bash.blesh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/adnanh/webhook">webhook</link>,
+          a lightweight webhook server. Available as
+          <link linkend="opt-services.webhook.enable">services.webhook</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/alexivkin/CUPS-PDF-to-PDF">cups-pdf-to-pdf</link>,
+          a pdf-generating cups backend based on
+          <link xlink:href="https://www.cups-pdf.de/">cups-pdf</link>.
+          Available as
+          <link linkend="opt-services.printing.cups-pdf.enable">services.printing.cups-pdf</link>.
         </para>
       </listitem>
       <listitem>
@@ -39,10 +62,41 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/StevenBlack/hosts">stevenblack-blocklist</link>,
+          A unified hosts file with base extensions for blocking
+          unwanted websites. Available as
+          <link xlink:href="options.html#opt-networking.stevenblack.enable">networking.stevenblack</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ellie/atuin">atuin</link>,
+          a sync server for shell history. Available as
+          <link linkend="opt-services.atuin.enable">services.atuin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://gitlab.com/kop316/mmsd">mmsd</link>,
+          a lower level daemon that transmits and recieves MMSes.
+          Available as
+          <link linkend="opt-services.mmsd.enable">services.mmsd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
           <link xlink:href="options.html#opt-services.v2raya.enable">services.v2raya</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.netfilter.org/projects/ulogd/index.html">ulogd</link>,
+          a userspace logging daemon for netfilter/iptables related
+          logging. Available as
+          <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -63,6 +117,23 @@
       </listitem>
       <listitem>
         <para>
+          <literal>borgbackup</literal> module now has an option for
+          inhibiting system sleep while backups are running, defaulting
+          to off (not inhibiting sleep), available as
+          <link linkend="opt-services.borgbackup.jobs._name_.inhibitsSleep"><literal>services.borgbackup.jobs.&lt;name&gt;.inhibitsSleep</literal></link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>podman</literal> now uses the
+          <literal>netavark</literal> network stack. Users will need to
+          delete all of their local containers, images, volumes, etc, by
+          running <literal>podman system reset --force</literal> once
+          before upgrading their systems.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module no longer fetches instance metadata in
           stage-1. This results in a significantly smaller initramfs,
           since network drivers no longer need to be included, and
@@ -73,6 +144,26 @@
           <literal>/etc/ec2-metadata</literal> should now have an
           <literal>after</literal> dependency on
           <literal>fetch-ec2-metadata.service</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>minio</literal> removed support for its legacy
+          filesystem backend in
+          <link xlink:href="https://github.com/minio/minio/releases/tag/RELEASE.2022-10-29T06-21-33Z">RELEASE.2022-10-29T06-21-33Z</link>.
+          This means if your storage was created with the old format,
+          minio will no longer start. Unfortunately minio doesn’t
+          provide a an automatic migration, they only provide
+          <link xlink:href="https://min.io/docs/minio/windows/operations/install-deploy-manage/migrate-fs-gateway.html">instructions
+          how to manually convert the node</link>. To facilitate this
+          migration we keep around the last version that still supports
+          the old filesystem backend as
+          <literal>minio_legacy_fs</literal>. Use it via
+          <literal>services.minio.package = minio_legacy_fs;</literal>
+          to export your data before switching to the new version. See
+          the corresponding
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/199318">issue</link>
+          for more details.
         </para>
       </listitem>
       <listitem>
@@ -91,8 +182,8 @@
           <link linkend="opt-services.snapserver.openFirewall">services.snapserver.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
         </para>
       </listitem>
       <listitem>
@@ -101,8 +192,8 @@
           <link linkend="opt-services.tmate-ssh-server.openFirewall">services.tmate-ssh-server.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
         </para>
       </listitem>
       <listitem>
@@ -111,8 +202,18 @@
           <link linkend="opt-services.unifi-video.openFirewall">services.unifi-video.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Nginx module now validates the syntax of config files at
+          build time. For more complex configurations (using
+          <literal>include</literal> with out-of-store files notably)
+          you may need to disable this check by setting
+          <link linkend="opt-services.nginx.validateConfig">services.nginx.validateConfig</link>
+          to <literal>false</literal>.
         </para>
       </listitem>
       <listitem>
@@ -142,6 +243,17 @@
           under 10 packages in nixpkgs, largely unmaintained upstream as
           well, however, out-of-tree package expressions may need to be
           updated manually.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          In <literal>mastodon</literal> it is now necessary to specify
+          location of file with <literal>PostgreSQL</literal> database
+          password. In
+          <literal>services.mastodon.database.passwordFile</literal>
+          parameter default value
+          <literal>/var/lib/mastodon/secrets/db-password</literal> has
+          been changed to <literal>null</literal>.
         </para>
       </listitem>
       <listitem>
@@ -177,6 +289,16 @@
       </listitem>
       <listitem>
         <para>
+          The module <literal>usbmuxd</literal> now has the ability to
+          change the package used by the daemon. In case you’re
+          experiencing issues with <literal>usbmuxd</literal> you can
+          try an alternative program like <literal>usbmuxd2</literal>.
+          Available as
+          <link linkend="opt-services.usbmuxd.package">services.usbmuxd.package</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mastodon</literal> gained a tootctl wrapped
           named <literal>mastodon-tootctl</literal> similar to
           <literal>nextcloud-occ</literal> which can be executed from
@@ -191,6 +313,20 @@
           set. The option
           <literal>services.dnsmasq.extraConfig</literal> will be
           deprecated when NixOS 22.11 reaches end of life.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>dokuwiki</literal> service now takes
+          configuration via the
+          <literal>services.dokuwiki.sites.&lt;name&gt;.settings</literal>
+          attribute set, <literal>extraConfig</literal> is deprecated
+          and will be removed. The
+          <literal>{aclUse,superUser,disableActions}</literal>
+          attributes have been renamed, <literal>pluginsConfig</literal>
+          now also accepts an attribute set of booleans, passing plain
+          PHP is deprecated. Same applies to <literal>acl</literal>
+          which now also accepts structured settings.
         </para>
       </listitem>
       <listitem>
@@ -210,6 +346,78 @@
       </listitem>
       <listitem>
         <para>
+          <literal>mastodon</literal> now supports connection to a
+          remote <literal>PostgreSQL</literal> database.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.peertube</literal> now requires you to
+          specify the secret file
+          <literal>secrets.secretsFile</literal>. It can be generated by
+          running <literal>openssl rand -hex 32</literal>. Before
+          upgrading, read the release notes for PeerTube:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <link xlink:href="https://github.com/Chocobozzz/PeerTube/releases/tag/v5.0.0">Release
+              v5.0.0</link>
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          And backup your data.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.chronyd</literal> is now started with
+          additional systemd sandbox/hardening options for better
+          security.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The module <literal>services.headscale</literal> was
+          refactored to be compliant with
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link>. To be precise, this means that the following
+          things have changed:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Most settings has been migrated under
+              <link linkend="opt-services.headscale.settings">services.headscale.settings</link>
+              which is an attribute-set that will be converted into
+              headscale’s YAML config format. This means that the
+              configuration from
+              <link xlink:href="https://github.com/juanfont/headscale/blob/main/config-example.yaml">headscale’s
+              example configuration</link> can be directly written as
+              attribute-set in Nix within this option.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos/lib/make-disk-image.nix</literal> can now
+          mutate EFI variables, run user-provided EFI firmware or
+          variable templates. This is now extensively documented in the
+          NixOS manual.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.grafana</literal> listens only on localhost
+          by default again. This was changed to upstreams default of
+          <literal>0.0.0.0</literal> by accident in the freeform setting
+          conversion.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -223,9 +431,54 @@
       </listitem>
       <listitem>
         <para>
+          The new option <literal>users.motdFile</literal> allows
+          configuring a Message Of The Day that can be updated
+          dynamically.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Enabling global redirect in
+          <literal>services.nginx.virtualHosts</literal> now allows one
+          to add exceptions with the <literal>locations</literal>
+          option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new option <literal>recommendedBrotliSettings</literal> has
+          been added to <literal>services.nginx</literal>. Learn more
+          about compression in Brotli format
+          <link xlink:href="https://github.com/google/ngx_brotli/blob/master/README.md">here</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>
+          version is based on
+          <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>,
+          existing installations will keep using version 0.7. New
+          installations will use version 0.8. In order to upgrade a
+          Garage cluster, please follow
+          <link xlink:href="https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/">upstream
+          instructions</link> and force
+          <link xlink:href="options.html#opt-services.garage.package">services.garage.package</link>
+          or upgrade accordingly
+          <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>firewall</literal> and <literal>nat</literal>
+          module now has a nftables based implementation. Enable
+          <literal>networking.nftables</literal> to use it.
         </para>
       </listitem>
       <listitem>
@@ -241,6 +494,27 @@
           The <literal>unifi-poller</literal> package and corresponding
           NixOS module have been renamed to <literal>unpoller</literal>
           to match upstream.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The new option
+          <literal>services.tailscale.useRoutingFeatures</literal>
+          controls various settings for using Tailscale features like
+          exit nodes and subnet routers. If you wish to use your machine
+          as an exit node, you can set this setting to
+          <literal>server</literal>, otherwise if you wish to use an
+          exit node you can set this setting to
+          <literal>client</literal>. The strict RPF warning has been
+          removed as the RPF will be loosened automatically based on the
+          value of this setting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
+          can now access AX.25 interfaces via the
+          <literal>libax25</literal> package.
         </para>
       </listitem>
     </itemizedlist>

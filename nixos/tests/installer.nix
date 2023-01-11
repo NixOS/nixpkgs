@@ -49,6 +49,8 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
+        boot.initrd.secrets."/etc/secret" = /etc/nixos/secret;
+
         users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
@@ -124,12 +126,26 @@ let
               }",
               "/mnt/etc/nixos/configuration.nix",
           )
+          machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
       with subtest("Perform the installation"):
           machine.succeed("nixos-install < /dev/null >&2")
 
       with subtest("Do it again to make sure it's idempotent"):
           machine.succeed("nixos-install < /dev/null >&2")
+
+      with subtest("Check that we can build things in nixos-enter"):
+          machine.succeed(
+              """
+              nixos-enter -- nix-build --option substitute false -E 'derivation {
+                  name = "t";
+                  builder = "/bin/sh";
+                  args = ["-c" "echo nixos-enter build > $out"];
+                  system = builtins.currentSystem;
+                  preferLocalBuild = true;
+              }'
+              """
+          )
 
       with subtest("Shutdown system after installation"):
           machine.succeed("umount /mnt/boot || true")
@@ -465,8 +481,12 @@ let
     '';
     testSpecialisationConfig = true;
   };
-
-
+  # disable zfs so we can support latest kernel if needed
+  no-zfs-module = {
+    nixpkgs.overlays = [(final: super: {
+      zfs = super.zfs.overrideAttrs(_: {meta.platforms = [];});}
+    )];
+  };
 in {
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
@@ -714,6 +734,7 @@ in {
   bcachefsSimple = makeInstallerTest "bcachefs-simple" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''
@@ -737,13 +758,22 @@ in {
   bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
+
       environment.systemPackages = with pkgs; [ keyutils ];
     };
 
-    # We don't want to use the normal way of unlocking bcachefs defined in tasks/filesystems/bcachefs.nix.
-    # So, override initrd.postDeviceCommands completely and simply unlock with the predefined password.
     extraConfig = ''
-      boot.initrd.postDeviceCommands = lib.mkForce "echo password | bcachefs unlock /dev/vda3";
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("password\n")
     '';
 
     createPartitions = ''
@@ -769,6 +799,9 @@ in {
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''

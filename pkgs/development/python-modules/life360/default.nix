@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "life360";
-  version = "5.4.1";
+  version = "5.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pnbruckner";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uFKRWTFrc1AYn0Rc8HhcVPkmdAbwFJuj8tXZjglGq8E=";
+    hash = "sha256-F/j3qIdz63pEQ+nj1poP3lBFWSpSq4nLseYg+N2tykU=";
   };
 
   propagatedBuildInputs = [

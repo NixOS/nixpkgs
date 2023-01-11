@@ -54,7 +54,7 @@ in
     postgresName = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = lib.mdDoc "The name of databse OnlyOffice should user.";
+      description = lib.mdDoc "The name of database OnlyOffice should user.";
     };
 
     postgresPasswordFile = mkOption {

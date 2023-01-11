@@ -570,7 +570,13 @@ test run would be:
 
 ```
   checkInputs = [ pytest ];
-  checkPhase = "pytest";
+  checkPhase = ''
+    runHook preCheck
+
+    pytest
+
+    runHook postCheck
+  '';
 ```
 
 However, many repositories' test suites do not translate well to nix's build
@@ -582,7 +588,11 @@ To filter tests using pytest, one can do the following:
   checkInputs = [ pytest ];
   # avoid tests which need additional data or touch network
   checkPhase = ''
+    runHook preCheck
+
     pytest tests/ --ignore=tests/integration -k 'not download and not update'
+
+    runHook postCheck
   '';
 ```
 
@@ -605,7 +615,7 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 `test` command for a `checkPhase` which runs `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 
-Using the example above, the analagous `pytestCheckHook` usage would be:
+Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```
   checkInputs = [ pytestCheckHook ];
@@ -624,7 +634,7 @@ Using the example above, the analagous `pytestCheckHook` usage would be:
   ];
 ```
 
-This is expecially useful when tests need to be conditionally disabled,
+This is especially useful when tests need to be conditionally disabled,
 for example:
 
 ```
@@ -1408,7 +1418,11 @@ example of such a situation is when `py.test` is used.
     # assumes the tests are located in tests
     checkInputs = [ pytest ];
     checkPhase = ''
+      runHook preCheck
+
       py.test -k 'not function_name and not other_function' tests
+
+      runHook postCheck
     '';
   }
   ```

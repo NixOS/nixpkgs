@@ -43,9 +43,7 @@ stdenv.mkDerivation rec {
     "-DDRACO_TINYGLTF_PATH=${tinygltf}"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";

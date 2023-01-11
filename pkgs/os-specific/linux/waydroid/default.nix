@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3Packages
 , dnsmasq
@@ -8,7 +7,6 @@
 , kmod
 , lxc
 , iproute2
-, iptables
 , nftables
 , util-linux
 , which
@@ -17,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.3.3";
+  version = "1.3.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-av1kcOSViUV2jsFiTE21N6sAJIL6K+zKkpPHjx6iYVk=";
+    sha256 = "sha256-0GBob9BUwiE5cFGdK8AdwsTjTOdc+AIWqUGN/gFfOqI=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -29,7 +29,5 @@ stdenv.mkDerivation rec {
     homepage = "https://opendungeons.github.io";
     license = with licenses; [ gpl3Plus zlib mit cc-by-sa-30 cc0 ofl cc-by-30 ];
     platforms = platforms.linux;
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

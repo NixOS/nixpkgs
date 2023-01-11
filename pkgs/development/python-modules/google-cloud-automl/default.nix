@@ -1,15 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, libcst
 , google-api-core
 , google-cloud-storage
 , google-cloud-testutils
+, libcst
+, mock
 , pandas
 , proto-plus
+, protobuf
 , pytest-asyncio
-, mock
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -27,9 +28,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     google-api-core
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+    pandas = [
+      pandas
+    ];
+    storage = [
+      google-cloud-storage
+    ];
+  };
 
   checkInputs = [
     google-cloud-storage
@@ -64,6 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud AutoML API client library";
     homepage = "https://github.com/googleapis/python-automl";
+    changelog = "https://github.com/googleapis/python-automl/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

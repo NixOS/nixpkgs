@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchurl, nasm
-, alsa-lib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
+{ lib, stdenv, fetchFromGitHub, nasm
+, alsa-lib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libtheora, libvorbis, libGLU, libGL, SDL2, zlib
 , Cocoa, AudioToolbox, Carbon, CoreMIDI, AudioUnit, cctools
 }:
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.5.1";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-n9jbOORFYUS/jDTazffyBOdfGOjkSOwBzgjOgmoDXwE=";
+  src = fetchFromGitHub {
+    owner = "scummvm";
+    repo = "scummvm";
+    rev = "v${version}";
+    hash = "sha256-fqMMdHBVcXLsBDWxXH9UKXwfvlyIVbRsIPmrYqPGQ+g=";
   };
 
   nativeBuildInputs = [ nasm ];
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
   ] ++ [
-    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis libGLU libGL SDL2 zlib
+    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis libGLU libGL SDL2 zlib
   ];
 
   dontDisableStatic = true;
@@ -28,7 +30,6 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ "host" ];
   configureFlags = [
-    "--enable-c++11"
     "--enable-release"
   ];
 
@@ -47,7 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.peterhoeg ];
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

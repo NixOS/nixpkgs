@@ -11,6 +11,7 @@ compat53,,,,0.7-1,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
+cyan,,,,,,
 cyrussasl,https://github.com/JorjBauer/lua-cyrussasl.git,,,,,
 digestif,https://github.com/astoff/digestif.git,,,0.2-1,5.3,
 dkjson,,,,,,
@@ -99,6 +100,7 @@ sqlite,,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
+teal-language-server,,,http://luarocks.org/dev,,,
 tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda

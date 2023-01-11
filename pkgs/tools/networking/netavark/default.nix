@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , installShellFiles
 , mandown
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     make -C docs netavark.1
     installManPage docs/netavark.1
   '';
+
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "Rust based network stack for containers";

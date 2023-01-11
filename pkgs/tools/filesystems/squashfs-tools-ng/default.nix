@@ -21,17 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably macOS SDK 10.13 or later. Check the current version in
-    # ../../../../os-specific/darwin/apple-sdk/default.nix
-    #
-    # From the build logs:
-    #
-    # > Undefined symbols for architecture x86_64:
-    # >   "_utimensat", referenced from:
-    # >       _set_attribs in rdsquashfs-restore_fstree.o
-    # > ld: symbol(s) not found for architecture x86_64
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

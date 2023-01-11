@@ -1,24 +1,24 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs, nixpkgs ? { }, libsets }:
 let
   revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.revision or "master");
 
-  libDefPos = set:
-    builtins.map
-      (name: {
-        name = name;
+  libDefPos = prefix: set:
+    builtins.concatMap
+      (name: [{
+        name = builtins.concatStringsSep "." (prefix ++ [name]);
         location = builtins.unsafeGetAttrPos name set;
-      })
-      (builtins.attrNames set);
+      }] ++ nixpkgsLib.optionals
+        (builtins.length prefix == 0 && builtins.isAttrs set.${name})
+        (libDefPos (prefix ++ [name]) set.${name})
+      ) (builtins.attrNames set);
 
   libset = toplib:
     builtins.map
       (subsetname: {
         subsetname = subsetname;
-        functions = libDefPos toplib.${subsetname};
+        functions = libDefPos [] toplib.${subsetname};
       })
-      (builtins.filter
-        (name: builtins.isAttrs toplib.${name})
-        (builtins.attrNames toplib));
+      (builtins.map (x: x.name) libsets);
 
   nixpkgsLib = pkgs.lib;
 

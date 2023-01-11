@@ -8,6 +8,8 @@
 , ffmpeg-headless
 , inetutils
 , nixosTests
+, home-assistant
+, testers
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -41,6 +43,22 @@ let
         };
       });
 
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        pname = "astral";
+        version = "2.2";
+        src = self.fetchPypi {
+          inherit pname version;
+          hash = "sha256-5B2ZZ9XEi+QhNGVS8PTe2tQ/85qDV09f8q0ytmJ7b74=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace "poetry.masonry" "poetry.core.masonry"
+        '';
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          self.pytz
+        ];
+      });
+
       caldav = super.caldav.overridePythonAttrs (old: rec {
         version = "0.9.1";
         src = fetchFromGitHub {
@@ -64,17 +82,6 @@ let
           repo = "python-gridnet";
           rev = "refs/tags/v${version}";
           hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
-        };
-      });
-
-      hap-python = super.hap-python.overridePythonAttrs (oldAtrs: rec {
-        pname = "ha-hap-python";
-        version = "4.5.2";
-        src = fetchFromGitHub {
-          owner = "bdraco";
-          repo = "ha-HAP-python";
-          rev = "refs/tags/v4.5.2";
-          hash = "sha256-xCmx5QopNShKIuXewT+T86Bxyi4P0ddh8r2UlJ48Wig=";
         };
       });
 
@@ -188,7 +195,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.12.6";
+  hassVersion = "2023.1.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -205,8 +212,8 @@ in python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
-    rev = version;
-    hash = "sha256-9dukY04sh35kj5vUbNmqnN+MPGqJT/YUuHC64pHzWjw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BYUh6rOW6GgOSaN9zDtwn+aiHcNI5BBns9jPc3A3DdI=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -223,6 +230,7 @@ in python.pkgs.buildPythonApplication rec {
       "attrs"
       "awesomeversion"
       "bcrypt"
+      "ciso8601"
       "cryptography"
       "home-assistant-bluetooth"
       "httpx"
@@ -282,11 +290,13 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
+    pytest-asyncio
     pytest-aiohttp
     pytest-freezegun
     pytest-mock
     pytest-rerunfailures
     pytest-socket
+    pytest-unordered
     pytest-xdist
     pytestCheckHook
     requests-mock
@@ -359,6 +369,10 @@ in python.pkgs.buildPythonApplication rec {
     tests = {
       nixos = nixosTests.home-assistant;
       components = callPackage ./tests.nix { };
+      version = testers.testVersion {
+        package = home-assistant;
+        command = "hass --version";
+      };
     };
   };
 

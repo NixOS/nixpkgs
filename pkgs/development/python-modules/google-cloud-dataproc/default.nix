@@ -5,6 +5,7 @@
 , mock
 , libcst
 , proto-plus
+, protobuf
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
@@ -12,21 +13,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.0.3";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gE4PyJCrgEekqR3S4YNUtp3yd2AOt7TmKvvDaJ4stk0=";
+    hash = "sha256-0SFlDmAxvgZCJSFIrXXEjpJ4D0GRJQ0nkBv9D9EpC2g=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   checkInputs = [
     mock
@@ -35,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_list_clusters"
   ];
 
@@ -47,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Dataproc API client library";
     homepage = "https://github.com/googleapis/python-dataproc";
+    changelog = "https://github.com/googleapis/python-dataproc/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -1,26 +1,24 @@
-{ python3
-, stdenv
-, fetchFromGitLab
+{ fetchFromGitLab
 , gobject-introspection
+, gtk4
 , lib
 , meson
 , ninja
+, python3
+, stdenv
+, testers
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.2.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-LXZ6n1oCbPa0taVbUZf52mGECrzXIcF8EaMVJ30rMtc=";
+    repo = "blueprint-compiler";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-L6EGterkZ8EB6xSnJDZ3IMuOumpTpEGnU74X3UgC7k0=";
   };
-
-  # Requires pythonfuzz, which I've found difficult to package
-  doCheck = false;
 
   nativeBuildInputs = [
     meson
@@ -28,19 +26,31 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python3
+    (python3.withPackages (ps: with ps; [
+      pygobject3
+    ]))
   ];
 
   propagatedBuildInputs = [
-    # So that the compiler can find GIR and .ui files
+    # For setup hook, so that the compiler can find typelib files
     gobject-introspection
   ];
+
+  doCheck = true;
+
+  checkInputs = [
+    gtk4
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "A markup language for GTK user interface files";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.ranfdev ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ benediktbroich ranfdev ];
+    platforms = platforms.unix;
   };
-}
+})

@@ -40,6 +40,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace "jsonschema<4" "jsonschema" \
       --replace "sphinx-external-toc~=0.2.3" "sphinx-external-toc" \
+      --replace "sphinx-jupyterbook-latex~=0.4.6" "sphinx-jupyterbook-latex" \
+      --replace "sphinx-thebe~=0.1.1" "sphinx-thebe" \
+      --replace "sphinx>=4,<5" "sphinx" \
+      --replace "sphinx_book_theme~=0.3.2" "sphinx_book_theme" \
       --replace "myst-nb~=0.13.1" "myst-nb" \
       --replace "docutils>=0.15,<0.18" "docutils" \
       --replace "sphinx-design~=0.1.0" "sphinx-design" \

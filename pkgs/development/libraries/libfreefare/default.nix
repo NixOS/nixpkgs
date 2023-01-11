@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libnfc, openssl
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libnfc, openssl
 , libobjc ? null
 , IOKit, Security
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0r5wfvwgf35lb1v65wavnwz2wlfyfdims6a9xpslf4lsm4a1v8xz";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libnfc openssl ] ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   meta = with lib; {
@@ -21,7 +21,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nfc-tools/libfreefare";
     maintainers = with maintainers; [bobvanderlinden];
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

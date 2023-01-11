@@ -51,7 +51,7 @@ gnustep.stdenv.mkDerivation rec {
     sed -i "s:${gnustep.make}:$out:g" $out/share/GNUstep/GNUstep.conf
 
     # Link in GNUstep base
-    ${lndir}/bin/lndir ${gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
+    ${lndir}/bin/lndir ${lib.getLib gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
 
     # Link in sope
     ${lndir}/bin/lndir ${sope}/ $out/

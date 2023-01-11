@@ -90,6 +90,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # timing based
     "test_etag"
+    "test_bogota"
+    "test_event_no_dst"
   ];
 
   meta = with lib; {

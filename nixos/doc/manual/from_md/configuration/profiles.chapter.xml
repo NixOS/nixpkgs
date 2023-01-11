@@ -4,12 +4,12 @@
     In some cases, it may be desirable to take advantage of
     commonly-used, predefined configurations provided by nixpkgs, but
     different from those that come as default. This is a role fulfilled
-    by NixOS's Profiles, which come as files living in
+    by NixOS’s Profiles, which come as files living in
     <literal>&lt;nixpkgs/nixos/modules/profiles&gt;</literal>. That is
     to say, expected usage is to add them to the imports list of your
     <literal>/etc/configuration.nix</literal> as such:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 imports = [
   &lt;nixpkgs/nixos/modules/profiles/profile-name.nix&gt;
 ];

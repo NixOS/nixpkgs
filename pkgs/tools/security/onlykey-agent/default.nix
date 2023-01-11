@@ -38,7 +38,7 @@ let
     meta = oa.meta // {
       description = "Using OnlyKey as hardware SSH and GPG agent";
       homepage = "https://github.com/trustcrypto/onlykey-agent/tree/ledger";
-      maintainers = with maintainers; [ kalbasit ];
+      maintainers = with lib.maintainers; [ kalbasit ];
     };
   });
 in

@@ -168,7 +168,7 @@ let
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
-        flags+=("-v" "-p" "$NIX_BUILD_CORES")
+        flags+=("-p" "$NIX_BUILD_CORES")
 
         if [ "$cmd" = "test" ]; then
           flags+=(-vet=off)

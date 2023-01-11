@@ -12507,11 +12507,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.51";
+    version = "12.52";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-76meNQp9c0Z+81gNSMnDTtJmd/qOGu4uqeHsGhTnDkQ=";
+      hash = "sha256-yH8RlkTRAanHYNyq5Vi52W8mGKIJwmGZsWhzyokz+ao=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -25137,7 +25137,7 @@ let
     };
     meta = {
       description = "Various subroutines to format text";
-      homepage = "https://www.shlomifish.org/open-source/projects/Text-Format";
+      homepage = "https://github.com/shlomif/perl-Module-Format";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
     };

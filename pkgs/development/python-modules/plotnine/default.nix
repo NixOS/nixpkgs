@@ -1,25 +1,35 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, matplotlib
-, scipy
-, patsy
-, pandas
-, statsmodels
-, pytestCheckHook
-, geopandas
-, scikit-misc
 , adjusttext
-, mizani }:
+, buildPythonPackage
+, fetchPypi
+, geopandas
+, matplotlib
+, mizani
+, pandas
+, patsy
+, pytestCheckHook
+, pythonOlder
+, scikit-misc
+, scipy
+, setuptools-scm
+, statsmodels
+}:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.9.0";
+  version = "0.10.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DompMBXzxx1oRKx6qfsNoJuQj199+n3V1opcoysuvOo=";
+    hash = "sha256-2RKgS2ONz4IsUaZ4i4VmQjI0jVFfFR2zpkwAAZZvaEE=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -69,7 +79,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Grammar of graphics for python";
-    homepage = "https://plotnine.readthedocs.io/en/stable";
+    homepage = "https://plotnine.readthedocs.io/";
+    changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

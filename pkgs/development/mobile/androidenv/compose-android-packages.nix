@@ -3,10 +3,10 @@
 }:
 
 { toolsVersion ? "26.1.1"
-, platformToolsVersion ? "33.0.2"
-, buildToolsVersions ? [ "32.0.0" ]
+, platformToolsVersion ? "33.0.3"
+, buildToolsVersions ? [ "33.0.1" ]
 , includeEmulator ? false
-, emulatorVersion ? "31.3.7"
+, emulatorVersion ? "31.3.14"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -14,7 +14,7 @@
 , abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "24.0.8215888"
+, ndkVersion ? "25.1.8937393"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -112,8 +112,19 @@ let
   ] ++ extraLicenses);
 in
 rec {
-  deployAndroidPackage = callPackage ./deploy-androidpackage.nix {
+  deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
+    inherit stdenv lib mkLicenses;
   };
+  deployAndroidPackage = ({package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
+    let
+      extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
+    in
+    deployAndroidPackages ({
+      inherit os buildInputs meta;
+      packages = [ package ];
+      patchesInstructions = { "${package.name}" = patchInstructions; };
+    } // extraParams
+  ));
 
   platform-tools = callPackage ./platform-tools.nix {
     inherit deployAndroidPackage;
@@ -123,7 +134,7 @@ rec {
 
   build-tools = map (version:
     callPackage ./build-tools.nix {
-      inherit deployAndroidPackage;
+      inherit deployAndroidPackage os;
       package = packages.build-tools.${version};
     }
   ) buildToolsVersions;
@@ -250,7 +261,7 @@ rec {
 
     by setting nixpkgs config option 'android_sdk.accept_license = true;'.
   '' else callPackage ./tools.nix {
-    inherit deployAndroidPackage packages toolsVersion;
+    inherit deployAndroidPackage packages toolsVersion os;
 
     postInstall = ''
       # Symlink all requested plugins

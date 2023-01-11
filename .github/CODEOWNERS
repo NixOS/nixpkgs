@@ -28,6 +28,7 @@
 /lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
 /lib/asserts.nix            @edolstra @nbp @Profpatsch
+/lib/path.*                 @infinisil @fricklerhandwerk
 
 # Nixpkgs Internals
 /default.nix                                     @nbp
@@ -47,6 +48,10 @@
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
+
+# Nixpkgs make-disk-image
+/doc/builders/images/makediskimage.section.md  @raitobezarius
+/nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -78,6 +83,8 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 /nixos/modules/system                                 @dasJ
+/nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
+/nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -100,7 +107,7 @@
 /pkgs/top-level/python-packages.nix                         @FRidh @jonringer
 /pkgs/development/interpreters/python                       @FRidh
 /pkgs/development/python-modules                            @FRidh @jonringer
-/doc/languages-frameworks/python.section.md                 @FRidh
+/doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
 /pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
@@ -268,6 +275,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
 /pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
+/pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001

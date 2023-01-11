@@ -2,16 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.1.0";
+  version = "2.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "DoorBirdPy";
     inherit version;
-    sha256 = "ed0e94953cdf96111c7f73c5fcf358f65dc0ff5e47f63fc057bf18ca7512e606";
+    hash = "sha256-ZGIIko5Ac0Q4Jhz+z7FREJ4MhPF9ADDWgQFRtcZ+dWY=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +25,9 @@ buildPythonPackage rec {
   # no tests on PyPI, no tags on GitLab
   doCheck = false;
 
-  pythonImportsCheck = [ "doorbirdpy" ];
+  pythonImportsCheck = [
+    "doorbirdpy"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for the DoorBird LAN API";

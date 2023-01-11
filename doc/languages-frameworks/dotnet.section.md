@@ -121,7 +121,6 @@ in buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.net_5_0;
-  dotnetFlags = [ "--runtime linux-x64" ];
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
   executables = []; # Don't install any executables.

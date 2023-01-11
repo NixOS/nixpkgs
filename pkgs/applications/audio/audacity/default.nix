@@ -53,30 +53,21 @@
 , libpng
 , libjpeg
 , AppKit
-, AudioToolbox
-, AudioUnit
-, Carbon
-, CoreAudio
 , CoreAudioKit
-, CoreServices
 }:
 
 # TODO
 # 1. detach sbsms
 
-let
-  inherit (lib) optionals;
-  pname = "audacity";
-  version = "3.2.2";
-in
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "audacity";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-vDkIBsXINo7g8lbDfXYTaz2AB6HWPc5resITllVNd6o=";
+    sha256 = "sha256-0F9+4hyUoKb0UP5t02yws/ErogscvI1nsdnSTpcr53E=";
   };
 
   postPatch = ''
@@ -84,10 +75,6 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-  ''
-  # error: unknown type name 'NSAppearanceName'
-  + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    sed -z -i "s/if (@available(macOS 10.14, \*)).*}/}/g" src/AudacityApp.mm
   '';
 
   nativeBuildInputs = [
@@ -97,7 +84,7 @@ stdenv.mkDerivation rec {
     python3
     makeWrapper
     wrapGAppsHook
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
 
@@ -106,6 +93,9 @@ stdenv.mkDerivation rec {
     ffmpeg_4
     file
     flac
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+  ] ++ [
     gtk3
     lame
     libid3tag
@@ -131,7 +121,7 @@ stdenv.mkDerivation rec {
     portaudio
     wavpack
     wxGTK32
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
@@ -144,10 +134,8 @@ stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-  ] ++ optionals stdenv.isDarwin [
-    AppKit
-    CoreAudioKit
-    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudioKit # for portaudio
     libpng
     libjpeg
   ];

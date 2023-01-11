@@ -54,7 +54,7 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = lib.mdDoc "Options used to mount the file system.";
-        type = types.listOf nonEmptyStr;
+        type = types.nonEmptyListOf nonEmptyStr;
       };
 
       depends = mkOption {

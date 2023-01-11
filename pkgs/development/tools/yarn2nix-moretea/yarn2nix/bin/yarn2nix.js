@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-const lockfile = require('@yarnpkg/lockfile')
-const { docopt } = require('docopt')
-const deepEqual = require('deep-equal')
-const R = require('ramda')
+const fs = require("fs");
+const lockfile = require("@yarnpkg/lockfile");
+const { docopt } = require("docopt");
+const deepEqual = require("deep-equal");
+const R = require("ramda");
 
-const fixPkgAddMissingSha1 = require('../lib/fixPkgAddMissingSha1')
-const mapObjIndexedReturnArray = require('../lib/mapObjIndexedReturnArray')
-const generateNix = require('../lib/generateNix')
+const fixPkgAddMissingSha1 = require("../lib/fixPkgAddMissingSha1");
+const mapObjIndexedReturnArray = require("../lib/mapObjIndexedReturnArray");
+const generateNix = require("../lib/generateNix");
 
 const USAGE = `
 Usage: yarn2nix [options]
@@ -19,11 +19,11 @@ Options:
   --no-patch          Don't patch the lockfile if hashes are missing
   --lockfile=FILE     Specify path to the lockfile [default: ./yarn.lock].
   --builtin-fetchgit  Use builtin fetchGit for git dependencies to support on-the-fly generation of yarn.nix without an internet connection
-`
+`;
 
-const options = docopt(USAGE)
+const options = docopt(USAGE);
 
-const data = fs.readFileSync(options['--lockfile'], 'utf8')
+const data = fs.readFileSync(options["--lockfile"], "utf8");
 
 // json example:
 
@@ -45,10 +45,10 @@ const data = fs.readFileSync(options['--lockfile'], 'utf8')
 //   }
 // }
 
-const json = lockfile.parse(data)
+const json = lockfile.parse(data);
 
-if (json.type !== 'success') {
-  throw new Error('yarn.lock parse error')
+if (json.type !== "success") {
+  throw new Error("yarn.lock parse error");
 }
 
 // Check for missing hashes in the yarn.lock and patch if necessary
@@ -56,35 +56,35 @@ if (json.type !== 'success') {
 let pkgs = R.pipe(
   mapObjIndexedReturnArray((value, key) => ({
     ...value,
-    nameWithVersion: key,
+    nameWithVersion: key
   })),
-  R.uniqBy(R.prop('resolved')),
-)(json.object)
+  R.uniqBy(R.prop("resolved"))
+)(json.object);
 
-;(async () => {
-  if (!options['--no-patch']) {
-    pkgs = await Promise.all(R.map(fixPkgAddMissingSha1, pkgs))
+(async () => {
+  if (!options["--no-patch"]) {
+    pkgs = await Promise.all(R.map(fixPkgAddMissingSha1, pkgs));
   }
 
-  const origJson = lockfile.parse(data)
+  const origJson = lockfile.parse(data);
 
   if (!deepEqual(origJson, json)) {
-    console.error('found changes in the lockfile', options['--lockfile'])
+    console.error("found changes in the lockfile", options["--lockfile"]);
 
-    if (options['--no-patch']) {
-      console.error('...aborting')
-      process.exit(1)
+    if (options["--no-patch"]) {
+      console.error("...aborting");
+      process.exit(1);
     }
 
-    fs.writeFileSync(options['--lockfile'], lockfile.stringify(json.object))
+    fs.writeFileSync(options["--lockfile"], lockfile.stringify(json.object));
   }
 
-  if (!options['--no-nix']) {
+  if (!options["--no-nix"]) {
     // print to stdout
-    console.log(generateNix(pkgs, options['--builtin-fetchgit']))
+    console.log(generateNix(pkgs, options["--builtin-fetchgit"]));
   }
 })().catch(error => {
-  console.error(error)
+  console.error(error);
 
-  process.exit(1)
-})
+  process.exit(1);
+});

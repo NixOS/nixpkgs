@@ -49,7 +49,7 @@ with lib;
       registration token on startup as needed. Make sure the PAT has a scope of
       `admin:org` for organization-wide registrations or a scope of
       `repo` for a single repository. Fine-grained PATs need read and write permission
-      to the "Adminstration" resources.
+      to the "Administration" resources.
 
       Changing this option or the file's content triggers a new runner registration.
     '';
@@ -169,5 +169,17 @@ with lib;
     '';
     default = null;
     defaultText = literalExpression "username";
+  };
+
+  workDir = mkOption {
+    type = with types; nullOr str;
+    description = lib.mdDoc ''
+      Working directory, available as `$GITHUB_WORKSPACE` during workflow runs
+      and used as a default for [repository checkouts](https://github.com/actions/checkout).
+      The service cleans this directory on every service start.
+
+      A value of `null` will default to the systemd `RuntimeDirectory`.
+    '';
+    default = null;
   };
 }

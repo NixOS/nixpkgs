@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, darwin
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
 , nixosTests }:
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
   ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optionals stdenv.isDarwin [darwin.apple_sdk.frameworks.IOKit darwin.apple_sdk.frameworks.AudioToolbox];
+  ++ lib.optionals stdenv.isDarwin [ IOKit AudioToolbox ];
 
   TARGET=lib.optionalString stdenv.isDarwin "MACOS";
 
@@ -45,7 +46,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;
-    # never built on x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

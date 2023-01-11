@@ -1,31 +1,17 @@
 { config
 , lib
 , pkgs
-, splicePackages
-, newScope
-, pkgsBuildBuild
-, pkgsBuildHost
-, pkgsBuildTarget
-, pkgsHostHost
-, pkgsTargetTarget
+, generateSplicesForMkScope
+, makeScopeWithSplicing
 }:
 
 let
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.xfce;
-    selfBuildHost = pkgsBuildHost.xfce;
-    selfBuildTarget = pkgsBuildTarget.xfce;
-    selfHostHost = pkgsHostHost.xfce;
-    selfTargetTarget = pkgsTargetTarget.xfce or { };
-  };
   keep = _self: { };
   extra = _spliced0: { };
 
 in
-lib.makeScopeWithSplicing
-  splicePackages
-  newScope
-  otherSplices
+makeScopeWithSplicing
+  (generateSplicesForMkScope "xfce")
   keep
   extra
   (self:
@@ -109,9 +95,7 @@ lib.makeScopeWithSplicing
 
       xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
 
-      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter {
-        inherit (pkgs.gnome) libsoup;
-      };
+      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter { };
 
       xfdashboard = callPackage ./applications/xfdashboard { };
 
@@ -192,55 +176,4 @@ lib.makeScopeWithSplicing
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
-    }) // lib.optionalAttrs config.allowAliases {
-  #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
-
-  terminal = throw "xfce.terminal has been removed, use xfce.xfce4-terminal instead"; # added 2022-05-24
-  thunar-build = throw "xfce.thunar-build has been removed, use xfce.thunar-bare instead"; # added 2022-05-24
-  thunarx-2-dev = throw "xfce.thunarx-2-dev has been removed, use xfce.thunar-bare instead"; # added 2022-05-24
-  thunar_volman = throw "xfce.thunar_volman has been removed, use xfce.thunar-volman instead"; # added 2022-05-24
-  xfce4panel = throw "xfce.xfce4panel has been removed, use xfce.xfce4-panel instead"; # added 2022-05-24
-  xfce4session = throw "xfce.xfce4session has been removed, use xfce.xfce4-session instead"; # added 2022-05-24
-  xfce4settings = throw "xfce.xfce4settings has been removed, use xfce.xfce4-settings instead"; # added 2022-05-24
-  xfce4_power_manager = throw "xfce.xfce4_power_manager has been removed, use xfce.xfce4-power-manager instead"; # added 2022-05-24
-  xfce4_appfinder = throw "xfce.xfce4_appfinder has been removed, use xfce.xfce4-appfinder instead"; # added 2022-05-24
-  xfce4_dev_tools = throw "xfce.xfce4_dev_tools has been removed, use xfce.xfce4-dev-tools instead"; # added 2022-05-24
-  xfce4notifyd = throw "xfce.xfce4notifyd has been removed, use xfce.xfce4-notifyd instead"; # added 2022-05-24
-  xfce4taskmanager = throw "xfce.xfce4taskmanager has been removed, use xfce.xfce4-taskmanager instead"; # added 2022-05-24
-  xfce4terminal = throw "xfce.xfce4terminal has been removed, use xfce.xfce4-terminal instead"; # added 2022-05-24
-  xfce4volumed_pulse = throw "xfce.xfce4volumed_pulse has been removed, use xfce.xfce4-volumed-pulse instead"; # added 2022-05-24
-  xfce4icontheme = throw "xfce.xfce4icontheme has been removed, use xfce.xfce4-icon-theme instead"; # added 2022-05-24
-  xfwm4themes = throw "xfce.xfwm4themes has been removed, use xfce.xfwm4-themes instead"; # added 2022-05-24
-  xfce4_battery_plugin = throw "xfce.xfce4_battery_plugin has been removed, use xfce.xfce4-battery-plugin instead"; # added 2022-05-24
-  xfce4_clipman_plugin = throw "xfce.xfce4_clipman_plugin has been removed, use xfce.xfce4-clipman-plugin instead"; # added 2022-05-24
-  xfce4_cpufreq_plugin = throw "xfce.xfce4_cpufreq_plugin has been removed, use xfce.xfce4-cpufreq-plugin instead"; # added 2022-05-24
-  xfce4_cpugraph_plugin = throw "xfce.xfce4_cpugraph_plugin has been removed, use xfce.xfce4-cpugraph-plugin instead"; # added 2022-05-24
-  xfce4_datetime_plugin = throw "xfce.xfce4_datetime_plugin has been removed, use xfce.xfce4-datetime-plugin instead"; # added 2022-05-24
-  xfce4_dockbarx_plugin = throw "xfce.xfce4_dockbarx_plugin has been removed, use xfce.xfce4-dockbarx-plugin instead"; # added 2022-05-24
-  xfce4_embed_plugin = throw "xfce.xfce4_embed_plugin has been removed, use xfce.xfce4-embed-plugin instead"; # added 2022-05-24
-  xfce4_eyes_plugin = throw "xfce.xfce4_eyes_plugin has been removed, use xfce.xfce4-eyes-plugin instead"; # added 2022-05-24
-  xfce4_fsguard_plugin = throw "xfce.xfce4_fsguard_plugin has been removed, use xfce.xfce4-fsguard-plugin instead"; # added 2022-05-24
-  xfce4_genmon_plugin = throw "xfce.xfce4_genmon_plugin has been removed, use xfce.xfce4-genmon-plugin instead"; # added 2022-05-24
-  xfce4_hardware_monitor_plugin = throw "xfce.xfce4_hardware_monitor_plugin has been removed, use xfce.xfce4-hardware-monitor-plugin instead"; # added 2022-05-24
-  xfce4_namebar_plugin = throw "xfce.xfce4_namebar_plugin has been removed, use xfce.xfce4-namebar-plugin instead"; # added 2022-05-24
-  xfce4_netload_plugin = throw "xfce.xfce4_netload_plugin has been removed, use xfce.xfce4-netload-plugin instead"; # added 2022-05-24
-  xfce4_notes_plugin = throw "xfce.xfce4_notes_plugin has been removed, use xfce.xfce4-notes-plugin instead"; # added 2022-05-24
-  xfce4_mailwatch_plugin = throw "xfce.xfce4_mailwatch_plugin has been removed, use xfce.xfce4-mailwatch-plugin instead"; # added 2022-05-24
-  xfce4_mpc_plugin = throw "xfce.xfce4_mpc_plugin has been removed, use xfce.xfce4-mpc-plugin instead"; # added 2022-05-24
-  xfce4_sensors_plugin = throw "xfce.xfce4_sensors_plugin has been removed, use xfce.xfce4-sensors-plugin instead"; # added 2022-05-24
-  xfce4_systemload_plugin = throw "xfce.xfce4_systemload_plugin has been removed, use xfce.xfce4-systemload-plugin instead"; # added 2022-05-24
-  xfce4_timer_plugin = throw "xfce.xfce4_timer_plugin has been removed, use xfce.xfce4-timer-plugin instead"; # added 2022-05-24
-  xfce4_verve_plugin = throw "xfce.xfce4_verve_plugin has been removed, use xfce.xfce4-verve-plugin instead"; # added 2022-05-24
-  xfce4_xkb_plugin = throw "xfce.xfce4_xkb_plugin has been removed, use xfce.xfce4-xkb-plugin instead"; # added 2022-05-24
-  xfce4_weather_plugin = throw "xfce.xfce4_weather_plugin has been removed, use xfce.xfce4-weather-plugin instead"; # added 2022-05-24
-  xfce4_whiskermenu_plugin = throw "xfce.xfce4_whiskermenu_plugin has been removed, use xfce.xfce4-whiskermenu-plugin instead"; # added 2022-05-24
-  xfce4_windowck_plugin = throw "xfce.xfce4_windowck_plugin has been removed, use xfce.xfce4-windowck-plugin instead"; # added 2022-05-24
-  xfce4_pulseaudio_plugin = throw "xfce.xfce4_pulseaudio_plugin has been removed, use xfce.xfce4-pulseaudio-plugin instead"; # added 2022-05-24
-  libxfce4ui_gtk3 = throw "xfce.libxfce4ui_gtk3 has been removed, use xfce.libxfce4ui instead"; # added 2022-05-24
-  xfce4panel_gtk3 = throw "xfce.xfce4panel_gtk3 has been removed, use xfce.xfce4-panel instead"; # added 2022-05-24
-  xfce4_power_manager_gtk3 = throw "xfce.xfce4_power_manager_gtk3 has been removed, use xfce.xfce4-power-manager instead"; # added 2022-05-24
-  gtk = throw "xfce.gtk has been removed, use gtk2 instead"; # added 2022-05-24
-  gtksourceview = throw "xfce.gtksourceview has been removed, use gtksourceview instead"; # added 2022-05-24
-  dconf = throw "xfce.dconf has been removed, use dconf instead"; # added 2022-05-24
-  vte = throw "xfce.vte has been removed, use vte instead"; # added 2022-05-24
-}
+    })

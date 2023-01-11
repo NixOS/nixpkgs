@@ -34,6 +34,9 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  separateDebugInfo = true;
+    # debugging requires information for both the unikernel and the tender
+
   installPhase = ''
     runHook preInstall
     export DESTDIR=$out

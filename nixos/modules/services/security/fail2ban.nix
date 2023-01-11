@@ -62,11 +62,10 @@ in
       };
 
       packageFirewall = mkOption {
-        default = pkgs.iptables;
-        defaultText = literalExpression "pkgs.iptables";
+        default = config.networking.firewall.package;
+        defaultText = literalExpression "config.networking.firewall.package";
         type = types.package;
-        example = literalExpression "pkgs.nftables";
-        description = lib.mdDoc "The firewall package used by fail2ban service.";
+        description = lib.mdDoc "The firewall package used by fail2ban service. Defaults to the package for your firewall (iptables or nftables).";
       };
 
       extraPackages = mkOption {
@@ -86,24 +85,24 @@ in
       };
 
       banaction = mkOption {
-        default = "iptables-multiport";
+        default = if config.networking.nftables.enable then "nftables-multiport" else "iptables-multiport";
+        defaultText = literalExpression '' if config.networking.nftables.enable then "nftables-multiport" else "iptables-multiport" '';
         type = types.str;
-        example = "nftables-multiport";
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
-          iptables-ipset-proto6-allports, shorewall, etc) It is used to
+          iptables-ipset-proto6-allports, shorewall, etc). It is used to
           define action_* variables. Can be overridden globally or per
           section within jail.local file
         '';
       };
 
       banaction-allports = mkOption {
-        default = "iptables-allport";
+        default = if config.networking.nftables.enable then "nftables-allport" else "iptables-allport";
+        defaultText = literalExpression '' if config.networking.nftables.enable then "nftables-allport" else "iptables-allport" '';
         type = types.str;
-        example = "nftables-allport";
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
-          shorewall, etc) It is used to define action_* variables. Can be overridden
+          shorewall, etc) for "allports" jails. It is used to define action_* variables. Can be overridden
           globally or per section within jail.local file
         '';
       };
@@ -161,7 +160,7 @@ in
         type = types.str;
         example = "2 4 16 128";
         description = lib.mdDoc ''
-          "bantime-increment.multipliers" used to calculate next value of ban time instead of formula, coresponding
+          "bantime-increment.multipliers" used to calculate next value of ban time instead of formula, corresponding
           previously ban count and given "bantime.factor" (for multipliers default is 1);
           following example grows ban time by 1, 2, 4, 8, 16 ... and if last ban count greater as multipliers count,
           always used last multiplier (64 in example), for factor '1' and original ban time 600 - 10.6 hours
@@ -174,7 +173,7 @@ in
         example = true;
         description = lib.mdDoc ''
           "bantime-increment.overalljails"  (if true) specifies the search of IP in the database will be executed
-          cross over all jails, if false (dafault), only current jail of the ban IP will be searched
+          cross over all jails, if false (default), only current jail of the ban IP will be searched
         '';
       };
 

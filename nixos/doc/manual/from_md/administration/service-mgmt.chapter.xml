@@ -85,21 +85,21 @@ Jan 07 15:55:57 hagbard systemd[1]: Started PostgreSQL Server.
       Packages in Nixpkgs sometimes provide systemd units with them,
       usually in e.g <literal>#pkg-out#/lib/systemd/</literal>. Putting
       such a package in <literal>environment.systemPackages</literal>
-      doesn't make the service available to users or the system.
+      doesn’t make the service available to users or the system.
     </para>
     <para>
       In order to enable a systemd <emphasis>system</emphasis> service
       with provided upstream package, use (e.g):
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 systemd.packages = [ pkgs.packagekit ];
 </programlisting>
     <para>
       Usually NixOS modules written by the community do the above, plus
       take care of other details. If a module was written for a service
-      you are interested in, you'd probably need only to use
+      you are interested in, you’d probably need only to use
       <literal>services.#name#.enable = true;</literal>. These services
-      are defined in Nixpkgs'
+      are defined in Nixpkgs’
       <link xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/modules">
       <literal>nixos/modules/</literal> directory </link>. In case the
       service is simple enough, the above method should work, and start
@@ -111,8 +111,8 @@ systemd.packages = [ pkgs.packagekit ];
       unit file at <literal>#pkg-out#/lib/systemd/user/</literal>, using
       <xref linkend="opt-systemd.packages" /> will make you able to
       start the service via <literal>systemctl --user start</literal>,
-      but it won't start automatically on login. However, You can
-      imperatively enable it by adding the package's attribute to
+      but it won’t start automatically on login. However, You can
+      imperatively enable it by adding the package’s attribute to
       <xref linkend="opt-systemd.packages" /> and then do this (e.g):
     </para>
     <programlisting>
@@ -129,7 +129,7 @@ $ systemctl --user enable syncthing.service
     </para>
     <para>
       Using <literal>systemctl --user enable syncthing.service</literal>
-      instead of the above, will work, but it'll use the absolute path
+      instead of the above, will work, but it’ll use the absolute path
       of <literal>syncthing.service</literal> for the symlink, and this
       path is in <literal>/nix/store/.../lib/systemd/user/</literal>.
       Hence <link linkend="sec-nix-gc">garbage collection</link> will

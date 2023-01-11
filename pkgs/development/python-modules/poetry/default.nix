@@ -5,7 +5,6 @@
 , cachy
 , cleo
 , crashtest
-, dataclasses
 , deepdiff
 , dulwich
 , fetchFromGitHub

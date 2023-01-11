@@ -9,12 +9,12 @@
       <para>
         The <link xlink:href="http://haskell.org/">Haskell</link>
         packages infrastructure has been re-designed from the ground up
-        (&quot;Haskell NG&quot;). NixOS now distributes the latest
+        (<quote>Haskell NG</quote>). NixOS now distributes the latest
         version of every single package registered on
         <link xlink:href="http://hackage.haskell.org/">Hackage</link> --
         well in excess of 8,000 Haskell packages. Detailed instructions
         on how to use that infrastructure can be found in the
-        <link xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+        <link xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User’s
         Guide to the Haskell Infrastructure</link>. Users migrating from
         an earlier release may find helpful information below, in the
         list of backwards-incompatible changes. Furthermore, we
@@ -23,8 +23,8 @@
         Haskell</link> release since version 0.0 as well as the most
         recent <link xlink:href="http://www.stackage.org/">Stackage
         Nightly</link> snapshot. The announcement
-        <link xlink:href="https://nixos.org/nix-dev/2015-September/018138.html">&quot;Full
-        Stackage Support in Nixpkgs&quot;</link> gives additional
+        <link xlink:href="https://nixos.org/nix-dev/2015-September/018138.html"><quote>Full
+        Stackage Support in Nixpkgs</quote></link> gives additional
         details.
       </para>
     </listitem>
@@ -42,7 +42,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   system.autoUpgrade.enable = true;
 }
@@ -432,7 +432,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   system.stateVersion = &quot;14.12&quot;;
 }
@@ -464,7 +464,7 @@
     </listitem>
     <listitem>
       <para>
-        Steam now doesn't need root rights to work. Instead of using
+        Steam now doesn’t need root rights to work. Instead of using
         <literal>*-steam-chrootenv</literal>, you should now just run
         <literal>steam</literal>. <literal>steamChrootEnv</literal>
         package was renamed to <literal>steam</literal>, and old
@@ -523,7 +523,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   fileSystems.&quot;/shiny&quot; = {
     device = &quot;myshinysharedfolder&quot;;
@@ -534,15 +534,15 @@
   <itemizedlist spacing="compact">
     <listitem>
       <para>
-        &quot;<literal>nix-env -qa</literal>&quot; no longer discovers
-        Haskell packages by name. The only packages visible in the
-        global scope are <literal>ghc</literal>,
+        <quote><literal>nix-env -qa</literal></quote> no longer
+        discovers Haskell packages by name. The only packages visible in
+        the global scope are <literal>ghc</literal>,
         <literal>cabal-install</literal>, and <literal>stack</literal>,
         but all other packages are hidden. The reason for this
         inconvenience is the sheer size of the Haskell package set.
         Name-based lookups are expensive, and most
         <literal>nix-env -qa</literal> operations would become much
-        slower if we'd add the entire Hackage database into the top
+        slower if we’d add the entire Hackage database into the top
         level attribute set. Instead, the list of Haskell packages can
         be displayed by running:
       </para>
@@ -566,13 +566,13 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
       <para>
         Previous versions of NixOS came with a feature called
         <literal>ghc-wrapper</literal>, a small script that allowed GHC
-        to transparently pick up on libraries installed in the user's
+        to transparently pick up on libraries installed in the user’s
         profile. This feature has been deprecated;
         <literal>ghc-wrapper</literal> was removed from the
         distribution. The proper way to register Haskell libraries with
         the compiler now is the
         <literal>haskellPackages.ghcWithPackages</literal> function. The
-        <link xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+        <link xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User’s
         Guide to the Haskell Infrastructure</link> provides more
         information about this subject.
       </para>
@@ -593,7 +593,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
         have a function attribute called <literal>extension</literal>
         that users could override in their
         <literal>~/.nixpkgs/config.nix</literal> files to configure
-        additional attributes, etc. That function still exists, but it's
+        additional attributes, etc. That function still exists, but it’s
         now called <literal>overrides</literal>.
       </para>
     </listitem>
@@ -662,7 +662,7 @@ infinite recursion encountered
         <literal>lib</literal>, after adding it as argument of the
         module. The following module
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 { config, pkgs, ... }:
 
 with pkgs.lib;
@@ -677,7 +677,7 @@ with pkgs.lib;
       <para>
         should be modified to look like:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 { config, pkgs, lib, ... }:
 
 with lib;
@@ -695,7 +695,7 @@ with lib;
         replaced by <literal>(import &lt;nixpkgs&gt; {})</literal>. The
         following module
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 { config, pkgs, ... }:
 
 let
@@ -712,7 +712,7 @@ in
       <para>
         should be modified to look like:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 { config, pkgs, ... }:
 
 let
@@ -748,7 +748,7 @@ in
         <literal>/etc/ssh/moduli</literal> file with respect to the
         <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html">vulnerabilities
         discovered in the Diffie-Hellman key exchange</link> can now
-        replace OpenSSH's default version with one they generated
+        replace OpenSSH’s default version with one they generated
         themselves using the new
         <literal>services.openssh.moduliFile</literal> option.
       </para>

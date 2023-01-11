@@ -69,14 +69,6 @@ let
           };
         })
 
-        (self: super: {
-          certifi = super.certifi.overridePythonAttrs (old: {
-            meta = old.meta // {
-              knownVulnerabilities = [ "CVE-2022-23491" ];
-            };
-          });
-        })
-
       ];
     }
   ).python;
@@ -90,6 +82,7 @@ let
     ps.nixops-hetzner
     ps.nixopsvbox
     ps.nixops-virtd
+    ps.nixops-hetznercloud
   ]) // rec {
     # Workaround for https://github.com/NixOS/nixpkgs/issues/119407
     # TODO after #1199407: Use .overrideAttrs(pkg: old: { passthru.tests = .....; })

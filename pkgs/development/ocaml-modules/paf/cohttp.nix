@@ -24,6 +24,8 @@ buildDunePackage {
     src
   ;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     paf
     cohttp-lwt

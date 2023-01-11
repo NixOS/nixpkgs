@@ -16,7 +16,7 @@
   </para>
   <warning>
     <para>
-      This command doesn't start/stop
+      This command doesn’t start/stop
       <link linkend="opt-systemd.user.services">user services</link>
       automatically. <literal>nixos-rebuild</literal> only runs a
       <literal>daemon-reload</literal> for each user with running user
@@ -64,8 +64,8 @@
   <para>
     which causes the new configuration (and previous ones created using
     <literal>-p test</literal>) to show up in the GRUB submenu
-    <quote>NixOS - Profile 'test'</quote>. This can be useful to
-    separate test configurations from <quote>stable</quote>
+    <quote>NixOS - Profile <quote>test</quote></quote>. This can be
+    useful to separate test configurations from <quote>stable</quote>
     configurations.
   </para>
   <para>
@@ -94,7 +94,7 @@ $ ./result/bin/run-*-vm
     unless you have set <literal>mutableUsers = false</literal>. Another
     way is to temporarily add the following to your configuration:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 users.users.your-user.initialHashedPassword = &quot;test&quot;;
 </programlisting>
   <para>

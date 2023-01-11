@@ -1,0 +1,39 @@
+diff --git a/desktop-ui/GNUmakefile b/desktop-ui/GNUmakefile
+index 4515610d3..916c8fcd8 100644
+--- a/desktop-ui/GNUmakefile
++++ b/desktop-ui/GNUmakefile
+@@ -91,7 +91,7 @@ endif
+ 	cp resource/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+ 	cp -R $(ares.path)/Shaders $(output.path)/$(name).app/Contents/Resources/
+ 	cp -R $(mia.path)/Database $(output.path)/$(name).app/Contents/Resources/	
+-	sips -s format icns resource/$(name).png --out $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+ 	codesign --force --deep --options runtime --entitlements resource/$(name).selfsigned.entitlements --sign - $(output.path)/$(name).app
+ else ifeq ($(platform),windows)
+ 	$(call mkdir,$(output.path)/Shaders/)
+diff --git a/genius/GNUmakefile b/genius/GNUmakefile
+index 5287309a8..8d80f9306 100644
+--- a/genius/GNUmakefile
++++ b/genius/GNUmakefile
+@@ -24,7 +24,7 @@ ifeq ($(platform),macos)
+ 	mkdir -p $(output.path)/$(name).app/Contents/Resources/
+ 	mv $(output.path)/$(name) $(output.path)/$(name).app/Contents/MacOS/$(name)
+ 	cp data/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+-	sips -s format icns data/$(name).png --$(output.path) $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns data/$(name).png
+ endif
+ 
+ verbose: hiro.verbose nall.verbose all;
+diff --git a/mia/GNUmakefile b/mia/GNUmakefile
+index b6930b6df..7a51b5028 100644
+--- a/mia/GNUmakefile
++++ b/mia/GNUmakefile
+@@ -32,7 +32,7 @@ ifeq ($(platform),macos)
+ 	mkdir -p $(output.path)/$(name).app/Contents/Resources/
+ 	mv $(output.path)/$(name) $(output.path)/$(name).app/Contents/MacOS/$(name)
+ 	cp resource/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+-	sips -s format icns resource/$(name).png --out $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+ endif
+ 
+ verbose: hiro.verbose nall.verbose all;

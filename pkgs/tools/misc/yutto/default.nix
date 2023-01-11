@@ -37,9 +37,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "yutto" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Bilibili downloader";

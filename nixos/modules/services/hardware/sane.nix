@@ -28,7 +28,7 @@ let
   };
 
   env = {
-    SANE_CONFIG_DIR = "/etc/sane.d";
+    SANE_CONFIG_DIR = "/etc/sane-config";
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
@@ -141,7 +141,7 @@ in
       description = lib.mdDoc ''
         Enable saned network daemon for remote connection to scanners.
 
-        saned would be runned from `scanner` user; to allow
+        saned would be run from `scanner` user; to allow
         access to hardware that doesn't have `scanner` group
         you should add needed groups to this user.
       '';
@@ -167,7 +167,7 @@ in
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
-      environment.etc."sane.d".source = config.hardware.sane.configDir;
+      environment.etc."sane-config".source = config.hardware.sane.configDir;
       environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
 

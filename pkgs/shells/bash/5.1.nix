@@ -1,23 +1,18 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
-, binutils ? null
+, binutils
 , bison
 , util-linux
 
   # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin
-, readline81 ? null
+, readline
 , withDocs ? false
-, texinfo ? null
+, texinfo
 , forFHSEnv ? false
 }:
 
-with lib;
-
-assert interactive -> readline81 != null;
-assert withDocs -> texinfo != null;
-assert stdenv.hostPlatform.isDarwin -> binutils != null;
 let
   upstreamPatches = import ./bash-5.1-patches.nix (nr: sha256: fetchurl {
     url = "mirror://gnu/bash/bash-5.1-patches/bash51-${nr}";
@@ -25,7 +20,7 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
+  name = "bash-${lib.optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
   version = "5.1";
 
   src = fetchurl {
@@ -37,14 +32,14 @@ stdenv.mkDerivation rec {
   # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
   # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
   # or you can check libc/include/sys/cdefs.h in bionic source code
-  ++ optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+  ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
-  '' + optionalString (!forFHSEnv) ''
+  '' + lib.optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
   '' + ''
@@ -59,18 +54,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "bash_cv_job_control_missing=nomissing"
     "bash_cv_sys_named_pipes=nomissing"
     "bash_cv_getcwd_malloc=yes"
-  ] ++ optionals stdenv.hostPlatform.isCygwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix"
     "--without-libiconv-prefix"
     "--with-installed-readline"
     "bash_cv_dev_stdin=present"
     "bash_cv_dev_fd=standard"
     "bash_cv_termcap_lib=libncurses"
-  ] ++ optionals (stdenv.hostPlatform.libc == "musl") [
+  ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
     "--without-bash-malloc"
     "--disable-nls"
   ];
@@ -79,14 +74,14 @@ stdenv.mkDerivation rec {
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
-    ++ optional withDocs texinfo
-    ++ optional stdenv.hostPlatform.isDarwin binutils;
+    ++ lib.optional withDocs texinfo
+    ++ lib.optional stdenv.hostPlatform.isDarwin binutils;
 
-  buildInputs = optional interactive readline81;
+  buildInputs = lib.optional interactive readline;
 
   enableParallelBuilding = true;
 
-  makeFlags = optionals stdenv.hostPlatform.isCygwin [
+  makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
     "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
     "SHOBJ_LIBS=-lbash"
   ];
@@ -110,12 +105,13 @@ stdenv.mkDerivation rec {
       rm -rf "$out/share" "$out/bin/bashbug"
     '';
 
+  passthru = {
+    shellPath = "/bin/bash";
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/bash/";
-    description =
-      "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
-      (if interactive then " (for interactive use)" else "");
-
+    description = "GNU Bourne-Again Shell, the de facto standard shell on Linux" + lib.optionalString interactive " (for interactive use)";
     longDescription = ''
       Bash is the shell, or command language interpreter, that will
       appear in the GNU operating system.  Bash is an sh-compatible
@@ -126,17 +122,9 @@ stdenv.mkDerivation rec {
       interactive use.  In addition, most sh scripts can be run by
       Bash without modification.
     '';
-
     license = licenses.gpl3Plus;
-
     platforms = platforms.all;
-
     maintainers = with maintainers; [ dtzWill ];
-
     mainProgram = "bash";
-  };
-
-  passthru = {
-    shellPath = "/bin/bash";
   };
 }

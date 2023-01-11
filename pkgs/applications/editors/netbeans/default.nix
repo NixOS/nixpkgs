@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "15";
+  version = "16";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha512-WxqAQiPKdMfQCw9Hxaa7K2VIGTJj+Hu9WO2ehG4yQUkHBd+l0f0siLKk/i2xqLE1ZA522rxKud6iwXDuAsjjDg==";
+    hash = "sha512-k+Zj6TKW0tOSYvM6V1okF4Qz62gZMETC6XG98W23Vtz3+vdiaddd8BC2DBg7p9Z1CofRq8sbwtpeTJM3FaXv0g==";
   };
 
   buildCommand = ''
@@ -64,6 +64,10 @@ stdenv.mkDerivation {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [ sander rszibele asbachb ];
     platforms = lib.platforms.unix;
   };

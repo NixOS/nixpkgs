@@ -1,0 +1,35 @@
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, Security
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "git-cliff";
+  version = "1.1.0";
+
+  src = fetchFromGitHub {
+    owner = "orhun";
+    repo = "git-cliff";
+    rev = "v${version}";
+    hash = "sha256-WpLg9kBJnEEzWIx3dJN++Np1jUkYnFGlgCrUdvz2/3w=";
+  };
+
+  cargoHash = "sha256-UN5X+rvL7nsFkIj+XZSdZ/qmHlkVVJy1BA2zSVQxqPw=";
+
+  # attempts to run the program on .git in src which is not deterministic
+  doCheck = false;
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
+  meta = with lib; {
+    description = "A highly customizable Changelog Generator that follows Conventional Commit specifications";
+    homepage = "https://github.com/orhun/git-cliff";
+    changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ siraben ];
+  };
+}

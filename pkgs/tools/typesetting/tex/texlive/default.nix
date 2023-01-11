@@ -117,20 +117,20 @@ let
     };
 
   # for daily snapshots
-  # snapshot = {
-  #   year = "2022";
-  #   month = "03";
-  #   day = "22";
-  # };
+  snapshot = {
+    year = "2022";
+    month = "12";
+    day = "27";
+  };
 
   tlpdb = fetchurl {
     # use the same mirror(s) as urlPrefixes below
     urls = [
-      "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
+      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
     ];
-    hash = "sha256-qSV6OZmGHCom2w85WXm84ohMrGGJLZ2Vzj9talDNiOo=";
+    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
   };
 
   # create a derivation that contains an unpacked upstream TL package
@@ -151,11 +151,11 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
-        "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
+        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+        #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
     in runCommand "texlive-${tlName}"
@@ -203,8 +203,8 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
-            extraVersion = "-final";
-            #extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
+            #extraVersion = "-final";
+            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )
         { inherit (tl)

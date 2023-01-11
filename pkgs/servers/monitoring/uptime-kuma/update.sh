@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-latestVersion="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/louislam/uptime-kuma/releases?per_page=1" | jq -r ".[0].tag_name" | sed 's/^v//')"
+latestVersion="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/louislam/uptime-kuma/releases?per_page=1" | jq -r ".[0].tag_name" | sed 's/^v//')"
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; uptime-kuma.version or (lib.getVersion uptime-kuma)" | tr -d '"')
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.6.5";
+  version = "0.6.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DLm/8bye8p2fhs36CW5PQAxm3uhJq1L+DT1Zn2uJhqE=";
+    hash = "sha256-Vb2sXZjhBZpZdemtGZ8dajB9Ziu/obLv80R63IH/hJg=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
+    changelog = "https://github.com/Mause/duckdb_engine/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

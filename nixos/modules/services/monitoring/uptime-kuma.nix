@@ -28,7 +28,7 @@ in
         };
         description = lib.mdDoc ''
           Additional configuration for Uptime Kuma, see
-          <https://github.com/louislam/uptime-kuma/wiki/Environment-Variables">
+          <https://github.com/louislam/uptime-kuma/wiki/Environment-Variables>
           for supported values.
         '';
       };

@@ -11,7 +11,7 @@ NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
 cd ${NIXPKGS_K3S_PATH}
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
-curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 
 LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
@@ -19,7 +19,7 @@ LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
 
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
-K3S_COMMIT=$(curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+K3S_COMMIT=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/k3s-io/k3s/tags \
     | jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
 

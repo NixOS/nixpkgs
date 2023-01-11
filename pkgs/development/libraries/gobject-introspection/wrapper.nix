@@ -19,24 +19,24 @@ let
   # passing this stdenv to `targetPackages...` breaks due to splicing not working in `.override``
   argsForTarget = builtins.removeAttrs args [ "stdenv" ];
 
-  overridenUnwrappedGir = gobject-introspection-unwrapped.override args;
+  overriddenUnwrappedGir = gobject-introspection-unwrapped.override args;
   # if we have targetPackages.gobject-introspection then propagate that
   overridenTargetUnwrappedGir =
     if targetPackages ? gobject-introspection-unwrapped
     then targetPackages.gobject-introspection-unwrapped.override argsForTarget
-    else overridenUnwrappedGir;
+    else overriddenUnwrappedGir;
 in
 
 # wrap both pkgsCrossX.buildPackages.gobject-introspection and {pkgs,pkgsSomethingExecutableOnBuildSystem).buildPackages.gobject-introspection
 if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) && stdenv.targetPlatform.emulatorAvailable buildPackages
 then
-  overridenUnwrappedGir.overrideAttrs
+  overriddenUnwrappedGir.overrideAttrs
     (previousAttrs:
       {
 
         pname = "gobject-introspection-wrapped";
         passthru = previousAttrs.passthru // {
-          unwrapped = overridenUnwrappedGir;
+          unwrapped = overriddenUnwrappedGir;
         };
         dontStrip = true;
         depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
@@ -44,8 +44,8 @@ then
           eval fixupPhase
           ${lib.concatMapStrings (output: ''
             mkdir -p ${"$" + "${output}"}
-            ${lib.getExe buildPackages.xorg.lndir} ${overridenUnwrappedGir.${output}} ${"$" + "${output}"}
-          '') overridenUnwrappedGir.outputs}
+            ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+          '') overriddenUnwrappedGir.outputs}
 
           cp $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
           cp $dev/bin/g-ir-scanner $dev/bin/.g-ir-scanner-wrapped
@@ -87,11 +87,11 @@ then
         '';
       })
 else
-  overridenUnwrappedGir.overrideAttrs (previousAttrs:
+  overriddenUnwrappedGir.overrideAttrs (previousAttrs:
     {
       pname = "gobject-introspection-wrapped";
       passthru = previousAttrs.passthru // {
-        unwrapped = overridenUnwrappedGir;
+        unwrapped = overriddenUnwrappedGir;
       };
       dontStrip = true;
       depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
@@ -99,7 +99,7 @@ else
         eval fixupPhase
         ${lib.concatMapStrings (output: ''
           mkdir -p ${"$" + "${output}"}
-          ${lib.getExe buildPackages.xorg.lndir} ${overridenUnwrappedGir.${output}} ${"$" + "${output}"}
-        '') overridenUnwrappedGir.outputs}
+          ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        '') overriddenUnwrappedGir.outputs}
       '';
     })

@@ -7,8 +7,10 @@
 , graphene
 , gtk4
 , lib
+, libadwaita
 , pango
 , pkg-config
+, withLibadwaita ? false
 , wrapGAppsHook4
 }:
 
@@ -36,7 +38,17 @@ buildGoModule rec {
     graphene
     gtk4
     pango
+  ] ++ lib.optionals withLibadwaita [
+    libadwaita
   ];
+
+  tags = lib.optionals withLibadwaita [ "libadwaita" ];
+
+  postInstall = ''
+    install -D -m 444 -t $out/share/applications .nix/com.github.diamondburned.gtkcord4.desktop
+    install -D -m 444 internal/icons/svg/logo.svg $out/share/icons/hicolor/scalable/apps/gtkcord4.svg
+    install -D -m 444 internal/icons/png/logo.png $out/share/icons/hicolor/256x256/apps/gtkcord4.png
+  '';
 
   vendorHash = "sha256-QZSjSk1xu5ZcrNEra5TxnUVvlQWb5/h31fm5Nc7WMoI=";
 

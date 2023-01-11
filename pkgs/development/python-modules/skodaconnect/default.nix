@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "skodaconnect";
-  version = "1.1.27";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lendy007";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CK5u2Nx1Z7XPDL5W24XxYCo3GfMYCAqKwxpQ8QTfQ0o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GsDnAusCMOFAZM10NcmS0NXOLGSDQaaQbFDoooUlTSs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Skoda Connect";
     homepage = "https://github.com/lendy007/skodaconnect";
-    changelog = "https://github.com/lendy007/skodaconnect/releases/tag/v${version}";
+    changelog = "https://github.com/lendy007/skodaconnect/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
