@@ -41,12 +41,12 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchurl {
     url =
       "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "sha256-MIBhvhgttqfUO42ipVNXhdKbcN/0YPtFK8Ox8KlafG0=";
+    sha256 = "sha256-Rru77rhBzD7pOT6r8RzG3Fnf26ZoWHVaKRyTFWgWdi8=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
