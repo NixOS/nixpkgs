@@ -11,7 +11,7 @@
     "${patchSet}/patches/ruby/3.0/head/railsexpress/01-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/3.0/head/railsexpress/02-malloc-trim.patch"
   ];
-  "3.1.2" = ops useRailsExpress [
+  "3.1.3" = ops useRailsExpress [
     "${patchSet}/patches/ruby/3.1/head/railsexpress/01-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/3.1/head/railsexpress/02-malloc-trim.patch"
   ];
