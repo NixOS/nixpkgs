@@ -1,6 +1,5 @@
-{ gnustep, lib, fetchFromGitHub , libxml2, openssl
+{ gnustep, lib, fetchFromGitHub, fetchpatch, libxml2, openssl
 , openldap, mariadb, libmysqlclient, postgresql }:
-with lib;
 
 gnustep.stdenv.mkDerivation rec {
   pname = "sope";
@@ -10,37 +9,56 @@ gnustep.stdenv.mkDerivation rec {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOPE-${version}";
-    sha256 = "sha256-mS685NOB6IN3a5tE3yr+VUq55Ouc5af9aJ2wTfGsAlo=";
+    hash = "sha256-mS685NOB6IN3a5tE3yr+VUq55Ouc5af9aJ2wTfGsAlo=";
   };
 
-  hardeningDisable = [ "format" ];
+  patches = [
+    (fetchpatch {
+      name = "sope-no-unnecessary-vars.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/Alinto/sope/pull/64.patch";
+      hash = "sha256-1txj8Qehg2N7ZsiYQA2FXI4peQAE3HUwDYkJEP9WnEk=";
+    })
+    (fetchpatch {
+      name = "sope-fix-wformat.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/Alinto/sope/pull/65.patch";
+      hash = "sha256-zCbvVdbeBeNo3/cDVdYbyUUC2z8D6Q5ga0plUoMqr98=";
+    })
+  ];
+
   nativeBuildInputs = [ gnustep.make ];
-  buildInputs = flatten ([ gnustep.base libxml2 openssl ]
-    ++ optional (openldap != null) openldap
-    ++ optionals (mariadb != null) [ libmysqlclient mariadb ]
-    ++ optional (postgresql != null) postgresql);
+  buildInputs = [ gnustep.base libxml2 openssl ]
+    ++ lib.optional (openldap != null) openldap
+    ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]
+    ++ lib.optional (postgresql != null) postgresql;
 
-  postPatch = ''
-    # Exclude NIX_ variables
-    sed -i 's/grep GNUSTEP_/grep ^GNUSTEP_/g' configure
-  '';
+  enableParallelBuilding = true;
 
+  # Configure directories where files are installed to. Everything is automatically
+  # put into $out (thanks GNUstep) apart from the makefiles location which is where
+  # makefiles are read from during build but also where the SOPE makefiles are
+  # installed to in the install phase. We move them over after the installation.
   preConfigure = ''
-    export DESTDIR="$out"
+    mkdir -p /build/Makefiles
+    ln -s ${gnustep.make}/share/GNUstep/Makefiles/* /build/Makefiles
+
+    cat <<EOF > /build/GNUstep.conf
+    GNUSTEP_MAKEFILES=/build/Makefiles
+    EOF
   '';
+  GNUSTEP_CONFIG_FILE = "/build/GNUstep.conf";
 
   configureFlags = [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
-    ++ optional (openldap != null) "--enable-openldap"
-    ++ optional (mariadb != null) "--enable-mysql"
-    ++ optional (postgresql != null) "--enable-postgresql";
+    ++ lib.optional (openldap != null) "--enable-openldap"
+    ++ lib.optional (mariadb != null) "--enable-mysql"
+    ++ lib.optional (postgresql != null) "--enable-postgresql";
 
-  # Yes, this is ugly.
-  preFixup = ''
-    cp -rlPa $out/nix/store/*/* $out
-    rm -rf $out/nix/store
+  # Move over the makefiles (see comment over preConfigure)
+  postInstall = ''
+    mkdir -p $out/share/GNUstep/Makefiles
+    find /build/Makefiles -mindepth 1 -maxdepth 1 -not -type l -exec cp -r '{}' $out/share/GNUstep/Makefiles \;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An extensive set of frameworks which form a complete Web application server environment";
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";
