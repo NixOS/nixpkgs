@@ -54,13 +54,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.6.5";
+  version = "5.6.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-UAPzB4Ps/w0VQjbbVl4KMRghwMc4roJR2/ZWkmwOSos=";
+    hash = "sha256-BRknGZOaN156fyETworGIdEiJWrf5uqFD/Nc88LcNcg=";
   };
 
   patches = [
