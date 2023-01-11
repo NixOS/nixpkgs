@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     description = "Configuration editing tool";
     license = licenses.lgpl21Only;
     homepage = "https://augeas.net/";
+    changelog = "https://augeas.net/news.html";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
