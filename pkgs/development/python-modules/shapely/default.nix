@@ -1,28 +1,35 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, substituteAll
 , pythonOlder
-, geos
-, pytestCheckHook
+, fetchPypi
 , cython
+, geos
+, setuptools
 , numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
   version = "2.0.0";
-  disabled = pythonOlder "3.6";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EfGxIxpsBCE/sSJsaWjRsbOzaexC0ellUGavh2MYYOo=";
+    hash = "sha256-EfGxIxpsBCE/sSJsaWjRsbOzaexC0ellUGavh2MYYOo=";
   };
 
   nativeBuildInputs = [
-    geos # for geos-config
     cython
+    geos # for geos-config
+    setuptools
+  ];
+
+  buildInputs = [
+    geos
   ];
 
   propagatedBuildInputs = [
@@ -32,9 +39,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  # Environment variable used in setup.py
-  GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   preCheck = ''
     rm -r shapely # prevent import of local shapely
@@ -54,9 +58,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shapely" ];
 
   meta = with lib; {
-    description = "Geometric objects, predicates, and operations";
-    homepage = "https://pypi.python.org/pypi/Shapely/";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
+    description = "Manipulation and analysis of geometric objects";
+    homepage = "https://github.com/shapely/shapely";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };
 }

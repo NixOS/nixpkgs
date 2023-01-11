@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytoolconfig
+, pytest-timeout
 , pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
@@ -11,9 +13,13 @@ buildPythonPackage rec {
   version = "1.6.0";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kxrqFUNlVWp9qsAcvOzgycEYdVv/98ZaskK2lYUWfso=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "python-rope";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-avNCti288dY9pl5AVTmUzZU/vb6WDkXEtELNlEi6L/o=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +31,7 @@ buildPythonPackage rec {
   ] ++ pytoolconfig.optional-dependencies.global;
 
   checkInputs = [
+    pytest-timeout
     pytestCheckHook
   ];
 
@@ -37,7 +44,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
-    maintainers = with maintainers; [ goibhniu ];
+    changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

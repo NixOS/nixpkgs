@@ -147,7 +147,8 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    platforms = with platforms; linux ++ cygwin ++ darwin;
+    # GDB upstream does not support ARM darwin
+    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
     maintainers = with maintainers; [ pierron globin lsix ];
   };
 }
