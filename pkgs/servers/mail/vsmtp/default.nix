@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-nBkfIjACmjnVNF3hJ22B4ecjWrX9licV7c8Yxv2tQCg=";
+    hash = "sha256-pY/CjdrRlZ2+z82RngLQ8jXQwZl9wy9phQG4/4uXCKA=";
   };
 
-  cargoHash = "sha256-HqQ8WD1/K7xMx97SbuP45Q/+4oADh1WZFJPXB8wlkbM=";
+  cargoHash = "sha256-7nDSTzZRjMbjhVNk3mqeQ8JemA62yCUMvhRwjkPlWn0=";
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ];
