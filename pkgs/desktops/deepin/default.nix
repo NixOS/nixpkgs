@@ -30,6 +30,7 @@ let
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
 
     #### CORE
+    dde-app-services = callPackage ./core/dde-app-services { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-clipboard = callPackage ./core/dde-clipboard { };
