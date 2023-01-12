@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
-  version = "1.22.1226";
+  version = "1.23.0110";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
     rev = "v${version}";
-    sha256 = "sha256-/Noc2aqHBjphX6RDqxQBI/OOKZgEnOndn0daBt1edXM=";
+    sha256 = "sha256-yQWdBNt7maYTzroB+P1hsGIeivkP+soR3/b847HLYZY=";
   };
 
   postPatch = ''
