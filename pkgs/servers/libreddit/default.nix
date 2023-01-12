@@ -3,31 +3,21 @@
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "libreddit";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "libreddit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+sSzYewqN3VjTl+wjgan3yxlFiuCg2rprJDpDktuQHo=";
+    hash = "sha256-3Q/Vl126EMRSNdStpZqFEkA0Kjzu6BeyBhokTQrrQXE=";
   };
 
-  cargoSha256 = "sha256-HhtslN6JV9DUBhuyesciZGGYVz7mvpdyxVps9xAc+Rs=";
-
-  patches = [
-    # https://github.com/libreddit/libreddit/pull/687
-    (fetchpatch {
-      name = "fix-cfg-test.patch";
-      url = "https://github.com/libreddit/libreddit/commit/dff91da8777dc42d38abf8b5d63addbd71fdabff.patch";
-      sha256 = "sha256-6np5gf8cyKotF7KJ19mCtRAF7SxDpNFpQCgdy/XDsng=";
-    })
-  ];
+  cargoSha256 = "sha256-TA0Rsya3vx6N/iAWpRmB7Byz7AIR0sdfk3kJ8wgvWHY=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
