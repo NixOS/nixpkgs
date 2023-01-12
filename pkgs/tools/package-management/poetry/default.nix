@@ -9,7 +9,7 @@ let
   python = python3;
 in python.pkgs.buildPythonApplication rec {
   pname = "poetry";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = python.pkgs.pythonOlder "3.7";
@@ -18,7 +18,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yiV2Y0vBF0d7BFfT5wonzRUGHVH040PZrlAUpVTFCZc=";
+    hash = "sha256-12EiEGI9Vkb6EUY/W2KWeLigxWra1Be4ozvi8njBpEU=";
   };
 
   nativeBuildInputs = [
@@ -119,6 +119,6 @@ in python.pkgs.buildPythonApplication rec {
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [ jakewaksbaum dotlambda ];
   };
 }
