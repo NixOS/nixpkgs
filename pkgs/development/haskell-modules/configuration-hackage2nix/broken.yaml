@@ -5823,7 +5823,6 @@ broken-packages:
   - X11-rm
   - X11-xdamage
   - X11-xfixes
-  - xcffib
   - xchat-plugin
   - xcp
   - x-dsp
