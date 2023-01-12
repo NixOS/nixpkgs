@@ -2,7 +2,6 @@
 , lib
 , buildPackages
 , fetchFromGitLab
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -68,7 +67,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.63";
+    version = "0.3.64";
 
     outputs = [
       "out"
@@ -86,7 +85,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-GQJpw5G9YN7T2upu2FLUxE8UvMRev3K2j4Z1uK1/dt4=";
+      sha256 = "sha256-wIvdciLBWIQjENEipzbVID0eliOcEwqS567pLxVVOsc=";
     };
 
     patches = [
@@ -102,19 +101,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # FIXME: backports, remove after 0.3.64
-      # fix bluetooth issues
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/c7b3ef0d9ff16a1e69a299870860bebcb628e298.patch";
-        hash = "sha256-hiZ6VUhMu8NgwX5DZ/JRVl/g1Go0nZQSjQVrmqIzXoY=";
-      })
-
-      # fix routes getting lost
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/89ac6b353521fb9a6d6eb6bb74724c4fa968f75c.patch";
-        hash = "sha256-vzHiKWGmyuUF2iDS/ZQws+bCXVYYEl048JaMckY/fGI=";
-      })
     ];
 
     nativeBuildInputs = [
