@@ -46,15 +46,19 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.4.0";
+  version = "5.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nZ+rw5qALSdu+nbaAtGA7PLW6XjcjeZvuPd4a5WtZkw=";
+    hash = "sha256-kQBOYRXhjz+OQk7Vlxb/UKiDi92mA8ialsFQ+QzqhlE=";
   };
+
+  patches = [
+    ./dont-clear-pythonpath.patch
+  ];
 
   nativeBuildInputs = [
     pyqtwebengine.wrapQtAppsHook

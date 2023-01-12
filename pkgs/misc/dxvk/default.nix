@@ -1,6 +1,5 @@
 { lib
 , pkgs
-, hostPlatform
 , stdenvNoCC
 , fetchFromGitHub
 , pkgsCross
@@ -8,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs:
   let
-    inherit (hostPlatform.uname) system;
+    inherit (stdenvNoCC.hostPlatform.uname) system;
     # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
     # needs to be built with a cross-compiler.
     dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix {

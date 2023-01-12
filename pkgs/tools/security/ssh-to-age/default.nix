@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ssh-to-age";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-age";
     rev = version;
-    sha256 = "sha256-KdPeV4j9x/nQtvmw90wvf62VxwXPGtKg8aSOM3YBT64=";
+    sha256 = "sha256-S7iWwRyJfxG38ym5j0b9xwC0tCNhQE+X/UuHG1wFVXo=";
   };
 
-  vendorSha256 = "sha256-1iDFM6KNsvvwOTg05TAJZvHVTv+Gc0nG0STzNdk0NB4=";
+  vendorHash = "sha256-ZOa352gtigbuEQHw6i9Mnh2MD6+8IHOJOg7WJCH+Q88=";
 
   checkPhase = ''
     runHook preCheck

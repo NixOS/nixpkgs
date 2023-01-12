@@ -90,16 +90,6 @@
     };
     version = "3.2.4";
   };
-  charlock_holmes = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0hybw8jw9ryvz5zrki3gc9r88jqy373m6v46ynxsdzv1ysiyr40p";
-      type = "gem";
-    };
-    version = "0.7.7";
-  };
   coderay = {
     source = {
       remotes = ["https://rubygems.org"];
@@ -173,16 +163,6 @@
     };
     version = "1.11.0";
   };
-  escape_utils = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "182ha3nmsc6ny4384233pav58a5x2spjn838w9nciwb29lxah1x3";
-      type = "gem";
-    };
-    version = "1.2.2";
-  };
   factory_bot = {
     dependencies = ["activesupport"];
     groups = ["development" "test"];
@@ -226,27 +206,16 @@
     };
     version = "15.5.0";
   };
-  github-linguist = {
-    dependencies = ["charlock_holmes" "escape_utils" "mini_mime" "rugged"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "10biwhh50fdssqs3ai651qgv079bn6h06g5cv00jc5s73iszfns9";
-      type = "gem";
-    };
-    version = "7.20.0";
-  };
   gitlab-labkit = {
     dependencies = ["actionpack" "activesupport" "grpc" "jaeger-client" "opentracing" "pg_query" "redis"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0m2n5lvnm5nxn7bc6bqm3ycwk47kck6nl1c0s83pcvsn6qizbsx7";
+      sha256 = "09xlv72nbys9a5iqvhxfzdr7vy3s3m2a6ixqb9vq71k925faq6gb";
       type = "gem";
     };
-    version = "0.28.0";
+    version = "0.29.0";
   };
   gitlab-license_finder = {
     dependencies = ["rubyzip" "thor" "tomlrb" "with_env" "xml-simple"];
@@ -274,10 +243,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1p4aa5nnkkrdd3v3i57092vj2agj7ih3zavymw451j52k8anqras";
+      sha256 = "1dcgkhjiaxha3yznyxxzm8a4n4jf61rk7kgbxy4sdkb865zbn2ab";
       type = "gem";
     };
-    version = "3.21.9";
+    version = "3.21.12";
   };
   googleapis-common-protos-types = {
     dependencies = ["google-protobuf"];
@@ -369,16 +338,6 @@
       type = "gem";
     };
     version = "0.9.2";
-  };
-  mini_mime = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0lbim375gw2dk6383qirz13hgdmxlan0vc5da2l072j3qw6fqjm5";
-      type = "gem";
-    };
-    version = "1.1.2";
   };
   mini_portile2 = {
     groups = ["default"];

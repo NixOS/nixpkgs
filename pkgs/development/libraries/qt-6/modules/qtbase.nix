@@ -23,6 +23,7 @@
 , double-conversion
 , util-linux
 , systemd
+, systemdSupport ? stdenv.isLinux
 , libb2
 , md4c
 , mtdev
@@ -129,7 +130,9 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.mariadb
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
+  ] ++ lib.optionals systemdSupport [
     systemd
+  ] ++ [
     mtdev
     lksctp-tools
     libselinux
@@ -219,7 +222,7 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_openssl_linked=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DQT_FEATURE_sctp=ON"
-    "-DQT_FEATURE_journald=ON"
+    "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.isDarwin [
     # build as a set of dynamic libraries
