@@ -7732,6 +7732,8 @@ with pkgs;
     libdevil = libdevil-nox;
   };
 
+  gridtracker = callPackage ../applications/radio/gridtracker { };
+
   grin = callPackage ../tools/text/grin { };
 
   gyb = callPackage ../tools/backup/gyb { };
