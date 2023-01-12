@@ -16265,4 +16265,10 @@
     github = "Detegr";
     githubId = 724433;
   };
+  airradda = {
+    name = "Airradda";
+    email = "nix@airradda.com";
+    github = "Airradda";
+    githubId = 3744856;
+  };
 }
