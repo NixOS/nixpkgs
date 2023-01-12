@@ -35,14 +35,7 @@ rustPlatform.buildRustPackage {
   RUSTC_BOOTSTRAP = 1;
 
   postInstall = ''
-    # NOTE: We override the `http.cainfo` option usually specified in
-    # `.cargo/config`. This is an issue when users want to specify
-    # their own certificate chain as environment variables take
-    # precedence
-    wrapProgram "$out/bin/cargo" \
-      --suffix PATH : "${rustc}/bin" \
-      --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+    wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
 
     installManPage src/tools/cargo/src/etc/man/*
 

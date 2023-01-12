@@ -73,6 +73,10 @@ in stdenv.mkDerivation ({
 
     ${cargoUpdateHook}
 
+    # Override the `http.cainfo` option usually specified in `.cargo/config`.
+    CARGO_HTTP_CAINFO=''${NIX_CARGO_HTTP_CAINFO:-${cacert}/etc/ssl/certs/ca-bundle.crt}
+    SSL_CERT_FILE=''${NIX_SSL_CERT_FILE:-${cacert}/etc/ssl/certs/ca-bundle.crt}
+
     cargo vendor $name --respect-source-config | cargo-vendor-normalise > $CARGO_CONFIG
 
     # Create an empty vendor directory when there is no dependency to vendor
@@ -96,7 +100,11 @@ in stdenv.mkDerivation ({
 
   inherit (hash_) outputHashAlgo outputHash;
 
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_CRATES_INDEX" ];
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+    "NIX_CRATES_INDEX"
+    "NIX_SSL_CERT_FILE"
+    "NIX_CARGO_HTTP_CAINFO"
+  ];
 } // (builtins.removeAttrs args [
   "name" "sha256" "cargoUpdateHook" "nativeBuildInputs"
 ]))
