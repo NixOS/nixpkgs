@@ -328,7 +328,11 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    meta = attrs.meta // { platforms = lib.platforms.linux; };
+    meta = attrs.meta // {
+      # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
+      platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
+        [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
+    };
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
