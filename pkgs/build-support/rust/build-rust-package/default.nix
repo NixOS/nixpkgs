@@ -10,6 +10,7 @@
 , cargoInstallHook
 , cargoNextestHook
 , cargoSetupHook
+, cargo
 , cargo-auditable
 , cargo-auditable-cargo-wrapper
 , rustc
@@ -120,7 +121,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
     (cargo-auditable-cargo-wrapper.override {
-      inherit cargo-auditable;
+      inherit cargo cargo-auditable;
     })
   ] ++ [
     cacert
