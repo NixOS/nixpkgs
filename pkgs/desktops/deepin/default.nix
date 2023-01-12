@@ -69,6 +69,7 @@ let
     dde-daemon = callPackage ./go-package/dde-daemon { };
     deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
     deepin-desktop-schemas = callPackage ./go-package/deepin-desktop-schemas { };
+    startdde = callPackage ./go-package/startdde { };
 
     #### TOOLS
     dde-device-formatter = callPackage ./tools/dde-device-formatter { };
