@@ -5355,9 +5355,13 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river { };
+  river = callPackage ../applications/window-managers/river {
+    zig = zig_0_9;
+  };
 
-  rivercarro = callPackage ../applications/misc/rivercarro { };
+  rivercarro = callPackage ../applications/misc/rivercarro {
+    zig = zig_0_9;
+  };
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
@@ -7201,7 +7205,9 @@ with pkgs;
 
   findutils = callPackage ../tools/misc/findutils { };
 
-  findup = callPackage ../tools/misc/findup { };
+  findup = callPackage ../tools/misc/findup {
+    zig = zig_0_9;
+  };
 
   bsd-finger = callPackage ../tools/networking/bsd-finger { };
   bsd-fingerd = bsd-finger.override({ buildClient = false; });
@@ -18732,7 +18738,9 @@ with pkgs;
 
   ytt = callPackage ../development/tools/ytt {};
 
-  zls = callPackage ../development/tools/zls { };
+  zls = callPackage ../development/tools/zls {
+    zig = zig_0_9;
+  };
 
   zydis = callPackage ../development/libraries/zydis { };
 
@@ -23745,7 +23753,12 @@ with pkgs;
   zig_0_9 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.9.1.nix {
     llvmPackages = llvmPackages_13;
   };
-  zig = zig_0_9;
+  # requires a newer Apple SDK
+  zig_0_10 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.10.nix {
+    llvmPackages = llvmPackages_15;
+  };
+  # Zig 0.10.1 is broken on Darwin, so use 0.9.1 on Darwin instead.
+  zig = if stdenv.isDarwin then zig_0_9 else zig_0_10;
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -30078,7 +30091,9 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
-  waylock = callPackage ../applications/misc/waylock {};
+  waylock = callPackage ../applications/misc/waylock {
+    zig = zig_0_9;
+  };
 
   wayshot = callPackage ../tools/misc/wayshot { };
 
@@ -30995,7 +31010,9 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  mepo = callPackage ../applications/misc/mepo { };
+  mepo = callPackage ../applications/misc/mepo {
+    zig = zig_0_9;
+  };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
@@ -31635,7 +31652,9 @@ with pkgs;
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
-  ncdu = callPackage ../tools/misc/ncdu { };
+  ncdu = callPackage ../tools/misc/ncdu {
+    zig = zig_0_9;
+  };
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
@@ -34656,7 +34675,9 @@ with pkgs;
     inherit (perlPackages) PathTiny;
   };
 
-  blackshades = callPackage ../games/blackshades { };
+  blackshades = callPackage ../games/blackshades {
+    zig = zig_0_9;
+  };
 
   blobby = callPackage ../games/blobby { };
 
