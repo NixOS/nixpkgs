@@ -1,0 +1,39 @@
+From c8f597bd7286a76e7ce371e4f7982d9d2700868a Mon Sep 17 00:00:00 2001
+From: rewine <luhongxu@deepin.org>
+Date: Wed, 28 Dec 2022 23:06:53 +0800
+Subject: [PATCH] fix PATH for NixOS
+
+---
+ device/main.go        | 2 +-
+ locale-helper/main.go | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/device/main.go b/device/main.go
+index 6c5404c..f79bcfc 100644
+--- a/device/main.go
++++ b/device/main.go
+@@ -15,7 +15,7 @@ import (
+ var logger = log.NewLogger(dbusServiceName)
+ 
+ func main() {
+-	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
++	os.Setenv("PATH", "/run/current-system/sw/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+ 	service, err := dbusutil.NewSystemService()
+ 	if err != nil {
+ 		logger.Fatal("failed to new system service:", err)
+diff --git a/locale-helper/main.go b/locale-helper/main.go
+index 0866e48..ef000b5 100644
+--- a/locale-helper/main.go
++++ b/locale-helper/main.go
+@@ -45,7 +45,7 @@ var (
+ )
+ 
+ func main() {
+-	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
++	os.Setenv("PATH", "/run/current-system/sw/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+ 	logger.BeginTracing()
+ 	defer logger.EndTracing()
+ 
+-- 
+2.38.1
+
