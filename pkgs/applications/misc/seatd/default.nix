@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     changelog   = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
     homepage    = "https://sr.ht/~kennylevinsen/seatd/";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = with platforms; freebsd ++ linux ++ netbsd;
     maintainers = with maintainers; [ emantor ];
   };
 }
