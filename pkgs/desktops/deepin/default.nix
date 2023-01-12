@@ -25,6 +25,7 @@ let
     deepin-compressor = callPackage ./apps/deepin-compressor { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
+    deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
 
     #### ARTWORK
