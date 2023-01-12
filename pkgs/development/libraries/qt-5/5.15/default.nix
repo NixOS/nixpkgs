@@ -55,14 +55,14 @@ let
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
       (fetchpatch {
-        url = "https://github.com/archlinux/svntogit-packages/raw/372ae3de526f783bdcb5d51b997fbf511055466a/trunk/qt5-webengine-python3.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a6f16c6daea3b5a1f7bc9f175d1645922c131563/qt5/qt5-webengine-python3.patch";
         hash = "sha256-rUSDwTucXVP3Obdck7LRTeKZ+JYQSNhQ7+W31uHZ9yM=";
       })
       (fetchpatch {
-        url = "https://github.com/archlinux/svntogit-packages/raw/372ae3de526f783bdcb5d51b997fbf511055466a/trunk/qt5-webengine-chromium-python3.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-chromium-python3.patch";
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
-        hash = "sha256-BODOw1ksPPns2fmMrk6KC5Po513xB0f1ycbsIL9MmHE=";
+        hash = "sha256-MZGYeMdGzwypfKoSUaa56K3inbcGRx7he/+AFyk5ekA=";
       })
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
