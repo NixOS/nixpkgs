@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
         echo '  BASEDIR = "$NIX_BUILD_TOP";'
         make --dry-run --print-data-base -f ${finalAttrs.src}/Makefile download \
           | egrep    '^[A-Z]+_(VER|URL|SUM|DIR) = ' \
-          | sed 's_\([^ ]*\) = \(.*\)_\1 = "\2\";_' \
+          | sed 's_\([^ ]*\) = \(.*\)_  \1 = "\2\";_' \
           | tr \( \{ \
           | tr \) \}
       ''
