@@ -15,6 +15,7 @@
 , pciutils
 , sndio
 , libjack2
+, speechd
 }:
 
 ## configurability of the wrapper itself
@@ -82,6 +83,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
+            ++ lib.optional (cfg.speechSynthesisSupport or false) speechd
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
