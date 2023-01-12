@@ -24,6 +24,7 @@ let
     deepin-calculator = callPackage ./apps/deepin-calculator { };
 
     #### ARTWORK
+    dde-account-faces = callPackage ./artwork/dde-account-faces { };
     deepin-icon-theme = callPackage ./artwork/deepin-icon-theme { };
     deepin-gtk-theme = callPackage ./artwork/deepin-gtk-theme { };
     deepin-sound-theme = callPackage ./artwork/deepin-sound-theme { };
