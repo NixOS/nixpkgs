@@ -63,6 +63,12 @@ in python.pkgs.buildPythonApplication rec {
       --zsh <($out/bin/poetry completions zsh) \
   '';
 
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
   checkInputs = with python.pkgs; [
     cachy
     deepdiff
