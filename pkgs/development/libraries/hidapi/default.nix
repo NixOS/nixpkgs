@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hidapi";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "hidapi";
     rev = "${pname}-${version}";
-    sha256 = "sha256-SMhlcB7LcViC6UFVYACjunxsGkvSOKC3mbLBH4XQSzM=";
+    sha256 = "sha256-XMFG/WeASccb/ClrOyUA/ubgdL4X098tKskOV30h8C4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
