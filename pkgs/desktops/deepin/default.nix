@@ -31,6 +31,7 @@ let
 
     #### CORE
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
+    dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
 
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
