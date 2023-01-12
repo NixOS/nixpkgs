@@ -21,6 +21,7 @@ let
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
 
     #### Dtk Application
+    deepin-album = callPackage ./apps/deepin-album { };
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
     deepin-draw = callPackage ./apps/deepin-draw { };
