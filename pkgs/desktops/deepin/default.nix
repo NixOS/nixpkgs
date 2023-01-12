@@ -25,6 +25,7 @@ let
 
     #### ARTWORK
     deepin-icon-theme = callPackage ./artwork/deepin-icon-theme { };
+    deepin-gtk-theme = callPackage ./artwork/deepin-gtk-theme { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
