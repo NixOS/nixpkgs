@@ -214,6 +214,15 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
     moveToOutput "share/gcc-*/python" "${!outputLib}"
 
+    # based on https://src.fedoraproject.org/rpms/gcc/blob/95507e8b681b5013b87bbbcb0514dd27941e648a/f/gcc.spec#_1293
+    # if [ ! -z $REPLACE_LINKER_SCRIPT ]; then
+        rm -f "${!outputLib}/lib/libgcc_s.so"
+        echo '/* GNU ld script
+Use the shared library, but some functions are only in
+the static library, so try that secondarily.  */
+GROUP ( libgcc_s.so.1 libgcc.a )' > "${!outputLib}/lib/libgcc_s.so"
+    # fi
+
     if [ -z "$enableShared" ]; then
         moveToOutput "${targetConfig+$targetConfig/}lib/lib*.a" "${!outputLib}"
     fi
