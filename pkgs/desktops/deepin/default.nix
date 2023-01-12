@@ -38,6 +38,7 @@ let
     go-lib = callPackage ./go-package/go-lib { inherit replaceAll; };
     go-gir-generator = callPackage ./go-package/go-gir-generator { };
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
+    deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
 
     #### TOOLS
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
