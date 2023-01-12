@@ -62,6 +62,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/hzeller/gmrender-resurrect">gmediarender</link>,
+          a simple, headless UPnP/DLNA renderer. Available as
+          <link xlink:href="options.html#opt-services.gmediarender.enable">services.gmediarender</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/StevenBlack/hosts">stevenblack-blocklist</link>,
           A unified hosts file with base extensions for blocking
           unwanted websites. Available as
