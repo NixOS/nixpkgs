@@ -24063,6 +24063,8 @@ with pkgs;
 
   go-camo = callPackage ../servers/http/go-camo { };
 
+  go-cqhttp = callPackage ../servers/go-cqhttp { };
+
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
