@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     libuv
     libunwind
     openfec
