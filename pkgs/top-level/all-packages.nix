@@ -18794,6 +18794,8 @@ with pkgs;
     };
   });
 
+  calcium = callPackage ../development/libraries/calcium {};
+
   cubeb = callPackage ../development/libraries/audio/cubeb {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
