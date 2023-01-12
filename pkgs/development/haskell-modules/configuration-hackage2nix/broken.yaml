@@ -1093,6 +1093,7 @@ broken-packages:
   - dense
   - dense-int-set
   - dependent-hashmap
+  - dep-t-dynamic
   - deptrack-core
   - dep-t-value
   - derangement
@@ -1445,6 +1446,7 @@ broken-packages:
   - fadno-braids
   - fadno-xml
   - failable-list
+  - FailT
   - failure-detector
   - fake
   - fake-type
@@ -4080,7 +4082,6 @@ broken-packages:
   - posit
   - positron
   - posix-acl
-  - posix-api
   - posix-realtime
   - posix-waitpid
   - postcodes
@@ -4361,6 +4362,7 @@ broken-packages:
   - record-wrangler
   - recursors
   - red-black-record
+  - redis-glob
   - redis-hs
   - redis-simple
   - Redmine
@@ -4905,6 +4907,8 @@ broken-packages:
   - socket-activation
   - socketed
   - socketio
+  - sockets
+  - sockets-and-pipes
   - socket-sctp
   - socket-unix
   - sodium
@@ -5820,6 +5824,7 @@ broken-packages:
   - X11-rm
   - X11-xdamage
   - X11-xfixes
+  - xcffib
   - xchat-plugin
   - xcp
   - x-dsp
