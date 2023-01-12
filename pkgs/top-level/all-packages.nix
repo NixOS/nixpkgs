@@ -23742,9 +23742,10 @@ with pkgs;
   libzra = callPackage ../development/libraries/libzra { };
 
   # requires a newer Apple SDK
-  zig = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig {
+  zig_0_9 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.9.1.nix {
     llvmPackages = llvmPackages_13;
   };
+  zig = zig_0_9;
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
