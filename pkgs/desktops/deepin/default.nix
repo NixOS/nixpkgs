@@ -23,6 +23,7 @@ let
     #### Dtk Application
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
+    deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
 
