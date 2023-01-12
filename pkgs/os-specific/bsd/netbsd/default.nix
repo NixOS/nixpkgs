@@ -815,6 +815,16 @@ in makeScopeWithSplicing
     meta.platforms = lib.platforms.netbsd;
   };
 
+  libpci = mkDerivation {
+    pname = "libpci";
+    path = "lib/libpci";
+    version = "9.2";
+    sha256 = "+IOEO1Bw3/H3iCp3uk3bwsFZbvCqN5Ciz70irnPl8E8=";
+    NIX_CFLAGS_COMPILE = [ "-I." ];
+    meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ sys.src ];
+  };
+
   libpthread-headers = mkDerivation {
     pname = "libpthread-headers";
     path = "lib/libpthread";
