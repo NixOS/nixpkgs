@@ -4297,6 +4297,8 @@ self: super: with self; {
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
 
+  home-assistant-chip-clusters = callPackage ../development/python-modules/home-assistant-chip-clusters { };
+
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   homeconnect = callPackage ../development/python-modules/homeconnect { };
