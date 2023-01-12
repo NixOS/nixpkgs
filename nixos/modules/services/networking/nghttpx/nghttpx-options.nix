@@ -62,6 +62,24 @@
       '';
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "nghttpx";
+      description = ''
+        User to drop privileges to.
+
+        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--user
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "nghttpx";
+      description = ''
+        Group to drop privileges to.
+      '';
+    };
+
     single-process = lib.mkOption {
       type        = lib.types.bool;
       default     = false;
@@ -136,6 +154,38 @@
         is given, nghttpx does not set the limit.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--rlimit-nofile
+      '';
+    };
+
+    backend-read-timeout = lib.mkOption {
+      type = lib.types.str;
+      default = "1m";
+      description = ''
+        Specify read timeout for backend connection.
+      '';
+    };
+
+    backend-write-timeout = lib.mkOption {
+      type = lib.types.str;
+      default = "30s";
+      description = ''
+        Specify write timeout for backend connection.
+      '';
+    };
+
+    frontend-read-timeout = lib.mkOption {
+      type = lib.types.str;
+      default = "1m";
+      description = ''
+        Specify read timeout for HTTP/1.1 frontend connection
+      '';
+    };
+
+    frontend-write-timeout = lib.mkOption {
+      type = lib.types.str;
+      default = "30s";
+      description = ''
+        Specify write timeout for all frontend connections
       '';
     };
   };

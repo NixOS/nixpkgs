@@ -70,7 +70,7 @@ let
     ${lib.optionalString (null != cfg.tls) ("private-key-file="+cfg.tls.key)}
     ${lib.optionalString (null != cfg.tls) ("certificate-file="+cfg.tls.crt)}
 
-    user=nghttpx
+    user=${cfg.user}
 
     ${lib.concatMapStringsSep "\n" renderFrontend cfg.frontends}
     ${lib.concatMapStringsSep "\n" renderBackend  cfg.backends}
@@ -80,6 +80,11 @@ let
 
     workers=${builtins.toString cfg.workers}
     rlimit-nofile=${builtins.toString cfg.rlimit-nofile}
+
+    frontend-read-timeout=${cfg.frontend-read-timeout}
+    frontend-write-timeout=${cfg.frontend-write-timeout}
+    backend-read-timeout=${cfg.backend-read-timeout}
+    backend-write-timeout=${cfg.backend-write-timeout}
 
     ${lib.optionalString cfg.single-thread "single-thread=yes"}
     ${lib.optionalString cfg.single-process "single-process=yes"}
@@ -92,13 +97,15 @@ in
   ];
 
   config = lib.mkIf cfg.enable {
+    users.users =
+      lib.mkIf
+        (cfg.user == "nghttpx")
+        { nghttpx.group = cfg.group; nghttpx.isSystemUser = true; };
 
-    users.groups.nghttpx = { };
-    users.users.nghttpx = {
-      group = config.users.groups.nghttpx.name;
-      isSystemUser = true;
-    };
-
+    users.groups =
+      lib.mkIf
+        (cfg.group == "nghttpx")
+        { nghttpx = { }; };
 
     systemd.services = {
       nghttpx = {
