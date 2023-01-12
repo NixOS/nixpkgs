@@ -4907,6 +4907,7 @@ broken-packages:
   - socket-activation
   - socketed
   - socketio
+  - sockets
   - sockets-and-pipes
   - socket-sctp
   - socket-unix
