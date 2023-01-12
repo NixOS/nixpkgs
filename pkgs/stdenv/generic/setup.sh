@@ -252,6 +252,34 @@ printWords() {
     printf '%s ' "$@"
 }
 
+# Array of tuples representing the phases to be sorted
+declare -a phasesToSort=(
+)
+
+# Add two phases with their relative ordering
+addPhase() {
+    local first="$1"
+    local second="$2"
+    export phasesToSort="${phasesToSort:-} $1 $2"
+}
+
+# Add an array of phases that are already relatively ordered.
+addPhases() {
+    phases=("$@")
+    echo "addPhases $phases"
+    for ((i=0; i<${#phases[@]}-1; i+=1)); do
+        addPhase "${phases[i]} ${phases[i+1]}"
+    done
+}
+
+# Topologically sort phases
+sortPhases() {
+    phases=("$@")
+    IFS='
+    '
+    export phases="$(printf "%s\n" "${phases[@]}" | tsort)"
+}
+
 ######################################################################
 # Initialisation.
 
@@ -1362,6 +1390,13 @@ genericBuild() {
             configurePhase ${preBuildPhases:-} buildPhase checkPhase \
             ${preInstallPhases:-} installPhase ${preFixupPhases:-} fixupPhase installCheckPhase \
             ${preDistPhases:-} distPhase ${postPhases:-}";
+        echo "genericBuild Phases: $phases"
+
+        phases_=($phases)
+        addPhases "${phases_[@]}"
+        echo "To sort: $phasesToSort"
+        sortPhases "${phasesToSort[@]}"
+        echo "Sorted: $phases"
     fi
 
     for curPhase in $phases; do

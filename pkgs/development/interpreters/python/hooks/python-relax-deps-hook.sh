@@ -104,4 +104,4 @@ pythonRelaxDepsHook() {
     popd
 }
 
-postBuild+=" pythonRelaxDepsHook"
+addPhase "buildPhase" "pythonRelaxDepsHook"
