@@ -38,6 +38,7 @@ let
 
     #### MISC
     deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
+    deepin-turbo = callPackage ./misc/deepin-turbo { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
