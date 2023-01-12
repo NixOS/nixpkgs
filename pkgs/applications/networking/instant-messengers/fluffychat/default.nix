@@ -1,22 +1,28 @@
 { lib
+, stdenv
 , fetchFromGitLab
-, flutter2
+, flutter
+, mesa
 , olm
+, fribidi
 , imagemagick
 , makeDesktopItem
 }:
 
-flutter2.mkFlutterApp rec {
+flutter.mkFlutterApp rec {
   pname = "fluffychat";
-  version = "1.2.0";
+  version = "1.8.0";
 
-  vendorHash = "sha256-1PDX023WXRmRe/b1L+6Du91BvGwYNp3YATqYSQdPrRY=";
+  vendorHash = {
+    "x86_64-linux" = "sha256-MnqgBCrTgq46AavzZ53G7Wmw/5yCgQlxOSpzPnphUUk=";
+    "aarch64-linux" = "sha256-SRRVw98Pqa9GBpnSv/8oKad5nUGB+UCSvW3isuVhfuA=";
+  }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "fluffychat";
     rev = "v${version}";
-    hash = "sha256-PJH3jMQc6u9R6Snn+9rNN8t+8kt6l3Xt7zKPbpqj13E=";
+    hash = "sha256-i3kG4dXGzeOsQM+ZDI3ENrV7NyXpJOC8M+pS77lwwac=";
   };
 
   desktopItem = makeDesktopItem {
@@ -29,12 +35,15 @@ flutter2.mkFlutterApp rec {
   };
 
   buildInputs = [
+    mesa
     olm
   ];
 
   nativeBuildInputs = [
     imagemagick
   ];
+
+  NIX_CFLAGS_COMPILE = "-I${fribidi}/include/fribidi";
 
   flutterExtraFetchCommands = ''
     M=$(echo $TMP/.pub-cache/hosted/pub.dartlang.org/matrix-*)
