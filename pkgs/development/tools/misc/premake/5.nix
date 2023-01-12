@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     description = "A simple build configuration and project generation tool using lua";
     license = lib.licenses.bsd3;
     platforms = platforms.darwin ++ platforms.linux;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
