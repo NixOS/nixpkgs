@@ -15,34 +15,52 @@ let
 
       baserow_premium = self.buildPythonPackage rec {
         pname = "baserow_premium";
-        version = "1.12.1";
+        version = "1.13.3";
         foramt = "setuptools";
 
         src = fetchFromGitLab {
           owner = "bramw";
           repo = pname;
           rev = "refs/tags/${version}";
-          hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
+          hash = "sha256-CWQ4z6x+MG9DdKWLdaHoKmDzQxNEN86PR2CW8jEs0QE=";
         };
 
         sourceRoot = "source/premium/backend";
 
         doCheck = false;
       };
+
+      baserow_enterprise = self.buildPythonPackage rec {
+        pname = "baserow_enterprise";
+        version = "1.13.3";
+        foramt = "setuptools";
+
+        src = fetchFromGitLab {
+          owner = "bramw";
+          repo = pname;
+          rev = "refs/tags/${version}";
+          hash = "sha256-CWQ4z6x+MG9DdKWLdaHoKmDzQxNEN86PR2CW8jEs0QE=";
+        };
+
+        sourceRoot = "source/enterprise/backend";
+
+        doCheck = false;
+      };
+
     };
   };
 in
 
 with python.pkgs; buildPythonApplication rec {
   pname = "baserow";
-  version = "1.12.1";
+  version = "1.13.3";
   format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "bramw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
+    hash = "sha256-CWQ4z6x+MG9DdKWLdaHoKmDzQxNEN86PR2CW8jEs0QE=";
   };
 
   sourceRoot = "source/backend";
@@ -69,6 +87,7 @@ with python.pkgs; buildPythonApplication rec {
     channels-redis
     daphne
     dj-database-url
+    djangorestframework-simplejwt
     django-celery-beat
     django-celery-email
     django-cors-headers
@@ -77,6 +96,7 @@ with python.pkgs; buildPythonApplication rec {
     django-storages
     drf-jwt
     drf-spectacular
+    elementpath
     faker
     gunicorn
     importlib-resources
@@ -84,16 +104,20 @@ with python.pkgs; buildPythonApplication rec {
     pillow
     psutil
     psycopg2
+    pysaml2
     redis
     regex
     requests
+    requests-oauthlib
     service-identity
     setuptools
     tqdm
     twisted
     unicodecsv
     uvicorn
+    validators
     watchgod
+    xmlschema
     zipp
   ] ++ uvicorn.optional-dependencies.standard;
 
@@ -104,6 +128,7 @@ with python.pkgs; buildPythonApplication rec {
   '';
 
   checkInputs = [
+    baserow_enterprise
     baserow_premium
     boto3
     freezegun
@@ -131,7 +156,7 @@ with python.pkgs; buildPythonApplication rec {
   disabledTestPaths = [
     # Disable premium tests
     "../premium/backend/src/baserow_premium"
-    "../premium/backend/tests/baserow_premium"
+    "../enterprise/backend/src/baserow_enterprise"
     # Disable database related tests
     "tests/baserow/contrib/database"
     "tests/baserow/api"
