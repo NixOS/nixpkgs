@@ -18572,6 +18572,8 @@ with pkgs;
 
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
+  antic = callPackage ../development/libraries/antic {};
+
   anttweakbar = callPackage ../development/libraries/AntTweakBar { };
 
   appstream = callPackage ../development/libraries/appstream { };
@@ -35421,6 +35423,8 @@ with pkgs;
 
   arcanPackages = recurseIntoAttrs (callPackage ../desktops/arcan { });
 
+  budgie = recurseIntoAttrs (callPackage ../desktops/budgie { });
+
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
@@ -38487,4 +38491,6 @@ with pkgs;
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
 
   tuner = callPackage ../applications/audio/tuner { };
+
+  jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 }

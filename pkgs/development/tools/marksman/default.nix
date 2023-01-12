@@ -3,7 +3,7 @@
 , buildDotnetModule
 , dotnetCorePackages
 , marksman
-, testVersion
+, testers
 }:
 
 buildDotnetModule rec {
@@ -34,7 +34,7 @@ buildDotnetModule rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = marksman;
       command = "marksman --version";
     };
