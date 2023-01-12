@@ -821,6 +821,18 @@ final: prev:
     meta.homepage = "https://github.com/ayu-theme/ayu-vim/";
   };
 
+  b64-nvim = buildVimPluginFrom2Nix {
+    pname = "b64.nvim";
+    version = "2022-08-22";
+    src = fetchFromGitHub {
+      owner = "taybart";
+      repo = "b64.nvim";
+      rev = "12dde6ebc3035f010833f513cfbd9abad92b28b3";
+      sha256 = "0h3ghaddqf00q7gih53ni7mx0iw5k9m616j34yg6hdf6s12zp5qw";
+    };
+    meta.homepage = "https://github.com/taybart/b64.nvim/";
+  };
+
   barbar-nvim = buildVimPluginFrom2Nix {
     pname = "barbar.nvim";
     version = "2023-01-03";
