@@ -37,6 +37,7 @@ let
     dde-dock = callPackage ./core/dde-dock { };
     dde-launcher = callPackage ./core/dde-launcher { };
     dde-session-shell = callPackage ./core/dde-session-shell { };
+    dde-session-ui = callPackage ./core/dde-session-ui { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
 
