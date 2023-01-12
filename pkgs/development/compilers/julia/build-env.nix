@@ -10,7 +10,7 @@ buildEnv {
 
     nativeBuildInputs = [ makeWrapper ];
 
-    pathsToLink = ["/share/julia" ];
+    pathsToLink = [ "/share/julia" ];
 
     # FONTCONFIG_FILE is needed to make Julia's fontconfig artifact
     # find the system fonts.
@@ -23,6 +23,7 @@ buildEnv {
       makeWrapper ${julia}/bin/julia $out/bin/julia \
         --set JULIA_LOAD_PATH "$JULIA_LOAD_PATH:$out/share/julia/upstream/packages:$out/share/julia/nixpkgs/packages" \
         --set JULIA_DEPOT_PATH "$JULIA_DEPOT_PATH:$out/share/julia/upstream:$out/share/julia/nixpkgs" \
+        --set JULIA_PKG_OFFLINE true \
         --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
         --set GDK_BACKEND "x11,*"
     '';
