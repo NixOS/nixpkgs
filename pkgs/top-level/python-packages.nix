@@ -4299,6 +4299,8 @@ self: super: with self; {
 
   home-assistant-chip-clusters = callPackage ../development/python-modules/home-assistant-chip-clusters { };
 
+  home-assistant-chip-core = callPackage ../development/python-modules/home-assistant-chip-core { };
+
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   homeconnect = callPackage ../development/python-modules/homeconnect { };
