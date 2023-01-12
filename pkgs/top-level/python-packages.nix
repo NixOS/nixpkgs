@@ -5156,6 +5156,8 @@ self: super: with self; {
 
   lark = callPackage ../development/python-modules/lark { };
 
+  larynx-train = callPackage ../development/python-modules/larynx-train { };
+
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
