@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 
 # nativeBuildInputs
 , flit-core
@@ -32,27 +31,33 @@
 , cython
 , html5lib
 , pytestCheckHook
-, typed-ast
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "5.3.0";
+  version = "6.1.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-80bVg1rfBebgSOKbWkzP84vpm39iLgM8lWlVD64nSsQ=";
+    /* One of the test images used a combining character `ä` that can be
+       encoded multiple ways. This means the file's name can end up encoded
+       differently depending on whether/which normal form the filesystem uses.
+
+       For Nix this causes a different hash for a FOD depending on the
+       filesystem where it is evaluated. This is problematic because hashes
+       fail to match up when evaluating the FOD across multiple platforms.
+    */
     postFetch = ''
       cd $out
-      mv tests/roots/test-images/testimäge.png \
-        tests/roots/test-images/testimæge.png
-      patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
+      mv tests/roots/test-images/{testimäge,testimæge}.png
+      sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
+    hash = "sha256-ClKAB+oQ0sdV/mssfXEkgpqbzhT3ybXPeqjQjbxqbrY=";
   };
 
   nativeBuildInputs = [
@@ -88,12 +93,10 @@ buildPythonPackage rec {
     cython
     html5lib
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typed-ast
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export HOME=$TMPDIR
   '';
 
   disabledTests = [
