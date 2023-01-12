@@ -517,6 +517,13 @@
           <literal>libax25</literal> package.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-version</literal> now accepts
+          <literal>--configuration-revision</literal> to display more
+          information about the current generation revision
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

@@ -22,6 +22,10 @@
    </arg>
 
    <arg>
+    <option>--configuration-revision</option>
+   </arg>
+
+   <arg>
     <option>--json</option>
    </arg>
 
@@ -113,6 +117,23 @@
       was built, e.g.
 <screen><prompt>$ </prompt>nixos-version --hash
 6317da40006f6bc2480c6781999c52d88dde2acf
+</screen>
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--configuration-revision</option>
+    </term>
+    <listitem>
+     <para>
+      Show the configuration revision if available. This could be the full SHA1
+      hash of the Git commit of the system flake, if you add
+      <screen>{ system.configurationRevision = self.rev or "dirty"; }</screen>
+      to the <screen>modules</screen> array of your flake.nix system configuration e.g.
+<screen><prompt>$ </prompt>nixos-version --configuration-revision
+aa314ebd1592f6cdd53cb5bba8bcae97d9323de8
 </screen>
      </para>
     </listitem>
