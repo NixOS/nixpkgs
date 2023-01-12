@@ -11,7 +11,7 @@
 # files.
 
 stdenv.mkDerivation rec {
-  version = "4.1.1";
+  version = "4.2.0";
   pname = "mpfr";
 
   src = fetchurl {
@@ -19,15 +19,8 @@ stdenv.mkDerivation rec {
       "https://www.mpfr.org/${pname}-${version}/${pname}-${version}.tar.xz"
       "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
     ];
-    hash = "sha256-/9GVvVZ9uv/DuYsj/QCq0FN2gMmJYXHkT+P/eeKKwz0=";
+    hash = "sha256-BqN43xNQEkjBsttaqXeiyBJq6Emp2be+JUb7Spwm2ZM=";
   };
-
-  patches = [
-    (fetchurl { # https://gitlab.inria.fr/mpfr/mpfr/-/issues/1
-      url = "https://www.mpfr.org/mpfr-4.1.1/patch01";
-      hash = "sha256-gKPCcJviGsqsEqnMmYiNY6APp3+3VXbyBf6LoZhP9Eo=";
-    })
-  ];
 
   outputs = [ "out" "dev" "doc" "info" ];
 
