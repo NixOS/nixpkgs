@@ -7734,6 +7734,8 @@ with pkgs;
 
   gridtracker = callPackage ../applications/radio/gridtracker { };
 
+  grig = callPackage ../applications/radio/grig { };
+
   grin = callPackage ../tools/text/grin { };
 
   gyb = callPackage ../tools/backup/gyb { };
