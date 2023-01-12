@@ -57,6 +57,7 @@ let
     go-gir-generator = callPackage ./go-package/go-gir-generator { };
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
     dde-api = callPackage ./go-package/dde-api { inherit replaceAll; };
+    dde-daemon = callPackage ./go-package/dde-daemon { };
     deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
     deepin-desktop-schemas = callPackage ./go-package/deepin-desktop-schemas { };
 
