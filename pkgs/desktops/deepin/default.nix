@@ -22,6 +22,9 @@ let
 
     #### Dtk Application
     deepin-calculator = callPackage ./apps/deepin-calculator { };
+
+    #### ARTWORK
+    deepin-icon-theme = callPackage ./artwork/deepin-icon-theme { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
