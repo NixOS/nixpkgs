@@ -29,6 +29,9 @@ let
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
 
+    #### CORE
+    dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
+
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
     deepin-calculator = callPackage ./apps/deepin-calculator { };
