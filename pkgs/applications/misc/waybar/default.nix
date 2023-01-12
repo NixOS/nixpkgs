@@ -35,20 +35,20 @@
 
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.16";
+  version = "0.9.17";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    sha256 = "sha256-hcU0ijWIN7TtIPkURVmAh0kanQWkBUa22nubj7rSfBs=";
+    sha256 = "sha256-sdNenmzI/yvN9w4Z83ojDJi+2QBx2hxhJQCFkc5kCZw=";
   };
 
   nativeBuildInputs = [
     meson ninja pkg-config scdoc wrapGAppsHook
   ] ++ lib.optional withMediaPlayer gobject-introspection;
 
-  propagatedBuildInputs = lib.optionals withMediaPlayer [
+  propagatedBuildInputs = [ playerctl ] ++ lib.optionals withMediaPlayer [
     glib
     playerctl
     python3.pkgs.pygobject3
