@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, ghc, glibcLocales }:
+{ lib, mkDerivation, fetchFromGitHub, ghc }:
 
 mkDerivation rec {
   pname = "cubical";
@@ -11,15 +11,15 @@ mkDerivation rec {
     hash = "sha256-bnHz5uZXZnn1Zd36tq/veA4yT7dhJ1c+AYpgdDfSRzE=";
   };
 
-  LC_ALL = "en_US.UTF-8";
-
-  preConfigure = ''export AGDA_EXEC=agda'';
+  LC_ALL = "C.UTF-8";
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
-  nativeBuildInputs = [ ghc glibcLocales ];
+  nativeBuildInputs = [ ghc ];
   buildPhase = ''
+    runHook preBuild
     make
+    runHook postBuild
   '';
 
   meta = with lib; {
@@ -28,6 +28,6 @@ mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice ryanorendorff ];
+    maintainers = with maintainers; [ alexarice ryanorendorff ncfavier ];
   };
 }
