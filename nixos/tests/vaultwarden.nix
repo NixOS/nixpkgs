@@ -107,7 +107,7 @@ let
 
                   wait = WebDriverWait(driver, 10)
 
-                  wait.until(EC.title_contains("Create Account"))
+                  wait.until(EC.title_contains("Create account"))
 
                   driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_email').send_keys(
                       '${userEmail}'
@@ -122,18 +122,20 @@ let
                       '${userPassword}'
                   )
 
-                  driver.find_element(By.XPATH, "//button[contains(., 'Create Account')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Create account')]").click()
 
-                  wait.until_not(EC.title_contains("Create Account"))
+                  wait.until_not(EC.title_contains("Create account"))
+
+                  driver.find_element(By.XPATH, "//button[contains(., 'Continue')]").click()
 
                   driver.find_element(By.CSS_SELECTOR, 'input#login_input_master-password').send_keys(
                       '${userPassword}'
                   )
-                  driver.find_element(By.XPATH, "//button[contains(., 'Log In')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Log in')]").click()
 
-                  wait.until(EC.title_contains("Bitwarden Web Vault"))
+                  wait.until(EC.title_contains("Vaultwarden Web Vault"))
 
-                  driver.find_element(By.XPATH, "//button[contains(., 'Add Item')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'Add item')]").click()
 
                   driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
                       'secrets'
