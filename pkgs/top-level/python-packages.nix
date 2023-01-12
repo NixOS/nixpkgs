@@ -5888,6 +5888,8 @@ self: super: with self; {
 
   moat-ble = callPackage ../development/python-modules/moat-ble { };
 
+  mobly = callPackage ../development/python-modules/mobly { };
+
   mocket = callPackage ../development/python-modules/mocket { };
 
   mock = callPackage ../development/python-modules/mock { };
