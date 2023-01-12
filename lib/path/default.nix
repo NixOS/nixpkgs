@@ -7,6 +7,7 @@ let
     isPath
     split
     match
+    typeOf
     ;
 
   inherit (lib.lists)
@@ -116,6 +117,25 @@ let
         else recurse ([ (baseNameOf path) ] ++ components) (dirOf path);
     in recurse [];
 
+  # Same as lib.path.hasPrefix (see docs), but it can be reused by lib.path.hasProperPrefix as well
+  internalHasPrefix = function: prefix: path:
+    let
+      deconPrefix = deconstructPath prefix;
+      deconPath = deconstructPath path;
+    in
+    assert assertMsg
+      (isPath prefix)
+      "${function}: First argument is of type ${typeOf prefix}, but a path was expected";
+    assert assertMsg
+      (isPath path)
+      "${function}: Second argument is of type ${typeOf path}, but a path was expected";
+    assert assertMsg
+      (deconPrefix.root == deconPath.root) ''
+        ${function}: Filesystem roots must be the same for both paths, but paths with different roots were given:
+            first argument: "${toString prefix}" (root "${toString deconPrefix.root}")
+            second argument: "${toString path}" (root "${toString deconPath.root}")'';
+    take (length deconPrefix.components) deconPath.components == deconPrefix.components;
+
 in /* No rec! Add dependencies on this file at the top. */ {
 
   deconstructPath = path:
@@ -171,6 +191,74 @@ in /* No rec! Add dependencies on this file at the top. */ {
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
+
+  /*
+  Whether the second path is a prefix of the first path, or equal to it.
+  Throws an error if the paths don't share the same filesystem root.
+
+  Laws:
+
+  - Equivalent to whether some subpath exists that can be appended to the first path to get the second path:
+
+        hasPrefix p q <-> exists s . append p s == q
+
+  - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values
+
+  - `lib.path.hasProperPrefix` is the [corresponding strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Correspondence_of_strict_and_non-strict_partial_order_relations):
+
+        hasPrefix p q <-> hasProperPrefix p q || p == q
+
+  Type:
+    hasPrefix :: Path -> Path -> Bool
+
+  Example:
+    hasPrefix /foo /foo/bar
+    => true
+    hasPrefix /foo /foo
+    => true
+    hasPrefix /foo/bar /foo
+    => false
+    hasPrefix /. /foo
+    => true
+  */
+  hasPrefix =
+    # The potential path prefix
+    prefix:
+    # The path that that might start with the given prefix
+    path:
+    internalHasPrefix "lib.path.hasPrefix" prefix path;
+
+  /*
+  Whether the second path is a prefix of the first path and not equal to it.
+  Throws an error if the paths don't share the same filesystem root.
+
+  Laws:
+
+  - `hasProperPrefix` is a [strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Strict_partial_order) over the set of all path values
+
+  - `lib.path.hasPrefix` is the [corresponding non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Correspondence_of_strict_and_non-strict_partial_order_relations):
+
+        hasProperPrefix p q <-> hasPrefix p q && p != q
+
+  Type:
+    hasProperPrefix :: Path -> Path -> Bool
+
+  Example:
+    hasProperPrefix /foo /foo/bar
+    => true
+    hasProperPrefix /foo /foo
+    => false
+    hasProperPrefix /foo/bar /foo
+    => false
+    hasProperPrefix /. /foo
+    => true
+  */
+  hasProperPrefix =
+    # The potential path prefix
+    prefix:
+    # The path that that might start with the given prefix
+    path:
+    internalHasPrefix "lib.path.hasProperPrefix" prefix path && prefix != path;
 
   /* Whether a value is a valid subpath string.
 
