@@ -17381,6 +17381,8 @@ with pkgs;
 
   malt = callPackage ../development/tools/profiling/malt {};
 
+  marksman = callPackage ../development/tools/marksman { };
+
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
@@ -32481,7 +32483,10 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission = callPackage ../applications/networking/p2p/transmission {
+    # https://github.com/NixOS/nixpkgs/issues/207047
+    openssl = openssl_legacy;
+  };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
