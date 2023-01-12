@@ -21837,8 +21837,9 @@ with pkgs;
 
   mesa = callPackage ../development/libraries/mesa {
     llvmPackages = llvmPackages_latest;
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
-    inherit (darwin.apple_sdk.libs) Xplugin;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
