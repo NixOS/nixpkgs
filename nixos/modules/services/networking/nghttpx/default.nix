@@ -109,6 +109,7 @@ in
 
     systemd.services = {
       nghttpx = {
+        path = [ pkgs.python3 pkgs.openssl.bin ];
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
         script   = ''
