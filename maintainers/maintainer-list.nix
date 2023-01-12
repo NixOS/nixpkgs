@@ -13065,6 +13065,12 @@
     githubId = 6362238;
     name = "Christoph Honal";
   };
+  stasjok = {
+    name = "Stanislav Asunkin";
+    email = "nixpkgs@stasjok.ru";
+    github = "stasjok";
+    githubId = 1353637;
+  };
   steamwalker = {
     email = "steamwalker@xs4all.nl";
     github = "steamwalker";
