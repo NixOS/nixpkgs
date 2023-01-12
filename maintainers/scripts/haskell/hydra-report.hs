@@ -112,7 +112,8 @@ main = do
       ["get-report"] -> getBuildReports
       ["ping-maintainers"] -> printMaintainerPing
       ["mark-broken-list"] -> printMarkBrokenList
-      _ -> putStrLn "Usage: get-report | ping-maintainers | mark-broken-list"
+      ["eval-info"] -> printEvalInfo
+      _ -> putStrLn "Usage: get-report | ping-maintainers | mark-broken-list | eval-info"
 
 reportFileName :: IO FilePath
 reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
@@ -396,12 +397,22 @@ jobTotals (summaryBuilds -> Table mapping) = getSum <$> Table (Map.foldMapWithKe
 details :: Text -> [Text] -> [Text]
 details summary content = ["<details><summary>" <> summary <> " </summary>", ""] <> content <> ["</details>", ""]
 
+evalLine :: Eval -> UTCTime -> Text
+evalLine Eval{id, jobsetevalinputs = JobsetEvalInputs{nixpkgs = Nixpkgs{revision}}} fetchTime =
+  "*evaluation ["
+   <> showT id
+   <> "](https://hydra.nixos.org/eval/"
+   <> showT id
+   <> ") of nixpkgs commit ["
+   <> Text.take 7 revision
+   <> "](https://github.com/NixOS/nixpkgs/commits/"
+   <> revision
+   <> ") as of "
+   <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
+   <> "*"
+
 printBuildSummary :: Eval -> UTCTime -> StatusSummary -> [(Text, Int)] -> Text
-printBuildSummary
-   Eval{id, jobsetevalinputs = JobsetEvalInputs{nixpkgs = Nixpkgs{revision}}}
-   fetchTime
-   summary
-   topBrokenRdeps =
+printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
       Text.unlines $
          headline <> [""] <> tldr <> (("  * "<>) <$> (errors <> warnings)) <> [""]
             <> totals
@@ -416,25 +427,14 @@ printBuildSummary
             <> footer
      where
       footer = ["*Report generated with [maintainers/scripts/haskell/hydra-report.hs](https://github.com/NixOS/nixpkgs/blob/haskell-updates/maintainers/scripts/haskell/hydra-report.hs)*"]
+      headline =
+        [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
+        , evalLine eval fetchTime ]
       totals =
          [ "#### Build summary"
          , ""
          ]
             <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT numSummary
-      headline =
-         [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
-         , "*evaluation ["
-            <> showT id
-            <> "](https://hydra.nixos.org/eval/"
-            <> showT id
-            <> ") of nixpkgs commit ["
-            <> Text.take 7 revision
-            <> "](https://github.com/NixOS/nixpkgs/commits/"
-            <> revision
-            <> ") as of "
-            <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
-            <> "*"
-         ]
       brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
       numSummary = statusToNumSummary summary
       jobsByState predicate = Map.filter (predicate . worstState) summary
@@ -468,6 +468,11 @@ printBuildSummary
       outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
       maintainedJob = Map.lookup "maintained" summary
       mergeableJob = Map.lookup "mergeable" summary
+
+printEvalInfo :: IO ()
+printEvalInfo = do
+   (eval, fetchTime, _) <- readBuildReports
+   putStrLn (Text.unpack $ evalLine eval fetchTime)
 
 printMaintainerPing :: IO ()
 printMaintainerPing = do
