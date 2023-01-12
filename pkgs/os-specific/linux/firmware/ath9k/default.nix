@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       name = "${finalAttrs.pname}-${finalAttrs.version}-update";
       shellHook = ''
         echo 'rec {'
-        echo '  BASEDIR="$NIX_BUILD_TOP";'
+        echo '  BASEDIR = "$NIX_BUILD_TOP";'
         make --dry-run --print-data-base -f ${finalAttrs.src}/Makefile download \
           | egrep    '^[A-Z]+_(VER|URL|SUM|DIR) = ' \
           | sed 's_\([^ ]*\) = \(.*\)_\1 = "\2\";_' \
