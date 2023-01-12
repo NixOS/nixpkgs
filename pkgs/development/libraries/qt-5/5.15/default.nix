@@ -67,6 +67,7 @@ let
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
+      ./qtwebengine-darwin-checks.patch
     ];
     qtwebkit = [
       (fetchpatch {
