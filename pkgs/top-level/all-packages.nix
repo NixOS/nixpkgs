@@ -9100,6 +9100,8 @@ with pkgs;
 
   jump = callPackage ../tools/system/jump {};
 
+  larynx = callPackage ../tools/audio/larynx { };
+
   latex2html = callPackage ../tools/misc/latex2html { };
 
   lazycli = callPackage ../tools/misc/lazycli { };
