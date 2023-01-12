@@ -195,7 +195,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.1.3";
+  hassVersion = "2023.1.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -213,7 +213,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-BYUh6rOW6GgOSaN9zDtwn+aiHcNI5BBns9jPc3A3DdI=";
+    hash = "sha256-up6AKdrbiLuVf58yDUGlNME7qVFbegnnb3zoTF4Gj3s=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
