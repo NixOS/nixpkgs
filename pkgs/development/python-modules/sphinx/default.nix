@@ -30,29 +30,29 @@
 
 # check phase
 , cython
+, filelock
 , html5lib
 , pytestCheckHook
-, typed-ast
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "5.3.0";
+  version = "7.0.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-80bVg1rfBebgSOKbWkzP84vpm39iLgM8lWlVD64nSsQ=";
     postFetch = ''
-      cd $out
-      mv tests/roots/test-images/testimäge.png \
-        tests/roots/test-images/testimæge.png
-      patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
+      # Change ä to æ in file names, since ä can be encoded multiple ways on different
+      # filesystems, leading to different hashes on different platforms.
+      cd "$out";
+      mv tests/roots/test-images/{testimäge,testimæge}.png
+      sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
+    hash = "sha256-DUUdHvmuxWw06ycH6qFE2LZ9GTzOqdvdPnye8cvVBOQ=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    babel
     alabaster
+    babel
     docutils
     imagesize
     jinja2
@@ -84,67 +84,20 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     cython
+    filelock
     html5lib
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typed-ast
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export HOME=$TMPDIR
   '';
 
-  disabledTests = [
-    # requires network access
-    "test_anchors_ignored"
-    "test_defaults"
-    "test_defaults_json"
-    "test_latex_images"
-
-    # requires imagemagick (increases build closure size), doesn't
-    # test anything substantial
-    "test_ext_imgconverter"
-
-    # fails with pygments 2.14
-    # TODO remove for sphinx 6
-    "test_viewcode"
-    "test_additional_targets_should_be_translated"
-    "test_additional_targets_should_not_be_translated"
-
-    # sphinx.errors.VersionRequirementError: The alabaster extension
-    # used by this project needs at least Sphinx v1.6; it therefore
-    # cannot be built with this version.
-    "test_needs_sphinx"
-
-    # Likely due to pygments 2.14 update
-    #  AssertionError: assert '5:11:17\u202fAM' == '5:11:17 AM'
-    "test_format_date"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
-    "test_inspect_main_url"
-    "test_auth_header_uses_first_match"
-    "test_linkcheck_allowed_redirects"
-    "test_linkcheck_request_headers"
-    "test_linkcheck_request_headers_no_slash"
-    "test_follows_redirects_on_HEAD"
-    "test_get_after_head_raises_connection_error"
-    "test_invalid_ssl"
-    "test_connect_to_selfsigned_with_tls_verify_false"
-    "test_connect_to_selfsigned_with_tls_cacerts"
-    "test_connect_to_selfsigned_with_requests_env_var"
-    "test_connect_to_selfsigned_nonexistent_cert_file"
-    "test_TooManyRedirects_on_HEAD"
-    "test_too_many_requests_retry_after_int_del"
-    "test_too_many_requests_retry_after_HTTP_date"
-    "test_too_many_requests_retry_after_without_header"
-    "test_too_many_requests_user_timeout"
-    "test_raises_for_invalid_status"
-    "test_auth_header_no_match"
-    "test_follows_redirects_on_GET"
-    "test_connect_to_selfsigned_fails"
-  ] ++ lib.optionals isPyPy [
+  disabledTests = lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
     "test_autosummary_generate_content_for_module"
