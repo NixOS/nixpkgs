@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
     homepage = "https://repo.or.cz/w/llpp.git";
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux;
+    # Project is unmaintained and fails to build:
+    # link.c:987:27: error: invalid operands to binary >= (have 'fz_location' and 'int')
+    broken = true;
     maintainers = with maintainers; [ pSub ];
     license = licenses.gpl3;
   };
