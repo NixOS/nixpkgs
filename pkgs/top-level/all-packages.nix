@@ -8383,6 +8383,18 @@ with pkgs;
 
   jadx = callPackage ../tools/security/jadx { };
 
+  inherit (callPackage ../tools/misc/jaeger { })
+    jaeger-agent
+    jaeger-all-in-one
+    jaeger-anonymizer
+    jaeger-collector
+    jaeger-es-index-cleaner
+    jaeger-ingester
+    jaeger-tracegen
+    jaeger-remote-storage
+    jaeger-query
+    ;
+
   jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
   jamesdsp-pulse = libsForQt5.callPackage ../applications/audio/jamesdsp {
     usePipewire = false;
