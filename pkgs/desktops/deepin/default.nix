@@ -29,6 +29,9 @@ let
     deepin-icon-theme = callPackage ./artwork/deepin-icon-theme { };
     deepin-gtk-theme = callPackage ./artwork/deepin-gtk-theme { };
     deepin-sound-theme = callPackage ./artwork/deepin-sound-theme { };
+
+    #### MISC
+    deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
   };
 in
 lib.makeScope libsForQt5.newScope packages
