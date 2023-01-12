@@ -17845,6 +17845,8 @@ with pkgs;
 
   python-language-server = callPackage ../development/dotnet-modules/python-language-server { };
 
+  python-matter-server = with python3Packages; toPythonApplication python-matter-server;
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };

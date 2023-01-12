@@ -9227,6 +9227,8 @@ self: super: with self; {
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
+  python-matter-server = callPackage ../development/python-modules/python-matter-server { };
+
   python-miio = callPackage ../development/python-modules/python-miio { };
 
   python-mimeparse = callPackage ../development/python-modules/python-mimeparse { };
