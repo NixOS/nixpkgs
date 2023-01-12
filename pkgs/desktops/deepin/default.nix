@@ -33,6 +33,7 @@ let
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-dock = callPackage ./core/dde-dock { };
+    dde-launcher = callPackage ./core/dde-launcher { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
 
