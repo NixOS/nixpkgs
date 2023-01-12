@@ -77,7 +77,6 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      netlify = automated-providers.netlify.overrideAttrs (o: { meta = o.meta // { broken = stdenv.isDarwin; }; });
       pass = automated-providers.pass.overrideAttrs (o: { meta = o.meta // { broken = stdenv.isDarwin; }; });
       tencentcloud = automated-providers.tencentcloud.overrideAttrs (o: { meta = o.meta // { broken = stdenv.isDarwin; }; });
       # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
