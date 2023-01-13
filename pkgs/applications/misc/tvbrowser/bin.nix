@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
 
 let
-  minimalJavaVersion = "8";
+  minimalJavaVersion = "11";
 
   desktopItem = makeDesktopItem {
     name = "tvbrowser";
@@ -19,12 +19,12 @@ in
 assert lib.versionAtLeast jre.version minimalJavaVersion;
 stdenv.mkDerivation rec {
   pname = "tvbrowser";
-  version = "4.0.1";
+  version = "4.2.7";
   name = "${pname}-bin-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%20${minimalJavaVersion}%20and%20higher%29/${version}/${pname}_${version}_bin.tar.gz";
-    sha256 = "0ahsirf6cazs5wykgbwsc6n35w6jprxyphzqmm7d370n37sb07pm";
+    hash = "sha256-A1ZLGHA1sSSafwWy6MlPikQMk+6CechftzFTLDaBfrs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --add-flags "-jar $out/share/java/${pname}/${pname}.jar" \
+      --add-flags "--module-path=lib:${pname}.jar -m ${pname}/tvbrowser.TVBrowser"  \
       --chdir "$out/share/java/${pname}"
   '';
 
