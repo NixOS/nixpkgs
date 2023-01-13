@@ -19089,7 +19089,6 @@ with pkgs;
 
   coinlive = callPackage ../tools/misc/coinlive {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
 
   cointop = callPackage ../applications/misc/cointop { };
