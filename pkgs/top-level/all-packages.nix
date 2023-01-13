@@ -20589,6 +20589,12 @@ with pkgs;
 
   libcutl = callPackage ../development/libraries/libcutl { };
 
+  libcxxrt = callPackage ../development/libraries/libcxxrt {
+    stdenv = if stdenv.hostPlatform.useLLVM or false
+             then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+             else stdenv;
+  };
+
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdatrie = callPackage ../development/libraries/libdatrie { };
