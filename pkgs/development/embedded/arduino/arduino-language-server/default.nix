@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "arduino-language-server";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduino-language-server";
     rev = version;
-    hash = "sha256-7xuVCD27gE8uDFBTQgBwH8bx8OWc9Lj71o27FYOSiTY=";
+    hash = "sha256-A5JcHdcSrRC1BxoJsPtLKBq1fu58SvwHm9hbgu8Uy5k=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-Xa26ilo95sQ/6dGvl4gB2bb0vzWXr+WPKLezAnZPeqM=";
+  vendorHash = "sha256-SKqorfgesYE0kXR/Fm6gI7Me0CxtDeNsTRGYuGJW+vo=";
 
   doCheck = false;
 
