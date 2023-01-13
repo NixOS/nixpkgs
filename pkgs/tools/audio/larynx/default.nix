@@ -50,6 +50,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    inherit larynx-train;
+  };
+
   meta = with lib; {
     changelog = "https://github.com/rhasspy/larynx2/releases/tag/v${version}";
     description = "A fast, local neural text to speech system";
