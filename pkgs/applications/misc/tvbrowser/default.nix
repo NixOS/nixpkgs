@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/${pname}
     cp -R runtime/tvbrowser_linux/* $out/share/${pname}
-    rm $out/share/${pname}/${pname}.sh
 
     mkdir -p $out/share/applications
     mv -t $out/share/applications $out/share/${pname}/${pname}.desktop
@@ -56,9 +55,12 @@ stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/${pname}  \
-      --add-flags "--module-path=lib:${pname}.jar -m ${pname}/tvbrowser.TVBrowser"  \
-      --chdir "$out/share/${pname}"
+    makeWrapper  \
+        $out/share/${pname}/${pname}.sh  \
+        $out/bin/${pname}  \
+        --prefix PATH : ${jdk}/bin  \
+        --prefix XDG_DATA_DIRS : $out/share  \
+        --set PROGRAM_DIR $out/share/${pname}
 
     runHook postInstall
   '';
