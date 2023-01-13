@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , buildPythonPackage
+, python
 , cairocffi
 , django
 , django_tagging
 , fetchFromGitHub
 , fetchpatch
 , gunicorn
+, mock
 , pyparsing
 , python-memcached
 , pythonOlder
@@ -71,6 +73,23 @@ buildPythonPackage rec {
   preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
+  '';
+
+  checkInputs = [ mock ];
+  checkPhase = ''
+    runHook preCheck
+
+    pushd webapp/
+    # avoid confusion with installed module
+    rm -r graphite
+    # redis not practical in test environment
+    substituteInPlace tests/test_tags.py \
+      --replace test_redis_tagdb _dont_test_redis_tagdb
+
+    DJANGO_SETTINGS_MODULE=tests.settings ${python.interpreter} manage.py test
+    popd
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
