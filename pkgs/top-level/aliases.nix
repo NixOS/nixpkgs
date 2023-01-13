@@ -652,6 +652,7 @@ mapAliases ({
   idea = throw "'idea' has been renamed to/replaced by 'jetbrains'"; # Converted to throw 2022-02-22
   ike = throw "ike has been removed, because it was unmaintained"; # Added 2022-05-26
   imapproxy = throw "imapproxy has been removed because it did not support a supported openssl version"; # added 2021-12-15
+  imag = throw "'imag' has been removed, upstream gone"; # Added 2023-01-13
   imagemagick7Big = imagemagickBig; # Added 2021-02-22
   imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
