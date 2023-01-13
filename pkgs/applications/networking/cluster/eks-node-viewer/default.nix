@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "eks-node-viewer";
-  version = "6a915ff6c89b00d5e8ff90e3fe0ce65dd12eca17";
+  version = "2022-12-10";
 
   src = fetchFromGitHub {
     owner = "awslabs";
