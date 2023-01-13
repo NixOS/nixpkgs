@@ -248,7 +248,7 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
-  ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
+  ] ++ optionals (isPy3k && hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++

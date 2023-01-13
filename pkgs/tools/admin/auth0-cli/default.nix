@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
-    rev = "tags/release/v${version}";
+    rev = "v${version}";
     hash = "sha256-FotjdMbQXDwkURSeye86sIFN60V//UlF7kZrwfkvTGY=";
   };
 

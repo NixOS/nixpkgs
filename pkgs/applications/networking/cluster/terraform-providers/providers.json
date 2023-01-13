@@ -121,20 +121,20 @@
     "vendorHash": "sha256-L4EoUqkA5/nAs65G+mvXfFt/FzrCN/BmJoFSCP4PC7Q="
   },
   "azuread": {
-    "hash": "sha256-itaFeOEnoTIJfACvJZCIe9RWNVgewdVFZzXUK7yGglQ=",
+    "hash": "sha256-N+ty5O7sJbCp/rdQrwytOHzPFkaIvT5+1pOcoBQF1aw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azuread",
     "owner": "hashicorp",
     "repo": "terraform-provider-azuread",
-    "rev": "v2.31.0",
+    "rev": "v2.32.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-ZLQV8hHh5U+qvBQovPxisPZ1BDUBH5YoKEt240bzQ0Y=",
+    "hash": "sha256-yCjfZruli5cIengL9f6ORsDWTY1BXwMr9g2Ohw+Q1Pc=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.38.0",
+    "rev": "v3.39.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -825,13 +825,13 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-2AR416LkqgfHdY18m4k/jqSet7G77HwHuGKilvS3Yig=",
+    "hash": "sha256-+aHlFu49BxdFqrVCEIEqpg+o2i4d5F1uZipc//Qipaw=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v3.39.0",
+    "rev": "v3.40.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-6dwFsEtlR3PtbshY6brauPN13seBmZda0Vkr65MAMhQ="
+    "vendorHash": "sha256-XwQTtOsg1rktv/Oc+eTJ+Jr+BJvLEQPCaRSeXdXxWB0="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
@@ -969,13 +969,13 @@
     "vendorHash": null
   },
   "scaleway": {
-    "hash": "sha256-dxXEGAkmemTHmGvKOwe3+xVE+nP4CAr82JmL3Nh+BQA=",
+    "hash": "sha256-k02p6eoo152SWalGCX4iXhkE5xN55HpQ9A31j7wuIPE=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.9.0",
+    "rev": "v2.9.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-bzx/Hl2JobtIa+ndvu1ssKg+faxt+JmJe4BL/go/0WY="
+    "vendorHash": "sha256-FbWLXt7MFn/86NlSwCYpSV/6Ft3xRcESoNcVxM1A4ng="
   },
   "secret": {
     "hash": "sha256-MmAnA/4SAPqLY/gYcJSTnEttQTsDd2kEdkQjQj6Bb+A=",
@@ -1032,11 +1032,11 @@
     "vendorHash": null
   },
   "snowflake": {
-    "hash": "sha256-Ku6r5yUi30R7bXmChF+F+8YuMe/KKdrXrOIUtGMM1Fk=",
+    "hash": "sha256-QikYp81omjlSckr/2oXCmAqiJlcMWuR120z86fP/zkE=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.55.0",
+    "rev": "v0.55.1",
     "spdx": "MIT",
     "vendorHash": "sha256-ulgTRY8qQ5oXONkwYtffRl1QMNnbvyn0zYiYqqvwrUU="
   },
@@ -1050,13 +1050,13 @@
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
   "spotinst": {
-    "hash": "sha256-OxpXh9wCsIjDSA6kDH9Gapkx0cWH8vFJoCxZu5FRPC8=",
+    "hash": "sha256-IhThsNLMHR29rOq1bDFsmySKFgvVxJ8twtjby6JxEc4=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.90.0",
+    "rev": "v1.91.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-L5nNi2DdchkjuWFOF7mOIiW3GzhDk6P66RQwyw0PhSM="
+    "vendorHash": "sha256-imMuIXBCg2k9Cp78V4MMkb/bMWRbpxnCuLCFaQrBg3Q="
   },
   "stackpath": {
     "hash": "sha256-nTR9HgSmuNCt7wxE4qqIH2+HA2igzqVx0lLRx6FoKrE=",
@@ -1187,13 +1187,13 @@
     "vendorHash": "sha256-EOBNoEW9GI21IgXSiEN93B3skxfCrBkNwLxGXaso1oE="
   },
   "vcd": {
-    "hash": "sha256-Gpib9vgd8t//WJj7tuVEUYGf4HitqE/Kz8RyhMglKsw=",
+    "hash": "sha256-EG4WSnUZr/QfUT1qqOBOGze5Ztxp0HSB9Q1YYgLXQqk=",
     "homepage": "https://registry.terraform.io/providers/vmware/vcd",
     "owner": "vmware",
     "repo": "terraform-provider-vcd",
-    "rev": "v3.8.1",
+    "rev": "v3.8.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-UT34mv0QN0Nq2+bRmAqFhslSzNe9iESUKEYLmjq9DRM="
+    "vendorHash": "sha256-fDMS1ne6EKAqQjfE4QT1A0ChloXKCrgZPcftxzN/JwU="
   },
   "venafi": {
     "hash": "sha256-/5X/+BilaYwi1Vce7mIvVeHjTpVX/OuYquZ+2BGfxrs=",

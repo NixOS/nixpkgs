@@ -28,8 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     (fetchpatch {
       # Fix HashIndexSizeTestCase.test_size_on_disk_accurate problems on ZFS,
       # see https://github.com/borgbackup/borg/issues/7250
-      url = "https://github.com/borgbackup/borg/pull/7252/commits/537a814e53e20013a041faa7192da005f137cf5b.patch";
-      hash = "sha256-dnF/FW8pS4Ub9aAL4b7zf6ZNjMZaiMqdtl5R+DlAZTM=";
+      url = "https://github.com/borgbackup/borg/pull/7252/commits/fe3775cf8078c18d8fe39a7f42e52e96d3ecd054.patch";
+      hash = "sha256-gdssHfhdkmRfSAOeXsq9Afg7xqGM3NLIq4QnzmPBhw4=";
     })
   ];
 

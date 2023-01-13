@@ -6,7 +6,7 @@
 , libxcrypt
 , glibcCross ? null
 , pam ? null
-, withTcb ? stdenv.isLinux, tcb
+, withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb, tcb
 }:
 let
   glibc =
