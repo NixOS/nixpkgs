@@ -15701,11 +15701,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  devserver = callPackage ../development/tools/rust/devserver {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-    openssl = openssl_1_1;
-  };
-
   devspace = callPackage ../development/tools/misc/devspace { };
 
   maturin = callPackage ../development/tools/rust/maturin {
