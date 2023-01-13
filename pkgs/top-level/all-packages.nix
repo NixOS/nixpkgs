@@ -21856,8 +21856,9 @@ with pkgs;
 
   mesa = callPackage ../development/libraries/mesa {
     llvmPackages = llvmPackages_latest;
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
-    inherit (darwin.apple_sdk.libs) Xplugin;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
@@ -22522,11 +22523,12 @@ with pkgs;
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
       inherit newScope;
-      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
+      inherit lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
       inherit bison cups dconf harfbuzz libGL perl gtk3 python3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
+      stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     });
 
   libsForQt5 = recurseIntoAttrs (import ./qt5-packages.nix {
@@ -36439,13 +36441,8 @@ with pkgs;
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_11
-    z3_4_8
-    z3_4_7;
+    z3_4_8;
   z3 = z3_4_8;
-  z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
-    python = python2;
-    stdenv = if stdenv.isDarwin then stdenv else gcc49Stdenv;
-  };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   zchaff = callPackage ../applications/science/logic/zchaff { };

@@ -3,12 +3,12 @@
 buildGoModule rec {
   pname = "yubikey-agent";
 
-  version = "unstable-2022-03-17";
+  version = "0.1.6";
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "yubikey-agent";
-    rev = "205a7ef2554625c7494038600d963123d6311873";
-    sha256 = "sha256-wJpN63KY5scmez6yYFsIr3JLEUB+YSl/XvoatIIeRI0=";
+    rev = "v${version}";
+    sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 
   buildInputs =
@@ -21,7 +21,7 @@ buildGoModule rec {
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
   '';
 
-  vendorSha256 = "sha256-SnjbkDPVjAnCbM2nLqBsuaPZwOmvDTKiUbi/93BlWVQ=";
+  vendorSha256 = "sha256-+IRPs3wm3EvIgfQRpzcVpo2JBaFQlyY/RI1G7XfVS84=";
 
   doCheck = false;
 
