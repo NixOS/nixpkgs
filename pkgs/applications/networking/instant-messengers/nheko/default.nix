@@ -23,6 +23,7 @@
 , pkg-config
 , nlohmann_json
 , coeurl
+, re2
 , libevent
 , curl
 , voipSupport ? true
@@ -32,13 +33,13 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "sha256-gid8XOZ1/hMDGNbse4GYfcAdqHiySWyy4isBgcpekIQ=";
+    sha256 = "sha256-4Xe3eRnDkgyYB+hUP8TBWTt+m29HVtgcqVEQUUsIpCY=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,7 @@ mkDerivation rec {
     qtquickcontrols2
     qtgraphicaleffects
     qtkeychain
+    re2
     coeurl
     libevent
     curl
