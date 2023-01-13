@@ -1,0 +1,14 @@
+diff --git a/photocollage/artwork.py b/photocollage/artwork.py
+index 493f179..cf8f69b 100644
+--- a/photocollage/artwork.py
++++ b/photocollage/artwork.py
+@@ -18,6 +18,9 @@ import base64
+ from io import BytesIO
+ 
+ import cairo
++
++import gi
++gi.require_version('GdkPixbuf', '2.0')
+ from gi.repository import GdkPixbuf
+ 
+ 

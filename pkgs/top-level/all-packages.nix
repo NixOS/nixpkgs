@@ -16140,6 +16140,9 @@ with pkgs;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
+  photocollage = callPackage ../applications/graphics/photocollage {
+    python = python3;
+  };
 
   # PHP interpreters, packages and extensions.
   #
