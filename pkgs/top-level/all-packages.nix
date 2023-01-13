@@ -15591,6 +15591,8 @@ with pkgs;
 
   shmig = callPackage ../development/tools/database/shmig { };
 
+  smlfmt = callPackage ../development/tools/smlfmt { };
+
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage ../development/compilers/smlnj {
