@@ -18186,7 +18186,7 @@ with pkgs;
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
 
   gradle-packages = import ../development/tools/build-managers/gradle {
-    inherit jdk8 jdk11 jdk17;
+    inherit jdk8 jdk11 jdk17 lib;
   };
   gradleGen = gradle-packages.gen;
   gradle_6 = callPackage gradle-packages.gradle_6 { };

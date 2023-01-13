@@ -1,4 +1,4 @@
-{ jdk8, jdk11, jdk17 }:
+{ jdk8, jdk11, jdk17, lib }:
 
 rec {
   gen =
@@ -32,12 +32,12 @@ rec {
       # true (or false if you want to disable this package's toolchain support).
       # For <6.7 versions, set this to false or passthru.tests will fail!
       #
-      # If true, this will enable the 'toolchains' attreibute and generate a
+      # If true, this will enable the 'toolchains' attribute and generate a
       # test in passthru.tests that verifies that:
       # a) The package can be used with Java toolchains via the javaToolchains
       #    argument
       # b) Gradle correctly picks up toolchains managed via this package
-      hasToolchainSupport ? false
+      hasToolchainSupport ? lib.versionAtLeast version "6.7"
     }:
 
     let
@@ -82,9 +82,9 @@ rec {
                 cp -rv lib/ $out/lib/gradle/
 
                 gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
-                test -f $gradle_launcher_jar
+                test -f "$gradle_launcher_jar"
                 echo '${propDefs}' > $out/lib/gradle/gradle.properties
-                makeWrapper ${java}/bin/java $out/bin/gradle \
+                makeWrapper "${java}"/bin/java $out/bin/gradle \
                   --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
               '';
 
@@ -110,8 +110,7 @@ rec {
                 mkdir $out/nix-support
                 echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
                 # Gradle will refuse to start without _both_ 5 and 6 versions of ncurses.
-                echo ${ncurses5} >> $out/nix-support/manual-runtime-dependencies
-                echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
+                { echo "${ncurses5}"; echo "${ncurses6}"; } >> $out/nix-support/manual-runtime-dependencies
               '';
 
             meta = with lib; {
@@ -136,7 +135,8 @@ rec {
               maintainers = with maintainers; [ lorenzleutgeb liff ];
             };
 
-            passthru.tests = (callPackage ./tests.nix { }) { inherit gradle; } //
+            passthru.tests = (callPackage ./tests.nix { }) (
+              { inherit gradle; } //
               lib.optionalAttrs hasToolchainSupport {
                 gradleWithToolchains =
                   let
@@ -144,7 +144,7 @@ rec {
                   in
                   if javaToolchains == toolchains then gradle # Avoids infinite recursion
                   else builder (args // { javaToolchains = toolchains; });
-              };
+              });
           };
         in
         gradle;
@@ -167,7 +167,6 @@ rec {
     nativeVersion = "0.22-milestone-24";
     sha256 = "11qz1xjfihnlvsblqqnd49kmvjq86pzqcylj6k1zdvxl4dd60iv1";
     defaultJava = jdk17;
-    hasToolchainSupport = true;
   };
 
   gradle_6 = gen {
@@ -175,6 +174,5 @@ rec {
     nativeVersion = "0.22-milestone-20";
     sha256 = "16iqh4bn7ndch51h2lgkdqyyhnd91fdfjx55fa3z3scdacl0491y";
     defaultJava = jdk11;
-    hasToolchainSupport = true;
   };
 }
