@@ -9,7 +9,7 @@
 , configText ? ""
 }:
 let
-  version = "2206";
+  version = "";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -36,7 +36,7 @@ let
     inherit version;
     src = fetchurl {
       url = "https://download3.vmware.com/software/CART23FQ2_LIN_2206_TARBALL/VMware-Horizon-Client-Linux-2206-8.6.0-20094634.tar.gz";
-      sha256 = "9819eae5708bf0d71156b81283e3a70100e2e22de9db827a8956ca8e83b2414a";
+      sha256 = "mBnq5XCL8NcRVrgSg+OnAQDi4i3p24J6iVbKjoOyQUo=";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
