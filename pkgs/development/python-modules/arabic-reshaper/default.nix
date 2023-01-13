@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "arabic-reshaper";
-  version = "2.1.4";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpcabd";
     repo = "python-arabic-reshaper";
-    rev = "v${version}";
-    hash = "sha256-qQGIC/KequOQZoxwm7AEkdPV0QpS7YoBV9v8ZA7AYQM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ucSC5aTvpnlAVQcT0afVecnoN3hIZKtzUhEQ6Qg0jQM=";
   };
 
   propagatedBuildInputs = [
