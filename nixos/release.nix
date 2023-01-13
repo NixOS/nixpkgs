@@ -1,12 +1,12 @@
-with import ../lib;
-
-{ nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
+{ lib ? import ../lib
+, nixpkgs ? { outPath = lib.cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 , configuration ? {}
 }:
 
-with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
+with lib;
+with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems lib; };
 
 let
 

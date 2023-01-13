@@ -21,7 +21,7 @@ let
   };
 
   nixpkgs' = builtins.removeAttrs (import ../pkgs/top-level/release.nix {
-    inherit supportedSystems;
+    inherit supportedSystems lib;
     nixpkgs = nixpkgsSrc;
   }) [ "unstable" ];
 
