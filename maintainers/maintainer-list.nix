@@ -7034,6 +7034,12 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  jovalie = {
+    email = "jovalie@proton.me";
+    github = "jovalie";
+    githubId = 18274535;
+    name = "Joan Puteri Zheng";
+  };
   jpas = {
     name = "Jarrod Pas";
     email = "jarrod@jarrodpas.com";
