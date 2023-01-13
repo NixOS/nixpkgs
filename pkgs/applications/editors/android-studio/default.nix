@@ -10,8 +10,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2021.3.1.17"; # "Android Studio Dolphin (2021.3.1)"
-    sha256Hash = "sha256-ia2wzg/6RreJTnv+2xQrH11SxDwXHmpsualaSfd3Vso=";
+    version = "2022.1.1.19"; # "Android Studio Electric Eel (2022.1.1)"
+    sha256Hash = "luxE6a2C86JB28ezuIZV49TyE314S1RcNXQnCQamjUA=";
   };
   betaVersion = {
     version = "2022.1.1.12"; # "Android Studio Electric Eel (2022.1.1) Beta 2"
