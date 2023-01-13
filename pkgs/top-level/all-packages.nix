@@ -6517,6 +6517,8 @@ with pkgs;
 
   driftctl = callPackage ../applications/networking/cluster/driftctl { };
 
+  eks-node-viewer = callPackage ../applications/networking/cluster/eks-node-viewer { };
+
   drill = callPackage ../tools/networking/drill {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
