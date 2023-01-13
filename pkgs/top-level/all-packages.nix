@@ -33060,9 +33060,7 @@ with pkgs;
 
   uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
 
-  umurmur = callPackage ../applications/networking/umurmur {
-    openssl = openssl_1_1;
-  };
+  umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = callPackage ../tools/virtualization/udocker { };
 
