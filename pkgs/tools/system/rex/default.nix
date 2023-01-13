@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchurl, perlPackages, rsync, ... }:
+{ pkgs, lib, fetchurl, perlPackages, rsync, installShellFiles, ... }:
 
 perlPackages.buildPerlPackage rec {
   pname = "Rex";
@@ -18,7 +18,7 @@ perlPackages.buildPerlPackage rec {
     rsync
   ];
 
-  nativeBuildInputs = with perlPackages; [ ParallelForkManager ];
+  nativeBuildInputs = with perlPackages; [ installShellFiles ParallelForkManager ];
 
   propagatedBuildInputs = with perlPackages; [
     AWSSignature4
@@ -43,6 +43,17 @@ perlPackages.buildPerlPackage rec {
   ];
 
   doCheck = false;
+
+  outputs = [ "out" ];
+
+  fixupPhase = ''
+    for sh in bash zsh; do
+      substituteInPlace ./share/rex-tab-completion.$sh \
+        --replace 'perl' "${pkgs.perl.withPackages (ps: [ ps.YAML ])}/bin/perl"
+    done
+    installShellCompletion --name _rex --zsh ./share/rex-tab-completion.zsh
+    installShellCompletion --name rex --bash ./share/rex-tab-completion.bash
+  '';
 
   meta = {
     homepage = "https://www.rexify.org";
