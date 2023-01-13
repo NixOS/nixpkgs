@@ -5,6 +5,7 @@
 , django
 , django_tagging
 , fetchFromGitHub
+, fetchpatch
 , gunicorn
 , pyparsing
 , python-memcached
@@ -30,6 +31,19 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-2HgCBKwLfxJLKMopoIdsEW5k/j3kNAiifWDnJ98a7Qo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-1.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/9c626006eea36a9fd785e8f811359aebc9774970.patch";
+      sha256 = "sha256-JMmdhLqsaRhUG2FsH+yPNl+cR7O2YLfKFliL2GU0aAk=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-2.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/2f178f490e10efc03cd1d27c72f64ecab224eb23.patch";
+      sha256 = "sha256-NL7K5uekf3NlLa58aFFRPJT9ktjqBeNlWC4Htd0fRQ0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cairocffi
