@@ -7732,6 +7732,8 @@ with pkgs;
 
   gridtracker = callPackage ../applications/radio/gridtracker { };
 
+  grig = callPackage ../applications/radio/grig { };
+
   grin = callPackage ../tools/text/grin { };
 
   gyb = callPackage ../tools/backup/gyb { };
@@ -37812,6 +37814,8 @@ with pkgs;
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
+
+  terraspace = callPackage ../applications/networking/cluster/terraspace {};
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
