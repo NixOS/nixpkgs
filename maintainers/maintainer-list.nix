@@ -6852,6 +6852,12 @@
     githubId = 3967312;
     name = "Jocelyn Thode";
   };
+  joedevivo = {
+     email = "55951+joedevivo@users.noreply.github.com";
+     github = "joedevivo";
+     githubId = 55951;
+     name = "Joe DeVivo";
+   };
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
@@ -9418,6 +9424,12 @@
     github = "mirrexagon";
     githubId = 1776903;
     name = "Andrew Abbott";
+  };
+  mislavzanic = {
+    email = "mislavzanic3@gmail.com";
+    github = "mislavzanic";
+    githubId = 48838244;
+    name = "Mislav Zanic";
   };
   misterio77 = {
     email = "eu@misterio.me";

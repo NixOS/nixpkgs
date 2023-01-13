@@ -1692,6 +1692,8 @@ with pkgs;
 
   git-bug = callPackage ../applications/version-management/git-bug { };
 
+  git-bug-migration = callPackage ../applications/version-management/git-bug-migration { };
+
   git-chglog = callPackage ../applications/version-management/git-chglog { };
 
   git-cinnabar = callPackage ../applications/version-management/git-cinnabar {
@@ -7730,6 +7732,10 @@ with pkgs;
     libdevil = libdevil-nox;
   };
 
+  gridtracker = callPackage ../applications/radio/gridtracker { };
+
+  grig = callPackage ../applications/radio/grig { };
+
   grin = callPackage ../tools/text/grin { };
 
   gyb = callPackage ../tools/backup/gyb { };
@@ -13498,6 +13504,8 @@ with pkgs;
 
   zim-tools = callPackage ../tools/text/zim-tools { };
 
+  zimfw = callPackage ../shells/zsh/zimfw { };
+
   zld = callPackage ../development/tools/zld { };
 
   par = callPackage ../tools/text/par { };
@@ -18793,6 +18801,8 @@ with pkgs;
       };
     };
   });
+
+  calcium = callPackage ../development/libraries/calcium {};
 
   cubeb = callPackage ../development/libraries/audio/cubeb {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
@@ -37731,6 +37741,8 @@ with pkgs;
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
+
+  terraspace = callPackage ../applications/networking/cluster/terraspace {};
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
