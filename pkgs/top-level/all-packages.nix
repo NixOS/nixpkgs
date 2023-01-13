@@ -35099,9 +35099,7 @@ with pkgs;
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
-  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten {
-    openssl = openssl_1_1;
-  };
+  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
 
   sienna = callPackage ../games/sienna { };
 
