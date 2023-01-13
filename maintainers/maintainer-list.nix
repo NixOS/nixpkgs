@@ -9831,6 +9831,16 @@
     githubId = 5047140;
     name = "Victor Collod";
   };
+  munksgaard = {
+    name = "Philip Munksgaard";
+    email = "philip@munksgaard.me";
+    github = "munksgaard";
+    githubId = 230613;
+    matrix = "@philip:matrix.munksgaard.me";
+    keys = [{
+      fingerprint = "5658 4D09 71AF E45F CC29 6BD7 4CE6 2A90 EFC0 B9B2";
+    }];
+  };
   muscaln = {
     email = "muscaln@protonmail.com";
     github = "muscaln";
