@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
@@ -37,6 +38,9 @@ buildPythonPackage rec {
     # optional backends
     "Redis"
     "Memcache"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # ignore flaky test
+    "test_cached_view_class"
   ];
 
   meta = with lib; {
