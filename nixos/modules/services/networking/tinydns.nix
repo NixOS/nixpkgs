@@ -42,6 +42,9 @@ with lib;
       description = "djbdns tinydns server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      # Ensure that pdns-recursor can bind port 53 before systemd-resolved's stub resolver attempts to.
+      before = [ "systemd-resolved.service" ];
+
       path = with pkgs; [ daemontools djbdns ];
       preStart = ''
         rm -rf /var/lib/tinydns

@@ -269,6 +269,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
       after = ["network.target" ];
+      # Ensure that knot can bind port 53 before systemd-resolved's stub resolver attempts to.
+      before = [ "systemd-resolved.service" ];
 
       serviceConfig = let
         # https://www.knot-dns.cz/docs/3.3/singlehtml/index.html#pre-requisites

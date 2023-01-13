@@ -187,6 +187,8 @@ in {
 
     systemd.services.pdns-recursor = {
       wantedBy = [ "multi-user.target" ];
+      # Ensure that pdns-recursor can bind port 53 before systemd-resolved's stub resolver attempts to.
+      before = [ "systemd-resolved.service" ];
 
       serviceConfig = {
         ExecStart = [ "" "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}" ];
