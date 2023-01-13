@@ -26564,6 +26564,8 @@ with pkgs;
 
   capitaine-cursors = callPackage ../data/icons/capitaine-cursors { };
 
+  capitaine-cursors-themed = callPackage ../data/icons/capitaine-cursors-themed { };
+
   carlito = callPackage ../data/fonts/carlito {};
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
