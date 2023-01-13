@@ -206,6 +206,9 @@ in
 
   preFixup = ''
     gappsWrapperArgs+=(
+        ${ # we cannot use runtimeDependencies otherwise libdbusmenu do not work on kde
+          lib.optionalString stdenv.isLinux
+          "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"}
       # Add gio to PATH so that moving files to the trash works when not using a desktop environment
       --prefix PATH : ${glib.bin}/bin
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
