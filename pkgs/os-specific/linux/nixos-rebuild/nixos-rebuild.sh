@@ -148,10 +148,6 @@ if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
-if [[ -z "$buildHost" && -n "$targetHost" ]]; then
-    buildHost="$targetHost"
-fi
-
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
     if [ -n "$verboseScript" ]; then

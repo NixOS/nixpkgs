@@ -258,6 +258,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>--target-host</literal> and
+          <literal>--build-host</literal> options of
+          <literal>nixos-rebuild</literal> no longer treat the
+          <literal>localhost</literal> value specially – to build
+          on/deploy to local machine, omit the relevant flag.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>nix.readOnlyStore</literal> option has been
           renamed to <literal>boot.readOnlyNixStore</literal> to clarify
           that it configures the NixOS boot process, not the Nix daemon.
