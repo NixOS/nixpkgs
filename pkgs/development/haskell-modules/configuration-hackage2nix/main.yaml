@@ -310,6 +310,7 @@ package-maintainers:
     - pandoc
     - paths
     - postgresql-simple
+    - purebred-email
     - reflex-dom
     - releaser
     - replace-megaparsec
