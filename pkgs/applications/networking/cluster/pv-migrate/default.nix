@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    ldflags+=" -X main.date=$(date +%Y-%m-%d-%T)"
+    ldflags+=" -X main.date=1970-01-01-00:00:01"
   '';
 
   meta = with lib; {
