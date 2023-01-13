@@ -5,6 +5,7 @@
 , pkg-config
 , openssl
 , olm
+, re2
 , spdlog
 , nlohmann_json
 , coeurl
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "sha256-x2c+wZWAWYoKxSqEezoInw3SwcGo9dQNDvuq7racLBA=";
+    sha256 = "sha256-39tdTY2emN3/FxZxwl6dcQn1bOgybws166wqFPJl68M=";
   };
 
   postPatch = ''
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     nlohmann_json
     openssl
     olm
+    re2
     coeurl
     libevent
     curl
