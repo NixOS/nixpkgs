@@ -20,11 +20,6 @@ buildPythonPackage rec {
     sha256 = "sha256-JLYMVS1ZqWBcwbakLFbNs5qCoo2rRTK77bkiKuVOy04=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Flask <= 2.1.2" "Flask <= 2.2"
-  '';
-
   propagatedBuildInputs = [
     cachelib
     flask
