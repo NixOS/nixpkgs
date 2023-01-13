@@ -17,6 +17,7 @@
 , libsodium
 , postgresql
 , gmp
+, gobject-introspection
 , foundationdb
 , capnproto
 , nettle
@@ -33,6 +34,7 @@
 , udev
 , libevdev
 , alsa-lib
+, graphene
 , ...
 }:
 
@@ -169,6 +171,11 @@ in
   libudev-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ udev ];
+  };
+
+  graphene-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ graphene gobject-introspection ];
   };
 
   nettle-sys = attrs: {
