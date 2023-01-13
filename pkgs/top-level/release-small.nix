@@ -1,13 +1,14 @@
 /* A small release file, with few packages to be built.  The aim is to reduce
    the load on Hydra when testing the `stdenv-updates' branch. */
 
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ lib ? import ../../lib
+, nixpkgs ? { outPath = lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs lib; };
 
 {
 

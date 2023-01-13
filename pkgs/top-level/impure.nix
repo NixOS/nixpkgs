@@ -75,6 +75,7 @@ in
       else []
 
 , crossOverlays ? []
+, lib ? import ../../lib
 
 , ...
 } @ args:

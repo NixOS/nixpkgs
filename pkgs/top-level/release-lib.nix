@@ -1,14 +1,11 @@
 { supportedSystems
+, lib ? import ../../lib
 , packageSet ? (import ../..)
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
-
-let
-  lib = import ../../lib;
-in with lib;
-
+with lib;
 rec {
 
   pkgs = packageSet (lib.recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);

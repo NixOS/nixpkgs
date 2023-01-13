@@ -38,6 +38,9 @@
   # list it returns.
   stdenvStages ? import ../stdenv
 
+, # Library functions for Nixpkgs
+  lib ? import ../../lib
+
 , # Ignore unexpected args.
   ...
 } @ args:
@@ -47,8 +50,6 @@ let # Rename the function arguments
   crossSystem0 = crossSystem;
 
 in let
-  lib = import ../../lib;
-
   inherit (lib) throwIfNot;
 
   checked =

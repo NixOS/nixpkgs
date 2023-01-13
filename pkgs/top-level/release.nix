@@ -8,7 +8,8 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
+{ lib ? import ../../lib
+, nixpkgs ? { outPath = lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
@@ -19,7 +20,7 @@
 , nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
+with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs lib; };
 
 let
 
