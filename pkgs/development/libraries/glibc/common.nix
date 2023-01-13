@@ -37,7 +37,6 @@
 , profilingLibraries ? false
 , withGd ? false
 , withLibcrypt ? false
-, meta
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
@@ -264,9 +263,5 @@ stdenv.mkDerivation ({
 
     maintainers = with maintainers; [ eelco ma27 ];
     platforms = platforms.linux;
-  } // meta;
-}
-
-// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preInstall = null; # clobber the native hook
+  } // (args.meta or {});
 })
