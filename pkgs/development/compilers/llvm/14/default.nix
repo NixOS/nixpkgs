@@ -114,7 +114,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -154,7 +154,7 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind

@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
+    libName = "cxxrt";
     updateScript = unstableGitUpdater { };
   };
 
