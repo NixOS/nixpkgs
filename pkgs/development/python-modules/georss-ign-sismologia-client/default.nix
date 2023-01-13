@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "georss-ign-sismologia-client";
-  version = "0.5";
+  version = "0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ign-sismologia-client";
-    rev = "v${version}";
-    hash = "sha256-i3VdxntFwieCmB4ihHRSCV5YKDyYytl3XnU/G1LwLhg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OLX6Megl5l8KDnd/G16QJ/wQn5AQc2cZ+LCbjuHFbwo=";
   };
 
   propagatedBuildInputs = [
