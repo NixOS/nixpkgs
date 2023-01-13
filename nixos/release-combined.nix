@@ -2,7 +2,8 @@
 # and nixos-14.04). The channel is updated every time the ‘tested’ job
 # succeeds, and all other jobs have finished (they may fail).
 
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ lib ? import ../lib
+, nixpkgs ? { outPath = lib.cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
 , limitedSupportedSystems ? [ "i686-linux" ]
@@ -12,7 +13,9 @@ let
 
   nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import ./.. {};
+  pkgs = import ./.. {
+    inherit lib;
+  };
 
   removeMaintainers = set: if builtins.isAttrs set
     then if (set.type or "") == "derivation"
@@ -23,13 +26,13 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit stableBranch;
+    inherit stableBranch lib;
     supportedSystems = supportedSystems ++ limitedSupportedSystems;
     nixpkgs = nixpkgsSrc;
   });
 
   nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    inherit supportedSystems;
+    inherit supportedSystems lib;
     nixpkgs = nixpkgsSrc;
   })) [ "unstable" ];
 

@@ -36,6 +36,7 @@ let
     if elem system systems then handleTest path args
     else {};
 
+  # TODO: make this overridable?
   nixosLib = import ../lib {
     # Experimental features need testing too, but there's no point in warning
     # about it, so we enable the feature flag.

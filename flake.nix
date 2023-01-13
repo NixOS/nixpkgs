@@ -11,6 +11,7 @@
         nixosSystem = args:
           import ./nixos/lib/eval-config.nix (
             args // {
+              lib = args.lib or final;
               modules = args.modules ++ [{
                 system.nixos.versionSuffix =
                   ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";

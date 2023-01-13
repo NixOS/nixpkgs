@@ -21,7 +21,7 @@ let
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
-      pkgs = import ./.. { inherit system; };
+      pkgs = import ./.. { inherit system lib; };
       callTest = config: {
         ${system} = hydraJob config.test;
       };
@@ -31,7 +31,7 @@ let
       allDrivers =
         import ./tests/all-tests.nix {
         inherit system;
-        pkgs = import ./.. { inherit system; };
+        pkgs = import ./.. { inherit system lib; };
         callTest = config: {
           ${system} = hydraJob config.driver;
         };

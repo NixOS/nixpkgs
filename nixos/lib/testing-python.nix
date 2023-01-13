@@ -1,6 +1,7 @@
 args@
 { system
-, pkgs ? import ../.. { inherit system config; }
+, lib ? import ../../lib
+, pkgs ? import ../.. { inherit system config lib; }
   # Use a minimal kernel?
 , minimal ? false
   # Ignored

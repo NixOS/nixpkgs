@@ -2,7 +2,8 @@
 # small subset of Nixpkgs, mostly useful for servers that need fast
 # security updates.
 
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ lib ? import ../lib
+, nixpkgs ? { outPath = lib.cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ] # no i686-linux
 }:
@@ -11,12 +12,13 @@ let
 
   nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import ./.. { system = "x86_64-linux"; };
-
-  lib = pkgs.lib;
+  pkgs = import ./.. {
+    inherit lib;
+    system = "x86_64-linux";
+  };
 
   nixos' = import ./release.nix {
-    inherit stableBranch supportedSystems;
+    inherit stableBranch supportedSystems lib;
     nixpkgs = nixpkgsSrc;
   };
 
