@@ -4,7 +4,7 @@
 , cairocffi
 , django
 , django_tagging
-, fetchPypi
+, fetchFromGitHub
 , gunicorn
 , pyparsing
 , python-memcached
@@ -24,9 +24,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Pxho1QWo2jJZYAMJx999bbELDVMr7Wp7wsssYPkc01o=";
+  src = fetchFromGitHub {
+    owner = "graphite-project";
+    repo = pname;
+    rev = version;
+    hash = "sha256-2HgCBKwLfxJLKMopoIdsEW5k/j3kNAiifWDnJ98a7Qo=";
   };
 
   propagatedBuildInputs = [
