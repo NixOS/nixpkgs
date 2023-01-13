@@ -40,8 +40,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Adds caching support to your Flask application";
-    homepage = "https://github.com/sh4nks/flask-caching";
+    description = "A caching extension for Flask";
+    homepage = "https://github.com/pallets-eco/flask-caching";
+    changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }
