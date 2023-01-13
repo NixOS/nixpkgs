@@ -2095,10 +2095,6 @@ self: super: {
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
 
-  # Test suite doesn't compile
-  # https://github.com/erebe/wstunnel/issues/145
-  wstunnel = dontCheck super.wstunnel;
-
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;
@@ -2319,4 +2315,8 @@ self: super: {
     revision = null;
     editedCabalFile = null;
   }) super.true-name);
+
+  # posix-api has had broken tests since 2020 (until at least 2023-01-11)
+  # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
+  posix-api = dontCheck super.posix-api;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
