@@ -1830,11 +1830,6 @@ with pkgs;
 
   git-subrepo = callPackage ../applications/version-management/git-subrepo { };
 
-  git-subset = callPackage ../applications/version-management/git-subset {
-    openssl = openssl_1_1;
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   git-subtrac = callPackage ../applications/version-management/git-subtrac { };
 
   git-sync = callPackage ../applications/version-management/git-sync { };
