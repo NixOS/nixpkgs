@@ -1093,6 +1093,8 @@ self: super: with self; {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  bambi = callPackage ../development/python-modules/bambi { };
+
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
