@@ -89,7 +89,7 @@ resholve.mkDerivation rec {
     description = "POSIX Shell script to quickly manage 2-monitors display";
     homepage = "https://github.com/Ventto/mons.git";
     license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ mschneider thiagokokada ];
     platforms = platforms.unix;
   };
 }
