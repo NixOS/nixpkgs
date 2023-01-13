@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Macchina-CLI";
     repo = pname;
-    rev = "tags/release/v${version}";
+    rev = "v${version}";
     hash = "sha256-zbQOmlFWpoQwf4rlDLn1V0vj1c66pVWrMROGANRDl9s=";
   };
 
