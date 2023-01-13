@@ -15,7 +15,6 @@
 , txamqp
 , urllib3
 , whisper
-, whitenoise
 }:
 
 buildPythonPackage rec {
@@ -57,7 +56,6 @@ buildPythonPackage rec {
     txamqp
     urllib3
     whisper
-    whitenoise
   ];
 
   postPatch = ''
