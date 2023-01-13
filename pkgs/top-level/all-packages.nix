@@ -32049,6 +32049,8 @@ with pkgs;
 
   qxw = callPackage ../applications/editors/qxw {};
 
+  qt-jdenticon = libsForQt5.callPackage ../development/libraries/qt-jdenticon {};
+
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
 
   rakarrack = callPackage ../applications/audio/rakarrack {

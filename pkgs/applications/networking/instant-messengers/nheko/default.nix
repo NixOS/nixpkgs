@@ -28,6 +28,7 @@
 , voipSupport ? true
 , gst_all_1
 , libnice
+, qt-jdenticon
 }:
 
 mkDerivation rec {
@@ -67,6 +68,7 @@ mkDerivation rec {
     coeurl
     libevent
     curl
+    qt-jdenticon
   ] ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optionals voipSupport (with gst_all_1; [
       gstreamer
