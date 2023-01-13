@@ -1,13 +1,14 @@
 { lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, mkl
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 , enableMemoryProfiling ? false
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
+, withMKL ? false
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
     bison imake which blas lapack curl tcl tk jdk
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx
+  ] ++ lib.optionals withMKL [ mkl ];
 
   patches = [
     ./no-usr-local-search-paths.patch
@@ -48,11 +50,14 @@ stdenv.mkDerivation rec {
   dontDisableStatic = static;
 
   preConfigure = ''
+    ${lib.optionalString withMKL ''
+      MKL="-L${mkl}/lib -Wl,--no-as-needed -lmkl_gf_lp64 -Wl,--start-group -lmkl_gnu_thread  -lmkl_core  -Wl,--end-group -fopenmp  -ldl -lpthread -lm"
+    ''}
     configureFlagsArray=(
       --disable-lto
       --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-      --with-blas="-L${blas}/lib -lblas"
-      --with-lapack="-L${lapack}/lib -llapack"
+      ${if withMKL then ''--with-blas="$MKL"'' else ''--with-blas="-L${blas}/lib -lblas"''}
+      ${if withMKL then "--with-lapack" else ''--with-lapack="-L${lapack}/lib -llapack"''}
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo
