@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java/${pname}
     cp -R * $out/share/java/${pname}
     rm $out/share/java/${pname}/${pname}.{sh,desktop}
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "--module-path=lib:${pname}.jar -m ${pname}/tvbrowser.TVBrowser"  \
       --chdir "$out/share/java/${pname}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
