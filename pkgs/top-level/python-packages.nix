@@ -8797,6 +8797,8 @@ self: super: with self; {
     inherit (pkgs) systemd;
   };
 
+  pyston-autoload = callPackage ../development/python-modules/pyston-autoload { };
+
   PyStemmer = callPackage ../development/python-modules/pystemmer { };
 
   pystray = callPackage ../development/python-modules/pystray { };
