@@ -3564,6 +3564,8 @@ self: super: with self; {
 
   formbox = callPackage ../development/python-modules/formbox { };
 
+  formulae = callPackage ../development/python-modules/formulae { };
+
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
