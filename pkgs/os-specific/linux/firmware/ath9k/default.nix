@@ -66,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit (finalAttrs) src;
     updateScript = writeScript "${finalAttrs.pname}-${finalAttrs.version}-updateScript" ''
       nix-shell '<nixpkgs>' -A ${finalAttrs.pname}${lib.optionalString enableUnstable "-unstable"}.passthru.update \
       > pkgs/os-specific/linux/firmware/ath9k/urls-and-hashes-${finalAttrs.version}.nix
