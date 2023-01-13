@@ -118,6 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
       is quite rare in the wifi world.  Wifi chips have their own
       dedicated general-purpose CPUs.  This source code allows you
       to see what those CPUs are doing and modify their behavior.
+
+      The mailing list archive contains a great deal of useful
+      information about the firmware:
+
+        http://lists.infradead.org/mailman/listinfo/ath9k_htc_fw
     '';
     license = with lib.licenses; [ # see NOTICE.txt for details
       bsd3                # almost everything; "the ClearBSD licence"
@@ -139,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     */
 
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    homepage = "http://lists.infradead.org/mailman/listinfo/ath9k_htc_fw";
+    homepage = "https://wireless.wiki.kernel.org/en/developers/gsoc/2012/ath9k_htc_open_firmware";
     downloadPage = "https://github.com/qca/open-ath9k-htc-firmware";
     changelog = "https://github.com/qca/open-ath9k-htc-firmware/tags";
   };
