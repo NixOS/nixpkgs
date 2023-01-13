@@ -5,17 +5,7 @@
 
   outputs = { self }:
     let
-      jobs = import ./pkgs/top-level/release.nix {
-        nixpkgs = self;
-      };
-
-      lib = import ./lib;
-
-      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
-    in
-    {
-      lib = lib.extend (final: prev: {
-
+      lib = (import ./lib).extend (final: prev: {
         nixos = import ./nixos/lib { lib = final; };
 
         nixosSystem = args:
@@ -34,6 +24,16 @@
             }
           );
       });
+
+      jobs = import ./pkgs/top-level/release.nix {
+        inherit lib;
+        nixpkgs = self;
+      };
+
+      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+    in
+    {
+      inherit lib;
 
       checks.x86_64-linux.tarball = jobs.tarball;
 
