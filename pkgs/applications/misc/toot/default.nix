@@ -2,19 +2,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "toot";
-  version = "0.29.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-SrPjotEkP8Z2uYB/4eAJAk3Zmzmr0xET69PmkxQCwFQ=";
+    sha256 = "sha256-qZk42zGHWpeN5rZPFw7xAmDIvhPzqTePU3If+p/L98c=";
   };
 
   checkInputs = with python3Packages; [ pytest ];
 
   propagatedBuildInputs = with python3Packages;
-    [ requests beautifulsoup4 future wcwidth urwid ];
+    [ requests beautifulsoup4 future wcwidth urwid psycopg2 ];
 
   checkPhase = ''
     py.test
