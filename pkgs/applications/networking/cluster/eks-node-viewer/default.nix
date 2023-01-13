@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-fuZIPRZdG7jbyMbnk6ocHL8LNEfNQtc2R361QMFTswQ";
 
   meta = with lib; {
-    description = "EKS Node Viewer";
+    description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
     changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${version}";
     license = licenses.afl20;
