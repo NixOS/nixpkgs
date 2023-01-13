@@ -16078,7 +16078,6 @@ with pkgs;
 
   cliscord = callPackage ../misc/cliscord {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
 
   clisp = callPackage ../development/interpreters/clisp {
