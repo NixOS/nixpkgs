@@ -80,7 +80,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Enterprise scalable realtime graphing";
     homepage = "http://graphiteapp.org/";
     license = licenses.asl20;
