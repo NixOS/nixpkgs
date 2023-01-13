@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
 
 let
+  minimalJavaVersion = "8";
+
   desktopItem = makeDesktopItem {
     name = "tvbrowser";
     exec = "tvbrowser";
@@ -13,13 +15,15 @@ let
     startupWMClass = "tvbrowser-TVBrowser";
   };
 
-in stdenv.mkDerivation rec {
+in
+assert lib.versionAtLeast jre.version minimalJavaVersion;
+stdenv.mkDerivation rec {
   pname = "tvbrowser";
   version = "4.0.1";
   name = "${pname}-bin-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%208%20and%20higher%29/${version}/${pname}_${version}_bin.tar.gz";
+    url = "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%20${minimalJavaVersion}%20and%20higher%29/${version}/${pname}_${version}_bin.tar.gz";
     sha256 = "0ahsirf6cazs5wykgbwsc6n35w6jprxyphzqmm7d370n37sb07pm";
   };
 
