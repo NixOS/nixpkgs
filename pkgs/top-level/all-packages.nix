@@ -18879,6 +18879,8 @@ with pkgs;
 
   cgui = callPackage ../development/libraries/cgui {};
 
+  charls = callPackage ../development/libraries/charls { };
+
   check = callPackage ../development/libraries/check {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
