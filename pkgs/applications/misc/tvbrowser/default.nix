@@ -53,22 +53,22 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/java/${pname}
-    cp -R runtime/tvbrowser_linux/* $out/share/java/${pname}
-    rm $out/share/java/${pname}/${pname}.sh
+    mkdir -p $out/share/${pname}
+    cp -R runtime/tvbrowser_linux/* $out/share/${pname}
+    rm $out/share/${pname}/${pname}.sh
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
     for i in 16 32 48 128; do
       mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-      ln -s $out/share/java/${pname}/imgs/${pname}$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+      ln -s $out/share/${pname}/imgs/${pname}$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
     done
 
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/${pname}  \
       --add-flags "--module-path=lib:${pname}.jar -m ${pname}/tvbrowser.TVBrowser"  \
-      --chdir "$out/share/java/${pname}"
+      --chdir "$out/share/${pname}"
 
     runHook postInstall
   '';
