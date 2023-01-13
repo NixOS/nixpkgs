@@ -36441,13 +36441,8 @@ with pkgs;
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_11
-    z3_4_8
-    z3_4_7;
+    z3_4_8;
   z3 = z3_4_8;
-  z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
-    python = python2;
-    stdenv = if stdenv.isDarwin then stdenv else gcc49Stdenv;
-  };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   zchaff = callPackage ../applications/science/logic/zchaff { };

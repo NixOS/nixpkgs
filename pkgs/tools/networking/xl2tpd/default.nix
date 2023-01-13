@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    homepage = "http://www.xelerance.com/software/xl2tpd/";
+    homepage = src.meta.homepage;
     description = "Layer 2 Tunnelling Protocol Daemon (RFC 2661)";
     platforms = platforms.linux;
     license = licenses.gpl2;
