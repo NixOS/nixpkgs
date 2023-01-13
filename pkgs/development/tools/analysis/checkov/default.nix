@@ -32,14 +32,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.1.20";
+  version = "2.2.258";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-dXpgm9S++jtBhuzX9db8Pm5LF6Qb4isXx5uyOGdWGUc=";
+    hash = "sha256-yggai2U6PFqct9s26qU53UK0Vxl9ZJD9FW4VTbSZd6I=";
   };
 
   patches = [
@@ -56,6 +56,7 @@ buildPythonApplication rec {
     aiohttp
     aiomultiprocess
     argcomplete
+    bc-detect-secrets
     bc-python-hcl2
     boto3
     cachetools
