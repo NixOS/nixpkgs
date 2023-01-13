@@ -31,7 +31,6 @@ stdenv.mkDerivation {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "\$(shell uname -r)" "${kernel.modDirVersion}" \
       --replace "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 

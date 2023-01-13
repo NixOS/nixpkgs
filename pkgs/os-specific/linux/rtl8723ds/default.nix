@@ -13,8 +13,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
 
   makeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
@@ -25,7 +24,6 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace "/sbin/depmod" "#" \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
