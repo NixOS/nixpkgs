@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, makeDesktopItem
 , stdenv
 , fetchzip
 , ant
@@ -16,19 +15,6 @@ let
     url = "https://www.tvbrowser.org/data/uploads/1372016422809_543/NewsPlugin.jar";
     hash = "sha256-5XoypuMd2AFBE2SJ6EdECuvq6D81HLLuu9UoA9kcKAM=";
   };
-
-  desktopItem = makeDesktopItem {
-    name = "tvbrowser";
-    exec = "tvbrowser";
-    icon = "tvbrowser";
-    comment = "Themeable and easy to use TV Guide";
-    desktopName = "TV-Browser";
-    genericName = "Electronic TV Program Guide";
-    categories = [ "AudioVideo" "TV" "Java" ];
-    startupNotify = true;
-    startupWMClass = "tvbrowser-TVBrowser";
-  };
-
 in
 assert lib.versionAtLeast jdk.version minimalJavaVersion;
 stdenv.mkDerivation rec {
@@ -46,6 +32,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     ant runtime-linux -Dnewsplugin.url=file://${newsPlugin}
+    ant tvbrowser-desktop-entry
 
     runHook postBuild
   '';
@@ -58,7 +45,10 @@ stdenv.mkDerivation rec {
     rm $out/share/${pname}/${pname}.sh
 
     mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    mv -t $out/share/applications $out/share/${pname}/${pname}.desktop
+    sed -e 's|=imgs/|='$out'/share/${pname}/imgs/|'  \
+        -e 's|=${pname}.sh|='$out'/bin/${pname}|'  \
+        -i $out/share/applications/${pname}.desktop
 
     for i in 16 32 48 128; do
       mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
