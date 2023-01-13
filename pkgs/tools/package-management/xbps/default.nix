@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, zlib, openssl, libarchive }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, which, zlib, openssl, libarchive }:
 
 stdenv.mkDerivation rec {
   pname = "xbps";
@@ -15,9 +15,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib openssl libarchive ];
 
-  patches = [ ./cert-paths.patch ];
+  patches = [
+    ./cert-paths.patch
+    # fix openssl 3
+    (fetchpatch {
+      url = "https://github.com/void-linux/xbps/commit/db1766986c4389eb7e17c0e0076971b711617ef9.patch";
+      hash = "sha256-CmyZdsHStPsELdEgeJBWIbXIuVeBhv7VYb2uGYxzUWQ=";
+    })
+  ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=deprecated-declarations";
 
   postPatch = ''
     # fix unprefixed ranlib (needed on cross)
