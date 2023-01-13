@@ -15,16 +15,6 @@ let
         doCheck = false;
       });
 
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.2.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
-        };
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-        doCheck = false;
-      });
-
     };
   };
 in
@@ -57,6 +47,7 @@ buildPythonApplication rec {
     aiomultiprocess
     argcomplete
     bc-detect-secrets
+    bc-jsonpath-ng
     bc-python-hcl2
     boto3
     cachetools
@@ -81,6 +72,7 @@ buildPythonApplication rec {
     policyuniverse
     prettytable
     pycep-parser
+    pyston-autoload
     pyyaml
     semantic-version
     tabulate
