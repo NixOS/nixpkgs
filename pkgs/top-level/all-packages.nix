@@ -19396,7 +19396,7 @@ with pkgs;
 
   funambol = callPackage ../development/libraries/funambol { };
 
-  gaiad = callPackage ../applications/blockchains/gaiad { } ; 
+  gaiad = callPackage ../applications/blockchains/gaiad { } ;
 
   galer = callPackage ../tools/security/galer { };
 
