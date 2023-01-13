@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
-, atomEnv, at-spi2-atk, autoPatchelfHook
+, atomEnv, at-spi2-atk, autoPatchelfHook, procps
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
 
 # Populate passthru.tests
@@ -138,6 +138,9 @@ let
 
       # this fixes bundled ripgrep
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
+      # this fixes "Node Debugger:Attach to process"
+      substituteInPlace resources/app/extensions/ms-vscode.js-debug/src/extension.js --replace "/bin/ps" "${procps}/bin/ps"
+
 
       # see https://github.com/gentoo/gentoo/commit/4da5959
       chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
