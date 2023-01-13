@@ -69,10 +69,19 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Electronic TV Program Guide";
+    downloadPage = "https://www.tvbrowser.org/index.php?id=tv-browser";
     homepage = "https://www.tvbrowser.org/";
+    changelog = "https://www.tvbrowser.org/index.php?id=news";
     sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    mainProgram = pname;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau yarny ];
+    longDescription = ''
+      TV-Browser shows TV program data arranged like in printed
+      TV programs after downloading it from the internet.
+      Plugins are used to download program data
+      and to provide additional functionality.
+    '';
   };
 }
