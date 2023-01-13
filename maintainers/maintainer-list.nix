@@ -16287,4 +16287,10 @@
     github = "Detegr";
     githubId = 724433;
   };
+  RossComputerGuy = {
+    name = "Tristan Ross";
+    email = "tristan.ross@midstall.com";
+    github = "RossComputerGuy";
+    githubId = 19699320;
+  };
 }
