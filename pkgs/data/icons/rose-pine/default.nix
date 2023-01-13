@@ -2,21 +2,9 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  variant ? "default",
-}: let
-  source-locations = {
-    default = "icons/rose-pine-icons";
-    moon = "icons/rose-pine-moon-icons";
-    dawn = "icons/rose-pine-dawn-icons";
-  };
-
-  source-location =
-    if builtins.hasAttr variant source-locations
-    then source-locations.${variant}
-    else abort "unknown rose-pine variant ${variant}";
-in
+}:
   stdenv.mkDerivation rec {
-    pname = "rose-pine-${variant}-icon-theme";
+    pname = "rose-pine-icon-theme";
     version = "unstable-2022-09-01";
 
     src = fetchFromGitHub {
@@ -33,7 +21,9 @@ in
       runHook preInstall
 
       mkdir -p $out/share/icons
-      mv ${source-location} $out/share/icons/rose-pine
+      mv icons/rose-pine-icons $out/share/icons/rose-pine
+      mv icons/rose-pine-dawn-icons $out/share/icons/rose-pine-dawn
+      mv icons/rose-pine-moon-icons $out/share/icons/rose-pine-moon
 
       runHook postInstall
     '';

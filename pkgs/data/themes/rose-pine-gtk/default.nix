@@ -4,20 +4,8 @@
   lib,
   gnome-themes-extra,
   gtk-engine-murrine,
-  gtk_engines,
-  variant ? "default",
-}: let
-  source-locations = {
-    default = "gtk3/rose-pine-gtk";
-    moon = "gtk3/rose-pine-moon-gtk";
-    dawn = "gtk3/rose-pine-dawn-gtk";
-  };
-
-  source-location =
-    if builtins.hasAttr variant source-locations
-    then source-locations.${variant}
-    else abort "unknown rose-pine variant ${variant}";
-in
+  gtk_engines
+}:
   stdenv.mkDerivation rec {
     pname = "rose-pine-${variant}-gtk-theme";
     version = "unstable-2022-09-01";
@@ -45,12 +33,10 @@ in
       runHook preInstall
 
       mkdir -p $out/share/themes
-      mv ${source-location} $out/share/themes/rose-pine
-      ${
-        if variant == "moon"
-        then "mv gnome_shell/moon/gnome-shell $out/share/themes/rose-pine"
-        else ""
-      }
+      mv gtk3/rose-pine-gtk $out/share/themes/rose-pine
+      mv gtk3/rose-pine-moon-gtk $out/share/themes/rose-pine-moon
+      mv gtk3/rose-pine-dawn-gtk $out/share/themes/rose-pine-dawn
+      mv gnome_shell/moon/gnome-shell $out/share/themes/rose-pine-moon
 
       runHook postInstall
     '';

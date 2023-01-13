@@ -27195,11 +27195,7 @@ with pkgs;
   roapi-http = callPackage ../servers/roapi/http.nix { };
 
   rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
-  rose-pine-dawn-gtk-theme = callPackage ../data/themes/rose-pine-gtk { variant = "dawn"; };
-  rose-pine-moon-gtk-theme = callPackage ../data/themes/rose-pine-gtk { variant = "moon"; };
   rose-pine-icon-theme = callPackage ../data/icons/rose-pine { };
-  rose-pine-dawn-icon-theme = callPackage ../data/icons/rose-pine { variant = "dawn"; };
-  rose-pine-moon-icon-theme = callPackage ../data/icons/rose-pine { variant = "moon"; };
 
   route159 = callPackage ../data/fonts/route159 { };
 
