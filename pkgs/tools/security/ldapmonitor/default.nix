@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ldapmonitor";
-  version = "1.3";
+  version = "1.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = pname;
-    rev = version;
-    hash = "sha256-lwTXvrnOVodCUQtR8FmCXiPuZ1Wx1ySfDKghpLXNuI4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BmTj/6dOUYfia6wO4nvkEW01MIC9TuBk4kYAsVHMsWY=";
   };
 
   sourceRoot = "${src.name}/python";
