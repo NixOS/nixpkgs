@@ -125,6 +125,35 @@ let
         };
       });
 
+      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
+        version = "13.15";
+        src = fetchFromGitHub {
+          owner = "python-telegram-bot";
+          repo = "python-telegram-bot";
+          rev = "v${version}";
+          hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
+        };
+        propagatedBuildInputs = [
+          self.APScheduler
+          self.cachetools
+          self.certifi
+          self.cryptography
+          self.decorator
+          self.future
+          self.tornado
+          self.urllib3
+        ];
+        setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
+        postPatch = ''
+          rm -r telegram/vendor
+          substituteInPlace requirements.txt \
+            --replace "APScheduler==3.6.3" "APScheduler" \
+            --replace "cachetools==4.2.2" "cachetools" \
+            --replace "tornado==6.1" "tornado"
+        '';
+        doCheck = false;
+      });
+
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.0";
         src = fetchFromGitHub {

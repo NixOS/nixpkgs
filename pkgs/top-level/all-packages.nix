@@ -29433,6 +29433,7 @@ with pkgs;
     jdk = jetbrains.jdk;
   }) // {
     jdk = callPackage ../development/compilers/jetbrains-jdk {  };
+    jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix { };
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
@@ -34613,9 +34614,7 @@ with pkgs;
 
   egoboo = callPackage ../games/egoboo { };
 
-  eidolon = callPackage ../games/eidolon {
-    openssl = openssl_1_1;
-  };
+  eidolon = callPackage ../games/eidolon { };
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
