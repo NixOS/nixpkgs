@@ -12581,9 +12581,10 @@ with pkgs;
 
   triggerhappy = callPackage ../tools/inputmethods/triggerhappy {};
 
-  trilium-desktop = callPackage ../applications/office/trilium/desktop.nix { };
-
-  trilium-server = callPackage ../applications/office/trilium/server.nix { };
+  inherit (callPackage ../applications/office/trilium {})
+    trilium-desktop
+    trilium-server
+    ;
 
   trousers = callPackage ../tools/security/trousers { };
 
