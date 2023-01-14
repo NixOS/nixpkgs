@@ -2,7 +2,7 @@
 , makeScopeWithSplicing, generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook
-, fetchgit, fetchurl, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
+, fetchgit, fetchzip, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
 , zlib, expat, libmd
 , runCommand, writeShellScript, writeText, symlinkJoin
 }:
@@ -74,6 +74,11 @@ in makeScopeWithSplicing
     inherit (self) mkDerivation;
   in {
   inherit freebsdSrc;
+
+  ports = fetchzip {
+    url = "https://cgit.freebsd.org/ports/snapshot/ports-dde3b2b456c3a4bdd217d0bf3684231cc3724a0a.tar.gz";
+    sha256 = "BpHqJfnGOeTE7tkFJBx0Wk8ryalmf4KNTit/Coh026E=";
+  };
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   # See note in ../netbsd/default.nix.
