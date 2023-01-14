@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "srvc";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "insilica";
     repo = "rs-srvc";
     rev = "v${version}";
-    sha256 = "sha256-XslMwA1DhztK9DPNCucUpzjCQXz6PN8ml8JBvKtJeqg=";
+    sha256 = "sha256-yeyAorVMHFl9wm57gmK6ZAI1w5daN2xl29Gqq0DsTtc=";
   };
 
-  cargoSha256 = "sha256-KxwBF5t8lcaH8ZD4SorIBiq7p6r9LGHfEOyNXtB9HJw=";
+  cargoHash = "sha256-/1TL0lWb4I9h6nGV7exx7U6ACrieN0EULTWg7Weexeg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
