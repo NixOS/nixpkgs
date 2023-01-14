@@ -339,6 +339,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>wordpress</literal> service now takes
+          configuration via the
+          <literal>services.wordpress.sites.&lt;name&gt;.settings</literal>
+          attribute set, <literal>extraConfig</literal> is still
+          available to append additional text to
+          <literal>wp-config.php</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           To reduce closure size in
           <literal>nixos/modules/profiles/minimal.nix</literal> profile
           disabled installation documentations and manuals. Also
