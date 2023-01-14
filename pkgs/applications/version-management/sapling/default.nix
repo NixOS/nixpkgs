@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, python38Packages
+, python3Packages
 , fetchFromGitHub
 , fetchurl
 , sd
@@ -90,11 +90,7 @@ let
   };
 
   # Builds the main `sl` binary and its Python extensions
-  #
-  # FIXME(lf-): when next updating this package, delete the python 3.8 override
-  # here, since the fix for https://github.com/facebook/sapling/issues/279 that
-  # required it will be in the next release.
-  sapling = python38Packages.buildPythonPackage {
+  sapling = python3Packages.buildPythonPackage {
     pname = "sapling-main";
     inherit src version;
 
@@ -135,7 +131,7 @@ let
     #    so that 'sl web' always works
     # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
     preFixup = ''
-      sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
+      sitepackages=$out/lib/${python3Packages.python.libPrefix}/site-packages
       chmod +w $sitepackages
       cp -r ${isl} $sitepackages/edenscm-isl
     '' + lib.optionalString (!enableMinimal) ''
