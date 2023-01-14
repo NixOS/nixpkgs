@@ -38159,6 +38159,8 @@ with pkgs;
     branch = "stable";
   };
 
+  discordo = callPackage ../applications/networking/discordo/default.nix { };
+
   discord-ptb = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
     inherit (pkgs) callPackage fetchurl;
