@@ -45,6 +45,11 @@ buildPythonPackage rec {
     Cocoa
   ];
 
+  # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "strictoverflow"
+  ];
+
   propagatedBuildInputs = [
     certifi
     contourpy

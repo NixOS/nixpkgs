@@ -528,6 +528,20 @@ in
         '';
     };
 
+    virtualisation.restrictNetwork =
+      mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description =
+          lib.mdDoc ''
+            If this option is enabled, the guest will be isolated, i.e. it will
+            not be able to contact the host and no guest IP packets will be
+            routed over the host to the outside. This option does not affect
+            any explicitly set forwarding rules.
+          '';
+      };
+
     virtualisation.vlans =
       mkOption {
         type = types.listOf types.ints.unsigned;
@@ -936,10 +950,11 @@ in
               else "'guestfwd=${proto}:${guest.address}:${toString guest.port}-" +
                    "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
           );
+        restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
       [
         "-net nic,netdev=user.0,model=virtio"
-        "-netdev user,id=user.0,${forwardingOptions}\"$QEMU_NET_OPTS\""
+        "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
 
     # FIXME: Consolidate this one day.

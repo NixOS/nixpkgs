@@ -49,6 +49,7 @@ stdenv.mkDerivation {
     alsa-lib
     at-spi2-core
     cups
+    gtk3
     libdrm
     libgcrypt
     libkrb5
@@ -58,7 +59,6 @@ stdenv.mkDerivation {
   ];
 
   runtimeDependencies = [
-    gtk3
     (lib.getLib systemd)
   ];
 

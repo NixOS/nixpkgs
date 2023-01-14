@@ -94,5 +94,6 @@ in
     };
     users.groups.litestream = {};
   };
-  meta.doc = ./litestream.xml;
+
+  meta.doc = ./default.xml;
 }

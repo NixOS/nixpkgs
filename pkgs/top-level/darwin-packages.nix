@@ -81,6 +81,20 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
+  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
+    inherit (pkgs) binutils-unwrapped;
+    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    dualAs = true;
+  };
+
+  binutilsDualAs = pkgs.wrapBintoolsWith {
+    libc =
+      if stdenv.targetPlatform != stdenv.hostPlatform
+      then pkgs.libcCross
+      else pkgs.stdenv.cc.libc;
+    bintools = self.binutilsDualAs-unwrapped;
+  };
+
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;

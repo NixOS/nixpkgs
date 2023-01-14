@@ -1,23 +1,14 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="module-services-litestream">
- <title>Litestream</title>
- <para>
-  <link xlink:href="https://litestream.io/">Litestream</link> is a standalone streaming
-  replication tool for SQLite.
- </para>
+# Litestream {#module-services-litestream}
 
- <section xml:id="module-services-litestream-configuration">
-  <title>Configuration</title>
+[Litestream](https://litestream.io/) is a standalone streaming
+replication tool for SQLite.
 
-  <para>
-   Litestream service is managed by a dedicated user named <literal>litestream</literal>
-   which needs permission to the database file. Here's an example config which gives
-   required permissions to access <link linkend="opt-services.grafana.settings.database.path">
-   grafana database</link>:
-<programlisting>
+## Configuration {#module-services-litestream-configuration}
+
+Litestream service is managed by a dedicated user named `litestream`
+which needs permission to the database file. Here's an example config which gives
+required permissions to access [grafana database](#opt-services.grafana.settings.database.path):
+```
 { pkgs, ... }:
 {
   users.users.litestream.extraGroups = [ "grafana" ];
@@ -58,8 +49,4 @@
     };
   };
 }
-</programlisting>
-  </para>
- </section>
-
-</chapter>
+```
