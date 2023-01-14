@@ -914,11 +914,11 @@ let
     };
   };
 
-  AppSqitch = buildPerlModule {
+  AppSqitch = buildPerlModule rec {
     version = "1.3.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.3.1.tar.gz";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/${pname}-v${version}.tar.gz";
       hash = "sha256-9edo0pjNQEfuKuQjGXgujCzaMSc3vL2/r1gL1H7+i5Q=";
     };
     buildInputs = [ CaptureTiny TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
