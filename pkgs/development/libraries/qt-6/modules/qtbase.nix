@@ -197,6 +197,10 @@ stdenv.mkDerivation rec {
 
   # https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
+    substituteInPlace src/gui/kernel/qguiapplication.cpp \
+        --replace 'qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH")' 'QByteArrayLiteral("@bin@/@qtPluginPrefix@/platforms")' \
+        --subst-var qtPluginPrefix \
+        --subst-var bin
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/QtAutoDetect.cmake --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
