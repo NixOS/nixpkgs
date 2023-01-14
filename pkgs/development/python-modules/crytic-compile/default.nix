@@ -1,14 +1,16 @@
 { lib
 , buildPythonPackage
+, cbor2
 , fetchFromGitHub
-, pythonOlder
+, pycryptodome
 , pysha3
+, pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.2.4";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,10 +19,12 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "crytic-compile";
     rev = "refs/tags/${version}";
-    hash = "sha256-phb4Y8CUxuHsNt43oKsgDAZTraNauPkcYQtzcsiWyy8=";
+    hash = "sha256-4iTvtu2TmxvLTyWm4PV0+yV1fRLYpJHZNBgjy1MFLjM=";
   };
 
   propagatedBuildInputs = [
+    cbor2
+    pycryptodome
     pysha3
     setuptools
   ];
