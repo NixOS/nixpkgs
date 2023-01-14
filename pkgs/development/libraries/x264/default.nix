@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
+  STRINGS = if stdenv.hostPlatform.useLLVM or false
+            then "${stdenv.cc.targetPrefix}llvm-strings"
+            else null;
+
   preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
     # `AS' is set to the binutils assembler, but we need nasm
     unset AS
