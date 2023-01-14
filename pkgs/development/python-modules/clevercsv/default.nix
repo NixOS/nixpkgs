@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cchardet
 , chardet
 , pandas
@@ -13,24 +12,20 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.7.4";
+  version = "0.7.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2OLvVJbqV/wR+Quq0cAlR/vCUe1/Km/nALwfoHD9B+U=";
+    hash = "sha256-zpnUw0ThYbbYS7CYgsi0ZL1qxbY4B1cy2NhrUU9uzig=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fixes compat with setuptools>=65.6.0
-      # https://github.com/alan-turing-institute/CleverCSV/issues/77
-      url = "https://github.com/alan-turing-institute/CleverCSV/commit/0614fe16fa0e8e08c4c916efc956209fe2aa8ce6.patch";
-      hash = "sha256-ZL0cc5Si8ga6kd3JhfaIUOWXdnEgep9tvHBVpXjsI+w=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "packaging>=23.0" "packaging"
+  '';
 
   propagatedBuildInputs = [
     cchardet
