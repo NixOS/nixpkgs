@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libgcrypt, libbaseencode }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libgcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "libcotp";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --replace "add_link_options(-Wl," "# add_link_options(-Wl,"
   '';
 
-  buildInputs = [ libbaseencode libgcrypt ];
+  buildInputs = [ libgcrypt ];
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
