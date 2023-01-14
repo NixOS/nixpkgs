@@ -4,15 +4,18 @@ set -euo pipefail
 
 cd $(dirname "${BASH_SOURCE[0]}")
 
-version=$(curl -s --show-error "https://api.github.com/repos/zadam/trilium/releases/latest" | jq -r '.tag_name' | tail -c +2)
-
-sha256_linux64=$(nix-prefetch-url --quiet https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz)
-sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz)
-
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
+    sed -i "s|$2 = \".*\"|$2 = \"${3:-}\"|" $1
 }
 
-setKV version $version
-setKV desktopSource.sha256 $sha256_linux64
-setKV serverSource.sha256 $sha256_linux64_server
+version=$(curl -s --show-error "https://api.github.com/repos/zadam/trilium/releases/latest" | jq -r '.tag_name' | tail -c +2)
+
+# Update desktop application
+sha256_linux64=$(nix-prefetch-url --quiet https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz)
+setKV ./desktop.nix version $version
+setKV ./desktop.nix desktopSource.sha256 $sha256_linux64
+
+# Update server
+sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz)
+setKV ./server.nix version $version
+setKV ./server.nix serverSource.sha256 $sha256_linux64_server
