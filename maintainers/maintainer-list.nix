@@ -2047,6 +2047,12 @@
     github = "brianmcgee";
     githubId = 1173648;
   };
+  brprice = {
+    name = "Ben Price";
+    email = "ben-nixos@brprice.uk";
+    github = "brprice";
+    githubId = 5623458;
+  };
   Br1ght0ne = {
     email = "brightone@protonmail.com";
     github = "Br1ght0ne";
