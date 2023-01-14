@@ -98,6 +98,10 @@ stdenv.mkDerivation {
   '';
 
   postPatch = ''
+    substituteInPlace src/gui/kernel/qguiapplication.cpp \
+        --replace 'qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH")' 'QByteArrayLiteral("@bin@/@qtPluginPrefix@/platforms")' \
+        --subst-var qtPluginPrefix \
+        --subst-var bin
     for prf in qml_plugin.prf qt_plugin.prf qt_docs.prf qml_module.prf create_cmake.prf; do
         substituteInPlace "mkspecs/features/$prf" \
             --subst-var qtPluginPrefix \
