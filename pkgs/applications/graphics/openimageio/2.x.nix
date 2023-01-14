@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , boost
 , cmake
 , giflib
@@ -16,14 +17,22 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.2.17.0";
+  version = "2.4.6.1";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
-    rev = "Release-${version}";
-    sha256 = "0jqpb1zci911wdm928addsljxx8zsh0gzbhv9vbw6man4wi93h6h";
+    rev = "v${version}";
+    sha256 = "sha256-oBICukkborxXFHXyM2rIn5qSbCWECjwDQI9MUg13IRU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "arm-fix-signed-unsigned-simd-mismatch.patch";
+      url = "https://github.com/OpenImageIO/oiio/commit/726c51181a2888b0bd1edbef5ac8451e9cc3f893.patch";
+      hash = "sha256-G4vexf0OHZ/sbcRob5X92tajkmAv72ok8rcVQtIE9XE=";
+    })
+  ];
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
@@ -58,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.openimageio.org";
+    homepage = "https://openimageio.org";
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
