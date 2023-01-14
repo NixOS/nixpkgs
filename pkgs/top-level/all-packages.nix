@@ -15815,11 +15815,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
 
-  teyjus = callPackage ../development/compilers/teyjus (
-    with ocaml-ng.ocamlPackages_4_02; {
-      inherit ocaml;
-      omake = omake_rc1;
-  });
+  teyjus = callPackage ../development/compilers/teyjus { };
 
   thrust = callPackage ../development/tools/thrust {
     gconf = gnome2.GConf;
@@ -23491,7 +23487,7 @@ with pkgs;
   };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
