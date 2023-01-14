@@ -17,6 +17,7 @@
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
+, makeWrapper
 }:
 
 let
@@ -42,6 +43,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook
+    makeWrapper
     dpkg
   ];
 
@@ -71,7 +73,9 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/qq.desktop \
       --replace "/opt/QQ/qq" "$out/bin/qq" \
       --replace "/usr/share" "$out/share"
-    ln -s $out/opt/QQ/qq $out/bin/qq
+    makeWrapper $out/opt/QQ/qq $out/bin/qq \
+      --argv0 "qq" \
+      --prefix GTK_IM_MODULE_FILE : "/run/current-system/sw/etc/gtk-3.0/immodules.cache"
 
     runHook postInstall
   '';
