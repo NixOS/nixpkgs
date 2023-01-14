@@ -41,35 +41,35 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "sha256-7olnyjkcT8OwokipDnLFW3rMOPljF6HvsU249SDvA3U=";
+    hash = "sha256-7olnyjkcT8OwokipDnLFW3rMOPljF6HvsU249SDvA3U=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "sha256-JYM2/dkrLFZz+oqOs8e+iTRG5Vv4oUcmpAavRQ7NMMM=";
+    hash = "sha256-JYM2/dkrLFZz+oqOs8e+iTRG5Vv4oUcmpAavRQ7NMMM=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's arc-core/build.gradle
     rev = "v0.9";
-    sha256 = "6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
+    hash = "sha256-6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
   };
   freetypeSource = fetchurl {
     # This is pinned in Arc's extensions/freetype/build.gradle
     url = "https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz";
-    sha256 = "1b4dcngjcly9n80hnyr4d5s6qp8bspabfs7v3h07gb13pdg7kasy";
+    hash = "sha256-Xqt5XrsjrHcAHPtot9TVC11sdGkkewsBsslTJp9ljaw=";
   };
   glewSource = fetchurl {
     # This is pinned in Arc's backends/backend-sdl/build.gradle
     url = "https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip";
-    sha256 = "1m702jzfjhdr76cb71qplv6amhw15nnb1h6wbq4mlfbl6y8nl159";
+    hash = "sha256-qQRqkTd0OVoJXtzAsKwtgcOqzKYXh7OYOblB6b4U4NQ=";
   };
   SDLmingwSource = fetchurl {
     # This is pinned in Arc's backends/backend-sdl/build.gradle
     url = "https://www.libsdl.org/release/SDL2-devel-2.0.20-mingw.tar.gz";
-    sha256 = "1lbbjxl3a8vdillvv7654m6mp34lfkncvig5a8iwdmjpm214s29q";
+    hash = "sha256-OAlNgqhX1sYjUuXFzex0lIxbTSXFnL0pjW0jNWiXa9E=";
   };
 
   patches = [
@@ -125,7 +125,6 @@ let
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
     '';
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "sha256-Eb+LyO1d2XwhAp9awgMlxs7dfZav0ja9kH7PaUJQOCo=";
   };
