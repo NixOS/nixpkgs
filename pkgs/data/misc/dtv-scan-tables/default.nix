@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
+  allowedReferences = [ ];
+
   meta = with lib; {
     description = "Digital TV scan tables";
     homepage = "https://github.com/tvheadend/dtv-scan-tables";
