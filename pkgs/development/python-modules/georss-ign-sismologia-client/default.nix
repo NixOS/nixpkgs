@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for accessing the IGN Sismologia GeoRSS feed";
     homepage = "https://github.com/exxamalte/python-georss-ign-sismologia-client";
+    changelog = "https://github.com/exxamalte/python-georss-ign-sismologia-client/blob/v0.6/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
