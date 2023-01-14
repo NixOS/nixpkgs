@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcotp";
-  version = "1.2.8";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XWrLtWoYIEyGSwc1Qq1Q2NTn0USm1ekVyLWuwvppOZE=";
+    sha256 = "sha256-99Uw/BMk2bLj+/FZd7MwrRw62XcCroO9yNWdtH5AFpE=";
   };
 
   buildInputs = [ libbaseencode libgcrypt ];
