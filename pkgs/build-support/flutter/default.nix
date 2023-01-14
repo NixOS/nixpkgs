@@ -114,6 +114,18 @@ let
         make_deterministic_repo "$(dirname "$repoGit")"
       done
 
+      if [ -d "$RES/.pub-cache/git/cache" ]; then
+        find "$RES/.pub-cache/git/cache" -mindepth 1 -maxdepth 1 -type d | while read -r repoGit; do
+          (
+            cd "$repoGit"
+            git config pack.threads 1
+            git repack -A -d -f
+            rm -f config
+            git gc --prune=all --keep-largest-pack
+          )
+        done
+      fi
+
       # dart _fetchedAt, etc
       DART_DATE=$(date --date="@$SOURCE_DATE_EPOCH" -In | sed "s|,|.|g" | sed "s|+.*||g")
       find "$RES/.pub-cache" -iname "*.json" -exec sed -r 's|.*_fetchedAt.*|    "_fetchedAt": "'"$DART_DATE"'",|g' -i {} +
