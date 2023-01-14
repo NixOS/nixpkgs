@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dtv-scan-tables";
-  version = "20221027";
+  version = "20221027-tvheadend";
 
   src = fetchFromGitHub {
     owner = "tvheadend";
