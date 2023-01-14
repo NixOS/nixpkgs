@@ -115,6 +115,7 @@ let
   ceph-python-env = python.withPackages (ps: [
     ps.sphinx
     ps.flask
+    ps.routes
     ps.cython
     ps.setuptools
     ps.virtualenv
