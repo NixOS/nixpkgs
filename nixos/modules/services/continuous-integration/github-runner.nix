@@ -20,4 +20,6 @@ in
   config = mkIf cfg.enable {
     services.github-runners.${cfg.name} = cfg;
   };
+
+  meta.maintainers = with maintainers; [ veehaitch newam ];
 }
