@@ -1513,6 +1513,7 @@ mapAliases ({
   timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # Added 2021-09-05
   tkcvs = tkrev; # Added 2022-03-07
   togglesg-download = throw "togglesg-download was removed 2021-04-30 as it's unmaintained"; # Added 2021-04-30
+  tokodon = plasma5Packages.tokodon;
   tomboy = throw "tomboy is not actively developed anymore and was removed"; # Added 2022-01-27
   tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life"; # Added 2021-06-16
   tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life"; # Added 2021-06-16
