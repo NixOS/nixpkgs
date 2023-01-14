@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-decouple";
-  version = "3.6";
+  version = "3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "HBNetwork";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ll0MZb4FaNFF/jvCfj4TkuoAi4m448KaOU3ykvKPbSo=";
+    hash = "sha256-sCUlE+92+nG7ZHuGKXRJVx2wokNP7/F7g8LvdRWqHCQ=";
   };
 
   checkInputs = [

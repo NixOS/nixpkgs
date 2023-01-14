@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vhs";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wcOLUA/U+xRwo7slnACCURQO7D0F3pFP2/SHDfEHeTA=";
+    hash = "sha256-t6n4uID7KTu/BqsmndJOft0ifxZNfv9lfqlzFX0ApKw=";
   };
 
-  vendorHash = "sha256-f8EHDxu+NWAFJx9ujzsiDhNymdEzExmdreP11gV56AI=";
+  vendorHash = "sha256-9nkRr5Jh1nbI+XXbPj9KB0ZbLybv5JUVovpB311fO38=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
   buildInputs = [ ttyd ffmpeg ];
