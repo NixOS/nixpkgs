@@ -1,11 +1,14 @@
 # This module creates a virtual machine from the NixOS configuration.
 # Building the `config.system.build.vm' attribute gives you a command
 # that starts a KVM/QEMU VM running the NixOS configuration defined in
-# `config'.  The Nix store is shared read-only with the host, which
-# makes (re)building VMs very efficient.  However, it also means you
-# can't reconfigure the guest inside the guest - you need to rebuild
-# the VM in the host.  On the other hand, the root filesystem is a
-# read/writable disk image persistent across VM reboots.
+# `config'.  The host's Nix store is shared read-only with the guest,
+# which makes (re)building VMs very efficient.  If
+# `virtualisation.writableStore` is `true` (the default), then an
+# overlay filesystem will be added to make the guest's store writable.
+# Note that if `writableStore = false`, you can't reconfigure the
+# guest inside the guest - you need to rebuild the VM in the host.  On
+# the other hand, the root filesystem is a read/writable disk image
+# persistent across VM reboots.
 
 { config, lib, pkgs, options, ... }:
 

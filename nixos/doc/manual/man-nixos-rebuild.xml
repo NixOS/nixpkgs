@@ -319,11 +319,14 @@
       </para>
 
       <para>
-       The VM mounts the Nix store of the host through the 9P file system. The
-       host Nix store is read-only, so Nix commands that modify the Nix store
-       will not work in the VM. This includes commands such as
-       <command>nixos-rebuild</command>; to change the VM’s configuration,
-       you must halt the VM and re-run the commands above.
+       The VM mounts the Nix store of the host through the 9P file system.
+       The host Nix store is read-only. Depending on the value of the
+       configuration's <literal>virtualisation.writableStore</literal>, a
+       writable overlay may be added so that Nix commands that modify the Nix
+       store can work in the VM. (Note that this includes commands such as
+       <command>nixos-rebuild</command>; if this setting is
+       <literal>false</literal> then to change the VM’s configuration, you must
+       halt the VM and re-run the commands above.
       </para>
 
       <para>

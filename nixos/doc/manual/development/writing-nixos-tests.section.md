@@ -98,10 +98,10 @@ There are a few special NixOS options for test VMs:
 
 `virtualisation.writableStore`
 
-:   By default, the Nix store in the VM is not writable. If you enable
-    this option, a writable union file system is mounted on top of the
-    Nix store to make it appear writable. This is necessary for tests
-    that run Nix operations that modify the store.
+:   By default, the Nix store in the VM is writable - a writable union
+    file system is mounted on top of the shared host Nix store to make
+    it appear writable. This is necessary for tests that run Nix
+    operations that modify the store.
 
 For more options, see the module
 [`qemu-vm.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix).
