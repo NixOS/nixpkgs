@@ -2599,6 +2599,12 @@
     githubId = 42220376;
     name = "Charlotte Van Petegem";
   };
+  cidkidnix = {
+    name = "Dylan Green";
+    email = "cidkidnix@protonmail.com";
+    github = "cidkidnix";
+    githubId = 67574902;
+  };
   ciferkey = {
     name = "Matthew Brunelle";
     email = "ciferkey@gmail.com";
