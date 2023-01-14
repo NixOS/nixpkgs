@@ -69,10 +69,10 @@
       "url": "https://files.pythonhosted.org/packages/fc/56/9f67dcd4a4b9960373173a31be1b8c47fe351a1c9385677a7bdd82810e57/ipdb-0.13.9.tar.gz"
     },
     {
-      "sha256": "04m31z011arz2b70rwwkhvzkb9d4yxcfbxpw27d6fa3n79a7sdxg",
-      "url": "https://files.pythonhosted.org/packages/bc/fa/8604d92ef753e0036d807f1b3179813ab2fa283e3b19c926e11673c8205b/Cython-0.29.26.tar.gz"
+      "sha256": "1xqsihpqnfal29nb5kmw8z71nd4jbsnbz7p3lkr094xpb13wycw7",
+      "url": "https://files.pythonhosted.org/packages/4c/76/1e41fbb365ad20b6efab2e61b0f4751518444c953b390f9b2d36cf97eea0/Cython-0.29.32.tar.gz"
     }
   ],
-  "version": "0.1.20221118-210929-cfbb68aa",
-  "versionHash": "5535144625961033752"
+  "version": "0.2.20221222-152408-ha6a66d09",
+  "versionHash": "14601963598499040874"
 }
