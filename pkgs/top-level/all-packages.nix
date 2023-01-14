@@ -455,7 +455,9 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
+  dtv-scan-tables_linuxtv = callPackage ../data/misc/dtv-scan-tables/linuxtv.nix { };
   dtv-scan-tables_tvheadend = callPackage ../data/misc/dtv-scan-tables/tvheadend.nix { };
+  dtv-scan-tables = dtv-scan-tables_linuxtv;
 
   dufs = callPackage ../servers/http/dufs {
     inherit (darwin.apple_sdk.frameworks) Security;
