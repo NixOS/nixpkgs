@@ -14861,7 +14861,9 @@ with pkgs;
 
   fsharp = callPackage ../development/compilers/fsharp { };
 
-  fstar = callPackage ../development/compilers/fstar { };
+  fstar = callPackage ../development/compilers/fstar {
+    z3 = z3_4_8_5;
+  };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
@@ -36876,7 +36878,8 @@ with pkgs;
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_11
-    z3_4_8;
+    z3_4_8
+    z3_4_8_5;
   z3 = z3_4_8;
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
