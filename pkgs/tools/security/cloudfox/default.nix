@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "BishopFox";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-HLBW7a2sjA/bs8VJkwQNqM6YPEfa1onMoK89G5Fsb8s=";
   };
 
@@ -22,6 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool for situational awareness of cloud penetration tests";
     homepage = "https://github.com/BishopFox/cloudfox";
+    changelog = "https://github.com/BishopFox/cloudfox/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
