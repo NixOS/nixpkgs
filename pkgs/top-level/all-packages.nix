@@ -1881,6 +1881,8 @@ with pkgs;
 
   gst = callPackage ../applications/version-management/gst { };
 
+  hred = callPackage ../development/tools/hred { };
+
   hub = callPackage ../applications/version-management/hub { };
 
   hut = callPackage ../applications/version-management/hut { };
