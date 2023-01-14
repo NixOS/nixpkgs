@@ -2994,6 +2994,8 @@ with pkgs;
 
   detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
+  deterministic-uname = callPackage ../build-support/deterministic-uname { };
+
   dfmt = callPackage ../tools/text/dfmt { };
 
   diopser = callPackage ../applications/audio/diopser { stdenv = gcc10StdenvCompat; };
