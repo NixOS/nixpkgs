@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.28.1";
+  version = "2.28.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,12 +27,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
+    hash = "sha256-mLGyeC48bEkEk4uEwOuTJyEGnf25E0MTvv98g8LfJL8=";
   };
-
-  patches = [
-    ./relax-charset-normalizer.patch
-  ];
 
   propagatedBuildInputs = [
     brotlicffi
