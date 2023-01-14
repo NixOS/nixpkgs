@@ -395,13 +395,13 @@
     "vendorHash": null
   },
   "flexibleengine": {
-    "hash": "sha256-ie7GbJxkB3wekGqA+S9wBWwRDAYK0RIzbFSG+VmTSjw=",
+    "hash": "sha256-uT8BmACMMJKVPAhL/7rudCXG9AOb4kS1Lswr5ZxY6M4=",
     "homepage": "https://registry.terraform.io/providers/FlexibleEngineCloud/flexibleengine",
     "owner": "FlexibleEngineCloud",
     "repo": "terraform-provider-flexibleengine",
-    "rev": "v1.35.1",
+    "rev": "v1.36.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Q9xbrRhrq75yzjSK/LTP47xA9uP7PNBsEjTx3oNEwRY="
+    "vendorHash": "sha256-obBN7Q/gKbvERJIUVz+GgPjn7/OKjXCiFI6WuOd0hic="
   },
   "fortios": {
     "deleteVendor": true,
