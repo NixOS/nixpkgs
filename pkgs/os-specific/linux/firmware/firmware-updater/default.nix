@@ -8,10 +8,10 @@ flutter2.mkFlutterApp {
   pname = "firmware-updater";
   version = "unstable";
 
-  vendorHash =
-    if stdenv.system == "aarch64-linux"
-    then "sha256-+ACmcIKXtGtaYBuwc7jY9hEdIS9qxQCbuxRKJQohX5A="
-    else "sha256-nPblucEpNCBJYpIqx1My6SWq8CjXYuHDG/uphdcrWjQ=";
+  vendorHash = {
+    "x86_64-linux" = "sha256-xWP3SLq0IM1jcJ59OAEqRFMvnR2CphXwzq67iyyon1o=";
+    "aarch64-linux" = "sha256-lymrdwzRdLm+b6pQ/iANJBL1ZQMJZnz8D36GtIdl9L8=";
+  }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   src = fetchFromGitHub {
     owner = "canonical";
