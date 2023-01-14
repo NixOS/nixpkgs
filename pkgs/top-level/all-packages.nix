@@ -22552,6 +22552,7 @@ with pkgs;
   });
 
   # TODO: remove once no package needs this anymore or together with OpenSSL 1.1
+  # Current users: mumble, murmur
   qt5_openssl_1_1 = qt5.overrideScope' (_: super: {
     qtbase = super.qtbase.override {
       openssl = openssl_1_1;
@@ -22561,10 +22562,6 @@ with pkgs;
       };
     };
   });
-  libsForQt5_openssl_1_1 = import ./qt5-packages.nix {
-    inherit lib pkgs;
-    qt5 = qt5_openssl_1_1;
-  };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
@@ -32753,7 +32750,9 @@ with pkgs;
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
-  teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux { };
+  teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux {
+    electron = electron_21;
+  };
 
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
@@ -35204,9 +35203,7 @@ with pkgs;
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
-  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten {
-    openssl = openssl_1_1;
-  };
+  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
 
   sienna = callPackage ../games/sienna { };
 
