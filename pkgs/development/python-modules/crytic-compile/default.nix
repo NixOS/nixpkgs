@@ -3,7 +3,6 @@
 , cbor2
 , fetchFromGitHub
 , pycryptodome
-, pysha3
 , pythonOlder
 , setuptools
 }:
@@ -25,10 +24,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cbor2
     pycryptodome
-    pysha3
     setuptools
   ];
 
+  # Test require network access
   doCheck = false;
 
   pythonImportsCheck = [
