@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, python3 }:
 
 let
   inherit (lib)
@@ -826,4 +826,26 @@ rec {
     outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
     preferLocalBuild = true;
   } "mkdir $out";
+
+  runPythonScript = name: runPythonScriptWith { inherit name; };
+
+  runPythonScriptWith =
+    {
+      # name of the resulting derivation
+      name,
+      python ? python3,
+    }:
+    pythonScript:
+
+    runCommand name {
+      nativeBuildInputs = [
+        python
+      ];
+      passAsFile = [
+        "pythonScript"
+      ];
+      inherit pythonScript;
+    } ''
+      exec python3 "$pythonScriptPath"
+    '';
 }

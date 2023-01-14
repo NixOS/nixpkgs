@@ -104,6 +104,7 @@ let
     import ../build-support/trivial-builders.nix {
       inherit lib;
       inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self) python3;
       inherit (self.pkgsBuildHost) shellcheck;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };

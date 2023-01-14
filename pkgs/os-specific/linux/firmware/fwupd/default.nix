@@ -45,7 +45,7 @@
 , tpm2-tools
 , fwupd-efi
 , nixosTests
-, runCommand
+, runPythonScript
 , unstableGitUpdater
 , modemmanager
 , libqmi
@@ -75,13 +75,6 @@ let
   # haveFlashrom = isx86;
   # Experimental
   haveFlashrom = false;
-
-  runPythonCommand = name: buildCommandPython: runCommand name {
-    nativeBuildInputs = [ python3 ];
-      inherit buildCommandPython;
-  } ''
-    exec python3 -c "$buildCommandPython"
-  '';
 
   test-firmware =
     let
@@ -360,7 +353,7 @@ let
       in {
         installedTests = nixosTests.installed-tests.fwupd;
 
-        passthruMatches = runPythonCommand "fwupd-test-passthru-matches" ''
+        passthruMatches = runPythonScript "fwupd-test-passthru-matches" ''
           import itertools
           import configparser
           import os
