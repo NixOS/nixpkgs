@@ -1,6 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
 , openssl, openldap, libedit, keyutils
+
+# for passthru.tests
+, bind
+, curl
 , nixosTests
+, openssh
+, postgresql
+, python3
 
 # Extra Arguments
 , type ? ""
@@ -92,6 +99,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     implementation = "krb5";
-    tests = { inherit (nixosTests) kerberos; };
+    tests = {
+      inherit (nixosTests) kerberos;
+      inherit (python3.pkgs) requests-credssp;
+      bind = bind.override { enableGSSAPI = true; };
+      curl = curl.override { gssSupport = true; };
+      openssh = openssh.override { withKerberos = true; };
+      postgresql = postgresql.override { gssSupport = true; };
+    };
   };
 }
