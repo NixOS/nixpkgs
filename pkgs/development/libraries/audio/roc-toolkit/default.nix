@@ -46,9 +46,7 @@ stdenv.mkDerivation rec {
   sconsFlags =
     [ "--build=${stdenv.buildPlatform.config}"
       "--host=${stdenv.hostPlatform.config}"
-      "--prefix=${placeholder "out"}"
-      "--disable-doc"
-      "--disable-tests" ] ++
+      "--prefix=${placeholder "out"}" ] ++
     lib.optional (!soxSupport) "--disable-sox" ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++
     lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
