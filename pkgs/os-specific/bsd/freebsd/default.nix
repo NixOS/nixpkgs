@@ -398,6 +398,12 @@ in lib.makeScopeWithSplicing
     outputs = [ "out" "man" "test" ];
   };
 
+  sed = mkDerivation {
+    path = "usr.bin/sed";
+    TESTSRC = "${freebsdSrc}/contrib/netbsd-tests";
+    MK_TESTS = "no";
+  };
+
   # Don't add this to nativeBuildInputs directly.  Use statHook instead.
   stat = mkDerivation {
     path = "usr.bin/stat";
