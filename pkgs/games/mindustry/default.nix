@@ -20,6 +20,8 @@
 , libpulseaudio ? null
 , libjack2 ? null
 
+, nixosTests
+
 
 # Make the build version easily overridable.
 # Server and client build versions must match, and an empty build version means
@@ -214,6 +216,10 @@ stdenv.mkDerivation rec {
   '' + ''
     runHook postInstall
   '';
+
+  passthru.tests = {
+    nixosTest = nixosTests.mindustry;
+  };
 
   meta = with lib; {
     homepage = "https://mindustrygame.github.io/";
