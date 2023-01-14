@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-router";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
     rev = "${version}";
-    sha256 = "sha256-QBxlqKNaCUMVkm8rVTZ5z6tTN9WxgDQxeNkbgCe9KEg=";
+    sha256 = "sha256-Ote/arHCU6qiTXdK2RXv9848aeW6rcBsrb6nfxIzQLs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
