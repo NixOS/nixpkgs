@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "nsz";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "nicoboss";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-tdngXV+VUOAkg3lF2NOmw0mBeSEE+YpUfuKukTKcPnM=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-It815Uxxs4T9BM9EypAfPuq4Oy8rgGLpKA79m2xM8N4=";
   };
 
   propagatedBuildInputs = [pycryptodome enlighten zstandard ]

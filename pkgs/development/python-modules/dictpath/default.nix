@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "dictpath";
-  version = "0.1.3";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "dictpath";
-    rev = version;
-    sha256 = "0314i8wky2z83a66zggc53m8qa1rjgkrznrl2ixsgiq0prcn6v16";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-4QRFjbeaggoEPVGAmSY+qVMNW0DKqarNfRXaH6B58ew=";
   };
 
   postPatch = ''

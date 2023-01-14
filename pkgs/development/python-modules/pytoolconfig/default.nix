@@ -1,17 +1,29 @@
 { lib
 , buildPythonPackage
-, docutils
 , fetchFromGitHub
-, packaging
-, pdm-pep517
-, platformdirs
-, pydantic
-, pytest-timeout
-, pytestCheckHook
 , pythonOlder
+
+# build
+, pdm-pep517
+
+# docs
+, docutils
+, sphinxHook
+, sphinx-rtd-theme
+, sphinx-autodoc-typehints
+
+# runtime
+, tomli
+, packaging
+
+# optionals
+, pydantic
+, platformdirs
 , sphinx
 , tabulate
-, tomli
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -23,22 +35,32 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bagel897";
-    repo = pname;
+    repo = "pytoolconfig";
     rev = "refs/tags/v${version}";
     hash = "sha256-b7er/IgXr2j9dSnI87669BXWA5CXNTzwa1DTpl8PBZ4=";
   };
 
-  postPatch = ''
-    # License file name doesn't match
-    substituteInPlace pyproject.toml \
-      --replace "license = { file = 'LGPL-3.0' }" "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace "packaging>=22.0" "packaging"
-  '';
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  PDM_PEP517_SCM_VERSION = version;
 
   nativeBuildInputs = [
     pdm-pep517
-  ];
+
+    # docs
+    docutils
+    sphinx-autodoc-typehints
+    sphinx-rtd-theme
+    sphinxHook
+  ] ++ passthru.optional-dependencies.doc;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "packaging>=22.0" "packaging"
+  '';
 
   propagatedBuildInputs = [
     packaging
@@ -59,21 +81,19 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    docutils
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.global
-  ++ passthru.optional-dependencies.doc;
-
   pythonImportsCheck = [
     "pytoolconfig"
   ];
 
+  checkInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
   meta = with lib; {
-    description = "Module for tool configuration";
-    homepage = "https://github.com/bagel897/pytoolconfig";
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
+    description = "Python tool configuration";
+    homepage = "https://github.com/bagel897/pytoolconfig";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab hexa ];
   };
 }

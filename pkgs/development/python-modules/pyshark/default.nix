@@ -46,7 +46,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = [ pytestCheckHook wireshark-cli ];
+  checkInputs = [ py pytestCheckHook wireshark-cli ];
 
   pythonImportsCheck = [ "pyshark" ];
 

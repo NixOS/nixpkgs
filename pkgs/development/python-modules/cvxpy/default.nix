@@ -17,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.2.1";
+  version = "1.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bWdkJkPR3bLyr1m0Zrh9QsSi42eDGte0PDO1nu+ltQ4=";
+    hash = "sha256-IaeUtv0vdgqddm1o++SUZTT2Xom3Pom4icVQOYVVi4Y=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools <= 64.0.2" "setuptools"
+  '';
 
   propagatedBuildInputs = [
     cvxopt

@@ -216,6 +216,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>llvmPackages_rocm.llvm</literal> will not contain
+          <literal>clang</literal> or <literal>compiler-rt</literal>.
+          <literal>llvmPackages_rocm.clang</literal> will not contain
+          <literal>llvm</literal>.
+          <literal>llvmPackages_rocm.clangNoCompilerRt</literal> has
+          been removed in favor of using
+          <literal>llvmPackages_rocm.clang-unwrapped</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Nginx module now validates the syntax of config files at
           build time. For more complex configurations (using
           <literal>include</literal> with out-of-store files notably)
@@ -269,6 +280,14 @@
           The <literal>nix.readOnlyStore</literal> option has been
           renamed to <literal>boot.readOnlyNixStore</literal> to clarify
           that it configures the NixOS boot process, not the Nix daemon.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Deprecated <literal>xlibsWrapper</literal> transitional
+          package has been removed in favour of direct use of its
+          constitutents: <literal>xorg.libX11</literal>,
+          <literal>freetype</literal> and others.
         </para>
       </listitem>
     </itemizedlist>
@@ -473,6 +492,13 @@
           <link xlink:href="options.html#opt-services.garage.package">services.garage.package</link>
           or upgrade accordingly
           <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>hip</literal> has been separated into
+          <literal>hip</literal>, <literal>hip-common</literal> and
+          <literal>hipcc</literal>.
         </para>
       </listitem>
       <listitem>

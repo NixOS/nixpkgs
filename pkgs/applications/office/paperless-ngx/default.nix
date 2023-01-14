@@ -155,7 +155,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     python-dateutil
     python-dotenv
     python-gnupg
-    python-Levenshtein
+    levenshtein
     python-magic
     pytz
     pyyaml

@@ -10,12 +10,14 @@
 
 let
   llvmMajor = lib.versions.major llvm.version;
+  isROCm = lib.hasPrefix "rocm" llvm.pname;
 
+  # ROCm will always be at the latest version
   branch =
-    if llvmMajor == "15" then rec {
+    if llvmMajor == "15" || isROCm then rec {
       version = "15.0.0";
       rev = "v${version}";
-      hash = "sha256-111yL6Wh8hykoGz1QmT1F7lfGDEmG4U3iqmqrJxizOg=";
+      hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
     } else if llvmMajor == "14" then rec{
       version = "14.0.0";
       rev = "v${version}";
@@ -36,15 +38,17 @@ stdenv.mkDerivation {
     inherit (branch) rev hash;
   };
 
-  nativeBuildInputs = [ pkg-config cmake llvm.dev spirv-tools ];
+  nativeBuildInputs = [ pkg-config cmake spirv-tools ]
+    ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
 
-  buildInputs = [ spirv-headers llvm ];
+  buildInputs = [ spirv-headers ]
+    ++ lib.optionals (!isROCm) [ llvm ];
 
   checkInputs = [ lit ];
 
   cmakeFlags = [
     "-DLLVM_INCLUDE_TESTS=ON"
-    "-DLLVM_DIR=${llvm.dev}"
+    "-DLLVM_DIR=${(if isROCm then llvm else llvm.dev)}"
     "-DBUILD_SHARED_LIBS=YES"
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/

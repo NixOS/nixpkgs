@@ -148,19 +148,6 @@ in {
     inherit passthruFun;
   };
 
-  python37 = callPackage ./cpython {
-    self = __splicedPackages.python37;
-    sourceVersion = {
-      major = "3";
-      minor = "7";
-      patch = "16";
-      suffix = "";
-    };
-    sha256 = "sha256-gzjwwiIthH6QTJVTaRVdwb7u7YBujV7wSwDvR4cji/0=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
   python38 = callPackage ./cpython {
     self = __splicedPackages.python38;
     sourceVersion = {

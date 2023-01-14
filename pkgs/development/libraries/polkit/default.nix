@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
     rsync --archive "${DESTDIR}${system}"/* "$out"
     rm --recursive "${DESTDIR}${system}"/*
     rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
-    for o in $outputs; do
+    for o in $(getAllOutputNames); do
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done

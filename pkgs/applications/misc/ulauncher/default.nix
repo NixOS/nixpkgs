@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     dbus-python
     pygobject3
     pyinotify
-    python-Levenshtein
+    levenshtein
     pyxdg
     pycairo
     requests

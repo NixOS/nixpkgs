@@ -6,7 +6,7 @@
 , hatch-nodejs-version
 , fastjsonschema
 , jsonschema
-, jupyter_core
+, jupyter-core
 , traitlets
 , pep440
 , pytestCheckHook
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.7.0";
+  version = "5.7.1";
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d4760c15c1a04269ef5caf375be8b98dd2f696e5eb9e603ec2bf091f9b0d3f3";
+    sha256 = "sha256-OBCgEwRT7QMZcFIdIJibilkvPC5zKDqCgK40rh91s/g=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     fastjsonschema
     jsonschema
-    jupyter_core
+    jupyter-core
     traitlets
   ];
 

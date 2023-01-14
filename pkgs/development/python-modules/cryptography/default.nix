@@ -18,6 +18,7 @@
 , pretend
 , libiconv
 , iso8601
+, py
 , pytz
 , hypothesis
 }:
@@ -28,6 +29,7 @@ in
 buildPythonPackage rec {
   pname = "cryptography";
   version = "38.0.4"; # Also update the hash in vectors.nix
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -63,6 +65,7 @@ buildPythonPackage rec {
     hypothesis
     iso8601
     pretend
+    py
     pytestCheckHook
     pytest-benchmark
     pytest-subtests

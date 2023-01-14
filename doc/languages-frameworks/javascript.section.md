@@ -175,9 +175,10 @@ buildNpmPackage rec {
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };
 
-  patches = [ ./remove-prepack-script.patch ];
-
   npmDepsHash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
+
+  # The prepack script runs the build script, which we'd rather do in the build phase.
+  npmPackFlags = [ "--ignore-scripts" ];
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 

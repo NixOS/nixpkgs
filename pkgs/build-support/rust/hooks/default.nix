@@ -107,6 +107,9 @@ in {
           host-config = true
           target-applies-to-host = true
         '';
+
+        # https://github.com/NixOS/nixpkgs/issues/201254
+        aarch64LinuxGccWorkaround = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
       };
     } ./cargo-setup-hook.sh) {};
 

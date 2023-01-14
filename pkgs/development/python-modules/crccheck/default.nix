@@ -1,25 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, nose }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, unittestCheckHook
+}:
 
 let
   pname = "crccheck";
-  version = "1.1";
+  version = "1.3.0";
 in buildPythonPackage {
   inherit pname version;
-
-  checkInputs = [ nose ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "45962231cab62b82d05160553eebd9b60ef3ae79dc39527caef52e27f979fa96";
-  };
+  format = "setuptools";
 
   disabled = !isPy3k;
 
+  src = fetchFromGitHub {
+    owner = "MartinScharrer";
+    repo = "crccheck";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nujt3RWupvCtk7gORejtSwqqVjW9VwztOVGXBHW9T+k=";
+  };
+
+  checkInputs = [
+    unittestCheckHook
+  ];
+
   meta = with lib; {
     description = "Python library for CRCs and checksums";
-    homepage = "https://sourceforge.net/projects/crccheck/";
-    license = licenses.gpl3Plus;
+    homepage = "https://github.com/MartinScharrer/crccheck";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

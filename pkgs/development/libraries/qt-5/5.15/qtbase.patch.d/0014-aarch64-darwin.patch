@@ -86,18 +86,6 @@ index 0cf1f31b60d..042319a2aa3 100644
 +include(clang-mac.conf)
  
  load(qt_config)
-diff --git a/mkspecs/common/macx.conf b/mkspecs/common/macx.conf
-index d16b77acb8e..4ba0a8eaa36 100644
---- a/mkspecs/common/macx.conf
-+++ b/mkspecs/common/macx.conf
-@@ -6,7 +6,6 @@ QMAKE_PLATFORM         += macos osx macx
- QMAKE_MAC_SDK           = macosx
- 
- QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
--QMAKE_APPLE_DEVICE_ARCHS = x86_64
- 
- # Should be 10.15, but as long as the CI builds with
- # older SDKs we have to keep this.
 diff --git a/mkspecs/macx-clang/Info.plist.app b/mkspecs/macx-clang-arm64/Info.plist.app
 similarity index 100%
 rename from mkspecs/macx-clang/Info.plist.app

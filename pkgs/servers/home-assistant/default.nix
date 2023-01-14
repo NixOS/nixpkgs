@@ -106,6 +106,16 @@ let
         };
       });
 
+      pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.3";
+        src = fetchFromGitHub {
+          owner = "riptideio";
+          repo = "pymodbus";
+          rev= "refs/tags/v${version}";
+          hash = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";

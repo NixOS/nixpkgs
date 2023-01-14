@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.1.1";
+  version = "8.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
+    hash = "sha256-kkHDd2HwBP5oTmN9K02Lea3eurxk40OqHLoUT60sm0c=";
   };
 
   buildInputs = [

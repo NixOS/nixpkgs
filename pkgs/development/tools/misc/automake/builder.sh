@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 # Wrap the given `aclocal' program, appending extra `-I' flags

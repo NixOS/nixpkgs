@@ -33,12 +33,16 @@ with lib;
       ffmpeg_4 = super.ffmpeg_4-headless;
       ffmpeg_5 = super.ffmpeg_5-headless;
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      gst_all_1 = super.gst_all_1 // {
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableX11 = false; };
+      };
       gpsd = super.gpsd.override { guiSupport = false; };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
-      libextractor = super.libextractor.override { gstreamerSupport = false; gtkSupport = false; };
+      libextractor = super.libextractor.override { gtkSupport = false; };
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
+      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };

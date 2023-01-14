@@ -8,11 +8,12 @@
 
 buildPythonPackage rec {
   pname = "subprocess-tee";
-  version = "0.3.5";
+  version = "0.4.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff5cced589a4b8ac973276ca1ba21bb6e3de600cde11a69947ff51f696efd577";
+    sha256 = "sha256-s8EkmT+LiNHrHC/eC8IGl4fqxyC6iHccuhfoyTMkgl0=";
   };
 
   nativeBuildInputs = [

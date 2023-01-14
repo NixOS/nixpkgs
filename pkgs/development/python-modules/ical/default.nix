@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , freezegun
 , tzdata
+, py
 , pyparsing
 , pydantic
 , pytest-asyncio
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     freezegun
+    py
     pytest-asyncio
     pytest-benchmark
     pytest-golden

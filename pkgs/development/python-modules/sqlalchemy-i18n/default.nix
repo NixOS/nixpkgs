@@ -3,6 +3,7 @@
 , buildPythonPackage
 , sqlalchemy
 , sqlalchemy-utils
+, six
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     sqlalchemy
     sqlalchemy-utils
+    six
   ];
 
   # tests require running a postgresql server

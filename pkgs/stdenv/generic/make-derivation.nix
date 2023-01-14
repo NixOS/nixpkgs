@@ -154,6 +154,12 @@ let
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
   && config.contentAddressedByDefault
 
+# Experimental.  For simple packages mostly just works,
+# but for anything complex, be prepared to debug if enabling.
+, __structuredAttrs ? config.structuredAttrsByDefault or false
+
+, env ? { }
+
 , ... } @ attrs:
 
 let
@@ -259,13 +265,16 @@ else let
     lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
       (lib.concatLists propagatedDependencies));
 
+  envIsExportable = lib.isAttrs env && !lib.isDerivation env;
+
   derivationArg =
     (removeAttrs attrs
-      ["meta" "passthru" "pos"
+      (["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"])
+       "sandboxProfile" "propagatedSandboxProfile"]
+       ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
@@ -289,7 +298,7 @@ else let
           then attrs.name + hostSuffix
           else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // {
+    }) // lib.optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -304,8 +313,7 @@ else let
 
       userHook = config.stdenv.userHook or null;
       __ignoreNulls = true;
-
-      inherit strictDeps;
+      inherit __structuredAttrs strictDeps;
 
       depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
       nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
@@ -410,6 +418,7 @@ else let
       outputHashAlgo = attrs.outputHashAlgo or "sha256";
       outputHashMode = attrs.outputHashMode or "recursive";
     } // lib.optionalAttrs (enableParallelBuilding) {
+      inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
@@ -473,6 +482,19 @@ else let
                    else true);
     };
 
+  checkedEnv =
+    let
+      overlappingNames = lib.attrNames (builtins.intersectAttrs env derivationArg);
+    in
+    assert lib.assertMsg envIsExportable
+      "When using structured attributes, `env` must be an attribute set of environment variables.";
+    assert lib.assertMsg (overlappingNames == [ ])
+      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " overlappingNames}";
+    lib.mapAttrs
+      (n: v: assert lib.assertMsg (lib.isString v || lib.isBool v || lib.isInt v || lib.isDerivation v)
+        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+      env;
+
 in
 
 lib.extendDerivation
@@ -509,7 +531,7 @@ lib.extendDerivation
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation derivationArg);
+  (derivation (derivationArg // lib.optionalAttrs envIsExportable checkedEnv));
 
 in
   fnOrAttrs:

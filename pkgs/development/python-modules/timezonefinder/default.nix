@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "6.0.2";
+  version = "6.1.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = pname;
-    rev = version;
-    hash = "sha256-jquaA/+alSRUaa2wXQ6YoDR4EY9OlZCAdcxS5TR0CAU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-A5s1npvgJGp6SvIqoXGRmFN3iE0pqMUl1ZTi07ix5b0=";
   };
 
   nativeBuildInputs = [

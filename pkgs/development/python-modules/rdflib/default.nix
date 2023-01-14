@@ -18,12 +18,13 @@
 , html5lib
 
 # tests
+, pytest-cov
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.1.1";
+  version = "6.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = pname;
-    rev = version;
-    hash = "sha256:1ih7vx4i16np1p8ig5faw74apmbm7kgyj9alya521yvzid6d7pzd";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GkqfSyApOFKPIiIYXhgaRZuMawk7PRYmxGDhnRI+Rz0=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
+    pytest-cov
     pytestCheckHook
   ]
   ++ passthru.optional-dependencies.networkx
@@ -68,6 +70,10 @@ buildPythonPackage rec {
     # Requires network access
     "test_service"
     "testGuessFormatForParse"
+    "test_infix_owl_example1"
+    "test_context"
+    "test_guess_format_for_parse"
+    "rdflib.extras.infixowl"
   ] ++ lib.optionals stdenv.isDarwin [
     # Require loopback network access
     "TestGraphHTTP"

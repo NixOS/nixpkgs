@@ -25,7 +25,7 @@ let newPython = python3.override {
       version = "1.5.0";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
+        hash = "sha256-Dlh1auOPvY/DAg1UutuOrhfFudy+04ixe7Vbilko35I=";
       };
     });
   };

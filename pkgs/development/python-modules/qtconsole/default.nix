@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, jupyter_core
+, jupyter-core
 , jupyter-client
 , pygments
 , pyqt5
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ipykernel
-    jupyter_core
+    jupyter-core
     jupyter-client
     pygments
     pyqt5
