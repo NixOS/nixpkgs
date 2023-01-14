@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyatag";
-  version = "3.5.1";
+  version = "0.3.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "MatsNl";
     repo = "pyatag";
     rev = "refs/tags/${version}";
-    sha256 = "17x2m7icbby1y2zfc79jpbir2kvyqlrkix9pvvxanm658arsh8c7";
+    sha256 = "sha256-yJEPDNjEv2lGrBQ78sl7nseVRemsG7hTdBGH5trciYU=";
   };
 
   propagatedBuildInputs = [
