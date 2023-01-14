@@ -4782,6 +4782,8 @@ with pkgs;
 
   pika = callPackage ../applications/graphics/pika { };
 
+  pkg = callPackage ../tools/package-management/pkg { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   pn = callPackage ../tools/text/pn { };
