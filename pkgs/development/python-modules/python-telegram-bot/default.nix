@@ -1,60 +1,124 @@
 { lib
+, aiolimiter
 , APScheduler
+, beautifulsoup4
 , buildPythonPackage
 , cachetools
-, certifi
-, decorator
-, fetchPypi
-, future
-, tornado
-, urllib3
+, cryptography
+, fetchFromGitHub
+, flaky
+, httpx
+, pytest-asyncio
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
 , pythonOlder
+, pytz
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.15";
+  version = "20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tAR2BrgIG2K71qo2H3yh7+h/qPGIHsnZMtNYRL9XoVQ=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-34Apzy7id+fDxTN935hPT0HeZNZMEdQqZ0aiV0trAxE=";
   };
 
   propagatedBuildInputs = [
+    aiolimiter
     APScheduler
     cachetools
-    certifi
-    decorator
-    future
+    cryptography
+    httpx
+    pytz
+  ] ++ httpx.optional-dependencies.socks;
+
+  checkInputs = [
+    beautifulsoup4
+    flaky
+    pytest-asyncio
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
     tornado
-    urllib3
   ];
-
-  # --with-upstream-urllib3 is not working properly
-  postPatch = ''
-    rm -r telegram/vendor
-
-    substituteInPlace requirements.txt \
-      --replace "APScheduler==3.6.3" "APScheduler" \
-      --replace "cachetools==4.2.2" "cachetools" \
-      --replace "tornado==6.1" "tornado"
-  '';
-
-  setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
-
-  # tests not included with release
-  doCheck = false;
 
   pythonImportsCheck = [
     "telegram"
   ];
 
+  disabledTests = [
+    # Tests require network access
+    "TestAIO"
+    "TestAnimation"
+    "TestApplication"
+    "TestAudio"
+    "TestBase"
+    "TestBot"
+    "TestCallback"
+    "TestChat"
+    "TestChosenInlineResult"
+    "TestCommandHandler"
+    "TestConstants"
+    "TestContact"
+    "TestConversationHandler"
+    "TestDice"
+    "TestDict"
+    "TestDocument"
+    "TestFile"
+    "TestForceReply"
+    "TestForum"
+    "TestGame"
+    "TestGet"
+    "TestHTTP"
+    "TestInline"
+    "TestInput"
+    "TestInvoice"
+    "TestJob"
+    "TestKeyboard"
+    "TestLocation"
+    "TestMask"
+    "TestMenu"
+    "TestMessage"
+    "TestMeta"
+    "TestOrder"
+    "TestPassport"
+    "TestPhoto"
+    "TestPickle"
+    "TestPoll"
+    "TestPre"
+    "TestPrefix"
+    "TestProximity"
+    "TestReply"
+    "TestRequest"
+    "TestSend"
+    "TestSent"
+    "TestShipping"
+    "TestSlot"
+    "TestSticker"
+    "TestString"
+    "TestSuccess"
+    "TestTelegram"
+    "TestType"
+    "TestUpdate"
+    "TestUser"
+    "TestVenue"
+    "TestVideo"
+    "TestVoice"
+    "TestWeb"
+  ];
+
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
+    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ veprbl pingiun ];
   };
