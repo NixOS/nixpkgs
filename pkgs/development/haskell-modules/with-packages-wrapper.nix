@@ -161,8 +161,8 @@ symlinkJoin {
     ''}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
+  preferLocalBuild = true;
   passthru = {
-    preferLocalBuild = true;
     inherit (ghc) version meta;
 
     # Inform users about backwards incompatibilities with <= 21.05
