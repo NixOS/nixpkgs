@@ -174,6 +174,18 @@ stdenv.mkDerivation {
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
     ./0018-core-don-t-taint-on-unmerged-usr.patch
+  ] ++ [
+    # systemd 252 propagates oom-kills to all processes of a login session.
+    # fixes are merged in 253.
+    # https://github.com/NixOS/nixpkgs/issues/210680
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/pull/25385.patch";
+      sha256 = "sha256-4GVBW8EH5BsfAi2cWKgRJvnw+gWE/L31Qphy0OzDH1Y=";
+    })
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/pull/25725.patch";
+      sha256 = "sha256-/I+XxeLQeDZl0bQ+kHuurLlpM7NGOb7y+zjR5HmaMuE=";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
