@@ -9100,6 +9100,10 @@ with pkgs;
 
   jump = callPackage ../tools/system/jump {};
 
+  larynx = callPackage ../tools/audio/larynx { };
+
+  larynx-train = with python3Packages; toPythonApplication larynx-train;
+
   latex2html = callPackage ../tools/misc/latex2html { };
 
   lazycli = callPackage ../tools/misc/lazycli { };

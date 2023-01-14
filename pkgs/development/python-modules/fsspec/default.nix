@@ -13,6 +13,20 @@
 , requests
 , smbprotocol
 , tqdm
+
+# optionals
+, adlfs
+, dask
+, distributed
+, dropbox
+, fusepy
+, gcsfs
+, libarchive-c
+, ocifs
+, panel
+, pyarrow
+, pygit2
+, s3fs
 }:
 
 buildPythonPackage rec {
@@ -36,6 +50,75 @@ buildPythonPackage rec {
     smbprotocol
     tqdm
   ];
+
+  passthru.optional-dependencies = {
+    entrypoints = [
+    ];
+    abfs = [
+      adlfs
+    ];
+    adl = [
+      adlfs
+    ];
+    dask = [
+      dask
+      distributed
+    ];
+    dropbox = [
+      # missing dropboxdrivefs
+      requests
+      dropbox
+    ];
+    gcs = [
+      gcsfs
+    ];
+    git = [
+      pygit2
+    ];
+    github = [
+      requests
+    ];
+    gs = [
+      gcsfs
+    ];
+    hdfs = [
+      pyarrow
+    ];
+    arrow = [
+      pyarrow
+    ];
+    http = [
+      aiohttp
+      requests
+    ];
+    sftp = [
+      paramiko
+    ];
+    s3 = [
+      s3fs
+    ];
+    oci = [
+      ocifs
+    ];
+    smb = [
+      smbprotocol
+    ];
+    ssh = [
+      paramiko
+    ];
+    fuse = [
+      fusepy
+    ];
+    libarchive = [
+      libarchive-c
+    ];
+    gui = [
+      panel
+    ];
+    tqdm = [
+      tqdm
+    ];
+  };
 
   checkInputs = [
     numpy
