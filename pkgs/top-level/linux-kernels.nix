@@ -453,6 +453,8 @@ in {
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
 
+    hp-vendor = callPackage ../os-specific/linux/hp-vendor { };
+
     system76 = callPackage ../os-specific/linux/system76 { };
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
