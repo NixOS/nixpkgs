@@ -38,7 +38,7 @@ substituteAll {
   modDirVersion = if modDirVersion != "" then modDirVersion else "unknown";
 
   meta = with lib; {
-    description = "Print certain system information (hardcoded with <nixpkgs/lib/system> values)";
+    description = "Print certain system information (hardcoded with lib/system values)";
     longDescription = ''
       This package provides a replacement for `uname` whose output depends only
       on `stdenv.buildPlatform`.  It is meant to be used from within derivations.
