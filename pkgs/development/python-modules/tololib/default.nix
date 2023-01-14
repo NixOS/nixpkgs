@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "tololib";
-  version = "0.1.0b3";
+  version = "0.1.0b4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "MatthiasLohr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "qkdMy6/ZuBksbBTbDhPyCPWMjubQODjdMsqHTJ7QvQI=";
+    hash = "sha256-2OQaJR70bx8qWs1IPErF+B3X1iRvHW74axTqtdvum3U=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
