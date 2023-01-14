@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "jB2V/Wpxmp92wba41mWZAeO63wy3NrkupllGxJMNkFM=";
+    rev = "refs/tags/v${version}";
+    hash = "jB2V/Wpxmp92wba41mWZAeO63wy3NrkupllGxJMNkFM=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to control VLC";
     homepage = "https://github.com/MartinHjelmare/aiovlc";
+    changelog = "https://github.com/MartinHjelmare/aiovlc/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
