@@ -3,12 +3,9 @@
 
 { options, config, lib, pkgs, ... }:
 
-with lib;
-
 let
   qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
 in
-
 {
 
   config = {
@@ -118,8 +115,8 @@ in
     boot.consoleLogLevel = 7;
 
     # Prevent tests from accessing the Internet.
-    networking.defaultGateway = mkOverride 150 "";
-    networking.nameservers = mkOverride 150 [ ];
+    networking.defaultGateway = lib.mkOverride 150 "";
+    networking.nameservers = lib.mkOverride 150 [ ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")
@@ -130,7 +127,7 @@ in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.users.root.initialHashedPassword = mkOverride 150 "";
+    users.users.root.initialHashedPassword = lib.mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
 
