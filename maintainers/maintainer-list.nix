@@ -1125,6 +1125,12 @@
     githubId = 58516559;
     name = "Alexander Rezvov";
   };
+  arian-d = {
+    email = "arianxdehghani@gmail.com";
+    github = "arian-d";
+    githubId = 40076285;
+    name = "Arian Dehghani";
+  };
   arianvp = {
     email = "arian.vanputten@gmail.com";
     github = "arianvp";
