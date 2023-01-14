@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-99Uw/BMk2bLj+/FZd7MwrRw62XcCroO9yNWdtH5AFpE=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_link_options(-Wl," "# add_link_options(-Wl,"
+  '';
+
   buildInputs = [ libbaseencode libgcrypt ];
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -19,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/paolostivanin/libcotp";
     license = licenses.asl20;
     maintainers = with maintainers; [ alexbakker ];
+    platforms = platforms.all;
   };
 }
