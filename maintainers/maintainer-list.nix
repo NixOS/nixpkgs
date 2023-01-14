@@ -3760,6 +3760,7 @@
     name = "Davide Peressoni";
     email = "davide.peressoni@tuta.io";
     matrix = "@dpd-:matrix.org";
+    github = "DPDmancul";
     githubId = 3186857;
   };
   dpercy = {
