@@ -20,6 +20,7 @@ buildPythonPackage rec {
   pname = "requests";
   version = "2.28.1";
   format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
@@ -90,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
+    changelog = "https://github.com/psf/requests/blob/v${version}/HISTORY.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
