@@ -7,11 +7,51 @@ let
 
   settingsFormat = pkgs.formats.toml { };
 
-  settingsFile = settingsFormat.generate "starship.toml" cfg.settings;
+  settingsFileNixos = settingsFormat.generate "starship.toml" cfg.settings;
+
+  settingsFileMerged = pkgs.runPythonScriptWith {
+    name = "starship.toml";
+    python = pkgs.python3.withPackages (pp: [
+      pp.jsonmerge
+      pp.toml
+    ]);
+  } ''
+    from jsonmerge import merge
+    import os
+    import subprocess
+    import toml
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        preset = subprocess.check_output(
+            ["${pkgs.starship}/bin/starship", "preset", "${cfg.preset}"],
+            env={
+                "HOME": tmpdir,
+            },
+            encoding="utf-8",
+        )
+    preset = toml.loads(preset)
+    with open("${settingsFileNixos}") as settings_file:
+        settings = toml.load(settings_file)
+    merged = merge(preset, settings)
+    with open(os.environ["out"], "w") as out:
+        toml.dump(merged, out)
+  '';
+
+  settingsFile = if cfg.preset != null then settingsFileMerged else settingsFileNixos;
 
 in {
   options.programs.starship = {
     enable = mkEnableOption (lib.mdDoc "the Starship shell prompt");
+
+    preset = mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "pure-preset";
+      description = lib.mdDoc ''
+        A [configuration preset](https://starship.rs/presets/) to merge settings into.
+      '';
+    };
 
     settings = mkOption {
       inherit (settingsFormat) type;
