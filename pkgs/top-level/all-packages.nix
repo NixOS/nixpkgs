@@ -19095,6 +19095,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  detekt = callPackage ../development/tools/detekt { };
+
   dhex = callPackage ../applications/editors/dhex { };
 
   double-conversion = callPackage ../development/libraries/double-conversion { };
