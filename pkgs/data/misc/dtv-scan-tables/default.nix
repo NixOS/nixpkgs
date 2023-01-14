@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     v4l-utils
   ];
 
-  installFlags = [
-    "DATADIR=$(out)"
+  makeFlags = [
+    "PREFIX=$(out)"
   ];
 
   meta = with lib; {
