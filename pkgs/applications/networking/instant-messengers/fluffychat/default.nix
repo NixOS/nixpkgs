@@ -75,7 +75,7 @@ flutter2.mkFlutterApp rec {
     description = "Chat with your friends (matrix client)";
     homepage = "https://fluffychat.im/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 nickcao ];
     platforms = platforms.linux;
   };
 }
