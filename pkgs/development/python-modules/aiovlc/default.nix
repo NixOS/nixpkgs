@@ -10,17 +10,22 @@
 
 buildPythonPackage rec {
   pname = "aiovlc";
-  version = "0.1.0";
+  version = "0.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "jB2V/Wpxmp92wba41mWZAeO63wy3NrkupllGxJMNkFM=";
+    hash = "sha256-ZFLNgPxR5N+hI988POCYJD9QGivs1fYysyFtmxsJQaA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace \
+      " --cov=aiovlc --cov-report=term-missing:skip-covered" ""
+  '';
 
   propagatedBuildInputs = [
     click
