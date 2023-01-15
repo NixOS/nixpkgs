@@ -63,6 +63,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/radareorg/radare2/commit/842f809d4ec6a12af2906f948657281c9ebc8a24.patch";
       sha256 = "sha256-asEXW9Ox48w9WQhOA9tleXIvynIjsWb6ItKmFTojgbQ=";
     })
+    (fetchpatch {
+      name = "CVE-2023-0302.patch";
+      url = "https://github.com/radareorg/radare2/commit/961f0e723903011d4f54c2396e44efa91fcc74ce.patch";
+      hash = "sha256-QinRQDIY4p3P+M3Hh9w3Dv3N/2XTaf3N0nUluHPpAvg=";
+    })
   ];
 
   preBuild = ''
