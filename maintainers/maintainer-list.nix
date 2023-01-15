@@ -4134,6 +4134,12 @@
     githubId = 103082;
     name = "Ed Brindley";
   };
+  eliandoran = {
+    email = "contact@eliandoran.me";
+    name = "Elian Doran";
+    github = "eliandoran";
+    githubId = 21236836;
+  };
   elizagamedev = {
     email = "eliza@eliza.sh";
     github = "elizagamedev";
