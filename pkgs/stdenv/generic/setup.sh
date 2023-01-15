@@ -879,7 +879,7 @@ substituteStream() {
 # fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -d '' $1 ; then
+    if IFS='' read -r -d '' "$1" ; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
@@ -1436,7 +1436,7 @@ installCheckPhase() {
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
-       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+       && ! make -n ${makefile:+-f $makefile} "${installCheckTarget:-installcheck}" >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         # Old bash empty array hack
@@ -1503,14 +1503,14 @@ showPhaseFooter() {
     local startTime="$2"
     local endTime="$3"
     local delta=$(( endTime - startTime ))
-    (( $delta < 30 )) && return
+    (( delta < 30 )) && return
 
     local H=$((delta/3600))
     local M=$((delta%3600/60))
     local S=$((delta%60))
     echo -n "$phase completed in "
-    (( $H > 0 )) && echo -n "$H hours "
-    (( $M > 0 )) && echo -n "$M minutes "
+    (( H > 0 )) && echo -n "$H hours "
+    (( M > 0 )) && echo -n "$M minutes "
     echo "$S seconds"
 }
 
@@ -1552,7 +1552,7 @@ genericBuild() {
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
         if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
+            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
         fi
 
         showPhaseHeader "$curPhase"
