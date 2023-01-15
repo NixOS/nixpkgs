@@ -11659,6 +11659,8 @@ with pkgs;
 
   shiv = with python3Packages; toPythonApplication shiv;
 
+  shim-unsigned = callPackage ../tools/misc/shim { };
+
   shocco = callPackage ../tools/text/shocco { };
 
   shopify-cli = callPackage ../development/web/shopify-cli { };
