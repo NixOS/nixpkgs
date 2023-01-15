@@ -139,9 +139,10 @@ in rec {
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
+      TOUCH_IF_DB=$dst/.used-docbook \
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-        ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
+        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
         ${lib.optionalString markdownByDefault "--markdown-by-default"} \
         $baseJSON $options \
         > $dst/options.json
@@ -152,6 +153,14 @@ in rec {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
+
+  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
+    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
+      echo 1
+    else
+      echo 0
+    fi >"$out"
+  '';
 
   # Convert options.json into an XML file.
   # The actual generation of the xml file is done in nix purely for the convenience

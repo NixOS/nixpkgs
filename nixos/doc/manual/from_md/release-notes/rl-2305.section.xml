@@ -316,6 +316,22 @@
       </listitem>
       <listitem>
         <para>
+          DocBook option documentation, which has been deprecated since
+          22.11, will now cause a warning when documentation is built.
+          Out-of-tree modules should migrate to using CommonMark
+          documentation as outlined in
+          <xref linkend="sec-option-declarations" /> to silence this
+          warning.
+        </para>
+        <para>
+          DocBook option documentation support will be removed in the
+          next release and CommonMark will become the default. DocBook
+          option documentation that has not been migrated until then
+          will no longer render properly or cause errors.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>dnsmasq</literal> service now takes configuration
           via the <literal>services.dnsmasq.settings</literal> attribute
           set. The option

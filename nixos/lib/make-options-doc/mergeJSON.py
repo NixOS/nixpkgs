@@ -228,6 +228,7 @@ def convertMD(options: Dict[str, Any]) -> str:
     return options
 
 warningsAreErrors = False
+warnOnDocbook = False
 errorOnDocbook = False
 markdownByDefault = False
 optOffset = 0
@@ -235,7 +236,10 @@ for arg in sys.argv[1:]:
     if arg == "--warnings-are-errors":
         optOffset += 1
         warningsAreErrors = True
-    if arg == "--error-on-docbook":
+    if arg == "--warn-on-docbook":
+        optOffset += 1
+        warnOnDocbook = True
+    elif arg == "--error-on-docbook":
         optOffset += 1
         errorOnDocbook = True
     if arg == "--markdown-by-default":
@@ -278,26 +282,27 @@ def is_docbook(o, key):
 # check that every option has a description
 hasWarnings = False
 hasErrors = False
-hasDocBookErrors = False
+hasDocBook = False
 for (k, v) in options.items():
-    if errorOnDocbook:
+    if warnOnDocbook or errorOnDocbook:
+        kind = "error" if errorOnDocbook else "warning"
         if isinstance(v.value.get('description', {}), str):
-            hasErrors = True
-            hasDocBookErrors = True
+            hasErrors |= errorOnDocbook
+            hasDocBook = True
             print(
-                f"\x1b[1;31merror: option {v.name} description uses DocBook\x1b[0m",
+                f"\x1b[1;31m{kind}: option {v.name} description uses DocBook\x1b[0m",
                 file=sys.stderr)
         elif is_docbook(v.value, 'defaultText'):
-            hasErrors = True
-            hasDocBookErrors = True
+            hasErrors |= errorOnDocbook
+            hasDocBook = True
             print(
-                f"\x1b[1;31merror: option {v.name} default uses DocBook\x1b[0m",
+                f"\x1b[1;31m{kind}: option {v.name} default uses DocBook\x1b[0m",
                 file=sys.stderr)
         elif is_docbook(v.value, 'example'):
-            hasErrors = True
-            hasDocBookErrors = True
+            hasErrors |= errorOnDocbook
+            hasDocBook = True
             print(
-                f"\x1b[1;31merror: option {v.name} example uses DocBook\x1b[0m",
+                f"\x1b[1;31m{kind}: option {v.name} example uses DocBook\x1b[0m",
                 file=sys.stderr)
 
     if v.value.get('description', None) is None:
@@ -310,10 +315,14 @@ for (k, v) in options.items():
             f"\x1b[1;31m{severity}: option {v.name} has no type. Please specify a valid type, see " +
             "https://nixos.org/manual/nixos/stable/index.html#sec-option-types\x1b[0m", file=sys.stderr)
 
-if hasDocBookErrors:
+if hasDocBook:
+    (why, what) = (
+        ("disallowed for in-tree modules", "contribution") if errorOnDocbook
+        else ("deprecated for option documentation", "module")
+    )
     print("Explanation: The documentation contains descriptions, examples, or defaults written in DocBook. " +
         "NixOS is in the process of migrating from DocBook to Markdown, and " +
-        "DocBook is disallowed for in-tree modules. To change your contribution to "+
+        f"DocBook is {why}. To change your {what} to "+
         "use Markdown, apply mdDoc and literalMD and use the *MD variants of option creation " +
         "functions where they are available. For example:\n" +
         "\n" +
@@ -326,6 +335,9 @@ if hasDocBookErrors:
         "  example.package = mkPackageOptionMD pkgs \"your-package\" {};\n" +
         "  imports = [ (mkAliasOptionModuleMD [ \"example\" \"args\" ] [ \"example\" \"settings\" ]) ];",
         file = sys.stderr)
+    with open(os.getenv('TOUCH_IF_DB'), 'x'):
+        # just make sure it exists
+        pass
 
 if hasErrors:
     sys.exit(1)
