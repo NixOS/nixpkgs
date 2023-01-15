@@ -36,11 +36,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "8.0.1";
+  version = "9.0.1";
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
   src = fetchurl {
     url = "https://download.qt.io/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "sha256-4s4gCnnHTc1jZ9y7g8g5wcILLMB31qZYY56s3opKuGU=";
+    sha256 = "sha256-4e4e881b2635bac07e785c9e889ab9a253ad47a00074e260cbccdb3c0aef189f";
   };
 
   buildInputs = [
