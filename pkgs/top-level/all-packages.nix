@@ -1341,6 +1341,8 @@ with pkgs;
 
   clematis = callPackage ../tools/misc/clematis { };
 
+  colorless = callPackage ../tools/misc/colorless { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
