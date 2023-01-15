@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "nptyping";
   version = "2.4.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -25,14 +26,25 @@ buildPythonPackage rec {
     hash = "sha256-jV2MVMP/tlYN3djoViemGaJyzREoOJJamwG97WFhIvc=";
   };
 
-  propagatedBuildInputs = [ numpy ];
-
-  checkInputs = [
-    beartype feedparser invoke mypy pandas pytestCheckHook typeguard
+  propagatedBuildInputs = [
+    numpy
   ];
 
-  # tries to download data
-  disabledTests = [ "test_pandas_stubs_fork_is_synchronized" ];
+  checkInputs = [
+    beartype
+    feedparser
+    invoke
+    mypy
+    pandas
+    pytestCheckHook
+    typeguard
+  ];
+
+  disabledTests = [
+    # tries to download data
+    "test_pandas_stubs_fork_is_synchronized"
+  ];
+
   disabledTestPaths = [
     # missing pyright import:
     "tests/test_pyright.py"
@@ -50,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type hints for numpy";
     homepage = "https://github.com/ramonhagenaars/nptyping";
+    changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
