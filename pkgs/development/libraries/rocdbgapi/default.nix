@@ -95,6 +95,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = finalAttrs.version != stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

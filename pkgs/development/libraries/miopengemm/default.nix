@@ -117,6 +117,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

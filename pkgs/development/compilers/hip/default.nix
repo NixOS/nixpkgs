@@ -189,6 +189,9 @@ in stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
     # Tests require GPU, also include issues
-    broken = finalAttrs.version != hip-common.version || finalAttrs.version != hipcc.version || buildTests;
+    broken =
+      versions.minor finalAttrs.version != versions.minor hip-common.version ||
+      versions.minor finalAttrs.version != versions.minor hipcc.version ||
+      buildTests;
   };
 })

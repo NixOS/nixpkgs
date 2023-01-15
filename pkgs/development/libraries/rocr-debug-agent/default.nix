@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ ncsa ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = finalAttrs.version != hip.version;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

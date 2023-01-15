@@ -52,6 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface";
     license = with licenses; [ bsd2 mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
-    broken = finalAttrs.version != stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

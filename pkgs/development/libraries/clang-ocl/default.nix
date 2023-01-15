@@ -36,6 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != stdenv.cc.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

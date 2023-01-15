@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     # to be supported yet by the build infrastructure. Recheck in
     # the future.
     platforms = [ "x86_64-linux" ];
-    broken = finalAttrs.version != stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

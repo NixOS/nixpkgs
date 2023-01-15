@@ -100,7 +100,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    # Once again, they haven't updated the tags...
-    broken = lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

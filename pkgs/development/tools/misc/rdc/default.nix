@@ -118,6 +118,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/rdc";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != rocm-smi.version;
+    broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version;
   };
 })

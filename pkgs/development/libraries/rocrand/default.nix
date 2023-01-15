@@ -79,6 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocRAND";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSOLVER";
     license = with licenses; [ bsd2 ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })
