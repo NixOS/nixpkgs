@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -107,13 +107,20 @@ in stdenv.mkDerivation {
 
     src = kodi_src;
 
-    # This is a backport of
-    # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
-    # to Kodi 19.4 Matrix.
-    # This can be removed once a new release of Kodi comes out and we upgrade
-    # to it.
     patches = [
+      # This is a backport of
+      # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
+      # to Kodi 19.4 Matrix.
+      # This can be removed once a new major release of Kodi comes out and we upgrade
+      # to it.
       ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
+
+      # A patch to fix build until the next major release of Kodi comes out and we upgrade
+      # https://github.com/xbmc/xbmc/pull/22291
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/5449652abf0bb9dddd0d796de4120e60f19f89a5.patch";
+        sha256 = "sha256-vqX08dTSPhIur4aVu2BzXEpAxMOjaadwRNI43GSV9Og=";
+      })
     ];
 
     buildInputs = [
