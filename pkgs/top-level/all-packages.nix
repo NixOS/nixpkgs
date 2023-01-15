@@ -36654,7 +36654,9 @@ with pkgs;
   };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = wxGTK32;
+    wxGTK = wxGTK32.override {
+      withWebKit = true;
+    };
   };
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
