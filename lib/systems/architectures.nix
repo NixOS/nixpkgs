@@ -2,9 +2,10 @@
 
 rec {
   # gcc.arch to its features (as in /proc/cpuinfo)
-  features = {
-    default        = [ ];
+  features = rec {
+    default        = x86-64-v2;
     # x86_64 Intel
+    nehalem        = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
     ivybridge      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -28,6 +29,12 @@ rec {
     znver1         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
     znver2         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
     znver3         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
+    # Microarchitecture levels
+    # https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels
+    x86-64         = [ ];
+    x86-64-v2      = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
+    x86-64-v3      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2"          "fma"        ];
+    x86-64-v4      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2" "avx512" "fma"        ];
     # other
     armv5te        = [ ];
     armv6          = [ ];
@@ -40,14 +47,19 @@ rec {
   # a superior CPU has all the features of an inferior and is able to build and test code for it
   inferiors = {
     # x86_64 Intel
-    default        = [ ];
-    westmere       = [ ];
+    default        = [ "x86-64-v2"   ];
+    x86-64         = [ ];
+    x86-64-v2      = [ "x86-64"      ] ++ inferiors.x86-64;
+    nehalem        = [ "x86-64-v2"   ] ++ inferiors.x86-64-v2;
+    westmere       = [ "nehalem"     ] ++ inferiors.nehalem;
     sandybridge    = [ "westmere"    ] ++ inferiors.westmere;
     ivybridge      = [ "sandybridge" ] ++ inferiors.sandybridge;
-    haswell        = [ "ivybridge"   ] ++ inferiors.ivybridge;
+    x86-64-v3      = [ "ivybridge"   ] ++ inferiors.ivybridge;
+    haswell        = [ "x86-64-v3"   ] ++ inferiors.x86-64-v3;
     broadwell      = [ "haswell"     ] ++ inferiors.haswell;
     skylake        = [ "broadwell"   ] ++ inferiors.broadwell;
-    skylake-avx512 = [ "skylake"     ] ++ inferiors.skylake;
+    x86-64-v4      = [ "skylake"     ] ++ inferiors.skylake;
+    skylake-avx512 = [ "x86-64-v4"   ] ++ inferiors.x86-64-v4;
 
     # x86_64 AMD
     # TODO: fill this (need testing)
