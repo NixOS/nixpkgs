@@ -25,6 +25,8 @@ let
     "ghc943"
     "ghc944"
     "ghc94"
+    "ghc96"
+    "ghc961"
     "ghcHEAD"
   ];
 
@@ -40,6 +42,8 @@ let
     "ghc942"
     "ghc943"
     "ghc944"
+    "ghc96"
+    "ghc961"
     "ghcHEAD"
   ];
 
@@ -299,6 +303,27 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghc94 = ghc944;
+    ghc961 = callPackage ../development/compilers/ghc/9.6.1.nix {
+      bootPkgs =
+        # For GHC 9.2 no armv7l bindists are available.
+        if stdenv.hostPlatform.isAarch32 then
+          packages.ghc924
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc924
+        else if stdenv.isAarch64 then
+          packages.ghc924BinaryMinimal
+        else
+          packages.ghc924Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # Support range >= 10 && < 15
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
+      llvmPackages = pkgs.llvmPackages_14;
+    };
+    ghc96 = ghc961;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
@@ -315,7 +340,7 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      # 2022-08-04: Support range >= 10 && < 15
+      # 2023-01-15: Support range >= 10 && < 15
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
       llvmPackages = pkgs.llvmPackages_14;
     };
@@ -451,6 +476,12 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
     ghc94 = ghc942;
+    ghc961 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc961;
+      ghc = bh.compiler.ghc961;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
+    };
+    ghc96 = ghc961;
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
