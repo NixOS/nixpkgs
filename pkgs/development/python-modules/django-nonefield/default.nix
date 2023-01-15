@@ -6,7 +6,6 @@
 # Build
 , buildPythonPackage
 , fetchPypi
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,7 +21,6 @@ buildPythonPackage rec {
     django
     django-nine
     unidecode
-    wheel
   ];
 
   # No tests
