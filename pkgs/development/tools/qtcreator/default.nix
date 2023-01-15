@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
   src = fetchurl {
     url = "https://download.qt.io/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "sha256-4e4e881b2635bac07e785c9e889ab9a253ad47a00074e260cbccdb3c0aef189f";
+    sha256 = "sha256:4e4e881b2635bac07e785c9e889ab9a253ad47a00074e260cbccdb3c0aef189f";
   };
 
   buildInputs = [
