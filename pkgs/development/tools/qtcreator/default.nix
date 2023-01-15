@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     cp -v ${./icore.cpp} src/plugins/coreplugin/icore.cpp
     cp -v ${./qtc.qbs} qbs/modules/qtc/qtc.qbs
     cp -v ${./qtcreator.pri} qtcreator.pri
+    cp -v ${./QtCreatorAPI.cmake} cmake/QtCreatorAPI.cmake
   '';
 
   #buildFlags = optional withDocumentation "docs";
