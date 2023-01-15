@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       };
     in
     ''
-      header "Setting up IPP crypto build artifacts"
+      echo "Setting up IPP crypto build artifacts"
 
       pushd 'external/ippcp_internal'
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     ./linux/installer/bin/sgx_linux_x64_sdk_${version}.bin -prefix $installDir
     installDir=$installDir/sgxsdk
 
-    header "Move files created by installer"
+    echo "Move files created by installer"
 
     mkdir -p $out/bin
     pushd $out
@@ -206,15 +206,15 @@ stdenv.mkDerivation rec {
 
 
   preFixup = ''
-    header "Strip sgxsdk prefix"
+    echo "Strip sgxsdk prefix"
     for path in "$out/share/bin/environment" "$out/bin/sgx-gdb"; do
       substituteInPlace $path --replace "$TMPDIR/sgxsdk" "$out"
     done
 
-    header "Fixing pkg-config files"
+    echo "Fixing pkg-config files"
     sed -i "s|prefix=.*|prefix=$out|g" $out/lib/pkgconfig/*.pc
 
-    header "Fixing SGX_SDK default in samples"
+    echo "Fixing SGX_SDK default in samples"
     substituteInPlace $out/share/SampleCode/LocalAttestation/buildenv.mk \
       --replace '/opt/intel/sgxsdk' "$out"
     for file in $out/share/SampleCode/*/Makefile; do
@@ -222,12 +222,12 @@ stdenv.mkDerivation rec {
         --replace '/opt/intel/sgxsdk' "$out"
     done
 
-    header "Fixing BINUTILS_DIR in buildenv.mk"
+    echo "Fixing BINUTILS_DIR in buildenv.mk"
     substituteInPlace $out/share/bin/buildenv.mk \
       --replace 'BINUTILS_DIR ?= /usr/local/bin' \
                 'BINUTILS_DIR ?= ${BINUTILS_DIR}'
 
-    header "Fixing GDB path in bin/sgx-gdb"
+    echo "Fixing GDB path in bin/sgx-gdb"
     substituteInPlace $out/bin/sgx-gdb --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
   '';
 
