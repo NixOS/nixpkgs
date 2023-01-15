@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # nix-shell -I nixpkgs=. '<nixpkgs>' -A ath9k-htc-blobless-firmware.passthru.update \
-    #  > pkgs/os-specific/linux/firmware/ath9k/urls-and-hashes-${finalAttrs.version}.nix
+    # nix-shell -I nixpkgs=. '<nixpkgs>' -A ath9k-htc-blobless-firmware.passthru.update > pkgs/os-specific/linux/firmware/ath9k/urls-and-hashes-1.4.0.nix
+    # nix-shell -I nixpkgs=. '<nixpkgs>' -A ath9k-htc-blobless-firmware-unstable.passthru.update > pkgs/os-specific/linux/firmware/ath9k/urls-and-hashes-unstable-2022-05-22.nix
     update = stdenv.mkDerivation (finalAttrs: {
       name = "${finalAttrs.pname}-${finalAttrs.version}-update";
       extraHashes = "";
