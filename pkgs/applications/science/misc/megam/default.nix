@@ -12,11 +12,16 @@ stdenv.mkDerivation {
 
   patches = [ ./ocaml-includes.patch ./ocaml-3.12.patch ];
 
-  buildInputs = [ ocaml ncurses ];
+  strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ocaml ];
 
-  makeFlags = [ "CAML_INCLUDES=${ocaml}/lib/ocaml/caml" ];
+  buildInputs = [ ncurses ];
+
+  makeFlags = [
+    "CAML_INCLUDES=${ocaml}/lib/ocaml/caml"
+    "WITHBIGARRAY=bigarray.cma"
+  ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559
   dontStrip = true;
@@ -42,6 +47,6 @@ stdenv.mkDerivation {
     license = "non-commercial";
 
     maintainers = [ ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.unix;
   };
 }

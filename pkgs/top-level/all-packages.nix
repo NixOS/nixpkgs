@@ -385,6 +385,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  cotp = callPackage ../applications/misc/cotp {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
@@ -15220,7 +15224,7 @@ with pkgs;
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_04;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -18130,9 +18134,7 @@ with pkgs;
 
   process-compose = callPackage ../applications/misc/process-compose { };
 
-  process-viewer = callPackage ../applications/misc/process-viewer {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
-  };
+  process-viewer = callPackage ../applications/misc/process-viewer { };
 
   procodile = callPackage ../tools/system/procodile { };
 
@@ -30954,7 +30956,7 @@ with pkgs;
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   monitor = callPackage ../applications/system/monitor {
@@ -36652,7 +36654,9 @@ with pkgs;
   };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = wxGTK32;
+    wxGTK = wxGTK32.override {
+      withWebKit = true;
+    };
   };
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
@@ -36748,9 +36752,7 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  megam = callPackage ../applications/science/misc/megam {
-    inherit (ocaml-ng.ocamlPackages_4_07) ocaml;
-  };
+  megam = callPackage ../applications/science/misc/megam { };
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
 
