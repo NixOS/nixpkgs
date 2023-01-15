@@ -69,8 +69,14 @@ nixev() {
     nix-instantiate --eval --strict -E "$1"
 }
 
+# use `nix eval` command
+nixev2() {
+    nix eval --raw "$1"
+}
+
 desc_system() {
-    nixev '(import <nixpkgs> {}).stdenv.hostPlatform.system'
+    nixev '(import <nixpkgs> {}).stdenv.hostPlatform.system' 2>/dev/null ||
+        nixev2 'nixpkgs#stdenv.hostPlatform.system'
 }
 
 desc_host_os() {
@@ -98,7 +104,7 @@ desc_multi_user() {
 }
 
 desc_nixpkgs_path() {
-    nixev '<nixpkgs>'
+    nixev '<nixpkgs>' 2>/dev/null || echo "not found"
 }
 
 channel_facts() {
