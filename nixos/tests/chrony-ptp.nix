@@ -2,6 +2,10 @@ import ./make-test-python.nix ({ lib, ... }:
 {
   name = "chrony-ptp";
 
+  meta = {
+    maintainers = with lib.maintainers; [ gkleen ];
+  };
+
   nodes = {
     qemuGuest = { lib, ... }: {
       boot.kernelModules = [ "ptp_kvm" ];

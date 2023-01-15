@@ -5220,6 +5220,12 @@
     githubId = 60962839;
     name = "Mazen Zahr";
   };
+  gkleen = {
+    name = "Gregor Kleen";
+    email = "xpnfr@bouncy.email";
+    github = "gkleen";
+    githubId = 20089782;
+  };
   gleber = {
     email = "gleber.p@gmail.com";
     github = "gleber";
