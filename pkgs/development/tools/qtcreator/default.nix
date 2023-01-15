@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   '';
 */
 
+/*
   postPatch = ''
     cp -v ${./icore.cpp} src/plugins/coreplugin/icore.cpp
     cp -v ${./qtc.qbs} qbs/modules/qtc/qtc.qbs
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     cp -v ${./QtCreatorAPI.cmake} cmake/QtCreatorAPI.cmake
     cp -v ${./QtCreatorAPIInternal.cmake} cmake/QtCreatorAPIInternal.cmake
   '';
+*/
 
   cmakeFlags = [
     # workaround for missing CMAKE_INSTALL_DATAROOTDIR
