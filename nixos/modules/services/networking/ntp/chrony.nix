@@ -203,7 +203,7 @@ in
           PrivateMounts = true;
           # System Call Filtering
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "@clock" "@setuid" "capset" "chown" ];
+          SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "@clock" "@setuid" "capset" "chown" ] ++ lib.optional pkgs.stdenv.hostPlatform.isAarch64 "fchownat";
         };
       };
   };
