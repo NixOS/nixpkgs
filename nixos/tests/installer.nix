@@ -21,8 +21,6 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
-        documentation.enable = false;
-
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 

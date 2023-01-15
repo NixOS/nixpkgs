@@ -104,7 +104,28 @@ with lib;
         makeInitrdNGTool
         systemdStage1
         systemdStage1Network
-      ];
+      ] ++ (
+        # also include a copy of the manual built from a minimal config.
+        # the manual included by the installer is not sufficient alone
+        # because it contains options the installed system will likely
+        # not have (since it won't import the installer modules), so
+        # we need the second copy to avoid manual builds during install.
+        let
+          manual = (import "${pkgs.path}/nixos" {
+            configuration = {
+              boot.isContainer = true;
+              documentation.enable = true;
+              documentation.nixos.enable = true;
+            };
+          }).config.system.build.manual;
+        in [
+          manual.generatedSources
+          manual.optionsJSON
+          manual.optionsDocBook
+          manual.manpages
+          manual.manualHTML
+        ]
+      );
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
