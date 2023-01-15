@@ -144,12 +144,12 @@ stdenv.mkDerivation (finalAttrs: {
         # as soon as `enableUnstable==false` points to a version
         # greater than 1.4.0.
         extraHashes = ''
-        echo 'GCC_SUM = "sha256-kuYcbcOgpEnmLXKjgYX9pVAWioZwLeoHEl69PsOZYoI=";'
-        echo 'MPFR_SUM = "sha256-e2bD8T3IOF8IJkyAWFPz4aju2rgHHVgvPmYZccms1f0=";'
-        echo 'MPC_SUM = "sha256-7VqBXP6lJdx3jfDLN0aLnBtVSq8w2TKLFDHKcFt0AP8=";'
-        echo 'GMP_SUM = "sha256-H1iKrMxBu5rtlG+f44Uhwm2LKQ0APF34B/ZWkPKq3sk=";'
-        echo 'BINUTILS_SUM = "sha256-KrLlsD4IbRLGKV+DGtrUaz4UEKOiNJM6Lo+sZssuehk=";'
-      '';
+          echo '  GCC_SUM = "sha256-kuYcbcOgpEnmLXKjgYX9pVAWioZwLeoHEl69PsOZYoI=";'
+          echo '  MPFR_SUM = "sha256-e2bD8T3IOF8IJkyAWFPz4aju2rgHHVgvPmYZccms1f0=";'
+          echo '  MPC_SUM = "sha256-7VqBXP6lJdx3jfDLN0aLnBtVSq8w2TKLFDHKcFt0AP8=";'
+          echo '  GMP_SUM = "sha256-H1iKrMxBu5rtlG+f44Uhwm2LKQ0APF34B/ZWkPKq3sk=";'
+          echo '  BINUTILS_SUM = "sha256-KrLlsD4IbRLGKV+DGtrUaz4UEKOiNJM6Lo+sZssuehk=";'
+        '';
       });
     });
 
