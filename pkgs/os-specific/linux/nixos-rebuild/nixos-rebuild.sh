@@ -28,6 +28,7 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
+specialisation=
 buildHost=
 targetHost=
 remoteSudo=
@@ -105,6 +106,14 @@ while [ "$#" -gt 0 ]; do
             profile="/nix/var/nix/profiles/system-profiles/$1"
             mkdir -p -m 0755 "$(dirname "$profile")"
         fi
+        shift 1
+        ;;
+      --specialisation|-c)
+        if [ -z "$1" ]; then
+            log "$0: ‘--specialisation’ requires an argument"
+            exit 1
+        fi
+        specialisation="$1"
         shift 1
         ;;
       --build-host|h)
@@ -365,6 +374,10 @@ if [[ -n $flake ]]; then
     fi
 fi
 
+if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
+    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
+    exit 1
+fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
@@ -559,7 +572,18 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
+    if [[ -z "$specialisation" ]]; then
+        cmd="$pathToConfig/bin/switch-to-configuration"
+    else
+        cmd="$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration"
+
+        if [[ ! -f "$cmd" ]]; then
+            log "error: specialisation not found: $specialisation"
+            exit 1
+        fi
+    fi
+
+    if ! targetHostCmd "$cmd" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

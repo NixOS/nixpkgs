@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
 , pythonOlder
+, numpy
+, nptyping
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -21,6 +23,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+    nptyping
+    typing-extensions
   ];
 
   pythonImportsCheck = [

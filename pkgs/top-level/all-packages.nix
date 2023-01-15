@@ -1321,6 +1321,8 @@ with pkgs;
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
 
+  arubaotp-seed-extractor = callPackage ../tools/security/arubaotp-seed-extractor { };
+
   audible-cli = callPackage ../tools/misc/audible-cli { };
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
@@ -11660,6 +11662,8 @@ with pkgs;
   shen-sources = callPackage ../development/interpreters/shen-sources { };
 
   shiv = with python3Packages; toPythonApplication shiv;
+
+  shim-unsigned = callPackage ../tools/misc/shim { };
 
   shocco = callPackage ../tools/text/shocco { };
 

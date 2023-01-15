@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   # Ninja is not detected by setuptools for some reason even though it's present:
   postPatch = ''
-    substituteInPlace "setup.cfg" --replace "ninja" ""
+    substituteInPlace "setup.cfg" --replace "    ninja" ""
   '';
 
   preBuild = ''

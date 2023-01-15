@@ -72,7 +72,7 @@ with lib;
     # mounting the storage in a different system.
     services.openssh = {
       enable = true;
-      permitRootLogin = "yes";
+      settings.PermitRootLogin = "yes";
     };
 
     # Enable wpa_supplicant, but don't start it by default.

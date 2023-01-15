@@ -11,9 +11,9 @@
 , nbconvert
 , nbformat
 , nest-asyncio
-, notebook
 , notebook-shim
 , prometheus-client
+, pytest-jupyter
 , pytest-tornasync
 , pytestCheckHook
 , pythonOlder
@@ -47,7 +47,6 @@ buildPythonPackage rec {
     nbconvert
     nbformat
     nest-asyncio
-    notebook
     notebook-shim
     prometheus-client
     pyzmq
@@ -58,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-jupyter
     pytest-tornasync
     pytestCheckHook
   ];
