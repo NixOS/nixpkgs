@@ -34198,6 +34198,8 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
+  torq = callPackage ../applications/blockchains/torq { };
+
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
     boost = boost17x;
     withGui = true;
