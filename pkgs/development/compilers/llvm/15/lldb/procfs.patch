@@ -1,14 +1,20 @@
 --- a/source/Plugins/Process/Linux/Procfs.h
 +++ b/source/Plugins/Process/Linux/Procfs.h
-@@ -10,6 +10,7 @@
+@@ -10,6 +10,13 @@
  // sys/procfs.h on Android/Linux for all supported architectures.
  
  #include <sys/ptrace.h>
 +#include <asm/ptrace.h>
++
++// on i686 preprocessor symbols with these register names are defined as
++// numeric constants; these symbols clash with identifier names used in
++// `llvm/Support/VirtualFileSystem.h` and `llvm/ADT/SmallVector.h`
++#undef FS
++#undef CS
  
  #include "lldb/lldb-types.h"
  
-@@ -17,23 +18,13 @@
+@@ -17,23 +24,13 @@
  
  #include <vector>
  
