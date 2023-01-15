@@ -1,4 +1,4 @@
-{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
+{ config, lib, substituteAll, stdenv, fetchurl, autoreconfHook, pkg-config, gettext, glib, gtk-doc, atk, pango, cairo, perl, xorg
 , gdk-pixbuf, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "2.24.33";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
   };
 
@@ -38,12 +38,19 @@ stdenv.mkDerivation rec {
     gtkCleanImmodulesCache
   ];
 
-
-  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
+  nativeBuildInputs = setupHooks ++ [
+    autoreconfHook
+    gettext
+    gobject-introspection
+    gtk-doc # required for autoreconf
+    perl
+    pkg-config
+  ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
     ./patches/gtk2-theme-paths.patch
+    ./patches/2.0-sysconfdir_install.patch
   ] ++ optionals stdenv.isDarwin [
     (fetchpatch {
       url = "https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776";
@@ -67,6 +74,7 @@ stdenv.mkDerivation rec {
   '' else null;
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
   ] ++ optionals stdenv.isDarwin [
