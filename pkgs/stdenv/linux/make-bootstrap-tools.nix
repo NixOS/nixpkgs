@@ -272,16 +272,17 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
-      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+      rtld=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
+      libc_includes=${bootstrapTools}/include-glibc
     '' + lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-      ldmusl=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
-      export CPP="cpp -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
+      rtld=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
+      libc_includes=${bootstrapTools}/include-libc
     '' + ''
+      # path to version-specific libraries, like libstdc++.so
+      cxx_libs=$(echo ${bootstrapTools}/lib/gcc/*/*)
+      export CPP="cpp -idirafter $libc_includes -B${bootstrapTools}"
+      export  CC="gcc -idirafter $libc_includes -B${bootstrapTools} -Wl,-dynamic-linker,$rtld -Wl,-rpath,${bootstrapTools}/lib -Wl,-rpath,$cxx_libs"
+      export CXX="g++ -idirafter $libc_includes -B${bootstrapTools} -Wl,-dynamic-linker,$rtld -Wl,-rpath,${bootstrapTools}/lib -Wl,-rpath,$cxx_libs"
 
       echo '#include <stdio.h>' >> foo.c
       echo '#include <limits.h>' >> foo.c
