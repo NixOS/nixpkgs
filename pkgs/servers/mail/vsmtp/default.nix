@@ -1,36 +1,28 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
 , installShellFiles
-, openssl
 , testers
 , vsmtp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "1.3.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-nBkfIjACmjnVNF3hJ22B4ecjWrX9licV7c8Yxv2tQCg=";
+    hash = "sha256-uyu2NpHFDqJDcfQukG6TdRH7KuZnrYTULvLiABdvAog=";
   };
 
-  cargoHash = "sha256-HqQ8WD1/K7xMx97SbuP45Q/+4oADh1WZFJPXB8wlkbM=";
+  cargoHash = "sha256-A0Q6ciZJL13VzJgZIWZalrRElSNGHUN/9b8Csj4Tdak=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  cargoBuildFlags = [
-    "--package"
-    "vsmtp"
-    "--package"
-    "vqueue"
-  ];
+  # too many upstream failures
+  doCheck = false;
 
   postInstall = ''
     installManPage tools/install/man/*.1

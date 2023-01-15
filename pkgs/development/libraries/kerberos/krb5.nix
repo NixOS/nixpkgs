@@ -1,6 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
 , openssl, openldap, libedit, keyutils
+
+# for passthru.tests
+, bind
+, curl
 , nixosTests
+, openssh
+, postgresql
+, python3
 
 # Extra Arguments
 , type ? ""
@@ -19,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.20";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "sha256-fgIr3TyFGDAXP5+qoAaiMKDg/a1MlT6Fv/S/DaA24S8";
+    sha256 = "sha256-cErtSbGetacXizSyhzYg7CmdsIdS1qhXT5XUGHmriFE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -92,6 +99,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     implementation = "krb5";
-    tests = { inherit (nixosTests) kerberos; };
+    tests = {
+      inherit (nixosTests) kerberos;
+      inherit (python3.pkgs) requests-credssp;
+      bind = bind.override { enableGSSAPI = true; };
+      curl = curl.override { gssSupport = true; };
+      openssh = openssh.override { withKerberos = true; };
+      postgresql = postgresql.override { gssSupport = true; };
+    };
   };
 }

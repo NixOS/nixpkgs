@@ -2,7 +2,6 @@
 , lib
 , buildPackages
 , fetchFromGitLab
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -68,7 +67,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.63";
+    version = "0.3.64";
 
     outputs = [
       "out"
@@ -86,7 +85,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-GQJpw5G9YN7T2upu2FLUxE8UvMRev3K2j4Z1uK1/dt4=";
+      sha256 = "sha256-wIvdciLBWIQjENEipzbVID0eliOcEwqS567pLxVVOsc=";
     };
 
     patches = [

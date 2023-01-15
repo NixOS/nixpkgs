@@ -1,6 +1,7 @@
 { self
 , bash
 , fetchpatch
+, fzf
 , lib
 , openssl
 , zstd
@@ -110,6 +111,7 @@ with self;
   };
 
   async_rpc_websocket = janePackage {
+    duneVersion = "3";
     pname = "async_rpc_websocket";
     hash = "1n93jhkz5r76xcc40c4i4sxcyfz1dbppz8sjfxpwcwjyi6lyhp1p";
     meta.description = "Library to serve and dispatch Async RPCs over websockets";
@@ -131,6 +133,7 @@ with self;
   };
 
   async_smtp = janePackage {
+    duneVersion = "3";
     pname = "async_smtp";
     hash = "1m00j7wcb0blipnc1m6by70gd96a1k621b4dgvgffp8as04a461r";
     minimumOCamlVersion = "4.12";
@@ -159,6 +162,7 @@ with self;
   };
 
   async_websocket = janePackage {
+    duneVersion = "3";
     pname = "async_websocket";
     hash = "16ixqfnx9jp77bvx11dlzsq0pzfpyiif60hl2q06zncyswky9xgb";
     meta.description = "A library that implements the websocket protocol on top of Async";
@@ -243,6 +247,7 @@ with self;
   };
 
   cohttp_async_websocket = janePackage {
+    duneVersion = "3";
     pname = "cohttp_async_websocket";
     hash = "0d0smavnxpnwrmhlcf3b5a3cm3n9kz1y8fh6l28xv6zrn4sc7ik8";
     meta.description = "Websocket library for use with cohttp and async";
@@ -317,6 +322,7 @@ with self;
   };
 
   email_message = janePackage {
+    duneVersion = "3";
     pname = "email_message";
     hash = "00h66l2g5rjaay0hbyqy4v9i866g779miriwv20h9k4mliqdq7in";
     meta.description = "E-mail message parser";
@@ -375,6 +381,9 @@ with self;
     hash = "1ha0i6dx5bgwzbdi4rn98wjwi2imv5p2i7qs7hy0c6cmg88xbdry";
     meta.description = "A library for running the fzf command line tool";
     propagatedBuildInputs = [ async core_kernel ppx_jane ];
+    postPatch = ''
+      substituteInPlace src/fzf.ml --replace /usr/bin/fzf ${fzf}/bin/fzf
+    '';
   };
 
   higher_kinded = janePackage {

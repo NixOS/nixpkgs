@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "smiley-sans";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchzip {
     url = "https://github.com/atelier-anchor/smiley-sans/releases/download/v${version}/smiley-sans-v${version}.zip";
-    sha256 = "sha256-ufx/n3c7XoTZAxmdUMD4fc25z6By3/H4TOn0RtHOwyQ=";
+    sha256 = "sha256-/lsAZRHgmx1TMjm2O5Z0IOiHQM8LKJPXcBKZrlXt3RA=";
     stripRoot = false;
   };
 
@@ -18,9 +18,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A condensed and oblique Chinese typeface seeking a visual balance between the humanist and the geometric";

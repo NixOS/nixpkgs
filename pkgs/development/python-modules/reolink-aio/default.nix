@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.1.3";
+  version = "0.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-4qg43qxrgBSES2ng7DbjgWrsXY+3+olvUe19zW2UXCE=";
+    sha256 = "sha256-rHiKwr720aTpkem8urnK9TP5CkHCEOHdeBp00rhlitI=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +51,7 @@ buildPythonPackage rec {
     "test3_images"
     "test4_properties"
     "test_succes"
+    "test_wrong_password"
   ];
 
   pythonImportsCheck = [

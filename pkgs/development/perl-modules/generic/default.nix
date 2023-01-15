@@ -24,6 +24,8 @@
 # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
 , PERL_USE_UNSAFE_INC ? "1"
 
+, env ? {}
+
 , ...
 }@attrs:
 
@@ -43,10 +45,11 @@ lib.throwIf (attrs ? name) "buildPerlPackage: `name` (\"${attrs.name}\") is depr
     buildInputs = buildInputs ++ [ perl ];
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.mini or perl) ];
 
-    fullperl = buildPerl;
-
     inherit outputs src doCheck checkTarget enableParallelBuilding;
-    inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
+    env = {
+      inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
+      fullperl = buildPerl;
+    } // env;
 
     meta = defaultMeta // (attrs.meta or { });
   });

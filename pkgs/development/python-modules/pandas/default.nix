@@ -28,13 +28,13 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.4.4";
+  version = "1.5.2";
   format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q2wNc4YXtnUYPl8o2zK1FItpStm7oKQMPqJtlrQx22c=";
+    hash = "sha256-IguY0VzuCyzYOaY1i9Hyc9A1a/lkwaGusy1H2wIVSIs=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -96,6 +96,10 @@ buildPythonPackage rec {
     # than expected, e.g. on amd64 with FMA or on arm64
     # https://github.com/pandas-dev/pandas/issues/38921
     "test_rolling_var_numerical_issues"
+    # Requires mathplotlib
+    "test_subset_for_boolean_cols"
+    # DeprecationWarning from numpy
+    "test_sort_values_sparse_no_warning"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"

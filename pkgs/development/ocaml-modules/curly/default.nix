@@ -6,13 +6,13 @@ buildDunePackage rec {
   pname = "curly";
   version = "0.2.0";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/rgrinberg/curly/releases/download/${version}/curly-${version}.tbz";
-    sha256 = "07vqdrklar0d5i83ip7sjw2c1v18a9m3anw07vmi5ay29pxzal6k";
+    hash = "sha256-01D1+03CqxLrPoBbNWpSKOzABJf63DhQLA1kRWdueB8=";
   };
 
   propagatedBuildInputs = [ result ];

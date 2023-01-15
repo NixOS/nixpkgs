@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python-Levenshtein
+, levenshtein
 , pytesseract
 , opencv4
 , fuzzywuzzy
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    python-Levenshtein
+    levenshtein
     pytesseract
     opencv4
     fuzzywuzzy

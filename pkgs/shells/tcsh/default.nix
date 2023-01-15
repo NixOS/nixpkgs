@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.24.06";
+  version = "6.24.07";
 
   src = fetchurl {
     url = "mirror://tcsh/${pname}-${version}.tar.gz";
-    hash = "sha256-qM0M0d3JT4cGgcy9CaNREFDppx5f6ZorAHlB9eGyt6U=";
+    hash = "sha256-dOTpgFy9lBPtNLT/odcvyNDvgaW3lHaFQJFBbOkzaZU=";
   };
 
   strictDeps = true;

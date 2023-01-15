@@ -28,6 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     freezegun
     numpy
+    py
     pytestCheckHook
   ];
 

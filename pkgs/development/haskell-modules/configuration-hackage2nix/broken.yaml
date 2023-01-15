@@ -560,6 +560,7 @@ broken-packages:
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
+  - cabal-plan-bounds
   - cabal-progdeps
   - cabalQuery
   - CabalSearch
@@ -853,6 +854,7 @@ broken-packages:
   - Conscript
   - consistent
   - console-program
+  - constable
   - const-math-ghc-plugin
   - constrained
   - constrained-categories
@@ -1091,6 +1093,7 @@ broken-packages:
   - dense
   - dense-int-set
   - dependent-hashmap
+  - dep-t-dynamic
   - deptrack-core
   - dep-t-value
   - derangement
@@ -1443,6 +1446,7 @@ broken-packages:
   - fadno-braids
   - fadno-xml
   - failable-list
+  - FailT
   - failure-detector
   - fake
   - fake-type
@@ -2323,7 +2327,6 @@ broken-packages:
   - HLogger
   - hlongurl
   - hls-brittany-plugin
-  - hls-call-hierarchy-plugin
   - hls-haddock-comments-plugin
   - hls-selection-range-plugin
   - hls-stan-plugin
@@ -2661,7 +2664,6 @@ broken-packages:
   - identifiers
   - idiii
   - idna2008
-  - idris
   - IDynamic
   - ieee-utils
   - iexcloud
@@ -4080,7 +4082,6 @@ broken-packages:
   - posit
   - positron
   - posix-acl
-  - posix-api
   - posix-realtime
   - posix-waitpid
   - postcodes
@@ -4327,6 +4328,7 @@ broken-packages:
   - rattle
   - rattletrap
   - raven-haskell-scotty
+  - raylib-imgui
   - raz
   - rbst
   - rclient
@@ -4360,6 +4362,7 @@ broken-packages:
   - record-wrangler
   - recursors
   - red-black-record
+  - redis-glob
   - redis-hs
   - redis-simple
   - Redmine
@@ -4904,6 +4907,8 @@ broken-packages:
   - socket-activation
   - socketed
   - socketio
+  - sockets
+  - sockets-and-pipes
   - socket-sctp
   - socket-unix
   - sodium
@@ -5819,6 +5824,7 @@ broken-packages:
   - X11-rm
   - X11-xdamage
   - X11-xfixes
+  - xcffib
   - xchat-plugin
   - xcp
   - x-dsp

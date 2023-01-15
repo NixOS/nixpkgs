@@ -41,13 +41,12 @@ let
         pymongo
       ]);
 
-      # 4.2 < mongodb <= 6.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else if versionAtLeast version "4.2" then rec {
+    } else rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
         cheetah3
@@ -55,23 +54,12 @@ let
         setuptools
       ]);
 
-      # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else rec {
-      python = scons.python.withPackages (ps: with ps; [
-        setuptools
-        typing
-        cheetah3
-      ]);
-
-      scons = sconsPackages.scons_3_1_2;
-      mozjsVersion = "45";
-      mozjsReplace = "defined(HAVE_SINCOS)";
-   };
+    };
 
   system-libraries = [
     "boost"

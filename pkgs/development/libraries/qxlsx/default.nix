@@ -7,23 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "qxlsx";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
     rev = "v${version}";
-    hash = "sha256-01G7eJRrnee/acEeobYAYMY+93y+I0ASOTVRGuO+IcA=";
+    hash = "sha256-T+PUeml4O6uwY6DCAsBer4gDo+nrSGGus+yQv02CJcE=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase ];
-
-  # Don't force Qt definitions onto users: https://github.com/QtExcel/QXlsx/commit/8e83402d
-  postPatch = ''
-    substituteInPlace QXlsx/CMakeLists.txt \
-     --replace 'target_compile_definitions(QXlsx PUBLIC' 'target_compile_definitions(QXlsx PRIVATE'
-  '';
 
   preConfigure = ''
     cd QXlsx

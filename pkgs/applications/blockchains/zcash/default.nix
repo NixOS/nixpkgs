@@ -1,5 +1,5 @@
 { autoreconfHook, boost180, cargo, coreutils, curl, cxx-rs, db62, fetchFromGitHub
-, hexdump, hostPlatform, lib, libevent, libsodium, makeWrapper, rust, rustPlatform
+, hexdump, lib, libevent, libsodium, makeWrapper, rust, rustPlatform
 , pkg-config, Security, stdenv, testers, utf8cpp, util-linux, zcash, zeromq
 }:
 
@@ -82,6 +82,6 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     license = licenses.mit;
 
     # https://github.com/zcash/zcash/issues/4405
-    broken = hostPlatform.isAarch64 && hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
 }

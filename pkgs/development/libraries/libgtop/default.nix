@@ -7,6 +7,7 @@
 , gobject-introspection
 , gnome
 , gtk-doc
+, deterministic-uname
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    # uname output embedded in https://gitlab.gnome.org/GNOME/libgtop/-/blob/master/src/daemon/Makefile.am
+    deterministic-uname
     pkg-config
     gtk-doc
     perl

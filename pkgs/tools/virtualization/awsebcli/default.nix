@@ -49,10 +49,10 @@ with localPython.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
       --replace "requests>=2.20.1,<=2.26" "requests==2.28.1" \
-      --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<1.27.76" \
+      --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<2" \
       --replace "pathspec==0.9.0" "pathspec>=0.10.0,<0.11.0" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
-      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<2.1.0"
+      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<2.2.0"
   '';
 
   buildInputs = [

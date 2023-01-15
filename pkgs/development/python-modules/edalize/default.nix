@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "olofk";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fpUNCxW7+uymodJ/yGME9VNcCEZdBROIdT1+blpgkzA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-h6b0mdAUR4NsN2SpnLu5OgS9Fy9ZRitG+5Sbon1jlUM=";
   };
 
   postPatch = ''

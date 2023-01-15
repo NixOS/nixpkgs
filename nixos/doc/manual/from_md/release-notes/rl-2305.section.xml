@@ -62,6 +62,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/StevenBlack/hosts">stevenblack-blocklist</link>,
+          A unified hosts file with base extensions for blocking
+          unwanted websites. Available as
+          <link xlink:href="options.html#opt-networking.stevenblack.enable">networking.stevenblack</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ellie/atuin">atuin</link>,
           a sync server for shell history. Available as
           <link linkend="opt-services.atuin.enable">services.atuin</link>.
@@ -122,6 +130,14 @@
           delete all of their local containers, images, volumes, etc, by
           running <literal>podman system reset --force</literal> once
           before upgrading their systems.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>git-bug</literal> has been updated to at least
+          version 0.8.0, which includes backwards incompatible changes.
+          The <literal>git-bug-migration</literal> package can be used
+          to upgrade existing repositories.
         </para>
       </listitem>
       <listitem>
@@ -200,6 +216,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>llvmPackages_rocm.llvm</literal> will not contain
+          <literal>clang</literal> or <literal>compiler-rt</literal>.
+          <literal>llvmPackages_rocm.clang</literal> will not contain
+          <literal>llvm</literal>.
+          <literal>llvmPackages_rocm.clangNoCompilerRt</literal> has
+          been removed in favor of using
+          <literal>llvmPackages_rocm.clang-unwrapped</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Nginx module now validates the syntax of config files at
           build time. For more complex configurations (using
           <literal>include</literal> with out-of-store files notably)
@@ -253,6 +280,14 @@
           The <literal>nix.readOnlyStore</literal> option has been
           renamed to <literal>boot.readOnlyNixStore</literal> to clarify
           that it configures the NixOS boot process, not the Nix daemon.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Deprecated <literal>xlibsWrapper</literal> transitional
+          package has been removed in favour of direct use of its
+          constitutents: <literal>xorg.libX11</literal>,
+          <literal>freetype</literal> and others.
         </para>
       </listitem>
     </itemizedlist>
@@ -461,6 +496,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>hip</literal> has been separated into
+          <literal>hip</literal>, <literal>hip-common</literal> and
+          <literal>hipcc</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
@@ -507,6 +549,13 @@
           <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
           can now access AX.25 interfaces via the
           <literal>libax25</literal> package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-version</literal> now accepts
+          <literal>--configuration-revision</literal> to display more
+          information about the current generation revision
         </para>
       </listitem>
     </itemizedlist>

@@ -1,19 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gevent
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
   version = "1.4.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-P8d2GIxFAAHeXjXgIxKGwahiH1TW/9fE+V0f9Ra54wo=";
+  src = fetchFromGitHub {
+    owner = "jgehrcke";
+    repo = "gipc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T5TqLanODyzJGyjDZz+75bbz3THxoobYnfJFQxAB76E=";
   };
 
-  propagatedBuildInputs = [ gevent ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "gevent>=1.5,<=21.12.0" "gevent>=1.5"
+  '';
+
+  propagatedBuildInputs = [
+    gevent
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "gevent-cooperative child processes and IPC";

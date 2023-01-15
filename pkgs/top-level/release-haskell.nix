@@ -345,6 +345,13 @@ let
               ;
             };
           };
+
+      pkgsCross.ghcjs.haskellPackages = {
+        inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+          ghc
+          hello
+        ;
+      };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the

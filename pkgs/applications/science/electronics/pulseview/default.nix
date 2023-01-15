@@ -30,7 +30,7 @@ mkDerivation rec {
     # Fixes replaced/obsolete Qt methods
     (fetchpatch {
        url = "https://github.com/sigrokproject/pulseview/commit/ae726b70a7ada9a4be5808e00f0c951318479684.patch";
-       sha256 = "1rg8azin2b7gmp68bn3z398swqlg15ddyp4xynrz49wj44cgxsdv";
+       sha256 = "sha256-6bFXFAnTO+MBUmslw55gWWSCCPwnejqKGpHeJOoH0e8=";
      })
   ];
 

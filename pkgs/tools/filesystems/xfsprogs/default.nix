@@ -7,8 +7,7 @@ stdenv.mkDerivation rec {
   version = "6.1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tag.xz";
-    name = "${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
     hash = "sha256-7OuQFcTr76VvqF+v91bMtR7Sz5w5uiOXZ/jnhwXoUlE=";
   };
 

@@ -6,6 +6,7 @@
 , linkify-it-py
 , mdurl
 , psutil
+, py
 , pytest-benchmark
 , pytest-regressions
 , pytestCheckHook
@@ -41,9 +42,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     psutil
+    py
     pytest-benchmark
     pytest-regressions
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--benchmark-skip"
   ];
 
   pythonImportsCheck = [

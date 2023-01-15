@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,16 +20,8 @@ buildPythonPackage rec {
     owner = "Richardk2n";
     repo = "pylsp-mypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-fZ2bPPjBK/H2jMI4S3EhvWJaNl4tK7HstxcHSAkoFW4=";
+    hash = "sha256-BpYg2noReHFgJ/5iQI09XUWNAN7UdcYgqpZ/IPr17Ao=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "0001-adapt-test-to-latest-mypy.patch";
-      url = "https://github.com/python-lsp/pylsp-mypy/commit/99cf687798464f810b128881dbbec82aa5353e04.patch";
-      sha256 = "sha256-wLaGMaW/gTab2fX7zGnemLQQNDWxBURYb7VsgEas61Y=";
-    })
-  ];
 
   propagatedBuildInputs = [
     mypy

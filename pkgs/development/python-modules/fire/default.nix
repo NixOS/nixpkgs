@@ -4,7 +4,7 @@
 , six
 , hypothesis
 , mock
-, python-Levenshtein
+, levenshtein
 , pytestCheckHook
 , termcolor
 , pythonOlder
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     mock
-    python-Levenshtein
+    levenshtein
     pytestCheckHook
   ];
 

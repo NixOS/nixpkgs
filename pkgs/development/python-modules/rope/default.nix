@@ -1,33 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, nose }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytoolconfig
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "0.18.0";
+  version = "1.6.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "786b5c38c530d4846aa68a42604f61b4e69a493390e3ca11b88df0fbfdc3ed04";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "python-rope";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-avNCti288dY9pl5AVTmUzZU/vb6WDkXEtELNlEi6L/o=";
   };
 
-  patches = [
-    # Python 3.9 ast changes
-    (fetchpatch {
-      url = "https://github.com/python-rope/rope/pull/333.patch";
-      excludes = [ ".github/workflows/main.yml" ];
-      sha256 = "1gq7n1zs18ndmv0p8jg1h5pawabi1m9m9z2w5hgidvqmpmcziky0";
-    })
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    # tracked upstream here https://github.com/python-rope/rope/issues/247
-    NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
-  '';
+  propagatedBuildInputs = [
+    pytoolconfig
+  ] ++ pytoolconfig.optional-dependencies.global;
+
+  checkInputs = [
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_search_submodule"
+    "test_get_package_source_pytest"
+    "test_get_modname_folder"
+  ];
 
   meta = with lib; {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
-    maintainers = with maintainers; [ goibhniu ];
+    changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

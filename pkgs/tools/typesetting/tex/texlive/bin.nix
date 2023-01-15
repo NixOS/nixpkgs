@@ -238,7 +238,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     "xetex"
   ];
   postInstall = ''
-    for output in $outputs; do
+    for output in $(getAllOutputNames); do
       mkdir -p "''${!output}/bin"
     done
 

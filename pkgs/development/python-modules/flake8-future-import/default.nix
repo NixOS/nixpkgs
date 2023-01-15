@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "flake8-future-import";
-  version = "0.4.6";
+  version = "0.4.7";
 
   # PyPI tarball doesn't include the test suite
   src = fetchFromGitHub {
     owner = "xZise";
     repo = "flake8-future-import";
-    rev = version;
-    sha256 = "00q8n15xdnvqj454arn7xxksyrzh0dw996kjyy7g9rdk0rf8x82z";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 
   patches = lib.optionals (pythonAtLeast "3.10") [

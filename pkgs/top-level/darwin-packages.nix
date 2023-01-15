@@ -1,19 +1,11 @@
 { lib
 , buildPackages, pkgs, targetPackages
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, stdenv, splicePackages, newScope
+, generateSplicesForMkScope, makeScopeWithSplicing
+, stdenv
 , preLibcCrossHeaders
 }:
 
 let
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.darwin;
-    selfBuildHost = pkgsBuildHost.darwin;
-    selfBuildTarget = pkgsBuildTarget.darwin;
-    selfHostHost = pkgsHostHost.darwin;
-    selfTargetTarget = pkgsTargetTarget.darwin or {}; # might be missing
-  };
-
   # Prefix for binaries. Customarily ends with a dash separator.
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
@@ -22,7 +14,7 @@ let
                                         (stdenv.targetPlatform.config + "-");
 in
 
-lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
+makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -87,6 +79,20 @@ impure-cmds // appleSourcePackages // chooseLibs // {
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
     bintools = self.binutils-unwrapped;
+  };
+
+  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
+    inherit (pkgs) binutils-unwrapped;
+    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    dualAs = true;
+  };
+
+  binutilsDualAs = pkgs.wrapBintoolsWith {
+    libc =
+      if stdenv.targetPlatform != stdenv.hostPlatform
+      then pkgs.libcCross
+      else pkgs.stdenv.cc.libc;
+    bintools = self.binutilsDualAs-unwrapped;
   };
 
   binutilsNoLibc = pkgs.wrapBintoolsWith {

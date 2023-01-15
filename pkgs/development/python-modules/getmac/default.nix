@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, py
 , pytest-benchmark
 , pytest-mock
 , pytestCheckHook
@@ -19,6 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
+    py
     pytestCheckHook
     pytest-benchmark
     pytest-mock

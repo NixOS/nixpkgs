@@ -240,27 +240,15 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals isPy37 [
-    # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
-    # See: https://bugs.python.org/issue11122
-    ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
-    # The workaround is for unittests on Win64, which we don't support.
-    # It does break aarch64-darwin, which we do support. See:
-    # * https://bugs.python.org/issue35523
-    # * https://github.com/python/cpython/commit/e6b247c8e524
-    ./3.7/no-win64-workaround.patch
   ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonAtLeast "3.11") [
     ./3.11/darwin-libutil.patch
-  ] ++ optionals (pythonOlder "3.8") [
-    # Backport from CPython 3.8 of a good list of tests to run for PGO.
-    ./3.7/profile-task.patch
   ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
-  ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
+  ] ++ optionals (isPy3k && hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
@@ -293,15 +281,17 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-  LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
-  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
-    "glibc" = "-lgcc_s";
-    "musl" = "-lgcc_eh";
-  }."${stdenv.hostPlatform.libc}" or "");
-  # Determinism: We fix the hashes of str, bytes and datetime objects.
-  PYTHONHASHSEED=0;
+  env = {
+    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
+    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
+    NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
+      "glibc" = "-lgcc_s";
+      "musl" = "-lgcc_eh";
+    }."${stdenv.hostPlatform.libc}" or "");
+    # Determinism: We fix the hashes of str, bytes and datetime objects.
+    PYTHONHASHSEED=0;
+  };
 
   configureFlags = [
     "--without-ensurepip"

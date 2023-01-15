@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, markuppy
 , odfpy
 , openpyxl
 , pandas
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     all = [
-      # markuppy
+      markuppy
       odfpy
       openpyxl
       pandas
@@ -50,7 +51,7 @@ buildPythonPackage rec {
       tabulate
     ];
     html = [
-      # markuppy
+      markuppy
     ];
     ods = [
       odfpy

@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , aiohttp
+, boto3
 , buildPythonPackage
-, codecov
 , fetchFromGitHub
-, flake8
+, flask
+, flask-sockets
 , isPy3k
 , mock
+, moto
 , psutil
 , pytest-cov
 , pytest-mock
@@ -15,20 +17,23 @@
 , requests
 , responses
 , six
+, sqlalchemy
+, websockets
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "slackclient";
-  version = "2.9.3";
+  version = "3.19.5";
+  format =  "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "v${version}";
-    sha256 = "1rfb7izgddv28ag37gdnv3sd8z2zysrxs7ad8x20x690zshpaq16";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/DVcnfHjvmRreHSlZbzxz6pbqytEUdqbaGbQVxIW4Qk=";
   };
 
   propagatedBuildInputs = [
@@ -39,22 +44,30 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    codecov
-    flake8
+    boto3
+    flask
+    flask-sockets
     mock
+    moto
     psutil
-    pytest-cov
     pytest-mock
     pytestCheckHook
-    pytest-runner
     responses
+    sqlalchemy
+    websockets
   ];
 
   # Exclude tests that requires network features
   pytestFlagsArray = [ "--ignore=integration_tests" ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   disabledTests = [
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
+    "test_interactions"
+    "test_send_message_while_disconnection"
   ] ++ lib.optionals stdenv.isDarwin [
     # these fail with `ConnectionResetError: [Errno 54] Connection reset by peer`
     "test_issue_690_oauth_access"

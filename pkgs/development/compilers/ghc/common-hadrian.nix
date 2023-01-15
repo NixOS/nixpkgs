@@ -353,6 +353,8 @@ stdenv.mkDerivation ({
   '';
 
   ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
+  # GHC currently ships an edited config.sub so ghcjs is accepted which we can not rollback
+  ${if targetPlatform.isGhcjs then "dontUpdateAutotoolsGnuConfigScripts" else null} = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]

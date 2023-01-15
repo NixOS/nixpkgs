@@ -159,6 +159,8 @@ in
   /* Javacript */
   ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
     haskell.packages.ghcjs.hello = nativePlatforms;
+    haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;
+    haskellPackages.hello = nativePlatforms;
   };
 
   /* Linux on Raspberrypi */

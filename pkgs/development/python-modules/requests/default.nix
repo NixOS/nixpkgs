@@ -6,6 +6,7 @@
 , chardet
 , charset-normalizer
 , fetchPypi
+, fetchpatch
 , idna
 , pysocks
 , pytest-mock
@@ -18,6 +19,7 @@
 buildPythonPackage rec {
   pname = "requests";
   version = "2.28.1";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
@@ -26,6 +28,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
   };
+
+  patches = [
+    ./relax-charset-normalizer.patch
+  ];
 
   propagatedBuildInputs = [
     brotlicffi

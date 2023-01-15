@@ -10,6 +10,7 @@
 , packaging
 , pillow
 , poetry-core
+, py
 , pydantic
 , pyjwt
 , pytest-aiohttp
@@ -22,6 +23,7 @@
 , pythonOlder
 , pytz
 , setuptools
+, setuptools-scm
 , termcolor
 , typer
 , ffmpeg
@@ -29,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.5.3";
+  version = "4.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -38,7 +40,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FZXnJorY7WNgDVajULZyFwJ13RBbClXK38CCyF7ASmI=";
+    hash = "sha256-5xHU4WC7HPDEJsfCX4bVsK3p6SWZ/fHH7APbFtDGC40=";
   };
 
   postPatch = ''
@@ -46,8 +48,11 @@ buildPythonPackage rec {
       --replace "--cov=pyunifiprotect --cov-append" ""
   '';
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -74,6 +79,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     ffmpeg # Required for command ffprobe
+    py
     pytest-aiohttp
     pytest-asyncio
     pytest-benchmark

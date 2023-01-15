@@ -21,4 +21,7 @@
 
   # Also expose DebugSymbols; used by `llvmPackages_8.lldb` package.
   DebugSymbols = {};
+
+  # Also expose MultitouchSupport; used by `chuck` package.
+  MultitouchSupport = {};
 }

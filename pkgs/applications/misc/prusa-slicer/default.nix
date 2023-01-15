@@ -183,5 +183,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3;
     maintainers = with maintainers; [ moredread tweber ];
+  } // lib.optionalAttrs (stdenv.isDarwin) {
+    mainProgram = "PrusaSlicer";
   };
 }

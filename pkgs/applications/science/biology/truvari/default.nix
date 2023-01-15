@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pyvcf
-    python-Levenshtein
+    levenshtein
     progressbar2
     pysam
     pyfaidx

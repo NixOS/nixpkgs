@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, intltool, pkg-config, qmake, wrapQtAppsHook, libqalculate, qtbase, qttools }:
+{ lib, stdenv, fetchFromGitHub, intltool, pkg-config, qmake, wrapQtAppsHook, libqalculate, qtbase, qttools, qtsvg, qtwayland }:
 
 stdenv.mkDerivation rec {
   pname = "qalculate-qt";
@@ -8,11 +8,16 @@ stdenv.mkDerivation rec {
     owner = "qalculate";
     repo = "qalculate-qt";
     rev = "v${version}";
-    sha256 = "sha256-1MU/Wici+NQWbjoNpE9q6jKx8aKt85OAfb+ZsN/oK5w=";
+    hash = "sha256-1MU/Wici+NQWbjoNpE9q6jKx8aKt85OAfb+ZsN/oK5w=";
   };
 
   nativeBuildInputs = [ qmake intltool pkg-config wrapQtAppsHook ];
-  buildInputs = [ libqalculate qtbase qttools ];
+  buildInputs = [ libqalculate qtbase qttools qtsvg qtwayland ];
+
+  postPatch = ''
+    substituteInPlace qalculate-qt.pro\
+      --replace "LRELEASE" "${qttools.dev}/bin/lrelease"
+  '';
 
   meta = with lib; {
     description = "The ultimate desktop calculator";

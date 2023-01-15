@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
-, applyPatches
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -89,11 +88,12 @@
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
 , withFido2 ? true
-, withHomed ? false
+, withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -130,7 +130,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.1";
+  version = "252.4";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -147,7 +147,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-G43qbNF7znTITSM78sOL0qi8nqaA7qIhmiqP/rZKjXY=";
+    hash = "sha256-8ejSEt3QyCSARGGVbXWac2dB9jdUpC4eX2rN0iENQX0=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -177,20 +177,10 @@ stdenv.mkDerivation {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-d43ec090ceb2bf0016a065103a4c34d0c43cb906.tar.gz";
-        sha256 = "sha256-e5rHmz0uyNgJwrAj96VGWWu9YHhZtJXoDpCtj17eC5w=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-cccd4bcaf381c2729adc000381bd89906003e72a.tar.gz";
+        sha256 = "2CFZEzWqUy6OOF3c+LN4Zmy3RqMzfdRHp+B5zlWJsoE=";
       };
-      oe-core-patched = applyPatches {
-        src = oe-core;
-        patches = [
-          (fetchpatch {
-            url = "https://lore.kernel.org/all/20221109002306.853567-1-raj.khem@gmail.com/raw";
-            includes = [ "meta/recipes-core/systemd/systemd/*" ];
-            sha256 = "sha256-aPJjN4vesZwFzgY4Nb6uaIuHz/quH1HccSVEof32IOU=";
-          })
-        ];
-      };
-      musl-patches = oe-core-patched + "/meta/recipes-core/systemd/systemd";
+      musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
       (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
@@ -212,8 +202,7 @@ stdenv.mkDerivation {
       (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0001-networkd-ipv4acd.c-Use-net-if.h-for-getting-IFF_LOOP.patch")
-      (musl-patches + "/0001-test-compile-test-utmp.c-only-if-UTMP-is-enabled.patch")
+      (musl-patches + "/0001-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
     ]
   );
 

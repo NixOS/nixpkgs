@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 # This is the builder for all X.org components.
 source $stdenv/setup
 

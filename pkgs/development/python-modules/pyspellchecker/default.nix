@@ -1,20 +1,29 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyspellchecker";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.7.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zKbDJCjuOI0Vsbh+lK/Dv5T7GGK6hIo7RJvs1inSatM=";
+  src = fetchFromGitHub {
+    owner = "barrust";
+    repo = "pyspellchecker";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DM1Q8OirFMoYqjdSnsNL5r7Zxffxc0DEXwv1W6y8GnE=";
   };
 
-  # no tests in PyPI
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Pure python spell checking";

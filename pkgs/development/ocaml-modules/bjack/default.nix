@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, libsamplerate, libjack2 }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, Accelerate, CoreAudio, dune-configurator, libsamplerate, libjack2 }:
 
 buildDunePackage rec {
   pname = "bjack";
@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "1gf31a8i9byp6npn0x6gydcickn6sf5dnzmqr2c1b9jn2nl7334c";
   };
 
-  buildInputs = [ dune-configurator ];
+  buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreAudio ];
   propagatedBuildInputs = [ libsamplerate libjack2 ];
 
   meta = with lib; {

@@ -66,10 +66,6 @@ self: super: {
   # > https://github.com/roelvandijk/numerals
   numerals = doJailbreak (dontCheck super.numerals);
 
-  # Too stricut upper bound on time
-  # https://github.com/acw/rate-limit/issues/9
-  rate-limit = doJailbreak super.rate-limit;
-
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -452,7 +448,7 @@ self: super: {
   #
   # # Depends on itself for testing
   # doctest-discover = addBuildTool super.doctest-discover
-  #   (if pkgs.buildPlatform != pkgs.hostPlatform
+  #   (if pkgs.stdenv.buildPlatform != pkgs.stdenv.hostPlatform
   #    then self.buildHaskellPackages.doctest-discover
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
@@ -477,12 +473,6 @@ self: super: {
 
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
-
-  # Too strict upper bounds on bytestring & time
-  # https://github.com/barrucadu/irc-conduit/issues/35
-  irc-conduit = doJailbreak super.irc-conduit;
-  # https://github.com/barrucadu/irc-client/issues/77
-  irc-client = doJailbreak super.irc-client;
 
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
@@ -654,12 +644,15 @@ self: super: {
   }) newer;
 
   # * The standard libraries are compiled separately.
-  # * We need multiple patches from master to fix compilation with
+  # * We need a patch from master to fix compilation with
   #   updated dependencies (haskeline and megaparsec) which can be
-  #   removed when the next idris release (1.3.4 probably) comes
-  #   around.
+  #   removed when the next idris release comes around.
   idris = self.generateOptparseApplicativeCompletions [ "idris" ]
-    (doJailbreak (dontCheck super.idris));
+    (appendPatch (fetchpatch {
+      name = "idris-libffi-0.2.patch";
+      url = "https://github.com/idris-lang/Idris-dev/commit/6d6017f906c5aa95594dba0fd75e7a512f87883a.patch";
+      hash = "sha256-wyLjqCyLh5quHMOwLM5/XjlhylVC7UuahAM79D8+uls=";
+    }) (doJailbreak (dontCheck super.idris)));
 
   # Too strict bound on hspec
   # https://github.com/lspitzner/multistate/issues/9#issuecomment-1367853016
@@ -1357,9 +1350,7 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
-    (assert super.hls-call-hierarchy-plugin.version == "1.1.0.0"; disableCabalFlag "callHierarchy") # Disabled temporarily: https://github.com/haskell/haskell-language-server/pull/3431
   ]).overrideScope (lself: lsuper: {
-    hls-call-hierarchy-plugin = null;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -1977,12 +1968,6 @@ self: super: {
       "--skip" "/toJsonSerializer/should generate valid JSON/"
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
-  # https://github.com/ssadler/aeson-quick/issues/3
-  aeson-quick = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/asLens.set/&&!/complex.set/&&!/multipleKeys.set/"
-    ] ++ drv.testFlags or [];
-  }) super.aeson-quick;
   # https://github.com/minio/minio-hs/issues/165
   minio-hs = overrideCabal (drv: {
     testFlags = [
@@ -2109,13 +2094,6 @@ self: super: {
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
-
-  # Support network >= 3.1.2
-  # https://github.com/erebe/wstunnel/pull/107
-  wstunnel = appendPatch (fetchpatch {
-    url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
-    sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
-  }) super.wstunnel;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
@@ -2337,4 +2315,8 @@ self: super: {
     revision = null;
     editedCabalFile = null;
   }) super.true-name);
+
+  # posix-api has had broken tests since 2020 (until at least 2023-01-11)
+  # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
+  posix-api = dontCheck super.posix-api;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

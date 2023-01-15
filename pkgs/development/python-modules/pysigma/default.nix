@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.8.9";
+  version = "0.8.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SXZ6bo1b5xhVGSlWr51ZCxT0Ov1g/qd8V43P5KEhY+s=";
+    hash = "sha256-OAhKeAKRT2/A6VO+PxUBi7bkaQVNRT59boyLPGdO+Yw=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to parse and convert Sigma rules into queries";
     homepage = "https://github.com/SigmaHQ/pySigma";
+    changelog = "https://github.com/SigmaHQ/pySigma/releases/tag/v${version}";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };

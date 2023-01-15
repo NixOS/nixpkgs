@@ -192,6 +192,7 @@ dont-distribute-packages:
  - HROOT-hist
  - HROOT-io
  - HROOT-math
+ - HROOT-net
  - HROOT-tree
  - HRay
  - HSGEP
@@ -672,7 +673,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - ascii-cows
+ - ascii-superset_1_2_5_0
  - ascii-table
+ - ascii-th_1_2_0_0
+ - ascii_1_5_1_0
  - asic
  - asil
  - assert4hs-hspec
@@ -870,7 +874,6 @@ dont-distribute-packages:
  - bv-sized
  - bv-sized-lens
  - bytable
- - bytelog
  - bytepatch
  - bytestring-builder-varword
  - bytestring-read
@@ -1026,7 +1029,9 @@ dont-distribute-packages:
  - comark
  - comfort-array
  - comfort-array-shape
+ - comfort-array_0_5_2
  - comfort-fftw
+ - comfort-glpk
  - commsec
  - commsec-keyexchange
  - comonad-random
@@ -1395,6 +1400,7 @@ dont-distribute-packages:
  - ewe
  - exference
  - exinst-aeson
+ - exinst-base
  - exinst-bytes
  - exinst-cereal
  - exinst-deepseq
@@ -3660,7 +3666,6 @@ dont-distribute-packages:
  - snowflake-server
  - sock2stream
  - socket-io
- - sockets
  - socketson
  - solga-swagger
  - solr
@@ -3815,6 +3820,7 @@ dont-distribute-packages:
  - synthesizer
  - synthesizer-alsa
  - synthesizer-core
+ - synthesizer-core_0_8_3
  - synthesizer-dimensional
  - synthesizer-filter
  - synthesizer-llvm

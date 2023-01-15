@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "openstep-plist";
-  version = "0.3.0";
+  version = "0.3.0.post1";
 
   src = fetchPypi {
     pname = "openstep_plist";
     inherit version;
-    sha256 = "sha256-KO4sGKjod5BwUFQ1MU2S1dG0DyiJ06mdroMbRDsugBk=";
+    sha256 = "sha256-GK/z1e3tnr++3+ukRKPASDJGl7+KObsENhwN1Tv+qws=";
     extension = "zip";
   };
 

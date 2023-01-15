@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.1.1";
+  version = "2023.1.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2020,8 +2020,9 @@
     "matter" = ps: with ps; [
       aiohttp-cors
       fnvhash
+      python-matter-server
       sqlalchemy
-    ]; # missing inputs: python-matter-server
+    ];
     "maxcube" = ps: with ps; [
       maxcube-api
     ];
@@ -4439,6 +4440,7 @@
     "mailgun"
     "manual"
     "manual_mqtt"
+    "matter"
     "maxcube"
     "mazda"
     "meater"

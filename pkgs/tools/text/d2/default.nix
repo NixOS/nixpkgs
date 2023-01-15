@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "d2";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "terrastruct";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-whxXMU9jQ/ixXUx6vqs1CdLWZGHTBFJcA6v1Z4aAV4s=";
+    hash = "sha256-z7R3lseEPWtBl5wjpMK8okQG31L1k2R/+B9M25TrI6s=";
   };
 
   vendorHash = "sha256-t94xCNteYRpbV2GzrD4ppD8xfUV1HTJPkipEzr36CaM=";

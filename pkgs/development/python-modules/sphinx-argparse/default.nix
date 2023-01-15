@@ -7,11 +7,12 @@
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5UrWyPiVrGu50N2foH5H4TeipCrhinFFFSYuhrTMS6s=";
+    pname = "sphinx_argparse";
+    inherit version;
+    sha256 = "sha256-4PNBhOtW8S+s53T7yHuICr25AXoJmNHsVZsmfpaX5Ek=";
   };
 
   postPatch = ''

@@ -36,6 +36,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace "sphinx_automodapi/tests/helpers.py" \
       --replace '[0]), None)' "[0]), (None, '${testInventory}'))"
+
+    substituteInPlace "sphinx_automodapi/tests/test_cases.py" \
+      --replace '[0]), None)' "[0]), (None, '${testInventory}'))"
   '';
 
   checkInputs = [
