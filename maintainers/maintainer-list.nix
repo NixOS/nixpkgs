@@ -6083,6 +6083,12 @@
     githubId = 61913481;
     name = "Mat Marini";
   };
+  illustratedman-code = {
+    email = "illustratedman.code@gmail.com";
+    github = "IllustratedMan-code";
+    githubId = 60514384;
+    name = "David Lewis";
+  };
   illustris = {
     email = "me@illustris.tech";
     github = "illustris";
