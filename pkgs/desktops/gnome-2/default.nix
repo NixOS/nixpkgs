@@ -16,8 +16,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libgnomeprint = callPackage ./platform/libgnomeprint { };
 
-  libgnomeprintui = callPackage ./platform/libgnomeprintui { };
-
   libgnomecups = callPackage ./platform/libgnomecups { };
 
   libgtkhtml = callPackage ./platform/libgtkhtml { };
@@ -80,5 +78,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_python = throw "gnome2.gnome_python has been removed"; # 2023-01-14
   gnome_python_desktop = throw "gnome2.gnome_python_desktop has been removed"; # 2023-01-14
   libglademm = throw "gnome2.libglademm has been removed"; # 2022-01-15
+  libgnomeprintui = throw "gnome2.libgnomeprintui has been removed"; # 2023-01-15
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
 })
