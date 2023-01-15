@@ -38585,4 +38585,6 @@ with pkgs;
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 
   ov = callPackage ../tools/text/ov { };
+
+  crazydiskinfo = callPackage ../applications/misc/crazydiskinfo { };
 }

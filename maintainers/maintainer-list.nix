@@ -16325,4 +16325,10 @@
     github = "franzmondlichtmann";
     githubId = 105480088;
   };
+  asimpson = {
+    email = "adam@adamsimpson.net";
+    name = "Adam Simpson";
+    github = "asimpson";
+    githubId = 1048831;
+  };
 }
