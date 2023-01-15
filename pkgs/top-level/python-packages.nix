@@ -2541,6 +2541,8 @@ self: super: with self; {
 
   django-filter = callPackage ../development/python-modules/django-filter { };
 
+  django-fobi = callPackage ../development/python-modules/django-fobi { };
+
   django-formtools = callPackage ../development/python-modules/django-formtools { };
 
   django-graphiql-debug-toolbar = callPackage ../development/python-modules/django-graphiql-debug-toolbar { };
@@ -2583,6 +2585,10 @@ self: super: with self; {
   django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
+
+  django-nine = callPackage ../development/python-modules/django-nine { };
+
+  django-nonefield = callPackage ../development/python-modules/django-nonefield { };
 
   django_nose = callPackage ../development/python-modules/django_nose { };
 
