@@ -181,6 +181,7 @@ rec {
       src = unresholved;
       inherit version pname;
       buildInputs = [ resholve ];
+      disallowedReferences = [ resholve ];
 
       # retain a reference to the base
       passthru = unresholved.passthru // {
