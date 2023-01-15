@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "WojciechMula";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-APpL99kOwzIQjePvRDeJ0FDm1kjBi6083JMKuBqtaRk=";
   };
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
       key strings occurrences at once in some input text.
     '';
     homepage = "https://github.com/WojciechMula/pyahocorasick";
+    changelog = "https://github.com/WojciechMula/pyahocorasick/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
