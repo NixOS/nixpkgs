@@ -65,11 +65,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+/*
   postPatch = ''
     stat src/libs/extensionsystem/pluginmanager.cpp
     cp ${./src/qt-creator-opensource-src-8.0.1/src/libs/extensionsystem/pluginmanager.cpp} src/libs/extensionsystem/pluginmanager.cpp
     cp ${./src/qt-creator-opensource-src-8.0.1/src/plugins/welcome/welcomeplugin.cpp} src/plugins/welcome/welcomeplugin.cpp
   '';
+*/
 
   #buildFlags = optional withDocumentation "docs";
 
