@@ -29506,6 +29506,8 @@ with pkgs;
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
+  buzztrax = callPackage ../applications/audio/buzztrax { };
+
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
