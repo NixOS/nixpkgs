@@ -14,7 +14,7 @@ let
         fetchgit {
           inherit (args) url rev sha256;
           fetchLFS = false;
-          fetchSubmodules = false;
+          fetchSubmodules = true;
           deepClone = false;
           leaveDotGit = false;
         };
