@@ -326,6 +326,24 @@
       </listitem>
       <listitem>
         <para>
+          A few openssh options have been moved from extraConfig to the
+          new freeform option <literal>settings</literal> and renamed as
+          follow:
+          <literal>services.openssh.kbdInteractiveAuthentication</literal>
+          to
+          <literal>services.openssh.settings.KbdInteractiveAuthentication</literal>,
+          <literal>services.openssh.passwordAuthentication</literal> to
+          <literal>services.openssh.settings.PasswordAuthentication</literal>,
+          <literal>services.openssh.useDns</literal> to
+          <literal>services.openssh.settings.UseDns</literal>,
+          <literal>services.openssh.permitRootLogin</literal> to
+          <literal>services.openssh.settings.PermitRootLogin</literal>,
+          <literal>services.openssh.logLevel</literal> to
+          <literal>services.openssh.settings.LogLevel</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mastodon</literal> gained a tootctl wrapped
           named <literal>mastodon-tootctl</literal> similar to
           <literal>nextcloud-occ</literal> which can be executed from
