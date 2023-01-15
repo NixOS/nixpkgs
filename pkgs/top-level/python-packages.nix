@@ -2124,6 +2124,8 @@ self: super: with self; {
 
   cwcwidth = callPackage ../development/python-modules/cwcwidth { };
 
+  cwl-upgrader = callPackage ../development/python-modules/cwl-upgrader { };
+
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
