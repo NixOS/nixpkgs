@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip-common";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "HIP";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-JpHWTsR2Z8pXp1gNjO29pDYvH/cJvd5Dlpeig33UD28=";
+    hash = "sha256-44CZWk6EsP5EduzBCBbOh2kshS89qOm4v3mx/xNDzV0=";
   };
 
   patches = [

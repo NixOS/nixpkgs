@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "5.4.1";
+  version = "5.4.2";
 
   outputs = [
     "out"
