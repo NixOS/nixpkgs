@@ -30,25 +30,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IMCS6bJqOzPeAFZyQtjzd1rQ5ugIevqoFUW6Y0w1Pzs=";
   };
 
-  buildInputs = [
-    vulkan-headers
-    vulkan-tools
-    vulkan-loader
-    glslang
-    glfw
-    libjpeg
-    pkg-config
-    rsync
-    cmake
+  strictDeps = true;
+
+  nativeBuildInputs = [
     clang
+    cmake
+    glslang
     llvm
     llvmPackages.openmp
-    pugixml
-    freetype
+    pkg-config
+    rsync
+  ];
+
+  buildInputs = [
     exiv2
     ffmpeg
-    libvorbis
+    freetype
+    glfw
+    libjpeg
     libmad
+    libvorbis
+    llvmPackages.openmp
+    pugixml
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
   ];
 
   dontUseCmakeConfigure = true;
