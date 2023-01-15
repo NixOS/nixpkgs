@@ -16316,7 +16316,7 @@
   franzmondlichtmann = {
     name = "Franz Schroepf";
     email = "franz-schroepf@t-online.de";
-    gthub = "franzmondlichtmann";
+    github = "franzmondlichtmann";
     githubId = 105480088;
   };
 }
