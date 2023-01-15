@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/wordpress
     cp -r . $out/share/wordpress
+
+    runHook postInstall
   '';
 
   passthru.tests = {

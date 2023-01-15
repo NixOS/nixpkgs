@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, bokeh
 , emcee
 , matplotlib
 , netcdf4
@@ -19,6 +18,7 @@
 , xarray
 , xarray-einstats
 , zarr
+, ffmpeg
 , h5py
 , jaxlib
 , torchvision
@@ -56,9 +56,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    bokeh
     cloudpickle
     emcee
+    ffmpeg
     h5py
     jax
     jaxlib

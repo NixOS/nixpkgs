@@ -123,8 +123,8 @@ in
             architecture = builtins.elemAt (builtins.match "^([a-z0-9_]+).+" (toString pkgs.system)) 0;
             creation_date = 1;
             properties = {
-              description = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
-              os = "nixos";
+              description = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
+              os = "${config.system.nixos.distroId}";
               release = "${config.system.nixos.codeName}";
             };
             templates = templates.properties;

@@ -342,6 +342,8 @@ let
 
     inherit (config.boot) resumeDevice;
 
+    inherit (config.system.nixos) distroName;
+
     inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS verbose
