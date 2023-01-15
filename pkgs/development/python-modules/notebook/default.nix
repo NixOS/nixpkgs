@@ -1,12 +1,10 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , argon2-cffi
-, nose
-, nose_warnings_filters
 , glibcLocales
-, isPy3k
 , mock
 , jinja2
 , tornado
@@ -15,6 +13,7 @@
 , jupyter-core
 , jupyter-client
 , nbformat
+, nbclassic
 , nbconvert
 , ipykernel
 , terminado
@@ -28,7 +27,7 @@
 buildPythonPackage rec {
   pname = "notebook";
   version = "6.5.2";
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -37,19 +36,14 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf8";
 
-  checkInputs = [ nose pytestCheckHook glibcLocales ]
-    ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
+  checkInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter-core send2trash
-    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
+    jupyter-client nbformat nbclassic
+    nbconvert ipykernel terminado requests pexpect
     prometheus-client argon2-cffi
   ];
-
-  # disable warning_filters
-  preCheck = lib.optionalString (!isPy3k) ''
-    echo "" > setup.cfg
-  '';
 
   postPatch = ''
     # Remove selenium tests

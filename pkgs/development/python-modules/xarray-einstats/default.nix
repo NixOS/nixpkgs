@@ -46,10 +46,6 @@ buildPythonPackage rec {
     "xarray_einstats"
   ];
 
-  pytestFlagsArray = [
-    "src/xarray_einstats/tests/"
-  ];
-
   meta = with lib; {
     description = "Stats, linear algebra and einops for xarray";
     homepage = "https://github.com/arviz-devs/xarray-einstats";
