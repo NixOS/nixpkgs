@@ -28492,6 +28492,8 @@ with pkgs;
 
   gauche = callPackage ../development/interpreters/gauche { };
 
+  gazelle-origin = python3Packages.callPackage ../tools/misc/gazelle-origin { };
+
   gcal = callPackage ../applications/misc/gcal { };
 
   gcstar = callPackage ../applications/misc/gcstar { };
