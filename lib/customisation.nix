@@ -88,13 +88,32 @@ rec {
       overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
       # Change the result of the function call by applying g to it
       overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
+
+      args =
+        (_: previousAttrs: {
+          passthru = (previousAttrs.passthru or { }) // {
+            override = overrideArgs;
+            overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
+            # error: stack overflow (possible infinite recursion)
+            #overrideAttrs = fdrv:
+            #  overrideResult (x: x.overrideAttrs fdrv);
+          };
+        });
+
     in
-      if builtins.isAttrs result then
+      if builtins.isAttrs result && result ? overrideAttrs then
+        (result.overrideAttrs args) #// {
+          # is this even necessary?
+          # nix-diff shows no difference in cross/non
+          # nix-diff $(nix eval --raw "nixpkgs/$(git merge-base upstream/master HEAD)#nix.drvPath") $(nix eval --raw ".#nix.drvPath")
+          # nix-diff $(nix eval --raw "nixpkgs/$(git merge-base upstream/master HEAD)#pkgsCross.aarch64-multiplatform.nix.drvPath") $(nix eval --raw ".#pkgsCross.aarch64-multiplatform.nix.drvPath")
+          #overrideAttrs = fdrv:
+          #  overrideResult (x: x.overrideAttrs fdrv);
+        #}
+      else if builtins.isAttrs result then
         result // {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
-          ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-            overrideResult (x: x.overrideAttrs fdrv);
         }
       else if lib.isFunction result then
         # Transform the result into a functor while propagating its arguments
