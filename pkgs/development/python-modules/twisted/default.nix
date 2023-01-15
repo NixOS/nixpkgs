@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , fetchpatch
@@ -61,6 +62,16 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/twisted/twisted/pull/11787.diff";
       hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
+    })
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/pull/11734.diff";
+      excludes = [ ".github/workflows/*" ];
+      hash = "sha256-Td08pDxHwl7fPLCA6rUySuXpy8YmZfvXPHGsBpdcmSo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/commit/00bf5be704bee022ba4d9b24eb6c2c768b4a1921.patch";
+      hash = "sha256-fnBzczm3OlhbjRcePIQ7dSX6uldlCZ9DJTS+UFO2nAQ=";
     })
   ];
 
