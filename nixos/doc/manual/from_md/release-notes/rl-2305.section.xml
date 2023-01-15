@@ -305,9 +305,9 @@
       <listitem>
         <para>
           The <literal>wordpress</literal> derivation no longer contains
-          any builtin plugins or themes; these can be found in
-          <literal>wordpressPackages.{plugins,themes}</literal>,
-          respectively.
+          any builtin plugins or themes. If you need them you have to
+          add them back to prevent your site from breaking. You can find
+          them in <literal>wordpressPackages.{plugins,themes}</literal>.
         </para>
       </listitem>
       <listitem>
