@@ -1,5 +1,5 @@
 rec {
-  BASEDIR="$NIX_BUILD_TOP";
+  BASEDIR = ".";
 BINUTILS_URL = "https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2";
 DL_DIR = "${TOOLCHAIN_DIR}/dl";
 GMP_URL = "https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VER}.tar.bz2";

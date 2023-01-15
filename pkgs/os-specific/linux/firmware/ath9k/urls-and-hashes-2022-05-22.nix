@@ -1,5 +1,5 @@
 rec {
-  BASEDIR="$NIX_BUILD_TOP";
+  BASEDIR = ".";
 BINUTILS_URL = "https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2";
 DL_DIR = "${TOOLCHAIN_DIR}/dl";
 GMP_SUM = "f51c99cb114deb21a60075ffb494c1a210eb9d7cb729ed042ddb7de9534451ea";
