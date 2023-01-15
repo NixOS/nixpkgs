@@ -1321,6 +1321,8 @@ with pkgs;
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
 
+  arubaotp-seed-extractor = callPackage ../tools/security/arubaotp-seed-extractor { };
+
   audible-cli = callPackage ../tools/misc/audible-cli { };
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
