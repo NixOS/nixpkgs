@@ -3112,6 +3112,7 @@ with pkgs;
   github-commenter = callPackage ../development/tools/github-commenter { };
 
   github-desktop = callPackage ../applications/version-management/github-desktop {
+    openssl = openssl_1_1;
     curl = curl.override { openssl = openssl_1_1; };
   };
 

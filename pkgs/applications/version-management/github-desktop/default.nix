@@ -15,15 +15,16 @@
 , cups
 , mesa
 , systemd
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
-  version = "3.0.6";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
-    hash = "sha256-UQsMT4/D571xgrU8C4HBoRO+qf08GCGerA4Y5gHcjRc=";
+    hash = "sha256-R8t0y7b2upMOsWebIBr9+qT2GqQ/ahzWLcFIWwK4JTs=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cups
     mesa
+    openssl
   ];
 
   unpackPhase = ''
