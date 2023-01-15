@@ -53,10 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writeScript "${finalAttrs.pname}-${finalAttrs.version}-updateScript" ''
-      nix-shell '<nixpkgs>' -A ${finalAttrs.pname}.passthru.update \
-      > pkgs/os-specific/linux/firmware/ath9k/urls-and-hashes-${finalAttrs.version}.nix
-    '';
+    # nix-shell -I nixpkgs=. '<nixpkgs>' -A ath9k-htc-blobless-firmware.passthru.update \
+    #  > pkgs/os-specific/linux/firmware/ath9k/urls-and-hashes-${finalAttrs.version}.nix
     update = stdenv.mkDerivation (finalAttrs: {
       name = "${finalAttrs.pname}-${finalAttrs.version}-update";
       extraHashes = "";
