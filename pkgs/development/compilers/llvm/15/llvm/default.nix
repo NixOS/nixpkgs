@@ -7,6 +7,7 @@
 , darwin
 , ninja
 , python3
+, python3Packages
 , libffi
 , libbfd
 , libpfm
@@ -55,9 +56,12 @@ let
   # So, we "manually" assemble one python derivation for the package to depend
   # on, taking into account whether checks are enabled or not:
   python = if doCheck then
+    # Note that we _explicitly_ ask for a python interpreter for our host
+    # platform here; the splicing that would ordinarily take care of this for
+    # us does not seem to work once we use `withPackages`.
     let
       checkDeps = ps: with ps; [ psutil ];
-    in python3.withPackages checkDeps
+    in pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
   else python3;
 
 in stdenv.mkDerivation (rec {
@@ -79,7 +83,11 @@ in stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" "python" ];
 
   nativeBuildInputs = [ cmake ninja python ]
-    ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
+    ++ optionals enableManpages [
+      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+      # splicing does *not* work with the latter. (TODO: fix)
+      python3Packages.sphinx python3Packages.recommonmark
+    ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
