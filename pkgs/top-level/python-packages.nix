@@ -6457,6 +6457,8 @@ self: super: with self; {
 
   opencensus = callPackage ../development/python-modules/opencensus { };
 
+  opencensus-context = callPackage ../development/python-modules/opencensus-context { };
+
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
     pythonPackages = self;
