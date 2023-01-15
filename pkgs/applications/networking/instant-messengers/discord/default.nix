@@ -1,9 +1,9 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions = if stdenv.isLinux then {
-    stable = "0.0.22";
+    stable = "0.0.24";
     ptb = "0.0.38";
-    canary = "0.0.145";
+    canary = "0.0.146";
   } else {
     stable = "0.0.264";
     ptb = "0.0.59";
@@ -22,7 +22,7 @@ let
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-TF+7SnCTsbh+Z8AeEESEFVLSpD3c5HOAwpU1UBuB1BU=";
+        sha256 = "e46886f911aac0751d21e4955a96da230dec4ee65bbc841e7ad5d212f4aa4e5b";
       };
     };
     x86_64-darwin = {
