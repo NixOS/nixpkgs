@@ -129,6 +129,7 @@ rec {
              )
            )
          )}
+      '' + lib.optionalString (partialSolution.interpreter != "none") ''
         ${partialSolution.interpreter} -n $out
       '';
     };
@@ -146,6 +147,7 @@ rec {
             )
           )
         }
+      '' + lib.optionalString (partialSolution.interpreter != "none") ''
         ${partialSolution.interpreter} -n $out/bin/${name}
       '';
     };
