@@ -51,7 +51,7 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
-        boot.initrd.secrets."/etc/secret" = /etc/nixos/secret;
+        boot.initrd.secrets."/etc/secret" = ./secret;
 
         users.users.alice = {
           isNormalUser = true;
