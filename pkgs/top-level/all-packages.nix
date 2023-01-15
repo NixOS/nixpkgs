@@ -36752,9 +36752,7 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  megam = callPackage ../applications/science/misc/megam {
-    inherit (ocaml-ng.ocamlPackages_4_07) ocaml;
-  };
+  megam = callPackage ../applications/science/misc/megam { };
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
 
