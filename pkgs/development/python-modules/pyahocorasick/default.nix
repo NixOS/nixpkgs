@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
-  version = "2.0.0b1";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "WojciechMula";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-APpL99kOwzIQjePvRDeJ0FDm1kjBi6083JMKuBqtaRk=";
+    hash = "sha256-Ugl7gHyubXpxe4aots2e9stLuQAZEWsrlDuAHdSC0SA=";
   };
 
   checkInputs = [
