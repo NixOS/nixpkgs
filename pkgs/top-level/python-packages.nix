@@ -2126,6 +2126,8 @@ self: super: with self; {
 
   cwl-upgrader = callPackage ../development/python-modules/cwl-upgrader { };
 
+  cwlformat = callPackage ../development/python-modules/cwlformat { };
+
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
