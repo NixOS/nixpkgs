@@ -116,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     */
 
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
     homepage = "https://wireless.wiki.kernel.org/en/developers/gsoc/2012/ath9k_htc_open_firmware";
     downloadPage = "https://github.com/qca/open-ath9k-htc-firmware";
     changelog = "https://github.com/qca/open-ath9k-htc-firmware/tags";
