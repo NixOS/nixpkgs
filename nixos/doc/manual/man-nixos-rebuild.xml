@@ -113,6 +113,18 @@
      </group> <replaceable>name</replaceable>
    </arg>
 
+   <arg>
+    <group choice='req'>
+    <arg choice='plain'>
+     <option>--specialisation</option>
+    </arg>
+
+    <arg choice='plain'>
+     <option>-c</option>
+    </arg>
+     </group> <replaceable>name</replaceable>
+   </arg>
+
    <sbr />
 
    <arg>
@@ -204,6 +216,20 @@
        <command>nixos-rebuild switch</command> or <command>nixos-rebuild
        boot</command> remain available in the GRUB menu.
       </para>
+      <para>
+        Note that if you are using specializations, running just
+        <command>nixos-rebuild switch</command> will switch you back to the
+        unspecialized, base system - in that case, you might want to use this
+        instead:
+<screen>
+<prompt>$ </prompt>nixos-rebuild switch --specialisation your-specialisation-name
+</screen>
+        This command will build all specialisations and make them bootable just
+        like regular <command>nixos-rebuild switch</command> does - the only
+        thing different is that it will switch to given specialisation instead
+        of the base system; it can be also used to switch from the base system
+        into a specialised one, or to switch between specialisations.
+      </para>
      </listitem>
     </varlistentry>
 
@@ -232,6 +258,16 @@
        automatically revert to the default configuration (i.e. the
        configuration resulting from the last call to <command>nixos-rebuild
        switch</command> or <command>nixos-rebuild boot</command>).
+      </para>
+      <para>
+        Note that if you are using specialisations, running just
+        <command>nixos-rebuild test</command> will activate the unspecialised,
+        base system - in that case, you might want to use this instead:
+<screen>
+<prompt>$ </prompt>nixos-rebuild test --specialisation your-specialisation-name
+</screen>
+        This command can be also used to switch from the base system into a
+        specialised one, or to switch between specialisations.
       </para>
      </listitem>
     </varlistentry>
@@ -495,6 +531,21 @@
 </screen>
       The new configuration will appear in the GRUB 2 submenu “NixOS -
       Profile 'test'”.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--specialisation</option>
+    </term>
+    <term>
+     <option>-c</option>
+    </term>
+    <listitem>
+     <para>
+      Activates given specialisation; when not specified, switching and testing
+      will activate the base, unspecialised system.
      </para>
     </listitem>
    </varlistentry>

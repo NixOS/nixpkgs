@@ -10,12 +10,20 @@
       In addition to numerous new and upgraded packages, this release
       has the following highlights:
     </para>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           Cinnamon has been updated to 5.6, see
           <link xlink:href="https://github.com/NixOS/nixpkgs/pull/201328#issue-1449910204">the
           pull request</link> for what is changed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-rebuild</literal> now supports an extra
+          <literal>--specialisation</literal> option that can be used to
+          change specialisation for <literal>switch</literal> and
+          <literal>test</literal> commands.
         </para>
       </listitem>
     </itemizedlist>
