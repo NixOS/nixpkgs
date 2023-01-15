@@ -23373,7 +23373,7 @@ with pkgs;
 
   vte = callPackage ../development/libraries/vte {
     # Needs GCC ≥10 but aarch64 defaults to GCC 9.
-    stdenv = clangStdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   vte-gtk4 = vte.override {

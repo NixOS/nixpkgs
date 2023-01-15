@@ -93,7 +93,9 @@ stdenv.mkDerivation rec {
   ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument"
+    # https://github.com/NixOS/nixpkgs/issues/201254
+    + lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   postPatch = ''
     patchShebangs perf/*
