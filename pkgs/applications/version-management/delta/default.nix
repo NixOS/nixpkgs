@@ -7,6 +7,7 @@
 , Foundation
 , libiconv
 , Security
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,11 +27,17 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation libiconv Security ];
 
+  checkInputs = [ git ];
+
   postInstall = ''
     installShellCompletion --bash --name delta.bash etc/completion/completion.bash
     installShellCompletion --zsh --name _delta etc/completion/completion.zsh
     installShellCompletion --fish --name delta.fish etc/completion/completion.fish
   '';
+
+  checkFlags = lib.optionals stdenv.isDarwin [
+    "--skip=test_diff_same_non_empty_file"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";

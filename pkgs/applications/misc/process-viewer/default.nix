@@ -4,28 +4,24 @@
 , pkg-config
 , gtk4
 , stdenv
-, DiskArbitration
-, Foundation
-, IOKit
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "process-viewer";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-MHVKjbD1/h7G94x6dpyRT/BPWQVUFurW7EvAUJ2xZeU=";
+    sha256 = "sha256-ELASfcXNhUCE/mhPKBHA78liFMbcT9RB/aoLt4ZRPa0=";
   };
 
-  cargoSha256 = "sha256-NkJjwB4rBV4hFRwYHILMET8o4x1+95sVsFqNaVN8tMg=";
+  cargoSha256 = "sha256-K2kyZwKRALh9ImPngijgpoHyLS+c5sDYviN74JxhJLM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk4 ] ++ lib.optionals stdenv.isDarwin [
-    DiskArbitration
-    Foundation
-    IOKit
+    darwin.apple_sdk_11_0.frameworks.Foundation
   ];
 
   postInstall = ''
