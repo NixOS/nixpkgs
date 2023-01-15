@@ -440,11 +440,11 @@ rec {
 
 
   /* Like `mapAttrs`, but allows the name of each attribute to be
-     changed in addition to the value.  The applied function should
-     return both the new name and value as a `nameValuePair`.
+     changed in addition to the value. The applied function should
+     return both the new name and new value.
 
      Example:
-       mapAttrs' (name: value: nameValuePair ("foo_" + name) ("bar-" + value))
+       mapAttrs' (name: value: { name = "foo_" + name; value = "bar-" + value; })
           { x = "a"; y = "b"; }
        => { foo_x = "bar-a"; foo_y = "bar-b"; }
 
