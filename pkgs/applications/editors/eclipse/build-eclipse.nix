@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
+    interpreter="$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)"
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
     [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.eclipse.org/";
     inherit description;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
 }
