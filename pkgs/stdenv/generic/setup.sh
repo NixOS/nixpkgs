@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=1090,2154,2123,2034,2178
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
@@ -443,7 +444,6 @@ runHook addInputsHook
 
 # Package accumulators
 
-# shellcheck disable=SC2034
 declare -a pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
 declare -a pkgsHostHost pkgsHostTarget
 declare -a pkgsTargetTarget
@@ -468,7 +468,6 @@ declare -a pkgTargetHookVars=(envTargetTargetHook)
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
 # those variables are declared here, since where and if they are used varies
-# shellcheck disable=SC2034
 declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
 
 # Add env hooks for all sorts of deps with the specified host offset.
