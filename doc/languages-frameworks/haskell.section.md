@@ -159,13 +159,12 @@ on Hackage and tries to pick for every (transitive) dependency of your build
 exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
-The Haskell builder in nixpkgs, (described in more detail in
-[#haskell-mkderivation]), does no such thing. It will simply take as input
-packages with names off the desired dependencies and just check whether they
-fulfill the version bounds and (by default, see `jailbreak`) fail if they
-don’t.
+The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
+It will simply take as input packages with names off the desired dependencies
+and just check whether they fulfill the version bounds and (by default, see
+`jailbreak`) fail if they don’t.
 
-The package resolution is done by the `haskellPackages.callPackage` function,
+The package resolution is done by the `haskellPackages.callPackage` function
 which will, e.g., use `haskellPackages.aeson` for a package input of name
 `aeson`.
 While this is the default behavior, it is possible to override the dependencies
