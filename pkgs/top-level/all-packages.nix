@@ -38624,4 +38624,6 @@ with pkgs;
   tuner = callPackage ../applications/audio/tuner { };
 
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
+
+  ov = callPackage ../tools/text/ov { };
 }
