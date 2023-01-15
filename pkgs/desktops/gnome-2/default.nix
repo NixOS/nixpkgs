@@ -33,10 +33,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 
-  gnome_python = callPackage ./bindings/gnome-python { };
-
-  gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
-
   gnome_vfs = callPackage ./platform/gnome-vfs { };
 
   libgnome = callPackage ./platform/libgnome { };
@@ -72,7 +68,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gtk = pkgs.gtk2;
   gtkmm = pkgs.gtkmm2;
-  python_rsvg = self.gnome_python_desktop;
 
   gtkdoc = pkgs.gtk-doc;
   startup_notification = pkgs.libstartup_notification;
@@ -82,5 +77,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_icon_theme = self.gnome-icon-theme;
   gnomeicontheme = self.gnome-icon-theme;
   gnome_common = gnome-common;
-  libglademm = throw "libglademm has been removed"; # 2022-01-15
+  gnome_python = throw "gnome2.gnome_python has been removed"; # 2023-01-14
+  gnome_python_desktop = throw "gnome2.gnome_python_desktop has been removed"; # 2023-01-14
+  libglademm = throw "gnome2.libglademm has been removed"; # 2022-01-15
+  python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
 })
