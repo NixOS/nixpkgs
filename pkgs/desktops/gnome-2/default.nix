@@ -18,8 +18,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
-  libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm { };
-
   # for git-head builds
   gnome-common = callPackage platform/gnome-common { };
 
@@ -70,6 +68,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtkhtml = throw "gnome2.gtkhtml has been removed"; # 2023-01-15
   gtkhtml4 = throw "gnome2.gtkhtml4 has been removed"; # 2023-01-15
   libglademm = throw "gnome2.libglademm has been removed"; # 2022-01-15
+  libgnomecanvasmm = "gnome2.libgnomecanvasmm has been removed"; # 2022-01-15
   libgnomecups = throw "gnome2.libgnomecups has been removed"; # 2023-01-15
   libgnomeprint = throw "gnome2.libgnomeprint has been removed"; # 2023-01-15
   libgnomeprintui = throw "gnome2.libgnomeprintui has been removed"; # 2023-01-15
