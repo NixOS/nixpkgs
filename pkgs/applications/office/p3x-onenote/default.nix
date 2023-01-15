@@ -1,7 +1,7 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
-  version = "2020.10.111";
+  version = "2023.4.113";
   name = "p3x-onenote-${version}";
 
   plat = {
@@ -17,7 +17,7 @@ let
     armv7l-linux = "172m2d94zzm8q61pvnjy01cl5fg11ad9hfh1han0gycnv3difniy";
     i386-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
     i686-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    x86_64-linux = "0bn48r55l5dh8zcf8ijh3z6hlyp3s6fvfyqc1csvnslm63dfkzcq";
+    x86_64-linux = "sha256-R52E59kBKwDUb2k1cBhlL2Y3Kwt4i4aMb7kBVUZdcDc=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
