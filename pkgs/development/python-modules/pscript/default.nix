@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , pytestCheckHook
 , nodejs
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pscript";
   version = "0.7.7";
+  format = "setuptools";
 
-  # PyPI tarball doesn't include tests directory
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "flexxui";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-AhVI+7FiWyH+DfAXnau4aAHJAJtsWEpmnU90ey2z35o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AhVI+7FiWyH+DfAXnau4aAHJAJtsWEpmnU90ey2z35o=";
   };
 
   checkInputs = [
@@ -27,13 +30,15 @@ buildPythonPackage rec {
     rm -rf pscript_legacy
   '';
 
+  pythonImportsCheck = [
+    "pscript"
+  ];
+
   meta = with lib; {
     description = "Python to JavaScript compiler";
-    license = licenses.bsd2;
     homepage = "https://pscript.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    changelog = "https://github.com/flexxui/pscript/blob/v${version}/docs/releasenotes.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-
-
-
