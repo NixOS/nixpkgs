@@ -12727,6 +12727,7 @@
     name = "Sebastiaan Alvarez Rodriguez";
     email = "sebastiaanalva@gmail.com";
     github = "Sebastiaan-Alvarez-Rodriguez";
+    githubId = 24595187;
   };
   sebastianblunt = {
     name = "Sebastian Blunt";
