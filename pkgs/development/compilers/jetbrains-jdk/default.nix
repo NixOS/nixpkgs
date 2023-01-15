@@ -84,6 +84,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   in ''
     runHook preInstall
 
+    mv build/linux-x86_64-server-${buildType}/images/jdk/man build/linux-x86_64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-x64${debugSuffix}-b${build}
     rm -rf build/linux-x86_64-server-${buildType}/images/jdk
     mv build/linux-x86_64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-x64${debugSuffix}-b${build} build/linux-x86_64-server-${buildType}/images/jdk
   '' + oldAttrs.installPhase + "runHook postInstall";
