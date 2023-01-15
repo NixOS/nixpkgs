@@ -6,6 +6,10 @@
   extraConfig ? ""
 }:
 
+let
+  inherit (lib) optionals;
+in
+
 stdenv.mkDerivation rec {
   pname = "toybox";
   version = "0.8.8";
@@ -17,12 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
   };
 
-  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ]; # needed for cross
+  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
   buildInputs = [
     libxcrypt
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     libiconv
-  ] ++lib.optionals (enableStatic && stdenv.cc.libc ? static) [
+  ] ++ optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
   ];
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ lib.optional enableStatic "LDFLAGS=--static";
+  makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];
 
   installTargets = [ "install_flat" ];
 
