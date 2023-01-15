@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     license = "non-commercial";
 
     maintainers = [ ];
-    platforms = lib.platforms.unix; # arbitrary choice
+    platforms = lib.platforms.unix;
   };
 }
