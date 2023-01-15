@@ -1,0 +1,45 @@
+diff --git a/meson.build b/meson.build
+index aed48fc3f6..33632d3ecf 100644
+--- a/meson.build
++++ b/meson.build
+@@ -176,6 +176,11 @@ gtk_libdir = join_paths(gtk_prefix, get_option('libdir'))
+ gtk_datadir = join_paths(gtk_prefix, get_option('datadir'))
+ gtk_localedir = join_paths(gtk_prefix, get_option('localedir'))
+ gtk_sysconfdir = join_paths(gtk_prefix, get_option('sysconfdir'))
++if get_option('sysconfdir_install') != ''
++  gtk_sysconfdir_install = join_paths(gtk_prefix, get_option('sysconfdir_install'))
++else
++  gtk_sysconfdir_install = sysconfdir
++endif
+ gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
+ gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
+ gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
+@@ -751,7 +756,7 @@ immodules = [
+   [ 'ipa', files([ immodule_srcdir + 'imipa.c' ]) ],
+   [ 'multipress', files( [ immodule_srcdir + 'gtkimcontextmultipress.c', immodule_srcdir + 'immultipress.c' ]), true,
+                     ['-DMULTIPRESS_LOCALEDIR="@0@"'.format(gtk_mplocaledir),
+-                     '-DMULTIPRESS_CONFDIR="@0@/gtk-3.0"'.format(gtk_sysconfdir)] ],
++                     '-DMULTIPRESS_CONFDIR="@0@/gtk-3.0"'.format(gtk_sysconfdir_install)] ],
+   [ 'thai', files([ immodule_srcdir + 'thai-charprop.c', immodule_srcdir + 'gtkimcontextthai.c', immodule_srcdir + 'imthai.c' ]) ],
+   [ 'ti-er', files([ immodule_srcdir + 'imti-er.c' ]) ],
+   [ 'ti-et', files([ immodule_srcdir + 'imti-et.c' ]) ],
+@@ -764,7 +769,7 @@ immodules = [
+   [ 'xim', files([ immodule_srcdir + 'gtkimcontextxim.c', immodule_srcdir + 'imxim.c' ]), x11_enabled ],
+ ]
+ 
+-install_data(join_paths(immodule_srcdir, 'im-multipress.conf'), install_dir: join_paths(gtk_sysconfdir, 'gtk-3.0'))
++install_data(join_paths(immodule_srcdir, 'im-multipress.conf'), install_dir: join_paths(gtk_sysconfdir_install, 'gtk-3.0'))
+ 
+ # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
+ # doing the same check as glib. We can't check that by linking to glib because
+diff --git a/meson_options.txt b/meson_options.txt
+index 94099aa01e..d8b0b8f56b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,3 +1,6 @@
++option('sysconfdir_install', type: 'string', value: '',
++  description: 'sysconfdir to use during installation')
++
+ # GDK backends
+ option('x11_backend', type: 'boolean', value: true,
+   description : 'Enable the X11 gdk backend (only when building on Unix)')

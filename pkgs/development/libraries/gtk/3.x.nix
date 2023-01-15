@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
+    ./patches/3.0-sysconfdir_install.patch
 
     # Add accidentally non-dist’d build file.
     # https://gitlab.gnome.org/GNOME/gtk/-/commit/b2ad8d2abafbd94c7e58e5e1b98c92e6b6fa6d9a
@@ -167,6 +168,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withGtkDoc}"
+    "-Dsysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
