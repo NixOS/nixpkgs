@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , pandoc
 , pythonOlder
@@ -36,6 +37,15 @@ buildPythonPackage rec {
     hash = "sha256-WEe8zSlNckl7bPBi6u8mHQ1/xPw3kE81F8Xr15TchgM=";
   };
 
+  patches = [
+    # in master post 3.2.1
+    (fetchpatch {
+      name = "fix-responses-compat.patch";
+      url = "https://github.com/httpie/httpie/commit/e73c3e6c249b89496b4f81fa20bb449911da79f1.patch";
+      hash = "sha256-L+NVfcDP2brJsjceW4fqtAgn7ca56r8T5sQjcNA1yXo=";
+    })
+  ];
+
   nativeBuildInputs = [
     installShellFiles
     pandoc
@@ -51,7 +61,6 @@ buildPythonPackage rec {
     setuptools
     rich
   ] ++ requests.optional-dependencies.socks;
-
 
   checkInputs = [
     pytest-httpbin
@@ -90,19 +99,6 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test_stdin_read_warning"
-    # Re-evaluate those tests with the next release
-    "test_duplicate_keys_support_from_response"
-    "test_invalid_xml"
-    "test_json_formatter_with_body_preceded_by_non_json_data"
-    "test_pretty_options_with_and_without_stream_with_converter"
-    "test_response_mime_overwrite"
-    "test_terminal_output_response_charset_detection"
-    "test_terminal_output_response_charset_override"
-    "test_terminal_output_response_content_type_charset_with_stream"
-    "test_terminal_output_response_content_type_charset"
-    "test_valid_xml"
-    "test_xml_format_options"
-    "test_xml_xhtm"
   ] ++ lib.optionals stdenv.isDarwin [
     # flaky
     "test_daemon_runner"
