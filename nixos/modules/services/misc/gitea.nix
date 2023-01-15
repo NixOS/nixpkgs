@@ -633,7 +633,6 @@ in
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
        after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
        path = [ gitea ];
 
        environment = {
