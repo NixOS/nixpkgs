@@ -5505,7 +5505,9 @@ self: super: with self; {
 
   loguru = callPackage ../development/python-modules/loguru { };
 
-  logutils = callPackage ../development/python-modules/logutils { };
+  logutils = callPackage ../development/python-modules/logutils {
+    redis-server = pkgs.redis;
+  };
 
   logzero = callPackage ../development/python-modules/logzero { };
 
