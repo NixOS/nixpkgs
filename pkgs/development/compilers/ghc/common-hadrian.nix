@@ -395,9 +395,11 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [
     perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    # autoconf and friends are necessary for hadrian to create the bindist
+    autoconf automake m4
   ] ++ lib.optionals (rev != null) [
     # We need to execute the boot script
-    autoconf automake m4 python3
+    python3
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [

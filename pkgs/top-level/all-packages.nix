@@ -15002,7 +15002,7 @@ with pkgs;
   haskellPackages = dontRecurseIntoAttrs
     # JS backend is only available for GHC >= 9.6
     (if stdenv.hostPlatform.isGhcjs
-     then haskell.packages.native-bignum.ghcHEAD
+     then haskell.packages.native-bignum.ghc96
      # Prefer native-bignum to avoid linking issues with gmp
      else if stdenv.hostPlatform.isStatic
      then haskell.packages.native-bignum.ghc92
