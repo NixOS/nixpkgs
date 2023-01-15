@@ -32,7 +32,7 @@ if [ -n "$__structuredAttrs" ]; then
     export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
     export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
 else
-    : ${outputs:=out}
+    : "${outputs:=out}"
 fi
 
 getAllOutputNames() {
@@ -393,7 +393,7 @@ fi
 # implementation uses zip archive and zip does not support dates going back to
 # 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=315532800}
+: "${SOURCE_DATE_EPOCH:=315532800}"
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -605,12 +605,12 @@ findInputs() {
 # in each list must be store paths, and therefore space-free.
 
 # Make sure all are at least defined as empty
-: ${depsBuildBuild=} ${depsBuildBuildPropagated=}
-: ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
-: ${depsBuildTarget=} ${depsBuildTargetPropagated=}
-: ${depsHostHost=} ${depsHostHostPropagated=}
-: ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
-: ${depsTargetTarget=} ${depsTargetTargetPropagated=}
+: "${depsBuildBuild=}" "${depsBuildBuildPropagated=}"
+: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}" "${defaultNativeBuildInputs=}"
+: "${depsBuildTarget=}" "${depsBuildTargetPropagated=}"
+: "${depsHostHost=}" "${depsHostHostPropagated=}"
+: "${buildInputs=}" "${propagatedBuildInputs=}" "${defaultBuildInputs=}"
+: "${depsTargetTarget=}" "${depsTargetTargetPropagated=}"
 
 for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
@@ -1070,7 +1070,7 @@ unpackPhase() {
     # Find the source directory.
 
     # set to empty if unset
-    : ${sourceRoot=}
+    : "${sourceRoot=}"
 
     if [ -n "${setSourceRoot:-}" ]; then
         runOneHook setSourceRoot
@@ -1174,7 +1174,7 @@ configurePhase() {
     runHook preConfigure
 
     # set to empty if unset
-    : ${configureScript=}
+    : "${configureScript=}"
 
     if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
