@@ -81,6 +81,12 @@ stdenv.mkDerivation rec {
     cp -v ${./QtCreatorAPIInternal.cmake} cmake/QtCreatorAPIInternal.cmake
   '';
 
+  cmakeFlags = [
+    # workaround for missing CMAKE_INSTALL_DATAROOTDIR
+    # in pkgs/development/tools/build-managers/cmake/setup-hook.sh
+    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
+  ];
+
   #buildFlags = optional withDocumentation "docs";
 
   cmakeBuildType = "Debug";
