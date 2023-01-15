@@ -385,6 +385,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  cotp = callPackage ../applications/misc/cotp {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
