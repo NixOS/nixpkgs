@@ -12,6 +12,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    # remove non-essential plugins and themes
+    rm -r wp-content/{plugins,themes}
+    mkdir wp-content/plugins
+    cat << EOF > wp-content/plugins/index.php
+    <?php
+    // Silence is golden.
+    EOF
+    cp -a wp-content/{plugins,themes}
+
     mkdir -p $out/share/wordpress
     cp -r . $out/share/wordpress
 

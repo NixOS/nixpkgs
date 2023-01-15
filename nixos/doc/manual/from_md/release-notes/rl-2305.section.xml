@@ -304,6 +304,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>wordpress</literal> derivation no longer contains
+          any builtin plugins or themes; these can be found in
+          <literal>wordpressPackages.{plugins,themes}</literal>,
+          respectively.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>llvmPackages_rocm.llvm</literal> will not contain
           <literal>clang</literal> or <literal>compiler-rt</literal>.
           <literal>llvmPackages_rocm.clang</literal> will not contain
