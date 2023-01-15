@@ -58,6 +58,8 @@ buildPythonPackage rec {
     "test_get_extractor_qcow2"
     # WARNING  patch:patch.py:450 inconsistent line ends in patch hunks
     "test_patch_info_patch_patches_windows_plugin_explorer_patch"
+    # AssertionError: assert [['linux-2.6...._end;', ...]]] == [['linux-2.6...._end;', ...]]]
+    "test_patch_info_patch_patches_misc_linux_st710x_patches_motorola_rootdisk_c_patch"
   ];
 
   pythonImportsCheck = [

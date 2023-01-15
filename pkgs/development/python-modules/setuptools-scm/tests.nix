@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "setuptools-scm-tests";
   inherit (setuptools-scm) version;
+  format = "other";
 
   src = setuptools-scm.src;
 

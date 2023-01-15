@@ -112,13 +112,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-73g1/5JJ9OJ4LtImxIRQ+kwjT/vTyolFUScAcitZ+G4=",
+    "hash": "sha256-1ez/xzbFviTavUDfkCdI+s/r/NmaIMx+G8fiCTPAm9o=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.49.0",
+    "rev": "v4.50.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-L4EoUqkA5/nAs65G+mvXfFt/FzrCN/BmJoFSCP4PC7Q="
+    "vendorHash": "sha256-OhBrq6zHGBQYTXOxGih0O1udv9Rb1vcRBqD/zomKHww="
   },
   "azuread": {
     "hash": "sha256-N+ty5O7sJbCp/rdQrwytOHzPFkaIvT5+1pOcoBQF1aw=",
@@ -130,11 +130,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-yCjfZruli5cIengL9f6ORsDWTY1BXwMr9g2Ohw+Q1Pc=",
+    "hash": "sha256-gWB1pZSv/lv5ZedPQIbcis5QA3g8JTIFeADh+Qte/rk=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.39.0",
+    "rev": "v3.39.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -340,11 +340,11 @@
     "vendorHash": "sha256-z0vos/tZDUClK/s2yrXZG2RU8QgA8IM6bJj6jSdCnBk="
   },
   "docker": {
-    "hash": "sha256-70nwqQOMncOOeX/ulrzBqTAqQyHELwM1V8/ZC+jUyXE=",
+    "hash": "sha256-M2K4N39vtVDA/vMp/s2KYiS/uoE+STf2e6yh6q0CS28=",
     "homepage": "https://registry.terraform.io/providers/kreuzwerker/docker",
     "owner": "kreuzwerker",
     "repo": "terraform-provider-docker",
-    "rev": "v2.25.0",
+    "rev": "v3.0.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-OdZQb81d7N1TdbDWEImq2U3kLkCPdhRk38+8T8fu+F4="
   },
@@ -395,13 +395,13 @@
     "vendorHash": null
   },
   "flexibleengine": {
-    "hash": "sha256-ie7GbJxkB3wekGqA+S9wBWwRDAYK0RIzbFSG+VmTSjw=",
+    "hash": "sha256-uT8BmACMMJKVPAhL/7rudCXG9AOb4kS1Lswr5ZxY6M4=",
     "homepage": "https://registry.terraform.io/providers/FlexibleEngineCloud/flexibleengine",
     "owner": "FlexibleEngineCloud",
     "repo": "terraform-provider-flexibleengine",
-    "rev": "v1.35.1",
+    "rev": "v1.36.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Q9xbrRhrq75yzjSK/LTP47xA9uP7PNBsEjTx3oNEwRY="
+    "vendorHash": "sha256-obBN7Q/gKbvERJIUVz+GgPjn7/OKjXCiFI6WuOd0hic="
   },
   "fortios": {
     "deleteVendor": true,
@@ -1095,11 +1095,11 @@
     "vendorHash": "sha256-2wPmLpjhG6QgG+BUCO0oIzHjBOWIOYuptgdtSIm9TZw="
   },
   "tencentcloud": {
-    "hash": "sha256-jCtTe1Wi9gvNd1IP+3kYlPYVBT45UkdjlhmNLhEgA10=",
+    "hash": "sha256-CLXW1takpsySUo8lpDe6DzRFczts1zRriHZge5uCb3A=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.79.5",
+    "rev": "v1.79.6",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

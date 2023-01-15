@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , buildPackages, pkgsHostHost
 , pkg-config, which, makeWrapper
-, zlib, bzip2, libpng, gnumake, glib
+, zlib, bzip2, brotli, libpng, gnumake, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-R2byAVfMTPDNKS+Av5F/ktHEObJDrDAY3r9rkUDEGn8=";
   };
 
-  propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+  propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
   nativeBuildInputs = [ pkg-config which makeWrapper ]

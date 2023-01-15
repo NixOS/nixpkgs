@@ -21,7 +21,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.23";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "jax-v${version}";
-    hash = "sha256-ruXOwpBwpi1G8jgH9nhbWbs14JupwWkjh+Wzrj8HVU4=";
+    rev = "refs/tags/jaxlib-v${version}";
+    hash = "sha256-ajLI0iD0YZRK3/uKSbhlIZGc98MdW174vA34vhoy7Iw=";
   };
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are

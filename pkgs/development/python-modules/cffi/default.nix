@@ -32,6 +32,24 @@ if isPyPy then null else buildPythonPackage rec {
     # deemed safe to trust in cffi.
     #
     ./darwin-use-libffi-closures.diff
+    (fetchpatch {
+      # Drop py.code usage from tests, no longer depend on the deprecated py package
+      url = "https://foss.heptapod.net/pypy/cffi/-/commit/9c7d865e17ec16a847090a3e0d1498b698b99756.patch";
+      excludes = [
+        "README.md"
+        "requirements.txt"
+      ];
+      hash = "sha256-HSuLLIYXXGGCPccMNLV7o1G3ppn2P0FGCrPjqDv2e7k=";
+    })
+    (fetchpatch {
+      #  Replace py.test usage with pytest
+      url = "https://foss.heptapod.net/pypy/cffi/-/commit/bd02e1b122612baa74a126e428bacebc7889e897.patch";
+      excludes = [
+        "README.md"
+        "requirements.txt"
+      ];
+      hash = "sha256-+2daRTvxtyrCPimOEAmVbiVm1Bso9hxGbaAbd03E+ws=";
+    })
   ] ++  lib.optionals (pythonAtLeast "3.11") [
     # Fix test that failed because python seems to have changed the exception format in the
     # final release. This patch should be included in the next version and can be removed when
@@ -63,6 +81,12 @@ if isPyPy then null else buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isMusl;
 
   checkInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # AssertionError: cannot seem to get an int[10] not completely cleared
+    # https://foss.heptapod.net/pypy/cffi/-/issues/556
+    "test_ffi_new_allocator_1"
+  ];
 
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar lnl7 ];

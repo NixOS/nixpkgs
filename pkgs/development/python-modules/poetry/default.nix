@@ -8,6 +8,7 @@
 , deepdiff
 , dulwich
 , fetchFromGitHub
+, filelock
 , flatdict
 , html5lib
 , httpretty
@@ -32,7 +33,9 @@
 , requests-toolbelt
 , shellingham
 , stdenv
+, tomli
 , tomlkit
+, trove-classifiers
 , urllib3
 , virtualenv
 , xattr
@@ -40,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.2.2";
+  version = "1.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -49,14 +52,8 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-huIjLv1T42HEmePCQNJpKnNxJKdyD9MlEtc2WRPOjRE=";
+    hash = "sha256-yiV2Y0vBF0d7BFfT5wonzRUGHVH040PZrlAUpVTFCZc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'crashtest = "^0.3.0"' 'crashtest = "*"' \
-      --replace 'xattr = { version = "^0.9.7"' 'xattr = { version = "^0.10.0"'
-  '';
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,10 +61,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cachecontrol
-    cachy
     cleo
     crashtest
     dulwich
+    filelock
     html5lib
     jsonschema
     keyring
@@ -81,9 +78,12 @@ buildPythonPackage rec {
     requests-toolbelt
     shellingham
     tomlkit
+    trove-classifiers
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.8") [
@@ -98,6 +98,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    cachy
     deepdiff
     flatdict
     pytestCheckHook
@@ -142,6 +143,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;

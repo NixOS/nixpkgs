@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: ef77e9e4b96d16ae52524f0810a95262ae2aaad3
-  ref: refs/tags/6.2.34
+  revision: 8bc83af1beb142de1ed3d81d2ef943443d07bff9
+  ref: refs/tags/6.2.35
   specs:
-    metasploit-framework (6.2.34)
+    metasploit-framework (6.2.35)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -128,13 +128,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.688.0)
+    aws-partitions (1.693.0)
     aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.356.0)
+    aws-sdk-ec2 (1.357.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.73.0)
@@ -265,7 +265,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.13.10)
+    nokogiri (1.14.0)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
@@ -321,7 +321,7 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.28)
+    rex-core (0.1.29)
     rex-encoder (0.1.6)
       metasm
       rex-arch
@@ -351,7 +351,7 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.43)
+    rex-socket (0.1.45)
       rex-core
     rex-sslscan (0.1.8)
       rex-core
@@ -384,7 +384,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.0.5)
       tilt (~> 2.0)
-    sqlite3 (1.5.4)
+    sqlite3 (1.6.0)
       mini_portile2 (~> 2.8.0)
     sshkey (2.0.0)
     swagger-blocks (3.0.0)
@@ -435,4 +435,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.2
+   2.4.3

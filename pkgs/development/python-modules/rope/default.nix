@@ -1,11 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytoolconfig
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, pytoolconfig
 }:
 
 buildPythonPackage rec {
@@ -28,15 +28,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pytoolconfig
-  ]++ pytoolconfig.optional-dependencies.global;
+  ] ++ pytoolconfig.optional-dependencies.global;
 
   checkInputs = [
     pytest-timeout
     pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "rope"
   ];
 
   disabledTests = [

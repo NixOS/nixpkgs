@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     mpv
     peewee
     pygobject3
-    python-Levenshtein
+    levenshtein
     python-dateutil
     requests
     semver

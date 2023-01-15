@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
   nativeBuildInputs = [
     hatch-vcs
     hatchling
@@ -34,10 +39,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-  '';
+  disabledTests = [
+    # Tests started failing with numpy 1.24
+    "test_numpy_numeric_type_complex"
+    "test_numpy_numeric_type_float"
+    "test_numpy_numeric_type_int"
+  ];
 
   pythonImportsCheck = [
     "hamcrest"

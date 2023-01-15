@@ -19,35 +19,21 @@ let
     '';
     buildInputs = [ perl ];
   };
-  usingAnnulenWebkitFork = lib.versionAtLeast qtbase.version "5.11.0";
 in
 qtModule {
   pname = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
-    ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
-    ++ lib.optional usingAnnulenWebkitFork qtwebchannel;
-  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ]
-    ++ lib.optional usingAnnulenWebkitFork hyphen;
-  nativeBuildInputs = [
-    bison flex gdb gperf perl pkg-config python38 ruby
-  ] ++ lib.optional usingAnnulenWebkitFork cmake;
+  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors qtwebchannel ]
+    ++ lib.optional stdenv.isDarwin qtmultimedia;
+  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base hyphen ]
+    ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ];
+  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python38 ruby cmake ];
 
-  cmakeFlags = lib.optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
+  cmakeFlags = [ "-DPORT=Qt" ]
     ++ lib.optionals stdenv.isDarwin [
       "-DQt5Multimedia_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
       "-DQt5MultimediaWidgets_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
       "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
-    ]);
-
-  # QtWebKit overrides qmake's default_pre and default_post features,
-  # so its custom qmake files must be found first at the front of QMAKEPATH.
-  preConfigure = lib.optionalString (!usingAnnulenWebkitFork) ''
-    QMAKEPATH="$PWD/Tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
-    fixQtBuiltinPaths . '*.pr?'
-    # Fix hydra's "Log limit exceeded"
-    export qmakeFlags="$qmakeFlags CONFIG+=silent"
-  '';
+    ];
 
   NIX_CFLAGS_COMPILE = [
     # with gcc7 this warning blows the log over Hydra's limit

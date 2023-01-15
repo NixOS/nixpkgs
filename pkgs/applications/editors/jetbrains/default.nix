@@ -127,9 +127,9 @@ let
     }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $out/goland*/plugins/go-plugin/lib/dlv/linux/dlv
+        patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
 
-        chmod +x $out/goland*/plugins/go-plugin/lib/dlv/linux/dlv
+        chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
 
         # fortify source breaks build since delve compiles with -O0
         wrapProgram $out/bin/goland \
@@ -287,12 +287,6 @@ let
         '';
         maintainers = with maintainers; [ abaldeau ];
       };
-    }).overrideAttrs (attrs: {
-      postPatch = (attrs.postPatch or "") + optionalString (stdenv.isLinux) ''
-        # Webstorm tries to use bundled jre if available.
-        # Lets prevent this for the moment
-        rm -r jbr
-      '';
     });
 
 in

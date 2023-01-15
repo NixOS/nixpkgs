@@ -6,6 +6,7 @@
 , rocm-cmake
 , hip
 , openmp
+, clang-tools-extra
 , gtest
 , buildTests ? false
 , buildExamples ? false
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
-  version = "unstable-2022-12-08";
+  version = "unstable-2022-12-15";
 
   outputs = [
     "out"
@@ -29,20 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "composable_kernel";
-    rev = "d58b7f5155b44c8b608f3edc6a6eab314493ec1a";
-    hash = "sha256-4nzyaWhPnY/0TygcoJAqVzdgfXOkf+o/BE2V9N+Bm7Q=";
+    rev = "0345963eef4f92e9c5eab608bb8557b5463a1dcb";
+    hash = "sha256-IJbUZ3/UIPbYO9H+BUPP6T2HyUnC+FVbVPXQE5bEjRg=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
     hip
+    clang-tools-extra
   ];
 
   buildInputs = [
     openmp
-  ] ++ lib.optionals buildTests [
-    gtest
   ];
 
   cmakeFlags = [
@@ -50,16 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_CXX_COMPILER=hipcc"
   ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals buildTests [
+    "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
   # No flags to build selectively it seems...
-  postPatch = ''
-    substituteInPlace test/CMakeLists.txt \
-      --replace "include(googletest)" ""
-
-    substituteInPlace CMakeLists.txt \
-      --replace "enable_testing()" ""
-  '' + lib.optionalString (!buildTests) ''
+  postPatch = lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(test)" ""
   '' + lib.optionalString (!buildExamples) ''
@@ -67,15 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "add_subdirectory(example)" ""
   '';
 
-  postInstall = ''
-    mkdir -p $out/bin
-    mv bin/ckProfiler $out/bin
-  '' + lib.optionalString buildTests ''
+  postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
-    mv bin/test_* $test/bin
+    mv $out/bin/test_* $test/bin
   '' + lib.optionalString buildExamples ''
     mkdir -p $example/bin
-    mv bin/example_* $example/bin
+    mv $out/bin/example_* $example/bin
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -85,9 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    # Several tests seem to either not compile or have a race condition
-    # Undefined reference to symbol '_ZTIN7testing4TestE'
-    # Try removing this next update
-    broken = buildTests;
+    broken = buildExamples; # bin/example_grouped_gemm_xdl_bfp16] Error 139
   };
 })

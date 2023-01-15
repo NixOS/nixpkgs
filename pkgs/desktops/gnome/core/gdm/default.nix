@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     # We use rsync to merge the directories.
     rsync --archive "${DESTDIR}/etc" "$out"
     rm --recursive "${DESTDIR}/etc"
-    for o in $outputs; do
+    for o in $(getAllOutputNames); do
         if [[ "$o" = "debug" ]]; then continue; fi
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"

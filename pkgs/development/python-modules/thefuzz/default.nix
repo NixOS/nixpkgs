@@ -4,7 +4,7 @@
 , pythonOlder
 , pytestCheckHook
 , hypothesis
-, python-Levenshtein
+, levenshtein
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-b3Em2y8silQhKwXjp0DkX0KRxJfXXSB1Fyj2Nbt0qj0=";
   };
 
-  propagatedBuildInputs = [ python-Levenshtein ];
+  propagatedBuildInputs = [ levenshtein ];
 
   # Skip linting
   postPatch = ''

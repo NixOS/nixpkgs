@@ -53,9 +53,6 @@ assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
   version = version + patchSuffix;
-  linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
-
-  inherit (stdenv) is64bit;
 
   enableParallelBuilding = true;
 
@@ -70,9 +67,6 @@ stdenv.mkDerivation ({
           $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
        */
       ./2.35-master.patch.gz
-
-      /* Revert this patch contained in the previous bundle.  For now, until we know more. */
-      ./revert-mktime.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -174,10 +168,14 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
 
-  # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
-  # prevent a retained dependency on the bootstrap tools in the stdenv-linux
-  # bootstrap.
-  BASH_SHELL = "/bin/sh";
+  env = {
+    linuxHeaders = if withLinuxHeaders then linuxHeaders else "";
+    inherit (stdenv) is64bit;
+    # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
+    # prevent a retained dependency on the bootstrap tools in the stdenv-linux
+    # bootstrap.
+    BASH_SHELL = "/bin/sh";
+  };
 
   # Used by libgcc, elf-header, and others to determine ABI
   passthru = { inherit version; minorRelease = version; };

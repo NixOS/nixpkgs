@@ -8,12 +8,12 @@ let
     # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
     packageOverrides = self: super: {
       resolvelib = super.resolvelib.overridePythonAttrs (attrs: rec {
-        version = "0.8.1";
+        version = "0.9.0";
         src = fetchFromGitHub {
           owner = "sarugaku";
           repo = "resolvelib";
-          rev = version;
-          sha256 = "sha256-QDHEdVET7HN2ZCKxNUMofabR+rxJy0erWhNQn94D7eI=";
+          rev = "/refs/tags/${version}";
+          hash = "sha256-xzu8sMNMihJ80vezMdGkOT5Etx08qy3T/TkEn5EAY48=";
         };
       });
     };
@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.1.5";
+  version = "2.3.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W+5B1JfOyTpJaT+le1zxyDNwGATrErxNNHw+x5VdfOc=";
+    hash = "sha256-zaSNM5Ey4oI2MtUPYBHG0PCMgJdasVatwkjaRBrT1RQ=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonApplication rec {
     pep517
     pip
     platformdirs
+    pyproject-hooks
     python-dotenv
     requests-toolbelt
     resolvelib

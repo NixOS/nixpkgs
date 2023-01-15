@@ -18,6 +18,7 @@
 , jsonschema
 , peewee
 , poetry-core
+, py
 , pycryptodome
 , pytest-aiohttp
 , pytest-benchmark
@@ -73,6 +74,7 @@ buildPythonPackage rec {
     aioresponses
     faker
     hypothesis
+    py
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook

@@ -5,7 +5,6 @@
 , cmake
 , rocm-cmake
 , rocm-opencl-runtime
-, clang
 , texlive
 , doxygen
 , sphinx
@@ -32,7 +31,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"
@@ -54,7 +53,6 @@ in stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    clang
   ];
 
   buildInputs = [
@@ -70,8 +68,6 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_C_COMPILER=clang"
-    "-DCMAKE_CXX_COMPILER=clang++"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -121,6 +117,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != clang.version;
+    broken = finalAttrs.version != stdenv.cc.version;
   };
 })

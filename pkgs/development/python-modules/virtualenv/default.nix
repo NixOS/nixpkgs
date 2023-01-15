@@ -1,9 +1,8 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , isPy27
-, backports-entry-points-selectable
 , cython
 , distlib
 , fetchPypi
@@ -18,16 +17,18 @@
 , pytest-timeout
 , pytestCheckHook
 , setuptools-scm
-, six
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.16.5";
+  version = "20.17.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-In6huZlP3F6jGXe6M4PvKW10cuqFvp1nMuQqkcBOgNo=";
+    hash = "sha256-+LknaE78bxzCBsnbKXpXCrmtDlHBb6nkVIfTbRkFwFg=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +36,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    backports-entry-points-selectable
     distlib
     filelock
     platformdirs
-    six
-  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.hostPlatform.isWindows) [
-    pathlib2
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ] ++ lib.optionals (pythonOlder "3.8") [
@@ -65,8 +62,8 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  # Ignore tests which require network access
   disabledTestPaths = [
+    # Ignore tests which require network access
     "tests/unit/create/test_creator.py"
     "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
   ];
@@ -77,16 +74,16 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
-  ] ++ lib.optionals isPy27 [
-    "test_python_via_env_var"
-    "test_python_multi_value_prefer_newline_via_env_var"
   ];
 
-  pythonImportsCheck = [ "virtualenv" ];
+  pythonImportsCheck = [
+    "virtualenv"
+  ];
 
   meta = with lib; {
     description = "A tool to create isolated Python environments";
     homepage = "http://www.virtualenv.org";
+    changelog = "https://github.com/pypa/virtualenv/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
   };

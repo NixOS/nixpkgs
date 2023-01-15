@@ -25,21 +25,21 @@ let newPython = python3.override {
       version = "1.5.0";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
+        hash = "sha256-Dlh1auOPvY/DAg1UutuOrhfFudy+04ixe7Vbilko35I=";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.49.0";
+  version = "1.53.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    hash = "sha256-BJGstNAnAZtpwagsCY+4quTd0/79zL+v4ifKikS3vaw=";
+    hash = "sha256-2DNDNdZO1D30egOiYa3qw8F2xsUTBOm/CHv07v5OrC8=";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [

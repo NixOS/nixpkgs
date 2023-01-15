@@ -280,6 +280,7 @@ with lib.maintainers; {
       kalbasit
       mic92
       zowoq
+      qbit
     ];
     scope = "Maintain Golang compilers.";
     shortName = "Go";

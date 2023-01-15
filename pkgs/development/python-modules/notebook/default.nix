@@ -12,7 +12,7 @@
 , tornado
 , ipython_genutils
 , traitlets
-, jupyter_core
+, jupyter-core
 , jupyter-client
 , nbformat
 , nbconvert
@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.4.12";
+  version = "6.5.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YmjJ7JBIz/ekVAXJkMKaycpAsLw+wpJj0hjF4B8rToY=";
+    sha256 = "sha256-wYl+UxfiJfx4tFVJpqtLZo5MmW/QOgTpOP5eevK//9A=";
   };
 
   LC_ALL = "en_US.utf8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
+    jinja2 tornado ipython_genutils traitlets jupyter-core send2trash
     jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
     prometheus-client argon2-cffi
   ];

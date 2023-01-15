@@ -19,9 +19,14 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    cython
     setuptools
   ];
 
+  preBuild = ''
+    # re-run cython
+    make -B
+  '';
 
   pythonImportsCheck = [
     "http_parser"

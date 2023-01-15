@@ -49,12 +49,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.8.4";
+  version = "1.8.5";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yoG6iLfF7ugBL4eNC9OLINIzBj1YgF4TVngFKb77qak=";
+    sha256 = "sha256-44QnQ/tmBGTdKd5z3Pye9m0nO+ELzGQFn/Ic1e8ellU=";
   };
 
   postPatch = ''

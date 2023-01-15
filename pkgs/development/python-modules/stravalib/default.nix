@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "0.10.4";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "451817c68a11e0c77db9cb628e3c4df0f4806c5a481536598ab3baa1d1c21215";
+    sha256 = "sha256-qn46u1Kq2fkEL/JnjDNKbJZMTz/pitveNFPaf2xkbYs=";
   };
 
   checkInputs = [

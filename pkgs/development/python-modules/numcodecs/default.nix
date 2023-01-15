@@ -2,28 +2,33 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, setuptools
 , setuptools-scm
 , cython
 , entrypoints
 , numpy
 , msgpack
+, py-cpuinfo
 , pytestCheckHook
 , python
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.10.2";
+  version = "0.11.0";
+  format ="pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IoOMaz/Zhr2cckA5uIhwBX95DiKyDm4cu6oN4ULdWcQ=";
+    sha256 = "sha256-bAWLMh3oShcpKZsOrk1lKy5I6hyn+d8NplyxNHDmNes=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
     cython
+    py-cpuinfo
   ];
 
   propagatedBuildInputs = [

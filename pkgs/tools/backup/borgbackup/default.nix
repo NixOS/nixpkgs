@@ -83,6 +83,7 @@ python3.pkgs.buildPythonApplication rec {
 
   checkInputs = with python3.pkgs; [
     e2fsprogs
+    py
     python-dateutil
     pytest-benchmark
     pytest-xdist

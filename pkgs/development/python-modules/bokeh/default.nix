@@ -28,16 +28,19 @@
 , icalendar
 , pandas
 , pythonImportsCheckHook
+, contourpy
+, xyzservices
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "2.4.3";
+  version = "3.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7zOAEWGvN5Zlq3o0aE8iCYYeOu/VyAOiH7u5nZSHSwM=";
+    hash= "sha256-HChHHvXmEQulvtUTE3/SYFTrxEVLx2hlDq7vxTuJioo=";
   };
 
   patches = [
@@ -70,10 +73,10 @@ buildPythonPackage rec {
     requests
     nbconvert
     icalendar
-    pandas
   ];
 
   propagatedBuildInputs = [
+    contourpy
     pillow
     jinja2
     python-dateutil
@@ -81,8 +84,10 @@ buildPythonPackage rec {
     pyyaml
     tornado
     numpy
+    pandas
     packaging
     typing-extensions
+    xyzservices
   ]
   ++ lib.optionals ( isPy27 ) [
     futures

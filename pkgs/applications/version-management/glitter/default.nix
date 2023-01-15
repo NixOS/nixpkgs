@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, git }:
 
 rustPlatform.buildRustPackage rec {
   pname = "glitter";
@@ -13,6 +13,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-GQ7Bns+FPj4jl2dBXnMrmcKIYcZTLZc1WvaHgKGj/gU=";
 
+  checkInputs = [
+    git
+  ];
+
   # tests require it to be in a git repository
   preCheck = ''
     git init
@@ -24,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A git wrapper that allows you to compress multiple commands into one";
     homepage = "https://github.com/milo123459/glitter";
+    changelog = "https://github.com/Milo123459/glitter/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

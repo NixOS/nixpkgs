@@ -12,15 +12,20 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.7.4";
+  version = "0.7.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "v${version}";
-    sha256 = "sha256-2OLvVJbqV/wR+Quq0cAlR/vCUe1/Km/nALwfoHD9B+U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zpnUw0ThYbbYS7CYgsi0ZL1qxbY4B1cy2NhrUU9uzig=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "packaging>=23.0" "packaging"
+  '';
 
   propagatedBuildInputs = [
     cchardet
@@ -30,7 +35,9 @@ buildPythonPackage rec {
     tabview
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "clevercsv"

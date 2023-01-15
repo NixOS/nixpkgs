@@ -56,9 +56,9 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
-  libc_bin = if libc == null then null else getBin libc;
-  libc_dev = if libc == null then null else getDev libc;
-  libc_lib = if libc == null then null else getLib libc;
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
   bintools_bin = if nativeTools then "" else getBin bintools;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
@@ -69,7 +69,7 @@ let
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
   dynamicLinker =
-    /**/ if sharedLibraryLoader == null then null
+    /**/ if sharedLibraryLoader == null then ""
     else if targetPlatform.libc == "musl"             then "${sharedLibraryLoader}/lib/ld-musl-*"
     else if targetPlatform.libc == "uclibc"           then "${sharedLibraryLoader}/lib/ld*-uClibc.so.1"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
@@ -88,7 +88,7 @@ let
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
-    else null;
+    else "";
 
   expand-response-params =
     if buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
@@ -104,15 +104,10 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit bintools_bin libc_bin libc_dev libc_lib coreutils_bin;
-  shell = getBin shell + shell.shellPath or "";
-  gnugrep_bin = if nativeTools then "" else gnugrep;
-
-  inherit targetPrefix suffixSalt;
-
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
   passthru = {
+    inherit targetPrefix suffixSalt;
     inherit bintools libc nativeTools nativeLibc nativePrefix;
 
     emacsBufferSetup = pkgs: ''
@@ -205,8 +200,6 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
-
-  wrapperName = "BINTOOLS_WRAPPER";
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -379,10 +372,15 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
-  inherit dynamicLinker;
-
-  # for substitution in utils.bash
-  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+  env = {
+    # for substitution in utils.bash
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    shell = getBin shell + shell.shellPath or "";
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+    wrapperName = "BINTOOLS_WRAPPER";
+    inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
+    inherit bintools_bin libc_bin libc_dev libc_lib;
+  };
 
   meta =
     let bintools_ = if bintools != null then bintools else {}; in

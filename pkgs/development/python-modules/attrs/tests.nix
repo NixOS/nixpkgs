@@ -7,6 +7,7 @@
 buildPythonPackage {
   pname = "attrs-tests";
   inherit (attrs) version;
+  format = "other";
 
   srcs = attrs.testout;
 

@@ -1,6 +1,7 @@
 { self
 , bash
 , fetchpatch
+, fzf
 , lib
 , openssl
 , zstd
@@ -380,6 +381,9 @@ with self;
     hash = "1ha0i6dx5bgwzbdi4rn98wjwi2imv5p2i7qs7hy0c6cmg88xbdry";
     meta.description = "A library for running the fzf command line tool";
     propagatedBuildInputs = [ async core_kernel ppx_jane ];
+    postPatch = ''
+      substituteInPlace src/fzf.ml --replace /usr/bin/fzf ${fzf}/bin/fzf
+    '';
   };
 
   higher_kinded = janePackage {

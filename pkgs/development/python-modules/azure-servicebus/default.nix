@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.8.0";
+  version = "7.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-KTvJXOJ3o2KUL9iPcus6m0qS3hAAB3Wz0uPgCttFqlk=";
+    hash = "sha256-gI5eCyXGFkQgY0rhyGLioLXj1a4I6vV64Nm/EKyFEks=";
   };
 
   propagatedBuildInputs = [
