@@ -1381,6 +1381,8 @@ with pkgs;
 
   gh-eco = callPackage ../tools/misc/gh-eco { };
 
+  gh-markdown-preview = callPackage ../tools/misc/gh-markdown-preview { };
+
   ghostie = callPackage ../tools/misc/ghostie { };
 
   glooctl = callPackage ../applications/networking/cluster/glooctl { };
@@ -1882,6 +1884,8 @@ with pkgs;
   glitter = callPackage ../applications/version-management/glitter { };
 
   gst = callPackage ../applications/version-management/gst { };
+
+  hred = callPackage ../development/tools/hred { };
 
   hub = callPackage ../applications/version-management/hub { };
 
@@ -9102,6 +9106,10 @@ with pkgs;
 
   jump = callPackage ../tools/system/jump {};
 
+  larynx = callPackage ../tools/audio/larynx { };
+
+  larynx-train = with python3Packages; toPythonApplication larynx-train;
+
   latex2html = callPackage ../tools/misc/latex2html { };
 
   lazycli = callPackage ../tools/misc/lazycli { };
@@ -14747,9 +14755,7 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
-  hvm = callPackage ../development/compilers/hvm {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  hvm = callPackage ../development/compilers/hvm { };
 
   iay = callPackage ../tools/misc/iay {
     inherit (darwin.apple_sdk.frameworks) AppKit Security Foundation Cocoa;
@@ -17927,6 +17933,8 @@ with pkgs;
 
   python-language-server = callPackage ../development/dotnet-modules/python-language-server { };
 
+  python-matter-server = with python3Packages; toPythonApplication python-matter-server;
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
@@ -18218,6 +18226,8 @@ with pkgs;
   reviewdog = callPackage ../development/tools/misc/reviewdog { };
 
   revive = callPackage ../development/tools/revive { };
+
+  riff = callPackage ../development/tools/misc/riff { };
 
   rman = callPackage ../development/tools/misc/rman { };
 

@@ -17472,6 +17472,22 @@ let
     };
   };
 
+  NetAsyncHTTPServer = buildPerlModule {
+    pname = "Net-Async-HTTP-Server";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-Server-0.13.tar.gz";
+      hash = "sha256-yk3kcfIieNI5PIqy7G56xO8hfbRjXS3Mi6KoynIhFO4=";
+    };
+    buildInputs = [ TestIdentity TestMetricsAny TestRefcount TestSimple13 ];
+    propagatedBuildInputs = [ HTTPMessage IOAsync MetricsAny ];
+    meta = {
+      description = "Serve HTTP with IO::Async";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.anoa ];
+    };
+  };
+
   NetAsyncPing = buildPerlPackage {
     pname = "Net-Async-Ping";
     version = "0.004001";

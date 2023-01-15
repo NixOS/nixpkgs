@@ -3045,6 +3045,8 @@ self: super: with self; {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
+
   esprima = callPackage ../development/python-modules/esprima { };
 
   escapism = callPackage ../development/python-modules/escapism { };
@@ -4309,6 +4311,10 @@ self: super: with self; {
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
 
+  home-assistant-chip-clusters = callPackage ../development/python-modules/home-assistant-chip-clusters { };
+
+  home-assistant-chip-core = callPackage ../development/python-modules/home-assistant-chip-core { };
+
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   homeconnect = callPackage ../development/python-modules/homeconnect { };
@@ -5158,6 +5164,8 @@ self: super: with self; {
 
   lark = callPackage ../development/python-modules/lark { };
 
+  larynx-train = callPackage ../development/python-modules/larynx-train { };
+
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
@@ -5393,6 +5401,8 @@ self: super: with self; {
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning = callPackage ../development/python-modules/lightning { };
+
+  lightning-utilities  = callPackage ../development/python-modules/lightning-utilities { };
 
   lightparam = callPackage ../development/python-modules/lightparam { };
 
@@ -5909,6 +5919,8 @@ self: super: with self; {
   mnist = callPackage ../development/python-modules/mnist { };
 
   moat-ble = callPackage ../development/python-modules/moat-ble { };
+
+  mobly = callPackage ../development/python-modules/mobly { };
 
   mocket = callPackage ../development/python-modules/mocket { };
 
@@ -9252,6 +9264,8 @@ self: super: with self; {
   };
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
+
+  python-matter-server = callPackage ../development/python-modules/python-matter-server { };
 
   python-miio = callPackage ../development/python-modules/python-miio { };
 

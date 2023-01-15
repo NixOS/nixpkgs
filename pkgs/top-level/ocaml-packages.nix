@@ -1632,8 +1632,6 @@ let
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
-    omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
-
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
