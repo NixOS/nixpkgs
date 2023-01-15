@@ -86,6 +86,9 @@ in
           # rely on default RUNPATHs of the binary and other libraries
           # Do no force-pull wrong glibc.
           patchelf --remove-rpath $out/lib/libgcc_s.so.1
+          # 'patchelf' does not remove the string itself. Wipe out
+          # string reference to avoid possible link to bootstrapTools
+          ${buildPackages.nukeReferences}/bin/nuke-refs $out/lib/libgcc_s.so.1
       fi
     '';
 
