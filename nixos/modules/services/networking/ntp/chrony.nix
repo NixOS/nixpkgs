@@ -185,7 +185,7 @@ in
           ProtectSystem = "full";
           ProtectHome = true;
           PrivateTmp = true;
-          PrivateDevices = true;
+          PrivateDevices = false;
           PrivateUsers = false;
           ProtectHostname = true;
           ProtectClock = false;
