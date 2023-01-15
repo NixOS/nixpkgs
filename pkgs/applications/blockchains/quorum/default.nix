@@ -2,12 +2,12 @@
 
 buildGoPackage rec {
   pname = "quorum";
-  version = "2.5.0";
+  version = "22.7.5";
 
-  goPackagePath = "github.com/jpmorganchase/quorum";
+  goPackagePath = "github.com/consensys/quorum";
 
   src = fetchFromGitHub {
-    owner = "jpmorganchase";
+    owner = "ConsenSys";
     repo = pname;
     rev = "v${version}";
     sha256 = "0xfdaqp9bj5dkw12gy19lxj73zh7w80j051xclsvnd41sfah86ll";
