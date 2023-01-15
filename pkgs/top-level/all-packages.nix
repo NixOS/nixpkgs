@@ -15095,9 +15095,7 @@ with pkgs;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
 
-  lorri = callPackage ../tools/misc/lorri {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  lorri = callPackageWithExtraSet "darwin.apple_sdk.frameworks" ../tools/misc/lorri { };
 
   manticore = callPackage ../development/compilers/manticore { };
 

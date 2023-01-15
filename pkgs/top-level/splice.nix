@@ -146,6 +146,21 @@ in
 
   newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
 
+  callPackageWithExtraSet = extraSetString:
+    let
+      set = (lib.attrByPath (lib.splitString "." extraSetString) (throw "extraSet should be a attrpath string relative to top-level") splicedPackages);
+
+      set' = builtins.removeAttrs set [
+        "callPackage"
+        "newScope"
+        "overrideScope"
+        "packages"
+      ];
+
+      newScope = extra: lib.callPackageWith (splicedPackages // extra);
+    in
+    newScope set';
+
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
 
