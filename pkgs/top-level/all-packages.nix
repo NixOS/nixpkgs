@@ -33642,7 +33642,7 @@ with pkgs;
   };
 
   xiphos = callPackage ../applications/misc/xiphos {
-    gtkhtml = gnome2.gtkhtml4;
+    gtkhtml = gnome.gtkhtml;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
