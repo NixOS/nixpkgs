@@ -125,11 +125,6 @@ _eval() {
 ######################################################################
 # Logging.
 
-# Obsolete.
-stopNest() { true; }
-header() { echo "$1"; }
-closeNest() { true; }
-
 # Prints a command such that all word splits are unambiguous. We need
 # to split the command in three parts because the middle format string
 # will be, and must be, repeated for each argument. The first argument
@@ -798,10 +793,6 @@ unset _HOST_PATH
 unset _XDG_DATA_DIRS
 
 
-# Make GNU Make produce nested output.
-export NIX_INDENT_MAKE=1
-
-
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
@@ -1033,7 +1024,7 @@ _defaultUnpack() {
 
 unpackFile() {
     curSrc="$1"
-    header "unpacking source archive $curSrc" 3
+    echo "unpacking source archive $curSrc"
     if ! runOneHook unpackCmd "$curSrc"; then
         echo "do not know how to unpack source archive $curSrc"
         exit 1
@@ -1130,7 +1121,7 @@ patchPhase() {
     fi
 
     for i in "${patchesArray[@]}"; do
-        header "applying patch $i" 3
+        echo "applying patch $i"
         local uncompress=cat
         case "$i" in
             *.gz)
@@ -1494,15 +1485,15 @@ distPhase() {
 showPhaseHeader() {
     local phase="$1"
     case "$phase" in
-        unpackPhase) header "unpacking sources";;
-        patchPhase) header "patching sources";;
-        configurePhase) header "configuring";;
-        buildPhase) header "building";;
-        checkPhase) header "running tests";;
-        installPhase) header "installing";;
-        fixupPhase) header "post-installation fixup";;
-        installCheckPhase) header "running install tests";;
-        *) header "$phase";;
+        unpackPhase) echo "unpacking sources";;
+        patchPhase) echo "patching sources";;
+        configurePhase) echo "configuring";;
+        buildPhase) echo "building";;
+        checkPhase) echo "running tests";;
+        installPhase) echo "installing";;
+        fixupPhase) echo "post-installation fixup";;
+        installCheckPhase) echo "running install tests";;
+        *) echo "$phase";;
     esac
 }
 
