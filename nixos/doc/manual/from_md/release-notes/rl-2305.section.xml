@@ -99,6 +99,14 @@
           <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://photoprism.app/">photoprism</link>,
+          a AI-Powered Photos App for the Decentralized Web. Available
+          as
+          <link xlink:href="options.html#opt-services.photoprism.enable">services.photoprism</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">

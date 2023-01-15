@@ -513,6 +513,7 @@ in {
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   phosh = handleTest ./phosh.nix {};
+  photoprism = handleTest ./photoprism.nix {};
   php = handleTest ./php {};
   php80 = handleTest ./php { php = pkgs.php80; };
   php81 = handleTest ./php { php = pkgs.php81; };
