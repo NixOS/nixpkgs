@@ -471,7 +471,6 @@ broken-packages:
   - brick-dropdownmenu
   - brick-filetree
   - bricks-internal
-  - brick-skylighting
   - brillig
   - brittany
   - broadcast-chan-tests
