@@ -42,7 +42,7 @@ def system_dir(profile: Optional[str], generation: int, specialisation: Optional
     else:
         return d
 
-BOOT_ENTRY = """title NixOS{profile}{specialisation}
+BOOT_ENTRY = """title @distroName@{profile}{specialisation}
 version Generation {generation} {description}
 linux {kernel}
 initrd {initrd}
@@ -99,7 +99,7 @@ def describe_generation(generation_dir: str) -> str:
     build_time = int(os.path.getctime(generation_dir))
     build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
 
-    description = "NixOS {}, Linux Kernel {}, Built on {}".format(
+    description = "@distroName@ {}, Linux Kernel {}, Built on {}".format(
         nixos_version, kernel_version, build_date
     )
 
@@ -206,8 +206,8 @@ def get_profiles() -> List[str]:
         return []
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
-    parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
+    parser = argparse.ArgumentParser(description='Update @distroName@-related systemd-boot files')
+    parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default @distroName@ config to boot')
     args = parser.parse_args()
 
     try:

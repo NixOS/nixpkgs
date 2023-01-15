@@ -73,7 +73,7 @@ trap 'fail' 0
 
 # Print a greeting.
 info
-info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info "[1;32m<<< @distroName@ Stage 1 >>>[0m"
 info
 
 # Make several required directories.
@@ -422,7 +422,7 @@ lustrateRoot () {
     local root="$1"
 
     echo
-    echo -e "\e[1;33m<<< NixOS is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
+    echo -e "\e[1;33m<<< @distroName@ is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
     echo
 
     mkdir -m 0755 -p "$root/old-root.tmp"

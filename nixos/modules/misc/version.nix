@@ -16,18 +16,18 @@ let
     ) + "\n";
 
   osReleaseContents = {
-    NAME = "NixOS";
-    ID = "nixos";
+    NAME = "${cfg.distroName}";
+    ID = "${cfg.distroId}";
     VERSION = "${cfg.release} (${cfg.codeName})";
     VERSION_CODENAME = toLower cfg.codeName;
     VERSION_ID = cfg.release;
     BUILD_ID = cfg.version;
-    PRETTY_NAME = "NixOS ${cfg.release} (${cfg.codeName})";
+    PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
     LOGO = "nix-snowflake";
-    HOME_URL = "https://nixos.org/";
-    DOCUMENTATION_URL = "https://nixos.org/learn.html";
-    SUPPORT_URL = "https://nixos.org/community.html";
-    BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+    HOME_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/";
+    DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
+    SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
+    BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
   } // lib.optionalAttrs (cfg.variant_id != null) {
     VARIANT_ID = cfg.variant_id;
   };
@@ -87,6 +87,20 @@ in
       type = types.str;
       default = trivial.codeName;
       description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
+    };
+
+    nixos.distroId = mkOption {
+      internal = true;
+      type = types.str;
+      default = "nixos";
+      description = lib.mdDoc "The id of the operating system";
+    };
+
+    nixos.distroName = mkOption {
+      internal = true;
+      type = types.str;
+      default = "NixOS";
+      description = lib.mdDoc "The name of the operating system";
     };
 
     nixos.variant_id = mkOption {
@@ -155,10 +169,10 @@ in
     environment.etc = {
       "lsb-release".text = attrsToText {
         LSB_VERSION = "${cfg.release} (${cfg.codeName})";
-        DISTRIB_ID = "nixos";
+        DISTRIB_ID = "${cfg.distroId}";
         DISTRIB_RELEASE = cfg.release;
         DISTRIB_CODENAME = toLower cfg.codeName;
-        DISTRIB_DESCRIPTION = "NixOS ${cfg.release} (${cfg.codeName})";
+        DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
       };
 
       "os-release".text = attrsToText osReleaseContents;
