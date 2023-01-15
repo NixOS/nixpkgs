@@ -5995,6 +5995,12 @@
     githubId = 37965;
     name = "Léo Stefanesco";
   };
+  indeednotjames = {
+    email = "nix@indeednotjames.com";
+    github = "IndeedNotJames";
+    githubId = 55066419;
+    name = "Emily Lange";
+  };
   infinidoge = {
     name = "Infinidoge";
     email = "infinidoge@inx.moe";
