@@ -354,6 +354,15 @@ final: prev: {
     '';
   };
 
+  nxapi = prev.nxapi.override {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+
+    # Disable checking for updates at runtime.
+    postInstall = ''
+      wrapProgram "$out/bin/nxapi" --set NXAPI_SKIP_UPDATE_CHECK 1
+    '';
+  };
+
   parcel = prev.parcel.override {
     buildInputs = [ final.node-gyp-build ];
     preRebuild = ''

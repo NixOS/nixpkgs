@@ -241,6 +241,7 @@
 , "npm-check-updates"
 , "npm-merge-driver"
 , "nrm"
+, "nxapi"
 , "ocaml-language-server"
 , "orval"
 , "parcel-bundler"
