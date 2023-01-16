@@ -13,14 +13,14 @@ let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-70O9/QRADaEYVvZjEfuBOxPF8lCZ138L2fbFWpj3VUw=";
+    sha256 = "sha256-XaxxakVwogJlqyZGL275jGSZDLoRLl8SAAg8V+X4cmQ=";
   };
 
-  cargoHash = "sha256-iHOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkgCdgw=";
+  cargoHash = "sha256-66mVkoqMl+KNCXWsGUbu8nBrazgHP+5dTaT2Ye0btWY=";
 
   auditable = true; # TODO: remove when this is the default
 
