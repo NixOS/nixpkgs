@@ -60,9 +60,16 @@ assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (lib.optionalAttrs nativeComp {
+let
+  libGccJitLibraryPaths = [
+    "${lib.getLib libgccjit}/lib/gcc"
+    "${lib.getLib stdenv.cc.libc}/lib"
+  ] ++ lib.optionals (stdenv.cc?cc.libgcc) [
+    "${lib.getLib stdenv.cc.cc.libgcc}/lib"
+  ];
+  emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
-  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+  LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
 } // {
   pname = pname + lib.optionalString ( !withX && !withNS && !withMacport && !withGTK2 && !withGTK3 ) "-nox";
   inherit version;
@@ -73,17 +80,15 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
             then ./native-comp-driver-options-28.patch
             else ./native-comp-driver-options.patch;
       backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''"-B${x}"'') [
+        (builtins.map (x: ''"-B${x}"'') ([
           # Paths necessary so the JIT compiler finds its libraries:
           "${lib.getLib libgccjit}/lib"
-          "${lib.getLib libgccjit}/lib/gcc"
-          "${lib.getLib stdenv.cc.libc}/lib"
-
+        ] ++ libGccJitLibraryPaths ++ [
           # Executable paths necessary for compilation (ld, as):
           "${lib.getBin stdenv.cc.cc}/bin"
           "${lib.getBin stdenv.cc.bintools}/bin"
           "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ]));
+        ])));
     })
   ];
 

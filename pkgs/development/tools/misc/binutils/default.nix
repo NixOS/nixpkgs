@@ -248,6 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
     # (around PLUGINS) for cases that support or not support plugins.
     # No platform specific filters yet here.
     hasPluginAPI = enableGold;
+    isFromBootstrapFiles = false;
   };
 
   meta = with lib; {

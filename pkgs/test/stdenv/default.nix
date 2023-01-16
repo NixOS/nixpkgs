@@ -96,7 +96,7 @@ let
 
 in
 
-{
+rec {
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
   hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; });
 
@@ -273,4 +273,53 @@ in
       };
 
   };
+
+  # This test *must* be run prior to releasing any build of either stdenv or the
+  # gcc that it exports!  This check should also be part of CI for any PR that
+  # causes a rebuild of `stdenv.cc`.
+  #
+  # When we used gcc's internal bootstrap it did this check as part of (and
+  # serially with) the gcc derivation.  Now that we bootstrap externally this
+  # check can be done in parallel with any/all of stdenv's referrers.  But we
+  # must remember to do the check.
+  #
+  gcc-stageCompare =
+    assert stdenv.cc.isGNU;
+    assert !(stdenv.enableGccExternalBootstrapForStdenv or false)
+            -> throw "gcc-stageCompare can only be used with externally-bootstrapped gcc";
+    with pkgs;
+    # rebuild gcc using the "final" stdenv
+    let gcc-stageCompare = (gcc-unwrapped.override {
+          reproducibleBuild = true;
+          profiledCompiler = false;
+          stdenv = overrideCC stdenv (wrapCCWith {
+            cc = stdenv.cc;
+          });
+        }).overrideAttrs(_: {
+          NIX_OUTPATH_USED_AS_RANDOM_SEED = stdenv.cc.cc.out;
+        });
+    in stdenv.mkDerivation {
+      name = "gcc-stageCompare";
+      inherit (gcc-unwrapped) version;
+      dontUnpack = true;
+      dontBuild = true;
+      dontFixup = true;
+      doCheck = true;
+      installPhase = ''
+        runHook preInstall
+        touch $out
+        runHook postInstall
+      '';
+      checkPhase = ''
+        runHook preCheck
+        diff -sr ${pkgs.gcc-unwrapped.checksum}/checksums ${gcc-stageCompare.checksum}/checksums
+        runHook postCheck
+      '';
+    };
+
+  # because "OfBorg @build" doesn't have any way to restrict which
+  # platforms are built upon...
+  gcc-stageCompare-onRelevantPlatforms =
+    lib.optional (stdenv.enableGccExternalBootstrapForStdenv or false)
+      gcc-stageCompare;
 }

@@ -178,7 +178,11 @@ stdenv.mkDerivation ({
   };
 
   # Used by libgcc, elf-header, and others to determine ABI
-  passthru = { inherit version; minorRelease = version; };
+  passthru = {
+    inherit version;
+    minorRelease = version;
+    isFromBootstrapFiles = false;
+  };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //

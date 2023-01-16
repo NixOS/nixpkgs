@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
           pcregrep -o1 '<title>GNU MPFR version ([0-9.]+)</title>')"
       update-source-version ${pname} "$new_version"
     '';
+    isFromBootstrapFiles = false;
   };
 
   meta = {

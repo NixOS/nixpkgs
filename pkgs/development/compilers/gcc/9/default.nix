@@ -267,6 +267,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
+    isFromBootstrapFiles = false;
   };
 
   enableParallelBuilding = true;

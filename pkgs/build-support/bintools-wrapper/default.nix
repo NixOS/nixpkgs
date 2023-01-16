@@ -108,6 +108,7 @@ stdenv.mkDerivation {
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
   passthru = {
+    inherit (bintools.passthru) isFromBootstrapFiles;
     inherit targetPrefix suffixSalt;
     inherit bintools libc nativeTools nativeLibc nativePrefix isGNU isLLVM;
 

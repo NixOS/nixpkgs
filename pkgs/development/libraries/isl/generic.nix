@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  passthru.isFromBootstrapFiles = false;
   meta = {
     homepage = "https://libisl.sourceforge.io/";
     license = lib.licenses.lgpl21;

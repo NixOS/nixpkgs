@@ -38,4 +38,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
+  passthru.isFromBootstrapFiles = false;
 }

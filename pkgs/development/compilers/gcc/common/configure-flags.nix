@@ -11,6 +11,7 @@
 , enableLTO
 , enableMultilib
 , enablePlugin
+, enableGdbPlugin ? enablePlugin  # "Libcc1 is the GCC cc1 plugin for the GDB debugger"
 , enableShared
 
 , langC
@@ -23,8 +24,12 @@
 , langObjC
 , langObjCpp
 , langJit
+, enableInternalBootstrap
+  ? (with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform)
+    && throw "please specify enableInternalBootstrap explicitly for native builds"
 }:
 
+assert enableGdbPlugin -> enablePlugin;
 assert cloog != null -> lib.versionOlder version "5";
 assert langJava -> lib.versionOlder version "7";
 
@@ -172,9 +177,8 @@ let
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"])
     ++ lib.optional (!enableShared) "--disable-shared"
-    ++ [
-      (lib.enableFeature enablePlugin "plugin")
-    ]
+    ++ [ (lib.enableFeature enablePlugin "plugin") ]
+    ++ [ (lib.enableFeature enableGdbPlugin "libcc1") ]
 
     # Support -m32 on powerpc64le/be
     ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
@@ -215,7 +219,7 @@ let
     # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
     ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
-    ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
+    ++ lib.optional (!enableInternalBootstrap) "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
@@ -240,6 +244,9 @@ let
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
+    # stdenv's setOutputFlags puts libexec in $lib; we need it in
+    # $out to prevent circular references between $lib and $out
+    ++ [ "--libexecdir=${builtins.placeholder "out"}/libexec" ]
   ;
 
 in configureFlags

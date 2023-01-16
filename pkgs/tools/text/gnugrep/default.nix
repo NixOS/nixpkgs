@@ -66,5 +66,8 @@ stdenv.mkDerivation {
     mainProgram = "grep";
   };
 
-  passthru = {inherit pcre;};
+  passthru = {
+    inherit pcre;
+    isFromBootstrapFiles = false;
+  };
 }

@@ -4,6 +4,7 @@
 , withGd ? false
 , withLibcrypt? false
 , buildPackages
+, enableCopyLibGccHack ? !stdenv.enableGccExternalBootstrapForStdenv or false
 }:
 
 let
@@ -14,10 +15,12 @@ let
   ];
 in
 
+lib.pipe
 (callPackage ./common.nix { inherit stdenv; } {
   inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
   pname = "glibc" + lib.optionalString withGd "-gd";
-}).overrideAttrs(previousAttrs: {
+}) [
+  (pkg: pkg.overrideAttrs(previousAttrs: {
 
     # Note:
     # Things you write here override, and do not add to,
@@ -64,18 +67,46 @@ in
         ])
       ]);
 
-    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
-    # any program we run, because the gcc will have been placed at a new
-    # store path than that determined when built (as a source for the
-    # bootstrap-tools tarball)
-    # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will now be at {gcc}/lib, and gcc's libgcc will be found without
-    # any special hack.
-    # TODO: remove this hack. Things that rely on this hack today:
-    # - dejagnu: during linux bootstrap tcl SIGSEGVs
-    # - clang-wrapper in cross-compilation
-    # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    # glibc needs to `dlopen()` `libgcc_s.so` (see `preInstall` phase below for
+    # why) but does not link against it.  Furthermore, glibc doesn't use the
+    # ordinary `dlopen()` call to do this; instead it uses one which ignores
+    # most paths:
+    #
+    #   https://sourceware.org/legacy-ml/libc-help/2013-11/msg00026.html
+    #
+    # In order to get it to not ignore `libgcc_s.so`, we have to add its path to
+    # `user-defined-trusted-dirs`:
+    #
+    #   https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/Makefile;h=b509b3eada1fb77bf81e2a0ca5740b94ad185764#l1355
+    #
+    # Conveniently, this will also inform Nix of the fact that glibc depends on
+    # gcc.libgcc, since the path will be embedded in the resulting binary.
+    #
+    makeFlags =
+      (previousAttrs.makeFlags or [])
+      ++ lib.optionals (!enableCopyLibGccHack && stdenv.cc.cc?libgcc) [
+        "user-defined-trusted-dirs=${stdenv.cc.cc.libgcc}/lib"
+      ];
+
+    # Since glibc commit 9d79e0377b08773ec4f7ec38479b1563606f7ef7, Any program
+    # which calls `pthread_cancel()` or `pthread_exit()` must be able to
+    # `dlopen("libgcc_s.so")`.  If it cannot, `glibc` will abort the process.
+    # Earlier versions of `glibc` did not require `libgcc_s.so`.  These two
+    # functions are used very infrequently -- the most notable user is `libtcl`
+    # via `expect`.
+    #
+    # Why does `glibc` need `libgcc_s.so` in order to do this?
+    #
+    # Thread cancellation can be either deferred (the default) or asynchronous.
+    # Implementing asynchronous thread cancellation requires cooperation from the
+    # compiler that go beyond the C ABI -- usually stack-unwinding capabilities.
+    # I was unable to find any software in nixpkgs that uses asynchronous thread
+    # cancellation.  From `man 3 pthread_setcanceltype`: "Setting the
+    # cancelability type to PTHREAD_CANCEL_ASYNCHRONOUS is rarely useful".  In
+    # spite of this, `glibc` chose to remove the existing compiler-independent
+    # routine for deferred thread cancellation.
+    #
+    preInstall = lib.optionalString (enableCopyLibGccHack && stdenv.hostPlatform == stdenv.buildPlatform) ''
       if [ -f ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
           cp ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
@@ -162,6 +193,15 @@ in
 
     separateDebugInfo = true;
 
-  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
-})
+    meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+  }))
+
+  (pkg: pkg.overrideAttrs (previousAttrs: {
+    passthru = (previousAttrs.passthru or {}) // {
+      isFromBootstrapTools = false;
+    } // lib.optionalAttrs (!enableCopyLibGccHack && stdenv.cc.cc?libgcc) {
+      inherit (stdenv.cc.cc) libgcc;
+    };
+  }))
+]
 

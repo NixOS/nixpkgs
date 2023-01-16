@@ -9,7 +9,7 @@
 , lib
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, gccForLibs ? null
+, gccForLibs ? if useCcForLibs then cc else null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -18,6 +18,7 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, useCcForLibs ? isClang || (cc.passthru.enableExternalBootstrap or false)
 }:
 
 with lib;
@@ -63,7 +64,7 @@ let
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
-  useGccForLibs = isClang
+  useGccForLibs = useCcForLibs
     && libcxx == null
     && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
@@ -155,6 +156,7 @@ stdenv.mkDerivation {
     inherit expand-response-params;
 
     inherit nixSupport;
+    inherit (cc.passthru) isFromBootstrapFiles;
   };
 
   dontBuild = true;

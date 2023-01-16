@@ -169,6 +169,8 @@ stdenv.mkDerivation rec {
     rm -r "$out/share"
   '';
 
+  passthru.isFromBootstrapFiles = false;
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "The GNU Core Utilities";

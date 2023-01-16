@@ -26,7 +26,10 @@ let self = stdenv.mkDerivation rec {
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
   # - see #5855 for related discussion
   outputs = [ "out" "dev" "info" ];
-  passthru.static = self.out;
+  passthru = {
+    static = self.out;
+    isFromBootstrapFiles = false;
+  };
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
