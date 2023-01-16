@@ -43,6 +43,8 @@ buildPythonPackage rec {
     # these require .git, but leaveDotGit = true doesn't help
     "test__get_version__defaults"
     "test__get_version__format_jinja"
+    # these expect to be able to run the poetry cli which fails in test hook
+    "test_integration"
   ];
 
   pythonImportsCheck = [
