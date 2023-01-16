@@ -16319,4 +16319,10 @@
     github = "RossComputerGuy";
     githubId = 19699320;
   };
+  franzmondlichtmann = {
+    name = "Franz Schroepf";
+    email = "franz-schroepf@t-online.de";
+    github = "franzmondlichtmann";
+    githubId = 105480088;
+  };
 }
