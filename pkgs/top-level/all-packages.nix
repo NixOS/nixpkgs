@@ -3350,6 +3350,8 @@ with pkgs;
 
   kjv = callPackage ../applications/misc/kjv { };
 
+  lukesmithxyz-bible-kjv = callPackage ../applications/misc/lukesmithxyz-bible/kjv.nix { };
+
   luigi = callPackage ../applications/networking/cluster/luigi { };
 
   m-cli = callPackage ../os-specific/darwin/m-cli { };
