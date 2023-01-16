@@ -12456,9 +12456,7 @@ with pkgs;
 
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
-  toybox = darwin.apple_sdk_11_0.callPackage ../tools/misc/toybox {
-    inherit (darwin.apple_sdk_11_0) Libsystem;
-  };
+  toybox = darwin.apple_sdk_11_0.callPackage ../tools/misc/toybox { };
 
   trackma = callPackage ../tools/misc/trackma { };
 
@@ -28534,6 +28532,8 @@ with pkgs;
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
 
+  dracut = callPackage ../os-specific/linux/dracut { };
+
   dragonflydb = callPackage ../servers/nosql/dragonflydb { };
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
@@ -33064,9 +33064,7 @@ with pkgs;
 
   uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
 
-  umurmur = callPackage ../applications/networking/umurmur {
-    openssl = openssl_1_1;
-  };
+  umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = callPackage ../tools/virtualization/udocker { };
 
@@ -34003,6 +34001,8 @@ with pkgs;
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
   chia = callPackage ../applications/blockchains/chia { };
+
+  chia-dev-tools = callPackage ../applications/blockchains/chia-dev-tools { };
 
   chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
 

@@ -1,10 +1,14 @@
 {
   stdenv, lib, fetchFromGitHub, which,
-  buildPackages, libxcrypt, libiconv, Libsystem,
+  buildPackages, libxcrypt, libiconv,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
 }:
+
+let
+  inherit (lib) optionals;
+in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
@@ -17,13 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
+  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
   buildInputs = [
     libxcrypt
-  ] ++lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     libiconv
-    Libsystem # This shouldn't be necessary, see https://github.com/NixOS/nixpkgs/issues/210923
-  ] ++lib.optionals (enableStatic && stdenv.cc.libc ? static) [
+  ] ++ optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
   ];
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ lib.optional enableStatic "LDFLAGS=--static";
+  makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];
 
   installTargets = [ "install_flat" ];
 
