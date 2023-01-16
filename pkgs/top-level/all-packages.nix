@@ -4077,6 +4077,8 @@ with pkgs;
 
   changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
 
+  claper = callPackage ../servers/web-apps/claper { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
