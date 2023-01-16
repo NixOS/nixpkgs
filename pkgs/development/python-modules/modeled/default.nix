@@ -7,6 +7,7 @@
 , moretools
 , path
 , pytestCheckHook
+, pythonRemoveDepsHook
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,13 @@ buildPythonPackage rec {
 
   buildInputs = [ zetup ];
 
+  nativeBuildInputs = [ pythonRemoveDepsHook ];
+
   propagatedBuildInputs = [ six moretools path ];
+
+  pythonRemoveDeps = [
+    "pyth.py" # Renamed to path
+  ];
 
   checkInputs = [ pytestCheckHook ];
 
