@@ -24062,7 +24062,7 @@ with pkgs;
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd { };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlangR24; };
 
   exhibitor = callPackage ../servers/exhibitor { };
 
