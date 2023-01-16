@@ -1,13 +1,18 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , SDL2
+, aubio
 , boost
 , cmake
 , ffmpeg
 , gettext
+, git
 , glew
 , glibmm
+, glm
+, icu
 , libepoxy
 , librsvg
 , libxmlxx
@@ -16,18 +21,28 @@
 , portaudio
 }:
 
+let
+  ced = fetchFromGitHub {
+    owner = "performous";
+    repo = "compact_enc_det";
+    rev = "9ca1351fe0b1e85992a407b0fc54a63e9b3adc6e";
+    hash = "sha256-ztfeblR4YnB5+lb+rwOQJjogl+C9vtPH9IVnYO7oxec=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "performous";
-  version = "1.1";
+  version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "performous";
-    repo = "performous";
-    rev = version;
-    hash = "sha256-neTHfug2RkcH/ZvAMCJv++IhygGU0L5Ls/jQYjLEQCI=";
+  src = fetchurl {
+    url = "https://github.com/performous/performous/archive/refs/tags/${version}.tar.gz";
+    hash = "sha256-yIQ4uzuUAKIlSpkoQ3UVdTSuOL78SLonJUvDuefvUO8=";
   };
 
-  patches = [ ./performous-cmake.patch ];
+  postPatch = ''
+    mkdir ced-src
+    cp -R ${ced}/* ced-src
+    sed -z -i "s/include(FetchContent.*ced-sources)/add_subdirectory(ced-src)/" CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -37,10 +52,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
+    aubio
     boost
     ffmpeg
     glew
     glibmm
+    glm
+    icu
     libepoxy
     librsvg
     libxmlxx
