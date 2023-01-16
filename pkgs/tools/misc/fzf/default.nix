@@ -9,6 +9,8 @@
 , ncurses
 , perl
 , glibcLocales
+, testers
+, fzf
 }:
 
 let
@@ -23,16 +25,16 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.35.1";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zn//z66apkhUd2RvLZSV8PqmocQdVmPngfyK4jmWsfs=";
+    hash = "sha256-1PKu8l4Mx17CpePUE0JEnLPNsUdJ0KvW6Lx6VZM27kI=";
   };
 
-  vendorSha256 = "sha256-EjcOcrADHdwTCGimv2BRvbjqSZxz4isWhGmPbWQ7YDE=";
+  vendorHash = "sha256-MsMwBBualAwJzCrv/WNBJakv6LcKZYsDUqkNmivUMOQ=";
 
   outputs = [ "out" "man" ];
 
@@ -80,6 +82,10 @@ buildGoModule rec {
     SCRIPT
     chmod +x $out/bin/fzf-share
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = fzf;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/junegunn/fzf";
