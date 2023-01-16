@@ -29871,6 +29871,7 @@ with pkgs;
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
+  swayhide = callPackage ../applications/window-managers/sway/swayhide.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
   swayws = callPackage ../applications/window-managers/sway/ws.nix { };
   swaywsr = callPackage ../applications/window-managers/sway/wsr.nix { };

@@ -8475,6 +8475,12 @@
       fingerprint = "66D1 3048 2B5F 2069 81A6  6B83 6F98 7CCF 224D 20B9";
     }];
   };
+  luftmensch-luftmensch = {
+    name = "Valentino Bocchetti";
+    email = "valentinobocchetti59@gmail.com";
+    github = "luftmensch-luftmensch";
+    githubId = 65391343;
+  };
   luispedro = {
     email = "luis@luispedro.org";
     github = "luispedro";
