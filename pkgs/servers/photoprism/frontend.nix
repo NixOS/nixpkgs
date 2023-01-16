@@ -1,39 +1,20 @@
-{ lib, nodePackages, nodejs-14_x, stdenv, src, version, ... }:
+{ lib, buildNpmPackage, src, version }:
 
-let
-  nodeDependencies = nodePackages.photoprism-frontend.override {
-    inherit version;
-    name = "photoprism-frontend-dependencies";
-
-    # Workaround for lack of sourceRoot option in buildNodePackage.
-    src = "${src}/frontend";
-
-    meta.broken = false;
-  };
-in
-stdenv.mkDerivation {
+buildNpmPackage {
   inherit src version;
   pname = "photoprism-frontend";
 
-  buildInputs = [ nodejs-14_x ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    pushd frontend
-    ln -s ${nodeDependencies}/lib/node_modules/photoprism/node_modules ./node_modules
-    export PATH="${nodeDependencies}/lib/node_modules/photoprism/node_modules/.bin:$PATH"
-    NODE_ENV=production npm run build
-    popd
-
-    runHook postBuild
+  postPatch = ''
+    cd frontend
   '';
+
+  npmDepsHash = "sha256-NAtZ85WjiQn9w0B9Y78XL+tSsshHlaXS8+WtojFJmGg=";
 
   installPhase = ''
     runHook preInstall
 
     mkdir $out
-    cp -r assets $out/
+    cp -r ../assets $out/
 
     runHook postInstall
   '';
