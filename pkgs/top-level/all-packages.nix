@@ -25,7 +25,7 @@ in
 
 res: pkgs: super:
 
-with pkgs;
+with pkgs.__splicedPackages;
 
 {
   # A module system style type tag
@@ -4615,6 +4615,7 @@ with pkgs;
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
     let
+      binutilsNoLibc = pkgsHostTarget.binutilsNoLibc;
       libc1 = binutilsNoLibc.libc;
     in
     (wrapCCWith {
