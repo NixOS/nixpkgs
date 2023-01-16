@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "3.4.1";
+  version = "4.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qc/8Epax5bPUZvhq42xSj6NUq0T4gbO5dDDS6omWBOU=";
+    sha256 = "sha256-f9Ty4+5PycraxoLUSa9JFusV5Cot6bBWKfOGHZIRR3o=";
   };
 
   buildInputs = [
