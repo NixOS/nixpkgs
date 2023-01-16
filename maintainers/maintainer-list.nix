@@ -7517,6 +7517,12 @@
     githubId = 44045911;
     name = "Kid";
   };
+  kidsan = {
+    email = "8798449+Kidsan@users.noreply.github.com";
+    github = "kidsan";
+    githubId = 8798449;
+    name = "kidsan";
+  };
   kierdavis = {
     email = "kierdavis@gmail.com";
     github = "kierdavis";
