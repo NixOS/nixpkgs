@@ -35,6 +35,14 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 # -----------------------------------------
 # Write the build log to the default output
 
+getAllOutputNames() {
+    if [ -n "$__structuredAttrs" ]; then
+        echo "${!outputs[*]}"
+    else
+        echo "$outputs"
+    fi
+}
+
 outs=( $(getAllOutputNames) )
 defOut=${outs[0]}
 defOutPath=${!defOut}
