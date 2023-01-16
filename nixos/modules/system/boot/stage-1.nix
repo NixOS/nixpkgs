@@ -150,26 +150,6 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Dirty hack to make sure the kernel properly loads modules
-      # such as ext4 on demand (e.g. on a `mount(2)` syscall). This is necessary
-      # because `kmod` isn't linked against `libpthread.so.0` anymore (since
-      # it was merged into `libc.so.6` since version `2.34`), but still needs
-      # to access it for some reason. This is not an issue in stage-1 itself
-      # because of the `LD_LIBRARY_PATH`-variable and anytime later because the rpath of
-      # kmod/modprobe points to glibc's `$out/lib` where `libpthread.so.6` exists.
-      # However, this is a problem when the kernel calls `modprobe` inside
-      # the initial ramdisk because it doesn't know about the
-      # `LD_LIBRARY_PATH` and the rpath was nuked.
-      #
-      # Also, we can't use `makeWrapper` here because `kmod` only does
-      # `modprobe` functionality if `argv[0] == "modprobe"`.
-      cat >$out/bin/modprobe-kernel <<EOF
-      #!$out/bin/ash
-      export LD_LIBRARY_PATH=$out/lib
-      exec $out/bin/modprobe "\$@"
-      EOF
-      chmod +x $out/bin/modprobe-kernel
-
       # Copy resize2fs if any ext* filesystems are to be resized
       ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
@@ -341,6 +321,8 @@ let
     inherit linkUnits udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice;
+
+    inherit (config.system.nixos) distroName;
 
     inherit (config.system.build) earlyMountScript;
 

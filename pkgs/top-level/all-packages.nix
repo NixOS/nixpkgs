@@ -459,7 +459,9 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
+  dtv-scan-tables_linuxtv = callPackage ../data/misc/dtv-scan-tables/linuxtv.nix { };
+  dtv-scan-tables_tvheadend = callPackage ../data/misc/dtv-scan-tables/tvheadend.nix { };
+  dtv-scan-tables = dtv-scan-tables_linuxtv;
 
   dufs = callPackage ../servers/http/dufs {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -1320,6 +1322,8 @@ with pkgs;
   aquosctl = callPackage ../tools/misc/aquosctl { };
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
+
+  arubaotp-seed-extractor = callPackage ../tools/security/arubaotp-seed-extractor { };
 
   audible-cli = callPackage ../tools/misc/audible-cli { };
 
@@ -3120,6 +3124,7 @@ with pkgs;
   github-commenter = callPackage ../development/tools/github-commenter { };
 
   github-desktop = callPackage ../applications/version-management/github-desktop {
+    openssl = openssl_1_1;
     curl = curl.override { openssl = openssl_1_1; };
   };
 
@@ -10341,6 +10346,8 @@ with pkgs;
 
   operator-sdk = callPackage ../development/tools/operator-sdk { };
 
+  oscclip = callPackage ../tools/misc/oscclip { };
+
   owncast = callPackage ../servers/owncast { };
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
@@ -11658,6 +11665,8 @@ with pkgs;
   shen-sources = callPackage ../development/interpreters/shen-sources { };
 
   shiv = with python3Packages; toPythonApplication shiv;
+
+  shim-unsigned = callPackage ../tools/misc/shim { };
 
   shocco = callPackage ../tools/text/shocco { };
 
@@ -15222,7 +15231,7 @@ with pkgs;
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_04;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -18132,9 +18141,7 @@ with pkgs;
 
   process-compose = callPackage ../applications/misc/process-compose { };
 
-  process-viewer = callPackage ../applications/misc/process-viewer {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
-  };
+  process-viewer = callPackage ../applications/misc/process-viewer { };
 
   procodile = callPackage ../tools/system/procodile { };
 
@@ -25778,6 +25785,8 @@ with pkgs;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
   linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
+  linuxPackages_6_1_hardened = linuxKernel.packages.linux_6_1_hardened;
+  linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
@@ -30956,7 +30965,7 @@ with pkgs;
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   monitor = callPackage ../applications/system/monitor {
@@ -36654,7 +36663,9 @@ with pkgs;
   };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = wxGTK32;
+    wxGTK = wxGTK32.override {
+      withWebKit = true;
+    };
   };
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
@@ -36750,9 +36761,7 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  megam = callPackage ../applications/science/misc/megam {
-    inherit (ocaml-ng.ocamlPackages_4_07) ocaml;
-  };
+  megam = callPackage ../applications/science/misc/megam { };
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
 
@@ -37901,7 +37910,9 @@ with pkgs;
 
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
 
-  tvheadend = callPackage ../servers/tvheadend { };
+  tvheadend = callPackage ../servers/tvheadend {
+    dtv-scan-tables = dtv-scan-tables_tvheadend;
+  };
 
   twiggy = callPackage ../development/tools/twiggy { };
 
@@ -38620,4 +38631,6 @@ with pkgs;
   tuner = callPackage ../applications/audio/tuner { };
 
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
+
+  ov = callPackage ../tools/text/ov { };
 }

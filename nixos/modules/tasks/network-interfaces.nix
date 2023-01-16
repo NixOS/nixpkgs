@@ -434,7 +434,8 @@ in
   options = {
 
     networking.hostName = mkOption {
-      default = "nixos";
+      default = config.system.nixos.distroId;
+      defaultText = literalExpression "config.system.nixos.distroId";
       # Only allow hostnames without the domain name part (i.e. no FQDNs, see
       # e.g. "man 5 hostname") and require valid DNS labels (recommended
       # syntax). Note: We also allow underscores for compatibility/legacy

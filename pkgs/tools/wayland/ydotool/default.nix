@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "ReimuNotMoe";
     repo = "ydotool";
     rev = "v${version}";
-    sha256 = "sha256-maXXGCqB8dkGO8956hsKSwM4HQdYn6z1jBFENQ9sKcA=";
+    sha256 = "sha256-RcPHQFXD3YgfF11OFpcnSowPlEjxy2c2RWhGYr30GhI=";
   };
 
   strictDeps = true;

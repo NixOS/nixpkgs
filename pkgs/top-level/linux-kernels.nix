@@ -249,6 +249,7 @@ in {
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0_hardened = hardenedKernelFor kernels.linux_6_0 { };
+    linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -577,6 +578,7 @@ in {
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_0 { });
+    linux_6_1_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_1 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

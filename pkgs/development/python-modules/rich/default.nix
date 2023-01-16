@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris jyooru ];
+    maintainers = with maintainers; [ ris joelkoen ];
   };
 }

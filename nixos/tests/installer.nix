@@ -21,6 +21,8 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        documentation.enable = false;
+
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
@@ -307,7 +309,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 1536;
+          virtualisation.memorySize = 2047;
 
           boot.initrd.systemd.enable = systemdStage1;
 

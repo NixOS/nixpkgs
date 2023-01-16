@@ -4525,6 +4525,8 @@ self: super: with self; {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+  imagehash = callPackage ../development/python-modules/imagehash { };
+
   imageio = callPackage ../development/python-modules/imageio { };
 
   imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
@@ -5505,7 +5507,9 @@ self: super: with self; {
 
   loguru = callPackage ../development/python-modules/loguru { };
 
-  logutils = callPackage ../development/python-modules/logutils { };
+  logutils = callPackage ../development/python-modules/logutils {
+    redis-server = pkgs.redis;
+  };
 
   logzero = callPackage ../development/python-modules/logzero { };
 
@@ -6407,6 +6411,8 @@ self: super: with self; {
 
   nplusone = callPackage ../development/python-modules/nplusone { };
 
+  nptyping  = callPackage ../development/python-modules/nptyping { };
+
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
@@ -6576,6 +6582,8 @@ self: super: with self; {
   };
 
   opencensus = callPackage ../development/python-modules/opencensus { };
+
+  opencensus-context = callPackage ../development/python-modules/opencensus-context { };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;

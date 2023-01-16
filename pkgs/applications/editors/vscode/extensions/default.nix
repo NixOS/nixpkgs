@@ -2229,8 +2229,8 @@ let
         mktplcRef = {
           name = "adwaita-theme";
           publisher = "piousdeer";
-          version = "1.0.8";
-          sha256 = "XyzxiwKQGDUIXp6rnt1BmPzfpd1WrG8HnEqYEOJV6P8=";
+          version = "1.1.0";
+          sha256 = "sha256-tKpKLUcc33YrgDS95PJu22ngxhwjqeVMC1Mhhy+IPGE=";
         };
         meta = with lib; {
           description = "Theme for the GNOME desktop";

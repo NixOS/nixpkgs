@@ -12,8 +12,23 @@ let
     then cfgc.package
     else pkgs.buildPackages.openssh;
 
+  # reports boolean as yes / no
+  mkValueStringSshd = v:
+        if isInt           v then toString v
+        else if isString   v then v
+        else if true  ==   v then "yes"
+        else if false ==   v then "no"
+        else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+
+  # dont use the "=" operator
+  settingsFormat = (pkgs.formats.keyValue {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = mkValueStringSshd;
+    } " ";});
+
+  configFile = settingsFormat.generate "config" cfg.settings;
   sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
-    cat >$out <<EOL
+    cat ${configFile} - >$out <<EOL
     ${cfg.extraConfig}
     EOL
 
@@ -23,6 +38,7 @@ let
 
   cfg  = config.services.openssh;
   cfgc = config.programs.ssh;
+
 
   nssModulesPath = config.system.nssModules.path;
 
@@ -82,6 +98,12 @@ in
     (mkAliasOptionModuleMD [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
     (mkAliasOptionModuleMD [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
     (mkRenamedOptionModule [ "services" "openssh" "challengeResponseAuthentication" ] [ "services" "openssh" "kbdInteractiveAuthentication" ])
+
+    (mkRenamedOptionModule [ "services" "openssh" "kbdInteractiveAuthentication" ] [  "services" "openssh" "settings" "KbdInteractiveAuthentication" ])
+    (mkRenamedOptionModule [ "services" "openssh" "passwordAuthentication" ] [  "services" "openssh" "settings" "PasswordAuthentication" ])
+    (mkRenamedOptionModule [ "services" "openssh" "useDns" ] [  "services" "openssh" "settings" "UseDns" ])
+    (mkRenamedOptionModule [ "services" "openssh" "permitRootLogin" ] [  "services" "openssh" "settings" "PermitRootLogin" ])
+    (mkRenamedOptionModule [ "services" "openssh" "logLevel" ] [  "services" "openssh" "settings" "LogLevel" ])
   ];
 
   ###### interface
@@ -145,14 +167,6 @@ in
         '';
       };
 
-      permitRootLogin = mkOption {
-        default = "prohibit-password";
-        type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
-        description = lib.mdDoc ''
-          Whether the root user can login using ssh.
-        '';
-      };
-
       gatewayPorts = mkOption {
         type = types.str;
         default = "no";
@@ -207,22 +221,6 @@ in
           NOTE: this will override default listening on all local addresses and port 22.
           NOTE: setting this option won't automatically enable given ports
           in firewall configuration.
-        '';
-      };
-
-      passwordAuthentication = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Specifies whether password authentication is allowed.
-        '';
-      };
-
-      kbdInteractiveAuthentication = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Specifies whether keyboard-interactive authentication is allowed.
         '';
       };
 
@@ -346,26 +344,58 @@ in
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
-        default = "INFO"; # upstream default
-        description = lib.mdDoc ''
-          Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
-          QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is INFO. DEBUG and DEBUG1
-          are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
-          violates the privacy of users and is not recommended.
-        '';
-      };
 
-      useDns = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Specifies whether sshd(8) should look up the remote host name, and to check that the resolved host name for
-          the remote IP address maps back to the very same IP address.
-          If this option is set to no (the default) then only addresses and not host names may be used in
-          ~/.ssh/authorized_keys from and sshd_config Match Host directives.
-        '';
+      settings = mkOption {
+        description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
+        example = literalExpression ''{
+          UseDns true;
+        }'';
+        type = types.submodule ({name, ...}: {
+          freeformType = settingsFormat.type;
+          options = {
+            LogLevel = mkOption {
+              type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
+              default = "INFO"; # upstream default
+              description = lib.mdDoc ''
+                Gives the verbosity level that is used when logging messages from sshd(8). Logging with a DEBUG level
+                violates the privacy of users and is not recommended.
+              '';
+            };
+            UseDns = mkOption {
+              type = types.bool;
+              # apply if cfg.useDns then "yes" else "no"
+              default = false;
+              description = lib.mdDoc ''
+                Specifies whether sshd(8) should look up the remote host name, and to check that the resolved host name for
+                the remote IP address maps back to the very same IP address.
+                If this option is set to no (the default) then only addresses and not host names may be used in
+                ~/.ssh/authorized_keys from and sshd_config Match Host directives.
+              '';
+            };
+
+            PasswordAuthentication = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Specifies whether password authentication is allowed.
+              '';
+            };
+            PermitRootLogin = mkOption {
+              default = "prohibit-password";
+              type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
+              description = lib.mdDoc ''
+                Whether the root user can login using ssh.
+              '';
+            };
+            KbdInteractiveAuthentication = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Specifies whether keyboard-interactive authentication is allowed.
+              '';
+            };
+          };
+        });
       };
 
       extraConfig = mkOption {
@@ -496,7 +526,7 @@ in
     security.pam.services.sshd =
       { startSession = true;
         showMotd = true;
-        unixAuth = cfg.passwordAuthentication;
+        unixAuth = cfg.settings.PasswordAuthentication;
       };
 
     # These values are merged with the ones defined externally, see:
@@ -530,10 +560,7 @@ in
           Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
-        PermitRootLogin ${cfg.permitRootLogin}
         GatewayPorts ${cfg.gatewayPorts}
-        PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
-        KbdInteractiveAuthentication ${if cfg.kbdInteractiveAuthentication then "yes" else "no"}
 
         PrintMotd no # handled by pam_motd
 
@@ -550,11 +577,6 @@ in
         KexAlgorithms ${concatStringsSep "," cfg.kexAlgorithms}
         Ciphers ${concatStringsSep "," cfg.ciphers}
         MACs ${concatStringsSep "," cfg.macs}
-
-        LogLevel ${cfg.logLevel}
-
-        UseDNS ${if cfg.useDns then "yes" else "no"}
-
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

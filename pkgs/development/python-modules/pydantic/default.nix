@@ -9,12 +9,13 @@
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
+, pythonAtLeast
 , pythonOlder
 , pyupgrade
 , typing-extensions
 # dependencies for building documentation.
 # docs fail to build in Darwin sandbox: https://github.com/samuelcolvin/pydantic/issues/4245
-, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin)
+, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin && pythonAtLeast "3.10")
 , ansi2html
 , markdown-include
 , mkdocs

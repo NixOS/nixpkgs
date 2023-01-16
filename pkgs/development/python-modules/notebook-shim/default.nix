@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , jupyter-server
 , pytestCheckHook
 , pytest-tornasync
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "notebook-shim";
   version = "0.2.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter";
@@ -17,6 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-/z4vXSBqeL2wSqJ0kFNgU0TSGUGByhxHNya8EO55+7s=";
   };
 
+  nativeBuildInputs = [ hatchling ];
   propagatedBuildInputs = [ jupyter-server ];
 
   preCheck = ''

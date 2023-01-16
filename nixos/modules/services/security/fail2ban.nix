@@ -339,7 +339,7 @@ in
     # Block SSH if there are too many failing connection attempts.
     # Benefits from verbose sshd logging to observe failed login attempts,
     # so we set that here unless the user overrode it.
-    services.openssh.logLevel = lib.mkDefault "VERBOSE";
+    services.openssh.settings.LogLevel = lib.mkDefault "VERBOSE";
     services.fail2ban.jails.sshd = mkDefault ''
       enabled = true
       port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}

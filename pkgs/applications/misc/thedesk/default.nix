@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thedesk";
-  version = "23.0.3";
+  version = "23.0.5";
 
   src = fetchurl {
     url = "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-X1WNfpsHRkk2UNTExn338r4pWhtC1osrCo6V8g7Pxcc=";
+    sha256 = "sha256-6pXbHkLdJw0+G9lep/tGkbSGAf8AobkQQgvw6gPYlro=";
   };
 
   nativeBuildInputs = [
