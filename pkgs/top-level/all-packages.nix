@@ -12452,9 +12452,7 @@ with pkgs;
 
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
-  toybox = darwin.apple_sdk_11_0.callPackage ../tools/misc/toybox {
-    inherit (darwin.apple_sdk_11_0) Libsystem;
-  };
+  toybox = darwin.apple_sdk_11_0.callPackage ../tools/misc/toybox { };
 
   trackma = callPackage ../tools/misc/trackma { };
 

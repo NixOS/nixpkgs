@@ -1,6 +1,6 @@
 {
   stdenv, lib, fetchFromGitHub, which,
-  buildPackages, libxcrypt, libiconv, Libsystem,
+  buildPackages, libxcrypt, libiconv,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
@@ -17,12 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
+  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ]; # needed for cross
   buildInputs = [
     libxcrypt
-  ] ++lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
-    Libsystem # This shouldn't be necessary, see https://github.com/NixOS/nixpkgs/issues/210923
   ] ++lib.optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
