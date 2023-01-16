@@ -17,7 +17,6 @@ in runCommand "llvm-binutils-${version}" { preferLocalBuild = true; } ''
    ln -s ${llvm}/bin/llvm-ar $out/bin/${prefix}ar
    ln -s ${llvm}/bin/llvm-ar $out/bin/${prefix}dlltool
    ln -s ${llvm}/bin/llvm-ar $out/bin/${prefix}ranlib
-   ln -s ${llvm}/bin/llvm-as $out/bin/${prefix}as
    ln -s ${llvm}/bin/llvm-cxxfilt $out/bin/${prefix}c++filt
    ln -s ${llvm}/bin/llvm-dwp $out/bin/${prefix}dwp
    ln -s ${llvm}/bin/llvm-nm $out/bin/${prefix}nm
