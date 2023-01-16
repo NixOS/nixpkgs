@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysmb";
-  version = "1.2.9";
+  version = "1.2.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "miketeo";
     repo = "pysmb";
     rev = "refs/tags/pysmb-${version}";
-    hash = "sha256-2AZAtypotSVXWfwokUpfWYQMiMq6EgbdBx2G7bU0Cqw=";
+    hash = "sha256-psV6fYymE6k2YqxOvFM2s7JTG51fI5pSqmkZnvfmprw=";
   };
 
   propagatedBuildInputs = [
