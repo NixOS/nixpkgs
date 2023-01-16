@@ -254,7 +254,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   nautilus-python = callPackage ./misc/nautilus-python { };
 
-  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant1; };
+  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant2; };
 
   pomodoro = callPackage ./misc/pomodoro { };
 

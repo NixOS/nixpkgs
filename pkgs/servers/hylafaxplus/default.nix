@@ -72,6 +72,16 @@ stdenv.mkDerivation {
   patches = [
     # adjust configure check to work with libtiff > 4.1
     ./libtiff-4.patch
+    # fix missing exports in libtiff 4.5+
+    # https://gitlab.com/libtiff/libtiff/-/issues/504
+    # can probably be dropped with next hylafaxplus release
+    (fetchurl {
+      name = "hylafaxplus-7.0.6-tiff-4.5.0.patch";
+      url = "https://dev.gentoo.org/~sam/distfiles/net-misc/hylafaxplus/hylafaxplus-7.0.6-tiff-4.5.0.patch.xz";
+      downloadToTemp = true;
+      postFetch = ''xz -d < $downloadedFile > $out'';
+      hash = "sha256-koZvvzlgZHcANVaYdewnuLARz2TTeyDZRjm0EYWzsmk=";
+    })
   ];
   # Note that `configure` (and maybe `faxsetup`) are looking
   # for a couple of standard binaries in the `PATH` and
