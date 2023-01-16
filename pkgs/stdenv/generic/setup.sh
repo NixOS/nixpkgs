@@ -515,7 +515,7 @@ findInputs() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
     local varRef="$varVar[$((targetOffset - hostOffset))]"
@@ -644,7 +644,7 @@ activatePackage() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
