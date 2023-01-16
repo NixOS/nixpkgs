@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
   version = "1.23";
   outputs = [ "out" "man" "info" ];
 
-  nativeBuildInputs = [ ];
-
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
     sha256 = "sha256-R5LAR93xXvKdVbqOaKGiHgy3aS2H7N9yBEGYZFgvKA0=";
