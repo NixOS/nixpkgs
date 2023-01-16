@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, python3, libllvm, libcxxabi, libxcrypt
+, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -27,7 +27,8 @@ stdenv.mkDerivation {
   inherit src;
   sourceRoot = "${src.name}/${baseName}";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+    ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -80,10 +81,13 @@ stdenv.mkDerivation {
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-  ] # Prevent a compilation error on darwin
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-targetconditionals.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch
-
+    # Prevent a compilation error on darwin
+    ./darwin-targetconditionals.patch
+    # See: https://github.com/NixOS/nixpkgs/pull/186575
+    ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
+    # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+    ./armv7l.patch
+  ]
     # The `compiler-rt` build inspects `ld` to figure out whether it needs to
     # explicitly call `codesign`:
     # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/Modules/AddCompilerRT.cmake#L409-L422
