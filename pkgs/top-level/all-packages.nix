@@ -35269,7 +35269,7 @@ with pkgs;
   stt = callPackage ../tools/audio/stt { };
 
   stuntrally = callPackage ../games/stuntrally
-    { ogre = ogre1_9; mygui = mygui.override { withOgre = true; }; };
+    { };
 
   superTux = callPackage ../games/supertux { };
 
