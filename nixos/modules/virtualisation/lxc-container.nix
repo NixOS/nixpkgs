@@ -150,6 +150,12 @@ in
           source = config.system.build.toplevel + "/init";
           target = "/sbin/init";
         }
+        # Technically this is not required for lxc, but having also make this configuration work with systemd-nspawn.
+        # Nixos will setup the same symlink after start.
+        {
+          source = config.system.build.toplevel + "/etc/os-release";
+          target = "/etc/os-release";
+        }
       ];
 
       extraCommands = "mkdir -p proc sys dev";
