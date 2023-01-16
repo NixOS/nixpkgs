@@ -60,6 +60,55 @@ in
         Group = cfg.group;
         ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
         Restart = "on-failure";
+
+        # Sandboxing
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
+        ];
+        ExecPaths = [
+          "${builtins.storeDir}"
+        ];
+        LockPersonality = true;
+        NoExecPaths = [
+          "/"
+        ];
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          "${config.users.users.${cfg.user}.home}"
+        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@clock"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@obsolete"
+          "~@reboot"
+          "~@module"
+          "~@mount"
+          "~@swap"
+        ];
+        UMask = "0077";
       };
     };
 
