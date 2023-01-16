@@ -5,6 +5,7 @@
 , runCommand
 , cmake
 , rocm-cmake
+, rocrand
 , hip
 , openmp
 , sqlite
@@ -49,6 +50,7 @@ let
     ] ++ lib.optionals buildTests [
       gtest
     ] ++ lib.optionals (buildTests || buildBenchmarks) [
+      rocrand
       boost
       fftw
       fftwFloat
