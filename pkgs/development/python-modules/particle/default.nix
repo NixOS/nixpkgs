@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchPypi
 , setuptools-scm
+, hatchling
 , attrs
 , deprecated
 , hepunits
@@ -13,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.21.0";
+  version = "0.21.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SDdIg05+gfLNaQ+glitTf3Z/6K9HBci62mjIu9rIoX0=";
+    sha256 = "sha256-Mw9IVQoXZU8ByU6OI2Wtmo3PJuVz6KzzH7I+pPYkssQ=";
   };
   nativeBuildInputs = [
     setuptools-scm
+    hatchling
   ];
 
   propagatedBuildInputs = [
