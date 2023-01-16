@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yiV2Y0vBF0d7BFfT5wonzRUGHVH040PZrlAUpVTFCZc=";
+    hash = "sha256-12EiEGI9Vkb6EUY/W2KWeLigxWra1Be4ozvi8njBpEU=";
   };
 
   nativeBuildInputs = [
