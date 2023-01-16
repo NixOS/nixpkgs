@@ -37,7 +37,7 @@ if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
 tryDownload() {
     local url="$1"
     echo
-    header "trying $url"
+    echo "trying $url"
     local curlexit=18;
 
     success=
