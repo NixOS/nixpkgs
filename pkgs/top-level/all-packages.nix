@@ -3258,6 +3258,8 @@ with pkgs;
 
   itd = callPackage ../applications/misc/itd { };
 
+  kord = callPackage ../applications/misc/kord { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
