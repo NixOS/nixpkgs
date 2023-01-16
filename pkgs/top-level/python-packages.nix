@@ -4205,6 +4205,8 @@ self: super: with self; {
 
   hiro = callPackage ../development/python-modules/hiro { };
 
+  histoprint = callPackage ../development/python-modules/histoprint { };
+
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
   hjson = callPackage ../development/python-modules/hjson { };
