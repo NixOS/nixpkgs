@@ -113,6 +113,7 @@ let
   };
 
   ceph-python-env = python.withPackages (ps: [
+    # Check .requires files below https://github.com/ceph/ceph/tree/main/debian for dependencies
     ps.sphinx
     ps.flask
     ps.routes
