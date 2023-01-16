@@ -1,20 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, mesa_glu }:
+{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, cmake }:
 
 mkDerivation rec {
   pname = "fstl";
-  version = "0.9.4";
+  version = "0.10.0";
 
-  buildInputs = [qtbase mesa_glu];
+  buildInputs = [qtbase cmake];
 
-  prePatch = ''
-    sed -i "s|/usr/bin|$out/bin|g" qt/fstl.pro
-  '';
-
-  preBuild = ''
-    qmake qt/fstl.pro
-  '';
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    cd ../app
+    ./package.sh
     mkdir -p $out/Applications
     mv fstl.app $out/Applications
   '';
@@ -23,7 +17,7 @@ mkDerivation rec {
     owner = "mkeeter";
     repo = "fstl";
     rev = "v" + version;
-    sha256 = "028hzdv11hgvcpc36q5scf4nw1256qswh37xhfn5a0iv7wycmnif";
+    sha256 = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
   };
 
   meta = with lib; {
