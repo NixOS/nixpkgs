@@ -13565,6 +13565,12 @@
     githubId = 16734772;
     name = "Sumner Evans";
   };
+  suominen = {
+    email = "kimmo@suominen.com";
+    github = "suominen";
+    githubId = 1939855;
+    name = "Kimmo Suominen";
+  };
   superbo = {
     email = "supernbo@gmail.com";
     github = "SuperBo";
