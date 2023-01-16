@@ -30482,6 +30482,10 @@ with pkgs;
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
+  kuro = callPackage ../applications/misc/kuro {
+    electron = electron_22;
+  };
+
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   lame = callPackage ../development/libraries/lame { };
