@@ -172,6 +172,7 @@ let
                     "Flask-Login"
                     "werkzeug"
                     "flask"
+                    "Flask-Limiter"
                   ];
                 in
                 ''
