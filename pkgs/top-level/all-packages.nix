@@ -25979,6 +25979,8 @@ with pkgs;
 
   go-task = callPackage ../development/tools/go-task { };
 
+  golines = callPackage ../development/tools/golines { };
+
   golint = callPackage ../development/tools/golint { };
 
   golangci-lint = callPackage ../development/tools/golangci-lint { };
