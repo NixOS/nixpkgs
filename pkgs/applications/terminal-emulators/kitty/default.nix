@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
@@ -75,6 +75,13 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
+    # Fix clone-in-kitty not working on bash >= 5.2
+    # TODO: Removed on kitty release > 0.26.5
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/51bba9110e9920afbefeb981e43d0c1728051b5e.patch";
+      sha256 = "sha256-1aSU4aU6j1/om0LsceGfhH1Hdzp+pPaNeWAi7U6VcP4=";
+    })
+
     # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
     ./fix-test_ssh_env_vars.patch
 
