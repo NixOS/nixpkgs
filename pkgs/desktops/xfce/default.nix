@@ -135,8 +135,6 @@ makeScopeWithSplicing
 
       xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
 
-      xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin { };
-
       xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
 
       xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
@@ -176,4 +174,5 @@ makeScopeWithSplicing
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
+      xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
     })

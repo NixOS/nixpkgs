@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";
-  version = "2021-11-01";
+  version = "unstable-2022-07-11";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "tools";
-    rev = "13474ee775d0c5ec8a7da4fb0a9fa84187abfc87";
-    sha256 = "s/RPMIpQSznoQfchAP9gpO7I2uuTsOV0Ep4vVz7i2o4=";
+    rev = "439b6198a9b340de5998dd14a26a0d9d38a6bcac";
+    hash = "sha512-KMHgj73eXHT++IE8DbCsFeJ87ngc9R3XxMUJy4Z3s4/MtMeB9zblADHkyJqz9oyeugeJTrDtuVETPBRo7M4Y8A==";
   };
 
   NIX_CFLAGS_COMPILE = [
