@@ -1350,6 +1350,8 @@ with pkgs;
 
   clematis = callPackage ../tools/misc/clematis { };
 
+  colorless = callPackage ../tools/misc/colorless { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
@@ -3351,6 +3353,8 @@ with pkgs;
   };
 
   kjv = callPackage ../applications/misc/kjv { };
+
+  lukesmithxyz-bible-kjv = callPackage ../applications/misc/lukesmithxyz-bible/kjv.nix { };
 
   luigi = callPackage ../applications/networking/cluster/luigi { };
 
@@ -12452,7 +12456,9 @@ with pkgs;
 
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
-  toybox = callPackage ../tools/misc/toybox { };
+  toybox = darwin.apple_sdk_11_0.callPackage ../tools/misc/toybox {
+    inherit (darwin.apple_sdk_11_0) Libsystem;
+  };
 
   trackma = callPackage ../tools/misc/trackma { };
 
@@ -38591,4 +38597,8 @@ with pkgs;
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 
   ov = callPackage ../tools/text/ov { };
+
+  tubekit = callPackage ../applications/networking/cluster/tubekit/wrapper.nix { };
+
+  tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
 }

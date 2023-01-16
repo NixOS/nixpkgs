@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 }:
 
@@ -11,9 +11,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4kVroM+y7luhQSFFDo2CWzxKFGH8oHYSIKq2bUERy7c=";
+  src = fetchFromGitHub {
+    owner = "osvenskan";
+    repo = "posix_ipc";
+    rev = "rel${version}";
+    hash = "sha256-xK5CkThqVFVMIxBtgUfHIRNRfmBxKa/DWBYQg7QHl/M=";
   };
 
   pythonImportsCheckHook = [
