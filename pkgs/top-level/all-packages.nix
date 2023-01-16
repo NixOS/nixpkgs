@@ -14112,7 +14112,7 @@ with pkgs;
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isLinux) then 9
-        else 11;
+        else 12;
       numS = toString num;
     in {
       gcc = pkgs.${"gcc${numS}"};
