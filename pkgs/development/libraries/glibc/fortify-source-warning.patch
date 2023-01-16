@@ -1,0 +1,14 @@
+diff --git a/include/features.h b/include/features.h
+index 7d2c7a4f..15909cc5 100644
+--- a/include/features.h
++++ b/include/features.h
+@@ -420,9 +420,6 @@
+ #  endif
+ #  define __USE_FORTIFY_LEVEL 3
+ # elif _FORTIFY_SOURCE > 1
+-#  if _FORTIFY_SOURCE > 2
+-#   warning _FORTIFY_SOURCE > 2 is treated like 2 on this platform
+-#  endif
+ #  define __USE_FORTIFY_LEVEL 2
+ # else
+ #  define __USE_FORTIFY_LEVEL 1

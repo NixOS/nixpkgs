@@ -88,6 +88,9 @@ stdenv.mkDerivation ({
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Disable warning about _FORTIFY_SOURCE >2 */
+      ./fortify-source-warning.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
