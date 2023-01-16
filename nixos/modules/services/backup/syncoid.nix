@@ -208,6 +208,7 @@ in
             description = lib.mdDoc ''
               The local user for this transfer command, overriding {option}`services.syncoid.user`.
               With privilege delegation (i.e. with a user other than `root`), and when multiple commands involve the same dataset, it is important to use a different local user for each of those commands, as otherwise permissions can get removed when one command finishes, but the others are still in progress.
+              If different users are to use the same SSH key file, then that file has to be owned and readable by a group that the users have in common, but not be owned by any of the users, or OpenSSH will refuse to use the key as that user (e.g. `users.users.backup-to-''${target}.group = "backup"` and {command}`chown root:backup $sshKey ; chmod 640 $sshKey`).
             '';
           };
 
