@@ -32451,6 +32451,8 @@ with pkgs;
 
   synology-cloud-sync-decryption-tool = callPackage ../applications/networking/synology-cloud-sync-decryption-tool { };
 
+  litemdview = callPackage ../applications/graphics/litemdview { };
+
   maestral = with python3Packages; toPythonApplication maestral;
 
   maestral-gui = libsForQt5.callPackage ../applications/networking/maestral-qt { };
