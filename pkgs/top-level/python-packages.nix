@@ -11901,6 +11901,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  uhi = callPackage ../development/python-modules/uhi { };
+
   ujson = callPackage ../development/python-modules/ujson { };
 
   ukkonen = callPackage ../development/python-modules/ukkonen { };
