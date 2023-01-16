@@ -468,12 +468,14 @@ in
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
@@ -633,7 +635,6 @@ in
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
        after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
        path = [ gitea ];
 
        environment = {

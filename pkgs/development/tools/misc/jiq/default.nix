@@ -26,6 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/fiatjaf/jiq";
     license = licenses.mit;
     description = "jid on jq - interactive JSON query tool using jq expressions";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

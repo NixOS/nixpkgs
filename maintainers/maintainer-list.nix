@@ -6876,6 +6876,12 @@
     githubId = 310981;
     name = "Joel Burget";
   };
+  joelkoen = {
+    email = "mail@joelkoen.com";
+    github = "joelkoen";
+    githubId = 122502655;
+    name = "Joel Koen";
+  };
   joelmo = {
     email = "joel.moberg@gmail.com";
     github = "joelmo";
@@ -7265,12 +7271,6 @@
     github = "jwygoda";
     githubId = 20658981;
     name = "Jarosław Wygoda";
-  };
-  jyooru = {
-    email = "joel@joel.tokyo";
-    github = "jyooru";
-    githubId = 63786778;
-    name = "Joel";
   };
   jyp = {
     email = "jeanphilippe.bernardy@gmail.com";
@@ -14414,6 +14414,12 @@
     githubId = 52011418;
     name = "Travis Davis";
   };
+  traxys = {
+    email = "quentin+dev@familleboyer.net";
+    github = "traxys";
+    githubId = 5623227;
+    name = "Quentin Boyer";
+  };
   TredwellGit = {
     email = "tredwell@tutanota.com";
     github = "TredwellGit";
@@ -16312,5 +16318,11 @@
     email = "tristan.ross@midstall.com";
     github = "RossComputerGuy";
     githubId = 19699320;
+  };
+  franzmondlichtmann = {
+    name = "Franz Schroepf";
+    email = "franz-schroepf@t-online.de";
+    github = "franzmondlichtmann";
+    githubId = 105480088;
   };
 }

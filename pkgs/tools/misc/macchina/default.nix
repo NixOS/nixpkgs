@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "macchina";
-  version = "6.1.7";
+  version = "6.1.8";
 
   src = fetchFromGitHub {
     owner = "Macchina-CLI";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zbQOmlFWpoQwf4rlDLn1V0vj1c66pVWrMROGANRDl9s=";
+    hash = "sha256-MntHq5nphfjbO0Rx7v6WjsnabSMH5Ke3aR9/embG/rk=";
   };
 
-  cargoHash = "sha256-BYUGtaMG/fvQHYJgeSQcW+ZJOrm3N9g6m0c5TX9psJU=";
+  cargoHash = "sha256-w8WIpT8rUe7olB5kdpDyrId6D698AhcqzsfpOlutaHQ=";
 
   nativeBuildInputs = [
     installShellFiles

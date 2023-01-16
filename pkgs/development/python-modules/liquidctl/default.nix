@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.12.0";
+  version = "1.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5apn+8X7si8jniHSjt7sveqIuzeuI4uXllR627aT2vI=";
+    hash = "sha256-0QjgnTxqB50JNjSUAgBrGyhN2XC/TDYiC1tvhw1Bl1M=";
   };
 
   nativeBuildInputs = [
