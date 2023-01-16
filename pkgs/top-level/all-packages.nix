@@ -515,6 +515,7 @@ with pkgs;
 
   probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin) DarwinTools;
   };
 
   probe-run = callPackage ../development/tools/rust/probe-run {
