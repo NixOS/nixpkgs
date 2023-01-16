@@ -309,7 +309,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 1536;
+          virtualisation.memorySize = 2047;
 
           boot.initrd.systemd.enable = systemdStage1;
 

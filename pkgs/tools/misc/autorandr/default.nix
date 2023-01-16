@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
-  version = "1.12.1";
+  version = "1.13";
   format = "other";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "phillipberndt";
     repo = "autorandr";
     rev = version;
-    sha256 = "sha256-7SNnbgV6PeseBD6wdilEIOfOL2KVDpnlkSn9SBgRhhM=";
+    sha256 = "sha256-pTWwDKBCZV3wkX/VHuWrwMFgUAMDvik11y+ysKiN3HU=";
   };
 
   meta = with lib; {
