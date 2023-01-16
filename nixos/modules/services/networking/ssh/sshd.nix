@@ -346,9 +346,11 @@ in
 
 
       settings = mkOption {
-        description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
+        description = lib.mdDoc "Configuration for `sshd_config(5)`.";
+        default = { };
         example = literalExpression ''{
-          UseDns true;
+          UseDns = true;
+          PasswordAuthentication = false;
         }'';
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
