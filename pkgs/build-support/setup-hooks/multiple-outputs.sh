@@ -19,13 +19,15 @@ _assignFirst() {
         if [ -n "${!var-}" ]; then eval "${varName}"="${var}"; return; fi
     done
     echo
-    echo "error: _assignFirst: could not find a non-empty variable to assign to ${varName}. The following variables were all unset or empty: $*."
+    echo "error: _assignFirst: could not find a non-empty variable to assign to ${varName}."
+    echo "       The following variables were all unset or empty:"
+    echo "           $*"
     if [ -z "${out:-}" ]; then
         echo '       If you do not want an "out" output in your derivation, make sure to define'
         echo '       the other specific required outputs. This can be achieved by picking one'
-        echo "       of $* to add as an output."
+        echo "       of the above as an output."
         echo '       You do not have to remove "out" if you want to have a different default'
-        echo '        output, as it is the first output in `outputs` that is the default output.'
+        echo '       output, because the first output is taken as a default.'
         echo
     fi
     return 1 # none found
