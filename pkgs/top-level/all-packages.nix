@@ -1440,6 +1440,8 @@ with pkgs;
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
+  steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch {};
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   systeroid = callPackage ../tools/system/systeroid { };
