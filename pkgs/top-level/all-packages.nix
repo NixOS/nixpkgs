@@ -3153,9 +3153,7 @@ with pkgs;
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
-  gmnisrv = callPackage ../servers/gemini/gmnisrv {
-    openssl = openssl_1_1;
-  };
+  gmnisrv = callPackage ../servers/gemini/gmnisrv { };
 
   gmnitohtml = callPackage ../applications/misc/gmnitohtml { };
 
