@@ -4338,6 +4338,8 @@ self: super: with self; {
 
   hiro = callPackage ../development/python-modules/hiro { };
 
+  hist = callPackage ../development/python-modules/hist { };
+
   histoprint = callPackage ../development/python-modules/histoprint { };
 
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
