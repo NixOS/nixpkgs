@@ -33529,9 +33529,7 @@ with pkgs;
 
   xannotate = callPackage ../tools/X11/xannotate {};
 
-  xaos = callPackage ../applications/graphics/xaos {
-    libpng = libpng12;
-  };
+  xaos = libsForQt5.callPackage ../applications/graphics/xaos { };
 
   xastir = callPackage ../applications/misc/xastir {
     rastermagick = imagemagick6;
