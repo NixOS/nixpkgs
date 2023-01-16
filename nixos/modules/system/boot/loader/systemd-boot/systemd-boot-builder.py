@@ -228,20 +228,21 @@ def main() -> None:
         warnings.warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)
         os.environ["NIXOS_INSTALL_BOOTLOADER"] = "1"
 
+    # flags to pass to bootctl install/update
+    bootctl_flags = []
+
+    if "@canTouchEfiVariables@" != "1":
+        bootctl_flags.append("--no-variables")
+
+    if "@graceful@" == "1":
+        bootctl_flags.append("--graceful")
+
     if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
         if os.path.exists("@efiSysMountPoint@/loader/loader.conf"):
             os.unlink("@efiSysMountPoint@/loader/loader.conf")
 
-        flags = []
-
-        if "@canTouchEfiVariables@" != "1":
-            flags.append("--no-variables")
-
-        if "@graceful@" == "1":
-            flags.append("--graceful")
-
-        subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + flags + ["install"])
+        subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["install"])
     else:
         # Update bootloader to latest if needed
         available_out = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
@@ -270,7 +271,7 @@ def main() -> None:
                 print("skipping systemd-boot update to %s because of known regression" % available_version)
             else:
                 print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-                subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
+                subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")
