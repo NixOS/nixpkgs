@@ -14297,6 +14297,12 @@
     githubId = 139251;
     name = "Tom Hunger";
   };
+  tehmatt = {
+    name = "tehmatt";
+    email = "nix@programsareproofs.com";
+    github = "tehmatt";
+    githubId = 3358866;
+  };
   tejasag = {
     name = "Tejas Agarwal";
     email = "tejasagarwalbly@gmail.com";
