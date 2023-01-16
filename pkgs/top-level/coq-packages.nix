@@ -54,6 +54,7 @@ let
       gappalib = callPackage ../development/coq-modules/gappalib {};
       goedel = callPackage ../development/coq-modules/goedel {};
       graph-theory = callPackage ../development/coq-modules/graph-theory {};
+      graph-theory-planar = callPackage ../development/coq-modules/graph-theory-planar {};
       heq = callPackage ../development/coq-modules/heq {};
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       HoTT = callPackage ../development/coq-modules/HoTT {};

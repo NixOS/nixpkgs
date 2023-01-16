@@ -1,5 +1,5 @@
-{ lib, mkCoqDerivation, coq, mathcomp-algebra, mathcomp-finmap, mathcomp-fingroup
-, hierarchy-builder, version ? null }:
+{ lib, mkCoqDerivation, coq, mathcomp-algebra, mathcomp-finmap
+, mathcomp-fingroup, hierarchy-builder, version ? null }:
 
 with lib;
 
@@ -7,11 +7,13 @@ mkCoqDerivation {
   pname = "graph-theory";
 
   release."0.9".sha256 = "sha256-Hl3JS9YERD8QQziXqZ9DqLHKp63RKI9HxoFYWSkJQZI=";
+  release."0.9.1".sha256 = "sha256-lRRY+501x+DqNeItBnbwYIqWLDksinWIY4x/iojRNYU=";
 
   releaseRev = v: "v${v}";
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
+    { case = range "8.14" "8.16"; out = "0.9.1"; }
     { case = range "8.13" "8.16"; out = "0.9"; }
   ] null;
 
