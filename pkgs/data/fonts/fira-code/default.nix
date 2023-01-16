@@ -1,19 +1,23 @@
-{ lib, fetchzip }:
+{ stdenv, lib, fetchzip }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "fira-code";
   version = "6.2";
-in fetchzip {
-  name = "fira-code-${version}";
+  src = fetchzip {
+    url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
+    stripRoot = false;
+    sha256 = "sha256-UHOwZL9WpCHk6vZaqI/XfkZogKgycs5lWg1p0XdQt0A=";
+  };
 
-  url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
-
-  # only extract the variable font because everything else is a duplicate
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile '*-VF.ttf' -d $out/share/fonts/truetype
+  # extract both static and variable fonts because
+  # programs like VS Code don't load the variable version of Fira Code *Retina*
+  # without fiddling.
+  installPhase = ''
+    source $stdenv/setup
+    dst="$out/share/fonts/truetype"
+    mkdir -p $dst
+    cp $src/ttf/* $src/variable_ttf/* $dst/
   '';
-
-  sha256 = "0l02ivxz3jbk0rhgaq83cqarqxr07xgp7n27l0fh8fbgxwi52djl";
 
   meta = with lib; {
     homepage = "https://github.com/tonsky/FiraCode";
@@ -24,7 +28,7 @@ in fetchzip {
       combinations.
     '';
     license = licenses.ofl;
-    maintainers = [ maintainers.rycee ];
+    maintainers = [ maintainers.rycee maintainers.jayesh-bhoot ];
     platforms = platforms.all;
   };
 }
