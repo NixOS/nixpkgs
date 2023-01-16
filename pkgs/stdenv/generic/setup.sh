@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=1090,2154,2123,2034,2178
+# shellcheck disable=1090,2154,2123,2034,2178,2048
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
