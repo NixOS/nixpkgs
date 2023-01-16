@@ -306,6 +306,17 @@
           <literal>freetype</literal> and others.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The iputils package, which is installed by default, no longer
+          provides the <literal>ninfod</literal>,
+          <literal>rarpd</literal> and <literal>rdisc</literal> tools.
+          See
+          <link xlink:href="https://github.com/iputils/iputils/releases/tag/20221126">upstream’s
+          release notes</link> for more details and available
+          replacements.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-notable-changes">
