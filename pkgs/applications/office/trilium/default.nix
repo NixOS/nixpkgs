@@ -7,7 +7,7 @@ let
     license = licenses.agpl3Plus;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ fliegendewurst ];
+    maintainers = with maintainers; [ fliegendewurst eliandoran ];
   };
 in {
 
