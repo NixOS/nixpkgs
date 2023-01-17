@@ -19468,6 +19468,8 @@ with pkgs;
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
+  fuelup = callPackage ../development/tools/fuel/fuelup { };
+
   funambol = callPackage ../development/libraries/funambol { };
 
   galer = callPackage ../tools/security/galer { };

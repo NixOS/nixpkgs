@@ -1,0 +1,32 @@
+:100644 100644 9198f1a 0000000 M	src/download.rs
+
+diff --git a/src/download.rs b/src/download.rs
+index 9198f1a..3553cc0 100644
+--- a/src/download.rs
++++ b/src/download.rs
+@@ -309,7 +309,8 @@ pub fn unpack_bins(dir: &Path, dst_dir: &Path) -> Result<Vec<PathBuf>> {
+                 if dst_bin_file.exists() {
+                     fs::remove_file(&dst_bin_file)?;
+                 }
+-                fs::copy(bin_file.path(), dst_bin_file)?;
++                fs::copy(bin_file.path(), &dst_bin_file)?;
++                nix_patchelf(&dst_bin_file);
+                 downloaded.push(dst_dir.join(bin_file_name));
+             }
+ 
+@@ -320,6 +321,15 @@ pub fn unpack_bins(dir: &Path, dst_dir: &Path) -> Result<Vec<PathBuf>> {
+     Ok(downloaded)
+ }
+ 
++fn nix_patchelf(path: &Path) {
++    ::std::process::Command::new("@patchelf@/bin/patchelf")
++        .arg("--set-interpreter")
++        .arg("@dynamicLinker@")
++        .arg(path)
++        .output()
++        .unwrap();
++}
++
+ #[cfg(test)]
+ mod tests {
+     use super::*;
