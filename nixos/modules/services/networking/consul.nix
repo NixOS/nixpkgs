@@ -50,6 +50,14 @@ in
         '';
       };
 
+      devMode = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Run agent in development mode
+        '';
+      };
+
       leaveOnStop = mkOption {
         type = types.bool;
         default = false;
