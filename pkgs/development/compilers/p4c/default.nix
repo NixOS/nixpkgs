@@ -80,9 +80,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/p4lang/p4c";
+    changelog = "https://github.com/p4lang/p4c/releases";
     description = "Reference compiler for the P4 programming language";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = with maintainers; [ raitobezarius govanify ];
     license = licenses.asl20;
   };
 }
