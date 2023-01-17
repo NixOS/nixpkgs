@@ -11755,8 +11755,8 @@ with pkgs;
 
   sixpair = callPackage ../tools/misc/sixpair {};
 
-  sketchybar = callPackage ../os-specific/darwin/sketchybar {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa SkyLight;
+  sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa DisplayServices SkyLight;
   };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
@@ -24001,9 +24001,7 @@ with pkgs;
 
   codeowners = callPackage ../development/tools/codeowners { };
 
-  couchdb3 = callPackage ../servers/http/couchdb/3.nix {
-    erlang = buildPackages.erlangR22;
-  };
+  couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
@@ -24866,8 +24864,7 @@ with pkgs;
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
-    elixir = elixir_1_12;
-    erlang = erlang.override { opensslPackage = openssl_1_1; };
+    elixir = elixir_1_14;
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };

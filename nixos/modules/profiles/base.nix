@@ -35,6 +35,7 @@
     pkgs.rsync
     pkgs.socat
     pkgs.screen
+    pkgs.tcpdump
 
     # Hardware-related tools.
     pkgs.sdparm
