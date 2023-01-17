@@ -11712,6 +11712,8 @@ with pkgs;
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
+  signaldctl = callPackage ../applications/networking/instant-messengers/signaldctl { };
+
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
   inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
