@@ -16383,9 +16383,8 @@ with pkgs;
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
-    python = python3;
-  };
+  poetry = callPackage ../tools/package-management/poetry { };
+
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
@@ -34440,9 +34439,7 @@ with pkgs;
 
   bastet = callPackage ../games/bastet { };
 
-  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
-    inherit (python3Packages) buildPythonApplication;
-  };
+  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
 
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;

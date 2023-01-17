@@ -743,13 +743,13 @@
     "vendorHash": "sha256-w/1eNrXK4Zpt80J1FidnhMAD0lhSskHMt/hrdrgfSYw="
   },
   "mongodbatlas": {
-    "hash": "sha256-QMwsVD1RZwL9DPF0gnio4quqUa1b4G0SK73yd6BYnG4=",
+    "hash": "sha256-jYEeJoMqYo5BCsr8pZlowwUPdW/QrCoHiSpDrEGK9QQ=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.6.1",
+    "rev": "v1.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-WO8B5tiDYQTbKbqWfjjgyMLCmclhE0r2XNRTQ2uyu7s="
+    "vendorHash": "sha256-9m+eukHaSdSstWBtjxpgYkgyQVXx0jmKfEz3D9YROO4="
   },
   "namecheap": {
     "hash": "sha256-cms8YUL+SjTeYyIOQibksi8ZHEBYq2JlgTEpOO1uMZE=",
@@ -1050,13 +1050,13 @@
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
   "spotinst": {
-    "hash": "sha256-IhThsNLMHR29rOq1bDFsmySKFgvVxJ8twtjby6JxEc4=",
+    "hash": "sha256-IYuUN1dq6W/o5Ql5SpFgF0JCTNEvIdpJ5UAMH4hzMLU=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.91.0",
+    "rev": "v1.92.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-imMuIXBCg2k9Cp78V4MMkb/bMWRbpxnCuLCFaQrBg3Q="
+    "vendorHash": "sha256-Rc5ZrX3J6oBHzKoN8Uu7mKxatsxLLA3XmEROth4+C6g="
   },
   "stackpath": {
     "hash": "sha256-nTR9HgSmuNCt7wxE4qqIH2+HA2igzqVx0lLRx6FoKrE=",
@@ -1159,11 +1159,11 @@
     "vendorHash": null
   },
   "ucloud": {
-    "hash": "sha256-x1YQYan1W2AVg/L6BP8HfORpR2neoljZkQP3tDBM+MI=",
+    "hash": "sha256-S0pSri0NfxxaYfifUEUVAoEIRPE8y2/sCNdXCLIDGh0=",
     "homepage": "https://registry.terraform.io/providers/ucloud/ucloud",
     "owner": "ucloud",
     "repo": "terraform-provider-ucloud",
-    "rev": "v1.33.0",
+    "rev": "v1.34.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
