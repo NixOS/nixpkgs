@@ -81,7 +81,6 @@ in mkLicense lset) ({
   apsl10 = {
     spdxId = "APSL-1.0";
     fullName = "Apple Public Source License 1.0";
-    url = "https://web.archive.org/web/20040701000000*/http://www.opensource.apple.com/apsl/1.0.txt";
   };
 
   apsl20 = {
