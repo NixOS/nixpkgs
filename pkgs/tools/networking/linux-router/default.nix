@@ -1,8 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
 
 # --- Runtime Dependencies ---
-, bash, procps, iproute2, dnsmasq, iptables
-, coreutils, flock, gawk, getopt, gnugrep, gnused, which
+, bash
+, procps
+, iproute2
+, dnsmasq
+, iptables
+, coreutils
+, flock
+, gawk
+, getopt
+, gnugrep
+, gnused
+, which
 # `nmcli` is not required for create_ap.
 # Use NetworkManager by default because it is very likely already present
 , useNetworkManager ? true
@@ -10,7 +23,8 @@
 
 # --- WiFi Hotspot Dependencies ---
 , useWifiDependencies ? true
-, hostapd, iw
+, hostapd
+, iw
 # You only need this if 'iw' can not recognize your adapter.
 , useWirelessTools ? true
 , wirelesstools # for iwconfig
@@ -26,16 +40,18 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-router";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
-    rev = "${version}";
-    sha256 = "sha256-QBxlqKNaCUMVkm8rVTZ5z6tTN9WxgDQxeNkbgCe9KEg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ote/arHCU6qiTXdK2RXv9848aeW6rcBsrb6nfxIzQLs=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   dontBuild = true;
 
@@ -74,7 +90,8 @@ stdenv.mkDerivation rec {
       - DNS proxy
       - Compatible with NetworkManager (automatically set interface as unmanaged)
     '';
-    license = licenses.lgpl21;
+    changelog = "https://github.com/garywill/linux-router/releases/tag/${version}";
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
   };

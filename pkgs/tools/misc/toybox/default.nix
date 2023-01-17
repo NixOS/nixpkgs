@@ -1,10 +1,14 @@
 {
   stdenv, lib, fetchFromGitHub, which,
-  buildPackages, libxcrypt,
+  buildPackages, libxcrypt, libiconv,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
 }:
+
+let
+  inherit (lib) optionals;
+in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
@@ -17,10 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
+  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
   buildInputs = [
     libxcrypt
-  ] ++lib.optionals (enableStatic && stdenv.cc.libc ? static) [
+  ] ++ optionals stdenv.isDarwin [
+    libiconv
+  ] ++ optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
   ];
@@ -49,7 +55,7 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ lib.optional enableStatic "LDFLAGS=--static";
+  makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];
 
   installTargets = [ "install_flat" ];
 
@@ -67,8 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;
-    # https://github.com/NixOS/nixpkgs/issues/101229
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hhm ];
     priority = 10;
   };

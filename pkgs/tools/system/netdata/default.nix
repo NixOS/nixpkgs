@@ -4,7 +4,7 @@
 , curl, jemalloc, libuv, zlib
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
-, withDBengine ? true, judy, lz4
+, withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
@@ -33,18 +33,18 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev jemalloc libuv zlib.dev ]
+  buildInputs = [ curl jemalloc libuv zlib ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
-    ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
+    ++ optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ optionals withCups [ cups ]
-    ++ optionals withDBengine [ judy lz4.dev ]
+    ++ optionals withDBengine [ lz4 ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
     ++ optionals withCloud [ json_c ]
     ++ optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ optionals withConnPrometheus [ snappy ]
     ++ optionals (withCloud || withConnPrometheus) [ protobuf ]
-    ++ optionals withSsl [ openssl.dev ];
+    ++ optionals withSsl [ openssl ];
 
   patches = [
     # required to prevent plugins from relying on /etc
@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;
