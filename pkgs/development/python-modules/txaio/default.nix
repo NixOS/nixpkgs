@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "txaio";
-  version = "22.2.1";
+  version = "23.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LkWCtw8EsjRZCCVGhKmEIGwNm1DjB0okpMVauiHSTQE=";
+    hash = "sha256-+akhbpduXjJG39ESrXrVXKkVYGtguEp1esdpvUBP9wQ=";
   };
 
   propagatedBuildInputs = [
