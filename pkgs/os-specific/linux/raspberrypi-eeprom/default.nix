@@ -11,9 +11,9 @@
 }:
 
 let verinfo = {
-  version = "2022-12-07";
-  rev = "36886df55b9c9681f886b7f29039df7a02c3caa2";
-  hash = "sha256-/Q9zj/Hn/8S7bF1CN6ZCg705VYU+QUagNr4RNgZl+oA=";
+  version = "2023-01-11";
+  rev = "5129267f6a7da63bac8e79998002b5342890e01f";
+  hash = "sha256-ELTEeN0gsZhGPtLNJ1+SXc+pYmMKjcGlVtWjDICu6XU=";
 }; in
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
