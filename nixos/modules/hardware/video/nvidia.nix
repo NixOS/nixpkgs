@@ -51,7 +51,17 @@ in
       default = false;
       description = lib.mdDoc ''
         Experimental power management of PRIME offload. For more information, see
-        the NVIDIA docs, chapter 22. PCI-Express runtime power management.
+        the NVIDIA docs, on Chapter 22. PCI-Express Runtime D3 (RTD3) Power Management.
+      '';
+    };
+
+    hardware.nvidia.dynamicBoost.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Dynamic Boost balances power between the CPU and the GPU for improved
+        performance on supported laptops using the nvidia-powerd daemon. For more
+        information, see the NVIDIA docs, on Chapter 23. Dynamic Boost on Linux.
       '';
     };
 
@@ -158,7 +168,7 @@ in
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
-        Update for NVIDA GPU headless mode, i.e. nvidia-persistenced. It ensures all
+        Update for NVIDIA GPU headless mode, i.e. nvidia-persistenced. It ensures all
         GPUs stay awake even during headless mode.
       '';
     };
@@ -235,6 +245,11 @@ in
       {
         assertion = cfg.powerManagement.enable -> versionAtLeast nvidia_x11.version "430.09";
         message = "Required files for driver based power management only exist on versions >= 430.09.";
+      }
+
+      {
+        assertion = cfg.dynamicBoost.enable -> versionAtLeast nvidia_x11.version "510.47.03";
+        message = "NVIDIA's Dynamic Boost feature only exists on versions >= 510.47.03.";
       }
 
       {
@@ -365,7 +380,26 @@ in
             ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
           };
         };
+      }
+      // optionalAttrs cfg.dynamicBoost.enable {
+        "nvidia-powerd" = mkIf cfg.dynamicBoost.enable {
+          description = "nvidia-powerd service";
+          path = with pkgs; [
+            util-linux # nvidia-powerd wants lscpu
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "dbus";
+            BusName = "nvidia.powerd.server";
+            ExecStart = "${nvidia_x11.bin}/bin/nvidia-powerd";
+          };
+        };
       };
+
+    services.dbus = mkIf cfg.dynamicBoost.enable {
+      enable = true;
+      packages = [ nvidia_x11.bin ];
+    };
 
     systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
         "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"

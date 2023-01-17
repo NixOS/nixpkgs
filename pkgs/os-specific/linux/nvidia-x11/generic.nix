@@ -47,6 +47,7 @@ let
     libdrm xorg.libXext xorg.libX11
     xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
     wayland mesa libGL
+    dbus # for nvidia-powerd
   ]);
 
   self = stdenv.mkDerivation {

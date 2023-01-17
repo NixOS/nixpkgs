@@ -26,6 +26,13 @@
           <literal>test</literal> commands.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          NVIDIA’s Dynamic Boost can now be enabled to improve
+          performance on supported laptops with
+          <literal>hardware.nvidia.dynamicBoost.enable</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-new-services">
