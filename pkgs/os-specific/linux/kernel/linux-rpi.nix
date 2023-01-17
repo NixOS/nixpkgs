@@ -11,9 +11,9 @@ let
   #   https://github.com/raspberrypi/firmware/blob/{{raspberrypifw->src->rev}}/extra/git_hash
   verinfo = {
     modDirVersion = "5.15.84";
-    version = "2023-01-06";
-    rev = "refs/tags/1.20230106";
-    hash = "sha512-6Dcpo81JBvc8NOv1nvO8JwjUgOOviRgHmXLLcGpE/pI2lEOcSeDRlB/FZtflzXTGilapvmwOSx5NxQfAmysHqQ==";
+    version = "20230105";
+    rev = "355bbe0f8114dcedd8ef5d9989a5c0f07301db9e";
+    hash = "sha256-Rs9cXYDCIXFRLcgmz+PLVloGYXUaNmyUVsCy2BW5R6k=";
   };
 in
 lib.overrideDerivation (buildLinux (args // {
