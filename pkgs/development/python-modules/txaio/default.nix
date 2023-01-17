@@ -12,11 +12,13 @@
 buildPythonPackage rec {
   pname = "txaio";
   version = "22.2.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LkWCtw8EsjRZCCVGhKmEIGwNm1DjB0okpMVauiHSTQE=";
+    hash = "sha256-LkWCtw8EsjRZCCVGhKmEIGwNm1DjB0okpMVauiHSTQE=";
   };
 
   propagatedBuildInputs = [
@@ -42,11 +44,14 @@ buildPythonPackage rec {
     "test_cancel"
   ];
 
-  pythonImportsCheck = [ "txaio" ];
+  pythonImportsCheck = [
+    "txaio"
+  ];
 
   meta = with lib; {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio";
     homepage = "https://github.com/crossbario/txaio";
+    changelog = "https://github.com/crossbario/txaio/blob/v${version}/docs/releases.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
