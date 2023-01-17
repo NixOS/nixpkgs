@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "A console text editor for Unix that you already know how to use";
     homepage = "https://hisham.hm/dit/";
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ davidak ];
   };
 }
