@@ -28,8 +28,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    asgiref
-    python-dotenv
     click
     itsdangerous
     jinja2
@@ -42,6 +40,10 @@ buildPythonPackage rec {
 
   passthru.tests = {
     inherit flask-limiter flask-restful flask-restx moto;
+  };
+  passthru.optional-dependencies = {
+    dotenv = [ python-dotenv ];
+    async = [ asgiref ];
   };
 
   meta = with lib; {
