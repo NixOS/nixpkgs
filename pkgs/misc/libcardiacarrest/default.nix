@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, glib, libpulseaudio }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libcardiacarrest";
   version = "12.2.8"; # <PA API version>.<version>
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
       JACK).
     '';
     license = libpulseaudio.meta.license; # "same as PA headers"
-    maintainers = [ maintainers.oxij ]; # also the author
+    maintainers = [ lib.maintainers.oxij ]; # also the author
   };
 
 }

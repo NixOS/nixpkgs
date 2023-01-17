@@ -63,8 +63,6 @@ assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
 assert journalSupport      -> systemd != null;
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "conky";
   version = "1.13.1";
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
       cmake/ConkyPlatformChecks.cmake
-  '' + optionalString docsSupport ''
+  '' + lib.optionalString docsSupport ''
     # Drop examples, since they contain non-ASCII characters that break docbook2x :(
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
@@ -92,42 +90,42 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
-    ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
-    ++ optional  ncursesSupport     ncurses
-    ++ optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
-    ++ optional  xdamageSupport     libXdamage
-    ++ optional  imlib2Support      imlib2
-    ++ optional  luaSupport         lua
-    ++ optionals luaImlib2Support   [ toluapp imlib2 ]
-    ++ optionals luaCairoSupport    [ toluapp cairo ]
-    ++ optional  wirelessSupport    wirelesstools
-    ++ optional  curlSupport        curl
-    ++ optional  rssSupport         libxml2
-    ++ optional  weatherXoapSupport libxml2
-    ++ optional  nvidiaSupport      libXNVCtrl
-    ++ optional  pulseSupport       libpulseaudio
-    ++ optional  journalSupport     systemd
+    ++ lib.optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
+    ++ lib.optional  ncursesSupport     ncurses
+    ++ lib.optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
+    ++ lib.optional  xdamageSupport     libXdamage
+    ++ lib.optional  imlib2Support      imlib2
+    ++ lib.optional  luaSupport         lua
+    ++ lib.optionals luaImlib2Support   [ toluapp imlib2 ]
+    ++ lib.optionals luaCairoSupport    [ toluapp cairo ]
+    ++ lib.optional  wirelessSupport    wirelesstools
+    ++ lib.optional  curlSupport        curl
+    ++ lib.optional  rssSupport         libxml2
+    ++ lib.optional  weatherXoapSupport libxml2
+    ++ lib.optional  nvidiaSupport      libXNVCtrl
+    ++ lib.optional  pulseSupport       libpulseaudio
+    ++ lib.optional  journalSupport     systemd
     ;
 
   cmakeFlags = []
-    ++ optional docsSupport         "-DMAINTAINER_MODE=ON"
-    ++ optional curlSupport         "-DBUILD_CURL=ON"
-    ++ optional (!ibmSupport)       "-DBUILD_IBM=OFF"
-    ++ optional imlib2Support       "-DBUILD_IMLIB2=ON"
-    ++ optional luaCairoSupport     "-DBUILD_LUA_CAIRO=ON"
-    ++ optional luaImlib2Support    "-DBUILD_LUA_IMLIB2=ON"
-    ++ optional (!mpdSupport)       "-DBUILD_MPD=OFF"
-    ++ optional (!ncursesSupport)   "-DBUILD_NCURSES=OFF"
-    ++ optional rssSupport          "-DBUILD_RSS=ON"
-    ++ optional (!x11Support)       "-DBUILD_X11=OFF"
-    ++ optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
-    ++ optional doubleBufferSupport "-DBUILD_XDBE=ON"
-    ++ optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
-    ++ optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
-    ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
-    ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
-    ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
-    ++ optional journalSupport      "-DBUILD_JOURNAL=ON"
+    ++ lib.optional docsSupport         "-DMAINTAINER_MODE=ON"
+    ++ lib.optional curlSupport         "-DBUILD_CURL=ON"
+    ++ lib.optional (!ibmSupport)       "-DBUILD_IBM=OFF"
+    ++ lib.optional imlib2Support       "-DBUILD_IMLIB2=ON"
+    ++ lib.optional luaCairoSupport     "-DBUILD_LUA_CAIRO=ON"
+    ++ lib.optional luaImlib2Support    "-DBUILD_LUA_IMLIB2=ON"
+    ++ lib.optional (!mpdSupport)       "-DBUILD_MPD=OFF"
+    ++ lib.optional (!ncursesSupport)   "-DBUILD_NCURSES=OFF"
+    ++ lib.optional rssSupport          "-DBUILD_RSS=ON"
+    ++ lib.optional (!x11Support)       "-DBUILD_X11=OFF"
+    ++ lib.optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
+    ++ lib.optional doubleBufferSupport "-DBUILD_XDBE=ON"
+    ++ lib.optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
+    ++ lib.optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
+    ++ lib.optional wirelessSupport     "-DBUILD_WLAN=ON"
+    ++ lib.optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
+    ++ lib.optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
+    ++ lib.optional journalSupport      "-DBUILD_JOURNAL=ON"
     ;
 
   # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:

@@ -3,8 +3,6 @@
 , luaSupport ? false, lua5, perl
 }:
 
-with lib;
-
 let luaValue = if luaSupport then lua5 else "no";
     optional = lib.optional;
 in
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
     cp -R * $nginx
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source, cross-platform web application firewall (WAF)";
     license = licenses.asl20;
     homepage = "https://www.modsecurity.org/";

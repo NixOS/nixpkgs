@@ -63,26 +63,28 @@ let
 
       passthru = { inherit tests; };
 
-      meta = recursiveUpdate {
-        homepage = "https://hadoop.apache.org/";
-        description = "Framework for distributed processing of large data sets across clusters of computers";
-        license = licenses.asl20;
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      meta = recursiveUpdate
+        {
+          homepage = "https://hadoop.apache.org/";
+          description = "Framework for distributed processing of large data sets across clusters of computers";
+          license = licenses.asl20;
+          sourceProvenance = with sourceTypes; [ binaryBytecode ];
 
-        longDescription = ''
-          The Apache Hadoop software library is a framework that allows for
-          the distributed processing of large data sets across clusters of
-          computers using a simple programming model. It is designed to
-          scale up from single servers to thousands of machines, each
-          offering local computation and storage. Rather than rely on
-          hardware to deliver high-avaiability, the library itself is
-          designed to detect and handle failures at the application layer,
-          so delivering a highly-availabile service on top of a cluster of
-          computers, each of which may be prone to failures.
-        '';
-        maintainers = with maintainers; [ illustris ];
-        platforms = attrNames platformAttrs;
-      } (attrByPath [ stdenv.system "meta" ] {} platformAttrs);
+          longDescription = ''
+            The Apache Hadoop software library is a framework that allows for
+            the distributed processing of large data sets across clusters of
+            computers using a simple programming model. It is designed to
+            scale up from single servers to thousands of machines, each
+            offering local computation and storage. Rather than rely on
+            hardware to deliver high-avaiability, the library itself is
+            designed to detect and handle failures at the application layer,
+            so delivering a highly-availabile service on top of a cluster of
+            computers, each of which may be prone to failures.
+          '';
+          maintainers = with maintainers; [ illustris ];
+          platforms = attrNames platformAttrs;
+        }
+        (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
     };
 in
 {
@@ -91,17 +93,17 @@ in
   hadoop_3_3 = common rec {
     pname = "hadoop";
     platformAttrs = rec {
-        x86_64-linux = {
-          version = "3.3.4";
-          hash = "sha256-akg9GgsSNJDr2N8/cbZOs58zP3i5XwkK61jkM8vCQW0=";
-        };
-        x86_64-darwin = x86_64-linux;
-        aarch64-linux = {
-          version = "3.3.1";
-          hash = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
-          meta.knownVulnerabilities = [ "CVE-2021-37404" "CVE-2021-33036" ];
-        };
-        aarch64-darwin = aarch64-linux;
+      x86_64-linux = {
+        version = "3.3.4";
+        hash = "sha256-akg9GgsSNJDr2N8/cbZOs58zP3i5XwkK61jkM8vCQW0=";
+      };
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = {
+        version = "3.3.1";
+        hash = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
+        meta.knownVulnerabilities = [ "CVE-2021-37404" "CVE-2021-33036" ];
+      };
+      aarch64-darwin = aarch64-linux;
     };
     untarDir = "${pname}-${platformAttrs.${stdenv.system}.version}";
     jdk = jdk11_headless;

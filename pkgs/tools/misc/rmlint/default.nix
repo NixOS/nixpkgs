@@ -20,7 +20,6 @@
 
 assert withGui -> !stdenv.isDarwin;
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "rmlint";
   version = "2.10.1";
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
     platforms = platforms.unix;

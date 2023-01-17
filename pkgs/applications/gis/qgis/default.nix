@@ -2,7 +2,6 @@
 , extraPythonPackages ? (ps: [ ])
 , libsForQt5
 }:
-with lib;
 let
   qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {  };
 in symlinkJoin rec {

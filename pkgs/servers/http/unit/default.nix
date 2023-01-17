@@ -14,8 +14,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 let
   phpConfig = {
     embedSupport = true;
@@ -43,40 +41,40 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
 
   buildInputs = [ pcre2.dev ]
-    ++ optionals withPython3 [ python3 ncurses ]
-    ++ optional withPHP80 php80-unit
-    ++ optional withPHP81 php81-unit
-    ++ optional withPerl534 perl534
-    ++ optional withPerl536 perl536
-    ++ optional withPerldevel perldevel
-    ++ optional withRuby_2_7 ruby_2_7
-    ++ optional withRuby_3_0 ruby_3_0
-    ++ optional withRuby_3_1 ruby_3_1
-    ++ optional withSSL openssl;
+    ++ lib.optionals withPython3 [ python3 ncurses ]
+    ++ lib.optional withPHP80 php80-unit
+    ++ lib.optional withPHP81 php81-unit
+    ++ lib.optional withPerl534 perl534
+    ++ lib.optional withPerl536 perl536
+    ++ lib.optional withPerldevel perldevel
+    ++ lib.optional withRuby_2_7 ruby_2_7
+    ++ lib.optional withRuby_3_0 ruby_3_0
+    ++ lib.optional withRuby_3_1 ruby_3_1
+    ++ lib.optional withSSL openssl;
 
   configureFlags = [
     "--control=unix:/run/unit/control.unit.sock"
     "--pid=/run/unit/unit.pid"
     "--user=unit"
     "--group=unit"
-  ] ++ optional withSSL     "--openssl"
-    ++ optional (!withIPv6) "--no-ipv6"
-    ++ optional withDebug   "--debug";
+  ] ++ lib.optional withSSL     "--openssl"
+    ++ lib.optional (!withIPv6) "--no-ipv6"
+    ++ lib.optional withDebug   "--debug";
 
   # Optionally add the PHP derivations used so they can be addressed in the configs
-  usedPhp80 = optionals withPHP80 php80-unit;
-  usedPhp81 = optionals withPHP81 php81-unit;
+  usedPhp80 = lib.optionals withPHP80 php80-unit;
+  usedPhp81 = lib.optionals withPHP81 php81-unit;
 
   postConfigure = ''
-    ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
-    ${optionalString withPHP80      "./configure php    --module=php80    --config=${php80-unit.unwrapped.dev}/bin/php-config --lib-path=${php80-unit}/lib"}
-    ${optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
-    ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
-    ${optionalString withPerl536    "./configure perl   --module=perl536  --perl=${perl536}/bin/perl"}
-    ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
-    ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
-    ${optionalString withRuby_3_0   "./configure ruby   --module=ruby30   --ruby=${ruby_3_0}/bin/ruby"}
-    ${optionalString withRuby_3_1   "./configure ruby   --module=ruby31   --ruby=${ruby_3_1}/bin/ruby"}
+    ${lib.optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
+    ${lib.optionalString withPHP80      "./configure php    --module=php80    --config=${php80-unit.unwrapped.dev}/bin/php-config --lib-path=${php80-unit}/lib"}
+    ${lib.optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
+    ${lib.optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
+    ${lib.optionalString withPerl536    "./configure perl   --module=perl536  --perl=${perl536}/bin/perl"}
+    ${lib.optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
+    ${lib.optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
+    ${lib.optionalString withRuby_3_0   "./configure ruby   --module=ruby30   --ruby=${ruby_3_0}/bin/ruby"}
+    ${lib.optionalString withRuby_3_1   "./configure ruby   --module=ruby31   --ruby=${ruby_3_1}/bin/ruby"}
   '';
 
   postInstall = ''
@@ -85,7 +83,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests.unit-php = nixosTests.unit-php;
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
     homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;

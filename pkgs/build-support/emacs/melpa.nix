@@ -3,8 +3,6 @@
 
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
-with lib;
-
 { /*
     pname: Nix package name without special symbols and without version or
     "emacs-" prefix.

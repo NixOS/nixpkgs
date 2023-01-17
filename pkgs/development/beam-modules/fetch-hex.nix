@@ -6,8 +6,6 @@
 , meta ? { }
 }:
 
-with lib;
-
 stdenv.mkDerivation ({
   pname = "hex-source-${pkg}";
   inherit version;

@@ -23,15 +23,13 @@
 #   The command line administrative tools are part of other packages:
 #   see pkgs.mongodb-tools and pkgs.mongosh.
 
-with lib;
-
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
 }:
 
 let
   variants =
-    if versionAtLeast version "6.0" then rec {
+    if lib.versionAtLeast version "6.0" then rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
         cheetah3
@@ -71,7 +69,7 @@ let
     #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
-  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+  ] ++ lib.optionals stdenv.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
@@ -84,7 +82,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ variants.scons ]
-    ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+    ++ lib.optionals (lib.versionAtLeast version "4.4") [ xz ];
 
   buildInputs = [
     boost
@@ -109,16 +107,16 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-   '' + lib.optionalString (versionAtLeast version "4.4") ''
+   '' + lib.optionalString (lib.versionAtLeast version "4.4") ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
     substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder version "6.0") ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
-  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
@@ -143,13 +141,13 @@ in stdenv.mkDerivation rec {
     "--use-sasl-client"
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
-  ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
+  ] ++ lib.optionals (lib.versionAtLeast version "4.4") [ "--link-model=static" ]
     ++ map (lib: "--use-system-${lib}") system-libraries;
 
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
-  '' + optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 
@@ -169,11 +167,11 @@ in stdenv.mkDerivation rec {
   '';
 
   installTargets =
-    if (versionAtLeast version "6.0") then "install-devcore"
-    else if (versionAtLeast version "4.4") then "install-core"
+    if (lib.versionAtLeast version "6.0") then "install-devcore"
+    else if (lib.versionAtLeast version "4.4") then "install-core"
     else "install";
 
-  prefixKey = if (versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
+  prefixKey = if (lib.versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
 
   enableParallelBuilding = true;
 
@@ -184,7 +182,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
+    maintainers = with lib.maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }

@@ -12,7 +12,6 @@ let
   optLibidn = shouldUsePkg libidn;
   optGnutls = shouldUsePkg gnutls;
 in
-with lib;
 stdenv.mkDerivation rec {
   pname = "shishi";
   version = "1.0.2";
@@ -31,21 +30,21 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (enableFeature true                "libgcrypt")
-    (enableFeature (optPam != null)    "pam")
-    (enableFeature true                "ipv6")
-    (withFeature   (optLibidn != null) "stringprep")
-    (enableFeature (optGnutls != null) "starttls")
-    (enableFeature true                "des")
-    (enableFeature true                "3des")
-    (enableFeature true                "aes")
-    (enableFeature true                "md")
-    (enableFeature false               "null")
-    (enableFeature true                "arcfour")
+    (lib.enableFeature true                "libgcrypt")
+    (lib.enableFeature (optPam != null)    "pam")
+    (lib.enableFeature true                "ipv6")
+    (lib.withFeature   (optLibidn != null) "stringprep")
+    (lib.enableFeature (optGnutls != null) "starttls")
+    (lib.enableFeature true                "des")
+    (lib.enableFeature true                "3des")
+    (lib.enableFeature true                "aes")
+    (lib.enableFeature true                "md")
+    (lib.enableFeature false               "null")
+    (lib.enableFeature true                "arcfour")
   ];
 
   NIX_CFLAGS_COMPILE
-    = optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
+    = lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
 
   doCheck = true;
 
@@ -54,9 +53,9 @@ stdenv.mkDerivation rec {
   # Fix *.la files
   postInstall = ''
     sed -i $out/lib/libshi{sa,shi}.la \
-  '' + optionalString (optLibidn != null) ''
+  '' + lib.optionalString (optLibidn != null) ''
       -e 's,\(-lidn\),-L${optLibidn.out}/lib \1,' \
-  '' + optionalString (optGnutls != null) ''
+  '' + lib.optionalString (optGnutls != null) ''
       -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
   '' + ''
       -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage    = "https://www.gnu.org/software/shishi/";
     description = "An implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;

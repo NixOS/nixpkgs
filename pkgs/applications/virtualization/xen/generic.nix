@@ -24,19 +24,17 @@ config:
 
 , ...} @ args:
 
-with lib;
-
 let
   #TODO: fix paths instead
-  scriptEnvPath = concatMapStringsSep ":" (x: "${x}/bin") [
+  scriptEnvPath = lib.concatMapStringsSep ":" (x: "${x}/bin") [
     which perl
     coreutils gawk gnused gnugrep diffutils util-linux multipath-tools
     iproute2 inetutils iptables bridge-utils openvswitch nbd drbd
   ];
 
-  withXenfiles = f: concatStringsSep "\n" (mapAttrsToList f config.xenfiles);
+  withXenfiles = f: lib.concatStringsSep "\n" (lib.mapAttrsToList f config.xenfiles);
 
-  withTools = a: f: withXenfiles (name: x: optionalString (hasAttr a x) ''
+  withTools = a: f: withXenfiles (name: x: lib.optionalString (lib.hasAttr a x) ''
     echo "processing ${name}"
     __do() {
       cd "tools/${name}"
@@ -84,7 +82,7 @@ stdenv.mkDerivation (rec {
     python2Packages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
-  ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
+  ] ++ (lib.concatMap (x: x.buildInputs or []) (lib.attrValues config.xenfiles))
     ++ (config.buildInputs or []);
 
   prePatch = ''
@@ -170,12 +168,12 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/xenstat/Makefile \
       --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
 
-    ${optionalString (builtins.compareVersions config.version "4.8" >= 0) ''
+    ${lib.optionalString (builtins.compareVersions config.version "4.8" >= 0) ''
       substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
         --replace /bin/mkdir mkdir
     ''}
 
-    ${optionalString (builtins.compareVersions config.version "4.6" < 0) ''
+    ${lib.optionalString (builtins.compareVersions config.version "4.6" < 0) ''
       # TODO: use this as a template and support our own if-up scripts instead?
       substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
         --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts
@@ -185,7 +183,7 @@ stdenv.mkDerivation (rec {
     ''}
 
     ${withTools "patches" (name: x: ''
-      ${concatMapStringsSep "\n" (p: ''
+      ${lib.concatMapStringsSep "\n" (p: ''
         echo "# Patching with ${p}"
         patch -p1 < ${p}
       '') x.patches}
@@ -246,7 +244,7 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://www.xen.org/";
     description = "Xen hypervisor and related components"
-                + optionalString (args ? meta && args.meta ? description)
+                + lib.optionalString (args ? meta && args.meta ? description)
                                  " (${args.meta.description})";
     longDescription = (args.meta.longDescription or "")
                     + "\nIncludes:\n"

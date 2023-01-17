@@ -14,14 +14,12 @@
 , engine
 }:
 
-with lib;
-
 let
   engineSourceName = engine.src.name or "engine";
   modSourceName = mod.src.name or "mod";
 
 # Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
-in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
+in stdenv.mkDerivation (lib.recursiveUpdate packageAttrs rec {
   name = "${pname}-${version}";
   pname = "openra-${mod.name}";
   inherit (mod) version;
@@ -54,8 +52,8 @@ in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   configurePhase = ''
     runHook preConfigure
 
-    make version VERSION=${escapeShellArg version}
-    make -C ${engineSourceName} version VERSION=${escapeShellArg engine.version}
+    make version VERSION=${lib.escapeShellArg version}
+    make -C ${engineSourceName} version VERSION=${lib.escapeShellArg engine.version}
 
     runHook postConfigure
   '';
@@ -67,22 +65,22 @@ in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
 
     make -C ${engineSourceName} install-engine install-common-mod-files DATA_INSTALL_DIR=$out/lib/${pname}
 
-    cp -r ${engineSourceName}/mods/{${concatStringsSep "," ([ "common" "modcontent" ] ++ engine.mods)}} mods/* \
+    cp -r ${engineSourceName}/mods/{${lib.concatStringsSep "," ([ "common" "modcontent" ] ++ engine.mods)}} mods/* \
       $out/lib/${pname}/mods/
 
     substitute ${./mod-launch-game.sh} $out/lib/${pname}/launch-game.sh \
       --subst-var out \
-      --subst-var-by name ${escapeShellArg mod.name} \
-      --subst-var-by title ${escapeShellArg mod.title} \
-      --subst-var-by assetsError ${escapeShellArg mod.assetsError}
+      --subst-var-by name ${lib.escapeShellArg mod.name} \
+      --subst-var-by title ${lib.escapeShellArg mod.title} \
+      --subst-var-by assetsError ${lib.escapeShellArg mod.assetsError}
     chmod +x $out/lib/${pname}/launch-game.sh
 
     ${wrapLaunchGame "-${mod.name}"}
 
     substitute ${./openra-mod.desktop} $(mkdirp $out/share/applications)/${pname}.desktop \
-      --subst-var-by name ${escapeShellArg mod.name} \
-      --subst-var-by title ${escapeShellArg mod.title} \
-      --subst-var-by description ${escapeShellArg mod.description}
+      --subst-var-by name ${lib.escapeShellArg mod.name} \
+      --subst-var-by title ${lib.escapeShellArg mod.title} \
+      --subst-var-by description ${lib.escapeShellArg mod.description}
 
     cp README.md $(mkdirp $out/share/doc/packages/${pname})/README.md
 

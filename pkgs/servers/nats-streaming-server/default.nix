@@ -1,7 +1,5 @@
 { buildGoModule, fetchFromGitHub, lib  }:
 
-with lib;
-
 buildGoModule rec {
   pname   = "nats-streaming-server";
   version = "0.24.6";
@@ -18,7 +16,7 @@ buildGoModule rec {
   # tests fail and ask to `go install`
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "NATS Streaming System Server";
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];

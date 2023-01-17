@@ -34,8 +34,6 @@ assert spiceSupport -> (
   && spice-protocol != null
 );
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "virt-viewer";
   version = "11.0";
@@ -76,16 +74,16 @@ stdenv.mkDerivation rec {
     libvirt-glib
     libxml2
     vte
-  ] ++ optionals spiceSupport ([
+  ] ++ lib.optionals spiceSupport ([
     gdbm
     spice-gtk_libsoup2
     spice-protocol
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libcap
   ]);
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = optional spiceSupport spice-gtk_libsoup2;
+  propagatedUserEnvPkgs = lib.optional spiceSupport spice-gtk_libsoup2;
 
   strictDeps = true;
 
@@ -93,7 +91,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
     platforms = with platforms; linux ++ darwin;

@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool, fuse,
   pkg-config, lz4, xz, zlib, lzo, zstd }:
 
-with lib;
-
 stdenv.mkDerivation rec {
 
   pname = "squashfuse";
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "FUSE filesystem to mount squashfs archives";
     homepage = "https://github.com/vasi/squashfuse";
     maintainers = [  ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     license = "BSD-2-Clause";
   };
 }

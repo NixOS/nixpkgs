@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, rpmextract, makeWrapper, patchelf, qt4, zlib, libX11, libXt, libSM, libICE, libXext, libGLU, libGL }:
 
-with lib;
 stdenv.mkDerivation {
   pname = "aliza";
   version = "1.98.57";
@@ -49,7 +48,7 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${libs}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Medical imaging software with 2D, 3D and 4D capabilities";
     homepage = "https://www.aliza-dicom-viewer.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -9,14 +9,12 @@
 , enableDeserialize ? false
 }:
 
-with lib;
-
 let
   archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite${optionalString interactive "-interactive"}";
+  pname = "sqlite${lib.optionalString interactive "-interactive"}";
   version = "3.40.1";
 
   # nixpkgs-update: no auto update
@@ -29,14 +27,14 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
 
   NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -94,7 +92,7 @@ stdenv.mkDerivation rec {
     inherit sqldiff sqlite-analyzer tracker;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";

@@ -3,8 +3,6 @@
 , sslSupport ? true
 }:
 
-with lib;
-
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
@@ -17,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "12fra2fdwqj6ilv9wdkc33rkj343rdcf5jyff4yiwywlrwaa2l1p";
   };
 
-  configureFlags = optional (!sslSupport) "--disable-ssl";
+  configureFlags = lib.optional (!sslSupport) "--disable-ssl";
 
   buildInputs =
     [ ncurses zlib ]
-    ++ optional sslSupport openssl;
+    ++ lib.optional sslSupport openssl;
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
   #     `world_decl'; command.o:/build/tf-50b8/src/socket.h:24: first defined here
   NIX_CFLAGS_COMPILE="-fcommon";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";
     longDescription = ''

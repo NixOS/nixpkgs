@@ -19,8 +19,6 @@
 , pkg-config
 }:
 
-with lib;
-
 let
   unfuck-releases = {
     "0.43.05" = {
@@ -66,8 +64,8 @@ let
   };
 
   release =
-    if hasAttr dfVersion unfuck-releases
-    then getAttr dfVersion unfuck-releases
+    if lib.hasAttr dfVersion unfuck-releases
+    then lib.getAttr dfVersion unfuck-releases
     else throw "[unfuck] Unknown Dwarf Fortress version: ${dfVersion}";
 in
 

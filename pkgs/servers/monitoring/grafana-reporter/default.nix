@@ -1,7 +1,5 @@
 { lib, buildGoPackage, fetchFromGitHub, tetex, makeWrapper }:
 
-with lib;
-
 buildGoPackage rec {
   pname = "reporter";
   version = "2.3.1";
@@ -20,10 +18,10 @@ buildGoPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/grafana-reporter \
-      --prefix PATH : ${makeBinPath [ tetex ]}
+      --prefix PATH : ${lib.makeBinPath [ tetex ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "PDF report generator from a Grafana dashboard";
     homepage = "https://github.com/IzakMarais/reporter";
     license = licenses.mit;

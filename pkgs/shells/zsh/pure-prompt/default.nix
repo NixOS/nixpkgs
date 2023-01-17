@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
   version = "1.20.4";
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
     cp async.zsh "$OUTDIR/async"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Pretty, minimal and fast ZSH prompt";
     homepage = "https://github.com/sindresorhus/pure";
     license = licenses.mit;

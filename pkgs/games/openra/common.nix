@@ -7,11 +7,9 @@
 , zenity
 }:
 
-with lib;
-
 let
-  path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
-  rpath = makeLibraryPath [ lua freetype openal SDL2 ];
+  path = lib.makeBinPath ([ mono python3 ] ++ lib.optional (zenity != null) zenity);
+  rpath = lib.makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook { } ./mkdirp.sh;
 
 in {
@@ -75,7 +73,7 @@ in {
 
     dontStrip = true;
 
-    meta = {
+    meta = with lib; {
       maintainers = with maintainers; [ fusion809 msteen rardiol ];
       license = licenses.gpl3;
       platforms = platforms.linux;

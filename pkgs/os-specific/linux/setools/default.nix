@@ -3,7 +3,6 @@
 , withGraphics ? false
 }:
 
-with lib;
 with python3.pkgs;
 
 buildPythonApplication rec {
@@ -20,7 +19,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
   propagatedBuildInputs = [ enum34 libselinux networkx ]
-    ++ optionals withGraphics [ pyqt5 ];
+    ++ lib.optionals withGraphics [ pyqt5 ];
 
   checkInputs = [ tox checkpolicy ];
   preCheck = ''
@@ -33,7 +32,7 @@ buildPythonApplication rec {
     export SEPOL="${lib.getLib libsepol}/lib/libsepol.a"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SELinux Policy Analysis Tools";
     homepage = "https://github.com/SELinuxProject/setools";
     license = licenses.gpl2;

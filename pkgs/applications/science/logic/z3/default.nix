@@ -16,8 +16,6 @@
 assert javaBindings -> jdk != null;
 assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
-with lib;
-
 let common = { version, sha256, patches ? [ ] }:
   stdenv.mkDerivation rec {
     pname = "z3";
@@ -29,25 +27,25 @@ let common = { version, sha256, patches ? [ ] }:
       sha256 = sha256;
     };
 
-    nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
     buildInputs = [ python ]
-      ++ optional javaBindings jdk
-      ++ optionals ocamlBindings [ ocaml findlib zarith ]
+      ++ lib.optional javaBindings jdk
+      ++ lib.optionals ocamlBindings [ ocaml findlib zarith ]
     ;
     propagatedBuildInputs = [ python.pkgs.setuptools ];
     enableParallelBuilding = true;
 
-    postPatch = optionalString ocamlBindings ''
+    postPatch = lib.optionalString ocamlBindings ''
       export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
       mkdir -p $OCAMLFIND_DESTDIR/stublibs
     '';
 
-    configurePhase = concatStringsSep " "
+    configurePhase = lib.concatStringsSep " "
       (
         [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
-          ++ optional javaBindings "--java"
-          ++ optional ocamlBindings "--ml"
-          ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
+          ++ lib.optional javaBindings "--java"
+          ++ lib.optional ocamlBindings "--ml"
+          ++ lib.optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
       ) + "\n" + "cd build";
 
     doCheck = true;
@@ -60,19 +58,19 @@ let common = { version, sha256, patches ? [ ] }:
       mkdir -p $dev $lib
       mv $out/lib $lib/lib
       mv $out/include $dev/include
-    '' + optionalString pythonBindings ''
+    '' + lib.optionalString pythonBindings ''
       mkdir -p $python/lib
       mv $lib/lib/python* $python/lib/
       ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
-    '' + optionalString javaBindings ''
+    '' + lib.optionalString javaBindings ''
       mkdir -p $java/share/java
       mv com.microsoft.z3.jar $java/share/java
       moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
     '';
 
     outputs = [ "out" "lib" "dev" "python" ]
-      ++ optional javaBindings "java"
-      ++ optional ocamlBindings "ocaml";
+      ++ lib.optional javaBindings "java"
+      ++ lib.optional ocamlBindings "ocaml";
 
     meta = with lib; {
       description = "A high-performance theorem prover and SMT solver";

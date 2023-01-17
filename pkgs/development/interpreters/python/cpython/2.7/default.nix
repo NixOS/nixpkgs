@@ -54,8 +54,6 @@ assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
 assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
   "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
 
-with lib;
-
 let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
@@ -133,9 +131,9 @@ let
       # * https://github.com/python/cpython/commit/e6b247c8e524
       ../3.7/no-win64-workaround.patch
 
-    ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ] ++ lib.optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
-    ] ++ optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
       # ldconfig doesn't work on NixOS), and don't use
@@ -147,7 +145,7 @@ let
       # Fix ctypes.util.find_library with gcc10.
       ./find_library-gcc10.patch
 
-    ] ++ optionals stdenv.hostPlatform.isCygwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
       ./2.6.2-ssl-threads.patch
@@ -158,7 +156,7 @@ let
       ./2.7.3-dylib.patch
       ./2.7.3-getpath-exe-extension.patch
       ./2.7.3-no-libm.patch
-    ] ++ optionals hasDistutilsCxxPatch [
+    ] ++ lib.optionals hasDistutilsCxxPatch [
 
       # Patch from http://bugs.python.org/issue1222585 adapted to work with
       # `patch -p1' and with a last hunk removed
@@ -166,7 +164,7 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
-    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       ./cross-compile.patch
     ];
 
@@ -175,31 +173,31 @@ let
       for i in /usr /sw /opt /pkg; do
         substituteInPlace ./setup.py --replace $i /no-such-path
       done
-    '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
+    '' + lib.optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
-    '' + optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
         --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
     '';
 
-  configureFlags = optionals enableOptimizations [
+  configureFlags = lib.optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ optionals (!static) [
+  ] ++ lib.optionals (!static) [
     "--enable-shared"
   ] ++ [
     "--with-threads"
     "--with-system-ffi"
     "--with-system-expat"
     "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals stdenv.hostPlatform.isCygwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "ac_cv_func_bind_textdomain_codeset=yes"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "PYTHON_FOR_BUILD=${lib.getBin buildPackages.python}/bin/python"
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
     "ac_cv_little_endian_double=yes"
@@ -223,23 +221,23 @@ let
   ]
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
-  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
-  ++ optional static "LDFLAGS=-static";
+  ++ lib.optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
+  ++ lib.optional static "LDFLAGS=-static";
 
   strictDeps = true;
   buildInputs =
-    optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
+    lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
-    ++ optionals x11Support [ tcl tk libX11 ]
-    ++ optional (stdenv.isDarwin && configd != null) configd;
+    ++ lib.optionals x11Support [ tcl tk libX11 ]
+    ++ lib.optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
     [ autoreconfHook ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
       [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
-    C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
-    LIBRARY_PATH = makeLibraryPath paths;
+    C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" paths;
+    LIBRARY_PATH = lib.makeLibraryPath paths;
   };
 
   # Python 2.7 needs this
@@ -258,13 +256,13 @@ in with passthru; stdenv.mkDerivation ({
     LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
-      + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+    NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
+      + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
 
-    postPatch = optionalString (x11Support && (tix != null)) ''
+    postPatch = lib.optionalString (x11Support && (tix != null)) ''
           substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
@@ -291,18 +289,18 @@ in with passthru; stdenv.mkDerivation ({
         # Determinism: Windows installers were not deterministic.
         # We're also not interested in building Windows installers.
         find "$out" -name 'wininst*.exe' | xargs -r rm -f
-      '' + optionalString stripBytecode ''
+      '' + lib.optionalString stripBytecode ''
         # Determinism: deterministic bytecode
         # First we delete all old bytecode.
         find $out -name "*.pyc" -delete
-        '' + optionalString rebuildBytecode ''
+        '' + lib.optionalString rebuildBytecode ''
         # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
         # is not reproducible yet. https://bugs.python.org/issue29708
         # Not creating bytecode will result in a large performance loss however, so we do build it.
         find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
-      '' + optionalString stdenv.hostPlatform.isCygwin ''
+      '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';
 
@@ -311,14 +309,14 @@ in with passthru; stdenv.mkDerivation ({
     postFixup = ''
       # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
       cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-    '' + optionalString strip2to3 ''
+    '' + lib.optionalString strip2to3 ''
       rm -R $out/bin/2to3 $out/lib/python*/lib2to3
-    '' + optionalString stripConfig ''
+    '' + lib.optionalString stripConfig ''
       rm -R $out/bin/python*-config $out/lib/python*/config*
-    '' + optionalString stripIdlelib ''
+    '' + lib.optionalString stripIdlelib ''
       # Strip IDLE
       rm -R $out/bin/idle* $out/lib/python*/idlelib
-    '' + optionalString stripTests ''
+    '' + lib.optionalString stripTests ''
       # Strip tests
       rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
     '';

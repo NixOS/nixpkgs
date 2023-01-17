@@ -17,8 +17,6 @@
 , enableWebService ? false
 }:
 
-with lib;
-
 let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
@@ -36,7 +34,7 @@ in stdenv.mkDerivation {
   outputs = [ "out" "modsrc" ];
 
   nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 ]
-    ++ optional (!headless) wrapQtAppsHook;
+    ++ lib.optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
@@ -45,12 +43,12 @@ in stdenv.mkDerivation {
     acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
     libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
     libXmu libpng libopus python3 ]
-    ++ optional javaBindings jdk
-    ++ optional pythonBindings python3 # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
-    ++ optionals enableWebService [ gsoap zlib ];
+    ++ lib.optional javaBindings jdk
+    ++ lib.optional pythonBindings python3 # Python is needed even when not building bindings
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optionals headless [ libXrandr libGL ]
+    ++ lib.optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+    ++ lib.optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
@@ -59,14 +57,14 @@ in stdenv.mkDerivation {
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${lib.optionalString pythonBindings python3}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
-        ${optionalString (!headless) ''
-        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
+        ${lib.optionalString (!headless) ''
+        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${lib.getDev qtbase}/bin"@' \
         ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
-      ${optionalString pulseSupport
+      ${lib.optionalString pulseSupport
         ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
 
     grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
@@ -80,7 +78,7 @@ in stdenv.mkDerivation {
   '';
 
   patches =
-     optional enableHardening ./hardened.patch
+     lib.optional enableHardening ./hardened.patch
   ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
@@ -89,7 +87,7 @@ in stdenv.mkDerivation {
      # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
      # after the code that unsets it. Note that qtsvg is included so that SVG icons from
      # the user's icon theme can be loaded.
-  ++ optional (!headless && enableHardening) (substituteAll {
+  ++ lib.optional (!headless && enableHardening) (substituteAll {
       src = ./qt-env-vars.patch;
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
@@ -102,7 +100,7 @@ in stdenv.mkDerivation {
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
-  '' + optionalString headless ''
+  '' + lib.optionalString headless ''
     # Fix compile error in version 6.1.6
     substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
       --replace PSHCLFORMATDATA PSHCLFORMATS
@@ -126,29 +124,29 @@ in stdenv.mkDerivation {
     VBOX_WITH_RUNPATH              := $out/libexec/virtualbox
     VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
     VBOX_PATH_APP_DOCS             := $out/doc
-    ${optionalString javaBindings ''
+    ${lib.optionalString javaBindings ''
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
-    ${optionalString (!headless) ''
-    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
-    PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
-    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
+    ${lib.optionalString (!headless) ''
+    PATH_QT5_X11_EXTRAS_LIB        := ${lib.getLib qtx11extras}/lib
+    PATH_QT5_X11_EXTRAS_INC        := ${lib.getDev qtx11extras}/include
+    TOOL_QT5_LRC                   := ${lib.getDev qttools}/bin/lrelease
     ''}
-    ${optionalString enableWebService ''
+    ${lib.optionalString enableWebService ''
     # fix gsoap missing zlib include and produce errors with --as-needed
     VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
     ''}
     LOCAL_CONFIG
 
     ./configure \
-      ${optionalString headless "--build-headless"} \
-      ${optionalString (!javaBindings) "--disable-java"} \
-      ${optionalString (!pythonBindings) "--disable-python"} \
-      ${optionalString (!pulseSupport) "--disable-pulse"} \
-      ${optionalString (!enableHardening) "--disable-hardening"} \
-      ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
-      ${optionalString enableWebService "--enable-webservice"} \
-      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${lib.optionalString headless "--build-headless"} \
+      ${lib.optionalString (!javaBindings) "--disable-java"} \
+      ${lib.optionalString (!pythonBindings) "--disable-python"} \
+      ${lib.optionalString (!pulseSupport) "--disable-pulse"} \
+      ${lib.optionalString (!enableHardening) "--disable-hardening"} \
+      ${lib.optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${lib.optionalString enableWebService "--enable-webservice"} \
+      ${lib.optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -174,13 +172,13 @@ in stdenv.mkDerivation {
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
-    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${lib.optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${lib.optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file
     done
 
-    ${optionalString (extensionPack != null) ''
+    ${lib.optionalString (extensionPack != null) ''
       mkdir -p "$share"
       "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EOF
       "$libexec/VBoxExtPackHelperApp" install \
@@ -192,7 +190,7 @@ in stdenv.mkDerivation {
       EOF
     ''}
 
-    ${optionalString (!headless) ''
+    ${lib.optionalString (!headless) ''
       # Create and fix desktop item
       mkdir -p $out/share/applications
       sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
@@ -208,12 +206,12 @@ in stdenv.mkDerivation {
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
-  preFixup = optionalString (!headless) ''
+  preFixup = lib.optionalString (!headless) ''
     wrapQtApp $out/bin/VirtualBox
   ''
   # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
   # the source code (see postPatch).
-  + optionalString (!headless && !enableHardening) ''
+  + lib.optionalString (!headless && !enableHardening) ''
     wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
   '';
 
@@ -223,7 +221,7 @@ in stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "PC emulator";
     sourceProvenance = with lib.sourceTypes; [
       fromSource

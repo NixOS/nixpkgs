@@ -36,8 +36,6 @@
 , enableKisTablet ? false # enable improved graphics tablet support
 }:
 
-with lib;
-
 let
   clientDeps = [
     qtbase
@@ -57,7 +55,7 @@ let
     # optional:
     libmicrohttpd # HTTP admin api
     libsodium # ext-auth support
-  ] ++ optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
   kisDeps = [
     qtx11extras
@@ -82,9 +80,9 @@ in mkDerivation rec {
   buildInputs = [
     karchive
   ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  ++ lib.optionals buildClient      clientDeps
+  ++ lib.optionals buildServer      serverDeps
+  ++ lib.optionals enableKisTablet  kisDeps;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -96,7 +94,7 @@ in mkDerivation rec {
     "-DKIS_TABLET=${boolToFlag enableKisTablet}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";

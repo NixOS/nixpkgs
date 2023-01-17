@@ -10,7 +10,6 @@
 , useProprietaryAssets ? true
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "koboredux";
   version = "0.7.5.1";
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
       sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
     })]
     ++
-    (optional useProprietaryAssets (requireFile {
+    (lib.optional useProprietaryAssets (requireFile {
       name = "koboredux-${version}-Linux.tar.bz2";
       sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";
       message = ''
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dwhvis7ghf3mgzjd2rwn8hk3ndlgfwwcqaq581yc5rwd73v6vw4";
   })];
 
-  postPatch = optionalString useProprietaryAssets ''
+  postPatch = lib.optionalString useProprietaryAssets ''
     cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux data/gfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux_fullscreen data/gfx/
@@ -65,15 +64,15 @@ stdenv.mkDerivation rec {
     audiality2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
-      optionalString (!useProprietaryAssets) " (built without proprietary assets)";
+      lib.optionalString (!useProprietaryAssets) " (built without proprietary assets)";
     longDescription = ''
       Kobo Redux is a frantic 80's style 2D shooter, inspired by the look and
       feel of 90's arcade cabinets. The gameplay is fast and unforgiving,
       although with less of the frustrating quirkiness of the actual games
       of the 80's. A true challenge in the spirit of the arcade era!
-    '' + optionalString (!useProprietaryAssets) ''
+    '' + lib.optionalString (!useProprietaryAssets) ''
 
       This version replaces the official proprietary assets with placeholders.
       For the full experience, consider installing "koboredux" instead.

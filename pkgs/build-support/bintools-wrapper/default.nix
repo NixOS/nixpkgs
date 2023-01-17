@@ -34,8 +34,6 @@
 , postLinkSignHook ? null, signingUtils ? null
 }:
 
-with lib;
-
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   bintools != null && coreutils != null && gnugrep != null;
@@ -56,15 +54,15 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
-  libc_bin = if libc == null then "" else getBin libc;
-  libc_dev = if libc == null then "" else getDev libc;
-  libc_lib = if libc == null then "" else getLib libc;
-  bintools_bin = if nativeTools then "" else getBin bintools;
+  libc_bin = if libc == null then "" else lib.getBin libc;
+  libc_dev = if libc == null then "" else lib.getDev libc;
+  libc_lib = if libc == null then "" else lib.getLib libc;
+  bintools_bin = if nativeTools then "" else lib.getBin bintools;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = if nativeTools then "" else getBin coreutils;
+  coreutils_bin = if nativeTools then "" else lib.getBin coreutils;
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -104,7 +102,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
+  outputs = [ "out" ] ++ lib.optionals propagateDoc ([ "man" ] ++ lib.optional (bintools ? info) "info");
 
   passthru = {
     inherit targetPrefix suffixSalt;
@@ -118,7 +116,7 @@ stdenv.mkDerivation {
             (setenv "NIX_LDFLAGS_${suffixSalt}" (concat (getenv "NIX_LDFLAGS_${suffixSalt}") " -L" arg "/lib")))
           (when (file-directory-p (concat arg "/lib64"))
             (setenv "NIX_LDFLAGS_${suffixSalt}" (concat (getenv "NIX_LDFLAGS_${suffixSalt}") " -L" arg "/lib64"))))
-        '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
+        '(${lib.concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
   };
 
@@ -155,7 +153,7 @@ stdenv.mkDerivation {
     ''
 
     # Solaris needs an additional ld wrapper.
-    + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
+    + lib.optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
       ldPath="${nativePrefix}/bin"
       exec="$ldPath/${targetPrefix}ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
@@ -210,7 +208,7 @@ stdenv.mkDerivation {
     ##
     ## General libc support
     ##
-    optionalString (libc != null) (''
+    lib.optionalString (libc != null) (''
       touch "$out/nix-support/libc-ldflags"
       echo "-L${libc_lib}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
 
@@ -221,7 +219,7 @@ stdenv.mkDerivation {
     ##
     ## Dynamic linker support
     ##
-    + optionalString (sharedLibraryLoader != null) ''
+    + lib.optionalString (sharedLibraryLoader != null) ''
       if [[ -z ''${dynamicLinker+x} ]]; then
         echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
         local dynamicLinker="${sharedLibraryLoader}/lib/ld*.so.?"
@@ -259,16 +257,16 @@ stdenv.mkDerivation {
     # Propagate the underling unwrapped bintools so that if you
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
-    + optionalString (!nativeTools) ''
+    + lib.optionalString (!nativeTools) ''
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
     ''
 
     ##
     ## Man page and info support
     ##
-    + optionalString propagateDoc (''
+    + lib.optionalString propagateDoc (''
       ln -s ${bintools.man} $man
-    '' + optionalString (bintools ? info) ''
+    '' + lib.optionalString (bintools ? info) ''
       ln -s ${bintools.info} $info
     '')
 
@@ -287,21 +285,21 @@ stdenv.mkDerivation {
       fi
     ''
 
-    + optionalString hostPlatform.isCygwin ''
+    + lib.optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
     ''
 
-    + optionalString targetPlatform.isAvr ''
+    + lib.optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" relro bindnow"
     ''
 
-    + optionalString (libc != null && targetPlatform.isAvr) ''
+    + lib.optionalString (libc != null && targetPlatform.isAvr) ''
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
-        echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+        echo "-L${lib.getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
       done
     ''
 
-    + optionalString stdenv.targetPlatform.isDarwin ''
+    + lib.optionalString stdenv.targetPlatform.isDarwin ''
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
@@ -310,7 +308,7 @@ stdenv.mkDerivation {
     ##
 
     # TODO(@sternenseemann): make a generic strip wrapper?
-    + optionalString (bintools.isGNU or false) ''
+    + lib.optionalString (bintools.isGNU or false) ''
       wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
         "${bintools_bin}/bin/${targetPrefix}strip"
     ''
@@ -318,7 +316,7 @@ stdenv.mkDerivation {
     ###
     ### Remove LC_UUID
     ###
-    + optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
+    + lib.optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
       echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
 
@@ -335,7 +333,7 @@ stdenv.mkDerivation {
     ###
     ### Ensure consistent LC_VERSION_MIN_MACOSX
     ###
-    + optionalString stdenv.targetPlatform.isDarwin (
+    + lib.optionalString stdenv.targetPlatform.isDarwin (
       let
         inherit (stdenv.targetPlatform)
           darwinPlatform darwinSdkVersion
@@ -352,7 +350,7 @@ stdenv.mkDerivation {
     ##
     ## Code signing on Apple Silicon
     ##
-    + optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
+    + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
       echo 'source ${postLinkSignHook}' >> $out/nix-support/post-link-hook
 
       export signingUtils=${signingUtils}
@@ -375,7 +373,7 @@ stdenv.mkDerivation {
   env = {
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-    shell = getBin shell + shell.shellPath or "";
+    shell = lib.getBin shell + shell.shellPath or "";
     gnugrep_bin = if nativeTools then "" else gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
@@ -389,7 +387,7 @@ stdenv.mkDerivation {
         lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
       priority = 10;
-  } // optionalAttrs useMacosReexportHack {
+  } // lib.optionalAttrs useMacosReexportHack {
     platforms = lib.platforms.darwin;
   };
 }

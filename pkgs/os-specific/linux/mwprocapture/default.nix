@@ -1,13 +1,11 @@
 { lib, stdenv, fetchurl, kernel, alsa-lib }:
 
-with lib;
-
 let
   bits =
     if stdenv.is64bit then "64"
     else "32";
 
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
+  libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
 
 in
 stdenv.mkDerivation rec {
@@ -58,7 +56,7 @@ stdenv.mkDerivation rec {
       "$out"/bin/mwcap-info
   '';
 
-  meta = {
+  meta = with lib; {
     broken = kernel.kernelAtLeast "5.16";
     homepage = "http://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";

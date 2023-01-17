@@ -9,8 +9,6 @@
 , ... # For hash agility
 } @ args:
 
-with lib;
-
 assert (lib.assertOneOf "vc" vc [ "hg" "git" ]);
 
 let
@@ -38,7 +36,7 @@ let
       fetch = fetchzip;
       arguments = baseArgs // {
         url = "${baseUrl}/archive/${rev}.tar.gz";
-        postFetch = optionalString (vc == "hg") ''
+        postFetch = lib.optionalString (vc == "hg") ''
           rm -f "$out/.hg_archival.txt"
         ''; # impure file; see #12002
       };

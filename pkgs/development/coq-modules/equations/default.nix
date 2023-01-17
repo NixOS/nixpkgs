@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; (mkCoqDerivation {
+(mkCoqDerivation {
   pname = "equations";
   owner = "mattam82";
   repo = "Coq-Equations";
   inherit version;
-  defaultVersion = switch coq.coq-version [
+  defaultVersion = lib.switch coq.coq-version [
     { case = "8.16"; out = "1.3+8.16"; }
     { case = "8.15"; out = "1.3+8.15"; }
     { case = "8.14"; out = "1.3+8.14"; }
@@ -57,11 +57,11 @@ with lib; (mkCoqDerivation {
 
   mlPlugin = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
   };
 }).overrideAttrs (o: {
-  preBuild = "coq_makefile -f _CoqProject -o Makefile${optionalString (versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"}";
+  preBuild = "coq_makefile -f _CoqProject -o Makefile${lib.optionalString (lib.versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"}";
 })

@@ -5,8 +5,6 @@
   htmlcBackend ? true # depends on js_of_ocaml
 }:
 
-with lib;
-
 let
   inherit (lib) optionals versionOlder;
 
@@ -38,14 +36,14 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   buildPhase = topkg.buildPhase
-    + " --with-uutf ${boolToString pdfBackend}"
-    + " --with-otfm ${boolToString pdfBackend}"
-    + " --with-js_of_ocaml ${boolToString htmlcBackend}"
+    + " --with-uutf ${lib.boolToString pdfBackend}"
+    + " --with-otfm ${lib.boolToString pdfBackend}"
+    + " --with-js_of_ocaml ${lib.boolToString htmlcBackend}"
     + " --with-cairo2 false";
 
   inherit (topkg) installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "Declarative 2D vector graphics for OCaml";
     longDescription = ''
     Vg is an OCaml module for declarative 2D vector graphics. In Vg, images

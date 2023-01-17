@@ -206,7 +206,7 @@ in
       homepage = "https://www.rstudio.com/";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ ciil cfhammill ];
-      mainProgram = "rstudio" + optionalString server "-server";
+      mainProgram = "rstudio" + lib.optionalString server "-server";
       platforms = platforms.linux;
     };
 

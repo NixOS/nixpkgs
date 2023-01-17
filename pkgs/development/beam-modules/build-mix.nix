@@ -15,7 +15,6 @@
 , ...
 }@attrs:
 
-with lib;
 let
   shell = drv: stdenv.mkDerivation {
     name = "interactive-shell-${drv.name}";
@@ -90,5 +89,5 @@ let
     };
   });
 in
-fix pkg
+lib.fix pkg
 

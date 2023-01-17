@@ -33,15 +33,13 @@
 , firmware ? openSha256 != null
 }:
 
-with lib;
-
 assert !libsOnly -> kernel != null;
-assert versionOlder version "391" -> sha256_32bit != null;
+assert lib.versionOlder version "391" -> sha256_32bit != null;
 
 let
-  nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
-  pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
-  i686bundled = versionAtLeast version "391" && !disable32Bit;
+  nameSuffix = lib.optionalString (!libsOnly) "-${kernel.version}";
+  pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
+  i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
     libdrm xorg.libXext xorg.libX11
@@ -74,15 +72,15 @@ let
     inherit i686bundled;
 
     outputs = [ "out" ]
-        ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin"
-        ++ optional (!libsOnly && firmware) "firmware";
+        ++ lib.optional i686bundled "lib32"
+        ++ lib.optional (!libsOnly) "bin"
+        ++ lib.optional (!libsOnly && firmware) "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
-    makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
+    makeFlags = lib.optionals (!libsOnly) (kernel.makeFlags ++ [
       "IGNORE_PREEMPT_RT_PRESENCE=1"
       "NV_BUILD_SUPPORTS_HMM=1"
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
@@ -95,16 +93,16 @@ let
     dontPatchELF = true;
 
     libPath = libPathFor pkgs;
-    libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
+    libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
 
     buildInputs = [ which ];
     nativeBuildInputs = [ perl nukeReferences ]
-      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+      ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
+    disallowedReferences = lib.optionals (!libsOnly) [ kernel.dev ];
 
     passthru = {
-      open = mapNullable (hash: callPackage ./open.nix {
+      open = lib.mapNullable (hash: callPackage ./open.nix {
         inherit hash;
         nvidia_x11 = self;
         broken = brokenOpen;
@@ -113,10 +111,10 @@ let
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };
-      persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
+      persistenced = lib.mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
       compressFirmware = false;
-    } // optionalAttrs (!i686bundled) {
+    } // lib.optionalAttrs (!i686bundled) {
       inherit lib32;
     };
 

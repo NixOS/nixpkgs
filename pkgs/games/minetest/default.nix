@@ -39,8 +39,6 @@
 , withTouchSupport ? false
 }:
 
-with lib;
-
 let
   boolToCMake = b: if b then "ON" else "OFF";
 
@@ -82,9 +80,9 @@ let
       "-DCMAKE_INSTALL_MANDIR=share/man"
       "-DCMAKE_INSTALL_LOCALEDIR=share/locale"
 
-    ] ++ optionals buildServer [
+    ] ++ lib.optionals buildServer [
       "-DENABLE_PROMETHEUS=1"
-    ] ++ optionals withTouchSupport [
+    ] ++ lib.optionals withTouchSupport [
       "-DENABLE_TOUCH=TRUE"
     ];
 
@@ -95,11 +93,11 @@ let
     buildInputs = [
       irrlichtmtInput luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
-    ] ++ optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
-    ] ++ optionals buildClient [
+    ] ++ lib.optionals buildClient [
       libpng libjpeg libGLU openal libogg libvorbis xorg.libX11
-    ] ++ optionals buildServer [
+    ] ++ lib.optionals buildServer [
       leveldb postgresql hiredis prometheus-cpp
     ];
 

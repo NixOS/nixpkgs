@@ -22,7 +22,6 @@
 , nixosTests
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 
@@ -48,9 +47,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
-    ++ optional enableSystemd systemd
-    ++ optionals stdenv.isDarwin (with darwin; [
+    ++ lib.optionals stdenv.isLinux [ avahi pam dbus acl ]
+    ++ lib.optional enableSystemd systemd
+    ++ lib.optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
 
@@ -62,18 +61,18 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--enable-raw-printing"
     "--enable-threads"
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     "--enable-dbus"
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
-  ] ++ optional (libusb1 != null) "--enable-libusb"
-    ++ optional (gnutls != null) "--enable-ssl"
-    ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper";
+  ] ++ lib.optional (libusb1 != null) "--enable-libusb"
+    ++ lib.optional (gnutls != null) "--enable-ssl"
+    ++ lib.optional (avahi != null) "--enable-avahi"
+    ++ lib.optional (libpaper != null) "--enable-libpaper";
 
   # AR has to be an absolute path
   preConfigure = ''
-    export AR="${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    export AR="${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     configureFlagsArray+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.
@@ -84,7 +83,7 @@ stdenv.mkDerivation rec {
 
       "--with-systemd=$out/lib/systemd/system"
 
-      ${optionalString stdenv.isDarwin ''
+      ${lib.optionalString stdenv.isDarwin ''
         "--with-bundledir=$out"
       ''}
     )
@@ -130,7 +129,7 @@ stdenv.mkDerivation rec {
       for f in "$out"/lib/systemd/system/*; do
         substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
       done
-    '' + optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.isLinux ''
       # Use xdg-open when on Linux
       substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
@@ -138,7 +137,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.nixos = nixosTests.printing;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
     description = "A standards-based printing system for UNIX";
     license = licenses.asl20;

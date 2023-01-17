@@ -16,8 +16,6 @@
 , wrapGAppsHook
 }:
 
-with lib;
-
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
   version = "5.4.2";
@@ -60,7 +58,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "The client of the Tryton application platform";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose

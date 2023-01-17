@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "bignums";
   owner = "coq";
   displayVersion = { bignums = ""; };
   inherit version;
-  defaultVersion = if versions.isGe "8.6" coq.coq-version
+  defaultVersion = if lib.versions.isGe "8.6" coq.coq-version
     then "${coq.coq-version}.0" else null;
 
   release."8.17.0".sha256 = "sha256-MXYjqN86+3O4hT2ql62U83T5H03E/8ysH8erpvC/oyw=";
@@ -25,5 +25,5 @@ with lib; mkCoqDerivation {
 
   mlPlugin = true;
 
-  meta = { license = licenses.lgpl2; };
+  meta = { license = lib.licenses.lgpl2; };
 }

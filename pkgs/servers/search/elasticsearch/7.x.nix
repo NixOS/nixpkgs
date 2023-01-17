@@ -11,11 +11,10 @@
 , zlib
 }:
 
-with lib;
 let
-  info = splitString "-" stdenv.hostPlatform.system;
-  arch = elemAt info 0;
-  plat = elemAt info 1;
+  info = lib.splitString "-" stdenv.hostPlatform.system;
+  arch = lib.elemAt info 0;
+  plat = lib.elemAt info 1;
   shas =
     {
       x86_64-linux   = "7281b79f2bf7421c2d71ab4eecdfd517b86b6788d1651dad315198c564284ea9";
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
       --replace 'bin/elasticsearch-keystore' "$out/bin/elasticsearch-keystore"
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${makeBinPath [ util-linux coreutils gnugrep ]}" \
+      --prefix PATH : "${lib.makeBinPath [ util-linux coreutils gnugrep ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
 
   passthru = { enableUnfree = true; };
 
-  meta = {
+  meta = with lib; {
     description = "Open Source, Distributed, RESTful Search Engine";
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

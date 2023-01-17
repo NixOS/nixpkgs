@@ -18,8 +18,6 @@
 , dfVersion
 }:
 
-with lib;
-
 let
   dfhack-releases = {
     "0.44.10" = {
@@ -64,8 +62,8 @@ let
   release =
     if lib.isAttrs dfVersion
     then dfVersion
-    else if hasAttr dfVersion dfhack-releases
-    then getAttr dfVersion dfhack-releases
+    else if lib.hasAttr dfVersion dfhack-releases
+    then lib.getAttr dfVersion dfhack-releases
     else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;

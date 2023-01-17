@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, ncurses }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "robotfindskitten";
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     install -Dm644 {nki,$out/share/games/robotfindskitten}/vanilla.nki
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Yet another zen simulation; A simple find-the-kitten game";
     homepage = "http://robotfindskitten.org/";
     license = licenses.gpl2;

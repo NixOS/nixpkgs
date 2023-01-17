@@ -2,8 +2,6 @@
 , libmicrohttpd
 }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "stabber-unstable";
   version = "2020-06-08";
@@ -22,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib expat libmicrohttpd ];
 
-  meta = {
+  meta = with lib; {
     description = "Stubbed XMPP Server";
     homepage = "https://github.com/profanity-im/stabber";
     license = licenses.gpl3;

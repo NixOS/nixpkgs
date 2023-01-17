@@ -18,13 +18,12 @@
 , zlib
 }:
 
-with lib;
 let
   pVersion = "1.13.0.20220615";
-  pVersionTriple = splitVersion pVersion;
-  majorVersion = elemAt pVersionTriple 0;
-  minorVersion = elemAt pVersionTriple 1;
-  patchVersion = elemAt pVersionTriple 2;
+  pVersionTriple = lib.splitVersion pVersion;
+  majorVersion = lib.elemAt pVersionTriple 0;
+  minorVersion = lib.elemAt pVersionTriple 1;
+  patchVersion = lib.elemAt pVersionTriple 2;
   baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
   jdk = jdk11;
 in

@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, mock, nose, pytest, six }:
 
-with lib;
 buildPythonPackage rec {
   pname = "mohawk";
   version = "1.1.0";
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Hawk HTTP authorization.";
     homepage = "https://github.com/kumar303/mohawk";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

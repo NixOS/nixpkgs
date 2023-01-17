@@ -11,8 +11,6 @@
 , squashfsTools
 , buildGoPackage}:
 
-with lib;
-
 buildGoPackage rec {
   pname = "singularity";
   version = "3.8.7";

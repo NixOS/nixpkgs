@@ -1,7 +1,5 @@
 { lib, fetchFromGitHub, nodePackages }:
 
-with lib;
-
 let
   np = nodePackages.override { generated = ./package.nix; self = np; };
 in nodePackages.buildNodePackage rec {
@@ -15,11 +13,11 @@ in nodePackages.buildNodePackage rec {
     sha256 = "sha256-QEBdYdW55sAz6jshIAr2dSfXuqE/vqA2/kBeoxf75a8=";
   };
 
-  deps = (filter (v: nixType v == "derivation") (attrValues np));
+  deps = (lib.filter (v: lib.nixType v == "derivation") (lib.attrValues np));
 
   meta = {
     description = "Historical ripple data";
     homepage = "https://github.com/ripple/ripple-data-api";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ offline ];
   };
 }

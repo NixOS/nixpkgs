@@ -2,7 +2,6 @@
 , perl, gmp, libtap, gperf
 , perlPackages, python3 }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "freecell-solver";
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   # to depend on the generated "is_king.h".
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with lib; {
     description = "A FreeCell automatic solver";
     longDescription = ''
       FreeCell Solver is a program that automatically solves layouts

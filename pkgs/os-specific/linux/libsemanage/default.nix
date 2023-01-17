@@ -2,8 +2,6 @@
 , enablePython ? true, swig ? null, python ? null
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libsemanage";
   version = "3.4";
@@ -14,13 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-k7QjohYAuOP7WbuSXUWD0SWPRb6/Y8Kb3jBN/T1S79Y=";
    };
 
-  outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
+  outputs = [ "out" "dev" "man" ] ++ lib.optional enablePython "py";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ bison flex pkg-config ] ++ optional enablePython swig;
+  nativeBuildInputs = [ bison flex pkg-config ] ++ lib.optional enablePython swig;
   buildInputs = [ libsepol libselinux bzip2 audit ]
-    ++ optional enablePython python;
+    ++ lib.optional enablePython python;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
   # cc1: all warnings being treated as errors
   NIX_CFLAGS_COMPILE = [ "-Wno-error=clobbered" ];
 
-  installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
+  installTargets = [ "install" ] ++ lib.optionals enablePython [ "install-pywrap" ];
 
   enableParallelBuilding = true;
 

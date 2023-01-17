@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, meson, ninja, glib, libintl }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "desktop-file-utils";
   version = "0.26";
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/desktop-file-utils";
     description = "Command line utilities for working with .desktop files";
     platforms = platforms.linux ++ platforms.darwin;

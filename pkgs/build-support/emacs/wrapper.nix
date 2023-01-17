@@ -34,8 +34,6 @@ in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 { lib, lndir, makeWrapper, runCommand, gcc }: self:
 
-with lib;
-
 let
 
   inherit (self) emacs;
@@ -54,7 +52,7 @@ let
 in
 
 runCommand
-  (appendToName "with-packages" emacs).name
+  (lib.appendToName "with-packages" emacs).name
   {
     nativeBuildInputs = [ emacs lndir makeWrapper ];
     inherit emacs explicitRequires;
@@ -106,7 +104,7 @@ runCommand
         }
         mkdir -p $out/bin
         mkdir -p $out/share/emacs/site-lisp
-        ${optionalString nativeComp ''
+        ${lib.optionalString nativeComp ''
           mkdir -p $out/share/emacs/native-lisp
         ''}
 
@@ -130,7 +128,7 @@ runCommand
         linkEmacsPackage() {
           linkPath "$1" "bin" "bin"
           linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
-          ${optionalString nativeComp ''
+          ${lib.optionalString nativeComp ''
             linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
           ''}
         }
@@ -161,7 +159,7 @@ runCommand
           (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
         (add-to-list 'load-path "$out/share/emacs/site-lisp")
         (add-to-list 'exec-path "$out/bin")
-        ${optionalString nativeComp ''
+        ${lib.optionalString nativeComp ''
           (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
         ''}
         EOF
@@ -176,7 +174,7 @@ runCommand
         # Byte-compiling improves start-up time only slightly, but costs nothing.
         $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
 
-        ${optionalString nativeComp ''
+        ${lib.optionalString nativeComp ''
           $emacs/bin/emacs --batch \
             --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
             -f batch-native-compile "$siteStart" "$subdirs"

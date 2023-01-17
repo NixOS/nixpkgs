@@ -3,7 +3,6 @@
   OpenCL, Cocoa
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "opencascade-oce";
   version = "0.18.3";
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     libGL libGLU libXmu freetype fontconfig expat freeimage vtk
     gl2ps tbb
   ]
-    ++ optionals stdenv.isDarwin [OpenCL Cocoa]
+    ++ lib.optionals stdenv.isDarwin [OpenCL Cocoa]
   ;
 
   cmakeFlags = [
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     "-DOCE_WITH_GL2PS=ON"
     "-DOCE_MULTITHREAD_LIBRARY=TBB"
   ]
-  ++ optionals stdenv.isDarwin ["-DOCE_OSX_USE_COCOA=ON" "-DOCE_WITH_OPENCL=ON"];
+  ++ lib.optionals stdenv.isDarwin ["-DOCE_OSX_USE_COCOA=ON" "-DOCE_WITH_OPENCL=ON"];
 
   patches = [
     # Use fontconfig instead of hardcoded directory list
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
       --replace FONTCONFIG_LIBRARIES FONTCONFIG_LINK_LIBRARIES
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = "https://github.com/tpaviot/oce";
     maintainers = [ maintainers.viric ];

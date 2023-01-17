@@ -5,8 +5,6 @@
 , version ? null
 }:
 
-with lib;
-
 let compcert = mkCoqDerivation rec {
 
   pname = "compcert";
@@ -15,7 +13,7 @@ let compcert = mkCoqDerivation rec {
   inherit version;
   releaseRev = v: "v${v}";
 
-  defaultVersion =  with versions; switch coq.version [
+  defaultVersion =  with lib.versions; lib.switch coq.version [
       { case = range "8.14" "8.16"; out = "3.11"; }
       { case = isEq "8.13"        ; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
@@ -84,7 +82,7 @@ let compcert = mkCoqDerivation rec {
 }; in
 compcert.overrideAttrs (o:
   {
-    patches = with versions; switch [ coq.version o.version ] [
+    patches = with lib.versions; lib.switch [ coq.version o.version ] [
       { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
         out = [
           # Support for Coq 8.12.2

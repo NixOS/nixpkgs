@@ -12,8 +12,6 @@ assert (enableCrypt -> (libxcrypt != null));
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-with lib;
-
 let
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
@@ -33,7 +31,7 @@ let
     strictDeps = true;
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
-      optional crossCompiling "mini";
+      lib.optional crossCompiling "mini";
     setOutputFlags = false;
 
     propagatedBuildInputs = lib.optional enableCrypt libxcrypt;
@@ -48,9 +46,9 @@ let
         # Enable TLS/SSL verification in HTTP::Tiny by default
         ./http-tiny-verify-ssl-by-default.patch
       ]
-      ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch;
+      ++ lib.optional stdenv.isSunOS ./ld-shared.patch
+      ++ lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
+      ++ lib.optional crossCompiling ./MakeMaker-cross.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -84,18 +82,18 @@ let
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
-      ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
-      ++ optional stdenv.isSunOS "-Dcc=gcc"
-      ++ optional enableThreading "-Dusethreads"
-      ++ optional (!enableCrypt) "-A clear:d_crypt_r"
-      ++ optional stdenv.hostPlatform.isStatic "--all-static"
-      ++ optionals (!crossCompiling) [
+      ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
+      ++ lib.optional stdenv.isSunOS "-Dcc=gcc"
+      ++ lib.optional enableThreading "-Dusethreads"
+      ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
+      ++ lib.optional stdenv.hostPlatform.isStatic "--all-static"
+      ++ lib.optionals (!crossCompiling) [
         "-Dprefix=${placeholder "out"}"
         "-Dman1dir=${placeholder "out"}/share/man/man1"
         "-Dman3dir=${placeholder "out"}/share/man/man3"
       ];
 
-    configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
+    configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
     dontAddStaticConfigureFlags = true;
 
@@ -129,9 +127,9 @@ let
         OLD_ZLIB     = False
         GZIP_OS_CODE = AUTO_DETECT
         EOF
-      '' + optionalString stdenv.isDarwin ''
+      '' + lib.optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
-      '' + optionalString (!enableThreading) ''
+      '' + lib.optionalString (!enableThreading) ''
         # We need to do this because the bootstrap doesn't have a static libpthread
         sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
       '';
@@ -174,7 +172,7 @@ let
             }" /no-such-path \
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
-      '' + optionalString crossCompiling
+      '' + lib.optionalString crossCompiling
       ''
         mkdir -p $mini/lib/perl5/cross_perl/${version}
         for dir in cnf/{stub,cpan}; do
@@ -198,7 +196,7 @@ let
           "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
       ''; # */
 
-    meta = {
+    meta = with lib; {
       homepage = "https://www.perl.org/";
       description = "The standard implementation of the Perl 5 programmming language";
       license = licenses.artistic1;
@@ -206,7 +204,7 @@ let
       platforms = platforms.all;
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
-  } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
     crossVersion = "c876045741f5159318085d2737b0090f35a842ca"; # June 5, 2022
 
     perl-cross-src = fetchFromGitHub {

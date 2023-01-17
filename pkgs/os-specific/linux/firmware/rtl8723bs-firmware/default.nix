@@ -1,5 +1,5 @@
 { lib, stdenvNoCC, linuxPackages }:
-with lib;
+
 stdenvNoCC.mkDerivation {
   pname = "rtl8723bs-firmware";
   version = linuxPackages.rtl8723bs.version;

@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook
 , zlib, SDL, readline, libGLU, libGL, libX11 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "atari800";
   version = "5.0.0";
@@ -9,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
-    rev = "ATARI800_${replaceStrings ["."] ["_"] version}";
+    rev = "ATARI800_${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "sha256-+eJXhqPyU0GhmzF7DbteTXzEnn5klCor9Io/UgXQfQg=";
   };
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     "--enable-riodevice"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://atari800.github.io/";
     description = "An Atari 8-bit emulator";
     longDescription = ''

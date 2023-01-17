@@ -1,12 +1,11 @@
 { lib, mkCoqDerivation, coq, aac-tactics, mathcomp, version ? null }:
-with lib;
 
 mkCoqDerivation {
   pname = "relation-algebra";
   owner = "damien-pous";
 
   releaseRev = v:
-    if versions.isGe "1.7.6" v
+    if lib.versions.isGe "1.7.6" v
     then "v.${v}"
     else "v${v}";
 
@@ -20,7 +19,7 @@ mkCoqDerivation {
   release."1.7.1".sha256 = "sha256-WWVMcR6z8rT4wzZPb8SlaVWGe7NC8gScPqawd7bltQA=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = isEq "8.16"; out = "1.7.8"; }
     { case = isEq "8.15"; out = "1.7.7"; }
     { case = isEq "8.14"; out = "1.7.6"; }
@@ -35,7 +34,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ aac-tactics mathcomp.ssreflect ];
 
-  meta = {
+  meta = with lib; {
     description = "Relation algebra library for Coq";
     maintainers = with maintainers; [ siraben ];
     license = licenses.gpl3Plus;

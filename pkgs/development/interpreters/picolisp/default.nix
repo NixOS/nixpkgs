@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, jdk, w3m, openssl, makeWrapper }:
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "picoLisp";
@@ -9,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0l51x98bn1hh6kv40sdgp0x09pzg5i8yxbcjvm9n5bxsd6bbk5w2";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [openssl] ++ optional stdenv.is64bit jdk;
+  buildInputs = [openssl] ++ lib.optional stdenv.is64bit jdk;
   patchPhase = ''
     sed -i "s/which java/command -v java/g" mkAsm
 
-    ${optionalString stdenv.isAarch32 ''
+    ${lib.optionalString stdenv.isAarch32 ''
       sed -i s/-m32//g Makefile
       cat >>Makefile <<EOF
       ext.o: ext.c
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
       EOF
     ''}
   '';
-  sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
+  sourceRoot = ''picoLisp/src${lib.optionalString stdenv.is64bit "64"}'';
   postBuild = ''
     cd ../src; make gate
   '';
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib/picolisp/lib/el" "$out/share/emacs/site-lisp"
   '';
 
-  meta = {
+  meta = with lib; {
     # darwin: build times out
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A simple Lisp with an integrated database";

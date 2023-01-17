@@ -6,7 +6,6 @@
 , libcap ? null, systemd ? null
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "lxc";
   version = "4.0.12";
@@ -41,10 +40,10 @@ stdenv.mkDerivation rec {
     "--disable-api-docs"
     "--with-init-script=none"
     "--with-distro=nixos" # just to be sure it is "unknown"
-  ] ++ optional (libapparmor != null) "--enable-apparmor"
-    ++ optional (libselinux != null) "--enable-selinux"
-    ++ optional (libseccomp != null) "--enable-seccomp"
-    ++ optional (libcap != null) "--enable-capabilities"
+  ] ++ lib.optional (libapparmor != null) "--enable-apparmor"
+    ++ lib.optional (libselinux != null) "--enable-selinux"
+    ++ lib.optional (libseccomp != null) "--enable-seccomp"
+    ++ lib.optional (libcap != null) "--enable-capabilities"
     ++ [
     "--disable-examples"
     "--enable-python"
@@ -80,7 +79,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://linuxcontainers.org/";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = licenses.lgpl21Plus;

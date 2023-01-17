@@ -6,7 +6,6 @@
 , enableMpris ? stdenv.isLinux
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   version = "3.3.9";
   pname = "shairport-sync";
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     libconfig
     libpulseaudio
     soxr
-  ] ++ optional stdenv.isLinux glib;
+  ] ++ lib.optional stdenv.isLinux glib;
 
   prePatch = ''
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
@@ -44,9 +43,9 @@ stdenv.mkDerivation rec {
     "--without-configfiles"
     "--sysconfdir=/etc"
   ]
-    ++ optional enableDbus "--with-dbus-interface"
-    ++ optional enableMetadata "--with-metadata"
-    ++ optional enableMpris "--with-mpris-interface";
+    ++ lib.optional enableDbus "--with-dbus-interface"
+    ++ lib.optional enableMetadata "--with-metadata"
+    ++ lib.optional enableMpris "--with-mpris-interface";
 
   meta = with lib; {
     inherit (src.meta) homepage;

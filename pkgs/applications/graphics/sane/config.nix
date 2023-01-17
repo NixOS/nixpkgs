@@ -2,7 +2,6 @@
 
 { paths, disabledDefaultBackends ? [] }:
 
-with lib;
 let
 installSanePath = path: ''
       if [ -e "${path}/lib/sane" ]; then
@@ -48,6 +47,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
   ''
-  + (concatMapStrings installSanePath paths)
-  + (concatMapStrings disableBackend disabledDefaultBackends);
+  + (lib.concatMapStrings installSanePath paths)
+  + (lib.concatMapStrings disableBackend disabledDefaultBackends);
 }

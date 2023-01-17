@@ -1,7 +1,5 @@
 { lib, stdenv, fetchzip }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   version = "0.94";
   pname = "pcg-c";
@@ -31,8 +29,8 @@ stdenv.mkDerivation rec {
       algorithms for random number generation. Unlike many general-purpose RNGs,
       they are also hard to predict.
     '';
-    platforms = platforms.unix;
-    maintainers = [ maintainers.linus ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.linus ];
     broken = stdenv.isi686; # https://github.com/imneme/pcg-c/issues/11
   };
 }

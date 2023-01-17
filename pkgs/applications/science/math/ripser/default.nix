@@ -5,9 +5,7 @@
 , fileFormat ? "lowerTriangularCsv"
 }:
 
-with lib;
-
-assert assertOneOf "fileFormat" fileFormat
+assert lib.assertOneOf "fileFormat" fileFormat
   ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
 assert useGoogleHashmap -> sparsehash != null;
 

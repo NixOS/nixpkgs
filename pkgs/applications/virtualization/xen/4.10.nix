@@ -16,8 +16,6 @@
 assert withInternalSeabios -> !withSeabios;
 assert withInternalOVMF -> !withOVMF;
 
-with lib;
-
 # Patching XEN? Check the XSAs at
 # https://xenbits.xen.org/xsa/
 # and try applying all the ones we don't have yet.
@@ -46,7 +44,7 @@ callPackage (import ./generic.nix (rec {
   };
 
   # Sources needed to build tools and firmwares.
-  xenfiles = optionalAttrs withInternalQemu {
+  xenfiles = lib.optionalAttrs withInternalQemu {
     qemu-xen = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/qemu-xen.git";
@@ -63,7 +61,7 @@ callPackage (import ./generic.nix (rec {
       '';
       meta.description = "Xen's fork of upstream Qemu";
     };
-  } // optionalAttrs withInternalTraditionalQemu {
+  } // lib.optionalAttrs withInternalTraditionalQemu {
     qemu-xen-traditional = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/qemu-xen-traditional.git";
@@ -81,7 +79,7 @@ callPackage (import ./generic.nix (rec {
       '';
       meta.description = "Xen's fork of upstream Qemu that uses old device model";
     };
-  } // optionalAttrs withInternalSeabios {
+  } // lib.optionalAttrs withInternalSeabios {
     "firmware/seabios-dir-remote" = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/seabios.git";
@@ -91,7 +89,7 @@ callPackage (import ./generic.nix (rec {
       patches = [ ./0000-qemu-seabios-enable-ATA_DMA.patch ];
       meta.description = "Xen's fork of Seabios";
     };
-  } // optionalAttrs withInternalOVMF {
+  } // lib.optionalAttrs withInternalOVMF {
     "firmware/ovmf-dir-remote" = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/ovmf.git";
@@ -110,7 +108,7 @@ callPackage (import ./generic.nix (rec {
       };
       meta.description = "Xen's fork of iPXE";
     };
-  } // optionalAttrs withLibHVM {
+  } // lib.optionalAttrs withLibHVM {
     xen-libhvm-dir-remote = {
       src = fetchgit {
         name = "xen-libhvm";
@@ -132,21 +130,21 @@ callPackage (import ./generic.nix (rec {
           Helper library for reading ACPI and SMBIOS firmware values
           from the host system for use with the HVM guest firmware
           pass-through feature in Xen'';
-        license = licenses.bsd2;
+        license = lib.licenses.bsd2;
       };
     };
   };
 
   configureFlags = []
-    ++ optional (!withInternalQemu) "--with-system-qemu" # use qemu from PATH
-    ++ optional (withInternalTraditionalQemu) "--enable-qemu-traditional"
-    ++ optional (!withInternalTraditionalQemu) "--disable-qemu-traditional"
+    ++ lib.optional (!withInternalQemu) "--with-system-qemu" # use qemu from PATH
+    ++ lib.optional (withInternalTraditionalQemu) "--enable-qemu-traditional"
+    ++ lib.optional (!withInternalTraditionalQemu) "--disable-qemu-traditional"
 
-    ++ optional (withSeabios) "--with-system-seabios=${seabios}"
-    ++ optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
+    ++ lib.optional (withSeabios) "--with-system-seabios=${seabios}"
+    ++ lib.optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
 
-    ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
-    ++ optional (withInternalOVMF) "--enable-ovmf";
+    ++ lib.optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
+    ++ lib.optional (withInternalOVMF) "--enable-ovmf";
 
   NIX_CFLAGS_COMPILE = toString [
     # Fix build on Glibc 2.24.

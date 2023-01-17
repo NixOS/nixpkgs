@@ -44,8 +44,6 @@
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "samba";
   version = "4.17.4";
@@ -79,10 +77,10 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     buildPackages.stdenv.cc
-  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
-    ++ optionals stdenv.isDarwin [
+  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+    ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -103,18 +101,18 @@ stdenv.mkDerivation rec {
     libtasn1
     tdb
     libxcrypt
-  ] ++ optionals stdenv.isLinux [ liburing systemd ]
-    ++ optionals stdenv.isDarwin [ libiconv ]
-    ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
-    ++ optional (enablePrinting && stdenv.isLinux) cups
-    ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
-    ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
-    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
-    ++ optional enableAcl acl
-    ++ optional enableLibunwind libunwind
-    ++ optional enablePam pam;
+  ] ++ lib.optionals stdenv.isLinux [ liburing systemd ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ]
+    ++ lib.optionals enableLDAP [ openldap.dev python3Packages.markdown ]
+    ++ lib.optional (enablePrinting && stdenv.isLinux) cups
+    ++ lib.optional enableMDNS avahi
+    ++ lib.optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
+    ++ lib.optional enableRegedit ncurses
+    ++ lib.optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
+    ++ lib.optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
+    ++ lib.optional enableAcl acl
+    ++ lib.optional enableLibunwind libunwind
+    ++ lib.optional enablePam pam;
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -138,18 +136,18 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ optional (!enableDomainController)
+  ] ++ lib.optional (!enableDomainController)
     "--without-ad-dc"
-  ++ optionals (!enableLDAP) [
+  ++ lib.optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
-  ] ++ optional enableLibunwind "--with-libunwind"
-    ++ optional enableProfiling "--with-profiling-data"
-    ++ optional (!enableAcl) "--without-acl-support"
-    ++ optional (!enablePam) "--without-pam"
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optional enableLibunwind "--with-libunwind"
+    ++ lib.optional enableProfiling "--with-profiling-data"
+    ++ lib.optional (!enableAcl) "--without-acl-support"
+    ++ lib.optional (!enablePam) "--without-pam"
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optionals stdenv.isAarch32 [
+  ] ++ lib.optionals stdenv.isAarch32 [
     # https://bugs.gentoo.org/683148
     "--jobs 1"
   ];
@@ -167,7 +165,7 @@ stdenv.mkDerivation rec {
 
   # Save asn1_compile and compile_et so they are available to run on the build
   # platform when cross-compiling
-  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$dev/bin"
     cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';

@@ -6,8 +6,6 @@
   # test dependencies
   xvfb-run, liberation_ttf, file, tesseract }:
 
-with lib;
-
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
   version = "2.12.8";
@@ -126,7 +124,7 @@ perlPackages.buildPerlPackage rec {
       make test
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A GUI to produce PDFs or DjVus from scanned documents";
     homepage = "http://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;

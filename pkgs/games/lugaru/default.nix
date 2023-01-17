@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitLab, cmake, openal, pkg-config, libogg,
   libvorbis, SDL2, makeWrapper, libpng, libjpeg_turbo, libGLU }:
 
-with lib;
-
 stdenv.mkDerivation rec {
 
   pname = "lugaru";
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Third person ninja rabbit fighting game";
     homepage = "https://osslugaru.gitlab.io";
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
 }

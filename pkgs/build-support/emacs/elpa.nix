@@ -2,8 +2,6 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc }:
 
-with lib;
-
 { pname
 , version
 , src

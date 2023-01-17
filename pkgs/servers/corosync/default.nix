@@ -6,8 +6,6 @@
 , enableSnmp ? false
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "corosync";
   version = "3.1.7";
@@ -21,10 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     kronosnet nss nspr libqb systemd.dev
-  ] ++ optional enableDbus dbus
-    ++ optional enableInfiniBandRdma rdma-core
-    ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net-snmp;
+  ] ++ lib.optional enableDbus dbus
+    ++ lib.optional enableInfiniBandRdma rdma-core
+    ++ lib.optional enableMonitoring libstatgrab
+    ++ lib.optional enableSnmp net-snmp;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -34,10 +32,10 @@ stdenv.mkDerivation rec {
     "--enable-qdevices"
     # allows Type=notify in the systemd service
     "--enable-systemd"
-  ] ++ optional enableDbus "--enable-dbus"
-    ++ optional enableInfiniBandRdma "--enable-rdma"
-    ++ optional enableMonitoring "--enable-monitoring"
-    ++ optional enableSnmp "--enable-snmp";
+  ] ++ lib.optional enableDbus "--enable-dbus"
+    ++ lib.optional enableInfiniBandRdma "--enable-rdma"
+    ++ lib.optional enableMonitoring "--enable-monitoring"
+    ++ lib.optional enableSnmp "--enable-snmp";
 
   installFlags = [
     "sysconfdir=$(out)/etc"
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = optionalString enableInfiniBandRdma ''
+  preConfigure = lib.optionalString enableInfiniBandRdma ''
     # configure looks for the pkg-config files
     # of librdmacm and libibverbs
     # Howver, rmda-core does not provide a pkg-config file
@@ -66,10 +64,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) pacemaker;
+    inherit (lib.nixosTests) pacemaker;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://corosync.org/";
     description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;

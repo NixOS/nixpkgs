@@ -32,8 +32,6 @@
 # changes on later launches, but consider extending the wrapper with your
 # desired options instead.
 
-with lib;
-
 let
   callPackage = newScope self;
 
@@ -91,7 +89,7 @@ let
     df-hashes = lib.importJSON ./game.json;
 
     # Aliases for the latest Dwarf Fortress and the selected Therapist install
-    dwarf-fortress = getAttr (versionToName latestVersion) df-games;
+    dwarf-fortress = lib.getAttr (versionToName latestVersion) df-games;
     inherit dwarf-therapist-original;
     dwarf-therapist = dwarf-fortress.dwarf-therapist;
     dwarf-fortress-original = dwarf-fortress.dwarf-fortress;

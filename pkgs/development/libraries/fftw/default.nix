@@ -14,9 +14,7 @@
 , withDoc ? stdenv.cc.isGNU
 }:
 
-with lib;
-
-assert elem precision [ "single" "double" "long-double" "quad-precision" ];
+assert lib.elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 stdenv.mkDerivation rec {
   pname = "fftw-${precision}";
@@ -31,32 +29,32 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "man" ]
-    ++ optional withDoc "info"; # it's dev-doc only
+    ++ lib.optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
   nativeBuildInputs = [ gfortran ];
 
-  buildInputs = optionals stdenv.cc.isClang [
+  buildInputs = lib.optionals stdenv.cc.isClang [
     # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
     llvmPackages.openmp
-  ] ++ optional enableMpi mpi;
+  ] ++ lib.optional enableMpi mpi;
 
   configureFlags =
     [ "--enable-shared"
       "--enable-threads"
     ]
-    ++ optional (precision != "double") "--enable-${precision}"
+    ++ lib.optional (precision != "double") "--enable-${precision}"
     # all x86_64 have sse2
     # however, not all float sizes fit
-    ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ optional enableAvx "--enable-avx"
-    ++ optional enableAvx2 "--enable-avx2"
-    ++ optional enableAvx512 "--enable-avx512"
-    ++ optional enableFma "--enable-fma"
+    ++ lib.optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
+    ++ lib.optional enableAvx "--enable-avx"
+    ++ lib.optional enableAvx2 "--enable-avx2"
+    ++ lib.optional enableAvx512 "--enable-avx512"
+    ++ lib.optional enableFma "--enable-fma"
     ++ [ "--enable-openmp" ]
-    ++ optional enableMpi "--enable-mpi"
+    ++ lib.optional enableMpi "--enable-mpi"
     # doc generation causes Fortran wrapper generation which hard-codes gcc
-    ++ optional (!withDoc) "--disable-doc";
+    ++ lib.optional (!withDoc) "--disable-doc";
 
   enableParallelBuilding = true;
 

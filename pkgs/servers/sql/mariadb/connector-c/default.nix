@@ -4,8 +4,6 @@
 , version, sha256, ...
 }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
@@ -38,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
-  preConfigure = optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
   '';
 
@@ -59,7 +57,7 @@ stdenv.mkDerivation {
     install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Client library that can be used to connect to MySQL or MariaDB";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ globin ];

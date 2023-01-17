@@ -6,8 +6,6 @@
 , e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon
 }:
 
-with lib;
-
 let
   pname = "gitkraken";
   version = "9.0.0";
@@ -33,7 +31,7 @@ let
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gitkraken.com/";
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -48,7 +46,7 @@ let
     dontBuild = true;
     dontConfigure = true;
 
-    libPath = makeLibraryPath [
+    libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       curlWithGnuTls
       udev

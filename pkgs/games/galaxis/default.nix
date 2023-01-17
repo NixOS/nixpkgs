@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, ncurses, xmlto }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "galaxis";
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Rescue lifeboats lost in interstellar space";
     longDescription = ''
       Lifeboats from a crippled interstellar liner are adrift in a starfield. To

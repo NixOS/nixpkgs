@@ -15,7 +15,6 @@
 , xorgserver
 }:
 
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "geis";
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A library for input gesture recognition";
     homepage = "https://launchpad.net/geis";
     license = licenses.gpl2;

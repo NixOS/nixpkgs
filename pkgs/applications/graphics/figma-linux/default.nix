@@ -6,7 +6,6 @@
 , dpkg
 , ...
 }:
-with lib;
 stdenv.mkDerivation rec {
   pname = "figma-linux";
   version = "0.10.0";
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
           --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${pname}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];

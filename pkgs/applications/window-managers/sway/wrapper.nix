@@ -13,8 +13,6 @@
 
 assert extraSessionCommands != "" -> withBaseWrapper;
 
-with lib;
-
 let
   sway = sway-unwrapped.override { inherit isNixOS enableXWayland; };
   baseWrapper = writeShellScriptBin "sway" ''
@@ -34,24 +32,24 @@ let
 in symlinkJoin {
   name = "sway-${sway.version}";
 
-  paths = (optional withBaseWrapper baseWrapper)
+  paths = (lib.optional withBaseWrapper baseWrapper)
     ++ [ sway ];
 
   strictDeps = false;
   nativeBuildInputs = [ makeWrapper ]
-    ++ (optional withGtkWrapper wrapGAppsHook);
+    ++ (lib.optional withGtkWrapper wrapGAppsHook);
 
-  buildInputs = optionals withGtkWrapper [ gdk-pixbuf glib gtk3 ];
+  buildInputs = lib.optionals withGtkWrapper [ gdk-pixbuf glib gtk3 ];
 
   # We want to run wrapProgram manually
   dontWrapGApps = true;
 
   postBuild = ''
-    ${optionalString withGtkWrapper "gappsWrapperArgsHook"}
+    ${lib.optionalString withGtkWrapper "gappsWrapperArgsHook"}
 
     wrapProgram $out/bin/sway \
-      ${optionalString withGtkWrapper ''"''${gappsWrapperArgs[@]}"''} \
-      ${optionalString (extraOptions != []) "${concatMapStrings (x: " --add-flags " + x) extraOptions}"}
+      ${lib.optionalString withGtkWrapper ''"''${gappsWrapperArgs[@]}"''} \
+      ${lib.optionalString (extraOptions != []) "${lib.concatMapStrings (x: " --add-flags " + x) extraOptions}"}
   '';
 
   passthru = {

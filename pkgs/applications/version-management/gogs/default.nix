@@ -4,7 +4,6 @@
 , pamSupport ? true
 }:
 
-with lib;
 
 buildGoModule rec {
   pname = "gogs";
@@ -27,19 +26,19 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper openssh ];
 
-  buildInputs = optional pamSupport pam;
+  buildInputs = lib.optional pamSupport pam;
 
   tags =
-    (  optional sqliteSupport "sqlite"
-    ++ optional pamSupport "pam");
+    (  lib.optional sqliteSupport "sqlite"
+    ++ lib.optional pamSupport "pam");
 
   postInstall = ''
 
     wrapProgram $out/bin/gogs \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A painless self-hosted Git service";
     homepage = "https://gogs.io";
     license = licenses.mit;

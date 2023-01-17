@@ -13,10 +13,8 @@
 , df-hashes
 }:
 
-with lib;
-
 let
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
+  libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
   # Other srcs are avilable like 32-bit mac & win, but I have only
@@ -30,21 +28,21 @@ let
     i686-cygwin = "win32";
   };
 
-  dfVersionTriple = splitVersion dfVersion;
-  baseVersion = elemAt dfVersionTriple 1;
-  patchVersion = elemAt dfVersionTriple 2;
+  dfVersionTriple = lib.splitVersion dfVersion;
+  baseVersion = lib.elemAt dfVersionTriple 1;
+  patchVersion = lib.elemAt dfVersionTriple 2;
 
   game =
-    if hasAttr dfVersion df-hashes
-    then getAttr dfVersion df-hashes
+    if lib.hasAttr dfVersion df-hashes
+    then lib.getAttr dfVersion df-hashes
     else throw "Unknown Dwarf Fortress version: ${dfVersion}";
   dfPlatform =
-    if hasAttr stdenv.hostPlatform.system platforms
-    then getAttr stdenv.hostPlatform.system platforms
+    if lib.hasAttr stdenv.hostPlatform.system platforms
+    then lib.getAttr stdenv.hostPlatform.system platforms
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
   sha256 =
-    if hasAttr dfPlatform game
-    then getAttr dfPlatform game
+    if lib.hasAttr dfPlatform game
+    then lib.getAttr dfPlatform game
     else throw "Unsupported dfPlatform: ${dfPlatform}";
 
 in
@@ -68,20 +66,20 @@ stdenv.mkDerivation {
 
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath "${libpath}" \
       $exe
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # My custom unfucked dwarfort.exe for macOS. Can't use
     # absolute paths because original doesn't have enough
     # header space. Someone plz break into Tarn's house & put
     # -headerpad_max_install_names into his LDFLAGS.
 
-    ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
-    ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
-    ln -s ${getLib fmodex}/lib/libfmodex.dylib $out/libs
+    ln -s ${lib.getLib ncurses}/lib/libncurses.dylib $out/libs
+    ln -s ${lib.getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
+    ln -s ${lib.getLib fmodex}/lib/libfmodex.dylib $out/libs
 
     install_name_tool \
       -change /usr/lib/libncurses.5.4.dylib \
@@ -99,7 +97,7 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A single-player fantasy game with a randomly generated adventure world";
     homepage = "https://www.bay12games.com/dwarves/";
     license = licenses.unfreeRedistributable;

@@ -12,8 +12,6 @@
 , pcreSupport ? false, pcre ? null
 }:
 
-with lib;
-
 assert pcreSupport -> pcre != null;
 
 stdenv.mkDerivation rec {
@@ -28,13 +26,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib ncurses libmpdclient boost ]
-    ++ optional pcreSupport pcre;
+    ++ lib.optional pcreSupport pcre;
   nativeBuildInputs = [ meson ninja pkg-config gettext ];
 
   mesonFlags = [
     "-Dlirc=disabled"
     "-Ddocumentation=disabled"
-  ] ++ optional (!pcreSupport) "-Dregex=disabled";
+  ] ++ lib.optional (!pcreSupport) "-Dregex=disabled";
 
   meta = with lib; {
     description = "Curses-based interface for MPD (music player daemon)";

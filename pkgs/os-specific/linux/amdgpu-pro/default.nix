@@ -16,8 +16,6 @@
 , kernel ? null
 }:
 
-with lib;
-
 let
 
   bitness = if stdenv.is64bit then "64" else "32";
@@ -54,7 +52,7 @@ in stdenv.mkDerivation rec {
     sourceRoot=root
   '';
 
-  passthru = optionalAttrs (kernel != null) {
+  passthru = lib.optionalAttrs (kernel != null) {
     kmod = stdenv.mkDerivation rec {
       inherit version src postUnpack;
       name = "${pname}-${version}-kmod-${kernel.dev.version}";
@@ -79,7 +77,7 @@ in stdenv.mkDerivation rec {
         popd
       '';
 
-      makeFlags = optionalString (kernel != null) "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";
+      makeFlags = lib.optionalString (kernel != null) "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";
 
       installPhase = ''
         runHook preInstall
@@ -112,7 +110,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "vulkan" ];
 
-  depLibPath = makeLibraryPath [
+  depLibPath = lib.makeLibraryPath [
     stdenv.cc.cc.lib
     zlib
     libxcb
@@ -150,7 +148,7 @@ in stdenv.mkDerivation rec {
     # short name to allow replacement below
     ln -s lib/dri $out/dri
 
-  '' + optionalString (stdenv.is64bit) ''
+  '' + lib.optionalString (stdenv.is64bit) ''
     mkdir -p $out/etc
     pushd etc
     cp -r modprobe.d udev amd $out/etc

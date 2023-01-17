@@ -33,8 +33,6 @@ let
     };
 in
 
-with lib;
-
 stdenv.mkDerivation {
   name = "${pname}-unwrapped-${version}";
   inherit pname version;
@@ -49,8 +47,8 @@ stdenv.mkDerivation {
     [ libX11 libXt libXft ncurses  # required to build the terminfo file
       fontconfig freetype libXrender
       libptytty
-    ] ++ optional perlSupport perl
-      ++ optional gdkPixbufSupport gdk-pixbuf;
+    ] ++ lib.optional perlSupport perl
+      ++ lib.optional gdkPixbufSupport gdk-pixbuf;
 
   outputs = [ "out" "terminfo" ];
 
@@ -73,14 +71,14 @@ stdenv.mkDerivation {
     ./patches/9.06-font-width.patch
   ]) ++ [
     ./patches/256-color-resources.patch
-  ]++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
+  ]++ lib.optional stdenv.isDarwin ./patches/makefile-phony.patch;
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"
     "--enable-256-color"
-    (enableFeature perlSupport "perl")
-    (enableFeature unicode3Support "unicode3")
-  ] ++ optional emojiSupport "--enable-wide-glyphs";
+    (lib.enableFeature perlSupport "perl")
+    (lib.enableFeature unicode3Support "unicode3")
+  ] ++ lib.optional emojiSupport "--enable-wide-glyphs";
 
   LDFLAGS = [ "-lfontconfig" "-lXrender" "-lpthread" ];
   CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
@@ -106,7 +104,7 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
-  meta = {
+  meta = with lib; {
     inherit description;
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
     downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";

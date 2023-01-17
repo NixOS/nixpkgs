@@ -74,8 +74,6 @@ assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
 assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
   "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
 
-with lib;
-
 let
   # some python packages need legacy ciphers, so we're using openssl 3, but with that config
   # null check for Minimal
@@ -107,25 +105,25 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
-  nativeBuildInputs = optionals (!stdenv.isDarwin) [
+  nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [
     autoreconfHook
     pkg-config
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
-  ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
+  ] ++ lib.optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
   ];
 
-  buildInputs = filter (p: p != null) ([
+  buildInputs = lib.filter (p: p != null) ([
     zlib bzip2 expat xz libffi libxcrypt gdbm sqlite readline ncurses openssl' ]
-    ++ optionals x11Support [ tcl tk libX11 xorgproto ]
-    ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
-    ++ optionals stdenv.isDarwin [ configd ])
-    ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
+    ++ lib.optionals x11Support [ tcl tk libX11 xorgproto ]
+    ++ lib.optionals (bluezSupport && stdenv.isLinux) [ bluez ]
+    ++ lib.optionals stdenv.isDarwin [ configd ])
+    ++ lib.optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
@@ -174,13 +172,13 @@ let
       # python's build doesn't differentiate between musl and glibc in its
       # abi detection, our wrapper should match.
       if stdenv.hostPlatform.isMusl then
-        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
+        lib.replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
         else parsed.abi.name;
     multiarch =
       if isDarwin then "darwin"
       else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
 
-    abiFlags = optionalString isPy37 "m";
+    abiFlags = lib.optionalString isPy37 "m";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
     pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
@@ -207,17 +205,17 @@ in with passthru; stdenv.mkDerivation {
     inherit sha256;
   };
 
-  prePatch = optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
-  '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
+  '' + lib.optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
     # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
-  patches = optionals (version == "3.10.9") [
+  patches = lib.optionals (version == "3.10.9") [
     # https://github.com/python/cpython/issues/100160
     ./3.10/asyncio-deprecation.patch
-  ] ++ optionals (version == "3.11.1") [
+  ] ++ lib.optionals (version == "3.11.1") [
     # https://github.com/python/cpython/issues/100160
     (fetchpatch {
       name = "asyncio-deprecation-3.11.patch";
@@ -237,18 +235,18 @@ in with passthru; stdenv.mkDerivation {
     # owner-writable, so venvs can be recreated without permission
     # errors.
     ./virtualenv-permissions.patch
-  ] ++ optionals mimetypesSupport [
+  ] ++ lib.optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
-  ] ++ optionals (pythonAtLeast "3.11") [
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
     ./3.11/darwin-libutil.patch
-  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
+  ] ++ lib.optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
-  ] ++ optionals (isPy3k && hasDistutilsCxxPatch && pythonOlder "3.12") [
+  ] ++ lib.optionals (isPy3k && hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
@@ -264,7 +262,7 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
-  ] ++ optionals (pythonOlder "3.12") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
@@ -274,17 +272,17 @@ in with passthru; stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
-  '' + optionalString mimetypesSupport ''
+  '' + lib.optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mailcap}"
-  '' + optionalString (x11Support && (tix != null)) ''
+  '' + lib.optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   env = {
-    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
+    CPPFLAGS = lib.concatStringsSep " " (map (p: "-I${lib.getDev p}/include") buildInputs);
+    LDFLAGS = lib.concatStringsSep " " (map (p: "-L${lib.getLib p}/lib") buildInputs);
+    LIBS = "${lib.optionalString (!stdenv.isDarwin) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
       "glibc" = "-lgcc_s";
       "musl" = "-lgcc_eh";
@@ -297,23 +295,23 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
-  ] ++ optionals (!static) [
+  ] ++ lib.optionals (!static) [
     "--enable-shared"
-  ] ++ optionals enableOptimizations [
+  ] ++ lib.optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ optionals enableLTO [
+  ] ++ lib.optionals enableLTO [
     "--with-lto"
-  ] ++ optionals (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     # This is unconditionally true starting in CPython 3.7.
     "--with-threads"
-  ] ++ optionals (sqlite != null && isPy3k) [
+  ] ++ lib.optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (openssl' != null) [
+  ] ++ lib.optionals (openssl' != null) [
     "--with-openssl=${openssl'.dev}"
-  ] ++ optionals (libxcrypt != null) [
+  ] ++ lib.optionals (libxcrypt != null) [
     "CFLAGS=-I${libxcrypt}/include"
     "LIBS=-L${libxcrypt}/lib"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
     "ac_cv_little_endian_double=yes"
@@ -334,26 +332,26 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ] ++ optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
-  ] ++ optionals tzdataSupport [
+  ] ++ lib.optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
-  ] ++ optional static "LDFLAGS=-static";
+  ] ++ lib.optional static "LDFLAGS=-static";
 
-  preConfigure = optionalString (pythonOlder "3.12") ''
+  preConfigure = lib.optionalString (pythonOlder "3.12") ''
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
-  '' + optionalString (isPy3k && pythonOlder "3.7") ''
+  '' + lib.optionalString (isPy3k && pythonOlder "3.7") ''
     # Determinism: The interpreter is patched to write null timestamps when compiling Python files
     #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.
     export DETERMINISTIC_BUILD=1;
-  '' + optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
   '' +
 
@@ -364,7 +362,7 @@ in with passthru; stdenv.mkDerivation {
   #
   # The Fedora wiki has a good article about their journey towards enabling this flag:
   # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
-  optionalString enableNoSemanticInterposition ''
+  lib.optionalString enableNoSemanticInterposition ''
     export CFLAGS_NODIST="-fno-semantic-interposition"
   '';
 
@@ -372,9 +370,9 @@ in with passthru; stdenv.mkDerivation {
 
   postInstall = let
     # References *not* to nuke from (sys)config files
-    keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
+    keep-references = lib.concatMapStringsSep " " (val: "-e ${val}") ([
       (placeholder "out") libxcrypt
-    ] ++ optionals tzdataSupport [
+    ] ++ lib.optionals tzdataSupport [
       tzdata
     ]);
   in ''
@@ -420,25 +418,25 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
-    '' + optionalString stripConfig ''
+    '' + lib.optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
-    '' + optionalString stripIdlelib ''
+    '' + lib.optionalString stripIdlelib ''
     # Strip IDLE (and turtledemo, which uses it)
     rm -R $out/bin/idle* $out/lib/python*/{idlelib,turtledemo}
-    '' + optionalString stripTkinter ''
+    '' + lib.optionalString stripTkinter ''
     rm -R $out/lib/python*/tkinter
-    '' + optionalString stripTests ''
+    '' + lib.optionalString stripTests ''
     # Strip tests
     rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
-    '' + optionalString includeSiteCustomize ''
+    '' + lib.optionalString includeSiteCustomize ''
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
 
-    '' + optionalString stripBytecode ''
+    '' + lib.optionalString stripBytecode ''
     # Determinism: deterministic bytecode
     # First we delete all old bytecode.
     find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
-    '' + optionalString rebuildBytecode ''
+    '' + lib.optionalString rebuildBytecode ''
     # Python 3.7 implements PEP 552, introducing support for deterministic bytecode.
     # compileall uses the therein introduced checked-hash method by default when
     # `SOURCE_DATE_EPOCH` is set.
@@ -487,7 +485,7 @@ in with passthru; stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.python.org";
     changelog = let
       majorMinor = lib.versions.majorMinor version;

@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, autoconf, automake, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "HoTT";
   repo = "Coq-HoTT";
   owner = "HoTT";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.14" "8.16"; out = coq.coq-version; }
   ] null;
   releaseRev = v: "V${v}";
@@ -20,6 +20,6 @@ with lib; mkCoqDerivation {
   meta = {
     homepage = "http://homotopytypetheory.org/";
     description = "Homotopy type theory";
-    maintainers = with maintainers; [ siddharthist ];
+    maintainers = with lib.maintainers; [ siddharthist ];
   };
 }

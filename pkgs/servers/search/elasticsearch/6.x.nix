@@ -10,11 +10,9 @@
 , zlib
 }:
 
-with lib;
-
 stdenv.mkDerivation (rec {
   version = elk6Version;
-  pname = "elasticsearch${optionalString (!enableUnfree) "-oss"}";
+  pname = "elasticsearch${lib.optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}.tar.gz";
@@ -38,7 +36,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre_headless util-linux ]
-             ++ optionals enableUnfree [ zlib libxcrypt ];
+             ++ lib.optionals enableUnfree [ zlib libxcrypt ];
 
   installPhase = ''
     mkdir -p $out
@@ -47,7 +45,7 @@ stdenv.mkDerivation (rec {
     chmod -x $out/bin/*.*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${makeBinPath [ util-linux gnugrep coreutils ]}" \
+      --prefix PATH : "${lib.makeBinPath [ util-linux gnugrep coreutils ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
@@ -55,17 +53,17 @@ stdenv.mkDerivation (rec {
 
   passthru = { inherit enableUnfree; };
 
-  meta = {
+  meta = with lib;{
     description = "Open Source, Distributed, RESTful Search Engine";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };
-} // optionalAttrs enableUnfree {
+} // lib.optionalAttrs enableUnfree {
   dontPatchELF = true;
   nativeBuildInputs = [ makeWrapper ]
-    ++ optional stdenv.isLinux autoPatchelfHook;
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
   runtimeDependencies = [ zlib ];
   postFixup = lib.optionalString stdenv.isLinux ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do

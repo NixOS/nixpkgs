@@ -2,13 +2,13 @@
 let
   inherit (pkgs) lib formats;
 in
-with lib;
+
 let
 
   evalFormat = format: args: def:
     let
       formatSet = format args;
-      config = formatSet.type.merge [] (imap1 (n: def: {
+      config = formatSet.type.merge [] (lib.imap1 (n: def: {
         # We check the input values, so that
         #  - we don't write nonsensical tests that will impede progress
         #  - the test author has a slightly more realistic view of the
@@ -31,7 +31,7 @@ let
     fi
   '';
 
-  runBuildTests = tests: pkgs.linkFarm "nixpkgs-pkgs-lib-format-tests" (mapAttrsToList (name: value: { inherit name; path = runBuildTest name value; }) (filterAttrs (name: value: value != null) tests));
+  runBuildTests = tests: pkgs.linkFarm "nixpkgs-pkgs-lib-format-tests" (lib.mapAttrsToList (name: value: { inherit name; path = runBuildTest name value; }) (lib.filterAttrs (name: value: value != null) tests));
 
 in runBuildTests {
 
@@ -132,7 +132,7 @@ in runBuildTests {
   };
 
   testIniListToValue = {
-    drv = evalFormat formats.ini { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
+    drv = evalFormat formats.ini { listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault {}); } {
       foo = {
         bar = [ null true "test" 1.2 10 ];
         baz = false;
@@ -180,7 +180,7 @@ in runBuildTests {
   };
 
   testKeyValueListToValue = {
-    drv = evalFormat formats.keyValue { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
+    drv = evalFormat formats.keyValue { listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault {}); } {
       bar = [ null true "test" 1.2 10 ];
       baz = false;
       qux = "qux";

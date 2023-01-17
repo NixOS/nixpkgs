@@ -1,10 +1,10 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation rec {
+ mkCoqDerivation rec {
   pname = "coq-record-update";
   owner = "tchajed";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.10" "8.16";  out = "0.3.1"; }
   ] null;
   release."0.3.1".sha256 = "sha256-DyGxO2tqmYZZluXN6Oy5Tw6fuLMyuyxonj8CCToWKkk=";
@@ -13,6 +13,6 @@ with lib; mkCoqDerivation rec {
   buildFlags = [ "NO_TEST=1" ];
   meta = {
     description = "Library to create Coq record update functions";
-    maintainers = with maintainers; [ ineol ];
+    maintainers = with lib.maintainers; [ ineol ];
   };
 }

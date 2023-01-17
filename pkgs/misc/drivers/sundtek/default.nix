@@ -1,10 +1,8 @@
 { fetchurl, lib, stdenv }:
 
-with lib;
-
 let
   version = "2016-01-26";
-  rpath = makeLibraryPath [ "$out/lib" "$out/bin" ];
+  rpath = lib.makeLibraryPath [ "$out/lib" "$out/bin" ];
   platform = with stdenv;
     if isx86_64 then "64bit"
     else
@@ -42,7 +40,7 @@ in
 
     preferLocalBuild = true;
 
-    meta = {
+    meta = with lib; {
       description = "Sundtek MediaTV driver";
       maintainers = [ maintainers.simonvandel ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

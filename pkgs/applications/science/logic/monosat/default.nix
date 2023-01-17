@@ -3,8 +3,6 @@
   # annoying and break the python library, so let's not bother for now
   includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
 
-with lib;
-
 let
   boolToCmake = x: if x then "ON" else "OFF";
 
@@ -52,14 +50,14 @@ let
       "-DCMAKE_SKIP_BUILD_RPATH=ON"
     ];
 
-    postInstall = optionalString includeJava ''
+    postInstall = lib.optionalString includeJava ''
       mkdir -p $out/share/java
       cp monosat.jar $out/share/java
     '';
 
     passthru = { inherit python; };
 
-    meta = {
+    meta = with lib; {
       description = "SMT solver for Monotonic Theories";
       platforms   = platforms.unix;
       license     = if includeGplCode then licenses.gpl2 else licenses.mit;

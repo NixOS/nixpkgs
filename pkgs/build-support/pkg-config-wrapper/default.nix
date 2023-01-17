@@ -10,8 +10,6 @@
 , extraPackages ? [], extraBuildCommands ? ""
 }:
 
-with lib;
-
 let
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
@@ -24,7 +22,7 @@ let
                                         (targetPlatform.config + "-");
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
 in
 
@@ -36,7 +34,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
+  outputs = [ "out" ] ++ lib.optionals propagateDoc ([ "man" ] ++ lib.optional (pkg-config ? doc) "doc");
 
   passthru = {
     inherit targetPrefix suffixSalt;
@@ -68,7 +66,7 @@ stdenv.mkDerivation {
 
       echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${lib.getBin pkg-config}/bin/${baseBinName}"
     ''
     # symlink in share for autoconf to find macros
 
@@ -99,9 +97,9 @@ stdenv.mkDerivation {
     ##
     ## Man page and doc support
     ##
-    + optionalString propagateDoc (''
+    + lib.optionalString propagateDoc (''
       ln -s ${pkg-config.man} $man
-    '' + optionalString (pkg-config ? doc) ''
+    '' + lib.optionalString (pkg-config ? doc) ''
       ln -s ${pkg-config.doc} $doc
     '')
 
@@ -116,7 +114,7 @@ stdenv.mkDerivation {
     + extraBuildCommands;
 
   env = {
-    shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
+    shell = lib.getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
     wrapperName = "PKG_CONFIG_WRAPPER";
     inherit targetPrefix suffixSalt baseBinName;
   };

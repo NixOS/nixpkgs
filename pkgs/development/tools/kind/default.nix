@@ -1,7 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-with lib;
-
 buildGoModule rec {
   pname = "kind";
   version = "0.17.0";
@@ -36,11 +34,11 @@ buildGoModule rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
-    license     = lib.licenses.asl20;
+    license     = licenses.asl20;
     platforms   = platforms.unix;
   };
 }

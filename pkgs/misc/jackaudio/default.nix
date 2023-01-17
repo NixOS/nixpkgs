@@ -12,7 +12,6 @@
 , prefix ? ""
 }:
 
-with lib;
 let
   inherit (python3Packages) python dbus-python;
   shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     aften AudioUnit CoreAudio Accelerate libobjc
   ];
 
@@ -52,9 +51,9 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
-  ] ++ optional (optDbus != null) "--dbus"
-    ++ optional (optLibffado != null) "--firewire"
-    ++ optional (optAlsaLib != null) "--alsa";
+  ] ++ lib.optional (optDbus != null) "--dbus"
+    ++ lib.optional (optLibffado != null) "--firewire"
+    ++ lib.optional (optAlsaLib != null) "--alsa";
 
   postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 
-  meta = {
+  meta = with lib; {
     description = "JACK audio connection kit, version 2 with jackdbus";
     homepage = "https://jackaudio.org";
     license = licenses.gpl2Plus;
