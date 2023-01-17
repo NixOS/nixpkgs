@@ -6,8 +6,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3ph782JHIcXVujIa+VdRiY5PS7Qcijbi1k8GJ2Vti0I=";
+    hash = "sha256-3ph782JHIcXVujIa+VdRiY5PS7Qcijbi1k8GJ2Vti0I=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
     "--enable-compact-fsts"

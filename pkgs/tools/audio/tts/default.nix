@@ -88,8 +88,8 @@ python.pkgs.buildPythonApplication rec {
     scipy
     soundfile
     tensorflow
-    torch-bin
-    torchaudio-bin
+    torch
+    torchaudio
     tqdm
     trainer
     umap-learn
