@@ -42,7 +42,6 @@ in
         '';
       };
 
-
       webUi = mkOption {
         type = types.bool;
         default = false;
