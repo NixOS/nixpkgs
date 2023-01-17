@@ -11,8 +11,8 @@ let
   manpages = fetchFromGitHub {
     owner = "flexibeast";
     repo = "execline-man-pages";
-    rev = "v2.9.0.0.1";
-    sha256 = "sha256-hT0YsuYJ3XSMYwtlwDR8PGlD8ng8XPky93rCprruHu8=";
+    rev = "v2.9.1.0.1";
+    sha256 = "nZzzQFMUPmIgPS3aAIgcORr/TSpaLf8UtzBUFD7blt8=";
   };
 
 in buildPackage {
