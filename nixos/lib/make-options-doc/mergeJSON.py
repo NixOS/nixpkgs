@@ -105,9 +105,6 @@ class Renderer(mistune.renderers.BaseRenderer):
         if kind not in admonitions:
             raise NotImplementedError(f"admonition {kind} not supported yet")
         tag = admonitions[kind]
-        # we don't keep whitespace here because usually we'll contain only
-        # a single paragraph and the original docbook string is no longer
-        # available to restore the trailer.
         return f"<{tag}><para>{text.rstrip()}</para></{tag}>"
     def block_quote(self, text):
         return f"<blockquote><para>{text}</para></blockquote>"
@@ -196,8 +193,7 @@ def convertMD(options: Dict[str, Any]) -> str:
     def convertString(path: str, text: str) -> str:
         try:
             rendered = md(text)
-            # keep trailing spaces so we can diff the generated XML to check for conversion bugs.
-            return rendered.rstrip() + text[len(text.rstrip()):]
+            return rendered.rstrip()
         except:
             print(f"error in {path}")
             raise
