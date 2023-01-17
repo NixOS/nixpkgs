@@ -22,6 +22,7 @@
 , enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
+, enableQt        ? false, libsForQt5
 , enableVtk       ? false, vtk
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
@@ -188,6 +189,7 @@ stdenv.mkDerivation {
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
+    ++ lib.optional enableQt libsForQt5.full
     ++ lib.optional enableVtk vtk
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
@@ -238,6 +240,7 @@ stdenv.mkDerivation {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
     (opencvFlag "TBB" enableTbb)
+    (opencvFlag "QT" enableQt)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
