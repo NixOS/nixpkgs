@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=1090,2154,2123,2034,2178,2048
+# shellcheck disable=1090,2154,2123,2034,2178,2048,2068,1091
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
@@ -515,7 +515,7 @@ findInputs() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
     local varRef="$varVar[$((targetOffset - hostOffset))]"
@@ -644,7 +644,7 @@ activatePackage() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
