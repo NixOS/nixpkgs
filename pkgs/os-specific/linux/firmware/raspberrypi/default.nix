@@ -1,8 +1,8 @@
 { lib, stdenvNoCC, fetchFromGitHub
 , verinfo ? {
     version = "2023-01-06";
-    rev = "refs/tags/1.20230106";
-    hash = "sha512-iKUR16RipN8BGAmXteTJUzd/P+m5gnbWCJ28LEzYfOTJnGSal63zI7LDQg/HIKXx9wMTARQKObeKn+7ioS4QkA==";
+    rev = "78852e166b4cf3ebb31d051e996d54792f0994b0";
+    hash = "sha256-tdaH+zZwmILNFBge2gMqtzj/1Hydj9cxhPvhw+7jTrU=";
   }
 }:
 
