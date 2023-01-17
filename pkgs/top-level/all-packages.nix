@@ -8896,6 +8896,8 @@ with pkgs;
 
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
+  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
+
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
