@@ -10,28 +10,25 @@
 , nixosTests
 }:
 
-let serenity = fetchFromGitHub {
-  owner = "SerenityOS";
-  repo = "serenity";
-  rev = "a0f3e2c9a2b82117aa7c1a3444ad0d31baa070d5";
-  hash = "sha256-8Xde59ZfdkTD39mYSv0lfFjBHFDWTUwfozE+Q9Yq6C8=";
-};
-in
 stdenv.mkDerivation {
   pname = "ladybird";
-  version = "unstable-2022-09-29";
+  version = "unstable-2023-01-17";
 
-  # Remember to update `serenity` too!
   src = fetchFromGitHub {
     owner = "SerenityOS";
-    repo = "ladybird";
-    rev = "d69ad7332477de33bfd1963026e057d55c6f222d";
-    hash = "sha256-XQj2Bohk8F6dGCAManOmmDP5b/SqEeZXZbLDYPfvi2E=";
+    repo = "serenity";
+    rev = "45e85d20b64862df119f643f24e2d500c76c58f3";
+    hash = "sha256-n2mLg9wNfdMGsJuGj+ukjto9qYjGOIz4cZjgvMGQUrY=";
   };
+
+  sourceRoot = "source/Ladybird";
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "MACOSX_BUNDLE TRUE" "MACOSX_BUNDLE FALSE"
+    # https://github.com/SerenityOS/serenity/issues/17062
+    substituteInPlace main.cpp \
+      --replace "./SQLServer/SQLServer" "$out/bin/SQLServer"
   '';
 
   nativeBuildInputs = [
@@ -47,17 +44,18 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DSERENITY_SOURCE_DIR=${serenity}"
     # Disable network operations
     "-DENABLE_TIME_ZONE_DATABASE_DOWNLOAD=false"
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
 
-  # error: use of undeclared identifier 'aligned_alloc'
-  NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") [
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
+  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") [
+    # error: use of undeclared identifier 'aligned_alloc'
     "-include mm_malloc.h"
     "-Daligned_alloc=_mm_malloc"
-  ]);
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/201254
   NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
