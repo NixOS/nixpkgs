@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MPvBf2SEQgC4UTO4hfz7ZVQbh3lTH270+P5GfT+6diM=";
+    hash = "sha256-MPvBf2SEQgC4UTO4hfz7ZVQbh3lTH270+P5GfT+6diM=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,9 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   # The cythonized extensions are required to exist in the pygeos/ directory
   # for the package to function. Therefore override of buildPhase was
@@ -36,11 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pygeos" ];
+  pythonImportsCheck = [
+    "pygeos"
+  ];
 
   meta = with lib; {
-    description = "Wraps GEOS geometry functions in numpy ufuncs.";
+    description = "Wraps GEOS geometry functions in numpy ufuncs";
     homepage = "https://github.com/pygeos/pygeos";
+    changelog = "https://github.com/pygeos/pygeos/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nialov ];
   };
