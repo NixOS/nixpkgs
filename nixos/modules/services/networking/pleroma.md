@@ -134,6 +134,7 @@ services.nginx = {
   recommendedTlsSettings = true;
   recommendedOptimisation = true;
   recommendedGzipSettings = true;
+  recommendedProxySettings = true;
 
   recommendedProxySettings = false;
   # NOTE: if enabled, the NixOS proxy optimizations will override the Pleroma
