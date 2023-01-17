@@ -6,6 +6,8 @@ let
     isString
     isPath
     isAttrs
+    dirOf
+    baseNameOf
     typeOf
     seq
     split
@@ -122,8 +124,6 @@ let
         else go ([ (baseNameOf path) ] ++ components) (dirOf path);
     in go [];
 
-
-
 in /* No rec! Add dependencies on this file at the top. */ {
 
   /* Append a subpath string to a path.
@@ -175,58 +175,58 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
   difference = paths:
     let
-      # Deconstruct every path into its root + subpath
-      deconstructed = mapAttrsToList (name: value:
+      # Deconstruct every path into its root and subpath
+      deconstructedPaths = mapAttrsToList (name: value:
         # Check each item to be an actual path
-        assert assertMsg (isPath value) "lib.path.difference: Given attribute ${name} is of type ${typeOf value}, but a path value was expected";
+        assert assertMsg (isPath value) "lib.path.difference: Attribute ${name} is of type ${typeOf value}, but a path was expected";
         deconstructPath value // { inherit name value; }
       ) paths;
 
-      first =
+      firstPath =
         assert assertMsg
           (paths != {})
-          "lib.path.difference: An empty attribute set was given, but was expecting a non-empty attribute set";
-        head deconstructed;
+          "lib.path.difference: An empty attribute set was given, but a non-empty attribute set was expected";
+        head deconstructedPaths;
 
       # The common root to all paths, errors if there are different roots
       commonRoot =
         # Fast happy path in case all roots are the same
-        if all (dec: dec.root == first.root) deconstructed then first.root
+        if all (path: path.root == firstPath.root) deconstructedPaths then firstPath.root
         # Slower sad path when that's not the case and we need to throw an error
         else let
           trigger = foldl'
-            (skip: dec:
-              if dec.root == first.root then skip
-              else throw "lib.path.difference: Path ${first.name} = ${toString first.value} (root ${toString first.root}) has a different filesystem root than path ${toString dec.name} = ${toString dec.value} (root ${toString dec.root})")
+            (skip: path:
+              if path.root == firstPath.root then skip
+              else throw "lib.path.difference: Path ${firstPath.name} = ${toString firstPath.value} (root ${toString firstPath.root}) has a different filesystem root than path ${toString path.name} = ${toString path.value} (root ${toString path.root})")
             null
-            deconstructed;
+            deconstructedPaths;
           fallbackAbort =
             abort "lib.path.difference: This should never happen and indicates a bug! Some paths don't have the same filesystem root but it couldn't be found!";
         in seq trigger fallbackAbort;
 
-      goCommonAncestorLength = level:
-        let headComponent = elemAt first.components level; in
-        if all (dec:
-            # If all paths have another level of components
-            length dec.components > level
-            # And they all match
-            && elemAt dec.components level == headComponent
-          ) deconstructed
-        then goCommonAncestorLength (level + 1)
-        else level;
-
       commonAncestorLength =
-        # Ensure that we have a common root before trying to find a common ancestor
-        # If we didn't do this one could evaluate `relativePaths` without an error even when there's no common root
-        seq commonRoot
-        (goCommonAncestorLength 0);
+        let
+          go = index:
+            let firstComponent = elemAt firstPath.components index; in
+            if all (path:
+                # If all paths have another level of components
+                length path.components > index
+                # And they all match
+                && elemAt path.components index == firstComponent
+              ) deconstructedPaths
+            then go (index + 1)
+            else index;
+        in
+          # Ensure that we have a common root before trying to find a common ancestor
+          # If we didn't do this one could evaluate `relativePaths` without an error even when there's no common root
+          seq commonRoot (go 0);
 
       commonAncestor = commonRoot
-        + ("/" + joinRelPath (take commonAncestorLength first.components));
+        + ("/" + joinRelPath (take commonAncestorLength firstPath.components));
 
-      subpaths = listToAttrs (map (dec:
-        nameValuePair dec.name (joinRelPath (drop commonAncestorLength dec.components))
-      ) deconstructed);
+      subpaths = listToAttrs (map (path:
+        nameValuePair path.name (joinRelPath (drop commonAncestorLength path.components))
+      ) deconstructedPaths);
     in
     assert assertMsg
       (isAttrs paths)
