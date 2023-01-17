@@ -49,7 +49,7 @@ let
 
     swift-unwrapped = callPackage ./compiler {
       inherit (darwin) DarwinTools cctools sigtool;
-      inherit (apple_sdk) CLTools_Executables;
+      inherit (apple_sdk) MacOSX-SDK CLTools_Executables;
       inherit (apple_sdk.frameworks) CoreServices Foundation Combine;
     };
 
