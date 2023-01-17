@@ -6020,6 +6020,12 @@
     githubId = 55025025;
     name = "Feather Lin";
   };
+  IGI-111 = {
+    email = "igi-111@protonmail.com";
+    github = "IGI-111";
+    githubId = 7190144;
+    name = "IGI-111";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
