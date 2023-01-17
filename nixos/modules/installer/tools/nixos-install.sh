@@ -193,9 +193,11 @@ touch "$mountPoint/etc/NIXOS"
 # the root with `nixos-enter`.
 # Without this the bootloader installation may fail due to options that
 # contain paths referenced during evaluation, like initrd.secrets.
-mount --rbind --mkdir "$mountPoint" "$mountPoint$mountPoint"
-mount --make-rslave "$mountPoint$mountPoint"
-trap 'umount -R "$mountPoint$mountPoint" && rmdir "$mountPoint$mountPoint"' EXIT
+if (( EUID == 0 )); then
+    mount --rbind --mkdir "$mountPoint" "$mountPoint$mountPoint"
+    mount --make-rslave "$mountPoint$mountPoint"
+    trap 'umount -R "$mountPoint$mountPoint" && rmdir "$mountPoint$mountPoint"' EXIT
+fi
 
 # Switch to the new system configuration.  This will install Grub with
 # a menu default pointing at the kernel/initrd/etc of the new
