@@ -98,7 +98,7 @@ in
 
 {
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
-  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; });
+  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; inherit lib; });
 
   outputs-no-out = runCommand "outputs-no-out-assert" {
     result = testers.testBuildFailure (stdenv.mkDerivation {
@@ -158,7 +158,7 @@ in
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
 
-    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; });
+    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; inherit lib; });
 
     test-cc-wrapper-substitutions = ccWrapperSubstitutionsTest {
       name = "test-cc-wrapper-substitutions-structuredAttrsByDefault";
