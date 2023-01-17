@@ -2,14 +2,14 @@
 
 let
   verinfo = {
-    version = "2022-07-06";
+    version = "2022-07-14";
     btfw = {
-      rev = "dd840d991939f5046959b8c564596c7228f9d41d";
-      hash = "sha512-XvF6IHDoKBJkSs0Wyt8O1vcCMpSNS9WSYopn0+EyCr4btABGsHWTkgxb4nQbd+VbE6Ls2dcKr+c+X6aw/y1jhQ==";
+      rev = "31ad68831357d2019624004f1f0846475671088f";
+      hash = "sha256-wrNUD6FWD3Zsl3xo3ey4F/+v3Um8mylRvhL7N49NeiA=";
     };
     wififw = {
-      rev = "541e5a05d152e7e6f0d9be45622e4a3741e51c02";
-      hash = "sha512-0erVWiFom0V5AMu+XlolJnY9Q5/RCFlZwUovMBMNdEPb+L5rHcCdrA7zehDX1oRNe8DPb4S5gjny0iG/G7G6NQ==";
+      rev = "d9c88346cab86e23394ebf6cb6cb3069602d29f4";
+      hash = "sha256-1OqFWJMcQnQ03HXB2Kb2Tni+iao6Si3D5s/H1jLaK00=";
     };
   };
 in
