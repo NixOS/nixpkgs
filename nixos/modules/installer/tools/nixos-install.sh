@@ -188,6 +188,15 @@ nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
 mkdir -m 0755 -p "$mountPoint/etc"
 touch "$mountPoint/etc/NIXOS"
 
+# Create a bind mount for each of the mount points inside the target file
+# system. This preserves the validity of their absolute paths after changing
+# the root with `nixos-enter`.
+# Without this the bootloader installation may fail due to options that
+# contain paths referenced during evaluation, like initrd.secrets.
+mount --rbind --mkdir "$mountPoint" "$mountPoint$mountPoint"
+mount --make-rslave "$mountPoint$mountPoint"
+trap 'umount -R "$mountPoint$mountPoint" && rmdir "$mountPoint$mountPoint"' EXIT
+
 # Switch to the new system configuration.  This will install Grub with
 # a menu default pointing at the kernel/initrd/etc of the new
 # configuration.
