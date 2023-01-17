@@ -1,6 +1,5 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
-, poetry ? null
 , poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
@@ -143,7 +142,7 @@ lib.makeScope pkgs.newScope (self: {
       };
       getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-      poetryPkg = poetry.override { inherit python; };
+      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; };
 
       scripts = pyProject.tool.poetry.scripts or { };
       hasScripts = scripts != { };
