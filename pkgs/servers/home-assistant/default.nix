@@ -75,6 +75,16 @@ let
         checkInputs = old.checkInputs ++ [ self.nose ];
       });
 
+      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
+        version = "0.33";
+        src = fetchFromGitHub {
+          owner = "ndokter";
+          repo = "dsmr_parser";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
+        };
+      });
+
       gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
         version = "4.0.0";
         src = fetchFromGitHub {
