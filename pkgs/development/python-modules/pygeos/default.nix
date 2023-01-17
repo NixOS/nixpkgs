@@ -17,12 +17,6 @@ buildPythonPackage rec {
     sha256 = "sha256-MPvBf2SEQgC4UTO4hfz7ZVQbh3lTH270+P5GfT+6diM=";
   };
 
-  patches = [
-    # Adapt https://github.com/shapely/shapely/commit/4889bd2d72ff500e51ba70d5b954241878349562,
-    # backporting to pygeos
-    ./fix-for-geos-3-11.patch
-  ];
-
   nativeBuildInputs = [
     geos # for geos-config
     cython
