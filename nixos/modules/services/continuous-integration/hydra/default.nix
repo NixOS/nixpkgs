@@ -99,8 +99,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.hydra_unstable;
-        defaultText = literalExpression "pkgs.hydra_unstable";
+        default = pkgs.hydra;
+        defaultText = literalExpression "pkgs.hydra";
         description = lib.mdDoc "The Hydra package.";
       };
 

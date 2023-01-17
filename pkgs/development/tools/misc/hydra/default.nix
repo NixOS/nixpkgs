@@ -126,7 +126,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-12-23";
+  version = "unstable-2022-12-23";
 
   src = fetchFromGitHub {
     owner = "NixOS";
@@ -243,7 +243,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit nix perlDeps;
-    tests.basic = nixosTests.hydra.hydra_unstable;
+    tests.basic = nixosTests.hydra.hydra;
   };
 
   meta = with lib; {

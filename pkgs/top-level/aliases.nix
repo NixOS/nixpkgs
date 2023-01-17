@@ -630,7 +630,8 @@ mapAliases ({
   htmlTidy = throw "'htmlTidy' has been renamed to/replaced by 'html-tidy'"; # Converted to throw 2022-02-22
   ht-rust = xh; # Added 2021-02-13
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra_unstable` now"; # Added 2020-04-06
-  hydra-unstable = hydra_unstable; # added 2022-05-10
+  hydra_unstable = hydra; # added 2023-01-17
+  hydra-unstable = hydra; # added 2022-05-10
   hyperspace-cli = throw "hyperspace-cli is out of date, and has been deprecated upstream in favour of using the individual repos instead"; # Added 2022-08-29
 
   ### I ###
