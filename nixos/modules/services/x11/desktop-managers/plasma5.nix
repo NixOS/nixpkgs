@@ -401,7 +401,18 @@ in
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
 
-      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+      environment.sessionVariables = {
+        PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+
+        # Needed for things that depend on other store.kde.org packages to install correctly,
+        # notably Plasma look-and-feel packages (a.k.a. Global Themes)
+        #
+        # FIXME: this is annoyingly impure and should really be fixed at source level somehow,
+        # but kpackage is a library so we can't just wrap the one thing invoking it and be done.
+        # This also means things won't work for people not on Plasma, but at least this way it
+        # works for SOME people.
+        KPACKAGE_DEP_RESOLVERS_PATH = "${pkgs.plasma5Packages.frameworkintegration.out}/libexec/kf5/kpackagehandlers";
+      };
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
