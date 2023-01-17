@@ -147,7 +147,9 @@ rec {
   # We use androidndk from the previous stage, else we waste time or get cycles
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
-  libraries = runCommand "bionic-prebuilt" {} ''
+  libraries = runCommand "bionic-prebuilt" {
+     outputs = [ "headers" "out" ];
+  } ''
     lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
     if [ ! -d $lpath ]; then
       echo "NDK does not contain libraries for SDK version ${sdkVer} <$lpath>"
@@ -157,5 +159,6 @@ rec {
     cp $lpath/*.so $lpath/*.a $out/lib
     chmod +w $out/lib/*
     cp $lpath/* $out/lib
+    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/include $headers
   '';
 }
