@@ -1,26 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade, libsForQt5, vtkWithQt5}:
+{ blas
+, cmake
+, fetchFromGitHub
+, gfortran
+, git
+, lib
+, liblapack
+, libsForQt5
+, libGL
+, libGLU
+, mpi
+, opencascade
+, pkg-config
+, stdenv
+, vtkWithQt5
+, libtiff
+, libSM
+, libXt
+, tbb
+}:
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
-  version = "9.0";
+  version = "unstable-2022-08-30";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
     repo = "elmerfem";
-    rev = "release-${version}";
-    sha256 = "VK7jvu4s5d7k0c39XqY9dEzg/vXtX5Yr/09VcuZVQ9A=";
+    rev = "3eafebb4a0287c435376207e15003bf32ffb11e3";
+    hash = "sha256-2lVJmbFBDnUo+bw/AILzUncOJM4B7eAW0mosmsAWANI=";
   };
+
+  cmakeFlags = [
+    "-DELMER_INSTALL_LIB_DIR=${placeholder "out"}/lib"
+    "-DWITH_OpenMP:BOOLEAN=TRUE"
+    "-DWITH_MPI:BOOLEAN=TRUE"
+    "-DWITH_QT5:BOOLEAN=TRUE"
+    "-DWITH_OCC:BOOLEAN=TRUE"
+    "-DWITH_VTK:BOOLEAN=TRUE"
+    "-DWITH_ELMERGUI:BOOLEAN=TRUE"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
+  ];
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
     cmake
     gfortran
-    pkg-config
     libsForQt5.wrapQtAppsHook
+    pkg-config
   ];
+
   buildInputs = [
-    mpi
     blas
     liblapack
     libsForQt5.qtbase
@@ -28,41 +60,21 @@ stdenv.mkDerivation rec {
     libsForQt5.qwt
     libGL
     libGLU
+    mpi
     opencascade
     vtkWithQt5
-  ];
-
-  preConfigure = ''
-    patchShebangs ./
-  '';
-
-  patches = [
-    ./patches/0001-fix-import-of-QPainterPath.patch
-    ./patches/0002-fem-rename-loopvars-to-avoid-redefinition.patch
-    ./patches/0003-ignore-qwt_compat.patch
-  ];
-
-  storepath = placeholder "out";
-
-  cmakeFlags = [
-  "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
-  "-DWITH_OpenMP:BOOLEAN=TRUE"
-  "-DWITH_MPI:BOOLEAN=TRUE"
-  "-DWITH_QT5:BOOLEAN=TRUE"
-  "-DWITH_OCC:BOOLEAN=TRUE"
-  "-DWITH_VTK:BOOLEAN=TRUE"
-  "-DWITH_ELMERGUI:BOOLEAN=TRUE"
-  "-DCMAKE_INSTALL_LIBDIR=lib"
-  "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
+    libtiff
+    libSM
+    libXt
+    tbb
   ];
 
   meta = with lib; {
     homepage = "https://elmerfem.org/";
     description = "A finite element software for multiphysical problems";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wulfsta broke ];
+    maintainers = with maintainers; [ broke wulfsta ];
     license = licenses.lgpl21;
+    mainProgram = "ElmerGUI";
   };
-
 }
