@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook flex ];
 
-  enableParallelBuilding = true;
+  # occasional failures involving `lexer.o`
+  #enableParallelBuilding = true;
 
   # On darwin the tests depend on the installed libraries because of install_name.
   doInstallCheck = true;
