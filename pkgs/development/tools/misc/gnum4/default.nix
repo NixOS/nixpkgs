@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
 
+  postPatch = ''
+    patchShebangs configure
+  '';
+
   strictDeps = true;
   enableParallelBuilding = true;
 
