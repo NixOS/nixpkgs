@@ -8,7 +8,19 @@ cargoSetupPostUnpackHook() {
     # it writable. If we're using a tarball, the unpackFile hook already handles
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
-        unpackFile "$cargoDeps"
+        # if the source is a directory (for example, if the vendor dir is built by import-cargo-lock.nix)
+        # then unpackFile just copies the directory, preserving permissions
+        #
+        # if the directory comes from the nix store or contains symlinks into it,
+        # this results in readonly files
+        #
+        # to make it writable, we copy it manually here, resolving symlinks
+        if [ -d "$cargoDeps" ]; then
+          cp -pr -L --reflink=auto -- "$cargoDeps" "$(stripHash "$cargoDeps")"
+          chmod -R a+w "$(stripHash "$cargoDeps")"
+        else
+          unpackFile "$cargoDeps"
+        fi
         export cargoDepsCopy="$(realpath "$(stripHash $cargoDeps)")"
     else
         cargoDepsCopy="$(realpath "$(pwd)/$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}")"
