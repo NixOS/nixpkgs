@@ -11202,9 +11202,7 @@ with pkgs;
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
-  readstat = callPackage ../applications/science/math/readstat {
-    inherit (pkgs.darwin) libiconv;
-  };
+  readstat = callPackage ../applications/science/math/readstat { };
 
   redir = callPackage ../tools/networking/redir { };
 

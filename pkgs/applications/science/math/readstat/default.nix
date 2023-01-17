@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64)  [ libiconv ];
+  buildInputs = [ libiconv ];
 
   meta = {
     homepage = "https://github.com/WizardMac/ReadStat";
