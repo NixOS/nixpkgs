@@ -18704,6 +18704,8 @@ with pkgs;
 
   arsenal = callPackage ../tools/security/arsenal { };
 
+  asdcplib-carl = callPackage ../development/libraries/asdcplib-carl { };
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
@@ -19149,6 +19151,8 @@ with pkgs;
     callPackage ../development/libraries/dbus/make-dbus-conf.nix {
       inherit suidHelper serviceDirectories apparmor;
     };
+
+  dcpomatic = callPackage ../applications/video/dcpomatic { };
 
   dee = callPackage ../development/libraries/dee {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -20355,6 +20359,8 @@ with pkgs;
 
   lensfun = callPackage ../development/libraries/lensfun {};
 
+  leqm-nrt = callPackage ../development/libraries/leqm-nrt { };
+
   lesstif = callPackage ../development/libraries/lesstif { };
 
   leveldb = callPackage ../development/libraries/leveldb { };
@@ -20595,6 +20601,8 @@ with pkgs;
 
   libcutl = callPackage ../development/libraries/libcutl { };
 
+  libcxml = callPackage ../development/libraries/libcxml { };
+
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdatrie = callPackage ../development/libraries/libdatrie { };
@@ -20619,6 +20627,8 @@ with pkgs;
   libdc1394 = callPackage ../development/libraries/libdc1394 {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  libdcp = callPackage ../development/libraries/libdcp { };
 
   libde265 = callPackage ../development/libraries/libde265 {};
 
@@ -21074,6 +21084,8 @@ with pkgs;
   libspecbleach = callPackage ../development/libraries/audio/libspecbleach { };
 
   libspnav = callPackage ../development/libraries/libspnav { };
+
+  libsub = callPackage ../development/libraries/libsub { };
 
   libgsf = callPackage ../development/libraries/libgsf { };
 
