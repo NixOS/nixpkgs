@@ -48,6 +48,20 @@ in
       '';
     };
 
+    services.resolved.mdns = mkOption {
+      default = "true";
+      example = "false";
+      type = types.enum [ "true" "resolve" "false" ];
+      description = lib.mdDoc ''
+        Controls Multicast DNS support (RFC 6762[2]) on the local host.
+
+        If set to
+        - `"true"`: Enables full Multicast DNS responder and resolver support.
+        - `"false"`: Disables both.
+        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+      '';
+    };
+
     services.resolved.llmnr = mkOption {
       default = "true";
       example = "false";
@@ -130,6 +144,7 @@ in
           "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
         ${optionalString (cfg.domains != [])
           "Domains=${concatStringsSep " " cfg.domains}"}
+        MulticastDNS=${cfg.mdns}
         LLMNR=${cfg.llmnr}
         DNSSEC=${cfg.dnssec}
         ${config.services.resolved.extraConfig}
