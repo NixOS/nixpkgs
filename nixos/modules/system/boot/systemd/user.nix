@@ -39,6 +39,20 @@ let
     "timers.target"
     "xdg-desktop-autostart.target"
   ] ++ config.systemd.additionalUpstreamUserUnits;
+
+  writeTmpfiles = { rules, user ? null }:
+    let
+      suffix = if user == null then "" else "-${user}";
+    in
+    pkgs.writeTextFile {
+      name = "nixos-user-tmpfiles.d${suffix}";
+      destination = "/etc/xdg/user-tmpfiles.d/00-nixos${suffix}.conf";
+      text = ''
+        # This file is created automatically and should not be modified.
+        # Please change the options ‘systemd.user.tmpfiles’ instead.
+        ${concatStringsSep "\n" rules}
+      '';
+    };
 in {
   options = {
     systemd.user.extraConfig = mkOption {
@@ -91,6 +105,42 @@ in {
       default = {};
       type = systemdUtils.types.timers;
       description = lib.mdDoc "Definition of systemd per-user timer units.";
+    };
+
+    systemd.user.tmpfiles = {
+      rules = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "D %C - - - 7d" ];
+        description = lib.mdDoc ''
+          Global user rules for creation, deletion and cleaning of volatile and
+          temporary files automatically. See
+          {manpage}`tmpfiles.d(5)`
+          for the exact format.
+        '';
+      };
+
+      users = mkOption {
+        description = mdDoc ''
+          Per-user rules for creation, deletion and cleaning of volatile and
+          temporary files automatically.
+        '';
+        type = types.attrsOf (types.submodule {
+          options = {
+            rules = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "D %C - - - 7d" ];
+              description = mdDoc ''
+                Per-user rules for creation, deletion and cleaning of volatile and
+                temporary files automatically. See
+                {manpage}`tmpfiles.d(5)`
+                for the exact format.
+              '';
+            };
+          };
+        });
+      };
     };
 
     systemd.additionalUpstreamUserUnits = mkOption {
@@ -154,5 +204,30 @@ in {
     # Some overrides to upstream units.
     systemd.services."user@".restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+
+    # enable systemd user tmpfiles
+    systemd.user.services.systemd-tmpfiles-setup.wantedBy =
+      optional
+        (cfg.tmpfiles.rules != [] || any (cfg': cfg'.rules != []) (attrValues cfg.tmpfiles.users))
+        "basic.target";
+
+    # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
+    # write the tmpfiles.d rules for everyone there
+    environment.systemPackages =
+      optional
+        (cfg.tmpfiles.rules != [])
+        (writeTmpfiles { inherit (cfg.tmpfiles) rules; });
+
+    # /etc/profiles/per-user/$USER/etc/xdg is in systemd's $XDG_CONFIG_DIRS so
+    # we can write a single user's tmpfiles.d rules there
+    users.users =
+      mapAttrs
+        (user: cfg': {
+          packages = optional (cfg'.rules != []) (writeTmpfiles {
+            inherit (cfg') rules;
+            inherit user;
+          });
+        })
+        cfg.tmpfiles.users;
   };
 }
