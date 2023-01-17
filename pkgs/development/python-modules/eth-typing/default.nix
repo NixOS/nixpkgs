@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-typing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xk/IfW1zuNbGdYAxXTNL9kL+ZW1bWruZ21KFV9+lv/E=";
+    hash = "sha256-klN38pIQ9ZOFV7dzXNvylPGfifR8pXRLTJ3VE579AY0=";
   };
 
   checkInputs = [
