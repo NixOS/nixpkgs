@@ -22,11 +22,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-gHRB3thDH+CKRXTgrD37e2zf0rVDIVl4Zhxf5lsLjyc=";
+    hash = "sha256-3D87Ou/842WqbaUiJV1hRZFVkZzQ12GXCpRc8F3rKPQ=";
   };
 
   buildInputs = [
@@ -61,8 +61,8 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     xvfb-run dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python3.interpreter} -m unittest discover -s test/gtk -v
-    ${python3.interpreter} -m unittest discover -s test/no_gui -v
+      ${python3.interpreter} -m unittest discover -s test/gui -v
+    ${python3.interpreter} -m unittest discover -s test/common -v
   '';
 
   # necessary for wrapGAppsHook
