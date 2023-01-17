@@ -20,9 +20,9 @@ let
   systemdDevices = forEach devices
     (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
 
-  consulCmdStr = if cfg.devMode then 
-    "@${cfg.package}/bin/consul consul agent -dev" 
-    else 
+  consulCmdStr = if cfg.devMode then
+    "@${cfg.package}/bin/consul consul agent -dev"
+    else
     "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
       + concatMapStrings (n: " -config-file ${n}") configFiles;
 in
