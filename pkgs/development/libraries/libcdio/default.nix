@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libcddb libiconv ncurses ]
     ++ lib.optionals stdenv.isDarwin [ Carbon IOKit ];
 
+  enableParallelBuilding = true;
+
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
