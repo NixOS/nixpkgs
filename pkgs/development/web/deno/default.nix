@@ -85,6 +85,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = ./update/update.ts;
+  passthru.tests = callPackage ./tests { };
 
   meta = with lib; {
     homepage = "https://deno.land/";
