@@ -125,6 +125,7 @@ in {
           Per-user rules for creation, deletion and cleaning of volatile and
           temporary files automatically.
         '';
+        default = {};
         type = types.attrsOf (types.submodule {
           options = {
             rules = mkOption {
