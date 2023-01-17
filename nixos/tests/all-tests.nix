@@ -376,6 +376,7 @@ in {
   memcached = handleTest ./memcached.nix {};
   merecat = handleTest ./merecat.nix {};
   metabase = handleTest ./metabase.nix {};
+  mindustry = handleTest ./mindustry.nix {};
   minecraft = handleTest ./minecraft.nix {};
   minecraft-server = handleTest ./minecraft-server.nix {};
   minidlna = handleTest ./minidlna.nix {};
