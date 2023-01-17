@@ -1253,8 +1253,8 @@ with pkgs;
   };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
-    clang = clang_9;
-    llvm = llvm_9;
+    clang = clang_13;
+    llvm = llvm_13;
     python = python3;
     wine = null;
   };
