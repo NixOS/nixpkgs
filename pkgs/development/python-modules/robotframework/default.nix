@@ -1,4 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonPackage, jsonschema }:
+{ lib, fetchFromGitHub, buildPythonPackage,
+  tkinter, xmlschema, docutils, pygments, pyyaml, enum34, enum-compat, pillow, lxml, jsonschema,
+  python }:
 
 buildPythonPackage rec {
   pname = "robotframework";
@@ -10,6 +12,8 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-c7pPcDgqyqWQtiMbLQbQd0nAgx4TIFUFHrlBVDNdr8M=";
   };
+
+  propagatedBuildInputs = [ tkinter xmlschema docutils pygments pyyaml enum34 enum-compat pillow lxml ];
 
   checkInputs = [ jsonschema ];
 
