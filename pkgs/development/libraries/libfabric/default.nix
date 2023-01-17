@@ -3,11 +3,11 @@
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
+, enablePsm2 ? (stdenv.isx86_64 && stdenv.isLinux)
 , libpsm2
+, enableOpx ? (stdenv.isx86_64 && stdenv.isLinux)
 , libuuid
 , numactl
-, enablePsm2 ? (stdenv.isx86_64 && stdenv.isLinux)
-, enableOpx ? (stdenv.isx86_64 && stdenv.isLinux)
 }:
 
 stdenv.mkDerivation rec {
