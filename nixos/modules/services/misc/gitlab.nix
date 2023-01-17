@@ -671,13 +671,33 @@ in {
       pages.enable = mkEnableOption (lib.mdDoc "the GitLab Pages service");
 
       pages.settings = mkOption {
+        example = literalExpression ''
+          {
+            pages-domain = "example.com";
+            auth-client-id = "generated-id-xxxxxxx";
+            auth-client-secret = { _secret = "/var/keys/auth-client-secret"; };
+            auth-redirect-uri = "https://projects.example.com/auth";
+            auth-secret = { _secret = "/var/keys/auth-secret"; };
+            auth-server = "https://gitlab.example.com";
+          }
+        '';
+
         description = lib.mdDoc ''
           Configuration options to set in the GitLab Pages config
           file.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute `_secret` - a string pointing
+          to a file containing the value the option should be set
+          to. See the example to get a better picture of this: in the
+          resulting configuration file, the `auth-client-secret` and
+          `auth-secret` keys will be set to the contents of the
+          {file}`/var/keys/auth-client-secret` and
+          {file}`/var/keys/auth-secret` files respectively.
         '';
 
         type = types.submodule {
-          freeformType = with types; attrsOf (nullOr (oneOf [ str int bool ]));
+          freeformType = with types; attrsOf (nullOr (oneOf [ str int bool attrs ]));
 
           options = {
             listen-http = mkOption {
@@ -1466,7 +1486,24 @@ in {
     systemd.services.gitlab-pages =
       let
         filteredConfig = filterAttrs (_: v: v != null) cfg.pages.settings;
-        configFile = pkgs.writeText "gitlab-pages.conf" (lib.generators.toKeyValue {} filteredConfig);
+        isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+        mkPagesKeyValue = lib.generators.toKeyValue {
+          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+            mkValueString = v:
+              if isInt           v then toString v
+              else if isString   v then v
+              else if true  ==   v then "true"
+              else if false ==   v then "false"
+              else if isSecret   v then builtins.hashString "sha256" v._secret
+              else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
+          };
+        };
+        secretPaths = lib.catAttrs "_secret" (lib.collect isSecret filteredConfig);
+        mkSecretReplacement = file: ''
+          replace-secret ${lib.escapeShellArgs [ (builtins.hashString "sha256" file) file "/run/gitlab-pages/gitlab-pages.conf" ]}
+        '';
+        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+        configFile = pkgs.writeText "gitlab-pages.conf" (mkPagesKeyValue filteredConfig);
       in
         mkIf cfg.pages.enable {
           description = "GitLab static pages daemon";
@@ -1475,7 +1512,10 @@ in {
           wantedBy = [ "gitlab.target" ];
           partOf = [ "gitlab.target" ];
 
-          path = [ pkgs.unzip ];
+          path = with pkgs; [
+            unzip
+            replace-secret
+          ];
 
           serviceConfig = {
             Type = "simple";
@@ -1485,8 +1525,17 @@ in {
             User = cfg.user;
             Group = cfg.group;
 
-            ExecStart = "${cfg.packages.pages}/bin/gitlab-pages -config=${configFile}";
+            ExecStartPre = pkgs.writeShellScript "gitlab-pages-pre-start" ''
+              set -o errexit -o pipefail -o nounset
+              shopt -s dotglob nullglob inherit_errexit
+
+              install -m u=rw ${configFile} /run/gitlab-pages/gitlab-pages.conf
+              ${secretReplacements}
+            '';
+            ExecStart = "${cfg.packages.pages}/bin/gitlab-pages -config=/run/gitlab-pages/gitlab-pages.conf";
             WorkingDirectory = gitlabEnv.HOME;
+            RuntimeDirectory = "gitlab-pages";
+            RuntimeDirectoryMode = "0700";
           };
         };
 
