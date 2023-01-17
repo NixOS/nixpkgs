@@ -413,7 +413,7 @@ rec {
   mkSkeletonFromList = l: {
     "1" = if elemAt l 0 == "avr"
       then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
-      else throw "Target specification with 1 components is ambiguous";
+      else throw "system string '${lib.concatStringsSep "-" l}' with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
@@ -449,10 +449,10 @@ rec {
                  then "windows"  # autotools breaks on -gnu for window
                  else elemAt l 2;
       }
-      else throw "Target specification with 3 components is ambiguous";
+      else throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
-    or (throw "system string has invalid number of hyphen-separated components");
+    or (throw "system string '${lib.concatStringsSep "-" l}' has invalid number of hyphen-separated components");
 
   # This should revert the job done by config.guess from the gcc compiler.
   mkSystemFromSkeleton = { cpu
