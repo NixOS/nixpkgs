@@ -3650,6 +3650,8 @@ self: super: with self; {
 
   garminconnect = callPackage ../development/python-modules/garminconnect { };
 
+  gasp = callPackage ../development/python-modules/gasp { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   gatt = callPackage ../development/python-modules/gatt { };
