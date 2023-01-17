@@ -15775,7 +15775,10 @@ with pkgs;
 
   svdtools = callPackage ../development/embedded/svdtools { };
 
-  swift = callPackage ../development/compilers/swift { };
+  swiftPackages = recurseIntoAttrs (callPackage ../development/compilers/swift { });
+  inherit (swiftPackages) swift swiftpm sourcekit-lsp;
+
+  swiftpm2nix = callPackage ../development/tools/swiftpm2nix { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog {
     openssl = openssl_1_1;
@@ -38582,7 +38585,7 @@ with pkgs;
 
   mictray = callPackage ../tools/audio/mictray { };
 
-  swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
+  swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   swaysettings = callPackage ../applications/misc/swaysettings { };
 

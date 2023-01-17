@@ -1,0 +1,20 @@
+This patch fixes dylib references during bootstrapping. It's possible
+`LIBSWIFT_BUILD_MODE=BOOTSTRAPPING` is not really well tested on Darwin,
+because official builds don't use it.
+
+In the near future, Swift will require an existing Swift toolchain to
+bootstrap, and we will likely have to replace this any way.
+
+--- a/stdlib/cmake/modules/AddSwiftStdlib.cmake
++++ b/stdlib/cmake/modules/AddSwiftStdlib.cmake
+@@ -1035,6 +1035,10 @@ function(add_swift_target_library_single target name)
+       set(install_name_dir "${SWIFTLIB_SINGLE_DARWIN_INSTALL_NAME_DIR}")
+     endif()
+ 
++    if(DEFINED SWIFTLIB_SINGLE_BOOTSTRAPPING)
++      set(install_name_dir "${lib_dir}/${output_sub_dir}")
++    endif()
++
+     set_target_properties("${target}"
+       PROPERTIES
+       INSTALL_NAME_DIR "${install_name_dir}")
