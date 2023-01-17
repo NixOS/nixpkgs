@@ -1,16 +1,12 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "2.138";
-in fetchzip {
+in (fetchzip {
   name = "roboto-${version}";
 
   url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -x __MACOSX/\* -d $out/share/fonts/truetype
-  '';
 
   sha256 = "1s3c48wwvvwd3p4w3hfkri5v2c54j2bdxmd3bjv54klc5mrlh6z3";
 
@@ -26,4 +22,9 @@ in fetchzip {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -x __MACOSX/\* -d $out/share/fonts/truetype
+  '';
+})
