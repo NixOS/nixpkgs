@@ -133,7 +133,6 @@ rec {
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
       echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
       echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
-      echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
       echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
         # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake
