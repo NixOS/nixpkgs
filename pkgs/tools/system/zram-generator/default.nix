@@ -6,6 +6,7 @@
 , ronn
 , systemd
 , kmod
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,10 @@ stdenv.mkDerivation rec {
     "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/lib/systemd/system"
     "SYSTEMD_SYSTEM_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) zram-generator;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/systemd/zram-generator";

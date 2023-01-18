@@ -752,6 +752,7 @@ in {
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
+  zram-generator = handleTest ./zram-generator.nix {};
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
 }
