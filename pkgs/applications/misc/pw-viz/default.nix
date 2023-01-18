@@ -47,6 +47,10 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
   '';
 
+  # enables pipewire API deprecated in 0.3.64
+  # fixes error caused by https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  NIX_CFLAGS_COMPILE = [ "-DPW_ENABLE_DEPRECATED" ];
+
   meta = with lib; {
     description = "A simple and elegant pipewire graph editor ";
     homepage = "https://github.com/ax9d/pw-viz";
