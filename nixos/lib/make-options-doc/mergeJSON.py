@@ -66,9 +66,9 @@ class Renderer(mistune.renderers.BaseRenderer):
     def text(self, text):
         return escape(text)
     def paragraph(self, text):
-        return text + "\n\n"
+        return f"<para>{text}</para>"
     def newline(self):
-        return "<literallayout>\n</literallayout>"
+        return "<para><literallayout>\n</literallayout></para>"
     def codespan(self, text):
         return f"<literal>{escape(text)}</literal>"
     def block_code(self, text, info=None):
@@ -91,11 +91,11 @@ class Renderer(mistune.renderers.BaseRenderer):
     def list(self, text, ordered, level, start=None):
         if ordered:
             raise NotImplementedError("ordered lists not supported yet")
-        return f"<itemizedlist>\n{text}\n</itemizedlist>"
+        return f"<para><itemizedlist>\n{text}\n</itemizedlist></para>"
     def list_item(self, text, level):
-        return f"<listitem><para>{text}</para></listitem>\n"
+        return f"<listitem>{text}</listitem>\n"
     def block_text(self, text):
-        return text
+        return self.paragraph(text)
     def emphasis(self, text):
         return f"<emphasis>{text}</emphasis>"
     def strong(self, text):
@@ -104,7 +104,7 @@ class Renderer(mistune.renderers.BaseRenderer):
         if kind not in admonitions:
             raise NotImplementedError(f"admonition {kind} not supported yet")
         tag = admonitions[kind]
-        return f"<{tag}><para>{text.rstrip()}</para></{tag}>"
+        return f"<para><{tag}>{text.rstrip()}</{tag}></para>"
     def block_quote(self, text):
         return f"<blockquote><para>{text}</para></blockquote>"
     def command(self, text):
@@ -192,7 +192,7 @@ def convertMD(options: Dict[str, Any]) -> str:
     def convertString(path: str, text: str) -> str:
         try:
             rendered = md(text)
-            return rendered.rstrip()
+            return rendered
         except:
             print(f"error in {path}")
             raise
@@ -206,8 +206,7 @@ def convertMD(options: Dict[str, Any]) -> str:
     def convertCode(name: str, option: Dict[str, Any], key: str):
         rendered = f"{key}-db"
         if optionIs(option, key, 'literalMD'):
-            docbook = convertString(name, f"*{key.capitalize()}:*\n{option[key]['text']}")
-            option[rendered] = f"<para>{docbook}</para>"
+            option[rendered] = convertString(name, f"*{key.capitalize()}:*\n{option[key]['text']}")
         elif optionIs(option, key, 'literalExpression'):
             code = option[key]['text']
             # for multi-line code blocks we only have to count ` runs at the beginning
@@ -220,11 +219,8 @@ def convertMD(options: Dict[str, Any]) -> str:
             # inline literals need a space to separate ticks from content, code blocks
             # need newlines. inline literals need one extra tick, code blocks need three.
             ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
-            docbook = convertString(name, f"{ticks}{sep}{code}{sep}{ticks}")
-            if multiline:
-                option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis></para> {docbook}"
-            else:
-                option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis> {docbook}</para>"
+            code = f"{ticks}{sep}{code}{sep}{ticks}"
+            option[rendered] = convertString(name, f"*{key.capitalize()}:*\n{code}")
         elif optionIs(option, key, 'literalDocBook'):
             option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis> {option[key]['text']}</para>"
         elif key in option:
@@ -236,6 +232,10 @@ def convertMD(options: Dict[str, Any]) -> str:
                 option['description'] = convertString(name, option['description']['text'])
             elif markdownByDefault:
                 option['description'] = convertString(name, option['description'])
+            else:
+                option['description'] = ("<nixos:option-description><para>" +
+                                         option['description'] +
+                                         "</para></nixos:option-description>")
 
             convertCode(name, option, 'example')
             convertCode(name, option, 'default')
