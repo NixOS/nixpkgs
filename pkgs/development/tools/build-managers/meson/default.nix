@@ -84,6 +84,9 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+
+    substituteInPlace "$out/share/bash-completion/completions/meson" \
+      --replace "python3 -c " "${python3.interpreter} -c "
   '';
 
   nativeBuildInputs = [ installShellFiles ];
