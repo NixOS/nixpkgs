@@ -72,22 +72,14 @@
                 </para>
               </xsl:if>
 
-              <xsl:if test="attr[@name = 'default']">
-                <para>
-                  <emphasis>Default:</emphasis>
-                  <xsl:text>
-</xsl:text>
-                  <xsl:apply-templates select="attr[@name = 'default']/*" mode="top" />
-                </para>
+              <xsl:if test="attr[@name = 'default-db']">
+                <xsl:value-of disable-output-escaping="yes"
+                              select="attr[@name = 'default-db']/string/@value" />
               </xsl:if>
 
-              <xsl:if test="attr[@name = 'example']">
-                <para>
-                  <emphasis>Example:</emphasis>
-                  <xsl:text>
-</xsl:text>
-                  <xsl:apply-templates select="attr[@name = 'example']/*" mode="top" />
-                </para>
+              <xsl:if test="attr[@name = 'example-db']">
+                <xsl:value-of disable-output-escaping="yes"
+                              select="attr[@name = 'example-db']/string/@value" />
               </xsl:if>
 
               <xsl:if test="attr[@name = 'relatedPackages']">
@@ -120,19 +112,6 @@
         </xsl:for-each>
 
       </variablelist>
-  </xsl:template>
-
-
-  <xsl:template match="attrs[attr[@name = '_type' and string[@value = 'literalExpression']]]" mode = "top">
-    <xsl:choose>
-      <xsl:when test="contains(attr[@name = 'text']/string/@value, '&#010;')">
-        <programlisting><xsl:value-of select="attr[@name = 'text']/string/@value" /><xsl:text>
-</xsl:text></programlisting>
-      </xsl:when>
-      <xsl:otherwise>
-        <literal><xsl:value-of select="attr[@name = 'text']/string/@value" /></literal>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
 
