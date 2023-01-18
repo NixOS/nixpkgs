@@ -183,6 +183,9 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-yhDdyxnXSSkqLcuOPBWSEBc26rk1Od3gLcWW8S2p8bY=";
     })
 
+    # temporarily paper over https://github.com/jupyter-widgets/ipywidgets/issues/3669
+    ./patches/ipywidgets-on_submit-deprecationwarning.patch
+
     # Sage uses mixed integer programs (MIPs) to find edge disjoint
     # spanning trees. For some reason, aarch64 glpk takes much longer
     # than x86_64 glpk to solve such MIPs. Since the MIP formulation
