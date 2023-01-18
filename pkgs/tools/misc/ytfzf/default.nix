@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    hash = "sha256-01F3JSpA/SjAZWmXPftT/EvGlLVM3U/zLyABREgePi8=";
+    hash = "sha256-AouOckRrPdIzwfn6s7GXu3U9PrihcyPpt6Xb41dq1zg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
