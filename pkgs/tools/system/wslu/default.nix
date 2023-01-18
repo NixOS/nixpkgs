@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A collection of utilities for Windows Subsystems for Linux";
+    description = "A collection of utilities for Windows Subsystem for Linux";
     homepage = "https://github.com/wslutilities/wslu";
     changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
     license = licenses.gpl3Plus;
