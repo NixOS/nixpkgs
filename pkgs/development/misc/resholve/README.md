@@ -192,7 +192,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve`.
+> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:

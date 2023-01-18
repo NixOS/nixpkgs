@@ -9025,6 +9025,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  nagelfar = callPackage ../development/tools/nagelfar { };
+
   nats-top = callPackage ../tools/system/nats-top { };
 
   natscli = callPackage ../tools/system/natscli { };
@@ -34198,6 +34200,8 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
+  torq = callPackage ../applications/blockchains/torq { };
+
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
     boost = boost17x;
     withGui = true;
@@ -37594,6 +37598,8 @@ with pkgs;
   };
 
   qMasterPassword = qt6Packages.callPackage ../applications/misc/qMasterPassword { };
+
+  qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 

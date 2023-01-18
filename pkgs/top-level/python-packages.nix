@@ -5789,6 +5789,8 @@ self: super: with self; {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  meshcat = callPackage ../development/python-modules/meshcat { };
+
   meshio = callPackage ../development/python-modules/meshio { };
 
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
@@ -7175,6 +7177,8 @@ self: super: with self; {
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
+
+  pyngrok = callPackage ../development/python-modules/pyngrok { };
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
