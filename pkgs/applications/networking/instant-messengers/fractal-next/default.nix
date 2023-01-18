@@ -67,10 +67,15 @@ stdenv.mkDerivation rec {
     libshumate
   ];
 
+  # enables pipewire API deprecated in 0.3.64
+  # fixes error caused by https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  NIX_CFLAGS_COMPILE = [ "-DPW_ENABLE_DEPRECATED" ];
+
   meta = with lib; {
     description = "Matrix group messaging app (development version)";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ anselmschueler ]);
+    mainProgram = "fractal";
   };
 }
