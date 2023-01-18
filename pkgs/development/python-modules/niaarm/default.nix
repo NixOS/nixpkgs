@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "NiaARM";
+  pname = "niaarm";
   version = "0.2.4";
   format = "pyproject";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
-    repo = pname;
+    repo = "NiaARM";
     rev = version;
     hash = "sha256-JPsBpVMeVZxUhCHoIBP47LhR8nrc8ZtJHREZLwL5Zxw=";
   };
