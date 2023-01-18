@@ -104,6 +104,17 @@ let
         };
       });
 
+      # Pinned due to API changes in 10.0
+      mcstatus = super.mcstatus.overridePythonAttrs (oldAttrs: rec {
+        version = "9.3.0";
+        src = fetchFromGitHub {
+          owner = "py-mine";
+          repo = "mcstatus";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
+        };
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
