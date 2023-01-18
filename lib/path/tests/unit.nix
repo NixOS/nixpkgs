@@ -6,6 +6,7 @@ let
   inherit (lib.path) subpath;
 
   cases = lib.runTests {
+    # Test examples from the lib.path.subpath.isValid documentation
     testSubpathIsValidExample1 = {
       expr = subpath.isValid null;
       expected = false;
@@ -30,6 +31,7 @@ let
       expr = subpath.isValid "./foo//bar/";
       expected = true;
     };
+    # Some extra tests
     testSubpathIsValidTwoDotsEnd = {
       expr = subpath.isValid "foo/..";
       expected = false;
@@ -71,6 +73,7 @@ let
       expected = true;
     };
 
+    # Test examples from the lib.path.subpath.normalise documentation
     testSubpathNormaliseExample1 = {
       expr = subpath.normalise "foo//bar";
       expected = "./foo/bar";
@@ -107,6 +110,7 @@ let
       expr = (builtins.tryEval (subpath.normalise "/foo")).success;
       expected = false;
     };
+    # Some extra tests
     testSubpathNormaliseIsValidDots = {
       expr = subpath.normalise "./foo/.bar/.../baz...qux";
       expected = "./foo/.bar/.../baz...qux";

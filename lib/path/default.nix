@@ -25,6 +25,10 @@ let
     assertMsg
     ;
 
+  inherit (lib.path.subpath)
+    isValid
+    ;
+
   # Return the reason why a subpath is invalid, or `null` if it's valid
   subpathInvalidReason = value:
     if ! isString value then
@@ -133,7 +137,9 @@ in /* No rec! Add dependencies on this file at the top. */ {
     subpath.isValid "./foo//bar/"
     => true
   */
-  subpath.isValid = value:
+  subpath.isValid =
+    # The value to check
+    value:
     subpathInvalidReason value == null;
 
 
@@ -150,11 +156,11 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
   Laws:
 
-  - (Idempotency) Normalising multiple times gives the same result:
+  - Idempotency - normalising multiple times gives the same result:
 
         subpath.normalise (subpath.normalise p) == subpath.normalise p
 
-  - (Uniqueness) There's only a single normalisation for the paths that lead to the same file system node:
+  - Uniqueness - there's only a single normalisation for the paths that lead to the same file system node:
 
         subpath.normalise p != subpath.normalise q -> $(realpath ${p}) != $(realpath ${q})
 
@@ -210,9 +216,12 @@ in /* No rec! Add dependencies on this file at the top. */ {
     subpath.normalise "/foo"
     => <error>
   */
-  subpath.normalise = path:
-    assert assertMsg (subpathInvalidReason path == null)
-      "lib.path.subpath.normalise: Argument is not a valid subpath string: ${subpathInvalidReason path}";
-    joinRelPath (splitRelPath path);
+  subpath.normalise =
+    # The subpath string to normalise
+    subpath:
+    assert assertMsg (isValid subpath) ''
+      lib.path.subpath.normalise: Argument is not a valid subpath string:
+          ${subpathInvalidReason subpath}'';
+    joinRelPath (splitRelPath subpath);
 
 }
