@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCm-Developer-Tools/ROCgdb";
     license = with licenses; [ gpl2 gpl3 bsd3 ];
     maintainers = teams.rocm.members;
+    platforms = platforms.linux;
   };
 })

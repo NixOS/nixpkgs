@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/hipBLAS";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
+    platforms = platforms.linux;
     # Fixed in develop branch by using C++17 and related refactor
     broken = versions.minor finalAttrs.version != versions.minor hip.version || buildTests || buildBenchmarks || buildSamples;
   };

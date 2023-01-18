@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCm-Developer-Tools/rocprofiler";
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
+    platforms = platforms.linux;
     broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

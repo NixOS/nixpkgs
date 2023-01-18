@@ -107,6 +107,7 @@ let
       homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
       license = with licenses; [ mit ];
       maintainers = teams.rocm.members;
+      platforms = platforms.linux;
       broken = versions.minor finalAttrs.version != versions.minor hip.version;
     };
   });

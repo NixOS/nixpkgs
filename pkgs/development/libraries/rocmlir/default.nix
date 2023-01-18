@@ -100,6 +100,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
+    platforms = platforms.linux;
     broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

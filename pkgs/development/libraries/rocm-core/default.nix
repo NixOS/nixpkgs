@@ -53,5 +53,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://docs.amd.com";
     license = with licenses; [ ncsa ]; # See src/rocm_version.h
     maintainers = teams.rocm.members;
+    platforms = platforms.linux;
   };
 })

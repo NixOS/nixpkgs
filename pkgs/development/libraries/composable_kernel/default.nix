@@ -81,6 +81,7 @@ let
       homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
       license = with licenses; [ mit ];
       maintainers = teams.rocm.members;
+      platforms = platforms.linux;
       broken = buildExamples; # bin/example_grouped_gemm_xdl_bfp16] Error 139
     };
   });
