@@ -4,6 +4,7 @@ let
 
   inherit (builtins)
     isString
+    isPath
     split
     match
     ;
@@ -98,6 +99,52 @@ let
 
 in /* No rec! Add dependencies on this file at the top. */ {
 
+  /* Append a subpath string to a path.
+
+    Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
+    More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
+    and that the second argument is a valid subpath string (see `lib.path.subpath.isValid`).
+
+    Type:
+      append :: Path -> String -> Path
+
+    Example:
+      append /foo "bar/baz"
+      => /foo/bar/baz
+
+      # subpaths don't need to be normalised
+      append /foo "./bar//baz/./"
+      => /foo/bar/baz
+
+      # can append to root directory
+      append /. "foo/bar"
+      => /foo/bar
+
+      # first argument needs to be a path value type
+      append "/foo" "bar"
+      => <error>
+
+      # second argument needs to be a valid subpath string
+      append /foo /bar
+      => <error>
+      append /foo ""
+      => <error>
+      append /foo "/bar"
+      => <error>
+      append /foo "../bar"
+      => <error>
+  */
+  append =
+    # The absolute path to append to
+    path:
+    # The subpath string to append
+    subpath:
+    assert assertMsg (isPath path) ''
+      lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected'';
+    assert assertMsg (isValid subpath) ''
+      lib.path.append: Second argument is not a valid subpath string:
+          ${subpathInvalidReason subpath}'';
+    path + ("/" + subpath);
 
   /* Whether a value is a valid subpath string.
 
