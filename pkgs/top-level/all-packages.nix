@@ -2370,7 +2370,13 @@ with pkgs;
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel UniformTypeIdentifiers OpenGL UserNotifications;
+    inherit (darwin.apple_sdk_11_0) Libsystem;
+    inherit (darwin.apple_sdk_11_0.frameworks)
+      Cocoa
+      Kernel
+      UniformTypeIdentifiers
+      UserNotifications
+    ;
   };
 
   kitty-themes  = callPackage ../misc/kitty-themes {};
@@ -2544,7 +2550,6 @@ with pkgs;
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
-    openssl = openssl_1_1;
   };
 
   apkid = callPackage ../development/tools/apkid { };
@@ -7075,6 +7080,8 @@ with pkgs;
   fcitx5-unikey = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
 
   fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+
+  fcitx5-anthy = callPackage ../tools/inputmethods/fcitx5/fcitx5-anthy.nix { };
 
   fcitx5-chewing = callPackage ../tools/inputmethods/fcitx5/fcitx5-chewing.nix { };
 
@@ -20010,7 +20017,7 @@ with pkgs;
 
   gtksourceviewmm4 = callPackage ../development/libraries/gtksourceviewmm/4.x.nix { };
 
-  gtkspell2 = callPackage ../development/libraries/gtkspell { enchant = enchant1; };
+  gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
 
