@@ -35,7 +35,7 @@ in {
         type = lib.types.package;
         description = lib.mdDoc "Which package to use for the envfs.";
         default = pkgs.envfs;
-        defaultText = lib.mdDoc "pkgs.envfs";
+        defaultText = lib.literalExpression "pkgs.envfs";
       };
     };
   };
