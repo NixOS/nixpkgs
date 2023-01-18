@@ -197,7 +197,11 @@ in /* No rec! Add dependencies on this file at the top. */ {
           trigger = foldl'
             (skip: path:
               if path.root == firstPath.root then skip
-              else throw "lib.path.difference: Path ${firstPath.name} = ${toString firstPath.value} (root ${toString firstPath.root}) has a different filesystem root than path ${toString path.name} = ${toString path.value} (root ${toString path.root})")
+              else throw ''
+                lib.path.difference: Filesystem roots must be the same for all paths, but paths with different roots were given:
+                  ${firstPath.name} = ${toString firstPath.value} (root ${toString firstPath.root})
+                  ${toString path.name} = ${toString path.value} (root ${toString path.root})''
+            )
             null
             deconstructedPaths;
           fallbackAbort =
