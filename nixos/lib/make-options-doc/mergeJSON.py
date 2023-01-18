@@ -239,6 +239,9 @@ def convertMD(options: Dict[str, Any]) -> str:
 
             convertCode(name, option, 'example')
             convertCode(name, option, 'default')
+
+            if 'relatedPackages' in option:
+                option['relatedPackages'] = convertString(name, option['relatedPackages'])
         except Exception as e:
             raise Exception(f"Failed to render option {name}: {str(e)}")
 
