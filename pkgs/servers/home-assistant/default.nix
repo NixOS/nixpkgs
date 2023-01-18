@@ -43,6 +43,16 @@ let
         };
       });
 
+      aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.1";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "aiowatttime";
+          rev = "refs/tags/${version}";
+          hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
+        };
+      });
+
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
