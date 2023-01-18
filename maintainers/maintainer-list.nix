@@ -6688,6 +6688,12 @@
     githubId = 6445082;
     name = "Joseph Lukasik";
   };
+  jgonyea = {
+    email = "jeremy.gonyea@gmail.com";
+    github = "jgonyea";
+    githubId = 1057441;
+    name = "Jeremy Gonyea";
+  };
   jhh = {
     email = "jeff@j3ff.io";
     github = "jhh";
