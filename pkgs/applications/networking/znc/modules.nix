@@ -181,14 +181,14 @@ in
 
   push = zncDerivation rec {
     pname = "znc-push";
-    version = "unstable-2016-10-12";
+    version = "unstable-2022-08-24";
     module_name = "push";
 
     src = fetchFromGitHub {
       owner = "jreese";
       repo = "znc-push";
-      rev = "cf08b9e0f483f03c28d72dd78df932cbef141f10";
-      sha256 = "0xpwjw8csyrg736g1jc1n8d6804x6kbdkrvldzhk9ldj4iwqz7ay";
+      rev = "23d84678de2696e0b1f51aa5074764d29a98d37b";
+      hash = "sha256-5/HU0sR8B32ctkdAwYWtjh60/0JUdCDzLAXYOo0dIaw=";
     };
 
     meta = {
