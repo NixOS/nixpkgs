@@ -1,5 +1,6 @@
 { buildPythonApplication
 , colorama
+, commitizen
 , decli
 , fetchFromGitHub
 , git
@@ -8,13 +9,14 @@
 , packaging
 , poetry-core
 , py
-, pytest-freezegun
+, pytest-freezer
 , pytest-mock
 , pytest-regressions
 , pytestCheckHook
 , pyyaml
 , questionary
 , termcolor
+, testers
 , tomlkit
 , typing-extensions
 , argcomplete
@@ -24,13 +26,13 @@
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.38.0";
+  version = "2.39.1";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W+k+hqH0TKQAXf1Em6A1/VdqzJkhYp99I3lbqH6iDDc=";
+    hash = "sha256-QQIYyg2zwV7cfFxGHVsLiTRBgTGs3O7OJcmURvfY3LQ=";
     deepClone = true;
   };
 
@@ -62,7 +64,7 @@ buildPythonApplication rec {
     pre-commit
     py
     pytestCheckHook
-    pytest-freezegun
+    pytest-freezer
     pytest-mock
     pytest-regressions
     argcomplete
@@ -92,7 +94,13 @@ buildPythonApplication rec {
     "test_commitizen_debug_excepthook"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = commitizen;
+      command = "cz version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";

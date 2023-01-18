@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
     "PKGCONFIGDIR=$(out)/lib/pkgconfig"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" ];
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=unused-result"
+    "-Wno-error=deprecated-declarations"
+  ];
 
   enableParallelBuilding = true;
 

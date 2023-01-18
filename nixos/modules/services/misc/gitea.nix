@@ -175,7 +175,7 @@ in
         };
 
         type = mkOption {
-          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" ];
+          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" "tar.zst" ];
           default = "zip";
           description = lib.mdDoc "Archive format used to store the dump file.";
         };

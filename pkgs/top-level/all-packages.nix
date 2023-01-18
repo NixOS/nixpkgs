@@ -2368,7 +2368,13 @@ with pkgs;
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel UniformTypeIdentifiers OpenGL UserNotifications;
+    inherit (darwin.apple_sdk_11_0) Libsystem;
+    inherit (darwin.apple_sdk_11_0.frameworks)
+      Cocoa
+      Kernel
+      UniformTypeIdentifiers
+      UserNotifications
+    ;
   };
 
   kitty-themes  = callPackage ../misc/kitty-themes {};
@@ -2542,7 +2548,6 @@ with pkgs;
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
-    openssl = openssl_1_1;
   };
 
   apkid = callPackage ../development/tools/apkid { };
@@ -7074,6 +7079,8 @@ with pkgs;
 
   fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
 
+  fcitx5-anthy = callPackage ../tools/inputmethods/fcitx5/fcitx5-anthy.nix { };
+
   fcitx5-chewing = callPackage ../tools/inputmethods/fcitx5/fcitx5-chewing.nix { };
 
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
@@ -9015,6 +9022,8 @@ with pkgs;
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
+
+  nagelfar = callPackage ../development/tools/nagelfar { };
 
   nats-top = callPackage ../tools/system/nats-top { };
 
@@ -20008,7 +20017,7 @@ with pkgs;
 
   gtksourceviewmm4 = callPackage ../development/libraries/gtksourceviewmm/4.x.nix { };
 
-  gtkspell2 = callPackage ../development/libraries/gtkspell { enchant = enchant1; };
+  gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
 
@@ -20594,6 +20603,8 @@ with pkgs;
   libcutl = callPackage ../development/libraries/libcutl { };
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
+
+  libdatovka = callPackage ../development/libraries/libdatovka { };
 
   libdatrie = callPackage ../development/libraries/libdatrie { };
 
@@ -21466,6 +21477,7 @@ with pkgs;
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
   libtorrent-rasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar {
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
     python = python3;
   };
@@ -26341,7 +26353,9 @@ with pkgs;
   };
 
 
-  udev = systemd; # TODO: change to systemdMinimal
+  udev =
+    if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
+    else systemd; # TODO: change to systemdMinimal
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
@@ -34189,6 +34203,8 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
+  torq = callPackage ../applications/blockchains/torq { };
+
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
     boost = boost17x;
     withGui = true;
@@ -37586,6 +37602,8 @@ with pkgs;
 
   qMasterPassword = qt6Packages.callPackage ../applications/misc/qMasterPassword { };
 
+  qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
+
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 
   qdl = callPackage ../tools/misc/qdl { };
@@ -38600,4 +38618,6 @@ with pkgs;
   tubekit = callPackage ../applications/networking/cluster/tubekit/wrapper.nix { };
 
   tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
+
+  resgate = callPackage ../servers/resgate { };
 }
