@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gotrue";
-  version = "2.40.2";
+  version = "2.41.0";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-y2YQDgILH9JRsSjVaGDtwKXdWhTF/Idq6TPytnxsPyE=";
+    hash = "sha256-LqVFKpDlUqkjurFmeZ2YCuF3W1V3R5Dnw/5k1O0qjSc=";
   };
 
   vendorHash = "sha256-3dXfg9tblPx9V5LzzVm3UtCwGcPIAm2MaKm9JQi69mU=";
