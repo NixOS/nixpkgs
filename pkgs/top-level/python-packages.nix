@@ -654,6 +654,8 @@ self: super: with self; {
 
   asn1tools = callPackage ../development/python-modules/asn1tools { };
 
+  aspectlib = callPackage ../development/python-modules/aspectlib { };
+
   aspell-python = callPackage ../development/python-modules/aspell-python { };
 
   aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
