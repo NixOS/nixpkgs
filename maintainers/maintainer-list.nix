@@ -10770,6 +10770,12 @@
     githubId = 15930073;
     name = "Moritz Scheuren";
   };
+  ovlach = {
+    email = "ondrej@vlach.xyz";
+    name = "Ondrej Vlach";
+    github = "ovlach";
+    githubId = 4405107;
+  };
   ozkutuk = {
     email = "ozkutuk@protonmail.com";
     github = "ozkutuk";
