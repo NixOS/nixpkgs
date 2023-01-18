@@ -62,6 +62,7 @@ buildPythonPackage rec {
     "test/pytest/test_N2G_formatter.py"
     # missing test file
     "test/pytest/test_extend_tag.py"
+    "test/pytest/test_ttp_parser_methods.py"
   ];
 
   disabledTests = [
