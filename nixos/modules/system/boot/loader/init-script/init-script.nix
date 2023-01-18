@@ -8,7 +8,7 @@ let
     src = ./init-script-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
-    inherit (config.nixos.system) distroName;
+    inherit (config.system.nixos) distroName;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   };
 
