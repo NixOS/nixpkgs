@@ -15974,6 +15974,16 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  pniedzwiedzinski = {
+    name = "Patryk Niedźwiedziński";
+    email = "pniedzwiedzinski19@gmail.com";
+    github = "pniedzwiedzinski";
+    githubId = 19212948;
+    keys = [{
+      longkeyid = "rsa4096/0xFC6AE50A8309FBE9";
+      fingerprint = "4414 ADCF BF17 155A 7797  D6C4 FC6A E50A 8309 FBE9";
+    }];
+  };
   starcraft66 = {
     name = "Tristan Gosselin-Hane";
     email = "starcraft66@gmail.com";
