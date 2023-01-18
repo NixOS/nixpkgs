@@ -220,8 +220,11 @@ def convertMD(options: Dict[str, Any]) -> str:
             # inline literals need a space to separate ticks from content, code blocks
             # need newlines. inline literals need one extra tick, code blocks need three.
             ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
-            docbook = convertString(name, f"*{key.capitalize()}:*\n{ticks}{sep}{code}{sep}{ticks}")
-            option[rendered] = f"<para>{docbook}</para>"
+            docbook = convertString(name, f"{ticks}{sep}{code}{sep}{ticks}")
+            if multiline:
+                option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis></para> {docbook}"
+            else:
+                option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis> {docbook}</para>"
         elif optionIs(option, key, 'literalDocBook'):
             option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis> {option[key]['text']}</para>"
         elif key in option:
