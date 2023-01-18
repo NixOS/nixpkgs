@@ -609,6 +609,13 @@
           information about the current generation revision
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The desktop application of
+          <link xlink:href="https://vikunja.io">Vikunja</link> is now
+          available nixpkgs.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

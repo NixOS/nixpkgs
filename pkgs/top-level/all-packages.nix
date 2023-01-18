@@ -37961,6 +37961,7 @@ with pkgs;
 
   vikunja-api = callPackage ../servers/web-apps/vikunja/api.nix { };
   vikunja-frontend = callPackage ../servers/web-apps/vikunja/frontend.nix { };
+  vikunja-desktop = callPackage ../applications/misc/vikunja-desktop/default.nix { };
 
   vips = callPackage ../tools/graphics/vips {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
