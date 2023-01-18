@@ -213,11 +213,11 @@
     "vendorHash": null
   },
   "cloudamqp": {
-    "hash": "sha256-1T9ylCTG2wV5FmL6S5+t19H3Xct57WlLpbr6zMj5vwE=",
+    "hash": "sha256-S4iXhss4ASM4FJdBgElH/3IwpPFjUMy57BXG7C7p5+0=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.22.0",
+    "rev": "v1.22.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-PALZGyGZ6Ggccl4V9gG+gsEdNipYG+DCaZkqF0W1IMQ="
   },
