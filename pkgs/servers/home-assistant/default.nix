@@ -115,6 +115,17 @@ let
         };
       });
 
+      # Pinned due to API changes in 1.3.0
+      ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.2.0";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "ovoenergy";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-OSK74uvpHuEtWgbLVFrz1NO7lvtHbt690smGQ+GlsOI=";
+        };
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
