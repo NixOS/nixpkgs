@@ -20,7 +20,10 @@ let self = stdenv.mkDerivation rec {
     sha256 = "0z2ddfiwgi0xbf65z4fg4hqqzlhv0cc6hdcswf3c6n21xdmk5sga";
   };
 
-  patches = [ ./6.2.1-CVE-2021-43618.patch ];
+  patches = [
+    ./6.2.1-CVE-2021-43618.patch
+    ./6.2.1-arm64-avoid-x18.patch
+  ];
 
   #outputs TODO: split $cxx due to libstdc++ dependency
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
@@ -49,8 +52,7 @@ let self = stdenv.mkDerivation rec {
     ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
-    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
-    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-assembly";
+    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared";
 
   doCheck = true; # not cross;
 
