@@ -14,6 +14,8 @@
 
   documentation.nixos.enable = lib.mkDefault false;
 
+  fonts.fontconfig.enable = lib.mkDefault false;
+
   programs.command-not-found.enable = lib.mkDefault false;
 
   services.logrotate.enable = lib.mkDefault false;
