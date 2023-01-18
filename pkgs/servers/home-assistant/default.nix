@@ -247,6 +247,16 @@ let
         };
       });
 
+      # Pinned due to API changes in 2.0
+      vsure = super.vsure.overridePythonAttrs (oldAttrs: rec {
+        version = "1.8.1";
+        src = super.fetchPypi {
+          pname = "vsure";
+          inherit version;
+          hash = "sha256-Zh83t7yjZU2NjOgCkqPUHbqvEyEWXGITRgr5d2fLtRI=";
+        };
+      });
+
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
