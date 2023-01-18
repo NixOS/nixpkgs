@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ionelmc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f9Ty4+5PycraxoLUSa9JFusV5Cot6bBWKfOGHZIRR3o=";
+    hash = "sha256-f9Ty4+5PycraxoLUSa9JFusV5Cot6bBWKfOGHZIRR3o=";
   };
 
   buildInputs = [
