@@ -214,6 +214,7 @@
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
+  ./programs/qdmr.nix
   ./programs/qt5ct.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
