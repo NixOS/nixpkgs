@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";
-    homepage = "https://libopenraw.freedesktop.org/wiki/Exempi/";
+    homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
   };
