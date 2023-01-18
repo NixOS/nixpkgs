@@ -2071,7 +2071,6 @@ self: super: with self; {
   cryptography = callPackage ../development/python-modules/cryptography {
     inherit (pkgs.darwin) libiconv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
-    openssl = pkgs.openssl_1_1;
   };
 
   cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
