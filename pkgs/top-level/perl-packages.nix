@@ -22778,10 +22778,10 @@ let
 
   TclpTk = buildPerlPackage {
     pname = "Tcl-pTk";
-    version = "1.09";
+    version = "1.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.09.tar.gz";
-      hash = "sha256-LR+YBlKS9+W7mBBy9/EkAOjxGVVe4MC5zToPr/pXl24=";
+      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.10.tar.gz";
+      hash = "sha256-sMb4KXzTL7KhkF17OSbWMb8p+iM/jYTNHtb+2J85/QQ=";
     };
     propagatedBuildInputs = [
       ClassISA
@@ -26186,10 +26186,10 @@ let
 
   Tk = buildPerlPackage {
     pname = "Tk";
-    version = "804.035";
+    version = "804.036";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.035.tar.gz";
-      hash = "sha256-TSuAKRum3jTY7IhqCFptvSt5C5JgNaCH6ZAlYUxf/dQ=";
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
+      hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
     makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
