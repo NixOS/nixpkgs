@@ -80,15 +80,14 @@ class Renderer(mistune.renderers.BaseRenderer):
             if text == "":
                 tag = "xref"
             attr = "linkend"
-            link = quoteattr(link[1:])
+            link = link[1:]
         else:
             # try to faithfully reproduce links that were of the form <link href="..."/>
             # in docbook format
             if text == link:
                 text = ""
             attr = "xlink:href"
-            link = quoteattr(link)
-        return f"<{tag} {attr}={link}>{text}</{tag}>"
+        return f"<{tag} {attr}=\"{link}\">{text}</{tag}>"
     def list(self, text, ordered, level, start=None):
         if ordered:
             raise NotImplementedError("ordered lists not supported yet")
