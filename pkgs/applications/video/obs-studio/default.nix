@@ -38,10 +38,10 @@
 , libdrm
 , libajantv2
 , librist
+, libva
 , srt
 , qtwayland
 , wrapQtAppsHook
-, ...
 }:
 
 let
@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "obs-studio";
-  version = "28.1.2";
+  version = "29.0.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "sha256-M5UEOtdzXBVY0UGfwWx3MsM28bJ1EcVPl8acWXWV0lg=";
+    sha256 = "sha256-c+G02k4AACaYfa5Zhsanr6AU3vNbopDMcYtuny/d25Y=";
     fetchSubmodules = true;
   };
 
@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     pciutils
     libajantv2
     librist
+    libva
     srt
     qtwayland
   ]
