@@ -11419,6 +11419,12 @@
     githubId = 146413;
     name = "Tobias Poschwatta";
   };
+  PowerUser64 = {
+    email = "blakelysnorth@gmail.com";
+    github = "PowerUser64";
+    githubId = 24578572;
+    name = "Blake North";
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
