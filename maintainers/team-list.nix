@@ -398,6 +398,19 @@ with lib.maintainers; {
     shortName = "Linux Kernel";
   };
 
+  llvm = {
+    members = [
+      ericson2314
+      sternenseemann
+      lovek323
+      dtzWill
+      primeos
+    ];
+    scope = "Maintain LLVM package sets and related packages";
+    shortName = "LLVM";
+    enableFeatureFreezePing = true;
+  };
+
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [
