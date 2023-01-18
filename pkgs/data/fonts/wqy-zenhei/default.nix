@@ -1,19 +1,24 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "wqy-zenhei";
   version = "0.9.45";
-in fetchzip rec {
-  name = "wqy-zenhei-${version}";
 
-  url = "mirror://sourceforge/wqy/${name}.tar.gz";
+  src = fetchurl {
+    url = "mirror://sourceforge/wqy/${pname}-${version}.tar.gz";
+    hash = "sha256-5LfjBkdb+UJ9F1dXjw5FKJMMhMROqj8WfUxC8RDuddY=";
+  };
 
-  postFetch = ''
-    tar -xzf $downloadedFile --strip-components=1
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
     install -m644 *.ttc $out/share/fonts/
-  '';
 
-  sha256 = "0hbjq6afcd63nsyjzrjf8fmm7pn70jcly7fjzjw23v36ffi0g255";
+    runHook postInstall
+  '';
 
   meta = {
     description = "A (mainly) Chinese Unicode font";

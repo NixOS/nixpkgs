@@ -1,25 +1,30 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "oldsindhi";
   version = "1.0";
-in fetchzip rec {
-  name = "oldsindhi-${version}";
 
-  url = "https://github.com/MihailJP/oldsindhi/releases/download/v${version}/OldSindhi-${version}.tar.xz";
+  src = fetchurl {
+    url = "https://github.com/MihailJP/${pname}/releases/download/v${version}/OldSindhi-${version}.tar.xz";
+    hash = "sha256-jOcl+mo6CJ9Lnn3nAUiXXHCJssovVgLoPrbGxj4uzQs=";
+  };
 
-  postFetch = ''
-    tar -xJf $downloadedFile --strip-components=1
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/truetype *.ttf
-    install -m444 -Dt $out/share/doc/${name} README *.txt
-  '';
+    install -m444 -Dt $out/share/doc/${pname}-${version} README *.txt
 
-  sha256 = "03c483vbrwz2fpdfbys42fmik9788zxfmjmc4fgq4s2d0mraa0j1";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/MihailJP/oldsindhi";
     description = "Free Sindhi Khudabadi font";
     maintainers = with maintainers; [ mathnerd314 ];
-    license = with licenses; [mit ofl];
+    license = with licenses; [ mit ofl ];
     platforms = platforms.all;
   };
 }

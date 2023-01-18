@@ -1,25 +1,32 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "crimson";
   version = "2014.10";
-in fetchzip rec {
-  name = "crimson-${version}";
 
-  url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";
+  src = fetchFromGitHub {
+    owner = "skosch";
+    repo = "Crimson";
+    rev = "fonts-october2014";
+    hash = "sha256-Wp9L77q93TRmrAr0P4iH9gm0tqFY0X/xSsuFcd19aAE=";
+  };
 
-  postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/opentype "Desktop Fonts/OTF/"*.otf
-    install -m444 -Dt $out/share/doc/${name}    README.md
-  '';
+    install -m444 -Dt $out/share/doc/${pname}-${version}    README.md
 
-  sha256 = "0mg65f0ydyfmb43jqr1f34njpd10w8npw15cbb7z0nxmy4nkl842";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/skosch/Crimson";
     description = "A font family inspired by beautiful oldstyle typefaces";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

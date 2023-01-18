@@ -1,16 +1,23 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "tibetan-machine";
   version = "1.901b";
-in
-fetchzip {
-  name = "tibetan-machine-${version}";
-  url = "mirror://debian/pool/main/f/fonts-tibetan-machine/fonts-tibetan-machine_${version}.orig.tar.bz2";
-  sha256 = "sha256-A+RgpFLsP4iTzl0PMRHaNzWGbDR5Qa38lRegNJ96ULo=";
 
-  postFetch = ''
+  src = fetchurl {
+    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.bz2";
+    hash = "sha256-c/1Sgv7xKHpsJGjY9ZY2qOJHShGHL1robvphFNJOt5w=";
+  };
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
-    tar xf $downloadedFile --strip-components=1 -C $out/share/fonts ttf-tmuni-${version}/TibMachUni-${version}.ttf
+    cp *.ttf $out/share/fonts
+
+    runHook postInstall
   '';
 
   meta = with lib; {
