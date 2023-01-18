@@ -203,6 +203,30 @@ def convertMD(options: Dict[str, Any]) -> str:
         if '_type' not in option[key]: return False
         return option[key]['_type'] == typ
 
+    def convertCode(name: str, option: Dict[str, Any], key: str):
+        rendered = f"{key}-db"
+        if optionIs(option, key, 'literalMD'):
+            docbook = convertString(name, f"*{key.capitalize()}:*\n{option[key]['text']}")
+            option[rendered] = f"<para>{docbook}</para>"
+        elif optionIs(option, key, 'literalExpression'):
+            code = option[key]['text']
+            # for multi-line code blocks we only have to count ` runs at the beginning
+            # of a line, but this is much easier.
+            multiline = '\n' in code
+            longest, current = (0, 0)
+            for c in code:
+                current = current + 1 if c == '`' else 0
+                longest = max(current, longest)
+            # inline literals need a space to separate ticks from content, code blocks
+            # need newlines. inline literals need one extra tick, code blocks need three.
+            ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
+            docbook = convertString(name, f"*{key.capitalize()}:*\n{ticks}{sep}{code}{sep}{ticks}")
+            option[rendered] = f"<para>{docbook}</para>"
+        elif optionIs(option, key, 'literalDocBook'):
+            option[rendered] = f"<para><emphasis>{key.capitalize()}:</emphasis> {option[key]['text']}</para>"
+        elif key in option:
+            raise Exception(f"{name} {key} has unrecognized type", option[key])
+
     for (name, option) in options.items():
         try:
             if optionIs(option, 'description', 'mdDoc'):
@@ -210,12 +234,8 @@ def convertMD(options: Dict[str, Any]) -> str:
             elif markdownByDefault:
                 option['description'] = convertString(name, option['description'])
 
-            if optionIs(option, 'example', 'literalMD'):
-                docbook = convertString(name, option['example']['text'])
-                option['example'] = { '_type': 'literalDocBook', 'text': docbook }
-            if optionIs(option, 'default', 'literalMD'):
-                docbook = convertString(name, option['default']['text'])
-                option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+            convertCode(name, option, 'example')
+            convertCode(name, option, 'default')
         except Exception as e:
             raise Exception(f"Failed to render option {name}: {str(e)}")
 
