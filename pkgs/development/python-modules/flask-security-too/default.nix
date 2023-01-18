@@ -2,27 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, fetchpatch
 
-# extras: babel
+  # extras: babel
 , babel
 , flask-babel
 
-# extras: common
+  # extras: common
 , bcrypt
 , bleach
 , flask-mailman
 , qrcode
 
-# extras: fsqla
+  # extras: fsqla
 , flask-sqlalchemy
 , sqlalchemy
 , sqlalchemy-utils
 
-# extras: mfa
+  # extras: mfa
 , cryptography
 , phonenumbers
 
-# propagates
+  # propagates
 , blinker
 , email-validator
 , flask
@@ -32,7 +33,7 @@
 , itsdangerous
 , passlib
 
-# tests
+  # tests
 , argon2-cffi
 , flask-mongoengine
 , mongoengine
@@ -56,6 +57,28 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-nSo7fdY9tiE7PnhosXh1eBfVa5l6a43XNvp6vKvrq5Y=";
   };
+
+  patches = [
+    # Fixed issues related to upcomming flask-sqlalchemy 3.0.0 release
+    (fetchpatch {
+      name = "fix-sqlalchemy.patch";
+      url = "https://github.com/Flask-Middleware/flask-security/commit/9632a0eab5d3be4280c185e7e934a57fc24057a2.patch";
+      hash = "sha256-GOFWNhB83KC9R66ZASyag33Paqv+7njGD+oRlhjxZnk=";
+    })
+    # Test fixes for Flask-SQLAlchemy 3.0
+    (fetchpatch {
+      name = "test-fixes-for-sqlalchemy.patch";
+      url = "https://github.com/Flask-Middleware/flask-security/commit/a086bf6886b483266d7c7df5742774dd1d095e7f.patch";
+      hash = "sha256-bGJWaHbJfMytfW4OmCHMn+Bk95sMUKFPQpNN67LLoRY=";
+      excludes = [ ".pre-commit-config.yaml" ];
+    })
+    # Changes for sqlalchemy 2.0.0 compatibility
+    (fetchpatch {
+      name = "fix-backwards-compatibility-for-sqlalchemy.patch";
+      url = "https://github.com/Flask-Middleware/flask-security/commit/4fcaabd90fcf3329c1f76f84fb877b35f8573ed3.patch";
+      hash = "sha256-vhdvHV8KFt6ItctoUExNjEdrhVad0Pt9Atd3lLMyUlM=";
+    })
+  ];
 
   propagatedBuildInputs = [
     blinker
