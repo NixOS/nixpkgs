@@ -203,6 +203,36 @@ let
           '';
         };
 
+        requiresServices = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Define which other services this one depends on. They will be added to only Requires for the unit.
+          '';
+          example = literalExample ''
+            services.oci-containers = {
+              node1 = {
+                requiresServices = [ "ncsd.service" ];
+              }
+            }
+          '';
+        };
+
+        afterServices = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Define which other services this one will delay until they have started. They will be added to only the After for the unit.
+          '';
+          example = literalExample ''
+            services.oci-containers = {
+              node1 = {
+                afterServices = [ "ncsd.service" ];
+              }
+            }
+          '';
+        };
+
         extraOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -230,8 +260,8 @@ let
     escapedName = escapeShellArg name;
   in {
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ] ++ dependsOn;
-    requires = dependsOn;
+    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ] ++ dependsOn ++ container.afterServices;
+    requires = dependsOn ++ container.requiresServices;
     environment = proxy_env;
 
     path =
