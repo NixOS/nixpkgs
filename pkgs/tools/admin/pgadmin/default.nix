@@ -99,6 +99,7 @@ let
         inherit version;
         hash = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
       };
+      patches = [ ];
       propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
         final.pythonPackages.flask_mail
         final.pythonPackages.pyqrcode
