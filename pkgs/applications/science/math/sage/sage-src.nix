@@ -175,6 +175,14 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-j5AMY1TmhP+HBBBYaFZSkABJ5vtwe6iP2LRfGEgSm8Q=";
     })
 
+    # https://trac.sagemath.org/ticket/34615
+    (fetchSageDiff {
+      name = "sphinx-5.2-upgrade.patch";
+      base = "9.8.beta1";
+      rev = "8f8af65e54d3a9962cfab40f15dc23f4e955b43f";
+      sha256 = "sha256-yhDdyxnXSSkqLcuOPBWSEBc26rk1Od3gLcWW8S2p8bY=";
+    })
+
     # Sage uses mixed integer programs (MIPs) to find edge disjoint
     # spanning trees. For some reason, aarch64 glpk takes much longer
     # than x86_64 glpk to solve such MIPs. Since the MIP formulation
