@@ -118,11 +118,11 @@ let
   # (generally `/`) and a subpath
   deconstructPath =
     let
-      go = components: path:
+      recurse = components: path:
         # If the parent of a path is the path itself, then it's a filesystem root
         if path == dirOf path then { root = path; inherit components; }
-        else go ([ (baseNameOf path) ] ++ components) (dirOf path);
-    in go [];
+        else recurse ([ (baseNameOf path) ] ++ components) (dirOf path);
+    in recurse [];
 
 in /* No rec! Add dependencies on this file at the top. */ {
 
@@ -206,7 +206,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
       commonAncestorLength =
         let
-          go = index:
+          recurse = index:
             let firstComponent = elemAt firstPath.components index; in
             if all (path:
                 # If all paths have another level of components
@@ -214,12 +214,12 @@ in /* No rec! Add dependencies on this file at the top. */ {
                 # And they all match
                 && elemAt path.components index == firstComponent
               ) deconstructedPaths
-            then go (index + 1)
+            then recurse (index + 1)
             else index;
         in
           # Ensure that we have a common root before trying to find a common ancestor
           # If we didn't do this one could evaluate `relativePaths` without an error even when there's no common root
-          seq commonRoot (go 0);
+          seq commonRoot (recurse 0);
 
       commonAncestor = commonRoot
         + ("/" + joinRelPath (take commonAncestorLength firstPath.components));
