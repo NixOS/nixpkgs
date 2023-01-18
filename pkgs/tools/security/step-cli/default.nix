@@ -10,8 +10,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-fSVRDmgDbByAWVzvidrtqCQE+LzS1WpzOAt12ZiNBT4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fSVRDmgDbByAWVzvidrtqCQE+LzS1WpzOAt12ZiNBT4=";
   };
 
   ldflags = [
@@ -30,6 +30,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
     homepage = "https://smallstep.com/cli/";
+    changelog = "https://github.com/smallstep/cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ xfix ];
     platforms = platforms.linux ++ platforms.darwin;
