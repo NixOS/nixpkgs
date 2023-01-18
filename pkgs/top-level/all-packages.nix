@@ -326,6 +326,10 @@ with pkgs;
 
   cfn-nag = callPackage ../development/tools/cfn-nag { };
 
+  buildCilium = subPackages: callPackage ../tools/networking/cilium/default.nix { inherit subPackages; };
+  cilium = buildCilium [];
+  cni-plugin-cilium = buildCilium ["plugins/cilium-cni"];
+
   circumflex = callPackage ../applications/networking/circumflex { };
 
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
