@@ -3,6 +3,7 @@
 , Security
 , openssl
 , pkg-config
+, git
 , protobuf
 , rustPlatform
 , stdenv
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-CQFTO43/b0ymYtnAtvySrp8cOF7rRdzY8mvcYTiiUp0=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config git ];
 
   buildInputs = [
     openssl
