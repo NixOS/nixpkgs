@@ -206,8 +206,8 @@ addToSearchPath() {
 # syntax when they switch to setting __structuredAttrs = true.
 prependToVar() {
     local -n nameref="$1"
+    local useArray type
 
-    useArray=
     if [ -n "$__structuredAttrs" ]; then
         useArray=true
     else
@@ -239,8 +239,8 @@ prependToVar() {
 # Same as above
 appendToVar() {
     local -n nameref="$1"
+    local useArray type
 
-    useArray=
     if [ -n "$__structuredAttrs" ]; then
         useArray=true
     else
