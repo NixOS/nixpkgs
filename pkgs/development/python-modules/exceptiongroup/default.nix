@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.0.4";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     rev = version;
-    hash = "sha256-csyDWVvcsAMzgomb0xq0NbVP7qYQpDv9obBGANlwiVI=";
+    hash = "sha256-XQcYYz4MOxWj9QlgM6KuwBaCHjYzGRkQw3cN5WBSnAo=";
   };
 
   nativeBuildInputs = [
