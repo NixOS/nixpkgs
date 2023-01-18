@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.10.2";
+  version = "2023.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,16 +36,8 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-zHJR2WjHigUMWtRJW25+gk1fKGKedU53BBjwx5zaodA=";
+    hash = "sha256-avyrKBAPyYZBNgItnkNCferqb6+4yeGpBAZhSkL/fFA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix test_repartition_npartitions on platforms other than x86-64
-      url = "https://github.com/dask/dask/commit/65f40ad461c57065f981e6213e33b1d13cc9bc8f.patch";
-      hash = "sha256-KyTSms4ik1kYtL+I/huAxD+zK2AAuPkwmHA9FYk601Y=";
-    })
-  ];
 
   propagatedBuildInputs = [
     click
