@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "mistletoe";
-  version = "0.9.0";
+  version = "1.0.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PLlteCJtCPDTvwnvyvMw0jkCSSAG4YssBlWOi4a/f68=";
+    sha256 = "sha256-+g6cV+IFDP1orjBOT5xeHmk1dMxf2DI9szRSlJ1oJmE=";
   };
 
   meta = with lib; {
