@@ -6806,6 +6806,8 @@ with pkgs;
 
   d2 = callPackage ../tools/text/d2 { };
 
+  ddev = callPackage ../applications/virtualization/ddev { };
+
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {
