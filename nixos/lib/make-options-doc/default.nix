@@ -78,16 +78,13 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          <listitem>
-            <para>
-              <link xlink:href="https://search.nixos.org/packages?show=${name}&amp;sort=relevance&amp;query=${name}">
-                <literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name}</literal>
-              </link>
-            </para>
-            ${lib.optionalString (args ? comment) "<para>${args.comment}</para>"}
-          </listitem>
+          - [`${lib.optionalString (title != null) "${title} aka "}pkgs.${name}`](
+              https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
+            )${
+              lib.optionalString (args ? comment) "\n\n  ${args.comment}"
+            }
         '';
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+    in lib.concatMapStrings (p: describe (unpack p)) packages;
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
