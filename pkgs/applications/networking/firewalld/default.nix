@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Firewall daemon with D-Bus interface";
     homepage = "https://github.com/firewalld/firewalld";
+    platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
