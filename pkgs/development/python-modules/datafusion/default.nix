@@ -5,54 +5,42 @@
 , fetchPypi
 , fetchFromGitHub
 , rustPlatform
-, maturin
 , pytestCheckHook
 , libiconv
 , numpy
 , pandas
 , pyarrow
-, pytest
 }:
+
 let
-  # le sigh, the perils of unrelated versions of software living in the same
-  # repo: there's no obvious way to map the top level source repo
-  # (arrow-datafusion) version to the version of contained repo
-  # (arrow-datafusion/python)
-  #
-  # A commit hash will do in a pinch, and ultimately the sha256 has the final
-  # say of what the content is when building
-  cargoLock = fetchurl {
-    url = "https://raw.githubusercontent.com/apache/arrow-datafusion/6.0.0/python/Cargo.lock";
-    sha256 = "sha256-xiv3drEU5jOGsEIh0U01ZQ1NBKobxO2ctp4mxy9iigw=";
+  arrow-testing = fetchFromGitHub {
+    owner = "apache";
+    repo = "arrow-testing";
+    rev = "5bab2f264a23f5af68f69ea93d24ef1e8e77fc88";
+    hash = "sha256-Pxx8ohUpXb5u1995IvXmxQMqWiDJ+7LAll/AjQP7ph8=";
   };
 
-  postUnpack = ''
-    cp "${cargoLock}" $sourceRoot/Cargo.lock
-    chmod u+w $sourceRoot/Cargo.lock
-  '';
+  parquet-testing = fetchFromGitHub {
+    owner = "apache";
+    repo = "parquet-testing";
+    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
+    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
+  };
 in
+
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "0.4.0";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+YqogteKfNhtI2QbVXv/5CIWm3PcOH653dwONm5ZcL8=";
+    sha256 = "sha256-XYXZMorPs2Ue7E38DASd4rmxvX0wlx8A6sCpAbYUh4I=";
   };
 
-  inherit postUnpack;
-
-  # TODO: remove the patch hacking and postUnpack hooks after
-  # https://github.com/apache/arrow-datafusion/pull/1508 is merged
-  #
-  # the lock file isn't up to date as of 6.0.0 so we need to patch the source
-  # lockfile and the vendored cargo deps lockfile
-  patches = [ ./Cargo.lock.patch ];
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src pname version postUnpack;
-    sha256 = "sha256-JGyDxpfBXzduJaMF1sbmRm7KJajHYdVSj+WbiSETiY0=";
-    patches = [ ./Cargo.lock.patch ];
+    inherit src pname version;
+    sha256 = "sha256-6mPdKwsEN09Gf4eNsd/v3EBHVezHmff/KYB2lsXgzcA=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -68,13 +56,18 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "datafusion" ];
+  pytestFlagsArray = [ "--pyargs" pname ];
 
-  checkPhase = ''
-    runHook preCheck
-    pytest --pyargs "${pname}"
-    runHook postCheck
+  preCheck = ''
+    pushd $TMPDIR
+    ln -s ${arrow-testing} ./testing
+    ln -s ${parquet-testing} ./parquet
+  '';
+
+  postCheck = ''
+    popd
   '';
 
   meta = with lib; {
