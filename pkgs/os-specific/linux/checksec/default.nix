@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       install checksec $out/bin
       substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
       substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
+      sed -i -e '/# sanitize/I,+1 d' $out/bin/checksec
       wrapProgram $out/bin/checksec \
         --prefix PATH : ${path}
     '';
