@@ -1,13 +1,13 @@
 # Haskell {#haskell}
 
-The Haskell infrastructure in nixpkgs has two main purposes: The primary purpose
+The Haskell infrastructure in Nixpkgs has two main purposes: The primary purpose
 is to provide a Haskell compiler and build tools as well as infrastructure for
 packaging Haskell-based packages.
 
-The secondary purpose is to provide support for Haskell development environment
+The secondary purpose is to provide support for Haskell development environments
 including prebuilt Haskell libraries. However, in this area sacrifices have been
-made due to self-imposed restrictions in nixpkgs, to lessen the maintenance
-effort and improve performance. (More details in the subsection
+made due to self-imposed restrictions in Nixpkgs, to lessen the maintenance
+effort and to improve performance. (More details in the subsection
 [Limitations.](#haskell-limitations))
 
 ## Available packages {#haskell-available-packages}
@@ -18,17 +18,17 @@ The compiler and most build tools are exposed at the top level:
 * Language specific tools: `cabal-install`, `stack`, `hpack`, …
 
 Many “normal” user facing packages written in Haskell, like `niv` or `cachix`,
-are also exposed at the top level, so there is nothing haskell specific to
+are also exposed at the top level, and there is nothing Haskell specific to
 installing and using them.
 
-All of these packages originally are defined in the `haskellPackages` package
+All of these packages are originally defined in the `haskellPackages` package
 set and are re-exposed with a reduced dependency closure for convenience.
 (see `justStaticExecutables` below)
 
 The `haskellPackages` set includes at least one version of every package from
 Hackage as well as some manually injected packages. This amounts to a lot of
 packages, so it is hidden from `nix-env -qa` by default for performance reasons.
-You can still list all packages in the set like this, though:
+You can still list all packages in the set like this:
 
 ```console
 $ nix-env -f '<nixpkgs>' -qaP -A haskellPackages
@@ -39,22 +39,22 @@ haskellPackages.abacate                                                     abac
 haskellPackages.abc-puzzle                                                  abc-puzzle-0.2.1
 …
 ```
-Also the default set `haskellPackages` is included on [search.nixos.org].
+Also, the `haskellPackages` set is included on [search.nixos.org].
 
 The attribute names in `haskellPackages` always correspond with their name on
-Hackage. Since Hackage allows names that are not valid Nix without extra
-escaping, you sometimes need to extra care when handling attribute names like
-`3dmodels`.
+Hackage. Since Hackage allows names that are not valid Nix without escaping,
+you need to take care when handling attribute names like `3dmodels`.
 
 For packages that are part of [Stackage], we use the version prescribed by a
 Stackage solver (usually the current LTS one) as the default version. For all
 other packages we use the latest version from Hackage. See
-[below](#haskell-available-versions) to learn which versions exactly are provided.
+[below](#haskell-available-versions) to learn which versions are provided
+exactly.
 
 Roughly half of the 16K packages contained in `haskellPackages` don't actually
 build and are marked as broken semi-automatically. Most of those packages are
-deprecated or unmaintained, but sometimes packages that should, don't build.
-Very often fixing them is not a lot of work.
+deprecated or unmaintained, but sometimes packages that should build, do not
+build. Very often fixing them is not a lot of work.
 
 <!--
 TODO(@sternenseemann):
@@ -101,11 +101,11 @@ haskell.compiler.native-bignum.ghcHEAD   ghc-native-bignum-9.7.20221224
 haskell.compiler.ghcjs                   ghcjs-8.10.7
 ```
 
-Every of those compilers has a corresponding attribute set built completely
-using it. However, the non-standard package sets are not tested regularly and
-have less working packages as a result. The corresponding package set for GHC
-9.4.4 is `haskell.packages.ghc944` (in fact `haskellPackages` is just an alias
-for `haskell.packages.ghc924`):
+Each of those compiler versions has a corresponding attribute set built using
+it. However, the non-standard package sets are not tested regularly and, as a
+result, contain fewer working packages. The corresponding package set for GHC
+9.4.4 is `haskell.packages.ghc944`. In fact `haskellPackages` is just an alias
+for `haskell.packages.ghc924`:
 
 ```console
 $ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc924
