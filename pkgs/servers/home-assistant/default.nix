@@ -157,6 +157,17 @@ let
         };
       });
 
+      # Pinned due to API changes in 1.0.24
+      pysensibo = super.pysensibo.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.22";
+        src = fetchFromGitHub {
+          owner = "andrey-git";
+          repo = "pysensibo";
+          rev = "refs/tags/${version}";
+          hash = "sha256-AUcdKcdoYCg8OgUcFoLLpNK5GQMTg89XCR5CkTfNkcc=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
