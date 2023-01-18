@@ -118,7 +118,20 @@ in rec {
             inherit self;
             includeSiteCustomize = true;
            });
-         in self.withPackages (p: [ p.mistune ]))
+         in self.withPackages (p:
+           let
+            # TODO add our own small test suite when rendering is split out into a new tool
+            markdown-it-py = p.markdown-it-py.override {
+              disableTests = true;
+            };
+            mdit-py-plugins = p.mdit-py-plugins.override {
+              inherit markdown-it-py;
+              disableTests = true;
+            };
+          in [
+            markdown-it-py
+            mdit-py-plugins
+          ]))
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
