@@ -280,6 +280,12 @@
       </listitem>
       <listitem>
         <para>
+          Calling <literal>makeSetupHook</literal> without passing a
+          <literal>name</literal> argument is deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Qt 5.12 and 5.14 have been removed, as the corresponding
           branches have been EOL upstream for a long time. This affected
           under 10 packages in nixpkgs, largely unmaintained upstream as

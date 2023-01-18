@@ -546,6 +546,7 @@ rec {
    * # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
    * # bash interpreter.
    * myhellohookSub = makeSetupHook {
+   *                 name = "myscript-hook";
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
    *                 meta.platforms = lib.platforms.linux;
@@ -553,13 +554,21 @@ rec {
    *
    * # setup hook with a package test
    * myhellohookTested = makeSetupHook {
+   *                 name = "myscript-hook";
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
    *                 meta.platforms = lib.platforms.linux;
    *                 passthru.tests.greeting = callPackage ./test { };
    *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? {} }: script:
+  makeSetupHook =
+    { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
+    , deps ? []
+    , substitutions ? {}
+    , meta ? {}
+    , passthru ? {}
+    }:
+    script:
     runCommand name
       (substitutions // {
         inherit meta;
