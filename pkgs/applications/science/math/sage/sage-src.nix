@@ -80,10 +80,6 @@ stdenv.mkDerivation rec {
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
-
-    # Docbuilding copies files from the Nix store and expects them to be writable.
-    # Remove when https://github.com/matplotlib/matplotlib/pull/23805 lands.
-    ./patches/sphinx-fix-matplotlib-css-perms.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -162,6 +158,22 @@ stdenv.mkDerivation rec {
     # Some files were excluded from the above patch due to
     # conflicts. The patch below contains rebased versions.
     ./patches/pari-2.15.1-upgrade-rebased.patch
+
+    # https://trac.sagemath.org/ticket/34668
+    (fetchSageDiff {
+      name = "matplotlib-3.6-upgrade.patch";
+      base = "9.8.beta2";
+      rev = "5501e0de0dca1cff0355326dd42bd8c7e5749568";
+      sha256 = "sha256-ceJkVaecIsZewN8v/3gPQXFbFjv5Akz6zEFg/ToXdek=";
+    })
+
+    # https://trac.sagemath.org/ticket/34693
+    (fetchSageDiff {
+      name = "matplotlib-3.6-docbuilding.patch";
+      base = "9.8.beta4";
+      rev = "64589686c261d33e6b5aff2589bcae8af004bcc6";
+      sha256 = "sha256-j5AMY1TmhP+HBBBYaFZSkABJ5vtwe6iP2LRfGEgSm8Q=";
+    })
 
     # Sage uses mixed integer programs (MIPs) to find edge disjoint
     # spanning trees. For some reason, aarch64 glpk takes much longer
