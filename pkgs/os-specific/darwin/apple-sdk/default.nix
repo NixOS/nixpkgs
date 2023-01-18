@@ -330,6 +330,7 @@ in rec {
     "ContactsPersistence"
     "CoreSymbolication"
     "DebugSymbols"
+    "DisplayServices"
     "GameCenter"
     "MultitouchSupport"
     "SkyLight"

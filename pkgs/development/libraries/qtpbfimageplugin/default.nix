@@ -27,12 +27,6 @@ stdenv.mkDerivation rec {
       --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
   '';
 
-  # error: 'path' is unavailable: introduced in macOS 10.15
-  qmakeFlags = lib.optionals stdenv.isDarwin [
-    "CONFIG+=c++17"
-    "QMAKE_MACOSX_DEPLOYMENT_TARGET=10.15"
-  ];
-
   meta = with lib; {
     description = "Qt image plugin for displaying Mapbox vector tiles";
     longDescription = ''

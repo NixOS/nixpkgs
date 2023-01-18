@@ -1,14 +1,10 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
-fetchzip {
+(fetchzip {
   name = "fira-code-symbols-20160811";
 
   url = "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile -d $out/share/fonts/opentype
-  '';
 
   sha256 = "19krsp22rin74ix0i19v4bh1c965g18xkmz1n55h6n6qimisnbkm";
 
@@ -23,4 +19,9 @@ fetchzip {
     maintainers = [ maintainers.Profpatsch ];
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile -d $out/share/fonts/opentype
+  '';
+})

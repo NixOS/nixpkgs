@@ -365,6 +365,8 @@ with pkgs;
 
   catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
 
+  catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
+
   btdu = callPackage ../tools/misc/btdu { };
 
   cereal = callPackage ../development/libraries/cereal { };
@@ -6911,6 +6913,8 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
+  eris-go = callPackage ../servers/eris-go { };
+
   ericw-tools = callPackage ../applications/misc/ericw-tools { stdenv = gcc10StdenvCompat; };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
@@ -11708,6 +11712,8 @@ with pkgs;
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
+  signaldctl = callPackage ../applications/networking/instant-messengers/signaldctl { };
+
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
   inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
@@ -11753,8 +11759,8 @@ with pkgs;
 
   sixpair = callPackage ../tools/misc/sixpair {};
 
-  sketchybar = callPackage ../os-specific/darwin/sketchybar {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa SkyLight;
+  sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa DisplayServices SkyLight;
   };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
@@ -15613,9 +15619,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security CoreFoundation AppKit System;
   };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
-  cargo-generate = callPackage ../development/tools/rust/cargo-generate {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-generate = callPackage ../development/tools/rust/cargo-generate { };
   cargo-bootimage = callPackage ../development/tools/rust/bootimage { };
 
   cargo-whatfeatures = callPackage ../development/tools/rust/cargo-whatfeatures {
@@ -16381,9 +16385,8 @@ with pkgs;
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
-    python = python3;
-  };
+  poetry = callPackage ../tools/package-management/poetry { };
+
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
@@ -23999,9 +24002,7 @@ with pkgs;
 
   codeowners = callPackage ../development/tools/codeowners { };
 
-  couchdb3 = callPackage ../servers/http/couchdb/3.nix {
-    erlang = buildPackages.erlangR22;
-  };
+  couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
@@ -24659,6 +24660,8 @@ with pkgs;
 
   miniflux = callPackage ../servers/miniflux { };
 
+  mir = callPackage ../servers/mir { };
+
   icinga2 = callPackage ../servers/monitoring/icinga2 { };
 
   icinga2-agent = callPackage ../servers/monitoring/icinga2 {
@@ -24864,8 +24867,7 @@ with pkgs;
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
-    elixir = elixir_1_12;
-    erlang = erlang.override { opensslPackage = openssl_1_1; };
+    elixir = elixir_1_14;
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
@@ -34441,9 +34443,7 @@ with pkgs;
 
   bastet = callPackage ../games/bastet { };
 
-  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
-    inherit (python3Packages) buildPythonApplication;
-  };
+  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
 
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;

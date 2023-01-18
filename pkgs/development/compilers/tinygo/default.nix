@@ -28,17 +28,17 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-Rxdxum1UIaz8tpEAGqpLvKd25nHdj4Se+IoN29EJEHg=";
+    sha256 = "rI8CADPWKdNvfknEsrpp2pCeZobf9fAp0GDIWjupzZA=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-QxLY4KT05PtA/W7d1vKxsq5w35YZ6MJL3Lh726b+E9w=";
+  vendorSha256 = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
 
   patches = [
     ./0001-Makefile.patch

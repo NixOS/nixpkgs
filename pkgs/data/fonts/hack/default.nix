@@ -1,16 +1,12 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "3.003";
-in fetchzip {
+in (fetchzip {
   name = "hack-font-${version}";
 
   url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
-  '';
 
   sha256 = "1l6ih6v7dqali5c7zh6z2xnbf9h2wz0ag6fdgszmqd5lnhw39v6s";
 
@@ -37,4 +33,9 @@ in fetchzip {
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
+  '';
+})

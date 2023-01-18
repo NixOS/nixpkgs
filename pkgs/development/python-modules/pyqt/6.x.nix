@@ -135,7 +135,5 @@ buildPythonPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ LunNova ];
-    # python3Packages.pyqt-builder needs to be patched
-    broken = stdenv.isDarwin;
   };
 }
