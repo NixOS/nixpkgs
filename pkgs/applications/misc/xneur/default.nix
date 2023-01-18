@@ -1,9 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool, xorg, pcre, gst_all_1, glib
-, xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, intltool
+, pkg-config
+, wrapGAppsHook
+, enchant
+, gdk-pixbuf
+, glib
+, gst_all_1
+, libnotify
+, pcre
+, xorg
+, xosd
+}:
 
 stdenv.mkDerivation {
-   pname = "xneur";
-   version = "0.20.0";
+  pname = "xneur";
+  version = "0.20.0";
 
   src = fetchurl {
     url = "https://github.com/AndrewCrewKuznetsov/xneur-devel/raw/f66723feb272c68f7c22a8bf0dbcafa5e3a8a5ee/dists/0.20.0/xneur_0.20.0.orig.tar.gz";
@@ -11,14 +25,25 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkg-config intltool wrapGAppsHook
+    intltool
+    pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    xorg.libX11 xorg.libXtst pcre gst_all_1.gstreamer glib
-    xosd xorg.libXext xorg.libXi libnotify
-    enchant gdk-pixbuf
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    enchant
+    gdk-pixbuf
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    libnotify
+    pcre
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXtst
+    xosd
   ];
 
   patches = [
