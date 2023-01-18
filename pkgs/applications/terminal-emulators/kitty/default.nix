@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
@@ -7,14 +7,11 @@
 , openssl
 , installShellFiles
 , dbus
+, Libsystem
 , Cocoa
-, CoreGraphics
-, Foundation
-, IOKit
 , Kernel
 , UniformTypeIdentifiers
 , UserNotifications
-, OpenGL
 , libcanberra
 , libicns
 , libpng
@@ -47,16 +44,14 @@ buildPythonApplication rec {
     openssl.dev
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
-    CoreGraphics
-    Foundation
-    IOKit
     Kernel
-    OpenGL
     UniformTypeIdentifiers
     UserNotifications
     libpng
     python3
     zlib
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    Libsystem
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -80,6 +75,13 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
+    # Fix clone-in-kitty not working on bash >= 5.2
+    # TODO: Removed on kitty release > 0.26.5
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/51bba9110e9920afbefeb981e43d0c1728051b5e.patch";
+      sha256 = "sha256-1aSU4aU6j1/om0LsceGfhH1Hdzp+pPaNeWAi7U6VcP4=";
+    })
+
     # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
     ./fix-test_ssh_env_vars.patch
 
@@ -110,6 +112,7 @@ buildPythonApplication rec {
     '';
   in ''
     runHook preBuild
+    ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.isDarwin then ''
       ${python.interpreter} setup.py build ${darwinOptions}
       make docs
@@ -219,7 +222,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
     maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
   };
 }
