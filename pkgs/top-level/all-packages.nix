@@ -29842,6 +29842,8 @@ with pkgs;
 
   sonixd = callPackage ../applications/audio/sonixd { };
 
+  sonobus = callPackage ../applications/audio/sonobus { };
+
   sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
