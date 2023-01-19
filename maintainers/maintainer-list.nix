@@ -16379,4 +16379,10 @@
     github = "franzmondlichtmann";
     githubId = 105480088;
   };
+  srounce = {
+    name = "Samuel Rounce";
+    email = "me@samuelrounce.co.uk";
+    github = "srounce";
+    githubId = 60792;
+  };
 }
