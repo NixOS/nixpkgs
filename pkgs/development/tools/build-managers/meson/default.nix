@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Oo4DDCM094IIX4FicGLMbUpnce3zHgVf/jdPnmsImrk=";
+    hash = "sha256-Oo4DDCM094IIX4FicGLMbUpnce3zHgVf/jdPnmsImrk=";
   };
 
   patches = [
