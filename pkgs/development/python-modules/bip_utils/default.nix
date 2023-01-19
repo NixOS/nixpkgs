@@ -41,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/ebellocchia/bip_utils/blob/${src.rev}/CHANGELOG.md";
     description = "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
     homepage = "https://github.com/ebellocchia/bip_utils";
     license = with lib.licenses; [ mit ];
