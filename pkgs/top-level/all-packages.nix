@@ -30184,6 +30184,8 @@ with pkgs;
 
   levant = callPackage ../applications/networking/cluster/levant { };
 
+  lprint = callPackage ../applications/printing/lprint { };
+
   lwm = callPackage ../applications/window-managers/lwm { };
 
   marker = callPackage ../applications/editors/marker { };
