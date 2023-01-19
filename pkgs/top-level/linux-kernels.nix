@@ -324,6 +324,8 @@ in {
 
     e1000e = if lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
+    igh-ethercat-master = callPackage ../os-specific/linux/igh-ethercat-master { };
+
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
