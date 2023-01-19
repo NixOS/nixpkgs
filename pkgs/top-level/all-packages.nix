@@ -15236,6 +15236,8 @@ with pkgs;
     stdenv = llvmPackages_9.stdenv;
   };
 
+  blaze = callPackage ../development/libraries/blaze { };
+
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
 
   qbe = callPackage ../development/compilers/qbe { };
@@ -15293,6 +15295,10 @@ with pkgs;
     useNVIDIA = true;
   };
 
+  hipify = callPackage ../development/compilers/hipify {
+    stdenv = rocmClangStdenv;
+  };
+
   hipcub = callPackage ../development/libraries/hipcub {
     stdenv = rocmClangStdenv;
   };
@@ -15300,6 +15306,29 @@ with pkgs;
   hipsparse = callPackage ../development/libraries/hipsparse {
     inherit (llvmPackages_rocm) openmp;
     stdenv = rocmClangStdenv;
+  };
+
+  hipfort = callPackage ../development/libraries/hipfort {
+    stdenv = rocmClangStdenv;
+  };
+
+  hipfft = callPackage ../development/libraries/hipfft {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
+  };
+
+  hipsolver = callPackage ../development/libraries/hipsolver {
+    stdenv = rocmClangStdenv;
+  };
+
+  hipblas = callPackage ../development/libraries/hipblas {
+    stdenv = rocmClangStdenv;
+  };
+
+  migraphx = callPackage ../development/libraries/migraphx {
+    inherit (llvmPackages_rocm) clang-tools-extra openmp;
+    stdenv = rocmClangStdenv;
+    rocmlir = rocmlir-rock;
   };
 
   rccl = callPackage ../development/libraries/rccl {
@@ -15355,8 +15384,28 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  # Best just use GCC here
+  rdc = callPackage ../development/tools/misc/rdc { };
+
+  # Best just use GCC here
+  rocgdb = callPackage ../development/tools/misc/rocgdb {
+    elfutils = elfutils.override { enableDebuginfod = true; };
+  };
+
+  rocdbgapi = callPackage ../development/libraries/rocdbgapi {
+    stdenv = rocmClangStdenv;
+  };
+
+  rocr-debug-agent = callPackage ../development/libraries/rocr-debug-agent {
+    stdenv = rocmClangStdenv;
+  };
+
   rocmlir-rock = rocmlir.override {
     buildRockCompiler = true;
+  };
+
+  rocm-core = callPackage ../development/libraries/rocm-core {
+    stdenv = rocmClangStdenv;
   };
 
   rocprim = callPackage ../development/libraries/rocprim {
@@ -36069,7 +36118,20 @@ with pkgs;
 
   lie = callPackage ../applications/science/math/LiE { };
 
-  magma = callPackage ../development/libraries/science/math/magma { };
+  magma = callPackage ../development/libraries/science/math/magma {
+    inherit (llvmPackages_rocm) openmp;
+  };
+
+  magma-cuda = magma.override {
+    useCUDA = true;
+    useROCM = false;
+  };
+
+  magma-hip = magma.override {
+    useCUDA = false;
+    useROCM = true;
+  };
+
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
