@@ -79,7 +79,7 @@ symlinkJoin {
   name = ghc.name + "-with-packages";
   paths = paths
           ++ [ ghc ]
-          ++ lib.optionals installDocumentation [ ghc.doc ];
+          ++ lib.optionals installDocumentation [ (lib.getOutput "doc" ghc) ];
   nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     # wrap compiler executables with correct env variables
