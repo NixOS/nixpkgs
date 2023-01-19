@@ -27,7 +27,7 @@ flutter.mkFlutterApp rec {
     categories = [ "Development" ];
   };
 
-  vendorHash = "sha256-0VZizwFlUfvrXLMn5iya2UMLcHhn5GtKaj2zekhqPS0=";
+  vendorHash = "sha256-iR/U2vQQqj95j1XkgW3/u7DQzwQrNmho9M4yLvefb4A=";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
