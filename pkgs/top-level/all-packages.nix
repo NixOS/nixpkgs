@@ -7568,6 +7568,8 @@ with pkgs;
      gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
+  gnome-epub-thumbnailer = callPackage ../applications/misc/gnome-epub-thumbnailer { };
+
   gnome-extension-manager = callPackage ../applications/misc/gnome-extension-manager { };
 
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
