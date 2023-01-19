@@ -69,14 +69,11 @@ with lib;
 
 let
   tg_owt = callPackage ./tg_owt.nix {
-    abseil-cpp = (abseil-cpp.override {
+    abseil-cpp = abseil-cpp.override {
       # abseil-cpp should use the same compiler
       inherit stdenv;
       cxxStandard = "20";
-    }).overrideAttrs (_: {
-      # https://github.com/NixOS/nixpkgs/issues/130963
-      NIX_LDFLAGS = optionalString stdenv.isDarwin "-lc++abi";
-    });
+    };
 
     # tg_owt should use the same compiler
     inherit stdenv;
@@ -100,8 +97,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./kf594.patch
     ./shortcuts-binary-path.patch
-    # let it build with nixpkgs 10.12 sdk
-    ./kotato-10.12-sdk.patch
   ];
 
   postPatch = optionalString stdenv.isLinux ''
@@ -112,6 +107,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
   '' + optionalString stdenv.isDarwin ''
+    sed -i "13i#import <CoreAudio/CoreAudio.h>" Telegram/lib_webrtc/webrtc/mac/webrtc_media_devices_mac.mm
     substituteInPlace Telegram/CMakeLists.txt \
       --replace 'COMMAND iconutil' 'COMMAND png2icns' \
       --replace '--convert icns' "" \
@@ -188,9 +184,6 @@ stdenv.mkDerivation rec {
     Metal
     libicns
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/130963
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lc++abi";
 
   enableParallelBuilding = true;
 
