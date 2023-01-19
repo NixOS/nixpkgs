@@ -693,17 +693,20 @@ in {
               users.groups.${user.name} = {};
             '';
           }
-          {
-            assertion = (user.shell == pkgs.fish) -> (config.programs.fish.enable == true);
+        ] ++ (map (shell: {
+            assertion = (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
             message = ''
-              users.users.${user.name}.shell is set to fish, but
-              programs.fish.enable is not true. This will cause the fish shell
-              to lack the basic nix directories in its PATH and might make
+              users.users.${user.name}.shell is set to ${shell}, but
+              programs.${shell}.enable is not true. This will cause the ${shell}
+              shell to lack the basic nix directories in its PATH and might make
               logging in as that user impossible. You can fix it with:
-              programs.fish.enable = true;
+              programs.${shell}.enable = true;
             '';
-          }
-        ]
+          }) [
+          "fish"
+          "xonsh"
+          "zsh"
+        ])
     ));
 
     warnings =
