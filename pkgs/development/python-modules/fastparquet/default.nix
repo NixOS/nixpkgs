@@ -2,12 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
+, cython
 , numba
 , numpy
 , pandas
 , cramjam
 , fsspec
+, git
 , thrift
+, setuptools-scm
 , python-lzo
 , pytestCheckHook
 , pythonOlder
@@ -15,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.8.1";
+  version = "2022.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-rWrbHHcJMahaUV8+YuKkZUhdboNFUK9btjvdg74lCxc=";
+    hash = "sha256-/DSe2vZwrHHTuAXWJh9M1wCes5c4/QAVUnJVEI4Evyw=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +37,14 @@ buildPythonPackage rec {
     numpy
     pandas
     thrift
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION="${version}";
+
+  nativeBuildInputs = [
+    git
+    cython
+    setuptools-scm
   ];
 
   passthru.optional-dependencies = {
