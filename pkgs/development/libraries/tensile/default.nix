@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/Tensile";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = version != stdenv.cc.version;
+    platforms = platforms.linux;
+    broken = versions.minor version != versions.minor stdenv.cc.version;
   };
 }

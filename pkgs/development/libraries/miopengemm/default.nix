@@ -31,7 +31,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
-  version = "5.4.1";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -117,6 +117,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != stdenv.cc.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "5.4.1";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })
