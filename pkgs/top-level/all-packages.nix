@@ -5269,6 +5269,8 @@ with pkgs;
 
   pika = callPackage ../applications/graphics/pika { };
 
+  pkg = callPackage ../tools/package-management/pkg { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   pn = callPackage ../tools/text/pn { };
@@ -25401,6 +25403,8 @@ with pkgs;
   dstat = callPackage ../os-specific/linux/dstat { };
 
   erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
+
+  evdev-proto = callPackage ../os-specific/bsd/freebsd/evdev-proto { };
 
   fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
   # unstable until the first 1.x release
