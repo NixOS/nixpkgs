@@ -1771,9 +1771,7 @@ with pkgs;
 
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
-  git-nomad = callPackage ../applications/version-management/git-nomad {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-  };
+  git-nomad = callPackage ../applications/version-management/git-nomad { };
 
   git-octopus = callPackage ../applications/version-management/git-octopus { };
 
@@ -21088,9 +21086,10 @@ with pkgs;
 
   libgsf = callPackage ../development/libraries/libgsf { };
 
-  # GNU libc provides libiconv so systems with glibc don't need to build
-  # libiconv separately. Additionally, Apple forked/repackaged libiconv so we
-  # use that instead of the vanilla version on that OS.
+  # GNU libc provides libiconv so systems with glibc don't need to
+  # build libiconv separately. Additionally, Apple forked/repackaged
+  # libiconv so we use that instead of the vanilla version on that OS,
+  # and BSDs include libiconv in libc.
   #
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
@@ -21101,6 +21100,8 @@ with pkgs;
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv
+    else if stdenv.hostPlatform.isNetBSD
+      then null
     else libiconvReal;
 
   glibcIconv = libc: let
@@ -30883,7 +30884,9 @@ with pkgs;
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
+    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_13.ocaml.override {
+      unsafeStringSupport = true;
+    });
   };
 
   mlvwm = callPackage ../applications/window-managers/mlvwm { };
@@ -30983,6 +30986,7 @@ with pkgs;
     mopidy-somafm
     mopidy-soundcloud
     mopidy-subidy
+    mopidy-tidal
     mopidy-tunein
     mopidy-youtube
     mopidy-ytmusic;
@@ -36317,7 +36321,9 @@ with pkgs;
   drat-trim = callPackage ../applications/science/logic/drat-trim {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
-    inherit (ocaml-ng.ocamlPackages_4_02) ocaml;
+    ocaml = ocaml-ng.ocamlPackages_4_14.ocaml.override {
+      unsafeStringSupport = true;
+    };
   };
 
   eprover = callPackage ../applications/science/logic/eprover { };
