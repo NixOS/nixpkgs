@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     cheroot
     click
     flask
-    flaskbabel
+    flask-babel
     jaraco_functools
     jinja2
     markdown2
