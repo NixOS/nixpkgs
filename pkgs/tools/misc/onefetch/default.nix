@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , installShellFiles
 , pkg-config
@@ -15,28 +14,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.14.2";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LiX91GMJdmhosCZcL3JlzYRieqeQs+YWMAtKTzSBzZY=";
+    sha256 = "sha256-3wXZBPYths3+Vhtq4W2BTR47V63o0bq++fWLIpWrm7Y=";
   };
 
-  cargoSha256 = "sha256-D1GVwNpuqoiwJsWAZfTR9qUC1xuHR+O0bq9rxmgkYXk=";
+  cargoSha256 = "sha256-xBw2OMJMale4MWRyy6v0E0ZE4A98QXLyRu0k7L+9q8k=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
     ./zstd-pkg-config.patch
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "use-iso-time-for-snapshot-tests";
-      url = "https://github.com/o2sh/onefetch/commit/b8b0320d2d271bb10053403092833a26e57134d1.patch";
-      hash = "sha256-LnC+UCvSwMePC4jBjrTKnbyypNvHHNevB2v4y+hv8Pc=";
-    })
   ];
 
   nativeBuildInputs = [ cmake installShellFiles pkg-config ];
