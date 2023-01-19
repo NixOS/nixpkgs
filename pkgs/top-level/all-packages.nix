@@ -28497,6 +28497,8 @@ with pkgs;
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
+  braille-printer-app = callPackage ../applications/printing/braille-printer-app { };
+
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time {
