@@ -5,6 +5,7 @@
 , six
 , mock
 , isPyPy
+, pythonOlder
 , fetchpatch
 }:
 
@@ -26,8 +27,9 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ rednose ];
   propagatedBuildInputs = [ six mock ];
+  checkInputs = [ rednose ];
+  doCheck = pythonOlder "3.11";
 
   meta = with lib; {
     description = "Utility belt for automated testing";
