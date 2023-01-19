@@ -157,6 +157,16 @@ let
         };
       });
 
+      # https://github.com/home-assistant/core/pull/80931
+      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.0";
+        src = super.fetchPypi {
+          pname = "PyJWT";
+          inherit version;
+          hash = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
+        };
+      });
+
       pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.3";
         src = fetchFromGitHub {
