@@ -9469,9 +9469,7 @@ with pkgs;
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
-  macchina = callPackage ../tools/misc/macchina {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  macchina = callPackage ../tools/misc/macchina { };
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
