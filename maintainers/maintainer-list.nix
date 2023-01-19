@@ -15420,6 +15420,12 @@
     githubId = 17534323;
     name = "Quentin Vaucher";
   };
+  xlambein = {
+    email = "xlambein@gmail.com";
+    github = "xlambein";
+    githubId = 5629059;
+    name = "Xavier Lambein";
+  };
   xnaveira = {
     email = "xnaveira@gmail.com";
     github = "xnaveira";
