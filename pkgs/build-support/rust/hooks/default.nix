@@ -27,6 +27,18 @@ let
   rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
   rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+
+  rustFlagsFor = plat: [
+    # https://doc.rust-lang.org/rustc/codegen-options/index.html#target-feature
+    "-C" "target-feature=${if plat.isStatic then "+" else "-"}crt-static"
+  ] ++ lib.optionals (plat ? gcc.arch) [
+    # https://doc.rust-lang.org/rustc/codegen-options/index.html#target-cpu
+    #"-C" "target-cpu=${plat.gcc.arch}"
+  ] ++ lib.optionals (plat ? gcc.tune) [
+    # https://doc.rust-lang.org/rustc/codegen-options/index.html#tune-cpu
+    #"-Z" "tune-cpu=${plat.gcc.tune}"  # nightly builds only; uncomment when stabilized
+  ] ++ (plat.rustc.flags or []);
+
 in {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
@@ -98,11 +110,11 @@ in {
         cargoConfig = ''
           [host]
           "linker" = "${ccForBuild}"
-          "rustflags" = [ "-C", "target-feature=${if stdenv.buildPlatform.isStatic then "+" else "-"}crt-static" ]
+          "rustflags" = [ ${lib.concatMapStringsSep ", " (f: "\"${builtins.toString f}\"") (rustFlagsFor stdenv.buildPlatform)} ]
 
           [target."${shortTarget}"]
           "linker" = "${ccForHost}"
-          "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
+          "rustflags" = [ ${lib.concatMapStringsSep ", " (f: "\"${builtins.toString f}\"") (rustFlagsFor stdenv.hostPlatform)} ]
 
           [unstable]
           host-config = true
