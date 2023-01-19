@@ -119,13 +119,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
-      "sparc-linux" "sparc64-linux"
-      "riscv32-linux" "riscv64-linux"
-      "alpha-linux"
-    ];
+    platforms = with lib.platforms; lib.intersectLists
+      (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
+      (darwin ++ freebsd ++ illumos ++ linux);
     broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }
