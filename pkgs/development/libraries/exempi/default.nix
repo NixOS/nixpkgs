@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, expat, zlib, boost, libiconv, darwin }:
+{ lib, stdenv, fetchurl, expat, zlib, boost, libiconv, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "exempi";
