@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCm-Developer-Tools/rocprofiler";
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != stdenv.cc.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

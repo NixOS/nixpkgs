@@ -1769,9 +1769,7 @@ with pkgs;
 
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
-  git-nomad = callPackage ../applications/version-management/git-nomad {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-  };
+  git-nomad = callPackage ../applications/version-management/git-nomad { };
 
   git-octopus = callPackage ../applications/version-management/git-octopus { };
 
@@ -7569,6 +7567,8 @@ with pkgs;
      inherit (gst_all_1) gstreamer gst-plugins-base;
      gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
+
+  gnome-epub-thumbnailer = callPackage ../applications/misc/gnome-epub-thumbnailer { };
 
   gnome-extension-manager = callPackage ../applications/misc/gnome-extension-manager { };
 
@@ -15236,6 +15236,8 @@ with pkgs;
     stdenv = llvmPackages_9.stdenv;
   };
 
+  blaze = callPackage ../development/libraries/blaze { };
+
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
 
   qbe = callPackage ../development/compilers/qbe { };
@@ -15293,6 +15295,10 @@ with pkgs;
     useNVIDIA = true;
   };
 
+  hipify = callPackage ../development/compilers/hipify {
+    stdenv = rocmClangStdenv;
+  };
+
   hipcub = callPackage ../development/libraries/hipcub {
     stdenv = rocmClangStdenv;
   };
@@ -15300,6 +15306,29 @@ with pkgs;
   hipsparse = callPackage ../development/libraries/hipsparse {
     inherit (llvmPackages_rocm) openmp;
     stdenv = rocmClangStdenv;
+  };
+
+  hipfort = callPackage ../development/libraries/hipfort {
+    stdenv = rocmClangStdenv;
+  };
+
+  hipfft = callPackage ../development/libraries/hipfft {
+    inherit (llvmPackages_rocm) openmp;
+    stdenv = rocmClangStdenv;
+  };
+
+  hipsolver = callPackage ../development/libraries/hipsolver {
+    stdenv = rocmClangStdenv;
+  };
+
+  hipblas = callPackage ../development/libraries/hipblas {
+    stdenv = rocmClangStdenv;
+  };
+
+  migraphx = callPackage ../development/libraries/migraphx {
+    inherit (llvmPackages_rocm) clang-tools-extra openmp;
+    stdenv = rocmClangStdenv;
+    rocmlir = rocmlir-rock;
   };
 
   rccl = callPackage ../development/libraries/rccl {
@@ -15355,8 +15384,28 @@ with pkgs;
     stdenv = rocmClangStdenv;
   };
 
+  # Best just use GCC here
+  rdc = callPackage ../development/tools/misc/rdc { };
+
+  # Best just use GCC here
+  rocgdb = callPackage ../development/tools/misc/rocgdb {
+    elfutils = elfutils.override { enableDebuginfod = true; };
+  };
+
+  rocdbgapi = callPackage ../development/libraries/rocdbgapi {
+    stdenv = rocmClangStdenv;
+  };
+
+  rocr-debug-agent = callPackage ../development/libraries/rocr-debug-agent {
+    stdenv = rocmClangStdenv;
+  };
+
   rocmlir-rock = rocmlir.override {
     buildRockCompiler = true;
+  };
+
+  rocm-core = callPackage ../development/libraries/rocm-core {
+    stdenv = rocmClangStdenv;
   };
 
   rocprim = callPackage ../development/libraries/rocprim {
@@ -21088,9 +21137,10 @@ with pkgs;
 
   libgsf = callPackage ../development/libraries/libgsf { };
 
-  # GNU libc provides libiconv so systems with glibc don't need to build
-  # libiconv separately. Additionally, Apple forked/repackaged libiconv so we
-  # use that instead of the vanilla version on that OS.
+  # GNU libc provides libiconv so systems with glibc don't need to
+  # build libiconv separately. Additionally, Apple forked/repackaged
+  # libiconv so we use that instead of the vanilla version on that OS,
+  # and BSDs include libiconv in libc.
   #
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
@@ -21101,6 +21151,8 @@ with pkgs;
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv
+    else if stdenv.hostPlatform.isNetBSD
+      then null
     else libiconvReal;
 
   glibcIconv = libc: let
@@ -30883,7 +30935,9 @@ with pkgs;
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
+    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_13.ocaml.override {
+      unsafeStringSupport = true;
+    });
   };
 
   mlvwm = callPackage ../applications/window-managers/mlvwm { };
@@ -30977,11 +31031,13 @@ with pkgs;
     mopidy-mpris
     mopidy-muse
     mopidy-musicbox-webclient
+    mopidy-notify
     mopidy-podcast
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
     mopidy-subidy
+    mopidy-tidal
     mopidy-tunein
     mopidy-youtube
     mopidy-ytmusic;
@@ -36062,7 +36118,20 @@ with pkgs;
 
   lie = callPackage ../applications/science/math/LiE { };
 
-  magma = callPackage ../development/libraries/science/math/magma { };
+  magma = callPackage ../development/libraries/science/math/magma {
+    inherit (llvmPackages_rocm) openmp;
+  };
+
+  magma-cuda = magma.override {
+    useCUDA = true;
+    useROCM = false;
+  };
+
+  magma-hip = magma.override {
+    useCUDA = false;
+    useROCM = true;
+  };
+
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
@@ -36316,7 +36385,9 @@ with pkgs;
   drat-trim = callPackage ../applications/science/logic/drat-trim {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
-    inherit (ocaml-ng.ocamlPackages_4_02) ocaml;
+    ocaml = ocaml-ng.ocamlPackages_4_14.ocaml.override {
+      unsafeStringSupport = true;
+    };
   };
 
   eprover = callPackage ../applications/science/logic/eprover { };

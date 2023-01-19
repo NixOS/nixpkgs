@@ -25,7 +25,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir";
-  version = "5.4.0";
+  version = "5.4.1";
 
   outputs = [
     "out"
@@ -100,7 +100,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    # Once again, they haven't updated the tags...
-    broken = lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

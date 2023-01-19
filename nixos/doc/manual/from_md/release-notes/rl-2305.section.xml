@@ -516,6 +516,22 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>root</literal> package is now built with the
+          <literal>&quot;-Dgnuinstall=ON&quot;</literal> CMake flag,
+          making the output conform the <literal>bin</literal>
+          <literal>lib</literal> <literal>share</literal> layout. In
+          this layout, <literal>tutorials</literal> is under
+          <literal>share/doc/ROOT/</literal>; <literal>cmake</literal>,
+          <literal>font</literal>, <literal>icons</literal>,
+          <literal>js</literal> and <literal>macro</literal> under
+          <literal>share/root</literal>;
+          <literal>Makefile.comp</literal> and
+          <literal>Makefile.config</literal> under
+          <literal>etc/root</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Enabling global redirect in
           <literal>services.nginx.virtualHosts</literal> now allows one
           to add exceptions with the <literal>locations</literal>
@@ -607,6 +623,13 @@
           <literal>nixos-version</literal> now accepts
           <literal>--configuration-revision</literal> to display more
           information about the current generation revision
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.nomad.extraSettingsPlugins</literal> has
+          been fixed to allow more than one plugin in the path.
         </para>
       </listitem>
     </itemizedlist>

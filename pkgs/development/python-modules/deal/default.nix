@@ -77,6 +77,8 @@ buildPythonPackage rec {
     "test_scheme_contract_is_satisfied_when_setting_arg"
     "test_scheme_contract_is_satisfied_within_chain"
     "test_scheme_errors_rewrite_message"
+    # broken since pytest > 7.1.3
+    "test_exception_hook"
   ];
 
   disabledTestPaths = [

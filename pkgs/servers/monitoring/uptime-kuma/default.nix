@@ -4,16 +4,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uptime-kuma";
-  version = "1.18.5";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = finalAttrs.version;
-    sha256 = "sha256-4RLOY8OqhbcnSPa0VpAdMT3E1M0/ev/sSAmbQUQxqbw=";
+    sha256 = "yWQ3O3sCW6YKpE8BKgJjrKmLD9NyccaqyzQOXlSCC8I=";
   };
 
-  uiSha256 = "sha256-0KbxagFh4bxNrnekUHx0DGr3urfUUz33zn4EtJIZBps=";
+  uiSha256 = "sha256-aaQB1S8PmWU7brncRwEHG5bWEcyxD3amaq7Z6vpP92o=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
