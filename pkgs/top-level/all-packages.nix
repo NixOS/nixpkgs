@@ -10666,6 +10666,8 @@ with pkgs;
 
   pappl = callPackage ../applications/printing/pappl { };
 
+  pappl-retrofit = callPackage ../applications/printing/pappl-retrofit { };
+
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
