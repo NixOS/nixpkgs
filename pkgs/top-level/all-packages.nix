@@ -33062,6 +33062,8 @@ with pkgs;
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
+  terminal-stocks = callPackage ../applications/misc/terminal-stocks { };
+
   terminal-typeracer = callPackage ../applications/misc/terminal-typeracer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
