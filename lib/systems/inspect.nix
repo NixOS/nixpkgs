@@ -47,6 +47,7 @@ rec {
     isOr1k         = { cpu = { family = "or1k"; }; };
     isM68k         = { cpu = { family = "m68k"; }; };
     isS390         = { cpu = { family = "s390"; }; };
+    isS390x        = { cpu = { family = "s390"; bits = 64; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };

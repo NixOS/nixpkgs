@@ -85,6 +85,7 @@ in {
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;
   s390          = filterDoubles predicates.isS390;
+  s390x         = filterDoubles predicates.isS390x;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;
