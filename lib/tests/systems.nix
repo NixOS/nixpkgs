@@ -16,6 +16,7 @@ with lib.systems.doubles; lib.runTests {
   testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows ++ embedded ++ mmix ++ js ++ genode ++ redox);
 
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv6l-netbsd" "armv6l-none" "armv7a-linux" "armv7a-netbsd" "armv7l-linux" "armv7l-netbsd" "arm-none" "armv7a-darwin" ];
+  testarmv7 = mseteq armv7 [ "armv7a-darwin" "armv7a-linux" "armv7l-linux" "armv7a-netbsd" "armv7l-netbsd" ];
   testi686 = mseteq i686 [ "i686-linux" "i686-freebsd13" "i686-genode" "i686-netbsd" "i686-openbsd" "i686-cygwin" "i686-windows" "i686-none" "i686-darwin" ];
   testmips = mseteq mips [ "mips64el-linux" "mipsel-linux" "mipsel-netbsd" ];
   testmmix = mseteq mmix [ "mmix-mmixware" ];

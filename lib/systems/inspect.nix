@@ -22,6 +22,9 @@ rec {
     ];
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
+    isArmv7        = map ({ arch, ... }: { cpu = { inherit arch; }; })
+                       (lib.filter (cpu: lib.hasPrefix "armv7" cpu.arch or "")
+                         (lib.attrValues cpuTypes));
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isAarch        = { cpu = { family = "arm"; }; };
     isMicroBlaze   = { cpu = { family = "microblaze"; }; };
