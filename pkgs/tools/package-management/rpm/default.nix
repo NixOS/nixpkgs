@@ -1,6 +1,6 @@
 { stdenv, lib
 , pkg-config, autoreconfHook
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python3, lua, llvmPackages
 , sqlite, zstd, libcap
 }:
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
+  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python3 lua sqlite ]
                 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
                 ++ lib.optional stdenv.isLinux libcap;
 
