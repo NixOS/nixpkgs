@@ -130,6 +130,13 @@
           <link xlink:href="options.html#opt-services.photoprism.enable">services.photoprism</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/languitar/autosuspend">autosuspend</link>,
+          a python daemon that suspends a system if certain conditions
+          are met, or not met.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
