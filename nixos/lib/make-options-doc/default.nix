@@ -157,9 +157,8 @@ in rec {
   # The actual generation of the xml file is done in nix purely for the convenience
   # of not having to generate the xml some other way
   optionsXML = pkgs.runCommand "options.xml" {} ''
-    export NIX_STORE_DIR=$TMPDIR/store
-    export NIX_STATE_DIR=$TMPDIR/state
     ${pkgs.nix}/bin/nix-instantiate \
+      --store dummy:// \
       --eval --xml --strict ${./optionsJSONtoXML.nix} \
       --argstr file ${optionsJSON}/share/doc/nixos/options.json \
       > "$out"
