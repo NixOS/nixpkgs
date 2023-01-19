@@ -28789,6 +28789,10 @@ with pkgs;
 
   cuneiform = callPackage ../tools/graphics/cuneiform {};
 
+  cups-browsed = callPackage ../applications/printing/cups-browsed {
+    inherit (darwin) libresolv;
+  };
+
   curseradio = callPackage ../applications/audio/curseradio { };
 
   curtail = callPackage ../applications/graphics/curtail { };
