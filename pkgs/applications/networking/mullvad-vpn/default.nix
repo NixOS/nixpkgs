@@ -45,10 +45,23 @@ stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
   version = "2022.5";
 
-  src = fetchurl {
-    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "sha256-G3B4kb+ugukYtCVH3HHI43u3n9G0dX6WyYUA3X/sZ+o=";
-  };
+  src =
+    let
+      inherit (stdenv.hostPlatform) system;
+      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      suffix = selectSystem {
+        x86_64-linux = "amd64";
+        aarch64-linux = "arm64";
+      };
+      sha256 = selectSystem {
+        x86_64-linux = "sha256-G3B4kb+ugukYtCVH3HHI43u3n9G0dX6WyYUA3X/sZ+o=";
+        aarch64-linux = "sha256-bDenh7OU9RfU6bOMy0GTBMM9KOfiqXxligNVPLcNE3A=";
+      };
+    in
+    fetchurl {
+      url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_${suffix}.deb";
+      inherit sha256;
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -90,7 +103,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 
