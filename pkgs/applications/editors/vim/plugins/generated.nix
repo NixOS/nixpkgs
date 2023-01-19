@@ -941,6 +941,18 @@ final: prev:
     meta.homepage = "https://github.com/blueballs-theme/blueballs-neovim/";
   };
 
+  boole-nvim = buildVimPluginFrom2Nix {
+    pname = "boole.nvim";
+    version = "2023-01-14";
+    src = fetchFromGitHub {
+      owner = "nat-418";
+      repo = "boole.nvim";
+      rev = "f4f9996f91159e54b8f1893b20e2e599c91bc1bd";
+      sha256 = "0kilw1g57nrwxp07qpycig4bswafwg751kaiqnlnn70xbb88xppg";
+    };
+    meta.homepage = "https://github.com/nat-418/boole.nvim/";
+  };
+
   bracey-vim = buildVimPluginFrom2Nix {
     pname = "bracey.vim";
     version = "2021-08-20";
