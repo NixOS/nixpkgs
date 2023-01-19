@@ -33,6 +33,15 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      advantage-air = super.advantage-air.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        src = super.fetchPypi {
+          pname = "advantage_air";
+          inherit version;
+          hash = "sha256-I9HMDLZX9xKDJuYSAweM2r4v3ZKevHTn5dHTYxN3EuE=";
+        };
+      });
+
       # https://github.com/postlund/pyatv/issues/1879
       aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
         pname = "aiohttp";
