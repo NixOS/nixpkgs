@@ -121,6 +121,9 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
+         # all tests are skipped
+         # https://github.com/home-assistant/core/blob/dev/tests/components/homeassistant_hardware/test_silabs_multiprotocol_addon.py#L23
+        "homeassistant_hardware"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;
