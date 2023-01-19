@@ -14339,6 +14339,12 @@
     githubId = 1280118;
     name = "Tomislav Markovski";
   };
+  tmarkus = {
+    email = "tobias@markus-regensburg.de";
+    github = "hesiod";
+    githubId = 3159881;
+    name = "Tobias Markus";
+  };
   tmountain = {
     email = "tinymountain@gmail.com";
     github = "tmountain";
