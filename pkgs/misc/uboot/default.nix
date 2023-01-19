@@ -194,6 +194,17 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootEspressobin = buildUBoot rec {
+    defconfig = "mvebu_espressobin-88f3720_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+    src = fetchurl {
+      url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
+      sha256 = "03wm651ix783s4idj223b0nm3r6jrdnrxs1ncs8s128g72nknhk9";
+    };
+    version = "2023.01";
+  };
+
   ubootGuruplug = buildUBoot {
     defconfig = "guruplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
