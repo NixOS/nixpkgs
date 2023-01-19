@@ -97,6 +97,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
