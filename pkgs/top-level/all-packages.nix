@@ -19530,6 +19530,8 @@ with pkgs;
 
   fbthrift = callPackage ../development/libraries/fbthrift { };
 
+  fb303 = callPackage ../development/libraries/fb303 { };
+
   fcgi = callPackage ../development/libraries/fcgi { };
 
   fcl = callPackage ../development/libraries/fcl { };
