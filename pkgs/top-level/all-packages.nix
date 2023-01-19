@@ -30224,6 +30224,8 @@ with pkgs;
 
   popura = callPackage ../tools/networking/popura {};
 
+  ps-printer-app = callPackage ../applications/printing/ps-printer-app { };
+
   pureref = callPackage ../applications/graphics/pureref { };
 
   shepherd = nodePackages."@nerdwallet/shepherd";
