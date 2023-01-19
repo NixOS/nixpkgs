@@ -609,6 +609,13 @@
           information about the current generation revision
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.nomad.extraSettingsPlugins</literal> has
+          been fixed to allow more than one plugin in the path.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

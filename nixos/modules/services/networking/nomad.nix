@@ -67,7 +67,7 @@ in
           Additional plugins dir used to configure nomad.
         '';
         example = literalExpression ''
-          [ "<pluginDir>" pkgs.<plugins-name> ]
+          [ "<pluginDir>" pkgs.nomad-driver-nix pkgs.nomad-driver-podman  ]
         '';
       };
 
@@ -139,9 +139,16 @@ in
         {
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
+          ExecStart =
+            let
+              pluginsDir = pkgs.symlinkJoin
+                {
+                  name = "nomad-plugins";
+                  paths = cfg.extraSettingsPlugins;
+                };
+            in
+            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin" +
+            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;
