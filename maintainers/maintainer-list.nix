@@ -6166,6 +6166,12 @@
     githubId = 4085046;
     name = "Imuli";
   };
+  inclyc = {
+    email = "i@lyc.dev";
+    github = "inclyc";
+    githubId = 36667224;
+    name = "Yingchi Long";
+  };
   ineol = {
     email = "leo.stefanesco@gmail.com";
     github = "ineol";
