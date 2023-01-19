@@ -38691,4 +38691,6 @@ with pkgs;
   tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
 
   resgate = callPackage ../servers/resgate { };
+
+  mox-boot-builder = callPackage ../misc/mox-boot-builder { };
 }
