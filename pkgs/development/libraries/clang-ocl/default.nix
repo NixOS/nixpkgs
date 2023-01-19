@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-ocl";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != stdenv.cc.cc.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

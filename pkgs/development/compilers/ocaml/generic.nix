@@ -11,12 +11,14 @@ in
 , aflSupport ? false
 , flambdaSupport ? false
 , spaceTimeSupport ? false
+, unsafeStringSupport ? false
 }:
 
 assert useX11 -> safeX11 stdenv;
 assert aflSupport -> lib.versionAtLeast version "4.05";
 assert flambdaSupport -> lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> lib.versionAtLeast version "4.04";
+assert unsafeStringSupport -> lib.versionAtLeast version "4.06" && lib.versionOlder version "5.0";
 
 let
   src = args.src or (fetchurl {
@@ -59,6 +61,10 @@ stdenv.mkDerivation (args // {
   ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
   ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
+  ++ optionals unsafeStringSupport [
+    "--disable-force-safe-string"
+    "DEFAULT_STRING=unsafe"
+  ]
   ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
     "-host ${stdenv.hostPlatform.config}"

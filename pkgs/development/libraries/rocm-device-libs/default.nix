@@ -14,7 +14,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -45,6 +45,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = finalAttrs.version != stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })
