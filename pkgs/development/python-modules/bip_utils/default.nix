@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , ecdsa
-, pysha3
 , coincurve
 , pynacl
 , crcmod
@@ -28,7 +27,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ecdsa
-    pysha3
     cbor2
     pynacl
     coincurve
