@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "1knff50rr8f39myxj50fprb9ya87cslmwz7zzfya56l33r7i7jh3";
   };
 
+  # required for build time tool `./tools/translate.c`
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ installShellFiles tcl tcllib ];
