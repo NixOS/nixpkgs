@@ -6560,6 +6560,19 @@ final: prev:
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
   };
 
+  oil-nvim = buildVimPluginFrom2Nix {
+    pname = "oil.nvim";
+    version = "2023-01-19";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "oil.nvim";
+      rev = "f5961e731f641206727eaded197e5879694c35f7";
+      sha256 = "1q4wcmdbpx2si4ynq4hldbq2asq16qqwrf0lmcpqrldpziffgdv2";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/stevearc/oil.nvim/";
+  };
+
   omnisharp-extended-lsp-nvim = buildVimPluginFrom2Nix {
     pname = "omnisharp-extended-lsp.nvim";
     version = "2022-10-29";
