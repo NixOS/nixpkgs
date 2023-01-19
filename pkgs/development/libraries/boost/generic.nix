@@ -1,4 +1,4 @@
-{ lib, stdenv, icu, expat, zlib, bzip2, python ? null, fixDarwinDylibNames, libiconv, libxcrypt
+{ lib, stdenv, icu, expat, zlib, bzip2, zstd, xz, python ? null, fixDarwinDylibNames, libiconv, libxcrypt
 , boost-build
 , fetchpatch
 , which
@@ -227,6 +227,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ which boost-build ]
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
+    ++ optional (versionAtLeast version "1.69") zstd
+    ++ optional (versionAtLeast version "1.65") xz
     ++ optional enableIcu icu
     ++ optionals enablePython [ libxcrypt python ]
     ++ optional enableNumpy python.pkgs.numpy;
