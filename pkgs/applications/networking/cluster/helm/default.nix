@@ -37,7 +37,8 @@ buildGoModule rec {
   postInstall = ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
-    installShellCompletion helm.{bash,zsh}
+    $out/bin/helm completion fish > helm.fish
+    installShellCompletion helm.{bash,zsh,fish}
   '';
 
   meta = with lib; {
