@@ -10,17 +10,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "NiaARM";
-  version = "0.2.2";
+  pname = "niaarm";
+  version = "0.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
-    repo = pname;
+    repo = "NiaARM";
     rev = version;
-    hash = "sha256-IY72hDklPkGjb2zo7Wf0MBiPn/jHtyUKW9D0jxA0P54=";
+    hash = "sha256-JPsBpVMeVZxUhCHoIBP47LhR8nrc8ZtJHREZLwL5Zxw=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,11 @@ buildPythonPackage rec {
     niapy
     nltk
     pandas
+  ];
+
+  disabledTests = [
+    # Test requires extra nltk data dependency
+    "test_text_mining"
   ];
 
   checkInputs = [
@@ -44,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A minimalistic framework for Numerical Association Rule Mining";
     homepage = "https://github.com/firefly-cpp/NiaARM";
+    changelog = "https://github.com/firefly-cpp/NiaARM/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };
