@@ -2173,6 +2173,15 @@ self: super: {
     testTarget = "tests";
   }) super.conduit-aeson;
 
+  # Ships a broken Setup.hs
+  # https://github.com/lehins/FailT/issues/1
+  FailT = overrideCabal (drv: {
+    postPatch = ''
+      ${drv.postPatch or ""}
+      rm Setup.hs
+    '';
+  }) super.FailT;
+
   # Disabling doctests.
   regex-tdfa = overrideCabal {
     testTarget = "regex-tdfa-unittest";

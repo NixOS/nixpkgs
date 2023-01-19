@@ -1444,7 +1444,6 @@ broken-packages:
   - fadno-braids
   - fadno-xml
   - failable-list
-  - FailT
   - failure-detector
   - fake
   - fake-type
