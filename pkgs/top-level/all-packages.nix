@@ -19452,6 +19452,8 @@ with pkgs;
 
   editline = callPackage ../development/libraries/editline { };
 
+  edencommon = callPackage ../development/libraries/edencommon { };
+
   eigen = callPackage ../development/libraries/eigen {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
