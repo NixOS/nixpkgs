@@ -4,7 +4,8 @@
 { stdenv
 , pkgs
 , lib
-,
+, runCommand
+, testers
 }:
 
 let
@@ -98,6 +99,25 @@ in
 {
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
   hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; });
+
+  outputs-no-out = runCommand "outputs-no-out-assert" {
+    result = testers.testBuildFailure (stdenv.mkDerivation {
+      NIX_DEBUG = 1;
+      name = "outputs-no-out";
+      outputs = ["foo"];
+      buildPhase = ":";
+      installPhase = ''
+        touch $foo
+      '';
+    });
+
+    # Assumption: the first output* variable to be configured is
+    #   _overrideFirst outputDev "dev" "out"
+    expectedMsg = "_assignFirst: could not find a non-empty variable to assign to outputDev. The following variables were all unset or empty: dev out.";
+  } ''
+    grep -F "$expectedMsg" $result/testBuildFailure.log >/dev/null
+    touch $out
+  '';
 
   test-env-attrset = testEnvAttrset { name = "test-env-attrset"; stdenv' = bootStdenv; };
 
