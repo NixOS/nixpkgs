@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, gitUpdater
 , gtk3
 , hicolor-icon-theme
 , jdupes
@@ -48,6 +49,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A Material Design icon theme based on Paper icon theme";
