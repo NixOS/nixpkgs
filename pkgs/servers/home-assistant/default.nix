@@ -85,6 +85,15 @@ let
         };
       });
 
+      icalendar = super.icalendar.overridePythonAttrs (oldAttrs: rec {
+        version = "4.1.0";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-l0i3wC78xD5Y0GFa4JdqxPJl6Q2t7ptPiE3imQXBs5U=";
+        };
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
