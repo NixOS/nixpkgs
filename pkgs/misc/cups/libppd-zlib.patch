@@ -1,0 +1,25 @@
+--- a/Makefile.am	1970-01-01 01:00:01.000000000 +0100
++++ b/Makefile.am	2023-02-11 00:18:59.837436258 +0100
+@@ -117,9 +117,11 @@
+ 	$(pkgppdinclude_DATA) \
+ 	$(pkgppddefs_DATA)
+ libppd_la_LIBADD = \
++	$(ZLIB_LIBS) \
+ 	$(LIBCUPSFILTERS_LIBS) \
+ 	$(CUPS_LIBS)
+ libppd_la_CFLAGS = \
++	$(ZLIB_CFLAGS) \
+ 	$(LIBCUPSFILTERS_CFLAGS) \
+ 	$(CUPS_CFLAGS)
+ libppd_la_LDFLAGS = \
+--- a/configure.ac	1970-01-01 01:00:01.000000000 +0100
++++ b/configure.ac	2023-02-11 00:19:48.327581295 +0100
+@@ -124,6 +124,8 @@
+ # ========================
+ PKG_CHECK_MODULES([LIBCUPSFILTERS], [libcupsfilters])
+ 
++PKG_CHECK_MODULES([ZLIB], [zlib])
++
+ # =======================================================
+ # Check for whether we want to install the ppdc utilities
+ # =======================================================

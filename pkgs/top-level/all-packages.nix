@@ -37391,6 +37391,8 @@ with pkgs;
 
   libcupsfilters = callPackage ../misc/cups/libcupsfilters.nix { };
 
+  libppd = callPackage ../misc/cups/libppd.nix { };
+
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
