@@ -76,6 +76,7 @@ in {
   microblaze    = filterDoubles predicates.isMicroBlaze;
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
+  power         = filterDoubles predicates.isPower;
   riscv         = filterDoubles predicates.isRiscV;
   riscv32       = filterDoubles predicates.isRiscV32;
   riscv64       = filterDoubles predicates.isRiscV64;
