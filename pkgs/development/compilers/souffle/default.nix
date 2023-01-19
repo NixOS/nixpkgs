@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
   };
 
-  patches = [ ./threads.patch ] ++ [
+  patches = [
+    ./threads.patch
     (fetchpatch {
       name = "missing-override.patch";
       url = "https://github.com/souffle-lang/souffle/commit/da2d778f0cca94f206686546fa56b9ffc738ad75.patch";
