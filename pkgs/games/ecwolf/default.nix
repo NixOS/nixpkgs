@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, cmake, pkg-config, zlib, bzip2, libjpeg, SDL, SDL_mixer, gtk2 }:
+{ stdenv, lib, fetchFromBitbucket, makeDesktopItem, copyDesktopItems, cmake, pkg-config, zlib, bzip2, libjpeg, SDL, SDL_mixer, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "ecwolf";
   version = "1.3.3";
 
-  src = fetchurl {
-    url = "https://maniacsvault.net/ecwolf/files/ecwolf/1.x/${pname}-${version}-src.tar.xz";
-    sha256 = "1sbdv672dz47la5a5qwmdi1v258k9kc5dkx7cdj2b6gk8nbm2srl";
+  src = fetchFromBitbucket {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "7RjWoABZkN5J7GpG7ie7F3rSrI3Kp3I8KRalZAE92pQ=";
   };
 
   nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
