@@ -1819,7 +1819,6 @@ broken-packages:
   - gloss-banana
   - gloss-export
   - gloss-game
-  - glpk-headers
   - gltf-codec
   - glue
   - g-npm
@@ -3245,7 +3244,6 @@ broken-packages:
   - math-grads
   - math-interpolate
   - math-metric
-  - math-programming
   - matrix-as-xyz
   - matrix-lens
   - matrix-market

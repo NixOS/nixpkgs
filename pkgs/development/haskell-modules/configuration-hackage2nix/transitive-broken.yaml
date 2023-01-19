@@ -2726,8 +2726,6 @@ dont-distribute-packages:
  - marvin
  - masakazu-bot
  - matchers
- - math-programming-glpk
- - math-programming-tests
  - mathblog
  - mathlink
  - matsuri
