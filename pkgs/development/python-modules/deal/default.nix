@@ -73,6 +73,7 @@ buildPythonPackage rec {
     "test_source_vaa_scheme"
     "test_vaa_scheme_and_custom_exception"
     "test_scheme_string_validation_args_correct"
+    "test_exception_hook"
     "test_method_chain_decorator_with_scheme_is_fulfilled"
     "test_scheme_contract_is_satisfied_when_setting_arg"
     "test_scheme_contract_is_satisfied_within_chain"
