@@ -48,6 +48,7 @@ with lib;
       limesuite = super.limesuite.override { withGui = false; };
       mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
+      neofetch = super.neofetch.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
       networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
