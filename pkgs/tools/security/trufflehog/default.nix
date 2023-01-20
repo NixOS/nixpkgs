@@ -27,7 +27,7 @@ buildGoModule rec {
     description = "Find credentials all over the place";
     homepage = "https://github.com/trufflesecurity/trufflehog";
     changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/v${version}";
-    license = with licenses; [ agpl3 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [ agpl3Only ];
+    maintainers = with maintainers; [ fab ];
   };
 }
