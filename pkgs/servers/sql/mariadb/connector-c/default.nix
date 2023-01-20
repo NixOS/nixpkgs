@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, cmake
 , curl, openssl, zlib
 , libiconv
-, version, sha256, ...
+, version, hash, ...
 }:
 
 with lib;
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   outputs = [ "out" "dev" ];
