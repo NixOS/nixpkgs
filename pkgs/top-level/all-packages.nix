@@ -2862,6 +2862,8 @@ with pkgs;
 
   inherit (nodePackages) bitwarden-cli;
 
+  bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
+
   inherit (nodePackages) concurrently;
 
   bklk = callPackage ../applications/misc/bklk { };
@@ -7767,7 +7769,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  graphviz-nox = graphviz.override {
+  graphviz-nox = callPackage ../tools/graphics/graphviz {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     withXorg = false;
     libdevil = libdevil-nox;
   };
@@ -10288,6 +10291,8 @@ with pkgs;
 
   openmvg = callPackage ../applications/science/misc/openmvg { };
 
+  openmvs = callPackage ../applications/science/misc/openmvs { };
+
   openntpd = callPackage ../tools/networking/openntpd { };
 
   openntpd_nixos = openntpd.override {
@@ -10850,7 +10855,7 @@ with pkgs;
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
-    wxGTK30 = wxGTK30.override { withWebKit = true; };
+    wxGTK32 = wxGTK32.override { withWebKit = true; };
   };
 
   polaris = callPackage ../servers/polaris { };
@@ -20688,6 +20693,7 @@ with pkgs;
   };
 
   libdevil-nox = libdevil.override {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
     withXorg = false;
   };
 

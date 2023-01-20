@@ -264,6 +264,7 @@ stdenv.mkDerivation {
 
     + optionalString cc.langGo or false ''
       wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
+      wrap ${targetPrefix}go ${./go-wrapper.sh} $ccPath/${targetPrefix}go
     '';
 
   strictDeps = true;
