@@ -123,6 +123,7 @@ let
       breeze-grub = callPackage ./breeze-grub.nix { };
       breeze-plymouth = callPackage ./breeze-plymouth { };
       discover = callPackage ./discover.nix { };
+      flatpak-kcm = callPackage ./flatpak-kcm.nix { };
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix { };
       kde-cli-tools = callPackage ./kde-cli-tools.nix { };
       kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };
