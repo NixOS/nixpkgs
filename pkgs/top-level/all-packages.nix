@@ -7767,7 +7767,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  graphviz-nox = graphviz.override {
+  graphviz-nox = callPackage ../tools/graphics/graphviz {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     withXorg = false;
     libdevil = libdevil-nox;
   };
@@ -20688,6 +20689,7 @@ with pkgs;
   };
 
   libdevil-nox = libdevil.override {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
     withXorg = false;
   };
 
