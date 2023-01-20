@@ -14550,6 +14550,18 @@ with pkgs;
     meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
+  gccgo12 = wrapCC (gcc12.cc.override {
+    name = "gccgo";
+    langCC = true; #required for go.
+    langC = true;
+    langGo = true;
+    langJit = true;
+    profiledCompiler = false;
+  } // {
+    # not supported on darwin: https://github.com/golang/go/issues/463
+    meta.broken = stdenv.hostPlatform.isDarwin;
+  });
+
   ghdl = ghdl-mcode;
 
   ghdl-mcode = callPackage ../development/compilers/ghdl {
