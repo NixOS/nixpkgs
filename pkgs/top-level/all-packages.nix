@@ -37662,6 +37662,8 @@ with pkgs;
     with3d = false;
   };
 
+  kikit = with python3Packages; toPythonApplication kikit;
+
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
