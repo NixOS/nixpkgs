@@ -1,6 +1,7 @@
 { version
 , dmdSha256
-, druntimeSha256
+# only needed before version 2.101.0
+, druntimeSha256? ""
 , phobosSha256
 }:
 
@@ -42,6 +43,18 @@ let
       stdenv.hostPlatform.parsed.kernel.name;
 
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";
+  druntimeRepo = lib.versionOlder version "2.101.0";
+  dmdPrefix =
+    if druntimeRepo then
+      "dmd"
+    else
+      "dmd/compiler";
+  druntimePrefix =
+    if druntimeRepo then
+      "druntime"
+    else
+      "dmd/druntime";
+
 in
 
 stdenv.mkDerivation rec {
@@ -60,17 +73,18 @@ stdenv.mkDerivation rec {
     })
     (fetchFromGitHub {
       owner = "dlang";
-      repo = "druntime";
-      rev = "v${version}";
-      sha256 = druntimeSha256;
-      name = "druntime";
-    })
-    (fetchFromGitHub {
-      owner = "dlang";
       repo = "phobos";
       rev = "v${version}";
       sha256 = phobosSha256;
       name = "phobos";
+    })
+  ] ++ lib.optionals druntimeRepo [
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "druntime";
+      rev = "v${version}";
+      sha256 = druntimeSha256;
+      name = "druntime";
     })
   ];
 
@@ -99,30 +113,26 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs dmd/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
-
-    rm dmd/test/runnable/gdb1.d
-    rm dmd/test/runnable/gdb10311.d
-    rm dmd/test/runnable/gdb14225.d
-    rm dmd/test/runnable/gdb14276.d
-    rm dmd/test/runnable/gdb14313.d
-    rm dmd/test/runnable/gdb14330.d
-    rm dmd/test/runnable/gdb15729.sh
-    rm dmd/test/runnable/gdb4149.d
-    rm dmd/test/runnable/gdb4181.d
-
+    patchShebangs ${dmdPrefix}/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
+    rm ${dmdPrefix}/test/runnable/gdb1.d
+    rm ${dmdPrefix}/test/runnable/gdb10311.d
+    rm ${dmdPrefix}/test/runnable/gdb14225.d
+    rm ${dmdPrefix}/test/runnable/gdb14276.d
+    rm ${dmdPrefix}/test/runnable/gdb14313.d
+    rm ${dmdPrefix}/test/runnable/gdb14330.d
+    rm ${dmdPrefix}/test/runnable/gdb15729.sh
+    rm ${dmdPrefix}/test/runnable/gdb4149.d
+    rm ${dmdPrefix}/test/runnable/gdb4181.d
     # Disable tests that rely on objdump whitespace until fixed upstream:
     #   https://issues.dlang.org/show_bug.cgi?id=23317
-    rm dmd/test/runnable/cdvecfill.sh
-    rm dmd/test/compilable/cdcmp.d
-
+    rm ${dmdPrefix}/test/runnable/cdvecfill.sh
+    rm ${dmdPrefix}/test/compilable/cdcmp.d
     # Grep'd string changed with gdb 12
     #   https://issues.dlang.org/show_bug.cgi?id=23198
-    substituteInPlace druntime/test/exceptions/Makefile \
-      --replace 'in D main (' 'in _Dmain ('
-
+    substituteInPlace ${druntimePrefix}/test/exceptions/Makefile \
+      --replace 'D main (' '_Dmain ('
     # We're using gnused on all platforms
-    substituteInPlace druntime/test/coverage/Makefile \
+    substituteInPlace ${druntimePrefix}/test/coverage/Makefile \
       --replace 'freebsd osx' 'none'
   ''
 
@@ -134,7 +144,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
     rm dmd/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-    substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+    substituteInPlace ${dmdPrefix}/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
   ''
 
   + lib.optionalString stdenv.isLinux ''
@@ -173,18 +183,17 @@ stdenv.mkDerivation rec {
   # Build and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
     runHook preBuild
-
     export buildJobs=$NIX_BUILD_CORES
     if [ -z $enableParallelBuilding ]; then
       buildJobs=1
     fi
-
     make -C dmd -f posix.mak $buildFlags -j$buildJobs HOST_DMD=${HOST_DMD}
-    make -C druntime -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd}
+    ${lib.optionalString druntimeRepo
+      "make -C druntime -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd}"
+    }
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
     echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
     make -C phobos -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
-
     runHook postBuild
   '';
 
@@ -196,19 +205,19 @@ stdenv.mkDerivation rec {
 
   # NOTE: Purity check is disabled for checkPhase because it doesn't fare well
   # with the DMD linker. See https://github.com/NixOS/nixpkgs/issues/97420
-  checkPhase = ''
+  checkPhase =
+  ''
     runHook preCheck
-
     export checkJobs=$NIX_BUILD_CORES
     if [ -z $enableParallelChecking ]; then
       checkJobs=1
     fi
 
     NIX_ENFORCE_PURITY= \
-      make -C dmd/test $checkFlags CC=$CXX SHELL=$SHELL -j$checkJobs N=$checkJobs
+      make -C ${dmdPrefix}/test $checkFlags CC=$CXX SHELL=$SHELL -j$checkJobs N=$checkJobs
 
     NIX_ENFORCE_PURITY= \
-      make -C druntime -f posix.mak unittest $checkFlags -j$checkJobs
+      make -C ${druntimePrefix} -f posix.mak unittest $checkFlags -j$checkJobs
 
     NIX_ENFORCE_PURITY= \
       make -C phobos -f posix.mak unittest $checkFlags -j$checkJobs DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
@@ -216,7 +225,8 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase =
+  ''
     runHook preInstall
 
     install -Dm755 ${pathToDmd} $out/bin/dmd
@@ -224,9 +234,11 @@ stdenv.mkDerivation rec {
     installManPage dmd/docs/man/man*/*
 
     mkdir -p $out/include/dmd
-    cp -r {druntime/import/*,phobos/{std,etc}} $out/include/dmd/
+
+    cp -r {${druntimePrefix}/import/*,phobos/{std,etc}} $out/include/dmd/
 
     mkdir $out/lib
+
     cp phobos/generated/${osname}/release/${bits}/libphobos2.* $out/lib/
 
     wrapProgram $out/bin/dmd \
