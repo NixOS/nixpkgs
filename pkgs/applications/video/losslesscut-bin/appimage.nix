@@ -5,7 +5,7 @@ let
   nameRepo = "lossless-cut";
   nameCamel = "LosslessCut";
   name = "${pname}-${version}";
-  nameSource = "${nameCamel}-linux-x86_64.AppImage";
+  nameSource = "${nameCamel}-linux.AppImage";
   nameExecutable = "losslesscut";
   owner = "mifi";
   src = fetchurl {

@@ -8,7 +8,6 @@
 , gobject-introspection
 , gjs
 , nixosTests
-, curl
 , glib
 , systemd
 , xz
@@ -86,7 +85,6 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    curl
     glib
     systemd
     e2fsprogs
@@ -110,7 +108,6 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-curl"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"

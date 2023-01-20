@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.3";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "a31e95a7f49e58aaf4271015dd60730fc74d9776dfac425a8f14eb64cdcd9944";
+    sha256 = "6a0f7b03ef3a7f74cf42ffa5b88ab1a7b7beb4d864871a1b700465343ae74bb6";
   };
 
   nativeBuildInputs = [ dos2unix makeWrapper ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     # in ~/.local/share instead.
     wrapProgram "$out/bin/ClassiCube" \
       --run 'mkdir -p "$HOME/.local/share/ClassiCube"' \
-      --run 'cd       "$HOME/.local/share/ClassiCube"'
+      --add-flags '-d"$HOME/.local/share/ClassiCube"'
   '';
 
   meta = with lib; {

@@ -1,13 +1,6 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, extra-cmake-modules
-, qtbase
-, wrapQtAppsHook
-, ki18n
-, kdelibs4support
-, krunner
+{ lib, stdenv
+, cmake, fetchFromGitHub, extra-cmake-modules
+, qtbase, wrapQtAppsHook, ki18n, kdelibs4support, krunner
 }:
 
 stdenv.mkDerivation rec {

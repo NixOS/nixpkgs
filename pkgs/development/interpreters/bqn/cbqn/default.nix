@@ -4,7 +4,6 @@
 , genBytecode ? false
 , bqn-path ? null
 , mbqn-source ? null
-, libffi
 }:
 
 let
@@ -12,26 +11,22 @@ let
     name = "cbqn-bytecode-files";
     owner = "dzaima";
     repo = "CBQN";
-    rev = "3df8ae563a626ff7ae0683643092f0c3bc2481e5";
-    hash = "sha256:0rh9qp1bdm9aa77l0kn9n4jdy08gl6l7898lncskxiq9id6xvyb8";
+    rev = "c39653c898531a2cdbf4cc5c764df6e37b1894a4";
+    hash = "sha256-JCEmkwh5Rv5+NQoxvefSrYnayU892/Wam+gjMgcQmO0=";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2022-10-04";
+  version = "0.pre+date=2022-05-06";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "abcb575a537712763e9e53b6cb0eb415346b00e6";
-    hash = "sha256:05gqw2ppcykv36ji8mkp8mq502q84vk9algp9c2d3z495xqy8rn6";
+    rev = "3496a939b670f8c9ca2a04927378d6b7e9abd68e";
+    hash = "sha256-P+PoY4XF9oEw7VIpmybvPp+jxWHEo2zt1Lamayf1mHg=";
   };
-
-  buildInputs = [
-    libffi
-  ];
 
   dontConfigure = true;
 
@@ -49,13 +44,8 @@ stdenv.mkDerivation rec {
   '' + (if genBytecode then ''
     ${bqn-path} genRuntime ${mbqn-source}
   '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} src/gen/
-  '')
-  # Need to adjust ld flags for darwin manually
-  # https://github.com/dzaima/CBQN/issues/26
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeFlagsArray+=(LD_LIBS="-ldl -lffi")
-  '';
+    cp ${cbqn-bytecode-files}/src/gen/{compiles,formatter,runtime0,runtime1,src} src/gen/
+  '');
 
   installPhase = ''
      runHook preInstall

@@ -1,15 +1,16 @@
-{ lib, buildDunePackage, irmin, astring, logs, lwt
-, alcotest, irmin-test, irmin-watcher }:
+{ lib, buildDunePackage, irmin, irmin-test }:
 
 buildDunePackage rec {
 
   pname = "irmin-fs";
 
-  inherit (irmin) version src strictDeps;
+  inherit (irmin) version src;
 
-  propagatedBuildInputs = [ irmin astring logs lwt ];
+  propagatedBuildInputs = [ irmin ];
 
-  checkInputs = [ alcotest irmin-test irmin-watcher ];
+  useDune2 = true;
+
+  checkInputs = lib.optional doCheck irmin-test;
 
   doCheck = true;
 
@@ -18,3 +19,5 @@ buildDunePackage rec {
   };
 
 }
+
+

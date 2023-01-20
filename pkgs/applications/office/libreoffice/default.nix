@@ -555,6 +555,7 @@ in
     openssl
     pam
     perl
+    pkg-config
     poppler
     python3
     sane-backends

@@ -178,6 +178,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
 
+  gnome-todo = callPackage ./apps/gnome-todo {};
+
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   polari = callPackage ./apps/polari { };
@@ -267,7 +269,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
   gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
-  gnome-todo = pkgs.endeavour; # added 2022-07-30
   libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
 
   bijiben = throw "The ‘gnome.bijiben’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-notes’ directly."; # added 2018-09-26

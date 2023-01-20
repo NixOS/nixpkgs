@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchpatch, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
@@ -8,17 +8,12 @@ rustPlatform.buildRustPackage rec {
     owner = "urbica";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kygqwbaByse81oc007piXHM6aK6Yi2JB0qTFN2WFP8U=";
+    sha256 = "1i9zhmjkgid4s90n52wqmrl3lwswcaxd6d47ssycgjl1nv0jla4k";
   };
 
-  cargoPatches = [
-    # Remove after a new release, tracked by https://github.com/maplibre/martin/issues/410.
-    ./update-socket2-for-rust-1.64.patch
-  ];
+  cargoSha256 = "1jgl8s6h4pqhn189swrhn896kw1rkmqpf7dq52ry2rdci80g02nq";
 
-  cargoHash = "sha256-oevyr1P0uzHbpWCYQ1raqA42HI2KLl2IYcm1D2PeKOo=";
-
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = with stdenv; lib.optional isDarwin Security;
 
   doCheck = false;
 

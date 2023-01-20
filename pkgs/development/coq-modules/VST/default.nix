@@ -25,7 +25,7 @@ mkCoqDerivation {
   repo = "VST";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.14" "8.16"; out = "2.10"; }
+    { case = range "8.14" "8.15"; out = "2.10"; }
     { case = range "8.13" "8.15"; out = "2.9"; }
     { case = range "8.12" "8.13"; out = "2.8"; }
   ] null;
@@ -39,7 +39,7 @@ mkCoqDerivation {
   preConfigure = ''
     patchShebangs util
     substituteInPlace Makefile \
-      --replace 'COQVERSION= ' 'COQVERSION= 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
+      --replace 'COQVERSION= ' 'COQVERSION= 8.15.2 or-else 8.15.1 or-else '\
       --replace 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
   '';
 

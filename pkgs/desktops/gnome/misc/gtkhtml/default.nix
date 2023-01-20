@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gtkhtml"; attrPath = "gnome.gtkhtml"; };
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk3 intltool gnome.adwaita-icon-theme
                   gsettings-desktop-schemas ];
 
   propagatedBuildInputs = [ enchant isocodes ];

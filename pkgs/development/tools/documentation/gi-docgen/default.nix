@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , python3
@@ -19,15 +18,6 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "35pL/2TQRVgPfAcfOGCLlSP1LIh4r95mFC+UoXQEEHo=";
   };
-
-  patches = [
-    # Fix gnome-builder build
-    # https://gitlab.gnome.org/GNOME/gi-docgen/-/merge_requests/161
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/0524047ada3e6a5572c43dd36201ebe589d08095.patch";
-      sha256 = "1P+i7v1sMULOd0w8K363Mssj+tBJ2wiSmE7DlztvCbw=";
-    })
-  ];
 
   depsBuildBuild = [
     python3

@@ -14,8 +14,8 @@ gnustep.stdenv.mkDerivation rec {
     hash = "sha256-3Xy0y1sdixy4gXhzhP9mfWeaDmOVJty+X95xCyxayPE=";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit ]
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oath-toolkit ]
     ++ lib.optional enableActiveSync libwbxml;
 
   patches = lib.optional enableActiveSync ./enable-activesync.patch;

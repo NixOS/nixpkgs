@@ -1,12 +1,7 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, knotifications
-, kpty
-, qtbase
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kcoreaddons, kdbusaddons, ki18n, knotifications, kpty, qtbase,
 }:
 
 mkDerivation {

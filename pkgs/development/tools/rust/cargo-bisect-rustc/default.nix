@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bisect-rustc";
-  version = "0.6.4";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dJpdAg+A7TYm6bGq73aA15hIymbJ56ScyygQLiEboak=";
+    hash = "sha256-TRcHeA4pOzODyzkQCGkdAWy3Bt2ltrOcpCMDu6n4k3k=";
   };
 
   patches =
@@ -46,12 +46,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-Y/CQcIgdG8dCvPF5bmJDySmgzRi6lFU/aJxkyUjYlAM=";
-
-  checkFlags = [
-    "--skip cli_tests"    # https://github.com/rust-lang/cargo-bisect-rustc/issues/226
-    "--skip test_github"  # requires internet
-  ];
+  cargoSha256 = "sha256-3I5V/JOxxy1+Cwkq9tuHMgHQ0eCfzAViJ4Gl+l8RHlE=";
 
   meta = with lib; {
     description = "Bisects rustc, either nightlies or CI artifacts";

@@ -24,11 +24,11 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.1";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    hash = "sha256-Xw7seQike8dSV6SIAsrK1Sc/HBOyaA8fhHzwrISKyBA=";
+    hash = "sha256-QtGgoC7CrxRyjcdoySHUeAC8gwP0FyIetvMvBCNbBDE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

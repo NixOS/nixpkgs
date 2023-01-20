@@ -56,7 +56,9 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     httpretty
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ passthru.optional-dependencies.openidconnect
+  ++ passthru.optional-dependencies.saml
+  ++ passthru.optional-dependencies.azuread;
 
   # Disable checking the code coverage
   prePatch = ''

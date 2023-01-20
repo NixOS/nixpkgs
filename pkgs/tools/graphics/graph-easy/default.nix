@@ -10,7 +10,7 @@ perlPackages.buildPerlPackage {
 
   meta = with lib; {
     description = "Render/convert graphs in/from various formats";
-    license = licenses.gpl1Only;
+    license = licenses.gpl1;
     platforms = platforms.unix;
     maintainers = [ maintainers.jensbin ];
   };

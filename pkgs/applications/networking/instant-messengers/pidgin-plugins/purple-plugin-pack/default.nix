@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g5hmy7fwgjq59j52h9yps28jsjjrfkd4r18gyx6hfd3g3kzbg1b";
   };
 
-  nativeBuildInputs = [ intltool ];
-  buildInputs = [ pidgin python2 ];
+  buildInputs = [ pidgin intltool python2 ];
 
   meta = with lib; {
     homepage = "https://bitbucket.org/rekkanoryo/purple-plugin-pack";

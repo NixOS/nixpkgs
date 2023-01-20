@@ -87,7 +87,7 @@ mediator_lua,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
-nvim-cmp,,,,,,
+nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
@@ -101,4 +101,3 @@ std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
 tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
-vusted,,,,,,figsoda

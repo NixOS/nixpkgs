@@ -389,8 +389,8 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
 
       services.colord.enable = mkDefault true;
+      services.gnome.chrome-gnome-shell.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
-      services.gnome.gnome-browser-connector.enable = mkDefault true;
       services.gnome.gnome-initial-setup.enable = mkDefault true;
       services.gnome.gnome-remote-desktop.enable = mkDefault true;
       services.gnome.gnome-settings-daemon.enable = true;
@@ -520,7 +520,7 @@ in
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
-      environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
+      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
       # Override default mimeapps for nautilus
       environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];

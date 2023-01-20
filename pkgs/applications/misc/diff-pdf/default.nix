@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, cairo, poppler, wxGTK, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
 
+let
+  wxInputs =
+    if stdenv.isDarwin then
+      [ wxmac darwin.apple_sdk.frameworks.Cocoa ]
+    else
+      [ wxGTK ];
+in
 stdenv.mkDerivation rec {
   pname = "diff-pdf";
   version = "0.5";
@@ -12,8 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
-  buildInputs = [ cairo poppler wxGTK ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ cairo poppler ] ++ wxInputs;
 
   preConfigure = "./bootstrap";
 

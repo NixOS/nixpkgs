@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to MySQL";
     homepage = "https://github.com/PyMySQL/mysqlclient-python";
-    license = licenses.gpl2Only;
+    license = licenses.gpl1;
     maintainers = with maintainers; [ y0no ];
   };
 }

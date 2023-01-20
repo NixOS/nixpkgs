@@ -21,7 +21,6 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
   version = "9.0.6";
-  format = "other";
 
   src = fetchFromGitHub {
     owner = "haiwen";
@@ -29,6 +28,8 @@ python.pkgs.buildPythonApplication rec {
     rev = "876b7ba9b680fc668e89706aff535593772ae921"; # using a fixed revision because upstream may re-tag releases :/
     sha256 = "sha256-GHvJlm5DVt3IVJnqJu8YobNNqbjdPd08s4DCdQQRQds=";
   };
+
+  format = "other";
 
   dontBuild = true;
 

@@ -22,9 +22,9 @@ index 40eb8e3..5db545b 100644
 +project('gssdp-tools', 'c', version: '@version@')
 +gnome = import('gnome')
 +
-+gssdp = dependency('gssdp-1.6')
++gssdp = dependency('gssdp-1.2')
 +gtk = dependency('gtk4', version : '>= 4')
-+libsoup = dependency('libsoup-3.0', version : '>= 2.99.0')
++libsoup = dependency('libsoup-2.4', version : '>= 2.26.1')
 +
  resource = gnome.compile_resources(
      'org.gupnp.GSSDP.DeviceSniffer',

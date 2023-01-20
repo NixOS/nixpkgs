@@ -35,7 +35,7 @@ let
   };
 
   mediawikiScripts = pkgs.runCommand "mediawiki-scripts" {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ pkgs.makeWrapper ];
     preferLocalBuild = true;
   } ''
     mkdir -p $out/bin

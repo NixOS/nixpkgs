@@ -20,7 +20,7 @@
 , sqlite
 , virtualpg
 , wxGTK
-, xz
+, wxmac
 , zstd
 , Carbon
 , Cocoa
@@ -56,10 +56,9 @@ stdenv.mkDerivation rec {
     proj
     sqlite
     virtualpg
-    wxGTK
-    xz
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
+  ] ++ lib.optional stdenv.isLinux wxGTK
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
 
   enableParallelBuilding = true;
 

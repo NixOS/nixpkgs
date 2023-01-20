@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rofl0r/proxychains-ng/commit/9b42da71f4df7b783cf07a58ffa095e293c43380.patch";
       sha256 = "sha256-tYv9XP51WtsjaoklwQk3D/MQceoOvtdMwBraECt6AXQ=";
     })
-    # https://github.com/NixOS/nixpkgs/issues/136093
-    ./swap-priority-4-and-5-in-get_config_path.patch
   ];
 
   installFlags = [

@@ -1,22 +1,22 @@
 diff --git a/src/toolchains.rs b/src/toolchains.rs
-index 53a7ddb..795a711 100644
+index 4d85e7c..b1353c6 100644
 --- a/src/toolchains.rs
 +++ b/src/toolchains.rs
-@@ -206,6 +206,8 @@ impl Toolchain {
-             })?;
+@@ -259,6 +259,8 @@ impl Toolchain {
+             .map_err(InstallError::Download)?;
          }
- 
+
 +        nix_patchelf(tmpdir.path().to_path_buf())
 +            .expect("failed to patch toolchain for NixOS");
-         fs::rename(tmpdir.into_path(), dest).map_err(InstallError::Move)
+         fs::rename(tmpdir.into_path(), dest).map_err(InstallError::Move)?;
+
+         Ok(())
+@@ -557,3 +559,42 @@ pub(crate) fn download_tarball(
      }
- 
-@@ -533,3 +535,42 @@ fn download_tarball(
-         res => res,
-     }
+     download_tar_gz(client, name, &format!("{}.gz", url,), strip_prefix, dest)
  }
 +
-+fn nix_patchelf(mut toolchain_path: PathBuf) -> io::Result<()> {
++fn nix_patchelf(mut toolchain_path: PathBuf) -> Result<(), Error> {
 +    toolchain_path.push("bin");
 +
 +    for entry in toolchain_path.read_dir()? {

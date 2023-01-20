@@ -1,29 +1,21 @@
-{ lib
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, fetchFromGitHub
-, fetchpatch
-, Security
-}:
+{ lib, stdenv, rustPlatform, openssl, pkg-config, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cliscord";
-  version = "unstable-2022-10-07";
+  version = "unstable-2020-12-08";
 
   src = fetchFromGitHub {
     owner = "somebody1234";
     repo = pname;
-    rev = "d62317d55c07ece8c9d042dcd74b62e58c9bfaeb";
-    hash = "sha256-dmR49yyErahOUxR9pGW1oYy8Wq5SWOprK317u+JPBv4=";
+    rev = "b02fbe5516fd7f153d0b0e3c7d5d11e2ab651b43";
+    sha256 = "sha256-hzZozgOkw8kFppuHiX9TQxHhxKRv8utWWbhEOIzKDLo=";
   };
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoHash = "sha256-Z8ras6W4BnAWjHe6rPd1X1d3US5gq7CxnBAkW//OTsg=";
+  cargoSha256 = "12zfwdssyv0j83bff6s4376d99pv7z8ya8q8adwmf5ayvgmj4xz4";
 
   meta = with lib; {
     description = "Simple command-line tool to send text and files to discord";

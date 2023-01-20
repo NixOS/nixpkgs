@@ -109,9 +109,6 @@ in stdenv.mkDerivation rec {
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
   ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
     "--disable-docs"
-  ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    # https://github.com/rust-lang/rust/issues/92173
-    "--set rust.jemalloc"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
@@ -138,10 +135,6 @@ in stdenv.mkDerivation rec {
 
     # Useful debugging parameter
     # export VERBOSE=1
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    # See https://github.com/jemalloc/jemalloc/issues/1997
-    # Using a value of 48 should work on both emulated and native x86_64-darwin.
-    export JEMALLOC_SYS_WITH_LG_VADDR=48
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -154,10 +147,8 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ Security ]
+    ++ optionals stdenv.isDarwin [ libiconv Security ]
     ++ optional (!withBundledLLVM) llvmShared;
-
-  depsTargetTargetPropagated = optionals stdenv.isDarwin [ libiconv ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;

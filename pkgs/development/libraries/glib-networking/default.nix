@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , meson
@@ -9,6 +8,7 @@
 , glib
 , gettext
 , makeWrapper
+, python3
 , gnutls
 , p11-kit
 , libproxy
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.74.0";
+  version = "2.72.2";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HxharvCUEj+OJdj6VWYbP9cQIBY6AXSts1o3aFzaYTs=";
+    sha256 = "zSoITHu5HXjoSftV1A5HL22PaGLN3J8Sw5FJNZuhgmg=";
   };
 
   patches = [
@@ -36,12 +36,18 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gettext
     makeWrapper
+    python3 # for install_script
   ];
 
   buildInputs = [

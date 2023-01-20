@@ -50,9 +50,7 @@ let
     libcharset = callPackage ./libcharset.nix {};
     libunwind = callPackage ./libunwind.nix {};
     libnetwork = callPackage ./libnetwork.nix {};
-    # Avoid introducing a new objc4 if stdenv already has one, to prevent
-    # conflicting LLVM modules.
-    objc4 = if stdenv ? objc4 then stdenv.objc4 else callPackage ./libobjc.nix {};
+    objc4 = callPackage ./libobjc.nix {};
 
     # questionable aliases
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;

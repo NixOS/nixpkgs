@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of HopcroftKarp's algorithm";
     homepage = "https://github.com/sofiat-olaosebikan/hopcroftkarp";
-    license = licenses.gpl3Only;
+    license = licenses.gpl1;
     maintainers = [ maintainers.costrouc ];
   };
 }

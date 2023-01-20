@@ -13,13 +13,6 @@
     <itemizedlist>
       <listitem>
         <para>
-          GNOME has been upgraded to 43. Please take a look at their
-          <link xlink:href="https://release.gnome.org/43/">Release
-          Notes</link> for details.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           During cross-compilation, tests are now executed if the test
           suite can be executed by the build platform. This is the case
           when doing “native” cross-compilation where the build and host
@@ -497,16 +490,6 @@
       </listitem>
       <listitem>
         <para>
-          The <literal>p4</literal> package now only includes the
-          open-source Perforce Helix Core command-line client and APIs.
-          It no longer installs the unfree Helix Core Server binaries
-          <literal>p4d</literal>, <literal>p4broker</literal>, and
-          <literal>p4p</literal>. To install the Helix Core Server
-          binaries, use the <literal>p4d</literal> package instead.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The <literal>coq</literal> package and versioned variants
           starting at <literal>coq_8_14</literal> no longer include
           CoqIDE, which is now available through
@@ -634,12 +617,6 @@
       </listitem>
       <listitem>
         <para>
-          The default <literal>kops</literal> version is now 1.25.1 and
-          support for 1.22 and older has been dropped.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
         </para>
@@ -733,14 +710,6 @@
           0.8.36 to 2.0.15. See the
           <link xlink:href="https://github.com/bbuchfink/diamond/releases">upstream
           release notes</link> for more details.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>guake</literal> package has been updated from
-          3.6.3 to 3.9.0, see the
-          <link xlink:href="https://github.com/Guake/guake/releases">changelog</link>
-          for more details.
         </para>
       </listitem>
       <listitem>

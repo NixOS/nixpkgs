@@ -2,15 +2,17 @@
 
 buildDunePackage rec {
   pname = "bigstringaf";
-  version = "0.9.0";
+  version = "0.7.0";
 
-  minimalOCamlVersion = "4.08";
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HXPjnE56auy2MI6HV2XuBX/VeqsO50HFzTul17lKEqE=";
+    sha256 = "1q1sqxzdnlrpl95ccrhl7lwy3zswgd9rbn19ildclh0lyi2vazbj";
   };
 
   # This currently fails with dune
@@ -18,7 +20,8 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   checkInputs = [ alcotest ];
-  doCheck = true;
+  propagatedBuildInputs = [ bigarray-compat ];
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";

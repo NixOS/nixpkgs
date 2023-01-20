@@ -41,6 +41,27 @@
 # around it.
 
 let
+  modules = [
+    {
+      path = "web/api/app/Plugin/Crud";
+      src = fetchFromGitHub {
+        owner = "ZoneMinder";
+        repo = "crud";
+        rev = "3.1.0-zm";
+        sha256 = "061avzyml7mla4hlx057fm8a9yjh6m6qslgyzn74cv5p2y7f463l";
+      };
+    }
+    {
+      path = "web/api/app/Plugin/CakePHP-Enum-Behavior";
+      src = fetchFromGitHub {
+        owner = "ZoneMinder";
+        repo = "CakePHP-Enum-Behavior";
+        rev = "1.0-zm";
+        sha256 = "0zsi6s8xymb183kx3szspbrwfjqcgga7786zqvydy6hc8c909cgx";
+      };
+    }
+  ];
+
   addons = [
     {
       path = "scripts/ZoneMinder/lib/ZoneMinder/Control/Xiaomi.pm";
@@ -57,13 +78,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.28";
+  version = "1.36.15";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "sha256-x00u7AWMNS+wAO/tdWi7GYbMZZM7XnszCO57ZDlm0J0=";
+    sha256 = "1qlsg7gd9kpjdbq9d5yrjmc7g1pbscrg4sws7xrdln1z8509sv50";
     fetchSubmodules = true;
   };
 
@@ -73,6 +94,11 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    ${lib.concatStringsSep "\n" (map (e: ''
+      rm -rf ${e.path}/*
+      cp -r ${e.src}/* ${e.path}/
+    '') modules)}
+
     rm -rf web/api/lib/Cake/Test
 
     ${lib.concatStringsSep "\n" (map (e: ''

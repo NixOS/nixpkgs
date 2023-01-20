@@ -18,7 +18,7 @@ let
         ${master.ip}  api.${domain}
         ${concatMapStringsSep "\n" (machineName: "${machines.${machineName}.ip}  ${machineName}.${domain}") (attrNames machines)}
       '';
-      wrapKubectl = with pkgs; runCommand "wrap-kubectl" { nativeBuildInputs = [ makeWrapper ]; } ''
+      wrapKubectl = with pkgs; runCommand "wrap-kubectl" { buildInputs = [ makeWrapper ]; } ''
         mkdir -p $out/bin
         makeWrapper ${pkgs.kubernetes}/bin/kubectl $out/bin/kubectl --set KUBECONFIG "/etc/kubernetes/cluster-admin.kubeconfig"
       '';

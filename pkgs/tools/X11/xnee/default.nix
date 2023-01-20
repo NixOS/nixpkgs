@@ -33,10 +33,9 @@ stdenv.mkDerivation rec {
         --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
     '';
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ libX11 xorgproto libXext libXtst gtk2
-      libXi
+      libXi pkg-config
       texinfo
     ];
 

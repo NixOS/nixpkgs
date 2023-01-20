@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vp25b970r1hv5ndzs4di63rgwnl31jfaj3jz5dka276kx34q4al";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libltc libsndfile jack2 ];
+  buildInputs = [ pkg-config libltc libsndfile jack2 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

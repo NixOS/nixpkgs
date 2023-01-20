@@ -82,7 +82,7 @@ with lib;
       ppp-pptpd-wrapped = pkgs.stdenv.mkDerivation {
         name         = "ppp-pptpd-wrapped";
         phases       = [ "installPhase" ];
-        nativeBuildInputs  = with pkgs; [ makeWrapper ];
+        buildInputs  = with pkgs; [ makeWrapper ];
         installPhase = ''
           mkdir -p $out/bin
           makeWrapper ${pkgs.ppp}/bin/pppd $out/bin/pppd \

@@ -15,18 +15,18 @@
 , gnome
 , glib
 , pkg-config
-, gettext
+, intltool
 , itstool
 , libxml2
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.41.2";
+  version = "3.40.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "8xDwoUUEmfDP92y5+cXWaZGpUGH6s9bmcMSlZHOF1jM=";
+    sha256 = "xad/55vUDjeOooyPRaZjJ/vIzFw7W48PCcAhfufMCpA=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsHook
     itstool
-    gettext
+    intltool
   ];
 
   buildInputs = [

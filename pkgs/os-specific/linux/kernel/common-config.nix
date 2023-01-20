@@ -481,7 +481,6 @@ let
       DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = whenOlder "4.11" (option yes);
-      HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;

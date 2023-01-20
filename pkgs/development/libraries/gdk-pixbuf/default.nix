@@ -7,7 +7,9 @@
 , pkg-config
 , gettext
 , python3
-, docutils
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_43
 , gi-docgen
 , glib
 , libtiff
@@ -23,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.9";
+  version = "2.42.8";
 
   outputs = [ "out" "dev" "man" "devdoc" ]
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "KPeVjnvymjLU6WNVbSQdCkGmeGWC/2pa0RZl4DR/yWI=";
+    sha256 = "hKzqOsskEbKRNLMgFaWxqqYoRLGcSx74uJccawdZ9MY=";
   };
 
   patches = [
@@ -57,7 +59,9 @@ stdenv.mkDerivation rec {
     gobject-introspection
 
     # for man pages
-    docutils
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];

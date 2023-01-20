@@ -14,8 +14,8 @@ let
 
   pkgConfig = {
     node-sass = {
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ libsass python3 ];
+      nativeBuildInputs = [ ];
+      buildInputs = [ libsass pkg-config python3 ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi

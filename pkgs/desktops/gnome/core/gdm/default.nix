@@ -44,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "43.0";
+  version = "42.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lNcNbtffWfp/3k/QL+0RaFk6itzhD87hE8FI1Ss5IpQ=";
+    sha256 = "oyisl2k3vsF5lx/weCmhJGuYznJBgcEorjKguketOFU=";
   };
 
   mesonFlags = [
@@ -144,7 +144,6 @@ stdenv.mkDerivation rec {
     rsync --archive "${DESTDIR}/etc" "$out"
     rm --recursive "${DESTDIR}/etc"
     for o in $outputs; do
-        if [[ "$o" = "debug" ]]; then continue; fi
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done
@@ -162,8 +161,6 @@ stdenv.mkDerivation rec {
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
   DESTDIR = "${placeholder "out"}/dest";
-
-  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {

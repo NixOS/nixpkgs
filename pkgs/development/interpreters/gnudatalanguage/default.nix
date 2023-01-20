@@ -18,16 +18,13 @@
 , udunits
 , eigen
 , pslib
+, eccodes
+, glpk
 , libpng
 , plplot
 , libtiff
 , libgeotiff
 , libjpeg
-  # eccodes is broken on darwin
-, enableGRIB ? stdenv.isLinux
-, eccodes
-, enableGLPK ? stdenv.isLinux
-, glpk
   # We enable it in hdf4 and use libtirpc as a dependency here from the passthru
   # of hdf4
 , enableLibtirpc ? stdenv.isLinux
@@ -56,10 +53,9 @@
 , netcdf-forced ? null
 , plplot-forced ? null
   # wxWidgets is preferred over X11 for this project but we only have it on Linux
-  # and Darwin.
+  # and Darwin. Also, we use the wxWidgets dependency here from the passthru of
+  # plplot.
 , enableWX ? (stdenv.isLinux || stdenv.isDarwin)
-, wxGTK32
-, Cocoa
   # X11: OFF by default for platform consistency. Use X where WX is not available
 , enableXWin ? (!stdenv.isLinux && !stdenv.isDarwin)
 }:
@@ -132,6 +128,8 @@ stdenv.mkDerivation rec {
     udunits
     eigen
     pslib
+    eccodes
+    glpk
     libpng
     libtiff
     libgeotiff
@@ -141,10 +139,7 @@ stdenv.mkDerivation rec {
     netcdf-custom
     plplot-with-drivers
   ] ++ lib.optional enableXWin plplot-with-drivers.libX11
-  ++ lib.optional enableGRIB eccodes
-  ++ lib.optional enableGLPK glpk
-  ++ lib.optional enableWX wxGTK32
-  ++ lib.optional (enableWX && stdenv.isDarwin) Cocoa
+  ++ lib.optional enableWX plplot-with-drivers.wxWidgets
   ++ lib.optional enableMPI mpi
   ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
   ++ lib.optional enableSzip szip;
@@ -161,29 +156,19 @@ stdenv.mkDerivation rec {
     ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]
     ++ lib.optional (!enableNetCDF) "-DNETCDF=OFF"
     ++ lib.optional (!enablePlplotDrivers) "-DINTERACTIVE_GRAPHICS=OFF"
-    ++ lib.optional (!enableGRIB) "-DGRIB=OFF"
-    ++ lib.optional (!enableGLPK) "-DGLPK=OFF"
     ++ lib.optional (!enableWX) "-DWXWIDGETS=OFF"
     ++ lib.optional enableSzip "-DSZIPDIR=${szip}"
     ++ lib.optionals enableXWin [ "-DX11=ON" "-DX11DIR=${plplot-with-drivers.libX11}" ]
     ++ lib.optionals enableMPI [ "-DMPI=ON" "-DMPIDIR=${mpi}" ];
 
-  # Tests are failing on Hydra:
-  # ./src/common/dpycmn.cpp(137): assert ""IsOk()"" failed in GetClientArea(): invalid wxDisplay object
-  doCheck = stdenv.isLinux;
+  doCheck = true;
 
   # Opt-out unstable tests
   # https://github.com/gnudatalanguage/gdl/issues/482
   # https://github.com/gnudatalanguage/gdl/issues/1079
   # https://github.com/gnudatalanguage/gdl/issues/460
   preCheck = ''
-    checkFlagsArray+=("ARGS=-E '${lib.concatMapStringsSep "|" (test: test + ".pro") [
-      "test_byte_conversion"
-      "test_bytscl"
-      "test_call_external"
-      "test_tic_toc"
-      "test_timestamp"
-    ]}'")
+    checkFlagsArray+=("ARGS=-E 'test_tic_toc.pro|test_byte_conversion.pro|test_bytscl.pro|test_call_external.pro'")
   '';
 
   passthru = {

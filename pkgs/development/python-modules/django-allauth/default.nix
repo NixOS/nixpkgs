@@ -6,7 +6,6 @@
 , pythonOlder
 , requests
 , requests-oauthlib
-, pyjwt
 }:
 
 buildPythonPackage rec {
@@ -31,11 +30,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     django
     python3-openid
-    pyjwt
     requests
     requests-oauthlib
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ];
 
   checkPhase = ''
     # test is out of date

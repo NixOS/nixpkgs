@@ -1,25 +1,20 @@
 { stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls, gettext
 , zlib, curl, pkg-config, libgcrypt
-, cmake, libobjc, libresolv, libiconv
+, cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
-, enableTests ? !stdenv.isDarwin, cpputest
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
 , pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, phpSupport ? !stdenv.isDarwin, php, systemd, libxml2, pcre2, libargon2
 , extraBuildInputs ? []
+, fetchpatch
 }:
 
 let
   inherit (python3Packages) python;
-  php-embed = php.override {
-    embedSupport = true;
-    apxs2Support = false;
-  };
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
@@ -27,37 +22,35 @@ let
     { name = "guile"; enabled = guileSupport; cmakeFlag = "ENABLE_GUILE"; buildInputs = [ guile ]; }
     { name = "lua"; enabled = luaSupport; cmakeFlag = "ENABLE_LUA"; buildInputs = [ lua5 ]; }
     { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
-    { name = "php"; enabled = phpSupport; cmakeFlag = "ENABLE_PHP"; buildInputs = [
-      php-embed.unwrapped.dev libxml2 pcre2 libargon2
-    ] ++ lib.optional stdenv.isLinux systemd; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.7";
+      version = "3.6";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        hash = "sha256-n5kvC//h85c4IvkrCVTz+F0DcCC5rdRkvj8W3fUPXI8=";
+        sha256 = "sha256-GkYN/Y4LQQr7GdSDu0ucXXM9wWPAqKD1txJXkOhJMDc=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=OFF"         # TODO(@ncfavier): Documentation fails to build, was deactivated to push through security update
-        "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
+        "-DENABLE_DOC=OFF"         # TODO: Documentation fails to build, was deactivated to push through security update
+        "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
+        "-DENABLE_PHP=OFF"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
-      nativeBuildInputs = [ cmake pkg-config asciidoctor ] ++ lib.optional enableTests cpputest;
+      nativeBuildInputs = [ cmake pkg-config makeWrapper asciidoctor ];
       buildInputs = with lib; [
           ncurses openssl aspell gnutls gettext zlib curl
           libgcrypt ]
@@ -92,7 +85,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ ncfavier ];
+        maintainers = with lib.maintainers; [ lovek323 ];
         platforms = lib.platforms.unix;
       };
     }

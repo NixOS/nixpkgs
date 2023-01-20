@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 , appstream-glib
 , python3Packages
@@ -30,8 +30,9 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
+    appstream-glib
   ];
 
   buildInputs = [
@@ -56,8 +57,6 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   meta = with lib; {

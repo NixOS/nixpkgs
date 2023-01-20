@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sockdump";
-  version = "unstable-2022-10-12";
+  version = "unstable-2022-05-27";
 
   src = fetchFromGitHub {
     owner = "mechpen";
     repo = pname;
-    rev = "005dcb056238c2e37ff378aef27c953208ffa08f";
-    hash = "sha256-X8PIUDxlcdPoD7+aLDWzlWV++P3mmu52BwY7irhypww=";
+    rev = "4bb689933f253d4f58c8bb81b992cc883068e873";
+    hash = "sha256-B2ob4k29kgPA4JMtwr0Ma7vQeDRHL/vTFAJxhdS8ShA=";
   };
 
   propagatedBuildInputs = [ bcc ];

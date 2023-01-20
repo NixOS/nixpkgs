@@ -1,62 +1,20 @@
-{ mkDerivation
-, stdenv
-, lib
-, extra-cmake-modules
-, kdoctools
-, fetchpatch
-, libepoxy
-, lcms2
-, libICE
-, libSM
-, libcap
-, libdrm
-, libinput
-, libxkbcommon
-, mesa
-, pipewire
-, udev
-, wayland
-, xcb-util-cursor
-, xwayland
-, plasma-wayland-protocols
-, wayland-protocols
-, libxcvt
-, qtdeclarative
-, qtmultimedia
-, qtquickcontrols2
-, qtscript
-, qtsensors
-, qtvirtualkeyboard
-, qtx11extras
-, breeze-qt5
-, kactivities
-, kcompletion
-, kcmutils
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kcrash
-, kdeclarative
-, kdecoration
-, kglobalaccel
-, ki18n
-, kiconthemes
-, kidletime
-, kinit
-, kio
-, knewstuff
-, knotifications
-, kpackage
-, krunner
-, kscreenlocker
-, kservice
-, kwayland
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, plasma-framework
-, libqaccessibilityclient
-, python3
+{
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools, fetchpatch,
+
+  libepoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
+  pipewire, udev, wayland, xcb-util-cursor, xwayland,
+  plasma-wayland-protocols, wayland-protocols, libxcvt,
+
+  qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
+  qtvirtualkeyboard, qtx11extras,
+
+  breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
+  kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
+  kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
+  krunner, kscreenlocker, kservice, kwayland, kwidgetsaddons,
+  kwindowsystem, kxmlgui, plasma-framework, libqaccessibilityclient,
+  python3
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -65,60 +23,18 @@ mkDerivation {
   pname = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    libepoxy
-    lcms2
-    libICE
-    libSM
-    libcap
-    libdrm
-    libinput
-    libxkbcommon
-    mesa
-    pipewire
-    udev
-    wayland
-    xcb-util-cursor
-    xwayland
-    libxcvt
-    plasma-wayland-protocols
-    wayland-protocols
+    libepoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
+    udev wayland xcb-util-cursor xwayland
+    libxcvt plasma-wayland-protocols wayland-protocols
 
-    qtdeclarative
-    qtmultimedia
-    qtquickcontrols2
-    qtscript
-    qtsensors
-    qtvirtualkeyboard
-    qtx11extras
+    qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors
+    qtvirtualkeyboard qtx11extras
 
-    breeze-qt5
-    kactivities
-    kcmutils
-    kcompletion
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kcrash
-    kdeclarative
-    kdecoration
-    kglobalaccel
-    ki18n
-    kiconthemes
-    kidletime
-    kinit
-    kio
-    knewstuff
-    knotifications
-    kpackage
-    krunner
-    kscreenlocker
-    kservice
-    kwayland
-    kwidgetsaddons
-    kwindowsystem
-    kxmlgui
-    plasma-framework
-    libqaccessibilityclient
+    breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
+    kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
+    kidletime kinit kio knewstuff knotifications kpackage krunner kscreenlocker
+    kservice kwayland kwidgetsaddons kwindowsystem kxmlgui
+    plasma-framework libqaccessibilityclient
 
   ];
   outputs = [ "out" "dev" ];
@@ -142,8 +58,6 @@ mkDerivation {
       url = "https://invent.kde.org/plasma/kwin/-/commit/9a008b223ad696db3bf5692750f2b74e578e08b8.diff";
       sha256 = "sha256-f35G+g2MVABLDbAkCed3ZmtDWrzYn1rdD08mEx35j4k=";
     })
-  ] ++ lib.optionals stdenv.isAarch64 [
-    ./0001-Revert-x11-Refactor-output-updates.patch
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''

@@ -87,7 +87,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda tomfitzhenry ];
     platforms = platforms.linux;
-    # Requires upgrade to libsoup3
-    broken = true;
   };
 }

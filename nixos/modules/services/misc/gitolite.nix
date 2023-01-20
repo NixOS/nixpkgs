@@ -101,14 +101,6 @@ in
         '';
       };
 
-      description = mkOption {
-        type = types.str;
-        default = "Gitolite user";
-        description = lib.mdDoc ''
-          Gitolite user account's description.
-        '';
-      };
-
       group = mkOption {
         type = types.str;
         default = "gitolite";
@@ -153,7 +145,7 @@ in
     '';
 
     users.users.${cfg.user} = {
-      description     = cfg.description;
+      description     = "Gitolite user";
       home            = cfg.dataDir;
       uid             = config.ids.uids.gitolite;
       group           = cfg.group;

@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -44,11 +44,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.0";
+  version = "2.72.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "NlLH8HLXsDGmte3WI/d+vF3NKuaYWYq8yJ/znKda3TA=";
+    sha256 = "Sjmi9iS4US1QDVhAFz7af6hfUcEJBS6ugGrOzoXTRfA=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -90,27 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     #    * gio-launch-desktop
     ./split-dev-programs.patch
 
-    # Fix build on Darwin
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2914
-    (fetchpatch {
-      name = "gio-properly-guard-use-of-utimensat.patch";
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7f7171e68a420991b537d3e9e63263a0b2871618.patch";
-      sha256 = "kKEqmBqx/RlvFT3eixu+NnM7JXhHb34b9NLRfAt+9h0=";
-    })
-
     # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2866
     (fetchpatch {
       name = "tests-skip-g-file-info-test-if-atime-unsupported.patch";
       url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
       sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
-    })
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2867
-    ./tests-skip-shared-libs-if-default_library-static.patch
-
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2921
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/f0dd96c28751f15d0703b384bfc7c314af01caa8.patch";
-      sha256 = "sha256-8ucHS6ZnJuP6ajGb4/L8QfhC49FTQG1kAGHVdww/YYE=";
     })
 
     ./skip-timer-test.patch
@@ -121,9 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf
-    finalAttrs.setupHook
-    pcre2
+    libelf finalAttrs.setupHook pcre
   ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [

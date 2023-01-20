@@ -1,53 +1,50 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , fetchPypi
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pytz
+, six
+, typing-extensions
 , requests
 , yarl
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "3.4.0";
-  format = "pyproject";
+  version = "3.3.2";
+  disabled = pythonOlder "3.6";
 
-  disabled = pythonOlder "3.8";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Trim21";
     repo = "transmission-rpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O+VimSIVsO4P7v+8HHdYujaKpPx4FV8bF/Nn4EHP2vo=";
+    sha256 = "sha256-GkhNOKatT/hJFw1l1xrf43jtgxvJ+WVvhz83Oe0MZ6w=";
   };
+
+  # remove once upstream has tagged version with dumped typing-extensions
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'typing_extensions = ">=3.7.4.2,<4.0.0.0"' 'typing_extensions = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
-    pydantic
+    six
+    typing-extensions
     requests
-  ];
-
-  checkInputs = [
-    pytz
-    pytestCheckHook
     yarl
   ];
 
-  pythonImportsCheck = [
-    "transmission_rpc"
-  ];
+  # no tests
+  doCheck = false;
 
-  disabledTests = [
-    # Tests require a running Transmission instance
-    "test_real"
-  ];
+  pythonImportsCheck = [ "transmission_rpc" ];
 
   meta = with lib; {
     description = "Python module that implements the Transmission bittorent client RPC protocol";

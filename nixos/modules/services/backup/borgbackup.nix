@@ -116,7 +116,7 @@ let
       original, name, set ? {}
     }:
     pkgs.runCommand "${name}-wrapper" {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
+      buildInputs = [ pkgs.makeWrapper ];
     } (with lib; ''
       makeWrapper "${original}" "$out/bin/${name}" \
         ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}

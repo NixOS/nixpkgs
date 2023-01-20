@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-J0cEaC5v4naO4GGUzdfV55kB7KzA+q+v64i5y5Xbp9Q=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    pkg-config
     libusb1
   ];
 

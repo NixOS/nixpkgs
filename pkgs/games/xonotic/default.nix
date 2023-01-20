@@ -83,14 +83,14 @@ let
     '';
 
     buildPhase = (lib.optionalString withDedicated ''
-      make -j $NIX_BUILD_CORES sv-${target}
+      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sv-${target}
     '' + lib.optionalString withGLX ''
-      make -j $NIX_BUILD_CORES cl-${target}
+      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cl-${target}
     '' + lib.optionalString withSDL ''
-      make -j $NIX_BUILD_CORES sdl-${target}
+      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sdl-${target}
     '') + ''
       pushd ../d0_blind_id
-      make -j $NIX_BUILD_CORES
+      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
       popd
     '';
 

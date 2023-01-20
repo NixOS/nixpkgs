@@ -1,6 +1,5 @@
-{ lib, buildDunePackage, astring, cohttp-lwt, cohttp-lwt-unix, irmin, webmachine
-, fmt, jsonm, logs, lwt, uri
-, git-unix, irmin-git, irmin-test, irmin-fs, digestif
+{ lib, buildDunePackage, cohttp-lwt, irmin, webmachine
+, checkseum, git-unix, irmin-git, irmin-test, digestif, git-cohttp-unix
 , cacert
 }:
 
@@ -8,13 +7,14 @@ buildDunePackage rec {
 
   pname = "irmin-http";
 
-  inherit (irmin) version src strictDeps;
+  inherit (irmin) version src;
 
+  useDune2 = true;
 
-  propagatedBuildInputs = [ astring cohttp-lwt cohttp-lwt-unix fmt jsonm logs lwt uri irmin webmachine ];
+  propagatedBuildInputs = [ cohttp-lwt irmin webmachine ];
 
   checkInputs = [
-    digestif git-unix irmin-git irmin-test irmin-fs cacert
+    digestif checkseum git-cohttp-unix git-unix irmin-git irmin-test cacert
   ];
 
   doCheck = true;

@@ -427,8 +427,7 @@ with prev;
 
   luv = prev.luaLib.overrideLuarocks prev.luv (drv: {
 
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libuv ];
+    buildInputs = [ pkg-config libuv ];
 
     # Use system libuv instead of building local and statically linking
     extraVariables = {
@@ -511,13 +510,6 @@ with prev;
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''
       make all
-    '';
-  });
-
-  vusted = prev.vusted.overrideAttrs (_: {
-    # make sure vusted_entry.vim doesn't get wrapped
-    postInstall = ''
-      chmod -x $out/bin/vusted_entry.vim
     '';
   });
 

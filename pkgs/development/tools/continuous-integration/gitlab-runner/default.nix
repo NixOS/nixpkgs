@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
+{ lib, buildGoModule, fetchFromGitLab, fetchurl }:
 
 let
   version = "15.4.0";
@@ -13,9 +13,6 @@ buildGoModule rec {
     "-X ${commonPackagePath}.VERSION=${version}"
     "-X ${commonPackagePath}.REVISION=v${version}"
   ];
-
-  # For patchShebangs
-  buildInputs = [ bash ];
 
   vendorSha256 = "sha256-S0x1b2ITtqMoqdssoTgnolDC6Tyq3IdkJqxwZ29qCyU=";
 
@@ -46,10 +43,6 @@ buildGoModule rec {
     rm executors/docker/terminal_test.go
     rm executors/docker/docker_test.go
     rm helpers/docker/auth/auth_test.go
-  '';
-
-  postInstall = ''
-    install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
   '';
 
   preCheck = ''

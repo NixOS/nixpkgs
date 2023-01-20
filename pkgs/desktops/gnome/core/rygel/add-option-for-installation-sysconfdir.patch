@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 27bde61f..3d434de9 100644
+index 8af2fcf9..0e318307 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -22,7 +22,11 @@ if not get_option('uninstalled')
@@ -12,8 +12,8 @@ index 27bde61f..3d434de9 100644
 +    else
 +        rygel_sysconfdir = join_paths(get_option('prefix'), get_option('sysconfdir'))
 +    endif
-     rygel_plugindir = join_paths(rygel_libdir, 'rygel-2.8', 'plugins')
-     rygel_enginedir = join_paths(rygel_libdir, 'rygel-2.8', 'engines')
+     rygel_plugindir = join_paths(rygel_libdir, 'rygel-2.6', 'plugins')
+     rygel_enginedir = join_paths(rygel_libdir, 'rygel-2.6', 'engines')
      rygel_presetdir = join_paths(rygel_datadir, 'presets')
 @@ -57,7 +61,7 @@ conf.set_quoted('DATA_DIR', rygel_datadir)
  conf.set_quoted('PLUGIN_DIR', rygel_plugindir)

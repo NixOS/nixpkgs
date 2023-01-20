@@ -45,6 +45,7 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
+    pkg-config
     qtbase
     qtsvg
     sox
@@ -55,7 +56,7 @@ mkDerivation rec {
     ladspaPlugins
   ];
 
-  nativeBuildInputs = [ cmake which pkg-config ];
+  nativeBuildInputs = [ cmake which ];
 
   outputs = [ "out" "dev" ];
 

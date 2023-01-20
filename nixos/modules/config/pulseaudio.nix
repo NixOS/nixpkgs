@@ -102,7 +102,7 @@ in {
           each user that tries to use the sound system. The server runs
           with user privileges. If true, one system-wide PulseAudio
           server is launched on boot, running as the user "pulse", and
-          only users in the "pulse-access" group will have access to the server.
+          only users in the "audio" group will have access to the server.
           Please read the PulseAudio documentation for more details.
 
           Don't enable this option unless you know what you are doing.
@@ -310,7 +310,6 @@ in {
       };
 
       users.groups.pulse.gid = gid;
-      users.groups.pulse-access = {};
 
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";

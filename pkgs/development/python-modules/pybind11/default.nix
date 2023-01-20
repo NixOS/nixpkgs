@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   postBuild = ''
     # build tests
-    make -j $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
   '';
 
   postInstall = ''

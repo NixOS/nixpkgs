@@ -410,7 +410,7 @@ in
     environment.systemPackages = let
       cli-wrappers = pkgs.stdenv.mkDerivation {
         name = "tinc-cli-wrappers";
-        nativeBuildInputs = [ pkgs.makeWrapper ];
+        buildInputs = [ pkgs.makeWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
           ${concatStringsSep "\n" (mapAttrsToList (network: data:

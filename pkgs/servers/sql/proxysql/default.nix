@@ -16,7 +16,7 @@
 , libev
 , libgcrypt
 , libinjection
-, libmicrohttpd_0_9_69
+, libmicrohttpd_0_9_70
 , libuuid
 , lz4
 , nlohmann_json
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
         { f = "libdaemon"; p = libdaemon; }
         { f = "libev"; p = libev; }
         { f = "libinjection"; p = libinjection; }
-        { f = "libmicrohttpd"; p = libmicrohttpd_0_9_69; }
+        { f = "libmicrohttpd"; p = libmicrohttpd_0_9_70; }
         { f = "libssl"; p = openssl; }
         { f = "lz4"; p = lz4; }
         { f = "pcre"; p = pcre; }

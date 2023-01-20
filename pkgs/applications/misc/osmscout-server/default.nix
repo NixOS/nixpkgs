@@ -1,7 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, pkg-config
 , qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
 , libosmscout, valhalla, libpostal, osrm-backend, protobuf
-, libmicrohttpd, sqlite, marisa, kyotocabinet, boost
+, libmicrohttpd_0_9_70, sqlite, marisa, kyotocabinet, boost
 }:
 
 let
@@ -27,7 +27,7 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake pkg-config qttools ];
   buildInputs = [
     kirigami2 qtquickcontrols2 qtlocation
-    valhalla libosmscout osrm-backend libmicrohttpd
+    valhalla libosmscout osrm-backend libmicrohttpd_0_9_70
     libpostal sqlite marisa kyotocabinet boost protobuf date
   ];
 

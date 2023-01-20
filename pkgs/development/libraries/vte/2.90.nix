@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "54e5b07be3c0f7b158302f54ee79d4de1cb002f4259b6642b79b1e0e314a959c";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gobject-introspection glib gtk3 ncurses ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gobject-introspection intltool glib gtk3 ncurses ];
 
   configureFlags = [ "--enable-introspection" ];
 

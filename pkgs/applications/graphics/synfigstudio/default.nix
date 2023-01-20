@@ -114,6 +114,7 @@ stdenv.mkDerivation {
     gtk3
     gtkmm3
     imagemagick
+    intltool
     libjack2
     libsigcxx
     libxmlxx

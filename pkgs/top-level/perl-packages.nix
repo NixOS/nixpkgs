@@ -13873,8 +13873,7 @@ let
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-0.30.tar.gz";
       hash = "sha256-VZks+aHh+4M/QoMAUlv6fPftRrg+xBT4KgkXibN9CKM=";
     };
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.systemd ];
+    buildInputs = [ pkgs.pkg-config pkgs.systemd ];
     postPatch = ''
       substituteInPlace Build.PL \
         --replace "libsystemd-journal" "libsystemd"
@@ -20937,8 +20936,7 @@ let
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/RPM2-1.4.tar.gz";
       hash = "sha256-XstCqmkyTm9AiKv64HMTkG5aq/L0bxIE8/HeWRVbtjY=";
     };
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.rpm ];
+    buildInputs = [ pkgs.pkg-config pkgs.rpm ];
     doCheck = false; # Tries to open /var/lib/rpm
     meta = {
       description = "Perl bindings for the RPM Package Manager API";
@@ -27231,8 +27229,7 @@ let
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.99.tar.gz";
       hash = "sha256-En4XqHf7YeR7nouHv42q0xM5pioAEh+XUdUitDiw9/A=";
     };
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
+    buildInputs = [ pkgs.pkg-config pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
       description = "Interface to the GNOME libxslt library";
@@ -27808,8 +27805,7 @@ let
 
     makeMakerFlags = "--prefix-openssl=${pkgs.openssl_1_1.dev}";
 
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 ];
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 pkgs.pkg-config ];
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv; {
     description = "Protect a computer network from getting infected";
     homepage = "http://www.xbill.org/";
-    license = lib.licenses.gpl1Only;
+    license = lib.licenses.gpl1;
     maintainers = with lib.maintainers; [ aw ];
     longDescription = ''
       Ever get the feeling that nothing is going right? You're a sysadmin,

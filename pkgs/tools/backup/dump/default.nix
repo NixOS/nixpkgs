@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0CGs3k+77T2T662YFCL2cfSNZrKeyI196DZC7Pv/T9A=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ e2fsprogs ncurses readline ];
+  buildInputs = [ e2fsprogs pkg-config ncurses readline ];
 
   meta = with lib; {
     homepage = "https://dump.sourceforge.io/";

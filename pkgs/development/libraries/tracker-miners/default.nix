@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -13,9 +14,10 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsNoGuiHook
+, wrapGAppsHook
 , bzip2
 , dbus
+, evolution-data-server
 , exempi
 , giflib
 , glib
@@ -32,6 +34,7 @@
 , libosinfo
 , libpng
 , libseccomp
+, libsoup
 , libtiff
 , libuuid
 , libxml2
@@ -46,12 +49,24 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.4.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ouA2XjCBG7YelcghSzP0eCo6BODGJGoG7NnAFBfNhOY=";
+    sha256 = "Pt3G0nLAKWn6TCwV360MSddtAh8aJ+xwi2m+gCU1PJQ=";
   };
+
+  # TODO: remove me on 3.4.0
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/cc655ba0f95022cf35bc6d44cb5155788fee2e24.patch";
+      sha256 = "sha256-a85ygtabpkruiDgKbseQxYbFIAQlVDhs3eWkbStJjKs=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/9e613ceb37ec41fd1cd88c3d539e3ee03e8f6ba6.patch";
+      sha256 = "sha256-ht7EfZztyl0st0Sv7H92Q37vwXY4T61GQm9WJ8IxTTg=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -64,7 +79,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsNoGuiHook
+    wrapGAppsHook
   ];
 
   # TODO: add libenca, libosinfo
@@ -93,12 +108,14 @@ stdenv.mkDerivation rec {
     libjpeg
     libosinfo
     libpng
+    libsoup
     libtiff
     libuuid
     libxml2
     poppler
     taglib
   ] ++ lib.optionals stdenv.isLinux [
+    evolution-data-server
     libseccomp
     networkmanager
     systemd

@@ -23,10 +23,8 @@ in
 runCommand "uvcdynctrl-udev-rules-${version}"
 {
   inherit dataPath;
-  nativeBuildInputs = [
-    makeWrapper
-  ];
   buildInputs = [
+    makeWrapper
     libwebcam
   ];
   dontPatchELF = true;

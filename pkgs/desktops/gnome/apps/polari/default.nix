@@ -17,8 +17,8 @@
 , gtk3
 , glib
 , libsecret
-, libsoup_3
-, webkitgtk_4_1
+, libsoup
+, webkitgtk
 , gobject-introspection
 , appstream-glib
 , gnome
@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "polari";
-  version = "43.0";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "F6GS3uYfWOPNRHJQC+cBGUa5n75SvFrBJPqurC8zQUc=";
+    sha256 = "r5DPCEjsvkB+sjBkBINpdP048xww1HT0bRspIYqWaz0=";
   };
 
   patches = [
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
     gspell
     gdk-pixbuf
     libsecret
-    libsoup_3
-    webkitgtk_4_1 # for thumbnailer
+    libsoup
+    webkitgtk # for thumbnailer
   ];
 
   postFixup = ''

@@ -13,11 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-hlC/s0pYhNHMv3i7Nmu4r6jnXGpc6raScv5dO32+tfQ=";
 
-  preCheck = ''
-    # Fix `insecure algorithm SHA1-RSA` problem
-    export GODEBUG=x509sha1=1;
-  '';
-
   meta = with lib; {
     description = "Exporter for NATS metrics";
     homepage = "https://github.com/nats-io/prometheus-nats-exporter";

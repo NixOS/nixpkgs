@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y3crfm0jqprgxamlly713cka2x1bp6z63p1lw9wh4wc37kpira6";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ diffutils gd ];
+  buildInputs = [ diffutils gd pkg-config ];
   installFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
   meta = {

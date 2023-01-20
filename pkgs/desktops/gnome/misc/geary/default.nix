@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , gtk3
 , vala
@@ -25,7 +26,7 @@
 , itstool
 , libgee
 , gnome
-, webkitgtk_4_1
+, webkitgtk
 , python3
 , gnutls
 , cacert
@@ -47,12 +48,27 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "43.0";
+  version = "40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "SJFm+H3Z0pAR9eW3lpTyWItHP34ZHFnOkBPIyODjY+c=";
+    sha256 = "1c2nd35500ng28223y5pszc7fh8g16njj34f6p5xc9594lvj0mik";
   };
+
+  patches = [
+    # Fix accessibility issues with initializer of constants (Fix build with vala 0.56)
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/720
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/9bd4c82952a0a2c3308c5cc86c0b85650c1fb484.patch";
+      sha256 = "sha256-mSms0MOfw8xHxOrEQwrIv+d4h01xLPgyvX2oWmmFQVw=";
+    })
+    # Util.Cache.Lru: Workaround missing generic type argument (Fix build with vala 0.56)
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/721
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/0f75e7a84a39492d0748cec2ba6028e08cae3644.patch";
+      sha256 = "sha256-1ADQqKm3DxtjDGPSThq3c7s5S+q/3u/qr9JQEsLaFMI=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -92,7 +108,7 @@ stdenv.mkDerivation rec {
     libstemmer
     libytnef
     sqlite
-    webkitgtk_4_1
+    webkitgtk
   ];
 
   checkInputs = [
@@ -111,9 +127,12 @@ stdenv.mkDerivation rec {
   # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
   # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
   postPatch = ''
-    chmod +x build-aux/git_version.py
+    chmod +x build-aux/post_install.py build-aux/git_version.py
 
-    patchShebangs build-aux/git_version.py
+    patchShebangs build-aux/post_install.py build-aux/git_version.py
+
+    chmod +x build-aux/yaml_to_json.py
+    patchShebangs build-aux/yaml_to_json.py
 
     chmod +x desktop/geary-attach
   '';

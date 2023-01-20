@@ -15,17 +15,19 @@
 , libxml2
 , libxslt
 , itstool
-, webkitgtk_4_1
-, libsoup_3
+, webkitgtk
+, libsoup
 , glib-networking
 , libsecret
 , gnome-desktop
+, libnotify
 , libarchive
 , p11-kit
 , sqlite
 , gcr
 , isocodes
 , desktop-file-utils
+, python3
 , nettle
 , gdk-pixbuf
 , gst_all_1
@@ -38,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "43.0";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "tm1Jn57nJpbYPPhEElN3GBqVRVSkuzeFtzKTOArAwic=";
+    sha256 = "cxbTxlAOgl2OVyk/pYBHxWcnvuFs1rasgE/+XZsilWA=";
   };
 
   patches = lib.optionals withPantheon [
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    python3
     wrapGAppsHook
     buildPackages.glib
     buildPackages.gtk3
@@ -89,20 +92,26 @@ stdenv.mkDerivation rec {
     libdazzle
     libhandy
     libportal-gtk3
+    libnotify
     libarchive
     libsecret
-    libsoup_3
+    libsoup
     libxml2
     nettle
     p11-kit
     sqlite
-    webkitgtk_4_1
+    webkitgtk
   ];
 
   # Tests need an X display
   mesonFlags = [
     "-Dunit_tests=disabled"
   ];
+
+  postPatch = ''
+    chmod +x post_install.py # patchShebangs requires executable file
+    patchShebangs post_install.py
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

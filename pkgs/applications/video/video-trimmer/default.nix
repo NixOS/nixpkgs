@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , rustPlatform
+, gnome
 , pkg-config
 , meson
 , wrapGAppsHook4

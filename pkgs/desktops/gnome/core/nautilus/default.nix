@@ -4,15 +4,14 @@
 , meson
 , ninja
 , pkg-config
-, gi-docgen
-, docbook-xsl-nons
 , gettext
 , libxml2
 , desktop-file-utils
-, wrapGAppsHook4
-, gtk4
-, libadwaita
-, libportal-gtk4
+, python3
+, wrapGAppsHook
+, gtk3
+, libhandy
+, libportal-gtk3
 , gnome
 , gnome-autoar
 , glib-networking
@@ -25,25 +24,23 @@
 , tracker-miners
 , gexiv2
 , libselinux
-, libcloudproviders
 , gdk-pixbuf
 , substituteAll
 , gnome-desktop
 , gst_all_1
 , gsettings-desktop-schemas
-, gnome-user-share
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "43.0";
+  version = "42.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "PPVPrAqKvuCQ4VVBf3sW9j6grAwmTvT1RXSvNFgBqRE=";
+    sha256 = "mSEtLrdZlvGBcorQSi4thvJXewZOaKNMi4GnA330zLI=";
   };
 
   patches = [
@@ -65,9 +62,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    gi-docgen
-    docbook-xsl-nons
-    wrapGAppsHook4
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -76,29 +72,21 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
-    gnome-user-share
     gst_all_1.gst-plugins-base
-    gtk4
-    libadwaita
-    libportal-gtk4
+    gtk3
+    libhandy
+    libportal-gtk3
     libexif
     libnotify
     libseccomp
     libselinux
-    gdk-pixbuf
-    libcloudproviders
     shared-mime-info
     tracker
     tracker-miners
-    gnome-autoar
   ];
 
   propagatedBuildInputs = [
-    gtk4
-  ];
-
-  mesonFlags = [
-    "-Ddocs=true"
+    gnome-autoar
   ];
 
   preFixup = ''
@@ -110,9 +98,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
+  postPatch = ''
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   passthru = {

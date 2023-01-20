@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "d-spy";
-  version = "1.4.0";
+  version = "1.2.1";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/d-spy/${lib.versions.majorMinor version}/d-spy-${version}.tar.xz";
-    sha256 = "6uh0jOpiTFxMdeAhwt8dc3bk+fj76JrEQ0kR7PeIZ3I=";
+    url = "mirror://gnome/sources/dspy/${lib.versions.majorMinor version}/dspy-${version}.tar.xz";
+    sha256 = "TjnA1to687eJASJd0VEjOFe+Ihtfs62CwdsVhyNrZlI=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "d-spy";
+      packageName = "dspy";
+      attrPath = "d-spy";
     };
   };
 

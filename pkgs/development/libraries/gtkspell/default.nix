@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "00hdv28bp72kg1mq2jdz1sdw2b8mb9iclsp7jdqwpck705bdriwg";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [aspell gtk2 enchant];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [aspell gtk2 enchant intltool];
 
   meta = with lib; {
     description = "Word-processor-style highlighting and replacement of misspelled words";

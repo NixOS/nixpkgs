@@ -19,8 +19,7 @@
 , pkg-config
 , python3
 , shared-mime-info
-# https://gitlab.com/virt-viewer/virt-viewer/-/issues/88
-, spice-gtk_libsoup2 ? null
+, spice-gtk ? null
 , spice-protocol ? null
 , spiceSupport ? true
 , vte
@@ -30,7 +29,7 @@
 assert spiceSupport -> (
   gdbm != null
   && libcap != null
-  && spice-gtk_libsoup2 != null
+  && spice-gtk != null
   && spice-protocol != null
 );
 
@@ -79,12 +78,12 @@ stdenv.mkDerivation rec {
   ] ++ optionals spiceSupport [
     gdbm
     libcap
-    spice-gtk_libsoup2
+    spice-gtk
     spice-protocol
   ];
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = optional spiceSupport spice-gtk_libsoup2;
+  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
 
   strictDeps = true;
 

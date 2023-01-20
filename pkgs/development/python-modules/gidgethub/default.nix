@@ -27,8 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     uritemplate
     pyjwt
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ];
 
   checkInputs = [
     pytestCheckHook

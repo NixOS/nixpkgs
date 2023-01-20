@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.8.3";
+  version = "2.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JtSY/mQ7BAatBiq9XCO9O0x6nnyPpECnlSYNq9brxp8=";
+    sha256 = "sha256-Q/NLGD6ALwJ4mK/LUqovlDQ5lVnf3uMBnpwURya3BEI=";
   };
 
   propagatedBuildInputs = [

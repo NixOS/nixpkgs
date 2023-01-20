@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yelp-xsl";
-  version = "42.1";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-xsl/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-I4vhULFlMIDOE5lxMw/TbTomWV4NagQKLAML89IAW80=";
+    sha256 = "sha256-KbJzzAvRbvtumDRDgD8en9wDUR5cT/Y0j9MKYE1NyEY=";
   };
 
   nativeBuildInputs = [

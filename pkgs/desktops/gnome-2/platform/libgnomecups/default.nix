@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./glib.patch ./cups_1.6.patch ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk2 gettext libart_lgpl ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk2 gettext intltool libart_lgpl ];
 
   propagatedBuildInputs = [ libxml2 ];
 }

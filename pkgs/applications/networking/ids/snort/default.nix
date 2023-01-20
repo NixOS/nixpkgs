@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xrc7crchflfrk4x5dq5zx22zkmgcrbkww5r1pvkc3cyyr18cc6h";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ pkg-config luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
 
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
 

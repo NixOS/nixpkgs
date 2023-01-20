@@ -33,9 +33,10 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkg-config automake autoconf intltool ];
+  nativeBuildInputs = [ pkg-config automake autoconf ];
   buildInputs = [
     libtool
+    intltool
     gobject-introspection glib
     gtk2 gtk-doc clutter clutter-gtk
   ];

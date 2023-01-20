@@ -19,8 +19,7 @@ stdenv.mkDerivation {
     mkdir m4
   '';
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ glib expat libmicrohttpd ];
+  buildInputs = [ autoreconfHook pkg-config glib expat libmicrohttpd ];
 
   meta = {
     description = "Stubbed XMPP Server";

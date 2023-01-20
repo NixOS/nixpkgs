@@ -18,7 +18,7 @@ let
         "binnt"
         (lib.optionalString is32bit "binw")
       ] else if (isDarwin && is64bit) then [
-        "bino64"
+        "osx64"
       ] else [
         (lib.optionalString is64bit "binl64")
         "binl"

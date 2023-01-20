@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, CoreServices, graphviz }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, graphviz }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";
@@ -8,15 +8,10 @@ rustPlatform.buildRustPackage rec {
     owner = "dylanowen";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HTHGb23wc10iAWXX/TNMXjTLWm+OSf1WWW1+/aQRcsk=";
+    sha256 = "sha256-HTHGb23wc10iAWXX/TNMXjTLWm+OSf1WWW1+/aQRcsk=";
   };
 
-  cargoPatches = [
-    # Remove when updating mdbook-graphviz past 0.1.4.
-    ./update-mdbook-for-rust-1.64.patch
-  ];
-
-  cargoHash = "sha256-keDyfXooPU/GOx56OTq5psDohfZ0E478bnWn0bbC29o=";
+  cargoSha256 = "sha256-7z/4brKY9vpic8mv1b4P/8DE+VyColYnPPoPmY9891M=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

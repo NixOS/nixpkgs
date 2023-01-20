@@ -4,7 +4,7 @@
 
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "aarch64-linux" "x86_64-linux" ] # no i686-linux
+, supportedSystems ? [ "x86_64-linux" ] # no i686-linux
 }:
 
 let
@@ -53,8 +53,7 @@ in rec {
       };
       boot = {
         inherit (nixos'.tests.boot)
-          biosCdrom
-          uefiCdrom;
+          biosCdrom;
       };
     };
   };
@@ -84,56 +83,45 @@ in rec {
       vim;
   };
 
-  tested = let
-    onSupported = x: map (system: "${x}.${system}") supportedSystems;
-    onSystems = systems: x: map (system: "${x}.${system}")
-      (pkgs.lib.intersectLists systems supportedSystems);
-  in pkgs.releaseTools.aggregate {
+  tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
       maintainers = [ lib.maintainers.eelco ];
     };
-    constituents = lib.flatten [
-      [
-        "nixos.channel"
-        "nixpkgs.tarball"
-      ]
-      (map (onSystems [ "x86_64-linux" ]) [
-        "nixos.tests.boot.biosCdrom"
-        "nixos.tests.installer.lvm"
-        "nixos.tests.installer.separateBoot"
-        "nixos.tests.installer.simple"
-      ])
-      (map onSupported [
-        "nixos.dummy"
-        "nixos.iso_minimal"
-        "nixos.amazonImage"
-        "nixos.manual"
-        "nixos.tests.boot.uefiCdrom"
-        "nixos.tests.containers-imperative"
-        "nixos.tests.containers-ip"
-        "nixos.tests.firewall"
-        "nixos.tests.ipv6"
-        "nixos.tests.login"
-        "nixos.tests.misc"
-        "nixos.tests.nat.firewall-conntrack"
-        "nixos.tests.nat.firewall"
-        "nixos.tests.nat.standalone"
+    constituents =
+      [ "nixos.channel"
+        "nixos.dummy.x86_64-linux"
+        "nixos.iso_minimal.x86_64-linux"
+        "nixos.amazonImage.x86_64-linux"
+        "nixos.manual.x86_64-linux"
+        "nixos.tests.boot.biosCdrom.x86_64-linux"
+        "nixos.tests.containers-imperative.x86_64-linux"
+        "nixos.tests.containers-ip.x86_64-linux"
+        "nixos.tests.firewall.x86_64-linux"
+        "nixos.tests.installer.lvm.x86_64-linux"
+        "nixos.tests.installer.separateBoot.x86_64-linux"
+        "nixos.tests.installer.simple.x86_64-linux"
+        "nixos.tests.ipv6.x86_64-linux"
+        "nixos.tests.login.x86_64-linux"
+        "nixos.tests.misc.x86_64-linux"
+        "nixos.tests.nat.firewall-conntrack.x86_64-linux"
+        "nixos.tests.nat.firewall.x86_64-linux"
+        "nixos.tests.nat.standalone.x86_64-linux"
         # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
-        #"nixos.tests.nfs3.simple"
-        "nixos.tests.openssh"
-        "nixos.tests.php.fpm"
-        "nixos.tests.php.pcre"
-        "nixos.tests.predictable-interface-names.predictable"
-        "nixos.tests.predictable-interface-names.predictableNetworkd"
-        "nixos.tests.predictable-interface-names.unpredictable"
-        "nixos.tests.predictable-interface-names.unpredictableNetworkd"
-        "nixos.tests.proxy"
-        "nixos.tests.simple"
-        "nixpkgs.jdk"
-      ])
-    ];
+        #"nixos.tests.nfs3.simple.x86_64-linux"
+        "nixos.tests.openssh.x86_64-linux"
+        "nixos.tests.php.fpm.x86_64-linux"
+        "nixos.tests.php.pcre.x86_64-linux"
+        "nixos.tests.predictable-interface-names.predictable.x86_64-linux"
+        "nixos.tests.predictable-interface-names.predictableNetworkd.x86_64-linux"
+        "nixos.tests.predictable-interface-names.unpredictable.x86_64-linux"
+        "nixos.tests.predictable-interface-names.unpredictableNetworkd.x86_64-linux"
+        "nixos.tests.proxy.x86_64-linux"
+        "nixos.tests.simple.x86_64-linux"
+        "nixpkgs.jdk.x86_64-linux"
+        "nixpkgs.tarball"
+      ];
   };
 
 }

@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openssl ];
 
-  outputs = [ "out" "dev" "man" ];
-
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
     "-DCMAKE_INSTALL_LIBDIR=lib"

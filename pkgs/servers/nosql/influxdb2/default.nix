@@ -1,7 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , go-bindata
 , lib
 , llvmPackages
@@ -41,16 +40,6 @@ let
       rev = "v${libflux_version}";
       sha256 = "sha256-xcsmvT8Ve1WbfwrdVPnJcj7RAvrk795N3C95ubbGig0=";
     };
-    patches = [
-      # https://github.com/influxdata/flux/pull/5273
-      # fix compile error with Rust 1.64
-      (fetchpatch {
-        url = "https://github.com/influxdata/flux/commit/20ca62138a0669f2760dd469ca41fc333e04b8f2.patch";
-        stripLen = 2;
-        extraPrefix = "";
-        sha256 = "sha256-Fb4CuH9ZvrPha249dmLLI8MqSNQRKqKPxPbw2pjqwfY=";
-      })
-    ];
     sourceRoot = "source/libflux";
     cargoSha256 = "sha256-+hJQFV0tWeTQDN560DzROUNpdkcZ5h2sc13akHCgqPc=";
     nativeBuildInputs = [ llvmPackages.libclang ];

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-man";
-  version = "unstable-2022-11-05";
+  version = "unstable-2021-08-26";
 
   src = fetchFromGitHub {
     owner = "vv9k";
     repo = pname;
-    rev = "b9537dfbb241d7456835ed7e9d27ab8c8184e5f6";
-    hash = "sha256-ssAk60jnwYzAjseL26/3FaDv1vBAylgdE+vLhWZ8It4=";
+    rev = "419c91db0fcfcce65a6006ed9ec8415a8b705186";
+    sha256 = "sha256-NOPyDPQms/YJzjkXjVAFR60gLK4zqOuFSdRvFkZRRxQ=";
   };
 
-  cargoHash = "sha256-cR86eFhP9Swh+Ff8FNbAfWpWMkliOAyPwDQ6lRvU+nk=";
+  cargoSha256 = "sha256-NyeB2vI9Za5T1SKrjqwTi8LXX7A+M+2r/n1u2qtnK5g=";
 
   meta = with lib; {
     description = "Generate manual pages from mdBooks";

@@ -6,7 +6,7 @@
 , gnome
 , gtk3
 , gtk4
-, gettext
+, intltool
 , libnma
 , libnma-gtk4
 , libsecret
@@ -19,17 +19,17 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-sstp";
-  version = "1.3.1";
+  version = "1.3.0";
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "fQMSawiaCk/2ZeMHVVcM7PaFEKbP7bUS9Lh+htrGHX0=";
+    sha256 = "+IJw3jvOYs/+NDS9HvCrSQ6wxh1x1yqwiFij7UZb+rU=";
   };
 
   nativeBuildInputs = [
     file
-    gettext
+    intltool
     pkg-config
   ];
 

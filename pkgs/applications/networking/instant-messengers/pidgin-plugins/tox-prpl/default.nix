@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
-    broken = true; # unmaintained and not compatible with current Tox API.
     homepage = "https://github.com/jin-eld/tox-prpl";
     description = "Tox plugin for Pidgin / libpurple";
     license = licenses.gpl3;

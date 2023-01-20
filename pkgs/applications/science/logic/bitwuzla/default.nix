@@ -5,7 +5,6 @@
 , cmake
 , lingeling
 , btor2tools
-, symfpu
 , gtest
 , gmp
 , cadical
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwuzla";
-  version = "unstable-2022-10-03";
+  version = "unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
-    rev = "3bc0f9f1aca04afabe1aff53dd0937924618b2ad";
-    hash = "sha256-UXZERl7Nedwex/oUrcf6/GkDSgOQ537WDYm117RfvWo=";
+    rev = "b6fb61736a5cf70cd0b35ec4aeeadf23971610ce";
+    hash = "sha256-T5VnnWrcZ8K1NjFf5eeg0TRpXBLRCxC67v8zWPwYF/Y=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     picosat
     minisat
     btor2tools
-    symfpu
     gmp
     zlib
   ] ++ lib.optional withLingeling lingeling;

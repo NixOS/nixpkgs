@@ -51,13 +51,6 @@ let
         url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
-
-      # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
-      # This is applied anywhere to prevent patchrot.
-      (fetchurl {
-        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=6f97cb0ae4dff6588dae5868c2522aea96c99d2c";
-        sha256 = "sha256-giOmMInwLH0Ei9H7ETsrrzQU09I6+dn8KpPrKb7zn8I=";
-      })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
     ];

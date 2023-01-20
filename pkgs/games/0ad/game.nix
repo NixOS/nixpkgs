@@ -48,11 +48,6 @@ stdenv.mkDerivation rec {
     "-I${libXcursor.dev}/include/X11"
     "-I${SDL2}/include/SDL2"
     "-I${fmt.dev}/include"
-    "-I${nvidia-texture-tools.dev}/include"
-  ];
-
-  NIX_CFLAGS_LINK = toString [
-    "-L${nvidia-texture-tools.lib}/lib/static"
   ];
 
   patches = [ ./rootdir_env.patch ];

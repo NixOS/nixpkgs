@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk2 gettext libart_lgpl libgnomecups bison flex ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk2 gettext intltool libart_lgpl libgnomecups bison flex ];
 
   propagatedBuildInputs = [ libxml2 ];
 

@@ -1,22 +1,21 @@
-{ lib, fetchurl, buildDunePackage, ppxlib, ppx_repr, logs }:
+{ lib, fetchurl, buildDunePackage, ppxlib, ppx_repr }:
 
 buildDunePackage rec {
   pname = "ppx_irmin";
-  version = "3.4.1";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "sha256-kig2EWww7GgGijhpSgm7pSHPR+3Q5K5E4Ha5tJY9oYA=";
+    sha256 = "10r7j4z4gx3dp48lavjhpb1cam27n6ch751amslb0drphy53l00n";
   };
 
-  minimalOCamlVersion = "4.10";
+  minimumOCamlVersion = "4.08";
 
-  strictDeps = false; # We must provide checkInputs as buildInputs because dune builds tests at build time
+  useDune2 = true;
 
   propagatedBuildInputs = [
     ppx_repr
     ppxlib
-    logs
   ];
 
   meta = {

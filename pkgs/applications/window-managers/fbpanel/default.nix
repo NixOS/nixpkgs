@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/fbpanel/${pname}-${version}.tbz2";
     sha256 = "e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
   };
-  nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ libX11 libXmu libXpm gtk2 libpng libjpeg libtiff librsvg gdk-pixbuf gdk-pixbuf-xlib.dev ];
+    [ pkg-config libX11 libXmu libXpm gtk2 libpng libjpeg libtiff librsvg gdk-pixbuf gdk-pixbuf-xlib.dev ];
 
   preConfigure = "patchShebangs .";
 

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , Carbon
 , Cocoa
 , ffmpeg
@@ -13,26 +12,14 @@
 , proj
 , python3
 , wrapGAppsHook
-, wxGTK32
+, wxGTK30-gtk3
+, wxmac
 , xlibsWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.4.3";
-
-  src = fetchurl {
-    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-7NtGTe9xNRPEvG9fQ2fC6htQLEMHfqGmBM2ezhi6oNM=";
-  };
-
-  patches = [
-    # Fix cavern.tst to work with SOURCE_DATE_EPOCH set
-    (fetchpatch {
-      url = "https://github.com/ojwb/survex/commit/b1200a60be7bdea20ffebbd8bb15386041727fa6.patch";
-      hash = "sha256-OtFjqpU+u8XGy+PAHg2iea++b681p/Kl8YslisBs4sA=";
-    })
-  ];
+  version = "1.4.1";
 
   nativeBuildInputs = [
     perl
@@ -47,13 +34,19 @@ stdenv.mkDerivation rec {
     libGLU
     mesa
     proj
-    wxGTK32
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     Cocoa
+    wxmac
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wxGTK30-gtk3
     xlibsWrapper
   ];
+
+  src = fetchurl {
+    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-69X1jGjBTQIQzkD1mTZTzE8L/GXnnf5SI52l7eIiLz4=";
+  };
 
   postPatch = ''
     patchShebangs .

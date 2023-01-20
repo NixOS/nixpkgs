@@ -7,23 +7,23 @@ cargoSetupPostUnpackHook() {
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
         unpackFile "$cargoDeps"
-        export cargoDepsCopy="$(realpath "$(stripHash $cargoDeps)")"
+        export cargoDepsCopy=$(stripHash $cargoDeps)
     else
-        cargoDepsCopy="$(realpath "$(pwd)/$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}")"
+      cargoDepsCopy="$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}"
     fi
 
     if [ ! -d .cargo ]; then
         mkdir .cargo
     fi
 
-    config="$cargoDepsCopy/.cargo/config";
+    config="$(pwd)/$cargoDepsCopy/.cargo/config";
     if [[ ! -e $config ]]; then
       config=@defaultConfig@
     fi;
 
     tmp_config=$(mktemp)
     substitute $config $tmp_config \
-      --subst-var-by vendor "$cargoDepsCopy"
+      --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
     cat ${tmp_config} >> .cargo/config
 
     cat >> .cargo/config <<'EOF'
@@ -39,8 +39,8 @@ EOF
 cargoSetupPostPatchHook() {
     echo "Executing cargoSetupPostPatchHook"
 
-    cargoDepsLockfile="$cargoDepsCopy/Cargo.lock"
-    srcLockfile="$(pwd)/${cargoRoot:+$cargoRoot/}Cargo.lock"
+    cargoDepsLockfile="$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock"
+    srcLockfile="$NIX_BUILD_TOP/$sourceRoot/${cargoRoot:+$cargoRoot/}/Cargo.lock"
 
     echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
     if ! @diff@ $srcLockfile $cargoDepsLockfile; then

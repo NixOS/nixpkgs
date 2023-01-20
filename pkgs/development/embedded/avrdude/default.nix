@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb-compat-0_1, libelf, libftdi1, readline
+{ lib, stdenv, fetchurl, bison, flex, libusb-compat-0_1, libelf, libftdi1, readline
 # docSupport is a big dependency, disabled by default
 , docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null
 }:
@@ -9,21 +9,15 @@ stdenv.mkDerivation rec {
   pname = "avrdude";
   version = "7.0";
 
-  src = fetchFromGitHub {
-    owner = "avrdudes";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-T8MKrvBvFF3WFwBMIN75vCOS0khliHQI+GGQvCk7T1o=";
+  src = fetchurl {
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-wO9l2Y1gQMoLTytwDVFGPCoflGZUQfOdFdl0Qtu3m1Q=";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
+  configureFlags = lib.optionals docSupport "--enable-doc";
 
-  buildInputs = [ libusb-compat-0_1 libelf libftdi1 readline ]
+  buildInputs = [ bison flex libusb-compat-0_1 libelf libftdi1 readline ]
     ++ lib.optionals docSupport [ texLive texinfo texi2html ];
-
-  cmakeFlags = lib.optionals docSupport [
-    "-DBUILD_DOC=ON"
-  ];
 
   meta = with lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";

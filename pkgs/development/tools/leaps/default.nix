@@ -1,27 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, leaps }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "leaps";
-  version = "0.9.1";
+  version = "0.9.0";
+
+  goPackagePath = "github.com/Jeffail/leaps";
 
   src = fetchFromGitHub {
     owner = "Jeffail";
     repo = "leaps";
+    sha256 = "1bzas7ixyfsfh81lnvplhx59yghkmnmy5p7jv9rnwp219dwbylpz";
     rev = "v${version}";
-    sha256 = "sha256-9AYE8+K6B6/odwNR+UhTTqmJ1RD6HhKvtC3WibWUZic=";
   };
 
-  proxyVendor = true; # darwin/linux hash mismatch
-  vendorSha256 = "sha256-0dwUOoV2bxPB+B6CKxJPImPIDlBMPcm0AwEMrVUkALc=";
+  goDeps = ./deps.nix;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
-
-  passthru.tests.version = testers.testVersion { package = leaps; };
-
-  meta = with lib; {
+  meta = {
     description = "A pair programming tool and library written in Golang";
     homepage = "https://github.com/jeffail/leaps/";
-    license = licenses.mit;
+    license = "MIT";
     maintainers = with lib.maintainers; [ qknight ];
     platforms = lib.platforms.unix;
   };

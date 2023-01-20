@@ -1,7 +1,5 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , openssl
 , gsound
@@ -15,7 +13,6 @@
 , gtk3
 , openssh
 , gnome
-, evolution-data-server-gtk4
 , gjs
 , nixosTests
 }:
@@ -42,12 +39,6 @@ stdenv.mkDerivation rec {
 
     # Allow installing installed tests to a separate output
     ./installed-tests-path.patch
-
-    # Update extension for Nautilus 43.
-    (fetchpatch {
-      url = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/commit/9723ea9102f07c2c60fa065184cc58c2bc260abf.patch";
-      sha256 = "9afy/70AwW+OYML5J5IyBBiNKWkZ+wZZryZbi4uRfs4=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -64,7 +55,7 @@ stdenv.mkDerivation rec {
     gtk3
     gsound
     gjs # for running daemon
-    evolution-data-server-gtk4 # for libebook-contacts typelib
+    gnome.evolution-data-server # for libebook-contacts typelib
   ];
 
   mesonFlags = [

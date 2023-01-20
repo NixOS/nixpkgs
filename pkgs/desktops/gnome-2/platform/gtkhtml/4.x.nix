@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ gsettings-desktop-schemas gtk3 gnome-icon-theme GConf ];
-  nativeBuildInputs = [ pkg-config autoreconfHook intltool ];
-  buildInputs = [ enchant isocodes ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ intltool enchant isocodes autoreconfHook ];
 }

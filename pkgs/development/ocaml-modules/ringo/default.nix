@@ -2,16 +2,18 @@
 
 buildDunePackage rec {
   pname = "ringo";
-  version = "0.9";
+  version = "0.5";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ringo";
     rev = "v${version}";
-    sha256 = "sha256-lPb+WrRsmtOow9BX9FW4HoILlsTuuMrVlK0XPcXWZ9U=";
+    sha256 = "1zwha0ycv3rm3qnw7nkg2m08ibx39yxnx5fan4lnn82b0pdasjag";
   };
 
   minimalOCamlVersion = "4.05";
+
+  useDune2 = true;
 
   doCheck = true;
 

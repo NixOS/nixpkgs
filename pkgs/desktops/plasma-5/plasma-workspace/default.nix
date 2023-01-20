@@ -1,72 +1,23 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, coreutils
-, gnugrep
-, gnused
-, isocodes
-, libdbusmenu
-, libSM
-, libXcursor
-, libXtst
-, libXft
-, pam
-, wayland
-, xmessage
-, xsetroot
-, baloo
-, breeze-qt5
-, kactivities
-, kactivities-stats
-, kcmutils
-, kconfig
-, kcrash
-, kdbusaddons
-, kdeclarative
-, kdelibs4support
-, kdesu
-, kglobalaccel
-, kidletime
-, kinit
-, kjsembed
-, knewstuff
-, knotifyconfig
-, kpackage
-, kpeople
-, krunner
-, kscreenlocker
-, ktexteditor
-, ktextwidgets
-, kwallet
-, kwayland
-, kwin
-, kxmlrpcclient
-, libkscreen
-, libksysguard
-, libqalculate
-, networkmanager-qt
-, phonon
-, plasma-framework
-, prison
-, solid
-, kholidays
-, kquickcharts
-, appstream-qt
-, plasma-wayland-protocols
-, kpipewire
-, libkexiv2
-, qtgraphicaleffects
-, qtquickcontrols
-, qtquickcontrols2
-, qtscript
-, qttools
-, qtwayland
-, qtx11extras
-, qqc2-desktop-style
-, polkit-qt
-, pipewire
-, libdrm
+{
+  mkDerivation, lib,
+
+  extra-cmake-modules, kdoctools,
+
+  coreutils, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
+  libXtst, libXft, pam, wayland, xmessage, xsetroot,
+
+  baloo, breeze-qt5, kactivities, kactivities-stats, kcmutils, kconfig, kcrash,
+  kdbusaddons, kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime,
+  kinit, kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner,
+  kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
+  kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
+  phonon, plasma-framework, prison, solid, kholidays, kquickcharts,
+  appstream-qt, plasma-wayland-protocols,
+
+  qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
+  qtwayland, qtx11extras, qqc2-desktop-style,
+
+  pipewire, libdrm
 }:
 
 let inherit (lib) getBin getLib; in
@@ -77,66 +28,19 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    isocodes
-    libdbusmenu
-    libSM
-    libXcursor
-    libXtst
-    libXft
-    pam
-    wayland
+    isocodes libdbusmenu libSM libXcursor libXtst libXft pam wayland
 
-    baloo
-    kactivities
-    kactivities-stats
-    kcmutils
-    kconfig
-    kcrash
-    kdbusaddons
-    kdeclarative
-    kdelibs4support
-    kdesu
-    kglobalaccel
-    kidletime
-    kjsembed
-    knewstuff
-    knotifyconfig
-    kpackage
-    kpeople
-    krunner
-    kscreenlocker
-    ktexteditor
-    ktextwidgets
-    kwallet
-    kwayland
-    kwin
-    kxmlrpcclient
-    libkscreen
-    libksysguard
-    libqalculate
-    networkmanager-qt
-    phonon
-    plasma-framework
-    prison
-    solid
-    kholidays
-    kquickcharts
-    appstream-qt
-    plasma-wayland-protocols
-    kpipewire
-    libkexiv2
+    baloo kactivities kactivities-stats kcmutils kconfig kcrash kdbusaddons
+    kdeclarative kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
+    knotifyconfig kpackage kpeople krunner kscreenlocker ktexteditor
+    ktextwidgets kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
+    libqalculate networkmanager-qt phonon plasma-framework prison solid
+    kholidays kquickcharts appstream-qt plasma-wayland-protocols
 
-    qtgraphicaleffects
-    qtquickcontrols
-    qtquickcontrols2
-    qtscript
-    qtwayland
-    qtx11extras
-    qqc2-desktop-style
-    polkit-qt
+    qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
+    qtx11extras qqc2-desktop-style
 
-    pipewire
-    libdrm
+    pipewire libdrm
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
@@ -154,12 +58,6 @@ mkDerivation {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
-  '';
-
-  # work around wrapQtAppsHook double-wrapping kcminit_startup,
-  # which is a symlink to kcminit
-  postFixup = ''
-    ln -sf $out/bin/kcminit $out/bin/kcminit_startup
   '';
 
   NIX_CFLAGS_COMPILE = [

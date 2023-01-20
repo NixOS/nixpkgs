@@ -21,13 +21,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.12.4";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
     rev = version;
-    hash = "sha256-X+AtorrDjxPYRmG1kVumF857mLFfHVUmfOntUbO7J1U=";
+    hash = "sha256-al3SgpJPg8dfdghV1dl00wShrKSJFegRVTilaOi0RHQ=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoSha256 = "sha256-mCEQELIi4baPpQOO0Ya51bDfw24I/9tZIRjic6OzMF4=";
+  cargoSha256 = "sha256-+9Yi+oKctFiTR8cXN6ajtwKEC0kkOP3+kPfUPSYsx5A=";
 
   buildFeatures = [ "grpcio/openssl" ];
 

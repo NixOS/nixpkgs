@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
       pycryptodome
       # the following are distributed with calibre, but we use upstream instead
       odfpy
-    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
+    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqtwebengine.meta.platforms) [
       # much of calibre's functionality is usable without a web
       # browser, so we enable building on platforms which qtwebengine
       # does not support by simply omitting qtwebengine.
-      pyqt6-webengine
+      pyqtwebengine
     ] ++ lib.optional (unrarSupport) unrardll
   );
 

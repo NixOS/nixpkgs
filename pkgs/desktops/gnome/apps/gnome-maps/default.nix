@@ -7,31 +7,34 @@
 , python3
 , pkg-config
 , gnome
-, glib
-, gtk4
+, gtk3
 , gobject-introspection
 , gdk-pixbuf
-, librest_1_0
+, librest
+, librsvg
 , libgweather
 , geoclue2
-, wrapGAppsHook4
-, desktop-file-utils
-, libshumate
-, libsecret
-, libsoup_3
+, wrapGAppsHook
+, folks
+, libchamplain
+, libsoup
 , gsettings-desktop-schemas
+, webkitgtk
 , gjs
-, libadwaita
-, geocode-glib_2
+, libgee
+, libhandy
+, geocode-glib
+, evolution-data-server
+, gnome-online-accounts
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.0";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-CGjPz7eMOiesW+YM2E0wuz08KMiFqY+qCeN/o6UyNOQ=";
+    sha256 = "sha256-5FZGf6zzyP0QyThrXnTEPZWVrZ+3Ulf32gFK+YPWnNE=";
   };
 
   doCheck = true;
@@ -41,31 +44,35 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
-    gobject-introspection
-    # For post install script
-    desktop-file-utils
-    glib
-    gtk4
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
+    evolution-data-server
+    folks
     gdk-pixbuf
-    glib
     geoclue2
-    geocode-glib_2
+    geocode-glib
     gjs
+    gnome-online-accounts
+    gobject-introspection
     gsettings-desktop-schemas
-    gtk4
-    libshumate
+    gtk3
+    libchamplain
+    libgee
     libgweather
-    libadwaita
-    librest_1_0
-    libsecret
-    libsoup_3
+    libhandy
+    librest
+    librsvg
+    libsoup
+    webkitgtk
   ];
 
   postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
     # entry point to the wrapped binary we get back to a wrapped

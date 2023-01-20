@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals (!enablePython) [ "--disable-pywrap" ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper intltool ]
+  nativeBuildInputs = [ pkg-config makeWrapper ]
   # if python2 support is requested, it is needed at builtime as well as runtime.
   ++ lib.optionals (enablePython) [ python2 ]
   ;
-  buildInputs = [ perl nss nspr pam ]
+  buildInputs = [ perl nss nspr pam intltool ]
   ++ lib.optionals (enablePython) [ python2 ]
   ;
   propagatedBuildInputs = [ coreutils gettext cryptsetup lvm2 rsync keyutils which ];

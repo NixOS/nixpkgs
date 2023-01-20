@@ -3,8 +3,6 @@
 , fetchFromGitHub
 , rustPlatform
 , darwin
-, pandoc
-, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,17 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-jGPS9x4DKQCXZkaJu9qIEqoxIu+1WraqfqxGFRV5z7A=";
 
-  nativeBuildInputs = [ pandoc installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
-
-  postBuild = ''
-    patchShebangs --build ./documentation/build.sh
-    ./documentation/build.sh
-  '';
-
-  preFixup = ''
-    installManPage documentation/fend.1
-  '';
 
   doInstallCheck = true;
 

@@ -1,10 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, extra-cmake-modules
-, kwindowsystem
-, plasma-framework
-}:
+{ lib, mkDerivation, fetchFromGitHub, extra-cmake-modules
+, kwindowsystem, plasma-framework }:
 
 mkDerivation rec {
   pname = "plasma-applet-caffeine-plus";
@@ -18,8 +13,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    kwindowsystem
-    plasma-framework
+    kwindowsystem plasma-framework
   ];
 
   nativeBuildInputs = [ extra-cmake-modules ];

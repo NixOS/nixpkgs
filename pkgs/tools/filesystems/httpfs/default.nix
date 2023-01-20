@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h8ggvhw30n2r6w11n1s458ypggdqx6ldwd61ma4yd7binrlpjq1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ fuse openssl
+    [ pkg-config fuse openssl
       asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
     ];
 

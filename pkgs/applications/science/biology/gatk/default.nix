@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper, python3 }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "gatk";
@@ -8,19 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0hjlsl7fxf3ankyjidqhwxc70gjh6z4lnjzw6b5fldzb0qvgfvy8";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 ];
-
-  dontUnpack = true;
-
   installPhase = ''
     mkdir -p $out/bin
-    install -m755 -D $src/gatk-package-${version}-local.jar $out/bin/
-    install -m755 -D $src/gatk-package-${version}-spark.jar $out/bin/
     install -m755 -D $src/gatk $out/bin/
-  '';
-  postFixup = ''
-    wrapProgram $out/bin/gatk --prefix PATH : ${lib.makeBinPath [ jre ]}
+    install -m755 -D $src/gatk-package-${version}-local.jar $out/bin/
   '';
 
   meta = with lib; {

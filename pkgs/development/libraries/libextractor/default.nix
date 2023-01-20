@@ -45,11 +45,10 @@ stdenv.mkDerivation rec {
            -e "s|pexe[[:blank:]]*=.*$|pexe = strdup(\"$out/lib/\");|g"
     '';
 
-  nativeBuildInputs = [ pkg-config ];
-
   buildInputs =
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
+     pkg-config
    ] ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ lib.optionals gtkSupport [ glib gtk3 ]

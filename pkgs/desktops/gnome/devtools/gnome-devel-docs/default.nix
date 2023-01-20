@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-devel-docs"; attrPath = "gnome.gnome-devel-docs"; };
   };
 
-  nativeBuildInputs = [ intltool ];
-  buildInputs = [ itstool libxml2 ];
+  buildInputs = [ intltool itstool libxml2 ];
 
   meta = with lib; {
     homepage = "https://github.com/GNOME/gnome-devel-docs";

@@ -1,8 +1,8 @@
 diff --git a/app/flatpak-builtins-build-export.c b/app/flatpak-builtins-build-export.c
-index 3f5d8a1f..79493e61 100644
+index 43fd0563..4067bd36 100644
 --- a/app/flatpak-builtins-build-export.c
 +++ b/app/flatpak-builtins-build-export.c
-@@ -464,7 +464,7 @@ validate_desktop_file (GFile      *desktop_file,
+@@ -458,7 +458,7 @@ validate_desktop_file (GFile      *desktop_file,
    subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                   G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                   G_SUBPROCESS_FLAGS_STDERR_MERGE,
@@ -12,10 +12,10 @@ index 3f5d8a1f..79493e61 100644
      {
        if (!g_error_matches (local_error, G_SPAWN_ERROR, G_SPAWN_ERROR_NOENT))
 diff --git a/tests/libtest.sh b/tests/libtest.sh
-index 36d39ac4..3ad2c7a6 100644
+index acb2095b..b361da16 100644
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -511,7 +511,7 @@ if [ -z "${FLATPAK_BWRAP:-}" ]; then
+@@ -431,7 +431,7 @@ if [ -z "${FLATPAK_BWRAP:-}" ]; then
      # running installed-tests: assume we know what we're doing
      _flatpak_bwrap_works=true
  elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
@@ -24,7 +24,7 @@ index 36d39ac4..3ad2c7a6 100644
      _flatpak_bwrap_works=false
  else
      _flatpak_bwrap_works=true
-@@ -591,7 +591,7 @@ dbus-daemon --fork --config-file=session.conf --print-address=3 --print-pid=4 \
+@@ -504,7 +504,7 @@ dbus-daemon --fork --config-file=session.conf --print-address=3 --print-pid=4 \
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
  
@@ -33,20 +33,20 @@ index 36d39ac4..3ad2c7a6 100644
      assert_not_reached "Failed to start dbus-daemon"
  fi
  
-@@ -606,7 +606,7 @@ commit_to_path () {
+@@ -519,7 +519,7 @@ commit_to_path () {
  }
  
  cleanup () {
 -    /bin/kill -9 $DBUS_SESSION_BUS_PID
 +    @coreutils@/bin/kill -9 $DBUS_SESSION_BUS_PID
-     gpg-connect-agent --homedir "${FL_GPG_HOMEDIR}" killagent /bye >&2 || true
-     fusermount -u $XDG_RUNTIME_DIR/doc >&2 || :
+     gpg-connect-agent --homedir "${FL_GPG_HOMEDIR}" killagent /bye || true
+     fusermount -u $XDG_RUNTIME_DIR/doc || :
      kill $(jobs -p) &> /dev/null || true
 diff --git a/tests/make-test-app.sh b/tests/make-test-app.sh
-index afa11a6b..5b12055f 100755
+index 612f914f..4b890da2 100755
 --- a/tests/make-test-app.sh
 +++ b/tests/make-test-app.sh
-@@ -190,13 +190,13 @@ msgid "Hello world"
+@@ -151,13 +151,13 @@ msgid "Hello world"
  msgstr "Hallo Welt"
  EOF
  mkdir -p ${DIR}/files/de/share/de/LC_MESSAGES
@@ -60,10 +60,10 @@ index afa11a6b..5b12055f 100755
 -msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
 +@gettext@/bin/msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
  
- flatpak build-finish ${DIR} >&2
+ flatpak build-finish ${DIR}
  mkdir -p repos
 diff --git a/tests/make-test-runtime.sh b/tests/make-test-runtime.sh
-index 4ba950df..fd50fab3 100755
+index af289625..7db51c17 100755
 --- a/tests/make-test-runtime.sh
 +++ b/tests/make-test-runtime.sh
 @@ -28,9 +28,10 @@ EOF
@@ -80,7 +80,7 @@ index 4ba950df..fd50fab3 100755
  ln -s ../lib ${DIR}/usr/lib64
 @@ -40,40 +41,17 @@ if test -f /sbin/ldconfig.real; then
  else
-     cp "$(type -P ldconfig)" "${DIR}/usr/bin"
+     cp `which ldconfig` ${DIR}/usr/bin
  fi
 -LIBS=`mktemp`
 -BINS=`mktemp`
@@ -106,8 +106,8 @@ index 4ba950df..fd50fab3 100755
 -}
 -
  for i in $@ bash ls cat echo readlink socat; do
--    I=$(type -P "$i")
--    add_bin "$I"
+-    I=`which $i`
+-    add_bin $I
 -done
 -for i in `cat $BINS`; do
 -    #echo Adding binary $i 1>&2
@@ -116,16 +116,16 @@ index 4ba950df..fd50fab3 100755
 -for i in `cat $LIBS`; do
 -    #echo Adding library $i 1>&2
 -    cp "$i" ${DIR}/usr/lib/
-+    I=$(readlink -f "$(type -P "$i")")
-+    [ -e "${DIR}/usr/bin/$i" ] && continue
++    I=$(readlink -f $(which $i))
++    [ -e ${DIR}/usr/bin/$i ] && continue
 +    requisites=$(nix-store --query --requisites "$I")
 +    for r in $requisites; do
 +        # a single store item can be needed by multiple paths, no need to copy it again
-+        if [ ! -e "${DIR}/$r" ]; then
-+            cp -r "$r" "${DIR}/$r"
++        if [ ! -e ${DIR}/$r ]; then
++            cp -r $r ${DIR}/$r
 +        fi
 +    done
-+    ln -s "$I" "${DIR}/usr/bin/$i"
++    ln -s $I ${DIR}/usr/bin/$i
  done
  ln -s bash ${DIR}/usr/bin/sh
  
@@ -141,18 +141,18 @@ index 4ba950df..fd50fab3 100755
 +# We do not copy C.UTF8 locale because it is in locale archive and
 +# that is already copied with glibc.
 +
-+mv "${DIR}/nix/store" "${DIR}/usr/store" # files outside /usr are not permitted, we will have to replace /nix/store with /usr/store
-+chmod -R u+w "${DIR}" # nix store has read-only directories which would cause problems during clean-up, files need to be writable for sed
-+find "${DIR}" -type f -print0 | xargs -0 sed -i 's~/nix/store/~/usr/store/~g' # replace hardcoded paths
-+find "${DIR}" -type l | xargs -I '{}' sh -c 'tg="$(readlink "$1")"; newtg="${tg#/nix/store/}"; if [ "$tg" != "$newtg" ]; then ln -fs "/usr/store/$newtg" "$1"; fi' -- '{}' # replace symlink targets
++mv ${DIR}/nix/store ${DIR}/usr/store # files outside /usr are not permitted, we will have to replace /nix/store with /usr/store
++chmod -R u+w ${DIR} # nix store has read-only directories which would cause problems during clean-up, files need to be writable for sed
++find ${DIR} -type f -print0 | xargs -0 sed -i 's~/nix/store/~/usr/store/~g' # replace hardcoded paths
++find ${DIR} -type l | xargs -I '{}' sh -c 'tg="$(readlink "$1")"; newtg="${tg#/nix/store/}"; if [ "$tg" != "$newtg" ]; then ln -fs "/usr/store/$newtg" "$1"; fi' -- '{}' # replace symlink targets
  
  if [ x$COLLECTION_ID != x ]; then
      collection_args=--collection-id=${COLLECTION_ID}
 diff --git a/tests/testlibrary.c b/tests/testlibrary.c
-index 831d85c1..ae4f03d0 100644
+index 509ce6cc..6a333c9c 100644
 --- a/tests/testlibrary.c
 +++ b/tests/testlibrary.c
-@@ -1601,7 +1601,7 @@ check_bwrap_support (void)
+@@ -1399,7 +1399,7 @@ check_bwrap_support (void)
      {
        gint exit_code = 0;
        char *argv[] = { (char *) bwrap, "--unshare-ipc", "--unshare-net",
@@ -162,43 +162,44 @@ index 831d85c1..ae4f03d0 100644
        g_test_message ("Spawning %s", argv_str);
        g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL, &exit_code, &error);
 diff --git a/triggers/desktop-database.trigger b/triggers/desktop-database.trigger
-index 1037466d..c4c7ed6d 100755
+index 2188f535..d8283061 100755
 --- a/triggers/desktop-database.trigger
 +++ b/triggers/desktop-database.trigger
 @@ -1,5 +1,5 @@
  #!/bin/sh
  
--if command -v update-desktop-database >/dev/null && test -d "$1/exports/share/applications"; then
--    exec update-desktop-database -q "$1/exports/share/applications"
-+if test -d "$1/exports/share/applications"; then
-+    exec @dfu@/bin/update-desktop-database -q "$1/exports/share/applications"
+-if test \( -x "$(which update-desktop-database 2>/dev/null)" \) -a \( -d $1/exports/share/applications \); then
+-    exec update-desktop-database -q $1/exports/share/applications
++if test \( -d $1/exports/share/applications \); then
++    exec @dfu@/bin/update-desktop-database -q $1/exports/share/applications
  fi
 diff --git a/triggers/gtk-icon-cache.trigger b/triggers/gtk-icon-cache.trigger
-index d9fc8251..d8ddb96e 100755
+index 711cfab2..07baa2ac 100755
 --- a/triggers/gtk-icon-cache.trigger
 +++ b/triggers/gtk-icon-cache.trigger
 @@ -1,10 +1,10 @@
  #!/bin/sh
  
- if command -v gtk-update-icon-cache >/dev/null && test -d "$1/exports/share/icons/hicolor"; then
--    cp /usr/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
-+    cp @hicolorIconTheme@/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
-     for dir in "$1"/exports/share/icons/*; do
-         if test -f "$dir/index.theme"; then
--            if ! gtk-update-icon-cache --quiet "$dir"; then
-+            if ! @gtk3@/bin/gtk-update-icon-cache --quiet "$dir"; then
+-if test \( -x "$(which gtk-update-icon-cache 2>/dev/null)" \) -a \( -d $1/exports/share/icons/hicolor \); then
+-    cp /usr/share/icons/hicolor/index.theme $1/exports/share/icons/hicolor/
++if test \( -d $1/exports/share/icons/hicolor \); then
++    cp @hicolorIconTheme@/share/icons/hicolor/index.theme $1/exports/share/icons/hicolor/
+     for dir in $1/exports/share/icons/*; do
+         if test -f $dir/index.theme; then
+-            if ! gtk-update-icon-cache --quiet $dir; then
++            if ! @gtk3@/bin/gtk-update-icon-cache --quiet $dir; then
                  echo "Failed to run gtk-update-icon-cache for $dir"
                  exit 1
              fi
 diff --git a/triggers/mime-database.trigger b/triggers/mime-database.trigger
-index 10ddbbb3..c270998a 100755
+index 2067d8ec..a49a8777 100755
 --- a/triggers/mime-database.trigger
 +++ b/triggers/mime-database.trigger
 @@ -1,5 +1,5 @@
  #!/bin/sh
  
--if command -v update-mime-database >/dev/null && test -d "$1/exports/share/mime/packages"; then
--    exec update-mime-database "$1/exports/share/mime"
-+if test -d "$1/exports/share/mime/packages"; then
-+    exec @smi@/bin/update-mime-database "$1/exports/share/mime"
+-if test \( -x "$(which update-mime-database 2>/dev/null)" \) -a \( -d $1/exports/share/mime/packages \); then
+-    exec update-mime-database $1/exports/share/mime
++if test \( -d $1/exports/share/mime/packages \); then
++    exec @smi@/bin/update-mime-database $1/exports/share/mime
  fi

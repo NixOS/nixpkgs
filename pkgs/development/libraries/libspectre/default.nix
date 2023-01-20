@@ -11,11 +11,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./libspectre-0.2.7-gs918.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
     # Need `libgs.so'.
-    ghostscript cairo /*for tests*/
+    pkg-config ghostscript cairo /*for tests*/
   ];
 
   doCheck = true;

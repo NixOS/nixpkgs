@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   pname = "sipsak";
   version = "4.1.2.1";
 
-  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
+    autoreconfHook
     openssl
     c-ares
   ];

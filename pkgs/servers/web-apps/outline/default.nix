@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
     fixup_yarn_lock yarn.lock

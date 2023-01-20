@@ -7,9 +7,7 @@
 
 { lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
-, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
-, ocamlPackages_4_14
-, ncurses
+, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12, ncurses
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
 , glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
@@ -70,12 +68,11 @@ let
   '' else "";
   ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
     else with versions; switch coq-version [
-      { case = range "8.16" "8.17"; out = ocamlPackages_4_14; }
-      { case = range "8.14" "8.15"; out = ocamlPackages_4_12; }
+      { case = range "8.14" "8.14"; out = ocamlPackages_4_12; }
       { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
-    ] ocamlPackages_4_14;
+    ] ocamlPackages_4_12;
   ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
     ++ optional (coqAtLeast "8.14") dune_2;
   ocamlPropagatedBuildInputs = [ ]

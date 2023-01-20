@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/indoorvivants/tree-sitter-smithy",
-  "rev": "084537ae85d186448c447de959a4955c0b855d2b",
-  "date": "2022-10-09T13:04:45+01:00",
-  "path": "/nix/store/4r9gfwad9f769y0ivivprlpqjbq8di8s-tree-sitter-smithy",
-  "sha256": "17l94ay7vv2b1iihnzssbw3i027yvk5a44waqlyzgf2bkqk7iqs0",
+  "rev": "1cdb3578dfec76f19e566ea4c1e305632e88026a",
+  "date": "2022-05-21T16:39:36+01:00",
+  "path": "/nix/store/smvp9nkdg6amfzspfj0inmfvcsjgrsjz-tree-sitter-smithy",
+  "sha256": "14xaflvz43m1c892jh0bg2yzsj1mrambkvsj6xkx84j141nnf4vm",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

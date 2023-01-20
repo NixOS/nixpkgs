@@ -1,19 +1,19 @@
 { buildDunePackage
-, irmin, irmin-fs, ppx_irmin, lwt, mtime
+, irmin, irmin-unix, irmin-git, ppx_irmin, lwt, mtime
 , alcotest, alcotest-lwt, cacert
 }:
 
 buildDunePackage {
   pname = "irmin-containers";
 
-  inherit (ppx_irmin) src version strictDeps;
+  inherit (ppx_irmin) src version useDune2;
 
   nativeBuildInputs = [
     ppx_irmin
   ];
 
   propagatedBuildInputs = [
-    irmin irmin-fs ppx_irmin lwt mtime
+    irmin irmin-unix irmin-git ppx_irmin lwt mtime
   ];
 
   doCheck = true;

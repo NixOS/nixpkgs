@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "influxdb";
@@ -24,6 +24,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ offline zimbatm ];
-    broken = stdenv.isDarwin; # build fails with go > 1.17
   };
 }

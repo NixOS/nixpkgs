@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , gettext
 , fetchurl
 , pkg-config
@@ -11,16 +10,24 @@
 , python3
 , desktop-file-utils
 , wrapGAppsHook
-, gnome
-}:
+, gnome }:
 
-stdenv.mkDerivation rec {
+let
   pname = "gnome-power-manager";
-  version = "43.0";
+  version = "3.32.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major version}/gnome-power-manager-${version}.tar.xz";
-    sha256 = "faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0drfn3wcc8l4n07qwv6p0rw2dwcd00hwzda282q62l6sasks2b2g";
+  };
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      attrPath = "gnome.${pname}";
+    };
   };
 
   nativeBuildInputs = [
@@ -32,7 +39,7 @@ stdenv.mkDerivation rec {
 
     # needed by meson_post_install.sh
     python3
-    glib
+    glib.dev
     desktop-file-utils
   ];
 
@@ -40,14 +47,8 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     upower
+    gnome.adwaita-icon-theme
   ];
-
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-power-manager";
-      attrPath = "gnome.gnome-power-manager";
-    };
-  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-power-manager";

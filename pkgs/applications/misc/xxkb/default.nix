@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     sha256 = "0hl1i38z9xnbgfjkaz04vv1n8xbgfg88g5z8fyzyb2hxv2z37anf";
   };
 
-  nativeBuildInputs = [ imake gccmakedep pkg-config ];
+  nativeBuildInputs = [ imake gccmakedep ];
 
   buildInputs = [
     libX11
     libXt
     libXext
     libXpm
-  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf ];
+  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkg-config ];
 
   outputs = [ "out" "man" ];
 

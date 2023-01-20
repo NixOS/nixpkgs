@@ -3,19 +3,16 @@
 , stdenv
 , acl
 , gnome
-, glibmm_2_68
-, gtkmm4
+, gtkmm3
 , meson
 , ninja
 , pkg-config
-, itstool
-, wrapGAppsHook4
-, gtk4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "eiciel";
-  version = "0.10.0-rc2";
+  version = "0.9.13.1";
 
   outputs = [ "out" "nautilusExtension" ];
 
@@ -23,32 +20,30 @@ stdenv.mkDerivation rec {
     owner = "rofirrim";
     repo = "eiciel";
     rev = version;
-    sha256 = "+MXoT6J4tKuFaSvUTcM15cKWLUnS0kYgBfqH+5lz6KY=";
+    sha256 = "0rhhw0h1hyg5kvxhjxkdz03vylgax6912mg8j4lvcz6wlsa4wkvj";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    itstool
-    wrapGAppsHook4
-    gtk4
+    wrapGAppsHook
   ];
 
   buildInputs = [
     acl
-    glibmm_2_68
-    gtkmm4
+    gtkmm3
     gnome.nautilus
   ];
 
   mesonFlags = [
-    "-Dnautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-4"
+    "-Dnautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-3.0"
   ];
 
   postPatch = ''
-    # https://github.com/rofirrim/eiciel/pull/9
     substituteInPlace meson.build --replace "compiler.find_library('libacl')" "compiler.find_library('acl')"
+    chmod +x img/install_icons.sh
+    patchShebangs img/install_icons.sh
   '';
 
   meta = with lib; {

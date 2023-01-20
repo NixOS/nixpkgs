@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, removeReferencesTo
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , alsaSupport ? !stdenv.isDarwin, alsa-lib
 , dbusSupport ? !stdenv.isDarwin, dbus
 , pipewireSupport ? !stdenv.isDarwin, pipewire
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config removeReferencesTo ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
@@ -45,10 +45,6 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/183774
     "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
   ];
-
-  postInstall = lib.optional pipewireSupport ''
-    remove-references-to -t ${pipewire.dev} $(readlink -f $out/lib/*.so)
-  '';
 
   meta = with lib; {
     description = "OpenAL alternative";

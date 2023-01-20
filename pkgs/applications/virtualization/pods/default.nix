@@ -8,7 +8,7 @@
 , ninja
 , pkg-config
 , rustPlatform
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtksourceview5
 , libadwaita
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

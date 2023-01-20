@@ -136,7 +136,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.21";
+  version = "0.3.20";
 
   outputs = [ "out" "dev" ];
 
@@ -144,13 +144,8 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
+    sha256 = "sha256-FLPVcepf7tv/es+4kur9Op7o3iVAAayuYN4hY/P4mmQ=";
   };
-
-  postPatch = ''
-    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
-    substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
-  '';
 
   inherit blas64;
 

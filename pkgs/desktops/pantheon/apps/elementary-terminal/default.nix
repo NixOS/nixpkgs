@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -29,15 +28,6 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-qxjHrlpdJcfXEUan/JgU7HqBRdB36gxAb5xmd/ySsj0=";
   };
-
-  patches = [
-    # TerminalWidget: Fix terminal freeze when closing in GLib 2.73.2+
-    # https://github.com/elementary/terminal/pull/691
-    (fetchpatch {
-      url = "https://github.com/elementary/terminal/commit/3cabe328abb839f12cd21f4d3d474d1d1e42b907.patch";
-      sha256 = "sha256-wd36vOKqqPHCFPOok+Id9KqxbqjF0ohqsoxAU+jo4+Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libffi";
-  version = "3.4.3";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-RBbdkrauj8tbEEIecRxNPLMSA9d1Iad9hdAQIxHmw7g=";
+    sha256 = "081nx7wpzds168jbr59m34n6s3lyiq6r8zggvqxvlslsc4hvf3sl";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    ./libffi-powerpc64.patch
   ];
 
   strictDeps = true;

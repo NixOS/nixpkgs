@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ makeWrapper ] ++ optional stdenv.isFreeBSD autoreconfHook;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
     ++ optional (!stdenv.isCygwin) "--with-crypto"

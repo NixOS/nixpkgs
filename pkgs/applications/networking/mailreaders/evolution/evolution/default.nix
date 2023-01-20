@@ -5,7 +5,7 @@
 , intltool
 , fetchurl
 , libxml2
-, webkitgtk_4_1
+, webkitgtk
 , highlight
 , pkg-config
 , gtk3
@@ -14,6 +14,7 @@
 , libpst
 , gspell
 , evolution-data-server
+, libgdata
 , libgweather
 , glib-networking
 , gsettings-desktop-schemas
@@ -22,6 +23,7 @@
 , shared-mime-info
 , libical
 , db
+, gcr
 , sqlite
 , gnome
 , gnome-desktop
@@ -32,7 +34,7 @@
 , nspr
 , icu
 , libcanberra-gtk3
-, geocode-glib_2
+, geocode-glib
 , cmark
 , bogofilter
 , gst_all_1
@@ -44,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.46.0";
+  version = "3.44.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "4J6Sdrxrmr8NrTpOgT7qHQJfT2qvH6w7ew+IiVdCkT8=";
+    sha256 = "8LFuerrTx5RaKcMi8X2rSgjWHpm9fMkbjfNQU8XBLow=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
     bogofilter
     db
     evolution-data-server
+    gcr
     gdk-pixbuf
     glib
     glib-networking
@@ -78,8 +81,9 @@ stdenv.mkDerivation rec {
     highlight
     icu
     libcanberra-gtk3
-    geocode-glib_2
+    geocode-glib
     cmark
+    libgdata
     libgweather
     libical
     libnotify
@@ -93,7 +97,7 @@ stdenv.mkDerivation rec {
     procps
     shared-mime-info
     sqlite
-    webkitgtk_4_1
+    webkitgtk
   ];
 
   propagatedUserEnvPkgs = [
@@ -102,11 +106,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_AUTOAR=OFF"
+    "-DENABLE_LIBCRYPTUI=OFF"
     "-DENABLE_YTNEF=OFF"
     "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
+    "-DWITH_GWEATHER4=ON"
   ];
 
   requiredSystemFeatures = [
@@ -122,7 +128,6 @@ stdenv.mkDerivation rec {
     };
   };
 
-  PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with lib; {

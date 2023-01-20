@@ -1,7 +1,5 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -21,7 +19,6 @@
 , grilo
 , grilo-plugins
 , libpeas
-, libportal-gtk3
 , libhandy
 , adwaita-icon-theme
 , gnome-desktop
@@ -32,31 +29,12 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "43.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "s202VZKLWJZGKk05+Dtq1m0328nJnc6wLqii43OUpB4=";
+    sha256 = "SvBJHduV34szruOZ06UPnHqxfeiNOvYzVlZ8+I9X5qs=";
   };
-
-  patches = [
-    # Lower X11 dependency version since we do not have it.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/totem/-/commit/140d9eea70c3101ef3234abb4de5974cb84b13db.patch";
-      sha256 = "ohppxqMiH8Ksc9B2e3AXighfM6KVN+RNXYL+fLELSN8=";
-      revert = true;
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/totem/-/commit/2610b4536f73493587e4a5a38e01c9961fcabb96.patch";
-      sha256 = "nPfzS+LQuAlyQOz67hCdtx93w2frhgWlg1KGX5bEU38=";
-      revert = true;
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/totem/-/commit/5b871aee5292f25bbf39dca18045732e979e7a68.patch";
-      sha256 = "LqQLdgyZkIVc+/hQ5sdBLqhtjCVIMDSs9tjVXwMFodg=";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -83,7 +61,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     libpeas
-    libportal-gtk3
     libhandy
     shared-mime-info
     gdk-pixbuf
@@ -110,9 +87,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    chmod +x meson_compile_python.py # patchShebangs requires executable file
+    chmod +x meson_compile_python.py meson_post_install.py # patchShebangs requires executable file
     patchShebangs \
-      ./meson_compile_python.py
+      ./meson_compile_python.py \
+      ./meson_post_install.py
   '';
 
   checkPhase = ''

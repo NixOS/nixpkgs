@@ -18,11 +18,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-zHdgVpe92OiwLC4jHVtT3oC+WnB30e5U3ZOHnmuo+Ao=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
     libunwind
     lz4
+    pkg-config
   ] ++ (with python3.pkgs; [
     cython
   ]);

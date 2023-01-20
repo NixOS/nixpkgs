@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "bc2a20cd3ac1e61fe0461bd3ee8cb250dbcc1fa511fad0686d267744e9c78f3a";
   };
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    stdenv
+    stdenv pkg-config
   ] ++ lib.optionals enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
 
   configureFlags = lib.optional enableX11 "--with-x11";

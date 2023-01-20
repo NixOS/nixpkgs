@@ -24,13 +24,12 @@ rec {
     gerbil ? pkgs.gerbil-unstable,
     gambit-params ? pkgs.gambit-support.stable-params,
     gerbilInputs ? [],
-    nativeBuildInputs ? [],
     buildInputs ? [],
     buildScript ? "./build.ss",
     softwareName ? ""} :
     let buildInputs_ = buildInputs; in
     gccStdenv.mkDerivation rec {
-      inherit src meta pname version nativeBuildInputs;
+      inherit src meta pname version;
       passthru = { inherit gerbil-package version-path ;};
       buildInputs = [ gerbil ] ++ gerbilInputs ++ buildInputs_;
       postPatch = ''

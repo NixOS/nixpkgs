@@ -3,27 +3,27 @@
 , git
 , coq
 , cacert
-, ocaml-crunch
 }:
 
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.47.0";
+  version = "0.36.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-VJs0pKA99mZXhipK1bSAZmgAHvYbGbjxdI2XyJYjSm0=";
+    sha256 = "0zx8ai79ha3npm3aybzgisil27v9i052cqdllfri0fsc67dig78b";
     fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
+  useDune2 = true;
+
   strictDeps = true;
 
   nativeBuildInputs = [
-    ocaml-crunch
     git
     coq
     coq.ocamlPackages.menhir
@@ -49,11 +49,6 @@ coq.ocamlPackages.buildDunePackage rec {
     core_unix
     pprint
     linenoise
-    dune-configurator
-    ctypes_stubs_js
-    crunch
-    zarith_stubs_js
-    pure-splitmix
 
     # Test helpers deps
     qcheck
@@ -66,7 +61,7 @@ coq.ocamlPackages.buildDunePackage rec {
     hacl-star-raw
     lwt-canceler
     ipaddr
-    bls12-381
+    bls12-381-unix
     bls12-381-legacy
     ptime
     mtime

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     glib
     json-glib
     libsoup_3

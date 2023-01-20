@@ -1,36 +1,34 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , gettext
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gnome
 , accountsservice
 , fontconfig
 , gdm
 , geoclue2
-, geocode-glib_2
+, geocode-glib
 , glib
 , gnome-desktop
 , gnome-online-accounts
 , gtk3
-, gtk4
 , libgweather
 , json-glib
 , krb5
 , libpwquality
-, librest_1_0
+, librest
 , libsecret
 , networkmanager
 , pango
 , polkit
-, webkitgtk_5_0
+, webkitgtk
 , systemd
-, libadwaita
-, libnma-gtk4
+, libhandy
+, libnma
 , tzdata
 , libgnomekbd
 , gsettings-desktop-schemas
@@ -38,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "43.0";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Ap7LgZM/QE+k9spVvuR7A++JDoRGK/FF9u4JR34aOVU=";
+    sha256 = "TYPZiySavhW7Kz5+eurZxH+Ei8p7agkavJCLdlQavns=";
   };
 
   patches = [
@@ -58,7 +56,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     systemd
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -66,34 +64,32 @@ stdenv.mkDerivation rec {
     fontconfig
     gdm
     geoclue2
-    geocode-glib_2
+    geocode-glib
     glib
     gnome-desktop
     gnome-online-accounts
     gsettings-desktop-schemas
     gtk3
-    gtk4
     json-glib
     krb5
     libgweather
-    libadwaita
-    libnma-gtk4
+    libhandy
+    libnma
     libpwquality
-    librest_1_0
+    librest
     libsecret
     networkmanager
     pango
     polkit
-    webkitgtk_5_0
+    webkitgtk
   ];
 
   mesonFlags = [
+    "-Dcheese=disabled"
     "-Dibus=disabled"
     "-Dparental_controls=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
   ];
-
-  PKG_CONFIG_SYSTEMD_SYSUSERSDIR = "${placeholder "out"}/lib/sysusers.d";
 
   passthru = {
     updateScript = gnome.updateScript {

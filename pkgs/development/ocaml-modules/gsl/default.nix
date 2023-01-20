@@ -13,8 +13,7 @@ buildDunePackage rec {
     sha256 = "1mpzcgbrha2l8iikqbmn32668v2mnnsykxg5n5jgs0qnskn2nvrn";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator gsl ];
+  buildInputs = [ dune-configurator gsl pkg-config ];
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Accelerate ];
 
   meta = with lib; {

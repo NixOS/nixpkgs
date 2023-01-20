@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , fetchurl
 , at-spi2-core
 , babl
@@ -8,19 +7,22 @@
 , dleyna-renderer
 , gdk-pixbuf
 , gegl
-, geocode-glib_2
+, geocode-glib
 , gettext
 , gexiv2
+, gfbgraph
 , glib
 , gnome-online-accounts
 , gnome
 , gobject-introspection
+, grilo
+, grilo-plugins
 , gsettings-desktop-schemas
 , gtk3
 , itstool
 , libdazzle
-, libportal-gtk3
 , libhandy
+, libgdata
 , libxml2
 , meson
 , ninja
@@ -34,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "43.0";
+  version = "42.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x6x0WNUz8p2VUBHHS3YiTXnqMbzBLp1tDOe2w3BNCOE=";
+    sha256 = "JcsoFCUZnex7BF8T8y+PlgNMsMuLlNlvnf+vT1vmhVE=";
   };
 
   patches = [
@@ -71,15 +73,18 @@ stdenv.mkDerivation rec {
     dleyna-renderer
     gdk-pixbuf
     gegl
-    geocode-glib_2
+    geocode-glib
     gexiv2
+    gfbgraph
     glib
     gnome-online-accounts
+    grilo
+    grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
-    libportal-gtk3
     libhandy
+    libgdata
     tracker
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 

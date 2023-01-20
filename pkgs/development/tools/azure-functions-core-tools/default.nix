@@ -16,20 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "azure-functions-core-tools";
-  version = "4.0.4785";
+  version = "3.0.3785";
 
-  src =
-    if stdenv.isLinux then
-      fetchurl {
-        url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.linux-x64.${version}.zip";
-        sha256 = "sha256-SWvbPEslwhYNd2fTQJWy1+823o1vJR/roPstgelSfnQ=";
-      }
-    else
-      fetchurl {
-        url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.osx-x64.${version}.zip";
-        sha256 = "sha256-m06XeUHVDCxo7sfK4eF1oM6IuaVET9jr/xSO9qzpxSU=";
-      }
-    ;
+  src = fetchurl {
+    url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.linux-x64.${version}.zip";
+    sha256 = "sha256-NdTEFQaG8eFengjzQr51ezehIHFvQZqmrjpjWk4vZKo=";
+  };
 
   nativeBuildInputs = [
     unzip
@@ -58,17 +50,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -prd . $out/bin/azure-functions-core-tools
-    chmod +x $out/bin/azure-functions-core-tools/{func,gozip}
-  '' + lib.optionalString stdenv.isLinux ''
+    cp -prd *.dll *.so gozip func $out/bin
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" "$out/bin/azure-functions-core-tools/func"
-    find $out/bin/azure-functions-core-tools -type f -name "*.so" -exec patchelf --set-rpath "${libPath}" {} \;
-    wrapProgram "$out/bin/azure-functions-core-tools/func" --prefix LD_LIBRARY_PATH : ${libPath}
-  '' + ''
-    ln -s $out/bin/{azure-functions-core-tools,}/func
-    ln -s $out/bin/{azure-functions-core-tools,}/gozip
+      --set-rpath "${libPath}" "$out/bin/func"
+    chmod +x $out/bin/func $out/bin/gozip
+    find $out/bin -type f -name "*.so" -exec patchelf --set-rpath "${libPath}" {} \;
+    wrapProgram "$out/bin/func" --prefix LD_LIBRARY_PATH : ${libPath}
   '';
   dontStrip = true; # Causes rpath patching to break if not set
 
@@ -81,6 +69,6 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.mit;
     maintainers = with maintainers; [ jshcmpbll ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -60,16 +60,16 @@
     "version": "3.0.3"
   },
   "lightbox-photoswipe": {
-    "path": "lightbox-photoswipe/tags/5.0.18",
-    "rev": "2796750",
-    "sha256": "1c6wnxq70rxqj95w0ygnhkl8kxnvcpy4sxj2nniim0wsilpr3w8g",
-    "version": "5.0.18"
+    "path": "lightbox-photoswipe/tags/5.0.16",
+    "rev": "2790158",
+    "sha256": "1pd83v7nz2l002z1y27h97gmhcdcbvsfi8x7llrg9vzijrx0vf18",
+    "version": "5.0.16"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/3.100.2",
-    "rev": "2797181",
-    "sha256": "04vxwxdvpp80hh381xb88g81i9ps1imvvax5nljjx7nywwc5p9ci",
-    "version": "3.100.2"
+    "path": "mailpoet/tags/3.100.1",
+    "rev": "2795092",
+    "sha256": "0wgzmicf6mmkmkwsxxaz2d8sylvq6v0a98nbc2yswd11l4igc8ld",
+    "version": "3.100.1"
   },
   "opengraph": {
     "path": "opengraph/tags/1.11.0",
@@ -90,21 +90,15 @@
     "version": "0.9.3"
   },
   "webp-converter-for-media": {
-    "path": "webp-converter-for-media/tags/5.3.0",
-    "rev": "2797448",
-    "sha256": "1w6i4z09rj9prj4skv9j2m45nsi1an092j2frfzf1wmdacvsrmvh",
-    "version": "5.3.0"
-  },
-  "worker": {
-    "path": "worker/tags/4.9.14",
-    "rev": "2739771",
-    "sha256": "14bq99cdpdqp1vydhgk3n4gyi99w1b0x1xkz1rnalj0xgqiq19hd",
-    "version": "4.9.14"
+    "path": "webp-converter-for-media/tags/5.2.4",
+    "rev": "2791011",
+    "sha256": "18y0yrngywz0zlxd67cn16nvzypb395rhsfavfyl6pq0ygymcxnm",
+    "version": "5.2.4"
   },
   "wp-change-email-sender": {
     "path": "wp-change-email-sender/trunk",
-    "rev": "2796798",
-    "sha256": "1wkj15vclbh4l38fkrmbmc4w7lapfydq9rrpn508ki19f4544dam",
+    "rev": "2655179",
+    "sha256": "0dv5604mn4ly2zm6mwqf5y8vp9cfiw70v66bimvgbahxz4i2w23q",
     "version": "1.0"
   },
   "wp-gdpr-compliance": {

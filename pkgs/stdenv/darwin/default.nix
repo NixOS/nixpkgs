@@ -698,11 +698,6 @@ rec {
         libc = pkgs.darwin.Libsystem;
         shellPackage = pkgs.bash;
         inherit bootstrapTools;
-      } // lib.optionalAttrs useAppleSDKLibs {
-        # This objc4 will be propagated to all builds using the final stdenv,
-        # and we shouldn't mix different builds, because they would be
-        # conflicting LLVM modules. Export it here so we can grab it later.
-        inherit (pkgs.darwin) objc4;
       };
 
       allowedRequisites = (with pkgs; [

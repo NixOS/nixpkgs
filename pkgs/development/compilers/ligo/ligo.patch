@@ -1,40 +1,23 @@
-From 6926fed076c2f5aa3282dbca10538d156c045c6f Mon Sep 17 00:00:00 2001
-From: bezmuth <benkel97@protonmail.com>
-Date: Wed, 3 Aug 2022 15:53:10 +0100
-Subject: [PATCH] Compat with core v0.15.0
-
----
- ligo.opam                                  | 4 +++-
- ligo.opam.locked                           | 5 +++--
- src/bin/cli.ml                             | 4 ++--
- src/bin/dune                               | 4 +++-
- src/main/helpers/cli_helpers.ml            | 4 ++--
- src/main/interpreter/dune                  | 2 +-
- src/main/interpreter/interpreter.ml        | 2 ++
- vendors/ligo-utils/simple-utils/dune       | 1 +
- vendors/ligo-utils/simple-utils/snippet.ml | 2 +-
- 9 files changed, 18 insertions(+), 10 deletions(-)
-
 diff --git a/ligo.opam b/ligo.opam
-index 47513217f..073f68ff5 100644
+index d561c74d1..3a8d34feb 100644
 --- a/ligo.opam
 +++ b/ligo.opam
 @@ -10,7 +10,9 @@ license: "MIT"
  # If you change the dependencies, run `opam lock` in the root
  depends: [
    # Jane Street Core
--  "core" {= "v0.14.1"}
-+  "core" {>= "v0.14.1" & < "v0.16.0"}
-+  "core_kernel" { >= "v0.14.1" & "v0.16.0"}
-+  "core_unix" { >= "v0.14.1"  & "v0.16.0"}
+-  "core"
++  "core" { >= "v0.14.0" & < "v0.16.0" }
++  "core_kernel" { >= "v0.14.0" & "v0.16.0" }
++  "core_unix" { >= "v0.14.0" & "v0.16.0" }
    # Tooling
    "odoc" { build }
    "ocamlfind" { build }
 diff --git a/ligo.opam.locked b/ligo.opam.locked
-index fd6fccf03..458e11791 100644
+index b4501cc76..c8ed8a41f 100644
 --- a/ligo.opam.locked
 +++ b/ligo.opam.locked
-@@ -47,8 +47,9 @@ depends: [
+@@ -50,8 +50,9 @@ depends: [
    "conf-rust" {= "0.1"}
    "conf-which" {= "1"}
    "coq" {= "8.13.2"}
@@ -45,12 +28,12 @@ index fd6fccf03..458e11791 100644
 +  "core_unix" {= "v0.15.0"}
    "cppo" {= "1.6.8"}
    "csexp" {= "1.5.1"}
-   "cstruct" {= "6.1.0"}
+   "cstruct" {= "6.0.1"}
 diff --git a/src/bin/cli.ml b/src/bin/cli.ml
-index dcaa85621..e411d8f32 100644
+index a6fc13e0d..ef5177868 100644
 --- a/src/bin/cli.ml
 +++ b/src/bin/cli.ml
-@@ -14,7 +14,7 @@ let entry_point =
+@@ -12,7 +12,7 @@ let entry_point =
  let source_file =
      let name = "SOURCE_FILE" in
      let _doc = "the path to the smart contract file." in
@@ -59,7 +42,7 @@ index dcaa85621..e411d8f32 100644
  
  let package_name =
    let name = "PACKAGE_NAME" in
-@@ -783,7 +783,7 @@ let main = Command.group ~preserve_subcommand_order:() ~summary:"The LigoLANG co
+@@ -662,7 +662,7 @@ let main = Command.group ~preserve_subcommand_order:() ~summary:"the LigoLANG co
    ]
  
  let run ?argv () =
@@ -68,8 +51,27 @@ index dcaa85621..e411d8f32 100644
    (* Effect to error code *)
    match !return with
      Done -> 0;
+@@ -677,4 +677,3 @@ let run ?argv () =
+     match exn with
+     | Failure msg -> message msg
+     | exn -> message (Exn.to_string exn)
+-  
+diff --git a/src/bin/cli_helpers.ml b/src/bin/cli_helpers.ml
+index b64a17d53..8c4c43dde 100644
+--- a/src/bin/cli_helpers.ml
++++ b/src/bin/cli_helpers.ml
+@@ -66,7 +66,7 @@ let run_command (cmd : command) =
+     (fun p -> Lwt.map  
+       (fun status -> 
+         match status with
+-          Caml.Unix.WEXITED 0 -> Ok ()
++          Caml_unix.WEXITED 0 -> Ok ()
+         | _ -> Error ("unknown error"))
+         p#status) in
+   Lwt_main.run status
+\ No newline at end of file
 diff --git a/src/bin/dune b/src/bin/dune
-index 03e5f17b5..74340ae9d 100644
+index 295c056f3..08d980439 100644
 --- a/src/bin/dune
 +++ b/src/bin/dune
 @@ -11,7 +11,9 @@
@@ -82,47 +84,31 @@ index 03e5f17b5..74340ae9d 100644
 +  core_unix.filename_unix)
   (modules cli version))
  
- 
-diff --git a/src/main/helpers/cli_helpers.ml b/src/main/helpers/cli_helpers.ml
-index 3d09ee6b8..585cca6fa 100644
---- a/src/main/helpers/cli_helpers.ml
-+++ b/src/main/helpers/cli_helpers.ml
-@@ -71,7 +71,7 @@ let run_command (cmd : command) =
-     (fun p -> Lwt.map  
-       (fun status -> 
-         match status with
--          Caml.Unix.WEXITED 0 -> Ok ()
-+          Caml_unix.WEXITED 0 -> Ok ()
-         | _ -> Error ("unknown error"))
-         p#status) in
--  Lwt_main.run status
-\ No newline at end of file
-+  Lwt_main.run status
+ (library
 diff --git a/src/main/interpreter/dune b/src/main/interpreter/dune
-index 6ccc74ff0..7d38bb822 100644
+index c55e24a88..f9762a297 100644
 --- a/src/main/interpreter/dune
 +++ b/src/main/interpreter/dune
 @@ -4,4 +4,4 @@
   (instrumentation
    (backend bisect_ppx))
-  (libraries tezos-013-PtJakart-test-helpers ast_aggregated ligo_interpreter
--   main_errors ligo_compile build fuzz ligo_run self_ast_typed bls12-381))
-+   main_errors ligo_compile build fuzz ligo_run self_ast_typed bls12-381 core_unix.sys_unix))
+  (libraries tezos-011-PtHangz2-test-helpers ast_aggregated ligo_interpreter
+-   main_errors ligo_compile build fuzz ligo_run self_ast_typed))
++   main_errors ligo_compile build fuzz ligo_run self_ast_typed core_unix.sys_unix))
 diff --git a/src/main/interpreter/interpreter.ml b/src/main/interpreter/interpreter.ml
-index 0f76a286c..d9a389a6b 100644
+index b0379029c..530e08c3a 100644
 --- a/src/main/interpreter/interpreter.ml
 +++ b/src/main/interpreter/interpreter.ml
-@@ -3,6 +3,8 @@ open Simple_utils
+@@ -2,6 +2,7 @@ open Simple_utils.Trace
+ open Simple_utils
  open Ligo_interpreter.Types
  open Ligo_interpreter.Combinators
- 
 +module Sys = Sys_unix
-+
+ 
  module AST = Ast_aggregated
  
- include AST.Types
 diff --git a/vendors/ligo-utils/simple-utils/dune b/vendors/ligo-utils/simple-utils/dune
-index becca2f86..a890dbf62 100644
+index ca9f2bf5c..62c39087b 100644
 --- a/vendors/ligo-utils/simple-utils/dune
 +++ b/vendors/ligo-utils/simple-utils/dune
 @@ -6,6 +6,7 @@
@@ -146,6 +132,3 @@ index 658f115f2..f23000590 100644
    let start = l#start#line in
    let start_column = l#start#offset `Byte in
    let stop = l#stop#line in
--- 
-2.36.1
-

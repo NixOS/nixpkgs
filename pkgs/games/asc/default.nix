@@ -16,11 +16,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=narrowing -std=c++11"; # I'm too lazy to catch all gcc47-related problems
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl zlib zip bzip2 libpng
+    freetype libjpeg wxGTK lua perl pkg-config zlib zip bzip2 libpng
     libtiff fluidsynth libmikmod flac libvorbis libogg
   ];
 

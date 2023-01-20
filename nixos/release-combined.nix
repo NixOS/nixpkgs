@@ -4,8 +4,8 @@
 
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" "aarch64-linux" ]
 }:
 
 let
@@ -50,17 +50,17 @@ in rec {
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
-        (onFullSupported "nixos.iso_plasma5")
-        (onFullSupported "nixos.iso_gnome")
+        (onSystems ["x86_64-linux"] "nixos.iso_plasma5")
+        (onSystems ["x86_64-linux"] "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
         (onFullSupported "nixos.tests.boot-stage1")
-        (onFullSupported "nixos.tests.boot.uefiCdrom")
-        (onFullSupported "nixos.tests.boot.uefiUsb")
-        (onFullSupported "nixos.tests.chromium")
+        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
+        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
+        (onSystems ["x86_64-linux"] "nixos.tests.chromium")
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems ["x86_64-linux"] "nixos.tests.docker")

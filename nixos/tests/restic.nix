@@ -68,9 +68,6 @@ import ./make-test-python.nix (
               package = pkgs.writeShellScriptBin "restic" ''
                 echo "$@" >> /tmp/fake-restic.log;
               '';
-
-              pruneOpts = [ "--keep-last 1" ];
-              checkOpts = [ "--some-check-option" ];
             };
           };
 
@@ -101,7 +98,6 @@ import ./make-test-python.nix (
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           "systemctl start restic-backups-custompackage.service",
           "grep 'backup .* /opt' /tmp/fake-restic.log",
-          "grep 'check .* --some-check-option' /tmp/fake-restic.log",
           "timedatectl set-time '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",

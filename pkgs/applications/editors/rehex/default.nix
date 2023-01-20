@@ -3,37 +3,41 @@
 , fetchFromGitHub
 , pkg-config
 , which
-, zip
-, libicns
 , capstone
 , jansson
 , libunistring
+, lua5_3
 , wxGTK31
-, lua53Packages
-, perlPackages
 , Carbon
 , Cocoa
 , IOKit
+, libicns
+, wxmac
 }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.5.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    hash = "sha256-VBHNrOVIz7UM9tY1V7Ykwt4Cv0fY++8gXc2og4sLDk8=";
+    hash = "sha256-NuWWaYABQDaS9wkwmXkBJWHzLFJbUUCiePNQNo4yZrk=";
   };
 
-  nativeBuildInputs = [ pkg-config which zip ]
+  postPatch = ''
+    # See https://github.com/solemnwarning/rehex/pull/148
+    substituteInPlace Makefile.osx \
+      --replace '$(filter-out %@2x.png,$(wildcard $(ICONSET)/*.png))' 'res/icon{16,32,128,256,512}.png'
+  '';
+
+  nativeBuildInputs = [ pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ capstone jansson libunistring wxGTK31 ]
-    ++ (with lua53Packages; [ lua busted ])
-    ++ (with perlPackages; [ perl TemplateToolkit ])
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
+  buildInputs = [ capstone jansson libunistring lua5_3 ]
+    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK31 ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ]
     ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ markus1189 wegank ];
+    maintainers = with maintainers; [ markus1189 ];
     platforms = platforms.all;
   };
 }

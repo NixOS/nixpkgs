@@ -4,15 +4,14 @@
 , pkg-config
 , gobject-introspection
 , itstool
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 , accountsservice
 , dbus
 , flatpak
 , malcontent
-, gtk4
-, libadwaita
-, appstream
+, gtk3
+, appstream-glib
 , desktop-file-utils
 , polkit
 , glib-testing
@@ -40,11 +39,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
     itstool
     desktop-file-utils
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    appstream
+    appstream-glib
     dbus
     polkit
     glib-testing
@@ -55,8 +54,7 @@ stdenv.mkDerivation rec {
     accountsservice
     malcontent
     glib
-    gtk4
-    libadwaita
+    gtk3
   ];
 
   mesonFlags = [
@@ -65,12 +63,6 @@ stdenv.mkDerivation rec {
     "-Duse_system_libmalcontent=true"
     "-Dui=enabled"
   ];
-
-  postPatch = ''
-    # https://gitlab.freedesktop.org/pwithnall/malcontent/-/merge_requests/148
-    substituteInPlace build-aux/meson_post_install.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-  '';
 
   meta = with lib; {
     description = "UI components for parental controls library";

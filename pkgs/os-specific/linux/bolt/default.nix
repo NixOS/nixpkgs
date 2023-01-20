@@ -65,8 +65,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  # https://gitlab.freedesktop.org/bolt/bolt/-/issues/181
-  doCheck = false;
+  doCheck = true;
 
   preCheck = ''
     export LD_LIBRARY_PATH=${umockdev.out}/lib/

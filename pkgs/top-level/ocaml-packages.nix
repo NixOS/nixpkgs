@@ -92,6 +92,7 @@ let
 
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
+    bls12-381-unix = callPackage ../development/ocaml-modules/bls12-381/unix.nix { };
     bls12-381-legacy = callPackage ../development/ocaml-modules/bls12-381/legacy.nix { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
@@ -577,7 +578,9 @@ let
       git-binary = pkgs.git;
     };
 
-    git-mirage = callPackage ../development/ocaml-modules/git/mirage.nix { };
+    git-cohttp = callPackage ../development/ocaml-modules/git/cohttp.nix { };
+
+    git-cohttp-unix = callPackage ../development/ocaml-modules/git/cohttp-unix.nix { };
 
     git-paf = callPackage ../development/ocaml-modules/git/paf.nix { };
 
@@ -626,6 +629,8 @@ let
 
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
 
+    irmin-layers = callPackage ../development/ocaml-modules/irmin/layers.nix { };
+
     irmin-mirage = callPackage ../development/ocaml-modules/irmin/mirage.nix { };
 
     irmin-mirage-git = callPackage ../development/ocaml-modules/irmin/mirage-git.nix { };
@@ -636,7 +641,7 @@ let
 
     irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
 
-    irmin-tezos = callPackage ../development/ocaml-modules/irmin/tezos.nix { };
+    irmin-unix = callPackage ../development/ocaml-modules/irmin/unix.nix { };
 
     irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
@@ -686,6 +691,9 @@ let
 
     lablgtk3-sourceview3 = callPackage ../development/ocaml-modules/lablgtk3/sourceview3.nix { };
 
+    lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
+      inherit (pkgs.gnome2) libgnomecanvas gtksourceview;
+    };
     lablgtk = callPackage ../development/ocaml-modules/lablgtk {
       inherit (pkgs.gnome2) libgnomecanvas gtksourceview;
     };

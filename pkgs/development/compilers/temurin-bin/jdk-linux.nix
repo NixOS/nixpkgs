@@ -1,8 +1,7 @@
-{ stdenv, lib, callPackage }:
+{ lib, callPackage }:
 
 let
-  variant = if stdenv.hostPlatform.isMusl then "alpine-linux" else "linux";
-  sources = (lib.importJSON ./sources.json).hotspot.${variant};
+  sources = (lib.importJSON ./sources.json).hotspot.linux;
   common = opts: callPackage (import ./jdk-linux-base.nix opts) {};
 in
 {

@@ -8,7 +8,7 @@ else
 
 buildDunePackage {
   pname = "ppx_cstruct";
-  inherit (cstruct) version src meta;
+  inherit (cstruct) version src useDune2 meta;
 
   minimalOCamlVersion = "4.08";
 

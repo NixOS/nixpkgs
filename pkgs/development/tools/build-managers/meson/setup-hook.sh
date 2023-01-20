@@ -20,7 +20,7 @@ mesonConfigurePhase() {
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
-    meson setup build $mesonFlags "${mesonFlagsArray[@]}"
+    meson build $mesonFlags "${mesonFlagsArray[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then

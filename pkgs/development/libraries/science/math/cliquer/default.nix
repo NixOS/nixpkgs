@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [
+  buildInputs = [
     autoreconfHook
   ];
 

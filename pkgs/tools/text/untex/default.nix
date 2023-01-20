@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A utility which removes LaTeX commands from input";
     homepage = "https://www.ctan.org/pkg/untex";
-    license = licenses.gpl1Only;
+    license = licenses.gpl1;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.all;
   };

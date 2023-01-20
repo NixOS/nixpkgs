@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dwm";
-  version = "6.4";
+  version = "6.3";
 
   src = fetchurl {
     url = "https://dl.suckless.org/dwm/${pname}-${version}.tar.gz";
-    sha256 = "sha256-+pwNaaWESFB2z8GICf1wXlwggNr7E9XnKaNkbKdwOm4=";
+    sha256 = "utqgKFKbH7of1/moTztk8xGQRmyFgBG1Pi97cMajB40=";
   };
 
   buildInputs = [ libX11 libXinerama libXft ];

@@ -70,9 +70,7 @@ stdenv.mkDerivation rec {
     dbus
   ];
 
-  # Broken by PCRE 2 bump in GLib.
-  # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
-  doCheck = false;
+  doCheck = stdenv.isLinux;
 
   checkPhase = ''
     runHook preCheck

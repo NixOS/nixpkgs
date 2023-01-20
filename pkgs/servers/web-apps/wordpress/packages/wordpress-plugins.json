@@ -15,7 +15,6 @@
 , "simple-login-captcha"
 , "static-mail-sender-configurator"
 , "webp-converter-for-media"
-, "worker"
 , "wp-mail-smtp"
 , "wp-gdpr-compliance"
 , "wp-statistics"

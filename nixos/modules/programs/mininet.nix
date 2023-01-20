@@ -14,7 +14,7 @@ let
   pyEnv = pkgs.python.withPackages(ps: [ ps.mininet-python ]);
 
   mnexecWrapped = pkgs.runCommand "mnexec-wrapper"
-    { nativeBuildInputs = [ pkgs.makeWrapper pkgs.pythonPackages.wrapPython ]; }
+    { buildInputs = [ pkgs.makeWrapper pkgs.pythonPackages.wrapPython ]; }
     ''
       makeWrapper ${pkgs.mininet}/bin/mnexec \
         $out/bin/mnexec \

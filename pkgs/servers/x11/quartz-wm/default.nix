@@ -12,7 +12,6 @@ in stdenv.mkDerivation {
     ./no_title_crash.patch
     ./extern-patch.patch
   ];
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libXinerama
     xorg.libAppleWM
@@ -20,6 +19,7 @@ in stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXext
     pixman
+    pkg-config
     AppKit Xplugin Foundation
   ];
   meta = with lib; {

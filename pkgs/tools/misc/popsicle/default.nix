@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   postPatch = ''
     # Have to do this here instead of in preConfigure because
     # cargoDepsCopy gets unset after postPatch.
-    configureFlagsArray+=("RUST_VENDORED_SOURCES=$cargoDepsCopy")
+    configureFlagsArray+=("RUST_VENDORED_SOURCES=$NIX_BUILD_TOP/$cargoDepsCopy")
   '';
 
   makeFlags = [

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-iRaf9/gu9VkGi1VbGpxvC5q+0M8ivezCz/oAKEg5V1M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ autoreconfHook pkg-config ];
   # Note: Although `nss-mdns' works by talking to `avahi-daemon', it
   # doesn't depend on the Avahi libraries.  Instead, it contains
   # hand-written D-Bus code to talk to the Avahi daemon.

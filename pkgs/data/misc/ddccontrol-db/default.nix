@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoconf automake intltool ];
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs =
     [
       libtool
+      intltool
     ];
 
   meta = with lib; {

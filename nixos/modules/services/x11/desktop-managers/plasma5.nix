@@ -228,14 +228,6 @@ in
         is not strictly required for Plasma Mobile to run.
       '';
     };
-
-    bigscreen.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Enable support for running the Plasma Bigscreen session.
-      '';
-    };
   };
 
   imports = [
@@ -245,7 +237,7 @@ in
 
   config = mkMerge [
     # Common Plasma dependencies
-    (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
+    (mkIf (cfg.enable || cfg.mobile.enable) {
 
       security.wrappers = {
         kscreenlocker_greet = {
@@ -602,30 +594,6 @@ in
       };
 
       services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-mobile ];
-    })
-
-    # Plasma Bigscreen
-    (mkIf cfg.bigscreen.enable {
-      environment.systemPackages =
-        with pkgs.plasma5Packages;
-        [
-          plasma-nano
-          plasma-settings
-          plasma-bigscreen
-          plasma-remotecontrollers
-
-          aura-browser
-          plank-player
-
-          plasma-pa
-          plasma-nm
-          kdeconnect-kde
-        ];
-
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
-
-      # required for plasma-remotecontrollers to work correctly
-      hardware.uinput.enable = true;
     })
   ];
 }

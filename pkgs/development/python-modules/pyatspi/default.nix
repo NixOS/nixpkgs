@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.46.0";
+  version = "2.38.2";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1FSJzz1HqhULGjXolJs7MQNfjCB15YjSa278Yllwxi4=";
+    sha256 = "DnCJwLYwlhS1NiCDazRi1/kShOQ2/kkpuhYZqEHPEYU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

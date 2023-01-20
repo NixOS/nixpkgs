@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
+, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
@@ -69,13 +69,13 @@ in
   cairo = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre2 xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ cairo pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
+    buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   charlock_holmes = attrs: {
@@ -230,7 +230,7 @@ in
   gio2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre pcre2 gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -275,7 +275,7 @@ in
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre2 ];
+    buildInputs = [ gtk2 pcre ];
   };
 
   gtk2 = attrs: {
@@ -293,7 +293,7 @@ in
       harfbuzz
       libdatrie
       libthai
-      pcre pcre2
+      pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
     ];
@@ -301,7 +301,7 @@ in
   };
 
   gobject-introspection = attrs: {
-    nativeBuildInputs = [ pkg-config pcre2 ]
+    nativeBuildInputs = [ pkg-config pcre ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
@@ -518,7 +518,7 @@ in
       pkg-config
       fribidi
       harfbuzz
-      pcre pcre2
+      pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
     ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -604,8 +604,7 @@ in
   };
 
   ruby-libvirt = attrs: {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libvirt ];
+    buildInputs = [ libvirt pkg-config ];
     buildFlags = [
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"

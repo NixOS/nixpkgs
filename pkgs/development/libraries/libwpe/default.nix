@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libwpe";
-  version = "1.14.0";
+  version = "1.12.3";
 
   src = fetchurl {
-    url = "https://wpewebkit.org/releases/libwpe-${version}.tar.xz";
-    sha256 = "wHMwW7rF9EAswcikdTv6PWOkCJAfhhggUeqlp13YnAA=";
+    url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "sha256-uE/b+8hJzk/fCEuyi1jlRjsbS2zI8gDcd7QfhUXVMp0=";
   };
 
   nativeBuildInputs = [

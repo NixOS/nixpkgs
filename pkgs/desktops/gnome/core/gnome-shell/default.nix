@@ -29,7 +29,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr_4
+, gcr
 , accountsservice
 , gdk-pixbuf
 , gdm
@@ -43,7 +43,7 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server-gtk4
+, evolution-data-server
 , gtk3
 , gtk4
 , libadwaita
@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.0";
+  version = "42.4";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "9u7JdwP588xv5ua0H23IIbGOyE34NRxN+XsXroJ0G0E=";
+    sha256 = "h1/ylw6p+3oFUG4yoNUNyRf0G0yjcTS0E3f5yChzxU4=";
   };
 
   patches = [
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr_4
+    gcr
     accountsservice
     libsecret
     polkit
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server-gtk4
+    evolution-data-server
     libical
     gtk3
     gtk4
@@ -201,8 +201,6 @@ stdenv.mkDerivation rec {
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
-
-  separateDebugInfo = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

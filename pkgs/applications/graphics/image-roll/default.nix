@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , glib
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 }:
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-cUE2IZOunR/NIo/qytORRfNqCsf87LfpKA8o/v4Nkhk=";
 
-  nativeBuildInputs = [ glib pkg-config wrapGAppsHook4 ];
+  nativeBuildInputs = [ glib pkg-config wrapGAppsHook ];
 
   buildInputs = [ gtk4 ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=file_list::tests"
 
     # sometimes fails on darwin
-    "--skip=image_list::tests::save_current_image_overwrites_image_at_current_image_path_when_filename_is_set_to_none"
+    "image_list::tests::save_current_image_overwrites_image_at_current_image_path_when_filename_is_set_to_none"
   ];
 
   postInstall = ''

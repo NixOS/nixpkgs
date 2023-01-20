@@ -16,13 +16,13 @@
 , libxml2
 , gnome
 , gobject-introspection
-, libsoup_3
+, libsoup
 , totem-pl-parser
 }:
 
 stdenv.mkDerivation rec {
   pname = "grilo";
-  version = "0.3.15"; # if you change minor, also change ./setup-hook.sh
+  version = "0.3.14"; # if you change minor, also change ./setup-hook.sh
 
   outputs = [ "out" "dev" "man" "devdoc" ];
   outputBin = "dev";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "81Ks9zZlZpk0JwY2/t5mtS2mgB/iD2OMQEirJnhXey0=";
+    sha256 = "A2nQsAuw9Zul966oz8Zl843xSltBgtKMfB4s0VtRh0M=";
   };
 
   mesonFlags = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     liboauth
     gtk3
     libxml2
-    libsoup_3
+    libsoup
     totem-pl-parser
   ];
 

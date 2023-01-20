@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
-, CoreFoundation, IOKit
+, IOKit
 , pytestCheckHook
 , mock
 , unittest2
@@ -41,10 +41,7 @@ buildPythonPackage rec {
     "cpu_freq"
   ];
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ CoreFoundation ] ++
-    lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   pythonImportsCheck = [ "psutil" ];
 

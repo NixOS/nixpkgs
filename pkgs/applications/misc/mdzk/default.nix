@@ -8,15 +8,10 @@ rustPlatform.buildRustPackage rec {
     owner = "mdzk-rs";
     repo = "mdzk";
     rev = version;
-    hash = "sha256-V//tVcIzhCh03VjwMC+R2ynaOFm+dp6qxa0oqBfvGUs=";
+    sha256 = "sha256-V//tVcIzhCh03VjwMC+R2ynaOFm+dp6qxa0oqBfvGUs=";
   };
 
-  cargoPatches = [
-    # Remove when new version of mdzk is released.
-    ./update-mdbook-for-rust-1.64.patch
-  ];
-
-  cargoHash = "sha256-5zGUBvmf68tCk5jGrNn+ukgYbiKzrlmZvWrYgoJf2zk=";
+  cargoSha256 = "sha256-2lPckUhnyfHaVWXzZXKliolDZiPtNl9UBZIKs6tUaNQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

@@ -7,61 +7,61 @@
 , pkg-config
 , gnome
 , glib
-, gtk4
-, desktop-file-utils
-, wrapGAppsHook4
+, gtk3
+, wrapGAppsHook
 , gettext
 , itstool
-, libadwaita
+, libhandy
 , libxml2
 , libxslt
-, docbook-xsl-nons
+, docbook_xsl
 , docbook_xml_dtd_43
 , systemd
+, python3
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "43.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M6k7l17CfISHglBIqnuK99XCNWWrz3t0yQKrez7CCGE=";
+    sha256 = "TV5FFp1r9DkC16npoHk8kW65LaumuoWzXI629nLNq9c=";
   };
 
   patches = [
-    # Remove GTK 3 depndency
-    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/46
+    # meson: Remove redundant check for glib-mkenums
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/32193a1385b95012bc8e7007ada89566bd63697d.patch";
-      sha256 = "5WsTnfVpWZquU65pSLnk2M6VnY+qQPUi7A0cqMmzfrU=";
-      postFetch = ''
-        substituteInPlace "$out" --replace "43.1" "43.0"
-      '';
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/01386ce9a69652a00bdb163e569b51150ca8903e.diff";
+      sha256 = "sha256-tJJEai4Jw8aVcyhsFTYILiUV1xhsysX/rleeLP13DVM=";
+    })
+    # meson: remove redundant check for pkg-config
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/ad350729a8b81f2c8eb2122de0956bb2199b48da.patch";
+      sha256 = "sha256-5qGYyKM+B9XNZKytWH8K4QfSuBf7wpaPCWT6YIO5FGY=";
     })
   ];
 
   nativeBuildInputs = [
+    python3
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     gettext
     itstool
     libxml2
     libxslt
-    docbook-xsl-nons
+    docbook_xsl
     docbook_xml_dtd_43
     glib
-    gtk4
-    desktop-file-utils
   ];
 
   buildInputs = [
     glib
-    gtk4
-    libadwaita
+    gtk3
+    libhandy
     systemd
     gsettings-desktop-schemas
   ];
@@ -69,6 +69,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dman=true"
   ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   doCheck = true;
 

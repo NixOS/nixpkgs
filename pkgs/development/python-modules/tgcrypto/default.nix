@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "tgcrypto";
-  version = "1.2.4";
+  version = "1.2.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pyrogram";
     repo = "tgcrypto";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-hifRWVEvNZVFyIJPwYY+CDR04F1I9GyAi3dt2kx+81c=";
+    rev = "v${version}";
+    sha256 = "06g1kv3skq2948h0sjf64s1cr2p1rhxnx5pf9nmvhxkmri1xmfzs";
   };
 
   checkInputs = [

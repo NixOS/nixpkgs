@@ -165,11 +165,7 @@ let
           if(process.argv[2] == "development") {
               replaceDependencies(packageObj.devDependencies);
           }
-          else {
-              packageObj.devDependencies = {};
-          }
           replaceDependencies(packageObj.optionalDependencies);
-          replaceDependencies(packageObj.peerDependencies);
 
           /* Write the fixed package.json file */
           fs.writeFileSync("package.json", JSON.stringify(packageObj, null, 2));
@@ -274,7 +270,7 @@ let
 
   # Reconstructs a package-lock file from the node_modules/ folder structure and package.json files with dummy sha1 hashes
   reconstructPackageLock = writeTextFile {
-    name = "reconstructpackagelock.js";
+    name = "addintegrityfields.js";
     text = ''
       var fs = require('fs');
       var path = require('path');
@@ -284,43 +280,25 @@ let
       var lockObj = {
           name: packageObj.name,
           version: packageObj.version,
-          lockfileVersion: 2,
+          lockfileVersion: 1,
           requires: true,
-          packages: {
-              "": {
-                  name: packageObj.name,
-                  version: packageObj.version,
-                  license: packageObj.license,
-                  bin: packageObj.bin,
-                  dependencies: packageObj.dependencies,
-                  engines: packageObj.engines,
-                  optionalDependencies: packageObj.optionalDependencies
-              }
-          },
           dependencies: {}
       };
 
-      function augmentPackageJSON(filePath, packages, dependencies) {
+      function augmentPackageJSON(filePath, dependencies) {
           var packageJSON = path.join(filePath, "package.json");
           if(fs.existsSync(packageJSON)) {
               var packageObj = JSON.parse(fs.readFileSync(packageJSON));
-              packages[filePath] = {
-                  version: packageObj.version,
-                  integrity: "sha1-000000000000000000000000000=",
-                  dependencies: packageObj.dependencies,
-                  engines: packageObj.engines,
-                  optionalDependencies: packageObj.optionalDependencies
-              };
               dependencies[packageObj.name] = {
                   version: packageObj.version,
                   integrity: "sha1-000000000000000000000000000=",
                   dependencies: {}
               };
-              processDependencies(path.join(filePath, "node_modules"), packages, dependencies[packageObj.name].dependencies);
+              processDependencies(path.join(filePath, "node_modules"), dependencies[packageObj.name].dependencies);
           }
       }
 
-      function processDependencies(dir, packages, dependencies) {
+      function processDependencies(dir, dependencies) {
           if(fs.existsSync(dir)) {
               var files = fs.readdirSync(dir);
 
@@ -336,81 +314,20 @@ let
                           pkgFiles.forEach(function(entry) {
                               if(stats.isDirectory()) {
                                   var pkgFilePath = path.join(filePath, entry);
-                                  augmentPackageJSON(pkgFilePath, packages, dependencies);
+                                  augmentPackageJSON(pkgFilePath, dependencies);
                               }
                           });
                       } else {
-                          augmentPackageJSON(filePath, packages, dependencies);
+                          augmentPackageJSON(filePath, dependencies);
                       }
                   }
               });
           }
       }
 
-      processDependencies("node_modules", lockObj.packages, lockObj.dependencies);
+      processDependencies("node_modules", lockObj.dependencies);
 
       fs.writeFileSync("package-lock.json", JSON.stringify(lockObj, null, 2));
-    '';
-  };
-
-  # Script that links bins defined in package.json to the node_modules bin directory
-  # NPM does not do this for top-level packages itself anymore as of v7
-  linkBinsScript = writeTextFile {
-    name = "linkbins.js";
-    text = ''
-      var fs = require('fs');
-      var path = require('path');
-
-      var packageObj = JSON.parse(fs.readFileSync("package.json"));
-
-      var nodeModules = Array(packageObj.name.split("/").length).fill("..").join(path.sep);
-
-      if(packageObj.bin !== undefined) {
-          fs.mkdirSync(path.join(nodeModules, ".bin"))
-
-          if(typeof packageObj.bin == "object") {
-              Object.keys(packageObj.bin).forEach(function(exe) {
-                  if(fs.existsSync(packageObj.bin[exe])) {
-                      console.log("linking bin '" + exe + "'");
-                      fs.symlinkSync(
-                          path.join("..", packageObj.name, packageObj.bin[exe]),
-                          path.join(nodeModules, ".bin", exe)
-                      );
-                  }
-                  else {
-                      console.log("skipping non-existent bin '" + exe + "'");
-                  }
-              })
-          }
-          else {
-              if(fs.existsSync(packageObj.bin)) {
-                  console.log("linking bin '" + packageObj.bin + "'");
-                  fs.symlinkSync(
-                      path.join("..", packageObj.name, packageObj.bin),
-                      path.join(nodeModules, ".bin", packageObj.name.split("/").pop())
-                  );
-              }
-              else {
-                  console.log("skipping non-existent bin '" + packageObj.bin + "'");
-              }
-          }
-      }
-      else if(packageObj.directories !== undefined && packageObj.directories.bin !== undefined) {
-          fs.mkdirSync(path.join(nodeModules, ".bin"))
-
-          fs.readdirSync(packageObj.directories.bin).forEach(function(exe) {
-              if(fs.existsSync(path.join(packageObj.directories.bin, exe))) {
-                  console.log("linking bin '" + exe + "'");
-                  fs.symlinkSync(
-                      path.join("..", packageObj.name, packageObj.directories.bin, exe),
-                      path.join(nodeModules, ".bin", exe)
-                  );
-              }
-              else {
-                  console.log("skipping non-existent bin '" + exe + "'");
-              }
-          })
-      }
     '';
   };
 
@@ -460,18 +377,13 @@ let
 
         npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${lib.optionalString production "--production"} rebuild
 
-        runHook postRebuild
-
         if [ "''${dontNpmInstall-}" != "1" ]
         then
             # NPM tries to download packages even when they already exist if npm-shrinkwrap is used.
             rm -f npm-shrinkwrap.json
 
-            npm ${forceOfflineFlag} --nodedir=${nodeSources} --no-bin-links --ignore-scripts ${npmFlags} ${lib.optionalString production "--production"} install
+            npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${lib.optionalString production "--production"} install
         fi
-
-        # Link executables defined in package.json
-        node ${linkBinsScript}
     '';
 
   # Builds and composes an NPM package including all its dependencies

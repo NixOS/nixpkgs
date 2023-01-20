@@ -14,10 +14,12 @@ stdenv.mkDerivation rec {
     owner = pname;
   };
 
-  patches = [
-    (fetchpatch { # https://github.com/lz4/lz4/pull/1162
-      name = "build-shared-no.patch";
-      url = "https://github.com/lz4/lz4/commit/851ef4b23c7cbf4ceb2ba1099666a8b5ec4fa195.patch";
+  patches = lib.optionals (!enableShared) [
+    # This patch is already part of the `dev` branch.
+    # Remove when upgrading to the next version.
+    (fetchpatch {
+      name = "lz4-fix-BUILD_SHARED=no.patch";
+      url = "https://github.com/lz4/lz4/commit/5ccbd38277989ae6a728171d59ae03bad6f2f4d5.patch";
       sha256 = "sha256-P+/uz3m7EAmHgXF/1Vncc0uKKxNVq6HNIsElx0rGxpw=";
     })
   ];

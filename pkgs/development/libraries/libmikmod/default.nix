@@ -18,13 +18,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs =
     optional stdenv.isLinux libpulseaudio;
 
-  outputs = [ "out" "dev" "man" ];
-
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lasound";
-
-  postInstall = ''
-    moveToOutput bin/libmikmod-config "$dev"
-  '';
 
   meta = with lib; {
     description = "A library for playing tracker music module files";

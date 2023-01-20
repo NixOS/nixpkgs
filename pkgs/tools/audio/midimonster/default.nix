@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
   pname = "midimonster";
   version = "0.6.0";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [gnumake gcc lua5_4 openssl jack1 python3 alsa-lib ncurses libevdev];
+  buildInputs = [pkg-config gnumake gcc lua5_4 openssl jack1 python3 alsa-lib ncurses libevdev];
 
   src = fetchFromGitHub {
     repo = "midimonster";

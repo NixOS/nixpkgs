@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
     for makefile in "''${makeFiles[@]}"; do
           local flagsArray=(
-            -j$NIX_BUILD_CORES
+            -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
             SHELL=$SHELL
             $makeFlags "''${makeFlagsArray[@]}"
             $buildFlags "''${buildFlagsArray[@]}"

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , desktop-file-utils
 , gettext
 , glibcLocales
@@ -13,25 +12,28 @@
 , python3
 , wrapGAppsHook
 , cpio
+, file
 , glib
 , gnome
 , gtk3
 , libhandy
 , json-glib
 , libarchive
-, libportal-gtk3
+, libnotify
 , nautilus
 , unzip
 }:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "43.0";
+  version = "3.42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/file-roller/${lib.versions.major version}/file-roller-${version}.tar.xz";
-    sha256 = "KYcp/b252oEywLvGCQdRfWVoWwVhiuBRZzNeZIT1c6E=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "HEOObVPsEP9PLrWyLXu/KKfCqElXq2SnUcHN88UjAsc=";
   };
+
+  LANG = "en_US.UTF-8"; # postinstall.py
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -48,16 +50,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cpio
+    file
     glib
+    gnome.adwaita-icon-theme
     gtk3
     libhandy
     json-glib
     libarchive
-    libportal-gtk3
+    libnotify
     nautilus
   ];
 
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+
   postPatch = ''
+    chmod +x postinstall.py # patchShebangs requires executable file
+    patchShebangs postinstall.py
     patchShebangs data/set-mime-type-entry.py
   '';
 

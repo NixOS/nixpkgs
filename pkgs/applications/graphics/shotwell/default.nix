@@ -6,11 +6,11 @@
 , libexif
 , libgphoto2
 , libwebp
-, libsoup_3
+, libsoup
 , libxml2
 , vala
 , sqlite
-, webkitgtk_4_1
+, webkitgtk
 , pkg-config
 , gnome
 , gst_all_1
@@ -30,6 +30,7 @@
 , wrapGAppsHook
 , gobject-introspection
 , itstool
+, libgdata
 , libchamplain
 , libsecret
 , gsettings-desktop-schemas
@@ -40,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.5";
+  version = "0.30.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OwSPxs6ZsjLR4OqbjbB0CDyGyI07bWMTaiz4IXqkXBk=";
+    sha256 = "sha256-yYgs+9rTA8uBYbFJrLtMYX++fKn2q24i0XTiRH51GPo=";
   };
 
   nativeBuildInputs = [
@@ -65,10 +66,10 @@ stdenv.mkDerivation rec {
     libexif
     libgphoto2
     libwebp
-    libsoup_3
+    libsoup
     libxml2
     sqlite
-    webkitgtk_4_1
+    webkitgtk
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     librest
     gcr
     gnome.adwaita-icon-theme
+    libgdata
     libchamplain
     libsecret
   ];

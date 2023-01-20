@@ -9,7 +9,6 @@
 , pkg-config
 , glib
 , gtk3
-, libhandy
 , gnome
 , python3
 , dconf
@@ -22,17 +21,23 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "43.0";
+  version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k1o8Lddswqk81a7ppU05R/sRHrOW9LY9xfC6j40JkTY=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-Vxr0x9rU8Em1PmzXKLea3fCMJ92ra8V7OW0hGGbueeM=";
   };
 
   patches = [
     # Look for compiled schemas in NIX_GSETTINGS_OVERRIDES_DIR
     # environment variable, to match what we patched GLib to do.
     ./schema-override-variable.patch
+
+    # Fix build with Meson 0.61.0
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/56474378568e6ff4af8aa912810323e808c1d977.patch";
+      sha256 = "iFyJcskqcmvz7tp1Z9jM9f8WvAhD0L9Vx1hu2c402MA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -52,7 +57,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    libhandy
     dconf
   ];
 

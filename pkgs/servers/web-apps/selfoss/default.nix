@@ -1,35 +1,26 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "selfoss";
-  version = "2.19";
+  version = "2.18";
 
   src = fetchurl {
-    url = "https://github.com/SSilence/selfoss/releases/download/${version}/selfoss-${version}.zip";
-    sha256 = "5JxHUOlyMneWPKaZtgLwn5FI4rnyWPzmsUQpSYrw5Pw=";
+    url = "https://github.com/SSilence/selfoss/releases/download/${version}/${pname}-${version}.zip";
+    sha256 = "1vd699r1kjc34n8avggckx2b0daj5rmgrj997sggjw2inaq4cg8b";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  sourceRoot = ".";
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
-    runHook preInstall
-
-    mkdir "$out"
-    cp -ra \
-      .htaccess \
-      .nginx.conf \
-      * \
-      "$out/"
-
-    runHook postInstall
+    mkdir $out
+    cp -ra * $out/
   '';
 
   meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     homepage = "https://selfoss.aditu.de";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar regnat ];
     platforms = platforms.all;
   };

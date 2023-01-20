@@ -984,6 +984,11 @@ in mkLicense lset) ({
     fullName = "GNU Free Documentation License v1.3";
     deprecated = true;
   };
+  gpl1 = {
+    spdxId = "GPL-1.0";
+    fullName = "GNU General Public License v1.0";
+    deprecated = true;
+  };
   gpl2 = {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0";

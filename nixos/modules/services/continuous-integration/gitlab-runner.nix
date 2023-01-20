@@ -453,43 +453,6 @@ in
         };
       });
     };
-    clear-docker-cache = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to periodically prune gitlab runner's Docker resources. If
-          enabled, a systemd timer will run {command}`clear-docker-cache` as
-          specified by the `dates` option.
-        '';
-      };
-
-      flags = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        example = [ "prune" ];
-        description = lib.mdDoc ''
-          Any additional flags passed to {command}`clear-docker-cache`.
-        '';
-      };
-
-      dates = mkOption {
-        default = "weekly";
-        type = types.str;
-        description = lib.mdDoc ''
-          Specification (in the format described by
-          {manpage}`systemd.time(7)`) of the time at
-          which the prune will occur.
-        '';
-      };
-
-      package = mkOption {
-        default = config.virtualisation.docker.package;
-        defaultText = literalExpression "config.virtualisation.docker.package";
-        example = literalExpression "pkgs.docker";
-        description = lib.mdDoc "Docker package to use for clearing up docker cache.";
-      };
-    };
   };
   config = mkIf cfg.enable {
     warnings = (mapAttrsToList
@@ -533,22 +496,6 @@ in
         KillSignal = "SIGQUIT";
         KillMode = "process";
       };
-    };
-    # Enable periodic clear-docker-cache script
-    systemd.services.gitlab-runner-clear-docker-cache = {
-      description = "Prune gitlab-runner docker resources";
-      restartIfChanged = false;
-      unitConfig.X-StopOnRemoval = false;
-
-      serviceConfig.Type = "oneshot";
-
-      path = [ cfg.clear-docker-cache.package pkgs.gawk ];
-
-      script = ''
-        ${pkgs.gitlab-runner}/bin/clear-docker-cache ${toString cfg.clear-docker-cache.flags}
-      '';
-
-      startAt = optional cfg.clear-docker-cache.enable cfg.clear-docker-cache.dates;
     };
     # Enable docker if `docker` executor is used in any service
     virtualisation.docker.enable = mkIf (

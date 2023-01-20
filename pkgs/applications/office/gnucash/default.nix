@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     gettext
     makeWrapper
     wrapGAppsHook
-    pkg-config
   ];
 
   buildInputs = [
@@ -56,6 +55,7 @@ stdenv.mkDerivation rec {
     libofx
     libxml2
     libxslt
+    pkg-config
     swig
     webkitgtk
   ]

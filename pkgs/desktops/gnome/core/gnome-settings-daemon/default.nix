@@ -30,23 +30,23 @@
 , modemmanager
 , networkmanager
 , gnome-desktop
-, geocode-glib_2
+, geocode-glib
 , docbook_xsl
 , wrapGAppsHook
 , python3
 , tzdata
 , nss
-, gcr_4
+, gcr
 , gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "43.0";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "NRO7JPxvgYFmciOmSgZ1NP3M879mMmqUA9OLDw1gE9A=";
+    sha256 = "nESXFKqOwSccDbUTffNFgZWUPwXM0KyJNdkzl3cLqwA=";
   };
 
   patches = [
@@ -93,12 +93,12 @@ stdenv.mkDerivation rec {
     libgweather
     nss
     polkit
-    geocode-glib_2
+    geocode-glib
     geoclue2
     systemd
     libgudev
     libwacom
-    gcr_4
+    gcr
   ];
 
   mesonFlags = [
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
+    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
       chmod +x $f
       patchShebangs $f
     done

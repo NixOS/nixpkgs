@@ -1,38 +1,37 @@
 { buildDunePackage, git
-, rresult, result, bigstringaf
-, fmt, bos, fpath, uri, digestif, logs, lwt
+, mmap, rresult, result, bigstringaf
+, fmt, bos, fpath, uri, digestif, logs, lwt, git-cohttp-unix
 , mirage-clock, mirage-clock-unix, astring, awa, cmdliner
-, decompress, domain-name, ipaddr, mtime
-, tcpip, awa-mirage, mirage-flow, mirage-unix
+, cohttp-lwt-unix, decompress, domain-name, ipaddr, mtime
+, tcpip, awa-mirage, mirage-flow
 , alcotest, alcotest-lwt, base64, cstruct
 , ke, mirage-crypto-rng, ocurl, git-binary
 , ptime, mimic, ca-certs-nss, tls, tls-mirage
-, cacert, happy-eyeballs-lwt, git-mirage
+, cacert
 }:
 
 buildDunePackage {
   pname = "git-unix";
-  inherit (git) version src;
+  inherit (git) version src minimumOCamlVersion;
 
-  minimalOCamlVersion = "4.08";
+  useDune2 = true;
 
   buildInputs = [
-    awa awa-mirage cmdliner
-    mirage-clock tcpip
+    awa awa-mirage cmdliner git-cohttp-unix
+    mirage-clock mirage-clock-unix tcpip
   ];
   propagatedBuildInputs = [
-    rresult result bigstringaf
-    fmt bos fpath digestif logs lwt
-    astring decompress
-    domain-name ipaddr mirage-flow mirage-unix
+    mmap rresult result bigstringaf
+    fmt bos fpath uri digestif logs lwt
+    astring cohttp-lwt-unix decompress
+    domain-name ipaddr mtime mirage-flow
     cstruct ptime mimic ca-certs-nss
-    tls tls-mirage git happy-eyeballs-lwt
-    git-mirage mirage-clock-unix
+    tls tls-mirage git
   ];
   checkInputs = [
     alcotest alcotest-lwt base64 ke
     mirage-crypto-rng git-binary
-    uri mtime
+    cohttp-lwt-unix
     cacert # sets up NIX_SSL_CERT_FILE
   ];
   doCheck = true;
@@ -40,5 +39,7 @@ buildDunePackage {
   meta = {
     description = "Unix backend for the Git protocol(s)";
     inherit (git.meta) homepage license maintainers;
+    # Not compatible with cmdliner ≥ 1.1
+    broken = true;
   };
 }

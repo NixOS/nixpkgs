@@ -43,14 +43,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installShellCompletion --bash --name ${pname}  contrib/completions/complete.bash
     installShellCompletion --zsh  --name _${pname} contrib/completions/complete.zsh
-    installShellCompletion --fish --name ${pname}  contrib/completions/complete.fish
   '';
 
   meta = with lib; {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ srgom peterhoeg bertof ];
+    maintainers = with maintainers; [ srgom peterhoeg ];
     platforms = platforms.linux;
   };
 }

@@ -16,7 +16,7 @@
 , openssl
 , alsa-lib
 , libpulseaudio
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -67,8 +67,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/cargo.sh
     patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {

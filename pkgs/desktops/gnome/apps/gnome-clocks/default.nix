@@ -5,10 +5,10 @@
 , ninja
 , gettext
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , itstool
 , desktop-file-utils
-, vala
+, vala_0_56
 , gobject-introspection
 , libxml2
 , gtk4
@@ -17,7 +17,7 @@
 , sound-theme-freedesktop
 , gsettings-desktop-schemas
 , gnome-desktop
-, geocode-glib_2
+, geocode-glib
 , gnome
 , gdk-pixbuf
 , geoclue2
@@ -27,21 +27,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "43.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sHQ7cNAIgKo7zcx/fzTIwihiV7XIFzfU+YG8jE9PmB0=";
+    sha256 = "DnEY20oDLjzqMhLZjLuCjWt88i/gXgxfyLORxqPdb+A=";
   };
 
   nativeBuildInputs = [
-    vala
+    vala_0_56
     meson
     ninja
     pkg-config
     gettext
     itstool
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gdk-pixbuf
     gnome-desktop
-    geocode-glib_2
+    geocode-glib
     geoclue2
     libgweather
     gsound

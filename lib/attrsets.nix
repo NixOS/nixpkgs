@@ -622,20 +622,6 @@ rec {
   dontRecurseIntoAttrs =
     attrs: attrs // { recurseForDerivations = false; };
 
-  /* `unionOfDisjoint x y` is equal to `x // y // z` where the
-     attrnames in `z` are the intersection of the attrnames in `x` and
-     `y`, and all values `assert` with an error message.  This
-      operator is commutative, unlike (//). */
-  unionOfDisjoint = x: y:
-    let
-      intersection = builtins.intersectAttrs x y;
-      collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
-      mask = builtins.mapAttrs (name: value: builtins.throw
-        "unionOfDisjoint: collision on ${name}; complete list: ${collisions}")
-        intersection;
-    in
-      (x // y) // mask;
-
   /*** deprecated stuff ***/
 
   zipWithNames = zipAttrsWithNames;

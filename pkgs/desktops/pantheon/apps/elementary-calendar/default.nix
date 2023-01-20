@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -13,10 +12,10 @@
 , evolution-data-server
 , folks
 , geoclue2
-, geocode-glib_2
+, geocode-glib
 , granite
 , gtk3
-, libchamplain_libsoup3
+, libchamplain
 , libgee
 , libhandy
 , libical
@@ -33,22 +32,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c2c8QNifBDzb0CelB72AIL4G694l6KCSXBjWIHrzZJo=";
   };
 
-  patches = [
-    # build: support evolution-data-server 3.46
-    # https://github.com/elementary/calendar/pull/758
-    (fetchpatch {
-      url = "https://github.com/elementary/calendar/commit/62c20e5786accd68b96c423b04e32c043e726cac.patch";
-      sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
-    })
-
-    # GridDay: Fix day in month in grid with GLib 2.73.1+
-    # https://github.com/elementary/calendar/pull/763
-    (fetchpatch {
-      url = "https://github.com/elementary/calendar/commit/20b0983c85935bedef065b786ec8bbca55ba7d9e.patch";
-      sha256 = "sha256-Tw9uNqqRAC+vOp7EWzZVeDmZxt3hTGl9UIP21FcunqA=";
-    })
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -63,10 +46,10 @@ stdenv.mkDerivation rec {
     evolution-data-server
     folks
     geoclue2
-    geocode-glib_2
+    geocode-glib
     granite
     gtk3
-    libchamplain_libsoup3
+    libchamplain
     libgee
     libhandy
     libical

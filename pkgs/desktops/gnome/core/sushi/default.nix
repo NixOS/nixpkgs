@@ -9,7 +9,7 @@
 , gtksourceview4
 , gjs
 , libsoup
-, webkitgtk_4_1
+, webkitgtk
 , icu
 , wrapGAppsHook
 , gst_all_1
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sushi";
-  version = "43.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/sushi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "V4SFJhSasceE+5L7yTTDUU/lIqumSdXZ/t7H4bFHUns=";
+    sha256 = "RdjbevRaeXhOejRYjRSeqVXIvkS7gqNuiWgpQFt8iCA=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     librsvg
     libsoup
-    webkitgtk_4_1
+    webkitgtk
     libepoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

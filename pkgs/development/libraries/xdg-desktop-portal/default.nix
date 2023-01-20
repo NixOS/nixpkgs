@@ -3,9 +3,9 @@
 , autoreconfHook
 , dbus
 , fetchFromGitHub
+, fetchpatch
 , flatpak
 , fuse3
-, bubblewrap
 , systemdMinimal
 , geoclue2
 , glib
@@ -20,12 +20,12 @@
 , python3
 , pkg-config
 , stdenv
-, runCommand
+, substituteAll
 , wrapGAppsHook
 , enableGeoLocation ? true
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
   version = "1.15.0";
 
@@ -33,20 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = "xdg-desktop-portal";
-    rev = finalAttrs.version;
+    repo = pname;
+    rev = version;
     sha256 = "sha256-Kw3zJeGwPfw1fDo8HsgYmrpgCk/PUvWZPRloKJNAJVc=";
   };
-
-  patches = [
-    # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
-    # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
-    (runCommand "icon-validator.patch" { } ''
-      # Flatpak uses a different path
-      substitute "${flatpak.icon-validator-patch}" "$out" \
-        --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
-    '')
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -60,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     flatpak
     fuse3
-    bubblewrap
     systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
@@ -94,11 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.xdg-desktop-portal;
-
-      validate-icon = runCommand "test-icon-validation" { } ''
-        ${finalAttrs.finalPackage}/libexec/xdg-desktop-portal-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
-        grep format=svg "$out"
-      '';
     };
   };
 
@@ -108,4 +92,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-})
+}

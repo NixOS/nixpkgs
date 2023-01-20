@@ -14,7 +14,6 @@
 , util-linux
 , qtbase
 , qtquickcontrols2
-, qtwebview
 , qtx11extras
 , karchive
 , kcmutils
@@ -27,7 +26,6 @@
 , kirigami2
 , kitemmodels
 , knewstuff
-, kpurpose
 , kwindowsystem
 , kxmlgui
 , plasma-framework
@@ -47,7 +45,6 @@ mkDerivation {
     pcre
     util-linux
     qtquickcontrols2
-    qtwebview
     qtx11extras
     karchive
     kcmutils
@@ -60,7 +57,6 @@ mkDerivation {
     kirigami2
     kitemmodels
     knewstuff
-    kpurpose
     kwindowsystem
     kxmlgui
     plasma-framework

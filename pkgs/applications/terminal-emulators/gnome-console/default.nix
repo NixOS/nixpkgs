@@ -23,7 +23,6 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  # Do not upgrade until https://gitlab.gnome.org/GNOME/vte/-/issues/2584 is resolved!
   version = "42.2";
 
   src = fetchurl {
@@ -46,6 +45,8 @@ stdenv.mkDerivation rec {
     libhandy
     pcre2
     vte
+  ] ++ lib.optionals stdenv.isLinux [
+    gnome.nautilus
   ];
 
   nativeBuildInputs = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  mesonFlags = [
+  mesonFlags = lib.optionals (!stdenv.isLinux) [
     "-Dnautilus=disabled"
   ];
 

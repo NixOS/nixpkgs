@@ -48,20 +48,20 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.16.3";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-6gxmZeLDMlt2nqwd/M1g/hgo1fz2YmUAOezLP2ftso4=";
+    hash = "sha256-LjLyg4IMJMUcod2K/s/bdHxzhaE3q+hlyZ20sldANYE=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper pkg-config ]
+  nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
-    ++ lib.optionals withSystemd [ systemd ]
+    ++ lib.optionals withSystemd [ pkg-config systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
 

@@ -1,115 +1,36 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wayland-scanner
-, boost
-, fontconfig
-, ibus
-, libXcursor
-, libXft
-, libcanberra_kde
-, libpulseaudio
-, libxkbfile
-, xf86inputevdev
-, xf86inputsynaptics
-, xinput
-, xkeyboard_config
-, xorgserver
-, util-linux
-, wayland
-, wayland-protocols
-, accounts-qt
-, qtdeclarative
-, qtquickcontrols
-, qtquickcontrols2
-, qtsvg
-, qtx11extras
-, attica
-, baloo
-, kaccounts-integration
-, kactivities
-, kactivities-stats
-, kauth
-, kcmutils
-, kdbusaddons
-, kdeclarative
-, kded
-, kdelibs4support
-, kemoticons
-, kglobalaccel
-, ki18n
-, kitemmodels
-, knewstuff
-, knotifications
-, knotifyconfig
-, kpeople
-, krunner
-, kscreenlocker
-, kwallet
-, kwin
-, phonon
-, plasma-framework
-, plasma-workspace
-, qqc2-desktop-style
-, xf86inputlibinput
+{
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools,
+
+  boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
+  libxkbfile, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
+  xorgserver, util-linux,
+
+  accounts-qt, qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg,
+  qtx11extras,
+
+  attica, baloo, kaccounts-integration, kactivities, kactivities-stats, kauth,
+  kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
+  kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
+  kpeople, krunner, kscreenlocker, kwallet, kwin, phonon,
+  plasma-framework, plasma-workspace, qqc2-desktop-style, xf86inputlibinput
 }:
 
 mkDerivation {
   pname = "plasma-desktop";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    boost
-    fontconfig
-    ibus
-    libcanberra_kde
-    libpulseaudio
-    libXcursor
-    libXft
-    xorgserver
-    libxkbfile
-    phonon
-    xf86inputlibinput
-    xf86inputevdev
-    xf86inputsynaptics
-    xinput
+    boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver
+    libxkbfile phonon xf86inputlibinput xf86inputevdev xf86inputsynaptics xinput
     xkeyboard_config
-    wayland
-    wayland-protocols
 
-    accounts-qt
-    qtdeclarative
-    qtquickcontrols
-    qtquickcontrols2
-    qtsvg
-    qtx11extras
+    accounts-qt qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
 
-    attica
-    baloo
-    kaccounts-integration
-    kactivities
-    kactivities-stats
-    kauth
-    kcmutils
-    kdbusaddons
-    kdeclarative
-    kded
-    kdelibs4support
-    kemoticons
-    kglobalaccel
-    ki18n
-    kitemmodels
-    knewstuff
-    knotifications
-    knotifyconfig
-    kpeople
-    krunner
-    kscreenlocker
-    kwallet
-    kwin
-    plasma-framework
-    plasma-workspace
-    qqc2-desktop-style
+    attica baloo kaccounts-integration kactivities kactivities-stats kauth
+    kcmutils kdbusaddons kdeclarative kded kdelibs4support kemoticons
+    kglobalaccel ki18n kitemmodels knewstuff knotifications knotifyconfig
+    kpeople krunner kscreenlocker kwallet kwin plasma-framework
+    plasma-workspace qqc2-desktop-style
   ];
 
   patches = [

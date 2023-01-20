@@ -16,7 +16,7 @@ let unwrapped = stdenv.mkDerivation rec {
     sha256 = "sha256-RUsbkovGvLsYM1OvMPv95VlfIkWjQjoaRubJei3yKBA=";
   };
 
-  nativeBuildInputs = [ makeWrapper intltool ];
+  nativeBuildInputs = [ makeWrapper ];
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
@@ -27,7 +27,7 @@ let unwrapped = stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr
     libXScrnSaver python-with-dbus
-    avahi dbus dbus-glib libidn
+    avahi dbus dbus-glib intltool libidn
     libICE libXext libSM cyrus_sasl
     libgnt ncurses # optional: build finch - the console UI
   ]

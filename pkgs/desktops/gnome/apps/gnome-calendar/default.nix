@@ -7,14 +7,14 @@
 , wrapGAppsHook4
 , libgweather
 , geoclue2
-, geocode-glib_2
+, geocode-glib
 , gettext
 , libxml2
 , gnome
 , gtk4
-, evolution-data-server-gtk4
+, evolution-data-server
 , libical
-, libsoup_3
+, libsoup
 , glib
 , gsettings-desktop-schemas
 , libadwaita
@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "43.0";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "CeXA+TYPP4Vt6qfA2zD12rAVEYDfQYOAfGzzYCmS9cw=";
+    sha256 = "rnzGOq6WoCqlmbbWo0hYX0529ylTbznvt0QwKwW1+70=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
-    evolution-data-server-gtk4
+    evolution-data-server # waiting for GTK4 port
     libical
-    libsoup_3
+    libsoup
     glib
     libgweather
     geoclue2
-    geocode-glib_2
+    geocode-glib
     gsettings-desktop-schemas
     libadwaita
   ];

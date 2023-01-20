@@ -119,21 +119,6 @@ let
   writeDashBin = name:
     writeDash "/bin/${name}";
 
-  # Like writeScript but the first line is a shebang to fish
-  #
-  # Example:
-  #   writeFish "example" ''
-  #     echo hello world
-  #   ''
-  writeFish = makeScriptWriter {
-    interpreter = "${pkgs.fish}/bin/fish --no-config";
-    check = "${pkgs.fish}/bin/fish --no-config --no-execute";  # syntax check only
-  };
-
-  # Like writeScriptBin but the first line is a shebang to fish
-  writeFishBin = name:
-    writeFish "/bin/${name}";
-
   # writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
   # and some haskell source code and returns an executable.
   #
@@ -207,7 +192,7 @@ let
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
+    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)

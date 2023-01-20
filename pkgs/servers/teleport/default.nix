@@ -5,7 +5,6 @@
 , makeWrapper
 , symlinkJoin
 , CoreFoundation
-, AppKit
 , libfido2
 , openssl
 , pkg-config
@@ -69,7 +68,7 @@ buildGoModule rec {
     ++ lib.optional withRdpClient "desktop_access_rdp";
 
   buildInputs = [ openssl libfido2 ]
-    ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
+    ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security ];
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   patches = [

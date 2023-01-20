@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocamlbuild";
-  version = "0.14.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "ocamlbuild";
     rev = version;
-    sha256 = "sha256-QAqIMdi6M9V7RIX0kppKPSkCJE/pLx2iMdh5XYXQCJs=";
+    sha256 = "sha256-ZL0BwOCWTNDjNkrwNAmzHjHF1Rpg3CUuV4lSqcwDqgI=";
   };
 
   createFindlibDestdir = true;

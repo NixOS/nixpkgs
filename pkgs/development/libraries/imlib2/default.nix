@@ -6,9 +6,9 @@
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
 , x11Support ? true
-, webpSupport ? true
 , svgSupport ? false
 , heifSupport ? false
+, webpSupport ? false
 , jxlSupport ? false
 , psSupport ? false
 

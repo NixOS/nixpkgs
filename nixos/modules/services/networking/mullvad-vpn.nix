@@ -39,7 +39,7 @@ with lib;
       startLimitBurst = 5;
       startLimitIntervalSec = 20;
       serviceConfig = {
-        ExecStart = "${pkgs.mullvad}/bin/mullvad-daemon -v --disable-stdout-timestamps";
+        ExecStart = "${pkgs.mullvad-vpn}/bin/mullvad-daemon -v --disable-stdout-timestamps";
         Restart = "always";
         RestartSec = 1;
       };

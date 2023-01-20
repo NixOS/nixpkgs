@@ -285,7 +285,7 @@ in
         elementary-music
         elementary-photos
         elementary-screenshot
-        # elementary-tasks
+        elementary-tasks
         elementary-terminal
         elementary-videos
         epiphany

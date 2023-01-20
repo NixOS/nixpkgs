@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, tcl, makeWrapper, autoreconfHook, fetchpatch, substituteAll }:
+{ lib, stdenv, buildPackages, fetchurl, tcl, makeWrapper, autoreconfHook, fetchpatch }:
 
 tcl.mkTclDerivation rec {
   pname = "expect";
@@ -13,10 +13,6 @@ tcl.mkTclDerivation rec {
     (fetchpatch {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/c05e6aa361a4049eabd8b21eb64a34899ef83fc7/package/expect/0001-enable-cross-compilation.patch";
       sha256 = "1jwx2l1slidvcpahxbyqs942l81jd62rzbxliyd9lwysk38c8b6b";
-    })
-    (substituteAll {
-      src = ./fix-cross-compilation.patch;
-      tcl = "${buildPackages.tcl}/bin/tclsh";
     })
   ];
 

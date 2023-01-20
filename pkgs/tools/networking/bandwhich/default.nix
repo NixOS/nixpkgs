@@ -8,28 +8,22 @@ rustPlatform.buildRustPackage rec {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    hash = "sha256-lggeJrPfZTpUEydFJ9XXgbbS3pmrGqTef2ROsPOmiwQ=";
+    sha256 = "014blvrv0kk4gzga86mbk7gd5dl1szajfi972da3lrfznck1w24n";
   };
 
-  cargoHash = "sha256-kGRsF+THNQahEoD3vY+XcPrr9cHjchtg86tMvcIdHPk=";
+  cargoSha256 = "sha256-Vrd5DIfhUSb3BONaUG8RypmVF+HWrlM0TodlWjOLa/c=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
 
+  # FIXME: remove when the linked-hash-map dependency is bumped upstream
   cargoPatches = [
-    # FIXME: remove when the linked-hash-map dependency is bumped upstream
-    # https://github.com/imsnif/bandwhich/pull/222/
     (fetchpatch {
-      name = "update-linked-hash-map.patch";
-      url = "https://github.com/imsnif/bandwhich/commit/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
-      hash = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
+      url = "https://github.com/imsnif/bandwhich/pull/222/commits/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
+      sha256 = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
     })
-
-    # Tweaked https://github.com/imsnif/bandwhich/pull/245 so that it merges
-    # cleanly with the earlier patch.
-    ./update-socket2-for-rust-1.64.diff
   ];
 
   meta = with lib; {

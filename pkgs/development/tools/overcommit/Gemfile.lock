@@ -1,13 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    childprocess (4.1.0)
-    iniparse (1.5.0)
-    overcommit (0.59.1)
-      childprocess (>= 0.6.3, < 5)
+    childprocess (3.0.0)
+    iniparse (1.4.4)
+    overcommit (0.51.0)
+      childprocess (>= 0.6.3, < 4)
       iniparse (~> 1.4)
-      rexml (~> 3.2)
-    rexml (3.2.5)
 
 PLATFORMS
   ruby
@@ -16,4 +14,4 @@ DEPENDENCIES
   overcommit
 
 BUNDLED WITH
-   2.3.22
+   2.1.4

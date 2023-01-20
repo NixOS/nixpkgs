@@ -169,13 +169,13 @@ in rec {
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
+  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
-  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
+  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;

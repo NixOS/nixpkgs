@@ -42,7 +42,7 @@ let
     makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set \"${key}\" \"${value}\"") hydraEnv);
   in pkgs.buildEnv rec {
     name = "hydra-env";
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ pkgs.makeWrapper ];
     paths = [ cfg.package ];
 
     postBuild = ''

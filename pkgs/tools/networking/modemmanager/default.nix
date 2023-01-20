@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl
-, fetchpatch
 , glib, udev, libgudev, polkit, ppp, gettext, pkg-config, python3
 , libmbim, libqmi, systemd, vala, gobject-introspection, dbus
 }:
@@ -12,19 +11,6 @@ stdenv.mkDerivation rec {
     url = "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
     sha256 = "sha256-FiVfginu6y3+y43RNwNg1G8QFeyF5vulwcvZ9DcdZes=";
   };
-
-  patches = [
-    # Fix tests with GLib 2.73.2
-    # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/issues/601
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/79a5a4eed2189ea87d25cbe00bc824a2572cad66.patch";
-      sha256 = "egGXkCzAMyqPjeO6ro23sdTddTDEGJUkV7rH8sSlSGE=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/51a333cd9a6707de7c623fd4c94cb6032477572f.patch";
-      sha256 = "1XyJ0GBmpBRwnsKPI4i/EBrF7W08HelL/PMDwmlQWcw=";
-    })
-  ];
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
 

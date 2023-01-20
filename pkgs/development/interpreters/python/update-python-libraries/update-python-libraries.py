@@ -342,7 +342,11 @@ def _update_package(path, target):
     text = _replace_value('version', new_version, text)
     # hashes from pypi are 16-bit encoded sha256's, normalize it to sri to avoid merge conflicts
     # sri hashes have been the default format since nix 2.4+
-    sri_hash = subprocess.check_output(["nix", "--extra-experimental-features", "nix-command", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+    try:
+        sri_hash = subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+    except subprocess.CalledProcessError:
+        # nix<2.4 compat
+        sri_hash = subprocess.check_output(["nix", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
 
 
     # fetchers can specify a sha256, or a sri hash

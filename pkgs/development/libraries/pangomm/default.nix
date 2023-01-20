@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.46.3";
+  version= "2.46.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-QQ/gTUcaYI8/AnPToX2EAkHZEe0P8sdYqYWcZsbyQ3k=";
+    sha256 = "sha256-V0QqtNwEOHe/44OZFXMastaT/GY0pxYUQi+1MMnqpvQ=";
   };
 
   outputs = [ "out" "dev" ];

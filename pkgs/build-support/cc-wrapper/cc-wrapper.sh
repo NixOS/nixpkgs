@@ -122,31 +122,6 @@ fi
 
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
-        #
-        # The motivation for this comment is to explain the reason for appending
-        # the C++ stdlib to NIX_CFLAGS_COMPILE, which I initially thought should
-        # change and later realized it shouldn't in:
-        #
-        #   https://github.com/NixOS/nixpkgs/pull/185569#issuecomment-1234959249
-        #
-        # NIX_CFLAGS_COMPILE contains dependencies added using "-isystem", and
-        # NIX_CXXSTDLIB_COMPILE adds the C++ stdlib using "-isystem". Appending
-        # NIX_CXXSTDLIB_COMPILE to NIX_CLAGS_COMPILE emulates this part of the
-        # include lookup order from GCC/Clang:
-        #
-        # > 4. Directories specified with -isystem options are scanned in
-        # >    left-to-right order.
-        # > 5. Standard system directories are scanned.
-        # > 6. Directories specified with -idirafter options are scanned
-        # >    in left-to-right order.
-        #
-        # NIX_CXX_STDLIB_COMPILE acts as the "standard system directories" that
-        # are otherwise missing from CC in nixpkgs, so should be added last.
-        #
-        # This means that the C standard library should never be present inside
-        # NIX_CFLAGS_COMPILE, because it MUST come after the C++ stdlib. It is
-        # added automatically by cc-wrapper later using "-idirafter".
-        #
         NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
     fi
     if [[ "$cxxLibrary" = 1 ]]; then

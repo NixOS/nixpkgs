@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bqn";
-  version = "0.pre+date=2022-10-03";
+  version = "0.pre+date=2021-12-13";
 
   src = fetchFromGitHub {
     owner = "mlochbaum";
     repo = "BQN";
-    rev = "1518205cceeb1fef27c584d24e92b189ffd234f4";
-    hash = "sha256:1pyk331ymbs2fv9jxmbv28yvk9mr2mcni1dsja6fzkk1jrd767hy";
+    rev = "2c2e86e10ff963a6aefa14f76fd8833ce3c9157c";
+    hash = "sha256-iAlDXGlHTeI6+r/QKFiBHhj5A+FgUy7JFrCpAwpyVQU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

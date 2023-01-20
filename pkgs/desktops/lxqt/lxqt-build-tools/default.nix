@@ -30,12 +30,6 @@ mkDerivation rec {
       url = "https://github.com/lxqt/lxqt-build-tools/pull/76/commits/fa9672b671ede3f46b004f81580f9afb50fedf00.patch";
       sha256 = "0dl7n1afcc6ky9vd9lpc65p9grpszpql7lfjq2vlzlilixnv8xv1";
     })
-    # Fix build failure of libqtxdg with GLib 2.73.1+
-    # https://github.com/lxqt/lxqt-build-tools/pull/79
-    (fetchpatch {
-      url = "https://github.com/lxqt/lxqt-build-tools/commit/4991811d9212ec1176af6d1cbe88aa37efad4836.patch";
-      sha256 = "sha256-PsYJKonMG6A9O4Li+RC1qBjFUzYgxVAwzSqHq/phmPc=";
-    })
   ];
 
   postPatch = ''

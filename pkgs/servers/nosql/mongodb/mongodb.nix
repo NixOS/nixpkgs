@@ -1,27 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, sconsPackages
-, boost
-, gperftools
-, pcre-cpp
-, snappy
-, zlib
-, libyamlcpp
-, sasl
-, openssl
-, libpcap
-, python3
-, curl
-, Security
-, CoreFoundation
-, cctools
-, xz
-}:
+{ lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
+, sasl, openssl, libpcap, python3, curl, Security, CoreFoundation, cctools, xz }:
 
 # Note:
-#   The command line administrative tools are part of other packages:
-#   see pkgs.mongodb-tools and pkgs.mongosh.
+# The command line tools are written in Go as part of a different package (mongodb-tools)
 
 with lib;
 
@@ -30,49 +11,17 @@ with lib;
 }:
 
 let
-  variants =
-    if versionAtLeast version "6.0" then rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-        packaging
-        pymongo
-      ]);
-
-      # 4.2 < mongodb <= 6.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
-
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    } else if versionAtLeast version "4.2" then rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-      ]);
-
-      # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
-
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    } else rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        typing
-        cheetah
-      ]);
-
-      scons = sconsPackages.scons_3_1_2;
-      mozjsVersion = "45";
-      mozjsReplace = "defined(HAVE_SINCOS)";
-   };
-
+  variants = if versionAtLeast version "4.2"
+    then rec { python = scons.python.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
+            scons = sconsPackages.scons_3_1_2.override { python = python3; }; # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
+            mozjsVersion = "60";
+            mozjsReplace = "defined(HAVE___SINCOS)";
+          }
+    else rec { python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+            scons = sconsPackages.scons_3_1_2;
+            mozjsVersion = "45";
+            mozjsReplace = "defined(HAVE_SINCOS)";
+          };
   system-libraries = [
     "boost"
     "pcre"
@@ -180,10 +129,7 @@ in stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  installTargets =
-    if (versionAtLeast version "6.0") then "install-devcore"
-    else if (versionAtLeast version "4.4") then "install-core"
-    else "install";
+  installTargets = if (versionAtLeast version "4.4") then "install-core" else "install";
 
   prefixKey = if (versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
 
@@ -197,9 +143,6 @@ in stdenv.mkDerivation rec {
     inherit license;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = subtractLists systems.doubles.i686 (
-      if (versionAtLeast version "6.0") then systems.doubles.linux
-      else systems.doubles.unix
-    );
+    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }

@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake unzip pkg-config ];
   buildInputs =
     [
+      cmake
       libGLU
       libGL
       freetype

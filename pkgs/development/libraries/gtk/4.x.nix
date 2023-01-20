@@ -93,7 +93,6 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
-  ] ++ lib.optionals waylandSupport [
     wayland-scanner
   ] ++ setupHooks;
 

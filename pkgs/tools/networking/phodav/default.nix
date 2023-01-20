@@ -1,50 +1,48 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
-, libsoup_3
-, libxml2
+, libsoup
 , meson
 , ninja
-, gnome
 }:
 
+let
+  version = "2.5";
+in
 stdenv.mkDerivation rec {
   pname = "phodav";
-  version = "3.0";
-
-  outputs = [ "out" "dev" "lib" ];
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/phodav/${version}/phodav-${version}.tar.xz";
-    sha256 = "OS7C0G1QMA3P8e8mmiqYUwTim841IAAvyiny7cHRONE=";
+    url = "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${pname}-${version}.tar.xz";
+    sha256 = "045rdzf8isqmzix12lkz6z073b5qvcqq6ad028advm5gf36skw3i";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-  ];
-
-  buildInputs = [
-    libsoup_3
-    libxml2
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/phodav/-/commit/ae9ac98c1b3db26070111661aba02594c62d2cef.patch";
+      sha256 = "sha256-jIHG6aRqG00Q6aIQsn4tyQdy/b6juW6QiUPXLmIc3TE=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/phodav/-/commit/560ab5ca4f836d82bddbbe66ea0f7c6b4cab6b3b.patch";
+      sha256 = "sha256-2gP579qhEkp7fQ8DBGYbZcjb2Tr+WpJs30Z7lsQaz2g=";
+    })
   ];
 
   mesonFlags = [
     "-Davahi=disabled"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "-Dsystemd=disabled"
     "-Dgtk_doc=disabled"
-    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dudev=disabled"
   ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lintl";
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  nativeBuildInputs = [ libsoup pkg-config meson ninja ];
+
+  outputs = [ "out" "dev" "lib" ];
 
   # We need to do this in pre-configure before the data/ folder disappears.
   preConfigure = ''
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://wiki.gnome.org/phodav";
-    license = licenses.lgpl21Plus;
+    license = licenses.lgpl21;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;
   };

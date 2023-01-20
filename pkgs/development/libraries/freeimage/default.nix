@@ -1,7 +1,7 @@
 { lib, stdenv, fetchsvn, darwin, libtiff
 , libpng, zlib, libwebp, libraw, openexr, openjpeg
 , libjpeg, jxrlib, pkg-config
-, fixDarwinDylibNames, autoSignDarwinBinariesHook }:
+, fixDarwinDylibNames }:
 
 stdenv.mkDerivation {
   pname = "freeimage";
@@ -39,8 +39,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.cctools
     fixDarwinDylibNames
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    autoSignDarwinBinariesHook
   ];
   buildInputs = [ libtiff libtiff.dev_private libpng zlib libwebp libraw openexr openjpeg libjpeg libjpeg.dev_private jxrlib ];
 

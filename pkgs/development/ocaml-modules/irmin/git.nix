@@ -1,15 +1,16 @@
 { lib, buildDunePackage
-, git, irmin, ppx_irmin, git-unix, irmin-watcher
+, git, irmin, irmin-test, ppx_irmin, git-cohttp-unix, git-unix
 , digestif, cstruct, fmt, astring, fpath, logs, lwt, uri
-, cohttp-lwt-unix, mimic
-, irmin-test, mtime, alcotest, cacert
+, mtime, alcotest, cacert
 }:
 
 buildDunePackage {
 
   pname = "irmin-git";
 
-  inherit (irmin) version src strictDeps;
+  inherit (irmin) version src;
+
+  useDune2 = true;
 
   propagatedBuildInputs = [
     git
@@ -23,13 +24,9 @@ buildDunePackage {
     logs
     lwt
     uri
-    irmin-watcher
-    git-unix
-    mimic
-    cohttp-lwt-unix
   ];
 
-  checkInputs = [ mtime alcotest irmin-test cacert ];
+  checkInputs = [ mtime alcotest git-cohttp-unix git-unix irmin-test cacert ];
 
   doCheck = true;
 

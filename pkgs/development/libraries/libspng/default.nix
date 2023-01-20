@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    pkg-config
     zlib
   ];
 
   nativeBuildInputs = [
     ninja
     meson
-    pkg-config
   ];
 
   meta = with lib; {

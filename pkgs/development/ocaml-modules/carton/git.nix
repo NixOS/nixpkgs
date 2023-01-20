@@ -8,7 +8,7 @@
 buildDunePackage {
   pname = "carton-git";
 
-  inherit (carton) version src postPatch;
+  inherit (carton) version src useDune2 postPatch;
 
   propagatedBuildInputs = [
     carton

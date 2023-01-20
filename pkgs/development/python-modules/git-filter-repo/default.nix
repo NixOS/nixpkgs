@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "git-filter-repo";
-  version = "2.38.0";
+  version = "2.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/hdT4Y8L1tPJtXhoyAEa59BWpuurcGcGOWoV71MScl4=";
+    sha256 = "sha256-taCfODhl3goWSwa6F0Rh5V2RZ8xvuwbPKh5i2/DNumM=";
   };
 
   nativeBuildInputs = [

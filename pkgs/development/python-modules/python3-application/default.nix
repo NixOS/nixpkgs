@@ -1,17 +1,26 @@
-{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, zope_interface, twisted }:
+{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, fetchpatch, zope_interface, twisted }:
 
 buildPythonPackage rec {
   pname = "python3-application";
-  version = "3.0.4";
+  version = "3.0.3";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "sha256-XXAKp/RlBVs3KmcnuiexdYfxf0zt2A/DrsJzdC9I4vA=";
+    rev = version;
+    sha256 = "sha256-oscUI/Ag/UXmAi/LN1pPTdyqQe9aAfeQzhKFxaTmW3A=";
   };
+
+  patches = [
+    # Apply bugfix commit that is not yet part of a release
+    (fetchpatch {
+      name = "fix-time-import.patch";
+      url = "https://github.com/AGProjects/python3-application/commit/695f7d769e69c84e065872ffb403157d0af282fd.patch";
+      sha256 = "sha256-MGs8uUIFXkPXStOn5oCNNEMVmcKrq8YPl8Xvl3OTOUM=";
+    })
+  ];
 
   propagatedBuildInputs = [ zope_interface twisted ];
 
@@ -22,7 +31,7 @@ buildPythonPackage rec {
     description = "A collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chanley yureien ];
+    maintainers = with maintainers; [ chanley ];
     longDescription = ''
       This package is a collection of modules that are useful when building python applications. Their purpose is to eliminate the need to divert resources into implementing the small tasks that every application needs to do in order to run successfully and focus instead on the application logic itself.
       The modules that the application package provides are:

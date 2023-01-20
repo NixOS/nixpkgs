@@ -24,6 +24,7 @@ e_s_d_schema_constants = [
 ]
 
 g_d_s_schema_constants = [
+    "\"org.gnome.system.proxy\"",
 ]
 
 def get_schema_directory(schema_path):

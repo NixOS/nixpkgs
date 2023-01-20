@@ -1,4 +1,4 @@
-{ frameworks, libs, libobjc, libnetwork }: with frameworks; with libs;
+{ frameworks, libs, libobjc, Libsystem, libnetwork }: with frameworks; with libs;
 {
   AGL                              = { inherit Carbon OpenGL; };
   AVFoundation                     = { inherit ApplicationServices AVFCapture AVFCore CoreGraphics simd UniformTypeIdentifiers; };
@@ -89,7 +89,9 @@
   IOBluetooth                      = { inherit CoreBluetooth IOKit; };
   IOBluetoothUI                    = { inherit IOBluetooth; };
   IOKit                            = {};
-  IOSurface                        = { inherit IOKit; };
+  # `IOSurface` should depend on `Libsystem` (in place of `xpc`) but this currently causes build
+  # issues due to incompatibility issues between `Libsystem` and `libcxx`.
+  IOSurface                        = { inherit IOKit xpc; };
   IOUSBHost                        = {};
   IdentityLookup                   = {};
   ImageCaptureCore                 = {};

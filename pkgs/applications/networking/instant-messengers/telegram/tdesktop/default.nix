@@ -28,7 +28,7 @@
 , tl-expected
 , hunspell
 , glibmm
-, webkitgtk_4_1
+, webkitgtk
 , jemalloc
 , rnnoise
 , abseil-cpp
@@ -93,7 +93,7 @@ env.mkDerivation rec {
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
-      --replace '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
+      --replace '"libwebkit2gtk-4.0.so.37"' '"${webkitgtk}/lib/libwebkit2gtk-4.0.so.37"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -131,7 +131,7 @@ env.mkDerivation rec {
     tl-expected
     hunspell
     glibmm
-    webkitgtk_4_1
+    webkitgtk
     jemalloc
     rnnoise
     tg_owt

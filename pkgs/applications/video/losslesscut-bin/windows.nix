@@ -1,7 +1,7 @@
 { stdenvNoCC
 , lib
 , fetchurl
-, p7zip
+, unzip
 , version
 , sha256
 , useMklink ? false
@@ -11,8 +11,8 @@ let
   pname = "losslesscut";
   nameRepo = "lossless-cut";
   nameCamel = "LosslessCut";
-  nameSourceBase = "${nameCamel}-win-x64";
-  nameSource = "${nameSourceBase}.7z";
+  nameSourceBase = "${nameCamel}-win";
+  nameSource = "${nameSourceBase}.zip";
   nameExecutable = "${nameCamel}.exe";
   owner = "mifi";
   getSymlinkCommand = if (customSymlinkCommand != null) then customSymlinkCommand
@@ -27,10 +27,10 @@ in stdenvNoCC.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
-    7z x $src -o${nameSourceBase}
+    unzip $src -d ${nameSourceBase}
   '';
 
   sourceRoot = nameSourceBase;

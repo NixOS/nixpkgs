@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation (rec {
-  version = "4.12.0";
+  version = "4.11.0";
   pname = "libpfm";
 
   src = fetchurl {
     url = "mirror://sourceforge/perfmon2/libpfm4/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SwwfU/OaYVJbab6/UyxoBAwbmE11RKiuCESxPNkeHuQ=";
+    sha256 = "1k7yp6xfsglp2b6271r622sjinlbys0dk24n9iiv656y5f3zi9ax";
   };
 
   makeFlags = [

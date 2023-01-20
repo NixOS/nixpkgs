@@ -93,6 +93,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bleakgrey/tootle";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
-    broken = true;
   };
 }

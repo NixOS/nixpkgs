@@ -84,7 +84,7 @@ with lib;
       xl2tpd-ppp-wrapped = pkgs.stdenv.mkDerivation {
         name         = "xl2tpd-ppp-wrapped";
         phases       = [ "installPhase" ];
-        nativeBuildInputs  = with pkgs; [ makeWrapper ];
+        buildInputs  = with pkgs; [ makeWrapper ];
         installPhase = ''
           mkdir -p $out/bin
 

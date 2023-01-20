@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     "--enable-SIGCHLD-fallback"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     Xaw3d
     ghostscriptX
     perl
+    pkg-config
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];

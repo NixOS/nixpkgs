@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libogg ];
   propagatedBuildInputs = [ libopus ];
-  outputs = [ "out" "dev" ];
   patches = [ ./include-multistream.patch ]
     # fixes problem with openssl 1.1 dependency
     # see https://github.com/xiph/opusfile/issues/13

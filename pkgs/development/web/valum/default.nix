@@ -21,8 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ ];
-    # Likely broken by GLib 2.74 switch to PCRE 2.
-    # https://github.com/valum-framework/valum/issues/238
-    broken = true;
   };
 }

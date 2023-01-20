@@ -4,11 +4,11 @@ if lib.versionOlder (cstruct.version or "1") "3"
 then cstruct
 else
 
-  buildDunePackage {
-    pname = "cstruct-lwt";
-    inherit (cstruct) version src meta;
+buildDunePackage {
+  pname = "cstruct-lwt";
+  inherit (cstruct) version src useDune2 meta;
 
-    minimalOCamlVersion = "4.08";
+  minimumOCamlVersion = "4.03";
 
-    propagatedBuildInputs = [ cstruct lwt ];
-  }
+  propagatedBuildInputs = [ cstruct lwt ];
+}

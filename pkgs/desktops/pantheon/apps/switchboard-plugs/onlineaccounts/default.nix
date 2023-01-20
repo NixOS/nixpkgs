@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -11,7 +10,9 @@
 , glib
 , granite
 , gtk3
+, libgdata
 , libhandy
+, sqlite
 , switchboard
 }:
 
@@ -26,15 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Q/vvXKyeedn5o7HnL9F5ixSjJS3OWrvvHbzvx2fW2qY=";
   };
 
-  patches = [
-    # build: support evolution-data-server 3.45
-    # https://github.com/elementary/switchboard-plug-onlineaccounts/pull/244
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/b60f0458a23a2f76ad14d399f145e150e1ab82d3.patch";
-      sha256 = "sha256-C7woN4shPrVlSWZeW0Fz+xFi5CTQd2K5BsF5YeI9x0Y=";
-    })
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -47,7 +39,9 @@ stdenv.mkDerivation rec {
     glib
     granite
     gtk3
+    libgdata
     libhandy
+    sqlite # needed for camel-1.2
     switchboard
   ];
 

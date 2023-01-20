@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    pkg-config
   ];
 
   buildInputs = [
+    pkg-config
     rocksdb
   ];
 

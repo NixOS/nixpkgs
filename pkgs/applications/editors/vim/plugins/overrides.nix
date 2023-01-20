@@ -628,10 +628,6 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  nvim-dap-python = super.nvim-dap-python.overrideAttrs (old: {
-    dependencies = with self; [ nvim-dap ];
-  });
-
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
   });

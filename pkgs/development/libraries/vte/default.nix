@@ -9,12 +9,9 @@
 , gnome
 , glib
 , gtk3
-, gtk4
-, gtkVersion ? "3"
 , gobject-introspection
 , vala
 , python3
-, gi-docgen
 , libxml2
 , gnutls
 , gperf
@@ -30,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.70.0";
+  version = "0.68.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k+DdShvCp6GmLaZBYKJ0zORWl26hVn2YWR2pbi0mWuY=";
+    sha256 = "sha256-E+fUeJyiFqM3gAMNJGybE92/0ECUxjFu6n/5IoTdF0k=";
   };
 
   patches = [
@@ -60,7 +57,6 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     python3
-    gi-docgen
   ];
 
   buildInputs = [
@@ -73,38 +69,25 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
+  propagatedBuildInputs = [
     # Required by vte-2.91.pc.
-    (if gtkVersion == "3" then gtk3 else gtk4)
+    gtk3
     glib
     pango
   ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-  ] ++ lib.optionals (!systemdSupport) [
+  mesonFlags = lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals (gtkVersion == "4") [
-    "-Dgtk3=false"
-    "-Dgtk4=true"
   ] ++ lib.optionals stdenv.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"
   ];
-
-  # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
 
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
     patchShebangs src/parser-seq.py
     patchShebangs src/modes.py
-  '';
-
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

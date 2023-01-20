@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
+  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
     ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
-    ++ lib.optionals withLibsecret [ glib libsecret ];
+    ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
@@ -252,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       '')
 
    + lib.optionalString withManual ''# Install man pages
-       make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''

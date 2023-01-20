@@ -481,8 +481,8 @@ let
       ++ optional v.allowDiscards "discard"
       ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
       ++ optional (v.header != null) "header=${v.header}"
-      ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
-      ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
+      ++ optional (v.keyFileOffset != null) "keyfile-offset=${v.keyFileOffset}"
+      ++ optional (v.keyFileSize != null) "keyfile-size=${v.keyFileSize}"
     ;
   in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
 

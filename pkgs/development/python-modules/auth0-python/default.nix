@@ -26,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     pyjwt
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ];
 
   checkInputs = [
     aiohttp

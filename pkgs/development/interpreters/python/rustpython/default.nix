@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
-  version = "unstable-2022-10-11";
+  version = "unstable-2021-12-09";
 
   src = fetchFromGitHub {
     owner = "RustPython";
     repo = "RustPython";
-    rev = "273ffd969ca6536df06d9f69076c2badb86f8f8c";
-    sha256 = "sha256-t/3++EeP7a8t2H0IEPLogBri7+6u+2+v+lNb4/Ty1/w=";
+    rev = "db3b3127df34ff5dd569301aa36ed71ae5624e4e";
+    sha256 = "sha256-YwGfXs3A5L/18mHnnWubPU3Y8EI9uU3keJ2HJnnTwv0=";
   };
 
-  cargoHash = "sha256-Pv7SK64+eoK1VUxDh1oH0g1veWoIvBhiZE9JI/alXJ4=";
+  cargoHash = "sha256-T85kiPG80oZ4mwpb8Ag40wDHKx2Aens+gM7NGXan5lM=";
 
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = "--features=freeze-stdlib";

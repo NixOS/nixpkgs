@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # because the Makefile would not print warnings about too old
   # libraries (see "warning:" in the Makefile)
   postBuild = ''
-    make libs doc -j$NIX_BUILD_CORES
+    make libs doc -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
   '';
 
   installTargets = [
