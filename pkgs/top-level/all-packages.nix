@@ -4988,6 +4988,8 @@ with pkgs;
 
   rsbep = callPackage ../tools/backup/rsbep { };
 
+  rsbkb = callPackage ../tools/text/rsbkb { };
+
   rsyslog = callPackage ../tools/system/rsyslog {
     withHadoop = false; # Currently Broken
     withKsi = false; # Currently Broken
