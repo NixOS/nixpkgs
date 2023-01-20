@@ -15,7 +15,20 @@ stdenv.mkDerivation rec {
     sha256 = "156z4wpj49i6j388yjird5qvrph7hz0grb4r44l4jf3q8imadyrg";
   };
 
-  configurePlatforms = [ ];  # bespoke, non-autotools configure script
+  buildInputs = lib.optionals enableX11 [ libpng libX11 libXext libXv ];
+
+  configureFlags = [
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+    "--extra-cflags=-Ilibqhtml"
+  ] ++ lib.optionals (!enableX11) [
+    "--disable-x11"
+  ];
+
+  makeFlags = [
+    # is actually used as BUILD_CC
+    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace Makefile --replace \
@@ -27,22 +40,8 @@ stdenv.mkDerivation rec {
       '$(CC) $(LDFLAGS) -o $@ html2png.o $(OBJS)'
     substituteInPlace Makefile --replace \
       'install -m 755 -s' \
-      'install -m 755 -s --strip-program=${stdenv.cc.targetPrefix}strip'
+      "install -m 755 -s --strip-program=''${STRIP}"
   '';
-
-  buildInputs = lib.optionals enableX11 [ libpng libX11 libXext libXv ];
-
-  configureFlags = [
-    "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--extra-cflags=-Ilibqhtml"
-  ] ++ lib.optionals (!enableX11) [
-    "--disable-x11"
-  ];
-
-  makeFlags = [
-    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
-    "STRIP=${stdenv.cc.targetPrefix}strip"
-  ];
 
   preInstall = ''
     mkdir -p $out/bin $out/man
