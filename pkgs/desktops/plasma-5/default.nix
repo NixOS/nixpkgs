@@ -163,6 +163,7 @@ let
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
       plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault { };
+      plasma-welcome = callPackage ./plasma-welcome.nix { };
       plasma-workspace = callPackage ./plasma-workspace { };
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix { };
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix { };
