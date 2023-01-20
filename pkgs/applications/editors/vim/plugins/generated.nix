@@ -4719,8 +4719,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "williamboman";
       repo = "mason-lspconfig.nvim";
-      rev = "e11264c3d198aef24b019e67ac04ac0cf21465ed";
-      sha256 = "0y4aw7fhab2phcllnydy8w5aviv6bc51aq1lizw9rph48cnfwkc2";
+      rev = "5b388c0de30f1605671ebfb9a20a620cda50ffce";
+      sha256 = "1c01jacxp96s2xd8w2hvp46ai49lw8dsmv372l8jj6794dqm1bfv";
     };
     meta.homepage = "https://github.com/williamboman/mason-lspconfig.nvim/";
   };
@@ -4743,8 +4743,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "williamboman";
       repo = "mason.nvim";
-      rev = "3d9ded5a837d4c667f6332f437e431624733fbb1";
-      sha256 = "059q5sxgkhsc93wmhyblgcvaqshnmg5fd6i27l80lsa3b4fny1pm";
+      rev = "db162f3f32e54f3a4ee2f03c1ea08a5253a0500a";
+      sha256 = "0scz36d4r3iz5d5g4bvxcqs15sqcdz9ry8fhhxrfz5zcsvwlj0wx";
     };
     meta.homepage = "https://github.com/williamboman/mason.nvim/";
   };
@@ -5523,8 +5523,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "tamago324";
       repo = "nlsp-settings.nvim";
-      rev = "421c066ce09faefe5ed066aa22c1659b76e15239";
-      sha256 = "0ih9n5lhn8r06b9m9jsg16avqa6jrvc56zhwhiqr267r9ylwyn3w";
+      rev = "06816026ccce2e8246e952d55ea87ddd26a9d2a4";
+      sha256 = "1wmf4f7z537fhnr79ijg05bb198wrl7im56m1phb6naa5fbpr0zc";
     };
     meta.homepage = "https://github.com/tamago324/nlsp-settings.nvim/";
   };
@@ -7117,12 +7117,12 @@ final: prev:
 
   refactoring-nvim = buildVimPluginFrom2Nix {
     pname = "refactoring.nvim";
-    version = "2023-01-05";
+    version = "2023-01-19";
     src = fetchFromGitHub {
       owner = "theprimeagen";
       repo = "refactoring.nvim";
-      rev = "b253bcee0488209875fafceda0d0832a121fa3c7";
-      sha256 = "0fak02yivwm0vw4rq912b9ysy1qfzpq6ffvi7yj48gkxrl4gr9k5";
+      rev = "ee63338cfb9151018afb243f5af5262c1686b280";
+      sha256 = "03fgla400n5mqhpfa3lljzark76ah7n0mzzxfsn5c6m3hxfkvaim";
     };
     meta.homepage = "https://github.com/theprimeagen/refactoring.nvim/";
   };
@@ -13753,12 +13753,12 @@ final: prev:
 
   zenbones-nvim = buildVimPluginFrom2Nix {
     pname = "zenbones.nvim";
-    version = "2022-12-31";
+    version = "2023-01-20";
     src = fetchFromGitHub {
       owner = "mcchrish";
       repo = "zenbones.nvim";
-      rev = "9d865e070ada2b81a92ba8b3bf564b3fc71efc53";
-      sha256 = "078j4d7hj5lpf19fryx8rwpyg6q6wkk9z7grkc08s8kyssigcs9w";
+      rev = "13ed6d0493a1d5140995c4456ced54d0aa984f6a";
+      sha256 = "1k894mxc7v4fp5zr80wbfk18zd5shcfik0j7mv1cs8c950xmahjl";
     };
     meta.homepage = "https://github.com/mcchrish/zenbones.nvim/";
   };
