@@ -9928,9 +9928,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa AGL OpenGL;
   };
 
-  pcre16 = res.pcre.override { variant = "pcre16"; };
+  pcre16 = super.pcre.override { variant = "pcre16"; };
   # pcre32 seems unused
-  pcre-cpp = res.pcre.override { variant = "cpp"; };
+  pcre-cpp = super.pcre.override { variant = "cpp"; };
 
   inherit (callPackage ../development/libraries/physfs {
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -12649,7 +12649,7 @@ with pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
-  espeak = res.espeak-ng;
+  espeak = super.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
@@ -12929,7 +12929,7 @@ with pkgs;
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
   };
 
-  firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
+  firefox-beta-bin = super.wrapFirefox firefox-beta-bin-unwrapped {
     pname = "firefox-beta-bin";
     desktopName = "Firefox Beta";
   };
@@ -12940,7 +12940,7 @@ with pkgs;
     generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
   };
 
-  firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
+  firefox-devedition-bin = super.wrapFirefox firefox-devedition-bin-unwrapped {
     nameSuffix = "-devedition";
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
@@ -16815,7 +16815,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
 
-  faust = res.faust2;
+  faust = super.faust2;
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
@@ -17155,7 +17155,7 @@ with pkgs;
   mfcl3770cdwlpr = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).driver;
   mfcl3770cdwcupswrapper = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).cupswrapper;
 
-  samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
+  samsung-unified-linux-driver = super.samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or {});
 
