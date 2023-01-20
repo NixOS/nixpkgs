@@ -10272,15 +10272,6 @@
     githubId = 1219785;
     name = "Félix Baylac-Jacqué";
   };
-  ninjin = {
-    email = "pontus@stenetorp.se";
-    github = "ninjin";
-    githubId = 354934;
-    name = "Pontus Stenetorp";
-    keys = [{
-      fingerprint = "0966 2F9F 3FDA C22B C22E  4CE1 D430 2875 00E6 483C";
-    }];
-  };
   nioncode = {
     email = "nioncode+github@gmail.com";
     github = "nioncode";
