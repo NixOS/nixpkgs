@@ -89,6 +89,14 @@ stdenv.mkDerivation rec {
     # To help debug the transient error in
     # https://trac.sagemath.org/ticket/23087 when it next occurs.
     ./patches/configurationpy-error-verbose.patch
+
+    # https://trac.sagemath.org/ticket/33907
+    (fetchSageDiff {
+      name = "interfaces-expectpy-intermittent.patch";
+      base = "9.8.beta6";
+      rev = "6f5c1c2fc8bcfb5e6555716d05ce70511795ffa1";
+      sha256 = "sha256-z8FQxtrk62MHzPjrUTad+fMAE6XV8GTsLWKgGOM3zBg=";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
