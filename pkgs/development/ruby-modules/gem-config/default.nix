@@ -370,7 +370,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python3 ];
+    buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
     # The gem includes broken symlinks which are ignored during unpacking, but
@@ -384,6 +384,9 @@ in
         --replace "location = Libv8::Location::Vendor.new" \
                   "location = Libv8::Location::System.new"
     '';
+    meta.broken = true; # At 2023-01-20, errors as:
+                        #   "Failed to build gem native extension."
+                        # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
