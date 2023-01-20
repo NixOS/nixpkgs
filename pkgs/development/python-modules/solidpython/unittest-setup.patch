@@ -1,0 +1,22 @@
+--- solidpython-old/solid/test/test_solidpython.py	2023-04-03 13:37:46.615009659 +0200
++++ solidpython-new/solid/test/test_solidpython.py	2023-04-03 13:38:26.868154089 +0200
+@@ -533,7 +532,7 @@
+         test_name = f"test_{test_dict['name']}"
+         setattr(TestSolidPython, test_name, test)
+ 
++generate_cases_from_templates()
+ 
+ if __name__ == '__main__':
+-    generate_cases_from_templates()
+     unittest.main()
+--- solidpython-old/solid/test/test_utils.py	2023-04-03 13:37:46.616009662 +0200
++++ solidpython-new/solid/test/test_utils.py	2023-04-03 13:46:32.689897204 +0200
+@@ -194,7 +194,7 @@
+         test = test_generator_no_scad(func, args, expected)
+         setattr(TestSPUtils, test_name, test)
+ 
++create_tests()
+ 
+ if __name__ == '__main__':
+-    create_tests()
+     unittest.main()

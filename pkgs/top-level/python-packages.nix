@@ -10977,6 +10977,8 @@ self: super: with self; {
 
   solax = callPackage ../development/python-modules/solax { };
 
+  solidpython = callPackage ../development/python-modules/solidpython { };
+
   solc-select = callPackage ../development/python-modules/solc-select { };
 
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
