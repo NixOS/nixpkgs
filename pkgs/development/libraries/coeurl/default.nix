@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-sN+YSddUOdnJLcnHyWdjNm1PpxCwnkwiqSvyrwUrg6w=";
   };
 
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isAarch64 "-mno-outline-atomics";
   nativeBuildInputs = [ ninja pkg-config meson ];
 
   buildInputs = [ libevent curl spdlog ];
