@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "0.24.1";
+  version = "0.25.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8NYutkZwR8tQzsVzYsOo6HdkiZ6WbIconDjcOwgs3PM=";
+    hash = "sha256-hpX/qmRRwvCE0N5jIWl6AZkcYaVViK30nPbJwyZD+rM=";
   };
 
   nativeBuildInputs = [
