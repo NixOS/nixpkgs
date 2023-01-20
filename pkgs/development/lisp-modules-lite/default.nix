@@ -2131,11 +2131,12 @@ in
   }) {};
 
   metacopy = callPackage (self: with self; lispDerivation {
-    src = pkgs.fetchdarcs {
+    src = pkgs.fetchFromGitHub {
+      owner = "hraban";
+      repo = "metacopy";
       name = "metacopy-src";
-      url = "http://dwim.hu/live/metacopy/";
-      rev = "d823378e31206959d8d0473186b26d67536b854b";
-      sha256 = "sha256-PZF851VEfD0crmwFpOJSt5qPwStfGoWdG4O5QlFgm/c=";
+      rev = "c9b530a6b87e8fa2ad979d7f5152e956245216ed";
+      sha256 = "K7r1fY8bSc8qsqOZBsjD1qHQ57GlhsvLBo8ady81nAE=";
     };
     lispSystem = "metacopy";
     lispDependencies = [ moptilities ];
