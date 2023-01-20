@@ -996,11 +996,11 @@
     "vendorHash": "sha256-0UOC70RWcEb/YqPrrc7k+dY7jBuTZLWvUTNxuUZIyu4="
   },
   "sentry": {
-    "hash": "sha256-RJ0PtrV/0ASYnHM53J6pyP/xaerotcFSvdDQeCYp5l0=",
+    "hash": "sha256-L/aZ4/xCVZk3C6AGglzCj5T9XnoI/uiLbRASNAHwcro=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.11.1",
+    "rev": "v0.11.2",
     "spdx": "MIT",
     "vendorHash": "sha256-5XAetSjMtRffP/xExRUXfclDutEFV0VL3drusaB4rnM="
   },
