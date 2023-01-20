@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "3.0";
+  version = "3.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-wyN7dlAbQwqvES8qEJ4Zo+fDMM/Lh9tNjf215Ywop10=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-e2w0E8t6s0OWx2ROme2GdyzWhmCc6hnMfSdLTZqt3bg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'tzlocal = ">2.0, <3.0"' 'tzlocal = ">2.0, !=3.0"'
+      --replace 'rich = "^12.2.0"' 'rich = ">=12.2.0, <14.0.0"'
   '';
 
   preCheck = ''
@@ -66,6 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zalakain ];
+    maintainers = with maintainers; [ bryanasdev000 zalakain ];
   };
 }
