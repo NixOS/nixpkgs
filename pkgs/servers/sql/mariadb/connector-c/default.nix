@@ -1,12 +1,15 @@
 { lib, stdenv, fetchurl, cmake
-, curl, openssl, zlib
+, curl, openssl, zlib, zstd
 , libiconv
 , version, hash, ...
 }:
 
 with lib;
 
-stdenv.mkDerivation {
+let
+  isVer33 = versionAtLeast version "3.3";
+
+in stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
@@ -43,7 +46,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ curl openssl zlib ];
+  propagatedBuildInputs = [ curl openssl zlib ] ++ optional isVer33 zstd;
   buildInputs = [ libiconv ];
 
   postInstall = ''
