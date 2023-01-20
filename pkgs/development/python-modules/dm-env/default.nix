@@ -4,15 +4,17 @@
 , dm-tree
 , numpy
 , absl-py
-, nose }:
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "dm-env";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pDbrHGVMOeDJhqUWzuIYvqcUC1EPzv9j+X60/P89k94=";
+    hash = "sha256-pDbrHGVMOeDJhqUWzuIYvqcUC1EPzv9j+X60/P89k94=";
   };
 
   buildInputs = [
@@ -22,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
