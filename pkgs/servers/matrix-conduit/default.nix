@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitLab, stdenv, darwin, nixosTests }:
+{ lib, rustPlatform, fetchFromGitLab, stdenv, darwin, nixosTests, rocksdb_6_23 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
@@ -32,6 +32,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+
+  ROCKSDB_INCLUDE_DIR = "${rocksdb_6_23}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb_6_23}/lib";
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
