@@ -45,6 +45,9 @@ python3Packages.buildPythonApplication rec {
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace python-Levenshtein Levenshtein
+
     chmod a+w -R ..
     patchShebangs ../tools
 
