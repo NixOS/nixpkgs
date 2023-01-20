@@ -50,7 +50,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = lib.optionalString stdenv.isDarwin (
+  preConfigure = lib.optionalString stdenv.isFreeBSD ''
+    substituteInPlace configure --replace '`uname -r`' \
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+  '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -75,7 +78,7 @@ stdenv.mkDerivation rec {
     '');
 
   configureFlags =
-    lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    lib.optional stdenv.hostPlatform.isx86_64 "--enable-only64bit"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = true;

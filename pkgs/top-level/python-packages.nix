@@ -12419,6 +12419,8 @@ self: super: with self; {
 
   yarg = callPackage ../development/python-modules/yarg { };
 
+  yark = callPackage ../development/python-modules/yark { };
+
   yarl = callPackage ../development/python-modules/yarl { };
 
   yaspin = callPackage ../development/python-modules/yaspin { };
