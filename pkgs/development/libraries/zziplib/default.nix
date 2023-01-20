@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl2Plus mpl11 ];
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = python3.meta.platforms;
+    platforms = platforms.unix;
   };
 }
