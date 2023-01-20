@@ -7108,6 +7108,8 @@ self: super: with self; {
 
   pcapy-ng = callPackage ../development/python-modules/pcapy-ng { };
 
+  pcbnew-transition = callPackage ../development/python-modules/pcbnew-transition { };
+
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
   pcpp = callPackage ../development/python-modules/pcpp { };
