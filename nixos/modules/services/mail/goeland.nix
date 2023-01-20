@@ -61,16 +61,13 @@ in
     };
     users.groups.goeland = { };
 
-    warnings =
-      if hasAttr "password" cfg.settings.email
-      then [
-        ''
-          It is not recommended to set the "services.goeland.settings.email.password"
-          option as it will be in cleartext in the Nix store.
-          Please use "services.goeland.settings.email.password_file" instead.
-        ''
-      ]
-      else [ ];
+    warnings = optionals (hasAttr "password" cfg.settings.email) [
+      ''
+        It is not recommended to set the "services.goeland.settings.email.password"
+        option as it will be in cleartext in the Nix store.
+        Please use "services.goeland.settings.email.password_file" instead.
+      ''
+    ];
   };
 
   meta.maintainers = with maintainers; [ sweenu ];
