@@ -42,7 +42,7 @@
 , attr ? null
 , audit ? null
 , dmidecode ? null
-, fuse ? null
+, fuse3 ? null
 , kmod ? null
 , libapparmor ? null
 , libcap_ng ? null
@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.10.0";
+  version = "9.0.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MboJLQ0R3l9lUQDjNVACvmxISjypvfxxMHSKF0+k6WM=";
+    sha256 = "sha256-YnkgTl6C3QkvMBGm95JgWmWaP4mAECe9B0wwjOx94p8=";
     fetchSubmodules = true;
   };
 
@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
     acl
     attr
     audit
-    fuse
+    fuse3
     libapparmor
     libcap_ng
     libnl
