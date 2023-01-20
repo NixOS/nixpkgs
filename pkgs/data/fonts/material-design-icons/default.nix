@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "material-design-icons";
-  version = "7.0.96";
+  version = "7.1.96";
 
   dontBuild = true;
 
@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
     rev = "v${version}";
-    sha256 = "sha256-d4weq1V8Pk0xJxzTVaiyMhkMHvrH3SBkUzRQT3w7n0U=";
+    sha256 = "sha256-qS7zJQkd0Q5wYLgYXa63fD3Qi2T5JWD6vXW2FoFzZxo=";
     sparseCheckout = [ "fonts" ];
   };
 
