@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-       lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
-    ++ lib.optional stdenv.isSunOS libiconv
-    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  buildInputs = [ libiconv ]
+    ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   cmakeFlags =
     [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
