@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.5";
+  version = "0.27.6";
 
   outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";
-    sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
+    sha256 = "sha256-Ddy605EQhsATzmdhN3Zq+2ksYMrHEfucA+IqezYmjo4=";
   };
 
   nativeBuildInputs = [
@@ -61,9 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
-  checkTarget = "tests";
 
   preCheck = ''
     patchShebangs ../test/
