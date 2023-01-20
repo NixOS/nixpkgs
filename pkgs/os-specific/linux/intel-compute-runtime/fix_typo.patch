@@ -1,0 +1,26 @@
+diff --git a/level_zero/core/source/fabric/fabric.cpp b/level_zero/core/source/fabric/fabric.cpp
+index 8d165eecc..269b239c1 100644
+--- a/level_zero/core/source/fabric/fabric.cpp
++++ b/level_zero/core/source/fabric/fabric.cpp
+@@ -56,7 +56,7 @@ FabricVertex *FabricVertex::createFromDevice(Device *device) {
+     memcpy_s(fabricVertex->properties.uuid.id, ZE_MAX_UUID_SIZE, deviceProperties.uuid.id, ZE_MAX_DEVICE_UUID_SIZE);
+ 
+     if (deviceProperties.flags & ZE_DEVICE_PROPERTY_FLAG_SUBDEVICE) {
+-        fabricVertex->properties.type = ZE_FABRIC_VERTEX_EXP_TYPE_SUBEVICE;
++        fabricVertex->properties.type = ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICE;
+     } else {
+         fabricVertex->properties.type = ZE_FABRIC_VERTEX_EXP_TYPE_DEVICE;
+     }
+diff --git a/level_zero/core/test/unit_tests/sources/fabric/test_fabric.cpp b/level_zero/core/test/unit_tests/sources/fabric/test_fabric.cpp
+index 0d7fe2a53..a930ed1e3 100644
+--- a/level_zero/core/test/unit_tests/sources/fabric/test_fabric.cpp
++++ b/level_zero/core/test/unit_tests/sources/fabric/test_fabric.cpp
+@@ -110,7 +110,7 @@ TEST_F(FabricVertexFixture, givenFabricVerticesAreCreatedWhenzeFabricVertexGetPr
+                                const ze_pci_ext_properties_t &pciProperties) {
+         EXPECT_TRUE(0 == std::memcmp(vertexProperties.uuid.id, deviceProperties.uuid.id, sizeof(vertexProperties.uuid.id)));
+         if (deviceProperties.flags & ZE_DEVICE_PROPERTY_FLAG_SUBDEVICE) {
+-            EXPECT_EQ(vertexProperties.type, ZE_FABRIC_VERTEX_EXP_TYPE_SUBEVICE);
++            EXPECT_EQ(vertexProperties.type, ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICE);
+         } else {
+             EXPECT_EQ(vertexProperties.type, ZE_FABRIC_VERTEX_EXP_TYPE_DEVICE);
+         }

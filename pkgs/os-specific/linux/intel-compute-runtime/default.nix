@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CWiWkv3CmHhXAk2M92voeQ06ximSOnT9hgIA4rIxWmM=";
   };
 
+  patches = [ ./fix_typo.patch ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ intel-gmmlib intel-graphics-compiler libva level-zero ];
