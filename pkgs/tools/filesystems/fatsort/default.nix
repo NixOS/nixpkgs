@@ -14,12 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mm+JoGQLt4LYL/I6eAyfCuw9++RoLAqO2hV+CBBkLq0=";
   };
 
-  buildInputs = [ help2man ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ help2man libiconv ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "LD=${stdenv.cc.targetPrefix}cc"
+
+    "UNAME_O=${stdenv.hostPlatform.uname.system}"
+    "UNAME_S=${stdenv.hostPlatform.uname.system}"
   ];
 
   # make install target is broken (DESTDIR usage is insane)
