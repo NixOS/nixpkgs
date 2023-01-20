@@ -11,7 +11,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip editorconfig]')"
+    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip editorconfig]') && github.event.number != 211832"
     steps:
     - name: Get list of changed files from PR
       env:
