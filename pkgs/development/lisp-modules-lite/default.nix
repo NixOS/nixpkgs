@@ -2132,11 +2132,11 @@ in
 
   metacopy = callPackage (self: with self; lispDerivation {
     src = pkgs.fetchFromGitHub {
-      owner = "hraban";
-      repo = "metacopy";
       name = "metacopy-src";
-      rev = "c9b530a6b87e8fa2ad979d7f5152e956245216ed";
-      sha256 = "K7r1fY8bSc8qsqOZBsjD1qHQ57GlhsvLBo8ady81nAE=";
+      owner = "gwkkwg";
+      repo = "metacopy";
+      rev = "03a9cd58938b7aa6de7c9f2527614a1403cbb205";
+      sha256 = "L3I3fbQO8St9exILm5PxNXSTuDajzJ93h0wYg2M/bWY=";
     };
     lispSystem = "metacopy";
     lispDependencies = [ moptilities ];
