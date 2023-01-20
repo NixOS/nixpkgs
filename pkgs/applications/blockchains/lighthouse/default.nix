@@ -15,6 +15,7 @@
 , testers
 , unzip
 , nix-update-script
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    CoreFoundation
+    CoreFoundation SystemConfiguration
   ];
 
   depositContractSpec = fetchurl {

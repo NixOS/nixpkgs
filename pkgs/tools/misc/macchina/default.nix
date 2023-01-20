@@ -1,10 +1,9 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, libiconv
-, Foundation
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,12 +24,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-    Foundation
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.DisplayServices
   ];
 
   postInstall = ''
-    installShellCompletion target/completions/*.{bash,fish}
+    installManPage doc/macchina.{1,7}
   '';
 
   meta = with lib; {
@@ -38,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Macchina-CLI/macchina";
     changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ _414owen ];
+    maintainers = with maintainers; [ _414owen figsoda ];
   };
 }
