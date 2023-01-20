@@ -34,7 +34,8 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 
 # -----------------------------------------
 # Write the build log to the default output
-
+#
+# # from stdenv setup.sh
 getAllOutputNames() {
     if [ -n "$__structuredAttrs" ]; then
         echo "${!outputs[*]}"

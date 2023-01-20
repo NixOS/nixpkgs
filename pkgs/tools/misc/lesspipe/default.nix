@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.06";
+  version = "2.07";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    sha256 = "sha256-4hyDtr2/9lhAWuiLd7OQ/+rdg/u5f5JT4hba3wpxxzg=";
+    sha256 = "sha256-L39Prxs39Ku3jrQO/tOi2qGREFl7+W18WXTCcgoDkXU=";
   };
 
   nativeBuildInputs = [ perl makeWrapper ];

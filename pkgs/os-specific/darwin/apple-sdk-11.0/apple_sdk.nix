@@ -191,6 +191,7 @@ in rec {
   ) // (
     lib.mapAttrs privateFramework (import ./private-frameworks.nix {
       inherit frameworks;
+      libobjc = pkgs.darwin.apple_sdk_11_0.objc4;
     })
   );
 

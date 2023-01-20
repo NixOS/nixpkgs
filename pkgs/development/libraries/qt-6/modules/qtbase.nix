@@ -270,14 +270,18 @@ stdenv.mkDerivation rec {
     moveToOutput libexec "$dev"
 
     # fixup .pc file (where to find 'moc' etc.)
-    sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-      -e "/^bindir=/ c bindir=$dev/bin" \
-      -e "/^libexecdir=/ c libexecdir=$dev/libexec"
+    if [ -f "$dev/lib/pkgconfig/Qt6Core.pc" ]; then
+      sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
+        -e "/^bindir=/ c bindir=$dev/bin" \
+        -e "/^libexecdir=/ c libexecdir=$dev/libexec"
+    fi
 
     patchShebangs $out $dev
 
     # QTEST_ASSERT and other macros keeps runtime reference to qtbase.dev
-    substituteInPlace "$dev/include/QtTest/qtestassert.h" --replace "__FILE__" "__BASE_FILE__"
+    if [ -f "$dev/include/QtTest/qtestassert.h" ]; then
+      substituteInPlace "$dev/include/QtTest/qtestassert.h" --replace "__FILE__" "__BASE_FILE__"
+    fi
   '';
 
   dontStrip = debugSymbols;

@@ -1,41 +1,43 @@
-{ lib, fetchpatch
-, buildPythonPackage, fetchPypi, isPy3k
-, beautifulsoup4, lxml, cssutils, future, enum34, six
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, beautifulsoup4
+, lxml
+, cssutils
+, pytest-lazy-fixture
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "1.0.1";
+  version = "2.1.0";
+
+  disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f2hx9ky65c4niws3x5yx59yi8mqqrw9b2cghd220g4hj9yl800h";
+    hash = "sha256-mV//EYdP7wKYD3Vc49z6LQVQeOuhzNKFZLf28RYdABk=";
   };
 
-  disabled = !isPy3k;
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace 'beautifulsoup4>=4.2.1,<4.5.0' \
-                'beautifulsoup4>=4.2.1,<5'
-  '';
-
-  # don't require enum34 on python >= 3.4
-  patches = [
-    (fetchpatch {
-        url = "https://github.com/pbs/pycaption/pull/161.patch";
-        sha256 = "0p58awpsqx1qc3x9zfl1gd85h1nk7204lzn4kglsgh1bka0j237j";
-    })
+  propagatedBuildInputs = [
+    beautifulsoup4
+    lxml
+    cssutils
   ];
 
-  propagatedBuildInputs = [ beautifulsoup4 lxml cssutils future enum34 six ];
-
-  # Tests not included in pypi (?)
-  doCheck = false;
+  checkInputs = [
+    pytest-lazy-fixture
+    pytestCheckHook
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/pbs/pycaption/blob/${version}/docs/changelog.rst";
     description = "Closed caption converter";
     homepage = "https://github.com/pbs/pycaption";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

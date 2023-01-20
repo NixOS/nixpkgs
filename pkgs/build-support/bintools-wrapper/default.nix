@@ -25,6 +25,7 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
+, isGNU ? bintools.isGNU or false, isLLVM ? bintools.isLLVM or false
 , buildPackages ? {}
 , targetPackages ? {}
 , useMacosReexportHack ? false
@@ -108,7 +109,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit targetPrefix suffixSalt;
-    inherit bintools libc nativeTools nativeLibc nativePrefix;
+    inherit bintools libc nativeTools nativeLibc nativePrefix isGNU isLLVM;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too

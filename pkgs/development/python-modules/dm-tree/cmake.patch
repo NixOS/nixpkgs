@@ -1,13 +1,13 @@
 diff --git a/tree/CMakeLists.txt b/tree/CMakeLists.txt
-index 8f9946c..b9d6e9b 100644
+index 4fd1b1a..f0d072b 100644
 --- a/tree/CMakeLists.txt
 +++ b/tree/CMakeLists.txt
-@@ -50,70 +50,80 @@ if(APPLE)
+@@ -50,70 +50,79 @@ if(APPLE)
    set (CMAKE_FIND_FRAMEWORK LAST)
  endif()
  
 -# Fetch pybind to be able to use pybind11_add_module symbol.
--set(PYBIND_VER v2.6.2)
+-set(PYBIND_VER v2.10.1)
 -include(FetchContent)
 -FetchContent_Declare(
 -  pybind11
@@ -42,7 +42,7 @@ index 8f9946c..b9d6e9b 100644
 +
 +if (NOT pybind11_FOUND)
 +  # Fetch pybind to be able to use pybind11_add_module symbol.
-+  set(PYBIND_VER v2.6.2)
++  set(PYBIND_VER v2.10.1)
 +  include(FetchContent)
 +  FetchContent_Declare(
 +    pybind11
@@ -69,10 +69,7 @@ index 8f9946c..b9d6e9b 100644
  # Define pybind11 tree module.
  pybind11_add_module(_tree tree.h tree.cc)
 -add_dependencies(_tree abseil-cpp)
- 
--if (WIN32 OR MSVC)
--    set(ABSEIL_LIB_PREF "absl")
--    set(LIB_SUFF "lib")
+-
 +find_package(absl)
 +
 +if (NOT absl_FOUND)
@@ -115,6 +112,9 @@ index 8f9946c..b9d6e9b 100644
 +      set(LIB_SUFF "a")
 +  endif()
 +
+-if (WIN32 OR MSVC)
+-    set(ABSEIL_LIB_PREF "absl")
+-    set(LIB_SUFF "lib")
 +  # Link abseil static libs.
 +  # We don't use find_library here to force cmake to build abseil before linking.
 +  set(ABSEIL_LIBS int128 raw_hash_set raw_logging_internal strings throw_delegate)

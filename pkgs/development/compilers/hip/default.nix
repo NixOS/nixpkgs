@@ -49,7 +49,7 @@ let
   ];
 in stdenv.mkDerivation (finalAttrs: {
   pname = "hip-${hipPlatform}";
-  version = "5.4.1";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -61,7 +61,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-VL0vZVv099pZPX0J2pXPFvrhkVO/b6X+ZZDaD9B1hYI=";
+    hash = "sha256-FcuylhkG7HqLYXH1J6ND6IVEIbDzHp7h7jg2ZZ4XoFM=";
   };
 
   patches = [
@@ -160,10 +160,26 @@ in stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/hipconfig.pl ${lib.concatStringsSep " " wrapperArgs}
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+  passthru = {
+    # All known and valid general GPU targets
+    # We cannot use this for each ROCm library, as each defines their own supported targets
+    # See: https://github.com/RadeonOpenCompute/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
+    gpuTargets = lib.forEach [
+      "803"
+      "900"
+      "906"
+      "908"
+      "90a"
+      "1010"
+      "1012"
+      "1030"
+    ] (target: "gfx${target}");
+
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      owner = finalAttrs.src.owner;
+      repo = finalAttrs.src.repo;
+    };
   };
 
   meta = with lib; {
@@ -173,6 +189,9 @@ in stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
     # Tests require GPU, also include issues
-    broken = finalAttrs.version != hip-common.version || finalAttrs.version != hipcc.version || buildTests;
+    broken =
+      versions.minor finalAttrs.version != versions.minor hip-common.version ||
+      versions.minor finalAttrs.version != versions.minor hipcc.version ||
+      buildTests;
   };
 })

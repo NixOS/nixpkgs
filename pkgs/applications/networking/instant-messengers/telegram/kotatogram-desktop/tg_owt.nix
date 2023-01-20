@@ -56,11 +56,6 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [
-    # let it build with nixpkgs 10.12 sdk
-    ./tg_owt-10.12-sdk.patch
-  ];
-
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
       --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
@@ -114,9 +109,6 @@ stdenv.mkDerivation {
     CoreFoundation
     ApplicationServices
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/130963
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lc++abi";
 
   enableParallelBuilding = true;
 
