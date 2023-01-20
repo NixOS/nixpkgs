@@ -101,7 +101,7 @@ in
       # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
       machine.succeed(
           """
-        find /boot -iname '*.efi' -print0 | \
+        find /boot -iname '*boot*.efi' -print0 | \
         xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
       """
       )
