@@ -2578,6 +2578,8 @@ self: super: with self; {
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
+  django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
+
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
