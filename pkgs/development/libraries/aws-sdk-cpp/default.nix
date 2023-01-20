@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
     rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # TestRandomURLMultiThreaded fails
     rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
   '' + lib.optionalString stdenv.isi686 ''

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchPypi
 , buildPythonPackage
 , rustPlatform
 , llvmPackages
@@ -8,35 +8,30 @@
 , pcsclite
 , nettle
 , httpx
-, numpy
 , pytestCheckHook
 , pythonOlder
+, vcrpy
 , PCSC
 , libiconv
 }:
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.11.0";
-  disabled = pythonOlder "3.7";
+  version = "0.12.0";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "kushaldas";
-    repo = "johnnycanencrypt";
-    rev = "v${version}";
-    hash = "sha256-YhuYejxuKZEv1xQ1fQcXSkt9I80iJOJ6MecG622JJJo=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-aGhM/uyYE7l0h6L00qp+HRUVaj7s/tnHWIHJpLAkmR4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit patches src;
+    inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-r2NU1e3yeZDLOBy9pndGYM3JoH6BBKQkXMLsJR6PTRs=";
+    hash = "sha256-fcwDxkUFtA6LS77xdLktNnZJXmyl/ZzArvIW69SPpmI=";
   };
 
   format = "pyproject";
-
-  # https://github.com/kushaldas/johnnycanencrypt/issues/125
-  patches = [ ./Cargo.lock.patch ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
@@ -61,31 +56,23 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
-  doCheck = false;
-  doInstallCheck = true;
-
-  installCheckInputs = [
+  checkInputs = [
     pytestCheckHook
-    numpy
+    vcrpy
   ];
 
   preCheck = ''
-    export TESTDIR=$(mktemp -d)
-    cp -r tests/ $TESTDIR
-    pushd $TESTDIR
-  '';
-
-  postCheck = ''
-    popd
+    # import from $out
+    rm -r johnnycanencrypt
   '';
 
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
   meta = with lib; {
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
+    changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
     description = "Python module for OpenPGP written in Rust";
-    license = licenses.gpl3Plus;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }

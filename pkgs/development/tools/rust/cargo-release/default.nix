@@ -1,11 +1,12 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, Security
-, curl
-, openssl
 , pkg-config
+, openssl
+, stdenv
+, curl
+, darwin
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,15 +29,19 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    Security
     curl
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  checkInputs = [
+    git
   ];
 
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
-    homepage = "https://github.com/sunng87/cargo-release";
+    homepage = "https://github.com/crate-ci/cargo-release";
     changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [ figsoda gerschtli ];
   };
 }

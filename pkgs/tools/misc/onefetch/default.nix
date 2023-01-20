@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , installShellFiles
 , pkg-config
@@ -28,6 +29,14 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [
     # enable pkg-config feature of zstd
     ./zstd-pkg-config.patch
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "use-iso-time-for-snapshot-tests";
+      url = "https://github.com/o2sh/onefetch/commit/b8b0320d2d271bb10053403092833a26e57134d1.patch";
+      hash = "sha256-LnC+UCvSwMePC4jBjrTKnbyypNvHHNevB2v4y+hv8Pc=";
+    })
   ];
 
   nativeBuildInputs = [ cmake installShellFiles pkg-config ];
