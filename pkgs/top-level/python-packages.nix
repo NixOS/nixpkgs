@@ -8555,6 +8555,8 @@ self: super: with self; {
 
   pyment = callPackage ../development/python-modules/pyment { };
 
+  pymeta3 = callPackage ../development/python-modules/pymeta3 { };
+
   pymetar = callPackage ../development/python-modules/pymetar { };
 
   pymeteireann = callPackage ../development/python-modules/pymeteireann { };
