@@ -2,16 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    sha256 = "sha256-QTXDIvGz12ZxsWmPiMiJ8mBUWoJ2wnaeTZdXcwBh35o=";
+    sha256 = "sha256-GSCpmn6XRbmnfH31R9c6QW3/pez9KHPjI99dR+ln0P4=";
   };
 
-  cargoSha256 = "sha256-vE44I8lQ5VAfZB4WKLRv/xudoZJaFJGTT/UuumTePBU=";
+  # https://github.com/rust-lang/cargo/issues/11192
+  # https://github.com/ruma/ruma/issues/1441
+  postPatch = ''
+    pushd $cargoDepsCopy
+    sed -i ruma*/Cargo.toml \
+      -e 's/serde = { workspace = true/serde = { features = [ "derive" ], version = "*"/g' \
+      -e 's/tracing = { workspace = true.*/tracing = { version = "*" }/g' \
+      -e 's/workspace = true/version = "*"/g'
+    for p in ruma*; do echo '{"files":{},"package":null}' > $p/.cargo-checksum.json; done
+    popd
+  '';
+
+  cargoSha256 = "sha256-WFoupcuaG7f7KYBn/uzbOzlHHLurOyvm5e1lEcinxC8=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
