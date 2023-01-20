@@ -7947,6 +7947,8 @@ self: super: with self; {
 
   pybalboa = callPackage ../development/python-modules/pybalboa { };
 
+  pybars3 = callPackage ../development/python-modules/pybars3 { };
+
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
   pybids = callPackage ../development/python-modules/pybids { };
