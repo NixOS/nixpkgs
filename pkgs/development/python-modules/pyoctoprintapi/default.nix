@@ -12,7 +12,7 @@
 
 let
   pname = "pyoctoprintapi";
-  version = "0.1.10";
+  version = "0.1.11";
 in
 buildPythonPackage {
   inherit pname version;
@@ -22,7 +22,7 @@ buildPythonPackage {
     owner = "rfleming71";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-aXT8BY7D7Tx3UG7Brfpk8yQv1opXQUsgJteNkBwHeYY=";
+    hash = "sha256-MlFL8yUCkiMnxPbMGr4jwCs0kYwRM+VGBRQUcQ5Hd6A=";
   };
 
   propagatedBuildInputs = [
