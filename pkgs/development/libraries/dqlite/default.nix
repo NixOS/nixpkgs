@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://dqlite.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joko ];
+    maintainers = with maintainers; [ joko adamcstephens ];
     platforms = platforms.linux;
   };
 }
