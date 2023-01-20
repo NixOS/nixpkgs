@@ -2860,6 +2860,8 @@ with pkgs;
 
   inherit (nodePackages) bitwarden-cli;
 
+  bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
+
   inherit (nodePackages) concurrently;
 
   bklk = callPackage ../applications/misc/bklk { };
