@@ -5289,6 +5289,8 @@ with pkgs;
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
+  rmate-sh = callPackage ../tools/misc/rmate-sh { };
+
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
 
   rm-improved = callPackage ../applications/misc/rm-improved { };
