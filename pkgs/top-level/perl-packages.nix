@@ -12507,11 +12507,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.54";
+    version = "12.55";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-KnT6le0CfqS8yP/qpx4HgVsJmp38oPQIc36tNUzpfc8=";
+      hash = "sha256-CFgb16GnYPIKG0PLbTiSfm7FRdWZBtroXH32c5Ru6gg=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
