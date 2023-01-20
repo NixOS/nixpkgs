@@ -287,7 +287,7 @@ let
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
-  buildPkgDb = ghcName: packageConfDir: ''
+  buildPkgDb = thisGhc: packageConfDir: ''
     # If this dependency has a package database, then copy the contents of it,
     # unless it is one of our GHCs. These can appear in our dependencies when
     # we are doing native builds, and they have package databases in them, but
@@ -297,8 +297,8 @@ let
     # we compile with it, and doing so can result in having multiple copies of
     # e.g. Cabal in the database with the same name and version, which is
     # ambiguous.
-    if [ -d "$p/lib/${ghcName}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
+    if [ -d "$p/lib/${thisGhc.haskellCompilerName}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
+      cp -f "$p/lib/${thisGhc.haskellCompilerName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
   '';
@@ -363,14 +363,14 @@ stdenv.mkDerivation ({
   # pkgs* arrays defined in stdenv/setup.hs
   + ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb "${nativeGhcCommand}-${nativeGhc.version}" "$setupPackageConfDir"}
+      ${buildPkgDb nativeGhc "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
   ''
   # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghcNameWithPrefix "$packageConfDir"}
+      ${buildPkgDb ghc "$packageConfDir"}
       if [ -d "$p/include" ]; then
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
