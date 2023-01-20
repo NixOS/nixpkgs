@@ -14538,7 +14538,7 @@ with pkgs;
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
-  gccgo = wrapCC ((if stdenv.hostPlatform.isMusl then gcc_latest else gcc).cc.override {
+  gccgo = wrapCC (gcc.cc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
