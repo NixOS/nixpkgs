@@ -3996,6 +3996,11 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  emiller88 = {
+    github = "Emiller88";
+    githubid = 20095261;
+    name = "Emiller88";
+  };
   emmabastas = {
     email = "emma.bastas@protonmail.com";
     matrix = "@emmabastas:matrix.org";
@@ -5754,6 +5759,12 @@
     github = "illiusdope";
     githubId = 61913481;
     name = "Mat Marini";
+  };
+  illustratedman-code = {
+    email = "illustratedman.code@gmail.com";
+    github = "IllustratedMan-code";
+    githubId = 60514384;
+    name = "David Lewis";
   };
   illustris = {
     email = "me@illustris.tech";
