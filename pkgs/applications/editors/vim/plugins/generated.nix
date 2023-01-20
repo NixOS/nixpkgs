@@ -2683,6 +2683,18 @@ final: prev:
     meta.homepage = "https://github.com/sindrets/diffview.nvim/";
   };
 
+  dirbuf-nvim = buildVimPluginFrom2Nix {
+    pname = "dirbuf.nvim";
+    version = "2022-08-28";
+    src = fetchFromGitHub {
+      owner = "elihunter173";
+      repo = "dirbuf.nvim";
+      rev = "ac7ad3c8e61630d15af1f6266441984f54f54fd2";
+      sha256 = "09sbkgidj2fl7aj7kwzg37s5nynslbli9p3vwsh1yqxlag4lv6nz";
+    };
+    meta.homepage = "https://github.com/elihunter173/dirbuf.nvim/";
+  };
+
   direnv-vim = buildVimPluginFrom2Nix {
     pname = "direnv.vim";
     version = "2022-04-09";
