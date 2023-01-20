@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , cmake
 , asciidoc
@@ -26,12 +25,13 @@
 , qttools
 , re2
 , spdlog
+, wrapQtAppsHook
 , voipSupport ? true
 , gst_all_1
 , libnice
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nheko";
   version = "0.11.1";
 
@@ -47,6 +47,7 @@ mkDerivation rec {
     cmake
     lmdbxx
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

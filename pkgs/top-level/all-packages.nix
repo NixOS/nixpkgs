@@ -19074,7 +19074,10 @@ with pkgs;
 
   codecserver = callPackage ../applications/audio/codecserver { };
 
-  coeurl = callPackage ../development/libraries/coeurl { };
+  coeurl = callPackage ../development/libraries/coeurl {
+    stdenv = gcc11Stdenv;
+  };
+
 
   coercer = callPackage ../tools/security/coercer { };
 
@@ -22017,7 +22020,9 @@ with pkgs;
 
   mtpfs = callPackage ../tools/filesystems/mtpfs { };
 
-  mtxclient = callPackage ../development/libraries/mtxclient { };
+  mtxclient = callPackage ../development/libraries/mtxclient {
+    stdenv = gcc11Stdenv;
+  };
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;
@@ -31535,7 +31540,9 @@ with pkgs;
 
   ngt = callPackage ../development/libraries/ngt { };
 
-  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
+  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko {
+    stdenv = gcc11Stdenv;
+  };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
