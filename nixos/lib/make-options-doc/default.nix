@@ -94,15 +94,19 @@ let
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
+    nativeBuildInputs = [ pkgs.python3Minimal ];
+  } ''
+    python ${./generateDoc.py} \
       --format asciidoc \
       ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
-  optionsCommonMark = pkgs.runCommand "options.md" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
+  optionsCommonMark = pkgs.runCommand "options.md" {
+    nativeBuildInputs = [ pkgs.python3Minimal ];
+  } ''
+    python ${./generateDoc.py} \
       --format commonmark \
       ${optionsJSON}/share/doc/nixos/options.json \
       > $out
@@ -156,16 +160,20 @@ in rec {
   # Convert options.json into an XML file.
   # The actual generation of the xml file is done in nix purely for the convenience
   # of not having to generate the xml some other way
-  optionsXML = pkgs.runCommand "options.xml" {} ''
+  optionsXML = pkgs.runCommand "options.xml" {
+    nativeBuildInputs = [ pkgs.nix.out ];
+  } ''
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
-    ${pkgs.nix}/bin/nix-instantiate \
+    nix-instantiate \
       --eval --xml --strict ${./optionsJSONtoXML.nix} \
       --argstr file ${optionsJSON}/share/doc/nixos/options.json \
       > "$out"
   '';
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" {
+    nativeBuildInputs = [ pkgs.libxslt.bin pkgs.libxslt.bin pkgs.python3Minimal ];
+  } ''
     optionsXML=${optionsXML}
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
@@ -175,14 +183,14 @@ in rec {
       exit 1
     fi
 
-    ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
-    ${pkgs.libxslt.bin}/bin/xsltproc \
+    python ${./sortXML.py} $optionsXML sorted.xml
+    xsltproc \
       --stringparam documentType '${documentType}' \
       --stringparam revision '${revision}' \
       --stringparam variablelistId '${variablelistId}' \
       --stringparam optionIdPrefix '${optionIdPrefix}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
-    ${pkgs.libxslt.bin}/bin/xsltproc \
+    xsltproc \
       -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
   '';
 }

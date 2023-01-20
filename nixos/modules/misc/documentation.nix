@@ -77,10 +77,11 @@ let
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filter (pkgs.path + "/nixos");
           modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
+          nativeBuildInputs = [ pkgs.nix.out ];
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
-          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
+          nix-instantiate \
             --show-trace \
             --eval --json --strict \
             --argstr libPath "$libPath" \
