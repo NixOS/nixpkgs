@@ -4719,7 +4719,6 @@ broken-packages:
   - SFML
   - sfml-audio
   - sfmt
-  - sfnt2woff
   - SG
   - sgd
   - SGplus
