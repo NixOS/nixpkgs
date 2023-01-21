@@ -1,17 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , cython
 , fastrlock
 , numpy
-, six
 , wheel
 , pytestCheckHook
 , mock
 , setuptools
 , cudaPackages
 , addOpenGLRunpath
+, pythonOlder
 }:
 
 let
@@ -19,7 +18,8 @@ let
 in buildPythonPackage rec {
   pname = "cupy";
   version = "11.5.0";
-  disabled = !isPy3k;
+ 
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -51,7 +51,6 @@ in buildPythonPackage rec {
     nccl
     fastrlock
     numpy
-    six
     setuptools
     wheel
   ];
