@@ -5,7 +5,13 @@
 , libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
 , doxygen, python3, pciutils
 , withExamples ? []
-, shared ? false }:
+, shared ? false
+, machine ? (
+    if stdenv.isx86_64 then "nehalem"
+    else if stdenv.isAarch64 then "generic"
+    else null
+  )
+}:
 
 let
   mod = kernel != null;
@@ -63,8 +69,7 @@ in stdenv.mkDerivation rec {
   # kni kernel driver is currently not compatble with 5.11
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
   ++ lib.optional (!shared) "-Ddefault_library=static"
-  ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
-  ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
+  ++ lib.optional (machine != null) "-Dmachine=${machine}"
   ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
