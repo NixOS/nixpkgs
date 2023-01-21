@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/traxys/tree-sitter-lalrpop",
+  "rev": "7744b56f03ac1e5643fad23c9dd90837fe97291e",
+  "date": "2022-02-14T10:03:17+01:00",
+  "path": "/nix/store/dh7ja188ab6hgrb0zmij5l57gl1vd9zj-tree-sitter-lalrpop",
+  "sha256": "1mgfcr03fjcg82dpzjkpm54a7im4llv15jbapg3r2vmzakb86gy7",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

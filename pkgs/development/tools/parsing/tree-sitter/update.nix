@@ -358,6 +358,10 @@ let
       orga = "sourcegraph";
       repo = "tree-sitter-jsonnet";
     };
+    "tree-sitter-lalrpop" = {
+      orga = "traxys";
+      repo = "tree-sitter-lalrpop";
+    };
   };
 
   allGrammars =
