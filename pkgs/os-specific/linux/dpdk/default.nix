@@ -9,14 +9,14 @@
 
 let
   mod = kernel != null;
-  dpdkVersion = "22.07";
+  dpdkVersion = "22.11.1";
 in stdenv.mkDerivation rec {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
-    sha256 = "sha256-n2Tf3gdf21cIy2Leg4uP+4kVdf7R4dKusma6yj38m+o=";
+    sha256 = "sha256-3gdkZfcXSg1ScUuQcuSDenJrqsgtj+fcZEytXIz3TUw=";
   };
 
   nativeBuildInputs = [
