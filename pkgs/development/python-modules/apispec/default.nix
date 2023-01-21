@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , marshmallow
 , mock
 , openapi-spec-validator
@@ -17,9 +17,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-522Atznt70viEwkqY4Stf9kzun1k9tWgr/jU2hvveIc=";
+  src = fetchFromGitHub {
+    owner = "marshmallow-code";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-mFbWvJbg7LRC6Z8z4B2XVe/hg1K5i1a8VjKsPd93DJ8=";
   };
 
   propagatedBuildInputs = [
@@ -38,9 +40,17 @@ buildPythonPackage rec {
     "apispec"
   ];
 
+  disabledTestPaths = [
+    # https://github.com/marshmallow-code/apispec/pull/805
+    "tests/test_ext_marshmallow_field.py"
+    "tests/test_ext_marshmallow.py"
+    "tests/test_ext_marshmallow_openapi.py"
+  ];
+
   meta = with lib; {
     description = "A pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
+    changelog = "https://github.com/marshmallow-code/apispec/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
   };
