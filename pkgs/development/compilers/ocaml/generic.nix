@@ -101,7 +101,7 @@ stdenv.mkDerivation (args // {
   preConfigure = optionalString (lib.versionOlder version "4.04") ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
-  '' + optionalString (stdenv.isDarwin && lib.versionOlder version "4.13") ''
+  '' + optionalString (stdenv.isDarwin) ''
     # Do what upstream does by default now: https://github.com/ocaml/ocaml/pull/10176
     # This is required for aarch64-darwin, everything else works as is.
     AS="${stdenv.cc}/bin/cc -c" ASPP="${stdenv.cc}/bin/cc -c"
