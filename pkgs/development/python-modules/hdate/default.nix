@@ -11,9 +11,9 @@
 buildPythonPackage rec {
   pname = "hdate";
   version = "0.10.4";
-  disabled = pythonOlder "3.6";
-
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
@@ -21,6 +21,12 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pytz = ">= 2020.0"' 'pytz = "*"' \
+      --replace 'astral = {version = "^2.2", python = "^3.6"}' 'astral = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -34,10 +40,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "^2020.5" ">=2020.5"
-  '';
 
   pytestFlagsArray = [
     "tests"
