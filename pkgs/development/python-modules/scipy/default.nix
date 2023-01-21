@@ -67,6 +67,8 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
+
   passthru = {
     blas = numpy.blas;
   };
