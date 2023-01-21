@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stephrdev";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-gbEO3HBDeZ+nUACzpeV6iVuCdNHS5956wFzIYkbam+M=";
   };
 
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plugin to perform isort checks (import ordering)";
     homepage = "https://github.com/moccu/pytest-isort/";
+    changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
