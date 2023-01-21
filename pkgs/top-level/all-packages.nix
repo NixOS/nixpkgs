@@ -27684,6 +27684,8 @@ with pkgs;
 
   snap7 = callPackage ../development/libraries/snap7 {};
 
+  sniglet = callPackage ../data/fonts/sniglet { };
+
   snowblind = callPackage ../data/themes/snowblind { };
 
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
