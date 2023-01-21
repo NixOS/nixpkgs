@@ -20,8 +20,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-    bob = nodes.machine.config.users.users.bob;
+    user = nodes.machine.users.users.alice;
+    bob = nodes.machine.users.users.bob;
   in ''
     machine.wait_for_unit("display-manager.service")
 
