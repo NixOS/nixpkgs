@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage
-, fetchPypi, isPy3k, cython
-, fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, cython
+, fastrlock
+, numpy
+, six
+, wheel
+, pytestCheckHook
+, mock
+, setuptools
 , cudaPackages
 , addOpenGLRunpath
 }:
@@ -14,7 +23,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S8hWW97SLMibIQ/Z+0il1TFvMHAeErsjhSpgMU4fn24=";
+    hash = "sha256-S8hWW97SLMibIQ/Z+0il1TFvMHAeErsjhSpgMU4fn24=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
@@ -67,6 +76,7 @@ in buildPythonPackage rec {
   meta = with lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
+    changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];
