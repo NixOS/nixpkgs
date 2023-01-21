@@ -90,8 +90,9 @@ let
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {
