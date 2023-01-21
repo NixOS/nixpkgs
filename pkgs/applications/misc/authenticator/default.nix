@@ -69,6 +69,11 @@ stdenv.mkDerivation rec {
     zbar
   ];
 
+  # https://gitlab.gnome.org/World/Authenticator/-/issues/362
+  preBuild = ''
+    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS -DPW_ENABLE_DEPRECATED"
+  '';
+
   meta = {
     description = "Two-factor authentication code generator for GNOME";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
