@@ -1,8 +1,10 @@
 { lib
 , appdirs
+, beautifulsoup4
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, frozendict
 , multitasking
 , numpy
 , pandas
@@ -27,7 +29,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     appdirs
+    beautifulsoup4
     cryptography
+    frozendict
     multitasking
     numpy
     pandas
