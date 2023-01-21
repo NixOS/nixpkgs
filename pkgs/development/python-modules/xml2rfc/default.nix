@@ -1,27 +1,27 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, intervaltree
-, pyflakes
-, requests
-, lxml
-, google-i18n-address
-, pycountry
-, html5lib
-, six
-, kitchen
-, pypdf2
-, dict2xml
-, weasyprint
-, pyyaml
-, jinja2
-, configargparse
 , appdirs
+, buildPythonPackage
+, configargparse
 , decorator
+, dict2xml
+, fetchFromGitHub
+, google-i18n-address
+, html5lib
+, intervaltree
+, jinja2
+, lxml
+, markupsafe
 , pycairo
+, pycountry
+, pyflakes
+, pypdf2
 , pytestCheckHook
 , python-fontconfig
+, pythonOlder
+, pyyaml
+, requests
+, six
+, wcwidth
 }:
 
 buildPythonPackage rec {
@@ -47,22 +47,22 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    appdirs
+    configargparse
+    dict2xml
+    google-i18n-address
+    html5lib
     intervaltree
     jinja2
+    lxml
+    markupsafe
+    pycountry
     pyflakes
+    pypdf2
     pyyaml
     requests
-    lxml
-    google-i18n-address
-    pycountry
-    html5lib
     six
-    kitchen
-    pypdf2
-    dict2xml
-    weasyprint
-    configargparse
-    appdirs
+    wcwidth
   ];
 
   checkInputs = [
