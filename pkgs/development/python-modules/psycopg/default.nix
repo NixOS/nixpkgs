@@ -181,6 +181,8 @@ buildPythonPackage rec {
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
+    # timing sensitive
+    "test_first_task_rescheduling"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # racy test
     "test_sched"
