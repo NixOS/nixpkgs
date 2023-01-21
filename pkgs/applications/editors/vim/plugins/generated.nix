@@ -8308,6 +8308,18 @@ final: prev:
     meta.homepage = "https://github.com/jacoborus/tender.vim/";
   };
 
+  term-edit-nvim = buildVimPluginFrom2Nix {
+    pname = "term-edit.nvim";
+    version = "2023-01-20";
+    src = fetchFromGitHub {
+      owner = "chomosuke";
+      repo = "term-edit.nvim";
+      rev = "28a095d6c9691039a5680b644676bbc80c6bcc35";
+      sha256 = "1qlq09wxmiqqkz23id2679lj7x3rnjlyzqd67vfcp06gahnb0wky";
+    };
+    meta.homepage = "https://github.com/chomosuke/term-edit.nvim/";
+  };
+
   terminus = buildVimPluginFrom2Nix {
     pname = "terminus";
     version = "2021-12-28";
