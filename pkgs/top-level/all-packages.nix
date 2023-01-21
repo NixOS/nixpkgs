@@ -20727,7 +20727,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  libdevil-nox = libdevil.override {
+  libdevil-nox = callPackage ../development/libraries/libdevil {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     withXorg = false;
   };
