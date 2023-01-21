@@ -5,7 +5,12 @@ let
     if stdenv.hostPlatform != stdenv.targetPlatform
     then "${stdenv.targetPlatform.config}-"
     else "";
-in runCommand "llvm-binutils-${version}" { preferLocalBuild = true; } ''
+in runCommand "llvm-binutils-${version}" {
+  preferLocalBuild = true;
+  passthru = {
+    isLLVM = true;
+  };
+} ''
    mkdir -p $out/bin
    for prog in ${lld}/bin/*; do
      ln -s $prog $out/bin/${prefix}$(basename $prog)

@@ -16,7 +16,7 @@ permissions:
 jobs:
   labels:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'NixOS'
+    if: github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
     - uses: actions/labeler@v4
       with:

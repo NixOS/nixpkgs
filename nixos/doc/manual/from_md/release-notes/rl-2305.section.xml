@@ -272,6 +272,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>teleport</literal> has been upgraded to major version
+          11. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/setup/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/changelog/#1100">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and activated
           swap-formatted instance store devices and partitions in
           stage-1 (initramfs). This behaviour has been removed. Users

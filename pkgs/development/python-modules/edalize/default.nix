@@ -6,7 +6,6 @@
 , pandas
 , pytestCheckHook
 , which
-, verilog
 , yosys
 }:
 
@@ -34,12 +33,13 @@ buildPythonPackage rec {
     pandas
     which
     yosys
-    verilog
   ];
 
   pythonImportsCheck = [ "edalize" ];
 
   disabledTestPaths = [
+    "tests/test_questa_formal.py"
+    "tests/test_slang.py"
     "tests/test_apicula.py"
     "tests/test_ascentlint.py"
     "tests/test_diamond.py"

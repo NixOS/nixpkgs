@@ -1,34 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
-, nose
+, pythonOlder
+, pytestCheckHook
 , nibabel
 , pydicom
+, pylibjpeg-libjpeg
 }:
 
 buildPythonPackage rec {
   pname = "dcmstack";
-  version = "0.8";
-
-  disabled = pythonAtLeast "3.8";
-  # https://github.com/moloney/dcmstack/issues/67
+  version = "0.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "moloney";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1n24pp3rqz7ss1z6276fxynnppraxadbl3b9p8ijrcqnpzbzih7p";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GVzih9H2m2ZGSuZMRuaDG78b95PI3j0WQw5M3l4KNCs=";
   };
 
-  propagatedBuildInputs = [ nibabel pydicom ];
+  propagatedBuildInputs = [
+    nibabel
+    pydicom
+    pylibjpeg-libjpeg
+  ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/moloney/dcmstack";
