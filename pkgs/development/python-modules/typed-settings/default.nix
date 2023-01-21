@@ -15,6 +15,7 @@ buildPythonPackage rec {
   pname = "typed-settings";
   version = "2.0.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -43,11 +44,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "typed_settings" ];
+  pythonImportsCheck = [
+    "typed_settings"
+  ];
 
   meta = {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
+    changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];
   };
