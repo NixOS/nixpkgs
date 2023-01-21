@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sphinx beautifulsoup4 ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   pythonImportsCheck = [ "sphinx_codeautolink" ];
 
