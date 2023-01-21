@@ -125,6 +125,19 @@ let
         url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b46d8a8c921a8da6883610ad4b68da95bf59b59e.diff";
         hash = "sha256-2VHBwXbzUAGP/fG4xxoFLHSb9oXQK1BPuNv3zAV8cEg=";
       })
+
+      # FIXME: backports, remove after 0.3.64
+      # fix bluetooth issues
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/c7b3ef0d9ff16a1e69a299870860bebcb628e298.patch";
+        hash = "sha256-hiZ6VUhMu8NgwX5DZ/JRVl/g1Go0nZQSjQVrmqIzXoY=";
+      })
+
+      # fix routes getting lost
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/89ac6b353521fb9a6d6eb6bb74724c4fa968f75c.patch";
+        hash = "sha256-vzHiKWGmyuUF2iDS/ZQws+bCXVYYEl048JaMckY/fGI=";
+      })
     ];
 
     nativeBuildInputs = [

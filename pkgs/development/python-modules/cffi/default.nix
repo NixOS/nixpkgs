@@ -54,6 +54,12 @@ if isPyPy then null else buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # AssertionError: cannot seem to get an int[10] not completely cleared
+    # https://foss.heptapod.net/pypy/cffi/-/issues/556
+    "test_ffi_new_allocator_1"
+  ];
+
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar lnl7 ];
     homepage = "https://cffi.readthedocs.org/";

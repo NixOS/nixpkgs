@@ -11,7 +11,7 @@
 let
   version = {
     feature = "17";
-    interim = ".0.4";
+    interim = ".0.5";
     build = "8";
   };
 
@@ -23,7 +23,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "drbljLz82ZyK29lIDLPqCkwqpBdgU/7zCTZ0ceeb1SI=";
+      sha256 = "sha256-2k1Mm36ds6MZheZVsLvXkoqQG4zYeIRWzbP1aZ72Vqs=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
@@ -55,8 +55,8 @@ let
       # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
       # This is applied anywhere to prevent patchrot.
       (fetchurl {
-        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=6f97cb0ae4dff6588dae5868c2522aea96c99d2c";
-        sha256 = "sha256-giOmMInwLH0Ei9H7ETsrrzQU09I6+dn8KpPrKb7zn8I=";
+        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
+        sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
