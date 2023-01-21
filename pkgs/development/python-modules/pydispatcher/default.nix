@@ -19,7 +19,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://pydispatcher.sourceforge.net/";
+    homepage = "https://pydispatcher.sourceforge.net/";
     description = "Signal-registration and routing infrastructure for use in multiple contexts";
     license = licenses.bsd3;
   };

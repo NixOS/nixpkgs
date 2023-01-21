@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-level FTP client library (virtual file system and more)";
-    homepage = "http://ftputil.sschwarzer.net/";
+    homepage = "https://ftputil.sschwarzer.net/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
   };

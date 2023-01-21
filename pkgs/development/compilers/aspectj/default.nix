@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [jre];
 
   meta = {
-    homepage = "http://www.eclipse.org/aspectj/";
+    homepage = "https://www.eclipse.org/aspectj/";
     description = "A seamless aspect-oriented extension to the Java programming language";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.unix;

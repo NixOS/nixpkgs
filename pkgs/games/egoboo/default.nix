@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "3D dungeon crawling adventure";
 
-    homepage = "http://egoboo.sourceforge.net/";
+    homepage = "https://egoboo.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
 
     # I take it out of hydra as it does not work as well as I'd like
