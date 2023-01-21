@@ -406,7 +406,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-DWIhxvxt8f4h6MDd35mz7BJff+fu7HItW3WPDIEpCR3RzcOWyiHBbLQW5/DOgmf+pRLTjwXQob7kuTZVYUAw5w==";
+      sha512 = "sha512-bS96oZ5oDFXYgoF2l7PJ3Mp1wWWfLOo8B/jAfbA2Pn0Wm5Z/owBHzaMQKS3i1CzVBDWWPVnOohmbJmjvkcHS5w==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
