@@ -7,6 +7,8 @@ let
 in
 {
 
+  meta.maintainers = [ lib.maintainers.julienmalka ];
+
   options = {
     services.uptime-kuma = {
       enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set.");
