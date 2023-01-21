@@ -31413,6 +31413,8 @@ with pkgs;
 
   speedread = callPackage ../applications/misc/speedread { };
 
+  splatmoji = callPackage ../applications/misc/splatmoji { };
+
   station = callPackage ../applications/networking/station { };
 
   stochas = callPackage ../applications/audio/stochas { };
