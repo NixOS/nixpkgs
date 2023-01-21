@@ -3049,6 +3049,8 @@ self: super: with self; {
 
   ephemeral-port-reserve = callPackage ../development/python-modules/ephemeral-port-reserve { };
 
+  epitran = callPackage ../development/python-modules/epitran { };
+
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
   eradicate = callPackage ../development/python-modules/eradicate { };
@@ -6788,6 +6790,8 @@ self: super: with self; {
 
   panflute = callPackage ../development/python-modules/panflute { };
 
+  panphon = callPackage ../development/python-modules/panphon { };
+
   papermill = callPackage ../development/python-modules/papermill { };
 
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
@@ -6991,6 +6995,8 @@ self: super: with self; {
   phik = callPackage ../development/python-modules/phik { };
 
   phone-modem = callPackage ../development/python-modules/phone-modem { };
+
+  phonemes2ids = callPackage ../development/python-modules/phonemes2ids { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
@@ -9717,6 +9723,10 @@ self: super: with self; {
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
+  quart = callPackage ../development/python-modules/quart { };
+
+  quart-cors = callPackage ../development/python-modules/quart-cors { };
+
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
@@ -11068,6 +11078,8 @@ self: super: with self; {
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
+  swagger-ui-py = callPackage ../development/python-modules/swagger-ui-py { };
+
   swift = callPackage ../development/python-modules/swift { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
@@ -12296,6 +12308,8 @@ self: super: with self; {
   xcffib = callPackage ../development/python-modules/xcffib { };
 
   xdg = callPackage ../development/python-modules/xdg { };
+
+  xdgenvpy = callPackage ../development/python-modules/xdgenvpy { };
 
   xdis = callPackage ../development/python-modules/xdis { };
 

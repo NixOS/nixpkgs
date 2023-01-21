@@ -30928,6 +30928,8 @@ with pkgs;
 
   mimic = callPackage ../applications/audio/mimic { };
 
+  mimic3 = callPackage ../applications/audio/mimic3 { };
+
   meh = callPackage ../applications/graphics/meh {};
 
   mixxx = libsForQt5.callPackage ../applications/audio/mixxx { };
