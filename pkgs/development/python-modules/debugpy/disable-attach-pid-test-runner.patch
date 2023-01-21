@@ -1,0 +1,12 @@
+diff --git a/tests/debug/runners.py b/tests/debug/runners.py
+index 71f985f7..a7661f02 100644
+--- a/tests/debug/runners.py
++++ b/tests/debug/runners.py
+@@ -338,6 +338,6 @@ all_attach_connect = [attach_connect["api"], attach_connect["cli"]]
+ 
+ all_attach_socket = all_attach_listen + all_attach_connect
+ 
+-all_attach = all_attach_socket + [attach_pid]
++all_attach = all_attach_socket
+ 
+ all = all_launch + all_attach

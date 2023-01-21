@@ -13,6 +13,7 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
+, attachToProcessSupport ? lib.meta.availableOn stdenv.hostPlatform gdb
 }:
 
 buildPythonPackage rec {
@@ -30,12 +31,6 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Hard code GDB path (used to attach to process)
-    (substituteAll {
-      src = ./hardcode-gdb.patch;
-      inherit gdb;
-    })
-
     # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
@@ -51,7 +46,13 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
-  ];
+  ]
+  ++ lib.optional attachToProcessSupport (substituteAll {
+    src = ./hardcode-gdb.patch;
+    inherit gdb;
+  })
+  ++ lib.optional (!attachToProcessSupport)
+    ./disable-attach-pid-test-runner.patch;
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
   # Compile flags taken from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     set -x
     cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
     rm *.so *.dylib *.dll *.exe *.pdb
+  '' + lib.optionalString attachToProcessSupport ''
     ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
       "x86_64-linux"   = "-shared -o attach_linux_amd64.so";
       "i686-linux"     = "-shared -o attach_linux_x86.so";
@@ -67,7 +69,7 @@ buildPythonPackage rec {
       "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86.dylib";
       "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_arm64.dylib";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
-  )'';
+  '' + ")";
 
   checkInputs = [
     django
@@ -78,6 +80,10 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     requests
+  ];
+
+  disabledTestPaths = lib.optionals (!attachToProcessSupport) [
+    "tests/debugpy/test_attach.py"
   ];
 
   preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
