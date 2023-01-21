@@ -1,6 +1,6 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
   lib, version ? null, useDune ? false }@args:
-with lib; mkCoqDerivation {
+ mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";
@@ -8,7 +8,7 @@ with lib; mkCoqDerivation {
   owner = "math-comp";
 
   inherit version;
-  defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
+  defaultVersion =  with lib.versions; lib.switch [ coq.version mathcomp.version ] [
       { cases = [ (isGe "8.10") (isGe "1.12.0") ];      out = "1.5.5"; }
       { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
       { cases = [ (range "8.7" "8.12")  "1.11.0" ];             out = "1.5.2"; }
@@ -31,7 +31,7 @@ with lib; mkCoqDerivation {
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  useDuneifVersion = v: versions.isGe "1.5.3" v || v == "dev";
+  useDuneifVersion = v: lib.versions.isGe "1.5.3" v || v == "dev";
 
   preConfigure = ''
     patchShebangs configure || true
@@ -42,7 +42,7 @@ with lib; mkCoqDerivation {
 
   meta = {
     description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";
-    license = licenses.cecill-c;
+    license = lib.licenses.cecill-c;
   };
 }
-// optionalAttrs (args?useDune) { inherit useDune; }
+// lib.optionalAttrs (args?useDune) { inherit useDune; }

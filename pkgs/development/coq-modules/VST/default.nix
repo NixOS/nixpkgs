@@ -1,7 +1,5 @@
 { lib, mkCoqDerivation, coq, compcert, ITree, version ? null }:
 
-with lib;
-
 # A few modules that are not built and installed by default
 #  but that may be useful to some users.
 # They depend on ITree.
@@ -11,7 +9,7 @@ let extra_floyd_files = [
   "powerlater.v"
   ]
   # floyd/printf.v is broken in VST 2.9
-  ++ optional (!versions.isGe "8.13" coq.coq-version) "printf.v"
+  ++ lib.optional (!lib.versions.isGe "8.13" coq.coq-version) "printf.v"
   ++ [
   "quickprogram.v"
   ];
@@ -24,7 +22,7 @@ mkCoqDerivation {
   owner = "PrincetonUniversity";
   repo = "VST";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.15" "8.16"; out = "2.11.1"; }
     { case = range "8.14" "8.16"; out = "2.10"; }
     { case = range "8.13" "8.15"; out = "2.9"; }

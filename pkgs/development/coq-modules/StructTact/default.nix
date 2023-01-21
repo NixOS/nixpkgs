@@ -1,10 +1,10 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "StructTact";
   owner = "uwplse";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.6" "8.16"; out = "20210328"; }
     { case = range "8.5" "8.13"; out = "20181102"; }
   ] null;
