@@ -16,7 +16,7 @@
 
 let
   pname = "hassil";
-  version = "0.2.3";
+  version = "0.2.4";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YT8FgvM0mlB8ri9WHLau+e4m+wyEI4mHWxXbhiI60h0=";
+    hash = "sha256-lgGo3zK1GN3MEOinXuvT5nCc8LBCxAHiW0CZfS8Yy7Y=";
   };
 
   nativeBuildInputs = [
