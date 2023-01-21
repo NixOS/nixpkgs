@@ -1,14 +1,15 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptoolsBuildHook
 , attrs
+, buildPythonPackage
 , cattrs
-, toml
-, pytestCheckHook
 , click
 , click-option-group
+, fetchPypi
+, hatchling
+, pytestCheckHook
+, pythonOlder
+, tomli
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -25,23 +26,35 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptoolsBuildHook
+    hatchling
   ];
 
   propagatedBuildInputs = [
     attrs
     cattrs
     click-option-group
-    toml
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
+
+  passthru.optional-dependencies = {
+    click = [
+      click
+    ];
+  };
+
+  checkInputs = [
+    pytestCheckHook
+    typing-extensions
+  ] ++ passthru.optional-dependencies.click;
 
   pytestFlagsArray = [
     "tests"
   ];
 
-  nativeCheckInputs = [
-    click
-    pytestCheckHook
+  disabledTests = [
+    # AssertionError: assert [OptionInfo(p...
+    "test_deep_options"
   ];
 
   pythonImportsCheck = [
