@@ -27690,6 +27690,8 @@ with pkgs;
 
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
 
+  sorts-mill-goudy = callPackage ../data/fonts/sorts-mill-goudy { };
+
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
 
   soundfont-generaluser = callPackage ../data/soundfonts/generaluser { };
