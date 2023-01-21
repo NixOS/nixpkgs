@@ -7,8 +7,10 @@
 , nodePackages
 , rWrapper
 , rPackages
+, extraRPackages ? []
 , makeWrapper
 , python3
+, extraPythonPackages ? ps: with ps; []
 }:
 
 stdenv.mkDerivation rec {
@@ -42,8 +44,8 @@ stdenv.mkDerivation rec {
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
       --prefix QUARTO_DART_SASS : ${nodePackages.sass}/bin/sass \
-      --prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown]; }}/bin/R \
-      --prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ])}/bin/python3
+      --prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R \
+      --prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3
   '';
 
   installPhase = ''
