@@ -1422,6 +1422,8 @@ with pkgs;
 
   httm = callPackage ../tools/filesystems/httm { };
 
+  inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
+
   jobber = callPackage ../tools/system/jobber {};
 
   kanata = callPackage ../tools/system/kanata { };
