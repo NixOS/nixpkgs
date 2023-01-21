@@ -47,7 +47,7 @@ buildPythonPackage (rec {
     twisted
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     parameterized
     psutil

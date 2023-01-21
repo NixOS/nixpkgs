@@ -15,7 +15,7 @@ buildDunePackage rec {
     bigstring
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     cstruct
     hex

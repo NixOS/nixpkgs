@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   # tests need to be able to set locale
   LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
 
   # tests which assert on strings don't decode results correctly
   doCheck = isPy3k;

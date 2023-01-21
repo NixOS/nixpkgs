@@ -26,7 +26,7 @@ buildPythonPackage rec {
     datasette
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cogapp
     pytest-mock
     pytestCheckHook

@@ -120,7 +120,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pytest-asyncio
     pytest-mock

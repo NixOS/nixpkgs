@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtk4
   ];
 

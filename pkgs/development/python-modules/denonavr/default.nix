@@ -35,7 +35,7 @@ buildPythonPackage rec {
     netifaces
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pytest-httpx

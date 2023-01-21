@@ -91,7 +91,7 @@ let
             --replace ", 'xandikos<0.2.4'" "" \
             --replace ", 'radicale'" ""
         '';
-        checkInputs = old.checkInputs ++ [ self.nose ];
+        nativeCheckInputs = old.nativeCheckInputs ++ [ self.nose ];
       });
 
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
@@ -417,7 +417,7 @@ in python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.isLinux;
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
     pytest-asyncio

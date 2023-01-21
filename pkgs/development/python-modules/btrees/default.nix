@@ -27,7 +27,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     transaction
     zope_testrunner
   ];

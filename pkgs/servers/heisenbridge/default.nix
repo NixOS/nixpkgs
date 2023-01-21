@@ -37,7 +37,7 @@ in python.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
   ];
 

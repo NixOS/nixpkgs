@@ -57,14 +57,14 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = let
-    pythonEnv = python.withPackages (_: propagatedBuildInputs ++ checkInputs ++ [ pytest ]);
+    pythonEnv = python.withPackages (_: propagatedBuildInputs ++ nativeCheckInputs ++ [ pytest ]);
   in
   ''
     export PYTHONPATH=${pythonEnv}/${python.sitePackages}

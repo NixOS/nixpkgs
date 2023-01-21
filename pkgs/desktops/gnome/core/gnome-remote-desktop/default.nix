@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pipewire
     systemd
-  ] ++ checkInputs;
+  ] ++ nativeCheckInputs;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mesa # for gbm
     libgudev
     xvfb-run

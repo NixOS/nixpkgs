@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
     websocket-client
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest
     pytest-mock

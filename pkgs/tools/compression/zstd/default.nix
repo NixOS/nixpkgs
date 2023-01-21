@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     mkdir -p build_ && cd $_
   '';
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
   inherit doCheck;
   checkPhase = ''
     runHook preCheck

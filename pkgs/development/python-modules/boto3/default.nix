@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

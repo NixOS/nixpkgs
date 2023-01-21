@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
 
   # tests can still timeout on slower systems
   inherit doCheck;
-  checkInputs = [ socat ];
+  nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.

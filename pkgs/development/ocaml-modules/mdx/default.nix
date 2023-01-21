@@ -21,7 +21,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ cppo ];
   buildInputs = [ cmdliner ];
   propagatedBuildInputs = [ astring fmt logs result csexp ocaml-version odoc-parser re ];
-  checkInputs = [ alcotest ocaml_lwt pandoc ];
+  nativeCheckInputs = [ alcotest ocaml_lwt pandoc ];
 
   # Check fails with cmdliner ≥ 1.1
   doCheck = false;

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "sha256-wr4gXSh456heG5nsaEi2yo7LMre2Nd6QbTm0dcDCX1k=";
   };
 
-  checkInputs = [ matplotlib networkx numpy pytestCheckHook ];
+  nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
   nativeBuildInputs = [ dos2unix ];
   propagatedBuildInputs = [
     cffi

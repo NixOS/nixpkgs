@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-p/HYG/KaHtvgvAd+eg1fKmDnLoWCL+XiT66jRBU2xRE=";
 
-  checkInputs = [ strace ];
+  nativeCheckInputs = [ strace ];
 
   meta = with lib; {
     description = "Analyzes strace output";

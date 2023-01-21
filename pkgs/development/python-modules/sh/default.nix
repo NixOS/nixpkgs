@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sed -i 's#/bin/sleep#${coreutils.outPath}/bin/sleep#' test.py
   '';
 
-  checkInputs = [ coverage lsof glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [ coverage lsof glibcLocales pytestCheckHook ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''

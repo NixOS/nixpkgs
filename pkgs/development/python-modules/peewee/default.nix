@@ -40,7 +40,7 @@ buildPythonPackage rec {
     mysql-connector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flask
   ];
 

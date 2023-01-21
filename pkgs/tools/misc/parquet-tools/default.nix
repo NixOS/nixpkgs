@@ -49,7 +49,7 @@ buildPythonApplication rec {
     thrift
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     moto
     pytest-mock

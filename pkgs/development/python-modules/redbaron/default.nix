@@ -16,7 +16,7 @@ buildPythonPackage rec {
     rm tests/test_bounding_box.py
   ''; #error about fixtures
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/gristlabs/asttokens";

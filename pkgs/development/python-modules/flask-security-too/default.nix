@@ -86,7 +86,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     argon2-cffi
     flask-mongoengine
     mongoengine

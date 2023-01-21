@@ -39,7 +39,7 @@ buildDunePackage rec {
     stdcompat
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3.pkgs.numpy
   ];
 

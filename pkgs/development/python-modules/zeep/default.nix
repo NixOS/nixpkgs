@@ -54,7 +54,7 @@ buildPythonPackage rec {
     xmlsec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     aioresponses
     freezegun

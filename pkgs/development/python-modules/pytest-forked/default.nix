@@ -42,7 +42,7 @@ buildPythonPackage rec {
     py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
   ];

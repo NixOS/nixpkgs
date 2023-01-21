@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ dbus ];
+  nativeCheckInputs = [ dbus ];
 
   nativeBuildInputs = [
     wrapGAppsHook

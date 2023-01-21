@@ -64,7 +64,7 @@ let
             --replace "cryptography>=3.2,<3.4" "cryptography" \
             --replace "msal-extensions>=0.3.1,<0.4" "msal-extensions"
         '';
-        checkInputs = with self; [ pytest ];
+        nativeCheckInputs = with self; [ pytest ];
         doCheck = stdenv.isLinux;
         # ignore tests that does network call, or assume powershell
         checkPhase = ''
@@ -96,7 +96,7 @@ let
           portalocker
         ];
 
-        checkInputs = [ py.pkgs.pytest ];
+        nativeCheckInputs = [ py.pkgs.pytest ];
         # ignore flaky test
         checkPhase = ''
           cd azure

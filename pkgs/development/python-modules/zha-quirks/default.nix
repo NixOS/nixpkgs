@@ -27,7 +27,7 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     pytestCheckHook
   ];

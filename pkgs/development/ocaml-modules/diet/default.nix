@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ stdlib-shims ];
 
   doCheck = true;
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-diet";

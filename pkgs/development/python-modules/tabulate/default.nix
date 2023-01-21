@@ -31,7 +31,7 @@ buildPythonPackage rec {
     widechars = [ wcwidth ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 

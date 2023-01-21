@@ -51,7 +51,7 @@ buildGoModule rec {
     "TestPendingDeleteOrder"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

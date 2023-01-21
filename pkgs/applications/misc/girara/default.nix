@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gettext check dbus ];
   buildInputs = [ libintl libiconv json_c ];
   propagatedBuildInputs = [ glib gtk ];
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
 
   doCheck = !stdenv.isDarwin;
 

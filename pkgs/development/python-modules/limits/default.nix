@@ -42,7 +42,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hiro
     pymemcache
     pymongo

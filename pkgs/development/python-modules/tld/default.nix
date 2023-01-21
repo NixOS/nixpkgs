@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "69fed19d26bb3f715366fb4af66fdeace896c55c052b00e8aaba3a7b63f3e7f0";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     factory_boy
     faker
     pytestCheckHook

@@ -64,7 +64,7 @@ in newPython.pkgs.buildPythonApplication rec {
     urllib3
   ] ++ lib.optionals stdenv.isDarwin [ idna cryptography pyopenssl ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pkg-config
     git
   ] ++ (with newPython.pkgs; [

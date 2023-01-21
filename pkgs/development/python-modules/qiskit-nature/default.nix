@@ -42,7 +42,7 @@ buildPythonPackage rec {
     scipy
   ] ++ lib.optional withPyscf pyscf;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     pylatexenc

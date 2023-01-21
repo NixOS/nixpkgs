@@ -49,7 +49,7 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=examples.django_test_settings
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     django-filter
     mock
     py

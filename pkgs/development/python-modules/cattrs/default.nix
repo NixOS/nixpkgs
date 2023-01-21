@@ -44,7 +44,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     immutables
     motor

@@ -499,7 +499,7 @@ in buildPythonPackage {
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
   # TEST_PACKAGES in tensorflow/tools/pip_package/setup.py
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     keras
     portpicker

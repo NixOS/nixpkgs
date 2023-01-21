@@ -30,7 +30,7 @@ buildDunePackage rec {
     mec
   ];
 
-  checkInputs = [ alcotest qcheck-alcotest bisect_ppx ];
+  nativeCheckInputs = [ alcotest qcheck-alcotest bisect_ppx ];
 
   doCheck = false; # circular deps
 

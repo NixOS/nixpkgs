@@ -55,7 +55,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     # https://github.com/falconry/falcon/blob/master/requirements/tests
     pytestCheckHook
     pyyaml

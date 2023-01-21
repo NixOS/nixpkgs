@@ -30,7 +30,7 @@ buildPythonPackage rec {
     plumbum
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     c-ares
   ];
 
-  checkInputs = [ gbenchmark ];
+  nativeCheckInputs = [ gbenchmark ];
 
   nativeBuildInputs = [ cmake ];
 

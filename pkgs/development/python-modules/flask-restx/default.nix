@@ -40,7 +40,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     faker
     mock

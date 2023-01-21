@@ -78,7 +78,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-cases
     pytestCheckHook
   ] ++ passthru.optional-dependencies.data;

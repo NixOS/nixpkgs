@@ -42,7 +42,7 @@ buildPythonPackage rec {
     "rtoml"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

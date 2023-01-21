@@ -41,7 +41,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     torch
     torchvision

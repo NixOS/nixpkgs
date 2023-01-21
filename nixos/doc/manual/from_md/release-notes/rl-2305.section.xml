@@ -148,6 +148,30 @@
       </listitem>
       <listitem>
         <para>
+          <literal>checkInputs</literal> have been renamed to
+          <literal>nativeCheckInputs</literal>, because they behave the
+          same as <literal>nativeBuildInputs</literal> when
+          <literal>doCheck</literal> is set.
+          <literal>checkInputs</literal> now denote a new type of
+          dependencies, added to <literal>buildInputs</literal> when
+          <literal>doCheck</literal> is set. As a rule of thumb,
+          <literal>nativeCheckInputs</literal> are tools on
+          <literal>$PATH</literal> used during the tests, and
+          <literal>checkInputs</literal> are libraries which are linked
+          to executables built as part of the tests. Similarly,
+          <literal>installCheckInputs</literal> are renamed to
+          <literal>nativeInstallCheckInputs</literal>, corresponding to
+          <literal>nativeBuildInputs</literal>, and
+          <literal>installCheckInputs</literal> are a new type of
+          dependencies added to <literal>buildInputs</literal> when
+          <literal>doInstallCheck</literal> is set. (Note that this
+          change will not cause breakage to derivations with
+          <literal>strictDeps</literal> unset, which are most packages
+          except python, rust and go packages).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>borgbackup</literal> module now has an option for
           inhibiting system sleep while backups are running, defaulting
           to off (not inhibiting sleep), available as

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [ coreutils bash ];
+  nativeCheckInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty

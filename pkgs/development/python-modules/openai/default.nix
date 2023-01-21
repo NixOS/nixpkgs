@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "openai"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];

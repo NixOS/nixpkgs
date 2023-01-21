@@ -16,7 +16,7 @@ buildDunePackage {
                             lwt mirage-random mirage-time mirage-clock
                             ca-certs ca-certs-nss happy-eyeballs tcpip tls tls-mirage
                             mtime mirage-crypto-rng ];
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   doCheck = true;
 
   meta = dns.meta // {

@@ -60,7 +60,7 @@ buildPythonPackage rec {
     jeepney
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ] ++ lib.optionals stdenv.isLinux [
     dbus

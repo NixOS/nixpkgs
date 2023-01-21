@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytz
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

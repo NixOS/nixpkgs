@@ -51,7 +51,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     gunicorn
     pytest-asyncio

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest
   ];

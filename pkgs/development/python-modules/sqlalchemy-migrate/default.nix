@@ -29,7 +29,7 @@ buildPythonPackage rec {
       --replace "pylint" ""
   '';
 
-  checkInputs = [ scripttest pytz testrepository ];
+  nativeCheckInputs = [ scripttest pytz testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   doCheck = !stdenv.isDarwin;

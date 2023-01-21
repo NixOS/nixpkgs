@@ -70,7 +70,7 @@ buildPythonPackage rec {
     unpaddedbase64
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     faker
     hypothesis

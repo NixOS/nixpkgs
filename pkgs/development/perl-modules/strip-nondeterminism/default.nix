@@ -30,7 +30,7 @@ buildPerlPackage rec {
     ArchiveCpio
   ];
 
-  checkInputs = [ SubOverride ];
+  nativeCheckInputs = [ SubOverride ];
 
   postPatch = ''
     substituteInPlace lib/File/StripNondeterminism.pm \

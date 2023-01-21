@@ -140,7 +140,7 @@ buildPythonPackage rec {
     $out/bin/twistd --help > /dev/null
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     glibcLocales
     # "hypothesis" indirectly depends on twisted to build its documentation.

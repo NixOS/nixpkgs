@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   doCheck = false; # failing tests
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyspark
     unittestCheckHook
     warcio

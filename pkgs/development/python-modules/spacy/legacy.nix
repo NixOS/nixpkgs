@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-T33LxObI6MtOrbsAn5wKGipnRC4AMsjWd2yUcMN1mQM=";
   };
 
-  # checkInputs = [ pytestCheckHook spacy ];
+  # nativeCheckInputs = [ pytestCheckHook spacy ];
   doCheck = false;
 
   pythonImportsCheck = [

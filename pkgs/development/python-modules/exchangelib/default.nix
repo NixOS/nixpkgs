@@ -71,7 +71,7 @@ buildPythonPackage rec {
     backports-zoneinfo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flake8
     psutil
     python-dateutil

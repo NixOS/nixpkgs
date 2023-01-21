@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
-  checkInputs = [ cunit ncurses ];
+  nativeCheckInputs = [ cunit ncurses ];
 
   cmakeFlags = [
     "-DENABLE_STATIC_LIB=OFF"

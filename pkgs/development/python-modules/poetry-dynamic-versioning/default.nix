@@ -36,7 +36,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     poetry
   ];

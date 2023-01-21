@@ -66,7 +66,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-click
     pytest-mock
     pytestCheckHook

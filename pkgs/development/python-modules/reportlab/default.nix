@@ -23,7 +23,7 @@ in buildPythonPackage rec {
     ./darwin-m1-compat.patch
   ];
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
 
   buildInputs = [ ft pillow ];
 

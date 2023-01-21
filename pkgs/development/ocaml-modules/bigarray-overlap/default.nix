@@ -19,7 +19,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ bigarray-compat ];
 
   nativeBuildInputs = [ findlib pkg-config ];
-  checkInputs = [ alcotest astring fpath bos ];
+  nativeCheckInputs = [ alcotest astring fpath bos ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

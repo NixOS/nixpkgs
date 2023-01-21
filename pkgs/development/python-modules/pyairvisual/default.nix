@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pysmb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     asynctest
     pytest-aiohttp

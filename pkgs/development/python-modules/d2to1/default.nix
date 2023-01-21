@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "d2to1";
   version = "0.2.12.post1";
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   src = fetchFromGitHub {
     owner = "embray";

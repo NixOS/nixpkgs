@@ -46,7 +46,7 @@ buildPythonPackage rec {
     export HTSLIB_INCLUDE_DIR=${htslib}/include
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     bcftools
     htslib

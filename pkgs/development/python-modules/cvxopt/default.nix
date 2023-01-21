@@ -51,7 +51,7 @@ buildPythonPackage rec {
     export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
   '';
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "-s" "tests" ];
 

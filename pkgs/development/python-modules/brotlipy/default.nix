@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  checkInputs = [ pytest hypothesis ];
+  nativeCheckInputs = [ pytest hypothesis ];
 
   checkPhase = ''
     py.test

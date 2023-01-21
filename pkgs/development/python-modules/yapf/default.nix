@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-o/UIXTfvfj4ATEup+bPkDFT/GQHNER8FFFrjE6fGfRs=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

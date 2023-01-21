@@ -20,7 +20,7 @@ buildPythonPackage rec {
     flask pygments dulwich httpauth humanize
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest requests python-ctags3
   ] ++ lib.optional (!isPy3k) mock;
 

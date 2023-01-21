@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-rtLCc1R65yoNXuhpcZwCpkPaFr9QfICVj6rcfgOOP3M=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyparsing
   ];
 

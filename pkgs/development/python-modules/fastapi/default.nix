@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosqlite
     databases
     flask

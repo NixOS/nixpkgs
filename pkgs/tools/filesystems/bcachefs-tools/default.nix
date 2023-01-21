@@ -53,7 +53,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-  checkInputs = [ valgrind ];
+  nativeCheckInputs = [ valgrind ];
 
   preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py

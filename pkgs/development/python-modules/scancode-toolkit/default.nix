@@ -129,7 +129,7 @@ buildPythonPackage rec {
     typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

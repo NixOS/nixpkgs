@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "LDADD=$(_LDADD)" ];
 
   doCheck = true;
-  checkInputs = [ inetutils wget ];
+  nativeCheckInputs = [ inetutils wget ];
   checkFlags = optional (!cgiSupport) "CGITESTS=";
 
   meta = with lib; {

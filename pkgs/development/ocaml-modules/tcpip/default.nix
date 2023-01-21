@@ -58,7 +58,7 @@ buildDunePackage rec {
   ];
 
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     mirage-flow
     mirage-vnetif

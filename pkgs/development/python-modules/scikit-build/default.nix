@@ -45,7 +45,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmake
     cython
     ninja

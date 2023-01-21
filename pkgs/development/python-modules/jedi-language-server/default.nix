@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pygls
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyhamcrest
     python-jsonrpc-server

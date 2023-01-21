@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     xorg.xeyes
     xorg.xorgserver

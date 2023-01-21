@@ -79,7 +79,7 @@ buildPythonPackage rec {
     txaio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

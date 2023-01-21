@@ -23,7 +23,7 @@ in buildDunePackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
                   rresult logs odoc bos yojson astring fpath ];
-  checkInputs = [ alcotest ] ++ runtimeInputs;
+  nativeCheckInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 
   postPatch = ''

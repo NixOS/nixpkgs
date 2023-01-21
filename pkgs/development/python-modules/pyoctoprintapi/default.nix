@@ -33,7 +33,7 @@ buildPythonPackage {
     "pyoctoprintapi"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

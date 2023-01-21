@@ -69,7 +69,7 @@ buildPythonPackage rec {
     encrypted = [ cryptography ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pygments
     jinja2

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pkce
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

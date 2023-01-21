@@ -40,7 +40,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaraco_text
     portend
     pypytools

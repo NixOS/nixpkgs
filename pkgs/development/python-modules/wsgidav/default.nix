@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cheroot
     pytestCheckHook
     requests

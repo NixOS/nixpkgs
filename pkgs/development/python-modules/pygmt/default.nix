@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
 
   doCheck = false; # the *entire* test suite requires network access
-  checkInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
   postBuild = ''
     export HOME=$TMP
   '';

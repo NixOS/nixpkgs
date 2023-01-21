@@ -23,7 +23,7 @@ buildPythonPackage rec {
     lmdb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cffi
     pytestCheckHook
   ];

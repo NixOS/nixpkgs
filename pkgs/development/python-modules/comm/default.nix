@@ -29,7 +29,7 @@ buildPythonPackage {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

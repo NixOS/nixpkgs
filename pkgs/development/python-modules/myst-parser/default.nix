@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myst_parser" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     pytest-param-files
     pytest-regressions

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   buildInputs = [ perl ];
   nativeBuildInputs = [ flex bison python3 autoconf ];
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";

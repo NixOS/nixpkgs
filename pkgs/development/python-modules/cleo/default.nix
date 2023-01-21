@@ -36,7 +36,7 @@ buildPythonPackage rec {
     "cleo.helpers"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

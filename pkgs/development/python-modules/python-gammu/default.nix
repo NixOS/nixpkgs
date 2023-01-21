@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   # Check with the next release if tests could be run with pytest
-  # checkInputs = [ pytestCheckHook ];
+  # nativeCheckInputs = [ pytestCheckHook ];
   # Don't run tests for now
   doCheck = false;
 

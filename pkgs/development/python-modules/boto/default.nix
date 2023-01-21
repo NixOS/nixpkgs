@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
   propagatedBuildInputs = [ requests httpretty ];
 
   meta = with lib; {

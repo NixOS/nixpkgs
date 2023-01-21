@@ -56,7 +56,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-jupyter
     pytest-tornasync
     pytestCheckHook

@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     cattrs
     cmake
     pytest-subprocess

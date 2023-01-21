@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "goodwe"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ fmt logs ptime domain-name gmap cstruct ipaddr lru duration metrics base64 ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     description = "An Domain Name System (DNS) library";

@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     types-setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

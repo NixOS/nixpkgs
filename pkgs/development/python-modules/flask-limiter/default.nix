@@ -47,7 +47,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asgiref
     pytest-mock
     pytestCheckHook

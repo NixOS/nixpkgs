@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = [ cffi ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
     ${python.interpreter} xkbcommon/ffi_build.py

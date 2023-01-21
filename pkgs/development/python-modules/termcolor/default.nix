@@ -25,7 +25,7 @@ buildPythonPackage rec {
     "termcolor"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

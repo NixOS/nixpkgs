@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytz
   ] ++ lib.optional (!isPy3k) enum34;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     boto3
   ] ++ lib.optional (pythonOlder "3.4") mock;

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

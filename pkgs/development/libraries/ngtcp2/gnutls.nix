@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ cunit ]
+  nativeCheckInputs = [ cunit ]
     ++ lib.optional stdenv.isDarwin ncurses;
 
   passthru.tests = knot-dns.passthru.tests; # the only consumer so far

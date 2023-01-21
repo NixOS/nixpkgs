@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # nixbld user on hydra
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

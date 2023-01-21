@@ -39,7 +39,7 @@ buildPythonPackage rec {
     aiolifx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async-timeout
     pytestCheckHook
     pytest-asyncio

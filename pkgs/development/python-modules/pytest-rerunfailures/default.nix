@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  checkInputs = [ mock pytest ];
+  nativeCheckInputs = [ mock pytest ];
 
   checkPhase = ''
     py.test test_pytest_rerunfailures.py

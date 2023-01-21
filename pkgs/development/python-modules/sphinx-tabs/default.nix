@@ -40,7 +40,7 @@ buildPythonPackage rec {
     docutils
   ];
 
-  checkInputs = [ pytest
+  nativeCheckInputs = [ pytest
     beautifulsoup4
   ];
 

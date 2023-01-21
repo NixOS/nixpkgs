@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ asn1crypto oscrypto ];
 
-  checkInputs = [ cacert ];
+  nativeCheckInputs = [ cacert ];
   checkPhase = ''
     # Tests are run with a custom executor/loader
     # The regex to skip specific tests relies on negative lookahead of regular expressions

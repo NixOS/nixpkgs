@@ -50,7 +50,7 @@ let countourpy = buildPythonPackage rec {
 
   doCheck = false; # infinite recursion with matplotlib, tests in passthru
 
-  checkInputs = [
+  nativeCheckInputs = [
     matplotlib
     pillow
     pytestCheckHook

@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     spidermonkey_102
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ] ++ testDeps;
 

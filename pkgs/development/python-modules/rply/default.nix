@@ -22,7 +22,7 @@ buildPythonPackage rec {
     appdirs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
   ];

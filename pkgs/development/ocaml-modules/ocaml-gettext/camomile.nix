@@ -7,7 +7,7 @@ buildDunePackage {
   propagatedBuildInputs = [ camomile ocaml_gettext ];
 
   doCheck = true;
-  checkInputs = [ ounit fileutils ];
+  nativeCheckInputs = [ ounit fileutils ];
 
   meta = (builtins.removeAttrs ocaml_gettext.meta  [ "mainProgram" ]) // {
     description = "Internationalization library using camomile (i18n)";

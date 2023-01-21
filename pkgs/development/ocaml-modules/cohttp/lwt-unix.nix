@@ -20,7 +20,7 @@ buildDunePackage {
   # TODO(@sternenseemann): fail for unknown reason
   # https://github.com/mirage/ocaml-cohttp/issues/675#issuecomment-830692742
   doCheck = false;
-  checkInputs = [ ounit cacert ];
+  nativeCheckInputs = [ ounit cacert ];
 
   meta = cohttp-lwt.meta // {
     description = "CoHTTP implementation for Unix and Windows using Lwt";

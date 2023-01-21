@@ -29,7 +29,7 @@ buildPythonPackage rec {
     export LC_ALL=en_US.UTF-8
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

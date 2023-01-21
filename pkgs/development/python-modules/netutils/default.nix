@@ -28,7 +28,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     pytestCheckHook
     pyyaml

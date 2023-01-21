@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tinycss2
   ] ++ fonttools.optional-dependencies.woff;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ghostscript
   ];

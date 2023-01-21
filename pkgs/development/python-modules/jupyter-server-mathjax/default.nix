@@ -25,7 +25,7 @@ buildPythonPackage rec {
     jupyter-server
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-tornasync
     pytestCheckHook
   ];

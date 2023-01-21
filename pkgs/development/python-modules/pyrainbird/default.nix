@@ -40,7 +40,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytest-aiohttp
     pytestCheckHook

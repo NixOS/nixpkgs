@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   doCheck = false; # test artifacts missing
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

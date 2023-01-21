@@ -29,7 +29,7 @@ buildPythonPackage rec {
     urwid-readline
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

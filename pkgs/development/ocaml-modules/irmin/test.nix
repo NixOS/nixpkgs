@@ -27,7 +27,7 @@ buildDunePackage {
     metrics
   ];
 
-  checkInputs = [ hex vector ];
+  nativeCheckInputs = [ hex vector ];
 
   meta = irmin.meta // {
     description = "Irmin test suite";

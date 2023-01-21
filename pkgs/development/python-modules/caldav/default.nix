@@ -32,7 +32,7 @@ buildPythonPackage rec {
     recurring-ical-events
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tzlocal
     pytz

@@ -46,7 +46,7 @@ buildDunePackage rec {
   preCheck = ''
     ln -s "${http2-frame-test-case}" lib_test/http2-frame-test-case
   '';
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     yojson
     hex

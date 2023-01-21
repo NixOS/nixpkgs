@@ -41,7 +41,7 @@ buildPythonPackage rec {
     dbus-fast
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

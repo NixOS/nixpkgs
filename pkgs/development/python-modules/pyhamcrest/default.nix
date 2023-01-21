@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pytest-xdist
     pytestCheckHook

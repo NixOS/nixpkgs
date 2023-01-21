@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
   ];
 

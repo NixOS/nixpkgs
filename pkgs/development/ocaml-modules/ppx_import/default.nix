@@ -38,7 +38,7 @@ buildDunePackage rec {
     ppxlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ounit
     ppx_deriving
     ppx_sexp_conv

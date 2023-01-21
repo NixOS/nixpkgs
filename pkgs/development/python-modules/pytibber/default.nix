@@ -34,7 +34,7 @@ buildPythonPackage rec {
     python-dateutil
   ] ++ gql.optional-dependencies.websockets;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

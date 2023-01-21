@@ -51,7 +51,7 @@ buildPythonPackage rec {
   # trustme uses pyopenssl
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
-  checkInputs = [
+  nativeCheckInputs = [
     curio
     hypothesis
     pytest-mock

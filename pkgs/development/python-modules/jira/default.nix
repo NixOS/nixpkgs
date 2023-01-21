@@ -41,7 +41,7 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytestCheckHook
     requests-mock
