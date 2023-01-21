@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       Minimacy is an open-source minimalist computation system based on the principle "Less is more".
       It is designed and programmed by Sylvain Huet.
     '';
-    maintainer  = with lib.maintainers; [ jboy ];
+    maintainers = with lib.maintainers; [ jboy ];
     homepage    = "https://minimacy.net";
     license     = lib.licenses.gpl2;
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;
