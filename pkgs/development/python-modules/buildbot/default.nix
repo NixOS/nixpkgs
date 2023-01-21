@@ -118,6 +118,9 @@ let
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
 
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;
 
@@ -127,6 +130,8 @@ let
 
       # remove testfile which is missing configuration file from sdist
       rm buildbot/test/integration/test_graphql.py
+      # tests in this file are flaky, see https://github.com/buildbot/buildbot/issues/6776
+      rm buildbot/test/integration/test_try_client.py
     '';
 
     passthru = {
