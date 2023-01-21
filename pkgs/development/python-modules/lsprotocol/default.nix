@@ -1,13 +1,14 @@
 { lib
+, attrs
 , buildPythonPackage
+, cattrs
 , fetchFromGitHub
 , flit-core
-, cattrs
-, attrs
-, nox
-, pytest
-, pyhamcrest
 , jsonschema
+, nox
+, pyhamcrest
+, pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -15,10 +16,12 @@ buildPythonPackage rec {
   version = "2022.0.0a9";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-6XecPKuBhwtkmZrGozzO+VEryI5wwy9hlvWE1oV6ajk=";
   };
 
@@ -28,14 +31,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cattrs
     attrs
+    cattrs
   ];
 
   checkInputs = [
-    pytest
-    pyhamcrest
     jsonschema
+    pyhamcrest
+    pytest
   ];
 
   checkPhase = ''
@@ -47,12 +50,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "lsprotocol" ];
+  pythonImportsCheck = [
+    "lsprotocol"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/lsprotocol";
-    description = "Python implementation of the Language Server Protocol.";
+    description = "Python implementation of the Language Server Protocol";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ doronbehar fab ];
   };
 }
