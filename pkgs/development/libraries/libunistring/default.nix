@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
         ./unistdio/test-u16-vasnprintf3.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
         FAIL unistdio/test-u16-vasnprintf3.sh (exit status: 1)
   */
-  enableParallelBuilding = false;
+  enableParallelChecking = false;
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/libunistring/";
