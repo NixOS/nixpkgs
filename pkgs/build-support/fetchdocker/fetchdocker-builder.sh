@@ -1,6 +1,6 @@
 if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source "${stdenv}/setup"
-header "exporting ${repository}/${imageName} (tag: ${tag}) into ${out}"
+echo "exporting ${repository}/${imageName} (tag: ${tag}) into ${out}"
 mkdir -p "${out}"
 
 cat <<EOF > "${out}/compositeImage.sh"
@@ -26,4 +26,3 @@ ${gnutar}/bin/tar \
   -c "${manifest}" "${repositories}" -T "${imageFileStorePaths}"
 EOF
 chmod +x "${out}/compositeImage.sh"
-stopNest

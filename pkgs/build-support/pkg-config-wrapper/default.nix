@@ -46,13 +46,10 @@ stdenv.mkDerivation {
   strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
+  dontUnpack = true;
 
   # Additional flags passed to pkg-config.
   addFlags = lib.optional stdenv.targetPlatform.isStatic "--static";
-
-  unpackPhase = ''
-    src=$PWD
-  '';
 
   installPhase =
     ''

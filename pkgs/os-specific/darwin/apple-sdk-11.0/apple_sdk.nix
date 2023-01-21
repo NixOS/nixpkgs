@@ -45,12 +45,20 @@ let
 
         cp -r ${MacOSX-SDK}${standardFrameworkPath name private} $out/Library/Frameworks
 
+        if [[ -d ${MacOSX-SDK}/usr/lib/swift/${name}.swiftmodule ]]; then
+          mkdir -p $out/lib/swift
+          cp -r -t $out/lib/swift \
+            ${MacOSX-SDK}/usr/lib/swift/${name}.swiftmodule \
+            ${MacOSX-SDK}/usr/lib/swift/libswift${name}.tbd
+        fi
+
         # Fix and check tbd re-export references
         chmod u+w -R $out
         find $out -name '*.tbd' -type f | while read tbd; do
           echo "Fixing re-exports in $tbd"
           rewrite-tbd \
             -p ${standardFrameworkPath name private}/:$out/Library/Frameworks/${name}.framework/ \
+            -p /usr/lib/swift/:$out/lib/swift/ \
             ${mkDepsRewrites deps} \
             -r ${builtins.storeDir} \
             "$tbd"
@@ -163,6 +171,15 @@ in rec {
 
     # Seems to be appropriate given https://developer.apple.com/forums/thread/666686
     JavaVM = super.JavaNativeFoundation;
+
+    CoreVideo = lib.overrideDerivation super.CoreVideo (drv: {
+      installPhase = drv.installPhase + ''
+        # When used as a module, complains about a missing import for
+        # Darwin.C.stdint. Apparently fixed in later SDKs.
+        awk -i inplace '/CFBase.h/ { print "#include <stdint.h>" } { print }' \
+          $out/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h
+      '';
+    });
   };
 
   bareFrameworks = (

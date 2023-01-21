@@ -1,0 +1,16 @@
+Prevents a user-visible warning on every compilation:
+
+  ld: warning: directory not found for option '-L.../MacOSX11.0.sdk/usr/lib/swift'
+
+--- a/Sources/SwiftDriver/Jobs/Toolchain+LinkerSupport.swift
++++ b/Sources/SwiftDriver/Jobs/Toolchain+LinkerSupport.swift
+@@ -50,7 +50,9 @@ extension Toolchain {
+         result.append(sdkPath.appending(components: "System", "iOSSupport", "usr", "lib", "swift"))
+       }
+ 
++      if sdkPath.absolutePath?.pathString.starts(with: "@storeDir@") == false {
+       result.append(sdkPath.appending(components: "usr", "lib", "swift"))
++      }
+     }
+ 
+     return result

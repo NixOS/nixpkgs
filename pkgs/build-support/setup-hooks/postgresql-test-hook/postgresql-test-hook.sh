@@ -53,7 +53,7 @@ EOF
     echo >&2 'initdb not found. Did you add postgresql to the checkInputs?'
     false
   fi
-  header 'initializing postgresql'
+  echo 'initializing postgresql'
   initdb -U postgres
 
   # Move the socket
@@ -65,15 +65,15 @@ EOF
     echo "listen_addresses = ''" >>"$PGDATA/postgresql.conf"
   fi
 
-  header 'starting postgresql'
+  echo 'starting postgresql'
   eval "${postgresqlStartCommands:-pg_ctl start}"
 
-  header 'setting up postgresql'
+  echo 'setting up postgresql'
   eval "$postgresqlTestSetupCommands"
 
 }
 
 postgresqlStop() {
-  header 'stopping postgresql'
+  echo 'stopping postgresql'
   pg_ctl stop
 }

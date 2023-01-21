@@ -203,6 +203,7 @@ let
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
       qmake = makeSetupHook {
+        name = "qmake-hook";
         deps = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
@@ -211,6 +212,7 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
+        name = "wrap-qt5-apps-hook";
         deps = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;

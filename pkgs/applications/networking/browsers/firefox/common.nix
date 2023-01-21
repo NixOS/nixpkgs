@@ -524,7 +524,7 @@ buildStdenv.mkDerivation ({
             fi
 
             # Extract the debug info.
-            header "separating debug info from $i (build ID $id)"
+            echo "separating debug info from $i (build ID $id)"
             mkdir -p "$dst/''${id:0:2}"
             $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
 

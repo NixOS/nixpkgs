@@ -75,7 +75,7 @@
   FileProviderUI                   = {};
   FinderSync                       = {};
   ForceFeedback                    = { inherit IOKit; };
-  Foundation                       = { inherit ApplicationServices CoreFoundation Security SystemConfiguration libobjc; };
+  Foundation                       = { inherit ApplicationServices CoreFoundation Security SystemConfiguration Combine libobjc; };
   GLKit                            = {};
   GLUT                             = { inherit OpenGL; };
   GSS                              = {};
@@ -159,7 +159,7 @@
   ScreenSaver                      = {};
   ScreenTime                       = {};
   ScriptingBridge                  = {};
-  Security                         = { inherit IOKit libDER; };
+  Security                         = { inherit IOKit libDER xpc; };
   SecurityFoundation               = { inherit Security; };
   SecurityInterface                = { inherit Security SecurityFoundation; };
   SensorKit                        = {};
@@ -169,7 +169,7 @@
   Speech                           = {};
   SpriteKit                        = {};
   StoreKit                         = {};
-  SwiftUI                          = {};
+  SwiftUI                          = { inherit AppKit DeveloperToolsSupport UniformTypeIdentifiers; };
   SyncServices                     = {};
   System                           = {};
   SystemConfiguration              = { inherit Security; };

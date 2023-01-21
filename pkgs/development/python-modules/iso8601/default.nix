@@ -25,7 +25,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    hypothesis
+    # "hypothesis" indirectly depends on iso8601 to build its documentation
+    (hypothesis.override { enableDocumentation = false; })
     pytestCheckHook
     pytz
   ];

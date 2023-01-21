@@ -34,6 +34,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # present in master
+    (fetchpatch {
+      name = "fix-test-failure-on-ia64-ppc64-riscv64";
+      url = "https://github.com/libjxl/libjxl/commit/bb8eac5d6acec223e44cf8cc72ae02f0816de311.patch";
+      hash = "sha256-DuUCStWEquhWo7bOss0RgZ7ouYE4FpWrIMFywYR424s=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     gtest

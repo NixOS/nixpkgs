@@ -6,6 +6,7 @@
 with lib;
 
 makePythonHook {
+      name = "wrap-python-hook";
       deps = makeWrapper;
       substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;

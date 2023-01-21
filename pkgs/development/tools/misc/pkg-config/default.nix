@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     rm -f check/check-requires-private check/check-gtk check/missing
   '';
 
-  buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
+  buildInputs = [ libiconv ];
 
   configureFlags = [ "--with-internal-glib" ]
     ++ optionals (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]

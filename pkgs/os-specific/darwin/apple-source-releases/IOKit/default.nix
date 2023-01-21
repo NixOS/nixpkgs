@@ -5,8 +5,6 @@ appleDerivation' stdenv {
   srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   __propagatedImpureHostDeps = [
     "/System/Library/Frameworks/IOKit.framework/IOKit"
     "/System/Library/Frameworks/IOKit.framework/Resources"

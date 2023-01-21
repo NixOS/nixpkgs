@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype gobject-introspection ]
+  buildInputs = [ glib freetype ]
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = lib.optional withGraphite2 graphite2

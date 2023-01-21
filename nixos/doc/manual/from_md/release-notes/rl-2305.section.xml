@@ -298,6 +298,12 @@
       </listitem>
       <listitem>
         <para>
+          Calling <literal>makeSetupHook</literal> without passing a
+          <literal>name</literal> argument is deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Qt 5.12 and 5.14 have been removed, as the corresponding
           branches have been EOL upstream for a long time. This affected
           under 10 packages in nixpkgs, largely unmaintained upstream as
@@ -329,6 +335,17 @@
           package has been removed in favour of direct use of its
           constitutents: <literal>xorg.libX11</literal>,
           <literal>freetype</literal> and others.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The iputils package, which is installed by default, no longer
+          provides the <literal>ninfod</literal>,
+          <literal>rarpd</literal> and <literal>rdisc</literal> tools.
+          See
+          <link xlink:href="https://github.com/iputils/iputils/releases/tag/20221126">upstream’s
+          release notes</link> for more details and available
+          replacements.
         </para>
       </listitem>
     </itemizedlist>

@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
-    mkdir -p $out/{include,lib}
+    mkdir -p $out/{include,lib/swift}
 
     for dir in $includeDirs; do
       from=${MacOSX-SDK}/usr/include/$dir
@@ -57,6 +57,13 @@ stdenvNoCC.mkDerivation {
         $out/lib
     done
 
+    for name in os Dispatch; do
+      cp -dr \
+        ${MacOSX-SDK}/usr/lib/swift/$name.swiftmodule \
+        ${MacOSX-SDK}/usr/lib/swift/libswift$name.tbd \
+        $out/lib/swift
+    done
+
     for f in $csu; do
       from=${MacOSX-SDK}/usr/lib/$f
       if [ -e "$from" ]; then
@@ -71,6 +78,7 @@ stdenvNoCC.mkDerivation {
       rewrite-tbd \
         -c /usr/lib/libsystem.dylib:$out/lib/libsystem.dylib \
         -p /usr/lib/system/:$out/lib/system/ \
+        -p /usr/lib/swift/:$out/lib/swift/ \
         -r ${builtins.storeDir} \
         "$tbd"
     done

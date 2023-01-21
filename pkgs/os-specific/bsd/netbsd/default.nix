@@ -679,6 +679,13 @@ in makeScopeWithSplicing
   ##
   ## START LIBRARIES
   ##
+  libarch = mkDerivation {
+    path = "lib/libarch";
+    version = "9.2";
+    sha256 = "6ssenRhuSwp0Jn71ErT0PrEoCJ+cIYRztwdL4QTDZsQ=";
+    meta.platforms = lib.platforms.netbsd;
+  };
+
   libutil = mkDerivation {
     path = "lib/libutil";
     version = "9.2";
@@ -806,6 +813,16 @@ in makeScopeWithSplicing
     sha256 = "0siqan1wdqmmhchh2n8w6a8x1abbff8n4yb6jrqxap3hqn8ay54g";
     SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
+  };
+
+  libpci = mkDerivation {
+    pname = "libpci";
+    path = "lib/libpci";
+    version = "9.2";
+    sha256 = "+IOEO1Bw3/H3iCp3uk3bwsFZbvCqN5Ciz70irnPl8E8=";
+    NIX_CFLAGS_COMPILE = [ "-I." ];
+    meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ sys.src ];
   };
 
   libpthread-headers = mkDerivation {
