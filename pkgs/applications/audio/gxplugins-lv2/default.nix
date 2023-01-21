@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "GxPlugins.lv2";
-  version = "0.9";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02fksl8wr443ygwgcd1c2zab8kp67a6ps12k71ysqx7szv4zq877";
+    sha256 = "sha256-NvmFoOAQtAnKrZgzG1Shy1HuJEWgjJloQEx6jw59hag=";
     fetchSubmodules = true;
   };
 
