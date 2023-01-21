@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     pipewire
   ];
 
+  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+  NIX_CFLAGS_COMPILE = [ "-DPW_ENABLE_DEPRECATED" ];
+
   meta = with lib; {
     description = "A GTK patchbay for pipewire";
     homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
