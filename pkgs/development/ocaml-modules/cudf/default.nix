@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     "all"
     "test"
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     ounit
   ];
   doCheck = true;

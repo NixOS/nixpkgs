@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-BKDjtC3NDazFsvX/FM0qXpHd1muXUQDgzBMSLipA4/U=";
+    hash = "sha256-Eprsy/wd5lMBXk3yVGhofYD9ZBfdmjGMwXZ61RMgd4k=";
   };
 
   vendorHash = "sha256-Yi+4fGCHLH/kA4DuPI2uQ/27xhMd4cPFkTWlI6Bc13A=";

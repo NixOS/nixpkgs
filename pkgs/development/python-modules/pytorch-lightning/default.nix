@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ]
   ++ fsspec.optional-dependencies.http;
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];

@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   # package only requires `unittest`, but use `pytest` to exclude tests
-  checkInputs = [
+  nativeCheckInputs = [
     faiss
     pytestCheckHook
   ];

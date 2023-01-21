@@ -55,7 +55,7 @@ buildPythonPackage rec {
     rm tests/test_bench.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

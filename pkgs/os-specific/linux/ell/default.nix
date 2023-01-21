@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 

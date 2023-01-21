@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ packaging ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
     numpy

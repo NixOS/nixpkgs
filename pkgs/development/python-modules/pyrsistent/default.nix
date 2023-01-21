@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [ pytestCheckHook hypothesis ];
 
   postPatch = ''
     substituteInPlace setup.py \

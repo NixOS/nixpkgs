@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python3 catch2 ];
+  nativeCheckInputs = [ boost python3 catch2 ];
 
   doCheck = true;
 

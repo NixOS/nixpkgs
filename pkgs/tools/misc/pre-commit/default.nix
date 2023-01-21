@@ -43,7 +43,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cargo
     dotnet-sdk
     git

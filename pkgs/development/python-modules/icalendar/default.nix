@@ -28,7 +28,7 @@ buildPythonPackage rec {
     backports-zoneinfo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest
   ];

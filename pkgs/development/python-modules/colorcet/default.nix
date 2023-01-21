@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pyct
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
   ];

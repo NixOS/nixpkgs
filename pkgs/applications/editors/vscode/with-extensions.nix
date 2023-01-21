@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, buildEnv, vscode, makeWrapper, writeText
+{ lib, stdenv, runCommand, buildEnv, vscode, vscode-utils, makeWrapper, writeTextFile
 , vscodeExtensions ? [] }:
 
 /*
@@ -46,44 +46,15 @@ let
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
-  toExtensionJsonEntry = drv: rec {
-    identifier = {
-      id = "${drv.vscodeExtPublisher}.${drv.vscodeExtName}";
-      uuid = "";
-    };
-
-    version = drv.version;
-
-    location = {
-      "$mid" = 1;
-      fsPath = drv.outPath + "/share/vscode/extensions/${drv.vscodeExtUniqueId}";
-      path = location.fsPath;
-      scheme = "file";
-    };
-
-    metadata = {
-      id = identifier.uuid;
-      publisherId = "";
-      publisherDisplayName = drv.vscodeExtPublisher;
-      targetPlatform = "undefined";
-      isApplicationScoped = false;
-      updated = false;
-      isPreReleaseVersion = false;
-      installedTimestamp = 0;
-      preRelease = false;
-    };
+  extensionJsonFile = writeTextFile {
+    name = "vscode-extensions-json";
+    destination = "/share/vscode/extensions/extensions.json";
+    text = vscode-utils.toExtensionJson vscodeExtensions;
   };
-
-  extensionJson = builtins.toJSON (map toExtensionJsonEntry vscodeExtensions);
-  extensionJsonFile = writeText "extensions.json" extensionJson;
-  extensionJsonOutput = runCommand "vscode-extensions-json" {} ''
-    mkdir -p $out/share/vscode/extensions
-    cp ${extensionJsonFile} $out/share/vscode/extensions/extensions.json
-  '';
 
   combinedExtensionsDrv = buildEnv {
     name = "vscode-extensions";
-    paths = vscodeExtensions ++ [ extensionJsonOutput ];
+    paths = vscodeExtensions ++ [ extensionJsonFile ];
   };
 
   extensionsFlag = ''
@@ -91,8 +62,6 @@ let
   '';
 in
 
-# When no extensions are requested, we simply redirect to the original
-# non-wrapped vscode executable.
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ vscode ];

@@ -9,7 +9,7 @@
 , bzip2
 , curl
 , cyrus_sasl
-, enchant1
+, enchant2
 , fetchpatch
 , freetds
 , freetype
@@ -311,10 +311,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "enchant";
-          buildInputs = [ enchant1 ];
-          configureFlags = [ "--with-enchant=${enchant1}" ];
-          # enchant1 doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          buildInputs = [ enchant2 ];
+          configureFlags = [ "--with-enchant" ];
           doCheck = false;
         }
         { name = "exif"; doCheck = false; }

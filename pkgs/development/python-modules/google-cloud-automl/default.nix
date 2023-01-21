@@ -44,7 +44,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-storage
     google-cloud-testutils
     mock

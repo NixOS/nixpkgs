@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-qZk42zGHWpeN5rZPFw7xAmDIvhPzqTePU3If+p/L98c=";
   };
 
-  checkInputs = with python3Packages; [ pytest ];
+  nativeCheckInputs = with python3Packages; [ pytest ];
 
   propagatedBuildInputs = with python3Packages;
     [ requests beautifulsoup4 future wcwidth urwid psycopg2 ];

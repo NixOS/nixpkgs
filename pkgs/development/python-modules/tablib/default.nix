@@ -71,7 +71,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pandas
     pytestCheckHook
     unicodecsv

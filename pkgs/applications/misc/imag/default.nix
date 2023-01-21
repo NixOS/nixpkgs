@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
-  checkInputs = [ gitMinimal util-linuxMinimal ];
+  nativeCheckInputs = [ gitMinimal util-linuxMinimal ];
 
   cargoSha256 = "1vnrc72g2271i2p847z30kplxmdpi60n3dzpw0s7dahg33g14ai6";
 

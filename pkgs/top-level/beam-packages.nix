@@ -15,17 +15,15 @@ in
 {
   beamLib = callPackage ../development/beam-modules/lib.nix { };
 
-  # R24 is the default version.
-  # The main switch to change default Erlang version.
-  defaultVersion = "erlangR24";
+  latestVersion = "erlangR25";
 
   # Each
   interpreters = {
 
-    erlang = self.interpreters.${self.defaultVersion};
-    erlang_odbc = self.interpreters."${self.defaultVersion}_odbc";
-    erlang_javac = self.interpreters."${self.defaultVersion}_javac";
-    erlang_odbc_javac = self.interpreters."${self.defaultVersion}_odbc_javac";
+    erlang = self.interpreters.${self.latestVersion};
+    erlang_odbc = self.interpreters."${self.latestVersion}_odbc";
+    erlang_javac = self.interpreters."${self.latestVersion}_javac";
+    erlang_odbc_javac = self.interpreters."${self.latestVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
 
@@ -120,8 +118,7 @@ in
   # Each field in this tuple represents all Beam packages in nixpkgs built with
   # appropriate Erlang/OTP version.
   packages = {
-    # Packages built with default Erlang version.
-    erlang = self.packages.${self.defaultVersion};
+    erlang = self.packages.${self.latestVersion};
 
     erlangR25 = self.packagesWith self.interpreters.erlangR25;
     erlangR24 = self.packagesWith self.interpreters.erlangR24;

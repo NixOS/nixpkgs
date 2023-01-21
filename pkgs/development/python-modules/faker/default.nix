@@ -25,7 +25,7 @@ buildPythonPackage rec {
     text-unidecode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pillow
     pytestCheckHook

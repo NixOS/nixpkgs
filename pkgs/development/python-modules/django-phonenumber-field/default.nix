@@ -36,7 +36,7 @@ buildPythonPackage rec {
     babel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
   ];
 

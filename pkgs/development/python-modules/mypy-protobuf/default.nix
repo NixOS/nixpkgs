@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   doCheck = false; # ModuleNotFoundError: No module named 'testproto'
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "regex ==" "regex >="
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTests = [
     # These languages require additional dictionaries that aren't packaged
     "test_languages"

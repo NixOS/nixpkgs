@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0a6b3zyxwdcb671c6lrwxm8fhvsbjh0m8hf1r18m9dha86laimjr";
   };
 
-  checkInputs = [ gdb ];
+  nativeCheckInputs = [ gdb ];
 
   # tests require gcc for some reason
   doCheck = !stdenv.hostPlatform.isDarwin;

@@ -21,7 +21,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     mirage-crypto-rng
     dns-tsig

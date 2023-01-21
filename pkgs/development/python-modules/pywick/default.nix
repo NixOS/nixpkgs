@@ -65,7 +65,7 @@ buildPythonPackage rec {
     yacs
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "High-level training framework for Pytorch";

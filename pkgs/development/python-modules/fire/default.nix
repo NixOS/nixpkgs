@@ -29,7 +29,7 @@ buildPythonPackage rec {
     termcolor
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     levenshtein

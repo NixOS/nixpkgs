@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-Tgoem88Y6AhlCKVhMm0Khg6GPcrEktYOqV8xcMaNkl4=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-xdist
     verilog

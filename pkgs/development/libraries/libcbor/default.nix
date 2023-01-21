@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     !stdenv.hostPlatform.is32bit
     && (!stdenv.hostPlatform.isStatic)
     && stdenv.hostPlatform == stdenv.buildPlatform;
-  checkInputs = [ cmocka ];
+  nativeCheckInputs = [ cmocka ];
 
   passthru.tests = {
     inherit libfido2 mysql80;

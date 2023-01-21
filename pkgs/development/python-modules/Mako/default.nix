@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     chameleon
     lingua
     mock

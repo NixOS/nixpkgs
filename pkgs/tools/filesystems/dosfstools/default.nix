@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-compat-symlinks" ];
 
-  checkInputs = [ xxd ];
+  nativeCheckInputs = [ xxd ];
   doCheck = true;
 
   meta = {

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     cmake
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
   ];
 

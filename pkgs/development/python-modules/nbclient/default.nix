@@ -46,7 +46,7 @@ let nbclient = buildPythonPackage rec {
   # circular dependencies if enabled by default
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipykernel
     ipywidgets
     nbconvert

@@ -442,10 +442,10 @@ index 8e4ee81..cc94026 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 7783781..6a2db01 100644
+index b0c2410..ca915e0 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
-@@ -90,7 +90,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
+@@ -94,7 +94,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
  	name_len = strlen (name);
  	hostname_len = strlen (hostname);
  
@@ -466,10 +466,10 @@ index 7783781..6a2db01 100644
  	g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-source-registry.c b/src/libedataserver/e-source-registry.c
-index 6701a3a..f497263 100644
+index 4a9b398..e7cb404 100644
 --- a/src/libedataserver/e-source-registry.c
 +++ b/src/libedataserver/e-source-registry.c
-@@ -1764,7 +1764,19 @@ e_source_registry_init (ESourceRegistry *registry)
+@@ -1773,7 +1773,19 @@ e_source_registry_init (ESourceRegistry *registry)
  
  	g_mutex_init (&registry->priv->sources_lock);
  

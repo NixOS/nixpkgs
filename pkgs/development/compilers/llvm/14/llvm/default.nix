@@ -56,7 +56,7 @@ in stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   patches = [
     ./gnu-install-dirs.patch

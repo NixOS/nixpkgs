@@ -43,7 +43,7 @@ buildPythonPackage rec {
     tag-expressions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-mock
     pytestCheckHook

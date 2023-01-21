@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.4.1";
+  version = "5.4.2";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64 || finalAttrs.version != stdenv.cc.version;
+    broken = stdenv.isAarch64 || versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

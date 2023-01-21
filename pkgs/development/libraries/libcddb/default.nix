@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fr21a7vprdyy1bq6s99m0x420c9jm5fipsd63pqv8qyfkhhxkim";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libcddb.sourceforge.net/";
     license = licenses.lgpl2Plus;
     mainProgram = "cddb_query";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

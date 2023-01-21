@@ -38,7 +38,7 @@ buildPythonPackage rec {
     mac-vendor-lookup
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

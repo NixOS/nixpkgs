@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-fymO9WqkYaRsHKCJHQJpySHqZor2t8BfVrfYUfYoJno=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     eventlet
     mock

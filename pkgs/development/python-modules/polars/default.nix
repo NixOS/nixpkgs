@@ -49,7 +49,7 @@ buildPythonPackage {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "polars" ];
-  # checkInputs = [
+  # nativeCheckInputs = [
   #   pytestCheckHook
   #   fixtures
   #   graphviz

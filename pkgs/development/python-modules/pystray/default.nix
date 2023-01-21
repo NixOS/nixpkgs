@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ gobject-introspection sphinx ];
   propagatedBuildInputs = [ pillow xlib six pygobject3 gtk3 libayatana-appindicator ];
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
 
   checkPhase = ''
     rm tests/icon_tests.py # test needs user input

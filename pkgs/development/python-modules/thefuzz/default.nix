@@ -30,7 +30,7 @@ buildPythonPackage rec {
     "thefuzz"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

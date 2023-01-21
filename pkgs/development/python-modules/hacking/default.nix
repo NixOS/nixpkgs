@@ -31,7 +31,7 @@ buildPythonPackage rec {
     flake8
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     stestr
     testscenarios

@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     absl-py
     attrs
     numpy

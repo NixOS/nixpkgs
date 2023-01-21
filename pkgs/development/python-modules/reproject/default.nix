@@ -38,7 +38,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];

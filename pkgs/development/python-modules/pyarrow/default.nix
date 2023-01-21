@@ -50,7 +50,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pandas
     pytestCheckHook

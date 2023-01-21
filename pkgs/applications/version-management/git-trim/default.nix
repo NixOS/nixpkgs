@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-trim";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "foriequal0";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rb9dhj7b7mjrhsvm9vw5gzjfxj10idnzv488jkfdz7sfhd3fcvz";
+    sha256 = "sha256-XAO3Qg5I2lYZVNx4+Z5jKHRIFdNwBJsUQwJXFb4CbvM=";
   };
 
-  cargoSha256 = "1gy77c1cnm2qpgf0fr03alvxi3936x36c032865a6ch8bzns7k5v";
+  cargoHash = "sha256-KCLMb8NXxjscrmKXkP/RbV+LsJqOG7zaClJGFiQ4o9k=";
 
   nativeBuildInputs = [ pkg-config ];
 

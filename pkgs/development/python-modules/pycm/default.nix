@@ -28,7 +28,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

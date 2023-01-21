@@ -40,7 +40,7 @@ in buildPythonPackage rec {
     "--rj-include-dir=${lib.getDev rapidjson'}/include"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];

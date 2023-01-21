@@ -35,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiodns
     aiohttp
     flask
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     "tests/testserver_tests/"
     # requires missing pytest plugin
     "tests/async_tests/test_rest_asyncio_transport.py"
-    # needs msrest, which cannot be included in checkInputs due to circular dependency new in msrest 0.7.1
+    # needs msrest, which cannot be included in nativeCheckInputs due to circular dependency new in msrest 0.7.1
     # azure-core needs msrest which needs azure-core
     "tests/test_polling.py"
     "tests/async_tests/test_base_polling_async.py"

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];
-  checkInputs = [ pygments ];
+  nativeCheckInputs = [ pygments ];
 
   meta = with lib; {
     description = "Structured Configuration Library";

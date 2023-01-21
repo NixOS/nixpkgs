@@ -7,7 +7,7 @@ dotnetCheckHook() {
     runHook preCheck
 
     if [ "${disabledTests-}" ]; then
-        local -r disabledTestsFlag="--filter FullyQualifiedName!=@disabledTests@"
+        local -r disabledTestsFlag="--filter @disabledTests@"
     fi
 
     if [ "${enableParallelBuilding-}" ]; then

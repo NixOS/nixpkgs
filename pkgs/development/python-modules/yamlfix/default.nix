@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ruyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];

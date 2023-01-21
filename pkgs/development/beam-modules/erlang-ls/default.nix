@@ -1,5 +1,5 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib }:
+, stdenv, writeScript, lib, erlang }:
 let
   version = "0.41.2";
   owner = "erlang-ls";
@@ -29,6 +29,13 @@ rebar3Relx {
   };
   releaseType = "escript";
   beamDeps = builtins.attrValues deps;
+
+  # Skip "els_hover_SUITE" test for Erlang/OTP 25+ while upstream hasn't fixed it
+  # https://github.com/erlang-ls/erlang_ls/pull/1402
+  postPatch = lib.optionalString (lib.versionOlder "25" erlang.version) ''
+    rm apps/els_lsp/test/els_hover_SUITE.erl
+  '';
+
   buildPlugins = [ rebar3-proper ];
   buildPhase = "HOME=. make";
   # based on https://github.com/erlang-ls/erlang_ls/blob/main/.github/workflows/build.yml

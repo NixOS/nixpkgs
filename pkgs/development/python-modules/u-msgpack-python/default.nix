@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";

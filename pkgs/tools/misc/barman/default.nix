@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     ./unwrap-subprocess.patch
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     python-snappy
     google-cloud-storage

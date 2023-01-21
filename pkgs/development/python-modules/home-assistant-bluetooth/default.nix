@@ -42,7 +42,7 @@ buildPythonPackage rec {
     "home_assistant_bluetooth"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     "xyzservices.providers"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mercantile
     pytestCheckHook
     requests

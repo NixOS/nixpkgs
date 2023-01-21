@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-fodoGeVSNw4XZrVt907H20OJQIR8FlfINvEPWOkZQqI=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-9CIAPsV0SJaBlNZZtWkqhhCJ/a1QEgbTkrCEBnuDVDo=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     faker
     mock

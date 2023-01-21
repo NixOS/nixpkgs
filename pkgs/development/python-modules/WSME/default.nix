@@ -41,7 +41,7 @@ buildPythonPackage rec {
     webob
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     cherrypy
     flask

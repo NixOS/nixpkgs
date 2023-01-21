@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   patches = [ ./Makefile.am.patch ];
 
   doCheck = true;
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   postInstall = ''
     mkdir -p $nginx

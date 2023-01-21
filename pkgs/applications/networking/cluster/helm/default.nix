@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "kubernetes-helm";
-  version = "3.10.3";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-SUPa6bbops2rrzzzYM5fH0l4DT7/rIkOqc396lTesao=";
+    sha256 = "sha256-Pes1p7rTO17Bef6qacsQWJkhb1CWilzmVYQe886EepU=";
   };
-  vendorSha256 = "sha256-vyHT/N5lat/vqM2jK4Q+jJOtZpS52YCYGcJqfa5e0KM=";
+  vendorSha256 = "sha256-LRMDrBSl5EGQqQt5FUU4JJHqdwfYt5qsVpe76jUQBVI=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -37,7 +37,8 @@ buildGoModule rec {
   postInstall = ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
-    installShellCompletion helm.{bash,zsh}
+    $out/bin/helm completion fish > helm.fish
+    installShellCompletion helm.{bash,zsh,fish}
   '';
 
   meta = with lib; {

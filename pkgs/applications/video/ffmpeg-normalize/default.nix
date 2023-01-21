@@ -7,11 +7,11 @@
 
 buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+WpWcQnnAUiARLZBkv51AblZDz9g8bM5MQTkm2kYsPQ=";
+    sha256 = "sha256-OwREpfWaP0tdAjMGjGpVIAQn8rlTTjSfT+0t5g/2yjQ=";
   };
 
   propagatedBuildInputs = [ ffmpeg ffmpeg-progress-yield ];

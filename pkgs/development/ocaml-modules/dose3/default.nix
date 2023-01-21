@@ -33,7 +33,7 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dpkg                      # Replaces: conf-dpkg
     git
     ounit

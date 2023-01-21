@@ -6,6 +6,7 @@
 , pkg-config
 , protobuf
 , makeWrapper
+, git
 , dbus
 , libnftnl
 , libmnl
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
     makeWrapper
+    git
   ];
 
   buildInputs = [

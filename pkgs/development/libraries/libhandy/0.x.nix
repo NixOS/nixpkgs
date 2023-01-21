@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [ gnome-desktop gtk3 libxml2 ];
-  checkInputs = [ dbus xvfb-run hicolor-icon-theme ];
+  nativeCheckInputs = [ dbus xvfb-run hicolor-icon-theme ];
 
   mesonFlags = [
     "-Dgtk_doc=true"

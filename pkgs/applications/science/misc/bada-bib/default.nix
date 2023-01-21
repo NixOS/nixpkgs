@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appstream-glib
     desktop-file-utils
   ];

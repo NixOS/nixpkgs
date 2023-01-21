@@ -38,7 +38,7 @@ buildPythonPackage rec {
     libxcrypt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

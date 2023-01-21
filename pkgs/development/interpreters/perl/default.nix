@@ -36,7 +36,16 @@ let
       optional crossCompiling "mini";
     setOutputFlags = false;
 
-    propagatedBuildInputs = lib.optional enableCrypt libxcrypt;
+    # On FreeBSD, if Perl is built with threads support, having
+    # libxcrypt available will result in a build failure, because
+    # perl.h will get conflicting definitions of struct crypt_data
+    # from libc's unistd.h and libxcrypt's crypt.h.
+    #
+    # FreeBSD Ports has the same issue building the perl port if
+    # the libxcrypt port has been installed.
+    #
+    # Without libxcrypt, Perl will still find FreeBSD's crypt functions.
+    propagatedBuildInputs = lib.optional (enableCrypt && !stdenv.isFreeBSD) libxcrypt;
 
     disallowedReferences = [ stdenv.cc ];
 

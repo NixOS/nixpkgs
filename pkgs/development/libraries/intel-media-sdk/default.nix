@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libdrm libva libpciaccess libX11 libXau libXdmcp libpthreadstubs
   ];
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DBUILD_SAMPLES=OFF"

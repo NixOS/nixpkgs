@@ -53,7 +53,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     future
     hypothesis
     parameterized

@@ -474,6 +474,15 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
+  # curl 7.87.0 introduces a preprocessor typechecker of sorts which fails on
+  # incorrect usages of curl_easy_getopt and similar functions. Presumably
+  # because the wrappers in curlc.c don't use static values for the different
+  # arguments to curl_easy_getinfo, it complains and needs to be disabled.
+  # https://github.com/GaloisInc/curl/issues/28
+  curl = appendConfigureFlags [
+    "--ghc-option=-DCURL_DISABLE_TYPECHECK"
+  ] super.curl;
+
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 

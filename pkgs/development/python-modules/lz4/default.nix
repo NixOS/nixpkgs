@@ -46,7 +46,7 @@ buildPythonPackage rec {
     "lz4.stream"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     psutil
   ];

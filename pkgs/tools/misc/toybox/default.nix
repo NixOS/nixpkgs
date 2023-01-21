@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   # ...this is fixed in latest git, so doCheck can likely be enabled for next release
   # see https://github.com/landley/toybox/commit/b928ec480cd73fd83511c0f5ca786d1b9f3167c3
   #doCheck = true;
-  checkInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
+  nativeCheckInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";

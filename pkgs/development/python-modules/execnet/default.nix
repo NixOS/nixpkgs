@@ -44,7 +44,7 @@ buildPythonPackage rec {
     apipkg
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
   ];

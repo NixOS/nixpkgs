@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ markup ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.04";
-  checkInputs = [ ounit2 ];
+  nativeCheckInputs = [ ounit2 ];
 
   meta = {
     description = "Functional HTML scraping and rewriting with CSS in OCaml";

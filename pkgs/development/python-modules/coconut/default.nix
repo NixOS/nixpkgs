@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
 
-  checkInputs = [ pexpect pytestCheckHook tkinter ];
+  nativeCheckInputs = [ pexpect pytestCheckHook tkinter ];
 
   # Currently most tests have performance issues
   pytestFlagsArray = [

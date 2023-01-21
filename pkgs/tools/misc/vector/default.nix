@@ -28,12 +28,12 @@
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+, nix-update-script
 }:
 
 let
   pname = "vector";
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = "0.27.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -42,15 +42,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = pinData.sha256;
+    sha256 = "sha256-+jap7cexevEky3H+Ct9LXXUwHR5tnbzdN+b13pv3f70=";
   };
 
-  patches = [
-    # replace with https://github.com/vectordotdev/vector/pull/15093 when ready
-    ./fix-for-rust-1.66.diff
-  ];
-
-  cargoSha256 = pinData.cargoSha256;
+  cargoSha256 = "sha256-KehBEwoz5N0zQLDk+9vwFSrn1TrVwljFj+asr7q7hmw=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -110,7 +105,7 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     inherit features;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

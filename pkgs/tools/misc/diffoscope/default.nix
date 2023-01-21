@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
       hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
     ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
-  checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
   postInstall = ''
     make -C doc

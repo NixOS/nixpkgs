@@ -30,7 +30,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asttokens
     littleutils
     pytestCheckHook

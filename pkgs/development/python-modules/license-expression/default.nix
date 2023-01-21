@@ -32,7 +32,7 @@ buildPythonPackage rec {
     boolean-py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

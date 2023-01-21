@@ -143,6 +143,14 @@ in {
               "curl -sSfL 'http://site2.local/doku.php?id=plugin-list' | (! grep 'plugin:tag')",
           )
 
+          # Test if theme is applied and working correctly (no weired relative PHP import errors)
+          machine.succeed(
+            "curl -sSfL 'http://site1.local/doku.php' | grep 'bootstrap3/images/logo.png'",
+            "curl -sSfL 'http://site1.local/lib/exe/css.php' | grep 'bootstrap3'",
+            "curl -sSfL 'http://site1.local/lib/tpl/bootstrap3/css.php'",
+          )
+
+
         # Just to ensure both Webserver configurations are consistent in allowing that
         with subtest("Rewriting"):
           machine.succeed(

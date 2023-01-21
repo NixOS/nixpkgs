@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     lz4
     numpy
     pandas

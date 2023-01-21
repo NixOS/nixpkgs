@@ -42,7 +42,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyhamcrest
     mock
     pytestCheckHook

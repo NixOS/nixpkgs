@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markdown pygments ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];

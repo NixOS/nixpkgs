@@ -61,7 +61,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
     babel
     mock

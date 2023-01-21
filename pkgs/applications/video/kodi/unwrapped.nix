@@ -233,7 +233,8 @@ in stdenv.mkDerivation {
     '';
 
     postInstall = ''
-      for p in $(ls $out/bin/) ; do
+      # TODO: figure out which binaries should be wrapped this way and which shouldn't
+      for p in $(ls --ignore=kodi-send $out/bin/) ; do
         wrapProgram $out/bin/$p \
           --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
@@ -242,6 +243,9 @@ in stdenv.mkDerivation {
                  ++ lib.optional nfsSupport libnfs
                  ++ lib.optional rtmpSupport rtmpdump)}"
       done
+
+      wrapProgram $out/bin/kodi-send \
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
         --replace kodi-standalone $out/bin/kodi-standalone

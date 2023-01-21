@@ -26,7 +26,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
   ];

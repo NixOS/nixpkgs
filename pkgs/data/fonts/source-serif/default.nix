@@ -1,18 +1,12 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "4.004";
-in fetchzip {
+in (fetchzip {
   name = "source-serif-${version}";
 
   url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,variable}
-    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
-    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
-  '';
 
   sha256 = "06814hcp20abca6p0ii61f23g6h1ibqyhq30lsva59wbwx5iha0h";
 
@@ -23,4 +17,11 @@ in fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts/{opentype,truetype,variable}
+    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
+    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
+    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
+  '';
+})

@@ -40,7 +40,7 @@ buildDunePackage rec {
     gluten-lwt-unix
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest-lwt
     dune-site
   ];

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiofiles
     pytest-asyncio
     pytest-localserver

@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gettext
     python3.pkgs.mock
   ];

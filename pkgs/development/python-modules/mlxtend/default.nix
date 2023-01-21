@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-7G4tIoQGS7/YPpAhUn0CRf8fl/DdjdqySPWgJEL0trA=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # image tests download files over the network
   pytestFlagsArray = [ "-sv" "--ignore=mlxtend/image" ];
   # Fixed in master, but failing in release version

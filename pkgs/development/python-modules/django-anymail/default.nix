@@ -29,7 +29,7 @@ buildPythonPackage rec {
     boto3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     mock

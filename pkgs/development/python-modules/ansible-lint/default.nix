@@ -60,7 +60,7 @@ buildPythonPackage rec {
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-xdist
     pytestCheckHook

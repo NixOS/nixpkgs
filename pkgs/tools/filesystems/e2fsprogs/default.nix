@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       "--enable-libuuid --disable-e2initrd-helper"
     ];
 
-  checkInputs = [ buildPackages.perl ];
+  nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
 
   postInstall = ''

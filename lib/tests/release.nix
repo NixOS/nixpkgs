@@ -1,11 +1,11 @@
 { # The pkgs used for dependencies for the testing itself
   # Don't test properties of pkgs.lib, but rather the lib in the parent directory
-  pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; }
+  pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; },
+  nix ? pkgs.nix,
 }:
 
 pkgs.runCommand "nixpkgs-lib-tests" {
   buildInputs = [
-    pkgs.nix
     (import ./check-eval.nix)
     (import ./maintainers.nix {
       inherit pkgs;
@@ -19,8 +19,12 @@ pkgs.runCommand "nixpkgs-lib-tests" {
       inherit pkgs;
     })
   ];
+  nativeBuildInputs = [
+    nix
+  ];
+  strictDeps = true;
 } ''
-    datadir="${pkgs.nix}/share"
+    datadir="${nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
     export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc

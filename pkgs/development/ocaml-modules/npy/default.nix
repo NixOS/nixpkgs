@@ -16,7 +16,7 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ camlzip ];
-  checkInputs = [ numpy ];
+  nativeCheckInputs = [ numpy ];
 
   doCheck = true;
 

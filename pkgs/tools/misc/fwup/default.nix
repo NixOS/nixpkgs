@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     dosfstools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
     xdelta
   ];

@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hypothesis lark libcst ];
 
-  checkInputs = [ parso pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ parso pytestCheckHook pytest-xdist ];
 
   pytestFlagsArray = [
     "-v"

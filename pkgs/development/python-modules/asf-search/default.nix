@@ -39,7 +39,7 @@ buildPythonPackage rec {
     wktutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];

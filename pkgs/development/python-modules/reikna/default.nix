@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "722fefbd253d0bbcbf5250b7b9c4aca5722cde4ca38bfbf863a551a5fc26edfa";
   };
 
-  checkInputs = [ sphinx pytest-cov pytest ];
+  nativeCheckInputs = [ sphinx pytest-cov pytest ];
 
   propagatedBuildInputs = [ Mako numpy funcsigs ]
     ++ lib.optional withCuda pycuda

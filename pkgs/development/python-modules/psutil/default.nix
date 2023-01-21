@@ -29,7 +29,7 @@ buildPythonPackage rec {
       IOKit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

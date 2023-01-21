@@ -25,7 +25,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ unittestCheckHook pyyaml ];
+  nativeCheckInputs = [ unittestCheckHook pyyaml ];
 
   pythonImportsCheck = [ "markdown" ];
 

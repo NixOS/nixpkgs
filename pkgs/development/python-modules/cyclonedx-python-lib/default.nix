@@ -48,7 +48,7 @@ buildPythonPackage rec {
     types-toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     jsonschema
     lxml

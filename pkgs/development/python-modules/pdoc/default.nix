@@ -31,7 +31,7 @@ buildPythonPackage rec {
     markupsafe
   ] ++ lib.optional (pythonOlder "3.9") astunparse;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];

@@ -55,7 +55,7 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.concatLists (lib.attrVals ([
     "woff"

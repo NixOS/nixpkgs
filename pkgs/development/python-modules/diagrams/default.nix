@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ./remove-black-requirement.patch
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files

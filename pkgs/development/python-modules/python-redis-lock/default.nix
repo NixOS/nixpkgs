@@ -22,7 +22,7 @@ buildPythonPackage rec {
     redis
   ] ++ lib.optional withDjango django-redis;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     process-tests
     pkgs.redis

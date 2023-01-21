@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tinycss2 ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cssselect2" ];
 

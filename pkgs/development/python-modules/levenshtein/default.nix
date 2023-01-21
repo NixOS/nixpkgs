@@ -45,7 +45,7 @@ buildPythonPackage rec {
     rapidfuzz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

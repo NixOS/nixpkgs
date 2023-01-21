@@ -1330,6 +1330,12 @@
     githubId = 55833;
     name = "Troels Henriksen";
   };
+  athre0z = {
+    email = "joel@zyantific.com";
+    github = "athre0z";
+    githubId = 6553158;
+    name = "Joel Höner";
+  };
   atila = {
     name = "Átila Saraiva";
     email = "atilasaraiva@gmail.com";
@@ -4189,6 +4195,12 @@
     githubId = 5300871;
     name = "Leon Kowarschick";
   };
+  elnudev = {
+    email = "elnu@elnu.com";
+    github = "elnudev";
+    githubId = 9874955;
+    name = "Elnu";
+  };
   elohmeier = {
     email = "elo-nixos@nerdworks.de";
     github = "elohmeier";
@@ -6159,6 +6171,12 @@
     github = "imuli";
     githubId = 4085046;
     name = "Imuli";
+  };
+  inclyc = {
+    email = "i@lyc.dev";
+    github = "inclyc";
+    githubId = 36667224;
+    name = "Yingchi Long";
   };
   ineol = {
     email = "leo.stefanesco@gmail.com";
@@ -9954,6 +9972,12 @@
       fingerprint = "7A10 AB8E 0BEC 566B 090C  9BE3 D812 6E55 9CE7 C35D";
     }];
   };
+  nat-418 = {
+    email = "93013864+nat-418@users.noreply.github.com";
+    github = "nat-418";
+    githubId = 93013864;
+    name = "nat-418";
+  };
   nathanruiz = {
     email = "nathanruiz@protonmail.com";
     github = "nathanruiz";
@@ -10763,6 +10787,12 @@
     github = "oyren";
     githubId = 15930073;
     name = "Moritz Scheuren";
+  };
+  ovlach = {
+    email = "ondrej@vlach.xyz";
+    name = "Ondrej Vlach";
+    github = "ovlach";
+    githubId = 4405107;
   };
   ozkutuk = {
     email = "ozkutuk@protonmail.com";

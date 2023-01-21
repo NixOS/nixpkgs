@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.9.1";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-a32H5X3VsfYuU1TkOH5uGn1eDLvGUDI6WhXEQ0AKwq8=";
+    sha256 = "sha256-T71Jmgj/hgLOcSHu5QyqdZ7dYpLjhTQqDBdQgiaGXA8=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     click
     jinja2

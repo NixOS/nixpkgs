@@ -35,7 +35,7 @@ buildPythonPackage rec {
     execnet
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     filelock
     pytestCheckHook
   ];

@@ -50,7 +50,7 @@ buildGoModule rec {
       --suffix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

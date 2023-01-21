@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ twisted ];
 
-  checkInputs = [ twisted ];
+  nativeCheckInputs = [ twisted ];
 
   checkPhase = ''
     trial formless nevow

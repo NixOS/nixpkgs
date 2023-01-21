@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
     Foundation
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb
   ] ++ lib.optionals (lib.versionOlder version "2.089.0") [
     unzip

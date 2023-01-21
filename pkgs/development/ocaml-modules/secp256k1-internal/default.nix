@@ -31,7 +31,7 @@ buildDunePackage rec {
     dune-configurator
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     hex
   ];

@@ -52,7 +52,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     ecs-logging
     jinja2

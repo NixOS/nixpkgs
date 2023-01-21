@@ -24,7 +24,7 @@ buildPythonPackage rec {
     crcmod
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

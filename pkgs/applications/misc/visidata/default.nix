@@ -71,7 +71,7 @@ buildPythonApplication rec {
   ] ++ lib.optionals withPcap [ dpkt dnslib ]
   ++ lib.optional withXclip xclip;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

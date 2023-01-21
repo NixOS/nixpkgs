@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-compute";
-  version = "29.0.0";
+  version = "29.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-wkRmH/3MMxeTZr7KQMZQbjPHs2GSxAjJFZlSp75pUPI=";
+    hash = "sha256-LVobrn9dMHyh6FDX6D/tnIOdT2NbEKS40/i8YJisKIg=";
   };
 
   propagatedBuildInputs = [

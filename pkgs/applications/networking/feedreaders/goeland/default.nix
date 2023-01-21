@@ -23,14 +23,15 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "An alternative to RSS2Email written in golang with many filters.";
+    description = "An alternative to rss2email written in golang with many filters";
     longDescription = ''
-      Goeland excels at creating beautiful emails from RSS,
-      tailored for daily or weekly digest. It include a number of
+      Goeland excels at creating beautiful emails from RSS feeds,
+      tailored for daily or weekly digest. It includes a number of
       filters that can transform the RSS content along the way.
-      It can also consume other sources, such as a Imgur tag.
+      It can also consume other sources, such as Imgur tags.
     '';
     homepage = "https://github.com/slurdge/goeland";
+    changelog = "https://github.com/slurdge/goeland/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.sweenu ];
   };

@@ -39,7 +39,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     mock
     pytest-asyncio

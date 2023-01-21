@@ -53,7 +53,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopen";
-  version = "5.4.1";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -182,6 +182,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpen";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

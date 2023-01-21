@@ -24,7 +24,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [bls12-381 data-encoding bigstringaf];
 
-  checkInputs = [alcotest alcotest-lwt bisect_ppx qcheck-alcotest];
+  nativeCheckInputs = [alcotest alcotest-lwt bisect_ppx qcheck-alcotest];
 
   doCheck = false; # circular dependencies
 

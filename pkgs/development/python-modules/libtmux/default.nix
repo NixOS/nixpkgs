@@ -29,7 +29,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     procps
     tmux
     pytest-rerunfailures

@@ -18,18 +18,18 @@ index 121398fa..a589988b 100644
  	sourceDir: func() string {
  		llvmDir := filepath.Join(goenv.Get("TINYGOROOT"), "llvm-project/compiler-rt/lib/builtins")
 diff --git a/builder/picolibc.go b/builder/picolibc.go
-index f1b061ae..159f90cf 100644
+index d0786ee3..9a5cf9b0 100644
 --- a/builder/picolibc.go
 +++ b/builder/picolibc.go
-@@ -27,7 +27,7 @@ var Picolibc = Library{
- 			"-D_COMPILING_NEWLIB",
- 			"-DHAVE_ALIAS_ATTRIBUTE",
- 			"-DTINY_STDIO",
+@@ -30,7 +30,7 @@ var Picolibc = Library{
+ 			"-D_IEEE_LIBM",
+ 			"-D__OBSOLETE_MATH_FLOAT=1", // use old math code that doesn't expect a FPU
+ 			"-D__OBSOLETE_MATH_DOUBLE=0",
 -			"-nostdlibinc",
 +			"-isystem", "@clang_include@",
- 			"-isystem", picolibcDir + "/include",
- 			"-I" + picolibcDir + "/tinystdio",
- 			"-I" + headerPath,
+ 			"-isystem", newlibDir + "/libc/include",
+ 			"-I" + newlibDir + "/libc/tinystdio",
+ 			"-I" + newlibDir + "/libm/common",
 diff --git a/compileopts/config.go b/compileopts/config.go
 index a006b673..3a105b49 100644
 --- a/compileopts/config.go

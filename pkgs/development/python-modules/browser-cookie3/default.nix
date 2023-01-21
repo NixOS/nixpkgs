@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.16.3";
+  version = "0.16.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LWqXml6ShNU7gHZChdETwkSmLhipnSCgnyCWnBs7MXw=";
+    hash = "sha256-i2Ib7OGnoimiZ2R/vGe6phPhA8lEP0BJ/gP1q9RVeiU=";
   };
 
   propagatedBuildInputs = [
@@ -38,10 +38,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Loads cookies from your browser into a cookiejar object";
     homepage = "https://github.com/borisbabic/browser_cookie3";
+    changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ borisbabic ];
+    broken = stdenv.isDarwin;
   };
 }

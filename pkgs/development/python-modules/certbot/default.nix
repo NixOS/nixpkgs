@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   buildInputs = [ dialog gnureadline ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python-dateutil
     pytestCheckHook
     pytest-xdist

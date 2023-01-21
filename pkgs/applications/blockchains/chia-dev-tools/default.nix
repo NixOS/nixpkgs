@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     pytimeparse
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-asyncio
   ];

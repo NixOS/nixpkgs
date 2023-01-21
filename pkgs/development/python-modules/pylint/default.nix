@@ -73,7 +73,7 @@ buildPythonPackage rec {
     installManPage man/*.1
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     py

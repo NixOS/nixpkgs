@@ -43,7 +43,11 @@ in
       substitutions = {
         inherit buildType libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
-          (lib.concatStringsSep "&FullyQualifiedName!=" disabledTests);
+          (let
+            escapedNames = lib.lists.map (n: lib.replaceStrings [","] ["%2C"] n) disabledTests;
+            filters = lib.lists.map (n: "FullyQualifiedName!=${n}") escapedNames;
+          in
+          "${lib.concatStringsSep "&" filters}");
       };
     } ./dotnet-check-hook.sh) { };
 

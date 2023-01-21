@@ -30,7 +30,7 @@ buildPythonPackage rec {
     humanfriendly
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

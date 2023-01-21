@@ -15,7 +15,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  checkInputs = [ jq ];
+  nativeCheckInputs = [ jq ];
 
   postInstall = ''
     wrapProgram $out/bin/jiq \

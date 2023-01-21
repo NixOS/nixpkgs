@@ -25,7 +25,7 @@ buildPythonPackage rec {
     py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     numpy
     py

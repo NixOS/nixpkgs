@@ -46,7 +46,7 @@ buildPythonPackage rec {
     nest-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     pyhamcrest

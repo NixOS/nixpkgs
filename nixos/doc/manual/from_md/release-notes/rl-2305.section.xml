@@ -85,6 +85,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/slurdge/goeland">goeland</link>,
+          an alternative to rss2email written in golang with many
+          filters. Available as
+          <link linkend="opt-services.goeland.enable">services.goeland</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ellie/atuin">atuin</link>,
           a sync server for shell history. Available as
           <link linkend="opt-services.atuin.enable">services.atuin</link>.
@@ -136,6 +144,30 @@
           and
           <link xlink:href="https://github.com/kolloch/crate2nix">crate2nix</link>
           instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>checkInputs</literal> have been renamed to
+          <literal>nativeCheckInputs</literal>, because they behave the
+          same as <literal>nativeBuildInputs</literal> when
+          <literal>doCheck</literal> is set.
+          <literal>checkInputs</literal> now denote a new type of
+          dependencies, added to <literal>buildInputs</literal> when
+          <literal>doCheck</literal> is set. As a rule of thumb,
+          <literal>nativeCheckInputs</literal> are tools on
+          <literal>$PATH</literal> used during the tests, and
+          <literal>checkInputs</literal> are libraries which are linked
+          to executables built as part of the tests. Similarly,
+          <literal>installCheckInputs</literal> are renamed to
+          <literal>nativeInstallCheckInputs</literal>, corresponding to
+          <literal>nativeBuildInputs</literal>, and
+          <literal>installCheckInputs</literal> are a new type of
+          dependencies added to <literal>buildInputs</literal> when
+          <literal>doInstallCheck</literal> is set. (Note that this
+          change will not cause breakage to derivations with
+          <literal>strictDeps</literal> unset, which are most packages
+          except python, rust and go packages).
         </para>
       </listitem>
       <listitem>
@@ -268,6 +300,16 @@
           removed. Users relying on this should provide their own
           implementation, and probably use ext4 and perform the mount in
           stage-2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>teleport</literal> has been upgraded to major version
+          11. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/setup/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/changelog/#1100">release
+          notes</link>.
         </para>
       </listitem>
       <listitem>
@@ -416,6 +458,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>wordpress</literal> service now takes
+          configuration via the
+          <literal>services.wordpress.sites.&lt;name&gt;.settings</literal>
+          attribute set, <literal>extraConfig</literal> is still
+          available to append additional text to
+          <literal>wp-config.php</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           To reduce closure size in
           <literal>nixos/modules/profiles/minimal.nix</literal> profile
           disabled installation documentations and manuals. Also
@@ -523,6 +575,22 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>root</literal> package is now built with the
+          <literal>&quot;-Dgnuinstall=ON&quot;</literal> CMake flag,
+          making the output conform the <literal>bin</literal>
+          <literal>lib</literal> <literal>share</literal> layout. In
+          this layout, <literal>tutorials</literal> is under
+          <literal>share/doc/ROOT/</literal>; <literal>cmake</literal>,
+          <literal>font</literal>, <literal>icons</literal>,
+          <literal>js</literal> and <literal>macro</literal> under
+          <literal>share/root</literal>;
+          <literal>Makefile.comp</literal> and
+          <literal>Makefile.config</literal> under
+          <literal>etc/root</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Enabling global redirect in
           <literal>services.nginx.virtualHosts</literal> now allows one
           to add exceptions with the <literal>locations</literal>
@@ -614,6 +682,13 @@
           <literal>nixos-version</literal> now accepts
           <literal>--configuration-revision</literal> to display more
           information about the current generation revision
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.nomad.extraSettingsPlugins</literal> has
+          been fixed to allow more than one plugin in the path.
         </para>
       </listitem>
     </itemizedlist>

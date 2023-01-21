@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
   '';
-  installCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
     lxml

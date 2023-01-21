@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison patchelf ];
 
   doCheck = true;
-  checkInputs = [ tzdata ]; # legacytimeperiod/dst needs this
+  nativeCheckInputs = [ tzdata ]; # legacytimeperiod/dst needs this
 
   postFixup = ''
     rm -r $out/etc/logrotate.d $out/etc/sysconfig $out/lib/icinga2/prepare-dirs

@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ uvicorn.optional-dependencies.standard;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aiohttp
     pytest-asyncio
     pytestCheckHook

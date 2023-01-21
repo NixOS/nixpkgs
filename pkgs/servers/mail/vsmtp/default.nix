@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , testers
 , vsmtp
@@ -16,6 +17,16 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-uyu2NpHFDqJDcfQukG6TdRH7KuZnrYTULvLiABdvAog=";
   };
+
+  patches = [
+    # https://github.com/viridIT/vSMTP/pull/952
+    # treewide: set GIT_HASH to unknown if git rev-parse HEAD fails
+    (fetchpatch {
+      url = "https://github.com/viridIT/vSMTP/commit/0ac4820c079e459f515825dfb451980119eaae9e.patch";
+      includes = [ "src/vsmtp/vsmtp-core/build.rs" "src/vqueue/build.rs" ];
+      hash = "sha256-kGjXsVokP6039rksaxw1EM/0zOlKIus1EaIEsFJvLE8=";
+    })
+  ];
 
   cargoHash = "sha256-A0Q6ciZJL13VzJgZIWZalrRElSNGHUN/9b8Csj4Tdak=";
 

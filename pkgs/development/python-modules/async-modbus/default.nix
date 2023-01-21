@@ -48,7 +48,7 @@ buildPythonPackage rec {
     umodbus
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

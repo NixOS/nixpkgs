@@ -70,7 +70,7 @@ buildPythonPackage rec {
     llvmPackages.openmp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
     matplotlib

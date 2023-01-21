@@ -9,14 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.1.0";
+  version = "1.2.0";
   pname = "azure-mgmt-redhatopenshift";
   disabled = isPy27; # don't feel like fixing namespace issues on python2
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-Tq8h3fvajxIG2QjtCyHCQDE2deBDioxLLaQQek/O24U=";
+    sha256 = "sha256-ZU4mKTzny9tsKDrFSU+lll5v6oDivYJlXDriWJLAYec=";
   };
 
   propagatedBuildInputs = [

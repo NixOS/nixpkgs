@@ -117,7 +117,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     matplotlib
     numpy

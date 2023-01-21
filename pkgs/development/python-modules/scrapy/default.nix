@@ -65,7 +65,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
