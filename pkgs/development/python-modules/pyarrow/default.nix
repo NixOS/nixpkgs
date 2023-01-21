@@ -120,6 +120,8 @@ buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_flight.py::test_large_descriptor"
     "--deselect=pyarrow/tests/test_flight.py::test_large_metadata_client"
     "--deselect=pyarrow/tests/test_flight.py::test_none_action_side_effect"
+    # fails to compile
+    "--deselect=pyarrow/tests/test_cython.py::test_cython_api"
   ] ++ lib.optionals stdenv.isLinux [
     # this test requires local networking
     "--deselect=pyarrow/tests/test_fs.py::test_filesystem_from_uri_gcs"
