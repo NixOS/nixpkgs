@@ -2,7 +2,7 @@
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
 , gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee
+, libnotify, libsoup_3, libgee
 , librsvg, libsignal-protocol-c
 , libgcrypt
 , libepoxy
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libnotify
     gpgme
     libgcrypt
-    libsoup
+    libsoup_3
     pcre
     libepoxy
     at-spi2-core
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     gnutls
     gstreamer
     gst-plugins-base
-    gst-plugins-good
+    (gst-plugins-good.override { libsoup = libsoup_3; })
     webrtc-audio-processing
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
   ];
 
-  cmakeFlags = ["-DBUILD_TESTS=yes"];
+  cmakeFlags = ["-DBUILD_TESTS=yes" "-DUSE_SOUP3=yes"];
 
   doCheck = true;
   checkPhase = ''

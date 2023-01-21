@@ -6,34 +6,31 @@
 , pkg-config
 , gobject-introspection
 , vala
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_45
+, libxslt
+, gi-docgen
 , glib
 , gssdp
-, libsoup
+, libsoup_3
 , libxml2
 , libuuid
 , gnome
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.4.4";
+  version = "1.6.1";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-N2GxXLBjYh+Efz7/t9djfwMXUA/Ka9oeGQT3OSF1Ch8=";
+    sha256 = "sha256-hTgUUtKvlbjhSyTUqYljPQ2DzYjRJy8nzLJBbMyDbUc=";
   };
 
-  patches = [
-    # Bring .pc file in line with our patched pkg-config.
-    ./0001-pkg-config-Declare-header-dependencies-as-public.patch
-  ];
+  postPatch = ''
+    patchShebangs subprojects/gi-docgen/gi-docgen.py
+  '';
 
   depsBuildBuild = [
     pkg-config
@@ -45,10 +42,9 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
-    docbook_xml_dtd_45
+    libxslt
+    gi-docgen
+    (python3.withPackages (p: with p; [ jinja2 markdown markupsafe pygments toml typogrify ]))
   ];
 
   buildInputs = [
@@ -58,7 +54,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glib
     gssdp
-    libsoup
+    libsoup_3
     libxml2
   ];
 
