@@ -37,6 +37,18 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
+    (fetchpatch {
+      name = "use-curlopt_protocols_str-for-new-libcurl.patch";
+      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=6560fb26a62ef135a804357ef4f15a47de3e49b3;hp=a5b07cdf9c491fb7a4a16598c482c68b718f59b9";
+      excludes = [ "debuginfod/ChangeLog" ]; # Doesn't apply
+      sha256 = "sha256-yjeliqojRGvfwbXynmxFGyKqAY7AEr0mbSGQEliYhZ4=";
+    })
+    (fetchpatch {
+      name = "fix-usage-of-deprecated-curlinfo.patch";
+      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=d2bf497b12fbd49b4996ccf0744303ffd67735b1;hp=6ecd16410ce1fe5cb0ac5b7c3342c5cc330e3a04";
+      excludes = [ "debuginfod/ChangeLog" ]; # Doesn't apply
+      sha256 = "sha256-zMx/TazM7vXJre2XagIWvwRS8cd8pbzMTmAbpbqZmx0=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
   postPatch = ''
