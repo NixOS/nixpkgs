@@ -22,7 +22,7 @@
 let
   documentation_deps = [
     (texlive.combine {
-      inherit (texlive) scheme-small wrapfig was;
+      inherit (texlive) scheme-small wrapfig gensymb;
     })
     xvfb-run
     imagemagick
