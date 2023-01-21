@@ -28,7 +28,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosmtpd
     hypothesis
     pytest-asyncio

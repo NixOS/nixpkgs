@@ -85,24 +85,26 @@ let
 
 # TODO(@Ericson2314): Stop using legacy dep attribute names
 
-#                           host offset -> target offset
-  depsBuildBuild              ? [] # -1 -> -1
-, depsBuildBuildPropagated    ? [] # -1 -> -1
-, nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
-, propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
-, depsBuildTarget             ? [] # -1 ->  1
-, depsBuildTargetPropagated   ? [] # -1 ->  1
+#                                 host offset -> target offset
+  depsBuildBuild                    ? [] # -1 -> -1
+, depsBuildBuildPropagated          ? [] # -1 -> -1
+, nativeBuildInputs                 ? [] # -1 ->  0  N.B. Legacy name
+, propagatedNativeBuildInputs       ? [] # -1 ->  0  N.B. Legacy name
+, depsBuildTarget                   ? [] # -1 ->  1
+, depsBuildTargetPropagated         ? [] # -1 ->  1
 
-, depsHostHost                ? [] #  0 ->  0
-, depsHostHostPropagated      ? [] #  0 ->  0
-, buildInputs                 ? [] #  0 ->  1  N.B. Legacy name
-, propagatedBuildInputs       ? [] #  0 ->  1  N.B. Legacy name
+, depsHostHost                      ? [] #  0 ->  0
+, depsHostHostPropagated            ? [] #  0 ->  0
+, buildInputs                       ? [] #  0 ->  1  N.B. Legacy name
+, propagatedBuildInputs             ? [] #  0 ->  1  N.B. Legacy name
 
-, depsTargetTarget            ? [] #  1 ->  1
-, depsTargetTargetPropagated  ? [] #  1 ->  1
+, depsTargetTarget                  ? [] #  1 ->  1
+, depsTargetTargetPropagated        ? [] #  1 ->  1
 
-, checkInputs                 ? []
-, installCheckInputs          ? []
+, checkInputs                       ? []
+, installCheckInputs                ? []
+, nativeCheckInputs                 ? []
+, nativeInstallCheckInputs          ? []
 
 # Configure Phase
 , configureFlags ? []
@@ -206,6 +208,14 @@ then abort ("mkDerivation was called with unsupported hardening flags: " + lib.g
 else let
   doCheck = doCheck';
   doInstallCheck = doInstallCheck';
+  buildInputs' = buildInputs
+         ++ lib.optionals doCheck checkInputs
+         ++ lib.optionals doInstallCheck installCheckInputs;
+  nativeBuildInputs' = nativeBuildInputs
+         ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
+         ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
+         ++ lib.optionals doCheck nativeCheckInputs
+         ++ lib.optionals doInstallCheck nativeInstallCheckInputs;
 
   outputs = outputs';
 
@@ -215,16 +225,12 @@ else let
   dependencies = map (map lib.chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
-         ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-         ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-         ++ lib.optionals doCheck checkInputs
-         ++ lib.optionals doInstallCheck' installCheckInputs))
+      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
       (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
@@ -271,6 +277,7 @@ else let
     (removeAttrs attrs
       (["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
+       "nativeCheckInputs" "nativeInstallCheckInputs"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
        "sandboxProfile" "propagatedSandboxProfile"]

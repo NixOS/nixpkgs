@@ -88,7 +88,7 @@ in buildPythonPackage {
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest
     scipy

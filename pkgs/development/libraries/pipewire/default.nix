@@ -139,7 +139,7 @@ let
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
 
     # Valgrind binary is required for running one optional test.
-    checkInputs = lib.optional withValgrind valgrind;
+    nativeCheckInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"

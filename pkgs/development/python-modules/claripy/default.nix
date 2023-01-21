@@ -37,7 +37,7 @@ buildPythonPackage rec {
     z3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -43,7 +43,7 @@ buildPythonPackage rec {
     astroid
   ] ++ z3.requiredPythonModules;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];

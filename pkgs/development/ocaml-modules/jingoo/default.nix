@@ -18,7 +18,7 @@ buildDunePackage rec {
 
   buildInputs = [ menhir ];
   propagatedBuildInputs = [ ppxlib ppx_deriving re uutf uucp ];
-  checkInputs = [ ounit2 ];
+  nativeCheckInputs = [ ounit2 ];
   doCheck = true;
 
 

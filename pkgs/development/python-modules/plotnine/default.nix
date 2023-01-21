@@ -45,7 +45,7 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     adjusttext
     geopandas
     pytestCheckHook

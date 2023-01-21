@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     tabulate
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     backoff
     more-itertools
     pytestCheckHook

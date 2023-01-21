@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "chex"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaxlib
     pytestCheckHook
   ];

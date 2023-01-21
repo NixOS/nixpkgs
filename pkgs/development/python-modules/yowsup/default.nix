@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace "==" ">=" \
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

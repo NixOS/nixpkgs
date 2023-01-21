@@ -26,7 +26,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

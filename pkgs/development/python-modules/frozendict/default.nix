@@ -21,7 +21,7 @@ buildPythonPackage rec {
     "frozendict"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

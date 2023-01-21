@@ -54,7 +54,7 @@ with python3.pkgs; buildPythonApplication rec {
     export PATH=$PATH:$out/bin
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsondiff
     pytestCheckHook
   ];

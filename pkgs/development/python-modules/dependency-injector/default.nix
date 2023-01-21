@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     fastapi
     httpx
     mypy-boto3-s3

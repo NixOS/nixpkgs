@@ -242,7 +242,7 @@ in buildPythonPackage rec {
     "torch"
   ];
 
-  checkInputs = [ hypothesis ninja psutil ];
+  nativeCheckInputs = [ hypothesis ninja psutil ];
 
   checkPhase = with lib.versions; with lib.strings; concatStringsSep " " [
     "runHook preCheck"

@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   # otherwise fmt breaks evaluation
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ alcotest bos rresult ];
+  nativeCheckInputs = [ alcotest bos rresult ];
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-base64";

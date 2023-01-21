@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytest-mock
     pytestCheckHook

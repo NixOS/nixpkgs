@@ -34,7 +34,7 @@ buildPythonPackage rec {
     cython quadprog/quadprog.pyx
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     scipy
   ];

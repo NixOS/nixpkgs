@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
-  checkInputs = [ nodejs ];
+  nativeCheckInputs = [ nodejs ];
 
   # other tests require it to be ran in the wasm-bindgen monorepo
   cargoTestFlags = [ "--test=interface-types" ];

@@ -17,7 +17,7 @@ buildDunePackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ ounit2 ];
+  nativeCheckInputs = [ ounit2 ];
 
   buildInputs = [ extlib ocamlfuse gapi-ocaml ocaml_sqlite3 tiny_httpd ];
 

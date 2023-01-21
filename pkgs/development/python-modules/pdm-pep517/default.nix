@@ -25,7 +25,7 @@ buildPythonPackage rec {
     git config --global user.email nobody@example.com
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     setuptools
     pytestCheckHook
     git

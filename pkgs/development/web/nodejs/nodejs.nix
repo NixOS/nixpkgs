@@ -127,7 +127,7 @@ let
              -e "s|std::tr1|std|" src/util.h
     '';
 
-    checkInputs = [ procps ];
+    nativeCheckInputs = [ procps ];
     doCheck = false; # fails 4 out of 1453 tests
 
     postInstall = ''

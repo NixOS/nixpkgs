@@ -24,7 +24,7 @@ in buildPythonPackage rec {
   pname = "pyopencl";
   version = "2022.3.1";
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [

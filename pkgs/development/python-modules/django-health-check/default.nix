@@ -33,7 +33,7 @@ buildPythonPackage rec {
     gitMinimal
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
     mock

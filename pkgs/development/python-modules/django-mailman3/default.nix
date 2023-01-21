@@ -14,7 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     django-gravatar2 django-compressor django-allauth mailmanclient
   ];
-  checkInputs = [ django mock ];
+  nativeCheckInputs = [ django mock ];
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot

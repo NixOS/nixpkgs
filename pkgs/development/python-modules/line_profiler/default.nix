@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ipython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

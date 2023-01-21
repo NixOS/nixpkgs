@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     check
     valgrind
   ];

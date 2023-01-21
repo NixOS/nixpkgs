@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_preload_extension"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     ipython-sql

@@ -28,7 +28,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
   ];
 

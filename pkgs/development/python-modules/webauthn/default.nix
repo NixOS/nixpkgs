@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "xsel" "${pkgs.xsel}/bin/xsel"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

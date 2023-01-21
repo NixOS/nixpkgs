@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
-  checkInputs = [ xvfb-run dbus ];
+  nativeCheckInputs = [ xvfb-run dbus ];
 
   checkPhase = ''
     xvfb-run dbus-run-session \

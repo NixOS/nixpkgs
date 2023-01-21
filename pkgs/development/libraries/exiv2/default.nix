@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     libxml2.bin
     python3
     which

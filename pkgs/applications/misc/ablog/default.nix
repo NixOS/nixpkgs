@@ -21,7 +21,7 @@ buildPythonApplication rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

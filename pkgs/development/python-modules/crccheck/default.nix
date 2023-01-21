@@ -21,7 +21,7 @@ in buildPythonPackage {
     hash = "sha256-nujt3RWupvCtk7gORejtSwqqVjW9VwztOVGXBHW9T+k=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

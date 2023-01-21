@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
     python3.pkgs.dbus-python
     python3.pkgs.pygobject3

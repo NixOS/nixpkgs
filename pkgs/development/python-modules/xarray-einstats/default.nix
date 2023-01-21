@@ -36,7 +36,7 @@ buildPythonPackage rec {
     xarray
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     einops
     numba
     pytestCheckHook

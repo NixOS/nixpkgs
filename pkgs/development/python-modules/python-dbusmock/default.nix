@@ -39,7 +39,7 @@ in buildPythonPackage rec {
     dbus-python
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     pygobject3
     bluez

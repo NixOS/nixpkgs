@@ -44,7 +44,7 @@ let
         ocamlPackages.angstrom
       ] ++ extraBuildInputs;
 
-      checkInputs = [ cacert ];
+      nativeCheckInputs = [ cacert ];
 
       meta = {
         description = "Tool for searching and changing code structure";

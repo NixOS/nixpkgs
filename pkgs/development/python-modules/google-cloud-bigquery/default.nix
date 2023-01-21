@@ -69,7 +69,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     google-cloud-testutils
     mock

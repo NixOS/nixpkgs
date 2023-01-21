@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130";
   };
 
-  checkInputs = [ pytestCheckHook freezegun ];
+  nativeCheckInputs = [ pytestCheckHook freezegun ];
 
   disabledTests = [
     # https://github.com/pydanny/cached-property/issues/131

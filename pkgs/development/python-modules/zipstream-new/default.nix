@@ -20,7 +20,7 @@ buildPythonPackage rec {
     "zipstream"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

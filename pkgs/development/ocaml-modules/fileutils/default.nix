@@ -16,7 +16,7 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ounit2
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.04";

@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ result seq ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ mdx.bin ounit2 qcheck-core ];
+  nativeCheckInputs = [ mdx.bin ounit2 qcheck-core ];
 
   meta = {
     homepage = "https://github.com/c-cube/sequence";

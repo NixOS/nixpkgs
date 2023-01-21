@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pytz
   ] ++ httpx.optional-dependencies.socks;
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     flaky
     pytest-asyncio

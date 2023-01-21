@@ -32,7 +32,7 @@ buildPythonPackage rec {
     httpx = [ httpx ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.httpx;
 

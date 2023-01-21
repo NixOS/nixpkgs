@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     "SHOBJ_LIBS=-lbash"
   ];
 
-  checkInputs = [ util-linux ];
+  nativeCheckInputs = [ util-linux ];
   doCheck = false; # dependency cycle, needs to be interactive
 
   postInstall = ''

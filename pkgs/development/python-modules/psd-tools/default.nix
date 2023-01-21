@@ -33,7 +33,7 @@ buildPythonPackage rec {
     scikitimage
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "psd_tools" ];
 

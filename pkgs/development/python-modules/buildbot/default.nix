@@ -90,7 +90,7 @@ let
       # tls
       ++ twisted.optional-dependencies.tls;
 
-    checkInputs = [
+    nativeCheckInputs = [
       treq
       txrequests
       pypugjs

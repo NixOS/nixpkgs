@@ -26,7 +26,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dask
     fsspec
     lxml

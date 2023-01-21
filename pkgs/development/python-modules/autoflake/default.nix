@@ -18,7 +18,7 @@ buildPythonPackage rec {
     pyflakes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -62,7 +62,7 @@ buildPythonPackage rec {
     "etils"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     chex
     jaxlib
     pytest-subtests

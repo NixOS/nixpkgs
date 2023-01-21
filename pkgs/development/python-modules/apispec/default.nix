@@ -27,7 +27,7 @@ buildPythonPackage rec {
     prance
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     openapi-spec-validator
     marshmallow
     mock

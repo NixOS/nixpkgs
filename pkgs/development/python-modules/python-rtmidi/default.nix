@@ -34,7 +34,7 @@ buildPythonPackage rec {
     CoreMIDI
     CoreServices
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     tox
     flake8
     alabaster

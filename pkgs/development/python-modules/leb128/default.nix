@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "040l6fxyzqal841kirf783kk1840gcy1gjd374jfr46v96qc8scm";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "leb128" ];
 
   meta = with lib; {

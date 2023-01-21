@@ -25,7 +25,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "vector" ];
 

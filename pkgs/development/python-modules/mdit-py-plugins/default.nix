@@ -30,7 +30,7 @@ buildPythonPackage rec {
     markdown-it-py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-regressions
   ];

@@ -41,7 +41,7 @@ buildPythonPackage rec {
     rm tests/particle/test_performance.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tabulate
     pandas

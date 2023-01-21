@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-+2AfAKyH5apYKoExXtlnaM41EygHKdP1H3kxLiuLlKw=";
   };
 
-  checkInputs = [ zope_testing ];
+  nativeCheckInputs = [ zope_testing ];
 
   meta = with lib; {
     description = "Supports the efficient creation of “hookable” objects";

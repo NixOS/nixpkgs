@@ -23,7 +23,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytest-mock
     pytestCheckHook

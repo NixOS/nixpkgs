@@ -30,7 +30,7 @@ buildDunePackage {
     tls tls-mirage git happy-eyeballs-lwt
     git-mirage mirage-clock-unix
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest alcotest-lwt base64 ke
     mirage-crypto-rng git-binary
     uri mtime

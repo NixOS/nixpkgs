@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     wcwidth
   ];
 
-  checkInputs = with python3Packages; [ nose pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ nose pytestCheckHook ];
 
   # Disable tests that touch network or shell out to commands
   disabledTests = [

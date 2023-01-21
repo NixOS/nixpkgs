@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/179474
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "fortify" "stackprotector" ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 

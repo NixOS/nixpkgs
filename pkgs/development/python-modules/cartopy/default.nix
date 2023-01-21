@@ -58,7 +58,7 @@ buildPythonPackage rec {
     plotting = [ gdal pillow scipy ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);

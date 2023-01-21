@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     py
     pytest-asyncio

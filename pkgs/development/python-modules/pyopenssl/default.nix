@@ -38,7 +38,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ openssl ];
   propagatedBuildInputs = [ cryptography ];
 
-  checkInputs = [ pytestCheckHook pretend flaky ];
+  nativeCheckInputs = [ pytestCheckHook pretend flaky ];
 
   preCheck = ''
     export LANG="en_US.UTF-8"

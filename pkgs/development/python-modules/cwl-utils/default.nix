@@ -37,7 +37,7 @@ buildPythonPackage rec {
     schema-salad
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cwlformat
     pytest-mock
     pytest-xdist

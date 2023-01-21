@@ -31,7 +31,7 @@ buildPythonPackage rec {
     haversine
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     asynctest
     pytest-asyncio

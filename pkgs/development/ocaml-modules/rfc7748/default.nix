@@ -26,7 +26,7 @@ buildDunePackage rec {
 
   # the tests fail for 4.05
   doCheck = lib.versionAtLeast ocaml.version "4.06";
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   meta = {
     homepage = "https://github.com/burgerdev/ocaml-rfc7748";

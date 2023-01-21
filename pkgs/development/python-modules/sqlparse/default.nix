@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
     installManPage docs/sqlformat.1

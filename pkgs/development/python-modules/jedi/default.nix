@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ parso ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     django
     pytestCheckHook

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     feedbackd
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];

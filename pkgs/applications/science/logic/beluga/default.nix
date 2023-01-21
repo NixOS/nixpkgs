@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
   '';
 
   checkPhase = "./TEST";
-  checkInputs = [ rsync ];
+  nativeCheckInputs = [ rsync ];
   doCheck = true;
 
   postInstall = ''

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ cunit ];
+  nativeCheckInputs = [ cunit ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

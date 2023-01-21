@@ -47,7 +47,7 @@ buildPythonPackage rec {
     rich
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     sphinx

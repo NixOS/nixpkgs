@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

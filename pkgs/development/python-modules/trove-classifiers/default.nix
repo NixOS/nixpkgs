@@ -22,7 +22,7 @@ buildPythonPackage rec {
     calver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

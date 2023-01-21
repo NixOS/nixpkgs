@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   doCheck = false; # tests not in sdist, git not tagged
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

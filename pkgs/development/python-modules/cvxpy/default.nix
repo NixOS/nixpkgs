@@ -48,7 +48,7 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "./cvxpy" ];
 

@@ -50,7 +50,7 @@ buildPythonPackage rec {
     yfinance
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt

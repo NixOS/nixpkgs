@@ -41,7 +41,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

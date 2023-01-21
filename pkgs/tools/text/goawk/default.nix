@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
-  checkInputs = [ gawk ];
+  nativeCheckInputs = [ gawk ];
 
   postPatch = ''
     substituteInPlace goawk_test.go \

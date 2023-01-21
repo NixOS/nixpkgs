@@ -26,7 +26,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake llvmPackages.lld ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"

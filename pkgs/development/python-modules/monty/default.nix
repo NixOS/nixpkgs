@@ -35,7 +35,7 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     numpy
     pandas

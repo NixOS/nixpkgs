@@ -39,7 +39,7 @@ buildPythonPackage rec {
   TEST_ARGS = "tests";
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     html5lib
   ];
 

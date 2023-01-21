@@ -26,7 +26,7 @@ buildPythonPackage rec {
     geojson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];

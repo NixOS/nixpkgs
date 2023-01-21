@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

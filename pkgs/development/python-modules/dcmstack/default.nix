@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pylibjpeg-libjpeg
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/moloney/dcmstack";

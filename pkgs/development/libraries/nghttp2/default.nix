@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
-  checkInputs = lib.optionals (enableTests) [ cunit tzdata ];
+  nativeCheckInputs = lib.optionals (enableTests) [ cunit tzdata ];
   preCheck = lib.optionalString (enableTests) ''
     export TZDIR=${tzdata}/share/zoneinfo
   '';

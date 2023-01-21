@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     pugixml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

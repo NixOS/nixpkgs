@@ -15,7 +15,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ fmt re ];
 
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   doCheck = true;
 

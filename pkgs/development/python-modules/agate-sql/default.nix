@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ agate sqlalchemy ];
 
-  checkInputs = [ crate geojson pytestCheckHook ];
+  nativeCheckInputs = [ crate geojson pytestCheckHook ];
 
   pythonImportsCheck = [ "agatesql" ];
 

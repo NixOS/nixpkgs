@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false; # meant to be ran with interactive interpreter
 
   # re-enable if we are able to make testing work
-  # checkInputs = [ bashInteractive coverage flake8 ];
+  # nativeCheckInputs = [ bashInteractive coverage flake8 ];
 
   propagatedBuildInputs = [
     dicttoxml

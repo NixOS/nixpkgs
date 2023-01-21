@@ -36,7 +36,7 @@ buildPythonPackage rec {
     extractcode-7z
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];

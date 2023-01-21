@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ] ++ requests.optional-dependencies.socks;
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook nose glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook nose glibcLocales ];
 
   propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
 

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost175 curl fuse openssl range-v3 spdlog ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  #checkInputs = [ gtest ];
+  #nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DDEPENDENCY_CONFIG='../cmake-utils/DependenciesFromLocalSystem.cmake'"

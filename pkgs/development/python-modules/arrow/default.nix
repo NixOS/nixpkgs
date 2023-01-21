@@ -29,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ python-dateutil ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytz

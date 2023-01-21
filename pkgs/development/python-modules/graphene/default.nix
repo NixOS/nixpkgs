@@ -36,7 +36,7 @@ buildPythonPackage rec {
     graphql-relay
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     promise
     py
     pytestCheckHook

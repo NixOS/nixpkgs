@@ -60,7 +60,7 @@ in
   '';
 
   doCheck = withDoCheck;
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
   ];
   pythonImportsCheck = [

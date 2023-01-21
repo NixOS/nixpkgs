@@ -40,7 +40,7 @@ buildPythonPackage rec {
     wheel # No idea why but it is listed
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     # optional
     pandas

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-VZSYVSFFBMdYO3G5oDqE3OLpaoQCdhO7U7QtBIRM4k4=";
   };
 
-  checkInputs = [ pytest selenium ];
+  nativeCheckInputs = [ pytest selenium ];
   propagatedBuildInputs = [ jinja2 six setuptools ];
 
   # Seems to require a browser

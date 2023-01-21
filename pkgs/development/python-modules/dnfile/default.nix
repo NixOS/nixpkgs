@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pefile
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

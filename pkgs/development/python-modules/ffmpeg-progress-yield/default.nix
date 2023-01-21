@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorama tqdm ];
 
-  checkInputs = [ pytestCheckHook ffmpeg procps ];
+  nativeCheckInputs = [ pytestCheckHook ffmpeg procps ];
 
   disabledTests = [
     "test_quit"

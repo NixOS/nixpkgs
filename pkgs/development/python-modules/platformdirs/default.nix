@@ -30,7 +30,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appdirs
     pytest-mock
     pytestCheckHook

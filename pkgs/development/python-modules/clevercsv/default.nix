@@ -35,7 +35,7 @@ buildPythonPackage rec {
     tabview
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

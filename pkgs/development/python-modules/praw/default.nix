@@ -34,7 +34,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     betamax-serializers
     betamax-matchers

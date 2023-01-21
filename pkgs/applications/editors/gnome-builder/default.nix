@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     webkitgtk_5_0
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];

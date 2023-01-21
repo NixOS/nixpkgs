@@ -30,7 +30,7 @@ buildPythonPackage rec {
     python-gvm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

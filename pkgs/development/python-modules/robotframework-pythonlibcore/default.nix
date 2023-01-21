@@ -31,7 +31,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mockito
     pytestCheckHook
     robotframework

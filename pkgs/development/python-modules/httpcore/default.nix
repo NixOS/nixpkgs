@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pproxy
     pytest-asyncio
     pytest-httpbin

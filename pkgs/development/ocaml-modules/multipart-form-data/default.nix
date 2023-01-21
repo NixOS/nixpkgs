@@ -19,7 +19,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     description = "Parser for multipart/form-data (RFC2388)";

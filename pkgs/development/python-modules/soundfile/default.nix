@@ -34,7 +34,7 @@ buildPythonPackage rec {
     substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   propagatedBuildInputs = [ numpy libsndfile cffi ];
   propagatedNativeBuildInputs = [ cffi ];
 

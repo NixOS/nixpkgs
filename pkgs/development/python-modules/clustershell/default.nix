@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     hostname
     nose

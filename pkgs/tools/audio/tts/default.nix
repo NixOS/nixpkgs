@@ -106,7 +106,7 @@ python.pkgs.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     espeak-ng
     pytestCheckHook
   ];

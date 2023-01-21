@@ -32,7 +32,7 @@ buildPythonPackage rec {
       --replace "more_itertools~=8.10" "more_itertools"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pytestCheckHook
   ];

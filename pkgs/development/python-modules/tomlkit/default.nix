@@ -21,7 +21,7 @@ buildPythonPackage rec {
     lib.optionals isPy27 [ enum34 functools32 ]
     ++ lib.optional isPy27 typing;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyaml
     pytestCheckHook
   ];

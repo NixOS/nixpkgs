@@ -26,7 +26,7 @@ buildPythonPackage rec {
     wurlitzer
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
   pytestFlagsArray = [
