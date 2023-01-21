@@ -12,13 +12,14 @@ buildPythonPackage rec {
   pname = "hdate";
   version = "0.10.4";
   disabled = pythonOlder "3.6";
+
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
-    rev = "v${version}";
-    sha256 = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +43,14 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [ "hdate" ];
+  pythonImportsCheck = [
+    "hdate"
+  ];
 
   meta = with lib; {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
+    changelog = "https://github.com/py-libhdate/py-libhdate/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
