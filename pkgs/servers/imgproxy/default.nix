@@ -3,12 +3,12 @@
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "3.13.0";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    sha256 = "sha256-dPGqiNGUI5WwqT65DvY6JXv9/1lc1NZlJbMWUYGgfYY=";
+    sha256 = "sha256-4P8Q8VM2+O4Du2u+LFmqGQYw8qvEuBGq2nz9FxvGQhE=";
     rev = "v${version}";
   };
 
