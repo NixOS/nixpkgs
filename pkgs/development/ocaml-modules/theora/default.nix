@@ -4,13 +4,13 @@ buildDunePackage rec {
   pname = "theora";
   version = "0.4.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-theora";
     rev = "v${version}";
-    sha256 = "1sggjmlrx4idkih1ddfk98cgpasq60haj4ykyqbfs22cmii5gpal";
+    hash = "sha256-VN1XYqxMCO0W9tMTqSAwWKv7GErTtRZgnC2SnmmV7+k=";
   };
 
   buildInputs = [ dune-configurator ];
