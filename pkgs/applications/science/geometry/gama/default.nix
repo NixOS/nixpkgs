@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ texinfo zip ];
 
-  checkInputs = [ octave libxml2 ];
+  nativeCheckInputs = [ octave libxml2 ];
   doCheck = true;
 
   meta = with lib ; {

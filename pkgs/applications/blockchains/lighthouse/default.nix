@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nodePackages.ganache
   ];
 

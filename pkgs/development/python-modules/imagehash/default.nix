@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pywavelets
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A Python Perceptual Image Hashing Module";

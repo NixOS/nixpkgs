@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   preBuild = "cd ..";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     shapely
   ];

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ decorator setuptools ];
-  checkInputs = [ nose pytestCheckHook ];
+  nativeCheckInputs = [ nose pytestCheckHook ];
 
   meta = {
     homepage = "https://networkx.github.io/";

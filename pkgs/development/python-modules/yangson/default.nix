@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pyxb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

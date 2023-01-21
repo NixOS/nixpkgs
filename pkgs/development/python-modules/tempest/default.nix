@@ -57,7 +57,7 @@ buildPythonPackage rec {
     debtcollector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     hacking
     oslotest

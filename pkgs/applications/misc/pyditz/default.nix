@@ -15,7 +15,7 @@ in buildPythonApplication rec {
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ pyyaml six jinja2 cerberus_1_1 ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/pyditz/";

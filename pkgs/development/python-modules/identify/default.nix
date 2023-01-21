@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "sha256-8QkDAVHjVEqicntSMb98JitmR5toOTGhgEk7cH3xSFI=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     editdistance-s
     pytestCheckHook
     ukkonen

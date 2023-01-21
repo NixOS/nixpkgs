@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pymdown-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

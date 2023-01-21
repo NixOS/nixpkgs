@@ -80,7 +80,7 @@ if isPyPy then null else buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isMusl;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # AssertionError: cannot seem to get an int[10] not completely cleared

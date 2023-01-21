@@ -35,7 +35,7 @@ buildPythonPackage rec {
     python-socketio
   ] ++ python-socketio.optional-dependencies.client;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     jsonschema
   ];

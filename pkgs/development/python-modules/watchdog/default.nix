@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-timeout
     pytestCheckHook

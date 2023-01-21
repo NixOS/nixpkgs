@@ -40,7 +40,7 @@ buildPythonPackage rec {
     fonttools
   ] ++ fonttools.optional-dependencies.ufo;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

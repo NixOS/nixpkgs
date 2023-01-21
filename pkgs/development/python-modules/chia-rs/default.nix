@@ -39,7 +39,7 @@ buildPythonPackage rec {
     touch wheel/Cargo.lock
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

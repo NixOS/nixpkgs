@@ -39,7 +39,7 @@ buildPythonPackage rec {
     typed-ast
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     typing-extensions
   ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-tests"
   ];
 
-  checkInputs = [ SDL2 ];
+  nativeCheckInputs = [ SDL2 ];
 
   doCheck = true;
 

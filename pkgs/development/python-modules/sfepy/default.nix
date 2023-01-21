@@ -61,7 +61,7 @@ buildPythonPackage rec {
     rm sfepy/tests/test_quadratures.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

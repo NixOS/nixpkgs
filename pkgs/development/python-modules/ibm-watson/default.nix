@@ -33,7 +33,7 @@ buildPythonPackage rec {
     ibm-cloud-sdk-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     responses
     pytestCheckHook
     python-dotenv

@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";

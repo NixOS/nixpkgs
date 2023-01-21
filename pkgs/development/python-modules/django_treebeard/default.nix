@@ -23,7 +23,7 @@ buildPythonPackage rec {
     django
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

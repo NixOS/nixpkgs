@@ -18,7 +18,7 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ seq ];
-  checkInputs = [ qcheck ounit2 ];
+  nativeCheckInputs = [ qcheck ounit2 ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

@@ -41,7 +41,7 @@ buildPythonPackage rec {
       --replace '[0]), None)' "[0]), (None, '${testInventory}'))"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     cython
     gcc

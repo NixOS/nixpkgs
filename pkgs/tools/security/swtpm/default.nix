@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
   ];
 

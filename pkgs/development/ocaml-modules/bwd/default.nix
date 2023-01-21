@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ qcheck-core ];
+  nativeCheckInputs = [ qcheck-core ];
 
   meta = {
     description = "Backward Lists";

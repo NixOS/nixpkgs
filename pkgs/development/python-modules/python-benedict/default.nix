@@ -60,7 +60,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     orjson
     pytestCheckHook
     python-decouple

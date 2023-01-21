@@ -22,7 +22,7 @@ buildPythonPackage rec {
     gmp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

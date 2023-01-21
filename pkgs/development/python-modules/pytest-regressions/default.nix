@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     matplotlib
   ];

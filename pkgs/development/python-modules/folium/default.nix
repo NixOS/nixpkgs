@@ -49,7 +49,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nbconvert
     pytestCheckHook
     pandas

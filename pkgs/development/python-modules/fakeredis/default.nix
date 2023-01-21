@@ -38,7 +38,7 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-asyncio
     pytest-mock

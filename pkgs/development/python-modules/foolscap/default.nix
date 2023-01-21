@@ -33,7 +33,7 @@ buildPythonPackage rec {
     service-identity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

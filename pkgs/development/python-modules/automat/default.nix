@@ -27,7 +27,7 @@ let automat = buildPythonPackage rec {
     attrs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-benchmark
     pytestCheckHook
   ];

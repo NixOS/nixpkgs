@@ -52,7 +52,7 @@ buildGoModule rec {
     ./0003-Use-out-path-as-build-id-on-darwin.patch
   ];
 
-  checkInputs = [ avrgcc binaryen ];
+  nativeCheckInputs = [ avrgcc binaryen ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ llvm clang.cc ]
     ++ lib.optionals stdenv.isDarwin [ zlib ncurses libffi libxml2 xar ];

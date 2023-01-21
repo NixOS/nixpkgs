@@ -80,7 +80,7 @@ buildPythonPackage rec {
     shortuuid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     azure-core
     bokeh
     flask

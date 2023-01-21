@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt

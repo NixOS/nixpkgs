@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
     ];
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   checkPhase = ''
     runHook preCheck

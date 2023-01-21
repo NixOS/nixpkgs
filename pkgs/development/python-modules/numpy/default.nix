@@ -75,7 +75,7 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     hypothesis
     typing-extensions

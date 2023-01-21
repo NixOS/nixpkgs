@@ -28,7 +28,7 @@ buildPythonPackage rec {
     cythonize --inplace editdistance/bycython.pyx
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
    pytestCheckHook
   ];
 

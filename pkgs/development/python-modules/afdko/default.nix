@@ -87,7 +87,7 @@ buildPythonPackage rec {
   # Use system libxml2
   FORCE_SYSTEM_LIBXML2 = true;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin

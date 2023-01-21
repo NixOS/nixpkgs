@@ -13,7 +13,7 @@ buildDunePackage rec {
   strictDeps = !doCheck;
 
   doCheck = true;
-  checkInputs = [ ounit2 randomconv ];
+  nativeCheckInputs = [ ounit2 randomconv ];
 
   meta = mirage-crypto.meta // {
     description = "Simple public-key cryptography for the modern age";

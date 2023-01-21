@@ -36,7 +36,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

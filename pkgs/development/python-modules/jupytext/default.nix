@@ -52,7 +52,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gitpython
     isort
     jupyter-client

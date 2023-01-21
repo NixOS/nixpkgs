@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     ddt

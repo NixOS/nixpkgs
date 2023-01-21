@@ -70,7 +70,7 @@ buildPythonPackage rec {
     sqlparse
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     contextlib2
     networkx

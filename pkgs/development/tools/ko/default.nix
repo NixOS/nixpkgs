@@ -24,7 +24,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
   preCheck = ''
     # Feed in all the tests for testing
     # This is because subPackages above limits what is built to just what we

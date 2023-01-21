@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-XgeyPXDO7WTzuzauS5q8UjVMFsmNRasDe+4rX7/+WGw=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyopenssl
     pytestCheckHook
     service-identity

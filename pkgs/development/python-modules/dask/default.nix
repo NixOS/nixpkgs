@@ -69,7 +69,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     fastparquet
     pyarrow
     pytestCheckHook

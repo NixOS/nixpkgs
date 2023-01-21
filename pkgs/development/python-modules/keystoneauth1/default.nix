@@ -50,7 +50,7 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hacking
     oslo-config
     oslo-utils

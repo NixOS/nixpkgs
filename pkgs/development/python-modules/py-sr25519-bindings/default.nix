@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     py-bip39-bindings
   ];

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

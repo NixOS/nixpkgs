@@ -32,7 +32,7 @@ buildPythonPackage rec {
     tailer
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

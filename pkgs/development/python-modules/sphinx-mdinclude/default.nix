@@ -22,7 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ flit-core ];
   propagatedBuildInputs = [ mistune docutils ];
 
-  checkInputs = [ pygments ];
+  nativeCheckInputs = [ pygments ];
 
   meta = with lib; {
     homepage = "https://github.com/miyakogi/m2r";

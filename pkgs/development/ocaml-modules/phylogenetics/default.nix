@@ -27,7 +27,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [ alcotest bppsuite ];
+  nativeCheckInputs = [ alcotest bppsuite ];
   buildInputs = [ menhir ];
   propagatedBuildInputs = [
     angstrom-unix

@@ -210,7 +210,7 @@ buildPythonPackage rec {
     airflow-frontend
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];

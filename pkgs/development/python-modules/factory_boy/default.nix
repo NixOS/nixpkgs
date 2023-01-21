@@ -25,7 +25,7 @@ buildPythonPackage rec {
     faker
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
     flask-sqlalchemy

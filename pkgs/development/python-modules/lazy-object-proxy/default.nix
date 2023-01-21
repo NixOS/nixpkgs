@@ -23,7 +23,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace ",<6.0" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

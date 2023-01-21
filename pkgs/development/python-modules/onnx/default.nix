@@ -41,7 +41,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nbval
     pytestCheckHook
     pytest-runner

@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication rec {
     xlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     python3Packages.pytest
     python3Packages.hypothesis-auto

@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     hypothesis
     jinja2

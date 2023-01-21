@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     nose

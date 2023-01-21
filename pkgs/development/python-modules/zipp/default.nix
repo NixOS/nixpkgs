@@ -26,7 +26,7 @@ let zipp = buildPythonPackage rec {
   # Prevent infinite recursion with pytest
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     func-timeout
     jaraco_itertools
   ];

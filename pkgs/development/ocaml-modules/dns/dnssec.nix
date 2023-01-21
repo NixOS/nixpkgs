@@ -20,7 +20,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     base64
   ];

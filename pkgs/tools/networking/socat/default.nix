@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  checkInputs = [ which nettools ];
+  nativeCheckInputs = [ which nettools ];
   doCheck = false; # fails a bunch, hangs
 
   meta = with lib; {

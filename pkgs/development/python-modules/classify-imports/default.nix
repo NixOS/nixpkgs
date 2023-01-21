@@ -21,7 +21,7 @@ buildPythonPackage rec {
     "classify_imports"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

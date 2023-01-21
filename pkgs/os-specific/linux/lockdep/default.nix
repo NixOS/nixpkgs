@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkInputs = [ valgrind ];
+  nativeCheckInputs = [ valgrind ];
   checkPhase = ''
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do

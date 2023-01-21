@@ -25,7 +25,7 @@ buildPythonPackage rec {
     frozenlist
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

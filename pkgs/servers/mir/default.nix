@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
     wlcs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 

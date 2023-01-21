@@ -46,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ etils.optional-dependencies.epath;
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaxlib
     matplotlib
     pytestCheckHook

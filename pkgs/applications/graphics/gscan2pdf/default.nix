@@ -89,7 +89,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" "man" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     imagemagick
     libtiff
     djvulibre

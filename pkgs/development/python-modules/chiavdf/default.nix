@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   buildInputs = [ boost gmp pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

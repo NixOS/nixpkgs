@@ -18,7 +18,7 @@ buildGoModule rec {
     "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     kubectl
   ];
 

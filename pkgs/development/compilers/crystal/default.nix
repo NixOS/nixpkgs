@@ -42,7 +42,7 @@ let
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
   isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
-  checkInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
+  nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
   binaryUrl = version: rel:
     if arch == archs.aarch64-linux then
@@ -230,8 +230,8 @@ let
       checkTarget = "compiler_spec";
 
       preCheck = ''
-        export LIBRARY_PATH=${lib.makeLibraryPath checkInputs}:$LIBRARY_PATH
-        export PATH=${lib.makeBinPath checkInputs}:$PATH
+        export LIBRARY_PATH=${lib.makeLibraryPath nativeCheckInputs}:$LIBRARY_PATH
+        export PATH=${lib.makeBinPath nativeCheckInputs}:$PATH
       '';
 
       passthru.buildBinary = binary;

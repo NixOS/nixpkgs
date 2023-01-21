@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
-  installCheckInputs = [ git ];
+  nativeInstallCheckInputs = [ git ];
   installCheckTarget = "test";
 
   passthru = {

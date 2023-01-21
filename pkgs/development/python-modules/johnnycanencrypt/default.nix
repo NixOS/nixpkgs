@@ -56,7 +56,7 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     vcrpy
   ];

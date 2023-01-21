@@ -55,7 +55,7 @@ buildPythonPackage rec {
     watchdog
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook

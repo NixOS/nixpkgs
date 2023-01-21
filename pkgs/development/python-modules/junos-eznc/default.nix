@@ -52,7 +52,7 @@ buildPythonPackage rec {
     yamlordereddictloader
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
   ];

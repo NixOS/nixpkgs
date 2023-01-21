@@ -35,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     procps
     pytestCheckHook
     pytz

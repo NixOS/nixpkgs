@@ -62,7 +62,7 @@ buildPythonPackage rec {
     cp extra/linux/71-liquidctl.rules $out/lib/udev/rules.d/.
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

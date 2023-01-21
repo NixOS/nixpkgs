@@ -38,7 +38,7 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  checkInputs = [ pytestCheckHook testpath responses ];
+  nativeCheckInputs = [ pytestCheckHook testpath responses ];
 
   disabledTests = [
     # needs some ini file.

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     qiskit-terra
   ] ++ lib.optionals withOptionalPackages optionalQiskitPackages;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "qiskit"

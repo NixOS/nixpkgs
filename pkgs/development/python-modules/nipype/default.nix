@@ -86,7 +86,7 @@ buildPythonPackage rec {
     xvfbwrapper
   ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pybids
     codecov
     glibcLocales

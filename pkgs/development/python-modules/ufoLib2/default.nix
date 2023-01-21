@@ -39,7 +39,7 @@ buildPythonPackage rec {
     msgpack = [ cattrs msgpack ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 

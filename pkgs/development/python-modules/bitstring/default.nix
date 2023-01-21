@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "bitstring" ];
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     fpyutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyfakefs
     pytestCheckHook
   ];

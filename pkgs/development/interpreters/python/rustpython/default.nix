@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   meta = with lib; {
     description = "Python 3 interpreter in written Rust";

@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct lwt ];
 
   doCheck = true;
-  checkInputs = [ ounit2 ];
+  nativeCheckInputs = [ ounit2 ];
 
   meta = with lib; {
     description = "Xenstore protocol in pure OCaml";

@@ -65,7 +65,7 @@ buildPythonPackage rec {
     vine
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     case
     dnspython

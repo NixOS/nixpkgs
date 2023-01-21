@@ -28,7 +28,7 @@ buildDunePackage {
     uutf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     vector
     hex
     alcotest

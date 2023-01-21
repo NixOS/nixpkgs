@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.tidalapi
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-mock
   ];

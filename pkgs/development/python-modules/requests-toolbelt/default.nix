@@ -23,7 +23,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     mock
     pytestCheckHook

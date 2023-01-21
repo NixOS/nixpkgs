@@ -47,7 +47,7 @@ buildPythonPackage rec {
     GSS
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     k5test
     nose
     parameterized

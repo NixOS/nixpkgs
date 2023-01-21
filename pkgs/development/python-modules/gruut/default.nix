@@ -63,7 +63,7 @@ buildPythonPackage rec {
     inherit lang version format src;
   }) langPkgs);
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [ glibcLocales pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25

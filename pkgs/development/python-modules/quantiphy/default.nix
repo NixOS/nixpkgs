@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rkm-codes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     inform
     parametrize-from-file
     pytestCheckHook

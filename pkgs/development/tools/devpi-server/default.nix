@@ -61,7 +61,7 @@ buildPythonApplication rec {
     waitress
   ] ++ passlib.optional-dependencies.argon2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     nginx
     py

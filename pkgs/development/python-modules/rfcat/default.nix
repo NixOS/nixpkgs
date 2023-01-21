@@ -38,7 +38,7 @@ buildPythonPackage rec {
     cp etc/udev/rules.d/20-rfcat.rules $out/etc/udev/rules.d
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

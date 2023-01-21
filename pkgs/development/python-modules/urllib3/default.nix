@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = passthru.optional-dependencies.brotli
     ++ passthru.optional-dependencies.socks;
 
-  checkInputs = [
+  nativeCheckInputs = [
     python-dateutil
     mock
     pytest-freezegun

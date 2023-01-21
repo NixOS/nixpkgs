@@ -72,7 +72,7 @@ buildPythonPackage rec {
     make l10n_compile
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     libreoffice
     openpaperwork-gtk
     psutil

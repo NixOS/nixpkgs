@@ -39,7 +39,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pygobject3
     pytest
     qtpy

@@ -38,7 +38,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pep440
     pytestCheckHook
     testpath

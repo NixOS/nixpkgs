@@ -230,7 +230,7 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
   __darwinAllowLocalNetworking = true;
-  installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
+  nativeInstallCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let
       excludedTests = lib.optionals stdenv.isDarwin [

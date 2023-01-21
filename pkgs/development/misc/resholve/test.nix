@@ -127,7 +127,7 @@ rec {
     '';
     doCheck = true;
     buildInputs = [ resholve ];
-    checkInputs = [ coreutils bats python27 ];
+    nativeCheckInputs = [ coreutils bats python27 ];
     # LOGLEVEL="DEBUG";
 
     # default path

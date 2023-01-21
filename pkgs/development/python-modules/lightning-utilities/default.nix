@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "lightning_utilities"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ];

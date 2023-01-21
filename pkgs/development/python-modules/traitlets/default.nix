@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ hatchling ];
-  checkInputs = [ glibcLocales pytest mock ];
+  nativeCheckInputs = [ glibcLocales pytest mock ];
   propagatedBuildInputs = [ ipython_genutils decorator six ];
 
   checkPhase = ''

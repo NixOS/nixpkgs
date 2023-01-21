@@ -160,7 +160,7 @@ resholve.mkDerivation rec {
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
     dontInstall = true; # just need the build directory
-    installCheckInputs = [
+    nativeInstallCheckInputs = [
       ncurses
       parallel # skips some tests if it can't detect
       flock # skips some tests if it can't detect

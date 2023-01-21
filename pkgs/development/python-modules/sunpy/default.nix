@@ -85,7 +85,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-astropy
     pytest-mock

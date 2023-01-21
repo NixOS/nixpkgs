@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ check subunit ];
+  nativeCheckInputs = [ check subunit ];
 
   cmakeFlags = [ "-DBUILD_ORCANIA_TESTING=on" ];
 

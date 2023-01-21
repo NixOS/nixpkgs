@@ -18,7 +18,7 @@ buildPythonPackage rec {
     mv pykdtree tests
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "kd-tree implementation for fast nearest neighbour search in Python";

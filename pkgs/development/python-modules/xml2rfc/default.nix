@@ -64,7 +64,7 @@ buildPythonPackage rec {
     appdirs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     decorator
     pycairo
     pytestCheckHook

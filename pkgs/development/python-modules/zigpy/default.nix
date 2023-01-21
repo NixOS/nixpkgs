@@ -40,7 +40,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     freezegun
     pytest-asyncio

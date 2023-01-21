@@ -36,7 +36,7 @@ buildPythonPackage rec {
     curio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pandoc
     pytestCheckHook

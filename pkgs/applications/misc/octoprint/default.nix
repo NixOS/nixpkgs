@@ -136,7 +136,7 @@ let
                 py.pkgs.appdirs
               ];
 
-              checkInputs = with self; [
+              nativeCheckInputs = with self; [
                 ddt
                 mock
                 pytestCheckHook

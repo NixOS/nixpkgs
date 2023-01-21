@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sed -i '/MOCK_VERSION/d' run_tests.py
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   checkPhase = ''
     touch .gitignore

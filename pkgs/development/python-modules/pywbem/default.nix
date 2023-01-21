@@ -44,7 +44,7 @@ buildPythonPackage rec {
     yamlloader
   ] ++ lib.optionals (pythonOlder "3.0") [ m2crypto ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     decorator
     FormEncode
     httpretty

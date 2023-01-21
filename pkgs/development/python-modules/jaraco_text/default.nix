@@ -41,7 +41,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.10") [
     pathlib2

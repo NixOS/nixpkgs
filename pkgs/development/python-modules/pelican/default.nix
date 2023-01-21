@@ -69,7 +69,7 @@ buildPythonPackage rec {
     unidecode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
     pandoc

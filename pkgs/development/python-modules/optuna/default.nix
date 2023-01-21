@@ -40,7 +40,7 @@ buildPythonPackage rec {
     sha256 = "sha256-TfAWL81a7GIePkPm+2uXinBP5jwnhWCZPp5GJjXOC6g=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     mock
     bokeh

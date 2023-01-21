@@ -82,7 +82,7 @@ buildDunePackage {
     result
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     alcotest-lwt
     bigstringaf
