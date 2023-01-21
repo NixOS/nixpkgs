@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "5.15.75";
-    hash = "sha256-tgm5nmguEfRFq3OhmZgRgFLIW7E798Rv1basxnfdqLI=";
+    version = "5.15.84";
+    hash = "sha256-CN3GOuwSicJ6Oa9BiKTyZg7fpzWc846v2SV9JRiOu3M=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.0.7";
-    hash = "sha256-qeM2oswuop42rvyBGlrH6VvODScLCpAOjTc4KR5a2Ec=";
+    version = "6.1.3";
+    hash = "sha256-YtkmbbFEfvww7yJ4MpLQ3M6QjbBXSU9Pjwu0Dq/dIcs=";
     variant = "main";
   };
 
@@ -33,7 +33,8 @@ let
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
 
-      # Google's Multigenerational LRU framework
+      # Multigenerational LRU framework
+      # This can be removed when the LTS variant reaches version >= 6.1 (since it's on by default then)
       LRU_GEN = yes;
       LRU_GEN_ENABLED = yes;
 
