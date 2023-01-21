@@ -1,0 +1,93 @@
+diff --git a/src/main.rs b/src/main.rs
+index f9ccde5..3253b17 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,4 +1,3 @@
+-#![feature(is_some_with)]
+ #![allow(
+     clippy::module_name_repetitions,
+     clippy::too_many_lines,
+diff --git a/src/tui/key_handler.rs b/src/tui/key_handler.rs
+index 25cede0..cc875cc 100644
+--- a/src/tui/key_handler.rs
++++ b/src/tui/key_handler.rs
+@@ -247,7 +247,7 @@ fn right(app: &mut App) -> Result<bool> {
+             }
+         }
+         Window::WindowRules { index, empty } => {
+-            if app.current_popup.is_some_and(|i| *i == 2) {
++            if app.current_popup.map(|i| i == 2).unwrap_or(false) {
+                 if let PopupState::Int { current, min, max } = app.current_popup_state {
+                     if current < max {
+                         app.current_popup_state = PopupState::Int {
+@@ -315,7 +315,7 @@ fn left(app: &mut App) -> Result<bool> {
+             }
+         }
+         Window::WindowRules { index, empty } => {
+-            if app.current_popup.is_some_and(|i| *i == 2) {
++            if app.current_popup.map(|i| i == 2).unwrap_or(false) {
+                 if let PopupState::Int { current, min, max } = app.current_popup_state {
+                     if current > min {
+                         app.current_popup_state = PopupState::Int {
+@@ -491,7 +491,8 @@ fn enter_home(app: &mut App) -> Result<bool> {
+                             .current_config
+                             .workspaces
+                             .as_ref()
+-                            .is_some_and(|v| v.is_empty())
++                            .map(|v| v.is_empty())
++                            .unwrap_or(false)
+                             || app.current_config.workspaces.as_ref().is_none(),
+                     };
+                 }
+@@ -502,7 +503,8 @@ fn enter_home(app: &mut App) -> Result<bool> {
+                             .current_config
+                             .tags
+                             .as_ref()
+-                            .is_some_and(|v| v.is_empty())
++                            .map(|v| v.is_empty())
++                            .unwrap_or(false)
+                             || app.current_config.tags.as_ref().is_none(),
+                     }
+                 }
+@@ -513,7 +515,8 @@ fn enter_home(app: &mut App) -> Result<bool> {
+                             .current_config
+                             .window_rules
+                             .as_ref()
+-                            .is_some_and(|v| v.is_empty())
++                            .map(|v| v.is_empty())
++                            .unwrap_or(false)
+                             || app.current_config.window_rules.as_ref().is_none(),
+                     }
+                 }
+@@ -524,7 +527,8 @@ fn enter_home(app: &mut App) -> Result<bool> {
+                             .current_config
+                             .scratchpad
+                             .as_ref()
+-                            .is_some_and(|v| v.is_empty())
++                            .map(|v| v.is_empty())
++                            .unwrap_or(false)
+                             || app.current_config.scratchpad.as_ref().is_none(),
+                     }
+                 }
+@@ -1445,7 +1449,7 @@ fn enter_scratchpads(app: &mut App, index: usize, empty: bool) -> Result<bool> {
+ }
+ 
+ fn enter_keybinds(app: &mut App, index: usize, empty: bool) -> Result<bool> {
+-    if empty && app.config_list_state.selected().is_some_and(|i| *i == 2) {
++    if empty && app.config_list_state.selected().map(|i| i == 2).unwrap_or(false) {
+         app.current_config.keybind.push(Keybind::default());
+     } else {
+         match app.current_popup {
+diff --git a/src/tui/popups.rs b/src/tui/popups.rs
+index 7dddc12..c73edc5 100644
+--- a/src/tui/popups.rs
++++ b/src/tui/popups.rs
+@@ -130,7 +130,7 @@ pub fn modkey(
+ }
+ 
+ fn check_modifier(modifier: &Option<KeyModifier>, name: &str) -> bool {
+-    modifier.is_some_and(|m| if let Single(s) = m { *s == name } else { false })
++    modifier.as_ref().map(|m| if let Single(s) = m { s == name } else { false }).unwrap_or(false)
+ }
+ 
+ pub fn max_window_width(
