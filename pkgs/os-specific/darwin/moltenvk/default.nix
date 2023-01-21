@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
         rev = "5755de46b07e4374c05fb1081f65f7ae1f8cca81";
         hash = "sha256-huPrQr+lPi7QCF8CufAavHEKGDDimGrcskiojhH9QYk=";
       };
+      patches = [ ];
     })).override { inherit (finalAttrs.passthru) spirv-headers spirv-tools; };
     spirv-cross = spirv-cross.overrideAttrs (old: {
       cmakeFlags = (old.cmakeFlags or [ ])
