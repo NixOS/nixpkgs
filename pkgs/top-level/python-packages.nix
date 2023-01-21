@@ -5610,6 +5610,8 @@ self: super: with self; {
 
   mailsuite = callPackage ../development/python-modules/mailsuite { };
 
+  maison = callPackage ../development/python-modules/maison { };
+
   Mako = callPackage ../development/python-modules/Mako { };
 
   malduck= callPackage ../development/python-modules/malduck { };
