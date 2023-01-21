@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
       "get_passwd" # passed on NixOS but failed on other Linuxes
       "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
       "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
+
+      # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
+      # Assertion failed in test/test-tcp-bind-error.c on line 99: r == UV_EADDRINUSE
+      "tcp_bind6_error_addrinuse" "tcp_bind_error_addrinuse_listen"
     ] ++ lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
