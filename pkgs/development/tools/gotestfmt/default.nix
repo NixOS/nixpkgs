@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-Rb/nIsHISzvqd+jJU4TNrHbailvgGEq4y0JuM9IdA3w=";
   };
 
-  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Go test output for humans";

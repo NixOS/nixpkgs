@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-I6KmNPFD8kkYDyek8lR1ZS7biPA/LYGwJqMoA2fG7Wg=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   nativeCheckInputs = [ gawk ];
 
