@@ -132,9 +132,9 @@ in
       Ciphers ${concatStringsSep "," sshdCfg.ciphers}
       MACs ${concatStringsSep "," sshdCfg.macs}
 
-      LogLevel ${sshdCfg.logLevel}
+      LogLevel ${sshdCfg.settings.LogLevel}
 
-      ${if sshdCfg.useDns then ''
+      ${if sshdCfg.options.UseDns then ''
         UseDNS yes
       '' else ''
         UseDNS no
