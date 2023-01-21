@@ -127,10 +127,11 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
-  ] ++ lib.optionals systemdSupport [
-    systemd
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ [
     mtdev
     lksctp-tools
     libselinux
@@ -222,8 +223,8 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    # error: 'path' is unavailable: introduced in macOS 10.15
-    "-DQT_FEATURE_cxx17_filesystem=OFF"
+    # build as a set of dynamic libraries
+    "-DFEATURE_framework=OFF"
   ];
 
   NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [

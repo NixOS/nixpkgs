@@ -44,14 +44,6 @@ getAllOutputNames() {
     fi
 }
 
-getAllOutputNames() {
-    if [ -n "$__structuredAttrs" ]; then
-        echo "${!outputs[*]}"
-    else
-        echo "$outputs"
-    fi
-}
-
 outs=( $(getAllOutputNames) )
 defOut=${outs[0]}
 defOutPath=${!defOut}
