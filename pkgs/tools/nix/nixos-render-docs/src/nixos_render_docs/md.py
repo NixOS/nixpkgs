@@ -239,5 +239,14 @@ class Converter(ABC):
         self._md.use(myst_role_plugin)
         self._md.enable(["smartquotes", "replacements"])
 
+    def _post_parse(self, tokens: list[Token]) -> list[Token]:
+        return tokens
+
+    def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
+        tokens = self._md.parse(src, env if env is not None else {})
+        return self._post_parse(tokens)
+
     def _render(self, src: str) -> str:
-        return self._md.render(src) # type: ignore[no-any-return]
+        env: dict[str, Any] = {}
+        tokens = self._parse(src, env)
+        return self._md.renderer.render(tokens, self._md.options, env) # type: ignore[no-any-return]
