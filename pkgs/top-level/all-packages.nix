@@ -29844,6 +29844,8 @@ with pkgs;
 
   leftwm-config = callPackage ../applications/window-managers/leftwm/leftwm-config { };
 
+  leftwm-theme = callPackage ../applications/window-managers/leftwm/leftwm-theme { };
+
   levant = callPackage ../applications/networking/cluster/levant { };
 
   lwm = callPackage ../applications/window-managers/lwm { };
