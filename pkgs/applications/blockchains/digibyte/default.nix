@@ -15,13 +15,11 @@
 , wrapQtAppsHook ? null
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "digibyte";
   version = "7.17.3";
 
-  name = pname + toString (optional (!withGui) "d") + "-" + version;
+  name = pname + toString (lib.optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
     owner = "digibyte-core";
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     hexdump
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     libevent
     db4
     zeromq
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     qtbase
     qttools
     protobuf
@@ -54,12 +52,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
       "--with-boost-libdir=${boost.out}/lib"
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
       "--with-gui=qt5"
       "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "DigiByte (DGB) is a rapidly growing decentralized, global blockchain";
     homepage = "https://digibyte.io/";
     license = licenses.mit;

@@ -2,7 +2,6 @@
 , readline, libsodium, rapidjson
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "wownero";
   version = "0.8.0.1";
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     "-DMANUAL_SUBMODULES=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     description = ''
       A privacy-centric memecoin that was fairly launched on April 1, 2018 with
       no pre-mine, stealth-mine or ICO

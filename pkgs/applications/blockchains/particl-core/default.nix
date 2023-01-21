@@ -14,8 +14,6 @@
 , python3
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "particl-core";
   version = "23.0.3.0";
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-bench"
     "--with-boost-libdir=${boost.out}/lib"
-  ] ++ optionals (!doCheck) [
+  ] ++ lib.optionals (!doCheck) [
     "--enable-tests=no"
   ];
 
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
   preCheck = "patchShebangs test";
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
     longDescription = ''
