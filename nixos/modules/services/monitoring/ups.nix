@@ -6,9 +6,7 @@ with lib;
 
 let
   cfg = config.power.ups;
-in
 
-let
   upsOptions = {name, config, ...}:
   {
     options = {
@@ -103,19 +101,14 @@ in
     # powerManagement.powerDownCommands
 
     power.ups = {
-      enable = mkOption {
-        default = false;
-        type = with types; bool;
-        description = lib.mdDoc ''
-          Enables support for Power Devices, such as Uninterruptible Power
-          Supplies, Power Distribution Units and Solar Controllers.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc ''
+        Enables support for Power Devices, such as Uninterruptible Power
+        Supplies, Power Distribution Units and Solar Controllers.
+      '');
 
-      # This option is not used yet.
       mode = mkOption {
         default = "standalone";
-        type = types.str;
+        type = types.enum [ "none" "standalone" "netserver" "netclient" ];
         description = lib.mdDoc ''
           The MODE determines which part of the NUT is to be started, and
           which configuration files must be modified.
@@ -180,38 +173,48 @@ in
     environment.systemPackages = [ pkgs.nut ];
 
     systemd.services.upsmon = {
+      enable = mkDefault (elem cfg.mode [ "standalone" "netserver" "netclient" ]);
       description = "Uninterruptible Power Supplies (Monitor)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "forking";
-      script = "${pkgs.nut}/sbin/upsmon";
-      environment.NUT_CONFPATH = "/etc/nut/";
-      environment.NUT_STATEPATH = "/var/lib/nut/";
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = "${pkgs.nut}/sbin/upsmon";
+        ExecReload = "${pkgs.nut}/sbin/upsmon -c reload";
+      };
+      environment.NUT_CONFPATH = "/etc/nut";
+      environment.NUT_STATEPATH = "/var/lib/nut";
     };
 
     systemd.services.upsd = {
+      enable = mkDefault (elem cfg.mode [ "standalone" "netserver" ]);
       description = "Uninterruptible Power Supplies (Daemon)";
       after = [ "network.target" "upsmon.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.Type = "forking";
-      # TODO: replace 'root' by another username.
-      script = "${pkgs.nut}/sbin/upsd -u root";
-      environment.NUT_CONFPATH = "/etc/nut/";
-      environment.NUT_STATEPATH = "/var/lib/nut/";
+      serviceConfig = {
+        Type = "forking";
+        # TODO: replace 'root' by another username.
+        ExecStart = "${pkgs.nut}/sbin/upsd -u root";
+        ExecReload = "${pkgs.nut}/sbin/upsd -c reload";
+      };
+      environment.NUT_CONFPATH = "/etc/nut";
+      environment.NUT_STATEPATH = "/var/lib/nut";
     };
 
     systemd.services.upsdrv = {
+      enable = mkDefault (elem cfg.mode [ "standalone" "netserver" ]);
       description = "Uninterruptible Power Supplies (Register all UPS)";
       after = [ "upsd.service" ];
       wantedBy = [ "multi-user.target" ];
-      # TODO: replace 'root' by another username.
-      script = "${pkgs.nut}/bin/upsdrvctl -u root start";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        # TODO: replace 'root' by another username.
+        ExecStart = "${pkgs.nut}/bin/upsdrvctl -u root start";
       };
-      environment.NUT_CONFPATH = "/etc/nut/";
-      environment.NUT_STATEPATH = "/var/lib/nut/";
+      environment.NUT_CONFPATH = "/etc/nut";
+      environment.NUT_STATEPATH = "/var/lib/nut";
     };
 
     environment.etc = {
@@ -223,9 +226,7 @@ in
         ''
           maxstartdelay = ${toString cfg.maxStartDelay}
 
-          ${flip concatStringsSep (forEach (attrValues cfg.ups) (ups: ups.summary)) "
-
-          "}
+          ${concatStringsSep "\n\n" (forEach (attrValues cfg.ups) (ups: ups.summary))}
         '';
       "nut/upssched.conf".source = cfg.schedulerRules;
       # These file are containing private information and thus should not
@@ -241,6 +242,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d /var/state/ups -"
+      "d /var/lib/nut 700"
     ];
 
 
