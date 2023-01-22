@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "1.3.1";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rj3WTDj2ey8unOxXkD4zbqwd0FDcyHPzsDrjtX7myj4=";
+    hash = "sha256-g2I9J7Exm8tVv4WN9Nv2IdCiCXj2jgdSX9jcD66mlzo=";
   };
 
   nativeBuildInputs = [
