@@ -37560,6 +37560,8 @@ with pkgs;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
+  nixpkgs-hammering = callPackage ../tools/nix/nixpkgs-hammering { };
+
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
