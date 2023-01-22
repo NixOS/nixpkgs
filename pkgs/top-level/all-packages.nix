@@ -27231,6 +27231,8 @@ with pkgs;
 
   myrica = callPackage ../data/fonts/myrica { };
 
+  nacelle = callPackage ../data/fonts/nacelle { };
+
   nafees = callPackage ../data/fonts/nafees { };
 
   nanum = callPackage ../data/fonts/nanum {  };
