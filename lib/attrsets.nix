@@ -840,6 +840,33 @@ rec {
     ) [pattern attrs]));
 
 
+  /* Pattern intersection.  Specifically, the following is true
+     if it does not `throw`:
+
+     forall patternList,
+     forall arg,
+         matchAttrs (intersectPatterns patternList) arg
+      == all (matchAttrs patternList) arg
+
+     Type:
+       intersectPatterns :: [ AttrSet ] -> AttrSet
+   */
+  intersectPatterns = let
+    inherit (lib) any unique isFunction elem;
+    inherit (lib.strings) concatStringsSep;
+    mergeLeaves = path: list:
+      let list' = unique list; in
+      # avoid introducing any new dependencies on function equality
+      assert any isFunction list -> throw "function found in pattern list at path '${concatStringsSep "." path}'";
+      assert length list == 0 -> throw "this should not happen; path '${concatStringsSep "." path}'";
+      assert length list' != 1 -> throw "disjoint patterns intersected at path '${concatStringsSep "." path}', values=${builtins.toString list'}";
+      elemAt list' 0;
+    intersectPatterns' = path: list:
+      if       !(any isAttrs list) then mergeLeaves path list
+      else if    all isAttrs list  then mapAttrs (k: v: intersectPatterns' (path++[k]) v) (zipAttrs list)
+      else throw "mix of attrsets and non-attrsets at path '${concatStringsSep "." path}', values = ${concatStringsSep "\n" (map builtins.toJSON list)}";
+  in list: (intersectPatterns' [] list);
+
   /* Override only the attributes that are already present in the old set
     useful for deep-overriding.
 
