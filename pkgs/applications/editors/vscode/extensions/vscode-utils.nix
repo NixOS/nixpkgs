@@ -19,13 +19,14 @@ let
     dontPatchELF ? true,
     dontStrip ? true,
     nativeBuildInputs ? [],
+    passthru ? { },
     ...
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
 
     name = "vscode-extension-${name}";
 
-    passthru = {
+    passthru = passthru // {
       inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
     };
 
