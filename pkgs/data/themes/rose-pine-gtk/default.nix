@@ -7,7 +7,7 @@
   gtk_engines,
 }:
 stdenv.mkDerivation rec {
-  pname = "rose-pine-${variant}-gtk-theme";
+  pname = "rose-pine-gtk-theme";
   version = "unstable-2022-09-01";
 
   src = fetchFromGitHub {
