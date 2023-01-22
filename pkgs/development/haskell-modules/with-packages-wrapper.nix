@@ -49,8 +49,8 @@ let
   isHaLVM       = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
+  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand    = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
                   else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
