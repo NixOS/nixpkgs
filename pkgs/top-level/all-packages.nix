@@ -4083,6 +4083,8 @@ with pkgs;
 
   changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
 
+  clini = callPackage ../tools/misc/clini { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
