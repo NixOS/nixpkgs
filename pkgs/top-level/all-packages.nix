@@ -425,6 +425,8 @@ with pkgs;
 
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
+  coost = callPackage ../development/libraries/coost { };
+
   crc = callPackage ../applications/networking/cluster/crc { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
