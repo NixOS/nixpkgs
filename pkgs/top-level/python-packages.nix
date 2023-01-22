@@ -10065,6 +10065,8 @@ self: super: with self; {
 
   retrying = callPackage ../development/python-modules/retrying { };
 
+  returns = callPackage ../development/python-modules/returns { };
+
   retworkx = callPackage ../development/python-modules/retworkx { };
 
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
