@@ -1,11 +1,10 @@
 { lib
+, buildNpmPackage
 , fetchFromGitHub
-, pkgs
-, stdenv
-, nodejs
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "jellyfin-web";
   version = "10.8.8";
 
@@ -16,35 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "pIoMpNxRtIvs6bhFEoSlFU8aHZ2CBbHnZaA/FVAkGOI=";
   };
 
-  nativeBuildInputs = [
-    nodejs
-  ];
+  npmDepsHash = "sha256-eVf1Sb5wIWeCbknyBAwmrSyaVy1trTZXB8Uuz3U/8VI=";
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
+  # Don't run the build script twice (https://github.com/jellyfin/jellyfin-web/blob/37dd3fe2b862c7e10a017e89f5d37e3a3df11aad/scripts/prepare.js)
+  SKIP_PREPARE = 1;
 
-        # dont run the prepare script:
-        # Error: Cannot find module '/nix/store/...-node-dependencies-jellyfin-web-.../jellyfin-web/scripts/prepare.js
-        # npm run build:production runs the same command
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
-
-      ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-      export PATH="${nodeDependencies}/bin:$PATH"
-
-      npm run build:production
-
-      runHook postBuild
-    '';
+  npmBuildScript = "build:production";
 
   installPhase = ''
     runHook preInstall
@@ -55,13 +31,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./web-update.sh;
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     description = "Web Client for Jellyfin";
     homepage = "https://jellyfin.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
-    platforms = nodejs.meta.platforms;
   };
 }
