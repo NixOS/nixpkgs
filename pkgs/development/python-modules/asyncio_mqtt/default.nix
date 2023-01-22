@@ -49,17 +49,17 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_client_filtered_messages"
-    "test_client_unfiltered_messages"
-    "test_client_unsubscribe"
-    "test_client_will"
-    "test_client_tls_context"
-    "test_client_tls_params"
-    "test_client_username_password "
     "test_client_logger"
     "test_client_max_concurrent_outgoing_calls"
-    "test_client_websockets"
-    "test_client_pending_calls_threshold"
     "test_client_no_pending_calls_warnings_with_max_concurrent_outgoing_calls"
+    "test_client_pending_calls_threshold"
+    "test_client_tls_context"
+    "test_client_tls_params"
+    "test_client_unfiltered_messages"
+    "test_client_unsubscribe"
+    "test_client_username_password "
+    "test_client_websockets"
+    "test_client_will"
     "test_multiple_messages_generators"
   ];
 
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "Idomatic asyncio wrapper around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/asyncio-mqtt";
     license = licenses.bsd3;
-    changelog = "https://github.com/sbtinstruments/asyncio-mqtt/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/sbtinstruments/asyncio-mqtt/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ hexa ];
   };
 }
