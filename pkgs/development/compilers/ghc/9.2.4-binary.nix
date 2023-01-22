@@ -38,11 +38,20 @@ let
   #   set `exePathForLibraryCheck = null`.
   # * To skip file checking for a specific arch specfic library,
   #   set `fileToCheckFor = null`.
-  ghcBinDists = {
-    # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
-    # nixpkgs uses for the respective system.
-    defaultLibc = {
-      i686-linux = {
+  ghcBinDists =
+    let
+      # return a disjunctive-list-of-patterns which is the intersection of its arguments
+      intersectPatternDisjunctions = lists:
+          (map lib.attrsets.intersectPatterns (lib.lists.cartesianProductOfLists lists));
+
+      # lib.systems.inspect.patterns are either disjunction-lists or
+      # singletons; wrap the singletons as a singleton-disjunction
+      patterns = lib.mapAttrs (_: lib.toList) lib.systems.inspect.patterns;
+    in {
+      # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
+      # nixpkgs uses for the respective system.
+      "i686-*-linux-gnu*" = {
+        patternList = with patterns; intersectPatternDisjunctions [ isx86_32 isLinux isGnu ];
         variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
@@ -57,7 +66,8 @@ let
           { nixPackage = ncurses5; fileToCheckFor = "libtinfo.so.5"; }
         ];
       };
-      x86_64-linux = {
+      "x86_64-*-linux-gnu*" = {
+        patternList = with patterns; intersectPatternDisjunctions [ isx86_64 isLinux isGnu ];
         variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
@@ -69,7 +79,8 @@ let
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
         ];
       };
-      aarch64-linux = {
+      "aarch64-*-linux-gnu*" = {
+        patternList = with patterns; intersectPatternDisjunctions [ isAarch64 isLinux isGnu ];
         variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
@@ -82,7 +93,8 @@ let
           { nixPackage = numactl; fileToCheckFor = null; }
         ];
       };
-      x86_64-darwin = {
+      "x86_64-*-darwin" = {
+        patternList = with patterns; intersectPatternDisjunctions [ isx86_64 isDarwin ];
         variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
@@ -96,7 +108,8 @@ let
         ];
         isHadrian = true;
       };
-      aarch64-darwin = {
+      "aarch64-*-darwin" = {
+        patternList = with patterns; intersectPatternDisjunctions [ isAarch64 isDarwin ];
         variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-apple-darwin.tar.xz";
@@ -110,10 +123,9 @@ let
         ];
         isHadrian = true;
       };
-    };
-    # Binary distributions for the musl libc for the respective system.
-    musl = {
-      x86_64-linux = {
+      # Binary distributions for the musl libc for the respective system.
+      "x86_64-*-linux-musl" = {
+        patternList = with patterns; intersectPatternDisjunctions [ isx86_64 isLinux isMusl ];
         variantSuffix = "-musl";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-alpine3.12-linux-gmp.tar.xz";
@@ -127,13 +139,20 @@ let
           { nixPackage = gmp.override { withStatic = true; }; fileToCheckFor = null; }
         ];
       };
-    };
   };
 
-  distSetName = if stdenv.hostPlatform.isMusl then "musl" else "defaultLibc";
-
-  binDistUsed = ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${distSetName}')");
+  binDistUsed =
+    let
+      inherit (stdenv) hostPlatform;
+      inherit (lib) filter concatSepStrings attrNames any attrValues;
+      pred = binDist: any (lib.meta.platformMatch hostPlatform) binDist.patternList;
+    in
+      lib.lists.findSingle
+        pred
+        (throw "cannot bootstrap GHC on ${hostPlatform.config}")
+        (throw "bug in nixpkgs, please report: ${hostPlatform.config} has multiple GHC bindists:"+
+         " ${concatSepStrings " " (map attrNames (filter pred ghcBinDists))}")
+        (attrValues ghcBinDists);
 
   gmpUsed = (builtins.head (
     builtins.filter (
@@ -416,17 +435,8 @@ stdenv.mkDerivation rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
-    # HACK: since we can't encode the libc / abi in platforms, we need
-    # to make the platform list dependent on the evaluation platform
-    # in order to avoid eval errors with musl which supports less
-    # platforms than the default libcs (i. e. glibc / libSystem).
-    # This is done for the benefit of Hydra, so `packagePlatforms`
-    # won't return any platforms that would cause an evaluation
-    # failure for `pkgsMusl.haskell.compiler.ghc922Binary`, as
-    # long as the evaluator runs on a platform that supports
-    # `pkgsMusl`.
-    platforms = builtins.attrNames ghcBinDists.${distSetName};
-    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
+    platforms = lib.concatMap (binDist: binDist.patternList) (lib.attrValues ghcBinDists);
+    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") (lib.systems.doublesFromPatterns platforms);
     maintainers = lib.teams.haskell.members;
   };
 }
