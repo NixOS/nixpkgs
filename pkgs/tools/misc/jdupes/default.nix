@@ -1,37 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "sha256-nDyRaV49bLVHlyqKJ7hf6OBWOLCfmHrTeHryK091c3w=";
+    sha256 = "sha256-VtwEDw0BBcXO2NVka0pddJSOm8hnQ8iqL2fzGI8uVFM=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
     postFetch = "rm -r $out/testdir";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "darwin-stack-size.patch";
-      url = "https://github.com/jbruchon/jdupes/commit/8f5b06109b44a9e4316f9445da3044590a6c63e2.patch";
-      sha256 = "0saq92v0mm5g979chr062psvwp3i3z23mgqrcliq4m07lvwc7i3s";
-    })
-    (fetchpatch {
-      name = "linux-header-ioctl.patch";
-      url = "https://github.com/jbruchon/jdupes/commit/0d4d98f51c99999d2c6dbbb89d554af551b5b69b.patch";
-      sha256 = "sha256-lyuZeRp0Laa8I9nDl1HGdlKa59OvGRQJnRg2fTWv7mQ=";
-    })
-    (fetchpatch {
-      name = "darwin-apfs-comp.patch";
-      url = "https://github.com/jbruchon/jdupes/commit/517b7035945eacd82323392b13bc17b044bcc89d.patch";
-      sha256 = "sha256-lvOab6tyEyKUtik3JBdIs5SHpVjcQEDfN7n2bfUszBw=";
-    })
-  ];
 
   dontConfigure = true;
 
