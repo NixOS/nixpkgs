@@ -3436,11 +3436,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xset = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, xorgproto, libXxf86misc }: stdenv.mkDerivation {
     pname = "xset";
-    version = "1.2.4";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xset-1.2.4.tar.bz2";
-      sha256 = "0my987wjvra7l92ry6q44ky383yg3phzxhdbn3lqhapm1ll9bzg4";
+      url = "mirror://xorg/individual/app/xset-1.2.5.tar.xz";
+      sha256 = "0bsyyx3k32k9vpb8x3ks7hlfr03nm0i14fv3cg6n4f2vcdajsscz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
