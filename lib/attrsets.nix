@@ -480,8 +480,10 @@ rec {
 
 
   /* Like `mapAttrs`, except that it recursively applies itself to
-     attribute sets.  Also, the first argument of the argument
-     function is a *list* of the names of the containing attributes.
+     the *leaf* attributes of a potentially-nested attribute set:
+     the second argument of the function will never be an attrset.
+     Also, the first argument of the argument function is a *list*
+     of the names of the containing attributes.
 
      Example:
        mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
