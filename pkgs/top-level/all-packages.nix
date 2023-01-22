@@ -1338,6 +1338,8 @@ with pkgs;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
 
+  askalono = callPackage ../tools/misc/askalono { };
+
   asleap = callPackage ../tools/networking/asleap { };
 
   butler = callPackage ../games/itch/butler.nix {
