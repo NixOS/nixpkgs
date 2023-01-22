@@ -26856,6 +26856,8 @@ with pkgs;
 
   eunomia = callPackage ../data/fonts/eunomia { };
 
+  f1_8 = callPackage ../data/fonts/f1_8 { };
+
   f5_6 = callPackage ../data/fonts/f5_6 { };
 
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
