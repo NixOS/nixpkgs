@@ -10418,6 +10418,12 @@
     githubId = 6052922;
     name = "Kirill Struokov";
   };
+  novenary = {
+    email = "streetwalkermc@gmail.com";
+    github = "9ary";
+    githubId = 1155030;
+    name = "novenary";
+  };
   np = {
     email = "np.nix@nicolaspouillard.fr";
     github = "np";
