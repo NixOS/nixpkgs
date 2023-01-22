@@ -5,6 +5,7 @@
 , readline
 , stdenv
 , which
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ which nettools ];
   doCheck = false; # fails a bunch, hangs
+
+  passthru.tests = lib.optionalAttrs stdenv.buildPlatform.isLinux {
+    musl = buildPackages.pkgsMusl.socat;
+  };
 
   meta = with lib; {
     description = "Utility for bidirectional data transfer between two independent data channels";
