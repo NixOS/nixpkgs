@@ -5,7 +5,6 @@
 , iproute2
 , lzo
 , openssl
-, openssl_1_1
 , pam
 , useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
@@ -74,12 +73,6 @@ let
 
 in
 {
-  openvpn_24 = generic {
-    version = "2.4.12";
-    sha256 = "1vjx82nlkxrgzfiwvmmlnz8ids5m2fiqz7scy1smh3j9jnf2v5b6";
-    extraBuildInputs = [ openssl_1_1 ];
-  };
-
   openvpn = generic {
     version = "2.5.8";
     sha256 = "1cixqm4gn2d1v8qkbww75j30fzvxz13gc7whcmz54i0x4fvibwx6";
