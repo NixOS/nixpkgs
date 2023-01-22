@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.1.39";
 
   src = fetchurl {
-    url = "http://mhddfs.uvw.ru/downloads/mhddfs_${version}.tar.gz";
+    url = "https://mhddfs.uvw.ru/downloads/mhddfs_${version}.tar.gz";
     sha256 = "14ggmh91vv69fp2qpz0nxp0hprlw2wsijss2k2485hb0ci4cabvh";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://mhddfs.uvw.ru/";
+    homepage = "https://mhddfs.uvw.ru/";
     description = "Combines a several mount points into the single one";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];

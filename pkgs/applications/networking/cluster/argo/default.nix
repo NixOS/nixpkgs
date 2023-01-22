@@ -22,7 +22,7 @@ let
       hash = "sha256-wchj5KjhTmhc4XVW0sRFCcyx5W9am8TNAIhej3WFWXU=";
     };
 
-    vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+    vendorHash = null;
 
     excludedPackages = [ "./example" ];
 

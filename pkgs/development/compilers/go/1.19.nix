@@ -18,7 +18,8 @@
 }:
 
 let
-  goBootstrap = if stdenv.buildPlatform.isMusl then buildPackages.gccgo else buildPackages.callPackage ./bootstrap116.nix { };
+  useGccGoBootstrap = stdenv.buildPlatform.isMusl || stdenv.buildPlatform.isRiscV;
+  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo else buildPackages.callPackage ./bootstrap116.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo119Module; };
 
@@ -120,7 +121,7 @@ stdenv.mkDerivation rec {
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = if stdenv.buildPlatform.isMusl then goBootstrap else "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild

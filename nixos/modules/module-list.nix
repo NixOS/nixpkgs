@@ -571,6 +571,7 @@
   ./services/misc/atuin.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
+  ./services/misc/autosuspend.nix
   ./services/misc/bazarr.nix
   ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix

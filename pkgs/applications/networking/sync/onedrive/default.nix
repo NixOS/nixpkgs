@@ -8,7 +8,7 @@
 , curl
 , sqlite
 , libnotify
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
 

@@ -47,7 +47,7 @@ in
         Whether to run the Avahi daemon, which allows Avahi clients
         to use Avahi's service discovery facilities and also allows
         the local machine to advertise its presence and services
-        (through the mDNS responder implemented by `avahi-daemon').
+        (through the mDNS responder implemented by `avahi-daemon`).
       '';
     };
 
@@ -205,7 +205,7 @@ in
       default = false;
       description = lib.mdDoc ''
         Whether to enable the mDNS NSS (Name Service Switch) plug-in.
-        Enabling it allows applications to resolve names in the `.local'
+        Enabling it allows applications to resolve names in the `.local`
         domain by transparently querying the Avahi daemon.
       '';
     };

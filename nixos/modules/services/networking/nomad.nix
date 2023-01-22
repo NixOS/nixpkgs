@@ -71,6 +71,17 @@ in
         '';
       };
 
+      credentials = mkOption {
+        description = lib.mdDoc ''
+          Credentials envs used to configure nomad secrets.
+        '';
+        type = types.attrsOf types.str;
+        default = { };
+
+        example = {
+          logs_remote_write_password = "/run/keys/nomad_write_password";
+        };
+      };
 
       settings = mkOption {
         type = format.type;
@@ -148,7 +159,8 @@ in
                 };
             in
             "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
+            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
+            concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (lib.attrNames cfg.credentials);
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;
@@ -157,6 +169,7 @@ in
           Restart = "on-failure";
           RestartSec = 2;
           TasksMax = "infinity";
+          LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
         }
         (mkIf cfg.enableDocker {
           SupplementaryGroups = "docker"; # space-separated string

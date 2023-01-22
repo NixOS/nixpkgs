@@ -45,7 +45,7 @@
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
 , libgcrypt ? null # cupsSupport
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
 

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-irn6L8tKOrtgTExLw5ycPLNZcnCKNEW6RayZVePVofw=";
+    sha256 = "sha256-a/C93Uuf++FIBqZSA0LaUQX4ZQoUMD2lHnV5MRlCw4g=";
   };
 
-  cargoHash = "sha256-eoWtmUQf1/X4cd/b1aiNoN8HS+qrylaoTdq21/97kPU=";
+  cargoHash = "sha256-JQvLezX8L2yEDyiVxH93Uk1V5qFjwXNVQWEI9ur9YOQ=";
 
   nativeBuildInputs = [ cmake pkg-config ];
 

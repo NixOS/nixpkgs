@@ -128,7 +128,7 @@ options = {
       </para>
       <anchor xml:id="ex-options-declarations-util-mkEnableOption-magic" />
       <programlisting language="nix">
-lib.mkEnableOption &quot;magic&quot;
+lib.mkEnableOption (lib.mdDoc &quot;magic&quot;)
 # is like
 lib.mkOption {
   type = lib.types.bool;
@@ -188,7 +188,7 @@ mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&qu
         </para>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-hello" />
         <programlisting language="nix">
-lib.mkPackageOption pkgs &quot;hello&quot; { }
+lib.mkPackageOptionMD pkgs &quot;hello&quot; { }
 # is like
 lib.mkOption {
   type = lib.types.package;
@@ -199,7 +199,7 @@ lib.mkOption {
 </programlisting>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-ghc" />
         <programlisting language="nix">
-lib.mkPackageOption pkgs &quot;GHC&quot; {
+lib.mkPackageOptionMD pkgs &quot;GHC&quot; {
   default = [ &quot;ghc&quot; ];
   example = &quot;pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
 }

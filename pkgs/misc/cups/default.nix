@@ -9,7 +9,7 @@
 , libtiff
 , pam
 , dbus
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , acl
 , gmp

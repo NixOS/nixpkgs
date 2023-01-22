@@ -9780,7 +9780,7 @@ let
     propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
     buildInputs = [ TestPod ];
     meta = {
-      homepage = "http://finance-quote.sourceforge.net/";
+      homepage = "https://finance-quote.sourceforge.net/";
       description = "Get stock and mutual fund quotes from various exchanges";
       license = with lib.licenses; [gpl2 ];
     };
@@ -20646,7 +20646,7 @@ let
     propagatedBuildInputs = [ DigestSHA1 URI ];
     meta = {
       description = "Collaborative, content-based spam filtering network agent";
-      homepage = "http://razor.sourceforge.net/";
+      homepage = "https://razor.sourceforge.net/";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

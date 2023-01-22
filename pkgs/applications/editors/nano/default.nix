@@ -4,8 +4,6 @@
 
 assert enableNls -> (gettext != null);
 
-with lib;
-
 let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
@@ -23,7 +21,7 @@ in stdenv.mkDerivation rec {
     sha256 = "V7p1Hpt1GfD23e5QUgLjh8dd3kQMH3qhuTEMw4FAaDY=";
   };
 
-  nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
+  nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
   buildInputs = [ ncurses ];
 
   outputs = [ "out" "info" ];
@@ -71,7 +69,7 @@ in stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nano-editor.org/";
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;

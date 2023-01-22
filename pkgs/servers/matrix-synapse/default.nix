@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
-, enableSystemd ? stdenv.isLinux, nixosTests
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, nixosTests
 , enableRedis ? true
 , callPackage
 }:

@@ -5,10 +5,8 @@
 
 { pname, product, productShort ? product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
 
-with lib;
-
-let loName = toLower productShort;
-    hiName = toUpper productShort;
+let loName = lib.toLower productShort;
+    hiName = lib.toUpper productShort;
     vmoptsName = loName
                + lib.optionalString stdenv.hostPlatform.is64bit "64"
                + ".vmoptions";
@@ -29,7 +27,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     startupWMClass = wmClass;
   };
 
-  vmoptsFile = optionalString (vmopts != null) (writeText vmoptsName vmopts);
+  vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
