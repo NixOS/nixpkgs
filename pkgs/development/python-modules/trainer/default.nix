@@ -9,6 +9,7 @@
 , torch-bin
 , tensorboardx
 , protobuf
+, psutil
 
 , pytestCheckHook
 , soundfile
@@ -37,10 +38,11 @@ buildPythonPackage {
   propagatedBuildInputs = [
     coqpit
     fsspec
-    torch-bin
+    protobuf
+    psutil
     soundfile
     tensorboardx
-    protobuf
+    torch-bin
   ];
 
   # only one test and that requires training data from the internet
