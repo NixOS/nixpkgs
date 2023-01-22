@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ] ++ passthru.optional-dependencies.signal;

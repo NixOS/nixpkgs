@@ -34,7 +34,7 @@ buildPythonPackage rec {
     catalogue
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     numpy
     psutil

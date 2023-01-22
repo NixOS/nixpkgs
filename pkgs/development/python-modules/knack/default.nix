@@ -36,7 +36,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     vcrpy
     pytest

@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   inherit (owl-base) version src meta useDune2;
 
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   buildInputs = [ dune-configurator stdio ];
   propagatedBuildInputs = [
     eigen openblasCompat owl-base npy

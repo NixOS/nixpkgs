@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     anyio
     curio
     hypothesis

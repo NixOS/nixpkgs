@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyasn1 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

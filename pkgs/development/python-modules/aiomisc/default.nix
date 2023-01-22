@@ -35,7 +35,7 @@ buildPythonPackage rec {
     logging-journald
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiocontextvars
     async-timeout
     fastapi

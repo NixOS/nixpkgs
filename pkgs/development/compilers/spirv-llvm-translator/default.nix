@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   buildInputs = [ spirv-headers ]
     ++ lib.optionals (!isROCm) [ llvm ];
 
-  checkInputs = [ lit ];
+  nativeCheckInputs = [ lit ];
 
   cmakeFlags = [
     "-DLLVM_INCLUDE_TESTS=ON"

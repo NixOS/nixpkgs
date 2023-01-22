@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.20.0";
+  version = "0.20.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    hash = "sha256-7bYGMbNLAN48kfckCcNtnymvQHm9CSNsgy/soe14SII=";
+    hash = "sha256-6oMOfyl8yR8FMprPYD831eiXh9g/bqslvxDmVcrNK80=";
   };
 
   postPatch = ''
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     unpaddedbase64
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     faker
     hypothesis

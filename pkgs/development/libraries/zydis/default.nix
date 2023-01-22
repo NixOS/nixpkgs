@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
   checkPhase = ''
     pushd ../tests
     python3 ./regression.py test ../build/ZydisInfo

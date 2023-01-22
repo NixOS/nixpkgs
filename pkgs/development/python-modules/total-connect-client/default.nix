@@ -29,7 +29,7 @@ buildPythonPackage rec {
     zeep
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

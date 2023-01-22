@@ -46,7 +46,7 @@ buildPythonPackage rec {
     trio = [ trio ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

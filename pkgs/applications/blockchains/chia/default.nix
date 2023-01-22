@@ -64,7 +64,7 @@ let chia = python3Packages.buildPythonApplication rec {
     zstd
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     "scim2_filter_parser"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     pytest-runner
     unittestCheckHook

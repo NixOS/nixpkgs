@@ -38,7 +38,7 @@ buildPythonPackage rec {
     "test_text_mining"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

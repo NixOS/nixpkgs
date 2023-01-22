@@ -46,7 +46,7 @@ buildPythonPackage {
   # only one test and that requires training data from the internet
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     torchvision-bin
   ];

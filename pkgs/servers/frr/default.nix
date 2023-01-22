@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     nettools
     python3.pkgs.pytest
   ];

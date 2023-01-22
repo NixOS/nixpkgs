@@ -38,7 +38,7 @@ buildPythonPackage rec {
     jaraco_collections
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

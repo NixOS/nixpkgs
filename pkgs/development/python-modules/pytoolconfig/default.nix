@@ -85,7 +85,7 @@ buildPythonPackage rec {
     "pytoolconfig"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 

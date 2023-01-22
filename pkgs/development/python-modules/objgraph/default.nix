@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ graphviz ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   meta = with lib; {
     description = "Draws Python object reference graphs with graphviz";

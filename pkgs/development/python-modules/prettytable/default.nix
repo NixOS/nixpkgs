@@ -37,7 +37,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-lazy-fixture
     pytestCheckHook
   ];

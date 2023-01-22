@@ -33,7 +33,7 @@ buildPythonPackage rec {
     ezyrb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

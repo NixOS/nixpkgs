@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     make cleanall
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     octave
   ];
   checkTarget = "tests";

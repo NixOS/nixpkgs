@@ -24,7 +24,7 @@ buildPythonPackage rec {
     tokenize-rt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

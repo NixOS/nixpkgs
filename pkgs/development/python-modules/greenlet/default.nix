@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-QuYCVkRg2g6O5ny21yNjY+5eExqhWUO2Zw5E5cLtD2c=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     objgraph
     psutil
     pytestCheckHook

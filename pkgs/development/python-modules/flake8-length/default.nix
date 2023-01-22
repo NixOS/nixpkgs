@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "flake8_length"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests/" ];
 

@@ -75,7 +75,7 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

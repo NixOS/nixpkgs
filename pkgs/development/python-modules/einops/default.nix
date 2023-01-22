@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     chainer
     jupyter
     keras

@@ -38,7 +38,7 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     stestr
   ];

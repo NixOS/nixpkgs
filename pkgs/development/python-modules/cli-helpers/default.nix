@@ -34,7 +34,7 @@ buildPythonPackage rec {
     styles = [ pygments ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

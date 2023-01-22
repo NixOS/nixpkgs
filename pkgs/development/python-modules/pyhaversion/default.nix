@@ -28,7 +28,7 @@ buildPythonPackage rec {
     awesomeversion
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

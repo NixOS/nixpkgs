@@ -61,7 +61,7 @@ buildPythonPackage rec {
     "bokeh"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest
     pillow

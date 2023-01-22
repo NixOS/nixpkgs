@@ -34,7 +34,7 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ansible-core
     flaky
     pytest-mock

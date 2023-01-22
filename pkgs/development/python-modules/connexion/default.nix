@@ -50,7 +50,7 @@ buildPythonPackage rec {
     swagger-ui-bundle
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp-remotes
     decorator
     pytest-aiohttp

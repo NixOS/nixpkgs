@@ -76,7 +76,7 @@ buildPythonPackage rec {
     "tensorflow_datasets"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     apache-beam
     beautifulsoup4
     ffmpeg

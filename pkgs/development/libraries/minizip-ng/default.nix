@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   enableParallelChecking = false;
 
   meta = with lib; {

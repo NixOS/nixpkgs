@@ -21,7 +21,7 @@ buildPythonPackage rec {
     flake8
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pep8
     pytestCheckHook

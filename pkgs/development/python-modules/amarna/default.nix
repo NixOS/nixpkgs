@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pydot
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

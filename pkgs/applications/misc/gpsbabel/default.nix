@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGUI qtserialport
     ++ lib.optional (withGUI && withMapPreview) qtwebengine;
 
-  checkInputs = [ libxml2 which ];
+  nativeCheckInputs = [ libxml2 which ];
 
   preConfigure = lib.optionalString withGUI ''
     lrelease gui/*.ts gui/coretool/*.ts

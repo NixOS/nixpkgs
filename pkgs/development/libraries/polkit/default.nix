@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     glib # in .pc Requires
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 

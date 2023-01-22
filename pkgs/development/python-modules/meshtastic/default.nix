@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytap2
     pytestCheckHook
   ];

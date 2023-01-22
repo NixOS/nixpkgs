@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     docutils
     pygments

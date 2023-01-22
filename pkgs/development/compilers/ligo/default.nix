@@ -96,7 +96,7 @@ ocamlPackages.buildDunePackage rec {
     zarith_stubs_js
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     ocamlPackages.ca-certs
   ];

@@ -36,7 +36,7 @@ in buildPythonPackage rec {
     pkg-config
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb numpy ncurses
   ];
 

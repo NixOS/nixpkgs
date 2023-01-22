@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

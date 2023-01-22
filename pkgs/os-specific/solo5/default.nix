@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;
-  checkInputs = [ util-linux qemu ];
+  nativeCheckInputs = [ util-linux qemu ];
   checkPhase = ''
     runHook preCheck
     patchShebangs tests

@@ -491,7 +491,7 @@ with prev;
   sqlite = prev.luaLib.overrideLuarocks prev.sqlite (drv: {
 
     doCheck = true;
-    checkInputs = [ final.plenary-nvim neovim-unwrapped ];
+    nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
     # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
     checkPhase = ''

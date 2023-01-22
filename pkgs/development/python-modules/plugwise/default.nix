@@ -45,7 +45,7 @@ buildPythonPackage rec {
     semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     jsonpickle
     mypy

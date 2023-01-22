@@ -36,7 +36,7 @@ buildPythonPackage rec {
     cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flask
     pytest-httpserver
     pytestCheckHook

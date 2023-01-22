@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ typesentry blessed ];
   buildInputs = [ llvm pipInstallHook ];
-  checkInputs = [ docutils pytestCheckHook ];
+  nativeCheckInputs = [ docutils pytestCheckHook ];
 
   LLVM = llvm;
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";

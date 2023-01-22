@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ++ optional  upowerSupport upower
     ++ optional  wireplumberSupport wireplumber;
 
-  checkInputs = [ catch2_3 ];
+  nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;
 
   mesonFlags = (lib.mapAttrsToList

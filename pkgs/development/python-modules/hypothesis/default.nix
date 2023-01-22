@@ -34,7 +34,7 @@ buildPythonPackage rec {
     exceptiongroup
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pexpect
     pytest-xdist
     pytestCheckHook

@@ -48,7 +48,7 @@ buildPythonPackage rec {
     validate-email
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     faker

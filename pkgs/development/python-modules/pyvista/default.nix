@@ -28,7 +28,7 @@ buildPythonPackage rec {
     vtk
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

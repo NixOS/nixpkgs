@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gnutls # for certtool
     cacert # trust store for glib-networking

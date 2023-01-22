@@ -55,7 +55,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ appdirs milksnake pyyaml ];
 
-  checkInputs = [ hypothesis jinja2 mock pytestCheckHook ];
+  nativeCheckInputs = [ hypothesis jinja2 mock pytestCheckHook ];
 
   preBuild = ''
     mkdir -p rust/target/release/deps

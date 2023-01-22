@@ -16,7 +16,7 @@ if [[ "$new_version" == "$old_version" ]]; then
 fi
 
 asf_path=$PWD
-push ../../../..
+pushd ../../../..
 
 if [[ "${1:-}" != "--deps-only" ]]; then
     update-source-version ArchiSteamFarm "$new_version"

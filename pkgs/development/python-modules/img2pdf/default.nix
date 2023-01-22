@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # https://gitlab.mister-muffin.de/josch/img2pdf/issues/128
   doCheck = !stdenv.isAarch64;
 
-  checkInputs = [
+  nativeCheckInputs = [
     exiftool
     ghostscript
     imagemagick

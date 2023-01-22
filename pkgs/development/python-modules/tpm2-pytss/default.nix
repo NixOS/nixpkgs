@@ -49,7 +49,7 @@ buildPythonPackage rec {
   # https://github.com/tpm2-software/tpm2-pytss/issues/341
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ibm-sw-tpm2
     pytestCheckHook
   ];

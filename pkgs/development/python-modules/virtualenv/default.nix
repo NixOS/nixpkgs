@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cython
     flaky
     pytest-freezegun

@@ -253,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"

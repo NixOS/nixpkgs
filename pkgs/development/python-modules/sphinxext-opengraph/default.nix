@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
   ];

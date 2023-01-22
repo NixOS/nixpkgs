@@ -26,15 +26,16 @@
 , vkbasalt-cli
 , vmtouch
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "2022.12.14.1";
+  version = "50.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-hoWyXCP7/0m8akUGBJyuF2yQcRKR8C7MDBLUdPdtBgE=";
+    sha256 = "sha256-+r/r3vExnvYQIicKAEmwZ+eRSep6kWte5k7gu9jC67w=";
   };
 
   patches = [ ./vulkan_icd.patch ];

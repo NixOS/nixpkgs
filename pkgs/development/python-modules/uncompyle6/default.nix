@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-HmqQLeYOpcP30q9+J0UAa05Lm97eiIoH+EQcmTjy7n0=";
   };
 
-  checkInputs = [ nose pytest hypothesis six ];
+  nativeCheckInputs = [ nose pytest hypothesis six ];
   propagatedBuildInputs = [ spark_parser xdis ];
 
   # six import errors (yet it is supplied...)

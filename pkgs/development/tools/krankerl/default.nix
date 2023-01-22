@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     file
   ];
 

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
   pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
   disabledTests = [ "gridplot_outputs" ];
 

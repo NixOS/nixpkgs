@@ -36,7 +36,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     asynctest
     pytest-aiohttp

@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ gnuplot lwt metrics mtime uuidm ];
 
-  checkInputs = [ metrics-lwt ];
+  nativeCheckInputs = [ metrics-lwt ];
 
   doCheck = true;
 

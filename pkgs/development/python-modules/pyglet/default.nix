@@ -84,7 +84,7 @@ buildPythonPackage rec {
   # tests do run and pass in nix-shell, however.
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

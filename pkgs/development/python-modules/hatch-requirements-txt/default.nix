@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   doCheck = false; # missing coincidence dependency
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

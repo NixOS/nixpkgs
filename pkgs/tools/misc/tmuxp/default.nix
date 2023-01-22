@@ -6,17 +6,12 @@ let
 in
 pypkgs.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.12.1";
+  version = "1.23.0";
 
   src = pypkgs.fetchPypi {
     inherit pname version;
-    sha256 = "078624c5ac7aa4142735f856fadb9281fcebb10e6b98d1be2b2f2bbd106613b9";
+    sha256 = "Ix/43QFOa0kCP5xndszFGk0p12w/t/z+fVcYRIj9y0s=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "libtmux>=0.12.0,<0.13.0" "libtmux"
-  '';
 
   # No tests in archive
   doCheck = false;

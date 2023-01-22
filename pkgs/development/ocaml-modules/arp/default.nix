@@ -36,7 +36,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     mirage-clock-unix
     mirage-profile

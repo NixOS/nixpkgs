@@ -41,7 +41,7 @@ buildPythonPackage rec {
     cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];

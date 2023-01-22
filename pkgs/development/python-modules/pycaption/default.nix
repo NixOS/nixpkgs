@@ -28,7 +28,7 @@ buildPythonPackage rec {
     cssutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-lazy-fixture
     pytestCheckHook
   ];

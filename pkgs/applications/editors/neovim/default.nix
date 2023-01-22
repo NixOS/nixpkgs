@@ -96,7 +96,7 @@ in
     ];
 
     # extra programs test via `make functionaltest`
-    checkInputs = [
+    nativeCheckInputs = [
       fish
       nodejs
       pyEnv      # for src/clint.py

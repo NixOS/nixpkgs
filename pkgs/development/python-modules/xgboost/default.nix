@@ -32,7 +32,7 @@ buildPythonPackage {
   '';
 
   # test setup tries to download test data with no option to disable
-  # (removing sklearn from checkInputs causes all previously enabled tests to be skipped)
+  # (removing sklearn from nativeCheckInputs causes all previously enabled tests to be skipped)
   # and are extremely cpu intensive anyway
   doCheck = false;
 

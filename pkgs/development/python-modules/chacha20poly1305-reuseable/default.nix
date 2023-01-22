@@ -48,7 +48,7 @@ buildPythonPackage {
       --replace "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

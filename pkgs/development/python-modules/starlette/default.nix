@@ -64,7 +64,7 @@ buildPythonPackage rec {
     ApplicationServices
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosqlite
     databases
     httpx

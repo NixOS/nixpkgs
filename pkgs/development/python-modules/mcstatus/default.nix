@@ -35,7 +35,7 @@ buildPythonPackage rec {
     dnspython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

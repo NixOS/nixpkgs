@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 
-  checkInputs = [ onnx pytestCheckHook torchvision ];
+  nativeCheckInputs = [ onnx pytestCheckHook torchvision ];
 
   # ignore all pytest warnings
   preCheck = ''

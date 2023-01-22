@@ -28,7 +28,7 @@ buildDunePackage rec {
     integers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     bisect_ppx
   ];

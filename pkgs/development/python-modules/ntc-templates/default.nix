@@ -31,7 +31,7 @@ buildPythonPackage rec {
     textfsm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ruamel-yaml
     yamllint

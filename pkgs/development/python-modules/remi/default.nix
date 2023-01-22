@@ -39,7 +39,7 @@ buildPythonPackage rec {
         "self.assertEqual("
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     python-snap7
     opencv4

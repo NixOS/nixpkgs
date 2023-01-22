@@ -26,7 +26,7 @@ buildPythonPackage rec {
     flask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-xprocess
     pytestCheckHook

@@ -12,7 +12,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     stdlib-shims
   ];
 

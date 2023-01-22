@@ -31,7 +31,7 @@ buildPythonPackage rec {
     rich
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     exdown
     pytestCheckHook
   ];

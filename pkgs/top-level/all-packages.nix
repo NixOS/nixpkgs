@@ -935,6 +935,8 @@ with pkgs;
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  fetchPypi = callPackage ../build-support/fetchpypi { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
@@ -1419,6 +1421,8 @@ with pkgs;
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
   httm = callPackage ../tools/filesystems/httm { };
+
+  inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber {};
 
@@ -2198,7 +2202,7 @@ with pkgs;
 
   dolphin-emu = callPackage ../applications/emulators/dolphin-emu { };
 
-  dolphin-emu-beta = qt5.callPackage ../applications/emulators/dolphin-emu/master.nix {
+  dolphin-emu-beta = qt6Packages.callPackage ../applications/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL VideoToolbox;
     inherit (darwin) moltenvk;
   };
@@ -11221,9 +11225,7 @@ with pkgs;
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
-  readstat = callPackage ../applications/science/math/readstat {
-    inherit (pkgs.darwin) libiconv;
-  };
+  readstat = callPackage ../applications/science/math/readstat { };
 
   redir = callPackage ../tools/networking/redir { };
 
@@ -15211,7 +15213,9 @@ with pkgs;
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
 
-  opam = callPackage ../development/tools/ocaml/opam { };
+  opam = callPackage ../development/tools/ocaml/opam {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
   opam_1_2 = callPackage ../development/tools/ocaml/opam/1.2.2.nix {
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
@@ -20690,7 +20694,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  libdevil-nox = libdevil.override {
+  libdevil-nox = callPackage ../development/libraries/libdevil {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     withXorg = false;
   };
@@ -26680,7 +26684,7 @@ with pkgs;
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
-  bibata-cursors = callPackage ../data/icons/bibata-cursors { };
+  bibata-cursors = callPackage ../data/icons/bibata-cursors { attrs = python3Packages.attrs; };
   bibata-extra-cursors = callPackage ../data/icons/bibata-cursors/extra.nix { };
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
@@ -31126,6 +31130,8 @@ with pkgs;
   norouter = callPackage ../tools/networking/norouter {
     buildGoModule = buildGo118Module; # tests fail with 1.19
   };
+
+  nqptp = callPackage ../tools/networking/nqptp { };
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 
@@ -38695,4 +38701,6 @@ with pkgs;
   tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
 
   resgate = callPackage ../servers/resgate { };
+
+  oversteer = callPackage ../applications/misc/oversteer { };
 }

@@ -60,7 +60,7 @@ buildPythonPackage rec {
     "--blosc=${lib.getDev c-blosc}"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     cd ..
   '';

@@ -9,15 +9,14 @@ stdenv.mkDerivation {
     perl GetoptLongDescriptive CPANPLUS Readonly LogLog4perl
   ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp ${./nix-generate-from-cpan.pl} $out/bin/nix-generate-from-cpan
-      patchShebangs $out/bin/nix-generate-from-cpan
-      wrapProgram $out/bin/nix-generate-from-cpan --set PERL5LIB $PERL5LIB
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp ${./nix-generate-from-cpan.pl} $out/bin/nix-generate-from-cpan
+    patchShebangs $out/bin/nix-generate-from-cpan
+    wrapProgram $out/bin/nix-generate-from-cpan --set PERL5LIB $PERL5LIB
+  '';
 
   meta = {
     maintainers = with lib.maintainers; [ eelco ];

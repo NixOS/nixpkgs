@@ -112,7 +112,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     asttokens
     executing
     gevent

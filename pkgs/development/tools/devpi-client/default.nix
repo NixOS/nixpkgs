@@ -48,7 +48,7 @@ buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     devpi-server
     git
     mercurial

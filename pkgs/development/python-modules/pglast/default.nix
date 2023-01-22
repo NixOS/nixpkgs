@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace "--cov=pglast --cov-report term-missing" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

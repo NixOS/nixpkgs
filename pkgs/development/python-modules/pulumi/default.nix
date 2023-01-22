@@ -27,7 +27,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pulumi.pkgs.pulumi-language-python
     pytestCheckHook
   ];

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     vivisect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-sugar
     pytestCheckHook
   ];

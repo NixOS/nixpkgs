@@ -32,7 +32,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-sugar
     pytest-timeout

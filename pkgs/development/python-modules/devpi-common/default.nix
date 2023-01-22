@@ -25,7 +25,7 @@ buildPythonPackage rec {
     lazy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
   ];

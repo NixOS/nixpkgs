@@ -26,7 +26,7 @@ buildPythonPackage rec {
     caio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiomisc
     asynctest
     pytestCheckHook

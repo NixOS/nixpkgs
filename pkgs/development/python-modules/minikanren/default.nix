@@ -30,7 +30,7 @@ buildPythonPackage rec {
     logical-unification
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
     pytest-html

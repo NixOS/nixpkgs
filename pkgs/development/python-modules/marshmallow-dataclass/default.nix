@@ -29,7 +29,7 @@ buildPythonPackage rec {
     typing-inspect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     marshmallow-enum
     pytestCheckHook
     typeguard

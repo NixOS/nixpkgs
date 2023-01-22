@@ -127,7 +127,7 @@ in stdenv.mkDerivation rec {
 
   checkTarget = "test";
   doCheck = true;
-  checkInputs = [ verilog ];
+  nativeCheckInputs = [ verilog ];
 
   # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
   # But other tools (like mcy or symbiyosys) can't know how yosys was built, so

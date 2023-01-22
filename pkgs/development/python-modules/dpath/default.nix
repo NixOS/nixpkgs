@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   # use pytest as nosetests hangs
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     nose2

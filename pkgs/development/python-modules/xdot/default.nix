@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [ pygobject3 graphviz gtk3 numpy ];
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
 
   postInstall = ''
     wrapProgram "$out/bin/xdot" --prefix PATH : "${lib.makeBinPath [ graphviz ]}"

@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     readthedocs-sphinx-ext
     pytestCheckHook
   ];

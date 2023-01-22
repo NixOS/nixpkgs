@@ -27,7 +27,7 @@ buildPythonPackage rec {
     meteocalc
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

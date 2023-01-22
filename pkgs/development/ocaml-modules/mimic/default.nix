@@ -23,7 +23,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     alcotest-lwt
     bigstringaf

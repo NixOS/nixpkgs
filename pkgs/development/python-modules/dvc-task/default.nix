@@ -40,7 +40,7 @@ buildPythonPackage rec {
     funcy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-celery
     pytest-mock
     pytest-test-utils

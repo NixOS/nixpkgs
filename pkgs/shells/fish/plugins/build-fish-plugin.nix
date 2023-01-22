@@ -12,7 +12,7 @@ attrs@{
   preInstall ? "",
   postInstall ? "",
 
-  checkInputs ? [],
+  nativeCheckInputs ? [],
   # plugin packages to add to the vendor paths of the test fish shell
   checkPlugins ? [],
   # vendor directories to add to the function path of the test fish shell
@@ -61,10 +61,10 @@ stdenv.mkDerivation (drvAttrs // {
 
   inherit doCheck;
 
-  checkInputs = [ (wrapFish {
+  nativeCheckInputs = [ (wrapFish {
     pluginPkgs = checkPlugins;
     functionDirs = checkFunctionDirs;
-  }) ] ++ checkInputs;
+  }) ] ++ nativeCheckInputs;
 
   checkPhase = ''
     export HOME=$(mktemp -d)  # fish wants a writable home

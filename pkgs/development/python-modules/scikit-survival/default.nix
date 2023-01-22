@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sksurv" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298

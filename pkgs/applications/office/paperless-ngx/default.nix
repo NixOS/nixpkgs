@@ -210,7 +210,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
-  checkInputs = with python.pkgs.pythonPackages; [
+  nativeCheckInputs = with python.pkgs.pythonPackages; [
     pytest-django
     pytest-env
     pytest-sugar

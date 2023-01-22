@@ -17,7 +17,7 @@ buildPythonPackage rec {
   buildInputs = [ pybind11 ];
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 

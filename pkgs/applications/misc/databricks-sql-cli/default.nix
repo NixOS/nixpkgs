@@ -53,7 +53,7 @@ buildPythonApplication rec {
     click
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "CLI for querying Databricks SQL";

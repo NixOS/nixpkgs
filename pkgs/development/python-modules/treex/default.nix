@@ -57,7 +57,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cloudpickle
     dm-haiku
     hypothesis

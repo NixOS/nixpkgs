@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pdm-pep517 ];
   propagatedBuildInputs = [ atpublic psutil ];
-  checkInputs = [ pytestCheckHook pytest-cov sybil ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov sybil ];
 
   # disable code coverage checks for all OS. Upstream does not enforce these
   # checks on Darwin, and code coverage cannot be improved downstream nor is it

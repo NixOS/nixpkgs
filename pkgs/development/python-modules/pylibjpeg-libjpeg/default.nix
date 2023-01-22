@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
   doCheck = false;  # tests try to import 'libjpeg.data', which errors

@@ -52,7 +52,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   meta = {
     description = "ACME implementation in OCaml";

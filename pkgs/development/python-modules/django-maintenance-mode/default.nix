@@ -26,7 +26,7 @@ buildPythonPackage rec {
     python-fsutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

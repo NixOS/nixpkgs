@@ -84,7 +84,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cython
     html5lib
     pytestCheckHook

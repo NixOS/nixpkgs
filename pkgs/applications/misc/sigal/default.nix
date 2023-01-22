@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools # needs pkg_resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ffmpeg
   ] ++ (with python3.pkgs; [
     pytestCheckHook

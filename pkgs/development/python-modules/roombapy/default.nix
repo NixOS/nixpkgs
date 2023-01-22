@@ -31,7 +31,7 @@ buildPythonPackage rec {
     paho-mqtt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     amqtt
     pytest-asyncio
     pytestCheckHook

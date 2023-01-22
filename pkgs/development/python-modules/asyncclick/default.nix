@@ -31,7 +31,7 @@ buildPythonPackage rec {
     anyio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     trio
   ];

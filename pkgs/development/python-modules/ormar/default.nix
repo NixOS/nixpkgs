@@ -55,7 +55,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiomysql
     aiopg
     aiosqlite

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     python-dateutil
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  checkInputs = [ py pytestCheckHook pytest-mock pytest-benchmark pyyaml ];
+  nativeCheckInputs = [ py pytestCheckHook pytest-mock pytest-benchmark pyyaml ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 

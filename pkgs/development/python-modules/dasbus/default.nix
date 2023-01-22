@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pygobject3 ];
-  checkInputs = [ dbus ];
+  nativeCheckInputs = [ dbus ];
 
   meta = with lib; {
     homepage = "https://github.com/rhinstaller/dasbus";

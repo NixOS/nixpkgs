@@ -17,7 +17,7 @@
   };
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ vispy napari-plugin-engine imageio ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   doCheck = false; # Circular dependency: napari
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 

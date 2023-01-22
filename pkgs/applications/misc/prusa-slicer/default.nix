@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ checkInputs;
+  ] ++ nativeCheckInputs;
 
   patches = [
     # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   separateDebugInfo = true;
 

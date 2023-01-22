@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     ostree
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     valgrind
   ];
 

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "http_parser"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

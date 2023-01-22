@@ -44,7 +44,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     openapi-core
     pytestCheckHook
     pytest-timeout

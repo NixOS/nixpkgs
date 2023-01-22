@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pyicu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

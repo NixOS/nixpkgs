@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unittest-cpp ];
+  nativeCheckInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 

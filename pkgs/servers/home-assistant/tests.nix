@@ -100,7 +100,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     dontBuild = true;
     dontInstall = true;
 
-    checkInputs = old.checkInputs
+    nativeCheckInputs = old.nativeCheckInputs
       ++ home-assistant.getPackages component home-assistant.python.pkgs
       ++ extraCheckInputs.${component} or [ ];
 

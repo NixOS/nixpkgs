@@ -38,7 +38,7 @@ buildPythonPackage rec {
     readchar
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pexpect
     pytest-mock
     pytestCheckHook

@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flake8 ];
 
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six ];
 
   checkPhase = ''
     ${python.interpreter} -m test_flake8_future_import

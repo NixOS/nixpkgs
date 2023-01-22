@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     nodejs
     pytest-mock

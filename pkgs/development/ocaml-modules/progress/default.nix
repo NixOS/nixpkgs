@@ -14,7 +14,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ fmt logs mtime optint terminal vector ];
 
   doCheck = true;
-  checkInputs = [ alcotest astring ];
+  nativeCheckInputs = [ alcotest astring ];
 
   meta = with lib; {
     description = "Progress bar library for OCaml";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];
-  checkInputs = [ cunit ncurses ];
+  nativeCheckInputs = [ cunit ncurses ];
 
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file

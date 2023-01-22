@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     fastapi
     flask
     pytestCheckHook

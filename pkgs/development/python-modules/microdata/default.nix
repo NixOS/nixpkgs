@@ -20,7 +20,7 @@ buildPythonPackage rec {
     html5lib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

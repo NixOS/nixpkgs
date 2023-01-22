@@ -40,7 +40,7 @@ let
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
     # buildRustPackage sets strictDeps = true;
-    checkInputs = buildInputs;
+    nativeCheckInputs = buildInputs;
 
     OPENSSL_NO_VENDOR = "1";
 

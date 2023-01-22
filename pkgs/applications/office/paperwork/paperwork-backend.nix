@@ -39,6 +39,9 @@ buildPythonPackage rec {
   patchFlags = [ "-p2" ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace python-Levenshtein Levenshtein
+
     echo 'version = "${version}"' > src/paperwork_backend/_version.py
     chmod a+w -R ..
     patchShebangs ../tools
@@ -72,7 +75,7 @@ buildPythonPackage rec {
     make l10n_compile
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     libreoffice
     openpaperwork-gtk
     psutil

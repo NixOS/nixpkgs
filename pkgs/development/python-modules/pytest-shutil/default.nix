@@ -11,7 +11,6 @@
 , mock
 , path
 , execnet
-, contextlib2
 , termcolor
 , six
 
@@ -32,6 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "contextlib2" 'contextlib2;python_version<"3"' \
       --replace "path.py" "path"
   '';
 
@@ -44,12 +44,11 @@ buildPythonPackage rec {
     mock
     path
     execnet
-    contextlib2
     termcolor
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmdline
     pytestCheckHook
   ];

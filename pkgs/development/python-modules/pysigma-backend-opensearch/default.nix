@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pysigma-backend-elasticsearch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];

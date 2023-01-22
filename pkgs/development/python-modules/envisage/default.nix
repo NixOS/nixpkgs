@@ -44,7 +44,7 @@ buildPythonPackage rec {
     export HOME=$PWD/HOME
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipython
     pytestCheckHook
   ];

@@ -43,7 +43,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     flask
     flask-sockets

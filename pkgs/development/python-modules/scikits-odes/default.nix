@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [ enum34 ];
 
   doCheck = true;
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     cd $out/${python.sitePackages}/scikits/odes/tests

@@ -48,7 +48,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     coverage # execs coverage in tests
     pytest-sugar
     pytest-xdist

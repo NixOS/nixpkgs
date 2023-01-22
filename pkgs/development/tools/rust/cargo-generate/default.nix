@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld

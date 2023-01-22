@@ -29,7 +29,7 @@ buildPythonPackage rec {
     whodap
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     pytestCheckHook
   ];
