@@ -111,8 +111,8 @@ let
       azure-batch = overrideAzureMgmtPackage super.azure-batch "13.0.0" "zip"
         "sha256-6Sld5wQE0nbtoN0iU9djl0Oavl2PGMH8oZnEm41q4wo=";
 
-      azure-data-tables = overrideAzureMgmtPackage super.azure-data-tables "12.4.0" "zip"
-        "sha256-3V/I3pHi+JCO+kxkyn9jz4OzBoqbpCYpjeO1QTnpZlw=";
+      azure-data-tables = overrideAzureMgmtPackage super.azure-data-tables "12.4.1" "zip"
+        "sha256-FvEo6PZubKBcB/t4/MxxNJMjHfHYXjPE4lp5yURVhko=";
 
       azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "3.0.0" "zip"
         "9262f54ed387eb083d8dae66d32a8df35647319b902bd498cdc376f50a12d154";
