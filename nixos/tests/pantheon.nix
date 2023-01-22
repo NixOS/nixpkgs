@@ -40,7 +40,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     with subtest("Check that logging in has given the user ownership of devices"):
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-    # TODO: DBus API could eliminate this? Pantheon uses Bamf.
     with subtest("Check if pantheon session components actually start"):
         machine.wait_until_succeeds("pgrep gala")
         machine.wait_for_window("gala")
