@@ -32851,6 +32851,8 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
+  tbox = callPackage ../development/libraries/tbox { };
+
   tdesktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     abseil-cpp = abseil-cpp_202206;
   };
