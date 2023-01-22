@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libssh";
-  version = "0.10.0";
+  version = "0.10.4";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DcFYxTTNg4rQt4WoLexYbeQNp+CWUjrmwIybe9KvC1c=";
+    sha256 = "sha256-BzksVKthR2KI0cHwp8VXtQIReXrQDDTDryu8TbxL2X0=";
   };
 
   postPatch = ''
