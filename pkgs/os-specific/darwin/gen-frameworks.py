@@ -3,6 +3,12 @@
 
 """
 Generate a frameworks.nix for a macOS SDK.
+
+You may point this tool at an Xcode bundled SDK, but more ideal is using the
+SDK from Nixpkgs. For example:
+
+SDK_PATH="$(nix-build --no-link -A darwin.apple_sdk_11_0.MacOSX-SDK)"
+./gen-frameworks.py "$SDK_PATH" > ./new-frameworks.nix
 """
 
 import json
