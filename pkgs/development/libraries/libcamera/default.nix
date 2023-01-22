@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-0/wvH07bJRKFwYnOARRJNzH8enIX3TNnWQnJdfpfvgE=";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   postPatch = ''
     patchShebangs utils/
   '';
