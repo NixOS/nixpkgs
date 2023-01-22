@@ -200,7 +200,7 @@ let
     "--verbose"
     "--prefix=$out"
     # Note: This must be kept in sync manually with mkGhcLibdir
-    "--libdir=\\$prefix/lib/\\$compiler"
+    ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
     "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
@@ -285,7 +285,8 @@ let
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
 
   ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
-  mkGhcLibdir = ghc: "lib/${ghc.targetPrefix}${ghc.haskellCompilerName}";
+  mkGhcLibdir = ghc: "lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
+    + lib.optionalString (ghc ? hadrian) "/lib";
   ghcLibdir = mkGhcLibdir ghc;
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
