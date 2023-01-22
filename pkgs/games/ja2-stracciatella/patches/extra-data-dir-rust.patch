@@ -1,0 +1,46 @@
+diff --git a/stracciatella/src/stracciatella.rs b/stracciatella/src/stracciatella.rs
+index d8586181d..79a5acdb6 100644
+--- a/stracciatella/src/stracciatella.rs
++++ b/stracciatella/src/stracciatella.rs
+@@ -20,35 +20,20 @@ pub mod unicode;
+ pub mod vfile;
+ pub mod vfs;
+
+-use std::io::ErrorKind;
++use std::env;
+ use std::path::PathBuf;
+
+-use log::warn;
+-
+ use crate::config::EngineOptions;
+ use crate::fs::canonicalize;
+
+ /// Returns the path to the assets directory.
+ /// It contains mods and externalized subdirectories.
+ pub fn get_assets_dir() -> PathBuf {
+-    let extra_data_dir_env = option_env!("EXTRA_DATA_DIR").unwrap_or(".");
+-    let extra_data_dir = std::env::current_exe()
+-        .and_then(|exe| {
+-            exe.parent()
+-                .map(|p| p.join(extra_data_dir_env))
+-                .ok_or_else(|| ErrorKind::NotFound.into())
+-        })
+-        .and_then(canonicalize);
++    let extra_data_dir_env = env::var("EXTRA_DATA_DIR");
++    let extra_data_dir = std::env::current_exe();
+
+-    match extra_data_dir {
+-        Ok(current_exe_dir) => current_exe_dir,
+-        Err(e) => {
+-            warn!(
+-                "Defaulting assets dir to {:?} because current exe dir could not determined. Reason: {:?}",
+-                extra_data_dir_env,
+-                e
+-            );
+-            extra_data_dir_env.into()
+-        }
++    match extra_data_dir_env {
++        Ok(env_dir) => env_dir.into(),
++        Err(e) => extra_data_dir.unwrap().into(),
+     }
+ }

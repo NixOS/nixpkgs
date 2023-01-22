@@ -1,0 +1,115 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 00348fb3a..fb2bbcb96 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -85,6 +85,7 @@ set(LOCAL_SDL_LIB "" CACHE STRING "Use local SDL library from this directory")
+ # @see CARGO_BUILD_TARGET in dependencies/lib-stracciatella/CMakeLists.txt
+ option(BUILD_SDL_LIB "Build SDL from source" OFF)
+ option(LOCAL_FLTK_LIB "Build with fltk lib" OFF)
++option(LOCAL_LUA_LIB "Build with local lua lib" ON)
+ option(LOCAL_RAPIDJSON_LIB "Build with local rapidjson lib" ON)
+ option(LOCAL_GTEST_LIB "Build with local gtest lib" ON)
+ # @see LOCAL_STRING_THEORY_LIB in dependencies/lib-string_theory/CMakeLists.txt
+@@ -173,6 +174,12 @@ else()
+     set(RAPIDJSON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-rapidjson/rapidjson-1.1.0/include")
+ endif()
+
++if (NOT LOCAL_LUA_LIB)
++    find_package(Lua REQUIRED)
++else()
++    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-lua")
++endif()
++
+ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+     add_definitions(-DENABLE_ASSERTS)
+ endif()
+@@ -192,15 +199,13 @@ if(BUILD_LAUNCHER)
+ endif()
+ message(STATUS "Fltk Libraries: ${FLTK_LIBRARIES}")
+
+-set(JA2_INCLUDES "")
++set(JA2_INCLUDES "include/stracciatella")
+ set(JA2_SOURCES "")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/externalized")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/game")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/sgp")
+-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-lua")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-sol2")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-smacker")
+-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-stracciatella")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-string_theory")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-miniaudio")
+ if (MINGW)
+@@ -290,15 +295,28 @@ if(ANDROID)
+ else()
+     add_executable(${JA2_BINARY} ${JA2_SOURCES})
+ endif()
+-target_link_libraries(${JA2_BINARY} ${JA2_LIBRARIES})
++target_link_libraries(${JA2_BINARY} 
++    ${SDL2_LIBRARY} 
++    ${GTEST_LIBRARIES} 
++    dl 
++    lua
++    pthread 
++    smacker 
++    string_theory-internal
++    lib/libstracciatella_c_api.a 
++)
+
+-add_dependencies(${JA2_BINARY} stracciatella)
+ set_property(SOURCE ${CMAKE_SOURCE_DIR}/src/game/GameVersion.cc APPEND PROPERTY COMPILE_DEFINITIONS "GAME_VERSION=v${ja2-stracciatella_VERSION}")
+
+ if(BUILD_LAUNCHER)
+     add_executable(${LAUNCHER_BINARY} ${LAUNCHER_SOURCES})
+-    target_link_libraries(${LAUNCHER_BINARY} ${FLTK_LIBRARIES} ${STRACCIATELLA_LIBRARIES} ${LAUNCHER_LIBRARIES})
+-    add_dependencies(${LAUNCHER_BINARY} stracciatella)
++    target_link_libraries(${LAUNCHER_BINARY}
++        ${LAUNCHER_LIBRARIES}
++        ${FLTK_LIBRARIES} 
++        dl 
++        pthread 
++        lib/libstracciatella_c_api.a
++    )
+ endif()
+
+ macro(copy_assets_dir_to_ja2_binary_after_build DIR)
+@@ -391,7 +409,7 @@ set(CPACK_NSIS_DISPLAY_NAME "JA2 Stracciatella")
+ set(CPACK_NSIS_PACKAGE_NAME "JA2 Stracciatella")
+ set(CPACK_NSIS_URL_INFO_ABOUT "https://ja2-stracciatella.github.io/")
+
+-if(UNIX AND NOT MINGW AND NOT APPLE)
++if(UNIX)
+     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+         set(PACKAGE_ARCH "x86-64")
+     else()
+@@ -433,7 +451,7 @@ if (UNIX AND NOT MINGW AND NOT APPLE AND NOT ANDROID)
+         install(TARGETS ${LAUNCHER_BINARY} RUNTIME DESTINATION bin)
+     endif()
+     if(WITH_RUST_BINARIES)
+-        install(PROGRAMS "${STRACCIATELLA_EXECUTABLES}" DESTINATION bin)
++        install(PROGRAMS "bin/ja2-resource-pack" DESTINATION bin)
+     endif()
+     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/externalized assets/mods assets/unittests DESTINATION share/ja2)
+     if(WITH_EDITOR_SLF)
+@@ -457,7 +475,7 @@ else()
+         install(TARGETS ${LAUNCHER_BINARY} RUNTIME DESTINATION .)
+     endif()
+     if(WITH_RUST_BINARIES)
+-        install(PROGRAMS "${STRACCIATELLA_EXECUTABLES}" DESTINATION .)
++        install(PROGRAMS "bin/ja2-resource-pack" DESTINATION .)
+     endif()
+     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/externalized assets/mods assets/unittests DESTINATION .)
+     if(WITH_EDITOR_SLF)
+@@ -486,12 +504,6 @@ if (MINGW)
+     install(SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/install-dlls-mingw.cmake")
+ endif()
+
+-if(APPLE)
+-    file(GLOB APPLE_DIST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/assets/distr-files-mac/*.txt")
+-    install(FILES ${APPLE_DIST_FILES} DESTINATION .)
+-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-SDL2-2.0.20-macos/SDL2.framework DESTINATION .)
+-endif()
+-
+ ## Build AppImage
+
+ add_custom_target(package-appimage
