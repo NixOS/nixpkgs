@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for DVC objects";
     homepage = "https://github.com/iterative/dvc-objects";
+    changelog = "https://github.com/iterative/dvc-objects/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
