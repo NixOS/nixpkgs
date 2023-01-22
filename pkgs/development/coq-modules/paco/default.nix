@@ -25,7 +25,7 @@ with lib; mkCoqDerivation {
   '';
 
   meta = {
-    homepage = "http://plv.mpi-sws.org/paco/";
+    homepage = "https://plv.mpi-sws.org/paco/";
     description = "A Coq library implementing parameterized coinduction";
     maintainers = with maintainers; [ jwiegley ptival ];
   };

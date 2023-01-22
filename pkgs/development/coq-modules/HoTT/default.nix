@@ -18,7 +18,7 @@ with lib; mkCoqDerivation {
   '';
 
   meta = {
-    homepage = "http://homotopytypetheory.org/";
+    homepage = "https://homotopytypetheory.org/";
     description = "Homotopy type theory";
     maintainers = with maintainers; [ siddharthist ];
   };

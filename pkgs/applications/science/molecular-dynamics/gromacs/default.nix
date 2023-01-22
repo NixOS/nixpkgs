@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
       reference or manual for details), but there are also quite a
       few features that make it stand out from the competition.
 
-      See: http://www.gromacs.org/About_Gromacs for details.
+      See: https://www.gromacs.org/About_Gromacs for details.
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ sheepforce markuskowa ];

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ''; # */
 
   meta = {
-    homepage = "http://www.eclipse.org/";
+    homepage = "https://www.eclipse.org/";
     inherit description;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
