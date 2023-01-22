@@ -1,11 +1,13 @@
-{ beam
+{ lib
+, beam
 , callPackage
 , openssl_1_1
 , wxGTK32
 , buildPackages
 , stdenv
 , wxSupport ? true
-, systemdSupport ? stdenv.isLinux
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 let

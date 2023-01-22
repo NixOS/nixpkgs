@@ -44,7 +44,7 @@
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
-, withSystemd ? stdenv.isLinux, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug

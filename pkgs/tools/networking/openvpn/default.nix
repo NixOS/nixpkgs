@@ -7,7 +7,7 @@
 , openssl
 , openssl_1_1
 , pam
-, useSystemd ? stdenv.isLinux
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , update-systemd-resolved
 , util-linux

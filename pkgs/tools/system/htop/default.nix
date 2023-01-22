@@ -2,8 +2,7 @@
 , ncurses
 , IOKit
 , sensorsSupport ? stdenv.isLinux, lm_sensors
-, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
-, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 assert systemdSupport -> stdenv.isLinux;

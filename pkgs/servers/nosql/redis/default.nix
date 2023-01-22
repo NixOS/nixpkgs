@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
 , tcl, which, ps, getconf
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
 }:
