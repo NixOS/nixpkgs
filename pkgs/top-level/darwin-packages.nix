@@ -104,6 +104,10 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
+  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
   # TODO: remove alias.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
