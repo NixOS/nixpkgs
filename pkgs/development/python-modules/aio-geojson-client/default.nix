@@ -1,11 +1,12 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , geojson
 , haversine
+, mock
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     hash = "sha256-5GiQgtbvYeleovFbXO2vlr2XPsDIWZiElM64O+urMcY=";
   };
 
+  patches = [
+    # Remove asynctest, https://github.com/exxamalte/python-aio-geojson-client/pull/35
+    (fetchpatch {
+      name = "remove-asynctest.patch";
+      url = "https://github.com/exxamalte/python-aio-geojson-client/commit/bf617d9898a99b026b43b28bd87bb6479f518c0a.patch";
+      hash = "sha256-uomH3LCaklfGURDs8SsnvNyHkubbe+5dleLEjW+I+M4=";
+    })
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     geojson
@@ -33,7 +43,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
-    asynctest
+    mock
     pytest-asyncio
     pytestCheckHook
   ];
