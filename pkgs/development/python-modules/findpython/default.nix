@@ -47,6 +47,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "A utility to find python versions on your system";
     homepage = "https://github.com/frostming/findpython";
+    changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
