@@ -27,6 +27,25 @@ rec {
     let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
+  # This function returns the elements of `systems.doubles.all`
+  # which match its argument, which can be either a pattern (see
+  # `lib.systems.inspect.patterns`) or a nix-double string.  It is
+  # used mainly for backward compatibility with existing code that
+  # expects `meta.{bad,hydra,""}platforms` to be a list of strings.
+  doublesFromPattern = pattern:
+    if lib.isString pattern
+    then [pattern]
+    else lib.filter
+      (double: lib.meta.platformMatch (elaborate double) pattern)
+      doubles.all;
+
+  # like above, but applied to a (disjunctive) list, with some
+  # optimizations for common cases on Hydra
+  doublesFromPatterns = patterns:
+    if lib.all lib.isString patterns
+    then patterns
+    else lib.concatMap doublesFromPattern patterns;
+
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
