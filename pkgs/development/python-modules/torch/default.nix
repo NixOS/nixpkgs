@@ -232,7 +232,7 @@ in buildPythonPackage rec {
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider pybind11 ]
-    ++ [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
+    ++ lib.optionals stdenv.isLinux [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices libobjc ];
