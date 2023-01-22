@@ -51,7 +51,6 @@ python.pkgs.buildPythonApplication rec {
       "mecab-python3"
       "numba"
       "numpy"
-      "umap-learn"
       "unidic-lite"
     ];
   in ''
@@ -60,6 +59,8 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
+    # only used for notebooks and visualization
+    sed -r -i -e '/umap-learn/d' requirements.txt
   '';
 
   nativeBuildInputs = with python.pkgs; [
@@ -92,7 +93,6 @@ python.pkgs.buildPythonApplication rec {
     torchaudio-bin
     tqdm
     trainer
-    umap-learn
     unidic-lite
     webrtcvad
   ];
