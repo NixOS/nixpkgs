@@ -58,7 +58,7 @@ buildPythonPackage rec {
     HOME=$(mktemp -d)
   '';
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   pythonImportsCheck = [ "binwalk" ];
 

@@ -2417,7 +2417,7 @@ buildLuarocksPackage {
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ lua ];
-  checkInputs = [ moonscript ];
+  nativeCheckInputs = [ moonscript ];
 
   meta = {
     homepage = "https://github.com/rktjmp/lush.nvim";
@@ -2689,7 +2689,7 @@ buildLuarocksPackage {
 
   disabled = with lua; (luaOlder "5.1");
   propagatedBuildInputs = [ lua luafilesystem ];
-  checkInputs = [ busted ];
+  nativeCheckInputs = [ busted ];
 
   meta = {
     homepage = "https://lunarmodules.github.io/penlight";
@@ -2833,7 +2833,7 @@ buildLuarocksPackage {
 
   disabled = with lua; (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
-  checkInputs = [ busted ];
+  nativeCheckInputs = [ busted ];
 
   meta = {
     homepage = "https://lunarmodules.github.io/say";
@@ -2900,7 +2900,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   propagatedBuildInputs = [ luv ];
-  checkInputs = [ plenary-nvim ];
+  nativeCheckInputs = [ plenary-nvim ];
 
   meta = {
     homepage = "https://github.com/tami5/sqlite.lua";
@@ -3051,7 +3051,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   propagatedBuildInputs = [ argparse compat53 luafilesystem ];
-  checkInputs = [ dkjson ];
+  nativeCheckInputs = [ dkjson ];
 
   meta = {
     homepage = "https://github.com/teal-language/tl";

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fsspec
     psutil
     pytestCheckHook

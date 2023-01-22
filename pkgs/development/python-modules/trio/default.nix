@@ -41,7 +41,7 @@ buildPythonPackage rec {
   # tests are failing on Darwin
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
+  nativeCheckInputs = [
     astor
     jedi
     pyopenssl

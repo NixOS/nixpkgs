@@ -31,7 +31,7 @@ buildDunePackage rec {
     ke logs lwt ocamlgraph uri rresult result bigstringaf optint mirage-flow
     domain-name emile mimic carton carton-lwt carton-git ipaddr psq hxd
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest alcotest-lwt mirage-crypto-rng git-binary crowbar cmdliner
   ];
   doCheck = !stdenv.isAarch64;

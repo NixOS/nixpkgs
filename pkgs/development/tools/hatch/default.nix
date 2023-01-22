@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     virtualenv
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     git
     pytestCheckHook
     pytest-mock

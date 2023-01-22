@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  checkInputs = [ luaPackages.luacheck ];
+  nativeCheckInputs = [ luaPackages.luacheck ];
 
   doCheck = true;
 

@@ -67,7 +67,7 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     beautifulsoup4
     pytest-asyncio

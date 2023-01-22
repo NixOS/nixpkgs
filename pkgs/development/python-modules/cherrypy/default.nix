@@ -55,7 +55,7 @@ buildPythonPackage rec {
     jaraco_collections
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     objgraph
     path
     pytest-forked

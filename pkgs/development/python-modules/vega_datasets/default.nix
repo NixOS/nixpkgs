@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pandas ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test vega_datasets --doctest-modules -k 'not column_names'

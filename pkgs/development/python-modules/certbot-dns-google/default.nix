@@ -20,7 +20,7 @@ buildPythonPackage rec {
     oauth2client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

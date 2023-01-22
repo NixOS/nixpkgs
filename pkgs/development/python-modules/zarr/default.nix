@@ -31,7 +31,7 @@ buildPythonPackage rec {
     numcodecs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

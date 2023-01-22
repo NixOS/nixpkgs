@@ -177,7 +177,7 @@ with self;
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ sexplib0 ];
-    checkInputs = [ alcotest ];
+    nativeCheckInputs = [ alcotest ];
   };
 
   base_bigstring = janePackage {
@@ -958,7 +958,7 @@ with self;
     meta.description = "Yet another implementation of fork&exec and related functionality";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
-    checkInputs = [ ounit ];
+    nativeCheckInputs = [ ounit ];
     # This currently fails with dune
     strictDeps = false;
   };

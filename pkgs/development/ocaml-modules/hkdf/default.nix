@@ -14,7 +14,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   propagatedBuildInputs = [ cstruct mirage-crypto ];
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   doCheck = true;
 
   meta = with lib; {

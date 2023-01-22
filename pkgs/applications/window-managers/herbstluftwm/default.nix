@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
     xdotool
     xorgserver

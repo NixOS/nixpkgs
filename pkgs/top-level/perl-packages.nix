@@ -3587,7 +3587,7 @@ let
       hash = "sha256-G9Q3Y8ajcxgwl6MOeH9dZxOw2ydRHFLVMyZrWdLPp4A=";
     };
     propagatedBuildInputs = [ ClassStd ];
-    checkInputs = [ TestPod TestPodCoverage ];
+    nativeCheckInputs = [ TestPod TestPodCoverage ];
     meta = {
       description = "Faster but less secure than Class::Std";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5258,7 +5258,7 @@ let
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
       hash = "sha256-DhyyI98AQfbZsBDxHm+XqXq1WhGKJzk460/oXUA/GxE=";
     };
-    checkInputs = [ pkgs.openssl MathBigIntGMP ];
+    nativeCheckInputs = [ pkgs.openssl MathBigIntGMP ];
     buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
     propagatedBuildInputs = [ BytesRandomSecureTiny ClassAccessor ConvertASN1 CryptFormat MathProvablePrime SymbolGet TryTiny ];
     meta = {
@@ -8320,7 +8320,7 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMAKHOLM/Encode-IMAPUTF7-1.05.tar.gz";
       hash = "sha256-RwMF3cN0g8/o08FtE3cKKAEfYAv1V6y4w+B3OZl8N+E=";
     };
-    checkInputs = [ TestNoWarnings ];
+    nativeCheckInputs = [ TestNoWarnings ];
     meta = {
       description = "IMAP modified UTF-7 encoding";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10220,7 +10220,7 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       hash = "sha256-RkYoy53QKLEEOMI4kt5vijAgI1Wk5OsBv9E7jP41r1c=";
     };
-    checkInputs = [ pkgs.cairo CairoGObject ];
+    nativeCheckInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     preCheck = ''
       # Our gobject-introspection patches make the shared library paths absolute
@@ -10464,7 +10464,7 @@ let
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
-    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    nativeCheckInputs = [ TestRequires TestDeep pkgs.hexdump ];
     meta = {
       description = "Perl extension for the libtiff library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10647,7 +10647,7 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    checkInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    nativeCheckInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
@@ -13944,7 +13944,7 @@ let
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
     '';
     doCheck = !stdenv.isDarwin;
-    checkInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
+    nativeCheckInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
     meta = {
       description = "The World-Wide Web library for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -18041,7 +18041,7 @@ let
       rev = "5fccc0c270e25c65ef634304630af74b48807d21";
       hash = "sha256-pveVyFdEe/TQCEI83RrQTWr7aoYrgOGaNqc1wJeiAnw=";
     };
-    checkInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
+    nativeCheckInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ NetServer ServerStarter ];
     meta = {
@@ -19145,7 +19145,7 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
       hash = "sha256-SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
     };
-    checkInputs = [ TestException TestMemoryCycle ];
+    nativeCheckInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
@@ -21351,7 +21351,7 @@ let
     };
     propagatedBuildInputs = [ ClassInspector IOSessionData LWPProtocolHttps TaskWeaken XMLParser ];
     buildInputs = [ TestWarn XMLParserLite ];
-    checkInputs = [ HTTPDaemon ];
+    nativeCheckInputs = [ HTTPDaemon ];
     meta = {
       description = "Perl's Web Services Toolkit";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -25327,7 +25327,7 @@ let
       hash = "sha256-wZHG1ezrjLdcBWUZI2BmLSAtcWutB6IzxLMppChNxxs=";
     };
     nativeBuildInputs = [ shortenPerlShebang ];
-    checkInputs = [ ListMoreUtils TestDifferences TestException ];
+    nativeCheckInputs = [ ListMoreUtils TestDifferences TestException ];
     postInstall = ''
       shortenPerlShebang $out/bin/Markdown.pl
     '';

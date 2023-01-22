@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf8";
 
-  checkInputs = [ pytestCheckHook glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter-core send2trash

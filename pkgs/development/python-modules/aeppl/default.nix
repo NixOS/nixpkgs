@@ -29,7 +29,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numdifftools
     pytestCheckHook
   ];

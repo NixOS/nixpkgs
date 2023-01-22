@@ -61,7 +61,7 @@ with localPython.pkgs; buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     mock
     nose

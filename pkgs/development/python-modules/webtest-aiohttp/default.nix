@@ -26,7 +26,7 @@ buildPythonPackage rec {
     webtest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     pytest-aiohttp
     pytestCheckHook

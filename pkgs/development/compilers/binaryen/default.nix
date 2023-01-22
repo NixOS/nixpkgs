@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  checkInputs = [ gtest lit nodejs filecheck ];
+  nativeCheckInputs = [ gtest lit nodejs filecheck ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';

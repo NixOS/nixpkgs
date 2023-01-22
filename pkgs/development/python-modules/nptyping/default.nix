@@ -30,7 +30,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beartype
     feedparser
     invoke

@@ -71,7 +71,7 @@ buildPythonPackage rec {
     requests-unixsocket
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipykernel
     pandoc
     pytestCheckHook

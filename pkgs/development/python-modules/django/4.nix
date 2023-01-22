@@ -82,7 +82,7 @@ buildPythonPackage rec {
   # ModuleNotFoundError: No module named 'asgiref'
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosmtpd
     argon2-cffi
     asgiref

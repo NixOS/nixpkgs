@@ -60,7 +60,7 @@ buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pre-commit
     py
     pytestCheckHook

@@ -48,7 +48,7 @@ buildPythonPackage rec {
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

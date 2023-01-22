@@ -12,7 +12,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [ cstruct-unix ];
+  nativeCheckInputs = [ cstruct-unix ];
 
   meta = awa.meta // { mainProgram = "awa_lwt_server"; };
 }

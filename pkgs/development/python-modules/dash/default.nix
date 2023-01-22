@@ -54,7 +54,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     mock

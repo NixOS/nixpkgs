@@ -22,7 +22,7 @@ buildGoModule rec {
     "-X github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nodejs
   ];
 

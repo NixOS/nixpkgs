@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "flask_migrate"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
     flask_script
   ];

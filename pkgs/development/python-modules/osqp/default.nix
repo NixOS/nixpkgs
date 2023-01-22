@@ -44,7 +44,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cvxopt
     pytestCheckHook
   ];

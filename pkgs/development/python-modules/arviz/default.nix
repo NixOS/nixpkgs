@@ -55,7 +55,7 @@ buildPythonPackage rec {
     xarray-einstats
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cloudpickle
     emcee
     ffmpeg

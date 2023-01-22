@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pexpect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jupyterlab
     pytest-asyncio
     pytest-tornasync

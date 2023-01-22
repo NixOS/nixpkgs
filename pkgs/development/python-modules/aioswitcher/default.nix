@@ -34,7 +34,7 @@ buildPythonPackage rec {
     export TZ=Asia/Jerusalem
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     assertpy
     pytest-asyncio
     pytest-mockservers

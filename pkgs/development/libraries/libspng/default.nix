@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmake
     libpng
   ];

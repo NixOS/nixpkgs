@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-auth
     google-cloud-bigquery
     pytestCheckHook

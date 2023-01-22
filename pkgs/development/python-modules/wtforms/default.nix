@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ markupsafe babel ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     email-validator
   ];

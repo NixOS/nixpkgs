@@ -65,7 +65,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook

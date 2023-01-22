@@ -121,7 +121,7 @@ buildPythonPackage rec {
     "apache_beam"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     mock
     pandas

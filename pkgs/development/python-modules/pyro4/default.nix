@@ -32,7 +32,7 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

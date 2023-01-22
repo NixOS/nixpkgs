@@ -31,7 +31,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook lxml ];
+  nativeCheckInputs = [ pytestCheckHook lxml ];
 
   # don't depend on testFiles on darwin as it may not be extractable due to
   # weird filenames

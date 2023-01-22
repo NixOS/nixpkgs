@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow toml numpy ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
     # Copying scripts directory needed by clickgen script at $out/bin/

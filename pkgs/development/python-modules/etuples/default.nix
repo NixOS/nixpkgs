@@ -24,7 +24,7 @@ buildPythonPackage rec {
     multipledispatch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
     pytest-html

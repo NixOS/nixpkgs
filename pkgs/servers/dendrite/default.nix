@@ -34,7 +34,7 @@ buildGoModule rec {
     # "cmd/dendritejs-pinecone"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];

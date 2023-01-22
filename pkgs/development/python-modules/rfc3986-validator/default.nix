@@ -22,7 +22,7 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     rfc3987

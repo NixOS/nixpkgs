@@ -54,7 +54,7 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   # xdc has an incorrect path to a test which has yet to be patched
   doCheck = plugin != "xdc";
-  checkInputs = [ static_gtest ];
+  nativeCheckInputs = [ static_gtest ];
 
   # ql-qlf tries to fetch a yosys script from github
   # Run the script in preBuild instead.

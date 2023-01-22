@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-4c7kp55K8iiBFk8hjUMR9gB0GX+3B+CC6AO2H20TcBg=";
   };
 
-  checkInputs = [ sphinx numpydoc pytestCheckHook psutil ];
+  nativeCheckInputs = [ sphinx numpydoc pytestCheckHook psutil ];
   propagatedBuildInputs = [ lz4 setuptools ];
 
   pytestFlagsArray = [ "joblib/test" ];

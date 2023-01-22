@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py bdist_wheel
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

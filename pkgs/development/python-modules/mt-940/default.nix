@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pyyaml pytest ];
+  nativeCheckInputs = [ pyyaml pytest ];
 
   # requires tests files that are not present
   doCheck = false;

@@ -120,7 +120,7 @@ buildPythonPackage rec {
     "test_extended_stabilizer_sparse_output_probs"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     fixtures

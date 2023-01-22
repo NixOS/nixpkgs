@@ -50,7 +50,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     lwt
     logs
     fmt

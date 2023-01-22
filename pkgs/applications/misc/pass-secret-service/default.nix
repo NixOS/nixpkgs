@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     secretstorage
   ];
 
-  checkInputs =
+  nativeCheckInputs =
     let
       ps = python3.pkgs;
     in

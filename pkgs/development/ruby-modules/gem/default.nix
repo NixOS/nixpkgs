@@ -86,7 +86,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
-  inherit type;
+  gemType = type;
 
   nativeBuildInputs = [
     ruby makeWrapper
@@ -143,7 +143,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
 
-    if [[ "$type" == "gem" ]]; then
+    if [[ "$gemType" == "gem" ]]; then
       if [[ -z "$gemspec" ]]; then
         gemspec="$(find . -name '*.gemspec')"
         echo "found the following gemspecs:"
@@ -158,7 +158,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
 
       echo "gem package built: $gempkg"
-    elif [[ "$type" == "git" ]]; then
+    elif [[ "$gemType" == "git" ]]; then
       git init
       # remove variations to improve the likelihood of a bit-reproducible output
       rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config

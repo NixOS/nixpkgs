@@ -24,7 +24,7 @@ buildPythonPackage rec {
     webcolors
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     wasmer-compiler-cranelift
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytestCheckHook
     pytest-benchmark

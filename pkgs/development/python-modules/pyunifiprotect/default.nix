@@ -77,7 +77,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     ffmpeg # Required for command ffprobe
     py
     pytest-aiohttp

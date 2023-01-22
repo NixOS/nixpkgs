@@ -38,7 +38,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     cstruct-unix
     ounit2

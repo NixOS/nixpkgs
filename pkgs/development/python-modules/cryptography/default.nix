@@ -60,7 +60,7 @@ buildPythonPackage rec {
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography-vectors
     # "hypothesis" indirectly depends on cryptography to build its documentation
     (hypothesis.override { enableDocumentation = false; })

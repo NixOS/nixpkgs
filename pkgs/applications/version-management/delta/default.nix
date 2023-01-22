@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation libiconv Security ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   postInstall = ''
     installShellCompletion --bash --name delta.bash etc/completion/completion.bash

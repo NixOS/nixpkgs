@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # told to do it. ~ C.
   setupPyGlobalFlags = [ "--use-pkg-config" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

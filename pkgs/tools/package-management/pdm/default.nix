@@ -61,7 +61,7 @@ buildPythonApplication rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-xdist

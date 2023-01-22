@@ -72,7 +72,7 @@ buildPythonPackage rec {
       --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

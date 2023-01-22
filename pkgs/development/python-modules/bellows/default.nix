@@ -37,7 +37,7 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-timeout

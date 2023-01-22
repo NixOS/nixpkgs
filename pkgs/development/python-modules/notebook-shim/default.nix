@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # have been comitted with msgs "wip" though.
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-tornasync
   ];

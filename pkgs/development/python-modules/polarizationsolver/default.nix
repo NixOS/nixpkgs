@@ -25,7 +25,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ fields ];
+  nativeCheckInputs = [ fields ];
 
   pythonImportsCheck = [ "polarizationsolver" ];
 

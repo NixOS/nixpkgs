@@ -156,7 +156,7 @@ let
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
-      checkInputs = [ zip ];
+      nativeCheckInputs = [ zip ];
 
       doCheck = true;
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-RKHBp+/bEH9FEPLcf1MKmTugk1A8rQU447mNm9Le3DE=";
 
-  checkInputs = lib.optional (!stdenv.isDarwin) nix;
+  nativeCheckInputs = lib.optional (!stdenv.isDarwin) nix;
 
   meta = with lib; {
     description = "A work-in-progress language server for Nix, with syntax checking and basic completion";

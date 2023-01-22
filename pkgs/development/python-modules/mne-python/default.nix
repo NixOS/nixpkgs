@@ -43,7 +43,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     h5py
     nibabel
     pandas

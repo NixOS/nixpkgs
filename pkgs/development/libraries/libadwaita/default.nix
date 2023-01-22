@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnome.adwaita-icon-theme
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run

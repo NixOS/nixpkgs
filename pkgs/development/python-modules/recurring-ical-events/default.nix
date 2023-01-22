@@ -31,7 +31,7 @@ buildPythonPackage rec {
     x-wr-timezone
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     restructuredtext_lint
     pygments

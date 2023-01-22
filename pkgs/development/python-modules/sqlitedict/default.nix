@@ -21,7 +21,7 @@ buildPythonPackage rec {
     mkdir tests/db
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytest-benchmark
     pytestCheckHook

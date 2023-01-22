@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   meta = with lib; {
     description = "Fastest Fourier Transform in the West library";

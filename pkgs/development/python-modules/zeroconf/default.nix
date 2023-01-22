@@ -38,7 +38,7 @@ buildPythonPackage rec {
   # OSError: [Errno 48] Address already in use
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

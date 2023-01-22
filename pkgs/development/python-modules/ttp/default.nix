@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "ttp"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
     ttp-templates

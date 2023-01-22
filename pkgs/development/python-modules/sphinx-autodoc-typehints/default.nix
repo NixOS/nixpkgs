@@ -34,7 +34,7 @@ buildPythonPackage {
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

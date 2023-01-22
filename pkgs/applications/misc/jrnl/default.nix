@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
     pytest-xdist
     pytestCheckHook

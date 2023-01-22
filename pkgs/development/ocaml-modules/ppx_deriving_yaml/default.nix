@@ -16,7 +16,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ppxlib ppx_deriving yaml ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     description = "A YAML codec generator for OCaml";

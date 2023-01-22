@@ -21,7 +21,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ base64 re stringext uri-sexp ];
 
   doCheck = true;
-  checkInputs = [ fmt alcotest crowbar ];
+  nativeCheckInputs = [ fmt alcotest crowbar ];
 
   meta = {
     description = "HTTP(S) library for Lwt, Async and Mirage";

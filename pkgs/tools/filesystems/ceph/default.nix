@@ -98,7 +98,7 @@ let
 
     sourceRoot = "ceph-${version}/src/python-common";
 
-    checkInputs = [ python.pkgs.pytest ];
+    nativeCheckInputs = [ python.pkgs.pytest ];
     propagatedBuildInputs = with python.pkgs; [ pyyaml six ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";

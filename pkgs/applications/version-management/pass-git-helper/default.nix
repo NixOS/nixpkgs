@@ -12,7 +12,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ pyxdg ];
-  checkInputs = [ pytest pytest-mock ];
+  nativeCheckInputs = [ pytest pytest-mock ];
   preCheck = ''
     export HOME=$(mktemp -d)
   '';

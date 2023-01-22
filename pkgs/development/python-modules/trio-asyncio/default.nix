@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sniffio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-trio
     pytestCheckHook
   ];

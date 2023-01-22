@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
 
     docstring-parser

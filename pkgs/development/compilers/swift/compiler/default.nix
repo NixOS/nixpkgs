@@ -526,7 +526,7 @@ in stdenv.mkDerivation {
 
   # TODO: ~50 failing tests on x86_64-linux. Other platforms not checked.
   doCheck = false;
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
   # TODO: consider using stress-tester and integration-test.
   checkPhase = ''
     cd $SWIFT_BUILD_ROOT/swift

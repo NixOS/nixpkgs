@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-RaYTplXhFKsnL1rxRMNR+VT92S2ym3z6buIQuCwZeeU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipykernel
     nbconvert
     typing-extensions

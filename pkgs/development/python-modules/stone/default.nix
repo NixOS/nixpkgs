@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ply six ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  nativeCheckInputs = [ pytestCheckHook mock ];
 
   # try to import from `test` directory, which is exported by the python interpreter
   # and cannot be overridden without removing some py3 to py2 support

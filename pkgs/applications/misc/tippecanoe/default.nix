@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ sqlite zlib ];
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

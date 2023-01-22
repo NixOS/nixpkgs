@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-xSaqiXjBAC8FnxUsSt43WMShJBjfqyspdUrmIwyvPQQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     sybil

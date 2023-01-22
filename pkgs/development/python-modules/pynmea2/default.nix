@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1b94lhpbgvnknb563dlwvs5vkk7w3ma54sj614ynh2dzgqrd6h73";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pynmea2" ];
 

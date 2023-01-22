@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   doCheck = false; # requires tiny_proxy module
 
-  checkInputs = [
+  nativeCheckInputs = [
     anyio
     flask
     pytest-asyncio

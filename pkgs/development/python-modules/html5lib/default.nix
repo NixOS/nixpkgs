@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   # latest release not compatible with pytest 6
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-expect
     pytestCheckHook

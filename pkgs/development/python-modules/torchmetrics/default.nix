@@ -37,7 +37,7 @@ buildPythonPackage {
     torch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytorch-lightning
     scikit-learn
     scikitimage

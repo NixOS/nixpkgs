@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jinja2 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pandas
     which

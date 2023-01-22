@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Qbv/N9YYZDD3f5ANd35btqJJKKHEb7HeaS+LUriDO1w=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     mock
     glibcLocales

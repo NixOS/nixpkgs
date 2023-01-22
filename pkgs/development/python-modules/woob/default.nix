@@ -74,7 +74,7 @@ buildPythonPackage rec {
       --replace "with-coverage = 1" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

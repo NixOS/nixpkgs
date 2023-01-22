@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytest-freezegun

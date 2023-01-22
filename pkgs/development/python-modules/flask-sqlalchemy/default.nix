@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

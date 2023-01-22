@@ -29,7 +29,7 @@ buildPythonPackage rec {
     canmatrix
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

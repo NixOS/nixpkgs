@@ -39,7 +39,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     grpcio
     mock
     pytestCheckHook

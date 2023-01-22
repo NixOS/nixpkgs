@@ -119,7 +119,7 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath pluginWrapperBins}"
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest
     mock
     rarfile

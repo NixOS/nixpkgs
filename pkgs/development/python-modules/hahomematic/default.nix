@@ -37,7 +37,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pydevccu
     pytest-aiohttp
     pytestCheckHook

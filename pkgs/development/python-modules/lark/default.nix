@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "lark.grammars"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     js2py
     pytestCheckHook
   ];

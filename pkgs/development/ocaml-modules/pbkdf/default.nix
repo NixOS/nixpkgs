@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.07";
   propagatedBuildInputs = [ cstruct mirage-crypto ];
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   doCheck = true;
 
   meta = {

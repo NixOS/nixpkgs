@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # Hack needed to make pytest + cython work
     # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298

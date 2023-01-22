@@ -32,7 +32,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     astropy
     pytestCheckHook
     pytest-doctestplus

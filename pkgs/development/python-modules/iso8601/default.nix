@@ -24,7 +24,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     # "hypothesis" indirectly depends on iso8601 to build its documentation
     (hypothesis.override { enableDocumentation = false; })
     pytestCheckHook

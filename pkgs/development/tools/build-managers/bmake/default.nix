@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     tzdata
   ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
     ksh

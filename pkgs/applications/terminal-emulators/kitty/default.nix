@@ -129,7 +129,7 @@ buildPythonApplication rec {
     runHook postBuild
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
 
     # Shells needed for shell integration tests

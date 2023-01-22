@@ -39,7 +39,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx
     pytest-mock

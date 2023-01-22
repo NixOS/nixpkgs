@@ -26,7 +26,7 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];

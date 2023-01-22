@@ -47,7 +47,7 @@ buildPythonPackage rec {
     langdetect = [ langdetect ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
     gitpython

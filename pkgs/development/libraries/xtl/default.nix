@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=ON" ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   checkTarget = "xtest";
 
   meta = with lib; {

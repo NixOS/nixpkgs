@@ -35,7 +35,7 @@ buildPythonPackage rec {
     hyperframe
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];

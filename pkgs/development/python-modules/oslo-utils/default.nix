@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     eventlet
     fixtures

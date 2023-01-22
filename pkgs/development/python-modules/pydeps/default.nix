@@ -31,7 +31,7 @@ buildPythonPackage rec {
     stdlib-list
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];

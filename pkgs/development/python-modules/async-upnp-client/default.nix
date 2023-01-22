@@ -34,7 +34,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];

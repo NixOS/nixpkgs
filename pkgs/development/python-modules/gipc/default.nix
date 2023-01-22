@@ -26,7 +26,7 @@ buildPythonPackage rec {
     gevent
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

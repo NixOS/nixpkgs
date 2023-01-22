@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} Lib/fontParts/fontshell/test.py
     runHook postCheck
   '';
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "An API for interacting with the parts of fonts during the font development process.";

@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     parameterized
     pytest-env

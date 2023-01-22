@@ -16,7 +16,7 @@ buildPythonApplication rec {
     yt-dlp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

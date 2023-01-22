@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pyaes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

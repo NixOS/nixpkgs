@@ -34,7 +34,7 @@ buildPythonPackage rec {
     schema-salad
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];

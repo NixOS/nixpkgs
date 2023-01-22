@@ -33,7 +33,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

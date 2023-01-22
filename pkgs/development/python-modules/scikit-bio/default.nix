@@ -30,7 +30,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cython ];
-  checkInputs = [ coverage ];
+  nativeCheckInputs = [ coverage ];
   propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy h5py hdmedians scikit-learn ];
 
   # cython package not included for tests

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     coreutils
     pytest-aiohttp

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ cairocffi ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

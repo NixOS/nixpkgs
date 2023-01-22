@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ppxlib rpclib ppx_deriving ];
 
-  checkInputs = [ alcotest yojson ];
+  nativeCheckInputs = [ alcotest yojson ];
   doCheck = true;
 
   meta = with lib; {

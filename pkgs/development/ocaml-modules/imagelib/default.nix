@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ decompress stdlib-shims ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";

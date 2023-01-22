@@ -57,7 +57,7 @@ let self = buildPythonPackage rec {
 
   doCheck = false; # infinite recursion with jupyter-server
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pythonPackages.pytest
   ];
 
-  checkInputs = lib.optionals enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
+  nativeCheckInputs = lib.optionals enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src

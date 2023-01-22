@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     lxml
     nose

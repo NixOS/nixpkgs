@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "keyring.backend"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

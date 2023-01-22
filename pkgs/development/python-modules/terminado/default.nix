@@ -31,7 +31,7 @@ buildPythonPackage rec {
     "terminado"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ];

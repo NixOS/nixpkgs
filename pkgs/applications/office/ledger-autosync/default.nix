@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   # Checks require ledger as a python package,
   # ledger does not support python3 while ledger-autosync requires it.
-  checkInputs = with python3Packages; [ ledger hledger nose mock pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ ledger hledger nose mock pytestCheckHook ];
 
   # Disable some non-passing tests:
   # https://github.com/egh/ledger-autosync/issues/127

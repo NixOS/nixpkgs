@@ -30,7 +30,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-flakes
     pytest-mock
     pytest-socket

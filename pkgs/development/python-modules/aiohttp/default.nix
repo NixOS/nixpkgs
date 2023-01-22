@@ -65,7 +65,7 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async_generator
     freezegun
     gunicorn

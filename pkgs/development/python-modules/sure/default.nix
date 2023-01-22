@@ -34,7 +34,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     rednose
   ];
 

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     flake8
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pexpect
   ];

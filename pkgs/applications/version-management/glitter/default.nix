@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-GQ7Bns+FPj4jl2dBXnMrmcKIYcZTLZc1WvaHgKGj/gU=";
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

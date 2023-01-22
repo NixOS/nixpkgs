@@ -23,7 +23,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pyfakefs
     pytestCheckHook

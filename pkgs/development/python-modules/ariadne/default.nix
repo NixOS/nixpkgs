@@ -34,7 +34,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     opentracing
     pytest-asyncio

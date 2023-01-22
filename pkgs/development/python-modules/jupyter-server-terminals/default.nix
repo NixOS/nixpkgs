@@ -36,7 +36,7 @@ let self = buildPythonPackage rec {
 
   doCheck = false; # infinite recursion
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-jupyter
     pytest-timeout
     pytestCheckHook

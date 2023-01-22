@@ -35,7 +35,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytest
   ];

@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  checkInputs = [
+  nativeCheckInputs = [
     brotli
     hypothesis
     lz4

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytoolconfig
   ] ++ pytoolconfig.optional-dependencies.global;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ];

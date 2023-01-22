@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
-  checkInputs = [ boost ];
+  nativeCheckInputs = [ boost ];
 
   postInstall = ''
     mkdir -p $out/lib/

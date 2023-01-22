@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gettext libxslt.bin docbook_xsl_ns ];
   buildInputs = [ libcap ]
     ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2;
-  checkInputs = [ iproute2 ];
+  nativeCheckInputs = [ iproute2 ];
 
   postInstall = ''
     mkdir $apparmor

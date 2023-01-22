@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     packaging
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ifaddr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

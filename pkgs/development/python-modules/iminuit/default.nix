@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-LtBbHA5r6/YNh2gKX0+NqQjrpKuMioyOYWT0R59SIL4=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     py
     pytest-asyncio
     pytest-benchmark
