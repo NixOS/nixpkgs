@@ -104,7 +104,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
-  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+  passthru = {
+    tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";
