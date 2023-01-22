@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c, python3 }:
 
 let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
@@ -39,6 +39,10 @@ rustPlatform.buildRustPackage rec {
     cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
     popd
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pillow;
+  };
 
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";
