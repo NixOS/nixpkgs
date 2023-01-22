@@ -12672,6 +12672,8 @@ with pkgs;
 
   udftools = callPackage ../tools/filesystems/udftools {};
 
+  udp2raw = callPackage ../tools/networking/udp2raw { };
+
   udpreplay = callPackage ../tools/networking/udpreplay { };
 
   udpt = callPackage ../servers/udpt { };
