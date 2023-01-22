@@ -94,6 +94,7 @@ let
           { nixPackage = ncurses6; fileToCheckFor = null; }
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
+        isHadrian = true;
       };
       aarch64-darwin = {
         variantSuffix = "";
@@ -107,6 +108,7 @@ let
           { nixPackage = ncurses6; fileToCheckFor = null; }
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
+        isHadrian = true;
       };
     };
     # Binary distributions for the musl libc for the respective system.
@@ -118,6 +120,7 @@ let
           sha256 = "026348947d30a156b84de5d6afeaa48fdcb2795b47954cd8341db00d3263a481";
         };
         isStatic = true;
+        isHadrian = true;
         # We can't check the RPATH for statically linked executable
         exePathForLibraryCheck = null;
         archSpecificLibraries = [
@@ -400,6 +403,13 @@ stdenv.mkDerivation rec {
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
+  } // lib.optionalAttrs (binDistUsed.isHadrian or false) {
+    # Normal GHC derivations expose the hadrian derivation used to build them
+    # here. In the case of bindists we just make sure that the attribute exists,
+    # as it is used for checking if a GHC derivation has been built with hadrian.
+    # The isHadrian mechanism will become obsolete with GHCs that use hadrian
+    # exclusively, i.e. 9.6 (and 9.4?).
+    hadrian = null;
   };
 
   meta = rec {
