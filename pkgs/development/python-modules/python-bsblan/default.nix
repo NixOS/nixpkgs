@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-pLqX+gbY71OsLflTyDuL4revj5dXol//eTFVy8iT9O4=";
   };
 
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to control and monitor an BSBLan device programmatically";
     homepage = "https://github.com/liudger/python-bsblan";
+    changelog = "https://github.com/liudger/python-bsblan/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
