@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, hatch
 , hatchling
 , packaging
 , pytestCheckHook
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    hatch
+    hatchling
   ];
 
   propagatedBuildInputs = [
