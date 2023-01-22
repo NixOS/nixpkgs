@@ -372,6 +372,13 @@
           <literal>freetype</literal> and others.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          .NET 5.0 was removed due to being end-of-life, use a newer,
+          supported .NET version -
+          https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-notable-changes">
