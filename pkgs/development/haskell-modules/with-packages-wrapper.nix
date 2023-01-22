@@ -53,7 +53,8 @@ let
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
-                  else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}";
+                  else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
+                    + lib.optionalString (ghc ? hadrian) "/lib";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.concatLists (
