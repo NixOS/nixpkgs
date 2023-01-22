@@ -2,33 +2,30 @@
 with lib;
 let
   cfg = config.i18n.inputMethod.kime;
-  yamlFormat = pkgs.formats.yaml { };
 in
 {
   options = {
     i18n.inputMethod.kime = {
-      config = mkOption {
-        type = yamlFormat.type;
-        default = { };
-        example = literalExpression ''
-          {
-            daemon = {
-              modules = ["Xim" "Indicator"];
-            };
-
-            indicator = {
-              icon_color = "White";
-            };
-
-            engine = {
-              hangul = {
-                layout = "dubeolsik";
-              };
-            };
-          }
-          '';
+      daemonModules = mkOption {
+        type = types.listOf types.enum [ "Xim" "Wayland" "Indicator" ];
+        default = [ "Xim" "Wayland" "Indicator" ];
+        example = literalExpression ''[ "Xim" "Indicator" ]'';
         description = lib.mdDoc ''
-          kime configuration. Refer to <https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md> for details on supported values.
+          List of daemon modules
+        '';
+      };
+      iconColor = mkOption {
+        type = types.enum [ "Black" "White" ];
+        default = "Black";
+        example = "White";
+        description = lib.mdDoc ''
+          Set icon color for indicator
+        '';
+      };
+      extraConfig = mkOption {
+        type = types.string;
+        description = lib.mdDoc ''
+          extra kime configuration. Refer to <https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md> for details on supported values.
         '';
       };
     };
@@ -43,7 +40,12 @@ in
       XMODIFIERS    = "@im=kime";
     };
 
-    environment.etc."xdg/kime/config.yaml".text = replaceStrings [ "\\\\" ] [ "\\" ] (builtins.toJSON cfg.config);
+    environment.etc."xdg/kime/config.yaml".text = ''
+      daemon:
+        modules: [${lib.concatStringSeq "," cfg.daemonModules}]
+      indicator:
+        icon_color: ${cfg.iconColor}
+    '' ++ cfg.extraConfig;
   };
 
   # uses attributes of the linked package

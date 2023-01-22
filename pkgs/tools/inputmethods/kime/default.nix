@@ -2,32 +2,34 @@
 , withWayland ? true
 , withIndicator ? true, dbus, libdbusmenu
 , withXim ? true, xorg, cairo
-, withGtk2 ? true, gtk2
 , withGtk3 ? true, gtk3
+, withGtk4 ? true, gtk4
 , withQt5 ? true, qt5
+, withQt6 ? false, qt6
 }:
 
 let
-  cmake_args = lib.optionals withGtk2 ["-DENABLE_GTK2=ON"]
-  ++ lib.optionals withGtk3 ["-DENABLE_GTK3=ON"]
-  ++ lib.optionals withQt5 ["-DENABLE_QT5=ON"];
+  cmake_args = lib.optionals withGtk3 ["-DENABLE_GTK3=ON"]
+  ++ lib.optionals withGtk4 ["-DENABLE_GTK4=ON"]
+  ++ lib.optionals withQt5 ["-DENABLE_QT5=ON"]
+  ++ lib.optionals withQt6 ["-DENABLE_QT6=ON"];
 
   optFlag = w: (if w then "1" else "0");
 in
 stdenv.mkDerivation rec {
   pname = "kime";
-  version = "2.5.6";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "Riey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-r5luI6B4IjNTbh2tzpqabokgwkmbyXrA61+F2HDEWuo=";
+    sha256 = "sha256-/7goB7dN7GRTdlLtjgx1FjqdyQN7DeZGGTnGLOnh2xs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sha256 = "sha256-GvBnNPY51RPt+I73oet5tB/EE2UsEPKbelJZkSY3xNw=";
+    sha256 = "sha256-Xm94AO3rnYJoHAp/PDA2/Hx7VLYaZBxRaeowVox/AUY=";
   };
 
   # Replace autostart path
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     export KIME_ICON_DIR=share/icons
     export KIME_LIB_DIR=lib
     export KIME_QT5_DIR=lib/qt-${qt5.qtbase.version}
+    export KIME_QT6_DIR=lib/qt-${qt6.qtbase.version}
     bash scripts/install.sh "$out"
     runHook postInstall
   '';
@@ -84,9 +87,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals withIndicator [ dbus libdbusmenu ]
   ++ lib.optionals withXim [ xorg.libxcb cairo ]
-  ++ lib.optionals withGtk2 [ gtk2 ]
   ++ lib.optionals withGtk3 [ gtk3 ]
-  ++ lib.optionals withQt5 [ qt5.qtbase ];
+  ++ lib.optionals withGtk4 [ gtk4 ]
+  ++ lib.optionals withQt5 [ qt5.qtbase ]
+  ++ lib.optionals withQt6 [ qt6.qtbase ];
 
   nativeBuildInputs = [
     pkg-config
