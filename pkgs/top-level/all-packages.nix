@@ -26856,6 +26856,8 @@ with pkgs;
 
   eunomia = callPackage ../data/fonts/eunomia { };
 
+  fa_1 = callPackage ../data/fonts/fa_1 { };
+
   f1_8 = callPackage ../data/fonts/f1_8 { };
 
   f5_6 = callPackage ../data/fonts/f5_6 { };
