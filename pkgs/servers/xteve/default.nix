@@ -17,6 +17,6 @@ buildGoModule rec {
     description = "M3U Proxy for Plex DVR and Emby Live TV";
     homepage = "https://github.com/xteve-project/xTeVe";
     license = licenses.mit;
-    maintainers = with maintainers; [ nrhelmi AndersonTorres ];
+    maintainers = with maintainers; [ nrhelmi ];
   };
 }
