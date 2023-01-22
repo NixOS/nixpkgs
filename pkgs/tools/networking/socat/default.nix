@@ -23,11 +23,6 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
-  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
-    # musl doesn't have getprotobynumber_r
-    "sc_cv_getprotobynumber_r=2"
-  ];
-
   buildInputs = [ openssl readline ];
 
   hardeningEnable = [ "pie" ];

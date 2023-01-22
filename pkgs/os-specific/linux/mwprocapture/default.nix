@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     broken = kernel.kernelAtLeast "5.16";
-    homepage = "http://www.magewell.com/";
+    homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ MP2E ];

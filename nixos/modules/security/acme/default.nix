@@ -727,7 +727,7 @@ in {
           Default values inheritable by all configured certs. You can
           use this to define options shared by all your certs. These defaults
           can also be ignored on a per-cert basis using the
-          `security.acme.certs.''${cert}.inheritDefaults' option.
+          {option}`security.acme.certs.''${cert}.inheritDefaults` option.
         '';
       };
 

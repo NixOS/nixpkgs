@@ -3652,6 +3652,8 @@ self: super: with self; {
 
   garminconnect = callPackage ../development/python-modules/garminconnect { };
 
+  gassist-text = callPackage ../development/python-modules/gassist-text { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   gatt = callPackage ../development/python-modules/gatt { };
@@ -4188,6 +4190,8 @@ self: super: with self; {
   hacking = callPackage ../development/python-modules/hacking { };
 
   hdate = callPackage ../development/python-modules/hdate { };
+
+  hdf5plugin = callPackage ../development/python-modules/hdf5plugin { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
@@ -5613,6 +5617,8 @@ self: super: with self; {
   makefun = callPackage ../development/python-modules/makefun { };
 
   mailsuite = callPackage ../development/python-modules/mailsuite { };
+
+  maison = callPackage ../development/python-modules/maison { };
 
   Mako = callPackage ../development/python-modules/Mako { };
 
@@ -12075,6 +12081,8 @@ self: super: with self; {
   wandb = callPackage ../development/python-modules/wandb { };
 
   warcio = callPackage ../development/python-modules/warcio { };
+
+  ward = callPackage ../development/python-modules/ward { };
 
   warlock = callPackage ../development/python-modules/warlock { };
 

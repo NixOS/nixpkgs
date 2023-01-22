@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       channels. Additionally, the program can drive MIDI instruments (with the
       gp32 and gp2x a custom MIDI interface is required).
     '';
-    homepage = "http://www.littlegptracker.com/";
-    downloadPage = "http://www.littlegptracker.com/download.php";
+    homepage = "https://www.littlegptracker.com/";
+    downloadPage = "https://www.littlegptracker.com/download.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

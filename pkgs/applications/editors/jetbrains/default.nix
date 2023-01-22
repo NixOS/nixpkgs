@@ -11,15 +11,13 @@
 , vmopts ? null
 }:
 
-with lib;
-
 let
   platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
   ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" ];
 
   inherit (stdenv.hostPlatform) system;
 
-  versions = builtins.fromJSON (readFile (./versions.json));
+  versions = builtins.fromJSON (lib.readFile (./versions.json));
   versionKey = if stdenv.isLinux then "linux" else system;
   products = versions.${versionKey} or (throw "Unsupported system: ${system}");
 
@@ -42,11 +40,11 @@ let
         maintainers = with maintainers; [ edwtjo mic92 ];
       };
     }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
+      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ lib.optionals (stdenv.isLinux) [
         autoPatchelfHook
         patchelf
       ];
-      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
+      buildInputs = (attrs.buildInputs or []) ++ lib.optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
         libdbusmenu
@@ -54,7 +52,7 @@ let
         expat
       ];
       dontAutoPatchelf = true;
-      postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
+      postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
         (
           cd $out/clion
           # bundled cmake does not find libc
@@ -217,7 +215,7 @@ let
         '';
         maintainers = with maintainers; [ ];
       };
-    }).overrideAttrs (finalAttrs: previousAttrs: optionalAttrs cythonSpeedup {
+    }).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs cythonSpeedup {
       buildInputs = with python3.pkgs; [ python3 setuptools ];
       preInstall = ''
       echo "compiling cython debug speedups"

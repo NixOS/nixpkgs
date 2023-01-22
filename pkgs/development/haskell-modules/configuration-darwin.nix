@@ -308,6 +308,9 @@ self: super: ({
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu);
 
+  # https://github.com/NixOS/nixpkgs/issues/149692
+  Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
+
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:

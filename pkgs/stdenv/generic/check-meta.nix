@@ -271,7 +271,7 @@ let
     sourceProvenance = listOf lib.types.attrs;
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
-    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
+    platforms = listOf (oneOf [ str (attrsOf anything) (functionTo bool) ]);   # see lib.meta.platformMatch
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;

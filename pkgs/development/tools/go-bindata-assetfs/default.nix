@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-yQgIaTl06nmIu8BfmQzrvEnlPQ2GQ/2nnvTmYXCL1oI=";
   };
 
-  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 

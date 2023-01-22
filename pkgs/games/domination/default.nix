@@ -88,8 +88,8 @@ in stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = "http://domination.sourceforge.net/";
-    downloadPage = "http://domination.sourceforge.net/download.shtml";
+    homepage = "https://domination.sourceforge.net/";
+    downloadPage = "https://domination.sourceforge.net/download.shtml";
     description = "A game that is a bit like the board game Risk or RisiKo";
     longDescription = ''
       Domination is a game that is a bit like the well known board game of Risk

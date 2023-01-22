@@ -424,7 +424,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/JorjBauer/lua-cyrussasl";
+    homepage = "https://github.com/JorjBauer/lua-cyrussasl";
     description = "Cyrus SASL library for Lua 5.1+";
     license.fullName = "BSD";
   };
@@ -593,7 +593,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/lewis6991/gitsigns.nvim";
+    homepage = "https://github.com/lewis6991/gitsigns.nvim";
     description = "Git signs written in pure lua";
     license.fullName = "MIT/X11";
   };
@@ -1038,7 +1038,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (GNU flavour).";
     license.fullName = "MIT/X11";
   };
@@ -1071,7 +1071,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (PCRE flavour).";
     maintainers = with lib.maintainers; [ vyp ];
     license.fullName = "MIT/X11";
@@ -1105,7 +1105,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (POSIX flavour).";
     license.fullName = "MIT/X11";
   };
@@ -1171,7 +1171,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/antirez/lua-cmsgpack";
+    homepage = "https://github.com/antirez/lua-cmsgpack";
     description = "MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
     license.fullName = "Two-clause BSD";
   };
@@ -1569,7 +1569,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/brimworks/lua-yajl";
+    homepage = "https://github.com/brimworks/lua-yajl";
     description = "Integrate the yajl JSON library with Lua.";
     maintainers = with lib.maintainers; [ pstn ];
     license.fullName = "MIT/X11";
@@ -2086,7 +2086,7 @@ buildLuarocksPackage {
     sha256 = "0hx6my54axjcb3bklr991wji374qq6mwa3ily6dvb72vi2534nwz";
   }).outPath;
   src = fetchzip {
-    url    = "http://github.com/luaposix/luaposix/archive/v34.1.1.zip";
+    url    = "https://github.com/luaposix/luaposix/archive/v34.1.1.zip";
     sha256 = "0863r8c69yx92lalj174qdhavqmcs2cdimjim6k55qj9yn78v9zl";
   };
 
@@ -2094,7 +2094,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ bit32 lua ];
 
   meta = {
-    homepage = "http://github.com/luaposix/luaposix/";
+    homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with lib.maintainers; [ vyp lblasc ];
     license.fullName = "MIT/X11";
@@ -2329,7 +2329,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/bluebird75/luaunit";
+    homepage = "https://github.com/bluebird75/luaunit";
     description = "A unit testing framework for Lua";
     maintainers = with lib.maintainers; [ lockejan ];
     license.fullName = "BSD";
@@ -2355,7 +2355,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/starwing/luautf8";
+    homepage = "https://github.com/starwing/luautf8";
     description = "A UTF-8 support module for Lua";
     maintainers = with lib.maintainers; [ pstn ];
     license.fullName = "MIT";
@@ -2489,7 +2489,7 @@ buildLuarocksPackage {
     sha256 = "0d0h70kjl5fkq589y1sx8qy8as002dhcf88pf60pghvch002ryi1";
   }).outPath;
   src = fetchzip {
-    url    = "http://github.com/gvvaughan/lyaml/archive/v6.2.8.zip";
+    url    = "https://github.com/gvvaughan/lyaml/archive/v6.2.8.zip";
     sha256 = "0r3jjsd8x2fs1aanki0s1mvpznl16f32c1qfgmicy0icgy5xfch0";
   };
 
@@ -2497,7 +2497,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/gvvaughan/lyaml";
+    homepage = "https://github.com/gvvaughan/lyaml";
     description = "libYAML binding for Lua";
     maintainers = with lib.maintainers; [ lblasc ];
     license.fullName = "MIT/X11";
@@ -2723,7 +2723,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua luassert ];
 
   meta = {
-    homepage = "http://github.com/nvim-lua/plenary.nvim";
+    homepage = "https://github.com/nvim-lua/plenary.nvim";
     description = "lua functions you don't want to write ";
     license.fullName = "MIT/X11";
   };
@@ -2779,7 +2779,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua luaposix ];
 
   meta = {
-    homepage = "http://pjb.com.au/comp/lua/readline.html";
+    homepage = "https://pjb.com.au/comp/lua/readline.html";
     description = "Interface to the readline library";
     license.fullName = "MIT/X11";
   };

@@ -2,17 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "parallel";
-  version = "20220322";
+  version = "20221222";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-35PM9qn1Ka0hJrcEKu8EhmA+k4x3tAWTnEFwLTik5tg=";
+    sha256 = "sha256-TakMe+wYqUQxtOPbSd1WP2XPIM6v0kX3zHtC74v4WX8=";
   };
 
   outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl procps ];
+
+  preInstall = ''
+    patchShebangs ./src/parallel
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/parallel \

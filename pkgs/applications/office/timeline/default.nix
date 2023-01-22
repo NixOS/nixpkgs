@@ -76,8 +76,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://thetimelineproj.sourceforge.net/";
-    changelog = "http://thetimelineproj.sourceforge.net/changelog.html";
+    homepage = "https://thetimelineproj.sourceforge.net/";
+    changelog = "https://thetimelineproj.sourceforge.net/changelog.html";
     description = "Display and navigate information on a timeline";
     license = with licenses; [ gpl3Only cc-by-sa-30 ];
     platforms = with platforms; unix;

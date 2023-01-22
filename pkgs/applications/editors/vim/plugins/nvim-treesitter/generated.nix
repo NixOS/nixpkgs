@@ -115,12 +115,12 @@
   };
   c_sharp = buildGrammar {
     language = "c_sharp";
-    version = "2574501";
+    version = "eed2576";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-c-sharp";
-      rev = "2574501b475b7ba7bc10d08dd1ff9732d3769662";
-      hash = "sha256-bXwGZJ+lYTJyaD7kbQGL6hagpkgqqCsPHBiz9AOXfNc=";
+      rev = "eed2576ae17aae83595c4a4ce1e9c1cbf7071bb6";
+      hash = "sha256-4X8X8l62bcv48Hti95MJ1GLtaeoAYi2tHy/oBt8qQVo=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-c-sharp";
   };
@@ -349,12 +349,12 @@
   };
   erlang = buildGrammar {
     language = "erlang";
-    version = "a8b8b0e";
+    version = "14fd388";
     source = fetchFromGitHub {
       owner = "WhatsApp";
       repo = "tree-sitter-erlang";
-      rev = "a8b8b0e16c4f5552f5e85af3dec976a5d16af8b9";
-      hash = "sha256-6eiRiTTPdMBRsxVHIHYuw0sIfRDvP4pZIEyckoo304Q=";
+      rev = "14fd38870c26dcae2ede1b989dc6531f1187f15e";
+      hash = "sha256-TnVuHoJG3vYpjOiOQRkE+gB1aNWIaE8cbIV6x92swNk=";
     };
     meta.homepage = "https://github.com/WhatsApp/tree-sitter-erlang";
   };
@@ -1247,12 +1247,12 @@
   };
   scala = buildGrammar {
     language = "scala";
-    version = "f6bbf35";
+    version = "802eba3";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-scala";
-      rev = "f6bbf35de41653b409ca9a3537a154f2b095ef64";
-      hash = "sha256-GNGD5UIPzpRQbGCp/fcBV6laPRhU5YQGbNiaAGis0CY=";
+      rev = "802eba33a1ae1ad9d873e5269dfcc9c4d86e4116";
+      hash = "sha256-WZe4QjzdGAo9KWQlS66rUUxJax9pbl4p2YE/GfAmkAQ=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-scala";
   };
@@ -1439,12 +1439,12 @@
   };
   tlaplus = buildGrammar {
     language = "tlaplus";
-    version = "7c5452a";
+    version = "d3ef05e";
     source = fetchFromGitHub {
       owner = "tlaplus-community";
       repo = "tree-sitter-tlaplus";
-      rev = "7c5452a0720271a349d6174b8778e76b189bebef";
-      hash = "sha256-DJIA2gvwWWqTGrC48FZiRZNt048KiQ/4sZxYSnHmlEg=";
+      rev = "d3ef05eec4473094e2d691243aa243ce63de6406";
+      hash = "sha256-k5O6VheS8RBrSNk/GBjP3Qun4wY8cbPXxEFU0tCKbuU=";
     };
     meta.homepage = "https://github.com/tlaplus-community/tree-sitter-tlaplus";
   };

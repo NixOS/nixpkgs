@@ -122,7 +122,9 @@ let
 
     postFixup = ''
       pushd $out/share/${pname}
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ${pname}
+      for file in ${pname} chrome-sandbox chrome_crashpad_handler; do
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file
+      done
 
       for file in $(find . -type f \( -name \*.node -o -name ${pname} -o -name \*.so\* \) ); do
         patchelf --set-rpath ${libPath}:$out/share/${pname} $file || true

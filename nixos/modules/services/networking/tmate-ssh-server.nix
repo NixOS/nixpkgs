@@ -28,7 +28,7 @@ in
     host = mkOption {
       type = types.str;
       description = mdDoc "External host name";
-      defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName ";
+      defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName";
       default =
         if domain == null then
           config.networking.hostName

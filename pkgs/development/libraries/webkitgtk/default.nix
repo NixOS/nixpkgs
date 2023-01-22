@@ -63,7 +63,7 @@
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation (finalAttrs: {
