@@ -673,9 +673,15 @@ rec {
       => [ "13" "14" "23" "24" ]
   */
   crossLists = builtins.trace
-    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
+    "lib.crossLists is deprecated, use lib.cartesianProductOfLists instead"
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
+  cartesianProductOfLists = lists:
+    let
+      inherit (lib) cartesianProductOfSets toString nameValuePair genAttrs attrValues;
+      attrs = builtins.listToAttrs (imap0 (i: nameValuePair (builtins.toString i)) lists);
+      cross = cartesianProductOfSets attrs;
+    in map attrValues cross;
 
   /* Remove duplicate elements from the list. O(n^2) complexity.
 
