@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.5";
+  version = "1.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Microsoft";
-    repo = pname;
+    owner = "microsoft";
+    repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-98hyNer2Xtx6D2R3pFhLC3tb/2DFTawXO36xfwhIfEg=";
+    sha256 = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
   };
 
   patches = [
