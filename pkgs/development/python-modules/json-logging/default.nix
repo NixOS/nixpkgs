@@ -3,6 +3,7 @@
 , fastapi
 , fetchFromGitHub
 , flask
+, httpx
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fastapi
     flask
+    httpx
     pytestCheckHook
     # quart
     requests
