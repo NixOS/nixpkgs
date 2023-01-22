@@ -4727,12 +4727,12 @@ final: prev:
 
   mason-lspconfig-nvim = buildVimPluginFrom2Nix {
     pname = "mason-lspconfig.nvim";
-    version = "2023-01-19";
+    version = "2023-01-22";
     src = fetchFromGitHub {
       owner = "williamboman";
       repo = "mason-lspconfig.nvim";
-      rev = "5b388c0de30f1605671ebfb9a20a620cda50ffce";
-      sha256 = "1c01jacxp96s2xd8w2hvp46ai49lw8dsmv372l8jj6794dqm1bfv";
+      rev = "d7ff61a828d59bc593ea3e2020508c114048d790";
+      sha256 = "03rmdhp30kzvc98gaagxbm3cm0q1mqy28wjih6r7l14kp3qv8bv1";
     };
     meta.homepage = "https://github.com/williamboman/mason-lspconfig.nvim/";
   };
