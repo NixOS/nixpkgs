@@ -45,7 +45,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
         ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
         ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-        ++ (if (lib.versionOlder version "10.6")
+        ++ (if (lib.versionOlder version "10.5")
             then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
             else [ openssl curl ]);
 
