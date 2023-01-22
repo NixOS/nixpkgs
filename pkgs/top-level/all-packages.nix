@@ -26836,6 +26836,8 @@ with pkgs;
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
+  dotcolon-fonts = callPackage ../data/fonts/dotcolon-fonts { };
+
   e17gtk = callPackage ../data/themes/e17gtk { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
