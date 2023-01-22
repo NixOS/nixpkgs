@@ -222,6 +222,7 @@
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
+, "node-gyp-build-optional-packages"
 , "node-inspector"
 , "node-pre-gyp"
 , "node-red"

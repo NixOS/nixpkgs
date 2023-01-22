@@ -309,7 +309,10 @@ final: prev: {
   };
 
   parcel = prev.parcel.override {
-    buildInputs = [ final.node-gyp-build ];
+    buildInputs = [
+      final.node-gyp-build
+      final.node-gyp-build-optional-packages
+    ];
     preRebuild = ''
       sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
     '';
