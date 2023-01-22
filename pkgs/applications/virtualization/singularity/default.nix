@@ -9,33 +9,33 @@
 , makeWrapper
 , cryptsetup
 , squashfsTools
-, buildGoPackage}:
+, buildGoModule
+}:
 
-with lib;
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "singularity";
   version = "3.8.7";
 
   src = fetchurl {
-    url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "sha256-Myny5YP4SoNDyywDgKHWy86vrn0eYztcvK33FD6shZs=";
+    url = "https://github.com/apptainer/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
+    hash = "sha256-Myny5YP4SoNDyywDgKHWy86vrn0eYztcvK33FD6shZs=";
   };
 
-  goPackagePath = "github.com/sylabs/singularity";
-
-  buildInputs = [ gpgme openssl libuuid ];
-  nativeBuildInputs = [ util-linux which makeWrapper cryptsetup ];
-  propagatedBuildInputs = [ coreutils squashfsTools ];
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace internal/pkg/build/files/copy.go \
       --replace /bin/cp ${coreutils}/bin/cp
   '';
 
-  postConfigure = ''
-    cd go/src/github.com/sylabs/singularity
+  buildInputs = [ gpgme openssl libuuid ];
+  nativeBuildInputs = [ util-linux which makeWrapper cryptsetup ];
+  propagatedBuildInputs = [ coreutils squashfsTools ];
 
+  ldflags = [ "-s" "-w" ];
+
+  postConfigure = ''
     patchShebangs .
     sed -i 's|defaultPath := "[^"]*"|defaultPath := "${lib.makeBinPath propagatedBuildInputs}"|' cmd/internal/cli/actions.go
 
@@ -64,7 +64,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.sylabs.io/";
+    homepage = "https://github.com/apptainer/singularity";
     description = "Application containers for linux";
     license = licenses.bsd3;
     platforms = platforms.linux;
