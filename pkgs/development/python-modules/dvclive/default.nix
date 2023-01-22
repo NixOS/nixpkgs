@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, ruamel-yaml
 , setuptools
 , tabulate
 }:
@@ -28,8 +29,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dvc-render
-    tabulate # will be available as dvc-render.optional-dependencies.table
-  ];
+    ruamel-yaml
+  ] ++ dvc-render.optional-dependencies.table;
 
   # Circular dependency with dvc
   doCheck = false;
