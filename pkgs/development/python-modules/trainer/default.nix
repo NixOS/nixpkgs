@@ -9,6 +9,7 @@
 , torch-bin
 , tensorboardx
 , protobuf
+, psutil
 
 , pytestCheckHook
 , soundfile
@@ -41,6 +42,7 @@ buildPythonPackage {
     soundfile
     tensorboardx
     protobuf
+    psutil
   ];
 
   # only one test and that requires training data from the internet
