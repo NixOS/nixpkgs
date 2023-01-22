@@ -10890,6 +10890,8 @@ self: super: with self; {
 
   sqlsoup = callPackage ../development/python-modules/sqlsoup { };
 
+  sqltrie = callPackage ../development/python-modules/sqltrie { };
+
   srp = callPackage ../development/python-modules/srp { };
 
   srpenergy = callPackage ../development/python-modules/srpenergy { };
