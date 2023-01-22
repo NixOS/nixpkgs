@@ -3,19 +3,19 @@
 , fetchFromGitHub
 , parameterized
 , pycryptodome
+, pydantic
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , requests
-, pydantic
 , requests-mock
 , responses
 }:
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5IEzoxuwIzMfHzW0oD/LC+iWf+yC05nfCJd5tzMccrc=";
+    hash = "sha256-qAFc1LPGG8O46He2cjhs567yqaZy7d5CMeDH/sqnriw=";
   };
 
   postPatch = ''
@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycryptodome
+    pydantic
     pyyaml
     requests
   ];
@@ -47,7 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     responses
-    pydantic
   ];
 
   pythonImportsCheck = [
