@@ -4,6 +4,8 @@
 , ninja
 , pkg-config
 , python3
+, zlib
+, coreutils
 , substituteAll
 }:
 
@@ -61,17 +63,31 @@ python3.pkgs.buildPythonApplication rec {
         "docs/yaml/objects/dep.yaml"
       ];
     })
+
+    # tests: avoid unexpected failure when cmake is not installed
+    # https://github.com/mesonbuild/meson/pull/11321
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/a38ad3039d0680f3ac34a6dc487776c79c48acf3.patch";
+      hash = "sha256-9YaXwc+F3Pw4BjuOXqva4MD6DAxX1k5WLbn0xzwuEmw=";
+    })
   ];
 
   setupHook = ./setup-hook.sh;
 
-  # Meson included tests since 0.45, however they fail in Nixpkgs because they
-  # require a typical building environment (including C compiler and stuff).
-  # Just for the sake of documentation, the next lines are maintained here.
-  doCheck = false;
   nativeCheckInputs = [ ninja pkg-config ];
+  checkInputs = [ zlib ];
   checkPhase = ''
-    python ./run_project_tests.py
+    patchShebangs "test cases"
+    substituteInPlace "test cases/native/8 external program shebang parsing/script.int.in" \
+      --replace /usr/bin/env ${coreutils}/bin/env
+    # requires git, creating cyclic dependency
+    rm -r "test cases/common/66 vcstag"
+    # requires glib, creating cyclic dependency
+    rm -r "test cases/linuxlike/6 subdir include order"
+    rm -r "test cases/linuxlike/9 compiler checks with dependencies"
+    # requires static zlib, see #66461
+    rm -r "test cases/linuxlike/14 static dynamic linkage"
+    HOME="$TMPDIR" python ./run_project_tests.py
   '';
 
   postFixup = ''
