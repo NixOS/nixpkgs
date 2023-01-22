@@ -46,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/sloria/webtest-aiohttp/blob/${src.rev}/CHANGELOG.rst";
     description = "Provides integration of WebTest with aiohttp.web applications";
     homepage = "https://github.com/sloria/webtest-aiohttp";
     license = licenses.mit;
