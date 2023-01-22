@@ -16,13 +16,11 @@
 , wrapQtAppsHook ? null
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "vertcoin";
   version = "0.18.0";
 
-  name = pname + toString (optional (!withGui) "d") + "-" + version;
+  name = pname + toString (lib.optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
     owner = pname + "-project";
@@ -35,7 +33,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     hexdump
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
     db4
     zeromq
     gmp
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     qtbase
     qttools
     protobuf
@@ -56,12 +54,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
       "--with-boost-libdir=${boost.out}/lib"
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
       "--with-gui=qt5"
       "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A digital currency with mining decentralisation and ASIC resistance as a key focus";
     homepage = "https://vertcoin.org/";
     license = licenses.mit;
