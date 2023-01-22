@@ -54,7 +54,8 @@ in makeScopeWithSplicing
   mkDerivation = lib.makeOverridable (attrs: let
     stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
   in stdenv'.mkDerivation ({
-    name = "${attrs.pname or (baseNameOf attrs.path)}-netbsd-${attrs.version}";
+    pname = "${attrs.pname or (baseNameOf attrs.path)}-netbsd";
+    inherit (attrs) version;
     src = fetchNetBSD attrs.path attrs.version attrs.sha256;
 
     extraPaths = [ ];

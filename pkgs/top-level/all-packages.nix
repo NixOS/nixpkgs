@@ -21143,14 +21143,12 @@ with pkgs;
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc ["glibc" "musl" "wasilibc"]
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
       then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
         then libcCross
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv
-    else if stdenv.hostPlatform.isNetBSD
-      then null
     else libiconvReal;
 
   libcIconv = libc: let
