@@ -18,7 +18,7 @@ let
 in buildPythonPackage rec {
   pname = "cupy";
   version = "11.5.0";
- 
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
