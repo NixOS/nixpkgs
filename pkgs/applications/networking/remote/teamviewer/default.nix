@@ -26,11 +26,11 @@ mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [ "out" "dev" ];
-  version = "15.35.7";
+  version = "15.37.8";
 
   src = fetchurl {
     url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-KNUhe0c6Th2pW7+Lmo62FYdOv+8t7Z5/eQkYPN8eusc=";
+    sha256 = "sha256-IAHH8/bYp61yY+USdQ8zyEUjvZluydUG1grbKTGTPIo=";
   };
 
   unpackPhase = ''
@@ -51,7 +51,7 @@ mkDerivation rec {
       $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,tv-delayed-start.sh}
 
     # Teamviewer packages its own qt library files.
-    # Most of them can be replaced by nixpkgs libraries, but the following need to be used beginning at version 15.35.7
+    # Most of them can be replaced by nixpkgs libraries, but the following need to be used beginning at version 15.37.8
     # because teamviewer will not start without them, either stalling at startup or even segfaulting. In the logfiles, some missing qt libraries
     # can be observed, although they are present from nixpkgs. AutoPatchelfHook will automatically choose the included libraries, if present.
     # See https://github.com/NixOS/nixpkgs/pull/202024
