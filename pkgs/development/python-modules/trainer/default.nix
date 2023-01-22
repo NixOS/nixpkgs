@@ -9,6 +9,7 @@
 , torch-bin
 , tensorboardx
 , protobuf
+, psutil
 
 , pytestCheckHook
 , soundfile
@@ -37,10 +38,11 @@ buildPythonPackage {
   propagatedBuildInputs = [
     coqpit
     fsspec
-    torch-bin
+    protobuf
+    psutil
     soundfile
     tensorboardx
-    protobuf
+    torch-bin
   ];
 
   # only one test and that requires training data from the internet
@@ -58,6 +60,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "A general purpose model trainer, as flexible as it gets";
     homepage = "https://github.com/coqui-ai/Trainer";
+    changelog = "https://github.com/coqui-ai/Trainer/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.tts.members;
   };
