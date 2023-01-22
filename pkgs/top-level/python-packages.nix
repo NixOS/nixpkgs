@@ -12058,6 +12058,8 @@ self: super: with self; {
 
   warcio = callPackage ../development/python-modules/warcio { };
 
+  ward = callPackage ../development/python-modules/ward { };
+
   warlock = callPackage ../development/python-modules/warlock { };
 
   warrant = callPackage ../development/python-modules/warrant { };
