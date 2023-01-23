@@ -176,36 +176,6 @@ let
       lintrng $out/man-pages-combined.xml
     '';
 
-  olinkDB = runCommand "manual-olinkdb"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
-    }
-    ''
-      xsltproc \
-        ${manualXsltprocOptions} \
-        --stringparam collect.xref.targets only \
-        --stringparam targets.filename "$out/manual.db" \
-        --nonet \
-        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
-        ${manual-combined}/manual-combined.xml
-
-      cat > "$out/olinkdb.xml" <<EOF
-      <?xml version="1.0" encoding="utf-8"?>
-      <!DOCTYPE targetset SYSTEM
-        "file://${docbook_xsl_ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
-        <!ENTITY manualtargets SYSTEM "file://$out/manual.db">
-      ]>
-      <targetset>
-        <targetsetinfo>
-            Allows for cross-referencing olinks between the manpages
-            and manual.
-        </targetsetinfo>
-
-        <document targetdoc="manual">&manualtargets;</document>
-      </targetset>
-      EOF
-    '';
-
 in rec {
   inherit generatedSources;
 
@@ -224,7 +194,6 @@ in rec {
       mkdir -p $dst
       xsltproc \
         ${manualXsltprocOptions} \
-        --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --stringparam id.warnings "1" \
         --nonet --output $dst/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
@@ -261,7 +230,6 @@ in rec {
 
       xsltproc \
         ${manualXsltprocOptions} \
-        --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/epub/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
         ${manual-combined}/manual-combined.xml
@@ -295,7 +263,6 @@ in rec {
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \
         --param man.break.after.slash 1 \
-        --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
         ${manual-combined}/man-pages-combined.xml
     '';
