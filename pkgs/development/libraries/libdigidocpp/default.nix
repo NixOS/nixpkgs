@@ -2,12 +2,12 @@
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
-  version = "3.14.11";
+  version = "3.14.12";
   pname = "libdigidocpp";
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     hash = "sha256-5QYKHwRB5nck5yqukX/UA+M3jFlBvkQ/ekB7JFIY5tI=";
+     hash = "sha256-82AH18KcrkD7mHDy+2c9v7E3Kj7Cb7jCoLfmo09D8PU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config xxd ];
