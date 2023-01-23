@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.1.6";
+  version = "2023.1.7";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
