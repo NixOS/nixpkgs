@@ -6495,6 +6495,13 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jboy = {
+    email = "jboy+nixos@bius.moe";
+    githubId = 2187261;
+    github = "jboynyc";
+    matrix = "@jboy:utwente.io";
+    name = "John Boy";
+  };
   jc = {
     name = "Josh Cooper";
     email = "josh@cooper.is";
