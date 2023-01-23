@@ -2,7 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , installShellFiles
-}: stdenv.mkDerivation rec {
+}:
+
+stdenv.mkDerivation rec {
   pname = "gti";
   version = "1.8.0";
 
@@ -24,7 +26,9 @@
   installPhase = ''
     install -D gti $out/bin/gti
     installManPage gti.6
-    installShellCompletion completions/gti.{bash,zsh}
+    installShellCompletion --cmd gti \
+      --bash completions/gti.bash \
+      --zsh completions/gti.zsh
   '';
 
   meta = with lib; {
