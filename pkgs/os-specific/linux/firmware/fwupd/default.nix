@@ -15,6 +15,7 @@
 , gusb
 , sqlite
 , libarchive
+, libredirect
 , curl
 , libjcat
 , elfutils
@@ -30,6 +31,7 @@
 , protobufc
 , python3
 , wrapGAppsNoGuiHook
+, ensureNewerSourcesForZipFilesHook
 , json-glib
 , bash-completion
 , shared-mime-info
@@ -85,13 +87,13 @@ let
 
   test-firmware =
     let
-      version = "unstable-2021-11-02";
+      version = "unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
         repo = "fwupd-test-firmware";
-        rev = "aaa2f9fd68a40684c256dd85b86093cba38ffd9d";
-        sha256 = "Slk7CNfkmvmOh3WtIBkPs3NYT96co6i8PwqcbpeVFgA=";
+        rev = "39954e434d63e20e85870dd1074818f48a0c08b7";
+        hash = "sha256-d4qG3fKyxkfN91AplRYqARFz+aRr+R37BpE450bPxi0=";
         passthru = {
           inherit src version; # For update script
           updateScript = unstableGitUpdater {
@@ -114,7 +116,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.4";
+    version = "1.8.9";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -123,7 +125,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-rfoHQ0zcKexBxA/vRg6Nlwlj/gx+hJ3sfzkyrbFh+IY=";
+      hash = "sha256-cZp5GsS6WYiuuT7EJ3i9ZdM8sHXQwJO1wE5eFoK+Uoo=";
     };
 
     patches = [
@@ -147,6 +149,8 @@ let
     ];
 
     nativeBuildInputs = [
+      # required for firmware zipping
+      ensureNewerSourcesForZipFilesHook
       meson
       ninja
       gi-docgen
@@ -187,7 +191,7 @@ let
       libmbim
       libcbor
       libqmi
-      xz # for liblzma.
+      xz # for liblzma
     ] ++ lib.optionals haveDell [
       libsmbios
     ] ++ lib.optionals haveFlashrom [
@@ -210,14 +214,9 @@ let
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
       "-Dplugin_modem_manager=enabled"
-      # Requires Meson 0.63
-      "-Dgresource_quirks=disabled"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
-      # Our builder only adds $lib/lib to rpath but some things link
-      # against libfwupdplugin which is in $out/lib.
-      "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
     ] ++ lib.optionals (!haveDell) [
       "-Dplugin_dell=disabled"
       "-Dplugin_synaptics_mst=disabled"
@@ -232,8 +231,7 @@ let
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
     dontWrapGApps = true;
 
-    # /etc/os-release not available in sandbox
-    # doCheck = true;
+    doCheck = true;
 
     # Environment variables
 
@@ -254,16 +252,18 @@ let
     postPatch = ''
       patchShebangs \
         contrib/generate-version-script.py \
-        meson_post_install.sh \
         po/test-deps
-
-      # This checks a version of a dependency of gi-docgen but gi-docgen is self-contained in Nixpkgs.
-      echo "Clearing docs/test-deps.py"
-      test -f docs/test-deps.py
-      echo > docs/test-deps.py
 
       substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
         --replace "gdbus" ${glib.bin}/bin/gdbus
+
+      # tests fail with: Failed to load SMBIOS: neither SMBIOS or DT found
+      sed -i 's/test(.*)//' plugins/lenovo-thinklmi/meson.build
+      sed -i 's/test(.*)//' plugins/mtd/meson.build
+      # fails on amd cpu
+      sed -i 's/test(.*)//' libfwupdplugin/meson.build
+      # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
+      sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
     '';
 
     preBuild = ''
@@ -273,6 +273,10 @@ let
 
     preCheck = ''
       addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
+
+      echo "12345678901234567890123456789012" > machine-id
+      export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
     '';
 
     preInstall = ''
@@ -349,7 +353,6 @@ let
       defaultDisabledPlugins = [
         "test"
         "test_ble"
-        "invalid"
       ];
 
       # For updating.

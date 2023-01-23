@@ -14055,6 +14055,13 @@
       fingerprint = "D2A2 F0A1 E7A8 5E6F B711  DEE5 63A4 4817 A52E AB7B";
     }];
   };
+  the-argus = {
+    email = "i.mcfarlane2002@gmail.com";
+    github = "the-argus";
+    name = "Ian McFarlane";
+    githubId = 70479099;
+    matrix = "@eyes1238:matrix.org";
+  };
   TheBrainScrambler = {
     email = "esthromeris@riseup.net";
     github = "TheBrainScrambler";

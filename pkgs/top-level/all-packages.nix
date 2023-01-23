@@ -27446,6 +27446,7 @@ with pkgs;
   roapi-http = callPackage ../servers/roapi/http.nix { };
 
   rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
+  rose-pine-icon-theme = callPackage ../data/icons/rose-pine { };
 
   route159 = callPackage ../data/fonts/route159 { };
 
@@ -37294,7 +37295,9 @@ with pkgs;
 
   colima = callPackage ../applications/virtualization/colima { };
 
-  lima = callPackage ../applications/virtualization/lima { };
+  lima = callPackage ../applications/virtualization/lima {
+    inherit (darwin) sigtool;
+  };
 
   logtop = callPackage ../tools/misc/logtop { };
 

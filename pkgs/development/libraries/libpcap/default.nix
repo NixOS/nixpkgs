@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, flex, bison, bluez, pkg-config, withBluez ? false }:
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, bluez
+, libxcrypt
+, pkg-config
+, withBluez ? false
+, withRemote ? false
+}:
 
 with lib;
 
@@ -11,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
   };
 
+  buildInputs = optionals withRemote [ libxcrypt ];
+
   nativeBuildInputs = [ flex bison ]
     ++ optionals withBluez [ bluez.dev pkg-config ];
 
@@ -20,6 +32,8 @@ stdenv.mkDerivation rec {
     "--with-pcap=${if stdenv.isLinux then "linux" else "bpf"}"
   ] ++ optionals stdenv.isDarwin [
     "--disable-universal"
+  ] ++ optionals withRemote [
+    "--enable-remote"
   ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)
     [ "ac_cv_linux_vers=2" ];
 
