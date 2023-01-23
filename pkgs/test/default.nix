@@ -51,7 +51,22 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php {});
 
-  pkg-configPackages = callPackage ./pkg-config-packages.nix { };
+  pkg-configPackages =
+    let
+      # pkg-configPackages test needs a Nixpkgs with allowUnsupportedPlatform
+      # in order to filter out the unsupported packages without throwing any errors
+      # tryEval would be too fragile, masking different problems as if they're
+      # unsupported platform problems.
+      allPkgs = import ../top-level {
+        system = pkgs.stdenv.hostPlatform.system;
+        localSystem = pkgs.stdenv.hostPlatform.system;
+        config = {
+          allowUnsupportedSystem = true;
+        };
+        overlays = [];
+      };
+    in
+    allPkgs.callPackage ./pkg-config-packages.nix { };
 
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
