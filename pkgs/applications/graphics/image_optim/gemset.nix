@@ -4,10 +4,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mylhwmh6n4xihxr9s3zj0lc286f5maxbqd4dgk3paqnd7afz88s";
+      sha256 = "08fmmswa9fwymwsa2gzlm856ak3y9kjxdzm4zdrcrfyxs2p8yqwc";
       type = "gem";
     };
-    version = "1.3.9";
+    version = "1.3.10";
   };
   fspath = {
     groups = ["default"];
@@ -25,20 +25,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1l3n59w1cbvfg2srfa14g3jdqwbkf7l86g4qrgfz3qps7zi0drg7";
+      sha256 = "02iw1plldayr1l8bdw2gshq0h083h0fxwji1m1nfhzikz917c07p";
       type = "gem";
     };
-    version = "0.31.1";
+    version = "0.31.3";
   };
   image_size = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "033k72f8n28psm89wv1qwsrnqyzz57ihyivyi442wha6vr9iyjz3";
+      sha256 = "10slvvyam8gkdjzlhb3wb21hp46ay18miyh1advwvyny660rmdsb";
       type = "gem";
     };
-    version = "3.0.2";
+    version = "3.2.0";
   };
   in_threads = {
     groups = ["default"];
