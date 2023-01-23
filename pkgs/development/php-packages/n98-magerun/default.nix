@@ -8,7 +8,7 @@ mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://files.magerun.net/n98-magerun-2.3.0.phar";
+    url = "https://files.magerun.net/n98-magerun-${version}.phar";
     sha256 = "b3e09dafccd4dd505a073c4e8789d78ea3def893cfc475a214e1154bff3aa8e4";
   };
 
@@ -19,9 +19,9 @@ mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    install -D $src $out/libexec/n98-magerun/n98-magerun.phar
+    install -D $src $out/libexec/n98-magerun/n98-magerun-${version}.phar
     makeWrapper ${php}/bin/php $out/bin/n98-magerun \
-      --add-flags "$out/libexec/n98-magerun/n98-magerun.phar" \
+      --add-flags "$out/libexec/n98-magerun/n98-magerun-${version}.phar" \
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
     runHook postInstall
   '';
