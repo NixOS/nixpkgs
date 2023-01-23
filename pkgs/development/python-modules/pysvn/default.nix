@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.18";
+  version = "1.9.20";
   format = "other";
 
   src = fetchurl {
-    url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
-    hash = "sha256-lUPsNumMYwZoiR1Gt/hqdLLoHOZybRxwvu9+eU1CY78=";
+    url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
+    hash = "sha256-LbAz+KjEY3nkSJAzJNwlnSRYoWr4i1ITRUPV3ZBH7cc=";
   };
 
   patches = [
@@ -62,8 +62,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  # FIXME https://github.com/NixOS/nixpkgs/issues/175227
-  # pythonImportsCheck = [ "pysvn" ];
+  pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
