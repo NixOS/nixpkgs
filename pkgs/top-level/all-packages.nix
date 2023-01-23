@@ -36014,6 +36014,8 @@ with pkgs;
 
   svaba = callPackage ../applications/science/biology/svaba { };
 
+  tandem-aligner = callPackage ../applications/science/biology/tandem-aligner { };
+
   tebreak = callPackage ../applications/science/biology/tebreak { };
 
   treemix = callPackage ../applications/science/biology/treemix { };
