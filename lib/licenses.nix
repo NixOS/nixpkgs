@@ -558,6 +558,12 @@ in mkLicense lset) ({
     redistributable = false;
   };
 
+  fair = {
+    fullName = "Fair License";
+    spdxId = "Fair";
+    free = true;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
