@@ -27404,6 +27404,7 @@ with pkgs;
   roapi-http = callPackage ../servers/roapi/http.nix { };
 
   rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
+  rose-pine-icon-theme = callPackage ../data/icons/rose-pine { };
 
   route159 = callPackage ../data/fonts/route159 { };
 
