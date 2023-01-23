@@ -15957,4 +15957,10 @@
     github = "jordanisaacs";
     githubId = 19742638;
   };
+  RossComputerGuy = {
+    name = "Tristan Ross";
+    email = "tristan.ross@midstall.com";
+    github = "RossComputerGuy";
+    githubId = 19699320;
+  };
 }
