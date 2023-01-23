@@ -194,7 +194,14 @@ class Renderer(markdown_it.renderer.RendererProtocol):
 
 class Converter:
     def __init__(self, manpage_urls: Dict[str, str]):
-        self._md = markdown_it.MarkdownIt(renderer_cls=Renderer)
+        self._md = markdown_it.MarkdownIt(
+            "commonmark",
+            {
+                'maxNesting': 100,   # default is 20
+                'html': False,       # not useful since we target many formats
+            },
+            renderer_cls=Renderer
+        )
         # TODO maybe fork the plugin and have only a single rule for all?
         self._md.use(container_plugin, name="{.note}")
         self._md.use(container_plugin, name="{.important}")
