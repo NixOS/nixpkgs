@@ -31,6 +31,6 @@ mkDerivation {
     license = licenses.mit;
     homepage = "https://magerun.net/";
     changelog = "https://magerun.net/category/magerun/";
-    maintainers = with maintainers; [ offline ] ++ teams.php.members;
+    maintainers = teams.php.member;
   };
 }
