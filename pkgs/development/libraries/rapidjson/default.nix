@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  doCheck = !stdenv.hostPlatform.isStatic;
+  doCheck = !stdenv.hostPlatform.isStatic && (stdenv.buildPlatform == stdenv.hostPlatform);
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
