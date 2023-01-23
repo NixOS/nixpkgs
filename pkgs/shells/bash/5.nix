@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
+  separateDebugInfo = true;
+
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
