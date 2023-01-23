@@ -172,7 +172,6 @@
   ./programs/geary.nix
   ./programs/git.nix
   ./programs/gnome-disks.nix
-  ./programs/gnome-documents.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
   ./programs/gpaste.nix
