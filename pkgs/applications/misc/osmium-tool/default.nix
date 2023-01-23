@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmium-tool";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "osmium-tool";
     rev = "v${version}";
-    sha256 = "sha256-xedunFzar44o+b/45isXWacDcC81wWkxgGwnpLPH/n0=";
+    sha256 = "sha256-xV/1LFby0L/o648XEQQ9gS9/eHssWhMIG7R1E8bfIDU=";
   };
 
   nativeBuildInputs = [
