@@ -20,8 +20,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-7ToNiRSWxe9nNcaWWmS6bhVqWMEwXN4uiwtjAmuK5qw=";
+    # tagged commit doesn't include all test files
+    rev = "dd2aa000333977d0848f0b62849083c118f99181";
+    hash = "sha256-f4IgSOzTPGzFCOxkZ9Zy22oCka9MHXGL2AgBC6qC6jU=";
   };
 
   postPatch = ''
