@@ -1366,6 +1366,8 @@ with pkgs;
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
+  dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
+
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
   gamemode = callPackage ../tools/games/gamemode {

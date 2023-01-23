@@ -8291,6 +8291,12 @@
       fingerprint = "5B93 9CFA E8FC 4D8F E07A  3AEA DFE1 D4A0 1733 7E2A";
     }];
   };
+  lorenz = {
+    name = "Lorenz Brun";
+    email = "lorenz@brun.one";
+    github = "lorenz";
+    githubId = 5228892;
+  };
   lorenzleutgeb = {
     email = "lorenz@leutgeb.xyz";
     github = "lorenzleutgeb";
