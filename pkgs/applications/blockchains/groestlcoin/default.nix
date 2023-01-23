@@ -24,21 +24,21 @@
 }:
 
 let
-  version = "23.0";
   desktop = fetchurl {
-    url = "https://raw.githubusercontent.com/Groestlcoin/packaging/${version}/debian/groestlcoin-qt.desktop";
+    # de45048 is the last commit when the debian/groestlcoin-qt.desktop file was changed
+    url = "https://raw.githubusercontent.com/Groestlcoin/packaging/de4504844e47cf2c7604789650a5db4f3f7a48aa/debian/groestlcoin-qt.desktop";
     sha256 = "0mxwq4jvcip44a796iwz7n1ljkhl3a4p47z7qlsxcfxw3zmm0k0k";
   };
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  inherit version;
+  version = "24.0.1";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
-    sha256 = "1ag7wpaw4zssx1g482kziqr95yl2vk9r332689s3093xv9i9pz4s";
+    sha256 = "0k14y3iv5l26r820wzkwqxi67kwh26i0yq20ffd72shicjs1d3qc";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]
