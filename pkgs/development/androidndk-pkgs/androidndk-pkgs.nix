@@ -131,9 +131,7 @@ rec {
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
       # Android needs executables linked with -pie since version 5.0
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
-      echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
-      echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
-      echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
+      echo "-target ${targetInfo.triple}" >> $out/nix-support/cc-cflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
         # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake
         echo "--fix-cortex-a8" >> $out/nix-support/cc-ldflags

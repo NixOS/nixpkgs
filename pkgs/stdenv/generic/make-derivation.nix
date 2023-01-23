@@ -430,6 +430,14 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+    } // lib.optionalAttrs (stdenv.targetPlatform.useAndroidPrebuilt) {
+      # NOTE(@cidkidnix):
+      # muldefs isn't a hardening flag, so we set it here on android since
+      # bionic still needs it
+      LD_FLAGS = "-z,muldefs $LD_FLAGS";
+      # Same thing with CXXFLAGS
+      # -Xclang and -mnoexecstack aren't really widely used like this in nixpkgs
+      CXXFLAGS = "-Xclang -mnoexecstack $CXXFLAGS";
     };
 
   validity = checkMeta { inherit meta attrs; };
