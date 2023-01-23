@@ -2,8 +2,9 @@ import collections
 import json
 import os
 import sys
-from typing import Any, Dict, List
 from collections.abc import MutableMapping, Sequence
+from typing import Any, Dict, List
+from frozendict import frozendict
 
 # for MD conversion
 import markdown_it
@@ -14,8 +15,6 @@ from mdit_py_plugins.container import container_plugin
 from mdit_py_plugins.deflist import deflist_plugin
 from mdit_py_plugins.myst_role import myst_role_plugin
 from xml.sax.saxutils import escape, quoteattr
-
-manpage_urls = json.load(open(os.getenv('MANPAGE_URLS')))
 
 class Renderer(markdown_it.renderer.RendererProtocol):
     __output__ = "docbook"
@@ -187,21 +186,31 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             title = f"<refentrytitle>{escape(page)}</refentrytitle>"
             vol = f"<manvolnum>{escape(section)}</manvolnum>"
             ref = f"<citerefentry>{title}{vol}</citerefentry>"
-            if man in manpage_urls:
-                return f"<link xlink:href={quoteattr(manpage_urls[man])}>{ref}</link>"
+            if man in env['manpage_urls']:
+                return f"<link xlink:href={quoteattr(env['manpage_urls'][man])}>{ref}</link>"
             else:
                 return ref
         raise NotImplementedError("md node not supported yet", token)
 
-md = (
-    markdown_it.MarkdownIt(renderer_cls=Renderer)
-    # TODO maybe fork the plugin and have only a single rule for all?
-    .use(container_plugin, name="{.note}")
-    .use(container_plugin, name="{.important}")
-    .use(container_plugin, name="{.warning}")
-    .use(deflist_plugin)
-    .use(myst_role_plugin)
-)
+class Converter:
+    def __init__(self, manpage_urls: Dict[str, str]):
+        self._md = markdown_it.MarkdownIt(renderer_cls=Renderer)
+        # TODO maybe fork the plugin and have only a single rule for all?
+        self._md.use(container_plugin, name="{.note}")
+        self._md.use(container_plugin, name="{.important}")
+        self._md.use(container_plugin, name="{.warning}")
+        self._md.use(deflist_plugin)
+        self._md.use(myst_role_plugin)
+
+        self._manpage_urls = frozendict(manpage_urls)
+
+    def render(self, src: str) -> str:
+        env = {
+            'manpage_urls': self._manpage_urls
+        }
+        return self._md.render(src, env)
+
+md = Converter(json.load(open(os.getenv('MANPAGE_URLS'))))
 
 # converts in-place!
 def convertMD(options: Dict[str, Any]) -> str:

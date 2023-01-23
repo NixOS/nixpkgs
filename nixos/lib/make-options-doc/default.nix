@@ -177,6 +177,7 @@ in rec {
         in [
           markdown-it-py
           mdit-py-plugins
+          p.frozendict
         ]))
     ];
   } ''
