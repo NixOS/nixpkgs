@@ -583,15 +583,15 @@
     <listitem>
      <para>
       Specifies the NixOS target host. By setting this to something other than
-      <replaceable>localhost</replaceable>, the system activation will happen
+      an empty string, the system activation will happen
       on the remote host instead of the local machine. The remote host needs to
       be accessible over ssh, and for the commands <option>switch</option>,
       <option>boot</option> and <option>test</option> you need root access.
      </para>
 
      <para>
-      If <option>--build-host</option> is not explicitly specified, building
-      will take place locally.
+      If <option>--build-host</option> is not explicitly specified or empty,
+      building will take place locally.
      </para>
 
      <para>
