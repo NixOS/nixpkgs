@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 if ENV['BUNDLER_CHECKSUM_VERIFICATION_OPT_IN'] # this verification is still experimental
   $LOAD_PATH.unshift(File.expand_path("vendor/gems/bundler-checksum/lib", __dir__))
   require 'bundler-checksum'
-  Bundler::Checksum.patch!
+  BundlerChecksum.patch!
 end
 
 gem 'bundler-checksum', '~> 0.1.0', path: 'vendor/gems/bundler-checksum', require: false
@@ -37,7 +37,7 @@ gem 'view_component', '~> 2.74.1'
 gem 'default_value_for', '~> 3.4.0'
 
 # Supported DBs
-gem 'pg', '~> 1.4.3'
+gem 'pg', '~> 1.4.5'
 
 gem 'rugged', '~> 1.2'
 gem 'grape-path-helpers', '~> 1.7.1'
@@ -84,7 +84,7 @@ gem 'gssapi', group: :kerberos
 gem 'timfel-krb5-auth', '~> 0.8', group: :kerberos
 
 # Spam and anti-bot protection
-gem 'recaptcha', '~> 4.11', require: 'recaptcha/rails'
+gem 'recaptcha', '~> 5.12', require: 'recaptcha/rails'
 gem 'akismet', '~> 3.0'
 gem 'invisible_captcha', '~> 2.0.0'
 
@@ -113,7 +113,7 @@ gem 'gpgme', '~> 2.0.22'
 # GitLab fork with several improvements to original library. For full list of changes
 # see https://github.com/intridea/omniauth-ldap/compare/master...gitlabhq:master
 gem 'gitlab_omniauth-ldap', '~> 2.2.0', require: 'omniauth-ldap'
-gem 'net-ldap', '~> 0.16.3'
+gem 'net-ldap', '~> 0.17.1'
 
 # API
 gem 'grape', '~> 1.5.2'
@@ -200,7 +200,7 @@ gem 'diffy', '~> 3.4'
 gem 'diff_match_patch', '~> 0.1.0'
 
 # Application server
-gem 'rack', '~> 2.2.4'
+gem 'rack', '~> 2.2.6', '>= 2.2.6.2'
 # https://github.com/zombocom/rack-timeout/blob/master/README.md#rails-apps-manually
 gem 'rack-timeout', '~> 0.6.3', require: 'rack/timeout/base'
 
@@ -304,7 +304,7 @@ gem 'fast_blank'
 gem 'gitlab-chronic', '~> 0.10.5'
 gem 'gitlab_chronic_duration', '~> 0.10.6.2'
 
-gem 'rack-proxy', '~> 0.7.4'
+gem 'rack-proxy', '~> 0.7.6'
 
 gem 'sassc-rails', '~> 2.1.0'
 gem 'autoprefixer-rails', '10.2.5.1'
@@ -358,12 +358,12 @@ gem 'prometheus-client-mmap', '~> 0.17', require: 'prometheus/client'
 gem 'warning', '~> 1.3.0'
 
 group :development do
-  gem 'lefthook', '~> 1.2.6', require: false
+  gem 'lefthook', '~> 1.2.7', require: false
   gem 'rubocop'
   gem 'solargraph', '~> 0.47.2', require: false
 
   gem 'letter_opener_web', '~> 2.0.0'
-  gem 'lookbook', '~> 1.2', '>= 1.2.1'
+  gem 'lookbook', '~> 1.4', '>= 1.4.5'
 
   # Better errors handler
   gem 'better_errors', '~> 2.9.1'
@@ -395,7 +395,7 @@ group :development, :test do
   gem 'spring', '~> 4.1.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 9.1.0', require: false
+  gem 'gitlab-styles', '~> 9.2.0', require: false
 
   gem 'haml_lint', '~> 0.40.0', require: false
   gem 'bundler-audit', '~> 0.7.0.1', require: false
@@ -538,7 +538,7 @@ gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: f
 gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer'
 
 # File encryption
-gem 'lockbox', '~> 0.6.2'
+gem 'lockbox', '~> 1.1.1'
 
 # Email validation
 gem 'valid_email', '~> 0.1'
@@ -574,6 +574,7 @@ gem 'arr-pm', '~> 0.0.12'
 
 # Apple plist parsing
 gem 'CFPropertyList'
+gem 'app_store_connect'
 
 # For phone verification
 gem 'telesignenterprise', '~> 2.2'
