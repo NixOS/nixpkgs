@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+  postFixup = ''
+    mv $out/bin/OpenMVS/* $out/bin
+    rmdir $out/bin/OpenMVS
+  '';
+
   meta = {
     description = "Open Multi-View Stereo reconstruction library";
     homepage = "https://github.com/cdcseacave/openMVS";
