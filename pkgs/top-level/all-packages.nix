@@ -1874,7 +1874,6 @@ with pkgs;
   git-town = callPackage ../applications/version-management/git-town { };
 
   git-trim = callPackage ../applications/version-management/git-trim {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -3896,6 +3895,8 @@ with pkgs;
   cawbird = callPackage ../applications/networking/cawbird { };
 
   cde = callPackage ../tools/package-management/cde { };
+
+  cdxgen = callPackage ../tools/security/cdxgen { };
 
   ceres-solver = callPackage ../development/libraries/ceres-solver {
     gflags = null; # only required for examples/tests
@@ -8546,9 +8547,7 @@ with pkgs;
 
   jot = callPackage ../applications/misc/jot { };
 
-  journaldriver = callPackage ../tools/misc/journaldriver {
-    openssl = openssl_1_1;
-  };
+  journaldriver = callPackage ../tools/misc/journaldriver { };
 
   jp = callPackage ../development/tools/jp { };
 
@@ -15565,7 +15564,6 @@ with pkgs;
   };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
   cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
@@ -15620,6 +15618,7 @@ with pkgs;
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-careful = callPackage ../development/tools/rust/cargo-careful { };
   cargo-chef = callPackage ../development/tools/rust/cargo-chef { };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
@@ -16114,7 +16113,6 @@ with pkgs;
 
   cliscord = callPackage ../misc/cliscord {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
 
   clisp = callPackage ../development/interpreters/clisp {
@@ -21187,17 +21185,15 @@ with pkgs;
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc ["glibc" "musl" "wasilibc"]
-      then glibcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
+      then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
         then libcCross
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv
-    else if stdenv.hostPlatform.isNetBSD
-      then null
     else libiconvReal;
 
-  glibcIconv = libc: let
+  libcIconv = libc: let
     inherit (libc) pname version;
     libcDev = lib.getDev libc;
   in runCommand "${pname}-iconv-${version}" { strictDeps = true; } ''
@@ -28832,8 +28828,6 @@ with pkgs;
   # This alias should live in aliases.nix but that would cause Hydra not to evaluate/build the packages.
   # If you turn this into "real" alias again, please add it to pkgs/top-level/packages-config.nix again too
   emacsPackages = emacs.pkgs;
-
-  inherit (gnome) empathy;
 
   emptty = callPackage ../applications/display-managers/emptty {};
 
