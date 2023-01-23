@@ -199,6 +199,7 @@ class Converter:
             {
                 'maxNesting': 100,   # default is 20
                 'html': False,       # not useful since we target many formats
+                'typographer': True, # required for smartquotes
             },
             renderer_cls=Renderer
         )
@@ -208,6 +209,7 @@ class Converter:
         self._md.use(container_plugin, name="{.warning}")
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
+        self._md.enable(["smartquotes", "replacements"])
 
         self._manpage_urls = frozendict(manpage_urls)
 
