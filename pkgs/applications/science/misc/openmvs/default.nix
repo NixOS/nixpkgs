@@ -1,4 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, eigen, opencv, cgal, ceres-solver, boost, vcg, glfw, zstd }:
+{ lib
+, boost
+, breakpad
+, ceres-solver
+, cgal
+, cmake
+, eigen
+, fetchFromGitHub
+, glfw
+, libjpeg
+, libpng
+, libtiff
+, opencv
+, openmp
+, pkg-config
+, stdenv
+, vcg
+, zstd
+}:
 
 let
   boostWithZstd = boost.overrideAttrs (old: {
@@ -20,7 +38,20 @@ stdenv.mkDerivation rec {
   # SSE is enabled by default
   cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
-  buildInputs = [ eigen opencv cgal ceres-solver vcg glfw boostWithZstd ];
+  buildInputs = [
+    boostWithZstd
+    breakpad
+    ceres-solver
+    cgal
+    eigen
+    glfw
+    libjpeg
+    libpng
+    libtiff
+    opencv
+    openmp
+    vcg
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
