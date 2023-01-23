@@ -13,7 +13,6 @@
 
   <xsl:param name="revision" />
   <xsl:param name="documentType" />
-  <xsl:param name="program" />
   <xsl:param name="variablelistId" />
   <xsl:param name="optionIdPrefix" />
 
@@ -149,9 +148,6 @@
                   <xsl:attribute name="xlink:href">https://github.com/NixOS/nixpkgs/blob/<xsl:value-of select="$revision"/>/<xsl:value-of select="@value"/></xsl:attribute>
                 </xsl:otherwise>
               </xsl:choose>
-            </xsl:when>
-            <xsl:when test="$revision != 'local' and $program = 'nixops' and contains(@value, '/nix/')">
-              <xsl:attribute name="xlink:href">https://github.com/NixOS/nixops/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>
