@@ -174,6 +174,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     grumphp = callPackage ../development/php-packages/grumphp { };
 
+    n98-magerun = callPackage ../development/php-packages/n98-magerun { };
+
+    n98-magerun2 = callPackage ../development/php-packages/n98-magerun2 { };
+
     phan = callPackage ../development/php-packages/phan { };
 
     phing = callPackage ../development/php-packages/phing { };
