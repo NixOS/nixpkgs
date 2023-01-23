@@ -306,6 +306,7 @@ if OTD_DOCUMENT_TYPE == 'appendix':
     print("""  <title>Configuration Options</title>""")
 print(f"""<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"
                         xmlns:nixos="tag:nixos.org"
+                        xmlns="http://docbook.org/ns/docbook"
              xml:id="{OTD_VARIABLE_LIST_ID}">""")
 
 for name in keys:
