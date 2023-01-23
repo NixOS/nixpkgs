@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "1.8.6";
+  version = "1.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     rev = "refs/tags/${version}";
-    hash = "sha256-5AyOCeRFiV7rdmoBPx03Xju6eTR/3jiE+HQBiEmdzmo=";
+    hash = "sha256-zlOIZYwNoUkznRcwNn8LQIEM4UuG6mPnqQIH+O4Jun4=";
   };
 
   preConfigure = ''

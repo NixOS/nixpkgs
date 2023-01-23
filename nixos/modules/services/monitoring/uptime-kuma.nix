@@ -7,6 +7,8 @@ let
 in
 {
 
+  meta.maintainers = [ lib.maintainers.julienmalka ];
+
   options = {
     services.uptime-kuma = {
       enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set.");
@@ -48,7 +50,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = cfg.settings;
-      path = lib.mkIf cfg.appriseSupport (with pkgs; [ apprise ]);
+      path = with pkgs; [ unixtools.ping ] ++ lib.optional cfg.appriseSupport apprise;
       serviceConfig = {
         Type = "simple";
         StateDirectory = "uptime-kuma";

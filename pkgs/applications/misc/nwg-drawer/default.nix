@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "nwg-drawer";
-  version = "0.3.0";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-o69ZCtIT0jh4QnlspiAh58aA61aFkkKu0FdmscHLMIk=";
+    sha256 = "sha256-OcOF43SOlseb6UGTxLtGH0MRokZob0x+cczpdJc8Hq4=";
   };
 
-  vendorSha256 = "sha256-Twipdrt3XZVrzJvElEGbKaJRMnop8fIFMFnriPTSS14=";
+  vendorHash = "sha256-RehZ86XuFs1kbm9V3cgPz1SPG3izK7/6fHQjPTHOYZs=";
 
   buildInputs = [ cairo gobject-introspection gtk3 gtk-layer-shell ];
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];

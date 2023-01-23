@@ -52,7 +52,7 @@ let
     , cgotoSupport ? false
     , embedSupport ? false
     , ipv6Support ? true
-    , systemdSupport ? stdenv.isLinux
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:

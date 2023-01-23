@@ -78,7 +78,7 @@ For example:
 
 ::: {#ex-options-declarations-util-mkEnableOption-magic .example}
 ```nix
-lib.mkEnableOption "magic"
+lib.mkEnableOption (lib.mdDoc "magic")
 # is like
 lib.mkOption {
   type = lib.types.bool;
@@ -113,7 +113,7 @@ Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
 ```nix
-lib.mkPackageOption pkgs "hello" { }
+lib.mkPackageOptionMD pkgs "hello" { }
 # is like
 lib.mkOption {
   type = lib.types.package;
@@ -125,7 +125,7 @@ lib.mkOption {
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
 ```nix
-lib.mkPackageOption pkgs "GHC" {
+lib.mkPackageOptionMD pkgs "GHC" {
   default = [ "ghc" ];
   example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }

@@ -209,7 +209,7 @@ let
 in rec {
   inherit generatedSources;
 
-  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
+  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook optionsUsedDocbook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"

@@ -130,6 +130,13 @@
           <link xlink:href="options.html#opt-services.photoprism.enable">services.photoprism</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/languitar/autosuspend">autosuspend</link>,
+          a python daemon that suspends a system if certain conditions
+          are met, or not met.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
@@ -271,6 +278,17 @@
       </listitem>
       <listitem>
         <para>
+          Kime has been updated from 2.5.6 to 3.0.2 and the
+          <literal>i18n.inputMethod.kime.config</literal> option has
+          been removed. Users should use
+          <literal>daemonModules</literal>,
+          <literal>iconColor</literal>, and
+          <literal>extraConfig</literal> options under
+          <literal>i18n.inputMethod.kime</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>llvmPackages_rocm.llvm</literal> will not contain
           <literal>clang</literal> or <literal>compiler-rt</literal>.
           <literal>llvmPackages_rocm.clang</literal> will not contain
@@ -278,16 +296,6 @@
           <literal>llvmPackages_rocm.clangNoCompilerRt</literal> has
           been removed in favor of using
           <literal>llvmPackages_rocm.clang-unwrapped</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The Nginx module now validates the syntax of config files at
-          build time. For more complex configurations (using
-          <literal>include</literal> with out-of-store files notably)
-          you may need to disable this check by setting
-          <link linkend="opt-services.nginx.validateConfig">services.nginx.validateConfig</link>
-          to <literal>false</literal>.
         </para>
       </listitem>
       <listitem>
@@ -414,6 +422,22 @@
           <literal>nextcloud-occ</literal> which can be executed from
           any user and switches to the configured mastodon user with
           sudo and sources the environment variables.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          DocBook option documentation, which has been deprecated since
+          22.11, will now cause a warning when documentation is built.
+          Out-of-tree modules should migrate to using CommonMark
+          documentation as outlined in
+          <xref linkend="sec-option-declarations" /> to silence this
+          warning.
+        </para>
+        <para>
+          DocBook option documentation support will be removed in the
+          next release and CommonMark will become the default. DocBook
+          option documentation that has not been migrated until then
+          will no longer render properly or cause errors.
         </para>
       </listitem>
       <listitem>

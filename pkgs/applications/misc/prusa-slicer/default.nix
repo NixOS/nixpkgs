@@ -26,12 +26,11 @@
 , openvdb
 , pcre
 , qhull
-, systemd
 , tbb
 , wxGTK31
 , xorg
 , fetchpatch
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 let
   wxGTK-prusa = wxGTK31.overrideAttrs (old: rec {

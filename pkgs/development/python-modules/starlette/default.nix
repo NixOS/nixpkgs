@@ -6,20 +6,15 @@
 
 # runtime
 , ApplicationServices
-, aiofiles
 , anyio
-, contextlib2
 , itsdangerous
 , jinja2
 , python-multipart
 , pyyaml
+, httpx
 , typing-extensions
 
 # tests
-, requests
-, aiosqlite
-, databases
-, httpx
 , pytestCheckHook
 , pythonOlder
 , trio
@@ -30,7 +25,7 @@ buildPythonPackage rec {
   version = "0.23.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
@@ -49,25 +44,19 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    aiofiles
     anyio
     itsdangerous
     jinja2
     python-multipart
     pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
+    httpx
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
 
   nativeCheckInputs = [
-    aiosqlite
-    databases
-    httpx
     pytestCheckHook
     trio
     typing-extensions

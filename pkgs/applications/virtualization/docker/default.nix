@@ -15,7 +15,7 @@ rec {
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
-      , withSystemd ? stdenv.isLinux, systemd
+      , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
       , withBtrfs ? stdenv.isLinux, btrfs-progs
       , withLvm ? stdenv.isLinux, lvm2
       , withSeccomp ? stdenv.isLinux, libseccomp

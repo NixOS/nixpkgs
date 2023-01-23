@@ -61,7 +61,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       specialisation.reloadWithErrorsSystem.configuration = {
         services.nginx.package = pkgs.nginxMainline;
-        services.nginx.virtualHosts."hello".extraConfig = "access_log /does/not/exist.log;";
+        services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
       };
     };
   };

@@ -26,8 +26,7 @@
 , python3
 , rustPlatform
 , openssl
-, systemd
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
 , rsync
 , withCockpit ? true

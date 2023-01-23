@@ -8,19 +8,15 @@
 }:
 
 buildGoModule rec {
-  version = "2.6.1";
+  version = "2.7.1";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-6g0tzI6ZW+wwbPrNTdj0t2H0/M8+M9ioJl6iPL0mAtY=";
+    sha256 = "sha256-k/HfFeVQBubKMYERhgXKN0Pma1oj9xz1wxlHIjikAzo=";
   };
-
-  patches = [
-    ./go119.patch
-  ];
 
   vendorSha256 = null;
 
