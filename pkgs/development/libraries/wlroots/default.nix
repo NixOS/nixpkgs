@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -27,7 +28,7 @@
 }:
 
 let
-  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], extraPatch ? "" }:
+  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], extraPatch ? "", patches ? [ ] }:
     stdenv.mkDerivation rec {
       pname = "wlroots";
       inherit version;
@@ -40,6 +41,7 @@ let
         inherit hash;
       };
 
+      inherit patches;
       postPatch = extraPatch;
 
       # $out for the library and $examples for the example programs (in examples):
@@ -129,6 +131,13 @@ rec {
       substituteInPlace backend/drm/meson.build \
         --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
     '';
+    patches = [
+      (fetchpatch2 {
+        # render/egl: fix uninitialized pointers in init_dmabuf_formats
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/ed71915742160f2b9157adbad79364e22ab7ebda.patch";
+        hash = "sha256-nNE+mBfLG3Q8PC3ly8GZXQZcoIoBLbcet7nxip6Ut0w=";
+      })
+    ];
   };
 
   wlroots = wlroots_0_15;
