@@ -5,8 +5,9 @@
 , redis
 , pytestCheckHook
 , process-tests
-, pkgs
 , withDjango ? false, django-redis
+, gevent
+, eventlet
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,11 @@ buildPythonPackage rec {
   ] ++ lib.optional withDjango django-redis;
 
   nativeCheckInputs = [
+    eventlet
+    gevent
     pytestCheckHook
     process-tests
-    pkgs.redis
+    redis
   ];
 
   disabledTests = [
@@ -37,10 +40,13 @@ buildPythonPackage rec {
     "test_reset_all_signalizes"
   ];
 
+  doCheck = !stdenv.isLinux;  # AttributeError: 'object' object has no attribute 'register_script'
+                              # FileNotFoundError: [Errno 2] No such file or directory: 'redis-server'
+
   meta = with lib; {
     homepage = "https://github.com/ionelmc/python-redis-lock";
     license = licenses.bsd2;
     description = "Lock context manager implemented via redis SETNX/BLPOP";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }
