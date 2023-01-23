@@ -1,22 +1,19 @@
-{ lib, buildFHSUserEnv, version, src }:
+{ lib, buildFHSUserEnv
+, zlib, git, xdg-user-dirs
+, python, setuptools, pip, bottle, platformio-core
+}:
 
 let
-  pio-pkgs = pkgs:
-    let
-      python = pkgs.python3;
-      platformio = python.pkgs.callPackage ./core.nix { inherit version src; };
-    in
-    (with pkgs; [
-      zlib
-      git
-      xdg-user-dirs
-    ]) ++ (with python.pkgs; [
-      python
-      setuptools
-      pip
-      bottle
-      platformio
-    ]);
+  pio-pkgs = _: [
+    zlib
+    git
+    xdg-user-dirs
+    python
+    setuptools
+    pip
+    bottle
+    platformio-core
+  ];
 
 in
 buildFHSUserEnv {
@@ -38,7 +35,7 @@ buildFHSUserEnv {
     mkdir -p $out/lib/udev/rules.d
 
     ln -s $out/bin/platformio $out/bin/pio
-    ln -s ${src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
+    ln -s ${platformio-core.src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
   runScript = "platformio";
