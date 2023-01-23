@@ -33,6 +33,11 @@ buildGoModule rec {
     ldflags="-X main.gitCommit=$(cat .git-revision)"
   '';
 
+  CGO_ENABLED = if stdenv.hostPlatform.isStatic then "0" else "1";
+  GO_EXTLINK_ENABLED = if stdenv.hostPlatform.isStatic then "0" else "1";
+  ldflags = lib.optionals stdenv.hostPlatform.isStatic [ "-w" "-extldflags" "-static" ];
+  tags = lib.optionals stdenv.hostPlatform.isStatic [ "netgo" ];
+
   passthru.tests.version = testers.testVersion {
     package = manifest-tool;
   };
