@@ -29,6 +29,8 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [
+    "cmd/ansible-operator"
+    "cmd/helm-operator"
     "cmd/operator-sdk"
   ];
 
