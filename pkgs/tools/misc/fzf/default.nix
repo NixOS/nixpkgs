@@ -2,6 +2,7 @@
 , lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , writeText
 , writeShellScriptBin
 , runtimeShell
@@ -44,6 +45,16 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
+  ];
+
+  patches = [
+    # fix for test failure on 32-bit platforms
+    # can be removed in the next release of fzf
+    # https://github.com/junegunn/fzf/issues/3127
+    (fetchpatch {
+      url = "https://github.com/junegunn/fzf/commit/aa7361337d3f78ae1e32283ba395446025323abb.patch";
+      hash = "sha256-ZmBdJa7eq9f58f2pL7QrtDSApkQJQBH/Em12J5xk3Q4=";
+    })
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
