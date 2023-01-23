@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   #       `l_notebook1'; jamin-callbacks.o:/build/jamin-0.95.0/src/hdeq.h:64: first defined here
   NIX_CFLAGS_COMPILE = "-fcommon";
 
-  NIX_LDFLAGS = "-ldl";
-
   postInstall = ''
     wrapProgram $out/bin/jamin --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa
   '';
