@@ -94,10 +94,6 @@ let
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
-      # In uclibc cases, libgomp needs an additional '-ldl'
-      # and as I don't know how to pass it, I disable libgomp.
-      "--disable-libgomp"
     ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
