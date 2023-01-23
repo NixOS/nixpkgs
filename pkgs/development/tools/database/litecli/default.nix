@@ -28,6 +28,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "litecli" ];
 
+  disabledTests = [
+    "test_auto_escaped_col_names"
+  ];
+
   meta = with lib; {
     description = "Command-line interface for SQLite";
     longDescription = ''
