@@ -4,7 +4,6 @@ import os
 import sys
 from typing import Any, Dict, List
 from collections.abc import MutableMapping, Sequence
-import inspect
 
 # for MD conversion
 import markdown_it
@@ -22,16 +21,39 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     __output__ = "docbook"
     def __init__(self, parser=None):
         self.rules = {
-            k: v
-            for k, v in inspect.getmembers(self, predicate=inspect.ismethod)
-            if not (k.startswith("render") or k.startswith("_"))
-        } | {
-            "container_{.note}_open": self._note_open,
-            "container_{.note}_close": self._note_close,
-            "container_{.important}_open": self._important_open,
-            "container_{.important}_close": self._important_close,
-            "container_{.warning}_open": self._warning_open,
-            "container_{.warning}_close": self._warning_close,
+            'text': self.text,
+            'paragraph_open': self.paragraph_open,
+            'paragraph_close': self.paragraph_close,
+            'hardbreak': self.hardbreak,
+            'softbreak': self.softbreak,
+            'code_inline': self.code_inline,
+            'code_block': self.code_block,
+            'link_open': self.link_open,
+            'link_close': self.link_close,
+            'list_item_open': self.list_item_open,
+            'list_item_close': self.list_item_close,
+            'bullet_list_open': self.bullet_list_open,
+            'bullet_list_close': self.bullet_list_close,
+            'em_open': self.em_open,
+            'em_close': self.em_close,
+            'strong_open': self.strong_open,
+            'strong_close': self.strong_close,
+            'fence': self.fence,
+            'blockquote_open': self.blockquote_open,
+            'blockquote_close': self.blockquote_close,
+            'dl_open': self.dl_open,
+            'dl_close': self.dl_close,
+            'dt_open': self.dt_open,
+            'dt_close': self.dt_close,
+            'dd_open': self.dd_open,
+            'dd_close': self.dd_close,
+            'myst_role': self.myst_role,
+            "container_{.note}_open": self.note_open,
+            "container_{.note}_close": self.note_close,
+            "container_{.important}_open": self.important_open,
+            "container_{.important}_close": self.important_close,
+            "container_{.warning}_open": self.warning_open,
+            "container_{.warning}_close": self.warning_close,
         }
     def render(self, tokens: Sequence[Token], options: OptionsDict, env: MutableMapping) -> str:
         assert '-link-tag-stack' not in env
@@ -113,17 +135,17 @@ class Renderer(markdown_it.renderer.RendererProtocol):
         return "<para><blockquote>"
     def blockquote_close(self, token, tokens, i, options, env):
         return "</blockquote></para>"
-    def _note_open(self, token, tokens, i, options, env):
+    def note_open(self, token, tokens, i, options, env):
         return "<para><note>"
-    def _note_close(self, token, tokens, i, options, env):
+    def note_close(self, token, tokens, i, options, env):
         return "</note></para>"
-    def _important_open(self, token, tokens, i, options, env):
+    def important_open(self, token, tokens, i, options, env):
         return "<para><important>"
-    def _important_close(self, token, tokens, i, options, env):
+    def important_close(self, token, tokens, i, options, env):
         return "</important></para>"
-    def _warning_open(self, token, tokens, i, options, env):
+    def warning_open(self, token, tokens, i, options, env):
         return "<para><warning>"
-    def _warning_close(self, token, tokens, i, options, env):
+    def warning_close(self, token, tokens, i, options, env):
         return "</warning></para>"
     # markdown-it emits tokens based on the html syntax tree, but docbook is
     # slightly different. html has <dl>{<dt/>{<dd/>}}</dl>,
