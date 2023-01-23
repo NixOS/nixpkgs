@@ -188,6 +188,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    "-Db_lundef=false"
+    "-Dxattr=false"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
