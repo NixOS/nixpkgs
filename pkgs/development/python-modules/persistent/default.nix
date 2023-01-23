@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "4.9.1";
+  version = "5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pfkeAJD5OS/TJNl/TCpjbJI5lYKCOM2i4/vMaxu8RoY=";
+    hash = "sha256-hx5jxSExFgeVzcjpw90xP4bg3/NMFRyY3NkSPG2M5nM=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatic persistence for Python objects";
     homepage = "https://github.com/zopefoundation/persistent/";
+    changelog = "https://github.com/zopefoundation/persistent/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ ];
   };

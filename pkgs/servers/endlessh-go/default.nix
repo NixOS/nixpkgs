@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "endlessh-go";
-  version = "20220731";
+  version = "20221012";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = version;
-    sha256 = "sha256-xV9VCbpd6JC/m3RXJt0v8WCCGs8UpZLvAv3bzPRrae4=";
+    sha256 = "sha256-qgwOaqRyMiN3+vnwzwNet7jMQzgmFb09AVfYFwCAQJI=";
   };
 
-  vendorSha256 = "sha256-YGVLntDnOX55IoIHIn0z1K7V/PhRLruEASfAGQsTUkk=";
+  vendorSha256 = "sha256-8W0yh+/FPIf6M5JipwbpLseKEdo4uVRmtsYYqfkwENU=";
 
   ldflags = [ "-s" "-w" ];
 

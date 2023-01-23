@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{ stdenv, lib, fetchurl, ncurses, autoreconfHook }:
 stdenv.mkDerivation rec {
   pname = "xstow";
   version = "1.1.0";
@@ -7,6 +7,16 @@ stdenv.mkDerivation rec {
     url = "http://downloads.sourceforge.net/sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-wXQ5XSmogAt1torfarrqIU4nBYj69MGM/HBYqeIE+dw=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # Upstream seems to try to support building both static and dynamic version
+  # of executable on dynamic systems, but fails with link error when attempting
+  # to cross-build "xstow-static" to the system where "xstow" proper is static.
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace src/Makefile.am --replace xstow-static ""
+    substituteInPlace src/Makefile.am --replace xstow-stow ""
+  '';
 
   buildInputs = [
     ncurses

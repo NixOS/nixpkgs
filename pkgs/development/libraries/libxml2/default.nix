@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , zlib
 , pkg-config
 , autoreconfHook
@@ -12,7 +11,7 @@
 , ncurses
 , findXMLCatalogs
 , libiconv
-, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? enableShared
 , icuSupport ? false
 , icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
@@ -20,9 +19,19 @@
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+let
+  # Newer versions fail with minimal python, probably because
+  # https://gitlab.gnome.org/GNOME/libxml2/-/commit/b706824b612adb2c8255819c9a55e78b52774a3c
+  # This case is encountered "temporarily" during stdenv bootstrapping on darwin.
+  # Beware that the old version has known security issues, so the final set shouldn't use it.
+  oldVer = python.pname == "python3-minimal";
+in
+  assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
+
+let
+libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.10.0";
+  version = "2.10.3";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -30,8 +39,8 @@ stdenv.mkDerivation rec {
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LdMxEOp3hnbeFL6kmZ7hFzxMpV1f8UUryiJOBvAVJZU=";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+    sha256 = "XSzD14vsPb4hKp1/pimtolp9qSivQyyTBg/1wX7iipw=";
   };
 
   patches = [
@@ -47,18 +56,9 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/63174
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
-
-    # Fix PostgreSQL tests
-    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/397
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/4ad71c2d72beef0d10cf75aa417db10d77846f75.patch";
-      sha256 = "gubGDhBhHNYdEty+sFQFd3pSWB9isN5AjD//ksujGQk=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/5b2d07a72670513e41b481a9d922c983a64027ca.patch";
-      sha256 = "7jYvMW6bgImXubbaWpQhrIw3xBBnaNn+iJt3EQiW3yU=";
-    })
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -94,7 +94,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
-    (lib.withFeatureAs pythonSupport "python" python)
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [
@@ -143,4 +144,15 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
   };
-}
+};
+in
+if oldVer then
+  libxml.overrideAttrs (attrs: rec {
+    version = "2.10.1";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      sha256 = "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8";
+    };
+  })
+else
+  libxml

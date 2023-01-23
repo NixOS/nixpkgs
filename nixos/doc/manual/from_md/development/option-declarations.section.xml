@@ -6,13 +6,13 @@
     hasn’t been declared in any module. An option declaration generally
     looks like this:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 options = {
   name = mkOption {
     type = type specification;
     default = default value;
     example = example value;
-    description = &quot;Description for use in the NixOS manual.&quot;;
+    description = lib.mdDoc &quot;Description for use in the NixOS manual.&quot;;
   };
 };
 </programlisting>
@@ -98,9 +98,11 @@ options = {
           A textual description of the option, in
           <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-contributing-markup">Nixpkgs-flavored
           Markdown</link> format, that will be included in the NixOS
-          manual. During the migration process from DocBook to
-          CommonMark the description may also be written in DocBook, but
-          this is discouraged.
+          manual. During the migration process from DocBook it is
+          necessary to mark descriptions written in CommonMark with
+          <literal>lib.mdDoc</literal>. The description may still be
+          written in DocBook (without any marker), but this is
+          discouraged and will be deprecated in the future.
         </para>
       </listitem>
     </varlistentry>
@@ -125,22 +127,23 @@ options = {
         For example:
       </para>
       <anchor xml:id="ex-options-declarations-util-mkEnableOption-magic" />
-      <programlisting language="bash">
-lib.mkEnableOption &quot;magic&quot;
+      <programlisting language="nix">
+lib.mkEnableOption (lib.mdDoc &quot;magic&quot;)
 # is like
 lib.mkOption {
   type = lib.types.bool;
   default = false;
   example = true;
-  description = &quot;Whether to enable magic.&quot;;
+  description = lib.mdDoc &quot;Whether to enable magic.&quot;;
 }
 </programlisting>
       <section xml:id="sec-option-declarations-util-mkPackageOption">
-        <title><literal>mkPackageOption</literal></title>
+        <title><literal>mkPackageOption</literal>,
+        <literal>mkPackageOptionMD</literal></title>
         <para>
           Usage:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&quot; &quot;pkgs&quot; ]; example = &quot;literal example&quot;; }
 </programlisting>
         <para>
@@ -170,24 +173,33 @@ mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&qu
           You can omit the default path if the name of the option is
           also attribute path in nixpkgs.
         </para>
+        <para>
+          During the transition to CommonMark documentation
+          <literal>mkPackageOption</literal> creates an option with a
+          DocBook description attribute, once the transition is
+          completed it will create a CommonMark description instead.
+          <literal>mkPackageOptionMD</literal> always creates an option
+          with a CommonMark description attribute and will be removed
+          some time after the transition is completed.
+        </para>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption" />
         <para>
           Examples:
         </para>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-hello" />
-        <programlisting language="bash">
-lib.mkPackageOption pkgs &quot;hello&quot; { }
+        <programlisting language="nix">
+lib.mkPackageOptionMD pkgs &quot;hello&quot; { }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.hello;
   defaultText = lib.literalExpression &quot;pkgs.hello&quot;;
-  description = &quot;The hello package to use.&quot;;
+  description = lib.mdDoc &quot;The hello package to use.&quot;;
 }
 </programlisting>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-ghc" />
-        <programlisting language="bash">
-lib.mkPackageOption pkgs &quot;GHC&quot; {
+        <programlisting language="nix">
+lib.mkPackageOptionMD pkgs &quot;GHC&quot; {
   default = [ &quot;ghc&quot; ];
   example = &quot;pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
 }
@@ -197,7 +209,7 @@ lib.mkOption {
   default = pkgs.ghc;
   defaultText = lib.literalExpression &quot;pkgs.ghc&quot;;
   example = lib.literalExpression &quot;pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
-  description = &quot;The GHC package to use.&quot;;
+  description = lib.mdDoc &quot;The GHC package to use.&quot;;
 }
 </programlisting>
         <section xml:id="sec-option-declarations-eot">
@@ -220,7 +232,7 @@ lib.mkOption {
             As an example, we will take the case of display managers.
             There is a central display manager module for generic
             display manager options and a module file per display
-            manager backend (sddm, gdm ...).
+            manager backend (sddm, gdm …).
           </para>
           <para>
             There are two approaches we could take with this module
@@ -285,7 +297,7 @@ lib.mkOption {
             <emphasis role="strong">Example: Extensible type placeholder
             in the service module</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 services.xserver.displayManager.enable = mkOption {
   description = &quot;Display manager to use&quot;;
   type = with types; nullOr (enum [ ]);
@@ -297,7 +309,7 @@ services.xserver.displayManager.enable = mkOption {
             <literal>services.xserver.displayManager.enable</literal> in
             the <literal>gdm</literal> module</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ &quot;gdm&quot; ]);
 };
@@ -308,7 +320,7 @@ services.xserver.displayManager.enable = mkOption {
             <literal>services.xserver.displayManager.enable</literal> in
             the <literal>sddm</literal> module</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ &quot;sddm&quot; ]);
 };

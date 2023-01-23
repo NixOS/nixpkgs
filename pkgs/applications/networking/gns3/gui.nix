@@ -3,24 +3,15 @@
 , version
 , sha256Hash
 , mkOverride
-, commonOverrides
 }:
 
 { lib
 , python3
 , fetchFromGitHub
 , wrapQtAppsHook
-, packageOverrides ? self: super: {}
 }:
 
-let
-  defaultOverrides = commonOverrides ++ [
-  ];
-
-  python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
-  };
-in python.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
   inherit version;
 
@@ -35,7 +26,7 @@ in python.pkgs.buildPythonPackage rec {
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     distro
     jsonschema
     psutil
@@ -54,10 +45,9 @@ in python.pkgs.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "sentry-sdk==" "sentry-sdk>=" \
       --replace "psutil==" "psutil>=" \
-      --replace "distro==" "distro>=" \
-      --replace "setuptools==" "setuptools>="
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
+      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
   '';
 
   meta = with lib; {
@@ -71,6 +61,6 @@ in python.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

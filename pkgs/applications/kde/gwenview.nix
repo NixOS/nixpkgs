@@ -11,7 +11,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/gwenview/";
     description = "KDE image viewer";
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

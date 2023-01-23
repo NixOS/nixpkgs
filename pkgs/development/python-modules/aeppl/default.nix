@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aeppl";
-  version = "0.0.35";
+  version = "0.0.50";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HUcLa/9fTUBJYszo1SiG08t7DQiNSd8EsINkJpAeLsY=";
+    hash = "sha256-cc41MspG2mXlNwLz7ViPPqXH/ayskVmms5SXqBo9g3Y=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numdifftools
     pytestCheckHook
   ];

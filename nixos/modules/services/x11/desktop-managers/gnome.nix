@@ -352,8 +352,8 @@ in
         })
       ];
 
-      # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
-      qt5 = {
+      # Harmonize Qt application style and also make them use the portal for file chooser dialog.
+      qt = {
         enable = mkDefault true;
         platformTheme = mkDefault "gnome";
         style = mkDefault "adwaita";

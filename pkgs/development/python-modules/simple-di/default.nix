@@ -4,7 +4,6 @@
 , fetchPypi
 , setuptools
 , typing-extensions
-, dataclasses
 }:
 
 buildPythonPackage rec {
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
   ];
 
   pythonImportsCheck = [

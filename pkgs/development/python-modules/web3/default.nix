@@ -56,14 +56,14 @@ buildPythonPackage rec {
     protobuf
     requests
     websockets
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ] ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonRelaxDeps = true;
 
   # TODO: package eth-tester
-  #checkInputs = [
+  #nativeCheckInputs = [
   #  eth-tester
   #  eth-tester.optional-dependencies.py-evm
   #  py-geth

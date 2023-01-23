@@ -1,7 +1,11 @@
 { lib
 , python3
+, fetchzip
 , fetchFromGitHub
 , wrapQtAppsHook
+, qtbase
+, qttools
+, qtsvg
 , buildEnv
 , aspellDicts
   # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
@@ -11,18 +15,29 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "retext";
-  version = "7.2.3";
+  version = "8.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
-    repo = "retext";
+    repo = pname;
     rev = version;
-    hash = "sha256-EwaJFODnkZGbqVw1oQrTrx2ME4vRttVW4CMPkWvMtHA=";
+    hash = "sha256-22yqNwIehgTfeElqhN5Jzye7LbcAiseTeoMgenpmsL0=";
+  };
+
+  toolbarIcons = fetchzip {
+    url = "https://github.com/retext-project/retext/archive/icons.zip";
+    hash = "sha256-LQtSFCGWcKvXis9pFDmPqAMd1m6QieHQiz2yykeTdnI=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    qttools.dev
+  ];
+
+  buildInputs = [
+    qtbase
+    qtsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -32,13 +47,18 @@ python3.pkgs.buildPythonApplication rec {
     markups
     pyenchant
     pygments
-    pyqt5
+    pyqt6
+    pyqt6-webengine
   ];
 
-  postPatch = ''
-    # Remove wheel check
-    sed -i -e '31,36d' setup.py
+  patches = [ ./remove-wheel-check.patch ];
+
+  preConfigure = ''
+    lrelease ReText/locale/*.ts
   '';
+
+  # prevent double wrapping
+  dontWrapQtApps = true;
 
   postInstall = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -49,9 +69,11 @@ python3.pkgs.buildPythonApplication rec {
       }}"
     )
 
+    cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons
+
     substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
       --replace "Exec=ReText-${version}.data/scripts/retext %F" "Exec=$out/bin/retext %F" \
-      --replace "Icon=ReText-${version}.data/data/share/retext/icons/retext.svg" "Icon=$out/share/retext/icons/retext.svg"
+      --replace "Icon=ReText/icons/retext.svg" "Icon=retext"
   '';
 
   doCheck = false;
@@ -63,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Editor for Markdown and reStructuredText";
     homepage = "https://github.com/retext-project/retext/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;
   };

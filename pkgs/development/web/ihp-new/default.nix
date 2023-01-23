@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ihp-new";
-  version = "0.20.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "digitallyinduced";
     repo = "ihp";
     rev = "v${version}";
-    sha256 = "sha256-fvFRBnMnFGsPleVv5aPfuoP1UzjnBel0NiNULFP+GkI=";
+    sha256 = "sha256-8RBZn74pMAOHZL1VzO9DeEeDYm5CE1HOobP9e7Ze0Us=";
   };
 
   dontConfigure = true;

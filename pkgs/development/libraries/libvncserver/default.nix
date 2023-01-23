@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libvncserver";
-  version = "0.9.13";
+  version = "0.9.14";
 
   outputs = [ "out" "dev" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "LibVNC";
     repo = "libvncserver";
     rev = "LibVNCServer-${version}";
-    sha256 = "sha256-gQT/M2u4nWQ0MfO2gWAqY0ZJc7V9eGczGzcsxKmG4H8=";
+    sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libpng
   ] ++ lib.optionals stdenv.isLinux [
     systemd
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Carbon
   ];
 

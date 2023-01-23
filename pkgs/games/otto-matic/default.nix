@@ -12,22 +12,23 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    SDL2
-  ];
-
   nativeBuildInputs = [
     cmake
     makeWrapper
   ];
 
+  buildInputs = [
+    SDL2
+  ];
+
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/OttoMatic
-    mv Data $out/share/OttoMatic
-    install -Dm755 {.,$out/bin}/OttoMatic
-    wrapProgram $out/bin/OttoMatic --chdir "$out/share/OttoMatic"
+    mkdir -p "$out/bin"
+    mv OttoMatic Data ReadMe.txt "$out/"
+    makeWrapper $out/OttoMatic $out/bin/OttoMatic --chdir "$out"
 
     runHook postInstall
   '';
@@ -35,9 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A port of Otto Matic, a 2001 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/OttoMatic";
-    license = with licenses; [
-      cc-by-sa-40
-    ];
+    license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;
   };

@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ledger2beancount";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "ledger2beancount";
     rev = version;
-    sha256 = "sha256-0Br+zuSUYrNP+ZL/FtNoaYoYBYho5kVfxu0tqKJSuBk=";
+    sha256 = "sha256-2LIP3ljK1HMAwjk2ueIf9pFL+UUnGDgx9GYNtRztdFY=";
   };
 
   dontBuild = true;

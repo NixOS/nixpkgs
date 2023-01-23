@@ -37,7 +37,7 @@ let
       doCheck = true;
 
       nativeBuildInputs = [ makeWrapper ]
-        ++ optional (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
+        ++ optionals (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
@@ -133,7 +133,7 @@ in
     };
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
-    # can be manually overriden
+    # can be manually overridden
     tests = nixosTests.hadoop_3_2;
   };
   hadoop2 = common rec {

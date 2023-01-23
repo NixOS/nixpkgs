@@ -20,6 +20,7 @@
 , shared-mime-info
 , libgweather
 , librsvg
+, webp-pixbuf-loader
 , geoclue2
 , perl
 , docbook_xml_dtd_45
@@ -67,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.0";
+  version = "43.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "9u7JdwP588xv5ua0H23IIbGOyE34NRxN+XsXroJ0G0E=";
+    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
   };
 
   patches = [
@@ -185,6 +186,17 @@ stdenv.mkDerivation rec {
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell.css
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''

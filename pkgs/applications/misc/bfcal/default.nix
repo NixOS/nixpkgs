@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bfcal";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
     repo = "bfcal";
     rev = "v${version}";
-    sha256 = "sha256-2z5ICVEZ55omwcoVWpac/HPwyKF9jDCYO78S9p21VMU=";
+    sha256 = "sha256-5xyBU+0XUNFUGgvw7U8YE64zncw6SvPmbJhc1LY2u/g=";
   };
 
   nativeBuildInputs = [
@@ -27,15 +27,11 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  postInstall = ''
-    mkdir -p $out/bin
-    install bfcal $out/bin
-  '';
-
   meta = with lib; {
     description = "Quickly display a calendar";
     homepage = "https://git.sr.ht/~bitfehler/bfcal";
     license = licenses.gpl3Plus;
+    platforms = qtbase.meta.platforms;
     maintainers = with maintainers; [ laalsaas ];
   };
 }

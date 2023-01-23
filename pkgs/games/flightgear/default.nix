@@ -2,7 +2,7 @@
 , freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase, qtdeclarative, glew
+, makeDesktopItem, qtbase, qtdeclarative, glew, curl
 }:
 
 let
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
-    glew qtdeclarative
+    glew qtdeclarative curl
   ];
 
   postInstall = ''

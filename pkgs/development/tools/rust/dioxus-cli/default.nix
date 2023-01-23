@@ -1,4 +1,4 @@
-{ fetchCrate, lib, rustPlatform, openssl, pkg-config }:
+{ lib, fetchCrate, rustPlatform, openssl, pkg-config, stdenv, CoreServices }:
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
   version = "0.1.4";
@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   cargoSha256 = "sha256-Mf/WtOO/vFuhg90DoPDwOZ6XKj423foHZ8vHugXakb0=";
 

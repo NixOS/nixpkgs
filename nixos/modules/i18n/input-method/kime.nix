@@ -1,40 +1,37 @@
 { config, pkgs, lib, generators, ... }:
-with lib;
-let
-  cfg = config.i18n.inputMethod.kime;
-  yamlFormat = pkgs.formats.yaml { };
-in
-{
-  options = {
-    i18n.inputMethod.kime = {
-      config = mkOption {
-        type = yamlFormat.type;
-        default = { };
-        example = literalExpression ''
-          {
-            daemon = {
-              modules = ["Xim" "Indicator"];
-            };
+let imcfg = config.i18n.inputMethod;
+in {
+  imports = [
+    (lib.mkRemovedOptionModule [ "i18n" "inputMethod" "kime" "config" ] "Use i18n.inputMethod.kime.* instead")
+  ];
 
-            indicator = {
-              icon_color = "White";
-            };
-
-            engine = {
-              hangul = {
-                layout = "dubeolsik";
-              };
-            };
-          }
-          '';
-        description = lib.mdDoc ''
-          kime configuration. Refer to <https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md> for details on supported values.
-        '';
-      };
+  options.i18n.inputMethod.kime = {
+    daemonModules = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum [ "Xim" "Wayland" "Indicator" ]);
+      default = [ "Xim" "Wayland" "Indicator" ];
+      example = [ "Xim" "Indicator" ];
+      description = lib.mdDoc ''
+        List of enabled daemon modules
+      '';
+    };
+    iconColor = lib.mkOption {
+      type = lib.types.enum [ "Black" "White" ];
+      default = "Black";
+      example = "White";
+      description = lib.mdDoc ''
+        Color of the indicator icon
+      '';
+    };
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = lib.mdDoc ''
+        extra kime configuration. Refer to <https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md> for details on supported values.
+      '';
     };
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "kime") {
+  config = lib.mkIf (imcfg.enabled == "kime") {
     i18n.inputMethod.package = pkgs.kime;
 
     environment.variables = {
@@ -43,7 +40,12 @@ in
       XMODIFIERS    = "@im=kime";
     };
 
-    environment.etc."xdg/kime/config.yaml".text = replaceStrings [ "\\\\" ] [ "\\" ] (builtins.toJSON cfg.config);
+    environment.etc."xdg/kime/config.yaml".text = ''
+      daemon:
+        modules: [${lib.concatStringsSep "," imcfg.kime.daemonModules}]
+      indicator:
+        icon_color: ${imcfg.kime.iconColor}
+    '' + imcfg.kime.extraConfig;
   };
 
   # uses attributes of the linked package

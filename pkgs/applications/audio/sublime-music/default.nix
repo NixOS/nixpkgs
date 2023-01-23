@@ -32,9 +32,11 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  # Can be removed in later versions
-  # https://gitlab.com/sublime-music/sublime-music/-/issues/343
-  pythonRelaxDeps = [ "python-mpv" ];
+  # Can be removed in later versions (probably > 0.11.16)
+  pythonRelaxDeps = [
+    "deepdiff"
+    "python-mpv"
+  ];
 
   buildInputs = [
     gtk3
@@ -52,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     mpv
     peewee
     pygobject3
-    python-Levenshtein
+    levenshtein
     python-dateutil
     requests
     semver
@@ -71,7 +73,7 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest
   ];
 

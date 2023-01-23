@@ -20,19 +20,20 @@
   # nix has a problem with the `?` in the feature list
   # enabling kafka will produce a vector with no features at all
 , enableKafka ? false
-  # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
+  # TODO investigate adding "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "sinks" "sources" "transforms" "vrl-cli" ]
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+, nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.24.1";
+  version = "0.27.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -41,28 +42,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RfKg14r3B5Jx2vIa4gpJs5vXRqSXKOXKRFmmQmzQorQ=";
+    sha256 = "sha256-+jap7cexevEky3H+Ct9LXXUwHR5tnbzdN+b13pv3f70=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "rust-1.64-part1.patch";
-      url = "https://github.com/vectordotdev/vector/commit/e7437df97711b6a660a3532fe5026244472a900f.patch";
-      hash = "sha256-EyheI3nngt72+ZZNNsjp3KV1CuRb9CZ7wUCHt0twFVs=";
-    })
-    (fetchpatch {
-      name = "rust-1.64-part2.patch";
-      url = "https://github.com/vectordotdev/vector/commit/e80c7afaf7601cf936c7c3468bd7b4b230ef6149.patch";
-      hash = "sha256-pHcq7XLn+9PKs0DnBTK5FawN5KSF8BuJf7sBO9u5Gb8=";
-      excludes = [
-        # There are too many conflicts to easily resolve patching this file, but
-        # the changes here do not block compilation.
-        "lib/lookup/src/lookup_v2/owned.rs"
-      ];
-    })
-  ];
-
-  cargoHash = "sha256-l2rrT2SeeH4bYYlzSiFASNBxtg4TBm1dRA4cFRfvpkk=";
+  cargoSha256 = "sha256-KehBEwoz5N0zQLDk+9vwFSrn1TrVwljFj+asr7q7hmw=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -120,7 +103,10 @@ rustPlatform.buildRustPackage {
     ''}
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    inherit features;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A high-performance logs, metrics, and events router";

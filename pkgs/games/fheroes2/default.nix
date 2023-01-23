@@ -1,19 +1,18 @@
 { stdenv, lib, fetchFromGitHub
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
 
-# updater only
-, nix-update-script
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "0.9.20";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    sha256 = "sha256-IF8ESbMDvermghBGLMq+GdE67Hg5XedX0REGGnWQhRA=";
+    sha256 = "sha256-86+4rFSvJ3xIVx+qDXZ65TSqIrPkbyoLNo1A+mFPdy8=";
   };
 
   buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
@@ -43,8 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      url = "https://github.com/ihhub/fheroes2.git";
     };
   };
 

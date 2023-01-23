@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fvwm";
-  version = "2.6.9";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = pname;
     rev = version;
-    hash = "sha256-sBVOrrl2WrZ2wWN/r1kDUtR+tPwXgDoSJDaxGeFkXJI=";
+    hash = "sha256-KcuX8las1n8UUE/BOHj7WOeZjva5hxgpFHtATMUk3bg=";
   };
 
   nativeBuildInputs = [

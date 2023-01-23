@@ -142,10 +142,20 @@ in {
       '';
     };
 
-    package = (mkPackageOption pkgs "systemd" {
+    package = (mkPackageOptionMD pkgs "systemd" {
       default = "systemdStage1";
     }) // {
       visible = false;
+    };
+
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = lib.mdDoc ''
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
+      '';
     };
 
     contents = mkOption {
@@ -332,7 +342,10 @@ in {
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     system.build = { inherit initialRamdisk; };
 
-    boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
+    boot.initrd.availableKernelModules = [
+      "autofs4"           # systemd needs this for some features
+      "tpm-tis" "tpm-crb" # systemd-cryptenroll
+    ];
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -349,6 +362,7 @@ in {
         "/etc/systemd/system.conf".text = ''
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
+          ${cfg.extraConfig}
         '';
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
@@ -403,6 +417,17 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
+      ] ++ optionals cfg.package.withCryptsetup [
+        # tpm2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
+        pkgs.tpm2-tss
+
+        # fido2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
+        "${pkgs.libfido2}/lib/libfido2.so.1"
+
+        # the unwrapped systemd-cryptsetup executable
+        "${cfg.package}/lib/systemd/.systemd-cryptsetup-wrapped"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];

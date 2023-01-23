@@ -23,7 +23,7 @@ let
               nixpkgs.config.allowAliases = false;
             })
           testModuleArgs.config.extraBaseModules
-        ] ++ optional config.minimal ../../modules/testing/minimal-kernel.nix;
+        ];
     };
 
 
@@ -78,14 +78,6 @@ in
       '';
     };
 
-    minimal = mkOption {
-      type = types.bool;
-      default = false;
-      description = mdDoc ''
-        Enable to configure all [{option}`nodes`](#test-opt-nodes) to run with a minimal kernel.
-      '';
-    };
-
     nodesCompat = mkOption {
       internal = true;
       description = mdDoc ''
@@ -101,7 +93,7 @@ in
     nodesCompat =
       mapAttrs
         (name: config: config // {
-          config = lib.warn
+          config = lib.warnIf (lib.isInOldestRelease 2211)
             "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
             config;
         })

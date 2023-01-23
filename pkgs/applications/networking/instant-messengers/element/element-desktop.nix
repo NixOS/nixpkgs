@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  # Only affects unused scripts in $out/share/element/electron/scripts. Also
+  # breaks because there are some `node`-scripts with a `npx`-shebang and
+  # this shouldn't be in the closure just for unused scripts.
+  dontPatchShebangs = true;
+
   buildPhase = ''
     runHook preBuild
 

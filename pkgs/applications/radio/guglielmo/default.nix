@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "guglielmo";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "marcogrecopriolo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s1iz9s0k897jayiwl3yr9ylpclw6bzcpmzhxqn0mkd7jhgfl4vx";
+    sha256 = "sha256-djBQTYbpgPFBtQZ9fZBpECP20RxB49AdxLbq8mUU6rg=";
   };
 
   postInstall = ''

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AhgWeV/ojB8jM16A5ggrOD1YjWfRVcoQbkd3S2bgdyE=";
   };
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   doCheck = !stdenv.isDarwin;
 

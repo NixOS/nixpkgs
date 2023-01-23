@@ -13,14 +13,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
-  version = "1.26.1";
+  version = "1.26.2";
 
   format = "other";
   doCheck = false;
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "DyRCmjsDe9BojsTDkdnYeB5Csj7zRfXlCvHnLF7y+jk=";
+    sha256 = "RyxILg7y+xYp5h4X2qoaSH9kOSsCmEncmkCCr7OLye4=";
   };
 
   nativeBuildInputs = [

@@ -33,6 +33,31 @@
       "actions": {
         "update-props": {}
       }
+    },
+    {
+      "matches": [
+        {
+          "application.process.binary": "jack_bufsize"
+        }
+      ],
+      "actions": {
+        "update-props": {
+          "jack.global-buffer-size": true
+        }
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.process.binary": "qsynth"
+        }
+      ],
+      "actions": {
+        "update-props": {
+          "node.pause-on-idle": false,
+          "node.passive": true
+        }
+      }
     }
   ]
 }

@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
     description = "A simple Lisp with an integrated database";
     homepage = "https://picolisp.com/";
     license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ raskin tohl ];
   };
 
   passthru = {

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -27,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.0";
+  version = "43.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-CGjPz7eMOiesW+YM2E0wuz08KMiFqY+qCeN/o6UyNOQ=";
+    sha256 = "sha256-iVUelLEnEwXP/yBLRMGDZyZ3gaV9LMt7b3u6Yo4JxRE=";
   };
 
   doCheck = true;
@@ -65,6 +66,14 @@ stdenv.mkDerivation rec {
     libsoup_3
   ];
 
+  patches = [
+    (fetchpatch {
+      name = "timeTest.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/commit/bec3d2f26de1b3a8c8b7e603f6d6a46c853426fa.diff";
+      sha256 = "sha256-7/ogIDG0piZOPaCPX4nUA3jHI7RGTd2KMZsp8z0XLcc=";
+    })
+  ];
+
   postPatch = ''
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
@@ -92,6 +101,6 @@ stdenv.mkDerivation rec {
     description = "A map application for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -118,9 +118,9 @@ in
         description = lib.mdDoc ''
           The  USBGuard  daemon  modifies  some attributes of controller
           devices like the default authorization state of new child device
-          instances. Using this setting, you can controll whether the daemon
+          instances. Using this setting, you can control whether the daemon
           will try to restore the attribute values to the state before
-          modificaton on shutdown.
+          modification on shutdown.
         '';
       };
 

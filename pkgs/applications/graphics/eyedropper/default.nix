@@ -15,19 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "eyedropper";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = pname;
-    rev = version;
-    hash = "sha256-dOB274OA7h1vwCuapzivHnMLLw/NTzsmOfFtHHaca1I=";
+    rev = "v${version}";
+    hash = "sha256-sDrMIryVFkjMGHbYvNDmKb1HyJNGb3Hd+muxUJKhogE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ymRl/nIUuT1BXa1dF5CMemBI8aYrdqeoVtghm6NF8cs=";
+    hash = "sha256-mztc44hHdqzR3WbG6tkCL38EfgBajRLlpMC8ElpXnlo=";
   };
 
   nativeBuildInputs = [

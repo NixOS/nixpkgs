@@ -92,8 +92,4 @@ in
     version = "4.8.15";
     sha256 = "0xkwqz0y5d1lfb6kfqy8wn8n2dqalzf4c8ghmjsajc1bpdl70yc5";
   };
-  z3_4_7 = common {
-    version = "4.7.1";
-    sha256 = "1s850r6qifwl83zzgvrb5l0jigvmymzpv18ph71hg2bcpk7kjw3d";
-  };
 }

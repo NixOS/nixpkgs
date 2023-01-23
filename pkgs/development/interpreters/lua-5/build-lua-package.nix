@@ -8,19 +8,20 @@
 , luaLib
 }:
 
-{
-pname
+{ pname
 , version
+# we need rockspecVersion to find the .rockspec even when version changes
+, rockspecVersion ? version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? "${lua.pname}${lua.sourceVersion.major}.${lua.sourceVersion.minor}-"
+, namePrefix ? "${lua.pname}${lib.versions.majorMinor version}-"
 
 # Dependencies for building the package
 , buildInputs ? []
 
 # Dependencies needed for running the checkPhase.
-# These are added to buildInputs when doCheck = true.
-, checkInputs ? []
+# These are added to nativeBuildInputs when doCheck = true.
+, nativeCheckInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
@@ -72,7 +73,7 @@ pname
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 
 let
-  generatedRockspecFilename = "${rockspecDir}/${pname}-${version}.rockspec";
+  generatedRockspecFilename = "${rockspecDir}/${pname}-${rockspecVersion}.rockspec";
 
   # TODO fix warnings "Couldn't load rockspec for ..." during manifest
   # construction -- from initial investigation, appears it will require
@@ -80,20 +81,6 @@ let
   # luarocks only looks for rockspecs in the default/system tree instead of all
   # configured trees)
   luarocks_config = "luarocks-config.lua";
-  luarocks_content = let
-    generatedConfig = luaLib.generateLuarocksConfig {
-      externalDeps = externalDeps ++ externalDepsGenerated;
-      inherit extraVariables;
-      inherit rocksSubdir;
-      inherit requiredLuaRocks;
-    };
-    in
-      ''
-      ${generatedConfig}
-      ${extraConfig}
-      '';
-
-  rocksSubdir = "${attrs.pname}-${version}-rocks";
 
   # Filter out the lua derivation itself from the Lua module dependency
   # closure, as it doesn't have a rock tree :)
@@ -106,15 +93,28 @@ let
     );
   externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
-  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (
-builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
+  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (self: let
 
-  name = namePrefix + pname + "-" + version;
+    rocksSubdir = "${self.pname}-${self.version}-rocks";
+    luarocks_content = let
+      generatedConfig = luaLib.generateLuarocksConfig {
+        externalDeps = externalDeps ++ externalDepsGenerated;
+        inherit extraVariables rocksSubdir requiredLuaRocks;
+      };
+      in
+        ''
+        ${generatedConfig}
+        ${extraConfig}
+        '';
+    in builtins.removeAttrs attrs ["disabled" "externalDeps" "extraVariables"] // {
+
+  name = namePrefix + pname + "-" + self.version;
+  inherit rockspecVersion;
 
   nativeBuildInputs = [
     wrapLua
     luarocks
-  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ checkInputs);
+  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs);
 
   buildInputs = buildInputs
     ++ (map (d: d.dep) externalDeps');

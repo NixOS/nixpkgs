@@ -21,12 +21,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   testScript = let
-    nixosInstallISO = (import ../release.nix {}).iso_minimal.${pkgs.hostPlatform.system};
+    nixosInstallISO = (import ../release.nix {}).iso_minimal.${pkgs.stdenv.hostPlatform.system};
     virshShutdownCmd = if pkgs.stdenv.isx86_64 then "shutdown" else "destroy";
   in ''
     start_all()
 
-    virthost.wait_for_unit("sockets.target")
+    virthost.wait_for_unit("multi-user.target")
 
     with subtest("enable default network"):
       virthost.succeed("virsh net-start default")
@@ -46,13 +46,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       virthost.succeed("virsh pool-start zfs_storagepool")
       virthost.succeed("virsh vol-create-as zfs_storagepool disk1 25MB")
 
-    with subtest("check if nixos install iso boots and network works"):
+    with subtest("check if nixos install iso boots, network and autostart works"):
       virthost.succeed(
-        "virt-install -n nixos --osinfo=nixos-unstable --ram=1024 --graphics=none --disk=`find ${nixosInstallISO}/iso -type f | head -n1`,readonly=on --import --noautoconsole"
+        "virt-install -n nixos --osinfo nixos-unstable --memory 1024 --graphics none --disk `find ${nixosInstallISO}/iso -type f | head -n1`,readonly=on --import --noautoconsole --autostart"
       )
       virthost.succeed("virsh domstate nixos | grep running")
       virthost.wait_until_succeeds("ping -c 1 nixos")
       virthost.succeed("virsh ${virshShutdownCmd} nixos")
       virthost.wait_until_succeeds("virsh domstate nixos | grep 'shut off'")
+      virthost.shutdown()
+      virthost.wait_for_unit("multi-user.target")
+      virthost.wait_until_succeeds("ping -c 1 nixos")
   '';
 })

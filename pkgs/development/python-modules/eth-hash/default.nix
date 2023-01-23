@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ] ++ passthru.optional-dependencies.pycryptodome
   ++ passthru.optional-dependencies.pysha3;

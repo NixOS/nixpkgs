@@ -32,7 +32,7 @@ let
           inherit version;
           sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
         };
-        checkInputs = old.checkInputs ++ (with self; [
+        nativeCheckInputs = old.nativeCheckInputs ++ (with self; [
           requests
         ]);
         doCheck = false;
@@ -81,7 +81,7 @@ let
       # however `click-7` is needed by the older flask we need here. Since it's just
       # for the test-suite apparently, let's skip it for now.
       Mako = super.Mako.overridePythonAttrs (lib.const {
-        checkInputs = [];
+        nativeCheckInputs = [];
         doCheck = false;
       });
     };
@@ -89,13 +89,13 @@ let
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-odwYUGfgoRrGbLpOh8SuQzYby8Ya6hKSn0rdHp+RS/U=";
+    sha256 = "sha256-QoVL6WJjX6+sN5S/iqV3kcfQ5fWTXkTnf6NpZcw3bGo=";
     fetchSubmodules = true;
   };
 
@@ -119,7 +119,7 @@ python3'.pkgs.buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) privacyidea; };
 
-  checkInputs = with python3'.pkgs; [ openssl mock pytestCheckHook responses testfixtures ];
+  nativeCheckInputs = with python3'.pkgs; [ openssl mock pytestCheckHook responses testfixtures ];
   preCheck = "export HOME=$(mktemp -d)";
   postCheck = "unset HOME";
   disabledTests = [

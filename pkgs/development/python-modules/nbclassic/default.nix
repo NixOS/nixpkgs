@@ -1,37 +1,77 @@
 { lib
+, argon2-cffi
 , buildPythonPackage
 , fetchPypi
-, notebook
+, ipykernel
+, ipython_genutils
+, jinja2
+, jupyter-client
+, jupyter-core
+, jupyter-server
+, nbconvert
+, nbformat
+, nest-asyncio
 , notebook-shim
-, pythonOlder
-, jupyter_server
-, pytestCheckHook
+, prometheus-client
+, pytest-jupyter
 , pytest-tornasync
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, send2trash
+, terminado
+, tornado
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.4.5";
-  disabled = pythonOlder "3.6";
+  version = "0.4.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BXBMbN2DAb9S5A7Z+uOegNa8XS1EfcZ4McFFtN2Sh3k=";
+    hash = "sha256-x02KUA+OBY1GtXakHlvGQHEeEDLPdUHd5fc+pJSX4oM=";
   };
 
-  propagatedBuildInputs = [ jupyter_server notebook notebook-shim ];
+  propagatedBuildInputs = [
+    argon2-cffi
+    ipykernel
+    ipython_genutils
+    jinja2
+    jupyter-client
+    jupyter-core
+    jupyter-server
+    nbconvert
+    nbformat
+    nest-asyncio
+    notebook-shim
+    prometheus-client
+    pyzmq
+    send2trash
+    terminado
+    tornado
+    traitlets
+  ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
+    pytest-jupyter
     pytest-tornasync
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "nbclassic"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Jupyter lab environment notebook server extension.";
-    license = with licenses; [ bsd3 ];
+    description = "Jupyter lab environment notebook server extension";
     homepage = "https://github.com/jupyterlab/nbclassic";
-    maintainers = [ maintainers.elohmeier ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ elohmeier ];
   };
 }

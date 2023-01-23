@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, autoreconfHook, pkg-config
+{ stdenv, mkDerivation, lib, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config
 , libtool, openssl, qtbase, qttools, sphinx }:
 
 mkDerivation rec {
@@ -11,6 +11,12 @@ mkDerivation rec {
     rev    = "RELEASE.${version}";
     sha256 = "04z0mmjsry72nvib4icmwh1717y4q9pf2gr68ljrzln4vv4ckpwk";
   };
+
+  # Adaptions to stay OpenSSL 3.0 compatible
+  patches = [ (fetchpatch {
+    url = "https://github.com/chris2511/xca/commit/f5ac099e948ea354deac75ff9fa09d51453476e1.patch";
+    hash = "sha256-4rRO2y9hZq879HTsgBgbXGRYEcgfG4niJKyK3l3PMZ8=";
+  }) ];
 
   buildInputs = [ libtool openssl qtbase ];
 

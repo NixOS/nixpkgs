@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -8,7 +8,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, libX11 ? null, x11Support ? false
 , zlib
 , self
 , configd, coreutils
@@ -31,12 +31,15 @@
 , rebuildBytecode ? true
 , reproducibleBuild ? false
 , enableOptimizations ? false
+, strip2to3 ? false
+, stripConfig ? false
+, stripIdlelib ? false
+, stripTests ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
 assert x11Support -> tcl != null
                   && tk != null
-                  && xlibsWrapper != null
                   && libX11 != null;
 
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
@@ -80,8 +83,12 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
-  src = fetchurl {
-    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+  # ActiveState is a fork of cpython that includes fixes for security
+  # issues after its EOL
+  src = fetchFromGitHub {
+    owner = "ActiveState";
+    repo = "cpython";
+    rev = "v${version}";
     inherit sha256;
   };
 
@@ -119,13 +126,6 @@ let
 
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
-
-      # Patch is likely to go away in the next release (if there is any)
-      ./CVE-2019-20907.patch
-
-      ./CVE-2021-3177.patch
-
-      ./CVE-2021-23336.patch
 
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
@@ -166,7 +166,7 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
-    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       ./cross-compile.patch
     ];
 
@@ -191,11 +191,10 @@ let
     "--enable-shared"
   ] ++ [
     "--with-threads"
-    "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
     "--with-system-ffi"
-  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--with-system-expat"
+    "--enable-unicode=ucs${toString ucsEncoding}"
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
@@ -230,11 +229,8 @@ let
   strictDeps = true;
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl zlib ]
-    ++ optional (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) libffi
-    ++ optional stdenv.hostPlatform.isCygwin expat
-    ++ [ db gdbm ncurses sqlite readline ]
-    ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
+    [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
+    ++ optionals x11Support [ tcl tk libX11 ]
     ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
     [ autoreconfHook ]
@@ -315,6 +311,16 @@ in with passthru; stdenv.mkDerivation ({
     postFixup = ''
       # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
       cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    '' + optionalString strip2to3 ''
+      rm -R $out/bin/2to3 $out/lib/python*/lib2to3
+    '' + optionalString stripConfig ''
+      rm -R $out/bin/python*-config $out/lib/python*/config*
+    '' + optionalString stripIdlelib ''
+      # Strip IDLE
+      rm -R $out/bin/idle* $out/lib/python*/idlelib
+    '' + optionalString stripTests ''
+      # Strip tests
+      rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
     '';
 
     enableParallelBuilding = true;
@@ -335,9 +341,15 @@ in with passthru; stdenv.mkDerivation ({
       '';
       license = lib.licenses.psfl;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ fridh ];
-      # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
-      # in case both 2 and 3 are installed.
-      priority = -100;
+      maintainers = with lib.maintainers; [ fridh thiagokokada ];
+      knownVulnerabilities = [
+        "Python 2.7 has reached its end of life after 2020-01-01. See https://www.python.org/doc/sunset-python-2/."
+        # Quote: That means that we will not improve it anymore after that day,
+        # even if someone finds a security problem in it. You should upgrade to
+        # Python 3 as soon as you can. [..] So, in 2008, we announced that we
+        # would sunset Python 2 in 2015, and asked people to upgrade before
+        # then. Some did, but many did not. So, in 2014, we extended that
+        # sunset till 2020.
+      ];
     };
   } // crossCompileEnv)

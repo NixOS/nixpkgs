@@ -2,7 +2,7 @@
 
 Modules that are imported can also be disabled. The option declarations,
 config implementation and the imports of a disabled module will be
-ignored, allowing another to take it\'s place. This can be used to
+ignored, allowing another to take its place. This can be used to
 import a set of modules from another channel while keeping the rest of
 the system on a stable release.
 
@@ -14,7 +14,7 @@ relative to the modules path (eg. \<nixpkgs/nixos/modules> for nixos).
 This example will replace the existing postgresql module with the
 version defined in the nixos-unstable channel while keeping the rest of
 the modules and packages from the original nixos channel. This only
-overrides the module definition, this won\'t use postgresql from
+overrides the module definition, this won't use postgresql from
 nixos-unstable unless explicitly configured to do so.
 
 ```nix
@@ -35,7 +35,7 @@ nixos-unstable unless explicitly configured to do so.
 
 This example shows how to define a custom module as a replacement for an
 existing module. Importing this module will disable the original module
-without having to know it\'s implementation details.
+without having to know its implementation details.
 
 ```nix
 { config, lib, pkgs, ... }:

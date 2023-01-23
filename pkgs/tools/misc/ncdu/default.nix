@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
-  version = "2.1.2";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ng1u8DYYo8MWcmv0khe37+Rc7HWLLJF86JLe10Myxtw=";
+    sha256 = "sha256-Xkr49rzYz3rY/T15ANqxMgdFoEUxAenjdPmnf3Ku0UE=";
   };
 
   XDG_CACHE_HOME="Cache"; # FIXME This should be set in stdenv
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   PREFIX = placeholder "out";
+
+  # Avoid CPU feature impurity, see https://github.com/NixOS/nixpkgs/issues/169461
+  ZIG_FLAGS = "-Drelease-safe -Dcpu=baseline";
 
   meta = with lib; {
     description = "Disk usage analyzer with an ncurses interface";

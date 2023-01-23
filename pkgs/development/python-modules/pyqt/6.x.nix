@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -58,7 +59,7 @@ buildPythonPackage rec {
   # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
   # does not use the enableParallelBuilding flag
   postUnpack = ''
-    export MAKEFLAGS+=" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES"
+    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '';
 
   outputs = [ "out" "dev" ];

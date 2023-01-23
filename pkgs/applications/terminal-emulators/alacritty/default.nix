@@ -16,12 +16,7 @@
 , fontconfig
 , freetype
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXxf86vm
-, libxcb
+, xorg
 , libxkbcommon
 , wayland
 , xdg-utils
@@ -41,12 +36,12 @@ let
     fontconfig
     freetype
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
-    libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXxf86vm
+    xorg.libxcb
   ] ++ lib.optionals stdenv.isLinux [
     libxkbcommon
     wayland
@@ -64,6 +59,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-t6ckX0PYI8UHfXhGRpcX8ly3DzE9A6i9P6f3Ny3DBzw=";
+
+  auditable = true; # TODO: remove when this is the default
 
   nativeBuildInputs = [
     cmake

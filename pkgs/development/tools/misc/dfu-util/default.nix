@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 ];
 
   src = fetchurl {
-    url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
+    url = "https://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-tLU7ohqC7349TEffKVKt9fpJT0mbawtXxYxdBK6P8Z4=";
   };
 

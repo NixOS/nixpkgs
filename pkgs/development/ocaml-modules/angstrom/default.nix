@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, ocaml-syntax-shims, alcotest, result, bigstringaf, ppx_let }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, ocaml-syntax-shims, alcotest, result, bigstringaf, ppx_let, gitUpdater }:
 
 buildDunePackage rec {
   pname = "angstrom";
@@ -14,10 +14,12 @@ buildDunePackage rec {
     sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
   };
 
-  checkInputs = [ alcotest ppx_let ];
+  nativeCheckInputs = [ alcotest ppx_let ];
   buildInputs = [ ocaml-syntax-shims ];
   propagatedBuildInputs = [ bigstringaf result ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/inhabitedtype/angstrom";

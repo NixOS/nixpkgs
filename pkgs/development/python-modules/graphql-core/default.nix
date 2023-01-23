@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, py
 , pytest-benchmark
 , pytest-asyncio
 , pytestCheckHook
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.2.1";
+  version = "3.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,10 +19,11 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-LLvfjlio0UmTwR2ZRpsoKTJoWHOEk740QE6K+5GNlrk=";
+    hash = "sha256-LtBbHA5r6/YNh2gKX0+NqQjrpKuMioyOYWT0R59SIL4=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytest-asyncio
     pytest-benchmark
     pytestCheckHook

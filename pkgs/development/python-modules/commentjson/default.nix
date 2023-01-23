@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ lark six ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "commentjson" ];
 

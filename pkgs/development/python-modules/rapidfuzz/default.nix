@@ -1,17 +1,15 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , cmake
 , cython_3
 , ninja
-, rapidfuzz-capi
 , scikit-build
 , setuptools
-, jarowinkler
 , numpy
 , hypothesis
-, jarowinkler-cpp
 , pandas
 , pytestCheckHook
 , rapidfuzz-cpp
@@ -20,9 +18,9 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "2.6.0";
+  version = "2.13.7";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
@@ -30,14 +28,13 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EplQodBTdZCqhM+6nCovpnqDJ6zvu+jG5muVMLIxdKI=";
+    hash = "sha256-ZovXYOoLriAmJHptolD135qCn7XHeVvzLJNzI08mqwY=";
   };
 
   nativeBuildInputs = [
     cmake
     cython_3
     ninja
-    rapidfuzz-capi
     scikit-build
     setuptools
   ];
@@ -45,21 +42,29 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    jarowinkler-cpp
     rapidfuzz-cpp
     taskflow
   ];
 
   preBuild = ''
     export RAPIDFUZZ_BUILD_EXTENSION=1
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
   '';
 
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
+    "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
+  ];
+
   propagatedBuildInputs = [
-    jarowinkler
     numpy
   ];
 
-  checkInputs = [
+  preCheck = ''
+    export RAPIDFUZZ_IMPLEMENTATION=cpp
+  '';
+
+  nativeCheckInputs = [
     hypothesis
     pandas
     pytestCheckHook
@@ -75,7 +80,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

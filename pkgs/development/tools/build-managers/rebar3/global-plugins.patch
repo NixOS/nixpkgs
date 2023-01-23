@@ -1,8 +1,8 @@
-diff --git a/src/rebar_plugins.erl b/src/rebar_plugins.erl
-index f2d22233..bee2cf18 100644
---- a/src/rebar_plugins.erl
-+++ b/src/rebar_plugins.erl
-@@ -30,7 +30,8 @@ project_plugins_install(State) ->
+diff --git a/apps/rebar/src/rebar_plugins.erl b/apps/rebar/src/rebar_plugins.erl
+index 469be42e..3a901cbe 100644
+--- a/apps/rebar/src/rebar_plugins.erl
++++ b/apps/rebar/src/rebar_plugins.erl
+@@ -31,7 +31,8 @@ project_plugins_install(State) ->
  top_level_install(State) ->
      Profiles = rebar_state:current_profiles(State),
      lists:foldl(fun(Profile, StateAcc) ->

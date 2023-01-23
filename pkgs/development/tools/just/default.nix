@@ -10,21 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.5.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    hash = "sha256-x/4+5m/FiqH68xTHP/cyPDbQ1DtpBXJr32iTq/9GWwI=";
+    hash = "sha256-TYw2YrilrEUCvyT9VvzrQnHcSnhPrNiAMRjLEk/QjgU=";
   };
 
-  cargoSha256 = "sha256-EjX2U+H8sw+v+NEa5uCxIqG8HDl2P6PjpvWrhuF9Jr0=";
+  cargoHash = "sha256-pgktCRxYlxo/kMdBm3/dzdU3rOXSNFY9IIE8j8Dgro0=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [ coreutils bash ];
+  nativeCheckInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty

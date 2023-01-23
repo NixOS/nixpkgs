@@ -1,10 +1,9 @@
 { lib
-, stdenv
 , rustPlatform
-, fetchFromGitHub
-, libusb1
+, fetchCrate
 , pkg-config
-, rustfmt
+, libusb1
+, stdenv
 , AppKit
 }:
 
@@ -12,20 +11,14 @@ rustPlatform.buildRustPackage rec {
   pname = "cargo-hf2";
   version = "0.3.3";
 
-  src = fetchFromGitHub {
-    owner = "jacobrosenthal";
-    repo = "hf2-rs";
-    rev = "v${version}";
-    sha256 = "1vkmdmc2041h7msygqb97zcl8vdxjqwy7w0lvbnw99h693q3hqa0";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-0o3j7YfgNNnfbrv9Gppo24DqYlDCxhtsJHIhAV214DU=";
   };
 
-  cargoPatches = [
-    ./add-cargo-lock.patch
-  ];
+  cargoSha256 = "sha256-zBxvpQfB9xw8+Rc1H1EaK/gQZtQ+uSs4YJwhm2o0vhI=";
 
-  cargoSha256 = "sha256-5aTqiJ23XuY9MNIt3lVMIJ+33BZkcS02HbctIJrnEfo=";
-
-  nativeBuildInputs = [ pkg-config rustfmt ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 

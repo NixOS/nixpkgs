@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "4.8.3";
+  version = "4.8.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wwAZUGMgyiR02DTM7R4iF+pTPgDrKj9Ot4eQB5QOxoI=";
+    sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
   };
 
   patches = [
@@ -65,10 +65,17 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
+
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
 
   # Broken by PCRE 2 bump in GLib.
   # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
@@ -79,7 +86,7 @@ stdenv.mkDerivation rec {
 
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --no-rebuild --print-errorlogs
 
     runHook postCheck

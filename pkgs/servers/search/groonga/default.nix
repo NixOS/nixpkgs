@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, mecab, kytea, libedit, pkg-config
+{ lib, stdenv, fetchurl, autoreconfHook, mecab, kytea, libedit, pkg-config, libxcrypt
 , suggestSupport ? false, zeromq, libevent, msgpack, openssl
 , lz4Support  ? false, lz4
 , zlibSupport ? true, zlib
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with lib;
-     [ mecab kytea libedit openssl ]
+     [ mecab kytea libedit openssl libxcrypt ]
     ++ optional lz4Support lz4
     ++ optional zlibSupport zlib
     ++ optionals suggestSupport [ zeromq libevent msgpack ];

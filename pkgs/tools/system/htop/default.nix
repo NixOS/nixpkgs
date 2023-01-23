@@ -2,7 +2,7 @@
 , ncurses
 , IOKit
 , sensorsSupport ? stdenv.isLinux, lm_sensors
-, systemdSupport ? stdenv.isLinux, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 assert systemdSupport -> stdenv.isLinux;
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   postFixup =
     let
       optionalPatch = pred: so: lib.optionalString pred "patchelf --add-needed ${so} $out/bin/htop";
-    in
-    ''
+    in lib.optionalString (!stdenv.hostPlatform.isStatic) ''
       ${optionalPatch sensorsSupport "${lm_sensors}/lib/libsensors.so"}
       ${optionalPatch systemdSupport "${systemd}/lib/libsystemd.so"}
     '';

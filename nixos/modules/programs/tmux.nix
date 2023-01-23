@@ -178,6 +178,16 @@ in {
         description = lib.mdDoc "List of plugins to install.";
         example = lib.literalExpression "[ pkgs.tmuxPlugins.nord ]";
       };
+
+      withUtempter = mkOption {
+        description = lib.mdDoc ''
+          Whether to enable libutempter for tmux.
+          This is required so that tmux can write to /var/run/utmp (which can be queried with `who` to display currently connected user sessions).
+          Note, this will add a guid wrapper for the group utmp!
+        '';
+        default = true;
+        type = types.bool;
+      };
     };
   };
 
@@ -191,6 +201,15 @@ in {
 
       variables = {
         TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
+      };
+    };
+    security.wrappers = mkIf cfg.withUtempter {
+      utempter = {
+        source = "${pkgs.libutempter}/lib/utempter/utempter";
+        owner = "root";
+        group = "utmp";
+        setuid = false;
+        setgid = true;
       };
     };
   };

@@ -2,9 +2,10 @@
 , targetPackages
 
 , crossStageStatic, libcCross
+, threadsCross
 , version
 
-, gmp, mpfr, libmpc, isl
+, binutils, gmp, mpfr, libmpc, isl
 , cloog ? null
 
 , enableLTO
@@ -50,7 +51,7 @@ let
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
-      "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
+      "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (if crossStageStatic then [
@@ -86,7 +87,7 @@ let
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "mcf"
+                          else if targetPlatform.isWindows then (threadsCross.model or "win32")
                           else "single"}"
       "--enable-nls"
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [

@@ -1,27 +1,42 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "12.1.0";
+  version = "13.1.2";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kVhdOx4+S0GLYcOIYMN9yzvDDL+/8oke69wqYJ/s5+Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/of1jeyHdVyXJ5O8aAN/InaJ5CtCPVFUTk96Q9n5Gr4=";
   };
 
-  vendorSha256 = "sha256-zL5tkBkZa2Twc2FNNNUIycd/QvkpR1XEntpJ0j4z/xo=";
+  vendorHash = "sha256-WiH4qu8DODEhAkxUm6VDcBwFyQO7kNjaiaWPDHCHj9E=";
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  ldflags = [ "-s" "-w" "-X" "main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
-  tags = [ "netgo" "osusergo" "static_build" ];
+  tags = [
+    "netgo"
+    "osusergo"
+    "static_build"
+  ];
 
   postInstall = ''
+    mv $out/bin/{src,oh-my-posh}
     mkdir -p $out/share/oh-my-posh
     cp -r ${src}/themes $out/share/oh-my-posh/
     installShellCompletion --cmd oh-my-posh \
@@ -33,7 +48,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "A prompt theme engine for any shell";
     homepage = "https://ohmyposh.dev";
+    changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    maintainers = with maintainers; [ lucperkins urandom ];
   };
 }

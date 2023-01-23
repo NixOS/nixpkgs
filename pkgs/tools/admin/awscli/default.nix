@@ -7,14 +7,6 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-      # TODO: https://github.com/aws/aws-cli/pull/5712
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
-        };
-      });
       pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
         version = "5.4.1";
         src = fetchFromGitHub {
@@ -30,22 +22,24 @@ let
         '';
       });
     };
+    self = py;
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.25.76"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.27.40"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PSr0zZEGXFxcFSN7QQ5Ux0Z4aCwwm9na+2hIv/gR6+s=";
+    hash = "sha256-xP+ugapi6KJE+UokGKmG67ze5dH6nJuJk7BjIr6dtTE=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
   postPatch = ''
     substituteInPlace setup.py \
       --replace "docutils>=0.10,<0.17" "docutils>=0.10" \
+      --replace "colorama>=0.2.5,<0.4.5" "colorama>=0.2.5,<0.5" \
       --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
   '';
 
@@ -88,6 +82,7 @@ with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";
+    changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
     mainProgram = "aws";

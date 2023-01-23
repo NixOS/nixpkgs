@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "43.0";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "CeXA+TYPP4Vt6qfA2zD12rAVEYDfQYOAfGzzYCmS9cw=";
+    sha256 = "r6X8ZuL2kVU8x9UX2yNjz/LWLNG130VeX09xMxOdIfI=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     description = "Simple and beautiful calendar application for GNOME";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

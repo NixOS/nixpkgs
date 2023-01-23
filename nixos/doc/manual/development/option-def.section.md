@@ -59,17 +59,35 @@ config = {
 ## Setting Priorities {#sec-option-definitions-setting-priorities .unnumbered}
 
 A module can override the definitions of an option in other modules by
-setting a *priority*. All option definitions that do not have the lowest
+setting an *override priority*. All option definitions that do not have the lowest
 priority value are discarded. By default, option definitions have
-priority 1000. You can specify an explicit priority by using
-`mkOverride`, e.g.
+priority 100 and option defaults have priority 1500.
+You can specify an explicit priority by using `mkOverride`, e.g.
 
 ```nix
 services.openssh.enable = mkOverride 10 false;
 ```
 
 This definition causes all other definitions with priorities above 10 to
-be discarded. The function `mkForce` is equal to `mkOverride 50`.
+be discarded. The function `mkForce` is equal to `mkOverride 50`, and
+`mkDefault` is equal to `mkOverride 1000`.
+
+## Ordering Definitions {#sec-option-definitions-ordering .unnumbered}
+
+It is also possible to influence the order in which the definitions for an option are
+merged by setting an *order priority* with `mkOrder`. The default order priority is 1000.
+The functions `mkBefore` and `mkAfter` are equal to `mkOrder 500` and `mkOrder 1500`, respectively.
+As an example,
+
+```nix
+hardware.firmware = mkBefore [ myFirmware ];
+```
+
+This definition ensures that `myFirmware` comes before other unordered
+definitions in the final list value of `hardware.firmware`.
+
+Note that this is different from [override priorities](#sec-option-definitions-setting-priorities):
+setting an order does not affect whether the definition is included or not.
 
 ## Merging Configurations {#sec-option-definitions-merging .unnumbered}
 

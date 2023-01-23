@@ -1,42 +1,31 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
-, fetchFromGitHub
-, buildGoModule
-, fetchYarnDeps
-, nixosTests
-, fixup_yarn_lock
-, jq
-, nodejs
-, which
-, yarn
+{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
+, brotli, fixup_yarn_lock, jq, nodejs, which, yarn
 }:
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
     else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
-  bcrypt_version = "5.0.1";
+  bcrypt_version = "5.1.0";
   bcrypt_lib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    hash = "sha256-3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
+    hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
   };
 
 in stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "4.3.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-1QpJtonn/mWGcTv2mSeGKAHwPAqOV6VBAYFZH1/jAH8=";
+    hash = "sha256-Z2l0I/vVEx4ivC87N26QaUnQjySU/XRFW3biEwl7Od0=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-BimtZpU3aZepvlMfhJ/u0trk1rUsGlzjYk2G90fstII=";
+    hash = "sha256-EVviTrgSZYsi68hJIlSC9ArQS3aVp6EQNKbkVx12WJk=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
@@ -46,10 +35,10 @@ in stdenv.mkDerivation rec {
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-IKMu+gQa+d30+yXjHCu/oQOQXL6kTN9WxDI/Y5IL1E8=";
+    hash = "sha256-ehA1W1bDXzApTpkWH7MEAQ9Ek73q3En76/LdvJhxh2Q=";
   };
 
-  nativeBuildInputs = [ fixup_yarn_lock jq nodejs which yarn ];
+  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
@@ -105,6 +94,12 @@ in stdenv.mkDerivation rec {
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
     mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
+
+    # Create static gzip and brotli files
+    find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
+      gzip -9 -n -c $file > $file.gz
+      brotli --best -f $file -o $file.br
+    done
   '';
 
   passthru.tests.peertube = nixosTests.peertube;

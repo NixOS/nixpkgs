@@ -2,22 +2,30 @@
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.4.16";
-  vendorSha256 = "sha256-A0Dq5QoKSFDpif8x27a1O8CGZ9s5PzOycvPfvEp4qn4=";
+  version = "5.4.21";
+  vendorHash = "sha256-P5KEliTqj9kGYffhl014QK6qPY9gLG+bViOz4dtsQwA=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    sha256 = "sha256-dKt7hM04gDQtpGwDSppDmJqr2uEb77tke4YJYbXMCgU=";
+    sha256 = "sha256-lNEd5mj5K8MhlLkrRiFnEqVLnS+4mx7FNAtYuF5jdC0=";
   };
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/symfony-cli $out/bin/symfony
   '';
 
   # Tests requires network access
-  doCheck = false;
+  checkPhase = ''
+    $GOPATH/bin/symfony-cli
+  '';
 
   meta = with lib; {
     description = "Symfony CLI";

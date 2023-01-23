@@ -4,10 +4,8 @@
 , fetchurl
 , asciidoc
 , binutils
-, bzip2
 , coreutils
 , curl
-, gnupg
 , gpgme
 , installShellFiles
 , libarchive
@@ -17,8 +15,24 @@
 , openssl
 , perl
 , pkg-config
-, xz
 , zlib
+
+# Compression tools in scripts/libmakepkg/util/compress.sh.in
+, gzip
+, bzip2
+, xz
+, zstd
+, lrzip
+, lzop
+, ncompress
+, lz4
+, lzip
+
+# pacman-key runtime dependencies
+, gawk
+, gettext
+, gnugrep
+, gnupg
 
 # Tells pacman where to find ALPM hooks provided by packages.
 # This path is very likely to be used in an Arch-like root.
@@ -27,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pacman";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchurl {
     url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-DbYUVuVqpJ4mDokcCwJb4hAxnmKxVSHynT6TsA079zE=";
+    hash = "sha256-fY4+jFEhrsCWXfcfWb7fRgUsbPFPljZcRBHsPeCkwaU=";
   };
 
   nativeBuildInputs = [
@@ -44,13 +58,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bzip2
     curl
     gpgme
     libarchive
     openssl
     perl
-    xz
     zlib
   ];
 
@@ -63,7 +75,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
+  postPatch = let compressionTools = [
+    gzip
+    bzip2
+    xz
+    zstd
+    lrzip
+    lzop
+    ncompress
+    lz4
+    lzip
+  ]; in ''
+    echo 'export PATH=${lib.makeBinPath compressionTools}:$PATH' >> scripts/libmakepkg/util/compress.sh.in
     substituteInPlace meson.build \
       --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
       --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
@@ -88,7 +111,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/makepkg \
       --prefix PATH : ${lib.makeBinPath [ binutils ]}
     wrapProgram $out/bin/pacman-key \
-      --prefix PATH : ${lib.makeBinPath [ gnupg ]}
+      --prefix PATH : ${lib.makeBinPath [
+        "${placeholder "out"}"
+        coreutils
+        gawk
+        gettext
+        gnugrep
+        gnupg
+      ]}
   '';
 
   meta = with lib; {

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libpcap
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
     which
     usbutils

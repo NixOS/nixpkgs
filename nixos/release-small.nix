@@ -31,6 +31,7 @@ in rec {
     inherit (nixos') channel manual options iso_minimal amazonImage dummy;
     tests = {
       inherit (nixos'.tests)
+        acme
         containers-imperative
         containers-ip
         firewall
@@ -110,6 +111,7 @@ in rec {
         "nixos.iso_minimal"
         "nixos.amazonImage"
         "nixos.manual"
+        "nixos.tests.acme"
         "nixos.tests.boot.uefiCdrom"
         "nixos.tests.containers-imperative"
         "nixos.tests.containers-ip"

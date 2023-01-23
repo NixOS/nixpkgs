@@ -355,6 +355,7 @@ in
       pipewire = 323;
       rstudio-server = 324;
       localtimed = 325;
+      automatic-timezoned = 326;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -664,6 +665,7 @@ in
       pipewire = 323;
       rstudio-server = 324;
       localtimed = 325;
+      automatic-timezoned = 326;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

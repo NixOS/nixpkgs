@@ -1,37 +1,43 @@
 { lib
 , stdenv
 , buildPythonPackage
+, CoreServices
+, fetchpatch
 , fetchPypi
-, pathtools
-, pyyaml
 , flaky
+, pathtools
 , pytest-timeout
 , pytestCheckHook
-, CoreServices
+, pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.9";
+  version = "2.2.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Q84g67NqUfIfo3b3bR1GkkUrJSfM1gGVDWntNrniFgk=";
+    hash = "sha256-g8+Lxg2cYTtmpMAYBRhz1ic9nkXQQO7QbWqWJBvY7AE=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     ./force-kqueue.patch
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   propagatedBuildInputs = [
     pathtools
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-timeout
     pytestCheckHook
@@ -41,11 +47,6 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "--cov=watchdog" "" \
       --replace "--cov-report=term-missing" ""
-  '' + lib.optionalString stdenv.hostPlatform.isMusl
-  # https://github.com/gorakhargosh/watchdog/issues/920
-  ''
-    substituteInPlace tests/test_inotify_c.py \
-      --replace "Unknown error -1" "No error information"
   '';
 
   disabledTests = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     "test_create_wrong_encoding"
   ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "test_delete"
+    "test_separate_consecutive_moves"
   ];
 
   disabledTestPaths = [
@@ -67,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";
     homepage = "https://github.com/gorakhargosh/watchdog";
+    changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
   };

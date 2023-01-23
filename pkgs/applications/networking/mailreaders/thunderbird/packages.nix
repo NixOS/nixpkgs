@@ -5,13 +5,13 @@ rec {
 
   thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "102.3.2";
+    version = "102.6.1";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "e10b0322293a723c5683231e4337b1c3a214c064bbcc7f569c111c4ace42e74ddc312f2f30a260020dac48e44662f093538fab935a78ee0f6fc4a2a70488f74a";
+      sha512 = "06ea2fce76c08609d638435869fddc1c4d7f4b748951ebfb2476b4dba9f1f76d3de2c11e5f62540f297a5d30bb0fc637852d8e57f4fadc2c905f299757949d83";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -19,6 +19,7 @@ rec {
     ];
 
     meta = with lib; {
+      changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];

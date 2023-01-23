@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Complete the puzzle by matching numbered tiles";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

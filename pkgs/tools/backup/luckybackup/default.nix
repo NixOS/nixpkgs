@@ -37,7 +37,7 @@ mkDerivation rec {
       before proceeding in any data manipulation), reliable and fully
       customizable.
     '';
-    homepage = "http://luckybackup.sourceforge.net/";
+    homepage = "https://luckybackup.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

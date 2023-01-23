@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, makeWrapper
 , alsa-lib
 , libX11
 , libevdev
@@ -11,6 +12,7 @@
 , SDL2
 , libzip
 , miniupnpc
+, vulkan-loader
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
@@ -40,6 +43,10 @@ stdenv.mkDerivation rec {
     libzip
     miniupnpc
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/flycast --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/flyinghead/flycast";

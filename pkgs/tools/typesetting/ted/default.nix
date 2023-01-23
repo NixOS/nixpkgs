@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, pcre, xlibsWrapper, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
+{ lib, stdenv, fetchurl, pkg-config, zlib, pcre, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "ted";
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ zlib pcre xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
+  buildInputs = [ zlib pcre xorg.libX11 xorg.libICE xorg.libSM xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
 
   meta = with lib; {
     description = "An easy rich text processor";

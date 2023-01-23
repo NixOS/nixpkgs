@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages pythonModules)
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
@@ -136,14 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postCheck = ''
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
-  '';
-
-  # add self to buildInputs to avoid needing to add gobject-introspection to buildInputs in addition to nativeBuildInputs
-  # builds use target-pkg-config to look for gobject-introspection instead of just looking for binaries in $PATH
-  # wrapper uses depsTargetTargetPropagated so ignore it
-  preFixup = lib.optionalString (!lib.hasSuffix "-wrapped" finalAttrs.pname) ''
-    mkdir -p $dev/nix-support
-    echo "$out" > $dev/nix-support/propagated-target-target-deps
   '';
 
   setupHook = ./setup-hook.sh;

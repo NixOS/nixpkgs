@@ -28,7 +28,7 @@ with lib;
         default = "local-lvm:vm-9999-disk-0";
         example = "ceph:vm-123-disk-0";
         description = lib.mdDoc ''
-          Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target sotrage.
+          Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target storage.
           This parameter is required by PVE even if it isn't used.
         '';
       };
@@ -51,6 +51,13 @@ with lib;
         default = 1024;
         description = lib.mdDoc ''
           Guest memory in MB
+        '';
+      };
+      bios = mkOption {
+        type = types.enum [ "seabios" "ovmf" ];
+        default = "seabios";
+        description = ''
+          Select BIOS implementation (seabios = Legacy BIOS, ovmf = UEFI).
         '';
       };
 
@@ -99,6 +106,17 @@ with lib;
         Additional options appended to qemu-server.conf
       '';
     };
+    partitionTableType = mkOption {
+      type = types.enum [ "efi" "hybrid" "legacy" "legacy+gpt" ];
+      description = ''
+        Partition table type to use. See make-disk-image.nix partitionTableType for details.
+        Defaults to 'legacy' for 'proxmox.qemuConf.bios="seabios"' (default), other bios values defaults to 'efi'.
+        Use 'hybrid' to build grub-based hybrid bios+efi images.
+      '';
+      default = if config.proxmox.qemuConf.bios == "seabios" then "legacy" else "efi";
+      defaultText = lib.literalExpression ''if config.proxmox.qemuConf.bios == "seabios" then "legacy" else "efi"'';
+      example = "hybrid";
+    };
     filenameSuffix = mkOption {
       type = types.str;
       default = config.proxmox.qemuConf.name;
@@ -122,9 +140,33 @@ with lib;
       ${lib.concatStrings (lib.mapAttrsToList cfgLine properties)}
       #qmdump#map:virtio0:drive-virtio0:local-lvm:raw:
     '';
+    inherit (cfg) partitionTableType;
+    supportEfi = partitionTableType == "efi" || partitionTableType == "hybrid";
+    supportBios = partitionTableType == "legacy" || partitionTableType == "hybrid" || partitionTableType == "legacy+gpt";
+    hasBootPartition = partitionTableType == "efi" || partitionTableType == "hybrid";
+    hasNoFsPartition = partitionTableType == "hybrid" || partitionTableType == "legacy+gpt";
   in {
+    assertions = [
+      {
+        assertion = config.boot.loader.systemd-boot.enable -> config.proxmox.qemuConf.bios == "ovmf";
+        message = "systemd-boot requires 'ovmf' bios";
+      }
+      {
+        assertion = partitionTableType == "efi" -> config.proxmox.qemuConf.bios == "ovmf";
+        message = "'efi' disk partitioning requires 'ovmf' bios";
+      }
+      {
+        assertion = partitionTableType == "legacy" -> config.proxmox.qemuConf.bios == "seabios";
+        message = "'legacy' disk partitioning requires 'seabios' bios";
+      }
+      {
+        assertion = partitionTableType == "legacy+gpt" -> config.proxmox.qemuConf.bios == "seabios";
+        message = "'legacy+gpt' disk partitioning requires 'seabios' bios";
+      }
+    ];
     system.build.VMA = import ../../lib/make-disk-image.nix {
       name = "proxmox-${cfg.filenameSuffix}";
+      inherit partitionTableType;
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
         vma = (pkgs.qemu_kvm.override {
@@ -181,7 +223,18 @@ with lib;
     boot = {
       growPartition = true;
       kernelParams = [ "console=ttyS0" ];
-      loader.grub.device = lib.mkDefault "/dev/vda";
+      loader.grub = {
+        device = lib.mkDefault (if (hasNoFsPartition || supportBios) then
+          # Even if there is a separate no-fs partition ("/dev/disk/by-partlabel/no-fs" i.e. "/dev/vda2"),
+          # which will be used the bootloader, do not set it as loader.grub.device.
+          # GRUB installation fails, unless the whole disk is selected.
+          "/dev/vda"
+        else
+          "nodev");
+        efiSupport = lib.mkDefault supportEfi;
+        efiInstallAsRemovable = lib.mkDefault supportEfi;
+      };
+
       loader.timeout = 0;
       initrd.availableKernelModules = [ "uas" "virtio_blk" "virtio_pci" ];
     };
@@ -190,6 +243,10 @@ with lib;
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
       fsType = "ext4";
+    };
+    fileSystems."/boot" = lib.mkIf hasBootPartition {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
     };
 
     services.qemuGuest.enable = lib.mkDefault true;

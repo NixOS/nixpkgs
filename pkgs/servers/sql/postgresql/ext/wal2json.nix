@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "wal2json";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "wal2json";
     rev = "wal2json_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-EB+tCaILWsU9fDhqosl6EyMoYBd6SHISFfyxiZ9pNOk=";
+    sha256 = "sha256-Gpc9uDKrs/dmVSFgdgHM453+TaEnhRh9t0gDbSn8FUI=";
   };
 
   buildInputs = [ postgresql ];

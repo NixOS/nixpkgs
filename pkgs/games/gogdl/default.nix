@@ -1,4 +1,5 @@
 { lib
+, gitUpdater
 , buildPythonApplication
 , fetchFromGitHub
 , pythonOlder
@@ -8,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "gogdl";
-  version = "0.3";
+  version = "0.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    rev = "v${version}";
-    sha256 = "sha256-lVNvmdUK7rjSNVdhDuSxyfuEw2FeZt0rVf9pdtsfgqE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4hWuGd0Alzd/ZqtN4zG2aid6C9lnT3Ihrrsjfg9PEYA=";
   };
 
   disabled = pythonOlder "3.8";
@@ -32,5 +33,9 @@ buildPythonApplication rec {
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ aidalgol ];
+  };
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 }

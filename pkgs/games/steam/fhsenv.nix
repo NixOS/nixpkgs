@@ -97,6 +97,7 @@ in buildFHSUserEnv rec {
     libdrm
     libxkbcommon # paradox launcher
     libvorbis # Dead Cells
+    libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
@@ -294,5 +295,10 @@ in buildFHSUserEnv rec {
       ${fixBootstrap}
       exec -- "$run" "$@"
     '';
+
+    meta = steam.meta // {
+      description = "Run commands in the same FHS environment that is used for Steam";
+      name = "steam-run";
+    };
   };
 }

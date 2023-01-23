@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ruby, dune_2, ocamlPackages
+{ lib, stdenv, fetchFromGitHub, ruby, dune_3, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
@@ -17,6 +17,7 @@ let
       rev = "v0.3.7+satysfi";
       sha256 = "0y8s0ij1vp1s4h5y1hn3ns76fzki2ba5ysqdib33akdav9krbj8p";
     };
+    propagatedBuildInputs = o.propagatedBuildInputs ++ [ ocamlPackages.result ];
   });
   yojson-with-position = ocamlPackages.buildDunePackage {
     pname = "yojson-with-position";
@@ -27,7 +28,7 @@ let
       rev = "v1.4.2+satysfi";
       sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
-    useDune2 = true;
+    duneVersion = "3";
     nativeBuildInputs = [ ocamlPackages.cppo ];
     propagatedBuildInputs = [ ocamlPackages.biniou ];
     inherit (ocamlPackages.yojson) meta;
@@ -52,7 +53,7 @@ in
 
     DUNE_PROFILE = "release";
 
-    nativeBuildInputs = [ ruby dune_2 ];
+    nativeBuildInputs = [ ruby dune_3 ];
 
     buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
       ocaml findlib menhir menhirLib

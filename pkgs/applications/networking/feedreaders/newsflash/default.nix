@@ -17,23 +17,24 @@
 , glib-networking
 , librsvg
 , gst_all_1
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "2.1.0";
+  version = "2.2.4";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = "refs/tags/v.${finalAttrs.version}";
-    sha256 = "sha256-QDGoA22olhafL2geLf1Jxriqc4++3yxGN/ZnNyEAqjA=";
+    sha256 = "sha256-civHj8a5LYV3XaAjSJBdn15+8sdO/yLlWBXCNW56plA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${finalAttrs.pname}-${finalAttrs.version}";
     src = finalAttrs.src;
-    sha256 = "sha256-21v/4VAgolk/12mj7CTu8d5CKMCovE1FQuGyMar8idY=";
+    sha256 = "sha256-vgqyFdc1m53SYqnYE6JLp1/tK7rFrohYOT/BTO6fUI0=";
   };
 
   patches = [
@@ -86,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-bad
   ]);
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v.";
+  };
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";

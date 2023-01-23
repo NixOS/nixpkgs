@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       Rabbit 3000A). Work is in progress on supporting the Microchip PIC16 and
       PIC18 targets. It can be retargeted for other microprocessors.
     '';
-    homepage = "http://sdcc.sourceforge.net/";
+    homepage = "https://sdcc.sourceforge.net/";
     license = with licenses; if (gputils == null) then gpl2Plus else unfreeRedistributable;
     maintainers = with maintainers; [ bjornfor yorickvp ];
     platforms = platforms.all;

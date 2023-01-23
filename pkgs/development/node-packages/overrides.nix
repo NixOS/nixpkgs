@@ -96,13 +96,13 @@ final: prev: {
     nativeBuildInputs = with pkgs; [
       pkg-config
     ] ++ lib.optionals stdenv.isDarwin [
-      xcbuild
       darwin.apple_sdk.frameworks.CoreText
     ];
     buildInputs = with pkgs; [
       pixman
       cairo
       pango
+      giflib
     ];
   };
 
@@ -135,10 +135,6 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "12"; };
   });
 
-  deltachat-desktop = prev."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
-  });
-
   eask = prev."@emacs-eask/cli".override {
     name = "eask";
   };
@@ -147,14 +143,13 @@ final: prev: {
   # ../../applications/video/epgstation
   epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
     buildInputs = [ pkgs.postgresql ];
-    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ] ++ lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
+    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation/client
   epgstation-client = prev."epgstation-client-../../applications/video/epgstation/client".override (oldAttrs: {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
@@ -192,6 +187,12 @@ final: prev: {
 
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = ''
+      installShellCompletion --cmd gt \
+        --bash <($out/bin/gt completion) \
+        --zsh <($out/bin/gt completion)
+    '';
   };
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
@@ -222,11 +223,7 @@ final: prev: {
   });
 
   joplin = prev.joplin.override {
-    nativeBuildInputs = with pkgs; [
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      xcbuild
-    ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
       # required by sharp
       # https://sharp.pixelplumbing.com/install
@@ -279,7 +276,7 @@ final: prev: {
     '';
   };
 
-  manta = prev.manta.override {
+  manta = prev.manta.override ( oldAttrs: {
     nativeBuildInputs = with pkgs; [ nodejs-14_x installShellFiles ];
     postInstall = ''
       # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
@@ -290,11 +287,8 @@ final: prev: {
         installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
       done
     '';
-  };
-
-  mastodon-bot = prev.mastodon-bot.override {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
-  };
+    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
+  });
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
   if stdenv.isDarwin
@@ -412,7 +406,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-l/QKLmLcKJQFuc+X02LyICo0NWTUVaNNZ00jKJBqwDyhwMAhboD1FWwYV50rkH4Wls0RviAJSFzkC2ZrfawpfA==";
+      sha512 = "sha512-bS96oZ5oDFXYgoF2l7PJ3Mp1wWWfLOo8B/jAfbA2Pn0Wm5Z/owBHzaMQKS3i1CzVBDWWPVnOohmbJmjvkcHS5w==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -432,7 +426,7 @@ final: prev: {
 
   pulp = prev.pulp.override {
     # tries to install purescript
-    npmFlags = "--ignore-scripts";
+    npmFlags = builtins.toString [ "--ignore-scripts" ];
 
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall =  ''
@@ -441,6 +435,26 @@ final: prev: {
       ]}
     '';
   };
+
+  readability-cli = prev.readability-cli.override (oldAttrs: {
+    # Wrap src to fix this build error:
+    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
+    #
+    # Need to wrap the source, instead of patching in patchPhase, because
+    # buildNodePackage only unpacks sources in the installPhase.
+    src = pkgs.srcOnly {
+      src = oldAttrs.src;
+      name = oldAttrs.name;
+      patchPhase = "chmod a-x readable.ts";
+    };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
+  });
 
   reveal-md = prev.reveal-md.override (
     lib.optionalAttrs (!stdenv.isDarwin) {
@@ -454,6 +468,10 @@ final: prev: {
       '';
     }
   );
+
+  rush = prev."@microsoft/rush".override {
+    name = "rush";
+  };
 
   ssb-server = prev.ssb-server.override (oldAttrs: {
     buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
@@ -513,11 +531,7 @@ final: prev: {
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [
-      final.node-pre-gyp
-    ] ++ lib.optionals stdenv.isDarwin [
-      pkgs.xcbuild
-    ];
+    nativeBuildInputs = [ final.node-pre-gyp ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
@@ -536,12 +550,13 @@ final: prev: {
     '';
   };
 
-  triton = prev.triton.override {
+  triton = prev.triton.override (oldAttrs: {
     nativeBuildInputs = [ pkgs.installShellFiles ];
     postInstall = ''
       installShellCompletion --cmd triton --bash <($out/bin/triton completion)
     '';
-  };
+    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
+  });
 
   ts-node = prev.ts-node.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -562,8 +577,7 @@ final: prev: {
   typescript-language-server = prev.typescript-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
-      wrapProgram "$out/bin/typescript-language-server" \
-        --suffix PATH : ${lib.makeBinPath [ final.typescript ]}
+      ${pkgs.xorg.lndir}/bin/lndir ${final.typescript} $out
     '';
   };
 

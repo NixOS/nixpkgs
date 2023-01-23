@@ -4,6 +4,7 @@
 , bison
 , flex
 , zlib
+, libxcrypt
 , usePAM ? stdenv.hostPlatform.isLinux
 , pam
 , useSSL ? true
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex ];
-  buildInputs = [ zlib.dev ] ++
+  buildInputs = [ zlib.dev libxcrypt ] ++
     lib.optionals useSSL [ openssl ] ++
     lib.optionals usePAM [ pam ];
 

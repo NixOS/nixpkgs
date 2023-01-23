@@ -10,6 +10,7 @@
 , packaging
 , pillow
 , poetry-core
+, py
 , pydantic
 , pyjwt
 , pytest-aiohttp
@@ -22,6 +23,7 @@
 , pythonOlder
 , pytz
 , setuptools
+, setuptools-scm
 , termcolor
 , typer
 , ffmpeg
@@ -29,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.3.3";
+  version = "4.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -38,17 +40,19 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-77vBKca4S0XEa5O4ntuBW8uEwVig7IBH6BX3QEmvHWc=";
+    hash = "sha256-5xHU4WC7HPDEJsfCX4bVsK3p6SWZ/fHH7APbFtDGC40=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" "" \
-      --replace "pydantic!=1.9.1" "pydantic"
+      --replace "--cov=pyunifiprotect --cov-append" ""
   '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -73,8 +77,9 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     ffmpeg # Required for command ffprobe
+    py
     pytest-aiohttp
     pytest-asyncio
     pytest-benchmark
@@ -94,6 +99,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";
     homepage = "https://github.com/briis/pyunifiprotect";
+    changelog = "https://github.com/AngellusMortis/pyunifiprotect/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

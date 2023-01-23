@@ -8,13 +8,12 @@
 , pythonOlder
 , requests
 , responses
-, six
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.12.0";
+  version = "3.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-p5GsJRoOG1vV3+efHDUFdIkfXe75HvjI3h5mveFak/M=";
+    hash = "sha256-qxqGfbrnMvmjbBD7l8OtGKx7WJr65Jbd9y5IyZDXwW4=";
   };
 
   propagatedBuildInputs = [
@@ -34,11 +33,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mypy
     pytestCheckHook
     responses
-    six
   ];
 
   postPatch = ''
@@ -58,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
     homepage =  "https://github.com/globus/globus-sdk-python";
+    changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];
   };

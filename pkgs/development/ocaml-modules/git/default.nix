@@ -8,13 +8,14 @@
 
 buildDunePackage rec {
   pname = "git";
-  version = "3.9.1";
+  version = "3.10.1";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
-    sha256 = "sha256-OyeMW5gsq4fMEWRmhzPq2qardFZtMjoQk6mMKz5+Ds4=";
+    sha256 = "sha256-plu69FIpyJcuZ8nJ3QnufLnDEjtcsoAd8czKHfzTkd8=";
   };
 
   # remove changelog for the carton package
@@ -30,7 +31,7 @@ buildDunePackage rec {
     ke logs lwt ocamlgraph uri rresult result bigstringaf optint mirage-flow
     domain-name emile mimic carton carton-lwt carton-git ipaddr psq hxd
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest alcotest-lwt mirage-crypto-rng git-binary crowbar cmdliner
   ];
   doCheck = !stdenv.isAarch64;

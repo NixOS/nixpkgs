@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.178";
+  version = "1.2.195";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-gmUamDV7gH30grFkG6rqDEf73wxe+FqhPi1GkNOeKuk=";
+    hash = "sha256-rNhCZO4Axeuc5jEAndjma7/jnst1kDNdtb/h/jD2rtE=";
   };
 
-  vendorHash = "sha256-4QVLxvprm27Bv/ZFgxTtqZcSAWak1e+G8s+heW1JZnA=";
+  vendorHash = "sha256-GjcmpHyjhjCWE5gQR/oTHfhHYg5WRu8uhgAuWhdxlYk=";
 
   proxyVendor = true;
 
@@ -36,16 +36,18 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/werf/werf/pkg/werf.Version=${src.rev}"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-extldflags '-static'"
+  ] ++ lib.optionals (CGO_ENABLED == 1) [
+    "-extldflags=-static"
     "-linkmode external"
   ];
 
   tags = [
     "containers_image_openpgp"
     "dfrunmount"
+    "dfrunnetwork"
+    "dfrunsecurity"
     "dfssh"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (CGO_ENABLED == 1) [
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"

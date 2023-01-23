@@ -219,6 +219,12 @@ fi
 PATH="$path_backup"
 # Old bash workaround, see above.
 
+# if a cc-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
+    compiler=@prog@
+    source @out@/nix-support/cc-wrapper-hook
+fi
+
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
     exec @prog@ @<(printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \

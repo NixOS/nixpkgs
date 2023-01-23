@@ -1,16 +1,12 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "1.002";
-in fetchzip {
+in (fetchzip {
   name = "zilla-slab-${version}";
 
   url = "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";
-  postFetch = ''
-    unzip $downloadedFile
-    mkdir -p $out/share/fonts/truetype
-    cp -v zilla-slab/ttf/*.ttf $out/share/fonts/truetype/
-  '';
   sha256 = "1b1ys28hyjcl4qwbnsyi6527nj01g3d6id9jl23fv6f8fjm4ph0f";
 
   meta = with lib; {
@@ -30,4 +26,10 @@ in fetchzip {
     maintainers = with maintainers; [ caugner ];
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    unzip $downloadedFile
+    mkdir -p $out/share/fonts/truetype
+    cp -v zilla-slab/ttf/*.ttf $out/share/fonts/truetype/
+  '';
+})

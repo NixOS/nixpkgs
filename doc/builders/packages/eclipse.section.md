@@ -43,11 +43,11 @@ packageOverrides = pkgs: {
         name = "myplugin1-1.0";
         srcFeature = fetchurl {
           url = "http://…/features/myplugin1.jar";
-          sha256 = "123…";
+          hash = "sha256-123…";
         };
         srcPlugin = fetchurl {
           url = "http://…/plugins/myplugin1.jar";
-          sha256 = "123…";
+          hash = "sha256-123…";
         };
       });
       (plugins.buildEclipseUpdateSite {
@@ -55,7 +55,7 @@ packageOverrides = pkgs: {
         src = fetchurl {
           stripRoot = false;
           url = "http://…/myplugin2.zip";
-          sha256 = "123…";
+          hash = "sha256-123…";
         };
       });
     ];

@@ -13,25 +13,7 @@ in self: super: {
       })
     ];
   }) (super.ghcjs.overrideScope (self: super: {
-    optparse-applicative = self.optparse-applicative_0_15_1_0;
-    webdriver = overrideCabal (drv: {
-      patches = drv.patches or [] ++ [
-        # Patch for aeson 2.0 which adds a lower bound on it, so we don't apply it globally
-        # Pending https://github.com/kallisti-dev/hs-webdriver/pull/183
-        (fetchpatch {
-          name = "webdriver-aeson-2.0.patch";
-          url = "https://github.com/georgefst/hs-webdriver/commit/90ded63218da17fc0bd9f9b208b0b3f60b135757.patch";
-          sha256 = "1xvkk51r2v020xlmci5n1fd1na8raa332lrj7r9f0ijsyfvnqlv0";
-          excludes = [ "webdriver.cabal" ];
-        })
-      ];
-      # Fix line endings so patch applies
-      prePatch = drv.prePatch or "" + ''
-        find . -name '*.hs' | xargs "${buildPackages.dos2unix}/bin/dos2unix"
-      '';
-
-      jailbreak = true;
-      broken = false;
-    }) super.webdriver;
+    # Allow transformers-compat >= 0.7
+    optparse-applicative = doJailbreak self.optparse-applicative_0_15_1_0;
   }));
 }

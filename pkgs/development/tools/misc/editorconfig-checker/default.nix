@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, editorconfig-checker }:
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = version;
-    sha256 = "sha256-S/iIanLToWN4OsItvSLGSEhgoYRJgUt0w3QFp1+scfY=";
+    hash = "sha256-8qGRcyDayXx3OflhE9Kw2AXM702/2pYB3JgfpQ0UYR8=";
   };
 
-  vendorSha256 = "sha256-ktyUuWW0xlhRLkertrc4/ZYCyDh/tfYBuHqIrdTkotQ=";
+  vendorHash = "sha256-S93ZvC92V9nrBicEv1yQ3DEuf1FmxtvFoKPR15e8VmA=";
 
   doCheck = false;
 
@@ -22,6 +22,10 @@ buildGoModule rec {
   postInstall = ''
     installManPage docs/editorconfig-checker.1
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = editorconfig-checker;
+  };
 
   meta = with lib; {
     description = "A tool to verify that your files are in harmony with your .editorconfig";

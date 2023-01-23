@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tempora ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

@@ -2,7 +2,7 @@
 , usePcre ? true
 , withPrometheusExporter ? true
 , stdenv, lib, fetchurl, nixosTests
-, openssl, zlib
+, openssl, zlib, libxcrypt
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0MgMkMBK55WYtYuXSdU3h/APe1FRdefYID8nluamWU0=";
   };
 
-  buildInputs = [ openssl zlib ]
+  buildInputs = [ openssl zlib libxcrypt ]
     ++ lib.optional useLua lua5_3
     ++ lib.optional usePcre pcre
     ++ lib.optional stdenv.isLinux systemd;

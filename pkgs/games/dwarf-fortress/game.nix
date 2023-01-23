@@ -18,8 +18,6 @@ with lib;
 let
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
-  homepage = "http://www.bay12games.com/dwarves/";
-
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
   # Other srcs are avilable like 32-bit mac & win, but I have only
   # included the ones most likely to be needed by Nixpkgs users.
@@ -56,7 +54,7 @@ stdenv.mkDerivation {
   version = dfVersion;
 
   src = fetchurl {
-    url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
+    url = "https://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
     inherit sha256;
   };
 
@@ -103,9 +101,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A single-player fantasy game with a randomly generated adventure world";
-    inherit homepage;
+    homepage = "https://www.bay12games.com/dwarves/";
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;
-    maintainers = with maintainers; [ a1russell robbinch roconnor abbradar numinit shazow ];
+    maintainers = with maintainers; [ a1russell robbinch roconnor abbradar numinit shazow ncfavier ];
   };
 }

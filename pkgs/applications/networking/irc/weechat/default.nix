@@ -36,21 +36,21 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.7";
+      version = "3.8";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        hash = "sha256-n5kvC//h85c4IvkrCVTz+F0DcCC5rdRkvj8W3fUPXI8=";
+        hash = "sha256-objxAUGvBhTkbQl4GshDP3RsCkAW4z917L9WyaVoYj4=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=OFF"         # TODO(@ncfavier): Documentation fails to build, was deactivated to push through security update
+        "-DENABLE_DOC=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]

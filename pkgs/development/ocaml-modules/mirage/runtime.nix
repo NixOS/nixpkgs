@@ -10,7 +10,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs lwt ];
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   doCheck = true;
 
   meta = with lib; {

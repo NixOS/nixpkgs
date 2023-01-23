@@ -1,11 +1,26 @@
 { pname, version, src, openasar, meta, binaryName, desktopName, autoPatchelfHook
 , makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
-, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
+, glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
-, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
+, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
+, wayland
+, branch
 , common-updater-scripts, withOpenASAR ? false }:
+
+let
+  disableBreakingUpdates = runCommand "disable-breaking-updates.py"
+    {
+      pythonInterpreter = "${python3.interpreter}";
+      configDirName = lib.toLower binaryName;
+    } ''
+    mkdir -p $out/bin
+    cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
+    substituteAllInPlace $out/bin/disable-breaking-updates.py
+    chmod +x $out/bin/disable-breaking-updates.py
+  '';
+in
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;
@@ -50,6 +65,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
+    libglvnd
     libnotify
     libX11
     libXcomposite
@@ -63,12 +79,12 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     nspr
-    nss
     libxcb
     pango
     libXScrnSaver
     libappindicator-gtk3
     libdbusmenu
+    wayland
   ];
 
   installPhase = ''
@@ -83,9 +99,10 @@ stdenv.mkDerivation rec {
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName}
+        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
+        --run "${lib.getExe disableBreakingUpdates}"
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
@@ -115,15 +132,19 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "x-scheme-handler/discord" ];
   };
 
-  passthru.updateScript = writeScript "discord-update-script" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-    set -eou pipefail;
-    url=$(curl -sI "https://discordapp.com/api/download/${
-      builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
-    }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
-    version=''${url##https://dl*.discordapp.net/apps/linux/}
-    version=''${version%%/*.tar.gz}
-    update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
-  '';
+  passthru = {
+    # make it possible to run disableBreakingUpdates standalone
+    inherit disableBreakingUpdates;
+    updateScript = writeScript "discord-update-script" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+      set -eou pipefail;
+      url=$(curl -sI "https://discordapp.com/api/download/${
+        builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
+      }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
+      version=''${url##https://dl*.discordapp.net/apps/linux/}
+      version=''${version%%/*.tar.gz}
+      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
+    '';
+  };
 }

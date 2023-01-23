@@ -1,17 +1,12 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "2.001";
-in fetchzip {
+in (fetchzip {
   name = "public-sans-${version}";
 
   url = "https://github.com/uswds/public-sans/releases/download/v${version}/public-sans-v${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-  '';
 
   sha256 = "sha256-Ba7D4J72GZQsGn0KINRib9BmHsAnoEsAwAOC+M3CkMU=";
 
@@ -23,4 +18,10 @@ in fetchzip {
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  '';
+})

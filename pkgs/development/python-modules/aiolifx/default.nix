@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "0.8.6";
+  version = "0.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FJ7XMAl00KkZtLOOkj50gwVakYzjnr894QrUvwceTjo=";
+    hash = "sha256-pqneX4O3BnDH7vT7RgFiEIMpLcoXOpBvKOYuMla3Iq4=";
   };
 
   propagatedBuildInputs = [

@@ -1,44 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, perl, fetchpatch }:
+{ lib, stdenv, fetchurl, perl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
-  version = "4.4.28";
+  version = "4.4.33";
 
-  src = fetchFromGitHub {
-    owner = "besser82";
-    repo = "libxcrypt";
-    rev = "v${version}";
-    sha256 = "sha256-Ohf+RCOXnoCxAFnXXV9e2TCqpfZziQl+FGJTGDSQTF0=";
+  src = fetchurl {
+    url = "https://github.com/besser82/libxcrypt/releases/download/v${version}/libxcrypt-${version}.tar.xz";
+    hash = "sha256-6HrPnGUsVzpHE9VYIVn5jzBdVu1fdUzmT1fUGU1rOm8=";
   };
 
-  patches = [
-    # Fix for tests on musl is being upstreamed:
-    # https://github.com/besser82/libxcrypt/pull/157
-    # Applied in all environments to prevent patchrot
-    (fetchpatch {
-      url = "https://github.com/besser82/libxcrypt/commit/a4228faa0b96986abc076125cf97d352a063d92f.patch";
-      sha256 = "sha256-iGNz8eer6OkA0yR74WisE6GbFTYyXKw7koXl/R7DhVE=";
-    })
+  outputs = [
+    "out"
+    "man"
   ];
 
-  preConfigure = ''
-    patchShebangs autogen.sh
-    ./autogen.sh
-  '';
-
   configureFlags = [
+    "--enable-hashes=all"
+    "--enable-obsolete-api=glibc"
+    "--disable-failure-tokens"
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
     "--disable-werror"
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config perl ];
+  nativeBuildInputs = [
+    perl
+  ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit (nixosTests) login shadow;
+  };
 
   meta = with lib; {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ dottedmag ];
+    maintainers = with maintainers; [ dottedmag hexa ];
     license = licenses.lgpl21Plus;
   };
 }

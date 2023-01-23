@@ -94,7 +94,8 @@ in
       };
 
       ssid = mkOption {
-        default = "nixos";
+        default = config.system.nixos.distroId;
+        defaultText = literalExpression "config.system.nixos.distroId";
         example = "mySpecialSSID";
         type = types.str;
         description = lib.mdDoc "SSID to be used in IEEE 802.11 management frames.";
@@ -199,7 +200,7 @@ in
 
     environment.systemPackages =  [ pkgs.hostapd ];
 
-    services.udev.packages = optional (cfg.countryCode != null) [ pkgs.crda ];
+    services.udev.packages = optionals (cfg.countryCode != null) [ pkgs.crda ];
 
     systemd.services.hostapd =
       { description = "hostapd wireless AP";

@@ -1,10 +1,11 @@
 { lib, runCommand
 , libreoffice, dbus, bash, substituteAll
+, coreutils, gnugrep
 , dolphinTemplates ? true
 }:
 runCommand libreoffice.name {
   inherit (libreoffice) jdk meta;
-  inherit dbus libreoffice bash;
+  inherit coreutils dbus gnugrep libreoffice bash;
 } (''
   mkdir -p "$out/bin"
   substituteAll "${./wrapper.sh}" "$out/bin/soffice"

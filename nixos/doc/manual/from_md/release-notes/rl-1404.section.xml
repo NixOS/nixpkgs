@@ -79,7 +79,7 @@
         the NixOS configuration. For instance, if a package
         <literal>foo</literal> provides systemd units, you can say:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   systemd.packages = [ pkgs.foo ];
 }
@@ -88,7 +88,7 @@
         to enable those units. You can then set or override unit options
         in the usual way, e.g.
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   systemd.services.foo.wantedBy = [ &quot;multi-user.target&quot; ];
   systemd.services.foo.serviceConfig.MemoryLimit = &quot;512M&quot;;
@@ -105,7 +105,7 @@
         NixOS configuration requires unfree packages from Nixpkgs, you
         need to enable support for them explicitly by setting:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   nixpkgs.config.allowUnfree = true;
 }
@@ -123,7 +123,7 @@
         The Adobe Flash player is no longer enabled by default in the
         Firefox and Chromium wrappers. To enable it, you must set:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.firefox.enableAdobeFlash = true; # for Firefox
@@ -136,7 +136,7 @@
         The firewall is now enabled by default. If you don’t want this,
         you need to disable it explicitly:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   networking.firewall.enable = false;
 }

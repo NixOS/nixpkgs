@@ -1,0 +1,13 @@
+diff --git a/build_helpers/build_helpers.py b/build_helpers/build_helpers.py
+index 7159d22615..73db312bbe 100644
+--- a/build_helpers/build_helpers.py
++++ b/build_helpers/build_helpers.py
+@@ -185,7 +185,7 @@ class ANTLRCommand(Command):  # type: ignore
+             command = [
+                 "java",
+                 "-jar",
+-                join(root_dir, "bin/antlr-4.9.3-complete.jar"),
++                "@antlr_jar@",
+                 "-Dlanguage=Python3",
+                 "-o",
+                 join(project_root, "hydra/grammar/gen/"),

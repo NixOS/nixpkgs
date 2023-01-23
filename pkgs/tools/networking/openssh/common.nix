@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = false;
-  checkInputs = optional (!stdenv.isDarwin) hostname;
+  nativeCheckInputs = optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)

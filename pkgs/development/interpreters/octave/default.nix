@@ -25,10 +25,11 @@
 , fftwSinglePrec
 , zlib
 , curl
+, rapidjson
 , blas, lapack
 # These two should use the same lapack and blas as the above
 , qrupdate, arpack, suitesparse ? null
-# If set to true, the above 5 deps are overriden to use the blas and lapack
+# If set to true, the above 5 deps are overridden to use the blas and lapack
 # with 64 bit indexes support. If all are not compatible, the build will fail.
 , use64BitIdx ? false
 , libwebp
@@ -81,7 +82,7 @@ let
   ;
   qrupdate' = qrupdate.override {
     # If use64BitIdx is false, this override doesn't evaluate to a new
-    # derivation, as blas and lapack are not overriden.
+    # derivation, as blas and lapack are not overridden.
     blas = blas';
     lapack = lapack';
   };
@@ -111,18 +112,13 @@ let
   };
 
   self = mkDerivation rec {
-    version = "7.1.0";
+    version = "7.3.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-1KnYHz9ntKbgfLeoDcsQrV6RdvzDB2LHCoFYCmS4sLY=";
+      sha256 = "sha256-bhSkZJ1wr0WrZg+Mu/ZFqvHsM/JfiL/aRpfLF+RAxPU=";
     };
-
-    patches = [
-      # https://savannah.gnu.org/bugs/?func=detailitem&item_id=62436
-      ./patches/bug62436.patch
-    ];
 
     buildInputs = [
       readline
@@ -135,6 +131,7 @@ let
       fltk
       zlib
       curl
+      rapidjson
       blas'
       lapack'
       libsndfile

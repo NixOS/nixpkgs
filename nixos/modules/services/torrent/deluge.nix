@@ -66,7 +66,7 @@ in {
             `true`. String values must be quoted, integer and
             boolean values must not. See
             <https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41>
-            for the availaible options.
+            for the available options.
           '';
         };
 
@@ -117,7 +117,7 @@ in {
             when {option}`services.deluge.declarative` is set to
             `true`.
             See <https://dev.deluge-torrent.org/wiki/UserGuide/Authentication> for
-            more informations.
+            more information.
           '';
         };
 

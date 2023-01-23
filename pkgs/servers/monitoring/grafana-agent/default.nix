@@ -2,20 +2,38 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.25.1";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-VbcWYH3eSKfYlSoN9HpxvhtvW36M1aYn9nLDfEbIzTY=";
+    sha256 = "sha256-yexCK4GBA997CShtuQQTs1GBsXoknUnWWO0Uotb9EG8=";
   };
 
-  vendorSha256 = "sha256-VFTz9+nf4qH8bbFijpT1uIHSAhJy/aMMlIjkvnzzAD4=";
+  vendorHash = "sha256-Cl3oygH1RPF+ZdJvkDmr7eyU5daxaZwNE8pQOHK/qP4=";
+
+  ldflags = let
+    prefix = "github.com/grafana/agent/pkg/build";
+  in [
+    "-s" "-w"
+    # https://github.com/grafana/agent/blob/d672eba4ca8cb010ad8a9caef4f8b66ea6ee3ef2/Makefile#L125
+    "-X ${prefix}.Version=${version}"
+    "-X ${prefix}.Branch=v${version}"
+    "-X ${prefix}.Revision=v${version}"
+    "-X ${prefix}.BuildUser=nix"
+    "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
+  ];
 
   tags = [
     "nonetwork"
     "nodocker"
+    "promtail_journal_enabled"
+  ];
+
+  subPackages = [
+    "cmd/agent"
+    "cmd/agentctl"
   ];
 
   # uses go-systemd, which uses libsystemd headers

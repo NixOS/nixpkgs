@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
 
-  buildFeatures = lib.optional withNotmuch [ "notmuch" ];
+  buildFeatures = lib.optionals withNotmuch [ "notmuch" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1

@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Pv7SK64+eoK1VUxDh1oH0g1veWoIvBhiZE9JI/alXJ4=";
 
   # freeze the stdlib into the rustpython binary
-  cargoBuildFlags = "--features=freeze-stdlib";
+  cargoBuildFlags = [ "--features=freeze-stdlib" ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   meta = with lib; {
     description = "Python 3 interpreter in written Rust";

@@ -3,25 +3,20 @@
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
-  version = "1.0.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = pname;
     rev = version;
-    sha256 = "0wambq06d7dvja25zcv4agc055q9rmf3xkrnxy8lsf4nic7ra2rr";
+    hash = "sha256-9MJnify4zcDBSZVJZCN/XupN5xax+U4PLee54gVVw3Q=";
   };
 
   patches = [
-    # Fix CMake saying console-bridge 1.0 is incompatible
-    (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/6faba176d41cf39114785a3e029013f941ed5a0e.patch";
-      sha256 = "1pn9hcg5wkkc7y28sbkxvffqxgvazzsp3g1xmz6h055v4f9ikjbs";
-    })
     # Fix CMake relative install dir assumptions (https://github.com/ros/urdfdom/pull/142)
     (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/707c97c3d1f739ba0ab6e93e1bf7cd01d68a8c07.patch";
-      sha256 = "10bv7sv7gfy6lj8z5bkw7v291y12fbrrxsiqxqjxg4i65rfg92ng";
+      url = "https://github.com/ros/urdfdom/commit/cbe6884d267779463bb444be851f6404e692cc0a.patch";
+      hash = "sha256-1gTRKIGqiSRion76bGecSfFJSBskYUJguUIa6ePIiX4=";
     })
   ];
 

@@ -1,5 +1,18 @@
+diff --git a/meson.build b/meson.build
+index e32338b3f9a..fae804fd41e 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1894,7 +1894,7 @@ endif
+ 
+ dep_clang = null_dep
+ if with_clc
+-  llvm_libdir = dep_llvm.get_variable(cmake : 'LLVM_LIBRARY_DIR', configtool: 'libdir')
++  llvm_libdir = get_option('clang-libdir')
+ 
+   dep_clang = cpp.find_library('clang-cpp', dirs : llvm_libdir, required : false)
+ 
 diff --git a/meson_options.txt b/meson_options.txt
-index a7030aba31e..1d2d8814992 100644
+index 6f307018815..ab84eb1006c 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -18,6 +18,12 @@
@@ -16,7 +29,7 @@ index a7030aba31e..1d2d8814992 100644
    'platforms',
    type : 'array',
 diff --git a/src/gallium/targets/opencl/meson.build b/src/gallium/targets/opencl/meson.build
-index b77826b6e1e..14fa9ba7177 100644
+index 7af210b5693..ff6ac8c61ca 100644
 --- a/src/gallium/targets/opencl/meson.build
 +++ b/src/gallium/targets/opencl/meson.build
 @@ -30,6 +30,7 @@ if with_ld_version_script
@@ -29,7 +42,7 @@ index b77826b6e1e..14fa9ba7177 100644
  polly_dep = null_dep
 @@ -60,19 +61,19 @@ else
  endif
- if not (dep_clang.found() and dep_clang_usable)
+ if not _shared_llvm or not (dep_clang.found() and dep_clang_usable)
    dep_clang = [
 -    cpp.find_library('clangCodeGen', dirs : llvm_libdir),
 -    cpp.find_library('clangFrontendTool', dirs : llvm_libdir),
@@ -60,11 +73,25 @@ index b77826b6e1e..14fa9ba7177 100644
      polly_dep, polly_isl_dep,
    ]
    # check clang once more
-@@ -120,6 +121,6 @@ if with_opencl_icd
+@@ -119,7 +120,7 @@ if with_opencl_icd
+     configuration : _config,
      input : 'mesa.icd.in',
      output : 'mesa.icd',
-     install : true,
--    install_dir : join_paths(get_option('sysconfdir'), 'OpenCL', 'vendors'),
-+    install_dir : join_paths(get_option('prefix'), 'etc', 'OpenCL', 'vendors'),
+-    install : true,
++    install : false,
+     install_dir : join_paths(get_option('sysconfdir'), 'OpenCL', 'vendors'),
    )
- endif
+ 
+diff --git a/src/gallium/targets/rusticl/meson.build b/src/gallium/targets/rusticl/meson.build
+index a968dee52db..69475cf3133 100644
+--- a/src/gallium/targets/rusticl/meson.build
++++ b/src/gallium/targets/rusticl/meson.build
+@@ -58,7 +58,7 @@ configure_file(
+   configuration : _config,
+   input : 'rusticl.icd.in',
+   output : 'rusticl.icd',
+-  install : true,
++  install : false,
+   install_dir : join_paths(get_option('sysconfdir'), 'OpenCL', 'vendors'),
+ )
+ 

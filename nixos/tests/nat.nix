@@ -3,14 +3,16 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, ... }:
+import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, nftables ? false, ... }:
   let
-    unit = if withFirewall then "firewall" else "nat";
+    unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
 
     routerBase =
       lib.mkMerge [
         { virtualisation.vlans = [ 2 1 ];
           networking.firewall.enable = withFirewall;
+          networking.firewall.filterForward = nftables;
+          networking.nftables.enable = nftables;
           networking.nat.internalIPs = [ "192.168.1.0/24" ];
           networking.nat.externalInterface = "eth1";
         }
@@ -21,7 +23,8 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
       ];
   in
   {
-    name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
+    name = "nat" + (lib.optionalString nftables "Nftables")
+                 + (if withFirewall then "WithFirewall" else "Standalone")
                  + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
     meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco rob ];
@@ -34,6 +37,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
             { virtualisation.vlans = [ 1 ];
               networking.defaultGateway =
                 (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
+              networking.nftables.enable = nftables;
             }
             (lib.optionalAttrs withConntrackHelpers {
               networking.firewall.connectionTrackingModules = [ "ftp" ];
@@ -111,7 +115,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
         # FIXME: this should not be necessary, but nat.service is not started because
         #        network.target is not triggered
         #        (https://github.com/NixOS/nixpkgs/issues/16230#issuecomment-226408359)
-        ${lib.optionalString (!withFirewall) ''
+        ${lib.optionalString (!withFirewall && !nftables) ''
           router.succeed("systemctl start nat.service")
         ''}
         client.succeed("curl --fail http://server/ >&2")

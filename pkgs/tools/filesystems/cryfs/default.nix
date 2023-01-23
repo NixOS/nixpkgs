@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-NV2xCC8TaJaWDZSghO8EFuygL8hJLOdx67BWaJ2NKRw=";
+    hash = "sha256-7luTCDjrquG8aBZ841VPwV9/ea8faHGLQtmRahqGTss=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost175 curl fuse openssl range-v3 spdlog ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  #checkInputs = [ gtest ];
+  #nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DDEPENDENCY_CONFIG='../cmake-utils/DependenciesFromLocalSystem.cmake'"

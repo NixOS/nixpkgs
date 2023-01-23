@@ -272,7 +272,7 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
+      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.unsafeDiscardStringContext /* only basename */ (builtins.baseNameOf binutils.dynamicLinker)})
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"

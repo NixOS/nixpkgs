@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appstream-glib
     desktop-file-utils
   ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Ghex";
     description = "Hex editor for GNOME desktop environment";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
   };

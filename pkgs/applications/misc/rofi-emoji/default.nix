@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, substituteAll
 , makeWrapper
 
 , autoreconfHook

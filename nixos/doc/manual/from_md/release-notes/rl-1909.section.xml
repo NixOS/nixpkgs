@@ -82,13 +82,13 @@
       </listitem>
       <listitem>
         <para>
-          We've updated to Xfce 4.14, which brings a new module
+          We’ve updated to Xfce 4.14, which brings a new module
           <literal>services.xserver.desktopManager.xfce4-14</literal>.
-          If you'd like to upgrade, please switch from the
+          If you’d like to upgrade, please switch from the
           <literal>services.xserver.desktopManager.xfce</literal> module
-          as it will be deprecated in a future release. They're
-          incompatibilities with the current Xfce module; it doesn't
-          support <literal>thunarPlugins</literal> and it isn't
+          as it will be deprecated in a future release. They’re
+          incompatibilities with the current Xfce module; it doesn’t
+          support <literal>thunarPlugins</literal> and it isn’t
           recommended to use
           <literal>services.xserver.desktopManager.xfce</literal> and
           <literal>services.xserver.desktopManager.xfce4-14</literal>
@@ -125,7 +125,7 @@
         </itemizedlist>
         <para>
           With these options we hope to give users finer grained control
-          over their systems. Prior to this change you'd either have to
+          over their systems. Prior to this change you’d either have to
           manually disable options or use
           <literal>environment.gnome3.excludePackages</literal> which
           only excluded the optional applications.
@@ -138,7 +138,7 @@
       <listitem>
         <para>
           Orthogonal to the previous changes to the GNOME 3 desktop
-          manager module, we've updated all default services and
+          manager module, we’ve updated all default services and
           applications to match as close as possible to a default
           reference GNOME 3 experience.
         </para>
@@ -295,7 +295,7 @@
               <literal>services.xserver.desktopManager.mate</literal>
               Note Mate uses
               <literal>programs.system-config-printer</literal> as it
-              doesn't use it as a service, but its graphical interface
+              doesn’t use it as a service, but its graphical interface
               directly.
             </para>
           </listitem>
@@ -347,7 +347,7 @@
           <literal>services.prometheus.alertmanager.user</literal> and
           <literal>services.prometheus.alertmanager.group</literal> have
           been removed because the alertmanager service is now using
-          systemd's
+          systemd’s
           <link xlink:href="http://0pointer.net/blog/dynamic-users-with-systemd.html">
           DynamicUser mechanism</link> which obviates these options.
         </para>
@@ -366,7 +366,7 @@
           The <literal>services.nzbget.configFile</literal> and
           <literal>services.nzbget.openFirewall</literal> options were
           removed as they are managed internally by the nzbget. The
-          <literal>services.nzbget.dataDir</literal> option hadn't
+          <literal>services.nzbget.dataDir</literal> option hadn’t
           actually been used by the module for some time and so was
           removed as cleanup.
         </para>
@@ -475,7 +475,7 @@
           Make sure you set the <literal>_netdev</literal> option for
           each of the file systems referring to block devices provided
           by the autoLuks module. Not doing this might render the system
-          in a state where it doesn't boot anymore.
+          in a state where it doesn’t boot anymore.
         </para>
         <para>
           If you are actively using the <literal>autoLuks</literal>
@@ -498,7 +498,7 @@
       <listitem>
         <para>
           The <literal>prometheus-nginx-exporter</literal> package now
-          uses the offical exporter provided by NGINX Inc. Its metrics
+          uses the official exporter provided by NGINX Inc. Its metrics
           are differently structured and are incompatible to the old
           ones. For information about the metrics, have a look at the
           <link xlink:href="https://github.com/nginxinc/nginx-prometheus-exporter">official
@@ -524,7 +524,7 @@
         <para>
           By default, prometheus exporters are now run with
           <literal>DynamicUser</literal> enabled. Exporters that need a
-          real user, now run under a seperate user and group which
+          real user, now run under a separate user and group which
           follow the pattern
           <literal>&lt;exporter-name&gt;-exporter</literal>, instead of
           the previous default <literal>nobody</literal> and
@@ -667,7 +667,7 @@
           instead of depending on the catch-all
           <literal>acme-certificates.target</literal>. This target unit
           was also removed from the codebase. This will mean nginx will
-          no longer depend on certificates it isn't explicitly managing
+          no longer depend on certificates it isn’t explicitly managing
           and fixes a bug with certificate renewal ordering racing with
           nginx restarting which could lead to nginx getting in a broken
           state as described at
@@ -687,8 +687,8 @@
           <literal>services.xserver.desktopManager.xterm</literal> is
           now disabled by default if <literal>stateVersion</literal> is
           19.09 or higher. Previously the xterm desktopManager was
-          enabled when xserver was enabled, but it isn't useful for all
-          people so it didn't make sense to have any desktopManager
+          enabled when xserver was enabled, but it isn’t useful for all
+          people so it didn’t make sense to have any desktopManager
           enabled default.
         </para>
       </listitem>
@@ -696,7 +696,7 @@
         <para>
           The WeeChat plugin
           <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been
-          removed as it doesn't receive any updates from upstream and
+          removed as it doesn’t receive any updates from upstream and
           depends on outdated Python2-based modules.
         </para>
       </listitem>
@@ -744,11 +744,11 @@
           <literal>services.gitlab.secrets.dbFile</literal>,
           <literal>services.gitlab.secrets.otpFile</literal> and
           <literal>services.gitlab.secrets.jwsFile</literal>). This was
-          done so that secrets aren't stored in the world-readable nix
-          store, but means that for each option you'll have to create a
-          file with the same exact string, add &quot;File&quot; to the
-          end of the option name, and change the definition to a string
-          pointing to the corresponding file; e.g.
+          done so that secrets aren’t stored in the world-readable nix
+          store, but means that for each option you’ll have to create a
+          file with the same exact string, add <quote>File</quote> to
+          the end of the option name, and change the definition to a
+          string pointing to the corresponding file; e.g.
           <literal>services.gitlab.databasePassword = &quot;supersecurepassword&quot;</literal>
           becomes
           <literal>services.gitlab.databasePasswordFile = &quot;/path/to/secret_file&quot;</literal>
@@ -791,7 +791,7 @@
       <listitem>
         <para>
           The <literal>nodejs-11_x</literal> package has been removed as
-          it's EOLed by upstream.
+          it’s EOLed by upstream.
         </para>
       </listitem>
       <listitem>
@@ -961,7 +961,7 @@
           from the upstream default <literal>speex-float-1</literal> to
           <literal>speex-float-5</literal>. Be aware that low-powered
           ARM-based and MIPS-based boards will struggle with this so
-          you'll need to set
+          you’ll need to set
           <literal>hardware.pulseaudio.daemon.config.resample-method</literal>
           back to <literal>speex-float-1</literal>.
         </para>
@@ -1004,7 +1004,7 @@
       </listitem>
       <listitem>
         <para>
-          It's now possible to change configuration in
+          It’s now possible to change configuration in
           <link xlink:href="options.html#opt-services.nextcloud.enable">services.nextcloud</link>
           after the initial deploy since all config parameters are
           persisted in an additional config file generated by the
@@ -1178,7 +1178,7 @@
           <link xlink:href="https://ceph.com/releases/v14-2-0-nautilus-released/">release
           notes</link> for details. The mgr dashboard as well as osds
           backed by loop-devices is no longer explicitly supported by
-          the package and module. Note: There's been some issues with
+          the package and module. Note: There’s been some issues with
           python-cherrypy, which is used by the dashboard and prometheus
           mgr modules (and possibly others), hence
           0000-dont-check-cherrypy-version.patch.

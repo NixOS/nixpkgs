@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , curl, db, libgeotiff
-, libXpm, libXt, motif, pcre
+, xorg, motif, pcre
 , perl, proj, rastermagick, shapelib
+, libax25
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl db libgeotiff
-    libXpm libXt motif pcre
+    xorg.libXpm xorg.libXt motif pcre
     perl proj rastermagick shapelib
+    libax25
   ];
 
   configureFlags = [ "--with-motif-includes=${motif}/include" ];

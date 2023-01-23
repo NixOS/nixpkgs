@@ -18,6 +18,7 @@ rec {
     isInt
     isList
     isAttrs
+    isPath
     isString
     match
     parseDrvName
@@ -185,6 +186,16 @@ rec {
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
+  /* Normalize path, removing extraneous /s
+
+     Type: normalizePath :: string -> string
+
+     Example:
+       normalizePath "/a//b///c/"
+       => "/a/b/c/"
+  */
+  normalizePath = s: (builtins.foldl' (x: y: if y == "/" && hasSuffix "/" x then x else x+y) "" (stringToCharacters s));
+
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
 
@@ -271,7 +282,7 @@ rec {
        => [ ]
        stringToCharacters "abc"
        => [ "a" "b" "c" ]
-       stringToCharacters "💩"
+       stringToCharacters "🦄"
        => [ "�" "�" "�" "�" ]
   */
   stringToCharacters = s:
@@ -294,6 +305,21 @@ rec {
       map f (stringToCharacters s)
     );
 
+  /* Convert char to ascii value, must be in printable range
+
+     Type: charToInt :: string -> int
+
+     Example:
+       charToInt "A"
+       => 65
+       charToInt "("
+       => 40
+
+  */
+  charToInt = let
+    table = import ./ascii-table.nix;
+  in c: builtins.getAttr c table;
+
   /* Escape occurrence of the elements of `list` in `string` by
      prefixing it with a backslash.
 
@@ -303,7 +329,20 @@ rec {
        escape ["(" ")"] "(foo)"
        => "\\(foo\\)"
   */
-  escape = list: replaceChars list (map (c: "\\${c}") list);
+  escape = list: replaceStrings list (map (c: "\\${c}") list);
+
+  /* Escape occurrence of the element of `list` in `string` by
+     converting to its ASCII value and prefixing it with \\x.
+     Only works for printable ascii characters.
+
+     Type: escapeC = [string] -> string -> string
+
+     Example:
+       escapeC [" "] "foo bar"
+       => "foo\\x20bar"
+
+  */
+  escapeC = list: replaceStrings list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
 
   /* Quote string to be used safely within the Bourne shell.
 
@@ -357,7 +396,7 @@ rec {
   */
   toShellVar = name: value:
     lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
-    if isAttrs value && ! isCoercibleToString value then
+    if isAttrs value && ! isStringLike value then
       "declare -A ${name}=(${
         concatStringsSep " " (lib.mapAttrsToList (n: v:
           "[${escapeShellArg n}]=${escapeShellArg v}"
@@ -433,19 +472,8 @@ rec {
     ["\"" "'" "<" ">" "&"]
     ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
-  # Obsolete - use replaceStrings instead.
-  replaceChars = builtins.replaceStrings or (
-    del: new: s:
-    let
-      substList = lib.zipLists del new;
-      subst = c:
-        let found = lib.findFirst (sub: sub.fst == c) null substList; in
-        if found == null then
-          c
-        else
-          found.snd;
-    in
-      stringAsChars subst s);
+  # warning added 12-12-2022
+  replaceChars = lib.warn "replaceChars is a deprecated alias of replaceStrings, replace usages of it with replaceStrings." builtins.replaceStrings;
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -459,7 +487,7 @@ rec {
        toLower "HOME"
        => "home"
   */
-  toLower = replaceChars upperChars lowerChars;
+  toLower = replaceStrings upperChars lowerChars;
 
   /* Converts an ASCII string to upper-case.
 
@@ -469,10 +497,10 @@ rec {
        toUpper "home"
        => "HOME"
   */
-  toUpper = replaceChars lowerChars upperChars;
+  toUpper = replaceStrings lowerChars upperChars;
 
   /* Appends string context from another string.  This is an implementation
-     detail of Nix.
+     detail of Nix and should be used carefully.
 
      Strings in Nix carry an invisible `context` which is a list of strings
      representing store paths.  If the string is later used in a derivation
@@ -495,13 +523,11 @@ rec {
        splitString "/" "/usr/local/bin"
        => [ "" "usr" "local" "bin" ]
   */
-  splitString = _sep: _s:
+  splitString = sep: s:
     let
-      sep = builtins.unsafeDiscardStringContext _sep;
-      s = builtins.unsafeDiscardStringContext _s;
-      splits = builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
+      splits = builtins.filter builtins.isString (builtins.split (escapeRegex (toString sep)) (toString s));
     in
-      map (v: addContextFrom _sep (addContextFrom _s v)) splits;
+      map (addContextFrom s) splits;
 
   /* Return a string without the specified prefix, if the prefix matches.
 
@@ -623,6 +649,61 @@ rec {
       name = head (splitString sep filename);
     in assert name != filename; name;
 
+  /* Create a -D<feature>=<value> string that can be passed to typical Meson
+     invocations.
+
+    Type: mesonOption :: string -> string -> string
+
+     @param feature The feature to be set
+     @param value The desired value
+
+     Example:
+       mesonOption "engine" "opengl"
+       => "-Dengine=opengl"
+  */
+  mesonOption = feature: value:
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    "-D${feature}=${value}";
+
+  /* Create a -D<condition>={true,false} string that can be passed to typical
+     Meson invocations.
+
+    Type: mesonBool :: string -> bool -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       mesonBool "hardened" true
+       => "-Dhardened=true"
+       mesonBool "static" false
+       => "-Dstatic=false"
+  */
+  mesonBool = condition: flag:
+    assert (lib.isString condition);
+    assert (lib.isBool flag);
+    mesonOption condition (lib.boolToString flag);
+
+  /* Create a -D<feature>={enabled,disabled} string that can be passed to
+     typical Meson invocations.
+
+    Type: mesonEnable :: string -> bool -> string
+
+     @param feature The feature to be enabled or disabled
+     @param flag The controlling flag
+
+     Example:
+       mesonEnable "docs" true
+       => "-Ddocs=enabled"
+       mesonEnable "savage" false
+       => "-Dsavage=disabled"
+  */
+  mesonEnable = feature: flag:
+    assert (lib.isString feature);
+    assert (lib.isBool flag);
+    mesonOption feature (if flag then "enabled" else "disabled");
+
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.
 
@@ -718,10 +799,31 @@ rec {
   in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
     result;
 
-  /* Check whether a value can be coerced to a string */
-  isCoercibleToString = x:
-    elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (isList x && lib.all isCoercibleToString x) ||
+  /* Soft-deprecated function. While the original implementation is available as
+     isConvertibleWithToString, consider using isStringLike instead, if suitable. */
+  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
+    "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
+    isConvertibleWithToString;
+
+  /* Check whether a list or other value can be passed to toString.
+
+     Many types of value are coercible to string this way, including int, float,
+     null, bool, list of similarly coercible values.
+  */
+  isConvertibleWithToString = x:
+    isStringLike x ||
+    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    (isList x && lib.all isConvertibleWithToString x);
+
+  /* Check whether a value can be coerced to a string.
+     The value must be a string, path, or attribute set.
+
+     String-like values can be used without explicit conversion in
+     string interpolations and in most functions that expect a string.
+   */
+  isStringLike = x:
+    isString x ||
+    isPath x ||
     x ? outPath ||
     x ? __toString;
 
@@ -738,31 +840,113 @@ rec {
        => false
   */
   isStorePath = x:
-    if !(isList x) && isCoercibleToString x then
+    if isStringLike x then
       let str = toString x; in
       substring 0 1 str == "/"
       && dirOf str == storeDir
     else
       false;
 
-  /* Parse a string as an int.
+  /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
+  ambiguity between zero-padded and octal numbers. See toIntBase10.
 
      Type: string -> int
 
      Example:
+
        toInt "1337"
        => 1337
+
        toInt "-4"
        => -4
+
+       toInt " 123 "
+       => 123
+
+       toInt "00024"
+       => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
+
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
-  # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
-    let may_be_int = fromJSON str; in
-    if isInt may_be_int
-    then may_be_int
-    else throw "Could not convert ${str} to int.";
+    let
+      # RegEx: Match any leading whitespace, possibly a '-', one or more digits,
+      # and finally match any trailing whitespace.
+      strippedInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*" str;
+
+      # RegEx: Match a leading '0' then one or more digits.
+      isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
+
+      # Attempt to parse input
+      parsedInput = fromJSON (head strippedInput);
+
+      generalError = "toInt: Could not convert ${escapeNixString str} to int.";
+
+      octalAmbigError = "toInt: Ambiguity in interpretation of ${escapeNixString str}"
+      + " between octal and zero padded integer.";
+
+    in
+      # Error on presence of non digit characters.
+      if strippedInput == null
+      then throw generalError
+      # Error on presence of leading zero/octal ambiguity.
+      else if isLeadingZero
+      then throw octalAmbigError
+      # Error if parse function fails.
+      else if !isInt parsedInput
+      then throw generalError
+      # Return result.
+      else parsedInput;
+
+
+  /* Parse a string as a base 10 int. This supports parsing of zero-padded integers.
+
+     Type: string -> int
+
+     Example:
+       toIntBase10 "1337"
+       => 1337
+
+       toIntBase10 "-4"
+       => -4
+
+       toIntBase10 " 123 "
+       => 123
+
+       toIntBase10 "00024"
+       => 24
+
+       toIntBase10 "3.14"
+       => error: floating point JSON numbers are not supported
+  */
+  toIntBase10 = str:
+    let
+      # RegEx: Match any leading whitespace, then match any zero padding,
+      # capture possibly a '-' followed by one or more digits,
+      # and finally match any trailing whitespace.
+      strippedInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*" str;
+
+      # RegEx: Match at least one '0'.
+      isZero = match "0+" (head strippedInput) == [];
+
+      # Attempt to parse input
+      parsedInput = fromJSON (head strippedInput);
+
+      generalError = "toIntBase10: Could not convert ${escapeNixString str} to int.";
+
+    in
+      # Error on presence of non digit characters.
+      if strippedInput == null
+      then throw generalError
+      # In the special case zero-padded zero (00000), return early.
+      else if isZero
+      then 0
+      # Error if parse function fails.
+      else if !isInt parsedInput
+      then throw generalError
+      # Return result.
+      else parsedInput;
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
      Lines beginning with `#` are treated as comments and ignored.

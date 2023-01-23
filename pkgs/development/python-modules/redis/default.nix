@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "4.3.4";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3fJwcd9K3zghxPLKWdZ1JcOoLl8mi+2XuBPLT6v4eIA=";
+    sha256 = "sha256-e4yH0ZxF0/EnGxJIWNKlwTFgxOdNSDXignNAD6NNUig=";
   };
 
   propagatedBuildInputs = [

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ amazon-ion six ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ionhash" ];
 

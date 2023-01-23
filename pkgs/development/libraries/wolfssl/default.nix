@@ -1,19 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, Security
 , autoreconfHook
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "5.5.1";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "sha256-gDY5uEvV5nNPObrar5Fq2UTW30UZ71CooUwQVJkq4l8=";
+    hash = "sha256-sR/Gjk50kLej5oJzDH1I6/V+7OIRiwtyeg5tEE3fmHk=";
   };
 
   postPatch = ''
@@ -42,12 +43,13 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+  propagatedBuildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [
     autoreconfHook
   ];
 
   doCheck = true;
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   postInstall = ''
      # fix recursive cycle:

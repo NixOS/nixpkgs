@@ -370,7 +370,7 @@
         documentation</link> for details. If you wish to continue to use
         httpd 2.2, add the following line to your NixOS configuration:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 {
   services.httpd.package = pkgs.apacheHttpd_2_2;
 }

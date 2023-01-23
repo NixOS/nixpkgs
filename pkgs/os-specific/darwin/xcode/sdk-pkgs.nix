@@ -1,4 +1,4 @@
-{ targetPlatform
+{ stdenv
 , clang-unwrapped
 , binutils-unwrapped
 , runCommand
@@ -12,7 +12,7 @@
 
 let
 
-minSdkVersion = targetPlatform.minSdkVersion or "9.0";
+minSdkVersion = stdenv.targetPlatform.minSdkVersion or "9.0";
 
 in
 
@@ -22,8 +22,8 @@ rec {
     type = "derivation";
     outPath = xcode + "/Contents/Developer/Platforms/${platform}.platform/Developer/SDKs/${platform}${version}.sdk";
 
-    platform = targetPlatform.xcodePlatform;
-    version = targetPlatform.sdkVer;
+    platform = stdenv.targetPlatform.xcodePlatform;
+    version = stdenv.targetPlatform.sdkVer;
   };
 
   binutils = wrapBintoolsWith {
@@ -39,7 +39,7 @@ rec {
     extraBuildCommands = ''
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags
-      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
+      echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
       echo "-isystem ${sdk}/usr/include${lib.optionalString (lib.versionAtLeast "10" sdk.version) " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"}" >> $out/nix-support/cc-cflags
       ${lib.optionalString (lib.versionAtLeast sdk.version "14") "echo -isystem ${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 >> $out/nix-support/cc-cflags"}
     '';

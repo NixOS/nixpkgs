@@ -21,7 +21,7 @@ buildDotnetModule rec {
   buildInputs = [ stdenv.cc.cc.lib ];
 
   projectFile = "inklecate/inklecate.csproj";
-  nugetDeps = if stdenv.isDarwin then ./deps-darwin.nix else ./deps-linux.nix;
+  nugetDeps = ./deps.nix;
   executables = [ "inklecate" ];
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;

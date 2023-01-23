@@ -16,22 +16,6 @@ let
                       else
                         pkgs.postgresql_12;
 
-  # Git 2.36.1 seemingly contains a commit-graph related bug which is
-  # easily triggered through GitLab, so we downgrade it to 2.35.x
-  # until this issue is solved. See
-  # https://gitlab.com/gitlab-org/gitlab/-/issues/360783#note_992870101.
-  gitPackage =
-    let
-      version = "2.35.4";
-    in
-      pkgs.git.overrideAttrs (oldAttrs: rec {
-        inherit version;
-        src = pkgs.fetchurl {
-          url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-          sha256 = "sha256-mv13OdNkXggeKQkJ+47QcJ6lYmcw6Qjri1ZJ2ETCTOk=";
-        };
-      });
-
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
@@ -56,11 +40,12 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
+    runtime_dir = "/run/gitaly"
     bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${gitPackage}/bin/git"
+    bin_path = "${pkgs.git}/bin/git"
 
     [gitaly-ruby]
     dir = "${cfg.packages.gitaly.ruby}"
@@ -157,7 +142,7 @@ let
       };
       workhorse.secret_file = "${cfg.statePath}/.gitlab_workhorse_secret";
       gitlab_kas.secret_file = "${cfg.statePath}/.gitlab_kas_secret";
-      git.bin_path = "${gitPackage}/bin/git";
+      git.bin_path = "git";
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
         sidekiq_exporter = {
@@ -260,6 +245,7 @@ in {
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
     (mkRenamedOptionModule [ "services" "gitlab" "backupPath" ] [ "services" "gitlab" "backup" "path" ])
     (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
+    (mkRemovedOptionModule [ "services" "gitlab" "logrotate" "extraConfig" ] "Modify services.logrotate.settings.gitlab directly instead")
   ];
 
   options = {
@@ -575,7 +561,7 @@ in {
           description = lib.mdDoc "GitLab container registry host name.";
         };
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 4567;
           description = lib.mdDoc "GitLab container registry port.";
         };
@@ -628,7 +614,7 @@ in {
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 25;
           description = lib.mdDoc "Port of the SMTP server for GitLab.";
         };
@@ -871,15 +857,6 @@ in {
           default = 30;
           description = lib.mdDoc "How many rotations to keep.";
         };
-
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
-          description = lib.mdDoc ''
-            Extra logrotate config options for this path. Refer to
-            <https://linux.die.net/man/8/logrotate> for details.
-          '';
-        };
       };
 
       workhorse.config = mkOption {
@@ -1042,7 +1019,6 @@ in {
           rotate = cfg.logrotate.keep;
           copytruncate = true;
           compress = true;
-          extraConfig = cfg.logrotate.extraConfig;
         };
       };
     };
@@ -1334,7 +1310,7 @@ in {
       });
       path = with pkgs; [
         postgresqlPackage
-        gitPackage
+        git
         ruby
         openssh
         nodejs
@@ -1365,7 +1341,7 @@ in {
       path = with pkgs; [
         openssh
         procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
-        gitPackage
+        git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
@@ -1378,6 +1354,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        RuntimeDirectory = "gitaly";
         ExecStart = "${cfg.packages.gitaly}/bin/gitaly ${gitalyToml}";
       };
     };
@@ -1411,7 +1388,7 @@ in {
       path = with pkgs; [
         remarshal
         exiftool
-        gitPackage
+        git
         gnutar
         gzip
         openssh
@@ -1484,7 +1461,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitPackage
+        git
         openssh
         nodejs
         procps

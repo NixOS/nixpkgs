@@ -2,15 +2,13 @@
 
 buildDunePackage rec {
   pname = "flac";
-  version = "0.3.0";
-
-  useDune2 = true;
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-flac";
     rev = "v${version}";
-    sha256 = "06gfbrp30sdxigzkix83y1b610ljzik6rrxmbl3ppmpx4dqlwnxa";
+    sha256 = "sha256-oMmxZtphEX/OPfyTumjkWQJidAjSRqriygaTjVJTCG0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchgit
-, automake
 , autoreconfHook
 , lv2
 , pkg-config

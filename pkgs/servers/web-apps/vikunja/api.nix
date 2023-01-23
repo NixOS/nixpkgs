@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "vikunja-api";
-  version = "0.19.2";
+  version = "0.20.1";
 
   src = fetchFromGitea {
     domain = "kolaente.dev";
     owner = "vikunja";
     repo = "api";
     rev = "v${version}";
-    sha256 = "sha256-KI/RgtyjO+LdsoZ0JMo7xHeINpUAd5nDvd/WiWYEA6c=";
+    sha256 = "sha256-KBUN/vBm2st5mfqmrwUv8w4QcgSKerfY51LQbWRn7To=";
   };
 
   nativeBuildInputs =
@@ -24,7 +24,7 @@ buildGoModule rec {
         '';
       in [ fakeGit mage ];
 
-  vendorSha256 = "sha256-ZEmZeIB+uL1/JWEfBd7gZuGNF95pdiJfu5+FY2+sL64=";
+  vendorSha256 = "sha256-ke4jhOhD24zSpQI1nxKoJ05yN/SfCku+wiNuDKr78rw=";
 
   # checks need to be disabled because of needed internet for some checks
   doCheck = false;

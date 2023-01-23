@@ -5,9 +5,9 @@
 , gdk-pixbuf-xlib
 , gettext
 , gtk2
-, imlib
 , libICE
 , libSM
+, libxcrypt
 , libXinerama
 , libXrandr
 , libXtst
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk-pixbuf-xlib
     gtk2
-    imlib
     libICE
     libSM
+    libxcrypt
     libXinerama
     libXrandr
     libXtst

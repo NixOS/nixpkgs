@@ -5,19 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MZ5ynaGZTzO2w0hGHII19PFC0+kjfd+IlcsenGGgMgg=";
+    sha256 = "sha256-Zexcfkf8Br3wduUpM3tcS68fEVO6reNxYSB3X3qUWKg=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];
-  checkInputs = [ cunit ncurses ];
+  nativeCheckInputs = [ cunit ncurses ];
 
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file

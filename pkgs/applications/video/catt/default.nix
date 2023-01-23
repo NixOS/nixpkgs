@@ -13,7 +13,7 @@ let
           owner = "jstasiak";
           repo = "python-zeroconf";
           rev = version;
-          sha256 = "158dqay74zvnz6kmpvip4ml0kw59nf2aaajwgaamx0zc8ci1p5pj";
+          hash = "sha256-8pYbIkPsg16VelwqpYSzqfAJaCU37lun+XZ/crzCDZU=";
         };
       });
 
@@ -29,7 +29,7 @@ let
         version = "9.2.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "02ig2wf2yyrnnl88r2n13s1naskwsifwgx3syifmcxygflsmjd3d";
+          hash = "sha256-bTRZNXXPd1Zd9Hr0x13UfGplgx7BiowQtTZ7LxwXLwo=";
         };
       });
     };

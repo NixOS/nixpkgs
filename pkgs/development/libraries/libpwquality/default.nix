@@ -15,7 +15,7 @@ assert enablePython -> !stdenv.hostPlatform.isStatic;
 
 stdenv.mkDerivation rec {
   pname = "libpwquality";
-  version = "1.4.4";
+  version = "1.4.5";
 
   outputs = [ "out" "dev" "lib" "man" ] ++ lib.optionals enablePython [ "py" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "libpwquality";
     repo = "libpwquality";
     rev = "${pname}-${version}";
-    sha256 = "sha256-7gAzrx5VP1fEBwAt6E5zGM8GyuPRR+JxYifYfirY+U8=";
+    sha256 = "sha256-YjvHzd4iEBvg+qHOVJ7/y9HqyeT+QDalNE/jdNM9BNs=";
   };
 
   patches = [

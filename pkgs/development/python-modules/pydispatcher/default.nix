@@ -14,12 +14,12 @@ buildPythonPackage rec {
     hash = "sha256-PX5PQ8cAAKHcox+SaU6Z0BAZNPpuq11UVadYhY2G35U=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
-    homepage = "http://pydispatcher.sourceforge.net/";
+    homepage = "https://pydispatcher.sourceforge.net/";
     description = "Signal-registration and routing infrastructure for use in multiple contexts";
     license = licenses.bsd3;
   };

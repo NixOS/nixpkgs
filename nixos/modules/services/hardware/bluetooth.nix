@@ -50,14 +50,8 @@ in
         type = types.package;
         default = pkgs.bluez;
         defaultText = literalExpression "pkgs.bluez";
-        example = literalExpression "pkgs.bluezFull";
         description = lib.mdDoc ''
           Which BlueZ package to use.
-
-          ::: {.note}
-          Use the `pkgs.bluezFull` package to enable all
-          bluez plugins.
-          :::
         '';
       };
 

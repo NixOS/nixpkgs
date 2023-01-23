@@ -1,0 +1,30 @@
+diff --git a/pom.xml b/pom.xml
+index d5f8330b4..58ed18b63 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -129,7 +130,7 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-jar-plugin</artifactId>
+-                <version>2.5</version>
++                <version>3.2.0</version>
+                 <configuration>
+                     <archive>
+                         <manifest>
+@@ -188,6 +189,7 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-assembly-plugin</artifactId>
++                <version>3.2.0</version>
+                 <configuration>
+                     <finalName>Digital</finalName>
+                     <appendAssemblyId>false</appendAssemblyId>
+@@ -202,7 +204,7 @@
+                         </manifest>
+                         <manifestEntries>
+                             <Build-SCM-Revision>${git.commit.id.describe}</Build-SCM-Revision>
+-                            <Build-Time>${maven.build.timestamp}</Build-Time>
++                            <Build-Time>@buildDate@</Build-Time>
+                             <SplashScreen-Image>icons/splash.png</SplashScreen-Image>
+                         </manifestEntries>
+                     </archive>

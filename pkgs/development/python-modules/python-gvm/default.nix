@@ -34,7 +34,7 @@ buildPythonPackage rec {
     paramiko
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

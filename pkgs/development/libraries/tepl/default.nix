@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tepl";
-  version = "6.1.2";
+  version = "6.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Cv4uyaWNT6ixBntqc0/TxzNqn/+3VyyWPFLqbYckoZs=";
+    sha256 = "jNaGXCw4GIdgyzjK4z3J4KiI+tGNCwTx1V5laqmJqEQ=";
   };
 
   nativeBuildInputs = [

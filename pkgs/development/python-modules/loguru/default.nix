@@ -33,7 +33,7 @@ buildPythonPackage rec {
     aiocontextvars
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     colorama
   ];

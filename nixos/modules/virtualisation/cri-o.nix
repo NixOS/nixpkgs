@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
@@ -93,7 +93,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package pkgs.cri-tools ];
 
-    environment.etc."crictl.yaml".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
+    environment.etc."crictl.yaml".source = "${cfg.package}/etc/crictl.yaml";
 
     virtualisation.cri-o.settings.crio = {
       storage_driver = cfg.storageDriver;
@@ -124,8 +124,8 @@ in
       };
     };
 
-    environment.etc."cni/net.d/10-crio-bridge.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
-    environment.etc."cni/net.d/99-loopback.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/99-loopback.conf";
+    environment.etc."cni/net.d/10-crio-bridge.conflist".source = "${cfg.package}/etc/cni/net.d/10-crio-bridge.conflist";
+    environment.etc."cni/net.d/99-loopback.conflist".source = "${cfg.package}/etc/cni/net.d/99-loopback.conflist";
     environment.etc."crio/crio.conf.d/00-default.conf".source = cfgFile;
 
     # Enable common /etc/containers configuration

@@ -14,7 +14,7 @@
 #   gems that don't behave correctly, fixes are already provided in the form of
 #   derivations.
 #
-# This seperates "what to build" (the exact gem versions) from "how to build"
+# This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
@@ -315,7 +315,7 @@ in
   };
 
   grpc = attrs: {
-    nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin libtool;
+    nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     NIX_CFLAGS_COMPILE = toString [
@@ -384,6 +384,9 @@ in
         --replace "location = Libv8::Location::Vendor.new" \
                   "location = Libv8::Location::System.new"
     '';
+    meta.broken = true; # At 2023-01-20, errors as:
+                        #   "Failed to build gem native extension."
+                        # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
@@ -543,6 +546,10 @@ in
 
   puma = attrs: {
     buildInputs = [ openssl ];
+  };
+
+  "pygments.rb" = attrs: {
+    buildInputs = [ python3 ];
   };
 
   rack = attrs: {

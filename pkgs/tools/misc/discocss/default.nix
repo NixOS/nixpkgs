@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "discocss";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "mlvzk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-afmQCOOZ1MwQkbZZNHYfq2+IRv2eOtYBrGVHzDEbUHw=";
+    sha256 = "sha256-Qp1EixARxEnpNM+Yhn00anR0Ll4aFmkeaGtNju/iWlY=";
   };
 
   dontBuild = true;

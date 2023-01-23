@@ -43,7 +43,7 @@ buildPythonPackage rec {
     # ValueError: Root URL is required.
     doCheck = false;
 
-    checkInputs = [
+    nativeCheckInputs = [
       unittestCheckHook
       responses
     ];

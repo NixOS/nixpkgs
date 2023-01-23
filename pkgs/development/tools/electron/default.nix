@@ -16,6 +16,7 @@
 , libappindicator-gtk3
 , libxshmfence
 , libglvnd
+, wayland
 }@args:
 
 let
@@ -23,7 +24,7 @@ let
 in
 rec {
 
-  electron = electron_21;
+  electron = electron_22;
 
   electron_9 = mkElectron "9.4.4" {
     x86_64-linux = "781d6ca834d415c71078e1c2c198faba926d6fce19e31448bbf4450869135450";
@@ -141,12 +142,21 @@ rec {
     headers = "11cv0p52864k4knwlwakiq8v6rxdv3iz6kvwhn0w8mpap2h5pzii";
   };
 
-  electron_21 = mkElectron "21.0.1" {
-    armv7l-linux = "07cb5a4642248c3662b64fdba8ff7a245674e09bdc52a45e9067e8b508bf4866";
-    aarch64-linux = "86d7eca977042c5fd9204d5aefe2dad5aae81538de1707f04cac59c912edf780";
-    x86_64-linux = "4fd6d7b5a65f44a43165ae77d0484db992b30d6efba478a192e984506fbd52b6";
-    x86_64-darwin = "f1ee563ac2b2defbf856e444c0f8fdbd7afae1a81dc0a29ebb190e2f68f48efd";
-    aarch64-darwin = "0027d3ffe795e44a959e23f0e9e91452e742ea697fc1141eb93f31b840c3a26f";
-    headers = "0ra6gd09ly184m6icj6k4wzp6qrjlbc2hdmy06xp2wcdgzc8dsn8";
+  electron_21 = mkElectron "21.2.1" {
+    armv7l-linux = "1f68ffacbcd0086c5bcbc726e3a0bd707b03acdf5c82d5cc44666b6e9a0d8a78";
+    aarch64-linux = "78c1c6ecf5959e67fa6c67d82dc7deb170bc10d34d45265d6e972dd5b996bcb9";
+    x86_64-linux = "d8aa2ea7b1a1421ca245ced1a9bdd77408bf7aee6f75c19d5e0e73dc120442b7";
+    x86_64-darwin = "f20c0be6cb51bad1bb591ec1116be622e631cbc89876b2258c55579bbe52de30";
+    aarch64-darwin = "2ac1bde2bbb4a265422e00eb5e1d81302b0c349b2db6e7bf1ee6f236a68b3d53";
+    headers = "1c1g6jc0p678d5sr2w4irhfkj02vm4kb92b7cvimz8an0jwy58x7";
+  };
+
+  electron_22 = mkElectron "22.0.0" {
+    armv7l-linux = "f2b9c870c12d4cfd6a4ac23bf937d4a89cd34381aedc2c9a64f00f22ff984985";
+    aarch64-linux = "7c031d1d907953399126e9ed072db66ab7c82e3aff29c8268c8c3a83f825f5de";
+    x86_64-linux = "ea0f4ad9a91bef4d5918d73c27b2731a5a93fe8917ad13d9eca83f39c5acbf05";
+    x86_64-darwin = "b072e64ae563997abed9b76e30b617dfc23a33d6bba6b85fdf30c0877a6215c2";
+    aarch64-darwin = "79b700953a20f4055bf94f11d7a6be9d39a7545774b45ca487cf33482828ebfd";
+    headers = "06fi1m6g0g81a1lkx11ryxbic0srp4iq2z2lf2449sjnaw1sh2hr";
   };
 }

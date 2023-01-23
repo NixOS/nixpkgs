@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "0szifda6yism5vn5jdizkha3ad0xk6zw4xgfl8g77dnv83ci7h65";
   };
 
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
   propagatedBuildInputs = [ angstrom stringext ];
   doCheck = true;
 

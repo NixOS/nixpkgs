@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , anyio
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.15.0";
+  version = "0.18.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,13 +24,13 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DibxoVH7uOy9rxzhiN4HmihA7HtdzErmJOnsI/NWY5I=";
+    hash = "sha256-XEhu6M1hFi3/gAKZcei7KJSrIhhlZhlvZvbfyA6VLR4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-EakC/rSIS42Q4Y0pvWKG7mzppU5KjCktnC09iFMZM0A=";
+    hash = "sha256-IWONA3o+2emJ7cKEw5xYSMdWzGuUSwn1B70zUDzj7Cw=";
   };
 
   nativeBuildInputs = [
@@ -45,26 +45,30 @@ buildPythonPackage rec {
     anyio
   ];
 
-  preCheck = ''
-    rm -rf watchfiles
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     dirty-equals
     pytest-mock
     pytest-timeout
     pytestCheckHook
   ];
 
+  postPatch = ''
+    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
+  '';
+
+  preCheck = ''
+    rm -rf watchfiles
+  '';
+
   pythonImportsCheck = [
     "watchfiles"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "Simple, modern file watching and code reload";
+    description = "File watching and code reload";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.isDarwin;
   };
 }

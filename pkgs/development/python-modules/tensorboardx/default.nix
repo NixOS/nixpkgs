@@ -55,7 +55,7 @@ buildPythonPackage rec {
     soundfile
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     matplotlib
     moto

@@ -1,5 +1,4 @@
-{ lib, newScope, splicePackages, steamPackagesAttr ? "steamPackages"
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
+{ makeScopeWithSplicing, generateSplicesForMkScope
 , stdenv, buildFHSUserEnv, pkgsi686Linux
 }:
 
@@ -18,19 +17,12 @@ let
       glxinfo-i686 = pkgsi686Linux.glxinfo;
       steam-runtime-wrapped-i686 =
         if self.steamArch == "amd64"
-        then pkgsi686Linux.${steamPackagesAttr}.steam-runtime-wrapped
+        then pkgsi686Linux.steamPackages.steam-runtime-wrapped
         else null;
       inherit buildFHSUserEnv;
     };
     steamcmd = callPackage ./steamcmd.nix { };
   };
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.${steamPackagesAttr};
-    selfBuildHost = pkgsBuildHost.${steamPackagesAttr};
-    selfBuildTarget = pkgsBuildTarget.${steamPackagesAttr};
-    selfHostHost = pkgsHostHost.${steamPackagesAttr};
-    selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr} or {}; # might be missing;
-  };
   keep = self: { };
   extra = spliced0: { };
-in lib.makeScopeWithSplicing splicePackages newScope otherSplices keep extra steamPackagesFun
+in makeScopeWithSplicing (generateSplicesForMkScope "steamPackages") keep extra steamPackagesFun

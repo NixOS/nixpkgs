@@ -33,7 +33,7 @@ crystal.buildCrystalPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/icr \
-      --prefix PATH : ${lib.makeBinPath [ crystal shards makeWrapper which ]}
+      --prefix PATH : ${lib.makeBinPath [ crystal shards which ]}
   '';
 
   meta = with lib; {

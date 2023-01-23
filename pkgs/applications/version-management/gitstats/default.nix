@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, perl, python2, gnuplot, coreutils, gnugrep }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, perl
+, python3
+, gnuplot
+, coreutils
+, gnugrep
+}:
 
 stdenv.mkDerivation rec {
   pname = "gitstats";
@@ -12,9 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qUQB3aCRbPkbMoMf39kPQ0vil8RjXL8RqjdTryfkzK0=";
   };
 
-  nativeBuildInputs = [ perl ];
+  patches = [
+    # make gitstats compatible with python3
+    # https://github.com/hoxu/gitstats/pull/105
+    (fetchpatch {
+      name = "convert-gitstats-to-use-python3.patch";
+      url = "https://github.com/hoxu/gitstats/commit/ca415668ce6b739ca9fefba6acd29c63b89f4211.patch";
+      hash = "sha256-sgjoj8eQ5CxQBffmhqymsmXb8peuaSbfFoWciLK3LOo=";
+    })
+  ];
 
-  buildInputs = [ python2 ];
+  nativeBuildInputs = [ installShellFiles perl ];
+
+  buildInputs = [ python3 ];
 
   strictDeps = true;
 
@@ -25,20 +45,22 @@ stdenv.mkDerivation rec {
         -i gitstats
   '';
 
-  buildPhase = ''
-    make man VERSION="${version}"
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=${version}"
+  ];
 
-  installPhase = ''
-    make install PREFIX="$out" VERSION="${version}"
-    install -Dm644 doc/gitstats.1 "$out"/share/man/man1/gitstats.1
+  buildFlags = [ "man" ];
+
+  postInstall = ''
+    installManPage doc/gitstats.1
   '';
 
   meta = with lib; {
-    homepage = "http://gitstats.sourceforge.net/";
+    homepage = "https://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

@@ -14,6 +14,7 @@
 , python3
 , ncurses
 , libuuid
+, libxcrypt
 , icu
 , libgcc
 , libblocksruntime
@@ -195,6 +196,7 @@ let
     libedit
     libgcc
     libuuid
+    libxcrypt
     libxml2
     ncurses
     sqlite
@@ -387,7 +389,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
 
   checkPhase = ''
     # Remove compiler build system tests which fail due to our modified default build profile and

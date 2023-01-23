@@ -61,6 +61,17 @@ in
         Defaults to `false` to respect its opt-in nature.
       '';
     };
+
+    xdgOpenUsePortal = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Sets environment variable `NIXOS_XDG_OPEN_USE_PORTAL` to `1`
+        This will make `xdg-open` use the portal to open programs, which resolves bugs involving
+        programs opening inside FHS envs or with unexpected env vars set from wrappers.
+        See [#160923](https://github.com/NixOS/nixpkgs/issues/160923) for more info.
+      '';
+    };
   };
 
   config =
@@ -95,6 +106,7 @@ in
 
         sessionVariables = {
           GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
+          NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
           XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
         };
       };

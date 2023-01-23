@@ -22,13 +22,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-dnNB82vEv49xzmH3r9dLL4aMIi61HQDr0gVin2H+jOw=";
+    sha256 = "sha256-Kitlx26cK2RiAC+PdRIdDLF5crorg6UB6uSzbKCrDHE=";
   };
 
   patchPhase = ''
@@ -160,7 +160,7 @@ resholve.mkDerivation rec {
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
     dontInstall = true; # just need the build directory
-    installCheckInputs = [
+    nativeInstallCheckInputs = [
       ncurses
       parallel # skips some tests if it can't detect
       flock # skips some tests if it can't detect

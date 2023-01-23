@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pbr
 , appdirs
@@ -18,7 +18,7 @@
 , oslotest
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-ironicclient";
   version = "5.0.1";
 
@@ -42,7 +42,7 @@ buildPythonApplication rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     requests-mock
     oslotest

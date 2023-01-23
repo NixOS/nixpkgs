@@ -72,16 +72,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    maintainers = with maintainers; [ tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

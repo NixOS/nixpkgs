@@ -12,7 +12,7 @@
 , ostree
 , glib
 , appstream
-, libsoup
+, libsoup_3
 , libadwaita
 , polkit
 , isocodes
@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "43.0";
+  version = "43.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "8WUuquJ0pqhwlQAENRZGUgDMdVlNzM2bShWZsKxJ5o8=";
+    sha256 = "k+6AdHl4rSzALlrnPQo9Psgu6hNPx3niqpFpAbu1gJA=";
   };
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     glib
     packagekit
     appstream
-    libsoup
+    libsoup_3
     libadwaita
     gsettings-desktop-schemas
     gnome-desktop
@@ -102,8 +102,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # Needs flatpak to upgrade
-    "-Dsoup2=true"
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
   ] ++ lib.optionals (!withFwupd) [

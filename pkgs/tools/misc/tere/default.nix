@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tere";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mgunyho";
     repo = "tere";
     rev = "v${version}";
-    sha256 = "sha256-2DpJYOzswT7dHEIj+qaTx1Jm28NE+61opoxuMChNwbM=";
+    sha256 = "sha256-gEoy7pwZxlCIPTQZVPSo5TIdmSliSSePunXO3hD3Ryo=";
   };
 
-  cargoSha256 = "sha256-8qSikfsHX8xwBqSSxWwNbiOpXmfzwGTAOALPjxVHadc=";
+  cargoSha256 = "sha256-4XvVisRLSHw4jz+nUndWzS1IK2tnzmxdcgqNHHOvkQg=";
 
-  # This test confirmed not working.
-  # https://github.com/mgunyho/tere/issues/44
-  cargoPatches = [ ./brokentest.patch ];
+  postPatch = ''
+    rm .cargo/config.toml;
+  '';
 
   meta = with lib; {
     description = "A faster alternative to cd + ls";

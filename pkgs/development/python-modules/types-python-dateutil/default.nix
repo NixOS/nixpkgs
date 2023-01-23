@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.8.19";
+  version = "2.8.19.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v9PrOcclOupLojsQ9psBfTCwE2YrtL5KtIsgu9dj8wk=";
+    hash = "sha256-q5H8X3FffXbZpQ09100MaN/jilTwI5z6BQZXWuTYep0=";
   };
 
   # Modules doesn't have tests

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "WMF library from wvWare";
-    homepage = "http://wvware.sourceforge.net/libwmf.html";
+    homepage = "https://wvware.sourceforge.net/libwmf.html";
     downloadPage = "https://github.com/caolanm/libwmf/releases";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

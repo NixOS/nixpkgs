@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.0.1";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "fpHMfxnPnGJSfJe4kJ28+704QjjRwYddOZAB17QxXno=";
+    sha256 = "gT6jpFN0mkSdDs+8GQa0qKuL5KLzxanBMGwA4EATW7Y=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ];
 
@@ -56,12 +56,15 @@ stdenv.mkDerivation rec {
     "-Ddemos=true"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
 
-    HOME=$TMPDIR xvfb-run meson test --print-errorlogs
+    env \
+      HOME="$TMPDIR" \
+      GTK_A11Y=none \
+      xvfb-run meson test --print-errorlogs
 
     runHook postCheck
   '';
@@ -83,6 +86,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libshumate";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

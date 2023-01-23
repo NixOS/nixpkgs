@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     zlib
-  ] ++ lib.optional (backend == "llvm") [
+  ] ++ lib.optionals (backend == "llvm") [
     llvm
   ];
   propagatedBuildInputs = [

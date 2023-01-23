@@ -7,6 +7,7 @@
 , libiconv
 , pcre
 , libgcrypt
+, libxcrypt
 , json_c
 , libxml2
 , ipv6Support ? false
@@ -39,12 +40,13 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   nativeBuildInputs =
-    [ autoreconfHook pkg-config bison libgcrypt pcre json_c libxml2 ]
+    [ autoreconfHook pkg-config bison ];
+  buildInputs = [ libgcrypt libxcrypt pcre json_c libxml2 ]
     ++ lib.optional mccpSupport zlib ++ lib.optional mysqlSupport libmysqlclient
     ++ lib.optional postgresSupport postgresql
     ++ lib.optional sqliteSupport sqlite ++ lib.optional tlsSupport openssl
-    ++ lib.optional pythonSupport python310;
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optional pythonSupport python310
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   # To support systems without autoconf LD puts its configure.ac in a non-default
   # location and uses a helper script. We skip that script and symlink the .ac

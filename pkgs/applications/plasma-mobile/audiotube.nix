@@ -3,11 +3,14 @@
 
 , extra-cmake-modules
 , gcc11
+, wrapGAppsHook
 
+, gst_all_1
 , kcoreaddons
 , kcrash
 , ki18n
 , kirigami2
+, qtimageformats
 , qtmultimedia
 , qtquickcontrols2
 , python3Packages
@@ -16,10 +19,9 @@
 mkDerivation rec {
   pname = "audiotube";
 
-  postPatch = "sed '1i#include <iostream>' -i src/ytmusic.cpp";
-
   nativeBuildInputs = [
     extra-cmake-modules
+    wrapGAppsHook
     gcc11 # doesn't build with GCC 9 from stdenv on aarch64
     python3Packages.wrapPython
     python3Packages.pybind11
@@ -30,9 +32,15 @@ mkDerivation rec {
     kcrash
     ki18n
     kirigami2
+    qtimageformats
     qtmultimedia
     qtquickcontrols2
-  ] ++ pythonPath;
+  ] ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]) ++ pythonPath;
 
   pythonPath = with python3Packages; [
     yt-dlp
@@ -42,7 +50,9 @@ mkDerivation rec {
   preFixup = ''
     buildPythonPath "$pythonPath"
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+  dontWrapGApps = true;
 
   meta = with lib; {
     description = "Client for YouTube Music";

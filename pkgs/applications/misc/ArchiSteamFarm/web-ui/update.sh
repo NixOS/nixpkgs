@@ -1,7 +1,8 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../../.. -i bash -p nodePackages.node2nix gnused jq curl
-set -eoux pipefail
+#! nix-shell -I nixpkgs=../../../.. -i bash -p nodePackages.node2nix gnused jq curl
+set -eou pipefail
 
+cd "$(dirname "$0")"
 pushd ../../../../..
 version=$(nix-instantiate --strict --eval -A ArchiSteamFarm.version | jq -r)
 popd

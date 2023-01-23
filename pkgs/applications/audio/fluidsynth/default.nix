@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.2.9";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    sha256 = "sha256-8vsYn/4qkANp6f6avtdaXHfJD+9NTHTrl7i4RTlKXPQ=";
+    sha256 = "sha256-7SuM7a8IIecAJ83QvJfUba/wArAEXywqL2HwVbeG8H4=";
   };
 
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  cmakeFlags = [ "-Denable-framework=off" ];
+  cmakeFlags = [
+    "-Denable-framework=off"
+    # set CMAKE_INSTALL_NAME_DIR to correct value on darwin
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

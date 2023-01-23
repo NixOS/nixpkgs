@@ -8,7 +8,6 @@ let
   resilioSync = pkgs.resilio-sync;
 
   sharedFoldersRecord = map (entry: {
-    secret = entry.secret;
     dir = entry.directory;
 
     use_relay_server = entry.useRelayServer;
@@ -39,6 +38,36 @@ let
   } // optionalAttrs (sharedFoldersRecord != []) {
     shared_folders = sharedFoldersRecord;
   }));
+
+  sharedFoldersSecretFiles = map (entry: {
+    dir = entry.directory;
+    secretFile = if builtins.hasAttr "secret" entry then
+      toString (pkgs.writeTextFile {
+        name = "secret-file";
+        text = entry.secret;
+      })
+    else
+      entry.secretFile;
+  }) cfg.sharedFolders;
+
+  runConfigPath = "/run/rslsync/config.json";
+
+  createConfig = pkgs.writeShellScriptBin "create-resilio-config" (
+    if cfg.sharedFolders != [ ] then ''
+      ${pkgs.jq}/bin/jq \
+        '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
+        ${
+          lib.concatMapStringsSep " \\\n  "
+          (entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"'')
+          sharedFoldersSecretFiles
+        } \
+        <${configFile} \
+        >${runConfigPath}
+    '' else ''
+      # no secrets, passing through config
+      cp ${configFile} ${runConfigPath};
+    ''
+  );
 
 in
 {
@@ -186,7 +215,7 @@ in
         default = [];
         type = types.listOf (types.attrsOf types.anything);
         example =
-          [ { secret         = "AHMYFPCQAHBM7LQPFXQ7WV6Y42IGUXJ5Y";
+          [ { secretFile     = "/run/resilio-secret";
               directory      = "/home/user/sync_test";
               useRelayServer = true;
               useTracker     = true;
@@ -202,9 +231,6 @@ in
         description = lib.mdDoc ''
           Shared folder list. If enabled, web UI must be
           disabled. Secrets can be generated using `rslsync --generate-secret`.
-          Note that this secret will be
-          put inside the Nix store, so it is realistically not very
-          secret.
 
           If you would like to be able to modify the contents of this
           directories, it is recommended that you make your user a
@@ -256,10 +282,14 @@ in
         Restart   = "on-abort";
         UMask     = "0002";
         User      = "rslsync";
+        RuntimeDirectory = "rslsync";
+        ExecStartPre = "${createConfig}/bin/create-resilio-config";
         ExecStart = ''
-          ${resilioSync}/bin/rslsync --nodaemon --config ${configFile}
+          ${resilioSync}/bin/rslsync --nodaemon --config ${runConfigPath}
         '';
       };
     };
   };
+
+  meta.maintainers = with maintainers; [ jwoudenberg ];
 }

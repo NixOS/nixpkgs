@@ -23,14 +23,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.36";
+  version = "6.1.40";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "e47942e42892c13c621869865e2b7b320340154f0fa74ecbdaf18fdaf70ef047";
+    sha256 = "bc857555d3e836ad9350a8f7b03bb54d2fdc04dddb2043d09813f4634bca4814";
   };
 
   outputs = [ "out" "modsrc" ];

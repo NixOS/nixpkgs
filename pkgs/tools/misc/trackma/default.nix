@@ -24,13 +24,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "trackma";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
     rev = "v${version}";
-    sha256 = "sha256-drc39ID4WYBQ/L2py57CB5OkQNfRKNigPQW0Lp8GIMc=";
+    sha256 = "sha256-BjZw/AYFlTYtgJTDFOALHx1d71ZQsYZ2TXnEUeQVvpw=";
     fetchSubmodules = true; # for anime-relations submodule
   };
 

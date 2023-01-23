@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, qt5, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, qt5, cmake
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsa-lib, python3
 , rnnoise
@@ -108,6 +108,17 @@ let
       sha256 = "sha256-SYsGCuj3HeyAQRUecGLaRdJR9Rm7lbaM54spY/zx0jU=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      # fixes 'static assertion failed: static_assert(sizeof(CCameraAngles) == 0x408, "");'
+      # when compiling pkgsi686Linux.mumble, which is a dependency of x64 mumble_overlay
+      # https://github.com/mumble-voip/mumble/pull/5850
+      # Remove with next version update
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/13c051b36b387356815cff5d685bc628b74ba136.patch";
+        hash = "sha256-Rq8fb6NFd4DCNWm6OOMYIP7tBllufmQcB5CSxPU4qqg=";
+      })
+    ];
   };
 in {
   mumble  = client source;

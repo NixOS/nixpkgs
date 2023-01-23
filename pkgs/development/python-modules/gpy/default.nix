@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
   propagatedBuildInputs = [ numpy scipy six paramz matplotlib ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # $ nosetests GPy/testing/*.py
   # => Ran 483 tests in 112.146s (on 8 cores)

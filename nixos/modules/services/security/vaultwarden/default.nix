@@ -22,9 +22,9 @@ let
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
-        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
-      ) cfg.config));
+      configEnv = concatMapAttrs (name: value: optionalAttrs (value != null) {
+        ${nameToEnvVar name} = if isBool value then boolToString value else toString value;
+      }) cfg.config;
     in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
@@ -162,8 +162,8 @@ in {
 
     webVaultPackage = mkOption {
       type = package;
-      default = pkgs.vaultwarden-vault;
-      defaultText = literalExpression "pkgs.vaultwarden-vault";
+      default = pkgs.vaultwarden.webvault;
+      defaultText = literalExpression "pkgs.vaultwarden.webvault";
       description = lib.mdDoc "Web vault package to use.";
     };
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, curl, gnugrep, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+{ lib, stdenv, curl, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
 let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 

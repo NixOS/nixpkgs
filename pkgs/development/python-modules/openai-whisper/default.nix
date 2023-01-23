@@ -50,7 +50,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

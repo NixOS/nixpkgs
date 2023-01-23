@@ -1,29 +1,32 @@
 { lib
 , rustPlatform
 , fetchCrate
-, pkg-config
-, openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "0.1.88";
+  version = "1.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-VnVyTUOtoplt0Zd5VkCe/h85/Mqcz7lgeIiZVD+Vrxk=";
+    sha256 = "sha256-nPkUGUcekZ2fvQgiVTNvt8vfQsNMyqsrkT2zqEfu/bE=";
   };
 
-  cargoSha256 = "sha256-4D63OEz7/2pJGPXiFEwl6ggaV2DNZcoN//BM7H0Sp7I=";
+  cargoSha256 = "sha256-EaZTpKFZPfDlP/2XylhJHznvlah7VNw4snrKDmT7ecw=";
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    darwin.apple_sdk.frameworks.IOKit
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    darwin.apple_sdk_11_0.frameworks.Foundation
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
-
-  # memory allocation of 34359738368 bytes failed
+  # tests are broken
   doCheck = false;
+
+  # enable nightly features
+  RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
     description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";

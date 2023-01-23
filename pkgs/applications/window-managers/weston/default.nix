@@ -2,7 +2,7 @@
 , meson, ninja, pkg-config, python3, wayland-scanner
 , cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
 , libjpeg, seatd, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
-, wayland-protocols, xlibsWrapper
+, wayland-protocols
 , pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
 , libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
     libjpeg seatd libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
-    pango pipewire udev vaapi wayland wayland-protocols xlibsWrapper
+    pango pipewire udev vaapi wayland wayland-protocols
   ];
 
   mesonFlags= [

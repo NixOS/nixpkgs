@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-f9QFsVGGKoWqZGIg8Z8FgZGcUo5M8MFNUavK69SgHkg=";
+    sha256 = "sha256-yGVhbI1LivTIQEgqOK59T1+8SiTJBPIdftiXkwE4lZM=";
   };
 
-  cargoSha256 = "sha256-ZoDE7SJ6snWTFvYXHZdVCC6UCug2wGghH93FfDTDsv0=";
+  cargoSha256 = "sha256-UR3ktV80QU0N3f7qmqdhYpc5uwoPq4UvN40zEuMbp+Q=";
 
   postPatch = ''
     substituteInPlace src/scripts/mod.rs \
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  checkInputs = [ perl python3 ];
+  nativeCheckInputs = [ perl python3 ];
 
   # these tests require network access
   checkFlags = [

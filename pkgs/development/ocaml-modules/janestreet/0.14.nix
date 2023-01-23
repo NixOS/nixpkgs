@@ -84,6 +84,7 @@ with self;
 
   async_js = janePackage {
     pname = "async_js";
+    duneVersion = "3";
     hash = "0rld8792lfwbinn9rhrgacivz49vppgy29smpqnvpga89wchjv0v";
     meta.description = "A small library that provide Async support for JavaScript platforms";
     buildInputs = [ js_of_ocaml-ppx ];
@@ -119,6 +120,7 @@ with self;
   };
 
   async_smtp = janePackage {
+    duneVersion = "3";
     pname = "async_smtp";
     hash = "1xf3illn7vikdxldpnc29n4z8sv9f0wsdgdvl4iv93qlvjk8gzck";
     meta.description = "SMTP client and server";
@@ -153,7 +155,7 @@ with self;
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ sexplib0 ];
-    checkInputs = [ alcotest ];
+    nativeCheckInputs = [ alcotest ];
   };
 
   base_bigstring = janePackage {
@@ -190,6 +192,7 @@ with self;
 
   bonsai = janePackage {
     pname = "bonsai";
+    duneVersion = "3";
     hash = "0k4grabwqc9sy4shzp77bgfvyajvvc0l8qq89ia7cvlwvly7gv6a";
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ ppx_pattern_bind ];
@@ -202,7 +205,7 @@ with self;
     minimumOCamlVersion = "4.07";
     meta.description = "Trivial metaprogramming tool";
     propagatedBuildInputs = [ re ];
-    checkInputs = [ ppx_jane ];
+    nativeCheckInputs = [ ppx_jane ];
     # This currently fails with dune
     strictDeps = false;
   };
@@ -270,6 +273,7 @@ with self;
   };
 
   email_message = janePackage {
+    duneVersion = "3";
     pname = "email_message";
     hash = "0k8hjkq91ikl7wjxs04k523jbkhl6q4abj6v0lzlbjiybmrpp69n";
     meta.description = "E-mail message parser";
@@ -309,6 +313,7 @@ with self;
 
   incr_dom = janePackage {
     pname = "incr_dom";
+    duneVersion = "3";
     hash = "0mi98cwi4npdh5vvcz0pb4sbb9j9dydl52s51rswwc3kn8mipxfx";
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
@@ -613,7 +618,7 @@ with self;
     minimumOCamlVersion = "4.04.2";
     hash = "0dbri9d00ydi0dw1cavswnqdmhjaaz80vap29ns2lr6mhhlvyjmj";
     meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
-    propagatedBuildInputs = [ ppxlib sexplib0 base ];
+    propagatedBuildInputs = [ (ppxlib.override { version = "0.24.0"; }) sexplib0 base ];
   };
 
   ppx_sexp_message = janePackage {
@@ -777,7 +782,7 @@ with self;
     meta.description = "Yet another implementation of fork&exec and related functionality";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
-    checkInputs = [ ounit ];
+    nativeCheckInputs = [ ounit ];
     # This currently fails with dune
     strictDeps = false;
   };
@@ -877,6 +882,7 @@ with self;
 
   virtual_dom = janePackage {
     pname = "virtual_dom";
+    duneVersion = "3";
     hash = "0vcydxx0jhbd5hbriahgp947mc7n3xymyrsfny1c4adk6aaq3c5w";
     meta.description = "OCaml bindings for the virtual-dom library";
     buildInputs = [ js_of_ocaml-ppx ];

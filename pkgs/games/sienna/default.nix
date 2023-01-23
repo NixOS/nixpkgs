@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, makeWrapper, makeDesktopItem, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "sienna";
-  version = "1.0c";
+  version = "1.0d";
+
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
-    sha256 = "1x15276fhqspgrrv8fzkp032i2qa8piywc0yy061x59mxhdndzj6";
+    sha256 = "sha256-1bFjhN7jL/PMYMJH1ete6uyHTYsTGgoP60sf/sJTLlU=";
   };
 
   icon = fetchurl {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "12q2rhk39dmb6ir50zafn8dylaad5gns8z3y21mfjabc5l5g02nn";
   };
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [ (makeDesktopItem {
     name = "sienna";
     exec = pname;
     icon = icon;
@@ -21,33 +22,29 @@ stdenv.mkDerivation rec {
     desktopName = "Sienna";
     genericName = "sienna";
     categories = [ "Game" ];
-  };
+  }) ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   dontUnpack = true;
 
-  installPhase =
-  ''
+  installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
     cp -v $src $out/share/games/lovegames/${pname}.love
 
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Fast-paced one button platformer";
+    homepage = "https://tangramgames.dk/games/sienna";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = "http://tangramgames.dk/games/sienna";
   };
 
 }

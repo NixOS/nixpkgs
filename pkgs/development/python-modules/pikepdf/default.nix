@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "6.0.2";
+  version = "6.2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-rwMSmARUrScG2nmiYBSkcq0NuUMhn0pHOPvgdKZbH7w=";
+    hash = "sha256-0E+kkvxT1jLfoBg3C9BfbSqfIX3K/Z5kK1kCdOks2Hk=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     hypothesis
     pytest-xdist

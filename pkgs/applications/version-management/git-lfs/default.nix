@@ -1,19 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, ronn, installShellFiles, git, testers, git-lfs }:
+{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs }:
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     rev = "v${version}";
-    sha256 = "sha256-3gVUPfZs5GViEA3D7Zm5NdxhuEz9DhwPLoQqHFdGCrI=";
+    hash = "sha256-r1z97sgqo1IyR0oW5b3bMGTUHGE8U+hrWgQ0Su9FRrw=";
   };
 
-  vendorSha256 = null;
+  vendorHash = "sha256-did6qAUawmQ/juLzJWIXGzmErj9tBKgM7HROTezX+tw=";
 
-  nativeBuildInputs = [ ronn installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ];
 
   ldflags = [
     "-s"
@@ -31,7 +31,7 @@ buildGoModule rec {
     make man
   '';
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     unset subPackages

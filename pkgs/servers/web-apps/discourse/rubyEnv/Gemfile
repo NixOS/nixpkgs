@@ -39,7 +39,7 @@ gem 'sprockets', '3.7.2'
 # allows us to precompile all our templates in the unicorn master
 gem 'actionview_precompiler', require: false
 
-gem 'seed-fu'
+gem 'discourse-seed-fu'
 
 gem 'mail', git: 'https://github.com/discourse/mail.git'
 gem 'mini_mime'
@@ -63,14 +63,7 @@ gem 'active_model_serializers', '~> 0.8.3'
 
 gem 'http_accept_language', require: false
 
-# Ember related gems need to be pinned cause they control client side
-# behavior, we will push these versions up when upgrading ember
-gem 'discourse-ember-rails', '0.18.6', require: 'ember-rails'
-gem 'discourse-ember-source', '~> 3.12.2'
-gem 'ember-handlebars-template', '0.8.0'
 gem 'discourse-fonts', require: 'discourse_fonts'
-
-gem 'barber'
 
 gem 'message_bus'
 
@@ -134,13 +127,10 @@ gem 'cose', require: false
 gem 'addressable'
 gem 'json_schemer'
 
-if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.1")
-  # net-smtp, net-imap and net-pop were removed from default gems in Ruby 3.1
-  gem "net-smtp", "~> 0.2.1", require: false
-  gem "net-imap", "~> 0.2.1", require: false
-  gem "net-pop", "~> 0.1.1", require: false
-  gem "digest", "3.0.0", require: false
-end
+gem "net-smtp", require: false
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "digest", require: false
 
 # Gems used only for assets and not required in production environments by default.
 # Allow everywhere for now cause we are allowing asset debugging in production
@@ -264,6 +254,8 @@ if ENV["IMPORT"] == "1"
   gem 'reverse_markdown'
   gem 'tiny_tds'
   gem 'csv'
+
+  gem 'parallel', require: false
 end
 
 gem 'webpush', require: false
@@ -271,6 +263,9 @@ gem 'colored2', require: false
 gem 'maxminddb'
 
 gem 'rails_failover', require: false
+
+gem 'faraday'
+gem 'faraday-retry'
 
 # workaround for faraday-net_http, see
 # https://github.com/ruby/net-imap/issues/16#issuecomment-803086765

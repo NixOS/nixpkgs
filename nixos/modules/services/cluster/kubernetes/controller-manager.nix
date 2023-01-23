@@ -10,7 +10,7 @@ in
 {
   imports = [
     (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "address" ] ["services" "kubernetes" "controllerManager" "bindAddress"])
-    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "port" ] ["services" "kubernetes" "controllerManager" "insecurePort"])
+    (mkRemovedOptionModule [ "services" "kubernetes" "controllerManager" "insecurePort" ] "")
   ];
 
   ###### interface
@@ -48,12 +48,6 @@ in
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
-    };
-
-    insecurePort = mkOption {
-      description = lib.mdDoc "Kubernetes controller manager insecure listening port.";
-      default = 0;
-      type = int;
     };
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes controller manager";
@@ -133,7 +127,6 @@ in
           --leader-elect=${boolToString cfg.leaderElect} \
           ${optionalString (cfg.rootCaFile!=null)
             "--root-ca-file=${cfg.rootCaFile}"} \
-          --port=${toString cfg.insecurePort} \
           --secure-port=${toString cfg.securePort} \
           ${optionalString (cfg.serviceAccountKeyFile!=null)
             "--service-account-private-key-file=${cfg.serviceAccountKeyFile}"} \

@@ -12,14 +12,14 @@
 
 mkYarnPackage rec {
   pname = "hedgedoc";
-  version = "1.9.4";
+  version = "1.9.6";
 
   # we use the upstream compiled js files because yarn2nix cannot handle different versions of dependencies
   # in development and production and the web assets muts be compiled with js-yaml 3 while development
   # uses js-yaml 4 which breaks the text editor
   src = fetchzip {
     url = "https://github.com/hedgedoc/hedgedoc/releases/download/${version}/hedgedoc-${version}.tar.gz";
-    hash = "sha256-YBPxL1/2bj+8cemSBZSNqSlD/DYJRxSG5UuyUipf3R8=";
+    hash = "sha256-NoA4mv9LyvShr4fdfBSHgDoyxY59ubRC8YC6hvOimZc=";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
@@ -30,7 +30,7 @@ mkYarnPackage rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    sha256 = "sha256-tnxubtu2lv5DKYY4rwQzNwvsFu3pD3NF4VUN/xieqpc=";
+    sha256 = "1xxq02mgys3bp7ivgsr9hyafd866ygw2bp3rbld2500afvayz89v";
   };
 
   configurePhase = ''

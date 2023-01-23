@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, cmake, pkg-config, inih, bash-completion }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, inih, bash-completion }:
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "2.0";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${version}";
-    hash = "sha256-0gLkfHGU3f/GU2PuSEoKD1K2Z42JNpfcIyIOFYcGLbk=";
+    hash = "sha256-7mVLfzguQ7eNIFTJMLJyoM+/pveGO88j2JUEOqvnqvk=";
   };
 
-  nativeBuildInputs = [ meson ninja cmake pkg-config inih bash-completion ];
+  nativeBuildInputs = [ meson ninja pkg-config inih bash-completion ];
 
   meta = with lib; {
     description = "Serial console TTY";

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.66.1";
+  version = "0.67.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    sha256 = "sha256-pK/rrGAL9JKt52jQRVtbQgPPe644anOARUNOhPCUCqE=";
+    sha256 = "sha256-oc9rG1dHi5YEU8VdwldHDv1qporMk8K7wpXOrCgcc0w=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/outline
-    mv node_modules build $out/share/outline/
+    mv public node_modules build $out/share/outline/
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build

@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ httpx.optional-dependencies.brotli
   ++ httpx.optional-dependencies.socks;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     respx
     pytest-asyncio
     pytestCheckHook

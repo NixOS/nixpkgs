@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
+{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, postInstall ? ""}:
 
 deployAndroidPackage {
   name = "androidsdk";
@@ -8,7 +8,7 @@ deployAndroidPackage {
   buildInputs = lib.optional (os == "linux") (
       (with pkgs; [ glibc freetype fontconfig fontconfig.lib])
       ++ (with pkgs.xorg; [ libX11 libXrender libXext ])
-      ++ (with pkgs_i686; [ glibc xorg.libX11 xorg.libXrender xorg.libXext fontconfig.lib freetype zlib ])
+      ++ (with pkgsi686Linux; [ glibc xorg.libX11 xorg.libXrender xorg.libXext fontconfig.lib freetype zlib ])
     );
 
   patchInstructions = ''

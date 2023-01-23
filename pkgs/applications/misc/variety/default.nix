@@ -16,7 +16,7 @@
 , imagemagickSupport ? true
 , imagemagick
 , appindicatorSupport ? true
-, libayatana-appindicator-gtk3
+, libayatana-appindicator
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     libnotify
     librsvg
   ]
-  ++ lib.optional appindicatorSupport libayatana-appindicator-gtk3;
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4

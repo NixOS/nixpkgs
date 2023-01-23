@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   meta = with lib; {
     description = "A cryptographically verifiable code review system for the cargo (Rust) package manager";

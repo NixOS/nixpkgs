@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 }:
 
 buildGoModule rec {
@@ -14,7 +15,15 @@ buildGoModule rec {
     hash = "sha256-gSMkTGzMDI+scG3FQ0u0liUDL4qOPPW2UWLlAQcmmaA=";
   };
 
-  vendorHash = "sha256-nesKIaMMuN71LpvX8nOm7hDecgGjnx3tmsinrJg4GpQ=";
+  patches = [
+    # update dependencies to fix darwin build - remove in next release
+    (fetchpatch {
+      url = "https://github.com/stefanoj3/dirstalk/commit/79aef14c5c048f3a3a8374f42c7a0d52fc9f7b50.patch";
+      sha256 = "sha256-2rSrMowfYdKV69Yg2QBzam3WOwGrSHQB+3uVi1Z2oJ8=";
+    })
+  ];
+
+  vendorHash = "sha256-XY4vIh5de0tp4KPXTpzTm7/2bDisTjCsojLzxVDf4Jw=";
 
   subPackages = "cmd/dirstalk";
 

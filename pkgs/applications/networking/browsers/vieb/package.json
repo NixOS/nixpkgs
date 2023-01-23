@@ -1,20 +1,16 @@
 {
   "name": "vieb",
   "productName": "Vieb",
-  "version": "7.1.2",
+  "version": "9.5.0",
   "description": "Vim Inspired Electron Browser",
   "main": "app/index.js",
   "scripts": {
-    "build": "node build.js",
-    "buildall": "node build.js --linux --win --mac",
-    "buildlinux": "node build.js --linux",
-    "buildmac": "node build.js --mac",
-    "buildwin": "node build.js --win",
     "dev": "electron app --datafolder=./ViebData/",
     "fix": "eslint --fix app .eslintrc.js build.js",
     "lint": "eslint app .eslintrc.js build.js",
     "start": "electron app",
-    "test": "TZ=UTC jest --testEnvironment jsdom --coverage --collectCoverageFrom 'app/**/*.js' -u && npm run lint && echo 'All good :)'"
+    "test": "TZ=UTC jest --testEnvironment jsdom --coverage --collectCoverageFrom 'app/**/*.js' -u",
+    "test:all": "npm run test && npm run lint && echo 'All good :)'"
   },
   "repository": "https://github.com/Jelmerro/Vieb",
   "homepage": "https://vieb.dev",
@@ -26,20 +22,28 @@
   ],
   "author": "Jelmer van Arnhem",
   "email": "Jelmerro@users.noreply.github.com",
+  "funding": "https://github.com/sponsors/Jelmerro/",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "electron": "17.0.1",
-    "electron-builder": "22.14.13",
-    "eslint": "8.9.0",
+    "electron": "22.0.0",
+    "electron-builder": "24.0.0-alpha.7",
+    "eslint": "8.29.0",
     "eslint-plugin-sort-keys": "2.3.5",
-    "jest": "27.5.1",
-    "jest-environment-jsdom": "27.5.1"
+    "jest": "29.3.1",
+    "jest-environment-jsdom": "29.3.1",
+    "terser-webpack-plugin": "5.3.6",
+    "webpack": "5.75.0",
+    "webpack-cli": "5.0.1",
+    "webpack-node-externals": "3.0.0"
   },
   "dependencies": {
-    "7zip-bin": "5.1.1",
-    "@cliqz/adblocker-electron": "1.23.6",
-    "@cliqz/adblocker-electron-preload": "1.23.6",
-    "is-svg": "4.3.2",
-    "rimraf": "3.0.2"
+    "@cliqz/adblocker-electron": "1.25.1",
+    "@cliqz/adblocker-electron-preload": "1.25.1",
+    "@mozilla/readability": "0.4.2",
+    "darkreader": "4.9.58",
+    "highlight.js": "11.7.0",
+    "jsdom": "20.0.3",
+    "marked": "4.2.4",
+    "picomatch": "2.3.1"
   }
 }

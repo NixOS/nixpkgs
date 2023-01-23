@@ -96,7 +96,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc "Database host port.";
         default = {
           mysql = 3306;

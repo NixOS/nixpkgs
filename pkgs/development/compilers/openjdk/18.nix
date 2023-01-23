@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, bash, pkg-config, autoconf, cpio
-, file, which, unzip, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bash, pkg-config, autoconf, cpio
+, file, which, unzip, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib
 , libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk18-bootstrap
 , setJavaClassPath
@@ -27,7 +27,7 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
+      cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk18-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -49,6 +49,13 @@ let
         url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
+
+      # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
+      # This is applied anywhere to prevent patchrot.
+      (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/testing/openjdk18/FixNullPtrCast.patch?id=b93d1fc37fcf106144958d957bb97c7db67bd41f";
+        hash = "sha256-nvO8RcmKwMcPdzq28mZ4If1XJ6FQ76CYWqRIozPCk5U=";
+      })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
     ];
@@ -65,6 +72,8 @@ let
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
+      "--with-freetype=system"
+      "--with-harfbuzz=system"
       "--with-libjpeg=system"
       "--with-giflib=system"
       "--with-libpng=system"
@@ -138,12 +147,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)

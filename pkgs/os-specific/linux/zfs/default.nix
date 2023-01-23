@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, nixosTests
 , configFile ? "all"
@@ -16,7 +16,7 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_19 ? pkgs.linuxKernel.packages.linux_5_19
+, linuxPackages_6_1 ? pkgs.linuxKernel.packages.linux_6_1
 }:
 
 let
@@ -52,7 +52,13 @@ let
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [
+        (fetchpatch {
+          name = "musl.patch";
+          url = "https://github.com/openzfs/zfs/commit/1f19826c9ac85835cbde61a7439d9d1fefe43a4a.patch";
+          sha256 = "XEaK227ubfOwlB2s851UvZ6xp/QOtYUWYsKTkEHzmo0=";
+        })
+      ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
@@ -203,7 +209,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman globin ];
+        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -216,28 +222,28 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "5.20";
-    latestCompatibleLinuxPackages = linuxPackages_5_19;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.6";
+    version = "2.1.8";
 
-    sha256 = "sha256-gd5WlNtnoSiVj4sKUGf0WhR7Z1GPebwu3Z1mkNsoC/I=";
+    sha256 = "sha256-/+23SEtywa7b1dgvQNmEGrfqXzM1mlk00TSpuiCkQOk=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "5.20";
-    latestCompatibleLinuxPackages = linuxPackages_5_19;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.6";
-    # rev = "0000000000000000000000000000000000000000";
+    version = "2.1.9-staging-2023-01-19";
+    rev = "04b02785b67f9b976c43643dd52ce6cdbc22e11e";
 
-    sha256 = "sha256-gd5WlNtnoSiVj4sKUGf0WhR7Z1GPebwu3Z1mkNsoC/I=";
+    sha256 = "sha256-/+23SEtywa7b1dgvQNmEGrfqXzM1mlk00TSpuiCkQOk=";
 
     isUnstable = true;
   };

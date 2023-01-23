@@ -59,7 +59,7 @@ buildPythonPackage rec {
     installManPage doc/manpages/*
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     mock
     stestr

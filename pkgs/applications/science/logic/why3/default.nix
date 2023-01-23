@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, fetchpatch, lib, stdenv
+{ callPackage, fetchurl, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A platform for deductive program verification";
-    homepage    = "http://why3.lri.fr/";
+    homepage    = "https://why3.lri.fr/";
     license     = licenses.lgpl21;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vbgl ];

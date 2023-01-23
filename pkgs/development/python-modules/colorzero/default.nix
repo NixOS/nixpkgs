@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "colorzero"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

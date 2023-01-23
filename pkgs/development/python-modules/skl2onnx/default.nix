@@ -10,6 +10,7 @@
 , onnxruntime
 , pandas
 , unittestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -30,7 +31,13 @@ buildPythonPackage rec {
     onnxconverter-common
   ];
 
-  checkInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [ "scikit-learn" ];
+
+  nativeCheckInputs = [
     onnxruntime
     pandas
     unittestCheckHook

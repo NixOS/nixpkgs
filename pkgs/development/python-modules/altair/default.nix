@@ -36,7 +36,7 @@ buildPythonPackage rec {
     jinja2
   ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     ipython
     pytestCheckHook

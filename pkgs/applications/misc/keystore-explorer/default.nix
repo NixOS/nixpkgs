@@ -1,12 +1,16 @@
-{ fetchzip, lib, stdenv, jdk, runtimeShell }:
+{ fetchzip, lib, stdenv, jdk, runtimeShell, glib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  version = "5.4.4";
+  version = "5.5.1";
   pname = "keystore-explorer";
   src = fetchzip {
-    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-544.zip";
-    sha256 = "01kpa8g6p6vcqq9y70w5bm8jbw4kp55pbywj2zrhgjibrhgjqi0b";
+    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "2C/LkUUuef30PkN7HL0CtcNOjR5uNo9XaCiTatv5hgA=";
   };
+
+  # glib is necessary so file dialogs don't hang.
+  buildInputs = [ glib ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   installPhase = ''
     runHook preInstall

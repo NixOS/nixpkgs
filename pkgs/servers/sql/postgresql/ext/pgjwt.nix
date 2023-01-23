@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "pgjwt";
-  version = "unstable-2017-04-24";
+  version = "unstable-2021-11-13";
 
   src = fetchFromGitHub {
     owner  = "michelp";
     repo   = "pgjwt";
-    rev    = "546a2911027b716586e241be7fd4c6f1785237cd";
-    sha256 = "1riz0xvwb6y02j0fljbr9hcbqb2jqs4njlivmavy9ysbcrrv1vrf";
+    rev    = "9742dab1b2f297ad3811120db7b21451bca2d3c9";
+    sha256 = "sha256-Hw3R9bMGDmh+dMzjmqZSy/rT4mX8cPU969OJiARFg10=";
   };
 
   dontBuild = true;

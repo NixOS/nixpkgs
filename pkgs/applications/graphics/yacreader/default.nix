@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "yacreader";
-  version = "9.9.2";
+  version = "9.11.0";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rurJkCIuHTWxIGb+TTHp8sQS26/5W/sdtWFxyeqVx54=";
+    sha256 = "sha256-/fSIV+4j516PgHGn6zF+TfVaVW/lVWykf5J8bnQuttg=";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];

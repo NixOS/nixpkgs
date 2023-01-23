@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Make lines of the same color to win";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

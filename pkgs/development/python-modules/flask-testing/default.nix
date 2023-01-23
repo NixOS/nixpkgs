@@ -25,7 +25,7 @@ buildPythonPackage rec {
     flask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     pytestCheckHook
   ];
@@ -38,6 +38,8 @@ buildPythonPackage rec {
     "test_assert_redirects"
     "test_server_listening"
     "test_server_process_is_spawned"
+    # change in repr(template) in recent flask
+    "test_assert_template_rendered_signal_sent"
   ];
 
   disabledTestPaths = [

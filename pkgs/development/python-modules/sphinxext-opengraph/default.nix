@@ -4,24 +4,31 @@
 , sphinx
 , pytestCheckHook
 , beautifulsoup4
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.6.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
-    rev = "v${version}";
-    sha256 = "sha256-YR6TlsmND5IhLdbPbmtVhRN2vSZfx70g2a6Yn6y6L/M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N8448GHg/lR7z7Y4F4vO7z+wAeaboo8Cj0X+HSyToAA=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
   ];

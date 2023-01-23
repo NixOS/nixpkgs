@@ -1,17 +1,12 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "6.2";
-in fetchzip {
+in (fetchzip {
   name = "fira-code-${version}";
 
   url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
-
-  # only extract the variable font because everything else is a duplicate
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile '*-VF.ttf' -d $out/share/fonts/truetype
-  '';
 
   sha256 = "0l02ivxz3jbk0rhgaq83cqarqxr07xgp7n27l0fh8fbgxwi52djl";
 
@@ -27,4 +22,10 @@ in fetchzip {
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  # only extract the variable font because everything else is a duplicate
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile '*-VF.ttf' -d $out/share/fonts/truetype
+  '';
+})

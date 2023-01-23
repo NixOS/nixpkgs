@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "45431b387587ed0fac6213b54d6e9f0936f0cc85238a8f5af7852fc9484c5c77";
   };
 
-  checkInputs = [ webtest zope_component ];
+  nativeCheckInputs = [ webtest zope_component ];
 
   propagatedBuildInputs = [ hupper pastedeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 

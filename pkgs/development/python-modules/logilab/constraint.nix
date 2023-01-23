@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, logilab_common, six }:
+{ lib, buildPythonPackage, fetchPypi, logilab-common, six }:
 
 buildPythonPackage rec {
   pname = "logilab-constraint";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    logilab_common six
+    logilab-common six
   ];
 
 

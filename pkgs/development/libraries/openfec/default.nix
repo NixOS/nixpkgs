@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
       find $dev/include -type f -a ! -iname '*.h' -delete
 
       install -D -m755 -t $out/lib ../bin/Release/libopenfec${so}
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -id $out/lib/libopenfec${so} $out/lib/libopenfec${so}
+    '' + ''
       ln -s libopenfec${so} $out/lib/libopenfec${so}.1
     '';
 

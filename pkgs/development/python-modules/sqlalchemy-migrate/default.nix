@@ -1,6 +1,19 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, scripttest, pytz, pbr, tempita, decorator, sqlalchemy
-, six, sqlparse, testrepository
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, python
+, pythonAtLeast
+, scripttest
+, pytz
+, pbr
+, tempita
+, decorator
+, sqlalchemy
+, six
+, sqlparse
+, testrepository
 }:
 
 buildPythonPackage rec {
@@ -29,7 +42,7 @@ buildPythonPackage rec {
       --replace "pylint" ""
   '';
 
-  checkInputs = [ scripttest pytz testrepository ];
+  nativeCheckInputs = [ scripttest pytz testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   doCheck = !stdenv.isDarwin;
@@ -51,5 +64,8 @@ buildPythonPackage rec {
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = teams.openstack.members ++ (with maintainers; [ makefu ]);
+    # using deprecated inspect.getargspec function
+    # https://bugs.launchpad.net/sqlalchemy-migrate/+bug/2003619
+    broken = pythonAtLeast "3.11";
   };
 }

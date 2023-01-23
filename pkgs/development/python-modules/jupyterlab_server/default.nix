@@ -8,7 +8,7 @@
 , pytestCheckHook
 , json5
 , babel
-, jupyter_server
+, jupyter-server
 , tomli
 , openapi-core
 , pytest-timeout
@@ -19,13 +19,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.15.2";
+  version = "2.17.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wLzdRgbmQObxbSNs6sVTNtyL+Yy7zgZ68nUkzML7JkA=";
+    hash = "sha256-pbaSPiqeopn5jeW1DN6Qci10748HE6dcvL+/0/Qa0Fg=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +38,13 @@ buildPythonPackage rec {
     jsonschema
     json5
     babel
-    jupyter_server
+    jupyter-server
     tomli
-  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     openapi-core
     pytestCheckHook
     pytest-timeout
@@ -71,8 +74,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of server components for JupyterLab and JupyterLab like applications";
-    homepage = "https://jupyter.org";
+    homepage = "https://jupyterlab-server.readthedocs.io/";
+    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python310Packages
+, libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-IsUaTmY4XLFIGKpNdtz3+m1uEDr7DTaRbhLqFZiNIfA=";
+    hash = "sha256-KtpI8L+KDKgCuYfXV0UgEuH48krPTSNFOwnC1ZURjMo=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     ++ optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
-      freetype libjpeg libpng libsamplerate libsndfile libtiff
-      opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib zstd fftw jemalloc
+      freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
+      opencolorio openexr openimagedenoise openimageio openjpeg python zlib zstd fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport [
+    ++ optionals cudaSupport [
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"
