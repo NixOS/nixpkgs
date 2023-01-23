@@ -2206,8 +2206,13 @@ with pkgs;
   dolphin-emu = callPackage ../applications/emulators/dolphin-emu { };
 
   dolphin-emu-beta = qt6Packages.callPackage ../applications/emulators/dolphin-emu/master.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL VideoToolbox;
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL VideoToolbox;
     inherit (darwin) moltenvk;
+    stdenv =
+      if stdenv.isDarwin && stdenv.isAarch64 then llvmPackages_14.stdenv
+      # https://github.com/NixOS/nixpkgs/issues/201254
+      else if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv
+      else stdenv;
   };
 
   dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {

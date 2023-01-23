@@ -141,6 +141,9 @@ stdenv.mkDerivation rec {
     "--set QT_XCB_NO_XI2 1"
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
   # Use nix-provided libraries instead of submodules
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -187,5 +190,7 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
+    # Requires both LLVM and SDK bump
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
