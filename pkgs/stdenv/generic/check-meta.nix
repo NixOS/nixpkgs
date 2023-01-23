@@ -273,7 +273,7 @@ let
     priority = int;
     pkgConfigModules = listOf str;
     platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
-    hydraPlatforms = listOf str;
+    hydraPlatforms = platforms;
     broken = bool;
     unfree = bool;
     unsupported = bool;
