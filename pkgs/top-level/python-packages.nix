@@ -11214,6 +11214,8 @@ self: super: with self; {
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
 
+  tensorflow-io = callPackage ../development/python-modules/tensorflow-io { };
+
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
