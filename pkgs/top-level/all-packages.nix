@@ -17263,6 +17263,8 @@ with pkgs;
 
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
 
+  cloudlog = callPackage ../applications/radio/cloudlog { };
+
   cloudflare-warp = callPackage ../tools/networking/cloudflare-warp { };
 
   cloudfoundry-cli = callPackage ../applications/networking/cluster/cloudfoundry-cli { };
