@@ -21,8 +21,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "sublime-music";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +98,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app/";
+    changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ albakham sumnerevans ];
   };
