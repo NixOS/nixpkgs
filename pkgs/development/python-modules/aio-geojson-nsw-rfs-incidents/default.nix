@@ -2,7 +2,6 @@
 , aio-geojson-client
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
-  version = "0.5";
+  version = "0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rWlt4MYnuY+CzszFVDniWBnqpQW3WldSEl00ns3ko3U=";
+    hash = "sha256-pn0r5iLpNnK3xmAhq/oX90hdiHgFDuwDQqfAzkp5jmw=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-asyncio
     pytestCheckHook
   ];
