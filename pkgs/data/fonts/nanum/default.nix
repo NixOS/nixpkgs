@@ -1,20 +1,23 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "nanum";
   version = "20170925";
-in
-fetchzip {
-  name = "nanum-${version}";
-  url = "mirror://ubuntu/pool/universe/f/fonts-nanum/fonts-nanum_${version}.orig.tar.xz";
-  sha256 = "sha256-lSTeQEuMmlQxiQqrx9tNScifE8nMOUDJF3lCfoAFIJk=";
 
-  postFetch = ''
-    unpackDir="$TMPDIR/unpack"
-    mkdir "$unpackDir"
-    cd "$unpackDir"
-    tar xf "$downloadedFile" --strip-components=1
+  src = fetchurl {
+    url = "mirror://ubuntu/pool/universe/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    hash = "sha256-GlVXH9YUU3wHMkNoz5miBv7N2oUEbwUXlcVoElQ9++4=";
+  };
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
     cp *.ttf $out/share/fonts
+
+    runHook postInstall
   '';
 
   meta = with lib; {

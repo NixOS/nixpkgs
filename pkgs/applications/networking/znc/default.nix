@@ -9,8 +9,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "znc";
   version = "1.8.2";
@@ -23,12 +21,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ optional withPerl perl
-    ++ optional withPython python3
-    ++ optional withTcl tcl
-    ++ optional withCyrus cyrus_sasl
-    ++ optional withUnicode icu
-    ++ optional withZlib zlib;
+    ++ lib.optional withPerl perl
+    ++ lib.optional withPython python3
+    ++ lib.optional withTcl tcl
+    ++ lib.optional withCyrus cyrus_sasl
+    ++ lib.optional withUnicode icu
+    ++ lib.optional withZlib zlib;
 
   configureFlags = [
     (lib.enableFeature withPerl "perl")
@@ -36,8 +34,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withTcl "tcl")
     (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
     (lib.enableFeature withCyrus "cyrus")
-  ] ++ optionals (!withIPv6) [ "--disable-ipv6" ]
-    ++ optionals withDebug [ "--enable-debug" ];
+  ] ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
+    ++ lib.optionals withDebug [ "--enable-debug" ];
 
   enableParallelBuilding = true;
 

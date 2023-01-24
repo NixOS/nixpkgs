@@ -5,7 +5,6 @@
 , mock
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytest-asyncio
 , pytestCheckHook
 , pytz
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
-  version = "0.7";
+  version = "0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,17 +22,8 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2iVUHMk4ydmGmmGS6lJV5pvxJHyP9bRSeh/dOXbquE0=";
+    sha256 = "sha256-wJVFjy6QgYb6GX9pZTylYFvCRWmD2lAFZKnodsa8Yqo=";
   };
-
-  patches = [
-    # Remove asynctest, https://github.com/exxamalte/python-aio-geojson-geonetnz-volcano/pull/18
-    (fetchpatch {
-      name = "remove-asynctest.patch";
-      url = "https://github.com/exxamalte/python-aio-geojson-geonetnz-volcano/commit/d04a488130375c78efa541fd63a5d88bd6b0fd49.patch";
-      hash = "sha256-ArG8CovJckzzNebd03WeU5i/jPqy2HRVBL3ICk5nZ5Y=";
-    })
-  ];
 
   propagatedBuildInputs = [
     aio-geojson-client

@@ -1,15 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-fetchzip {
-  name = "vdrsymbols-20100612";
+stdenvNoCC.mkDerivation rec {
+  pname = "vdrsymbols";
+  version = "20100612";
 
-  url = "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";
+  src = fetchurl {
+    url = "http://andreas.vdr-developer.org/fonts/download/${pname}-ttf-${version}.tgz";
+    hash = "sha256-YxB+JcDkta5are+OQyP/WKDL0vllgn0m26bU9mQ3C/Q=";
+  };
 
-  sha256 = "0wpxns8zqic98c84j18dr4zmj092v07yq07vwwgzblr0rw9n6gzr";
+  dontBuild = true;
 
-  postFetch = ''
-    tar xvzf "$downloadedFile"
-    install -Dm444 -t "$out/share/fonts/truetype" */*.ttf
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 -t "$out/share/fonts/truetype" *.ttf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

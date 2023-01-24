@@ -11,8 +11,6 @@
 , tombPluginSupport ? false
 }:
 
-with lib;
-
 assert x11Support -> xclip != null;
 assert waylandSupport -> wl-clipboard != null;
 
@@ -35,7 +33,7 @@ let
       name = "pass";
       paths = selected;
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = concatMap (x: x.buildInputs) selected;
+      buildInputs = lib.concatMap (x: x.buildInputs) selected;
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
     # dependencies (s.el) here. The user has to do this themselves.
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
-  '' + optionalString dmenuSupport ''
+  '' + lib.optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 

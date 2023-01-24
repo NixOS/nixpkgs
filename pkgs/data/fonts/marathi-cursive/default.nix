@@ -1,19 +1,24 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "marathi-cursive";
   version = "2.0";
-in fetchzip rec {
-  name = "marathi-cursive-${version}";
 
-  url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
+  src = fetchurl {
+    url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
+    hash = "sha256-JE9T3UMSYn/JfEWuWHikDJIlt4nZl6GzY98v3vG6di4=";
+  };
 
-  postFetch = ''
-    tar -xJf $downloadedFile --strip-components=1
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/marathi-cursive *.otf *.ttf
-    install -m444 -Dt $out/share/doc/${name} README *.txt
-  '';
+    install -m444 -Dt $out/share/doc/${pname}-${version} README *.txt
 
-  sha256 = "17pj60ajnjghxhxka8a046mz6vfwr79wnby7xd6pg5hgncin2hgg";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/MihailJP/MarathiCursive";

@@ -14,8 +14,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
@@ -34,17 +32,17 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
   buildInputs = [ curl jemalloc libuv zlib ]
-    ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
-    ++ optionals (!stdenv.isDarwin) [ libcap libuuid ]
-    ++ optionals withCups [ cups ]
-    ++ optionals withDBengine [ lz4 ]
-    ++ optionals withIpmi [ freeipmi ]
-    ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ optionals withCloud [ json_c ]
-    ++ optionals withConnPubSub [ google-cloud-cpp grpc ]
-    ++ optionals withConnPrometheus [ snappy ]
-    ++ optionals (withCloud || withConnPrometheus) [ protobuf ]
-    ++ optionals withSsl [ openssl ];
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
+    ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
+    ++ lib.optionals withCups [ cups ]
+    ++ lib.optionals withDBengine [ lz4 ]
+    ++ lib.optionals withIpmi [ freeipmi ]
+    ++ lib.optionals withNetfilter [ libmnl libnetfilter_acct ]
+    ++ lib.optionals withCloud [ json_c ]
+    ++ lib.optionals withConnPubSub [ google-cloud-cpp grpc ]
+    ++ lib.optionals withConnPrometheus [ snappy ]
+    ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
+    ++ lib.optionals withSsl [ openssl ];
 
   patches = [
     # required to prevent plugins from relying on /etc
@@ -68,12 +66,12 @@ in stdenv.mkDerivation rec {
   # We pick zlib.dev as a simple canary package with pkg-config input.
   disallowedReferences = [ zlib.dev ];
 
-  NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
     ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
     ln -s ${go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
-  '' + optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
@@ -83,13 +81,13 @@ in stdenv.mkDerivation rec {
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
-    ${optionalString withIpmi ''
+    ${lib.optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
     ''}
   '';
 
-  preConfigure = optionalString (!stdenv.isDarwin) ''
+  preConfigure = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
@@ -99,9 +97,9 @@ in stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
-  ] ++ optionals (!withDBengine) [
+  ] ++ lib.optionals (!withDBengine) [
     "--disable-dbengine"
-  ] ++ optionals (!withCloud) [
+  ] ++ lib.optionals (!withCloud) [
     "--disable-cloud"
   ];
 
@@ -116,7 +114,7 @@ in stdenv.mkDerivation rec {
     tests.netdata = nixosTests.netdata;
   };
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";

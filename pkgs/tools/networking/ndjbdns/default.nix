@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, systemd, pkg-config }:
 
-with lib;
-
 stdenv.mkDerivation {
   version = "1.06";
   pname = "ndjbdns";
@@ -15,9 +13,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ]
-    ++ optional stdenv.isLinux systemd;
+    ++ lib.optional stdenv.isLinux systemd;
 
-  meta = {
+  meta = with lib; {
     description = "A brand new release of the Djbdns";
     longDescription = ''
       Djbdns is a fully‐fledged Domain Name System(DNS), originally written by the eminent author of qmail, Dr. D J Bernstein.

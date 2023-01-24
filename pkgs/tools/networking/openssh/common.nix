@@ -30,7 +30,6 @@
 , linkOpenssl ? true
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   inherit pname version src;
 
@@ -57,12 +56,12 @@ stdenv.mkDerivation rec {
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
-    ++ optional withKerberos pkgs.libkrb5
+    ++ lib.optional withKerberos pkgs.libkrb5
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib openssl libedit ]
-    ++ optional withFIDO libfido2
-    ++ optional withKerberos libkrb5
-    ++ optional stdenv.isLinux pam;
+    ++ lib.optional withFIDO libfido2
+    ++ lib.optional withKerberos libkrb5
+    ++ lib.optional stdenv.isLinux pam;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -80,11 +79,11 @@ stdenv.mkDerivation rec {
     "--with-libedit=yes"
     "--disable-strip"
     (if stdenv.isLinux then "--with-pam" else "--without-pam")
-  ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withFIDO "--with-security-key-builtin=yes"
-    ++ optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
-    ++ optional stdenv.isDarwin "--disable-libutil"
-    ++ optional (!linkOpenssl) "--without-openssl"
+  ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ lib.optional withFIDO "--with-security-key-builtin=yes"
+    ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
+    ++ lib.optional stdenv.isDarwin "--disable-libutil"
+    ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null}= [ "-laudit" ] ++ lib.optionals withKerberos [ "-lkeyutils" ];
@@ -97,7 +96,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = false;
-  nativeCheckInputs = optional (!stdenv.isDarwin) hostname;
+  nativeCheckInputs = lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
@@ -145,7 +144,7 @@ stdenv.mkDerivation rec {
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
-  checkTarget = optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+  checkTarget = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
     # other tests are less demanding of the environment
     ++ [ "unit" "file-tests" "interop-tests" ];
 
@@ -165,7 +164,7 @@ stdenv.mkDerivation rec {
     borgbackup-integration = nixosTests.borgbackup;
   };
 
-  meta = {
+  meta = with lib; {
     description = "An implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";

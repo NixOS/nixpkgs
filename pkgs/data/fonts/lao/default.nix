@@ -1,16 +1,23 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "lao";
   version = "0.0.20060226";
-in
-fetchzip {
-  name = "lao-${version}";
-  url = "mirror://debian/pool/main/f/fonts-lao/fonts-lao_${version}.orig.tar.xz";
-  sha256 = "sha256-Ti3DNOgLR5VBJ1mSe8M+qs4UYbCR7qOPgqxRfmHa+jY=";
 
-  postFetch = ''
+  src = fetchurl {
+    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    hash = "sha256-DlgdyfhxxzVkNIL+NGsQ+PRlNkCuG3v2OahkIEYx60o=";
+  };
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
-    tar xf $downloadedFile --strip-components=1 -C $out/share/fonts fonts-lao-${version}/Phetsarath_OT.ttf
+    cp Phetsarath_OT.ttf $out/share/fonts
+
+    runHook postInstall
   '';
 
   meta = with lib; {
