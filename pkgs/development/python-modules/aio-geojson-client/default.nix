@@ -3,7 +3,6 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , geojson
 , haversine
 , mock
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
-  version = "0.17";
+  version = "0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,17 +22,8 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5GiQgtbvYeleovFbXO2vlr2XPsDIWZiElM64O+urMcY=";
+    hash = "sha256-nvfy1XLiMjyCiQo/YuzRbDtxGmAUAiq8UJwS/SkN3oM=";
   };
-
-  patches = [
-    # Remove asynctest, https://github.com/exxamalte/python-aio-geojson-client/pull/35
-    (fetchpatch {
-      name = "remove-asynctest.patch";
-      url = "https://github.com/exxamalte/python-aio-geojson-client/commit/bf617d9898a99b026b43b28bd87bb6479f518c0a.patch";
-      hash = "sha256-uomH3LCaklfGURDs8SsnvNyHkubbe+5dleLEjW+I+M4=";
-    })
-  ];
 
   propagatedBuildInputs = [
     aiohttp
