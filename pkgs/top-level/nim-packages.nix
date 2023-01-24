@@ -14,6 +14,8 @@ lib.makeScope newScope (self:
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
+    asynctools = callPackage ../development/nim-packages/asynctools { };
+
     base32 = callPackage ../development/nim-packages/base32 { };
 
     bumpy = callPackage ../development/nim-packages/bumpy { };
