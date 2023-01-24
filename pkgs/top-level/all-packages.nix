@@ -22638,6 +22638,7 @@ with pkgs;
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
     inherit lib pkgs qt6;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   });
 
   quark-engine = callPackage ../tools/security/quark-engine { };
