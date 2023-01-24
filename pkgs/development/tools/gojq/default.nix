@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "itchyny";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xJx3ge+8cIGL1j5vnU4JhCcwmXIRhJ66PYnEG223Fbc=";
+    hash = "sha256-xJx3ge+8cIGL1j5vnU4JhCcwmXIRhJ66PYnEG223Fbc=";
   };
 
-  vendorSha256 = "sha256-BnDtHqqU/kFJyeG1g4UZ51eSnUlbQ6eRKTFoz6kxl0s=";
+  vendorHash = "sha256-BnDtHqqU/kFJyeG1g4UZ51eSnUlbQ6eRKTFoz6kxl0s=";
 
   ldflags = [ "-s" "-w" ];
 
