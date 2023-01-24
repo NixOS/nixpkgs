@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aioecowitt";
-  version = "2022.11.0";
+  version = "2023.01.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-v+O4J3GZZelF3H3BbL7LVRZEIH01WrDNnmOOWG4rVT0=";
+    hash = "sha256-xOoKrGBkMEdpeiU1r27xlZp5s5sGJzvD7Ats+w6KR/o=";
   };
 
   propagatedBuildInputs = [
