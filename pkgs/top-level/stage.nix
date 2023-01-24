@@ -8,7 +8,15 @@
    arguments. Normal users should not import this directly but instead
    import `pkgs/default.nix` or `default.nix`. */
 
-
+let
+  # Cache mapping from attributes to unit directories up here so it can get
+  # reused every time this file is called
+  unitDirs = builtins.foldl' (result: shard:
+    result // builtins.mapAttrs (name: type:
+      ../unit + "/${shard}/${name}/pkg-fun.nix"
+    ) (builtins.readDir (../unit + "/${shard}"))
+  ) {} (builtins.attrNames (builtins.readDir ../unit));
+in
 { ## Misc parameters kept the same for all stages
   ##
 
@@ -269,6 +277,9 @@ let
     });
   };
 
+
+  unitPackages = self: super: lib.mapAttrs (name: file: self.callPackage file {}) unitDirs;
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
@@ -277,6 +288,7 @@ let
     stdenvAdapters
     trivialBuilders
     splice
+    unitPackages
     allPackages
     otherPackageSets
     aliases
