@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.2.1";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "et-v${version}";
-    hash = "sha256-YQ8Qx6RTmDoNWY8AQlnBJJendQl+tF1QA+Z6h/ar9qs=";
+    hash = "sha256-9W9Pz0VrFU+HNpf98I3CLrn8+kpjjNLOUK8gGcDJcI8=";
   };
 
   nativeBuildInputs = [
