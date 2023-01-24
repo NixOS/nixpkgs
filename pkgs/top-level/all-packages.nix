@@ -1366,6 +1366,8 @@ with pkgs;
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
+  dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
+
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
   gamemode = callPackage ../tools/games/gamemode {
@@ -1483,6 +1485,8 @@ with pkgs;
   sdlookup = callPackage ../tools/security/sdlookup { };
 
   sgrep = callPackage ../tools/text/sgrep { };
+
+  simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
@@ -1846,7 +1850,6 @@ with pkgs;
   git-town = callPackage ../applications/version-management/git-town { };
 
   git-trim = callPackage ../applications/version-management/git-trim {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -1881,6 +1884,8 @@ with pkgs;
   gitmux = callPackage ../applications/version-management/gitmux { };
 
   gitnuro = callPackage ../applications/version-management/gitnuro { };
+
+  gitprompt-rs = callPackage ../applications/version-management/gitprompt-rs/default.nix { };
 
   gitsign = callPackage ../applications/version-management/gitsign { };
 
@@ -2211,6 +2216,7 @@ with pkgs;
 
   dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
+    fmt = fmt_8;
   };
 
   ### APPLICATIONS/EMULATORS/RETROARCH
@@ -3866,6 +3872,8 @@ with pkgs;
   cawbird = callPackage ../applications/networking/cawbird { };
 
   cde = callPackage ../tools/package-management/cde { };
+
+  cdxgen = callPackage ../tools/security/cdxgen { };
 
   ceres-solver = callPackage ../development/libraries/ceres-solver {
     gflags = null; # only required for examples/tests
@@ -5793,6 +5801,7 @@ with pkgs;
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
     lua = lua5_4;
+    fmt = fmt_8;
   })
     ceph
     ceph-client;
@@ -8514,9 +8523,7 @@ with pkgs;
 
   jot = callPackage ../applications/misc/jot { };
 
-  journaldriver = callPackage ../tools/misc/journaldriver {
-    openssl = openssl_1_1;
-  };
+  journaldriver = callPackage ../tools/misc/journaldriver { };
 
   jp = callPackage ../development/tools/jp { };
 
@@ -15533,7 +15540,6 @@ with pkgs;
   };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
   cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
@@ -15549,9 +15555,7 @@ with pkgs;
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-deb = callPackage ../development/tools/rust/cargo-deb {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-deb = callPackage ../development/tools/rust/cargo-deb { };
   cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -15588,6 +15592,7 @@ with pkgs;
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-careful = callPackage ../development/tools/rust/cargo-careful { };
   cargo-chef = callPackage ../development/tools/rust/cargo-chef { };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
@@ -16079,7 +16084,6 @@ with pkgs;
 
   cliscord = callPackage ../misc/cliscord {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
 
   clisp = callPackage ../development/interpreters/clisp {
@@ -17694,8 +17698,6 @@ with pkgs;
     inherit jdk8 jdk11 jdk17;
   };
   gradleGen = gradle-packages.gen;
-  gradle_4 = callPackage gradle-packages.gradle_4 { };
-  gradle_5 = callPackage gradle-packages.gradle_5 { };
   gradle_6 = callPackage gradle-packages.gradle_6 { };
   gradle_7 = callPackage gradle-packages.gradle_7 { };
   gradle = gradle_7;
@@ -19475,10 +19477,9 @@ with pkgs;
 
   flyway = callPackage ../development/tools/flyway { };
 
-  inherit (callPackages ../development/libraries/fmt { }) fmt_7 fmt_8 fmt_9;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9;
 
-  fmt = fmt_7;
-  fmt_latest = fmt_9;
+  fmt = fmt_9;
 
   fplll = callPackage ../development/libraries/fplll {};
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
@@ -21150,17 +21151,15 @@ with pkgs;
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc ["glibc" "musl" "wasilibc"]
-      then glibcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
+      then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
         then libcCross
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv
-    else if stdenv.hostPlatform.isNetBSD
-      then null
     else libiconvReal;
 
-  glibcIconv = libc: let
+  libcIconv = libc: let
     inherit (libc) pname version;
     libcDev = lib.getDev libc;
   in runCommand "${pname}-iconv-${version}" { strictDeps = true; } ''
@@ -26027,6 +26026,8 @@ with pkgs;
 
   iferr = callPackage ../development/tools/iferr { };
 
+  gci = callPackage ../development/tools/gci { };
+
   ginkgo = callPackage ../development/tools/ginkgo { };
 
   gdlv = darwin.apple_sdk_11_0.callPackage ../development/tools/gdlv {
@@ -27405,6 +27406,7 @@ with pkgs;
   roapi-http = callPackage ../servers/roapi/http.nix { };
 
   rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
+  rose-pine-icon-theme = callPackage ../data/icons/rose-pine { };
 
   route159 = callPackage ../data/fonts/route159 { };
 
@@ -27981,6 +27983,10 @@ with pkgs;
   autotrace = callPackage ../applications/graphics/autotrace {};
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
+
+  avalanchego = callPackage ../applications/networking/avalanchego {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   avizo = callPackage ../applications/misc/avizo { };
 
@@ -28791,8 +28797,6 @@ with pkgs;
   # If you turn this into "real" alias again, please add it to pkgs/top-level/packages-config.nix again too
   emacsPackages = emacs.pkgs;
 
-  inherit (gnome) empathy;
-
   emptty = callPackage ../applications/display-managers/emptty {};
 
   endeavour = callPackage ../applications/office/endeavour { };
@@ -29043,6 +29047,8 @@ with pkgs;
   gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };
 
   gauche = callPackage ../development/interpreters/gauche { };
+
+  gazelle-origin = python3Packages.callPackage ../tools/misc/gazelle-origin { };
 
   gcal = callPackage ../applications/misc/gcal { };
 
@@ -31310,7 +31316,10 @@ with pkgs;
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
-  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql {
+    # fmt_9 is not supported: https://github.com/openstreetmap/osm2pgsql/issues/1859
+    fmt = fmt_8;
+  };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
@@ -31641,7 +31650,9 @@ with pkgs;
     boost = boost175;
   };
 
-  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
+  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
+    fmt = fmt_8;
+  };
 
   openjump = callPackage ../applications/misc/openjump { };
 
@@ -35114,9 +35125,7 @@ with pkgs;
 
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
-  performous = callPackage ../games/performous {
-    boost = boost166;
-  };
+  performous = callPackage ../games/performous { };
 
   pinball = callPackage ../games/pinball { };
 
@@ -36010,6 +36019,8 @@ with pkgs;
   SPAdes = callPackage ../applications/science/biology/spades { };
 
   svaba = callPackage ../applications/science/biology/svaba { };
+
+  tandem-aligner = callPackage ../applications/science/biology/tandem-aligner { };
 
   tebreak = callPackage ../applications/science/biology/tebreak { };
 
@@ -37252,7 +37263,9 @@ with pkgs;
 
   colima = callPackage ../applications/virtualization/colima { };
 
-  lima = callPackage ../applications/virtualization/lima { };
+  lima = callPackage ../applications/virtualization/lima {
+    inherit (darwin) sigtool;
+  };
 
   logtop = callPackage ../tools/misc/logtop { };
 
@@ -37298,7 +37311,9 @@ with pkgs;
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
-  kompute = callPackage ../development/libraries/kompute { };
+  kompute = callPackage ../development/libraries/kompute {
+    fmt = fmt_8;
+  };
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 

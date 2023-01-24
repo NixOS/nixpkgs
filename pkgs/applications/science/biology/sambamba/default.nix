@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sambamba";
-  version = "0.8.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "biod";
     repo = "sambamba";
     rev = "v${version}";
-    sha256 = "sha256-FEa9QjQoGNUOAtMNMZcqpTKMKVtXoBuOomTy0mpos/0=";
+    sha256 = "sha256-HwAzsbT71Q35Io6H7Hzs4RTatpRpdHqV0cwPYAlsf6c=";
     fetchSubmodules = true;
   };
 

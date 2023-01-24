@@ -16,7 +16,7 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_6_0 ? pkgs.linuxKernel.packages.linux_6_0
+, linuxPackages_6_1 ? pkgs.linuxKernel.packages.linux_6_1
 }:
 
 let
@@ -222,28 +222,28 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "6.1";
-    latestCompatibleLinuxPackages = linuxPackages_6_0;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.7";
+    version = "2.1.8";
 
-    sha256 = "sha256-vLm6RE11nqOCoYXne79JU3nUQnVEUNbwrULwFfghWcI=";
+    sha256 = "sha256-/+23SEtywa7b1dgvQNmEGrfqXzM1mlk00TSpuiCkQOk=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "6.1";
-    latestCompatibleLinuxPackages = linuxPackages_6_0;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.8-staging-2023-01-10";
-    rev = "0156253d29a303bdcca3e535958e754d8f086e33";
+    version = "2.1.9-staging-2023-01-19";
+    rev = "04b02785b67f9b976c43643dd52ce6cdbc22e11e";
 
-    sha256 = "sha256-2+vymBesmNLB3fuaCwQOojEzn3aYqtxIo35MvlwOoNw=";
+    sha256 = "sha256-/+23SEtywa7b1dgvQNmEGrfqXzM1mlk00TSpuiCkQOk=";
 
     isUnstable = true;
   };

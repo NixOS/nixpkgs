@@ -12,6 +12,14 @@ stdenv.mkDerivation {
 
   patches = [ ./ocaml-includes.patch ./ocaml-3.12.patch ];
 
+  postPatch = ''
+    # Deprecated in ocaml 3.10 https://github.com/ocaml/ocaml/commit/f6190f3d0c49c5220d443ee8d03ca5072d68aa87
+    # Deprecated in ocaml 3.08 https://github.com/ocaml/ocaml/commit/0c7aecb88dc696f66f49f3bed54a037361a26b8d
+    substituteInPlace fastdot_c.c --replace copy_double caml_copy_double --replace Bigarray_val Caml_ba_array_val --replace caml_bigarray caml_ba_array
+    # They were already deprecated in 3.12 https://v2.ocaml.org/releases/3.12/htmlman/libref/Array.html
+    substituteInPlace abffs.ml main.ml --replace create_matrix make_matrix
+    substituteInPlace intHashtbl.ml --replace Array.create Array.make
+  '';
   strictDeps = true;
 
   nativeBuildInputs = [ makeWrapper ocaml ];
@@ -20,7 +28,7 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "CAML_INCLUDES=${ocaml}/lib/ocaml/caml"
-    "WITHBIGARRAY=bigarray.cma"
+    ("WITHBIGARRAY=" + lib.optionalString (lib.versionOlder ocaml.version "4.08.0") "bigarray.cma")
   ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559

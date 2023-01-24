@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pachyderm";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "pachyderm";
     repo = "pachyderm";
     rev = "v${version}";
-    hash = "sha256-IzZBs6g6MQKofhMIdLr7ty7HzwF+SoyzCJ6RDMHt0mo=";
+    hash = "sha256-53VUZHA+yURikVtcXXa/fZqwAqwjukBKS4NQEBBoHew=";
   };
 
-  vendorHash = "sha256-j7zg0vIhdYbzyi4owdVEF4XyUNwGds6J01+3k5K90Yg=";
+  vendorHash = "sha256-k6ODl+whgeeyd8XaOjTDjxfShpOztirjq/Tg98YP8Hs=";
 
   subPackages = [ "src/server/cmd/pachctl" ];
 

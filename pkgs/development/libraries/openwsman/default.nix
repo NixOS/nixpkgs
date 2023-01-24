@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openwsman";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "sha256-/fSVzpGPObMkJIu7j6eR6A7Gtf2jttoPhcSayBvn3IU=";
+    sha256 = "sha256-CH2pqWs64Dznim3IljmsthKEQfACVlaAKQ/07MgryHo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
