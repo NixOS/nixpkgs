@@ -16,7 +16,6 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
-    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${version}";
     license = licenses.afl20;
     maintainers = [ maintainers.ivankovnatsky ];
   };
