@@ -139,20 +139,4 @@ rec {
     sha256 = "0p83zgszmrwa26a4q8nvzva2af5lfzy6xvcs57y9588smsw51wyw";
     defaultJava = jdk11;
   };
-
-  # NOTE: No GitHub Release for the following versions. `update.sh` will not work.
-
-  gradle_5 = gen {
-    version = "5.6.4";
-    nativeVersion = "0.18";
-    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
-    defaultJava = jdk11;
-  };
-
-  gradle_4 = gen {
-    version = "4.10.3";
-    nativeVersion = "0.14";
-    sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-    defaultJava = jdk8;
-  };
 }
