@@ -7,12 +7,11 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "blendle";
     repo = pname;
-    rev = version;
-    sha256 = "1y7m6ln3xricmrwf8638hqbmnbipfag1c1c04apfd4vcj7sqzm6b";
+    rev = "adddff3690d6bde62844e68e0edf304023927a9b";
+    sha256 = "sha256-zcJaH+Uyc/rCDRlQi+lSKaG7z4VWlNZ13klDnvL3Jgc=";
   };
 
   strictDeps = true;
-  buildInputs = [ bash ];
 
   installPhase = ''
     runHook preInstall
