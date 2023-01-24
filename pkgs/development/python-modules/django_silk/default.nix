@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.0.2";
+  version = "5.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-silk";
     rev = "refs/tags/${version}";
-    hash = "sha256-LzcbRZ9NLTkDTZ2eW+uXYqPbWDSdLZAJcYdD8JLuiDc=";
+    hash = "sha256-91FcOqAYZK7/RCKgXjbQEPUQ2cZRFi7NzVLQF+MMDRI=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but Django's
@@ -95,6 +95,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
+    changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };
