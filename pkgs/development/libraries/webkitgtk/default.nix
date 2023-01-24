@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , runCommand
+, fetchpatch
 , fetchurl
 , perl
 , python3
@@ -96,6 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
+    })
+
+    # NOTE: should be removed in next release
+    (fetchpatch {
+      name = "fix-build-warning-in-css-property-parser";
+      url = "https://github.com/WebKit/WebKit/commit/fe524823fc99baafa742dbd9c742d5dfd3295233.patch";
+      hash = "sha256-kumY49HN/E/8lG9yWGll9TQeJl2HJqkNGdho+ucf6qg=";
     })
   ];
 
