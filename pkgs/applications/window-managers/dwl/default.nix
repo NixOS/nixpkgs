@@ -10,7 +10,7 @@
 , wayland-protocols
 , wlroots_0_16
 , writeText
-, enable-xwayland ? true, xorg, libX11
+, enableXWayland ? true, xorg, libX11
 , conf ? null
 , patches ? [ ]
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wlroots_0_16
-  ] ++ lib.optionals enable-xwayland [
+  ] ++ lib.optionals enableXWayland [
     libX11
     xorg.xcbutilwm
   ];
@@ -49,8 +49,11 @@ stdenv.mkDerivation rec {
   patches = totalPatches;
 
   # Last two line of config.mk enables XWayland
-  prePatch = lib.optionalString enable-xwayland ''
-    sed -i -e 13,14s/^#//g config.mk
+  prePatch = lib.optionalString enableXWayland ''
+    cat <<EOF >>config.mk
+      XWAYLAND = -DXWAYLAND
+      XLIBS = xcb xcb-icccm
+    EOF
   '';
 
   # Allow users to set an alternative config.def.h
