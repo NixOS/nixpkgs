@@ -1,22 +1,36 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
-, six
-, pytestCheckHook
+, fetchpatch
 , mock
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "promise";
   version = "2.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "syrusakbary";
     repo = "promise";
-    rev = "v${version}";
-    sha256 = "17mq1bm78xfl0x1g50ng502m5ldq6421rzz35hlqafsj0cq8dkp6";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5s6GMANSO4UpLOP/HAQxuNFSBSjPgvJCB9R1dOoKuJ4=";
   };
+
+  patches = [
+    # Convert @asyncio.coroutine to async def, https://github.com/syrusakbary/promise/pull/99
+    (fetchpatch {
+      name = "use-async-def.patch";
+      url = "https://github.com/syrusakbary/promise/commit/3cde549d30b38dcff81b308e18c7f61783003791.patch";
+      hash = "sha256-XCbTo6RCv75nNrpbK3TFdV0h7tBJ0QK+WOAR8S8w9as=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tests/test_extra.py \
@@ -28,21 +42,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
     pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
     "tests/test_benchmark.py"
   ];
 
+  pythonImportsCheck = [
+    "promise"
+  ];
+
   meta = with lib; {
     description = "Ultra-performant Promise implementation in Python";
     homepage = "https://github.com/syrusakbary/promise";
+    changelog = "https://github.com/syrusakbary/promise/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }
