@@ -16,6 +16,8 @@
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
 
+  obs-livesplit-one = callPackage ./obs-livesplit-one { };
+
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
