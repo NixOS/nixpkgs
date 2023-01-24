@@ -451,6 +451,6 @@ in
     };
   };
 
-  meta.doc = ./jitsi-meet.xml;
+  meta.doc = ./jitsi-meet.md;
   meta.maintainers = lib.teams.jitsi.members;
 }

@@ -1082,5 +1082,5 @@ in {
   };
 
   meta.maintainers = with maintainers; [ mvs ];
-  meta.doc = ./akkoma.xml;
+  meta.doc = ./akkoma.md;
 }

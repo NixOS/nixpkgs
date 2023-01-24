@@ -801,7 +801,7 @@ in {
 
   meta = {
     buildDocsInSandbox = false;
-    doc = ./synapse.xml;
+    doc = ./synapse.md;
     maintainers = teams.matrix.members;
   };
 

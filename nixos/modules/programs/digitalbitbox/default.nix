@@ -33,7 +33,7 @@ in
   };
 
   meta = {
-    doc = ./default.xml;
+    doc = ./default.md;
     maintainers = with lib.maintainers; [ vidbina ];
   };
 }

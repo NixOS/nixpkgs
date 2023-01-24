@@ -68,12 +68,15 @@ let
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
 
-  modulesDoc = builtins.toFile "modules.xml" ''
-    <section xmlns:xi="http://www.w3.org/2001/XInclude" id="modules">
-    ${(lib.concatMapStrings (path: ''
-      <xi:include href="${path}" />
-    '') (lib.catAttrs "value" config.meta.doc))}
-    </section>
+  modulesDoc = runCommand "modules.xml" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs manual docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      "$out" \
+      --section \
+        --section-id modules \
+        --chapters ${lib.concatMapStrings (p: "${p.value} ") config.meta.doc}
   '';
 
   generatedSources = runCommand "generated-docbook" {} ''
