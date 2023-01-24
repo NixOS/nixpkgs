@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-MPD";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oZvKr61lyu7CmXP2A/xtYng1FIUPyveVJMqUuv6UnaM=";
+    sha256 = "sha256-CeLMRqj9cwBvQrOx7XHVV8MjDjwOosONVlsN2o+vTVM=";
   };
 
-  propagatedBuildInputs = [mopidy];
+  propagatedBuildInputs = [ mopidy ];
 
   # no tests implemented
   doCheck = false;

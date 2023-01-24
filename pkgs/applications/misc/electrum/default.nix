@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "4.3.2";
+  version = "4.3.3";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -37,7 +37,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-z2/UamKmBq/5a0PTbHdAqGK617Lc8xRhHRpbCc7jeZo=";
+    sha256 = "sha256-40GfOKBTAi8RAsAVrG9rv1Jr5IqM+1yro6YYRsSULxw=";
 
     postFetch = ''
       mv $out ./all
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-vTZArTwbKcf6/vPQOvjubPecsg+h+QlZ6rdbl6qNfs0=";
+    sha256 = "sha256-NPXGfbEjT9l88ZnGbDcE3+oGxThTzW7YfesBzssGsbc=";
   };
 
   postUnpack = ''
@@ -89,7 +89,13 @@ python3.pkgs.buildPythonApplication {
     qdarkstyle
   ];
 
-  preBuild = ''
+  postPatch = ''
+    # make compatible with protobuf4 by easing dependencies ...
+    substituteInPlace ./contrib/requirements/requirements.txt \
+      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+    # ... and regenerating the paymentrequest_pb2.py file
+    protoc --python_out=. electrum/paymentrequest.proto
+
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
@@ -111,7 +117,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum/tests" ];
 
@@ -135,7 +141,7 @@ python3.pkgs.buildPythonApplication {
   };
 
   meta = with lib; {
-    description = "A lightweight Bitcoin wallet";
+    description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)

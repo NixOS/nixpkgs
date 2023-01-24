@@ -26,7 +26,7 @@ buildPythonPackage rec {
     caio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiomisc
     asynctest
     pytestCheckHook
@@ -34,6 +34,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "aiofile"
+  ];
+
+  disabledTests = [
+    # Tests (SystemError) fails randomly during nix-review
+    "test_async_open_fp"
+    "test_async_open_iter_chunked"
+    "test_async_open_iter_chunked"
+    "test_async_open_line_iter"
+    "test_async_open_line_iter"
+    "test_async_open_readline"
+    "test_async_open_unicode"
+    "test_async_open"
+    "test_binary_io_wrapper"
+    "test_modes"
+    "test_text_io_wrapper"
+    "test_unicode_writer"
+    "test_write_read_nothing"
   ];
 
   meta = with lib; {

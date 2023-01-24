@@ -1,6 +1,5 @@
 { lib
 , fetchFromSourcehut
-, fetchpatch
 , buildGoModule
 , buildPythonPackage
 , srht
@@ -13,36 +12,27 @@
 , unzip
 }:
 let
-  version = "0.82.8";
+  version = "0.83.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    hash = "sha256-M94zkEUJU8EwksN34sd5IkASDCQ0hHb98G5wzZsCrpg=";
+    hash = "sha256-u/y+sYu/09LypWI/ngghbge5SvkuLQpray10j0SjlOo=";
   };
 
   buildsrht-api = buildGoModule ({
     inherit src version;
     pname = "buildsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-8z5m4bMwLeYg4i91MMjLMqbciWvqS0icCHFUJTUHBgk=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-DfVWr/4J4ZrhHpy9CXPaAQcbag/9FmDgiexcNo0lEsk=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion= "0.17.20"; });
 
   buildsrht-worker = buildGoModule {
     inherit src version;
     sourceRoot = "source/worker";
     pname = "buildsrht-worker";
     vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
-
-    patches = [
-      (fetchpatch {
-        name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
-        url = "https://git.sr.ht/~sircmpwn/builds.sr.ht/commit/f58bbde6bfed7d2321a3b17e991c91fc83d4c230.patch";
-        stripLen = 1;
-        hash = "sha256-vQR/T5G5Gz5tY+SEZZabsbnFKW44b+Bs+GDdydyeCDs=";
-      })
-    ];
   };
 in
 buildPythonPackage rec {
@@ -53,8 +43,6 @@ buildPythonPackage rec {
     substituteInPlace Makefile \
       --replace "all: api worker" ""
   '';
-
-  nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
     srht

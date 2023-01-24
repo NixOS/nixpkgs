@@ -1,8 +1,7 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
+, unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
-, writeShellScriptBin
+, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
 
 # Populate passthru.tests
 , tests
@@ -13,6 +12,7 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
+, dontFixup ? false
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
@@ -22,7 +22,7 @@ let
   inherit (stdenv.hostPlatform) system;
   unwrapped = stdenv.mkDerivation {
 
-    inherit pname version src sourceRoot;
+    inherit pname version src sourceRoot dontFixup;
 
     passthru = {
       inherit executableName longName tests updateScript;
@@ -66,13 +66,14 @@ let
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
       ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optional stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland ];
 
     nativeBuildInputs = [ unzip ]
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
         nodePackages.asar
-        (wrapGAppsHook.override { inherit makeWrapper; })
+        # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+        (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
       ];
 
     dontBuild = true;
@@ -109,7 +110,7 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
@@ -162,12 +163,17 @@ let
       icu
       libunwind
       libuuid
+      lttng-ust
       openssl
       zlib
 
       # mono
       krb5
     ]) ++ additionalPkgs pkgs;
+
+    extraBwrapArgs = [
+      "--bind-try /etc/nixos/ /etc/nixos/"
+    ];
 
     # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''

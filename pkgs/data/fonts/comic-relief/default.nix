@@ -1,20 +1,13 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "1.1";
-in fetchzip rec {
   name = "comic-relief-${version}";
+in (fetchzip rec {
+  inherit name;
 
   url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
-
-  postFetch = ''
-    mkdir -p $out/etc/fonts/conf.d
-    mkdir -p $out/share/doc/${name}
-    mkdir -p $out/share/fonts/truetype
-    cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
-    unzip -j $downloadedFile \*.ttf      -d $out/share/fonts/truetype
-    unzip -j $downloadedFile FONTLOG.txt -d $out/share/doc/${name}
-  '';
 
   sha256 = "0dz0y7w6mq4hcmmxv6fn4mp6jkln9mzr4s96vsg68wrl5b7k9yff";
 
@@ -37,4 +30,13 @@ in fetchzip rec {
     # want to install the font alias of this package.
     priority = 10;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/etc/fonts/conf.d
+    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/fonts/truetype
+    cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
+    unzip -j $downloadedFile \*.ttf      -d $out/share/fonts/truetype
+    unzip -j $downloadedFile FONTLOG.txt -d $out/share/doc/${name}
+  '';
+})

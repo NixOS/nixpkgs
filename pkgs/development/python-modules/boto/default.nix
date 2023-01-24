@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
-  disabled = pythonAtLeast "3.10"; # cannot import name 'Mapping' from 'collections'
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +24,19 @@ buildPythonPackage rec {
     ./bug-953970_python3.8-compat.patch
   ];
 
+  # boto is deprecated by upstream as of 2021-05-27 (https://github.com/boto/boto/commit/4980ac58764c3d401cb0b9552101f9c61c18f445)
+  # this patch is a bit simpler than https://github.com/boto/boto/pull/3898
+  # as we don't have to take care of pythonOlder "3.3".
+  postPatch = ''
+    substituteInPlace boto/dynamodb/types.py --replace 'from collections import Mapping' 'from collections.abc import Mapping'
+    substituteInPlace boto/mws/connection.py --replace 'import collections' 'import collections.abc as collections'
+  '';
+
   checkPhase = ''
     ${python.interpreter} tests/test.py default
   '';
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
   propagatedBuildInputs = [ requests httpretty ];
 
   meta = with lib; {

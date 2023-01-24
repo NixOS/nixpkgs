@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config intltool perl gobject-introspection vala ];
 
-  checkInputs = [ xvfb-run dbus ];
+  nativeCheckInputs = [ xvfb-run dbus ];
 
   buildInputs = [ atk cairo glib pango libxml2 gettext ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       make check
   '';
 

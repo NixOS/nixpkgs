@@ -9,6 +9,7 @@ buildDunePackage rec {
   version = "5.0.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
@@ -20,7 +21,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ base64 re stringext uri-sexp ];
 
   doCheck = true;
-  checkInputs = [ fmt alcotest crowbar ];
+  nativeCheckInputs = [ fmt alcotest crowbar ];
 
   meta = {
     description = "HTTP(S) library for Lwt, Async and Mirage";

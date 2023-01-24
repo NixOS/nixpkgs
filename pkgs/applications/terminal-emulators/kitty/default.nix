@@ -1,18 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
 , lcms2
 , librsync
+, openssl
 , installShellFiles
 , dbus
-, darwin
+, Libsystem
 , Cocoa
-, CoreGraphics
-, Foundation
-, IOKit
 , Kernel
-, OpenGL
+, UniformTypeIdentifiers
+, UserNotifications
 , libcanberra
 , libicns
 , libpng
@@ -27,14 +26,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.25.2";
+  version = "0.26.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
-    rev = "v${version}";
-    sha256 = "sha256-o/vVz1lPfsgkzbYjYhIrScCAROmVdiPsNwjW/m5n7Us=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UloBlV26HnkvbzP/NynlPI77z09MBEVgtrg5SeTmwB4=";
   };
 
   buildInputs = [
@@ -42,18 +41,17 @@ buildPythonApplication rec {
     ncurses
     lcms2
     librsync
+    openssl.dev
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
-    CoreGraphics
-    Foundation
-    IOKit
     Kernel
-    OpenGL
+    UniformTypeIdentifiers
+    UserNotifications
     libpng
     python3
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
-    darwin.apple_sdk.frameworks.UserNotifications
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    Libsystem
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -77,6 +75,16 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
+    # Fix clone-in-kitty not working on bash >= 5.2
+    # TODO: Removed on kitty release > 0.26.5
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/51bba9110e9920afbefeb981e43d0c1728051b5e.patch";
+      sha256 = "sha256-1aSU4aU6j1/om0LsceGfhH1Hdzp+pPaNeWAi7U6VcP4=";
+    })
+
+    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
+    ./fix-test_ssh_env_vars.patch
+
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -98,14 +106,19 @@ buildPythonApplication rec {
       --update-check-interval=0 \
       --shell-integration=enabled\ no-rc
     '';
-  in ''
-    runHook preBuild
-    ${if stdenv.isDarwin then ''
-      ${python.interpreter} setup.py kitty.app \
+    darwinOptions = ''
       --disable-link-time-optimization \
       ${commonOptions}
-      make man
+    '';
+  in ''
+    runHook preBuild
+    ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
+    ${if stdenv.isDarwin then ''
+      ${python.interpreter} setup.py build ${darwinOptions}
+      make docs
+      ${python.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
+      ${python.interpreter} setup.py build-launcher
       ${python.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
@@ -116,7 +129,7 @@ buildPythonApplication rec {
     runHook postBuild
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
 
     # Shells needed for shell integration tests
@@ -126,7 +139,7 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = if stdenv.isDarwin then ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
       --replace test_path_mapping_receive dont_test_path_mapping_receive
@@ -138,15 +151,9 @@ buildPythonApplication rec {
       --replace test_ssh_connection_data dont_test_ssh_connection_data
     substituteInPlace kitty_tests/fonts.py \
       --replace 'class Rendering(BaseTest)' 'class Rendering'
-  '' else "";
+  '';
 
-  checkPhase =
-    let buildBinPath =
-      if stdenv.isDarwin
-        then "kitty.app/Contents/MacOS"
-        else "linux-package/bin";
-    in
-    ''
+  checkPhase = ''
       runHook preCheck
 
       # Fontconfig error: Cannot load default config file: No such file: (null)
@@ -155,7 +162,8 @@ buildPythonApplication rec {
       # Required for `test_ssh_shell_integration` to pass.
       export TERM=kitty
 
-      env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
+      make test
+      runHook postCheck
     '';
 
   installPhase = ''
@@ -214,6 +222,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
   };
 }

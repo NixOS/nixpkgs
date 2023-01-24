@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cloudsmith-api";
-  version = "1.142.3";
+  version = "2.0.0";
 
   format = "wheel";
 
   src = fetchPypi {
     pname = "cloudsmith_api";
     inherit format version;
-    sha256 = "sha256-Cdnsath9p+LPKKzV4cmoOtl4doahi86l1NIgUwliZRU=";
+    sha256 = "sha256-Mcdpmrjg5hX4BTlBgt2+jQaoCqWjNIqkBykl1iT7McA=";
   };
 
   propagatedBuildInputs = [

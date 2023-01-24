@@ -10,7 +10,7 @@
 
 let
   pname = "setuptools";
-  version = "65.3.0";
+  version = "65.6.3";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "refs/tags/v${version}";
-      hash = "sha256-LPguGVWvwEMZpJFuXWLVFzIlzw+/QSMjVi2oYh0cI0s=";
+      hash = "sha256-B/1MhH0RDW7/pUam2FHnIcUPN6NpvQYBjRyHIm+E9rI=";
       name = "${pname}-${version}-source";
     };
 

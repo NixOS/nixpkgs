@@ -145,7 +145,7 @@
   (fetchNuGet { pname = "Serilog.Sinks.Debug"; version = "2.0.0"; sha256 = "1i7j870l47gan3gpnnlzkccn5lbm7518cnkp25a3g5gp9l0dbwpw"; })
   (fetchNuGet { pname = "Serilog.Sinks.File"; version = "5.0.0"; sha256 = "097rngmgcrdfy7jy8j7dq3xaq2qky8ijwg0ws6bfv5lx0f3vvb0q"; })
   (fetchNuGet { pname = "Serilog.Sinks.Graylog"; version = "2.3.0"; sha256 = "1mnji4p1n9rsjxlaal84zkypwqcfciws1si863zz4ld2xvv9adri"; })
-  (fetchNuGet { pname = "SerilogAnalyzer"; version = "0.15.0.0"; sha256 = "0k83cyzl9520q282vp07zb8rs16a56axv7a31l3m5fb1afq2hv9l"; })
+  (fetchNuGet { pname = "SerilogAnalyzer"; version = "0.15.0"; sha256 = "0k83cyzl9520q282vp07zb8rs16a56axv7a31l3m5fb1afq2hv9l"; })
   (fetchNuGet { pname = "SharpCompress"; version = "0.32.2"; sha256 = "1p198bl08ia89rf4n6yjpacj3yrz6s574snsfl40l8vlqcdrc1pm"; })
   (fetchNuGet { pname = "SkiaSharp"; version = "2.88.2"; sha256 = "0fnvp1yxl8gix9qb812pslhp8dvbf12ackvmp4yjdig6ybix77az"; })
   (fetchNuGet { pname = "SkiaSharp.NativeAssets.Linux"; version = "2.88.2"; sha256 = "1jc65bg75kxa2hv33y9584hbar10lirahgnh8s12lk8dpb23a3m3"; })

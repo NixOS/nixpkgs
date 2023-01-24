@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./rsvg-convert.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ iconnamingutils imagemagick librsvg ];
   propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
   # still missing parent icon themes: cristalsvg
 
@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
 
   postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 
-  meta = {
+  meta = with lib; {
     description = "A basic set of icons";
     homepage = "http://tango.freedesktop.org/Tango_Icon_Library";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.publicDomain;
   };
 }

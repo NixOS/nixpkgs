@@ -63,21 +63,23 @@
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.38.0";
+  version = "2.38.3";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  separateDebugInfo = stdenv.isLinux;
+  # https://github.com/NixOS/nixpkgs/issues/153528
+  # Can't be linked within a 4GB address space.
+  separateDebugInfo = stdenv.isLinux && !stdenv.is32bit;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-+c5jdaO24TKbC2CfRpIeJifcetYiSze5Z6supkO8D70=";
+    hash = "sha256-QfAB0e1EjGk2s5Sp8g5GQO6/g6fwgmLfKFBPdBBgSlo=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -214,18 +216,13 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
     "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
-    "-DUSE_SYSTEMD=OFF"
+    "-DENABLE_JOURNALD_LOG=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
     "-DENABLE_GLES2=ON"
   ];
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin ''
-    # It needs malloc_good_size.
-    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
-    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
-    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
   postFixup = ''

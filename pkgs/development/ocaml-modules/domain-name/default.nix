@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.04";
 
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

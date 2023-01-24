@@ -12,11 +12,12 @@
 , aws-checksums
 , cmake
 , s2n-tls
+, nix
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.17.32";
+  version = "0.18.9";
 
   outputs = [ "out" "dev" ];
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "sha256-Za2+7stcdrKou8DlfIIYGu5RYqS2FG5zCITm9pFSWX0=";
+    sha256 = "sha256-NEsEKUKmADevb8SSc8EFuXLc12fuOf6fXI76yVeDQno=";
   };
 
   patches = [
@@ -64,6 +65,10 @@ stdenv.mkDerivation rec {
     # Prevent dependency cycle.
     moveToOutput lib/aws-crt-cpp/cmake "$dev"
   '';
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C++ wrapper around the aws-c-* libraries";

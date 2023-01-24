@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     mv * $out
   '';
 
-  fixupPhase = ''
+  # Use preFixup instead of fixupPhase
+  # because we want the default fixupPhase as well
+  preFixup = ''
         bin_files=$(find $out/bin -type f ! -name common)
         for f in $bin_files ; do
           wrapProgram $f --set JAVA_HOME ${jre} --prefix PATH : '${ncurses.dev}/bin'

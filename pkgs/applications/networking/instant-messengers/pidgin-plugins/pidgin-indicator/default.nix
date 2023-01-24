@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CdA/aUu+CmCRbVBKpJGydicqFQa/rEsLWS3MBKlH2/M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ glib intltool libappindicator-gtk2 libtool pidgin ];
+  nativeBuildInputs = [ autoreconfHook intltool ];
+  buildInputs = [ glib libappindicator-gtk2 libtool pidgin ];
 
   meta = with lib; {
     description = "An AppIndicator and KStatusNotifierItem Plugin for Pidgin";

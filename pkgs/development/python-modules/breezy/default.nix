@@ -34,7 +34,7 @@ buildPythonPackage rec {
     launchpadlib
   ];
 
-  checkInputs = [ testtools ];
+  nativeCheckInputs = [ testtools ];
 
   # There is a conflict with their `lazy_import` and plugin tests
   doCheck = false;

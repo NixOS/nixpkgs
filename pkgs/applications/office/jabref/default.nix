@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
       binaryNativeCode # source bundles dependencies as jars
     ];
-    license = licenses.gpl2;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ gebner linsui ];
   };

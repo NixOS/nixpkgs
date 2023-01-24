@@ -45,9 +45,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Live GLSL coding renderer";
-    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
+    homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.hodapp ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

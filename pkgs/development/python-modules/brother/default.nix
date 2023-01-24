@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, dacite
 , pysnmplib
 , pytest-asyncio
 , pytest-error-for-skips
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "1.2.3";
+  version = "2.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,14 +20,15 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+o6hv63u6FBEu57mD02lss0LQPwgBnXsP8CKQ+/74/Q=";
+    hash = "sha256-jMvbZ4/NOA3dnJUdDWk2KTRz1gBOC+oDE0ChGNdFl1o=";
   };
 
   propagatedBuildInputs = [
+    dacite
     pysnmplib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook

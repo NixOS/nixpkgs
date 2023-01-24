@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , fetchFromGitHub
 , buildGoModule
 }:
@@ -13,6 +14,20 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "1jlza1czfssssi3y9zi6kr8k9msfa7vp215ibhwbz4h97av5xw5m";
   };
+
+  patches = [
+    # https://github.com/genuinetools/reg/pull/218
+    (fetchpatch {
+      name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
+      url = "https://github.com/genuinetools/reg/commit/f37b04ad8be47f1e68ef9b2c5906324d7096231e.patch";
+      hash = "sha256-wmBjPdrpNpxx//I+d+k8DNR11TmyXxb84vXR/MrYHKA=";
+    })
+    (fetchpatch {
+      name = "update-vendored-dependencies.patch";
+      url = "https://github.com/genuinetools/reg/commit/8bb04bc3fd41c089716e65ee905c6feac8bda5a0.patch";
+      hash = "sha256-5nZaayy0xu7sOJHVCp6AotINiF7vXk2Jic8SR8ZrH/g=";
+    })
+  ];
 
   vendorSha256 = null;
   doCheck = false;

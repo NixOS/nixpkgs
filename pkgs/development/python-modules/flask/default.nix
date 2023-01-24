@@ -36,7 +36,7 @@ buildPythonPackage rec {
     werkzeug
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

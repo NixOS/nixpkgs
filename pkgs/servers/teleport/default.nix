@@ -5,6 +5,8 @@
 , makeWrapper
 , symlinkJoin
 , CoreFoundation
+, AppKit
+, libfido2
 , openssl
 , pkg-config
 , protobuf
@@ -14,7 +16,6 @@
 , nixosTests
 
 , withRdpClient ? true
-, withRoleTester ? true
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -22,13 +23,13 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-KQfdeMuZ9LJHhEJLMl58Yb0+gxgDT7VcVnK1JxjVZaI=";
+    hash = "sha256-8S+r5pd8icOljGkxqLsZKmh4+nIwPQErs7RK88q0vOQ=";
   };
-  version = "9.1.2";
+  version = "11.1.4";
 
   rdpClient = rustPlatform.buildRustPackage rec {
-    name = "teleport-rdpclient";
-    cargoSha256 = "sha256-Jz7bB/f4HRxBhSevmfELSrIm+IXUVlADIgp2qWQd5PY=";
+    pname = "teleport-rdpclient";
+    cargoHash = "sha256-XuJTdpb2eIeXnVtuSOlHjZQ8PpwxK4/4siK2S2h6xIw=";
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -39,51 +40,37 @@ let
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
     # buildRustPackage sets strictDeps = true;
-    checkInputs = buildInputs;
+    nativeCheckInputs = buildInputs;
 
     OPENSSL_NO_VENDOR = "1";
 
     postInstall = ''
-      cp -r target $out
-    '';
-  };
-
-  roleTester = rustPlatform.buildRustPackage {
-    name = "teleport-roletester";
-    inherit version src;
-
-    cargoSha256 = "sha256-gCm4ETbXy6tGJQVSzUkoAWUmKD3poYgkw133LtziASI=";
-    buildAndTestSubdir = "lib/datalog/roletester";
-
-    PROTOC = "${protobuf}/bin/protoc";
-    PROTOC_INCLUDE = "${protobuf}/include";
-
-    postInstall = ''
-      cp -r target $out
+      mkdir -p $out/include
+      cp ${buildAndTestSubdir}/librdprs.h $out/include/
     '';
   };
 
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "67e608db77300d8a6cb17709be67f12c1d3271c3";
-    sha256 = "sha256-o4qjXGaNi5XDSUQrUuU+G77EdRnvJ1WUPWrryZU1CUE=";
+    # Submodule rev from https://github.com/gravitational/teleport/tree/v11.1.4
+    rev = "5f2597d5987804d37e61da8ae9d1a5a2d6b43ef4";
+    hash = "sha256-meRinI4VsJuRoJznVULHL38bUIu352lf5LRPLlef1OA=";
   };
 in
 buildGoModule rec {
   pname = "teleport";
 
   inherit src version;
-  vendorSha256 = "sha256-UMgWM7KHag99JR4i4mwVHa6yd9aHQ6Dy+pmUijNL4Ew=";
+  vendorHash = "sha256-nlwBjeh0BlZ3vUQxvaYW0aK5Y2YK1gEar9s1IMJJEMY=";
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
-  tags = [ "webassets_embed" ]
-    ++ lib.optional withRdpClient "desktop_access_rdp"
-    ++ lib.optional withRoleTester "roletester";
+  tags = [ "libfido2" "webassets_embed" ]
+    ++ lib.optional withRdpClient "desktop_access_rdp";
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ openssl libfido2 ]
+    ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   patches = [
     # https://github.com/NixOS/nixpkgs/issues/120738
@@ -97,31 +84,26 @@ buildGoModule rec {
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
 
-  preBuild =
-    let rustDeps = symlinkJoin {
-      name = "teleport-rust-deps";
-      paths = lib.optional withRdpClient rdpClient
-        ++ lib.optional withRoleTester roleTester;
-    };
-    in
-    ''
-      mkdir -p build
-      echo "making webassets"
-      cp -r ${webassets}/* webassets/
-      make lib/web/build/webassets
-
-      cp -r ${rustDeps}/. .
-    '';
+  preBuild = ''
+    mkdir -p build
+    echo "making webassets"
+    cp -r ${webassets}/* webassets/
+    make -j$NIX_BUILD_CORES lib/web/build/webassets
+  '' + lib.optionalString withRdpClient ''
+    ln -s ${rdpClient}/lib/* lib/
+    ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
+  '';
 
   # Multiple tests fail in the build sandbox
   # due to trying to spawn nixbld's shell (/noshell), etc.
   doCheck = false;
 
   postInstall = ''
-    install -Dm755 -t $client/bin $out/bin/tsh
+    mkdir -p $client/bin
+    mv {$out,$client}/bin/tsh
     # make xdg-open overrideable at runtime
     wrapProgram $client/bin/tsh --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-    wrapProgram $out/bin/tsh --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    ln -s {$client,$out}/bin/tsh
   '';
 
   doInstallCheck = true;

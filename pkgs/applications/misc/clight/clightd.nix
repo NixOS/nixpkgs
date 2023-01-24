@@ -5,17 +5,18 @@
 , enableDdc ? true, ddcutil
 , enableDpms ? true, libXext
 , enableGamma ? true, libdrm, libXrandr, wayland
-, enableScreen ? true }:
+, enableScreen ? true
+, enableYoctolight ? true }:
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    sha256 = "sha256-PxYOI/2ZOz3JSGCPIXfm3WfGZ19D8JhhdNS3FVuXus8=";
+    sha256 = "sha256-4daM6Z67d52v2LmzqSZ6RSAHznyZNEqvAdWCuVFi0Kw=";
   };
 
   # dbus-1.pc has datadir=/etc
@@ -33,10 +34,11 @@ stdenv.mkDerivation rec {
       "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
       # systemd.pc has prefix=${systemd.out}
       "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
-    ] ++ optional enableDdc    "-DENABLE_DDC=1"
-      ++ optional enableDpms   "-DENABLE_DPMS=1"
-      ++ optional enableGamma  "-DENABLE_GAMMA=1"
-      ++ optional enableScreen "-DENABLE_SCREEN=1";
+    ] ++ optional enableDdc        "-DENABLE_DDC=1"
+      ++ optional enableDpms       "-DENABLE_DPMS=1"
+      ++ optional enableGamma      "-DENABLE_GAMMA=1"
+      ++ optional enableScreen     "-DENABLE_SCREEN=1"
+      ++ optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
   nativeBuildInputs = [
     dbus

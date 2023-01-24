@@ -6,11 +6,9 @@
 , openjpeg, opencolorio_1, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
-
 , version
 , kde-channel
 , sha256
-
 , callPackage
 }:
 

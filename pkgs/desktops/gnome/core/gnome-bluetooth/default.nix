@@ -14,7 +14,7 @@
 , upower
 , itstool
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 , libnotify
 , gsound
 , gobject-introspection
@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
-  version = "42.2";
+  version = "42.5";
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "jOjs+rKCctsYMKY/CPnMtTBHNNG+Lb/OeV/kAp5inww=";
+    sha256 = "pPXxrC27e3uS99bStCwDD2Ku2bVCa53BFpRgQfPLqPc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection
     gtk-doc
     docbook-xsl-nons

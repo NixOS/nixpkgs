@@ -55,8 +55,8 @@ let
 
     # generate the new config by merging with the NixOS config options
     new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
-        "devices": (${builtins.toJSON devices}${optionalString (! cfg.overrideDevices) " + .devices"}),
-        "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + .folders"})
+        "devices": (${builtins.toJSON devices}${optionalString (cfg.devices == {} || ! cfg.overrideDevices) " + .devices"}),
+        "folders": (${builtins.toJSON folders}${optionalString (cfg.folders == {} || ! cfg.overrideFolders) " + .folders"})
     } * ${builtins.toJSON cfg.extraOptions}')
 
     # send the new config
@@ -212,10 +212,18 @@ in {
             };
 
             path = mkOption {
-              type = types.str;
+              # TODO for release 23.05: allow relative paths again and set
+              # working directory to cfg.dataDir
+              type = types.str // {
+                check = x: types.str.check x && (substring 0 1 x == "/" || substring 0 2 x == "~/");
+                description = types.str.description + " starting with / or ~/";
+              };
               default = name;
               description = lib.mdDoc ''
                 The path to the folder which should be shared.
+                Only absolute paths (starting with `/`) and paths relative to
+                the [user](#opt-services.syncthing.user)'s home directory
+                (starting with `~/`) are allowed.
               '';
             };
 
@@ -376,6 +384,29 @@ in {
         description = mdDoc ''
           Extra configuration options for Syncthing.
           See <https://docs.syncthing.net/users/config.html>.
+          Note that this attribute set does not exactly match the documented
+          xml format. Instead, this is the format of the json rest api. There
+          are slight differences. For example, this xml:
+          ```xml
+          <options>
+            <listenAddress>default</listenAddress>
+            <minHomeDiskFree unit="%">1</minHomeDiskFree>
+          </options>
+          ```
+          corresponds to the json:
+          ```json
+          {
+            options: {
+              listenAddresses = [
+                "default"
+              ];
+              minHomeDiskFree = {
+                unit = "%";
+                value = 1;
+              };
+            };
+          }
+          ```
         '';
         example = {
           options.localAnnounceEnabled = false;
@@ -405,7 +436,8 @@ in {
         example = "yourUser";
         description = mdDoc ''
           The user to run Syncthing as.
-          By default, a user named `${defaultUser}` will be created.
+          By default, a user named `${defaultUser}` will be created whose home
+          directory is [dataDir](#opt-services.syncthing.dataDir).
         '';
       };
 

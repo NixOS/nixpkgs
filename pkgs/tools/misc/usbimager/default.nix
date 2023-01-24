@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config
+{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook
 , withLibui ? true, gtk3
 , withUdisks ? stdenv.isLinux, udisks, glib
 , libX11 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src/";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
@@ -43,5 +43,7 @@ stdenv.mkDerivation rec {
     # windows and darwin could work, but untested
     # feel free add them if you have a machine to test
     platforms = with platforms; linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

@@ -106,15 +106,13 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
            && sed -i 's|driver_local.maximize_window()||' web/regression/runtests.py"
       )
 
-      # Don't bother to test LDAP or kerberos authentification
-      # For now deactivate change_password API test. Current bug report at https://redmine.postgresql.org/issues/7648
-      # Password change works from the UI, if email SMTP is configured.
+      # Don't bother to test LDAP or kerberos authentication
       with subtest("run browser test"):
           machine.succeed(
                'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
                && python regression/runtests.py \
                --pkg browser \
-               --exclude browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login,browser.tests.test_kerberos_with_mocking,browser.tests.test_change_password'
+               --exclude browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login,browser.tests.test_kerberos_with_mocking'
           )
 
       # fontconfig is necessary for chromium to run

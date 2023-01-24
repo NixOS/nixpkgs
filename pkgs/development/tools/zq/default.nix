@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "zq";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "brimdata";
     repo = "zed";
     rev = "v${version}";
-    hash = "sha256-BK4LB37jr/9O0sjYgFtnEkbFqTsp/1+hcmCNMFDPiPM=";
+    hash = "sha256-ias2HKwZo5Q/0M4YZI4wLgzMVWmannruXlhp8IsOuyU=";
   };
 
-  vendorSha256 = "sha256-oAkQRUaEP/RNjpDH4U8XFVokf7KiLk0OWMX+U7qny70=";
+  vendorHash = "sha256-h5NYx6xhIh4i/tS5cGHXBomnVZCUn8jJuzL6k1+IdKk=";
 
   subPackages = [ "cmd/zq" ];
 

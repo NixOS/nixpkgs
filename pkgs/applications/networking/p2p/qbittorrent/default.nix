@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config
+{ mkDerivation, lib, stdenv, fetchFromGitHub, pkg-config
 , boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -12,13 +12,13 @@ assert trackerSearch -> (python3 != null);
 with lib;
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.4.3.1";
+  version = "4.4.5";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    sha256 = "sha256-byA6bzGdigmVptUFdgBjyg6Oimn5L6l1DDOuuBjwO0s=";
+    sha256 = "sha256-EgRDNOJ4szdZA5ipOuGy2R0oVdjWcuqPU3ecU3ZNK3g=";
   };
 
   enableParallelBuilding = true;
@@ -42,12 +42,18 @@ mkDerivation rec {
 
   qtWrapperArgs = optional trackerSearch "--prefix PATH : ${makeBinPath [ python3 ]}";
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R src/qbittorrent.app $out/Applications
+    makeWrapper $out/{Applications/qbittorrent.app/Contents/MacOS,bin}/qbittorrent
+  '';
+
   meta = {
     description = "Featureful free software BitTorrent client";
     homepage    = "https://www.qbittorrent.org/";
     changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
     license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha ];
   };
 }

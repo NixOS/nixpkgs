@@ -16,7 +16,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "A command line interface for The Pirate Bay";
     homepage = "https://github.com/vikstrous/pirate-get";
-    license = licenses.gpl1;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;
   };

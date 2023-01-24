@@ -14,7 +14,8 @@
 , gdk-pixbuf
 , libnotify
 , qttools
-, xlibsWrapper
+, libICE
+, libSM
 , libX11
 , libxkbfile
 , libXi
@@ -26,6 +27,7 @@
 , avahi-compat
 
   # MacOS / darwin
+, darwin
 , ApplicationServices
 , Carbon
 , Cocoa
@@ -35,19 +37,20 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.14.5.17";
+  version = "1.14.5.22";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
-    sha256 = "sha256-9B6KPa1TsS4khCf7ccmwQZJ1KDEuLNw/W0PScYCgtlE=";
+    sha256 = "sha256-rqQ4n8P8pZSWRCxaQLa2PuduXMt2XeaFs051qcT3/o8=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
+  ] ++ lib.optionals (stdenv.isDarwin && !(darwin.apple_sdk.frameworks ? UserNotifications)) [
     # We cannot include UserNotifications because of a build failure in the Apple SDK.
     # The functions used from it are already implicitly included anyways.
     ./darwin-no-UserNotifications-includes.patch
@@ -76,11 +79,14 @@ stdenv.mkDerivation rec {
     Cocoa
     CoreServices
     ScreenSaver
+  ] ++ lib.optionals (stdenv.isDarwin && darwin.apple_sdk.frameworks ? UserNotifications) [
+    darwin.apple_sdk.frameworks.UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
     libselinux
     libsepol
-    xlibsWrapper
+    libICE
+    libSM
     libX11
     libXi
     libXtst
@@ -97,7 +103,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
-    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}";
+    # NSFilenamesPboardType is deprecated in 10.14+
+    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.isAarch64 then "10.13" else stdenv.targetPlatform.darwinSdkVersion}";
 
   doCheck = true;
 

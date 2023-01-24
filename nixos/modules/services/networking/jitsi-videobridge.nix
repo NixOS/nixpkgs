@@ -70,7 +70,7 @@ in
       description = lib.mdDoc ''
         Videobridge configuration.
 
-        See <https://github.com/jitsi/jitsi-videobridge/blob/master/src/main/resources/reference.conf>
+        See <https://github.com/jitsi/jitsi-videobridge/blob/master/jvb/src/main/resources/reference.conf>
         for default configuration with comments.
       '';
     };
@@ -150,7 +150,7 @@ in
         config = {
           hostName = mkDefault name;
           mucNickname = mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
-            config.networking.hostName + optionalString (config.networking.domain != null) ".${config.networking.domain}"
+            config.networking.fqdnOrHostName
           ));
         };
       }));

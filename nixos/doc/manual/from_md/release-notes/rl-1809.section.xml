@@ -54,7 +54,7 @@
         <para>
           For example
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   programs.firejail = {
     enable = true;
@@ -523,8 +523,8 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       <listitem>
         <para>
           The <literal>netcat</literal> package is now taken directly
-          from OpenBSD's <literal>libressl</literal>, instead of relying
-          on Debian's fork. The new version should be very close to the
+          from OpenBSD’s <literal>libressl</literal>, instead of relying
+          on Debian’s fork. The new version should be very close to the
           old version, but there are some minor differences.
           Importantly, flags like -b, -q, -C, and -Z are no longer
           accepted by the nc command.
@@ -533,7 +533,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       <listitem>
         <para>
           The <literal>services.docker-registry.extraConfig</literal>
-          object doesn't contain environment variables anymore. Instead
+          object doesn’t contain environment variables anymore. Instead
           it needs to provide an object structure that can be mapped
           onto the YAML configuration defined in
           <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the
@@ -543,7 +543,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       <listitem>
         <para>
           <literal>gnucash</literal> has changed from version 2.4 to
-          3.x. If you've been using <literal>gnucash</literal> (version
+          3.x. If you’ve been using <literal>gnucash</literal> (version
           2.4) instead of <literal>gnucash26</literal> (version 2.6) you
           must open your Gnucash data file(s) with
           <literal>gnucash26</literal> and then save them to upgrade the
@@ -695,7 +695,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
           A NixOS system can now be constructed more easily based on a
           preexisting invocation of Nixpkgs. For example:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   inherit (pkgs.nixos {
     boot.loader.grub.enable = false;
@@ -791,7 +791,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
           <para>
             An example usage of this would be:
           </para>
-          <programlisting language="bash">
+          <programlisting language="nix">
 { config, ... }:
 
 {
@@ -874,7 +874,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
           The <literal>programs.screen</literal> module provides allows
           to configure <literal>/etc/screenrc</literal>, however the
           module behaved fairly counterintuitive as the config exists,
-          but the package wasn't available. Since 18.09
+          but the package wasn’t available. Since 18.09
           <literal>pkgs.screen</literal> will be added to
           <literal>environment.systemPackages</literal>.
         </para>
@@ -920,7 +920,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
         <para>
           NixOS option descriptions are now automatically broken up into
           individual paragraphs if the text contains two consecutive
-          newlines, so it's no longer necessary to use
+          newlines, so it’s no longer necessary to use
           <literal>&lt;/para&gt;&lt;para&gt;</literal> to start a new
           paragraph.
         </para>

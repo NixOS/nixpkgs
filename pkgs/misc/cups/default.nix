@@ -9,7 +9,7 @@
 , libtiff
 , pam
 , dbus
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , acl
 , gmp
@@ -22,72 +22,56 @@
 , nixosTests
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
+  version = "2.4.2";
 
-  # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.4.2";
-
-  src = fetchurl (if stdenv.isDarwin then {
-    url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
-  } else {
+  src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
-  });
+  };
 
   outputs = [ "out" "lib" "dev" "man" ];
-
-  patches = lib.optionals (version == "2.2.6") [
-    ./0001-TargetConditionals.patch
-    (fetchpatch {
-      name = "CVE-2022-26691.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/de4f8c196106033e4c372dce3e91b9d42b0b9444.patch";
-      sha256 = "sha256-IKOtV7bCS6PstwK6YqnYRYTeH562jWwkley86p+6Of8=";
-      excludes = [ "CHANGES.md" ];
-    })
-    (fetchpatch {
-      name = "CVE-2022-26691-fix-comment.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/411b6136f450a583ee08c3880fa09dbe837eb3f1.patch";
-      sha256 = "sha256-dVopmr34c9N5H2ZZz52rXVnHQBuDTNo8M40x9455+jQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
+
+      # The cups.socket unit shouldn't be part of cups.service: stopping the
+      # service would stop the socket and break subsequent socket activations.
+      # See https://github.com/apple/cups/issues/6005
+      sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
   '';
 
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
-    ++ optional enableSystemd systemd
-    ++ optionals stdenv.isDarwin (with darwin; [
+    ++ lib.optionals stdenv.isLinux [ avahi pam dbus acl ]
+    ++ lib.optional enableSystemd systemd
+    ++ lib.optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
 
   propagatedBuildInputs = [ gmp ];
 
+  configurePlatforms = lib.optionals stdenv.isLinux [ "build" "host" ];
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--enable-raw-printing"
     "--enable-threads"
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     "--enable-dbus"
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
-  ] ++ optional (libusb1 != null) "--enable-libusb"
-    ++ optional (gnutls != null) "--enable-ssl"
-    ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper"
-    ++ optional stdenv.isDarwin "--disable-launchd";
+  ] ++ lib.optional (libusb1 != null) "--enable-libusb"
+    ++ lib.optional (gnutls != null) "--enable-ssl"
+    ++ lib.optional (avahi != null) "--enable-avahi"
+    ++ lib.optional (libpaper != null) "--enable-libpaper";
 
   # AR has to be an absolute path
   preConfigure = ''
-    export AR="${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    export AR="${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     configureFlagsArray+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.
@@ -98,7 +82,7 @@ stdenv.mkDerivation rec {
 
       "--with-systemd=$out/lib/systemd/system"
 
-      ${optionalString stdenv.isDarwin ''
+      ${lib.optionalString stdenv.isDarwin ''
         "--with-bundledir=$out"
       ''}
     )
@@ -107,6 +91,7 @@ stdenv.mkDerivation rec {
   installFlags =
     [ # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
+      "LAUNCHD_DIR=$(TMPDIR)/dummy"
       "LOGDIR=$(TMPDIR)/dummy"
       "REQUESTS=$(TMPDIR)/dummy"
       "STATEDIR=$(TMPDIR)/dummy"
@@ -143,7 +128,7 @@ stdenv.mkDerivation rec {
       for f in "$out"/lib/systemd/system/*; do
         substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
       done
-    '' + optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.isLinux ''
       # Use xdg-open when on Linux
       substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
@@ -151,7 +136,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.nixos = nixosTests.printing;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
     description = "A standards-based printing system for UNIX";
     license = licenses.asl20;

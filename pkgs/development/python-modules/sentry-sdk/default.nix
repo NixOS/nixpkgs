@@ -1,52 +1,46 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# runtime
-, certifi
-, urllib3
-
-# optionals
 , aiohttp
 , apache-beam
+, asttokens
 , blinker
 , botocore
 , bottle
+, buildPythonPackage
 , celery
+, certifi
 , chalice
 , django
+, executing
 , falcon
+, fetchFromGitHub
 , flask
-, flask_login
+, flask-login
+, gevent
 , httpx
+, jsonschema
+, mock
 , pure-eval
 , pyramid
+, pyrsistent
 , pyspark
+, pytest-forked
+, pytest-localserver
+, pytest-watch
+, pytestCheckHook
+, pythonOlder
 , rq
 , sanic
 , sqlalchemy
 , tornado
 , trytond
+, urllib3
 , werkzeug
-
-# tests
-, asttokens
-, executing
-, gevent
-, jsonschema
-, mock
-, pyrsistent
-, pytest-forked
-, pytest-localserver
-, pytest-watch
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.9.9";
+  version = "1.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -54,8 +48,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = version;
-    hash = "sha256-DIiShIiTHmJdOtf1WYi4ofJdZnsg13VczVvGW+ngE+I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ugCbjhOZTJ1+DeTKDTQJMIO6wjkqVL5tvPGoRrZKwGI=";
   };
 
   propagatedBuildInputs = [
@@ -118,7 +112,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     asttokens
     executing
     gevent
@@ -155,6 +149,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
+    changelog = "https://github.com/getsentry/sentry-python/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab gebner ];
   };

@@ -14,13 +14,14 @@
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "6.0.0";
+  version = "6.0.1";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GeMwRwr0AWfSk7A1JXjB+iLXSzTT7fXU/5DrwgO7svE=";
+    hash = "sha256-iWxCguXHr1xF6LaDsLDDOTKXT+blD8aQagqDYWqz2pc=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     paramiko
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
@@ -47,9 +48,15 @@ buildPythonPackage rec {
   ];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
-  disabledTests = lib.optionals stdenv.isDarwin [ "api_test" "stream_response" "socket_file" ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "api_test" "stream_response" "socket_file"
+  ];
 
   dontUseSetuptoolsCheck = true;
+
+  pythonImportsCheck = [
+    "docker"
+  ];
 
   meta = with lib; {
     description = "An API client for docker written in Python";

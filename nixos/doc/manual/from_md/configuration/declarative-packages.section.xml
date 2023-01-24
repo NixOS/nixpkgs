@@ -7,7 +7,7 @@
     adding the following line to <literal>configuration.nix</literal>
     enables the Mozilla Thunderbird email application:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 environment.systemPackages = [ pkgs.thunderbird ];
 </programlisting>
   <para>

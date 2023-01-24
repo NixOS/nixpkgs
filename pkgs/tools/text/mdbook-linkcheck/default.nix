@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-linkcheck";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "Michael-F-Bryan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZEOuA8W05800cnArscaGGOWTgzU6V3/wJiQcSx1MVkY=";
+    sha256 = "sha256-ZbraChBHuKAcUA62EVHZ1RygIotNEEGv24nhSPAEj00=";
   };
 
-  cargoSha256 = "sha256-EtPhbKvPHSnmPXemCzOXujlqqfdDSFaJpcZVJoHQq6U=";
+  cargoSha256 = "sha256-AwixlCL5ZcLgj9wYeBvkSy2U6J8alXf488l8DMn73w4=";
 
   buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 

@@ -62,7 +62,7 @@ let
       return 1
     }
 
-    tags=$($version_lister --pname=$pname --attr-path=$attr_path --file="${fileForGitCommands}") || exit 1
+    tags=$(sh -c "$version_lister --pname=$pname --attr-path=$attr_path --file=\"${fileForGitCommands}\"") || exit 1
 
     # print available tags
     for tag in $tags; do

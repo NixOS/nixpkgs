@@ -1,21 +1,21 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
+{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle, git, perl
 , makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
 let
   pname = "signald";
-  version = "0.19.1";
+  version = "0.23.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ma6kIKRVM8UUU/TvfVp2RVl/FLxFgBQU3mEypnujJ+c=";
+    sha256 = "sha256-RN0OYjOmVtHKeFkviep952uf3qWuBj8lhcaP1Lk/gDo=";
   };
 
   jre' = jre_minimal.override {
     jdk = jdk17_headless;
-    # from https://gitlab.com/signald/signald/-/blob/0.19.1/build.gradle#L173
+    # from https://gitlab.com/signald/signald/-/blob/0.23.0/build.gradle#L173
     modules = [
       "java.base"
       "java.management"
@@ -36,7 +36,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [ gradle perl ];
     patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -54,8 +54,8 @@ let
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
     outputHash = {
-      x86_64-linux = "sha256-q1gzauIL7aKalvPSfiK5IvkNkidCh+6jp5bpwxR+PZ0=";
-      aarch64-linux = "sha256-cM+7MaV0/4yAzobXX9FSdl/ZfLddwySayao96UdDgzk=";
+      x86_64-linux = "sha256-ANiNDdTuCuDEH5zUPsrVF6Uegdq3zVsMv+uMtYRX0jE=";
+      aarch64-linux = "sha256-V9zn4v/ZeLELAwFJ5y7OVAeJwZp4DmHm4KWxE6KpwGs=";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle_6 makeWrapper ];
+  nativeBuildInputs = [ git gradle makeWrapper ];
 
   doCheck = true;
 

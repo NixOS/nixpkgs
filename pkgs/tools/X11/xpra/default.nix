@@ -151,6 +151,7 @@ in buildPythonApplication rec {
     python-uinput
     pyxdg
     rencode
+    invoke
   ] ++ lib.optionals withNvenc [
     pycuda
     pynvml
@@ -186,9 +187,14 @@ in buildPythonApplication rec {
     )
   '';
 
-  # append module paths to xorg.conf
   postInstall = ''
+    # append module paths to xorg.conf
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+
+    # make application icon visible to desktop environemnts
+    icon_dir="$out/share/icons/hicolor/64x64/apps"
+    mkdir -p "$icon_dir"
+    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
   '';
 
   doCheck = false;

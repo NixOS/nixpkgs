@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
-, vala_0_54
+, vala
 , meson
 , ninja
 , pkg-config
@@ -50,6 +50,11 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/tootle/0003-make-app-entries-private.patch?id=c973e68e3cba855f1601ef010afa9a14578b9499";
       sha256 = "sha256-zwU0nxf/haBZl4tOYDmMzwug+HC6lLDT8/12Wt62+S4=";
     })
+    # https://github.com/flathub/com.github.bleakgrey.tootle/pull/22
+    (fetchpatch {
+      url = "https://github.com/flathub/com.github.bleakgrey.tootle/raw/6b524dc13143e4827f67628e33dcf161d862af29/Fix-construct-prop.patch";
+      sha256 = "sha256-zOIMy9+rY2aRcPHcGWU/x6kf/xb7VnuHdsKQ0FO1Cyc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -57,11 +62,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    # Does not build with Vala 0.56.1:
-    # ../src/Widgets/Status.vala:8.43-8.56: error: construct
-    # properties not supported for specified property type
-    # public API.NotificationType? kind { get; construct set; }
-    vala_0_54
+    vala
     wrapGAppsHook
   ];
 
@@ -83,9 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -93,5 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bleakgrey/tootle";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
+    platforms = platforms.linux;
   };
 }

@@ -21,7 +21,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.16";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "jax-v${version}";
-    hash = "sha256-4idh7boqBXSO9vEHxEcrzXjBIrKmmXiCf6cXh7En1/I=";
+    rev = "refs/tags/jaxlib-v${version}";
+    hash = "sha256-ajLI0iD0YZRK3/uKSbhlIZGc98MdW174vA34vhoy7Iw=";
   };
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ etils.optional-dependencies.epath;
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaxlib
     matplotlib
     pytestCheckHook
@@ -92,9 +92,8 @@ buildPythonPackage rec {
     "tests/sparse_test.py"
   ];
 
-  pythonImportsCheck = [
-    "jax"
-  ];
+  # As of 0.3.22, `import jax` does not work without jaxlib being installed.
+  pythonImportsCheck = [ ];
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

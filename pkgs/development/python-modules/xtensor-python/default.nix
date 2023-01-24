@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

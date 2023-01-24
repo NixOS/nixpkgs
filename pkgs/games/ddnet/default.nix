@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       compete against the best in international tournaments,
       design your own maps, or run your own server.
     '';
-    homepage = "https://ddnet.tw";
+    homepage = "https://ddnet.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ sirseruju lom ];
     mainProgram = "DDNet";

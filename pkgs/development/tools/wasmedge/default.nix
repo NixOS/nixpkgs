@@ -9,13 +9,13 @@
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "wasmedge";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = version;
-    sha256 = "sha256-4w9+3hp1GVLx2dOTDXlUOH6FgK1jvkt12wXs4/S9UlI=";
+    sha256 = "sha256-P2Y2WK6G8aEK1Q4hjrS9X+2WbOfy4brclB/+SWP5LTM=";
   };
 
   buildInputs = [
@@ -26,7 +26,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake llvmPackages.lld ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"

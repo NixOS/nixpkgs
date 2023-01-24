@@ -1,5 +1,15 @@
-{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+{ config
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, gettext
+, meson
+, ninja
+, pkg-config
+, perl
+, python3
+, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -7,10 +17,9 @@
 # this is just for tests (not in the closure of any regular package)
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
-, darwin, fetchpatch
+, darwin
+, makeHardcodeGsettingsPatch
 }:
-
-with lib;
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
@@ -22,7 +31,7 @@ assert stdenv.isLinux -> util-linuxMinimal != null;
 #       $out/bin/gtester-report' to postInstall if this is solved
 /*
   * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests runned by Hydra
+      and use them as a separately installed tests run by Hydra
       (they should test an already installed package)
       https://wiki.gnome.org/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
@@ -40,22 +49,37 @@ let
     done
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
+
+  buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.72.3";
+  version = "2.74.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "Sjmi9iS4US1QDVhAFz7af6hfUcEJBS6ugGrOzoXTRfA=";
+    sha256 = "6bxB7NlpDZvGqXDMc4ARm4KOW2pLFsOTxjiz3CuHy8s=";
   };
 
-  patches = optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-  ] ++ optionals stdenv.hostPlatform.isMusl [
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
+
+    # Fix error about missing sentinel in glib/tests/cxx.cpp
+    # These two commits are part of already merged glib MRs 3033 and 3031:
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3033
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/0ca5254c5d92aec675b76b4bfa72a6885cde6066.patch";
+      sha256 = "OfD5zO/7JIgOMLc0FAgHV9smWugFJuVPHCn9jTsMQJg=";
+    })
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3031
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7dc19632f3115e3f517c6bc80436fe72c1dcdeb4.patch";
+      sha256 = "v28Yk+R0kN9ssIcvJudRZ4vi30rzQEE8Lsd1kWp5hbM=";
+    })
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
@@ -90,14 +114,23 @@ stdenv.mkDerivation (finalAttrs: {
     #    * gio-launch-desktop
     ./split-dev-programs.patch
 
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2866
+    # Disable flaky test.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/820
+    ./skip-timer-test.patch
+
+    # GVariant security fixes
+    # https://discourse.gnome.org/t/multiple-fixes-for-gvariant-normalisation-issues-in-glib/12835
     (fetchpatch {
-      name = "tests-skip-g-file-info-test-if-atime-unsupported.patch";
-      url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
-      sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
+      url = "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3126.patch";
+      sha256 = "CNCxouYy8xNHt4eJtPZ2eOi9b0SxzI2DkklNfQMk3d8=";
     })
 
-    ./skip-timer-test.patch
+    # Menu model security fix
+    # https://discourse.gnome.org/t/fixes-for-gdbusmenumodel-crashes-in-glib/12846
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/4f4d770a1e40f719d5a310cffdac29cbb4e20c11.patch";
+      sha256 = "+S44AnC86HfbMwkRe1ll54IK9pLxaFD3LqiVhPelnXI=";
+    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -105,15 +138,17 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf finalAttrs.setupHook pcre
-  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
+    libelf
+    finalAttrs.setupHook
+    pcre2
+  ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ]) ++ lib.optionals buildDocs [
     # Note: this needs to be both in buildInputs and nativeBuildInputs. The
     # Meson gtkdoc module uses find_program to look it up (-> build dep), but
     # glib's own Meson configuration uses the host pkg-config to find its
@@ -129,10 +164,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    (buildPackages.meson.override {
-      withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
-    })
-    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2 libxslt
+    meson
+    ninja
+    pkg-config
+    perl
+    python3
+    gettext
+    libxslt
+    docbook_xsl
+  ] ++ lib.optionals buildDocs [
+    gtk-doc
+    docbook_xml_dtd_45
+    libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -140,10 +183,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+    "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ];
 
@@ -197,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (!buildDocs) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
@@ -210,16 +253,16 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
     export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
   '';
@@ -241,6 +284,18 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };
+
+    mkHardcodeGsettingsPatch =
+      {
+        src,
+        glib-schema-to-var,
+      }:
+      builtins.trace
+        "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"
+        (makeHardcodeGsettingsPatch {
+          inherit src;
+          schemaIdToVariableMapping = glib-schema-to-var;
+        });
   };
 
   meta = with lib; {

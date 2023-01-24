@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "mangal";
-  version = "3.10.0";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "metafates";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rWj9CknWNI6SSh0AwaPpj5TxHQzkAmaAhWW7kze3xiY=";
+    hash = "sha256-nbJdePlzZFM2ihbvFIMKyYZ9C0uKjU3TE5VLduLvtKE=";
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-ZgeG8S78/yS9KfEK1bZ3VlQGmZPBo9TXLQLz8rXOEGo=";
+  vendorSha256 = null;
 
   ldflags = [ "-s" "-w" ];
 

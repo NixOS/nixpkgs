@@ -26,8 +26,8 @@ let
     Type = "oneshot";
     User = user;
     Group = mkDefault "acme";
-    UMask = 0022;
-    StateDirectoryMode = 750;
+    UMask = "0022";
+    StateDirectoryMode = "750";
     ProtectSystem = "strict";
     ReadWritePaths = [
       "/var/lib/acme"
@@ -62,9 +62,9 @@ let
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       # 1. allow a reasonable set of syscalls
-      "@system-service"
+      "@system-service @resources"
       # 2. and deny unreasonable ones
-      "~@privileged @resources"
+      "~@privileged"
       # 3. then allow the required subset within denied groups
       "@chown"
     ];
@@ -85,7 +85,7 @@ let
     serviceConfig = commonServiceConfig // {
       StateDirectory = "acme/.minica";
       BindPaths = "/var/lib/acme/.minica:/tmp/ca";
-      UMask = 0077;
+      UMask = "0077";
     };
 
     # Working directory will be /tmp
@@ -190,7 +190,7 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" ]
+      ++ [ "renew" "--no-random-sleep" ]
       ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
@@ -223,9 +223,9 @@ let
         # have many certificates, the renewals are distributed over
         # the course of the day to avoid rate limits.
         AccuracySec = "${toString (_24hSecs / numCerts)}s";
-
         # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
         RandomizedDelaySec = "24h";
+        FixedRandomDelay = true;
       };
     };
 
@@ -243,7 +243,7 @@ let
 
       serviceConfig = commonServiceConfig // {
         Group = data.group;
-        UMask = 0027;
+        UMask = "0027";
 
         StateDirectory = "acme/${cert}";
 
@@ -325,6 +325,7 @@ let
         '');
       } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       # Working directory will be /tmp
@@ -376,7 +377,8 @@ let
 
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
+        # We also need an account key. Avoids #190493
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
@@ -712,7 +714,7 @@ in {
         default = false;
         description = lib.mdDoc ''
           Whether to use the root user when generating certs. This is not recommended
-          for security + compatiblity reasons. If a service requires root owned certificates
+          for security + compatibility reasons. If a service requires root owned certificates
           consider following the guide on "Using ACME with services demanding root
           owned certificates" in the NixOS manual, and only using this as a fallback
           or for testing.
@@ -725,7 +727,7 @@ in {
           Default values inheritable by all configured certs. You can
           use this to define options shared by all your certs. These defaults
           can also be ignored on a per-cert basis using the
-          `security.acme.certs.''${cert}.inheritDefaults' option.
+          {option}`security.acme.certs.''${cert}.inheritDefaults` option.
         '';
       };
 
@@ -763,7 +765,7 @@ in {
       To use the let's encrypt staging server, use security.acme.server =
       "https://acme-staging-v02.api.letsencrypt.org/directory".
     '')
-    (mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
     (mkRemovedOptionModule [ "security" "acme" "preDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
     (mkRemovedOptionModule [ "security" "acme" "activationDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
     (mkChangedOptionModule [ "security" "acme" "validMin" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMin / (24 * 3600)))
@@ -914,6 +916,6 @@ in {
 
   meta = {
     maintainers = lib.teams.acme.members;
-    doc = ./doc.xml;
+    doc = ./default.xml;
   };
 }

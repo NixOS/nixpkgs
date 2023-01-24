@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   buildInputs = [ zbar ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     cd python

@@ -25,6 +25,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+, docutils
 , gobject-introspection
 , gst_all_1
 , sofia_sip
@@ -32,15 +33,15 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ASKK9PB5FAD10CR5O+L2WgMjCzmIalithHL8jV0USiM=";
+    hash = "sha256-fvG9N6HuuO8BMH8MJRquMSe1oEPNmX/pzsJX5yzs1CY=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+    docutils
   ];
 
   buildInputs = [
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
     sofia_sip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -96,7 +98,7 @@ stdenv.mkDerivation rec {
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS=${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
     runHook postCheck
   '';
@@ -104,7 +106,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A phone dialer and call handler";
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
-    homepage = "https://source.puri.sm/Librem5/calls";
+    homepage = "https://gitlab.gnome.org/GNOME/calls";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
     platforms = platforms.linux;

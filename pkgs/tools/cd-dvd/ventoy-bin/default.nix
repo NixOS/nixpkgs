@@ -20,10 +20,8 @@
 , ntfs3g
 , parted
 , procps
-, qtbase
 , util-linux
 , which
-, wrapQtAppsHook
 , xfsprogs
 , xz
 , defaultGuiType ? ""
@@ -33,6 +31,7 @@
 , withNtfs ? false
 , withGtk3 ? false
 , withQt5 ? false
+, libsForQt5
 }:
 
 assert lib.elem defaultGuiType [ "" "gtk3" "qt5" ];
@@ -40,6 +39,8 @@ assert defaultGuiType == "gtk3" -> withGtk3;
 assert defaultGuiType == "qt5" -> withQt5;
 
 let
+  inherit (lib) optional optionalString;
+  inherit (libsForQt5) qtbase wrapQtAppsHook;
   arch = {
     x86_64-linux = "x86_64";
     i686-linux = "i386";
@@ -47,24 +48,21 @@ let
     mipsel-linux = "mips64el";
   }.${stdenv.hostPlatform.system}
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.80";
+  version = "1.0.88";
 
-  src = fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-FmMpMUy8VqwbOiRWZdoY76ToSoWWbBGM5h/9VS8rYRY=";
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
+    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
+    hash = "sha256-mg1dzXREIhO9LsoCEauuBR9ESGHM3RvoFN+5vHU0HDA=";
   };
 
   patches = [
-    ./000-sanitize.patch
-    ./001-add-mips64.diff
-    ./002-fix-for-read-only-file-system.diff
+    ./000-nixos-sanitization.patch
   ];
-
-  patchFlags = [ "-p0" ];
 
   postPatch = ''
     # Fix permissions.
@@ -79,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     makeWrapper
   ]
-  ++ lib.optional (withQt5 || withGtk3) copyDesktopItems
-  ++ lib.optional withQt5 wrapQtAppsHook;
+  ++ optional (withQt5 || withGtk3) copyDesktopItems
+  ++ optional withQt5 wrapQtAppsHook;
 
   buildInputs = [
     bash
@@ -97,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     which
     xz
   ]
-  ++ lib.optional withCryptsetup cryptsetup
-  ++ lib.optional withExt4 e2fsprogs
-  ++ lib.optional withGtk3 gtk3
-  ++ lib.optional withNtfs ntfs3g
-  ++ lib.optional withXfs xfsprogs
-  ++ lib.optional withQt5 qtbase;
+  ++ optional withCryptsetup cryptsetup
+  ++ optional withExt4 e2fsprogs
+  ++ optional withGtk3 gtk3
+  ++ optional withNtfs ntfs3g
+  ++ optional withXfs xfsprogs
+  ++ optional withQt5 qtbase;
 
   desktopItems = [
     (makeDesktopItem {
@@ -122,11 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    # Setup variables.
+    # Setup variables
     local VENTOY_PATH="$out"/share/ventoy
     local ARCH='${arch}'
 
-    # Prepare.
+    # Prepare
     cd tool/"$ARCH"
     rm ash* hexdump* mkexfatfs* mount.exfat-fuse* xzcat*
     for archive in *.xz; do
@@ -146,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm README
     rm tool/"$ARCH"/Ventoy2Disk.gtk2 || true  # For aarch64 and mips64el.
 
-    # Copy from "$src" to "$out".
+    # Copy from "$src" to "$out"
     mkdir -p "$out"/bin "$VENTOY_PATH"
     cp -r . "$VENTOY_PATH"
 
-    # Fill bin dir.
+    # Fill bin dir
     for f in Ventoy2Disk.sh_ventoy VentoyWeb.sh_ventoy-web \
              CreatePersistentImg.sh_ventoy-persistent \
              ExtendPersistentImg.sh_ventoy-extend-persistent \
@@ -163,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
   # See: https://github.com/ventoy/Ventoy/blob/v1.0.78/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1096
-  + lib.optionalString (withGtk3 || withQt5) ''
+  + optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
                 --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
@@ -171,13 +169,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir "$out"/share/{applications,pixmaps}
     ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
   ''
-  + lib.optionalString (!withGtk3) ''
+  + optionalString (!withGtk3) ''
     rm "$VENTOY_PATH"/tool/{"$ARCH"/Ventoy2Disk.gtk3,VentoyGTK.glade}
   ''
-  + lib.optionalString (!withQt5) ''
+  + optionalString (!withQt5) ''
     rm "$VENTOY_PATH/tool/$ARCH/Ventoy2Disk.qt5"
   ''
-  + lib.optionalString (!withGtk3 && !withQt5) ''
+  + optionalString (!withGtk3 && !withQt5) ''
     rm "$VENTOY_PATH"/VentoyGUI.*
   '' +
   ''
@@ -186,9 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
+    homepage = "https://www.ventoy.net";
     description = "A New Bootable USB Solution";
     longDescription = ''
-    homepage = "https://www.ventoy.net";
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the
       disk over and over, you just need to copy the ISO/WIM/IMG/VHD(x)/EFI files

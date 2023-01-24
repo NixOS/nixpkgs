@@ -7,11 +7,12 @@
 , pyric
 , pytestCheckHook
 , pythonOlder
+, usb-devices
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "0.3.3";
+  version = "1.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-vzSpQ43vy0a+8PWdTz/RjdXGxwmebdBX/qXhF6Mnw4Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gDypj2Vud6JtbGREPotvawgcsu5hbf92gJxxutWHcII=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,10 @@ buildPythonPackage rec {
     async-timeout
     btsocket
     pyric
+    usb-devices
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -49,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for recovering Bluetooth adapters";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery";
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

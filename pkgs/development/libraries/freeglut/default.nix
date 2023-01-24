@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGL, libGLU, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "freeglut";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
+  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGL libGLU ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       intended to be a full replacement for GLUT, and has only a few
       differences.
     '';
-    homepage = "http://freeglut.sourceforge.net/";
+    homepage = "https://freeglut.sourceforge.net/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

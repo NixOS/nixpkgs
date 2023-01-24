@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thrift";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-9GC1wcow2JGP+V6j62KRs5Uc9RhVNWYIjz8r6JgfYgk=";
+    hash = "sha256-snLBeIuxZdmVIaJZmzG5f6aeWTHQmQFdka4QegsMxY8=";
   };
 
   # Workaround to make the Python wrapper not drop this package:
@@ -61,11 +61,6 @@ stdenv.mkDerivation rec {
     # ToStringTest.cpp is failing from some reason due to locale issue, this
     # doesn't disable all UnitTests as in Darwin.
     ./disable-failing-test.patch
-    (fetchpatch {
-      name = "tests-expired-certs.diff"; # https://github.com/apache/thrift/pull/2629
-      url = "https://github.com/apache/thrift/commit/54765854873e19b8ba50a0ec8080dd92d8323851.diff";
-      sha256 = "wnG2MjY0DtAhVcEdcxu77tDa4T9Xm2pMYZU2wXLx2OA=";
-    })
     (fetchpatch {
       name = "setuptools-gte-62.1.0.patch"; # https://github.com/apache/thrift/pull/2635
       url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";

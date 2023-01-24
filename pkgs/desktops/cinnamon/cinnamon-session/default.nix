@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "5.4.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-m16nf3eC15ZT8eDvRTylBfxsnShkU1Sm8J9qcRGeGQo=";
+    hash = "sha256-lyASp0jFwaPLPQ3Jnow6eTpUBybwhSEmQUK/20fsh7I=";
   };
 
   patches = [

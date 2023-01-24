@@ -52,7 +52,7 @@ let
 
     # test suite is very cpu intensive, move to passthru.tests
     doCheck = false;
-    checkInputs = [ pytestCheckHook ];
+    nativeCheckInputs = [ pytestCheckHook ];
 
     # (1) The package has cythonized modules, whose .so libs will appear only in the wheel, i.e. in nix store;
     # (2) To stop Python from importing the wrong directory, i.e. the one in the build dir, not the one in nix store, `skimage` dir should be removed or renamed;

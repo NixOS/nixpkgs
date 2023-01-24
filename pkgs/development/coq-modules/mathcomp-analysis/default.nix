@@ -1,7 +1,8 @@
 { lib,
   mkCoqDerivation, recurseIntoAttrs,
-  mathcomp, mathcomp-finmap, mathcomp-bigenough, mathcomp-real-closed,
+  mathcomp, mathcomp-finmap, mathcomp-bigenough,
   hierarchy-builder,
+  single ? false,
   coqPackages, coq, version ? null }@args:
 with builtins // lib;
 let
@@ -20,7 +21,7 @@ let
   release."0.3.1".sha256 = "1iad288yvrjv8ahl9v18vfblgqb1l5z6ax644w49w9hwxs93f2k8";
   release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
+  defaultVersion = with versions; lib.switch [ coq.version mathcomp.version ]  [
       { cases = [ (isGe "8.14") (isGe "1.13.0") ];               out = "0.5.3"; }
       { cases = [ (isGe "8.14") (range "1.13" "1.15") ];         out = "0.5.2"; }
       { cases = [ (isGe "8.13") (range "1.13" "1.14") ];         out = "0.5.1"; }
@@ -36,20 +37,23 @@ let
   packages = [ "classical" "analysis" ];
 
   mathcomp_ = package: let
-      analysis-deps = map mathcomp_ (head (splitList (pred.equal package) packages));
-      pkgpath = if package == "analysis" then "theories" else "${package}";
-      pname = "mathcomp-${package}";
+      classical-deps = [ mathcomp.algebra mathcomp-finmap hierarchy-builder ];
+      analysis-deps = [ mathcomp.field mathcomp-bigenough ];
+      intra-deps = if package == "single" then []
+        else map mathcomp_ (head (splitList (lib.pred.equal package) packages));
+      pkgpath = if package == "single" then "."
+        else if package == "analysis" then "theories" else "${package}";
+      pname = if package == "single" then "mathcomp-analysis-single"
+        else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release repo owner;
 
         namePrefix = [ "coq" "mathcomp" ];
 
         propagatedBuildInputs =
-          (if package == "classical" then
-             [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap ]
-           else
-             [ mathcomp.field mathcomp-bigenough mathcomp-real-closed ])
-          ++ [ analysis-deps ];
+          intra-deps
+          ++ optionals (elem package [ "classical" "single" ]) classical-deps
+          ++ optionals (elem package [ "analysis" "single" ]) analysis-deps;
 
         preBuild = ''
           cd ${pkgpath}
@@ -83,4 +87,4 @@ let
     );
     in patched-derivation;
 in
-mathcomp_ "analysis"
+mathcomp_ (if single then "single" else "analysis")

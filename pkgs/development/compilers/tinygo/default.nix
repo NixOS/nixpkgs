@@ -18,6 +18,7 @@
 , avrdude
 , gdb
 , openocd
+, tinygoTests ? [ "smoketest" ]
 }:
 
 let
@@ -27,17 +28,17 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.23.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-YgQGAQJw9Xyw5BF2d9uZTQHfjHsu2evZGo4RV9DtStE=";
+    sha256 = "rI8CADPWKdNvfknEsrpp2pCeZobf9fAp0GDIWjupzZA=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-fK8BlCh+1NtHW6MwW68iSIB+Sw6AK+g3y4lMyMYrXkk=";
+  vendorSha256 = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
 
   patches = [
     ./0001-Makefile.patch
@@ -46,17 +47,22 @@ buildGoModule rec {
       src = ./0002-Add-clang-header-path.patch;
       clang_include = "${clang.cc.lib}/lib/clang/${clang.cc.version}/include";
     })
+
+    #TODO(muscaln): Find a better way to fix build ID on darwin
+    ./0003-Use-out-path-as-build-id-on-darwin.patch
   ];
 
-  checkInputs = [ avrgcc binaryen ];
-  nativeBuildInputs = [ go makeWrapper ];
+  nativeCheckInputs = [ avrgcc binaryen ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ llvm clang.cc ]
     ++ lib.optionals stdenv.isDarwin [ zlib ncurses libffi libxml2 xar ];
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  inherit tinygoTests;
 
   allowGoReference = true;
   tags = [ "llvm${llvmMajor}" ];
+  ldflags = [ "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo" ];
   subPackages = [ "." ];
 
   # Output contains static libraries for different arm cpus
@@ -83,8 +89,12 @@ buildGoModule rec {
 
     substituteInPlace Makefile \
       --replace "\$(TINYGO)" "$(pwd)/build/tinygo" \
+      --replace "@\$(MD5SUM)" "md5sum" \
       --replace "build/release/tinygo/bin" "$out/bin" \
       --replace "build/release/" "$out/share/"
+
+    substituteInPlace builder/buildid.go \
+      --replace "OUT_PATH" "$out"
 
     # TODO: Fix mingw and darwin
     # Disable windows and darwin cross-compile tests
@@ -103,24 +113,34 @@ buildGoModule rec {
   '';
 
   preBuild = ''
-    export HOME=$TMPDIR
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
     export PATH=$out/libexec/tinygo:$PATH
+    export HOME=$TMPDIR
   '';
 
-  postBuild = ''
+  postBuild = let
+    tinygoForBuild = if (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      then "build/tinygo"
+      else "${buildPackages.tinygo}/bin/tinygo";
+    in ''
     # Move binary
     mkdir -p build
     mv $GOPATH/bin/tinygo build/tinygo
 
     make gen-device
+
+    export TINYGOROOT=$(pwd)
+    finalRoot=$out/share/tinygo
+
+    for target in thumbv6m-unknown-unknown-eabi-cortex-m0 thumbv6m-unknown-unknown-eabi-cortex-m0plus thumbv7em-unknown-unknown-eabi-cortex-m4; do
+      mkdir -p $finalRoot/pkg/$target
+      for lib in compiler-rt picolibc; do
+        ${tinygoForBuild} build-library -target=''${target#*eabi-} -o $finalRoot/pkg/$target/$lib $lib
+      done
+    done
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    make smoketest XTENSA=0
-    runHook postCheck
+  checkPhase = lib.optionalString (tinygoTests != [ ] && tinygoTests != null) ''
+    make ''${tinygoTests[@]} XTENSA=0 ${lib.optionalString stdenv.isDarwin "AVR=0"}
   '';
 
   installPhase = ''
@@ -129,7 +149,6 @@ buildGoModule rec {
     make build/release
 
     wrapProgram $out/bin/tinygo \
-      --set TINYGOROOT $out/share/tinygo \
       --prefix PATH : ${lib.makeBinPath [ go avrdude openocd avrgcc binaryen ]}:$out/libexec/tinygo
 
     runHook postInstall
@@ -142,6 +161,5 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Madouura muscaln ];
-    broken = stdenv.isDarwin;
   };
 }

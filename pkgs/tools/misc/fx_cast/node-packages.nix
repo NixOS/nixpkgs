@@ -211,6 +211,24 @@ let
         sha512 = "6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==";
       };
     };
+    "@types/yargs-17.0.11" = {
+      name = "_at_types_slash_yargs";
+      packageName = "@types/yargs";
+      version = "17.0.11";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.11.tgz";
+        sha512 = "aB4y9UDUXTSMxmM4MH+YnuR0g5Cph3FLQBoWoMB21DSvFVAxRVEHEMx3TLh+zUZYMCQtKiqazz0Q4Rre31f/OA==";
+      };
+    };
+    "@types/yargs-parser-21.0.0" = {
+      name = "_at_types_slash_yargs-parser";
+      packageName = "@types/yargs-parser";
+      version = "21.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-21.0.0.tgz";
+        sha512 = "iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==";
+      };
+    };
     "agent-base-6.0.2" = {
       name = "agent-base";
       packageName = "agent-base";
@@ -1273,15 +1291,6 @@ let
         sha512 = "NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==";
       };
     };
-    "rage-edit-1.2.0" = {
-      name = "rage-edit";
-      packageName = "rage-edit";
-      version = "1.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/rage-edit/-/rage-edit-1.2.0.tgz";
-        sha512 = "0RspBRc2s6We4g7hRCvT5mu7YPEnfjvQK8Tt354a2uUNJCMC7MKLvo/1mLvHUCQ/zbP6siQyp5VRZN7UCpMFZg==";
-      };
-    };
     "rc-1.2.8" = {
       name = "rc";
       packageName = "rc";
@@ -1732,6 +1741,15 @@ let
         sha512 = "D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==";
       };
     };
+    "yargs-17.5.1" = {
+      name = "yargs";
+      packageName = "yargs";
+      version = "17.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/yargs/-/yargs-17.5.1.tgz";
+        sha512 = "t6YAJcxDkNX7NFYiVtKvWUz8l+PaKTLiL63mJYWR2GnHq2gjEWISzsLp9wg3aY36dY1j+gfIEL3pIF+XlJJfbA==";
+      };
+    };
     "yargs-parser-20.2.9" = {
       name = "yargs-parser";
       packageName = "yargs-parser";
@@ -1741,11 +1759,20 @@ let
         sha512 = "y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==";
       };
     };
+    "yargs-parser-21.1.1" = {
+      name = "yargs-parser";
+      packageName = "yargs-parser";
+      version = "21.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz";
+        sha512 = "tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==";
+      };
+    };
   };
   args = {
     name = "fx_cast_bridge";
     packageName = "fx_cast_bridge";
-    version = "0.2.0";
+    version = "0.3.1";
     src = ./.;
     dependencies = [
       sources."@babel/helper-validator-identifier-7.16.7"
@@ -1771,6 +1798,8 @@ let
       sources."@types/node-17.0.26"
       sources."@types/node-fetch-2.6.1"
       sources."@types/ws-8.5.3"
+      sources."@types/yargs-17.0.11"
+      sources."@types/yargs-parser-21.0.0"
       sources."agent-base-6.0.2"
       sources."ansi-regex-2.1.1"
       sources."ansi-styles-4.3.0"
@@ -1902,8 +1931,14 @@ let
       })
       (sources."pkg-fetch-3.3.0" // {
         dependencies = [
+          sources."ansi-regex-5.0.1"
           sources."fs-extra-9.1.0"
+          sources."is-fullwidth-code-point-3.0.0"
           sources."node-fetch-2.6.7"
+          sources."string-width-4.2.3"
+          sources."strip-ansi-6.0.1"
+          sources."yargs-16.2.0"
+          sources."yargs-parser-20.2.9"
         ];
       })
       sources."prebuild-install-6.1.4"
@@ -1913,7 +1948,6 @@ let
       sources."protobufjs-6.11.2"
       sources."pump-3.0.0"
       sources."queue-microtask-1.2.3"
-      sources."rage-edit-1.2.0"
       sources."rc-1.2.8"
       sources."readable-stream-2.3.7"
       sources."require-directory-2.1.1"
@@ -1970,7 +2004,7 @@ let
       sources."ws-8.5.0"
       sources."y18n-5.0.8"
       sources."yallist-4.0.0"
-      (sources."yargs-16.2.0" // {
+      (sources."yargs-17.5.1" // {
         dependencies = [
           sources."ansi-regex-5.0.1"
           sources."is-fullwidth-code-point-3.0.0"
@@ -1978,7 +2012,7 @@ let
           sources."strip-ansi-6.0.1"
         ];
       })
-      sources."yargs-parser-20.2.9"
+      sources."yargs-parser-21.1.1"
     ];
     buildInputs = globalBuildInputs;
     meta = {

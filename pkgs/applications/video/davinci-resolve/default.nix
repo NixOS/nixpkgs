@@ -3,7 +3,6 @@
 , cacert
 , curl
 , runCommandLocal
-, targetPlatform
 , unzip
 , appimage-run
 , addOpenGLRunpath
@@ -16,6 +15,7 @@
 , xkeyboard_config
 , glib
 , libarchive
+, libxcrypt
 , python2
 }:
 
@@ -48,7 +48,7 @@ let
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
           USERAGENT = builtins.concatStringsSep " " [
-            "User-Agent: Mozilla/5.0 (X11; Linux ${targetPlatform.linuxArch})"
+            "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.targetPlatform.linuxArch})"
             "AppleWebKit/537.36 (KHTML, like Gecko)"
             "Chrome/77.0.3865.75"
             "Safari/537.36"
@@ -154,6 +154,7 @@ buildFHSUserEnv {
     ocl-icd
     glib
     libarchive
+    libxcrypt # provides libcrypt.so.1
     xdg-utils # xdg-open needed to open URLs
     python2
     # currently they want python 3.6 which is EOL

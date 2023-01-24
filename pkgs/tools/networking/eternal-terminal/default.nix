@@ -43,14 +43,13 @@ stdenv.mkDerivation rec {
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optional stdenv.cc.isClang [
+  CXXFLAGS = lib.optionals stdenv.cc.isClang [
     "-std=c++17"
   ];
 
   doCheck = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     license = licenses.asl20;

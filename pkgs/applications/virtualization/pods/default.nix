@@ -8,26 +8,28 @@
 , ninja
 , pkg-config
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 , gtksourceview5
 , libadwaita
+, libpanel
+, vte-gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.0.0-beta.4";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j5rz43860n17qcxmc5dj8sll3y593jj9zz1sfvnx4g0694sp0cl";
+    sha256 = "sha256-Kjonyd0xL0QLjPS+U3xDC6AhOOxQmVAZ3STLXaa8eXc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-tj0ROO8HmFWyQLYDrdywOneHz6X43dRZJFTB+aw+m7o=";
+    sha256 = "sha256-K5oOpo3xJiNg7F549JLGs83658MYcoGfuIcNoF88Njc=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +42,15 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
     gtksourceview5
     libadwaita
+    libpanel
+    vte-gtk4
   ];
 
   meta = with lib; {

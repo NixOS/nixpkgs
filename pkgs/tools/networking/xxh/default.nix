@@ -1,19 +1,16 @@
 { lib
 , fetchFromGitHub
-, buildPythonApplication
-, pexpect
-, pyyaml
+, python3
 , openssh
 , nixosTests
-, pythonOlder
 }:
 
-buildPythonApplication rec{
+python3.pkgs.buildPythonApplication rec{
   pname = "xxh";
   version = "0.8.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -23,8 +20,8 @@ buildPythonApplication rec{
   };
 
   propagatedBuildInputs = [
-    pexpect
-    pyyaml
+    python3.pkgs.pexpect
+    python3.pkgs.pyyaml
     openssh
   ];
 

@@ -20,13 +20,17 @@ buildPythonPackage rec {
     hash = "sha256-HE8/P0aohoZNeMdcQVKdz6M31FMrjsd7oVytiaD0idI=";
   };
 
+  postPatch = ''
+    sed -i '/cryptography/d' setup.py
+  '';
+
   propagatedBuildInputs = [
     pyjwt
     python-dateutil
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpretty
     pytestCheckHook
   ];

@@ -262,11 +262,12 @@ rec {
           ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
         '';
 
-        binutils-unwrapped = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
+        binutils-unwrapped = bootstrapTools // {
+          name = "bootstrap-stage0-binutils";
+        };
 
-        cctools = {
+        cctools = bootstrapTools // {
           name = "bootstrap-stage0-cctools";
-          outPath = bootstrapTools;
           targetPrefix = "";
         };
 
@@ -581,7 +582,7 @@ rec {
     let
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash python3
+          gnumake gzip gnused bzip2 ed xz patch bash python3
           ncurses libffi zlib gmp pcre gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
 
@@ -698,6 +699,11 @@ rec {
         libc = pkgs.darwin.Libsystem;
         shellPackage = pkgs.bash;
         inherit bootstrapTools;
+      } // lib.optionalAttrs useAppleSDKLibs {
+        # This objc4 will be propagated to all builds using the final stdenv,
+        # and we shouldn't mix different builds, because they would be
+        # conflicting LLVM modules. Export it here so we can grab it later.
+        inherit (pkgs.darwin) objc4;
       };
 
       allowedRequisites = (with pkgs; [

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.7.3";
+  version = "3.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "nficano";
     repo = "humps";
     rev = "v${version}";
-    hash = "sha256-7jkwf4qGQ+AD4/hOrEe/oAPY+gnSySUVBWFf70rU7xc=";
+    hash = "sha256-ElL/LY2V2Z3efdV5FnDy9dSoBltULrzxsjaOx+7W9Oo=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

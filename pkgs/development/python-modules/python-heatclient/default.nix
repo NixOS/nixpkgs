@@ -1,6 +1,6 @@
 { lib
 , babel
-, buildPythonApplication
+, buildPythonPackage
 , cliff
 , fetchPypi
 , iso8601
@@ -20,7 +20,7 @@
 , testscenarios
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-heatclient";
   version = "3.1.0";
   format = "setuptools";
@@ -48,7 +48,7 @@ buildPythonApplication rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     requests-mock

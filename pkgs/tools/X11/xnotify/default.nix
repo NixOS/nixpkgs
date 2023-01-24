@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xnotify";
-  version = "unstable-2022-02-18";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "phillbush";
@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A tool to read notifications from stdin and pop them up on the screen";

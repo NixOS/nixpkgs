@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub
 , fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools
 , perl # For building web manuals
 , which, ed
+, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2021-10-19";
+  version = "2022-09-12";
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
-    rev = "d0d440860f2000a1560abb3f593cdc325fcead4c";
-    hash = "sha256-2aYXqPGwrReyFPrLDtEjgQd/RJjpOfI3ge/tDocYpRQ=";
+    rev = "ffbdd1aa20c8a20a8e9dcd3cec644b6dfa3c6acb";
+    hash = "sha256-Lq5B4VYUetkHwhFX2EaLr33wR1aLIiVn8OBobxjFt7I=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    ./INSTALL -b
+    PLAN9_TARGET=$out/plan9 ./INSTALL -b
     runHook postBuild
   '';
 
@@ -117,8 +117,6 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "9";
     platforms = platforms.unix;
-    # TODO: revisit this when the sdk situation on x86_64-darwin changes
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
 # TODO: investigate the mouse chording support patch

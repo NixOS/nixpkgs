@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , cmake
 , boost
@@ -9,17 +10,18 @@
 , catch
 , numpy
 , pytestCheckHook
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.0";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/X8DZPFsNrKGbhjZ1GFOj17/NU6p4R+saCW3pLKVNeA=";
+    hash = "sha256-YxAkozyWNTKMCIEk3AhHZbRHtzhRrCSB3wh/Qy9CIyU=";
   };
 
   postPatch = ''
@@ -27,13 +29,20 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dontUseCmakeBuildDir = true;
+
+  # Don't build tests if not needed, read the doInstallCheck value at runtime
+  preConfigure = ''
+    if [ -n "$doInstallCheck" ]; then
+      cmakeFlagsArray+=("-DBUILD_TESTING=ON")
+    fi
+  '';
 
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DBUILD_TESTING=on"
     "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
@@ -41,7 +50,7 @@ buildPythonPackage rec {
 
   postBuild = ''
     # build tests
-    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES
   '';
 
   postInstall = ''
@@ -51,7 +60,7 @@ buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch
     numpy
     pytestCheckHook
@@ -67,6 +76,12 @@ buildPythonPackage rec {
     "tests/extra_python_package/test_files.py"
     # tests that try to parse setuptools stdout
     "tests/extra_setuptools/test_setuphelper.py"
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # expects KeyError, gets RuntimeError
+    # https://github.com/pybind/pybind11/issues/4243
+    "test_cross_module_exception_translator"
   ];
 
   meta = with lib; {

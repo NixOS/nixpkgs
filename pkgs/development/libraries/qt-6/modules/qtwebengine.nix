@@ -69,7 +69,7 @@
 , enableProprietaryCodecs ? true
 }:
 
-qtModule rec {
+qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
@@ -222,6 +222,10 @@ qtModule rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  preConfigure = ''
+    export NINJAFLAGS="-j$NIX_BUILD_CORES"
+  '';
+
   postInstall = ''
     # This is required at runtime
     mkdir $out/libexec
@@ -229,7 +233,6 @@ qtModule rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
     # This build takes a long time; particularly on slow architectures

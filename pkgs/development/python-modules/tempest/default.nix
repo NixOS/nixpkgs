@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pbr
 , cliff
@@ -26,13 +26,13 @@
 , python
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "tempest";
-  version = "32.0.0";
+  version = "33.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MPaGhT2H8Hzk29qylQru9Z6QaRrHM+9I7N5qhe9Wts4=";
+    sha256 = "sha256-aEtBAE3p+HVw/macwZtKo20mSJctrsIN7idqWe6Dvtc=";
   };
 
   propagatedBuildInputs = [
@@ -57,7 +57,7 @@ buildPythonApplication rec {
     debtcollector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     hacking
     oslotest

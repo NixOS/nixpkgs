@@ -1,5 +1,4 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
-, cairo
+{ stdenv, lib, meson, ninja, fetchurl, cairo
 , girara
 , gtk-mac-integration
 , gumbo
@@ -15,15 +14,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.8";
+  version = "0.4.0";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wgW0z1ANjP6ezqreVOX6jUzRKYzYXxem9QxkclkRYhc=";
+    sha256 = "0pcjxvlh4hls8mjhjghhhihyy2kza8l27wdx0yq4bkd1g1b5f74c";
   };
-
-  patches = [ ./fix-mupdf-1.20.patch ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 

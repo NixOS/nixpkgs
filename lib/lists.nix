@@ -242,7 +242,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") firefox').
+     (e.g. `++ optional (system == "i686-linux") firefox`).
 
      Type: optional :: bool -> a -> [a]
 
@@ -283,7 +283,7 @@ rec {
   */
   toList = x: if isList x then x else [x];
 
-  /* Return a list of integers from `first' up to and including `last'.
+  /* Return a list of integers from `first` up to and including `last`.
 
      Type: range :: int -> int -> [int]
 
@@ -320,7 +320,7 @@ rec {
     ) { right = []; wrong = []; });
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
-     Predicate should return a string which becomes keys of attrset `groupBy' returns.
+     Predicate should return a string which becomes keys of attrset `groupBy` returns.
 
      `groupBy'` allows to customise the combining function and initial value
 

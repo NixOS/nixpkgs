@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchurl, gcc, zlib, python27 }:
+{ lib, stdenv, fetchurl, gcc, zlib, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ecopcr";
-  version = "0.8.0";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "https://git.metabarcoding.org/obitools/ecopcr/uploads/6f37991b325c8c171df7e79e6ae8d080/ecopcr-${version}.tar.gz";
-    sha256 = "10c58hj25z78jh0g3zcbx4890yd2qrvaaanyx8mn9p49mmyf5pk6";
+    url = "https://git.metabarcoding.org/obitools/ecopcr/-/archive/ecopcr_v${version}/ecopcr-ecopcr_v${version}.tar.gz";
+    hash = "sha256-ssvWpi7HuuRRAkpqqrX3ijLuBqM3QsrmrG+t7/m6fZA=";
   };
 
-  sourceRoot = "ecoPCR/src";
+  buildInputs = [ gcc python3 zlib ];
 
-  buildInputs = [ gcc python27 zlib ];
+  preConfigure = ''
+    cd src
+  '';
 
   installPhase = ''
     mkdir -p $out/bin

@@ -3,12 +3,30 @@
   util-linux, dmidecode, libuuid, newt,
   lua, speex, libopus, opusfile, libogg,
   srtp, wget, curl, iksemel, pkg-config,
-  autoconf, libtool, automake,
+  autoconf, libtool, automake, fetchpatch,
   python39, writeScript,
   withOpus ? true,
 }:
 
 let
+  # remove when upgrading to pjsip >2.12.1
+  pjsip_patches = [
+    (fetchpatch {
+      name = "0150-CVE-2022-31031.patch";
+      url = "https://github.com/pjsip/pjproject/commit/450baca94f475345542c6953832650c390889202.patch";
+      sha256 = "sha256-30kHrmB51UIw4x/J6/CD+vPKf/gBYDCcFoUpwEWkDMY=";
+    })
+    (fetchpatch {
+      name = "0151-CVE-2022-39244.patch";
+      url = "https://github.com/pjsip/pjproject/commit/c4d34984ec92b3d5252a7d5cddd85a1d3a8001ae.patch";
+      sha256 = "sha256-hTUMh6bYAizn6GF+sRV1vjKVxSf9pnI+eQdPOqsdJI4=";
+    })
+    (fetchpatch {
+      name = "0152-CVE-2022-39269.patch";
+      url = "https://github.com/pjsip/pjproject/commit/d2acb9af4e27b5ba75d658690406cec9c274c5cc.patch";
+      sha256 = "sha256-bKE/MrRAqN1FqD2ubhxIOOf5MgvZluHHeVXPjbR12iQ=";
+    })
+  ];
   common = {version, sha256, externals}: stdenv.mkDerivation {
     inherit version;
     pname = "asterisk";
@@ -58,6 +76,9 @@ let
         cp ${asterisk-opus}/codecs/* ./codecs
         cp ${asterisk-opus}/formats/* ./formats
       ''}
+      ${lib.concatMapStringsSep "\n" (patch: ''
+        cp ${patch} ./third-party/pjproject/patches/${patch.name}
+      '') pjsip_patches}
       ./bootstrap.sh
     '';
 
@@ -69,6 +90,7 @@ let
     ];
 
     preBuild = ''
+      cat third-party/pjproject/source/pjlib-util/src/pjlib-util/scanner.c
       make menuselect.makeopts
       ${lib.optionalString (externals ? "addons/mp3") ''
         substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
@@ -93,9 +115,9 @@ let
     };
   };
 
-  pjproject_2_12 = fetchurl {
-    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.12/pjproject-2.12.tar.bz2";
-    hash = "sha256-T3q4r/4WCAZCNGnULxMnNKH9wEK7gkseV/sV8IPasHQ=";
+  pjproject_2_12_1 = fetchurl {
+    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.12.1/pjproject-2.12.1.tar.bz2";
+    hash = "sha256-DiNH1hB5ZheYzyUjFyk1EtlsMJlgjf+QRVKjEk+hNjc=";
   };
 
   mp3-202 = fetchsvn {
@@ -116,7 +138,7 @@ let
   versions = lib.mapAttrs (_: {version, sha256}: common {
     inherit version sha256;
     externals = {
-      "externals_cache/pjproject-2.12.tar.bz2" = pjproject_2_12;
+      "externals_cache/pjproject-2.12.1.tar.bz2" = pjproject_2_12_1;
       "addons/mp3" = mp3-202;
     };
   }) (lib.importJSON ./versions.json);
@@ -136,6 +158,7 @@ in {
   # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09
   # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20
   # 19.x    Standard   2021-11-02  2022-11-02  2023-11-02
+  # 20.x    LTS        2022-11-02  2026-10-19  2027-10-19
   asterisk-lts = versions.asterisk_18;
   asterisk-stable = versions.asterisk_19;
   asterisk = versions.asterisk_19.overrideAttrs (o: {

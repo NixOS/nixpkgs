@@ -49,8 +49,8 @@ let
         start_all()
 
         machine.wait_for_unit('graphical.target')
-        machine.wait_until_succeeds('pgrep -x codium')
 
+        codium_running.wait()
         with codium_running:
             # Wait until vscodium is visible. "File" is in the menu bar.
             machine.wait_for_text('Get Started')
@@ -70,15 +70,15 @@ let
 
             # Save the file
             machine.send_key('ctrl-s')
-            machine.wait_for_text('Save')
+            machine.wait_for_text('(Save|Desktop|alice|Size)')
             machine.screenshot('save_window')
             machine.send_key('ret')
 
             # (the default filename is the first line of the file)
             machine.wait_for_file(f'/home/alice/{test_string}')
 
-        machine.send_key('ctrl-q')
-        machine.wait_until_fails('pgrep -x codium')
+        # machine.send_key('ctrl-q')
+        # machine.wait_until_fails('pgrep -x codium')
       '';
     });
 

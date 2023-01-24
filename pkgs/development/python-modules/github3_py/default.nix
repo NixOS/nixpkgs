@@ -28,9 +28,10 @@ buildPythonPackage rec {
     uritemplate
     python-dateutil
     pyjwt
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     betamax
     betamax-matchers

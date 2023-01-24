@@ -3,35 +3,52 @@ import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "systemd-oomd";
 
+  # This test is a simplified version of systemd's testsuite-55.
+  # https://github.com/systemd/systemd/blob/v251/test/units/testsuite-55.sh
   nodes.machine = { pkgs, ... }: {
-    systemd.oomd.extraConfig.DefaultMemoryPressureDurationSec = "1s"; # makes the test faster
-    # Kill cgroups when more than 1% pressure is encountered
-    systemd.slices."-".sliceConfig = {
-      ManagedOOMMemoryPressure = "kill";
-      ManagedOOMMemoryPressureLimit = "1%";
-    };
-    # A service to bring the system under memory pressure
-    systemd.services.testservice = {
-      serviceConfig.ExecStart = "${pkgs.coreutils}/bin/tail /dev/zero";
-    };
-    # Do not kill the backdoor
-    systemd.services.backdoor.serviceConfig.ManagedOOMMemoryPressure = "auto";
-
+    # Limit VM resource usage.
     virtualisation.memorySize = 1024;
+    systemd.oomd.extraConfig.DefaultMemoryPressureDurationSec = "1s";
+
+    systemd.slices.workload = {
+      description = "Test slice for memory pressure kills";
+      sliceConfig = {
+        MemoryAccounting = true;
+        ManagedOOMMemoryPressure = "kill";
+        ManagedOOMMemoryPressureLimit = "10%";
+      };
+    };
+
+    systemd.services.testbloat = {
+      description = "Create a lot of memory pressure";
+      serviceConfig = {
+        Slice = "workload.slice";
+        MemoryHigh = "5M";
+        ExecStart = "${pkgs.coreutils}/bin/tail /dev/zero";
+      };
+    };
+
+    systemd.services.testchill = {
+      description = "No memory pressure";
+      serviceConfig = {
+        Slice = "workload.slice";
+        MemoryHigh = "3M";
+        ExecStart = "${pkgs.coreutils}/bin/sleep infinity";
+      };
+    };
   };
 
   testScript = ''
-    # Start the system
+    # Start the system.
     machine.wait_for_unit("multi-user.target")
     machine.succeed("oomctl")
 
-    # Bring the system into memory pressure
-    machine.succeed("echo 0 > /proc/sys/vm/panic_on_oom")  # NixOS tests kill the VM when the OOM killer is invoked - override this
-    machine.succeed("systemctl start testservice")
+    machine.succeed("systemctl start testchill.service")
+    with subtest("OOMd should kill the bad service"):
+        machine.fail("systemctl start --wait testbloat.service")
+        assert machine.get_unit_info("testbloat.service")["Result"] == "oom-kill"
 
-    # Wait for oomd to kill something
-    # Matches these lines:
-    # systemd-oomd[508]: Killed /system.slice/systemd-udevd.service due to memory pressure for / being 3.26% > 1.00% for > 1s with reclaim activity
-    machine.wait_until_succeeds("journalctl -b | grep -q 'due to memory pressure for'")
+    with subtest("Service without memory pressure should be untouched"):
+        machine.require_unit_state("testchill.service", "active")
   '';
 })

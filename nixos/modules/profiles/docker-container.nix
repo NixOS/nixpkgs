@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
-let inherit (pkgs) writeScript; in
-
 let
- pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
+  inherit (pkgs) writeScript;
 
-in {
+  pkgs2storeContents = map (x: { object = x; symlink = "none"; });
+in
+
+{
   # Docker image config.
   imports = [
     ../installer/cd-dvd/channel.nix

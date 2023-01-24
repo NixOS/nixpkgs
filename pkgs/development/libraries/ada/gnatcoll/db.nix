@@ -50,22 +50,19 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "gnatcoll-${component}";
-  version = "22.0.0";
+  # executables don't adhere to the string gnatcoll-* scheme
+  pname =
+    if onlyExecutable
+    then builtins.replaceStrings [ "_" ] [ "-" ] component
+    else "gnatcoll-${component}";
+  version = "23.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-db";
     rev = "v${version}";
-    sha256 = "1c39yg13faadg5mzpq3s83rn24npmpc4yjj0cvj7kqwpqxci4m55";
+    sha256 = "1j77ina17myahlsvbyiycgxkncd7ijc7jrvzwa4gagx0fwjk7prh";
   };
-
-  patches = lib.optionals (component == "sqlite") [
-    # fixes build of the static sqlite component
-    # when building against the system libsqlite3
-    # See https://github.com/AdaCore/gprbuild/issues/27#issuecomment-298444608
-    ./gnatcoll-db-sqlite-static-external.patch
-  ];
 
   # Link executables dynamically unless specified by the platform,
   # as we usually do in nixpkgs where possible
@@ -95,7 +92,7 @@ stdenv.mkDerivation rec {
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optional (component == "sqlite") [
+  ] ++ lib.optionals (component == "sqlite") [
     # link against packaged, not vendored libsqlite3
     "GNATCOLL_SQLITE=external"
   ];

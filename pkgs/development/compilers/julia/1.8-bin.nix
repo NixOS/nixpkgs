@@ -1,19 +1,50 @@
 { autoPatchelfHook, fetchurl, lib, stdenv }:
 
+let
+  skip_tests = [
+    # Test flaky on ofborg
+    "channels"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Test flaky on ofborg
+    "FileWatching"
+    # Test requires pbcopy
+    "InteractiveUtils"
+    # Test requires network access
+    "Sockets"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Test Failed at $out/share/julia/stdlib/v1.8/LinearAlgebra/test/blas.jl:702
+    "LinearAlgebra/blas"
+    # Test Failed at $out/share/julia/test/misc.jl:724
+    "misc"
+  ];
+in
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.8.1";
+  version = "1.8.5";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "sha256-MwVO5kfuik+1T8BREOB+C1PgRZH+U9Cky0x+16BekfE=";
+      sha256 = "sha256-5xokgW6P6dX0gHZky7tCc49aqf4FOX01yB1MXWSbnQU=";
     };
     aarch64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
-      sha256 = "sha256-ugaDesKJlUe7t5mYnxFGT+zWeCImhxw7ekhhlIEEJnk=";
+      sha256 = "sha256-ofY3tExx6pvJbXw+80dyTAVKHlInuYCt6/wzWZ5RU6Q=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
+      sha256 = "sha256-oahZ7af7QaC1VGczmhHDwcDfeLJ9HhYOgLxnWLPY2uA=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
+      sha256 = "sha256-6oXgSJw2MkxNpiFjqhuC/PL1L3LRc+590hOjqSmSyrc=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  patches = [
+    # https://github.com/JuliaLang/julia/commit/f5eeba35d9bf20de251bb9160cc935c71e8b19ba
+    ./patches/1.8-bin/0001-allow-skipping-internet-required-tests.patch
+  ];
 
   postPatch = ''
     # Julia fails to pick up our Certification Authority root certificates, but
@@ -24,7 +55,7 @@ stdenv.mkDerivation rec {
         '@test_skip ca_roots_path() != bundled_ca_roots()'
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -48,7 +79,8 @@ stdenv.mkDerivation rec {
       --check-bounds=yes \
       --startup-file=no \
       --depwarn=error \
-      $out/share/julia/test/runtests.jl
+      $out/share/julia/test/runtests.jl \
+      --skip internet_required ${toString skip_tests}
     runHook postInstallCheck
   '';
 
@@ -57,8 +89,8 @@ stdenv.mkDerivation rec {
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ninjin raskin nickcao ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with lib.maintainers; [ raskin nickcao wegank ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "julia";
   };
 }

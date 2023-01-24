@@ -15,19 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lCq37FtAhWeZwMqfuBkhrxf8Q2CuvvHMjLH2rZIg1Rk=";
   };
 
-  postConfigure = ''
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site%' Makefile;
-    sed -i '/objdir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site/json%' json/Makefile;
-    sed -i '/objdir\s*=/s%=.*%=''${out}/share/guile/ccache/json%' json/Makefile;
-  '';
-
   nativeBuildInputs = [
     pkg-config texinfo
   ];
   buildInputs = [
     guile
   ];
+  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     description = "JSON Bindings for GNU Guile";

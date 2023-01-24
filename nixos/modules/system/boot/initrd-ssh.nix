@@ -25,7 +25,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 22;
       description = lib.mdDoc ''
         Port on which SSH initrd service should listen.
@@ -70,6 +70,15 @@ in
         using your regular host keys exposes the private keys on
         your unencrypted boot partition.
         :::
+      '';
+    };
+
+    ignoreEmptyHostKeys = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
+        to deploy ssh host keys out of band.
       '';
     };
 
@@ -141,7 +150,7 @@ in
       }
 
       {
-        assertion = cfg.hostKeys != [];
+        assertion = (cfg.hostKeys != []) || cfg.ignoreEmptyHostKeys;
         message = ''
           You must now pre-generate the host keys for initrd SSH.
           See the boot.initrd.network.ssh.hostKeys documentation

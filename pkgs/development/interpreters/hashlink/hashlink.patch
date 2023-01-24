@@ -1,8 +1,32 @@
-*** a/Makefile  1970-01-01 01:00:01.000000000 +0100
---- b/Makefile  2022-06-21 23:36:10.023460654 +0200
-*************** endif
-*** 109,110 ****
---- 109,111 ----
-  LIBOPENAL = -lopenal
-+ LIBOPENGL = -lGL
-  RELEASE_NAME = linux
+--- a/Makefile
++++ b/Makefile
+@@ -107,6 +107,7 @@ LIBFLAGS += -L/opt/libjpeg-turbo/lib64
+ endif
+ 
+ LIBOPENAL = -lopenal
++LIBOPENGL = -lGL
+ RELEASE_NAME = linux
+ 
+ endif
+--- a/libs/sdl/gl.c
++++ b/libs/sdl/gl.c
+@@ -7,7 +7,7 @@
+ #	include <OpenGLES/ES3/gl.h>
+ #	define HL_GLES
+ #elif defined(HL_MAC)
+-#	include <SDL.h>
++#	include <SDL2/SDL.h>
+ #	include <OpenGL/gl3.h>
+ #	define glBindImageTexture(...) hl_error("Not supported on OSX")
+ #	define glDispatchCompute(...) hl_error("Not supported on OSX")
+--- a/libs/sdl/sdl.c
++++ b/libs/sdl/sdl.c
+@@ -7,7 +7,7 @@
+ #	include <SDL.h>
+ #	include <SDL_syswm.h>
+ #elif defined(HL_MAC)
+-#	include <SDL.h>
++#	include <SDL2/SDL.h>
+ #else
+ #	include <SDL2/SDL.h>
+ #endif

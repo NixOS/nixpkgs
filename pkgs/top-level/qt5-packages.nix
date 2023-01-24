@@ -152,6 +152,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
 
+  maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
+
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
   phonon = callPackage ../development/libraries/phonon { };
@@ -173,11 +175,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
   qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
-
-  # Until macOS SDK allows for Qt 5.15, darwin is limited to 2.3.2
-  qca-qt5_2_3_2 = callPackage ../development/libraries/qca-qt5/2.3.2.nix {
-    openssl = pkgs.openssl_1_1;
-  };
 
   qcoro = callPackage ../development/libraries/qcoro { };
 
@@ -224,6 +221,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qwt = callPackage ../development/libraries/qwt/default.nix { };
 
   qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
+
+  qxlsx = callPackage ../development/libraries/qxlsx { };
 
   soqt = callPackage ../development/libraries/soqt { };
 

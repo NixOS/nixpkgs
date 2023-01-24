@@ -1,4 +1,4 @@
-{ fetchurl }:
+{ lib, fetchurl }:
 
 let
   version = "2.04";
@@ -21,5 +21,6 @@ in fetchurl {
 
   meta = {
     description = "Font, metrically identical to Arial and Times New Roman";
+    license = lib.licenses.bitstreamVera;
   };
 }

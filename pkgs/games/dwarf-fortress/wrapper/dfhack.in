@@ -2,8 +2,8 @@
 
 source @dfInit@
 
-for i in dfhack.init-example dfhack-config/default hack/* stonesense/*; do
-  update_path "$i"
+for i in *.init *.init-example dfhack-config/default dfhack-config/init hack/* stonesense/*; do
+  if [ -e "$i" ]; then update_path "$i"; fi
 done
 
 cd "$DF_DIR"

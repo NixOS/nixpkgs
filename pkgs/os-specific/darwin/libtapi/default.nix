@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   # Also means we don't have to manually fix the result with install_name_tool.
   patches = [
     ./disable-rpath.patch
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # TODO: make unconditional and rebuild the world
     # TODO: send upstream
     ./native-clang-tblgen.patch
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ]
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "-DCMAKE_CROSSCOMPILING=True"
       # This package could probably have a llvm_6 llvm-tblgen and clang-tblgen
       # provided to reduce some building. This package seems intended to
@@ -40,12 +40,15 @@ stdenv.mkDerivation {
         let
           nativeCC = pkgsBuildBuild.stdenv.cc;
           nativeBintools = nativeCC.bintools.bintools;
+          nativeLibcxxabi = lib.getLib pkgsBuildBuild.libcxxabi;
           nativeToolchainFlags = [
             "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
             "-DCMAKE_CXX_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}c++"
             "-DCMAKE_AR=${nativeBintools}/bin/${nativeBintools.targetPrefix}ar"
             "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
             "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
+            "-DCMAKE_EXE_LINKER_FLAGS=-L${nativeLibcxxabi}/lib"
+            "-DCMAKE_SHARED_LINKER_FLAGS=-L${nativeLibcxxabi}/lib"
           ];
         in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
       )

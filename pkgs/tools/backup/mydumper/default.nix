@@ -1,29 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, glib, zlib, pcre, libmysqlclient, libressl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, glib
+, zlib
+, pcre
+, libmysqlclient
+, libressl
+}:
 
 let inherit (lib) getDev; in
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
   pname = "mydumper";
+  version = "0.13.1-1";
 
   src = fetchFromGitHub {
     owner  = "maxbube";
-    repo   = "mydumper";
-    rev    = "v${version}";
-    sha256 = "0vbz0ri5hm6yzkrcgnaj8px6bf59myr5dbhyy7fd4cv44hr685k6";
+    repo = "mydumper";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Oknivkyr3wOfjnDccEeFVt7D2l1CkeWgXahsQCtAc0I=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ glib zlib pcre libmysqlclient libressl ];
+  buildInputs = [
+    glib
+    zlib
+    pcre
+    libmysqlclient
+    libressl
+  ];
 
-  cmakeFlags = [ "-DMYSQL_INCLUDE_DIR=${getDev libmysqlclient}/include/mysql" ];
+  cmakeFlags = [
+    "-DMYSQL_INCLUDE_DIR=${getDev libmysqlclient}/include/mysql"
+  ];
 
   meta = with lib; {
     description = "High-perfomance MySQL backup tool";
     homepage = "https://github.com/maxbube/mydumper";
-    license = licenses.gpl3;
+    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };

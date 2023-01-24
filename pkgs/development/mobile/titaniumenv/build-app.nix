@@ -34,7 +34,7 @@ let
   extraArgs = removeAttrs args [ "name" "preRebuild" "androidsdkArgs" "xcodewrapperArgs" ];
 in
 stdenv.mkDerivation ({
-  name = lib.replaceChars [" "] [""] name;
+  name = lib.replaceStrings [" "] [""] name;
 
   buildInputs = [ nodejs titanium alloy python which file jdk ];
 

@@ -4,8 +4,8 @@
 
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" "aarch64-linux" ]
+, supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" ]
 }:
 
 let
@@ -50,17 +50,18 @@ in rec {
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
-        (onSystems ["x86_64-linux"] "nixos.iso_plasma5")
-        (onSystems ["x86_64-linux"] "nixos.iso_gnome")
+        (onFullSupported "nixos.iso_plasma5")
+        (onFullSupported "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
+        (onFullSupported "nixos.tests.acme")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
         (onFullSupported "nixos.tests.boot-stage1")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
-        (onSystems ["x86_64-linux"] "nixos.tests.chromium")
+        (onFullSupported "nixos.tests.boot.uefiCdrom")
+        (onFullSupported "nixos.tests.boot.uefiUsb")
+        (onFullSupported "nixos.tests.chromium")
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems ["x86_64-linux"] "nixos.tests.docker")
@@ -76,6 +77,7 @@ in rec {
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolEscape")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
@@ -144,7 +146,8 @@ in rec {
         (onFullSupported "nixos.tests.predictable-interface-names.predictable")
         (onFullSupported "nixos.tests.predictable-interface-names.unpredictableNetworkd")
         (onFullSupported "nixos.tests.predictable-interface-names.unpredictable")
-        (onFullSupported "nixos.tests.printing")
+        (onFullSupported "nixos.tests.printing-service")
+        (onFullSupported "nixos.tests.printing-socket")
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
         (onFullSupported "nixos.tests.shadow")

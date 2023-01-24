@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "9a2420bf09af686736773153fca32a02ae11ecbe24b540c26104628959f91121";
 };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs =  [ openssl dnspython pynacl authres ];
 
   patchPhase = ''

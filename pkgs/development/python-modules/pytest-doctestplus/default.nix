@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , packaging
 , pytest
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.11.2";
-  format = "setuptools";
+  version = "0.12.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f393adf659709a5f111d6ca190871c61808a6f3611bd0a132e27e93b24dd3448";
+    hash = "sha256-epeeS+mdkRbgesBmxfANRfOHZ319d5877zDG/6jHkYE=";
   };
 
   nativeBuildInputs = [
@@ -31,19 +31,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  patches = [
-    # Removal of distutils, https://github.com/astropy/pytest-doctestplus/pull/172
-    (fetchpatch {
-      name = "distutils-removal.patch";
-      url = "https://github.com/astropy/pytest-doctestplus/commit/ae2ee14cca0cde0fab355936995fa083529b00ff.patch";
-      sha256 = "sha256-uryKV7bWw2oz0glyh2lpGqtDPFvRTo8RmI1N1n15/d4=";
-    })
   ];
 
   disabledTests = [

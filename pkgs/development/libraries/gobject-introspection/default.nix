@@ -35,7 +35,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.72.0";
+  version = "1.74.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    sha256 = "Av6OWQhh2I+DBg3TnNpcyqYLLaHSHQ+VSZMBsYa+qrw=";
+    sha256 = "NHs6cZ5oukxp/y1X7iaJIz6owH/EkiBeVzOGd55C1lM=";
   };
 
   patches = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages pythonModules)
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
@@ -136,14 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postCheck = ''
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
-  '';
-
-  # add self to buildInputs to avoid needing to add gobject-introspection to buildInputs in addition to nativeBuildInputs
-  # builds use target-pkg-config to look for gobject-introspection instead of just looking for binaries in $PATH
-  # wrapper uses depsTargetTargetPropagated so ignore it
-  preFixup = lib.optionalString (!lib.hasSuffix "-wrapped" finalAttrs.pname) ''
-    mkdir -p $dev/nix-support
-    echo "$out" > $dev/nix-support/propagated-target-target-deps
   '';
 
   setupHook = ./setup-hook.sh;

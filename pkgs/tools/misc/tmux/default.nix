@@ -6,8 +6,9 @@
 , libevent
 , ncurses
 , pkg-config
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
-, utf8proc
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
+, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 }:
 
 let
@@ -44,13 +45,15 @@ stdenv.mkDerivation rec {
     ncurses
     libevent
   ] ++ lib.optionals withSystemd [ systemd ]
-  ++ lib.optionals stdenv.isDarwin [ utf8proc ];
+  ++ lib.optionals withUtf8proc [ utf8proc ]
+  ++ lib.optionals withUtempter [ libutempter ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
-  ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
+  ++ lib.optionals withUtempter [ "--enable-utempter" ]
+  ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 
@@ -77,6 +80,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thammers fpletz SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ thammers fpletz SuperSandro2000 srapenne ];
   };
 }

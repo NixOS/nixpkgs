@@ -1,13 +1,12 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3Packages
 , dnsmasq
+, gawk
 , getent
 , kmod
 , lxc
 , iproute2
-, iptables
 , nftables
 , util-linux
 , which
@@ -16,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.3.0";
+  version = "1.3.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-6osDGYyFuyPDeK1QFowh414j3laD8i4bqPgCeJmsszE=";
+    sha256 = "sha256-0GBob9BUwiE5cFGdK8AdwsTjTOdc+AIWqUGN/gFfOqI=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -38,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   installPhase = ''
-    make install DESTDIR=$out PREFIX= USE_SYSTEMD=0 USE_NFTABLES=1
+    make install PREFIX=$out USE_SYSTEMD=0 USE_NFTABLES=1
 
     wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
        --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 nftables ]}
@@ -48,6 +47,7 @@ python3Packages.buildPythonApplication rec {
       python3Packages.gbinder-python
       python3Packages.pygobject3
       python3Packages.pyclip
+      gawk
       kmod
       lxc
       util-linux

@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1a1qw6i47fs1izx60l1ysabpmyx9j5sjnbdv8b47wi2xcc9i3hpq";
   };
 
+  # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
+  postPatch = ''
+    substituteInPlace templates/EBTKS/SimpleArray.h \
+      --replace "#define FINITE(x) finite(x)" "#define FINITE(x) isfinite(x)"
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc ];
 

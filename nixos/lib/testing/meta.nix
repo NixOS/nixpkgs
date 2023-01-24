@@ -24,14 +24,14 @@ in
             type = types.nullOr types.int;
             default = null; # NOTE: null values are filtered out by `meta`.
             description = mdDoc ''
-              The [{option}`test`](#opt-test)'s [`meta.timeout`](https://nixos.org/manual/nixpkgs/stable/#var-meta-timeout) in seconds.
+              The [{option}`test`](#test-opt-test)'s [`meta.timeout`](https://nixos.org/manual/nixpkgs/stable/#var-meta-timeout) in seconds.
             '';
           };
           broken = lib.mkOption {
             type = types.bool;
             default = false;
             description = mdDoc ''
-              Sets the [`meta.broken`](https://nixos.org/manual/nixpkgs/stable/#var-meta-broken) attribute on the [{option}`test`](#opt-test) derivation.
+              Sets the [`meta.broken`](https://nixos.org/manual/nixpkgs/stable/#var-meta-broken) attribute on the [{option}`test`](#test-opt-test) derivation.
             '';
           };
         };

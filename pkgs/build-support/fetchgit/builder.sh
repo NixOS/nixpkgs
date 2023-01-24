@@ -2,6 +2,8 @@
 # - no revision specified and remote has a HEAD which is used
 # - revision specified and remote has a HEAD
 # - revision specified and remote without HEAD
+#
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 header "exporting $url (rev $rev) into $out"

@@ -9,7 +9,7 @@
 , gtkmm3
 , pcre
 , swig
-, antlr4_8
+, antlr4_9
 , sudo
 , mysql
 , libxml2
@@ -23,7 +23,7 @@
 , libzip
 , libsecret
 , libssh
-, python2
+, python3
 , jre
 , boost
 , libsigcxx
@@ -39,17 +39,18 @@
 , dbus
 , bash
 , coreutils
+, zstd
 }:
 
 let
-  inherit (python2.pkgs) paramiko pycairo pyodbc;
+  inherit (python3.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.21";
+  version = "8.0.30";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0rqgr1dcbf6yp60hninbw5dnwykx5ngbyhhx0sbhgv0m0cq5a44h";
+    sha256 = "d094b391760948f42a3b879e8473040ae9bb26991eced482eb982a52c8ff8185";
   };
 
   patches = [
@@ -66,6 +67,7 @@ in stdenv.mkDerivation rec {
       nohup = "${coreutils}/bin/nohup";
       rm = "${coreutils}/bin/rm";
       rmdir = "${coreutils}/bin/rmdir";
+      stat = "${coreutils}/bin/stat";
       sudo = "${sudo}/bin/sudo";
     })
 
@@ -77,10 +79,12 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  # have it look for 4.7.2 instead of 4.7.1
+  # 1. have it look for 4.9.3 instead of 4.9.1
+  # 2. for some reason CMakeCache.txt is part of source code
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.7.1-complete.jar" "antlr-4.8-complete.jar"
+      --replace "antlr-4.9.1-complete.jar" "antlr-4.9.3-complete.jar"
+    rm -f build/CMakeCache.txt
   '';
 
   nativeBuildInputs = [
@@ -96,8 +100,8 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     libX11
-    antlr4_8.runtime.cpp
-    python2
+    antlr4_9.runtime.cpp
+    python3
     mysql
     libxml2
     libmysqlconnectorcpp
@@ -129,6 +133,7 @@ in stdenv.mkDerivation rec {
     libepoxy
     at-spi2-core
     dbus
+    zstd
   ];
 
   postPatch = ''
@@ -141,10 +146,10 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
-    "-DWITH_ANTLR_JAR=${antlr4_8.jarLocation}"
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
+    "-DWITH_ANTLR_JAR=${antlr4_9.jarLocation}"
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
@@ -154,7 +159,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${python2}/bin"
+      --prefix PATH : "${python3}/bin"
       --prefix PROJSO : "${proj}/lib/libproj.so"
       --set PYTHONPATH $PYTHONPATH
     )

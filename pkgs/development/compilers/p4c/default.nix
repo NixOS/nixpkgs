@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p4c";
-  version = "1.2.3.1";
+  version = "1.2.3.5";
 
   src = fetchFromGitHub {
     owner = "p4lang";
     repo = "p4c";
     rev = "v${version}";
-    sha256 = "sha256-mOswMUvr7LGN4GmczPUqNMUjs0c1Pc8SiC5k2Ou52Iw=";
+    sha256 = "sha256-5wDwHj+1X6HhhiLfEbOzijpZH6GwpTPEKgNh3iIGTWY=";
     fetchSubmodules = true;
   };
 
@@ -65,10 +65,9 @@ stdenv.mkDerivation rec {
     bison
     flex
     cmake
-    python3
   ]
-  ++ lib.optional enableDocumentation [ doxygen graphviz ]
-  ++ lib.optional enableBPF [ libllvm libbpf ];
+  ++ lib.optionals enableDocumentation [ doxygen graphviz ]
+  ++ lib.optionals enableBPF [ libllvm libbpf ];
 
   buildInputs = [
     protobuf
@@ -76,13 +75,15 @@ stdenv.mkDerivation rec {
     boehmgc
     gmp
     flex
+    python3
   ];
 
   meta = with lib; {
     homepage = "https://github.com/p4lang/p4c";
+    changelog = "https://github.com/p4lang/p4c/releases";
     description = "Reference compiler for the P4 programming language";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = with maintainers; [ raitobezarius govanify ];
     license = licenses.asl20;
   };
 }

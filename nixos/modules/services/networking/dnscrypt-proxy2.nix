@@ -111,7 +111,6 @@ in
           "~@aio"
           "~@keyring"
           "~@memlock"
-          "~@resources"
           "~@setuid"
           "~@timer"
         ];

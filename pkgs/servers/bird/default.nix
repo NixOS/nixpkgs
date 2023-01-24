@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bird";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchurl {
-    sha256 = "sha256-ftNB3djch/qXNlhrNRVEeoQ2/sRC1l9AIhVaud4f/Vo=";
     url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
+    hash = "sha256-YKe4O2e50InSp0WhH93RJGH2MavHtkW2wIWt+Qs/VdY=";
   };
 
   nativeBuildInputs = [ flex bison ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.bird;
 
   meta = with lib; {
+    changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
     description = "BIRD Internet Routing Daemon";
     homepage = "http://bird.network.cz";
     license = licenses.gpl2Plus;

@@ -5,18 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.18.10";
+  version = "1.18.12";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
-    sha256 = "sha256-FiVfginu6y3+y43RNwNg1G8QFeyF5vulwcvZ9DcdZes=";
+    sha256 = "sha256-tGTkkl2VWmyobdCGFudjsmrkbX/Tfb4oFnjjQGWx5DA=";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
   ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # install check instead, when those paths will have been created.
   doInstallCheck = true;
   preInstallCheck = ''
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     patchShebangs tools/tests/test-wrapper.sh
   '';
   installCheckTarget = "check";

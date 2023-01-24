@@ -3,12 +3,14 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools-scm
 , pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , click
 , colorama
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
 , mypy-extensions
 , pathspec
 , parameterized
@@ -21,22 +23,27 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "22.8.0";
+  version = "22.12.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eS9+tUC6mhfoZWU4cB0+sa/LE047RbcfILJcd6jbfm4=";
+    hash = "sha256-IpNR5aGMow9Ee/ck0Af4kPl+E68HC7atTApEHNdZai8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized aiohttp ];
+  nativeCheckInputs = [ pytestCheckHook parameterized aiohttp ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"

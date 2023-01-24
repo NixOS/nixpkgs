@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cpuid";
-  version = "20220927";
+  version = "20230120";
 
   src = fetchurl {
     url = "http://etallen.com/cpuid/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-sykaiTRIJgKGgaIoBgUpIMDzSY0Jn/3OP2P1Z6HqQOw=";
+    sha256 = "sha256-uJtB+IldDVj9uwpUECu0kLx8WCjbLNFb6C0U0ZRjpXk=";
   };
 
   # For pod2man during the build process.

@@ -131,9 +131,9 @@ in {
         exp_table = "";
         forbid = "";
         metaserver2 = "";
-        motd = (fileContents "${cfg.package}/etc/crossfire/motd");
-        news = (fileContents "${cfg.package}/etc/crossfire/news");
-        rules = (fileContents "${cfg.package}/etc/crossfire/rules");
+        motd = fileContents "${cfg.package}/etc/crossfire/motd";
+        news = fileContents "${cfg.package}/etc/crossfire/news";
+        rules = fileContents "${cfg.package}/etc/crossfire/rules";
         settings = "";
         stat_bonus = "";
       } // cfg.configFiles);

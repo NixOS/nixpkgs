@@ -4,39 +4,51 @@
 , google-auth
 , googleapis-common-protos
 , grpcio
+, grpcio-gcp
 , grpcio-status
-, protobuf
-, proto-plus
-, requests
 , mock
+, proto-plus
+, protobuf
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.10.1";
+  version = "2.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4WwVoReJvFo0V6+ygYo1QKA/NB5ucQ1/m79s3i70p8g=";
+    hash = "sha256-S5u11aOAoL76BXOzAmUbipqJJiwXMON79CPOxRGATCI=";
   };
 
   propagatedBuildInputs = [
     googleapis-common-protos
     google-auth
-    grpcio
-    grpcio-status
     protobuf
     proto-plus
     requests
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    grpc = [
+      grpcio
+      grpcio-status
+    ];
+    grpcgcp = [
+      grpcio-gcp
+    ];
+    grpcio-gcp = [
+      grpcio-gcp
+    ];
+  };
+
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

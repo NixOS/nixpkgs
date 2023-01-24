@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.15";
+  version = "0.7.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,18 +18,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = pname;
-    rev = version;
-    hash = "sha256-OuM/r9rxIl4niY87cEcbZ73x2ZIQbaPZqbMrQ7hZE/g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OcXMVgG62JUH28BGvfO/rpnC++/klhBLJ2HafDu9R40=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
+    changelog = "https://github.com/alengwenus/pypck/releases/tag/${version}";
     license = with licenses; [ epl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -168,12 +168,13 @@ in rec {
   bareFrameworks = (
     lib.mapAttrs framework (import ./frameworks.nix {
       inherit frameworks libs;
-      inherit (pkgs.darwin.apple_sdk_11_0) libnetwork Libsystem;
+      inherit (pkgs.darwin.apple_sdk_11_0) libnetwork;
       libobjc = pkgs.darwin.apple_sdk_11_0.objc4;
     })
   ) // (
     lib.mapAttrs privateFramework (import ./private-frameworks.nix {
       inherit frameworks;
+      libobjc = pkgs.darwin.apple_sdk_11_0.objc4;
     })
   );
 

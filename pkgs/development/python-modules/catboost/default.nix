@@ -1,38 +1,38 @@
-{ buildPythonPackage, fetchFromGitHub, fetchpatch, lib, pythonOlder
-, clang_7, python2
+{ buildPythonPackage, fetchFromGitHub, lib, pythonOlder
+, clang_12, python
 , graphviz, matplotlib, numpy, pandas, plotly, scipy, six
 , withCuda ? false, cudatoolkit }:
 
 buildPythonPackage rec {
   pname = "catboost";
-  version = "0.24.4";
+  version = "1.1.1";
 
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
-    rev = "v${version}";
-    sha256 = "sha256-pzmwEiKziB4ldnKgeCsP2HdnisX8sOkLssAzNfcSEx8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bqnUHTTRan/spA5y4LRt/sIUYpP3pxzdN/4wHjzgZVY=";
   };
 
-  nativeBuildInputs = [ clang_7 python2 ];
+  nativeBuildInputs = [ clang_12 ];
 
   propagatedBuildInputs = [ graphviz matplotlib numpy pandas scipy plotly six ]
-    ++ lib.optional withCuda [ cudatoolkit ];
+    ++ lib.optionals withCuda [ cudatoolkit ];
 
   patches = [
     ./nix-support.patch
-    (fetchpatch {
-      name = "format.patch";
-      url = "https://github.com/catboost/catboost/pull/1528/commits/a692ba42e5c0f62e5da82b2f6fccfa77deb3419c.patch";
-      sha256 = "sha256-fNGucHxsSDFRLk3hFH7rm+zzTdDpY9/QjRs8K+AzVvo=";
-    })
   ];
+
+  postPatch = ''
+    # substituteInPlace is too slow for these large files, and the target has lots of numbers in it that change often.
+    sed -e 's|\$(YMAKE_PYTHON3-.*)/python3|${python.interpreter}|' -i make/*.makefile
+  '';
 
   preBuild = ''
     cd catboost/python-package
-    '';
+  '';
   setupPyBuildFlags = [ "--with-ymake=no" ];
   CUDA_ROOT = lib.optional withCuda cudatoolkit;
   enableParallelBuilding = true;

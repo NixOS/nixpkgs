@@ -13,7 +13,7 @@ booting, and try to realise the configuration in the running system
 (e.g., by restarting system services).
 
 ::: {.warning}
-This command doesn\'t start/stop [user services](#opt-systemd.user.services)
+This command doesn't start/stop [user services](#opt-systemd.user.services)
 automatically. `nixos-rebuild` only runs a `daemon-reload` for each user with running
 user services.
 :::
@@ -51,7 +51,7 @@ GRUB 2 boot screen by giving it a different *profile name*, e.g.
 ```
 
 which causes the new configuration (and previous ones created using
-`-p test`) to show up in the GRUB submenu "NixOS - Profile \'test\'".
+`-p test`) to show up in the GRUB submenu "NixOS - Profile 'test'".
 This can be useful to separate test configurations from "stable"
 configurations.
 

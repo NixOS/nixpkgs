@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "irssi";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "irssi";
     repo = "irssi";
     rev = version;
-    hash = "sha256-dQZ/CeBfcfWGjKPF3fR62JDqyEXGv5hd9VT4OEbgJhQ=";
+    hash = "sha256-wRJp4KfI+2IAJ70XW7+0LR83cRvS/SGq7CpDVuc636Q=";
   };
 
   nativeBuildInputs = [

@@ -1,23 +1,24 @@
 { fetchFromGitHub
 , lib
+, stdenv
 , python3Packages
 }:
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = pname;
     rev = "refs/tags/release/${version}";
-    sha256 = "sha256-xRyKCpO2eBe5lI0pQW8wUee/5ZMDEo7/FLORrp3Sduk=";
+    sha256 = "sha256-4mbu3Z48jZQqRft4vkz/x4a7kAOiTrQfnyQpXl3MJn0=";
   };
 
   patches = [
     ./unwrap-subprocess.patch
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     python-snappy
     google-cloud-storage
@@ -36,6 +37,9 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Assertion error
     "test_help_output"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # FsOperationFailed
+    "test_get_file_mode"
   ];
 
   meta = with lib; {

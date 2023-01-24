@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, abseil-cpp
 , c-ares
 , cmake
 , crc32c
@@ -19,37 +18,31 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
-  googleapisRev = "d4f3468ef85278428005ed555b3a85db91551ee6";
+  googleapisRev = "13d5b3f3f9412f38427c8ad48068f04ad1ee9808";
   googleapis = fetchFromGitHub {
+    name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-sIQVFQhE3Ae6ia45apzdgtwzglMM4hFZ8efNAhMO5ZY=";
+    hash = "sha256-SiU7N1EQ/7LWhUwgf4c0CBfUzNGiLe4sSbbJmJF3sao=";
   };
   excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "1.38.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-kobOkohWIDTQaaihhoh/25tZUNv+CjKFwj2xQqO52bA=";
+    sha256 = "sha256-o8aURM8fvxn0FZjuqJGclq9Brss8LOFZzD0FV2j/lUc=";
   };
 
   postPatch = ''
     substituteInPlace external/googleapis/CMakeLists.txt \
-      --replace "https://github.com/googleapis/googleapis/archive/\''${GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
-
-    # https://github.com/googleapis/google-cloud-cpp/issues/8992
-    for file in external/googleapis/config.pc.in google/cloud/{,*/}config.pc.in; do
-      substituteInPlace "$file" \
-        --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-        --replace '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
-    done
+      --replace "https://github.com/googleapis/googleapis/archive/\''${_GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
+    sed -i '/https:\/\/storage.googleapis.com\/cloud-cpp-community-archive\/com_google_googleapis/d' external/googleapis/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
@@ -60,13 +53,12 @@ stdenv.mkDerivation rec {
     # enable these dependencies when doInstallCheck is false because we're
     # unconditionally building tests and benchmarks
     #
-    # when doInstallCheck is true, these deps are added to installCheckInputs
+    # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
     gbenchmark
     gtest
   ];
 
   buildInputs = [
-    abseil-cpp
     c-ares
     crc32c
     (curl.override { inherit openssl; })
@@ -114,7 +106,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  installCheckInputs = lib.optionals doInstallCheck [
+  nativeInstallCheckInputs = lib.optionals doInstallCheck [
     gbenchmark
     gtest
   ];
@@ -125,6 +117,7 @@ stdenv.mkDerivation rec {
     # this adds a good chunk of time to the build
     "-DBUILD_TESTING:BOOL=ON"
     "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+    "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}"
   ] ++ lib.optionals (apis != [ "*" ]) [
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];

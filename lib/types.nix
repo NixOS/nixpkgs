@@ -54,7 +54,7 @@ let
     concatStringsSep
     escapeNixString
     hasInfix
-    isCoercibleToString
+    isStringLike
     ;
   inherit (lib.trivial)
     boolToString
@@ -227,7 +227,7 @@ rec {
       merge = loc: defs:
         let
           getType = value:
-            if isAttrs value && isCoercibleToString value
+            if isAttrs value && isStringLike value
             then "stringCoercibleSet"
             else builtins.typeOf value;
 
@@ -262,7 +262,8 @@ rec {
     };
 
     unspecified = mkOptionType {
-      name = "unspecified value";
+      name = "unspecified";
+      description = "unspecified value";
       descriptionClass = "noun";
     };
 
@@ -477,7 +478,8 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+      descriptionClass = "noun";
+      check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
 
@@ -556,7 +558,7 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
-    # TODO: drop this in the future:
+    # TODO: deprecate this in the future:
     loaOf = elemType: types.attrsOf elemType // {
       name = "loaOf";
       deprecationMessage = "Mixing lists with attribute values is no longer"
@@ -616,8 +618,8 @@ rec {
       descriptionClass = "composite";
       check = isFunction;
       merge = loc: defs:
-        fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "[function body]" ]);
+        fnArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
       functor = (defaultFunctor "functionTo") // { wrapped = elemType; };

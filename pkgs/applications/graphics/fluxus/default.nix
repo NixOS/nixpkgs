@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     openssl.dev
     racket_7_9
   ];
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ sconsPackages.scons_latest ];
 
   patches = [ ./fix-build.patch ];
   sconsFlags = [

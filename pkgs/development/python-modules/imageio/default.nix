@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
 , substituteAll
 , imageio-ffmpeg
@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.22.0";
-  disabled = isPy27;
+  version = "2.24.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    sha256 = "sha256-ozLRJ+w4ey09ypZ/0GWpDxwaS6I0NXCwP+LOu27QZOo=";
+    sha256 = "sha256-8kD4Ip9PMpoVRigRlLUtpdZpQUGlJGaP7T+BsNB3gvo=";
     inherit pname version;
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fsspec
     psutil
     pytestCheckHook

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.1.1";
+  version = "0.18.1.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    sha256 = "sha256-mxbr02Ba/BeUiAZujnBdXgJSaq6a/U4GM7rR7sZzTWc=";
+    sha256 = "sha256-GBILqNkYQUkil1qvYnJTkHwgK3dzKR9I9GVbbLy/0UU=";
   };
 
   nativeBuildInputs = [

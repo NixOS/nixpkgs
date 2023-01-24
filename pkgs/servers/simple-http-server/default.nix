@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qhYsfbzEBbWii4r/G0trU7XiAMPrX/guRshyZE2xeJk=";
+    sha256 = "sha256-9wssSegekRBUXxpru5WGGu6BLX6BFEgV0QliNJToRFg=";
   };
 
-  cargoSha256 = "sha256-aldAez28SZM4A8niIHk85pKeRzpxaZiQhV9Ch5dyblI=";
+  cargoSha256 = "sha256-P8Zr5KTjXD0qHkf6QfyfN39PjokpZUfywhzVjIO5rE8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
+    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda mephistophiles ];
   };

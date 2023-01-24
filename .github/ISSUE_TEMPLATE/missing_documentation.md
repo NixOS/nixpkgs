@@ -15,7 +15,7 @@ assignees: ''
 
 <!-- make sure this issue is not redundant or obsolete -->
 
-- [ ] checked [latest Nixpkgs manual] \([source][nixpkgs-source]) and [latest NixOS manual]] \([source][nixos-source])
+- [ ] checked [latest Nixpkgs manual] \([source][nixpkgs-source]) and [latest NixOS manual] \([source][nixos-source])
 - [ ] checked [open documentation issues] for possible duplicates
 - [ ] checked [open documentation pull requests] for possible solutions
 

@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , makeWrapper
+, wrapGAppsHook
 , pkg-config
 , python3
 , gettext
@@ -13,6 +14,7 @@
 , libjack2
 , lv2
 , lilv
+, mpg123
 , serd
 , sord
 , sqlite
@@ -45,52 +47,27 @@
 , libsepol
 , libxkbcommon
 , util-linux
-, wxGTK
+, wavpack
+, wxGTK32
+, gtk3
 , libpng
 , libjpeg
-, AppKit ? null
-, AudioToolbox ? null
-, AudioUnit ? null
-, Carbon ? null
-, Cocoa ? null
-, CoreAudio ? null
-, CoreAudioKit ? null
-, CoreServices ? null
-, wxmac
+, AppKit
+, CoreAudioKit
 }:
 
 # TODO
-# 1. as of 3.0.2, GTK2 is still the recommended version ref https://www.audacityteam.org/download/source/ check if that changes in future versions
-# 2. detach sbsms
+# 1. detach sbsms
 
-let
-  inherit (lib) optionals;
+stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.1.3";
-
-  wxWidgets_src = fetchFromGitHub {
-    owner = pname;
-    repo = "wxWidgets";
-    rev = "v${version}-${pname}";
-    sha256 = "sha256-KrmYYv23DHBYKIuxMYBioCQ2e4KWdgmuREnimtm0XNU=";
-    fetchSubmodules = true;
-  };
-
-  wxGTK' = wxGTK.overrideAttrs (oldAttrs: rec {
-    src = wxWidgets_src;
-  });
-
-  wxmac' = wxmac.overrideAttrs (oldAttrs: rec {
-    src = wxWidgets_src;
-  });
-in stdenv.mkDerivation rec {
-  inherit pname version;
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-sdI4paxIHDZgoWTCekjrkFR4JFpQC6OatcnJdVXCCZk=";
+    sha256 = "sha256-0F9+4hyUoKb0UP5t02yws/ErogscvI1nsdnSTpcr53E=";
   };
 
   postPatch = ''
@@ -105,9 +82,10 @@ in stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
-  ] ++ optionals stdenv.isLinux [
-    linuxHeaders
     makeWrapper
+    wrapGAppsHook
+  ] ++ lib.optionals stdenv.isLinux [
+    linuxHeaders
   ];
 
   buildInputs = [
@@ -115,6 +93,10 @@ in stdenv.mkDerivation rec {
     ffmpeg_4
     file
     flac
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+  ] ++ [
+    gtk3
     lame
     libid3tag
     libjack2
@@ -125,6 +107,7 @@ in stdenv.mkDerivation rec {
     libvorbis
     lilv
     lv2
+    mpg123
     pcre
     portmidi
     serd
@@ -136,7 +119,9 @@ in stdenv.mkDerivation rec {
     suil
     twolame
     portaudio
-  ] ++ optionals stdenv.isLinux [
+    wavpack
+    wxGTK32
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
@@ -149,28 +134,31 @@ in stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-    wxGTK'
-    wxGTK'.gtk
-  ] ++ optionals stdenv.isDarwin [
-    wxmac'
-    AppKit
-    Cocoa
-    CoreAudioKit
-    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudioKit # for portaudio
     libpng
     libjpeg
   ];
 
   cmakeFlags = [
+    "-DAUDACITY_BUILD_LEVEL=2"
     "-DAUDACITY_REV_LONG=nixpkgs"
     "-DAUDACITY_REV_TIME=nixpkgs"
     "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
+    "-Daudacity_has_vst3=Off"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+
+  # [ 57%] Generating LightThemeAsCeeCode.h...
+  # ../../utils/image-compiler: error while loading shared libraries:
+  # lib-theme.so: cannot open shared object file: No such file or directory
+  preBuild = ''
+    export LD_LIBRARY_PATH=$PWD/utils
+  '';
 
   doCheck = false; # Test fails
 
@@ -178,11 +166,14 @@ in stdenv.mkDerivation rec {
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
   postInstall = lib.optionalString stdenv.isLinux ''
-    rm "$out/audacity"
     wrapProgram "$out/bin/audacity" \
       --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/Audacity.app $out/Applications/
+    makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
   '';
 
   meta = with lib; {
@@ -198,11 +189,7 @@ in stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl ];
+    maintainers = with maintainers; [ lheckemann veprbl wegank ];
     platforms = platforms.unix;
-    # darwin-aarch due to qtbase broken for it.
-    # darwin-x86_64 due to
-    # https://logs.nix.ci/?attempt_id=5cbc4581-09b4-4148-82fe-0326411a56b3&key=nixos%2Fnixpkgs.152273.
-    broken = stdenv.isDarwin;
   };
 }

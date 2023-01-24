@@ -5,8 +5,6 @@
   withGtk2 ? true, gtk2 ? null,
   withGtk3 ? true, gtk3 ? null }:
 
-with lib;
-
 assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
@@ -15,13 +13,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KcwEuiy58wjTr+RWPmpMaPgM0olzxiWp9MMYiKwmIcI=";
+    sha256 = "sha256-SN+9Q5v0bv+kQcYLBJmSCd9WIGSeQuOZze8LVwF20EA=";
   };
 
   nativeBuildInputs = [
@@ -30,13 +28,13 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3Packages; [
     rdflib pyliblo
-  ] ++ optional withFrontend pyqt5;
+  ] ++ lib.optional withFrontend pyqt5;
 
   buildInputs = [
     file liblo alsa-lib fluidsynth jack2 libpulseaudio libsndfile
-  ] ++ optional withQt qtbase
-    ++ optional withGtk2 gtk2
-    ++ optional withGtk3 gtk3;
+  ] ++ lib.optional withQt qtbase
+    ++ lib.optional withGtk2 gtk2
+    ++ lib.optional withGtk3 gtk3;
 
   propagatedBuildInputs = pythonPath;
 

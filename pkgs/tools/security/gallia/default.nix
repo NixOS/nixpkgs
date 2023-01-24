@@ -35,12 +35,13 @@ python3.pkgs.buildPythonApplication rec {
     zstandard
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.8.0"' 'aiofiles = ">=0.8.0"' \
       --replace 'zstandard = "^0.17.0"' 'zstandard = "*"'
   '';
 

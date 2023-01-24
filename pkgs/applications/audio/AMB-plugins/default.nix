@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sed -i 's@/usr/bin/install@install@g' Makefile
     sed -i 's@/bin/rm@rm@g' Makefile
     sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile
+    sed -i 's@g++@$(CXX)@g' Makefile
   '';
 
   preInstall="mkdir -p $out/lib/ladspa";

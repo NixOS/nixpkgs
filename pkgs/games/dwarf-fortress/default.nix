@@ -63,16 +63,13 @@ let
             inherit dwarf-fortress-unfuck;
           };
 
-          # unfuck is linux-only right now, we will only use it there.
-          dwarf-fortress-unfuck =
-            if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
-            else null;
+          dwarf-fortress-unfuck = callPackage ./unfuck.nix { inherit dfVersion; };
 
           twbt = callPackage ./twbt { inherit dfVersion; };
 
           dfhack = callPackage ./dfhack {
             inherit (perlPackages) XMLLibXML XMLLibXSLT;
-            inherit dfVersion twbt;
+            inherit dfVersion;
             stdenv = gccStdenv;
           };
 
@@ -83,11 +80,7 @@ let
         in
         callPackage ./wrapper {
           inherit (self) themes;
-
-          dwarf-fortress = dwarf-fortress;
-          twbt = twbt;
-          dfhack = dfhack;
-          dwarf-therapist = dwarf-therapist;
+          inherit dwarf-fortress twbt dfhack dwarf-therapist;
 
           jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
         };

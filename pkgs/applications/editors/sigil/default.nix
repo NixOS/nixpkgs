@@ -1,18 +1,17 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, makeWrapper
-, boost, xercesc, hunspell, zlib, pcre16
-, qtbase, qttools, qtwebengine, qtxmlpatterns
+, boost, xercesc, qtbase, qttools, qtwebengine, qtxmlpatterns
 , python3Packages
 }:
 
 mkDerivation rec {
   pname = "sigil";
-  version = "1.9.10";
+  version = "1.9.20";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     rev = version;
-    sha256 = "sha256-FWUrhTTV1TCoBhitopQc469I7SRy4UDKdRLifVKhCCg=";
+    sha256 = "sha256-rpJ+HBYmGuhxnZbJn59mc+IokBc5834X2uyriIGnsqA=";
   };
 
   pythonPath = with python3Packages; [ lxml ];

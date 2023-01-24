@@ -22,6 +22,7 @@
 , shared-mime-info
 , wrapGAppsHook
 , librsvg
+, webp-pixbuf-loader
 , libexif
 , gobject-introspection
 , gi-docgen
@@ -29,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "42.3";
+  version = "43.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MMGzwovG3ChU2Hjr0xoi6qFb+VnBNCBqKhkEGT5H9Do=";
+    sha256 = "sha256-nc/c5VhakOK7HPV+N3yx6xLUG9m8ubus31BrwbE1Tvk=";
   };
 
   patches = [
@@ -78,6 +79,17 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
@@ -105,5 +117,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    # requires <gio/gdesktopappinfo.h>
+    broken = stdenv.isDarwin;
   };
 }

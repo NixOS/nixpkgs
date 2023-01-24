@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   # https://github.com/testing-cabal/funcsigs/issues/10
-  patches = lib.optional (isPyPy && isPy3k) [ ./fix-pypy3-tests.patch ];
+  patches = lib.optionals (isPyPy && isPy3k) [ ./fix-pypy3-tests.patch ];
 
   # requires, unittest2 and package hasn't been maintained since 2013
   doCheck = false;

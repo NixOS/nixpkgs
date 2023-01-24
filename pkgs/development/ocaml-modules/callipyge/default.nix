@@ -25,7 +25,7 @@ buildDunePackage rec {
 
   # alcotest isn't available for OCaml < 4.08 due to fmt
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/oklm-wsh/Callipyge";

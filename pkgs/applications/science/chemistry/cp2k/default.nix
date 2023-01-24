@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "9.1.0";
+  version = "2023.1";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-P9RwZmrE1E0UTQVasQxWAqa3LBLyJNGeJo8T6u5WWcw=";
+    hash = "sha256-SG5Gz0cDiSfbSZ8m4K+eARMLU4iMk/xK3esN5yt05RE=";
     fetchSubmodules = true;
   };
 

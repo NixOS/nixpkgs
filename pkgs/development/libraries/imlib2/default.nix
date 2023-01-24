@@ -5,10 +5,10 @@
 # imlib2 can load images from ID3 tags.
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
-, x11Support ? true, xlibsWrapper ? null
+, x11Support ? true
+, webpSupport ? true
 , svgSupport ? false
 , heifSupport ? false
-, webpSupport ? false
 , jxlSupport ? false
 , psSupport ? false
 
@@ -20,10 +20,11 @@
 , openbox
 , fluxbox
 , enlightenment
+, xorg
 }:
 
 let
-  inherit (lib) optional;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libjpeg libtiff giflib libpng
     bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper
+  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
     ++ optional heifSupport libheif
     ++ optional svgSupport librsvg
     ++ optional webpSupport libwebp

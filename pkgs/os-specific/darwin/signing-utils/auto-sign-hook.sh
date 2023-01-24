@@ -25,7 +25,7 @@ signDarwinBinariesIn() {
 signDarwinBinariesInAllOutputs() {
   local output
 
-  for output in $outputs; do
+  for output in $(getAllOutputNames); do
      signDarwinBinariesIn "${!output}"
   done
 }

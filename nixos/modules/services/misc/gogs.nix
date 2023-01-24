@@ -90,7 +90,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 3306;
           description = lib.mdDoc "Database host port.";
         };
@@ -167,7 +167,7 @@ in
       };
 
       httpPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = lib.mdDoc "HTTP listen port.";
       };

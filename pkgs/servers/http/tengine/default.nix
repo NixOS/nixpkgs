@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxcrypt, libxml2, libxslt
 , substituteAll, gd, geoip, gperftools, jemalloc, nixosTests
 , withDebug ? false
 , withMail ? false
@@ -10,18 +10,18 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.3";
+  version = "2.3.4";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    sha256 = "0p43qsldwhx4zfwp585x8kps0akrf7b0gxdgf0sh0yqcp7l28gmx";
+    sha256 = "sha256-0xue5XDvK9U64+rka8GRNv2lX62zcrYA1Tz7DrsA0ts=";
   };
 
   buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
+    [ openssl zlib pcre libxcrypt libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   patches = singleton (substituteAll {

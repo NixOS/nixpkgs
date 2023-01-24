@@ -13,7 +13,7 @@ let
     attrPath=$1
 
     toplevel=$(git rev-parse --show-toplevel)
-    position=$(nix eval -f "$toplevel" --raw "$attrPath.meta.position")
+    position=$(nix --extra-experimental-features nix-command eval -f "$toplevel" --raw "$attrPath.meta.position")
     gemdir=$(dirname "$position")
 
     cd "$gemdir"

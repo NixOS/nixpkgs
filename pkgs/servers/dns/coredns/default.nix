@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -17,6 +18,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-nyMeKmGoypDrpZHYHGjhRnjgC3tbOX/dlj96pnXrdLE=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  outputs = [ "out" "man" ];
+
   postPatch = ''
     substituteInPlace test/file_cname_proxy_test.go \
       --replace "TestZoneExternalCNAMELookupWithProxy" \
@@ -29,10 +34,14 @@ buildGoModule rec {
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
   '';
 
+  postInstall = ''
+    installManPage man/*
+  '';
+
   meta = with lib; {
     homepage = "https://coredns.io";
     description = "A DNS server that runs middleware";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem rtreffer deltaevo superherointj ];
+    maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
   };
 }

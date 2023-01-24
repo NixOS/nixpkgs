@@ -1,15 +1,20 @@
-{ lib, fetchCrate, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hakari";
-  version = "0.9.14";
+  version = "0.9.23";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-C4UBvxGZDpGfYokTzHQNkUkZqBNuKbE4pzOJ04sTDoY=";
+  src = fetchFromGitHub {
+    owner = "guppy-rs";
+    repo = "guppy";
+    rev = "cargo-hakari-${version}";
+    sha256 = "sha256-Ewki2Ux233WEW7x3jgpdeMH6xoMYJQ9X3vP8CqY+0hc=";
   };
 
-  cargoHash = "sha256-eQrRBmlP206MKDlXxcJ64jD6/6mv3V/sv9TsybIx+8Q=";
+  cargoHash = "sha256-IpTWyp0o6OKS8h0U8ybC2Io3Tbs592UBzAWmd8zEm2I=";
+
+  cargoBuildFlags = [ "-p" "cargo-hakari" ];
+  cargoTestFlags = [ "-p" "cargo-hakari" ];
 
   meta = with lib; {
     description = "Manage workspace-hack packages to speed up builds in large workspaces.";
@@ -19,7 +24,8 @@ rustPlatform.buildRustPackage rec {
       and cumulatively by 20-25% or more.
     '';
     homepage = "https://crates.io/crates/cargo-hakari";
+    changelog = "https://github.com/guppy-rs/guppy/blob/cargo-hakari-${version}/tools/cargo-hakari/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ macalinao ];
+    maintainers = with maintainers; [ figsoda macalinao ];
   };
 }

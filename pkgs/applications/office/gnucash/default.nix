@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     gettext
     makeWrapper
     wrapGAppsHook
+    pkg-config
   ];
 
   buildInputs = [
@@ -55,7 +56,6 @@ stdenv.mkDerivation rec {
     libofx
     libxml2
     libxslt
-    pkg-config
     swig
     webkitgtk
   ]
@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
     ./0002-disable-gnc-fq-update.patch
     # this patch prevents the building of gnucash-valgrind
     ./0003-remove-valgrind.patch
+    # this patch makes gnucash exec the Finance::Quote helpers directly
+    ./0004-exec-fq-helpers.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress

@@ -1,7 +1,7 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, newScope, pixman }:
+{ lib, pixman }:
 
-lib.makeScope newScope (self: with self; {
+self: with self; {
 
   inherit pixman;
 
@@ -38,7 +38,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "bitmap";
     version = "1.0.9";
     builder = ./builder.sh;
@@ -48,13 +48,13 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "editres";
     version = "1.0.7";
     builder = ./builder.sh;
@@ -64,13 +64,13 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  encodings = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
+  encodings = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     pname = "encodings";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -80,7 +80,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -99,6 +99,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -116,6 +117,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -133,6 +135,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -150,6 +153,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -167,6 +171,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -200,6 +205,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -217,6 +223,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -234,6 +241,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -251,6 +259,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -268,6 +277,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -285,6 +295,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -302,6 +313,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -319,6 +331,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -336,6 +349,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -353,6 +367,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -370,6 +385,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -387,6 +403,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -404,6 +421,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -421,6 +439,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -438,6 +457,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -455,6 +475,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -472,6 +493,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -489,6 +511,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -506,6 +529,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -523,6 +547,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -540,6 +565,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -557,6 +583,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -574,6 +601,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -591,6 +619,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -608,6 +637,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -625,6 +655,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -642,6 +673,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -691,6 +723,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -708,6 +741,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -936,22 +970,6 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXaw3d = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
-    pname = "libXaw3d";
-    version = "1.6.3";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2";
-      sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXext libXmu libXpm xorgproto libXt ];
-    meta.platforms = lib.platforms.unix;
-  }) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcomposite = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     pname = "libXcomposite";
     version = "0.4.5";
@@ -1082,11 +1100,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXft = callPackage ({ stdenv, pkg-config, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
     pname = "libXft";
-    version = "2.3.4";
+    version = "2.3.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXft-2.3.4.tar.bz2";
-      sha256 = "1pdbr6gzfvixc791pjf42i9gg8wvfq6cpq6sdca04h4i42mxmpjp";
+      url = "mirror://xorg/individual/lib/libXft-2.3.6.tar.xz";
+      sha256 = "08ihq0in7iy5bwrx71nhnlkj7k1ic34brjcqs2wbnf69kwqyg9k0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1560,7 +1578,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
+  oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "oclock";
     version = "1.0.4";
     builder = ./builder.sh;
@@ -1570,7 +1588,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libxkbfile libX11 libXext libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1672,7 +1690,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "viewres";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -1682,7 +1700,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1706,11 +1724,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xauth = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xauth";
-    version = "1.1";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xauth-1.1.tar.bz2";
-      sha256 = "032klzzw8r09z36x1272ssd79bcisz8j5p8gbdy111fiknvx27bd";
+      url = "mirror://xorg/individual/app/xauth-1.1.2.tar.xz";
+      sha256 = "0072ivzn4z59ysanz838nh8s4mcmdsx6q9xkvlfysv2k37ynmfkq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1752,7 +1770,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
+  xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xcalc";
     version = "1.1.0";
     builder = ./builder.sh;
@@ -1762,7 +1780,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1896,7 +1914,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xclock";
     version = "1.0.9";
     builder = ./builder.sh;
@@ -1906,7 +1924,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXft libxkbfile libXmu xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1944,7 +1962,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xconsole";
     version = "1.0.7";
     builder = ./builder.sh;
@@ -1954,7 +1972,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1992,7 +2010,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xdm";
     version = "1.1.12";
     builder = ./builder.sh;
@@ -2002,7 +2020,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -2442,11 +2460,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-mga";
-    version = "2.0.0";
+    version = "2.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-mga-2.0.0.tar.bz2";
-      sha256 = "0yaxpgyyj9398nzzr5vnsfxcis76z46p9814yzj8179yl7hld296";
+      url = "mirror://xorg/individual/driver/xf86-video-mga-2.0.1.tar.xz";
+      sha256 = "1aq3aqh2yg09gy864kkshfx5pjl5w05jdz97bx5bnrbrhdq3p8r7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2570,11 +2588,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videor128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-r128";
-    version = "6.11.0";
+    version = "6.12.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-r128-6.11.0.tar.bz2";
-      sha256 = "0snvwmrh8dqyyaq7ggicym6yrsg4brygkx9156r0m095m7fp3rav";
+      url = "mirror://xorg/individual/driver/xf86-video-r128-6.12.1.tar.xz";
+      sha256 = "0hf7h54wxgs8njavp0kgadjq1787fhbd588j7pj685hz2wmkq0kx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2888,7 +2906,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
+  xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xfd";
     version = "1.1.3";
     builder = ./builder.sh;
@@ -2898,13 +2916,13 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config gettext ];
+    nativeBuildInputs = [ pkg-config gettext wrapWithXFileSearchPathHook ];
     buildInputs = [ libxkbfile fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xfontsel";
     version = "1.0.6";
     builder = ./builder.sh;
@@ -2914,7 +2932,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -2968,7 +2986,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xgc";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -2978,23 +2996,23 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xhost = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
+  xhost = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXmu, xorgproto, gettext }: stdenv.mkDerivation {
     pname = "xhost";
-    version = "1.0.8";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xhost-1.0.8.tar.bz2";
-      sha256 = "15n3mnd4i5kh4z32qv11580qjgvnng0wry2y753ljrqkkrbkrp52";
+      url = "mirror://xorg/individual/app/xhost-1.0.9.tar.xz";
+      sha256 = "0ib66h78ykc4zki4arh8hkcsgk1mk8yyy0ay5sdb2d908qqvb1pa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config gettext ];
     buildInputs = [ libX11 libXau libXmu xorgproto ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3128,7 +3146,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
+  xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xload";
     version = "1.1.3";
     builder = ./builder.sh;
@@ -3138,7 +3156,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config gettext ];
+    nativeBuildInputs = [ pkg-config gettext wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3192,7 +3210,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmag";
     version = "1.0.6";
     builder = ./builder.sh;
@@ -3202,13 +3220,13 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libX11 libXaw libXmu libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmessage";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -3218,7 +3236,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3240,7 +3258,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmore";
     version = "1.0.3";
     builder = ./builder.sh;
@@ -3250,7 +3268,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3448,7 +3466,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
+  xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xsm";
     version = "1.0.4";
     builder = ./builder.sh;
@@ -3458,7 +3476,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
     buildInputs = [ libICE libSM libX11 libXaw libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -3575,4 +3593,4 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
-})
+}

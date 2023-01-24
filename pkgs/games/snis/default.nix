@@ -18,6 +18,7 @@
 , sox
 , libopus
 , openscad
+, libxcrypt
 }:
 
 stdenv.mkDerivation {
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pkg-config openscad makeWrapper ];
-  buildInputs = [ coreutils portaudio libbsd libpng libvorbis SDL2 lua5_2 glew openssl picotts sox alsa-utils libopus ];
+  buildInputs = [ coreutils portaudio libbsd libpng libvorbis SDL2 lua5_2 glew openssl picotts sox alsa-utils libopus libxcrypt ];
 
   postBuild = ''
     make models -j$NIX_BUILD_CORES

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "nototools";
-  version = "0.2.16";
+  version = "0.2.17";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "nototools";
     rev = "v${version}";
-    sha256 = "14rrdamkmhrykff8ln07fq9cm8zwj3k113lzwjcy0lgz23g51jyl";
+    sha256 = "0jxydivqzggirc31jv7b4mrsjkg646zmra5m4h0pk4amgy65rvyp";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     zopfli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     six
     bash

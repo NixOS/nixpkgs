@@ -9,11 +9,11 @@ let
   mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
     type = args.type or (types.uniq types.bool);
     default = args.default or false;
-    description = (args.description or ''
+    description = lib.mdDoc ((args.description or ''
       Whether to ${args.feature} while building nixpkgs packages.
     '') + ''
       Changing the default may cause a mass rebuild.
-    '';
+    '');
   });
 
   options = {
@@ -34,35 +34,39 @@ let
     /* Config options */
 
     warnUndeclaredOptions = mkOption {
-      description = "Whether to warn when <literal>config</literal> contains an unrecognized attribute.";
+      description = lib.mdDoc "Whether to warn when `config` contains an unrecognized attribute.";
       type = types.bool;
       default = false;
     };
 
     doCheckByDefault = mkMassRebuild {
-      feature = "run <literal>checkPhase</literal> by default";
+      feature = "run `checkPhase` by default";
     };
 
     strictDepsByDefault = mkMassRebuild {
-      feature = "set <literal>strictDeps</literal> to true by default";
+      feature = "set `strictDeps` to true by default";
+    };
+
+    structuredAttrsByDefault = mkMassRebuild {
+      feature = "set `__structuredAttrs` to true by default";
     };
 
     enableParallelBuildingByDefault = mkMassRebuild {
-      feature = "set <literal>enableParallelBuilding</literal> to true by default";
+      feature = "set `enableParallelBuilding` to true by default";
     };
 
     configurePlatformsByDefault = mkMassRebuild {
-      feature = "set <literal>configurePlatforms</literal> to <literal>[\"build\" \"host\"]</literal> by default";
+      feature = "set `configurePlatforms` to `[\"build\" \"host\"]` by default";
     };
 
     contentAddressedByDefault = mkMassRebuild {
-      feature = "set <literal>__contentAddressed</literal> to true by default";
+      feature = "set `__contentAddressed` to true by default";
     };
 
     allowAliases = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to expose old attribute names for compatibility.
 
         The recommended setting is to enable this, as it
@@ -82,10 +86,10 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
-      description = ''
+      description = lib.mdDoc ''
         Whether to allow unfree packages.
 
-        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree">Installing unfree packages</link> in the NixOS manual.
+        See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
       '';
     };
 
@@ -94,10 +98,10 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1"'';
-      description = ''
+      description = lib.mdDoc ''
         Whether to allow broken packages.
 
-        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken">Installing broken packages</link> in the NixOS manual.
+        See [Installing broken packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken) in the NixOS manual.
       '';
     };
 
@@ -106,22 +110,22 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"'';
-      description = ''
+      description = lib.mdDoc ''
         Whether to allow unsupported packages.
 
-        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system">Installing packages on unsupported systems</link> in the NixOS manual.
+        See [Installing packages on unsupported systems](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system) in the NixOS manual.
       '';
     };
 
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
 
         A list of warnings can be found in
-        <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix">/pkgs/stdenv/generic/check-meta.nix</link>.
+        [/pkgs/stdenv/generic/check-meta.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix).
 
         This is not a stable interface; warnings may be added, changed
         or removed without prior notice.
@@ -130,7 +134,7 @@ let
 
     checkMeta = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';

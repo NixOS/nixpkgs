@@ -7,6 +7,7 @@
 , parts
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-y9Nv59pLWk1kRjZG3EmalT34Mjx7RLZ4WkvJlRrK5LI=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     fe25519
     parts
@@ -28,7 +33,7 @@ buildPythonPackage rec {
     fountains
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

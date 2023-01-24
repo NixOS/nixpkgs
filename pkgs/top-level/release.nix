@@ -30,7 +30,7 @@ let
     "aarch64"
   ] (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
 
-  jobs =
+  nonPackageJobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
@@ -130,7 +130,8 @@ let
               jobs.tests.patch-shebangs.x86_64-linux
               */
             ]
-            ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
+            # FIXME: reintroduce aarch64-darwin after this builds again
+            ++ lib.collect lib.isDerivation (removeAttrs jobs.stdenvBootstrapTools [ "aarch64-darwin" ])
             ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
@@ -167,7 +168,9 @@ let
           (system: {
             inherit
               (import ../stdenv/linux/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+                pkgs = import ../.. {
+                  localSystem = { inherit system; };
+                };
               })
               dist test;
           })
@@ -175,7 +178,9 @@ let
         // optionalAttrs supportDarwin.x86_64 {
           x86_64-darwin =
             let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+                localSystem = { system = "x86_64-darwin"; };
+              };
             in {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
@@ -186,14 +191,25 @@ let
           # Cross compiled bootstrap tools
           aarch64-darwin =
             let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+                localSystem = { system = "x86_64-darwin"; };
+                crossSystem = { system = "aarch64-darwin"; };
+              };
             in {
               # Distribution only for now
               inherit (bootstrap) dist;
             };
           };
 
-    } // (mapTestOn ((packagePlatforms pkgs) // {
+       };
+
+  # Do not allow attribute collision between jobs inserted in
+  # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
+  # Conflicts usually cause silent job drops like in
+  #   https://github.com/NixOS/nixpkgs/pull/182058
+  jobs = lib.attrsets.unionOfDisjoint
+    nonPackageJobs
+    (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;

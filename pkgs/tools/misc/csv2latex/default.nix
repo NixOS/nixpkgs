@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "csv2latex";
-  version = "0.22";
+  version = "0.23.1";
 
   src = fetchurl {
     url = "http://brouits.free.fr/csv2latex/csv2latex-${version}.tar.gz";
-    sha256 = "09qih2zx6cvlii1n5phiinvm9xw1l8f4i60b5hg56pymzjhn97vy";
+    sha256 = "sha256-k1vQyrVJmfaJ7jVaoW2dkPD7GO8EoDqJY5m8O2U/kYw=";
   };
 
   installPhase = ''

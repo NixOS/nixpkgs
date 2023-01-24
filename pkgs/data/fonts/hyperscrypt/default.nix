@@ -1,3 +1,4 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { fetchzip, lib }:
 
 let
@@ -5,18 +6,13 @@ let
   pname = "HyperScrypt";
 in
 
-fetchzip {
+(fetchzip {
   name = "${lib.toLower pname}-font-${version}";
   url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
   sha256 = "01pf5p2scmw02s0gxnibiwxbpzczphaaapv0v4s7svk9aw2gmc0m";
-  postFetch = ''
-    mkdir -p $out/share/fonts/{truetype,opentype}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/${pname}.ttf
-    unzip -j $downloadedFile \*${pname}.otf -d $out/share/fonts/opentype/${pname}.otf
-  '';
 
   meta = with lib; {
-    homepage = "http://velvetyne.fr/fonts/hyper-scrypt/";
+    homepage = "https://velvetyne.fr/fonts/hyper-scrypt/";
     description = "A modern stencil typeface inspired by stained glass technique";
     longDescription = ''
       The Hyper Scrypt typeface was designed for the Hyper Chapelle
@@ -37,4 +33,10 @@ fetchzip {
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts/{truetype,opentype}
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/${pname}.ttf
+    unzip -j $downloadedFile \*${pname}.otf -d $out/share/fonts/opentype/${pname}.otf
+  '';
+})

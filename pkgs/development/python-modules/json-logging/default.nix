@@ -1,46 +1,61 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, wheel
-, flask
-, sanic
 , fastapi
-, uvicorn
+, fetchFromGitHub
+, flask
+, httpx
+, pytestCheckHook
+, pythonOlder
 , requests
+, sanic
+, uvicorn
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "json-logging";
-  version = "1.3.0";
+  version = "1.5.0-rc0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bobbui";
     repo = "json-logging-python";
-    rev = version;
-    hash = "sha256-0eIhOi30r3ApyVkiBdTQps5tNj7rI+q8TjNWxTnhtMQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
   };
-  patches = [
-    # Fix tests picking up test modules instead of real packages.
-    (fetchpatch {
-      url = "https://github.com/bobbui/json-logging-python/commit/6fdb64deb42fe48b0b12bda0442fd5ac5f03107f.patch";
-      sha256 = "sha256-BLfARsw2FdvY22NCaFfdFgL9wTmEZyVIi3CQpB5qU0Y=";
-    })
+
+  nativeCheckInputs = [
+    fastapi
+    flask
+    httpx
+    pytestCheckHook
+    # quart
+    requests
+    sanic
+    uvicorn
+    wheel
   ];
 
-  # - Quart is not packaged for Nixpkgs.
-  checkInputs = [ wheel flask /*quart*/ sanic fastapi uvicorn requests pytestCheckHook ];
-  disabledTests = [ "quart" ];
-  # Tests spawn servers and try to connect to them.
+  pythonImportsCheck = [
+    "json_logging"
+  ];
+
+  disabledTests = [
+    "quart"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python library to emit logs in JSON format";
     longDescription = ''
-      Python logging library to emit JSON log that can be easily indexed and searchable by logging infrastructure such as ELK, EFK, AWS Cloudwatch, GCP Stackdriver.
+      Python logging library to emit JSON log that can be easily indexed and searchable by logging
+      infrastructure such as ELK, EFK, AWS Cloudwatch, GCP Stackdriver.
     '';
     homepage = "https://github.com/bobbui/json-logging-python";
+    changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ AluisioASG ];
   };

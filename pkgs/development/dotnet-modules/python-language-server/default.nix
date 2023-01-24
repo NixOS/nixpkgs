@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
+, stdenvNoCC
 , autoPatchelfHook
 , openssl
 , icu

@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.52";
+  version = "0.55";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    sha256 = "sha256-JnkNWWdr0CSlwME619BBWkvelFZoZpzmAR53nm2bSqM=";
+    sha256 = "sha256-vMWs+0iaszq+p55Z9AhqkNHWeOwlgt2iq7uuA8xGjJ4=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 

@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.android.com/studio/command-line/apksigner";
     license = licenses.asl20;
     maintainers = with maintainers; [ linsui ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }

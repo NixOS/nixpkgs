@@ -67,7 +67,7 @@ let
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
       inherit (stdenv.hostPlatform) gcc isAarch32;
-    in sharedConfigureFlags ++ [
+    in sharedConfigureFlags ++ optionals (versionOlder version "19") [
       "--without-dtrace"
     ] ++ (optionals isCross [
       "--cross-compiling"
@@ -123,12 +123,11 @@ let
           --replace "/usr/bin/env" "${coreutils}/bin/env"
       done
     '' + optionalString stdenv.isDarwin ''
-      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
       sed -i -e "s|tr1/type_traits|type_traits|g" \
              -e "s|std::tr1|std|" src/util.h
     '';
 
-    checkInputs = [ procps ];
+    nativeCheckInputs = [ procps ];
     doCheck = false; # fails 4 out of 1453 tests
 
     postInstall = ''
@@ -176,8 +175,6 @@ let
       Libs: -L$libv8/lib -lv8 -pthread -licui18n
       Cflags: -I$libv8/include
       EOF
-    '' + optionalString (stdenv.isDarwin && enableNpm) ''
-      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
     '';
 
     passthru.updateScript = import ./update.nix {

@@ -44,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "42.0";
+  version = "43.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "oyisl2k3vsF5lx/weCmhJGuYznJBgcEorjKguketOFU=";
+    sha256 = "lNcNbtffWfp/3k/QL+0RaFk6itzhD87hE8FI1Ss5IpQ=";
   };
 
   mesonFlags = [
@@ -143,7 +143,8 @@ stdenv.mkDerivation rec {
     # We use rsync to merge the directories.
     rsync --archive "${DESTDIR}/etc" "$out"
     rm --recursive "${DESTDIR}/etc"
-    for o in $outputs; do
+    for o in $(getAllOutputNames); do
+        if [[ "$o" = "debug" ]]; then continue; fi
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done
@@ -161,6 +162,8 @@ stdenv.mkDerivation rec {
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
   DESTDIR = "${placeholder "out"}/dest";
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {

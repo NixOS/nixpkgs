@@ -45,7 +45,7 @@ let
       mv bin/nomad-autoscaler $bin/bin
       ln -s $bin/bin/nomad-autoscaler $out/bin/nomad-autoscaler
 
-      for d in $outputs; do
+      for d in $(getAllOutputNames); do
         mkdir -p ''${!d}/share
       done
       rmdir $bin/share

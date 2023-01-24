@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "procyon";
-  version = "0.6-prerelease";
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "https://github.com/mstrobel/procyon/releases/download/${version}/procyon-decompiler-${version}.jar";
-    sha256 = "sha256-eBVWKCo8ccAT/T9HgjxUCNFzGyzofc9Mbyp0ldUmrdk=";
+    url = "https://github.com/mstrobel/procyon/releases/download/v${version}/procyon-decompiler-${version}.jar";
+    sha256 = "sha256-gh2pYBL8aSRPoeopjJBFXuTgIUNLx5bTuVRqskYBt3k=";
   };
 
   dontUnpack = true;

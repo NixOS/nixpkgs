@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Kb8p53gPkhxtOhH2COKwSDwbtRDFr6hHMJAkndV8Ukk=";
   };
 
-  buildInputs = [ pkcs11helper pkg-config openssl ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pkcs11helper openssl ];
 
   configureFlags = [
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     gnupg-pkcs11 is a project to implement a BSD-licensed smart-card
     daemon to enable the use of PKCS#11 tokens with GnuPG.
     '';
-    homepage = "http://gnupg-pkcs11.sourceforge.net/";
+    homepage = "https://gnupg-pkcs11.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthiasbeyer philandstuff ];
     platforms = platforms.unix;

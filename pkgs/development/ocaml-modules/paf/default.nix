@@ -25,14 +25,15 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    sha256 = "sha256-JIJjECEbajauowbXot19vtiDhTpGAQiSCBY0AHZOyZM=";
+    sha256 = "sha256-+RkrmWJJREHg8BBdNe92vYhd2/Frvs7l5qOr9jBwymU=";
   };
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     mirage-stack
@@ -49,7 +50,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     lwt
     logs
     fmt

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, alsa-lib, espeak, glibc, gpsd
+{ lib, stdenv, fetchFromGitHub, cmake, alsa-lib, espeak, gpsd
 , hamlib, perl, python3, udev }:
 
 with lib;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --replace 'Terminal=false' 'Terminal=true' \
       --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
     substituteInPlace src/dwgpsd.c \
-      --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 12'
+      --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 14'
   '';
 
   meta = {

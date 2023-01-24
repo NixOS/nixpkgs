@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , poetry-core
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -23,10 +24,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     poetry-core
+    setuptools
   ];
 
-  # Not running tests as aiomysql is missing support for
-  # pymysql>=0.9.3
+  # Not running tests as aiomysql is missing support for pymysql>=0.9.3
   doCheck = false;
 
   pythonImportsCheck = [

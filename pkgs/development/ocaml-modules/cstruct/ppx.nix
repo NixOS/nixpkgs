@@ -8,12 +8,12 @@ else
 
 buildDunePackage {
   pname = "ppx_cstruct";
-  inherit (cstruct) version src useDune2 meta;
+  inherit (cstruct) version src meta;
 
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [ cstruct ppxlib sexplib stdlib-shims ];
 
   doCheck = true;
-  checkInputs = [ ounit cppo ppx_sexp_conv cstruct-sexp cstruct-unix ];
+  nativeCheckInputs = [ ounit cppo ppx_sexp_conv cstruct-sexp cstruct-unix ];
 }

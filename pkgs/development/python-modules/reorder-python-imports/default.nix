@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "reorder-python-imports";
-  version = "3.8.1";
+  version = "3.9.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "reorder_python_imports";
     rev = "v${version}";
-    hash = "sha256-CLC9dfNSYqEBZB2fP34jpA/4cxm0HZzjo/e7Yn8XPFc=";
+    hash = "sha256-z8giVbW8+k/y9Kg+O2tMle5MoRAar2Gccx2YCtFQvxw=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "reorder_python_imports"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

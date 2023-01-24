@@ -6,17 +6,18 @@
 , isPy3k
 , sqlalchemy
 , pytestCheckHook
+, pytz
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.27.1";
+  version = "0.29.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YYzn13yaTTVt4mxbE8wbymGrisraMRRHodydawSy/Uc=";
+    sha256 = "sha256-SywW/b4DnVeSzzRiHbDaKTjcuwDnkwrK6vFfaQVIZhQ=";
   };
 
   propagatedBuildInputs = [
@@ -25,8 +26,9 @@ buildPythonPackage rec {
     geojson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytz
   ];
 
   disabledTests = [

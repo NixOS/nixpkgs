@@ -40,6 +40,26 @@ file.
     $ nix-build nixos/release.nix -A manual.x86_64-linux
     ```
 
+    This file should *not* usually be written by hand. Instead it is preferred
+    to write documentation using CommonMark and converting it to CommonMark
+    using pandoc. The simplest documentation can be converted using just
+
+    ```ShellSession
+    $ pandoc doc.md -t docbook --top-level-division=chapter -f markdown+smart > doc.xml
+    ```
+
+    More elaborate documentation may wish to add one or more of the pandoc
+    filters used to build the remainder of the manual, for example the GNOME
+    desktop uses
+
+    ```ShellSession
+    $ pandoc gnome.md -t docbook --top-level-division=chapter \
+        --extract-media=media -f markdown+smart \
+        --lua-filter ../../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua \
+        --lua-filter ../../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua \
+        > gnome.xml
+    ```
+
 -  `buildDocsInSandbox` indicates whether the option documentation for the
    module can be built in a derivation sandbox. This option is currently only
    honored for modules shipped by nixpkgs. User modules and modules taken from

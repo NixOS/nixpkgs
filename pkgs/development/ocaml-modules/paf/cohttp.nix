@@ -24,6 +24,8 @@ buildDunePackage {
     src
   ;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     paf
     cohttp-lwt
@@ -33,7 +35,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest-lwt
     fmt
     logs

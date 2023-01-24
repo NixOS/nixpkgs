@@ -12,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sticky";
-  version = "1.12";
+  version = "1.14";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-kAO8Qz4bTn3+YeIXAvPZ1SpKgn+g+rBgi9+TaqL1vOY=";
+    hash = "sha256-7UZbCbzQ1ZrSzxTUdbA+wsH3p27qj/c/cM4GY/kzG6E=";
   };
 
   postPatch = ''
@@ -85,6 +85,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ linsui bobby285271 ];
   };
 }

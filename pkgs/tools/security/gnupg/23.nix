@@ -2,7 +2,9 @@
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
 , adns, bzip2, gnutls, libusb1, openldap
-, tpm2-tss, pcsclite, pinentry, readline, sqlite, zlib
+, pinentry, readline, sqlite, zlib
+, withPcsc ? !enableMinimal, pcsclite
+, withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
 }:
 
 assert guiSupport -> enableMinimal == false;
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     libgcrypt libassuan libksba libiconv npth gettext
   ] ++ lib.optionals (!enableMinimal) ([
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ] ++ lib.optional (!stdenv.isDarwin) tpm2-tss);
+  ] ++ lib.optional withTpm2Tss tpm2-tss);
 
   patches = [
     ./fix-libusb-include-path.patch
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-  '' + lib.optionalString (stdenv.isLinux && (!enableMinimal)) ''
+  '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
@@ -55,7 +57,8 @@ stdenv.mkDerivation rec {
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
   ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ lib.optional ((!stdenv.isDarwin) && (!enableMinimal)) "--with-tss=intel";
+  ++ lib.optional withTpm2Tss "--with-tss=intel"
+  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}

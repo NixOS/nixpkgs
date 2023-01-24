@@ -4,7 +4,7 @@ let
   cfg = config.programs.kclock;
   kclockPkg = pkgs.libsForQt5.kclock;
 in {
-  options.programs.kclock = { enable = mkEnableOption (lib.mdDoc "Enable KClock"); };
+  options.programs.kclock = { enable = mkEnableOption (lib.mdDoc "KClock"); };
 
   config = mkIf cfg.enable {
     services.dbus.packages = [ kclockPkg ];

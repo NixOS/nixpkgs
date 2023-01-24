@@ -10,9 +10,9 @@ stdenv.mkDerivation  rec {
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 
-  nativeBuildInputs = [ autoconf automake  ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [ alsa-lib dssi gtk2 libjack2 ladspaH
-    ladspaPlugins liblo pkg-config ];
+    ladspaPlugins liblo ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,7 +30,7 @@ stdenv.mkDerivation  rec {
       synths) with user interfaces, permitting them to be hosted
       in-process by audio applications.
     '';
-    homepage = "http://dssi.sourceforge.net/download.html#Xsynth-DSSI";
+    homepage = "https://dssi.sourceforge.net/download.html#Xsynth-DSSI";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

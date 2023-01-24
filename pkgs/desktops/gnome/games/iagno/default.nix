@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "Computer version of the game Reversi, more popularly called Othello";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

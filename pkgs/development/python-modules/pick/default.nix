@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pick";
-  version = "2.0.2";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "wong2";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-W7jEVe2HvkZp3hFQpoqT8M7eYxwj2hfsOIhM0WZPvr8=";
+    hash = "sha256-Py+D03bXnVsIwvYwjl0IMeH33ZPJW5TuJ3tU79MMsCw=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to create curses-based interactive selection list in the terminal";
     homepage = "https://github.com/wong2/pick";
+    changelog = "https://github.com/wong2/pick/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

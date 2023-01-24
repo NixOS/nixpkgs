@@ -23,7 +23,7 @@ let
               nixpkgs.config.allowAliases = false;
             })
           testModuleArgs.config.extraBaseModules
-        ] ++ optional config.minimal ../../modules/testing/minimal-kernel.nix;
+        ];
     };
 
 
@@ -44,7 +44,7 @@ in
       description = mdDoc ''
         An attribute set of NixOS configuration modules.
 
-        The configurations are augmented by the [`defaults`](#opt-defaults) option.
+        The configurations are augmented by the [`defaults`](#test-opt-defaults) option.
 
         They are assigned network addresses according to the `nixos/lib/testing/network.nix` module.
 
@@ -54,7 +54,7 @@ in
 
     defaults = mkOption {
       description = mdDoc ''
-        NixOS configuration that is applied to all [{option}`nodes`](#opt-nodes).
+        NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes).
       '';
       type = types.deferredModule;
       default = { };
@@ -62,7 +62,7 @@ in
 
     extraBaseModules = mkOption {
       description = mdDoc ''
-        NixOS configuration that, like [{option}`defaults`](#opt-defaults), is applied to all [{option}`nodes`](#opt-nodes) and can not be undone with [`specialisation.<name>.inheritParentConfig`](https://search.nixos.org/options?show=specialisation.%3Cname%3E.inheritParentConfig&from=0&size=50&sort=relevance&type=packages&query=specialisation).
+        NixOS configuration that, like [{option}`defaults`](#test-opt-defaults), is applied to all [{option}`nodes`](#test-opt-nodes) and can not be undone with [`specialisation.<name>.inheritParentConfig`](https://search.nixos.org/options?show=specialisation.%3Cname%3E.inheritParentConfig&from=0&size=50&sort=relevance&type=packages&query=specialisation).
       '';
       type = types.deferredModule;
       default = { };
@@ -75,14 +75,6 @@ in
         An attribute set of arbitrary values that will be made available as module arguments during the resolution of module `imports`.
 
         Note that it is not possible to override these from within the NixOS configurations. If you argument is not relevant to `imports`, consider setting {option}`defaults._module.args.<name>` instead.
-      '';
-    };
-
-    minimal = mkOption {
-      type = types.bool;
-      default = false;
-      description = mdDoc ''
-        Enable to configure all [{option}`nodes`](#opt-nodes) to run with a minimal kernel.
       '';
     };
 
@@ -101,7 +93,7 @@ in
     nodesCompat =
       mapAttrs
         (name: config: config // {
-          config = lib.warn
+          config = lib.warnIf (lib.isInOldestRelease 2211)
             "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
             config;
         })

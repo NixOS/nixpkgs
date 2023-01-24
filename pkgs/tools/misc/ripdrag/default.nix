@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripdrag";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-bXyJcSJfKHkcwTayEbX9sZZEBeP9qoH36QqBIDnmKQM=";
+    sha256 = "sha256-/TF9dWZQVEVM3lHp4ubxYkDW+ZDL9puT6mUT6Q3hUsw=";
   };
 
-  cargoSha256 = "sha256-PqoIJ0mbpaE4UX+kz3pFiqmTS1Vp+jF2OT5+3K2A0MQ=";
+  cargoSha256 = "sha256-mIsT93XRU0mR5s5w3Sng2DTW2LyO9HT1w/1932vptIE=";
 
   nativeBuildInputs = [ pkg-config ];
 

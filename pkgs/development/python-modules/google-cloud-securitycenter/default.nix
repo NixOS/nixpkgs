@@ -1,37 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc-google-iam-v1
 , google-api-core
-, libcst
-, mock
+, grpc-google-iam-v1
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.16.0";
+  version = "1.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LuC8zMJP4SF/pOUSmA0TV/U/12bo9Wg+UYxdpHaGFfM=";
+    hash = "sha256-gtzSB70x7oN6EiTP1U5P1dV4a4eWZNGtRFInYz7AyCA=";
   };
 
   propagatedBuildInputs = [
     grpc-google-iam-v1
     google-api-core
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
@@ -46,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Security Command Center API API client library";
     homepage = "https://github.com/googleapis/python-securitycenter";
+    changelog = "https://github.com/googleapis/python-securitycenter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

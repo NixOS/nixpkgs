@@ -14,7 +14,7 @@
 , pytest-order
 , pytest-cid
 , mock
-, ipfs
+, kubo
 , httpx
 , httpcore
 }:
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     pytest-dependency
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytest-order
     pytest-cid
     mock
-    ipfs
+    kubo
     httpcore
     httpx
   ];

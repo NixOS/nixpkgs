@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "datefmt";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchurl {
-    url = "http://cdn.jb55.com/tarballs/datefmt/datefmt-${version}.tar.gz";
-    sha256 = "5d5e765380afe39eb39d48f752aed748b57dfd843a4947b2a6d18ab9b5e68092";
+    url = "https://cdn.jb55.com/tarballs/datefmt/datefmt-${version}.tar.gz";
+    sha256 = "sha256-HgW/vOGVEmAbm8k3oIwIa+cogq7qmX7MfTmHqxv9lhY=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

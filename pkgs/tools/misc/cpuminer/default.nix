@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
 
-  buildInputs = [ curl jansson autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ curl jansson ];
 
   configureFlags = [ "CFLAGS=-O3" ];
 
@@ -29,5 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

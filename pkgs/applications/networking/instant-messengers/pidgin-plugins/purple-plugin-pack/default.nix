@@ -1,19 +1,41 @@
-{ lib, stdenv, fetchurl, pidgin, intltool, python2 } :
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pidgin
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-plugin-pack";
-  version = "2.7.0";
+  version = "2.8.0";
+
   src = fetchurl {
-    url = "https://bitbucket.org/rekkanoryo/purple-plugin-pack/downloads/purple-plugin-pack-${version}.tar.bz2";
-    sha256 = "0g5hmy7fwgjq59j52h9yps28jsjjrfkd4r18gyx6hfd3g3kzbg1b";
+    url = "mirror://sourceforge/pidgin/purple-plugin-pack-2.8.0.tar.xz";
+    hash = "sha256-gszemnJRp1t+A6P5qSkBTY4AjBtvRuWGOPX0dto+JC0=";
   };
 
-  buildInputs = [ pidgin intltool python2 ];
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "PURPLE.get_pkgconfig_variable('plugindir')" "'$out/lib/purple-2'" \
+      --replace "PURPLE.get_pkgconfig_variable('datadir')" "'$out/share'" \
+      --replace "PIDGIN.get_pkgconfig_variable('plugindir')" "'$out/lib/pidgin'" \
+      --replace "PIDGIN.get_pkgconfig_variable('datadir')" "'$out/share'"
+  '';
+
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
+  buildInputs = [
+    pidgin
+  ];
 
   meta = with lib; {
-    homepage = "https://bitbucket.org/rekkanoryo/purple-plugin-pack";
-    description = "Plugin pack for Pidgin 2.x";
-    license = licenses.gpl2;
+    homepage = "https://keep.imfreedom.org/pidgin/purple-plugin-pack";
+    description = "Collection of plugins for purple-based clients such as Pidgin";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bdimcheff ];
   };

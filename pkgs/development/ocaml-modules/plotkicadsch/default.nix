@@ -17,6 +17,7 @@
 
 buildDunePackage rec {
   pname = "plotkicadsch";
+  duneVersion = "3";
 
   inherit (kicadsch) src version;
 

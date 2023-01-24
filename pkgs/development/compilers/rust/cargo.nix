@@ -2,6 +2,7 @@
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , CoreFoundation, Security
+, auditable ? false # TODO: change to true when this is the default
 }:
 
 rustPlatform.buildRustPackage {
@@ -11,6 +12,8 @@ rustPlatform.buildRustPackage {
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/cargo";
+
+  inherit auditable;
 
   passthru = {
     rustc = rustc;
@@ -23,6 +26,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config cmake installShellFiles makeWrapper
     (lib.getDev pkgsHostHost.curl)
+    zlib
   ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
@@ -75,7 +79,5 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
-    # weird segfault in a build script
-    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }

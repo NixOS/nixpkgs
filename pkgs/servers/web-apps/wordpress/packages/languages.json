@@ -1,0 +1,14 @@
+{
+  "de_DE": {
+    "path": "de_DE",
+    "rev": "1036537",
+    "sha256": "001jh83kv86av8yvkdwfcvpwik1yz8qxkyybmqkgx13hpaxhbf80",
+    "version": "6.0"
+  },
+  "fr_FR": {
+    "path": "fr_FR",
+    "rev": "1004765",
+    "sha256": "0g8h21hi4p0vl6pa57656lm508ycdyhpadq1liwk2d4x183avygh",
+    "version": "6.0"
+  }
+}

@@ -44,14 +44,14 @@ $ ./result/bin/nixos-test-driver --keep-vm-state
     <para>
       The <literal>.driverInteractive</literal> attribute combines the
       regular test configuration with definitions from the
-      <link linkend="opt-interactive"><literal>interactive</literal>
+      <link linkend="test-opt-interactive"><literal>interactive</literal>
       submodule</link>. This gives you a more usable, graphical, but
       slightly different configuration.
     </para>
     <para>
       You can add your own interactive-only test configuration by adding
       extra configuration to the
-      <link linkend="opt-interactive"><literal>interactive</literal>
+      <link linkend="test-opt-interactive"><literal>interactive</literal>
       submodule</link>.
     </para>
     <para>

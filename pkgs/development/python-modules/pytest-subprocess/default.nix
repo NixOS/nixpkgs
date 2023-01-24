@@ -13,22 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.4.1";
+  version = "1.4.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
-    rev = version;
-    hash = "sha256-xNkOXBCQ4AH/JVmxFzI3VSouA6jkCbUom7AdckfjGiE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8Of3/RltijfF5MXtVazGzIqpmRIhreT26kLNjzXLF1k=";
   };
 
   buildInputs = [
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     docutils
     pygments

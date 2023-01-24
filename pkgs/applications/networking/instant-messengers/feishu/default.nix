@@ -61,13 +61,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.14.14";
+  version = "5.18.11";
   pname = "feishu";
-  packageHash = "2844ab12b34f"; # A hash value used in the download url
+  packageHash = "9d89b152d581"; # A hash value used in the download url
 
   src = fetchurl {
     url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
-    sha256 = "c0ca999edc10d8ada08c46b33b15d7db0ced264248abd3ebfdb895d8457e1bec";
+    hash = "sha256-93LEybYePIEbmE8mjRL95haMuBuY0xH6/8fhwF7/ctM=";
   };
 
   nativeBuildInputs = [
@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     cups
     libXdamage
     libdrm
+    libgcrypt
     libxshmfence
     mesa
     nspr
@@ -160,7 +161,7 @@ stdenv.mkDerivation rec {
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 

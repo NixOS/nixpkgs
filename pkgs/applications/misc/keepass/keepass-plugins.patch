@@ -9,9 +9,9 @@ Subject: [PATCH] loadplugin
 
 diff --git a/KeePass/Forms/MainForm.cs b/KeePass/Forms/MainForm.cs
 index 347eaf5..b92e1e2 100644
---- a/KeePass/Forms/MainForm.cs
-+++ b/KeePass/Forms/MainForm.cs
-@@ -440,7 +440,$OUTPUT_LC$ @@ namespace KeePass.Forms
+--- a/KeePass/Forms/MainForm_Functions.cs
++++ b/KeePass/Forms/MainForm_Functions.cs
+@@ -312,7 +312,$OUTPUT_LC$ @@ namespace KeePass.Forms
  				ToolStripItemCollection tsicT = m_ctxTray.Items;
  				ToolStripItem tsiPrevT = m_ctxTrayOptions;
  

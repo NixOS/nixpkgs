@@ -42,7 +42,7 @@ $ systemd-cgls
     process would get 1/1001 of the cgroup’s CPU time.) You can limit a
     service’s CPU share in <literal>configuration.nix</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 systemd.services.httpd.serviceConfig.CPUShares = 512;
 </programlisting>
   <para>
@@ -57,7 +57,7 @@ systemd.services.httpd.serviceConfig.CPUShares = 512;
     <literal>configuration.nix</literal>; for instance, to limit
     <literal>httpd.service</literal> to 512 MiB of RAM (excluding swap):
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 systemd.services.httpd.serviceConfig.MemoryLimit = &quot;512M&quot;;
 </programlisting>
   <para>

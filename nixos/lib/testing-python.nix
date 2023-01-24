@@ -1,3 +1,4 @@
+args@
 { system
 , pkgs ? import ../.. { inherit system config; }
   # Use a minimal kernel?
@@ -5,17 +6,21 @@
   # Ignored
 , config ? { }
   # !!! See comment about args in lib/modules.nix
-, specialArgs ? { }
+, specialArgs ? throw "legacy - do not use, see error below"
   # Modules to add to each VM
 , extraConfigurations ? [ ]
 }:
-
-with pkgs;
-
 let
   nixos-lib = import ./default.nix { inherit (pkgs) lib; };
 in
 
+pkgs.lib.throwIf (args?specialArgs) ''
+  testing-python.nix: `specialArgs` is not supported anymore. If you're looking
+  for the public interface to the NixOS test framework, use `runTest`, and
+  `node.specialArgs`.
+  See https://nixos.org/manual/nixos/unstable/index.html#sec-calling-nixos-tests
+  and https://nixos.org/manual/nixos/unstable/index.html#test-opt-node.specialArgs
+''
 rec {
 
   inherit pkgs;
@@ -29,7 +34,9 @@ rec {
     };
   };
 
-  # Make a full-blown test
+  # Make a full-blown test (legacy)
+  # For an official public interface to the tests, see
+  # https://nixos.org/manual/nixos/unstable/index.html#sec-calling-nixos-tests
   makeTest =
     { machine ? null
     , nodes ? {}
@@ -48,7 +55,8 @@ rec {
           else builtins.unsafeGetAttrPos "testScript" t)
     , extraPythonPackages ? (_ : [])
     , interactive ? {}
-    } @ t:
+    } @ t: let
+    testConfig =
       (evalTest {
         imports = [
           { _file = "makeTest parameters"; config = t; }
@@ -60,6 +68,9 @@ rec {
           }
         ];
       }).config;
+    in
+      testConfig.test   # For nix-build
+        // testConfig;  # For all-tests.nix
 
   simpleTest = as: (makeTest as).test;
 

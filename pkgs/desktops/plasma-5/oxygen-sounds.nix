@@ -1,6 +1,5 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
+{ mkDerivation
+, extra-cmake-modules
 }:
 
 mkDerivation {

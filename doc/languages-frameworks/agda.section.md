@@ -52,7 +52,7 @@ agda.withPackages (p: [
       repo = "agda-stdlib";
       owner = "agda";
       rev = "v1.5";
-      sha256 = "16fcb7ssj6kj687a042afaa2gq48rc8abihpm14k684ncihb2k4w";
+      hash = "sha256-nEyxYGSWIDNJqBfGpRDLiOAnlHJKEKAOMnIaqfVZzJk=";
     };
   }))
 ])
@@ -83,7 +83,7 @@ agda.withPackages (p: [
       owner = "owner";
       version = "...";
       rev = "...";
-      sha256 = "...";
+      hash = "...";
     };
   })
 ])

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "dnslib";
-  version = "0.9.22";
+  version = "0.9.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EK/JT2pfHLiziCTgQuJeVBTh+q7f05s0iujZdyKSGoY=";
+    hash = "sha256-MQGW0+OM4gUbYe670vHQj8yTT6M2DyIDGGTRbv6Lync=";
   };
 
   checkPhase = ''

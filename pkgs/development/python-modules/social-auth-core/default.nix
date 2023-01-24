@@ -53,12 +53,10 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     httpretty
-  ] ++ passthru.optional-dependencies.openidconnect
-  ++ passthru.optional-dependencies.saml
-  ++ passthru.optional-dependencies.azuread;
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   # Disable checking the code coverage
   prePatch = ''

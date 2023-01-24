@@ -52,8 +52,8 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     #"-DSRB2_ASSET_DIRECTORY=/build/source/assets"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
-    "-DSDL2_MIXER_INCLUDE_DIR=${SDL2_mixer}/include/SDL2"
-    "-DSDL2_INCLUDE_DIR=${SDL2.dev}/include/SDL2"
+    "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
+    "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
   ];
 
   patches = [

@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.29";
+  version = "2.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-W2MOK6aIa1whkj13OeuibNjL/2LWt7TO8h4JeoUrZnQ=";
+    sha256 = "sha256-Aq038SG8vuxCA6mYOP5I6VWCUty5vgdbpAa9J+bIfZM=";
   };
 
   outputs = [ "out" "man" "doc" ]
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
   # which doesn't cross-compile.

@@ -80,14 +80,23 @@ if package_filename not in parser.sources:
     exit(1)
 
 package_file = open(package_filename, "wb")
-# Sometimes the href is a relative path
-if urlparse(parser.sources[package_filename]).netloc == "":
+# Sometimes the href is a relative or absolute path within the index's domain.
+indicated_url = urlparse(parser.sources[package_filename])
+if indicated_url.netloc == "":
     parsed_url = urlparse(index_url)
+
+    if indicated_url.path.startswith("/"):
+        # An absolute path within the index's domain.
+        path = parser.sources[package_filename]
+    else:
+        # A relative path.
+        path = parsed_url.path + "/" + parser.sources[package_filename]
+
     package_url = urlunparse(
         (
             parsed_url.scheme,
             parsed_url.netloc,
-            parsed_url.path + "/" + parser.sources[package_filename],
+            path,
             None,
             None,
             None,

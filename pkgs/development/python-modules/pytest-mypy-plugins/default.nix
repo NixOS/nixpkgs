@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "1.10.0";
+  version = "1.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-QvUh/vIvzCfEYNC0Y388qavGvbTg0yuT4j0SttUpUWs=";
+    hash = "sha256-7Qow315zuZB6BNIIm6QR9ZMFH6E/VSp2vRBpONlqYhM=";
   };
 
   buildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     regex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mypy
     pytestCheckHook
   ];
@@ -50,9 +50,18 @@ buildPythonPackage rec {
     "pytest_mypy_plugins"
   ];
 
+  disabledTests = [
+    # ...TypecheckAssertionError: Invalid output:
+    "with_out"
+    "add_mypypath_env_var_to_package_searc"
+    "error_case"
+    "skip_if_false"
+  ];
+
   meta = with lib; {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";
     homepage = "https://github.com/TypedDjango/pytest-mypy-plugins";
+    changelog = "https://github.com/typeddjango/pytest-mypy-plugins/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

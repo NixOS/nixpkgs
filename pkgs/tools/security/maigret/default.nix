@@ -1,19 +1,21 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-0Ni4rXVu3ZQyHBvD3IpV0i849CnumLj+n6/g4sMhHEs=";
+    hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
 
+  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
     aiohttp
@@ -24,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
     certifi
     chardet
+    cloudscraper
     colorama
     future
     html5lib
@@ -54,20 +57,14 @@ python3.pkgs.buildPythonApplication rec {
     yarl
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver
     pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Remove all version pinning
-    sed -i -e "s/==[0-9.]*//" requirements.txt
-
-    # We are not build for Python < 3.7
-    substituteInPlace requirements.txt \
-      --replace "future-annotations" ""
-  '';
+  pythonRelaxDeps = true;
+  pythonRemoveDeps = [ "future-annotations" ];
 
   pytestFlagsArray = [
     # DeprecationWarning: There is no current event loop
@@ -82,6 +79,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_pdf_report"
     "test_self_check_db_negative_enabled"
     "test_self_check_db_positive_enable"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # AsyncioProgressbarExecutor is slower on darwin than it should be,
+    # Upstream issue: https://github.com/soxoj/maigret/issues/679
+    "test_asyncio_progressbar_executor"
   ];
 
   pythonImportsCheck = [

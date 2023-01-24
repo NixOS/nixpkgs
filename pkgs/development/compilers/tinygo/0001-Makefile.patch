@@ -1,11 +1,11 @@
-From fcae473c4b6ac2120ec75c321d6db850d8ecd6a9 Mon Sep 17 00:00:00 2001
+From ef066db7f5cb7f551f88fb218c82fc947e464425 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Mustafa=20=C3=87al=C4=B1=C5=9Fkan?= <muscaln@protonmail.com>
-Date: Sat, 30 Apr 2022 16:37:44 +0300
+Date: Sun, 3 Jul 2022 14:30:51 +0300
 Subject: [PATCH 1/3] Makefile
 
 
 diff --git a/Makefile b/Makefile
-index dc388c21..7efc9901 100644
+index 60a5a574..904d2db5 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -14,11 +14,6 @@ LLVM_VERSIONS = 14 13 12 11
@@ -20,7 +20,7 @@ index dc388c21..7efc9901 100644
  # First search for a custom built copy, then move on to explicitly version-tagged binaries, then just see if the tool is in path with its normal name.
  findLLVMTool = $(call detect,$(1),$(abspath llvm-build/bin/$(1)) $(foreach ver,$(LLVM_VERSIONS),$(call toolSearchPathsVersion,$(1),$(ver))) $(1))
  CLANG ?= $(call findLLVMTool,clang)
-@@ -644,9 +639,8 @@ endif
+@@ -707,9 +702,8 @@ endif
  wasmtest:
  	$(GO) test ./tests/wasm
  
@@ -31,8 +31,13 @@ index dc388c21..7efc9901 100644
  	@mkdir -p build/release/tinygo/lib/CMSIS/CMSIS
  	@mkdir -p build/release/tinygo/lib/macos-minimal-sdk
  	@mkdir -p build/release/tinygo/lib/mingw-w64/mingw-w64-crt/lib-common
-@@ -663,10 +657,6 @@ build/release: tinygo gen-device wasi-libc $(if $(filter 1,$(USE_SYSTEM_BINARYEN
- 	@mkdir -p build/release/tinygo/pkg/thumbv7em-unknown-unknown-eabi-cortex-m4
+@@ -721,15 +715,8 @@ build/release: tinygo gen-device wasi-libc $(if $(filter 1,$(USE_SYSTEM_BINARYEN
+ 	@mkdir -p build/release/tinygo/lib/picolibc/newlib/libc
+ 	@mkdir -p build/release/tinygo/lib/picolibc/newlib/libm
+ 	@mkdir -p build/release/tinygo/lib/wasi-libc
+-	@mkdir -p build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0
+-	@mkdir -p build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0plus
+-	@mkdir -p build/release/tinygo/pkg/thumbv7em-unknown-unknown-eabi-cortex-m4
  	@echo copying source files
  	@cp -p  build/tinygo$(EXE)           build/release/tinygo/bin
 -ifneq ($(USE_SYSTEM_BINARYEN),1)
@@ -42,7 +47,7 @@ index dc388c21..7efc9901 100644
  	@cp -rp lib/CMSIS/CMSIS/Include      build/release/tinygo/lib/CMSIS/CMSIS
  	@cp -rp lib/CMSIS/README.md          build/release/tinygo/lib/CMSIS
  	@cp -rp lib/macos-minimal-sdk/*      build/release/tinygo/lib/macos-minimal-sdk
-@@ -705,8 +695,7 @@ endif
+@@ -768,16 +755,9 @@ endif
  	@cp -rp lib/picolibc/newlib/libm/common      build/release/tinygo/lib/picolibc/newlib/libm
  	@cp -rp lib/picolibc-stdio.c         build/release/tinygo/lib
  	@cp -rp lib/wasi-libc/sysroot        build/release/tinygo/lib/wasi-libc/sysroot
@@ -51,7 +56,15 @@ index dc388c21..7efc9901 100644
 +	@cp -rp lib/compiler-rt-builtins     build/release/tinygo/lib/compiler-rt-builtins
  	@cp -rp src                          build/release/tinygo/src
  	@cp -rp targets                      build/release/tinygo/targets
- 	./build/tinygo build-library -target=cortex-m0     -o build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0/compiler-rt     compiler-rt
+-	./build/release/tinygo/bin/tinygo build-library -target=cortex-m0     -o build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0/compiler-rt     compiler-rt
+-	./build/release/tinygo/bin/tinygo build-library -target=cortex-m0plus -o build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0plus/compiler-rt compiler-rt
+-	./build/release/tinygo/bin/tinygo build-library -target=cortex-m4     -o build/release/tinygo/pkg/thumbv7em-unknown-unknown-eabi-cortex-m4/compiler-rt    compiler-rt
+-	./build/release/tinygo/bin/tinygo build-library -target=cortex-m0     -o build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0/picolibc     picolibc
+-	./build/release/tinygo/bin/tinygo build-library -target=cortex-m0plus -o build/release/tinygo/pkg/thumbv6m-unknown-unknown-eabi-cortex-m0plus/picolibc picolibc
+-	./build/release/tinygo/bin/tinygo build-library -target=cortex-m4     -o build/release/tinygo/pkg/thumbv7em-unknown-unknown-eabi-cortex-m4/picolibc    picolibc
+ 
+ release:
+ 	tar -czf build/release.tar.gz -C build/release tinygo
 -- 
-2.36.0
+2.37.2
 

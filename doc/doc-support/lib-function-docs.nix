@@ -1,27 +1,36 @@
-# Generates the documentation for library functons via nixdoc. To add
-# another library function file to this list, the include list in the
-# file `doc/functions/library.xml` must also be updated.
+# Generates the documentation for library functions via nixdoc.
 
-{ pkgs ? import ./.. {}, locationsXml }:
+{ pkgs, locationsXml, libsets }:
 
 with pkgs; stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";
-  src = ./../../lib;
+  src = ../../lib;
 
   buildInputs = [ nixdoc ];
   installPhase = ''
     function docgen {
-      nixdoc -c "$1" -d "$2" -f "../lib/$1.nix"  > "$out/$1.xml"
+      # TODO: wrap lib.$1 in <literal>, make nixdoc not escape it
+      if [[ -e "../lib/$1.nix" ]]; then
+        nixdoc -c "$1" -d "lib.$1: $2" -f "$1.nix" > "$out/$1.xml"
+      else
+        nixdoc -c "$1" -d "lib.$1: $2" -f "$1/default.nix" > "$out/$1.xml"
+      fi
+      echo "<xi:include href='$1.xml' />" >> "$out/index.xml"
     }
 
-    mkdir -p $out
-    ln -s ${locationsXml} $out/locations.xml
+    mkdir -p "$out"
 
-    docgen strings 'String manipulation functions'
-    docgen trivial 'Miscellaneous functions'
-    docgen lists 'List manipulation functions'
-    docgen debug 'Debugging functions'
-    docgen options 'NixOS / nixpkgs option handling'
-    docgen sources 'Source filtering functions'
+    cat > "$out/index.xml" << 'EOF'
+    <?xml version="1.0" encoding="utf-8"?>
+    <root xmlns:xi="http://www.w3.org/2001/XInclude">
+    EOF
+
+    ${lib.concatMapStrings ({ name, description }: ''
+      docgen ${name} ${lib.escapeShellArg description}
+    '') libsets}
+
+    echo "</root>" >> "$out/index.xml"
+
+    ln -s ${locationsXml} $out/locations.xml
   '';
 }

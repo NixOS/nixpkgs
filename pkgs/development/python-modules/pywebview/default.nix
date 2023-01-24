@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.6.3";
+  version = "3.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
-    rev = version;
-    hash = "sha256-qOLK4MHdpmcCazCNfojncD8XH7OJB2H/pIW5XAJAlDo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5e05XkyxvOGLaEwKljYFppHQ99BxDQ7wPkViRlRo1VI=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pygobject3
     pytest
     qtpy

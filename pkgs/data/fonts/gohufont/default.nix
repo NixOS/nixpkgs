@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub
-, mkfontscale, bdf2psf, bdftopcf
-, fonttosfnt, libfaketime
+, xorg, bdf2psf, bdftopcf
+, libfaketime
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ mkfontscale bdf2psf bdftopcf
-      fonttosfnt libfaketime
+    [ xorg.mkfontscale bdf2psf bdftopcf
+      xorg.fonttosfnt libfaketime
     ];
 
   buildPhase = ''

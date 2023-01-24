@@ -2,6 +2,7 @@
 , lib
 , fetchgit
 , autoreconfHook
+, buildPackages
 , optimize ? false # impure hardware optimizations
 }:
 stdenv.mkDerivation rec {
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     rev = "gf2x-${version}";
     sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     autoreconfHook

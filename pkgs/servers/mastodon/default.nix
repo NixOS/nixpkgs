@@ -16,12 +16,7 @@ stdenv.mkDerivation rec {
   # Putting the callPackage up in the arguments list also does not work.
   src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-2NSibx026ENAqphGGhNoLwUldWTEPbDBrYu3hgeRlnM=";
-  };
-
-  mastodon-gems = bundlerEnv {
+  mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
     inherit version;
     ruby = ruby_3_0;
@@ -41,11 +36,16 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  mastodon-modules = stdenv.mkDerivation {
+  mastodonModules = stdenv.mkDerivation {
     pname = "${pname}-modules";
     inherit src version;
 
-    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      sha256 = "sha256-fuU92fydoazSXBHwA+DG//gRgWVYQ1M3m2oNS2iwv4I=";
+    };
+
+    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
       export NODE_OPTIONS=--openssl-legacy-provider
       fixup_yarn_lock ~/yarn.lock
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
       patchShebangs ~/bin
@@ -79,19 +79,19 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodon-gems.wrappedRuby ];
-  buildInputs = [ mastodon-gems nodejs-slim ];
+  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
+  buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''
-    ln -s ${mastodon-modules}/node_modules node_modules
-    ln -s ${mastodon-modules}/public/assets public/assets
-    ln -s ${mastodon-modules}/public/packs public/packs
+    ln -s $mastodonModules/node_modules node_modules
+    ln -s $mastodonModules/public/assets public/assets
+    ln -s $mastodonModules/public/packs public/packs
 
     patchShebangs bin/
-    for b in $(ls ${mastodon-gems}/bin/)
+    for b in $(ls $mastodonGems/bin/)
     do
       if [ ! -f bin/$b ]; then
-        ln -s ${mastodon-gems}/bin/$b bin/$b
+        ln -s $mastodonGems/bin/$b bin/$b
       fi
     done
 
@@ -121,6 +121,6 @@ stdenv.mkDerivation rec {
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ happy-river erictapen izorkin ];
+    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
   };
 }

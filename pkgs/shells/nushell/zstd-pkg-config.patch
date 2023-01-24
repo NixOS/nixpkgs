@@ -1,31 +1,31 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index d4c2ebe3a..bc78478c3 100644
+index 7376ffe6a..a7d3335cc 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2641,6 +2641,7 @@ dependencies = [
-  "wax",
+@@ -2751,6 +2751,7 @@ dependencies = [
   "which",
   "windows",
+  "winreg",
 + "zstd",
  ]
  
  [[package]]
-@@ -5604,4 +5605,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
+@@ -5881,4 +5882,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
  dependencies = [
   "cc",
   "libc",
 + "pkg-config",
  ]
 diff --git a/crates/nu-command/Cargo.toml b/crates/nu-command/Cargo.toml
-index 8a9d29562..374ffa153 100644
+index d293f3e39..a462d67dc 100644
 --- a/crates/nu-command/Cargo.toml
 +++ b/crates/nu-command/Cargo.toml
-@@ -89,6 +89,8 @@ wax = { version =  "0.5.0", features = ["diagnostics"] }
+@@ -93,6 +93,8 @@ wax = { version =  "0.5.0", features = ["diagnostics"] }
  rusqlite = { version = "0.28.0", features = ["bundled"], optional = true }
- sqlparser = { version = "0.16.0", features = ["serde"], optional = true }
+ sqlparser = { version = "0.23.0", features = ["serde"], optional = true }
  
 +zstd = { version = "*", features = [ "pkg-config" ] }
 +
- [target.'cfg(unix)'.dependencies]
- umask = "2.0.0"
- users = "0.11.0"
+ [target.'cfg(windows)'.dependencies]
+ winreg = "0.10.1"
+ 

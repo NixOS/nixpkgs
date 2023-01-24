@@ -4,7 +4,7 @@ buildDunePackage rec {
 
   pname = "gettext-stub";
 
-  inherit (ocaml_gettext) src version useDune2;
+  inherit (ocaml_gettext) src version;
 
   buildInputs = [ dune-configurator ];
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   meta = builtins.removeAttrs ocaml_gettext.meta  [ "mainProgram" ];
 }

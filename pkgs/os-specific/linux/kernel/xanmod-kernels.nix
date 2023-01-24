@@ -3,27 +3,20 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "5.15.60";
-    hash = "sha256-XSOYgrJ/uvPpEG+P3Zy1geFeF/HMZ4LejsKWtTxMUTs=";
+    version = "5.15.89";
+    hash = "sha256-wlb6er8L2EaqgJbmbATBdSxx1BGcJXNcsu+/4UBmYdQ=";
     variant = "lts";
   };
 
-  edgeVariant = {
-    version = "5.19.1";
-    hash = "sha256-Fw+XW2YDAGKEzZ4AO88Y8GcypfOb6AjKp3XOlkT8ZTQ=";
-    variant = "edge";
-  };
-
-  ttVariant = {
-    version = "5.15.54";
-    suffix = "xanmod1-tt";
-    hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
-    variant = "tt";
+  mainVariant = {
+    version = "6.1.7";
+    hash = "sha256-cgUxM40cDl4lzoF4St3ckKAtsle2PRehfSag3VaycrY=";
+    variant = "main";
   };
 
   xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
     inherit version;
-    modDirVersion = "${version}-${suffix}";
+    modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
 
     src = fetchFromGitHub {
       owner = "xanmod";
@@ -34,18 +27,20 @@ let
 
     structuredExtraConfig = with lib.kernel; {
       # AMD P-state driver
-      X86_AMD_PSTATE = yes;
+      X86_AMD_PSTATE = lib.mkOverride 60 yes;
 
       # Google's BBRv2 TCP congestion Control
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
 
+      # Multigenerational LRU framework
+      # This can be removed when the LTS variant reaches version >= 6.1 (since it's on by default then)
+      LRU_GEN = yes;
+      LRU_GEN_ENABLED = yes;
+
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_PIE = yes;
-
-      # Graysky's additional CPU optimizations
-      CC_OPTIMIZE_FOR_PERFORMANCE_O3 = yes;
 
       # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
       FUTEX = yes;
@@ -53,12 +48,11 @@ let
 
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
-    } // lib.optionalAttrs (variant == "tt") {
-      # removed options
-      CFS_BANDWIDTH = lib.mkForce (option no);
-      RT_GROUP_SCHED = lib.mkForce (option no);
-      SCHED_AUTOGROUP = lib.mkForce (option no);
-      SCHED_CORE = lib.mkForce (option no);
+
+      # Preemptive Full Tickless Kernel at 500Hz
+      HZ = freeform "500";
+      HZ_500 = yes;
+      HZ_1000 = no;
     };
 
     extraMeta = {
@@ -71,6 +65,5 @@ let
 in
 {
   lts = xanmodKernelFor ltsVariant;
-  edge = xanmodKernelFor edgeVariant;
-  tt = xanmodKernelFor ttVariant;
+  main = xanmodKernelFor mainVariant;
 }

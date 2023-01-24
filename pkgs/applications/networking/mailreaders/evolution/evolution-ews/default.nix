@@ -1,36 +1,90 @@
-{ lib, stdenv, fetchurl, gnome, cmake, gettext, intltool, pkg-config, evolution-data-server, evolution
-, sqlite, gtk3, webkitgtk, libgdata, libmspack }:
+{ stdenv
+, lib
+, fetchurl
+, gnome
+, cmake
+, gettext
+, intltool
+, pkg-config
+, evolution-data-server
+, evolution
+, gtk3
+, libsoup_3
+, libical
+, json-glib
+, libmspack
+, webkitgtk_4_1
+, substituteAll
+, _experimental-update-script-combinators
+, glib
+, makeHardcodeGsettingsPatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.44.4";
+  version = "3.46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "TxgrBaE6wbezOwj7Bm6DlcqpW6fagIiGqpGxQp1tfbM=";
+    sha256 = "BFnqQFY2OKWllPQt3BzHGRotOCLCEcz/+82LNtMmQCU=";
   };
 
-  nativeBuildInputs = [ cmake gettext intltool pkg-config ];
+  patches = [
+    # evolution-ews contains .so files loaded by evolution-data-server refering
+    # schemas from evolution. evolution-data-server is not wrapped with
+    # evolution's schemas because it would be a circular dependency with
+    # evolution.
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      evo = glib.makeSchemaPath evolution evolution.name;
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    gettext
+    intltool
+    pkg-config
+  ];
 
   buildInputs = [
-    evolution-data-server evolution
-    sqlite libgdata
-    gtk3 webkitgtk
+    evolution-data-server
+    evolution
+    gtk3
+    libsoup_3
+    libical
+    json-glib
     libmspack
+    # For evolution-shell-3.0
+    webkitgtk_4_1
   ];
 
   cmakeFlags = [
-    # Building with libmspack as recommended: https://wiki.gnome.org/Apps/Evolution/Building#Build_evolution-ews
-    "-DWITH_MSPACK=ON"
     # don't try to install into ${evolution}
     "-DFORCE_INSTALL_PREFIX=ON"
   ];
 
-   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "evolution-ews";
-      versionPolicy = "odd-unstable";
+  passthru = {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      inherit src;
+      schemaIdToVariableMapping = {
+        "org.gnome.evolution.mail" = "evo";
+        "org.gnome.evolution.calendar" = "evo";
+      };
     };
+
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "evolution-ews";
+          versionPolicy = "odd-unstable";
+        };
+        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updatePatch
+      ];
   };
 
   meta = with lib; {

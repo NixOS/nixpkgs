@@ -1,18 +1,14 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "6.101";
+  name = "andika-${version}";
 in
-  fetchzip rec {
-    name = "andika-${version}";
+  (fetchzip rec {
+    inherit name;
 
     url = "https://software.sil.org/downloads/r/andika/Andika-${version}.zip";
-
-    postFetch = ''
-      mkdir -p $out/share/{doc,fonts}
-      unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-      unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
-    '';
 
     sha256 = "sha256-J/Ad+fmCMOxLoo+691LE6Bgi/l3ovIfWScwwVWtqACI=";
 
@@ -28,4 +24,10 @@ in
       platforms = platforms.all;
       maintainers = [ maintainers.f--t ];
     };
-  }
+  }).overrideAttrs (_: {
+    postFetch = ''
+      mkdir -p $out/share/{doc,fonts}
+      unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+      unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
+    '';
+  })
