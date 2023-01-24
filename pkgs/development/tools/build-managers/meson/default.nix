@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Oo4DDCM094IIX4FicGLMbUpnce3zHgVf/jdPnmsImrk=";
+    hash = "sha256-Oo4DDCM094IIX4FicGLMbUpnce3zHgVf/jdPnmsImrk=";
   };
 
   patches = [
@@ -84,6 +84,9 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+
+    substituteInPlace "$out/share/bash-completion/completions/meson" \
+      --replace "python3 -c " "${python3.interpreter} -c "
   '';
 
   nativeBuildInputs = [ installShellFiles ];
