@@ -6,6 +6,7 @@
 , pcre2
 , gnome
 , makeWrapper
+, removeReferencesTo
 }:
 let
   vendorHashes = {
@@ -64,14 +65,23 @@ flutter.mkFlutterApp rec {
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
+
+    # Remove unnecessary references to Flutter.
+    remove-references-to -t ${flutter.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
   '';
 
   nativeBuildInputs = [
     makeWrapper
+    removeReferencesTo
   ];
 
   buildInputs = [
     pcre2
+  ];
+
+  disallowedReferences = [
+    flutter
+    flutter.unwrapped
   ];
 
   meta = with lib; {
