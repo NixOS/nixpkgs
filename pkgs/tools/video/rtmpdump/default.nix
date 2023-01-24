@@ -12,7 +12,6 @@
 
 assert (gnutlsSupport || opensslSupport);
 
-with lib;
 stdenv.mkDerivation {
   pname = "rtmpdump";
   version = "unstable-2021-02-19";
@@ -36,20 +35,20 @@ stdenv.mkDerivation {
     "prefix=$(out)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
-    ++ optional gnutlsSupport "CRYPTO=GNUTLS"
-    ++ optional opensslSupport "CRYPTO=OPENSSL"
-    ++ optional stdenv.isDarwin "SYS=darwin"
-    ++ optional stdenv.cc.isClang "CC=clang";
+    ++ lib.optional gnutlsSupport "CRYPTO=GNUTLS"
+    ++ lib.optional opensslSupport "CRYPTO=OPENSSL"
+    ++ lib.optional stdenv.isDarwin "SYS=darwin"
+    ++ lib.optional stdenv.cc.isClang "CC=clang";
 
   propagatedBuildInputs = [ zlib ]
-    ++ optionals gnutlsSupport [ gnutls nettle ]
-    ++ optional opensslSupport openssl;
+    ++ lib.optionals gnutlsSupport [ gnutls nettle ]
+    ++ lib.optional opensslSupport openssl;
 
   outputs = [ "out" "dev" ];
 
   separateDebugInfo = true;
 
-  meta = {
+  meta = with lib; {
     description = "Toolkit for RTMP streams";
     homepage = "https://rtmpdump.mplayerhq.hu/";
     license = licenses.gpl2;

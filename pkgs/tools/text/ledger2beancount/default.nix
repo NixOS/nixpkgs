@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount }:
 
-with lib;
-
 let
   perlDeps = with perlPackages; [
     DateCalc
@@ -44,7 +42,7 @@ in stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ledger to Beancount text-based converter";
     longDescription = ''
       A script to automatically convert Ledger-based textual ledgers to Beancount ones.
