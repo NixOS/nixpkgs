@@ -263,6 +263,10 @@ def convertMD(options: Dict[str, Any]) -> str:
             convertCode(name, option, 'example')
             convertCode(name, option, 'default')
 
+            if typ := option.get('type'):
+                ro = " *(read only)*" if option.get('readOnly', False) else ""
+                option['type'] = md.render(f'*Type:* {md_escape(typ)}{ro}')
+
             if 'relatedPackages' in option:
                 option['relatedPackages'] = md.render(option['relatedPackages'])
         except Exception as e:
@@ -280,6 +284,19 @@ id_translate_table = {
     ord(':'): ord('_'),
     ord('"'): ord('_'),
 }
+
+md_escape_table = {
+    ord('*'): '\\*',
+    ord('<'): '\\<',
+    ord('['): '\\[',
+    ord('`'): '\\`',
+    ord('.'): '\\.',
+    ord('#'): '\\#',
+    ord('&'): '\\&',
+    ord('\\'): '\\\\',
+}
+def md_escape(s: str) -> str:
+    return s.translate(md_escape_table)
 
 def need_env(n):
     if n not in os.environ:
@@ -358,8 +375,7 @@ for name in keys:
     print(f"""<listitem>""")
     print(opt['description'])
     if typ := opt.get('type'):
-        ro = " <emphasis>(read only)</emphasis>" if opt.get('readOnly', False) else ""
-        print(f"""<para><emphasis>Type:</emphasis> {escape(typ)}{ro}</para>""")
+        print(typ)
     if default := opt.get('default'):
         print(default)
     if example := opt.get('example'):
