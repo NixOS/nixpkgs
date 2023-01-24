@@ -19,6 +19,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-SDdIg05+gfLNaQ+glitTf3Z/6K9HBci62mjIu9rIoX0=";
   };
+
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -27,6 +28,12 @@ buildPythonPackage rec {
     attrs
     deprecated
     hepunits
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    tabulate
+    pandas
   ];
 
   pythonImportsCheck = [
@@ -41,16 +48,13 @@ buildPythonPackage rec {
     rm tests/particle/test_performance.py
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    tabulate
-    pandas
-  ];
 
-  meta = {
-    description = "Package to deal with particles, the PDG particle data table, PDGIDs, etc.";
+
+  meta = with lib; {
+    description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }
