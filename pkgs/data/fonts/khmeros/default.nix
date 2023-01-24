@@ -1,20 +1,23 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "khmeros";
   version = "5.0";
-in
-fetchzip {
-  name = "khmeros-${version}";
-  url = "mirror://debian/pool/main/f/fonts-khmeros/fonts-khmeros_${version}.orig.tar.xz";
-  sha256 = "sha256-pS+7RQbGwlBxdCfSVxHmARCAkZrZttwYNlV/CrxqI+w=";
 
-  postFetch = ''
-    unpackDir="$TMPDIR/unpack"
-    mkdir "$unpackDir"
-    cd "$unpackDir"
-    tar xf "$downloadedFile" --strip-components=1
+  src = fetchurl {
+    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    hash = "sha256-gBcM9YHSuhbxvwfQTvywH/5kN921GOyvGtkROcmcBiw=";
+  };
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
     cp *.ttf $out/share/fonts
+
+    runHook postInstall
   '';
 
   meta = with lib; {
