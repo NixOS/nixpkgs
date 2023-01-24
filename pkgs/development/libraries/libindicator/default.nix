@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, file
-, pkg-config
+, pkg-config, glib
 , gtkVersion ? "3", gtk2, gtk3 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config glib ];
 
   buildInputs = [ (if gtkVersion == "2" then gtk2 else gtk3) ];
 
