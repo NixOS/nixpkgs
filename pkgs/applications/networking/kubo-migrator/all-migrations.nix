@@ -15,6 +15,19 @@ let
     inherit (kubo-migrator-unwrapped) src;
     sourceRoot = "source/${pname}";
     vendorSha256 = null;
+    # Fix build on Go 1.17 and later: panic: qtls.ClientHelloInfo doesn't match
+    # See https://github.com/ipfs/fs-repo-migrations/pull/163
+    postPatch = lib.optionalString (lib.elem pname [ "fs-repo-10-to-11" "fs-repo-11-to-12" ]) ''
+      substituteInPlace 'vendor/github.com/marten-seemann/qtls-go1-15/common.go' \
+        --replace \
+          '"container/list"' \
+          '"container/list"
+          "context"' \
+        --replace \
+          'config *Config' \
+          'config *Config
+          ctx context.Context'
+    '';
     doCheck = false;
     meta = kubo-migrator-unwrapped.meta // {
       mainProgram = pname;
