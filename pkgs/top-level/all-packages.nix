@@ -13354,6 +13354,8 @@ with pkgs;
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
 
+  fzf-git-sh = callPackage ../shells/fzf-git-sh {};
+
   ion = callPackage ../shells/ion {
     inherit (darwin) Security;
   };

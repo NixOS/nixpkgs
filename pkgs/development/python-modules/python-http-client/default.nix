@@ -25,6 +25,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # checks date in license file and subsequently fails after new years
+    "test_daterange"
+  ];
+
   pythonImportsCheck = [
     "python_http_client"
   ];
