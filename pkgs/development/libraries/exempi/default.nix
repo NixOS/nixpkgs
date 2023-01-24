@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, expat, zlib, boost, libiconv, darwin }:
+{ lib, stdenv, fetchurl, expat, zlib, boost, libiconv, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "exempi";
@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isLinux && stdenv.is64bit;
   dontDisableStatic = doCheck;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";
-    homepage = "https://libopenraw.freedesktop.org/wiki/Exempi/";
+    homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
   };

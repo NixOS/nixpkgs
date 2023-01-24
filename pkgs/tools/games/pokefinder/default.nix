@@ -26,8 +26,11 @@ stdenv.mkDerivation rec {
     patchShebangs Source/Core/Resources/
   '';
 
-  installPhase = ''
+  installPhase = lib.optionalString (!stdenv.isDarwin) ''
     install -D Source/Forms/PokeFinder $out/bin/PokeFinder
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -R Source/Forms/PokeFinder.app $out/Applications
   '';
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
