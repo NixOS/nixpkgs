@@ -3,6 +3,7 @@
 , lib
 , llvmPackages
 , protobuf
+, rocksdb
 , rustPlatform
 , stdenv
 , writeShellScriptBin
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   PROTOC = "${protobuf}/bin/protoc";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
   # complicated rust environment setup and this is only needed for developer
