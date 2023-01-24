@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-T3vQodb0/3YEjsyHLSI8DBKK75J8hvsaBqyQI7GkT3U=";
   };
 
@@ -42,7 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for accessing the GeoNet NZ Quakes GeoJSON feeds";
-    homepage = "https://github.com/exxamalte/pythonaio-geojson-geonetnz-quakes";
+    homepage = "https://github.com/exxamalte/python-aio-geojson-geonetnz-quakes";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-geonetnz-quakes/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
