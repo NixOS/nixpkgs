@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.0.4";
+  version = "0.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mdE7H17vbKwQS7JloYasap8qAjaacdLuDPvIPxJSUXI=";
+    hash = "sha256-6SwZAAWBnxeeunZwUAVQJBU8904czNVheBlRFg5yrOw=";
   };
 
   postPatch = ''
