@@ -2816,6 +2816,8 @@ self: super: with self; {
 
   drawille = callPackage ../development/python-modules/drawille { };
 
+  drawilleplot = callPackage ../development/python-modules/drawilleplot { };
+
   dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
 
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
