@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://omxil.sourceforge.net/";
     description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }
