@@ -2,13 +2,12 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 
-# Build dependencies
+  # Build dependencies
 , setuptools
 
-# Runtime dependencies
+  # Runtime dependencies
 , appnope
 , backcall
 , decorator
@@ -21,32 +20,21 @@
 , stack-data
 , traitlets
 
-# Test dependencies
+  # Test dependencies
 , pytestCheckHook
 , testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.4.0";
+  version = "8.8.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2db3a10254241d9b447232cec8b424847f338d9d36f9a577a6192c332a46abd";
+    hash = "sha256-878sCFBa0sP07VxGrgMxqFR9Nr9LIaRR6K6AwHkduVs=";
   };
-
-  patches = [
-    (fetchpatch {
-      # The original URL might not be very stable, so let's prefer a copy.
-      urls = [
-        "https://raw.githubusercontent.com/bmwiedemann/openSUSE/9b35e4405a44aa737dda623a7dabe5384172744c/packages/p/python-ipython/ipython-pr13714-xxlimited.patch"
-        "https://github.com/ipython/ipython/pull/13714.diff"
-      ];
-      sha256 = "XPOcBo3p8mzMnP0iydns9hX8qCQXTmRgRD0TM+FESCI=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
