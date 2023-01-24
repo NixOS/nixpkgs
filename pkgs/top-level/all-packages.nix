@@ -4867,6 +4867,8 @@ with pkgs;
 
   iotools = callPackage ../tools/misc/iotools { };
 
+  ipython = with python3Packages; toPythonApplication ipython;
+
   irpf = callPackage ../applications/finance/irpf { };
 
   jellycli = callPackage ../applications/audio/jellycli { };
