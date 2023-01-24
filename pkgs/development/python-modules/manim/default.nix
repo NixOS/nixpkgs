@@ -1,11 +1,36 @@
 { lib
+, buildPythonPackage
 , fetchFromGitHub
-
+, pythonOlder
 , cairo
+, click
+, click-default-group
+, cloup
+, colour
 , ffmpeg
+, isosurfaces
+, jupyterlab
+, manimpango
+, mapbox-earcut
+, moderngl
+, moderngl-window
+, networkx
+, numpy
+, pillow
+, poetry-core
+, pycairo
+, pydub
+, pygments
+, pytest-xdist
+, pytestCheckHook
+, rich
+, scipy
+, screeninfo
+, skia-pathops
+, srt
 , texlive
-
-, python3
+, tqdm
+, watchdog
 }:
 
 let
@@ -42,21 +67,21 @@ let
     fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
     babel-english gnu-freefont mathastext cbfonts-fd;
   };
-in python3.pkgs.buildPythonApplication rec {
+in buildPythonPackage rec {
   pname = "manim";
   format = "pyproject";
   version = "0.16.0.post0";
-  disabled = python3.pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
-    repo = pname;
+    repo = "manim";
     rev = "refs/tags/v${version}";
     sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.poetry-core
+    poetry-core
   ];
 
   postPatch = ''
@@ -65,18 +90,18 @@ in python3.pkgs.buildPythonApplication rec {
       --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
       --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
       --replace 'click = ">=7.2<=9.0"' 'click = ">=7.2,<=9.0"' # https://github.com/ManimCommunity/manim/pull/2954
+
+    substituteInPlace manim/_config/default.cfg \
+      --replace "ffmpeg_executable = ffmpeg" "ffmpeg_executable = ${ffmpeg}/bin/ffmpeg"
   '';
 
   buildInputs = [ cairo ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     click
     click-default-group
     cloup
     colour
-    grpcio
-    grpcio-tools
-    importlib-metadata
     isosurfaces
     jupyterlab
     manimpango
@@ -89,7 +114,6 @@ in python3.pkgs.buildPythonApplication rec {
     pycairo
     pydub
     pygments
-    pysrt
     rich
     scipy
     screeninfo
@@ -100,18 +124,13 @@ in python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [
-      ffmpeg
-      (texlive.combine manim-tinytex)
-    ])
+    "--prefix PATH : ${lib.makeBinPath [ (texlive.combine manim-tinytex) ]}"
   ];
 
-
   nativeCheckInputs = [
-    python3.pkgs.pytest-xdist
-    python3.pkgs.pytestCheckHook
-
-    ffmpeg
+    pytest-xdist
+    pytestCheckHook
+    ffmpeg # required for ffprobe
     (texlive.combine manim-tinytex)
   ];
 
