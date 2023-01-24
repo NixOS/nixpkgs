@@ -18,12 +18,6 @@ let
         fwupd = cfg.daemonSettings;
       };
     };
-    "fwupd/uefi_capsule.conf" = {
-      source = pkgs.writeText "uefi_capsule.conf" ''
-        [uefi_capsule]
-        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-      '';
-    };
   };
 
   originalEtc =
@@ -147,7 +141,10 @@ in {
   ###### implementation
   config = mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
-    services.fwupd.daemonSettings.DisabledPlugins = cfg.package.defaultDisabledPlugins;
+    services.fwupd.daemonSettings = {
+      DisabledPlugins = cfg.package.defaultDisabledPlugins;
+      EspLocation = config.boot.loader.efi.efiSysMountPoint;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
