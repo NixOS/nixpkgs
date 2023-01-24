@@ -4,13 +4,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "0.32.0";
+  version = "0.35.2";
   format = "wheel";
 
   src = python3.pkgs.fetchPypi {
     pname = "cloudsmith_cli";
     inherit format version;
-    hash = "sha256-ZETVtRlzd9KUOeDyAH0MnnIy1WtGLVBm+bActUM4zBw=";
+    hash = "sha256-+M4CPveS9dltMI291Atm84T/cf4dPOO3wPvPI15E73Y=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
