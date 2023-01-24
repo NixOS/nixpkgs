@@ -474,6 +474,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>limine</literal> bootloader module was
+          introduced. It can be used as an alternative to systemd-boot
+          or GRUB.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>dokuwiki</literal> service now takes
           configuration via the
           <literal>services.dokuwiki.sites.&lt;name&gt;.settings</literal>

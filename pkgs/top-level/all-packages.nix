@@ -37790,6 +37790,8 @@ with pkgs;
 
   refind = callPackage ../tools/bootloaders/refind { };
 
+  limine = callPackage ../tools/bootloaders/limine { };
+
   spectra = callPackage ../development/libraries/spectra { };
 
   spectrojack = callPackage ../applications/audio/spectrojack { };
