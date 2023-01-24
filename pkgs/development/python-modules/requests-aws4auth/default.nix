@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.1.2";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tedder";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/SqU/ojP9I4JXzR0c5tLzxx9UyNaVsON7LG/dbdeiH0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-a3OY0Z5GGr3gYa5m4V6ukqQmjZuqtgZjmLGJxmFOPqU=";
   };
 
   propagatedBuildInputs = [
