@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
-  version = "0.14";
+  version = "0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T3vQodb0/3YEjsyHLSI8DBKK75J8hvsaBqyQI7GkT3U=";
+    hash = "sha256-/EPPEGLtiZBorZMnVg0NqwnHCbCXyZzz4449MzAYQx8=";
   };
 
   propagatedBuildInputs = [
