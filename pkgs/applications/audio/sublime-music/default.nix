@@ -1,5 +1,5 @@
-{ fetchFromGitLab
-, lib
+{ lib
+, fetchFromGitLab
 , python3Packages
 , gobject-introspection
 , gtk3
@@ -9,8 +9,10 @@
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
-, notifySupport ? true, libnotify
-, networkSupport ? true, networkmanager
+, notifySupport ? true
+, libnotify
+, networkSupport ? true
+, networkmanager
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,12 +40,21 @@ python3Packages.buildPythonApplication rec {
     "python-mpv"
   ];
 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--no-cov-on-fail/d" setup.cfg
+    # https://github.com/sublime-music/sublime-music/pull/370
+    # Can be removed in later versions (probably > 0.11.16)
+    substituteInPlace pyproject.toml \
+      --replace 'python-Levenshtein = "^0.12.0"' 'Levenshtein = ">0.12.0"'
+  '';
+
   buildInputs = [
     gtk3
     pango
   ]
-   ++ lib.optional notifySupport libnotify
-   ++ lib.optional networkSupport networkmanager
+  ++ lib.optional notifySupport libnotify
+  ++ lib.optional networkSupport networkmanager
   ;
 
   propagatedBuildInputs = with python3Packages; [
@@ -59,15 +70,10 @@ python3Packages.buildPythonApplication rec {
     requests
     semver
   ]
-   ++ lib.optional chromecastSupport PyChromecast
-   ++ lib.optional keyringSupport keyring
-   ++ lib.optional serverSupport bottle
+  ++ lib.optional chromecastSupport PyChromecast
+  ++ lib.optional keyringSupport keyring
+  ++ lib.optional serverSupport bottle
   ;
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov-on-fail/d" setup.cfg
-  '';
 
   # hook for gobject-introspection doesn't like strictDeps
   # https://github.com/NixOS/nixpkgs/issues/56943
