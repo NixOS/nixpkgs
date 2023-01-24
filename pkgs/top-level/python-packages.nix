@@ -4325,6 +4325,8 @@ self: super: with self; {
 
   hkdf = callPackage ../development/python-modules/hkdf { };
 
+  hledger-utils = callPackage ../development/python-modules/hledger-utils { };
+
   hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
