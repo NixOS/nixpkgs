@@ -21554,6 +21554,8 @@ with pkgs;
 
   libtsm = callPackage ../development/libraries/libtsm { };
 
+  libsv = callPackage ../development/libraries/libsv { };
+
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
   libu2f-host = callPackage ../development/libraries/libu2f-host { };
