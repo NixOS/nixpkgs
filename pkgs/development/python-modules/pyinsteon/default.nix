@@ -12,21 +12,27 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
+, voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.3.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PMjvic+K/m7beavlZvGhJcizSNCzLPZYLm3P2V9EPLs=";
+    hash = "sha256-yxWogOcZV0ZvV0a61YF47nqei+LGwD/Xz4QqNeJQtFA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -35,6 +41,7 @@ buildPythonPackage rec {
     pyserial
     pyserial-asyncio
     pyyaml
+    voluptuous
   ];
 
   nativeCheckInputs = [
