@@ -1,16 +1,16 @@
 { lib, stdenvNoCC, fetchzip }:
 
 let
-  majorVersion = "0";
-  minorVersion = "200";
+  majorVersion = "1";
+  minorVersion = "00";
 in
 stdenvNoCC.mkDerivation (self: {
-  pname = "medio";
+  pname = "nacelle";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
     url = "https://dotcolon.net/download/fonts/${self.pname}_${majorVersion}${minorVersion}.zip";
-    hash = "sha256-S+CcwD4zGVk7cIFD6K4NnpE/0mrJq4RnDJC576rhcLQ=";
+    hash = "sha256-e4QsPiyfWEAYHWdwR3CkGc2UzuA3hZPYYlWtIubY0Oo=";
     stripRoot = false;
   };
 
@@ -24,14 +24,9 @@ stdenvNoCC.mkDerivation (self: {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${self.pname}/";
-    description = "Serif font designed by Sora Sagano";
-    longDescription = ''
-      Medio is a serif font designed by Sora Sagano, based roughly
-      on the proportions of the font Tenderness (from the same designer),
-      but with hairline serifs in the style of a Didone.
-    '';
+    description = "A improved version of the Aileron font";
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars minijackson ];
-    license = licenses.cc0;
+    maintainers = with maintainers; [ minijackson ];
+    license = licenses.ofl;
   };
 })
