@@ -3,6 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, zeep
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,20 @@ buildPythonPackage rec {
     hash = "sha256-vMdj2cSa4j2l0remhtX9He7J2QUTQRYKENGscjomvsA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
+  '';
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  passthru.optional-dependencies = {
+    SOAP = [
+      zeep
+    ];
+  };
 
   pythonImportsCheck = [
     "stdnum"
