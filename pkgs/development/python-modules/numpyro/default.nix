@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
