@@ -34,6 +34,11 @@ buildPythonPackage rec {
 
   patches = [
     ./regex-compat.patch
+    (fetchpatch {
+      name = "prevent-redos-in-spanish-sentence-splitting-regex.patch";
+      url = "https://github.com/scrapinghub/dateparser/pull/1084.patch";
+      hash = "sha256-5dJ4TnrM0Eq9W02GWOTEpRnZzk1QzNQEc7JbEPfDVgY=";
+    })
   ];
 
   postPatch = ''
