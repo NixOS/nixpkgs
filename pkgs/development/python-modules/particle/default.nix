@@ -1,32 +1,44 @@
 { lib
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , fetchPypi
-, setuptools-scm
-, attrs
-, deprecated
+, hatch-vcs
+, hatchling
 , hepunits
-, pytestCheckHook
-, tabulate
 , pandas
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.21.0";
+  version = "0.21.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SDdIg05+gfLNaQ+glitTf3Z/6K9HBci62mjIu9rIoX0=";
+    hash = "sha256-Mw9IVQoXZU8ByU6OI2Wtmo3PJuVz6KzzH7I+pPYkssQ=";
   };
 
+  postPatch = ''
+    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
+    # as dependencies
+    substituteInPlace pyproject.toml \
+      --replace '"--benchmark-disable",' ""
+  '';
+
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
     attrs
-    deprecated
     hepunits
   ];
 
@@ -40,15 +52,9 @@ buildPythonPackage rec {
     "particle"
   ];
 
-  preCheck = ''
-    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
-    # as dependencies
-    substituteInPlace pyproject.toml \
-      --replace '"--benchmark-disable", ' ""
-    rm tests/particle/test_performance.py
-  '';
-
-
+  disabledTestPaths = [
+    "tests/particle/test_performance.py"
+  ];
 
   meta = with lib; {
     description = "Package to deal with particles, the PDG particle data table and others";
