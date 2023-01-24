@@ -709,7 +709,12 @@ in mkLicense lset) ({
 
   ncsa = {
     spdxId = "NCSA";
-    fullName  = "University of Illinois/NCSA Open Source License";
+    fullName = "University of Illinois/NCSA Open Source License";
+  };
+
+  nlpl = {
+    spdxId = "NLPL";
+    fullName = "No Limit Public License";
   };
 
   nposl3 = {
