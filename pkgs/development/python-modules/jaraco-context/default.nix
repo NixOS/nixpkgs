@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "jaraco-context";
-  version = "4.2.0";
+  version = "4.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.context";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J7vL+pvwXcKEkqZn44/U01HmP1CI5kIGsJ1aJevp0I4=";
+    hash = "sha256-YdbkpKv7k62uyhmjKoxeA9uf5BWnRD/rK+z46FJN4xk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
