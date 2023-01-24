@@ -27,6 +27,7 @@
 , mariadb
 , mpfr
 , neovim-unwrapped
+, openldap
 , openssl
 , pcre
 , pkg-config
@@ -327,6 +328,12 @@ with prev;
     };
     knownRockspec = with prev.luaffi; "${pname}-${version}.rockspec";
     disabled = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
+  });
+
+  lualdap = prev.luaLib.overrideLuarocks prev.lualdap (drv: {
+    externalDeps = [
+      { name = "LDAP"; dep = openldap; }
+    ];
   });
 
   luaossl = prev.luaLib.overrideLuarocks prev.luaossl (drv: {
