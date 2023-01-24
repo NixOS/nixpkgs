@@ -8,9 +8,9 @@
 , pkg-config
 , wayland
 , wayland-protocols
-, wlroots
+, wlroots_0_16
 , writeText
-, enable-xwayland ? true, xwayland, libX11
+, enable-xwayland ? true, xorg, libX11
 , conf ? null
 , patches ? [ ]
 }:
@@ -21,13 +21,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "dwl";
-  version = "0.3.1";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VHxBjjnzJNmtJxrm3ywJzvt2bNHGk/Cx8TICw6SaoiQ=";
+    hash = "sha256-OW7K7yMYSzqZWpQ9Vmpy8EgdWvyv3q1uh8A40f6AQF4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,18 +39,18 @@ stdenv.mkDerivation rec {
     pixman
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_16
   ] ++ lib.optionals enable-xwayland [
     libX11
-    xwayland
+    xorg.xcbutilwm
   ];
 
   # Allow users to set their own list of patches
   patches = totalPatches;
 
-  # Last line of config.mk enables XWayland
+  # Last two line of config.mk enables XWayland
   prePatch = lib.optionalString enable-xwayland ''
-    sed -i -e '$ s|^#||' config.mk
+    sed -i -e 13,14s/^#//g config.mk
   '';
 
   # Allow users to set an alternative config.def.h
