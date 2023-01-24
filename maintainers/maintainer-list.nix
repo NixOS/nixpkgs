@@ -16367,4 +16367,10 @@
     github = "franzmondlichtmann";
     githubId = 105480088;
   };
+  ManoftheSea = {
+    name = "Derek LaHousse";
+    email = "dlahouss@mtu.edu";
+    github = "ManoftheSea";
+    githubId = 8259405;
+  };
 }
