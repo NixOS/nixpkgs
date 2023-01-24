@@ -7,7 +7,8 @@
 
 stdenvNoCC.mkDerivation (finalAttrs:
   let
-    inherit (stdenvNoCC.hostPlatform.uname) system;
+    system = lib.toLower stdenvNoCC.targetPlatform.uname.system;
+
     # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
     # needs to be built with a cross-compiler.
     dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix {
