@@ -11241,7 +11241,9 @@ self: super: with self; {
 
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
-  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability {
+    inherit (pkgs.darwin) cctools;
+  };
 
   tensorflow = self.tensorflow-build;
 
