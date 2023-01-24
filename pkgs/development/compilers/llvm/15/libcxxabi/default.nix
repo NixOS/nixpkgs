@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
+  # On AArch64, GCC normally finds __aarch64_swp8_acq_rel and other symbols
+  # inside libgcc.a. But libcxxabi does not want to depend on libgcc.a
+  # (-nodefaultlibs). Embed atomics in libcxxabi.
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && stdenv.isAarch64) [ "-mno-outline-atomics" ];
+
   preInstall = lib.optionalString stdenv.isDarwin ''
     for file in lib/*.dylib; do
       if [ -L "$file" ]; then continue; fi

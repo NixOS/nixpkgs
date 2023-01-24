@@ -251,13 +251,23 @@ let
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+               else (
+                 # libcxxabi >= 15 does not build on gcc10 due to missing __builtin_bit_cast.
+                 if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "11"
+                 then pkgs.gcc11Stdenv
+                 else stdenv
+               );
     };
 
     libcxxabi = let
       stdenv_ = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+               else (
+                 # libcxxabi >= 15 does not build on gcc10 due to missing __builtin_bit_cast.
+                 if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "11"
+                 then pkgs.gcc11Stdenv
+                 else stdenv
+               );
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
         stdenv = stdenv_;

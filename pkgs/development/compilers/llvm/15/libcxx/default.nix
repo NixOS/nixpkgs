@@ -76,6 +76,11 @@ stdenv.mkDerivation rec {
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
+  # On AArch64, GCC normally finds __aarch64_swp8_acq_rel and other symbols
+  # inside libgcc.a. But libcxx does not want to depend on libgcc.a
+  # (-nodefaultlibs). Embed atomics in libcxx.
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && stdenv.isAarch64) [ "-mno-outline-atomics" ];
+
   buildFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
