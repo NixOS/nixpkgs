@@ -1,7 +1,7 @@
 { version, rev, sourceSha256 }:
 
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper
-, pkg-config, libX11, libuuid, xz, vtk, Cocoa }:
+, pkg-config, libX11, libuuid, xz, vtk_8, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "itk";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake xz makeWrapper ];
-  buildInputs = [ libX11 libuuid vtk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ libX11 libuuid vtk_8 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   postInstall = ''
     wrapProgram "$out/bin/h5c++" --prefix PATH ":" "${pkg-config}/bin"

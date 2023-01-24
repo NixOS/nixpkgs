@@ -48,7 +48,7 @@
 , enableGtk3 ? false
 , gtk3
 , enableVtk ? false
-, vtk
+, vtk_8
 , enableFfmpeg ? true
 , ffmpeg
 , enableGStreamer ? true
@@ -253,7 +253,7 @@ stdenv.mkDerivation {
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
-    ++ lib.optional enableVtk vtk
+    ++ lib.optional enableVtk vtk_8
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff

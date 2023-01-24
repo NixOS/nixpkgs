@@ -5,7 +5,7 @@
 , csxcad
 , qcsxcad
 , hdf5
-, vtkWithQt5
+, vtk_8_withQt5
 , qtbase
 , fparser
 , tinyxml
@@ -32,7 +32,7 @@ mkDerivation {
     csxcad
     qcsxcad
     hdf5
-    vtkWithQt5
+    vtk_8_withQt5
     qtbase
     fparser
     tinyxml
