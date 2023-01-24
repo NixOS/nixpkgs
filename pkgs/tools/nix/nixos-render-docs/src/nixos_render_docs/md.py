@@ -56,6 +56,10 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             'myst_role': self.myst_role,
             "container_{.note}_open": self.note_open,
             "container_{.note}_close": self.note_close,
+            "container_{.caution}_open": self.caution_open,
+            "container_{.caution}_close": self.caution_close,
+            "container_{.tip}_open": self.tip_open,
+            "container_{.tip}_close": self.tip_close,
             "container_{.important}_open": self.important_open,
             "container_{.important}_close": self.important_close,
             "container_{.warning}_open": self.warning_open,
@@ -147,11 +151,23 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def note_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                    env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
+    def caution_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def caution_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
     def important_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                        env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
     def important_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tip_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                 env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tip_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
     def warning_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
@@ -198,6 +214,8 @@ class Converter(ABC):
         )
         # TODO maybe fork the plugin and have only a single rule for all?
         self._md.use(container_plugin, name="{.note}")
+        self._md.use(container_plugin, name="{.caution}")
+        self._md.use(container_plugin, name="{.tip}")
         self._md.use(container_plugin, name="{.important}")
         self._md.use(container_plugin, name="{.warning}")
         self._md.use(deflist_plugin)

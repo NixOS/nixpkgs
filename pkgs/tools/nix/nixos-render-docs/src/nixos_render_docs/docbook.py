@@ -124,12 +124,24 @@ class DocBookRenderer(Renderer):
     def note_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                    env: MutableMapping[str, Any]) -> str:
         return "</note></para>"
+    def caution_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        return "<para><caution>"
+    def caution_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        return "</caution></para>"
     def important_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                        env: MutableMapping[str, Any]) -> str:
         return "<para><important>"
     def important_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
         return "</important></para>"
+    def tip_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                 env: MutableMapping[str, Any]) -> str:
+        return "<para><tip>"
+    def tip_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
+        return "</tip></para>"
     def warning_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         return "<para><warning>"
