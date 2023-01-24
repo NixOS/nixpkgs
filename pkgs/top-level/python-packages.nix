@@ -5309,6 +5309,8 @@ self: super: with self; {
 
   larynx-train = callPackage ../development/python-modules/larynx-train { };
 
+  laspy = callPackage ../development/python-modules/laspy { };
+
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
