@@ -2,7 +2,7 @@
 
 fetchzip rec {
   pname = "lxgw-wenkai";
-  version = "1.245.1";
+  version = "1.250";
 
   url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/lxgw-wenkai-v${version}.tar.gz";
 
@@ -15,7 +15,7 @@ fetchzip rec {
     shopt -u extglob dotglob
   '';
 
-  hash = "sha256-4RQ+aqAZPQH3t6v2KvrNWgYT3J3uMuY34XTuvyLEOeI=";
+  hash = "sha256-kzV+1rWVxvQXR/WxlM/AmmBMtyOtWGWtw88DHCBjkuc=";
 
   meta = with lib; {
     homepage = "https://lxgw.github.io/";
