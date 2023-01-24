@@ -56,5 +56,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/polkascan/py-sr25519-bindings";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny stargate01 ];
+    # cargo.lock needs to be updated
+    broken = true;
   };
 }
