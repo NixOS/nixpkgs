@@ -11391,6 +11391,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  roam-research = callPackage ../applications/office/roam-research { };
+
   rosie = callPackage ../tools/text/rosie { };
 
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
