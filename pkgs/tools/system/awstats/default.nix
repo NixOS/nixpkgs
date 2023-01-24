@@ -2,11 +2,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
-  version = "7.8";
+  version = "7.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
-    sha256 = "1f6l0hd01jmz7hpg0py8qixxiq50n8gl37iypayskxmy05z8craa";
+    sha256 = "sha256-YVF47TE9NDFfFaUi2xpdEsqcOV43hbsGKAq/+V2aBUY=";
   };
 
   postPatch = ''
