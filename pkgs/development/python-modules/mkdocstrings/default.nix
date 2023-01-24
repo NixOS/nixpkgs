@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.19.1";
+  version = "0.20.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,9 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-VCWUV+3vXmKbAXImAqY/K4vsA64gHBg83VkxbJua/ao=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-eFHcwbYEIwVWvDJWlmeUvEdqp3NYAF8SgdHJGw6bEMc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"' \
+      --replace 'license = "ISC"' 'license = {text = "ISC"}'
+  '';
 
   nativeBuildInputs = [
     pdm-pep517
@@ -43,12 +49,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace 'license = "ISC"' 'license = {text = "ISC"}'
-  '';
-
   pythonImportsCheck = [
     "mkdocstrings"
   ];
@@ -56,6 +56,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Circular dependencies
     "tests/test_extension.py"
+  ];
+
+  disabledTests = [
+    # Not all requirements are available
+    "test_disabling_plugin"
   ];
 
   meta = with lib; {

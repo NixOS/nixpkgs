@@ -13,7 +13,6 @@
 , kbdcompSupport ? false, ckbcomp
 }:
 
-with lib;
 let
   pcSystems = {
     i686-linux.target = "i386";
@@ -40,8 +39,8 @@ let
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) efiSystemsBuild);
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) pcSystems);
 
   version = "2.06";
 
@@ -330,8 +329,8 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
-    ++ optional doCheck qemu
-    ++ optional zfsSupport zfs;
+    ++ lib.optional doCheck qemu
+    ++ lib.optional zfsSupport zfs;
 
   strictDeps = true;
 
@@ -369,7 +368,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-grub-mount" # dep of os-prober
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # grub doesn't do cross-compilation as usual and tries to use unprefixed
     # tools to target the host. Provide toolchain information explicitly for
     # cross builds.
@@ -380,9 +379,9 @@ stdenv.mkDerivation rec {
     "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
     "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
     "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
-  ] ++ optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
-    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
+  ] ++ lib.optional zfsSupport "--enable-libzfs"
+    ++ lib.optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
+    ++ lib.optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport

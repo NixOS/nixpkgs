@@ -3,8 +3,6 @@
 , fetchFromGitHub
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "snabb";
   version = "2022.10";
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''
