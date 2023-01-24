@@ -1,11 +1,38 @@
 { lib
+, buildPythonPackage
 , fetchFromGitHub
-
+, pythonOlder
 , cairo
+, click
+, click-default-group
+, cloup
+, colour
 , ffmpeg
+, isosurfaces
+, jupyterlab
+, manimpango
+, mapbox-earcut
+, moderngl
+, moderngl-window
+, networkx
+, numpy
+, pillow
+, poetry-core
+, pycairo
+, pydub
+, pygments
+, pytest-xdist
+, pytestCheckHook
+, rich
+, scipy
+, screeninfo
+, skia-pathops
+, srt
+, svgelements
 , texlive
-
-, python3
+, tqdm
+, watchdog
+, xorg
 }:
 
 let
@@ -38,45 +65,40 @@ let
     url xcolor xetex xetexconfig xkeyval xunicode zapfding
 
     # manim-latex
-    standalone everysel preview doublestroke ms setspace rsfs relsize ragged2e
-    fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
-    babel-english gnu-freefont mathastext cbfonts-fd;
+    standalone everysel ctex frcursive preview doublestroke ms setspace rsfs
+    relsize ragged2e fundus-calligra microtype wasysym physics dvisvgm jknapltx
+    wasy cm-super babel-english gnu-freefont mathastext cbfonts-fd;
   };
-in python3.pkgs.buildPythonApplication rec {
+in buildPythonPackage rec {
   pname = "manim";
   format = "pyproject";
-  version = "0.16.0.post0";
-  disabled = python3.pythonOlder "3.8";
+  version = "0.17.2";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
-    repo = pname;
+    repo = "manim";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
+    sha256 = "sha256-ePy/wpJfjBJhbGz2qhSGzcNu80H2uhMmEm8x35RA9j8=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.poetry-core
+    poetry-core
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
-      --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
-      --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
-      --replace 'click = ">=7.2<=9.0"' 'click = ">=7.2,<=9.0"' # https://github.com/ManimCommunity/manim/pull/2954
+      --replace 'cloup = "^0.13.0"' 'cloup = "*"'
   '';
 
   buildInputs = [ cairo ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     click
     click-default-group
     cloup
     colour
-    grpcio
-    grpcio-tools
-    importlib-metadata
     isosurfaces
     jupyterlab
     manimpango
@@ -89,12 +111,12 @@ in python3.pkgs.buildPythonApplication rec {
     pycairo
     pydub
     pygments
-    pysrt
     rich
     scipy
     screeninfo
     skia-pathops
     srt
+    svgelements
     tqdm
     watchdog
   ];
@@ -106,14 +128,23 @@ in python3.pkgs.buildPythonApplication rec {
     ])
   ];
 
-
   nativeCheckInputs = [
-    python3.pkgs.pytest-xdist
-    python3.pkgs.pytestCheckHook
+    pytest-xdist
+    pytestCheckHook
 
     ffmpeg
     (texlive.combine manim-tinytex)
+    xorg.xorgserver
   ];
+
+  # fails like glcontext:
+  # Exception: (standalone) glXChooseFBConfig failed
+  doCheck = false;
+
+  preCheck = ''
+    export DISPLAY=:0
+    Xvfb $DISPLAY -screen 0 1280x1024x24 &
+  '';
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;

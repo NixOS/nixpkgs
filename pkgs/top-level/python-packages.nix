@@ -5679,6 +5679,8 @@ self: super: with self; {
 
   manhole = callPackage ../development/python-modules/manhole { };
 
+  manim = callPackage ../development/python-modules/manim { };
+
   manimpango = callPackage ../development/python-modules/manimpango {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
