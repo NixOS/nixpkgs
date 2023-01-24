@@ -47,6 +47,8 @@ buildDunePackage {
     astring
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = paf.meta // {
     description = "A CoHTTP client with its HTTP/AF implementation";
   };
