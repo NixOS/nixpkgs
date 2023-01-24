@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  # Fix for #40213, probably permanent, because upstream doesn't seem to be
-  # developed anymore. Alternatively, gcc7Stdenv could be used.
-  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds -Wno-error=stringop-overflow=8";
+  NIX_CFLAGS_COMPILE =
+    if stdenv.cc.isGNU then "-Wno-error=array-bounds -Wno-error=stringop-overflow=8"
+    else "-Wno-error=absolute-value -Wno-error=enum-conversion -Wno-error=logical-not-parentheses -Wno-error=non-literal-null-conversion";
 
   meta = with lib; {
     homepage = "https://omxil.sourceforge.net/";
