@@ -25,8 +25,6 @@
 , pkgsBuildBuild
 }:
 
-with lib;
-
 # k3s is a kinda weird derivation. One of the main points of k3s is the
 # simplicity of it being one binary that can perform several tasks.
 # However, when you have a good package manager (like nix), that doesn't
@@ -73,7 +71,7 @@ let
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion = "1.26.0-rc.0-k3s1";
 
-  baseMeta = {
+  baseMeta = with lib; {
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";

@@ -38,7 +38,7 @@
 , xorg
 , zlib
 }:
-with lib;
+
 let
   deps = [
     alsa-lib
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   version = "6.0.3";
 
   src = fetchurl {
-    url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
+    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
     sha256 = "sha256-UDyVPoQM78CKVWXgr08An77QTiFVmRNHwQPGaj1jAIM=";
   };
 
@@ -134,16 +134,16 @@ stdenv.mkDerivation rec {
         --replace "/etc/appgate.conf" "$out/etc/appgate.conf"
 
     wrapProgram $out/opt/appgate/service/createdump \
-        --set LD_LIBRARY_PATH "${makeLibraryPath [ stdenv.cc.cc ]}"
+        --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
 
     wrapProgram $out/opt/appgate/appgate-driver \
-        --prefix PATH : ${makeBinPath [ iproute2 networkmanager dnsmasq ]} \
+        --prefix PATH : ${lib.makeBinPath [ iproute2 networkmanager dnsmasq ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate/service
 
     # make xdg-open overrideable at runtime
     makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
-        --suffix PATH : ${makeBinPath [ xdg-utils ]} \
-        --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --set LD_LIBRARY_PATH $out/opt/appgate:${lib.makeLibraryPath deps}
 
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
