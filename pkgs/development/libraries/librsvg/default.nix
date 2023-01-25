@@ -71,8 +71,6 @@ stdenv.mkDerivation rec {
     bzip2
     pango
     libintl
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Foundation
