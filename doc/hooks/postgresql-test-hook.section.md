@@ -46,6 +46,12 @@ Bash-only variables:
  - `postgresqlEnableTCP`: set to `1` to enable TCP listening. Flaky; not recommended.
  - `postgresqlStartCommands`: defaults to `pg_ctl start`.
 
+## Hooks {#sec-postgresqlTestHook-hooks}
+
+A number of additional hooks are ran in postgresqlTestHook
+
+ - `postgresqlTestSetupPost`: ran after postgresql has been set up.
+
 ## TCP and the Nix sandbox {#sec-postgresqlTestHook-tcp}
 
 `postgresqlEnableTCP` relies on network sandboxing, which is not available on macOS and some custom Nix installations, resulting in flaky tests.
