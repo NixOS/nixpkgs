@@ -16,6 +16,9 @@ from mdit_py_plugins.deflist import deflist_plugin
 from mdit_py_plugins.myst_role import myst_role_plugin
 from xml.sax.saxutils import escape, quoteattr
 
+from .docbook import make_xml_id
+from .md import md_escape
+
 class Renderer(markdown_it.renderer.RendererProtocol):
     __output__ = "docbook"
     def __init__(self, parser=None):
@@ -276,30 +279,6 @@ def convertMD(options: Dict[str, Any]) -> str:
 
     return options
 
-id_translate_table = {
-    ord('*'): ord('_'),
-    ord('<'): ord('_'),
-    ord(' '): ord('_'),
-    ord('>'): ord('_'),
-    ord('['): ord('_'),
-    ord(']'): ord('_'),
-    ord(':'): ord('_'),
-    ord('"'): ord('_'),
-}
-
-md_escape_table = {
-    ord('*'): '\\*',
-    ord('<'): '\\<',
-    ord('['): '\\[',
-    ord('`'): '\\`',
-    ord('.'): '\\.',
-    ord('#'): '\\#',
-    ord('&'): '\\&',
-    ord('\\'): '\\\\',
-}
-def md_escape(s: str) -> str:
-    return s.translate(md_escape_table)
-
 def need_env(n):
     if n not in os.environ:
         raise RuntimeError("required environment variable not set", n)
@@ -369,7 +348,7 @@ def main():
 
     for name in keys:
         opt = options[name]
-        id = OTD_OPTION_ID_PREFIX + name.translate(id_translate_table)
+        id = OTD_OPTION_ID_PREFIX + make_xml_id(name)
         print(f"""<varlistentry>""")
         # NOTE adding extra spaces here introduces spaces into xref link expansions
         print(f"""<term xlink:href={quoteattr("#" + id)} xml:id={quoteattr(id)}>""", end='')
