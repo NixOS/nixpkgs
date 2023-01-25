@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
       license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
       platforms = platforms.unix;
+      mainProgram = "vassal";
   };
 }
