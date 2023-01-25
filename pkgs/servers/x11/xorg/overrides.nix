@@ -183,6 +183,7 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    outputDoc = "devdoc";
     outputs = [ "out" "dev" "devdoc" ];
   });
 
