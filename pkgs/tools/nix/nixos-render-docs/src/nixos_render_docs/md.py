@@ -1,4 +1,4 @@
-from collections.abc import MutableMapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from typing import Any, Optional
 
 import markdown_it
@@ -19,7 +19,8 @@ def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
 
 class Renderer(markdown_it.renderer.RendererProtocol):
-    def __init__(self, parser: Optional[markdown_it.MarkdownIt] = None):
+    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
+        self._manpage_urls = manpage_urls
         self.rules = {
             'text': self.text,
             'paragraph_open': self.paragraph_open,

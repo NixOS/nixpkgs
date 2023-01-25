@@ -1,6 +1,6 @@
-from collections.abc import MutableMapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, Optional
+from typing import Any, cast, Optional
 
 import markdown_it
 from markdown_it.token import Token
@@ -22,15 +22,19 @@ _xml_id_translate_table = {
 def make_xml_id(s: str) -> str:
     return s.translate(_xml_id_translate_table)
 
+class Deflist:
+    has_dd = False
+
 class DocBookRenderer(Renderer):
     __output__ = "docbook"
-    def render(self, tokens: Sequence[Token], options: OptionsDict,
-               env: MutableMapping[str, Any]) -> str:
-        assert '-link-tag-stack' not in env
-        env['-link-tag-stack'] = []
-        assert '-deflist-stack' not in env
-        env['-deflist-stack'] = []
-        return super().render(tokens, options, env)
+    _link_tags: list[str]
+    _deflists: list[Deflist]
+
+    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
+        super().__init__(manpage_urls, parser)
+        self._link_tags = []
+        self._deflists = []
+
     def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         # HACK to support docbook links and xrefs. link handling is only necessary because the docbook
@@ -72,12 +76,13 @@ class DocBookRenderer(Renderer):
         return f"<programlisting>{escape(token.content)}</programlisting>"
     def link_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
-        env['-link-tag-stack'].append(token.tag)
-        (attr, start) = ('linkend', 1) if token.attrs['href'][0] == '#' else ('xlink:href', 0)
-        return f"<{token.tag} {attr}={quoteattr(token.attrs['href'][start:])}>"
+        self._link_tags.append(token.tag)
+        href = cast(str, token.attrs['href'])
+        (attr, start) = ('linkend', 1) if href[0] == '#' else ('xlink:href', 0)
+        return f"<{token.tag} {attr}={quoteattr(href[start:])}>"
     def link_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                    env: MutableMapping[str, Any]) -> str:
-        return f"</{env['-link-tag-stack'].pop()}>"
+        return f"</{self._link_tags.pop()}>"
     def list_item_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                        env: MutableMapping[str, Any]) -> str:
         return "<listitem>"
@@ -137,24 +142,24 @@ class DocBookRenderer(Renderer):
     # we have to reject multiple definitions for the same term for time being.
     def dl_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                 env: MutableMapping[str, Any]) -> str:
-        env['-deflist-stack'].append({})
+        self._deflists.append(Deflist())
         return "<para><variablelist>"
     def dl_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                  env: MutableMapping[str, Any]) -> str:
-        env['-deflist-stack'].pop()
+        self._deflists.pop()
         return "</variablelist></para>"
     def dt_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                 env: MutableMapping[str, Any]) -> str:
-        env['-deflist-stack'][-1]['has-dd'] = False
+        self._deflists[-1].has_dd = False
         return "<varlistentry><term>"
     def dt_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                  env: MutableMapping[str, Any]) -> str:
         return "</term>"
     def dd_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                 env: MutableMapping[str, Any]) -> str:
-        if env['-deflist-stack'][-1]['has-dd']:
+        if self._deflists[-1].has_dd:
             raise Exception("multiple definitions per term not supported")
-        env['-deflist-stack'][-1]['has-dd'] = True
+        self._deflists[-1].has_dd = True
         return "<listitem>"
     def dd_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                  env: MutableMapping[str, Any]) -> str:
@@ -178,8 +183,8 @@ class DocBookRenderer(Renderer):
             title = f"<refentrytitle>{escape(page)}</refentrytitle>"
             vol = f"<manvolnum>{escape(section)}</manvolnum>"
             ref = f"<citerefentry>{title}{vol}</citerefentry>"
-            if man in env['manpage_urls']:
-                return f"<link xlink:href={quoteattr(env['manpage_urls'][man])}>{ref}</link>"
+            if man in self._manpage_urls:
+                return f"<link xlink:href={quoteattr(self._manpage_urls[man])}>{ref}</link>"
             else:
                 return ref
         raise NotImplementedError("md node not supported yet", token)

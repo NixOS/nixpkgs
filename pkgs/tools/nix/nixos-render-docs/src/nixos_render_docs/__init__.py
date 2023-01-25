@@ -21,6 +21,8 @@ from .md import md_escape
 
 class Converter:
     def __init__(self, manpage_urls: Dict[str, str]):
+        self._manpage_urls = frozendict(manpage_urls)
+
         self._md = markdown_it.MarkdownIt(
             "commonmark",
             {
@@ -28,7 +30,7 @@ class Converter:
                 'html': False,       # not useful since we target many formats
                 'typographer': True, # required for smartquotes
             },
-            renderer_cls=DocBookRenderer
+            renderer_cls=lambda parser: DocBookRenderer(self._manpage_urls, parser)
         )
         # TODO maybe fork the plugin and have only a single rule for all?
         self._md.use(container_plugin, name="{.note}")
@@ -38,13 +40,8 @@ class Converter:
         self._md.use(myst_role_plugin)
         self._md.enable(["smartquotes", "replacements"])
 
-        self._manpage_urls = frozendict(manpage_urls)
-
     def render(self, src: str) -> str:
-        env = {
-            'manpage_urls': self._manpage_urls
-        }
-        return self._md.render(src, env)
+        return self._md.render(src)
 
 md = Converter(json.load(open(os.getenv('MANPAGE_URLS'))))
 
