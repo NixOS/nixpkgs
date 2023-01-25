@@ -17341,6 +17341,8 @@ with pkgs;
 
   datree = callPackage ../development/tools/datree { };
 
+  detekt = callPackage ../development/tools/detekt { };
+
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
