@@ -71,7 +71,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional cupsSupport            pkgs.cups
   ++ lib.optional gettextSupport         pkgs.gettext
   ++ lib.optional dbusSupport            pkgs.dbus
-  ++ lib.optional openalSupport          pkgs.openal
   ++ lib.optional cairoSupport           pkgs.cairo
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
@@ -101,7 +100,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
-     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
   ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
      libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext

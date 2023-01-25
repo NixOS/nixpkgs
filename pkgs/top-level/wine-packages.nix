@@ -30,7 +30,6 @@ rec {
   full = base.override {
     gtkSupport = stdenv.isLinux;
     gstreamerSupport = true;
-    openalSupport = true;
     openclSupport = true;
     odbcSupport = true;
     netapiSupport = stdenv.isLinux;

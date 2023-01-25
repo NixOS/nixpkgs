@@ -18,7 +18,6 @@
   gstreamerSupport ? false,
   cupsSupport ? false,
   dbusSupport ? false,
-  openalSupport ? false,
   openclSupport ? false,
   cairoSupport ? false,
   odbcSupport ? false,
@@ -49,7 +48,7 @@ let wine-build = build: release:
         wineRelease = release;
         supportFlags = {
           inherit
-            cupsSupport gettextSupport dbusSupport openalSupport cairoSupport
+            cupsSupport gettextSupport dbusSupport cairoSupport
             odbcSupport netapiSupport cursesSupport vaSupport pcapSupport
             v4lSupport saneSupport gphoto2Support krb5Support ldapSupport fontconfigSupport
             alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
