@@ -362,6 +362,7 @@ let
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
     mzR = with pkgs; [ zlib netcdf ];
+    nanonext = with pkgs; [ mbedtls nng ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = with pkgs; [ nlopt pkg-config libiconv ];
     n1qn1 = [ pkgs.gfortran ];
