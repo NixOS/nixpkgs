@@ -424,6 +424,8 @@ with pkgs;
 
   commix = callPackage ../tools/security/commix { };
 
+  compdb = callPackage ../tools/misc/compdb { };
+
   conserver = callPackage ../tools/misc/conserver { };
 
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
@@ -5377,6 +5379,8 @@ with pkgs;
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
+  rmate-sh = callPackage ../tools/misc/rmate-sh { };
+
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
 
   rm-improved = callPackage ../applications/misc/rm-improved { };
@@ -8931,6 +8935,8 @@ with pkgs;
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
   mani = callPackage ../development/tools/mani { };
+
+  manifest-tool = callPackage ../development/tools/manifest-tool { };
 
   mask = callPackage ../development/tools/mask { };
 
@@ -14583,13 +14589,28 @@ with pkgs;
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
-  gccgo = wrapCC ((if stdenv.hostPlatform.isMusl then gcc_latest else gcc).cc.override {
+  gccgo = wrapCC (gcc.cc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
     langGo = true;
     langJit = true;
     profiledCompiler = false;
+  } // {
+    # not supported on darwin: https://github.com/golang/go/issues/463
+    meta.broken = stdenv.hostPlatform.isDarwin;
+  });
+
+  gccgo12 = wrapCC (gcc12.cc.override {
+    name = "gccgo";
+    langCC = true; #required for go.
+    langC = true;
+    langGo = true;
+    langJit = true;
+    profiledCompiler = false;
+  } // {
+    # not supported on darwin: https://github.com/golang/go/issues/463
+    meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
   ghdl = ghdl-mcode;
@@ -17440,6 +17461,8 @@ with pkgs;
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
   datree = callPackage ../development/tools/datree { };
+
+  detekt = callPackage ../development/tools/detekt { };
 
   dcadec = callPackage ../development/tools/dcadec { };
 
@@ -37180,6 +37203,8 @@ with pkgs;
   eiciel = callPackage ../tools/filesystems/eiciel { };
 
   apt = callPackage ../tools/package-management/apt { };
+
+  apx = callPackage ../tools/package-management/apx { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 

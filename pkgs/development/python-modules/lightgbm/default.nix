@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , cmake
@@ -6,15 +7,19 @@
 , scipy
 , scikit-learn
 , llvmPackages ? null
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "3.3.3";
+  version = "3.3.5";
+  format = "other";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hX5VmuhKIpY84rYhaCkpadIa3TC8kkaoTU5+7a5nlm0=";
+    hash = "sha256-ELj73PhR5PaKHwLzjZm9xEx8f7mxpi3PkkoNKf9zOVw=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +28,10 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs = lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
   propagatedBuildInputs = [
     numpy
     scipy
@@ -38,11 +46,15 @@ buildPythonPackage rec {
   # repository. It contains c++ tests which don't seem to wired up to
   # `make check`.
   doCheck = false;
-  pythonImportsCheck = [ "lightgbm" ];
+
+  pythonImportsCheck = [
+    "lightgbm"
+  ];
 
   meta = with lib; {
     description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/Microsoft/LightGBM";
+    changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ teh costrouc ];
   };

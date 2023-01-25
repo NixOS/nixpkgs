@@ -5,43 +5,53 @@
 , ply
 , pytestCheckHook
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "stone";
   version = "3.3.1";
+  format = "setuptools";
 
-  # pypi sdist misses requirements.txt
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
   };
 
   postPatch = ''
-    sed -i '/pytest-runner/d' setup.py
+    # https://github.com/dropbox/stone/issues/288
+    substituteInPlace stone/frontend/ir_generator.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
+    substituteInPlace setup.py \
+      --replace "'pytest-runner == 5.2.0'," ""
   '';
 
-  propagatedBuildInputs = [ ply six ];
-
-  nativeCheckInputs = [ pytestCheckHook mock ];
-
-  # try to import from `test` directory, which is exported by the python interpreter
-  # and cannot be overridden without removing some py3 to py2 support
-  disabledTestPaths = [
-    "test/test_tsd_types.py"
-    "test/test_js_client.py"
+  propagatedBuildInputs = [
+    ply
+    six
   ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ];
+
   disabledTests = [
     "test_type_name_with_module"
   ];
 
-  pythonImportsCheck = [ "stone" ];
+  pythonImportsCheck = [
+    "stone"
+  ];
 
   meta = with lib; {
     description = "Official Api Spec Language for Dropbox";
     homepage = "https://github.com/dropbox/stone";
+    changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };
