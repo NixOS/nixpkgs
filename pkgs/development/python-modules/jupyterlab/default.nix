@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UeiJRIrhlO7vjlD2P1xPSH9yj0d77+Q26XSWcvdRHb4=";
+    hash = "sha256-UeiJRIrhlO7vjlD2P1xPSH9yj0d77+Q26XSWcvdRHb4=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/jupyterlab/jupyterlab/releases/tag/v${version}";
     description = "Jupyter lab environment notebook server extension";
     license = with licenses; [ bsd3 ];
     homepage = "https://jupyter.org/";
