@@ -8,10 +8,10 @@ Subject: [PATCH] Look for fsck in the right place
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index 595434ab57..374a4e6c76 100644
+index 37fdfa540f..ef67384d36 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
-@@ -373,7 +373,7 @@ static int run(int argc, char *argv[]) {
+@@ -372,7 +372,7 @@ static int run(int argc, char *argv[]) {
                  } else
                          dash_c[0] = 0;
  

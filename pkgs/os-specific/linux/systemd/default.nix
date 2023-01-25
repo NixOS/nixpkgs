@@ -130,7 +130,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.4";
+  version = "253-rc1";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -145,9 +145,9 @@ stdenv.mkDerivation {
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "systemd-stable";
+    repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-8ejSEt3QyCSARGGVbXWac2dB9jdUpC4eX2rN0iENQX0=";
+    hash = "sha256-zFwcidI0D3j/TYqfte6g548LKfXWoqRZvS8rjXHynaM=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -162,19 +162,18 @@ stdenv.mkDerivation {
     ./0004-Look-for-fsck-in-the-right-place.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
     ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0008-Fix-hwdb-paths.patch
-    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-add-rootprefix-to-lookup-dir-paths.patch
-    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0016-pkg-config-derive-prefix-from-prefix.patch
-    ./0017-inherit-systemd-environment-when-calling-generators.patch
-    ./0018-core-don-t-taint-on-unmerged-usr.patch
-    ./0019-tpm2_context_init-fix-driver-name-checking.patch
+    ./0007-Fix-hwdb-paths.patch
+    ./0008-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0009-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0010-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0011-add-rootprefix-to-lookup-dir-paths.patch
+    ./0012-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0013-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0014-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0015-pkg-config-derive-prefix-from-prefix.patch
+    ./0016-inherit-systemd-environment-when-calling-generators.patch
+    ./0017-core-don-t-taint-on-unmerged-usr.patch
+    ./0018-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -281,6 +280,9 @@ stdenv.mkDerivation {
 
           # journalctl --grep requires libpcre so let's provide it
           { name = "libpcre2-8.so.0"; pkg = pcre2; }
+
+          # PKCS#11 support in cryptsetup and homed
+          { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
 
           # Support for TPM2 in systemd-cryptsetup, systemd-repart and systemd-cryptenroll
           { name = "libtss2-esys.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
@@ -398,7 +400,7 @@ stdenv.mkDerivation {
     ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit ]
+    ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
