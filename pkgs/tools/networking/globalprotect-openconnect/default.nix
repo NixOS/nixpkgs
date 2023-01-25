@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchurl
 , cmake, qtwebsockets, qtwebengine, qtkeychain, wrapQtAppsHook, openconnect
 }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yuezk/GlobalProtect-openconnect/releases/download/v${version}/globalprotect-openconnect-${version}.tar.gz";
-    sha256 = "0b7s3gf0gznlpmf9dxfq77254zlxmpajhzzn3scrdrvf413sjl0f";
+    hash = "sha256-vhvVKESLbqHx3XumxbIWOXIreDkW3yONDMXMHxhjsvk=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
