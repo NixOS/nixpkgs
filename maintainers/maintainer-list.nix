@@ -3747,12 +3747,6 @@
       fingerprint = "A8DF 1326 9E5D 9A38 E57C  FAC2 9D20 F650 3E33 8888";
     }];
   };
-  doublec = {
-    email = "chris.double@double.co.nz";
-    github = "doublec";
-    githubId = 16599;
-    name = "Chris Double";
-  };
   dpaetzel = {
     email = "david.paetzel@posteo.de";
     github = "dpaetzel";
