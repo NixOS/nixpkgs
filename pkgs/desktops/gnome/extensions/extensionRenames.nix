@@ -12,6 +12,10 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+  # no source repository can be found for this extension
+  "floating-panel@aylur" = "floating-panel";
+  "floating-panel-usedbymyself@wpism" = null;
+
   # forks of each other, azan@faissal.bensefia.id is more recent
   "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
   "azan@hatem.masmoudi.org" = null;
