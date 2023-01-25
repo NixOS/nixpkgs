@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libpng ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv libobjc ];
+  buildInputs = [ libiconv libpng ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc ];
 
   configureFlags = [
     "--with-tests"
