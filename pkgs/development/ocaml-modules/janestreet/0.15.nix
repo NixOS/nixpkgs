@@ -958,9 +958,7 @@ with self;
     meta.description = "Yet another implementation of fork&exec and related functionality";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
-    nativeCheckInputs = [ ounit ];
-    # This currently fails with dune
-    strictDeps = false;
+    checkInputs = [ ounit ];
   };
 
   shexp = janePackage {

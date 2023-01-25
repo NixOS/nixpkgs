@@ -10,7 +10,6 @@ buildDunePackage {
 
   propagatedBuildInputs = [ atdgen-runtime ];
 
-  strictDeps = true;
   doCheck = true;
   nativeCheckInputs = [ atd (python3.withPackages (ps: [ ps.jsonschema ]))];
   checkInputs = [ alcotest atdgen-codec-runtime ];

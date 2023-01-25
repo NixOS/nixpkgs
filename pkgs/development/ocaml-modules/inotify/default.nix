@@ -18,8 +18,6 @@ buildDunePackage rec {
 
   checkInputs = [ ounit2 fileutils ];
 
-  strictDeps = true;
-
   doCheck = true;
 
   meta = {
