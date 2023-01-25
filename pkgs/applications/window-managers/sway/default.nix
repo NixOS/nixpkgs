@@ -7,7 +7,7 @@
 # Used by the NixOS module:
 , isNixOS ? false
 , enableXWayland ? true, xorg
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, systemdSupport ? true
 , dbusSupport ? true
 , dbus
 , trayEnabled ? systemdSupport && dbusSupport
