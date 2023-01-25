@@ -169,3 +169,111 @@ def test_inline_anchor_escaping() -> None:
         Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup='', info='', meta={}, block=True, hidden=False)
     ]
+
+def test_inline_comment_basic() -> None:
+    c = Converter({})
+    assert c._parse("a <!-- foo --><!----> b") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='a <!-- foo --><!----> b', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='a  b', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("a<!-- b -->") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='a<!-- b -->', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='a', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+
+def test_inline_comment_does_not_nest_in_code() -> None:
+    c = Converter({})
+    assert c._parse("`a<!-- b -->c`") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='`a<!-- b -->c`', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='code_inline', tag='code', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='a<!-- b -->c', markup='`', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+
+def test_inline_comment_does_not_nest_elsewhere() -> None:
+    c = Converter({})
+    assert c._parse("*a<!-- b -->c*") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='*a<!-- b -->c*', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='em_open', tag='em', nesting=1, attrs={}, map=None, level=0, children=None,
+                        content='', markup='*', info='', meta={}, block=False, hidden=False),
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=1, children=None,
+                        content='ac', markup='', info='', meta={}, block=False, hidden=False),
+                  Token(type='em_close', tag='em', nesting=-1, attrs={}, map=None, level=0, children=None,
+                        content='', markup='*', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+
+def test_inline_comment_can_be_escaped() -> None:
+    c = Converter({})
+    assert c._parse("a\\<!-- b -->c") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='a\\<!-- b -->c', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='a<!-- b -->c', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("a\\\\<!-- b -->c") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='a\\c', markup='', info='', meta={}, block=False, hidden=False)
+              ],
+              content='a\\\\<!-- b -->c', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("a\\\\\\<!-- b -->c") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='a\\<!-- b -->c', markup='', info='', meta={}, block=False, hidden=False)
+              ],
+              content='a\\\\\\<!-- b -->c', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+
+def test_block_comment() -> None:
+    c = Converter({})
+    assert c._parse("<!-- a -->") == []
+    assert c._parse("<!-- a\n-->") == []
+    assert c._parse("<!--\na\n-->") == []
+    assert c._parse("<!--\n\na\n\n-->") == []
+    assert c._parse("<!--\n\n```\n\n\n```\n\n-->") == []

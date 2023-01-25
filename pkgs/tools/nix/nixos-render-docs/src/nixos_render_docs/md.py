@@ -261,6 +261,45 @@ def _inline_anchor_plugin(md: markdown_it.MarkdownIt) -> None:
 
     md.inline.ruler.before("link", "inline_anchor", inline_anchor)
 
+def _inline_comment_plugin(md: markdown_it.MarkdownIt) -> None:
+    def inline_comment(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
+        if state.src[state.pos : state.pos + 4] != '<!--':
+            return False
+        if _is_escaped(state.src, state.pos - 1):
+            return False
+        for i in range(state.pos + 4, state.posMax - 2):
+            if state.src[i : i + 3] == '-->': # -->
+                state.pos = i + 3
+                return True
+
+        return False
+
+    md.inline.ruler.after("autolink", "inline_comment", inline_comment)
+
+def _block_comment_plugin(md: markdown_it.MarkdownIt) -> None:
+    def block_comment(state: markdown_it.rules_block.StateBlock, startLine: int, endLine: int,
+                      silent: bool) -> bool:
+        pos = state.bMarks[startLine] + state.tShift[startLine]
+        posMax = state.eMarks[startLine]
+
+        if state.src[pos : pos + 4] != '<!--':
+            return False
+
+        nextLine = startLine
+        while nextLine < endLine:
+            pos = state.bMarks[nextLine] + state.tShift[nextLine]
+            posMax = state.eMarks[nextLine]
+
+            if state.src[posMax - 3 : posMax] == '-->':
+                state.line = nextLine + 1
+                return True
+
+            nextLine += 1
+
+        return False
+
+    md.block.ruler.after("code", "block_comment", block_comment)
+
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
@@ -286,6 +325,8 @@ class Converter(ABC):
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
         self._md.use(_inline_anchor_plugin)
+        self._md.use(_inline_comment_plugin)
+        self._md.use(_block_comment_plugin)
         self._md.enable(["smartquotes", "replacements"])
 
     def _post_parse(self, tokens: list[Token]) -> list[Token]:
