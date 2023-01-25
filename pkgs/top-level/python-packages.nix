@@ -5623,6 +5623,8 @@ self: super: with self; {
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
+  mando = callPackage ../development/python-modules/mando { };
+
   manhole = callPackage ../development/python-modules/manhole { };
 
   manimpango = callPackage ../development/python-modules/manimpango {
