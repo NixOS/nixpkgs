@@ -483,7 +483,10 @@ rec {
      the *leaf* attributes of a potentially-nested attribute set:
      the second argument of the function will never be an attrset.
      Also, the first argument of the argument function is a *list*
-     of the names of the containing attributes.
+     of the attribute names that form the path to the leaf attribute.
+
+     For a function that gives you control over what counts as a leaf,
+     see `mapAttrsRecursiveCond`.
 
      Example:
        mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
