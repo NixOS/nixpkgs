@@ -9144,6 +9144,12 @@
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
   };
+  mdr = {
+    email = "MattRussellUK@gmail.com";
+    github = "mdr";
+    githubId = 241257;
+    name = "Matt Russell";
+  };
   meain = {
     email = "mail@meain.io";
     matrix = "@meain:matrix.org";
