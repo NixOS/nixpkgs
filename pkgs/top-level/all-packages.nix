@@ -19363,6 +19363,8 @@ with pkgs;
 
   expat = callPackage ../development/libraries/expat { };
 
+  exprtk = callPackage ../development/libraries/exprtk { };
+
   eventlog = callPackage ../development/libraries/eventlog { };
 
   faac = callPackage ../development/libraries/faac { };
