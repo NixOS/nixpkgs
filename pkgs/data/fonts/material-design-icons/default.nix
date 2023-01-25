@@ -4,8 +4,6 @@ stdenvNoCC.mkDerivation rec {
   pname = "material-design-icons";
   version = "7.1.96";
 
-  dontBuild = true;
-
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
