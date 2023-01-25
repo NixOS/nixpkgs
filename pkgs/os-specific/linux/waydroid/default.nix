@@ -4,12 +4,15 @@
 , dnsmasq
 , gawk
 , getent
+, gobject-introspection
+, gtk3
 , kmod
 , lxc
 , iproute2
 , nftables
 , util-linux
 , which
+, wrapGAppsHook
 , xclip
 }:
 
@@ -25,6 +28,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-0GBob9BUwiE5cFGdK8AdwsTjTOdc+AIWqUGN/gFfOqI=";
   };
 
+  buildInputs = [
+    gtk3
+  ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     gbinder-python
     pyclip
@@ -35,9 +47,14 @@ python3Packages.buildPythonApplication rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
   dontWrapPythonPrograms = true;
+  dontWrapGApps = true;
 
   installPhase = ''
     make install PREFIX=$out USE_SYSTEMD=0 USE_NFTABLES=1
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
 
     wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
        --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 nftables ]}

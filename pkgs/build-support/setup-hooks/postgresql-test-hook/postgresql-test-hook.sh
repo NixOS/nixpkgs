@@ -71,6 +71,8 @@ EOF
   echo 'setting up postgresql'
   eval "$postgresqlTestSetupCommands"
 
+  runHook postgresqlTestSetupPost
+
 }
 
 postgresqlStop() {

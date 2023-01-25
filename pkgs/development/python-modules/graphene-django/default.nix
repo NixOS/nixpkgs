@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   pname = "graphene-django";
   version = "3.0.0";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -58,9 +60,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # Pèython 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
+    "test_django_objecttype_convert_choices_enum_naming_collisions"
+    "test_django_objecttype_choices_custom_enum_name"
+    "test_django_objecttype_convert_choices_enum_list"
+    "test_schema_representation"
+  ];
+
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";
     homepage = "https://github.com/graphql-python/graphene-django";
+    changelog = "https://github.com/graphql-python/graphene-django/releases/tag/v{version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
