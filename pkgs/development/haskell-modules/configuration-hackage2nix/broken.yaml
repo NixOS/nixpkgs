@@ -224,6 +224,7 @@ broken-packages:
   - ascii-string
   - ascii-vector-avc
   - asif
+  - asn1-ber-syntax
   - asn1-codec
   - asn1-data
   - AspectAG
@@ -1484,6 +1485,7 @@ broken-packages:
   - fenfire
   - fernet
   - FerryCore
+  - festival
   - Feval
   - fez-conf
   - ffeed
@@ -3384,6 +3386,7 @@ broken-packages:
   - monad-control-aligned
   - monadcryptorandom
   - monad-fork
+  - monadic-bang
   - monadiccp
   - monadic-recursion-schemes
   - monad-introspect
