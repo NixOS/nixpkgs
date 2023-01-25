@@ -626,7 +626,7 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 
 ### The check phase {#ssec-check-phase}
 
-The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make check`, but only if the `doCheck` variable is enabled.
+The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the `doCheck` variable is enabled (see below).
 
 #### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
@@ -646,7 +646,7 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 
 ##### `checkTarget` {#var-stdenv-checkTarget}
 
-The make target that runs the tests. Defaults to `check`.
+The make target that runs the tests. Defaults to `check` if it exists, otherwise `test`; if neither is found, do nothing.
 
 ##### `checkFlags` / `checkFlagsArray` {#var-stdenv-checkFlags}
 
