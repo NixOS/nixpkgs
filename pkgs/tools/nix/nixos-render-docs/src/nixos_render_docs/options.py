@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Any, Optional
 from xml.sax.saxutils import escape, quoteattr
 
@@ -14,8 +15,7 @@ def option_is(option: Option, key: str, typ: str) -> Optional[dict[str, str]]:
         return None
     return option[key] # type: ignore[return-value]
 
-class DocBookConverter(Converter):
-    __renderer__ = DocBookRenderer
+class BaseConverter(Converter):
     _options: dict[str, RenderedOption]
 
     def __init__(self, manpage_urls: dict[str, str],
@@ -59,6 +59,15 @@ class DocBookConverter(Converter):
         else:
             return (loc['url'] if 'url' in loc else None, loc['name'])
 
+    @abstractmethod
+    def _decl_def_header(self, header: str) -> list[str]: raise NotImplementedError()
+
+    @abstractmethod
+    def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]: raise NotImplementedError()
+
+    @abstractmethod
+    def _decl_def_footer(self) -> list[str]: raise NotImplementedError()
+
     def _render_decl_def(self, header: str, locs: list[OptionLoc]) -> list[str]:
         result = []
         result += self._decl_def_header(header)
@@ -69,9 +78,7 @@ class DocBookConverter(Converter):
         return result
 
     def _render_code(self, option: Option, key: str) -> list[str]:
-        if lit := option_is(option, key, 'literalDocBook'):
-            return [ f"<para><emphasis>{key.capitalize()}:</emphasis> {lit['text']}</para>" ]
-        elif lit := option_is(option, key, 'literalMD'):
+        if lit := option_is(option, key, 'literalMD'):
             return [ self._render(f"*{key.capitalize()}:*\n{lit['text']}") ]
         elif lit := option_is(option, key, 'literalExpression'):
             code = lit['text']
@@ -93,14 +100,15 @@ class DocBookConverter(Converter):
             return []
 
     def _render_description(self, desc: str | dict[str, str]) -> list[str]:
-        if isinstance(desc, str) and not self._markdown_by_default:
-            return [ f"<nixos:option-description><para>{desc}</para></nixos:option-description>" ]
-        elif isinstance(desc, str) and self._markdown_by_default:
+        if isinstance(desc, str) and self._markdown_by_default:
             return [ self._render(desc) ]
         elif isinstance(desc, dict) and desc.get('_type') == 'mdDoc':
             return [ self._render(desc['text']) ]
         else:
             raise Exception("description has unrecognized type", desc)
+
+    @abstractmethod
+    def _related_packages_header(self) -> list[str]: raise NotImplementedError()
 
     def _convert_one(self, option: dict[str, Any]) -> list[str]:
         result = []
@@ -130,6 +138,24 @@ class DocBookConverter(Converter):
                 self._options[name] = RenderedOption(option['loc'], self._convert_one(option))
             except Exception as e:
                 raise Exception(f"Failed to render option {name}") from e
+
+    @abstractmethod
+    def finalize(self) -> str: raise NotImplementedError()
+
+class DocBookConverter(BaseConverter):
+    __renderer__ = DocBookRenderer
+
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        if lit := option_is(option, key, 'literalDocBook'):
+            return [ f"<para><emphasis>{key.capitalize()}:</emphasis> {lit['text']}</para>" ]
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            return [ f"<nixos:option-description><para>{desc}</para></nixos:option-description>" ]
+        else:
+            return super()._render_description(desc)
 
     def _related_packages_header(self) -> list[str]:
         return [

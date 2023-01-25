@@ -1,3 +1,4 @@
+from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, Callable, Optional
@@ -180,7 +181,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                   env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
 
-class Converter:
+class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
     def __init__(self, manpage_urls: Mapping[str, str]):
