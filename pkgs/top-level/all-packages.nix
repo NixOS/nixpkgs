@@ -3248,6 +3248,8 @@ with pkgs;
 
   itch = callPackage ../games/itch {};
 
+  itchiodl = callPackage ../games/itchiodl { };
+
   itd = callPackage ../applications/misc/itd { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
