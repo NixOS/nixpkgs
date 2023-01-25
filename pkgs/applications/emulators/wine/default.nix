@@ -29,7 +29,6 @@
   saneSupport ? false,
   gphoto2Support ? false,
   krb5Support ? false,
-  ldapSupport ? false,
   pulseaudioSupport ? false,
   udevSupport ? false,
   xineramaSupport ? false,
@@ -50,7 +49,7 @@ let wine-build = build: release:
           inherit
             cupsSupport gettextSupport dbusSupport cairoSupport
             odbcSupport netapiSupport cursesSupport vaSupport pcapSupport
-            v4lSupport saneSupport gphoto2Support krb5Support ldapSupport fontconfigSupport
+            v4lSupport saneSupport gphoto2Support krb5Support fontconfigSupport
             alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
             tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
             sdlSupport usbSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;

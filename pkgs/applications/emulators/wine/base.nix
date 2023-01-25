@@ -81,7 +81,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional krb5Support            pkgs.libkrb5
-  ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio

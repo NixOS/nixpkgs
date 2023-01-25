@@ -38,7 +38,6 @@ rec {
     v4lSupport = stdenv.isLinux;
     gphoto2Support = true;
     krb5Support = true;
-    ldapSupport = true;
     vkd3dSupport = stdenv.isLinux;
     embedInstallers = true;
   };
