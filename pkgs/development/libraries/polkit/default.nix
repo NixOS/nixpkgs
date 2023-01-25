@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     expat
     pam
     dbus
