@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
+, wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -53,7 +54,9 @@ stdenv.mkDerivation rec {
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -109,6 +112,8 @@ stdenv.mkDerivation rec {
 
     # Wrap the startup command
     makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       "''${gappsWrapperArgs[@]}"
