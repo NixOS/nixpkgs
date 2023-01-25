@@ -1,45 +1,58 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, pkg-config
-, wayland
 , libX11
-, xbitmaps
 , libXcursor
 , libXmu
 , libXpm
 , libheif
+, pkg-config
+, wayland
+, xbitmaps
 }:
 
 buildGoModule rec {
   pname = "wallutils";
-  version = "5.12.4";
+  version = "5.12.5";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    sha256 = "sha256-NODG4Lw/7X1aoT+dDSWxWEbDX6EAQzzDJPwsWOLaJEM=";
+    hash = "sha256-qC+AF+NFXSrUZAYaiFPwvfZtsAGhKE4XFDOUcfXUAbM=";
   };
 
   vendorSha256 = null;
 
-  patches = [ ./lscollection-Add-NixOS-paths-to-DefaultWallpaperDirectories.patch ];
+  patches = [
+    ./000-add-nixos-dirs-to-default-wallpapers.patch
+  ];
 
   excludedPackages = [
     "./pkg/event/cmd" # Development tools
   ];
 
-  ldflags = [ "-s" "-w" ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ wayland libX11 xbitmaps libXcursor libXmu libXpm libheif ];
+  buildInputs = [
+    libX11
+    libXcursor
+    libXmu
+    libXpm
+    libheif
+    wayland
+    xbitmaps
+  ];
+
+  ldflags = [ "-s" "-w" ];
 
   preCheck =
     let skippedTests = [
-      "TestClosest" # Requiring Wayland or X.
-      "TestNewSimpleEvent" # Blocking
+      "TestClosest" # Requiring Wayland or X
       "TestEveryMinute" # Blocking
+      "TestNewSimpleEvent" # Blocking
     ]; in
     ''
       export XDG_RUNTIME_DIR=`mktemp -d`
@@ -47,11 +60,12 @@ buildGoModule rec {
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
     inherit (src.meta) homepage;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    inherit (wayland.meta) platforms;
+    badPlatforms = lib.platforms.darwin;
   };
 }
