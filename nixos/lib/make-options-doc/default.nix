@@ -148,20 +148,19 @@ in rec {
   '';
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {
-    MANPAGE_URLS = pkgs.path + "/doc/manpage-urls.json";
-    OTD_DOCUMENT_TYPE = documentType;
-    OTD_VARIABLE_LIST_ID = variablelistId;
-    OTD_OPTION_ID_PREFIX = optionIdPrefix;
-    OTD_REVISION = revision;
-
     nativeBuildInputs = [
       pkgs.nixos-render-docs
     ];
   } ''
-    nixos-render-docs \
+    nixos-render-docs options docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      --document-type ${lib.escapeShellArg documentType} \
+      --varlist-id ${lib.escapeShellArg variablelistId} \
+      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
       ${lib.optionalString markdownByDefault "--markdown-by-default"} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > options.xml
+      options.xml
 
     if grep /nixpkgs/nixos/modules options.xml; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"

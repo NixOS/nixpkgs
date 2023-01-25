@@ -1,3 +1,6 @@
+import argparse
+import json
+
 from abc import abstractmethod
 from typing import Any, Optional
 from xml.sax.saxutils import escape, quoteattr
@@ -223,3 +226,38 @@ class DocBookConverter(BaseConverter):
             result.append("</appendix>")
 
         return "\n".join(result)
+
+def _build_cli_db(p: argparse.ArgumentParser) -> None:
+    p.add_argument('--manpage-urls', required=True)
+    p.add_argument('--revision', required=True)
+    p.add_argument('--document-type', required=True)
+    p.add_argument('--varlist-id', required=True)
+    p.add_argument('--id-prefix', required=True)
+    p.add_argument('--markdown-by-default', default=False, action='store_true')
+    p.add_argument("infile")
+    p.add_argument("outfile")
+
+def _run_cli_db(args: argparse.Namespace) -> None:
+    with open(args.manpage_urls, 'r') as manpage_urls:
+        md = DocBookConverter(
+            json.load(manpage_urls),
+            revision = args.revision,
+            document_type = args.document_type,
+            varlist_id = args.varlist_id,
+            id_prefix = args.id_prefix,
+            markdown_by_default = args.markdown_by_default)
+
+        with open(args.infile, 'r') as f:
+            md.add_options(json.load(f))
+        with open(args.outfile, 'w') as f:
+            f.write(md.finalize())
+
+def build_cli(p: argparse.ArgumentParser) -> None:
+    formats = p.add_subparsers(dest='format', required=True)
+    _build_cli_db(formats.add_parser('docbook'))
+
+def run_cli(args: argparse.Namespace) -> None:
+    if args.format == 'docbook':
+        _run_cli_db(args)
+    else:
+        raise RuntimeError('format not hooked up', args)

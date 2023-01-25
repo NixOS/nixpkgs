@@ -1,45 +1,20 @@
-import collections
-import json
+import argparse
 import os
 import sys
-from collections.abc import MutableMapping, Sequence
-from typing import Any, Dict, List
-from frozendict import frozendict
+from typing import Any, Dict
 
-# for MD conversion
-import markdown_it
-import markdown_it.renderer
-from markdown_it.token import Token
-from markdown_it.utils import OptionsDict
-from mdit_py_plugins.container import container_plugin
-from mdit_py_plugins.deflist import deflist_plugin
-from mdit_py_plugins.myst_role import myst_role_plugin
-from xml.sax.saxutils import escape, quoteattr
+from .md import Converter
+from . import options
 
-from .options import DocBookConverter
+def main() -> None:
+    parser = argparse.ArgumentParser(description='render nixos manual bits')
 
-def need_env(n):
-    if n not in os.environ:
-        raise RuntimeError("required environment variable not set", n)
-    return os.environ[n]
+    commands = parser.add_subparsers(dest='command', required=True)
 
-def main():
-    markdownByDefault = False
-    optOffset = 0
-    for arg in sys.argv[1:]:
-        if arg == "--markdown-by-default":
-            optOffset += 1
-            markdownByDefault = True
+    options.build_cli(commands.add_parser('options'))
 
-    md = DocBookConverter(
-        json.load(open(os.getenv('MANPAGE_URLS'))),
-        revision = need_env('OTD_REVISION'),
-        document_type = need_env('OTD_DOCUMENT_TYPE'),
-        varlist_id = need_env('OTD_VARIABLE_LIST_ID'),
-        id_prefix = need_env('OTD_OPTION_ID_PREFIX'),
-        markdown_by_default = markdownByDefault
-    )
-
-    options = json.load(open(sys.argv[1 + optOffset], 'r'))
-    md.add_options(options)
-    print(md.finalize())
+    args = parser.parse_args()
+    if args.command == 'options':
+        options.run_cli(args)
+    else:
+        raise RuntimeError('command not hooked up', args)
