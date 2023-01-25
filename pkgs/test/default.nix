@@ -51,9 +51,9 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php {});
 
-  pkg-configPackages =
+  defaultPkgConfigPackages =
     let
-      # pkg-configPackages test needs a Nixpkgs with allowUnsupportedPlatform
+      # defaultPkgConfigPackages test needs a Nixpkgs with allowUnsupportedPlatform
       # in order to filter out the unsupported packages without throwing any errors
       # tryEval would be too fragile, masking different problems as if they're
       # unsupported platform problems.
