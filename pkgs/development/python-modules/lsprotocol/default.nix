@@ -35,10 +35,13 @@ buildPythonPackage rec {
     cattrs
   ];
 
+  nativeCheckInputs = [
+    pytest
+  ];
+
   checkInputs = [
     jsonschema
     pyhamcrest
-    pytest
   ];
 
   checkPhase = ''
@@ -55,8 +58,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/microsoft/lsprotocol";
     description = "Python implementation of the Language Server Protocol";
+    homepage = "https://github.com/microsoft/lsprotocol";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar fab ];
   };
