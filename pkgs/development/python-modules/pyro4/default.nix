@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, serpent
-, dill
 , cloudpickle
+, dill
+, fetchPypi
 , msgpack
-, isPy27
 , pytestCheckHook
+, pythonAtLeast
+, serpent
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,9 @@ buildPythonPackage rec {
   version = "4.82";
   format = "setuptools";
 
-  disabled = isPy27;
+  # No support Python >= 3.11
+  # https://github.com/irmen/Pyro4/issues/246
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     pname = "Pyro4";
@@ -37,12 +39,13 @@ buildPythonPackage rec {
   ];
 
   # add testsupport.py to PATH
-  preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
+  preCheck = ''
+    PYTHONPATH=tests/PyroTests:$PYTHONPATH
+  '';
 
-
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # ignore network related tests, which fail in sandbox
-    "--ignore=tests/PyroTests/test_naming.py"
+    "tests/PyroTests/test_naming.py"
   ];
 
   disabledTests = [
@@ -61,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro4";
+    changelog = "https://github.com/irmen/Pyro4/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };

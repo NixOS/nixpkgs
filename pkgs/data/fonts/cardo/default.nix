@@ -1,20 +1,22 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation {
+  pname = "cardo";
   version = "1.04";
-in
-fetchzip {
-  name = "cardo-${version}";
 
-  url = "http://scholarsfonts.net/cardo104.zip";
+  src = fetchzip {
+    url = "https://scholarsfonts.net/cardo104.zip";
+    stripRoot = false;
+    hash = "sha256-NU6/H5f0JBlVo3L3uUcl7IvNxPMXD8UQY9k5o2YA5Vo=";
+  };
 
-  hash = "sha256-eBK6+VQpreWA7jIneNXOcKFcT+cJzhoQ9XXyq93SZ8M=";
-  stripRoot = false;
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
     mkdir -p $out/share/fonts/truetype
-    mv $out/*.ttf $out/share/fonts/truetype
-    rm $out/*.pdf
+    mv *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

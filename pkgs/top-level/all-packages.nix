@@ -2346,6 +2346,8 @@ with pkgs;
 
   portfolio-filemanager = callPackage ../applications/file-managers/portfolio-filemanager { };
 
+  potreeconverter = callPackage ../applications/graphics/potreeconverter { };
+
   ranger = callPackage ../applications/file-managers/ranger { };
 
   sfm = callPackage ../applications/file-managers/sfm { };
@@ -20697,6 +20699,12 @@ with pkgs;
 
   libcutl = callPackage ../development/libraries/libcutl { };
 
+  libcxxrt = callPackage ../development/libraries/libcxxrt {
+    stdenv = if stdenv.hostPlatform.useLLVM or false
+             then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+             else stdenv;
+  };
+
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdatovka = callPackage ../development/libraries/libdatovka { };
@@ -31161,6 +31169,8 @@ with pkgs;
   pms = callPackage ../applications/audio/pms { };
 
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
+
+  river-tag-overlay = callPackage ../applications/misc/river-tag-overlay { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
 
