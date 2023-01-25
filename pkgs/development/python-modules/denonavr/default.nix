@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automation Library for Denon AVR receivers";
     homepage = "https://github.com/scarface-4711/denonavr";
+    changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ colemickens ];
   };
