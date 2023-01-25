@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
-    rev = "et-v${version}";
+    rev = "refs/tags/et-v${version}";
     hash = "sha256-9W9Pz0VrFU+HNpf98I3CLrn8+kpjjNLOUK8gGcDJcI8=";
   };
 
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
+    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux ++ platforms.darwin;
