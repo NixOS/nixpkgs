@@ -334,6 +334,8 @@ in
           ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
           ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
           ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/AAVMF.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF.fd /run/${dirName}/nix-ovmf/
         '')}
       '';
 
