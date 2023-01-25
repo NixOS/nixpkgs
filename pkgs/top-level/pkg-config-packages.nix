@@ -68,7 +68,9 @@ pkgs: {
   "gtk+-3.0" = pkgs.gtk3;
   "gtk+-x11-2.0" = pkgs.gtk2-x11;
   "gtksourceview-3.0" = pkgs.gtksourceview3;
-  hidapi-libusb = pkgs.hidapi;
+  hidapi = if pkgs.stdenv.isDarwin then pkgs.hidapi else null;
+  hidapi-hidraw = if pkgs.stdenv.isDarwin then null else pkgs.hidapi;
+  hidapi-libusb = if pkgs.stdenv.isDarwin then null else pkgs.hidapi;
   icu-i18n = pkgs.icu;
   icu-uc = pkgs.icu;
   icu-io = pkgs.icu;
@@ -132,7 +134,7 @@ pkgs: {
   pthread = null; # in stdenv
   libpulse = pkgs.libpulseaudio;
   libpulse-simple = pkgs.libpulseaudio;
-  libpulse-mainloop-glib = pkgs.libpulseaudio;
+  libpulse-mainloop-glib = if pkgs.stdenv.isDarwin then null else pkgs.libpulseaudio;
   python = pkgs.python3;
 
   Qt5Concurrent = pkgs.qt5.qtbase;
@@ -174,10 +176,11 @@ pkgs: {
   tensorflow = pkgs.libtensorflow;
   uuid = pkgs.libossp_uuid;
   "vte-2.91" = pkgs.vte;
-  wayland-client = pkgs.wayland;
-  wayland-cursor = pkgs.wayland;
-  egl = pkgs.libGL;
-  wayland-server = pkgs.wayland;
+  wayland-client = if pkgs.stdenv.isDarwin then null else pkgs.wayland;
+  wayland-cursor = if pkgs.stdenv.isDarwin then null else pkgs.wayland;
+  egl = if pkgs.stdenv.isDarwin then null else pkgs.libGL;
+  wayland-scanner = pkgs.wayland;
+  wayland-server = if pkgs.stdenv.isDarwin then null else pkgs.wayland;
   "webkit2gtk-4.0" = pkgs.webkitgtk;
   "webkit2gtk-web-extension-4.0" = pkgs.webkitgtk;
   x11 = pkgs.xorg.libX11;
