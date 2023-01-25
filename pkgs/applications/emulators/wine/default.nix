@@ -34,7 +34,6 @@
   xineramaSupport ? false,
   vulkanSupport ? false,
   sdlSupport ? false,
-  vkd3dSupport ? false,
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
   waylandSupport ? wineRelease == "wayland",
@@ -52,7 +51,7 @@ let wine-build = build: release:
             v4lSupport saneSupport gphoto2Support krb5Support fontconfigSupport
             alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
             tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
-            sdlSupport usbSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;
+            sdlSupport usbSupport mingwSupport waylandSupport embedInstallers;
         };
         inherit moltenvk;
       });

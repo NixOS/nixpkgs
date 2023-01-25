@@ -4,7 +4,6 @@
   autoconf, hexdump, perl, nixosTests,
   supportFlags,
   patches,
-  vkd3dArches,
   moltenvk,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
@@ -89,7 +88,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optional usbSupport             pkgs.libusb1
-  ++ vkd3dArches
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
     [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
     (gst-plugins-bad.override { enableZbar = false; }) ])
