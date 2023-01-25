@@ -1,17 +1,17 @@
 { pkgs ? import <nixpkgs> {} }:
 ## we default to importing <nixpkgs> here, so that you can use
-## a simple shell command to insert new sha256's into this file
+## a simple shell command to insert new hashes into this file
 ## e.g. with emacs C-u M-x shell-command
 ##
 ##     nix-prefetch-url sources.nix -A {stable{,.mono,.gecko64,.gecko32}, unstable, staging, winetricks}
 
 # here we wrap fetchurl and fetchFromGitHub, in order to be able to pass additional args around it
-let fetchurl = args@{url, sha256, ...}:
-  pkgs.fetchurl { inherit url sha256; } // args;
-    fetchFromGitHub = args@{owner, repo, rev, sha256, ...}:
-  pkgs.fetchFromGitHub { inherit owner repo rev sha256; } // args;
-    fetchFromGitLab = args@{domain, owner, repo, rev, sha256, ...}:
-  pkgs.fetchFromGitLab { inherit domain owner repo rev sha256; } // args;
+let fetchurl = args@{url, hash, ...}:
+  pkgs.fetchurl { inherit url hash; } // args;
+    fetchFromGitHub = args@{owner, repo, rev, hash, ...}:
+  pkgs.fetchFromGitHub { inherit owner repo rev hash; } // args;
+    fetchFromGitLab = args@{domain, owner, repo, rev, hash, ...}:
+  pkgs.fetchFromGitLab { inherit domain owner repo rev hash; } // args;
 
     updateScriptPreamble = ''
       set -eou pipefail
@@ -26,25 +26,25 @@ in rec {
   stable = fetchurl rec {
     version = "8.0";
     url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
-    sha256 = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
+    hash = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
       version = "2.47.3";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
-      sha256 = "sha256-5bmwbTzjVWRqjS5y4ETjfh4MjRhGTrGYWtzRh6f0jgE=";
+      hash = "sha256-5bmwbTzjVWRqjS5y4ETjfh4MjRhGTrGYWtzRh6f0jgE=";
     };
     gecko64 = fetchurl rec {
       version = "2.47.3";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86_64.msi";
-      sha256 = "sha256-pT7pVDkrbR/j1oVF9uTiqXr7yNyLA6i0QzSVRc4TlnU=";
+      hash = "sha256-pT7pVDkrbR/j1oVF9uTiqXr7yNyLA6i0QzSVRc4TlnU=";
     };
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
       version = "7.4.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      sha256 = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
+      hash = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
     };
 
     patches = [
@@ -61,7 +61,7 @@ in rec {
       # Can't use autobump on stable because we don't want the path
       # <source/7.0/wine-7.0.tar.xz> to become <source/7.0.1/wine-7.0.1.tar.xz>.
       if [[ "$UPDATE_NIX_OLD_VERSION" != "$latest_stable" ]]; then
-          set_version_and_sha256 stable "$latest_stable" "$(nix-prefetch-url "$wine_url_base/source/$major.0/wine-$latest_stable.tar.xz")"
+          set_version_and_hash stable "$latest_stable" "$(nix-prefetch-url "$wine_url_base/source/$major.0/wine-$latest_stable.tar.xz")"
       fi
 
       autobump stable.gecko32 "$latest_gecko"
@@ -72,16 +72,16 @@ in rec {
   };
 
   unstable = fetchurl rec {
-    # NOTE: Don't forget to change the SHA256 for staging as well.
+    # NOTE: Don't forget to change the hash for staging as well.
     version = "8.0";
     url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
-    sha256 = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
+    hash = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
     inherit (stable) gecko32 gecko64 patches;
 
     mono = fetchurl rec {
       version = "7.4.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      sha256 = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
+      hash = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''
@@ -92,7 +92,7 @@ in rec {
 
       update_staging() {
           staging_url=$(get_source_attr staging.url)
-          set_source_attr staging sha256 "\"$(to_sri "$(nix-prefetch-url --unpack "''${staging_url//$1/$2}")")\""
+          set_source_attr staging hash "\"$(to_sri "$(nix-prefetch-url --unpack "''${staging_url//$1/$2}")")\""
       }
 
       autobump unstable "$latest_unstable" "" update_staging
@@ -105,7 +105,7 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-AZVDcwgnF8m+h/jyWSMCLOAWN34sqnhTu2HnJoNyCYc=";
+    hash = "sha256-AZVDcwgnF8m+h/jyWSMCLOAWN34sqnhTu2HnJoNyCYc=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -116,7 +116,7 @@ in rec {
   wayland = fetchFromGitLab rec {
     # https://gitlab.collabora.com/alf/wine/-/tree/wayland
     version = "8.0";
-    sha256 = "sha256-whRnm21UyKZ4AQufNmctzivISVobnCeidmpYz65vlyk=";
+    hash = "sha256-whRnm21UyKZ4AQufNmctzivISVobnCeidmpYz65vlyk=";
     domain = "gitlab.collabora.com";
     owner = "alf";
     repo = "wine";
@@ -135,7 +135,7 @@ in rec {
       if [[ "$wayland_rev" != "$latest_wayland_rev" ]]; then
           latest_wayland=$(curl -s 'https://gitlab.collabora.com/alf/wine/-/raw/wayland/VERSION' | cut -f3 -d' ')
           wayland_url=$(get_source_attr wayland.url)
-          set_version_and_sha256 wayland "$latest_wayland" "$(nix-prefetch-url --unpack "''${wayland_url/$wayland_rev/$latest_wayland_rev}")"
+          set_version_and_hash wayland "$latest_wayland" "$(nix-prefetch-url --unpack "''${wayland_url/$wayland_rev/$latest_wayland_rev}")"
           set_source_attr wayland rev "\"$latest_wayland_rev\""
       fi
 
@@ -146,7 +146,7 @@ in rec {
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
     version = "20220411";
-    sha256 = "sha256-FjH10nZDYbqXI6/vKpZJKfv2maXSVkahNDf5UTU3eyU=";
+    hash = "sha256-FjH10nZDYbqXI6/vKpZJKfv2maXSVkahNDf5UTU3eyU=";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;
