@@ -44,6 +44,7 @@ python.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [
     python.pkgs.setuptools
+    python.pkgs.pytestCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -51,6 +52,8 @@ python.pkgs.buildPythonApplication {
     mdit-py-plugins-no-tests
     python.pkgs.frozendict
   ];
+
+  pytestFlagsArray = [ "-vvrP" "tests/" ];
 
   meta = with lib; {
     description = "Renderer for NixOS manual and option docs";

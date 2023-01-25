@@ -3,6 +3,8 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, Callable, Optional
 
+import re
+
 from .types import RenderFn
 
 import markdown_it
@@ -61,6 +63,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             'myst_role': self.myst_role,
             "container_admonition_open": self.admonition_open,
             "container_admonition_close": self.admonition_close,
+            "inline_anchor": self.inline_anchor,
         }
 
         self._admonitions = {
@@ -212,6 +215,51 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
+    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+
+def _is_escaped(src: str, pos: int) -> bool:
+    found = 0
+    while pos >= 0 and src[pos] == '\\':
+        found += 1
+        pos -= 1
+    return found % 2 == 1
+
+_INLINE_ANCHOR_PATTERN = re.compile(r"\{\s*#([\w-]+)\s*\}")
+
+def _inline_anchor_plugin(md: markdown_it.MarkdownIt) -> None:
+    def inline_anchor(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
+        if state.src[state.pos] != '[':
+            return False
+        if _is_escaped(state.src, state.pos - 1):
+            return False
+
+        # treat the inline span like a link label for simplicity.
+        label_begin = state.pos + 1
+        label_end = markdown_it.helpers.parseLinkLabel(state, state.pos)
+        input_end = state.posMax
+        if label_end < 0:
+            return False
+
+        # match id
+        match = _INLINE_ANCHOR_PATTERN.match(state.src[label_end + 1 : ])
+        if not match:
+            return False
+
+        if not silent:
+            token = state.push("inline_anchor", "", 0) # type: ignore[no-untyped-call]
+            token.attrs['id'] = match[1]
+
+            state.pos = label_begin
+            state.posMax = label_end
+            state.md.inline.tokenize(state)
+
+        state.pos = label_end + match.end() + 1
+        state.posMax = input_end
+        return True
+
+    md.inline.ruler.before("link", "inline_anchor", inline_anchor)
 
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
@@ -237,6 +285,7 @@ class Converter(ABC):
         )
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
+        self._md.use(_inline_anchor_plugin)
         self._md.enable(["smartquotes", "replacements"])
 
     def _post_parse(self, tokens: list[Token]) -> list[Token]:

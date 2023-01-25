@@ -200,3 +200,6 @@ class DocBookRenderer(Renderer):
             else:
                 return ref
         raise NotImplementedError("md node not supported yet", token)
+    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        return f'<anchor xml:id={quoteattr(cast(str, token.attrs["id"]))} />'
