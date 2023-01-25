@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
     # tmuxp install it so avoid collision
     rm $out/share/zsh/site-functions/_tmuxp
+
+    # trashy install it so avoid collision
+    rm $out/share/zsh/site-functions/_trash
   '';
 
   meta = {
