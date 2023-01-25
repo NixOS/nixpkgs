@@ -1,4 +1,8 @@
-{ lib, fetchurl, perlPackages, jdk }:
+{ lib
+, fetchurl
+, perlPackages
+, jdk
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
@@ -15,6 +19,7 @@ perlPackages.buildPerlPackage rec {
   '';
 
   outputs = [ "bin" "out" "doc" ]; # bin just links the user-run executable
+
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
   buildInputs = with perlPackages; [ ]; # plugins will need some
@@ -53,10 +58,10 @@ perlPackages.buildPerlPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://www.awstats.org/docs/awstats_changelog.txt";
     description = "Real-time logfile analyzer to get advanced statistics";
     homepage = "https://awstats.org";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
 }
-
