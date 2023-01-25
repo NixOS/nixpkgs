@@ -1943,6 +1943,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  git-sim = callPackage ../applications/version-management/git-sim { };
+
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
   git-stack = callPackage ../applications/version-management/git-stack {
