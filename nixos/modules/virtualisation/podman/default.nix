@@ -147,7 +147,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
+  config = lib.mkIf cfg.enable
     {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
@@ -241,6 +241,5 @@ in
           '';
         }
       ];
-    }
-  ]);
+    };
 }
