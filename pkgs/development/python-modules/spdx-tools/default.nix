@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.7.0a3";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-afV1W1n5ubHhqfLFpPO5fxaIy5TaZdw9eDy3JYOJ1oE=";
+    sha256 = "sha256-QqKMKBedWOFYF1av9IgQuyJ6b5mNhhMpIZVJdEDcAK8=";
   };
 
   propagatedBuildInputs = [
