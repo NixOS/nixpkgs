@@ -10,6 +10,7 @@ ninjaBuildPhase() {
 
     local flagsArray=(
         -j$buildCores
+        -l$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
 
@@ -39,6 +40,7 @@ ninjaCheckPhase() {
 
         local flagsArray=(
             -j$buildCores
+            -l$buildCores
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
         )
