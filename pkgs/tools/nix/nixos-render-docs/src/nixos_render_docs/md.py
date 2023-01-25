@@ -3,6 +3,8 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, Callable, Optional
 
+from .types import RenderFn
+
 import markdown_it
 from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
@@ -24,6 +26,9 @@ def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
 
 class Renderer(markdown_it.renderer.RendererProtocol):
+    _admonitions: dict[str, tuple[RenderFn, RenderFn]]
+    _admonition_stack: list[str]
+
     def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
         self._manpage_urls = manpage_urls
         self.rules = {
@@ -54,17 +59,28 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             'dd_open': self.dd_open,
             'dd_close': self.dd_close,
             'myst_role': self.myst_role,
-            "container_{.note}_open": self.note_open,
-            "container_{.note}_close": self.note_close,
-            "container_{.caution}_open": self.caution_open,
-            "container_{.caution}_close": self.caution_close,
-            "container_{.tip}_open": self.tip_open,
-            "container_{.tip}_close": self.tip_close,
-            "container_{.important}_open": self.important_open,
-            "container_{.important}_close": self.important_close,
-            "container_{.warning}_open": self.warning_open,
-            "container_{.warning}_close": self.warning_close,
+            "container_admonition_open": self.admonition_open,
+            "container_admonition_close": self.admonition_close,
         }
+
+        self._admonitions = {
+            "{.note}": (self.note_open, self.note_close),
+            "{.caution}": (self.caution_open,self.caution_close),
+            "{.tip}": (self.tip_open, self.tip_close),
+            "{.important}": (self.important_open, self.important_close),
+            "{.warning}": (self.warning_open, self.warning_close),
+        }
+        self._admonition_stack = []
+
+    def admonition_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        tag = token.info.strip()
+        self._admonition_stack.append(tag)
+        return self._admonitions[tag][0](token, tokens, i, options, env)
+    def admonition_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                         env: MutableMapping[str, Any]) -> str:
+        return self._admonitions[self._admonition_stack.pop()][1](token, tokens, i, options, env)
+
     def render(self, tokens: Sequence[Token], options: OptionsDict,
                env: MutableMapping[str, Any]) -> str:
         def do_one(i: int, token: Token) -> str:
@@ -212,12 +228,13 @@ class Converter(ABC):
             },
             renderer_cls=lambda parser: self.__renderer__(self._manpage_urls, parser)
         )
-        # TODO maybe fork the plugin and have only a single rule for all?
-        self._md.use(container_plugin, name="{.note}")
-        self._md.use(container_plugin, name="{.caution}")
-        self._md.use(container_plugin, name="{.tip}")
-        self._md.use(container_plugin, name="{.important}")
-        self._md.use(container_plugin, name="{.warning}")
+        self._md.use(
+            container_plugin,
+            name="admonition",
+            validate=lambda name, *args: (
+                name.strip() in self._md.renderer._admonitions # type: ignore[attr-defined]
+            )
+        )
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
         self._md.enable(["smartquotes", "replacements"])
