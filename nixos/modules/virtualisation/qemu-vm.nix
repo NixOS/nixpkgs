@@ -545,7 +545,8 @@ in
     virtualisation.vlans =
       mkOption {
         type = types.listOf types.ints.unsigned;
-        default = [ 1 ];
+        default = if config.virtualisation.interfaces == {} then [ 1 ] else [ ];
+        defaultText = lib.literalExpression ''if config.virtualisation.interfaces == {} then [ 1 ] else [ ]'';
         example = [ 1 2 ];
         description =
           lib.mdDoc ''
@@ -559,6 +560,35 @@ in
             in the list of VMs.
           '';
       };
+
+    virtualisation.interfaces = mkOption {
+      default = {};
+      example = {
+        enp1s0.vlan = 1;
+      };
+      description = lib.mdDoc ''
+        Network interfaces to add to the VM.
+      '';
+      type = with types; attrsOf (submodule {
+        options = {
+          vlan = mkOption {
+            type = types.ints.unsigned;
+            description = lib.mdDoc ''
+              VLAN to which the network interface is connected.
+            '';
+          };
+
+          assignIP = mkOption {
+            type = types.bool;
+            default = false;
+            description = lib.mdDoc ''
+              Automatically assign an IP address to the network interface using the same scheme as
+              virtualisation.vlans.
+            '';
+          };
+        };
+      });
+    };
 
     virtualisation.writableStore =
       mkOption {
