@@ -29,7 +29,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    httpx = [ httpx ];
+    httpx = [
+      httpx
+    ];
   };
 
   nativeCheckInputs = [
@@ -43,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Amazon Web Services version 4 authentication for the Python Requests library";
     homepage = "https://github.com/sam-washington/requests-aws4auth";
-    chnagelog = "https://github.com/tedder/requests-aws4auth/releases/tag/v${version}";
+    changelog = "https://github.com/tedder/requests-aws4auth/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ basvandijk ];
   };
