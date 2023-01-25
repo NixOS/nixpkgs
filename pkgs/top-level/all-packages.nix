@@ -8358,6 +8358,8 @@ with pkgs;
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
+  krunner-translator = libsForQt5.callPackage ../tools/misc/krunner-translator { };
+
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
   };
