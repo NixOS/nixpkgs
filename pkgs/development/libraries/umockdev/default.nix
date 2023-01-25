@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/martinpitt/umockdev";
+    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${version}";
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
