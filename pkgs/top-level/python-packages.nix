@@ -9754,6 +9754,8 @@ self: super: with self; {
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
 
+  radon = callPackage ../development/python-modules/radon { };
+
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
 
   rainbowstream = callPackage ../development/python-modules/rainbowstream { };
