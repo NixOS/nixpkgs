@@ -3,6 +3,8 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
+, wheel
 # install_requires
 , attrs
 , charset-normalizer
@@ -45,6 +47,11 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     attrs
