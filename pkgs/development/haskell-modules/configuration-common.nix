@@ -200,9 +200,10 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # matterhorn-50200.17.0 won't work with brick >= 0.71
+  # matterhorn-50200.17.0 won't work with brick >= 0.71, brick-skylighting >= 1.0
   matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
     brick = self.brick_0_70_1;
+    brick-skylighting = self.brick-skylighting_0_3;
   }));
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
