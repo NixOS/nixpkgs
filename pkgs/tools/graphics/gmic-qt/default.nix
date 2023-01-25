@@ -2,7 +2,6 @@
 , mkDerivation
 , variant ? "standalone"
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , ninja
@@ -59,13 +58,13 @@ assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps 
 
 mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.1.6";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "c-koi";
     repo = "gmic-qt";
     rev = "v.${version}";
-    sha256 = "sha256-/5wDHvJSMgEheg8YV4W40wUiHz25emIoFnGdfO8i92g=";
+    sha256 = "sha256-I5XC7zbDyBPFj4zul9rshoyeVV0hRQQ3aZQzEvYrgdc=";
   };
 
   nativeBuildInputs = [
@@ -93,15 +92,6 @@ mkDerivation rec {
   cmakeFlags = [
     "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
     "-DENABLE_SYSTEM_GMIC:BOOL=ON"
-  ];
-
-  patches = [
-    # NOTE: this should be removed when a new version is released.
-    (fetchpatch {
-      name = "fix_filter_translation_scripts.patch";
-      url = "https://github.com/c-koi/gmic-qt/commit/ccb9f29eda239d0c80663593cd90a6548c935b39.patch";
-      sha256 = "sha256-OzuJ6yGuDJweQ+1uin/pmJqZV79bN9E1Zuo+0iciwzg=";
-    })
   ];
 
   postPatch = ''
