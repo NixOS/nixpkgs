@@ -326,6 +326,7 @@ let
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     classInt = lib.optional stdenv.isDarwin [ pkgs.libiconv ];
+    coin = [ pkgs.libiconv ];
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
@@ -355,6 +356,7 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl ];
     kza = [ pkgs.fftw.dev ];
+    libcoin = [ pkgs.libiconv ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
     magick = [ pkgs.imagemagick.dev ];
@@ -367,6 +369,7 @@ let
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
     pander = with pkgs; [ pandoc which ];
+    party = [ pkgs.libiconv ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
@@ -374,6 +377,7 @@ let
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
+    polspline = [ pkgs.libiconv ];
     protolite = [ pkgs.protobuf ];
     R2SWF = with pkgs; [ zlib libpng freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
@@ -428,6 +432,7 @@ let
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
     stringi = [ pkgs.icu.dev ];
+    strucchange = [ pkgs.libiconv ];
     survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
     sysfonts = with pkgs; [ zlib libpng freetype.dev ];
