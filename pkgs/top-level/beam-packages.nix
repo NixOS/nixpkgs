@@ -5,9 +5,6 @@
 , wxGTK32
 , buildPackages
 , stdenv
-, wxSupport ? true
-, systemd
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 let
@@ -34,7 +31,6 @@ in
       wxGTK = wxGTK32;
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
     };
     erlangR25_odbc = self.interpreters.erlangR25.override { odbcSupport = true; };
     erlangR25_javac = self.interpreters.erlangR25.override { javacSupport = true; };
@@ -49,7 +45,6 @@ in
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
     };
     erlangR24_odbc = self.interpreters.erlangR24.override { odbcSupport = true; };
     erlangR24_javac = self.interpreters.erlangR24.override { javacSupport = true; };
@@ -65,7 +60,6 @@ in
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
     };
     erlangR23_odbc = self.interpreters.erlangR23.override { odbcSupport = true; };
     erlangR23_javac = self.interpreters.erlangR23.override { javacSupport = true; };
@@ -81,7 +75,6 @@ in
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
     };
     erlangR22_odbc = self.interpreters.erlangR22.override { odbcSupport = true; };
     erlangR22_javac = self.interpreters.erlangR22.override { javacSupport = true; };
@@ -95,7 +88,6 @@ in
       openssl = openssl_1_1;
       wxGTK = wxGTK32;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
     };
     erlangR21_odbc = self.interpreters.erlangR21.override { odbcSupport = true; };
     erlangR21_javac = self.interpreters.erlangR21.override { javacSupport = true; };
