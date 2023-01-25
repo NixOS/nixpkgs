@@ -1,8 +1,8 @@
-{ lib, pkg-config, pkg-configPackages, runCommand }:
+{ lib, pkg-config, defaultPkgConfigPackages, runCommand }:
 let
   inherit (lib.strings) escapeNixIdentifier;
 
-  allTests = lib.mapAttrs (k: v: if v == null then null else makePkgConfigTestMaybe k v) pkg-configPackages;
+  allTests = lib.mapAttrs (k: v: if v == null then null else makePkgConfigTestMaybe k v) defaultPkgConfigPackages;
 
   # nix-build rejects attribute names with periods
   # This will build those regardless.
