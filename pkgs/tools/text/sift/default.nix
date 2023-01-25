@@ -1,26 +1,33 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "sift";
   version = "0.9.0";
-  rev = "v${version}";
 
-  goPackagePath = "github.com/svent/sift";
+  src = fetchFromGitHub {
+    owner = "svent";
+    repo = "sift";
+    rev = "v${version}";
+    hash = "sha256-IZ4Hwg5NzdSXtrIDNxtkzquuiHQOmLV1HSx8gpwE/i0=";
+  };
+
+  vendorHash = "sha256-y883la4R4jhsS99/ohgBC9SHggybAq9hreda6quG3IY=";
+
+  patches = [
+    # Add Go Modules support
+    (fetchpatch {
+      url = "https://github.com/svent/sift/commit/b56fb3d0fd914c8a6c08b148e15dd8a07c7d8a5a.patch";
+      hash = "sha256-mFCEpkgQ8XDPRQ3yKDZ5qY9tKGSuHs+RnhMeAlx33Ng=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner = "svent";
-    repo = "sift";
-    sha256 = "0bgy0jf84z1c3msvb60ffj4axayfchdkf0xjnsbx9kad1v10g7i1";
-  };
+  ldflags = [ "-s" "-w" ];
 
   postInstall = ''
-    installShellCompletion --cmd sift --bash go/src/github.com/svent/sift/sift-completion.bash
+    installShellCompletion --cmd sift --bash sift-completion.bash
   '';
-
-  goDeps = ./deps.nix;
 
   meta = with lib; {
     description = "A fast and powerful alternative to grep";

@@ -3747,12 +3747,6 @@
       fingerprint = "A8DF 1326 9E5D 9A38 E57C  FAC2 9D20 F650 3E33 8888";
     }];
   };
-  doublec = {
-    email = "chris.double@double.co.nz";
-    github = "doublec";
-    githubId = 16599;
-    name = "Chris Double";
-  };
   dpaetzel = {
     email = "david.paetzel@posteo.de";
     github = "dpaetzel";
@@ -9149,6 +9143,12 @@
     keys = [{
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
+  };
+  mdr = {
+    email = "MattRussellUK@gmail.com";
+    github = "mdr";
+    githubId = 241257;
+    name = "Matt Russell";
   };
   meain = {
     email = "mail@meain.io";

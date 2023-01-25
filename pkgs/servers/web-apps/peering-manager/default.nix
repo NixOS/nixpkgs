@@ -32,18 +32,14 @@ let
 
 in py.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vrRMdqEpsps4ZKgunMhznJr/TQ9+WVMNYFu76ZU7iMI=";
+    sha256 = "sha256-mXva4c5Rtjq/jFJl3yGGlVrggzGJ3awN0+xoDnDWBSA=";
   };
-
-  patches = [
-    ./redis-unix-sock.patch
-  ];
 
   format = "other";
 

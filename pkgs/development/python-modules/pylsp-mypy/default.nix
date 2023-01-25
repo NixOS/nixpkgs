@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Richardk2n";
     repo = "pylsp-mypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-BpYg2noReHFgJ/5iQI09XUWNAN7UdcYgqpZ/IPr17Ao=";
+    hash = "sha256-LQ9Kw/dG3XA67WaVObE72fxERb21eZzk+MCqIp2Qy0o=";
   };
 
   propagatedBuildInputs = [

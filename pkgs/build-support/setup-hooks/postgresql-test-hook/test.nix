@@ -14,6 +14,9 @@ stdenv.mkDerivation {
     INSERT INTO hello VALUES ('it '||'worked');
     SELECT * FROM hello;
   '';
+  postgresqlTestSetupPost = ''
+    TEST_POST_HOOK_RAN=1
+  '';
   checkPhase = ''
     runHook preCheck
     psql <$sqlPath | grep 'it worked'
@@ -21,7 +24,7 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
   installPhase = ''
-    [[ $TEST_RAN == 1 ]]
+    [[ $TEST_RAN == 1 && $TEST_POST_HOOK_RAN == 1 ]]
     touch $out
   '';
 }
