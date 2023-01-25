@@ -246,4 +246,7 @@ class DocBookRenderer(Renderer):
 
     def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> tuple[str, dict[str, str]]:
-        return ("section", {})
+        attrs = {}
+        if id := token.attrs.get('id'):
+            attrs['xml:id'] = cast(str, id)
+        return ("section", attrs)

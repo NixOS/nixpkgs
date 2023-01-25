@@ -316,6 +316,8 @@ def _block_comment_plugin(md: markdown_it.MarkdownIt) -> None:
 
     md.block.ruler.after("code", "block_comment", block_comment)
 
+_HEADER_ID_RE = re.compile(r"\s*\{\s*\#([\w-]+)\s*\}\s*$")
+
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
@@ -346,6 +348,17 @@ class Converter(ABC):
         self._md.enable(["smartquotes", "replacements"])
 
     def _post_parse(self, tokens: list[Token]) -> list[Token]:
+        for i in range(0, len(tokens)):
+            # parse header IDs. this is purposely simple and doesn't support
+            # classes or other inds of attributes.
+            if tokens[i].type == 'heading_open':
+                children = tokens[i + 1].children
+                assert children is not None
+                if len(children) == 0 or children[-1].type != 'text':
+                    continue
+                if m := _HEADER_ID_RE.search(children[-1].content):
+                    tokens[i].attrs['id'] = m[1]
+                    children[-1].content = children[-1].content[:-len(m[0])].rstrip()
         return tokens
 
     def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
