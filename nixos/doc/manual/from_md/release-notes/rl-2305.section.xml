@@ -63,6 +63,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.magicbug.co.uk/cloudlog/">Cloudlog</link>,
+          a web-based Amateur Radio logging application. Available as
+          <link linkend="opt-services.cloudlog.enable">services.cloudlog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/junegunn/fzf">fzf</link>,
           a command line fuzzyfinder. Available as
           <link linkend="opt-programs.fzf.fuzzyCompletion">programs.fzf</link>.
@@ -370,6 +377,13 @@
           package has been removed in favour of direct use of its
           constitutents: <literal>xorg.libX11</literal>,
           <literal>freetype</literal> and others.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          .NET 5.0 was removed due to being end-of-life, use a newer,
+          supported .NET version -
+          https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core
         </para>
       </listitem>
     </itemizedlist>

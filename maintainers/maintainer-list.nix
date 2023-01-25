@@ -12269,6 +12269,12 @@
     githubId = 710906;
     name = "Roel van Dijk";
   };
+  roman = {
+    email = "open-source@roman-gonzalez.info";
+    github = "roman";
+    githubId = 7335;
+    name = "Roman Gonzalez";
+  };
   romildo = {
     email = "malaquias@gmail.com";
     github = "romildo";

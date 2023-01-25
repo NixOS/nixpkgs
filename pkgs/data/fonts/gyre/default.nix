@@ -1,15 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  baseName = "gyre-fonts";
+stdenvNoCC.mkDerivation rec {
+  pname = "gyre-fonts";
   version = "2.005";
-in (fetchzip {
-  name="${baseName}-${version}";
 
-  url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
+  src = fetchzip {
+    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
+    stripRoot = false;
+    hash = "sha256-+6IufuFf+IoLXoZEPlfHUNgRhKrQNBEZ1OwPD9/uOjg=";
+  };
 
-  sha256 = "17amdpahs6kn7hk3dqxpff1s095cg1caxzij3mxjbbxp8zy0l111";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    cp *.otf $out/share/fonts/truetype
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "OpenType fonts from the Gyre project, suitable for use with (La)TeX";
@@ -25,9 +33,4 @@ in (fetchzip {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bergey ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/truetype
-  '';
-})
+}

@@ -113,7 +113,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -153,7 +153,7 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -166,7 +166,7 @@ let
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
-          (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false)
+          (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };

@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   # fxload binary exist inside the `examples/bin` directory of `libusb1`
   postFixup = ''
-    mkdir -p $out/sbin
-    ln -s ${passthru.libusb}/examples/bin/fxload $out/sbin/fxload
+    mkdir -p $out/bin
+    ln -s ${passthru.libusb}/examples/bin/fxload $out/bin/fxload
   '';
 
   passthru.libusb = libusb1.override { withExamples = true; };

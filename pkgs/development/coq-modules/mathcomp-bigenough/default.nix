@@ -1,6 +1,6 @@
 { coq, mkCoqDerivation, mathcomp, lib, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "bigenough";
@@ -11,7 +11,7 @@ with lib; mkCoqDerivation {
     "1.0.1".sha256 = "sha256:02f4dv4rz72liciwxb2k7acwx6lgqz4381mqyq5854p3nbyn06aw";
   };
   inherit version;
-  defaultVersion = with versions; switch coq.version [
+  defaultVersion = with lib.versions; lib.switch coq.version [
     { case = range "8.10" "8.16"; out = "1.0.1"; }
     { case = range "8.5"  "8.14"; out = "1.0.0"; }
   ] null;
@@ -20,6 +20,6 @@ with lib; mkCoqDerivation {
 
   meta = {
     description = "A small library to do epsilon - N reasonning";
-    license = licenses.cecill-b;
+    license = lib.licenses.cecill-b;
   };
 }

@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "McKael";
     repo = "madonctl";
     rev = "v${version}";
-    sha256 = "sha256-mo185EKjLkiujAKcAFM1XqkXWvcfYbnv+r3dF9ywaf8=";
+    hash = "sha256-mo185EKjLkiujAKcAFM1XqkXWvcfYbnv+r3dF9ywaf8=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 

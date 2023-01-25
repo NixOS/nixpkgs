@@ -2019,6 +2019,40 @@ buildLuarocksPackage {
   };
 }) {};
 
+lualdap = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "lualdap";
+  version = "1.3.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lualdap-1.3.0-1.rockspec";
+    sha256 = "0b51sm0fz4kiim20w538v31k9g20wq3msxdkh17drkr60ab25sc8";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lualdap/lualdap",
+  "rev": "be380f5d98f779c813a4fb4ae1400262366fc8d4",
+  "date": "2021-06-05T15:49:42+02:00",
+  "path": "/nix/store/99sy73yz6sidqhkl0kwdsd7r853aw38n-lualdap",
+  "sha256": "133d8br5f24z03ni38m0czrqfz0mr0ksdrc1g73rawpmiqarpps8",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://lualdap.github.io/lualdap/";
+    description = "A Lua interface to the OpenLDAP library";
+    maintainers = with lib.maintainers; [ aanderse ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 lualogging = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, luasocket
 }:

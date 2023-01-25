@@ -657,12 +657,10 @@ with pkgs;
   dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
 
   dotnet-runtime_3 = dotnetCorePackages.runtime_3_1;
-  dotnet-runtime_5 = dotnetCorePackages.runtime_5_0;
   dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
   dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
 
   dotnet-aspnetcore_3 = dotnetCorePackages.aspnetcore_3_1;
-  dotnet-aspnetcore_5 = dotnetCorePackages.aspnetcore_5_0;
   dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
 
@@ -2196,6 +2194,7 @@ with pkgs;
   zesarux = callPackage ../applications/emulators/zesarux { };
 
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
+  zsnes2 = pkgsi686Linux.callPackage ../applications/emulators/zsnes/2.x.nix { };
 
   ### APPLICATIONS/EMULATORS/BSNES
 
@@ -2318,6 +2317,8 @@ with pkgs;
   pcmanfm = callPackage ../applications/file-managers/pcmanfm { };
 
   portfolio-filemanager = callPackage ../applications/file-managers/portfolio-filemanager { };
+
+  potreeconverter = callPackage ../applications/graphics/potreeconverter { };
 
   ranger = callPackage ../applications/file-managers/ranger { };
 
@@ -3167,9 +3168,7 @@ with pkgs;
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
-  gmnisrv = callPackage ../servers/gemini/gmnisrv {
-    openssl = openssl_1_1;
-  };
+  gmnisrv = callPackage ../servers/gemini/gmnisrv { };
 
   gmnitohtml = callPackage ../applications/misc/gmnitohtml { };
 
@@ -3366,7 +3365,7 @@ with pkgs;
 
   kjv = callPackage ../applications/misc/kjv { };
 
-  lukesmithxyz-bible-kjv = callPackage ../applications/misc/lukesmithxyz-bible/kjv.nix { };
+  lukesmithxyz-bible-kjv = callPackage ../applications/misc/kjv/lukesmithxyz-kjv.nix { };
 
   luigi = callPackage ../applications/networking/cluster/luigi { };
 
@@ -10301,7 +10300,9 @@ with pkgs;
 
   openimagedenoise_1_2_x = callPackage ../development/libraries/openimagedenoise/1_2_x.nix { };
 
-  openmvg = callPackage ../applications/science/misc/openmvg { };
+  openmvg = callPackage ../applications/science/misc/openmvg {
+    inherit (llvmPackages) openmp;
+  };
 
   openmvs = callPackage ../applications/science/misc/openmvs { };
 
@@ -17265,6 +17266,8 @@ with pkgs;
 
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
 
+  cloudlog = callPackage ../applications/radio/cloudlog { };
+
   cloudflare-warp = callPackage ../tools/networking/cloudflare-warp { };
 
   cloudfoundry-cli = callPackage ../applications/networking/cluster/cloudfoundry-cli { };
@@ -20659,6 +20662,12 @@ with pkgs;
 
   libcutl = callPackage ../development/libraries/libcutl { };
 
+  libcxxrt = callPackage ../development/libraries/libcxxrt {
+    stdenv = if stdenv.hostPlatform.useLLVM or false
+             then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+             else stdenv;
+  };
+
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdatovka = callPackage ../development/libraries/libdatovka { };
@@ -21554,6 +21563,8 @@ with pkgs;
   libtap = callPackage ../development/libraries/libtap { };
 
   libtsm = callPackage ../development/libraries/libtsm { };
+
+  libsv = callPackage ../development/libraries/libsv { };
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
@@ -22639,6 +22650,7 @@ with pkgs;
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
     inherit lib pkgs qt6;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   });
 
   quark-engine = callPackage ../tools/security/quark-engine { };
@@ -26835,6 +26847,8 @@ with pkgs;
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
+  dotcolon-fonts = callPackage ../data/fonts/dotcolon-fonts { };
+
   e17gtk = callPackage ../data/themes/e17gtk { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
@@ -26854,6 +26868,10 @@ with pkgs;
   equilux-theme = callPackage ../data/themes/equilux-theme { };
 
   eunomia = callPackage ../data/fonts/eunomia { };
+
+  fa_1 = callPackage ../data/fonts/fa_1 { };
+
+  f1_8 = callPackage ../data/fonts/f1_8 { };
 
   f5_6 = callPackage ../data/fonts/f5_6 { };
 
@@ -27192,6 +27210,8 @@ with pkgs;
 
   medio = callPackage ../data/fonts/medio { };
 
+  melete = callPackage ../data/fonts/melete { };
+
   mno16 = callPackage ../data/fonts/mno16 { };
 
   mnist = callPackage ../data/machine-learning/mnist { };
@@ -27227,6 +27247,8 @@ with pkgs;
   myrddin = callPackage ../development/compilers/myrddin { };
 
   myrica = callPackage ../data/fonts/myrica { };
+
+  nacelle = callPackage ../data/fonts/nacelle { };
 
   nafees = callPackage ../data/fonts/nafees { };
 
@@ -31106,6 +31128,8 @@ with pkgs;
 
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
+  river-tag-overlay = callPackage ../applications/misc/river-tag-overlay { };
+
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
 
   rofi-bluetooth = callPackage ../applications/misc/rofi-bluetooth { };
@@ -31972,6 +31996,10 @@ with pkgs;
 
   polymake = callPackage ../applications/science/math/polymake { };
 
+  pomodoro = callPackage ../applications/misc/pomodoro {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   pomotroid = callPackage ../applications/misc/pomotroid {
     electron = electron_9;
   };
@@ -32409,6 +32437,8 @@ with pkgs;
   secrets-extractor = callPackage ../tools/security/secrets-extractor { };
 
   secretscanner = callPackage ../tools/security/secretscanner { };
+
+  setconf = python3.pkgs.callPackage ../tools/misc/setconf { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
 
@@ -34316,7 +34346,7 @@ with pkgs;
   openethereum = callPackage ../applications/blockchains/openethereum { };
 
   polkadot = callPackage ../applications/blockchains/polkadot {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   particl-core = callPackage ../applications/blockchains/particl-core { };
@@ -38714,6 +38744,8 @@ with pkgs;
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
 
   tuner = callPackage ../applications/audio/tuner { };
+
+  locate-dominating-file = callPackage ../tools/misc/locate-dominating-file { };
 
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 

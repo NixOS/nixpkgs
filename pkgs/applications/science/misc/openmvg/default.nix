@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, cereal, openmp
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff ];
+  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ mdaiter ];
+    maintainers = with lib.maintainers; [ mdaiter bouk ];
   };
 }

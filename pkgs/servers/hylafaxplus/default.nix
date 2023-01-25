@@ -32,8 +32,8 @@
 let
 
   pname = "hylafaxplus";
-  version = "7.0.6";
-  hash = "sha512-0faeEwF/XQE/85zwUMOnrGzvGanuWRDr53SnrgbX0i/SHjHelzSEd2TK6plVOfV4w8RY7Ox7lSO1gjqEEzfZyw==";
+  version = "7.0.7";
+  hash = "sha512-nUvt+M0HBYN+MsGskuuDt1j0nI5Dk8MbfK/OVxP2FCDby3eiDg0eDtcpIxlOe4o0klko07zDRIb06zqh8ABuKA==";
 
   configSite = substituteAll {
     name = "${pname}-config.site";
@@ -72,16 +72,6 @@ stdenv.mkDerivation {
   patches = [
     # adjust configure check to work with libtiff > 4.1
     ./libtiff-4.patch
-    # fix missing exports in libtiff 4.5+
-    # https://gitlab.com/libtiff/libtiff/-/issues/504
-    # can probably be dropped with next hylafaxplus release
-    (fetchurl {
-      name = "hylafaxplus-7.0.6-tiff-4.5.0.patch";
-      url = "https://dev.gentoo.org/~sam/distfiles/net-misc/hylafaxplus/hylafaxplus-7.0.6-tiff-4.5.0.patch.xz";
-      downloadToTemp = true;
-      postFetch = ''xz -d < $downloadedFile > $out'';
-      hash = "sha256-koZvvzlgZHcANVaYdewnuLARz2TTeyDZRjm0EYWzsmk=";
-    })
   ];
   # Note that `configure` (and maybe `faxsetup`) are looking
   # for a couple of standard binaries in the `PATH` and

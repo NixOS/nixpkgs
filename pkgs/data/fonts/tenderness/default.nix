@@ -1,27 +1,32 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 let
   majorVersion = "0";
   minorVersion = "601";
-  pname = "tenderness";
 in
+stdenvNoCC.mkDerivation (self: {
+  pname = "tenderness";
+  version = "${majorVersion}.${minorVersion}";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${self.pname}_${majorVersion}${minorVersion}.zip";
+    hash = "sha256-bwJKW+rY7/r2pBCSA6HYlaRMsI/U8UdW2vV4tmYuJww=";
+    stripRoot = false;
+  };
 
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
-  sha256 = "0d88l5mzq0k63zsmb8d5w3hfqxy04vpv4j0j8nmj1xv6kikhhybh";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "http://dotcolon.net/font/${self.pname}/";
     description = "Serif font designed by Sora Sagano with old-style figures";
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.ofl;
   };
-}
+})

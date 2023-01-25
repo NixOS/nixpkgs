@@ -65,8 +65,6 @@
 , MetalKit
 }:
 
-with lib;
-
 let
   tg_owt = callPackage ./tg_owt.nix {
     abseil-cpp = abseil-cpp.override {
@@ -99,14 +97,14 @@ stdenv.mkDerivation rec {
     ./shortcuts-binary-path.patch
   ];
 
-  postPatch = optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i "13i#import <CoreAudio/CoreAudio.h>" Telegram/lib_webrtc/webrtc/mac/webrtc_media_devices_mac.mm
     substituteInPlace Telegram/CMakeLists.txt \
       --replace 'COMMAND iconutil' 'COMMAND png2icns' \
@@ -122,7 +120,7 @@ stdenv.mkDerivation rec {
     python3
     wrapQtAppsHook
     removeReferencesTo
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     # to build bundled libdispatch
     clang
     extra-cmake-modules
@@ -143,7 +141,7 @@ stdenv.mkDerivation rec {
     rnnoise
     tg_owt
     microsoft_gsl
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     kwayland
     alsa-lib
     libpulseaudio
@@ -151,7 +149,7 @@ stdenv.mkDerivation rec {
     glibmm
     jemalloc
     wayland
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreFoundation
     CoreServices
@@ -192,7 +190,7 @@ stdenv.mkDerivation rec {
     "-DDESKTOP_APP_QT6=OFF"
   ];
 
-  installPhase = optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r Kotatogram.app $out/Applications
     ln -s $out/Applications/Kotatogram.app/Contents/MacOS $out/bin
@@ -209,7 +207,7 @@ stdenv.mkDerivation rec {
     inherit tg_owt;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Kotatogram – experimental Telegram Desktop fork";
     longDescription = ''
       Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.

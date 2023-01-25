@@ -50,6 +50,5 @@ writeScript "update-standardnotes" ''
 
   updatePlatform x86_64-linux linux-x86_64
   updatePlatform aarch64-linux linux-arm64
-  updatePlatform i686-linux linux-i386
   setJsonKey .version "$newVersion"
 ''
