@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
   version = "1.4.9";
 
-  src = builtins.fetchTarball {
+  src = fetchurl {
     url = "https://github.com/yuezk/GlobalProtect-openconnect/releases/download/v${version}/globalprotect-openconnect-${version}.tar.gz";
     sha256 = "0b7s3gf0gznlpmf9dxfq77254zlxmpajhzzn3scrdrvf413sjl0f";
   };
