@@ -29552,6 +29552,8 @@ with pkgs;
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 
+  gscreenshot = callPackage ../applications/graphics/gscreenshot { };
+
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
