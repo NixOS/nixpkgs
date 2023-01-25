@@ -156,6 +156,16 @@ class OptionsDocBookRenderer(DocBookRenderer):
                       env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported in options doc", token)
 
+    # TODO keep optionsDocBook diff small. remove soon if rendering is still good.
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                          env: MutableMapping[str, Any]) -> str:
+        token.attrs['compact'] = False
+        return super().ordered_list_open(token, tokens, i, options, env)
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                         env: MutableMapping[str, Any]) -> str:
+        token.attrs['compact'] = False
+        return super().bullet_list_open(token, tokens, i, options, env)
+
 class DocBookConverter(BaseConverter):
     __renderer__ = OptionsDocBookRenderer
 

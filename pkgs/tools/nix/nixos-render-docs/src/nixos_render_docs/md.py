@@ -359,6 +359,20 @@ class Converter(ABC):
                 if m := _HEADER_ID_RE.search(children[-1].content):
                     tokens[i].attrs['id'] = m[1]
                     children[-1].content = children[-1].content[:-len(m[0])].rstrip()
+
+        # markdown-it signifies wide lists by setting the wrapper paragraphs
+        # of each item to hidden. this is not useful for our stylesheets, which
+        # signify this with a special css class on list elements instead.
+        wide_stack = []
+        for i in range(0, len(tokens)):
+            if tokens[i].type in [ 'bullet_list_open', 'ordered_list_open' ]:
+                wide_stack.append([i, True])
+            elif tokens[i].type in [ 'bullet_list_close', 'ordered_list_close' ]:
+                (idx, compact) = wide_stack.pop()
+                tokens[idx].attrs['compact'] = compact
+            elif len(wide_stack) > 0 and tokens[i].type == 'paragraph_open' and not tokens[i].hidden:
+                wide_stack[-1][1] = False
+
         return tokens
 
     def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
