@@ -16381,7 +16381,7 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
-  };  
+  };
   krysztal = {
     name = "Krysztal";
     email = "suibing112233@outlook.com";
