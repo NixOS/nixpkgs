@@ -4,14 +4,15 @@
 , fetchFromGitHub
 , systemd
 , xrandr
-, installShellFiles }:
+, installShellFiles
+, desktop-file-utils }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
-  version = "1.13.1";
+  version = "1.13.2";
   format = "other";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles desktop-file-utils ];
   propagatedBuildInputs = [ python3Packages.packaging ];
 
   buildPhase = ''
@@ -59,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "phillipberndt";
     repo = "autorandr";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-702x4O0rHW/VZIfu1+5G1gBSDQYVoAx167igz/M3Ea4=";
+    sha256 = "sha256-Yn950V7DgLhwYSoGyUvjTH0Vwg/FodxhKsBP5iLTgqA=";
   };
 
   meta = with lib; {
