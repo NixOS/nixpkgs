@@ -1,9 +1,13 @@
 from collections.abc import Mapping, MutableMapping, Sequence
-from typing import Any, Optional
+from frozendict import frozendict # type: ignore[attr-defined]
+from typing import Any, Callable, Optional
 
 import markdown_it
 from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
+from mdit_py_plugins.container import container_plugin # type: ignore[attr-defined]
+from mdit_py_plugins.deflist import deflist_plugin # type: ignore[attr-defined]
+from mdit_py_plugins.myst_role import myst_role_plugin # type: ignore[attr-defined]
 
 _md_escape_table = {
     ord('*'): '\\*',
@@ -175,3 +179,29 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
+
+class Converter:
+    __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
+
+    def __init__(self, manpage_urls: Mapping[str, str]):
+        self._manpage_urls = frozendict(manpage_urls)
+
+        self._md = markdown_it.MarkdownIt(
+            "commonmark",
+            {
+                'maxNesting': 100,   # default is 20
+                'html': False,       # not useful since we target many formats
+                'typographer': True, # required for smartquotes
+            },
+            renderer_cls=lambda parser: self.__renderer__(self._manpage_urls, parser)
+        )
+        # TODO maybe fork the plugin and have only a single rule for all?
+        self._md.use(container_plugin, name="{.note}")
+        self._md.use(container_plugin, name="{.important}")
+        self._md.use(container_plugin, name="{.warning}")
+        self._md.use(deflist_plugin)
+        self._md.use(myst_role_plugin)
+        self._md.enable(["smartquotes", "replacements"])
+
+    def _render(self, src: str) -> str:
+        return self._md.render(src) # type: ignore[no-any-return]
