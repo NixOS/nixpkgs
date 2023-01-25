@@ -3,26 +3,27 @@
 , fetchFromGitHub
 , cmake
 , stdenv
-, CoreFoundation
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.7.5";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-29uxcbqAnWCdxKqVdrMVtorXvSLUC+jlt4YwE19Gh+A=";
+    sha256 = "sha256-66wunZuRAJ6QVWgBUy2+HGaow33F5+16LitGSQC4kCE=";
   };
 
-  cargoSha256 = "sha256-VHuzv6Zq83byXDEEyYDtlaPC4DZ3GNJaJfO0ACrrqO8=";
+  cargoSha256 = "sha256-4CAj94wm9qxr9wejD2ffKSdRV1UeofMhxNxLi++At+I=";
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # link System as a dylib instead of a framework on macos
   postPatch = lib.optionalString stdenv.isDarwin ''

@@ -5,13 +5,14 @@
 , beautifulsoup4
 , lxml
 , cssutils
+, nltk
 , pytest-lazy-fixture
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.1.0";
+  version = "2.1.1";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mV//EYdP7wKYD3Vc49z6LQVQeOuhzNKFZLf28RYdABk=";
+    hash = "sha256-B+uIh8WTPPeNVU3yP8FEGc8OinY0MpJb9dHLC+nhi4I=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +28,10 @@ buildPythonPackage rec {
     lxml
     cssutils
   ];
+
+  passthru.optional-dependencies = {
+    transcript = [ nltk ];
+  };
 
   nativeCheckInputs = [
     pytest-lazy-fixture
