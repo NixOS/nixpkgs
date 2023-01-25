@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchurl
-, autoreconfHook
+, fetchgit
 , gettext
 , help2man
 , pkg-config
@@ -14,6 +13,10 @@
 , textStylingSupport ? true
 , dejagnu
 
+# to regenerate ./configure
+, autoconf, automake, libtool
+, flex, bison
+
 # update script only
 , writeScript
 }:
@@ -22,11 +25,13 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "2.4";
+  version = "3.0";
 
-  src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hB4oWRfGc4zpgqaTDjDr6t7PsGVaedkYTxb4dqn+bkc=";
+  # Some files are missing in release tarball.
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/git/poke.git";
+    rev = "releases/poke-${version}";
+    hash = "sha256-t1qVXOLww3XPXnWhZ/0KanQqy8swUGy9Mt+aYug5TI8=";
   };
 
   outputs = [ "out" "dev" "info" "lib" ]
@@ -41,7 +46,6 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoreconfHook
     gettext
     pkg-config
     texinfo
@@ -50,6 +54,10 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals guiSupport [
     makeWrapper
     tcl.tclPackageHook
+  ] ++ [
+    # for ./configure regeneration
+    autoconf automake libtool
+    flex bison
   ];
 
   buildInputs = [ boehmgc readline ]
@@ -72,8 +80,23 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Workaround nixpkgs' dejagnu bug where incorrect target platform
+  # is passed due to a wrapping bug:
+  #   https://github.com/NixOS/nixpkgs/pull/212688
+  # TODO(trofi): remove in staging.
+  preCheck = ''
+    rm testsuite/poke.pkl/in-1.pk
+    rm testsuite/poke.pkl/in-2.pk
+    rm testsuite/poke.pkl/in-3.pk
+  '';
+
   doCheck = !isCross;
   nativeCheckInputs = lib.optionals (!isCross) [ dejagnu ];
+
+  # Bundled ./configure is missing support for aarch64-darwin.
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   postInstall = ''
     moveToOutput share/emacs "$out"
