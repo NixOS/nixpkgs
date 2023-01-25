@@ -31,47 +31,33 @@
 
 let
   # FIXME: Compare revision with
-  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35arm64/Makefile#L26-L27
+  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35/Makefile#L26-L27
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "c9e7242972837ac11fc94db05fabcb801a8269c9";
-    hash = "sha256-HFQj23GlLAyyzMGnPq40XaPv5qPDHdDlQOo0Hprc9Cs=";
+    rev = "55d73c6bbb94448a5c615933179e73ac618cf876";
+    hash = "sha256-pZxxp5xDg8mgkGEx7LaBSoKxNPyggFYA4um9YaO20LU=";
   };
   armv7 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-armv7";
-    rev = "dde39f69ffea19fc37e681874b12cb4707bc4f30";
-
-    hash = "sha256-bnWQc0dScM9rhIdzf+iVXvMqYWq/bguEAUQPaZRgdlU=";
+    rev = "f270a6cc99644cb8e76055b6fa632b25abd26024";
+    hash = "sha256-YhfgJ7M8ys53jh1clOzj0I2yfJshXQm5zP0L9kMYsmk=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.8.0";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    hash = "sha256-9bDwtMNru7tG0L735y+Vrcg7Htk/TV9SVZn7WP4Ap4c=";
+    hash = "sha256-jwr3QPgJ6vKSk8yGxndQ69AickP8PorNDuGyJzHMpV4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-4843.patch";
-      url = "https://github.com/radareorg/radare2/commit/842f809d4ec6a12af2906f948657281c9ebc8a24.patch";
-      sha256 = "sha256-asEXW9Ox48w9WQhOA9tleXIvynIjsWb6ItKmFTojgbQ=";
-    })
-    (fetchpatch {
-      name = "CVE-2023-0302.patch";
-      url = "https://github.com/radareorg/radare2/commit/961f0e723903011d4f54c2396e44efa91fcc74ce.patch";
-      hash = "sha256-QinRQDIY4p3P+M3Hh9w3Dv3N/2XTaf3N0nUluHPpAvg=";
-    })
-  ];
-
   preBuild = ''
-    pushd ../libr/arch/p/arm/v35arm64
+    pushd ../libr/arch/p/arm/v35
     cp -r ${arm64} arch-arm64
     chmod -R +w arch-arm64
 
