@@ -8,7 +8,6 @@
 # the `.pc` file lists only the main output's lib dir.
 # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
-, tests
 }:
 
 # Without either the build will actually still succeed because the build
@@ -125,14 +124,6 @@ stdenv.mkDerivation rec {
     # for Windows as it is specific to `win32/Makefile.gcc`.
     "SHARED_MODE=1"
   ];
-
-  passthru = {
-    tests = {
-      # NB: this may test a different variant of zlib than the package that
-      #     carries this `tests` attribute, due to overriding.
-      pkg-configPackages = tests.pkg-configPackages.zlib;
-    };
-  };
 
   meta = with lib; {
     homepage = "https://zlib.net";
