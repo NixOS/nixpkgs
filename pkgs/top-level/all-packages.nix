@@ -2424,6 +2424,8 @@ with pkgs;
 
   sakura = callPackage ../applications/terminal-emulators/sakura { };
 
+  scriv = callPackage ../applications/version-management/scriv { };
+
   st = callPackage ../applications/terminal-emulators/st {
     conf = config.st.conf or null;
     patches = config.st.patches or [];
