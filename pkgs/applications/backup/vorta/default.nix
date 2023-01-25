@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-5RZXHMov3CX0zRprs7sgz0+cGEdESLrg4I2glRnTkcU=";
+    sha256 = "sha256-okxZ1kALB5l94ShStAJLfzD37MLhob8MCzhbqfVISkw=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
