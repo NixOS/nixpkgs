@@ -8902,6 +8902,8 @@ with pkgs;
 
   mani = callPackage ../development/tools/mani { };
 
+  manifest-tool = callPackage ../development/tools/manifest-tool { };
+
   mask = callPackage ../development/tools/mask { };
 
   mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
