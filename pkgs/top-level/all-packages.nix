@@ -38705,4 +38705,6 @@ with pkgs;
   resgate = callPackage ../servers/resgate { };
 
   oversteer = callPackage ../applications/misc/oversteer { };
+
+  linux-qq = callPackage ../applications/networking/linux-qq { };
 }

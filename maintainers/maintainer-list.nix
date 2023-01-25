@@ -16381,5 +16381,14 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };  
+  krysztal = {
+    name = "Krysztal";
+    email = "suibing112233@outlook.com";
+    github = "SUIBING112233";
+    githubId = 20512501;
+    keys = [{
+      fingerprint = "B201 D0C9 6041 4E5E B6BF  5B14 3882 0F4C 51AF 4A5F";
+    }];
   };
 }
