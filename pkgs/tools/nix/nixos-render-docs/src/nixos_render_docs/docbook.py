@@ -1,6 +1,6 @@
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, cast, Optional
+from typing import Any, cast, Optional, NamedTuple
 
 import markdown_it
 from markdown_it.token import Token
@@ -25,16 +25,27 @@ def make_xml_id(s: str) -> str:
 class Deflist:
     has_dd = False
 
+class Heading(NamedTuple):
+    container_tag: str
+    level: int
+
 class DocBookRenderer(Renderer):
     __output__ = "docbook"
     _link_tags: list[str]
     _deflists: list[Deflist]
+    _headings: list[Heading]
 
     def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
         super().__init__(manpage_urls, parser)
         self._link_tags = []
         self._deflists = []
+        self._headings = []
 
+    def render(self, tokens: Sequence[Token], options: OptionsDict,
+               env: MutableMapping[str, Any]) -> str:
+        result = super().render(tokens, options, env)
+        result += self._close_headings(None, env)
+        return result
     def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         # HACK to support docbook links and xrefs. link handling is only necessary because the docbook
@@ -203,3 +214,36 @@ class DocBookRenderer(Renderer):
     def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
         return f'<anchor xml:id={quoteattr(cast(str, token.attrs["id"]))} />'
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                          env: MutableMapping[str, Any]) -> str:
+        start = f' startingnumber="{token.attrs["start"]}"' if 'start' in token.attrs else ""
+        return f"<orderedlist{start}>"
+    def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                           env: MutableMapping[str, Any]) -> str:
+        return f"</orderedlist>"
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        hlevel = int(token.tag[1:])
+        result = self._close_headings(hlevel, env)
+        (tag, attrs) = self._heading_tag(token, tokens, i, options, env)
+        self._headings.append(Heading(tag, hlevel))
+        attrs_str = "".join([ f" {k}={quoteattr(v)}" for k, v in attrs.items() ])
+        return result + f'<{tag}{attrs_str}>\n<title>'
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        return '</title>'
+
+    def _close_headings(self, level: Optional[int], env: MutableMapping[str, Any]) -> str:
+        # we rely on markdown-it producing h{1..6} tags in token.tag for this to work
+        result = []
+        while len(self._headings):
+            if level is None or self._headings[-1].level >= level:
+                result.append(f"</{self._headings[-1].container_tag}>")
+                self._headings.pop()
+            else:
+                break
+        return "\n".join(result)
+
+    def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> tuple[str, dict[str, str]]:
+        return ("section", {})

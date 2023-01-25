@@ -64,6 +64,10 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             "container_admonition_open": self.admonition_open,
             "container_admonition_close": self.admonition_close,
             "inline_anchor": self.inline_anchor,
+            "heading_open": self.heading_open,
+            "heading_close": self.heading_close,
+            "ordered_list_open": self.ordered_list_open,
+            "ordered_list_close": self.ordered_list_close,
         }
 
         self._admonitions = {
@@ -217,6 +221,18 @@ class Renderer(markdown_it.renderer.RendererProtocol):
         raise RuntimeError("md token not supported", token)
     def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                          env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                           env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:

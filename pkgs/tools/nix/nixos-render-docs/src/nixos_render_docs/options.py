@@ -2,6 +2,9 @@ import argparse
 import json
 
 from abc import abstractmethod
+from collections.abc import MutableMapping, Sequence
+from markdown_it.utils import OptionsDict
+from markdown_it.token import Token
 from typing import Any, Optional
 from xml.sax.saxutils import escape, quoteattr
 
@@ -145,8 +148,16 @@ class BaseConverter(Converter):
     @abstractmethod
     def finalize(self) -> str: raise NotImplementedError()
 
+class OptionsDocBookRenderer(DocBookRenderer):
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported in options doc", token)
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported in options doc", token)
+
 class DocBookConverter(BaseConverter):
-    __renderer__ = DocBookRenderer
+    __renderer__ = OptionsDocBookRenderer
 
     def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
         if lit := option_is(option, key, 'literalDocBook'):
