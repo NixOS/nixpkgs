@@ -22,6 +22,7 @@ buildPythonPackage rec {
   pname = "graphene-django";
   version = "3.0.0";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";
     homepage = "https://github.com/graphql-python/graphene-django";
+    changelog = "https://github.com/graphql-python/graphene-django/releases/tag/v{version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
