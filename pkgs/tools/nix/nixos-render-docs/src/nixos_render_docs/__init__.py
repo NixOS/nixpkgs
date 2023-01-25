@@ -344,56 +344,57 @@ def print_decl_def(header, locs):
             print(f"""<member><filename{href}>{escape(loc['name'])}</filename></member>""")
     print(f"""</simplelist>""")
 
-markdownByDefault = False
-optOffset = 0
-for arg in sys.argv[1:]:
-    if arg == "--markdown-by-default":
-        optOffset += 1
-        markdownByDefault = True
+def main():
+    markdownByDefault = False
+    optOffset = 0
+    for arg in sys.argv[1:]:
+        if arg == "--markdown-by-default":
+            optOffset += 1
+            markdownByDefault = True
 
-options = convertMD(json.load(open(sys.argv[1 + optOffset], 'r')))
+    options = convertMD(json.load(open(sys.argv[1 + optOffset], 'r')))
 
-keys = list(options.keys())
-keys.sort(key=lambda opt: [ (0 if p.startswith("enable") else 1 if p.startswith("package") else 2, p)
-                            for p in options[opt]['loc'] ])
+    keys = list(options.keys())
+    keys.sort(key=lambda opt: [ (0 if p.startswith("enable") else 1 if p.startswith("package") else 2, p)
+                                for p in options[opt]['loc'] ])
 
-print(f"""<?xml version="1.0" encoding="UTF-8"?>""")
-if OTD_DOCUMENT_TYPE == 'appendix':
-    print("""<appendix xmlns="http://docbook.org/ns/docbook" xml:id="appendix-configuration-options">""")
-    print("""  <title>Configuration Options</title>""")
-print(f"""<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"
-                        xmlns:nixos="tag:nixos.org"
-                        xmlns="http://docbook.org/ns/docbook"
-             xml:id="{OTD_VARIABLE_LIST_ID}">""")
+    print(f"""<?xml version="1.0" encoding="UTF-8"?>""")
+    if OTD_DOCUMENT_TYPE == 'appendix':
+        print("""<appendix xmlns="http://docbook.org/ns/docbook" xml:id="appendix-configuration-options">""")
+        print("""  <title>Configuration Options</title>""")
+    print(f"""<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xmlns:nixos="tag:nixos.org"
+                            xmlns="http://docbook.org/ns/docbook"
+                 xml:id="{OTD_VARIABLE_LIST_ID}">""")
 
-for name in keys:
-    opt = options[name]
-    id = OTD_OPTION_ID_PREFIX + name.translate(id_translate_table)
-    print(f"""<varlistentry>""")
-    # NOTE adding extra spaces here introduces spaces into xref link expansions
-    print(f"""<term xlink:href={quoteattr("#" + id)} xml:id={quoteattr(id)}>""", end='')
-    print(f"""<option>{escape(name)}</option>""", end='')
-    print(f"""</term>""")
-    print(f"""<listitem>""")
-    print(opt['description'])
-    if typ := opt.get('type'):
-        print(typ)
-    if default := opt.get('default'):
-        print(default)
-    if example := opt.get('example'):
-        print(example)
-    if related := opt.get('relatedPackages'):
-        print(f"""<para>""")
-        print(f"""  <emphasis>Related packages:</emphasis>""")
-        print(f"""</para>""")
-        print(related)
-    if decl := opt.get('declarations'):
-        print_decl_def("Declared by", decl)
-    if defs := opt.get('definitions'):
-        print_decl_def("Defined by", defs)
-    print(f"""</listitem>""")
-    print(f"""</varlistentry>""")
+    for name in keys:
+        opt = options[name]
+        id = OTD_OPTION_ID_PREFIX + name.translate(id_translate_table)
+        print(f"""<varlistentry>""")
+        # NOTE adding extra spaces here introduces spaces into xref link expansions
+        print(f"""<term xlink:href={quoteattr("#" + id)} xml:id={quoteattr(id)}>""", end='')
+        print(f"""<option>{escape(name)}</option>""", end='')
+        print(f"""</term>""")
+        print(f"""<listitem>""")
+        print(opt['description'])
+        if typ := opt.get('type'):
+            print(typ)
+        if default := opt.get('default'):
+            print(default)
+        if example := opt.get('example'):
+            print(example)
+        if related := opt.get('relatedPackages'):
+            print(f"""<para>""")
+            print(f"""  <emphasis>Related packages:</emphasis>""")
+            print(f"""</para>""")
+            print(related)
+        if decl := opt.get('declarations'):
+            print_decl_def("Declared by", decl)
+        if defs := opt.get('definitions'):
+            print_decl_def("Defined by", defs)
+        print(f"""</listitem>""")
+        print(f"""</varlistentry>""")
 
-print("""</variablelist>""")
-if OTD_DOCUMENT_TYPE == 'appendix':
-    print("""</appendix>""")
+    print("""</variablelist>""")
+    if OTD_DOCUMENT_TYPE == 'appendix':
+        print("""</appendix>""")

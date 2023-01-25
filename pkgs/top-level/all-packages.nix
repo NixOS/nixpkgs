@@ -37557,6 +37557,8 @@ with pkgs;
 
   nixos-install-tools = callPackage ../tools/nix/nixos-install-tools { };
 
+  nixos-render-docs = callPackage ../tools/nix/nixos-render-docs { };
+
   nixdoc = callPackage ../tools/nix/nixdoc {};
 
   dnadd = callPackage ../tools/nix/dnadd { };
