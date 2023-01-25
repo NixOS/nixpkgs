@@ -37245,9 +37245,7 @@ with pkgs;
 
   gummy = callPackage ../tools/misc/gummy { };
 
-  hck = callPackage ../tools/text/hck {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  hck = callPackage ../tools/text/hck { };
 
   helm = callPackage ../applications/audio/helm { };
 
