@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GUI for Git, Mercurial, Subversion";
     homepage = "https://www.syntevo.com/smartgit/";
+    changelog = "https://www.syntevo.com/smartgit/changelog.txt";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];
