@@ -32,6 +32,7 @@
  <xi:include href="octave.section.xml" />
  <xi:include href="perl.section.xml" />
  <xi:include href="php.section.xml" />
+ <xi:include href="pkg-config.section.xml" />
  <xi:include href="python.section.xml" />
  <xi:include href="qt.section.xml" />
  <xi:include href="r.section.xml" />
