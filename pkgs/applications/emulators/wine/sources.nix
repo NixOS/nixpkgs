@@ -24,9 +24,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "7.0.1";
-    url = "https://dl.winehq.org/wine/source/7.0/wine-${version}.tar.xz";
-    sha256 = "sha256-gHyqeBIbFiUPJA0oKKB8pOPGCXOeVSTvD0z4muSagWw=";
+    version = "8.0";
+    url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
+    sha256 = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -42,9 +42,9 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "7.0.0";
+      version = "7.4.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      sha256 = "sha256-s35vyeWQ5YIkPcJdcqX8wzDDp5cN/cmKeoHSOEW6iQA=";
+      sha256 = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
     };
 
     patches = [
