@@ -18,6 +18,7 @@ from xml.sax.saxutils import escape, quoteattr
 
 from .docbook import make_xml_id, DocBookRenderer
 from .md import md_escape
+from .options import option_is
 
 class Converter:
     def __init__(self, manpage_urls: Dict[str, str]):
@@ -47,16 +48,10 @@ md = Converter(json.load(open(os.getenv('MANPAGE_URLS'))))
 
 # converts in-place!
 def convertMD(options: Dict[str, Any]) -> str:
-    def optionIs(option: Dict[str, Any], key: str, typ: str) -> bool:
-        if key not in option: return False
-        if type(option[key]) != dict: return False
-        if '_type' not in option[key]: return False
-        return option[key]['_type'] == typ
-
     def convertCode(name: str, option: Dict[str, Any], key: str):
-        if optionIs(option, key, 'literalMD'):
+        if option_is(option, key, 'literalMD'):
             option[key] = md.render(f"*{key.capitalize()}:*\n{option[key]['text']}")
-        elif optionIs(option, key, 'literalExpression'):
+        elif option_is(option, key, 'literalExpression'):
             code = option[key]['text']
             # for multi-line code blocks we only have to count ` runs at the beginning
             # of a line, but this is much easier.
@@ -70,14 +65,14 @@ def convertMD(options: Dict[str, Any]) -> str:
             ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
             code = f"{ticks}{sep}{code}{sep}{ticks}"
             option[key] = md.render(f"*{key.capitalize()}:*\n{code}")
-        elif optionIs(option, key, 'literalDocBook'):
+        elif option_is(option, key, 'literalDocBook'):
             option[key] = f"<para><emphasis>{key.capitalize()}:</emphasis> {option[key]['text']}</para>"
         elif key in option:
             raise Exception(f"{name} {key} has unrecognized type", option[key])
 
     for (name, option) in options.items():
         try:
-            if optionIs(option, 'description', 'mdDoc'):
+            if option_is(option, 'description', 'mdDoc'):
                 option['description'] = md.render(option['description']['text'])
             elif markdownByDefault:
                 option['description'] = md.render(option['description'])
