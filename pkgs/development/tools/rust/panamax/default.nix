@@ -1,19 +1,34 @@
-{ lib, rustPlatform, fetchCrate, pkg-config, openssl, stdenv, Security }:
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libgit2
+, openssl
+, zlib
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "panamax";
-  version = "1.0.3";
+  version = "1.0.6";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-w4waFdzd/Ps0whOp39QLBE/YF2eyc4t2Ili7FskUt1M=";
+    sha256 = "sha256-/JW2QB5PtwKo0TLU/QmkgsE6/ne+51EVmWyGn7Lljdw=";
   };
 
-  cargoSha256 = "sha256-52snmkTFHI26xJo9qJkmqh1M5lLzhDxw8WT6uFd57aw=";
+  cargoSha256 = "sha256-aKdDismdPcExqznS6S2LvAij6gv9/Hw2FBvkhr9rJGo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    libgit2
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "Mirror rustup and crates.io repositories for offline Rust and cargo usage";
