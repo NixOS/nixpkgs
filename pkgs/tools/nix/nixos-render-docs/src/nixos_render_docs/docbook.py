@@ -1,5 +1,6 @@
 from collections.abc import MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
+from typing import Any, Optional
 
 import markdown_it
 from markdown_it.token import Token
@@ -21,7 +22,7 @@ def make_xml_id(s: str) -> str:
 
 class DocBookRenderer(markdown_it.renderer.RendererProtocol):
     __output__ = "docbook"
-    def __init__(self, parser=None):
+    def __init__(self, parser: Optional[markdown_it.MarkdownIt] = None):
         self.rules = {
             'text': self.text,
             'paragraph_open': self.paragraph_open,
@@ -57,12 +58,13 @@ class DocBookRenderer(markdown_it.renderer.RendererProtocol):
             "container_{.warning}_open": self.warning_open,
             "container_{.warning}_close": self.warning_close,
         }
-    def render(self, tokens: Sequence[Token], options: OptionsDict, env: MutableMapping) -> str:
+    def render(self, tokens: Sequence[Token], options: OptionsDict,
+               env: MutableMapping[str, Any]) -> str:
         assert '-link-tag-stack' not in env
         env['-link-tag-stack'] = []
         assert '-deflist-stack' not in env
         env['-deflist-stack'] = []
-        def do_one(i, token):
+        def do_one(i: int, token: Token) -> str:
             if token.type == "inline":
                 assert token.children is not None
                 return self.renderInline(token.children, options, env)
@@ -71,7 +73,8 @@ class DocBookRenderer(markdown_it.renderer.RendererProtocol):
             else:
                 raise NotImplementedError("md token not supported yet", token)
         return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
-    def renderInline(self, tokens: Sequence[Token], options: OptionsDict, env: MutableMapping) -> str:
+    def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
         # HACK to support docbook links and xrefs. link handling is only necessary because the docbook
         # manpage stylesheet converts - in urls to a mathematical minus, which may be somewhat incorrect.
         for i, token in enumerate(tokens):
@@ -79,99 +82,132 @@ class DocBookRenderer(markdown_it.renderer.RendererProtocol):
                 continue
             token.tag = 'link'
             # turn [](#foo) into xrefs
-            if token.attrs['href'][0:1] == '#' and tokens[i + 1].type == 'link_close':
+            if token.attrs['href'][0:1] == '#' and tokens[i + 1].type == 'link_close': # type: ignore[index]
                 token.tag = "xref"
             # turn <x> into links without contents
             if tokens[i + 1].type == 'text' and tokens[i + 1].content == token.attrs['href']:
                 tokens[i + 1].content = ''
 
-        def do_one(i, token):
+        def do_one(i: int, token: Token) -> str:
             if token.type in self.rules:
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md node not supported yet", token)
         return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
 
-    def text(self, token, tokens, i, options, env):
+    def text(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+             env: MutableMapping[str, Any]) -> str:
         return escape(token.content)
-    def paragraph_open(self, token, tokens, i, options, env):
+    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                       env: MutableMapping[str, Any]) -> str:
         return "<para>"
-    def paragraph_close(self, token, tokens, i, options, env):
+    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
         return "</para>"
-    def hardbreak(self, token, tokens, i, options, env):
+    def hardbreak(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
         return "<literallayout>\n</literallayout>"
-    def softbreak(self, token, tokens, i, options, env):
+    def softbreak(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
         # should check options.breaks() and emit hard break if so
         return "\n"
-    def code_inline(self, token, tokens, i, options, env):
+    def code_inline(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                    env: MutableMapping[str, Any]) -> str:
         return f"<literal>{escape(token.content)}</literal>"
-    def code_block(self, token, tokens, i, options, env):
+    def code_block(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                   env: MutableMapping[str, Any]) -> str:
         return f"<programlisting>{escape(token.content)}</programlisting>"
-    def link_open(self, token, tokens, i, options, env):
+    def link_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
         env['-link-tag-stack'].append(token.tag)
         (attr, start) = ('linkend', 1) if token.attrs['href'][0] == '#' else ('xlink:href', 0)
         return f"<{token.tag} {attr}={quoteattr(token.attrs['href'][start:])}>"
-    def link_close(self, token, tokens, i, options, env):
+    def link_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                   env: MutableMapping[str, Any]) -> str:
         return f"</{env['-link-tag-stack'].pop()}>"
-    def list_item_open(self, token, tokens, i, options, env):
+    def list_item_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                       env: MutableMapping[str, Any]) -> str:
         return "<listitem>"
-    def list_item_close(self, token, tokens, i, options, env):
+    def list_item_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
         return "</listitem>\n"
     # HACK open and close para for docbook change size. remove soon.
-    def bullet_list_open(self, token, tokens, i, options, env):
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                         env: MutableMapping[str, Any]) -> str:
         return "<para><itemizedlist>\n"
-    def bullet_list_close(self, token, tokens, i, options, env):
+    def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                          env: MutableMapping[str, Any]) -> str:
         return "\n</itemizedlist></para>"
-    def em_open(self, token, tokens, i, options, env):
+    def em_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                env: MutableMapping[str, Any]) -> str:
         return "<emphasis>"
-    def em_close(self, token, tokens, i, options, env):
+    def em_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                 env: MutableMapping[str, Any]) -> str:
         return "</emphasis>"
-    def strong_open(self, token, tokens, i, options, env):
+    def strong_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                    env: MutableMapping[str, Any]) -> str:
         return "<emphasis role=\"strong\">"
-    def strong_close(self, token, tokens, i, options, env):
+    def strong_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
         return "</emphasis>"
-    def fence(self, token, tokens, i, options, env):
+    def fence(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+              env: MutableMapping[str, Any]) -> str:
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>{escape(token.content)}</programlisting>"
-    def blockquote_open(self, token, tokens, i, options, env):
+    def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
         return "<para><blockquote>"
-    def blockquote_close(self, token, tokens, i, options, env):
+    def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                         env: MutableMapping[str, Any]) -> str:
         return "</blockquote></para>"
-    def note_open(self, token, tokens, i, options, env):
+    def note_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
         return "<para><note>"
-    def note_close(self, token, tokens, i, options, env):
+    def note_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                   env: MutableMapping[str, Any]) -> str:
         return "</note></para>"
-    def important_open(self, token, tokens, i, options, env):
+    def important_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                       env: MutableMapping[str, Any]) -> str:
         return "<para><important>"
-    def important_close(self, token, tokens, i, options, env):
+    def important_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
         return "</important></para>"
-    def warning_open(self, token, tokens, i, options, env):
+    def warning_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
         return "<para><warning>"
-    def warning_close(self, token, tokens, i, options, env):
+    def warning_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
         return "</warning></para>"
     # markdown-it emits tokens based on the html syntax tree, but docbook is
     # slightly different. html has <dl>{<dt/>{<dd/>}}</dl>,
     # docbook has <variablelist>{<varlistentry><term/><listitem/></varlistentry>}<variablelist>
     # we have to reject multiple definitions for the same term for time being.
-    def dl_open(self, token, tokens, i, options, env):
+    def dl_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                env: MutableMapping[str, Any]) -> str:
         env['-deflist-stack'].append({})
         return "<para><variablelist>"
-    def dl_close(self, token, tokens, i, options, env):
+    def dl_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                 env: MutableMapping[str, Any]) -> str:
         env['-deflist-stack'].pop()
         return "</variablelist></para>"
-    def dt_open(self, token, tokens, i, options, env):
+    def dt_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                env: MutableMapping[str, Any]) -> str:
         env['-deflist-stack'][-1]['has-dd'] = False
         return "<varlistentry><term>"
-    def dt_close(self, token, tokens, i, options, env):
+    def dt_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                 env: MutableMapping[str, Any]) -> str:
         return "</term>"
-    def dd_open(self, token, tokens, i, options, env):
+    def dd_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                env: MutableMapping[str, Any]) -> str:
         if env['-deflist-stack'][-1]['has-dd']:
             raise Exception("multiple definitions per term not supported")
         env['-deflist-stack'][-1]['has-dd'] = True
         return "<listitem>"
-    def dd_close(self, token, tokens, i, options, env):
+    def dd_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                 env: MutableMapping[str, Any]) -> str:
         return "</listitem></varlistentry>"
-    def myst_role(self, token, tokens, i, options, env):
+    def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                  env: MutableMapping[str, Any]) -> str:
         if token.meta['name'] == 'command':
             return f"<command>{escape(token.content)}</command>"
         if token.meta['name'] == 'file':
