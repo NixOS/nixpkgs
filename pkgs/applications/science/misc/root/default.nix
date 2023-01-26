@@ -207,6 +207,7 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/201254
   NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.

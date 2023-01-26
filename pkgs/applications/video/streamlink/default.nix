@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "5.1.2";
+  version = "5.2.1";
   format = "pyproject";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    hash = "sha256-UB9gTT2/rQXV1Q7UQywEHlGBCJDMDmXupD8nYII4dno=";
+    hash = "sha256-/YcFH5t9x9EsmK7oPvSECmhL2ypHYgPvsMdL1IupEfw=";
   };
 
   nativeCheckInputs = with python3Packages; [
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     requests
     websocket-client
     urllib3
+    certifi
   ]) ++ [
     ffmpeg
   ];

@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lustre-v6.v${version}.tgz";
-    hash = "sha256-+OqDwUIiPrtJy1C3DmDNTrtsT8clKKcNWCev4TEMRBc=";
+    hash = "sha256-EQ+KjDn+UsyHFRh0RWe9toqdjiNcacQUMNRQCLuaw5I=";
   };
 
   propagatedBuildInputs = [
