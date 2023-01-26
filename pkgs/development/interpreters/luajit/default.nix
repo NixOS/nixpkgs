@@ -52,6 +52,15 @@ let
     ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
     ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
+
+  # LuaJIT requires build for 32bit architectures to be build on x86 not x86_64
+  # TODO support also other build architectures. The ideal way would be to use
+  # stdenv_32bit but that doesn't work due to host platform mismatch:
+  # https://github.com/NixOS/nixpkgs/issues/212494
+  buildStdenv = if buildPackages.stdenv.isx86_64 && stdenv.is32bit
+    then buildPackages.pkgsi686Linux.buildPackages.stdenv
+    else buildPackages.stdenv;
+
 in
 stdenv.mkDerivation rec {
   pname = "luajit";
@@ -88,8 +97,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "DEFAULT_CC=cc"
     "CROSS=${stdenv.cc.targetPrefix}"
-    # TODO: when pointer size differs, we would need e.g. -m32
-    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+    "HOST_CC=${buildStdenv.cc}/bin/cc"
   ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = XCFLAGS;
