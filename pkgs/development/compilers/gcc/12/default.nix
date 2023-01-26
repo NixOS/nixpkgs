@@ -28,6 +28,14 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, nukeReferences
+, callPackage
+, enableGdbPlugin ? enablePlugin
+, enableExternalBootstrap
+  ? (with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform)
+    && stdenv.enableGccExternalBootstrapForStdenv or false
+, enableLibGccOutput
+  ? (with stdenv; targetPlatform == hostPlatform)
 }:
 
 # Make sure we get GNU sed.
@@ -125,7 +133,7 @@ let majorVersion = "12";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -199,7 +207,7 @@ stdenv.mkDerivation ({
     libcCross crossMingw;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ texinfo which gettext ]
+  nativeBuildInputs = [ texinfo which gettext nukeReferences ]
     ++ (optional (perl != null) perl)
     ++ (optional langAda gnatboot)
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
@@ -256,6 +264,8 @@ stdenv.mkDerivation ({
       enableMultilib
       enablePlugin
       enableShared
+      enableGdbPlugin
+      enableExternalBootstrap
 
       langC
       langD
@@ -342,4 +352,13 @@ stdenv.mkDerivation ({
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+(callPackage ../common/external-bootstrap.nix {
+  inherit
+    version
+    langC langCC langJit
+    enablePlugin
+    profiledCompiler
+    enableExternalBootstrap enableLibGccOutput;
+}).mkDerivationOverrides
+

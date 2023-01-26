@@ -24,9 +24,9 @@
 , langObjC
 , langObjCpp
 , langJit
-, enableInternalBootstrap
-  ? (with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform)
-    && throw "please specify enableInternalBootstrap explicitly for native builds"
+, enableExternalBootstrap
+  ? (with stdenv; !(targetPlatform == hostPlatform && hostPlatform == buildPlatform))
+    && throw "please specify enableExternalBootstrap explicitly for native builds"
 }:
 
 assert enableGdbPlugin -> enablePlugin;
@@ -47,6 +47,7 @@ let
   inherit (stdenv)
     buildPlatform hostPlatform targetPlatform;
 
+  enableInternalBootstrap = targetPlatform == hostPlatform && hostPlatform == buildPlatform && !enableExternalBootstrap;
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
