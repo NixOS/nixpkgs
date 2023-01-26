@@ -1,11 +1,11 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , dateparser
 , fetchFromGitHub
 , haversine
+, mock
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.10";
+  version = "0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g/BlRRBImJihVlAfSMsPIPV0GJns0/pStF8TKSxpDI4=";
+    hash = "sha256-Voc1ME0iGQCMaDfBXDSVnRp8olvId+fLhH8sqHwB2Ak=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aresponses
-    asynctest
+    mock
     pytest-asyncio
     pytestCheckHook
   ];
