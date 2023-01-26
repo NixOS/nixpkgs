@@ -1,21 +1,62 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc, wayland-scanner
-, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam, mesa
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland-scanner
+, aml
+, jansson
+, libxkbcommon
+, mesa
+, neatvnc
+, pam
+, pixman
+, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/OKkQKt43lR0UCmQeSDMl1hXh03k+dX3UweigMWEUx4=";
+    sha256 = "sha256-WKtflN6DyzumOMEx+iX0AoIyGRN4nXUckmW/9Z2EW+Q=";
   };
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland-scanner ];
-  buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam mesa ];
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    aml
+    jansson
+    libxkbcommon
+    mesa
+    neatvnc
+    pam
+    pixman
+    wayland
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "tests" true)
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";
