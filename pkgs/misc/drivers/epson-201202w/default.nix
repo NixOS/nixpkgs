@@ -12,7 +12,7 @@ in
     src = fetchurl {
       # NOTE: Don't forget to update the webarchive link too!
       urls = [
-        "http://download.ebz.epson.net/dsc/f/01/00/01/77/09/d9c270238d35e885c89b4686665b383be8308fb8/epson-inkjet-printer-201202w-1.0.0-1lsb3.2.src.rpm"
+        "http://download.ebz.epson.net/dsc/f/01/00/01/77/09/d9c270238d35e885c89b4686665b383be8308fb8/epson-inkjet-printer-201202w-${version}-1lsb3.2.src.rpm"
         "http://web.archive.org/web/20220212002603/http://download.ebz.epson.net/dsc/f/01/00/01/77/09/d9c270238d35e885c89b4686665b383be8308fb8/epson-inkjet-printer-201202w-1.0.0-1lsb3.2.src.rpm"
       ];
 
