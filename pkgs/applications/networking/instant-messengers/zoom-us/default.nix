@@ -30,7 +30,7 @@
 , libxkbcommon
 , udev
 , zlib
-, krb5
+, libkrb5
   # Runtime
 , coreutils
 , pciutils
@@ -103,11 +103,13 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
     zlib
-    krb5
+    libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
