@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
     gtksourceview5
   ];
 
+  patchPhase = ''
+    sed -i 's/1.2.0/1.2.1/g' src/meson.build
+  '';
+
   postInstall = ''
     ln -s $out/bin/io.posidon.Paper $out/bin/paper
   '';
