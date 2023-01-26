@@ -73,9 +73,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "7.21";
+    version = "7.22";
     url = "https://dl.winehq.org/wine/source/7.x/wine-${version}.tar.xz";
-    sha256 = "sha256-zFbstwHD5RwixIY7bOP4oXMyU0BXxtOTTr6ysELJcso=";
+    sha256 = "sha256-HyrDss32bEm/FFtD56PzDm2BdtCuSYBWyQP++KbM/Do=";
     inherit (stable) gecko32 gecko64 patches;
 
     mono = fetchurl rec {
@@ -105,7 +105,7 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-u32UYkJKezPZkKar2IwFt8RDAyeixop1dhG8jQjsNpQ=";
+    sha256 = "sha256-08hWoc+jxSI28DkwK62LMSHGgpSpi1WjTvJsSltj8FU=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -115,12 +115,12 @@ in rec {
 
   wayland = fetchFromGitLab rec {
     # https://gitlab.collabora.com/alf/wine/-/tree/wayland
-    version = "7.21";
-    sha256 = "sha256-Pv9+lWwjhYobdB0wtyU8VGixGFNasL3ZBKnYRXP6Lx4=";
+    version = "7.22";
+    sha256 = "sha256-jg36b7rsqIgCFLN2vDBUipe/+uIln07GlFn8zvm0N9Y=";
     domain = "gitlab.collabora.com";
     owner = "alf";
     repo = "wine";
-    rev = "053ee2d23d825f800baa16e455a218834aa2dec0";
+    rev = "20d86f34a066657048610803e7143232efa6c0d3";
 
     inherit (unstable) gecko32 gecko64;
 
