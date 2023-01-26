@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, appleDerivation, fetchzip, bsdmake, perl, flex, bison
+{ lib, stdenv, buildPackages, appleDerivation, fetchFromGitHub, bsdmake, perl, flex, bison
 }:
 
 # this derivation sucks
@@ -10,9 +10,11 @@
 #
 # the more recent adv_cmds release is used for everything else in this package
 
-let recentAdvCmds = fetchzip {
-  url = "https://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
-  sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
+let recentAdvCmds = fetchFromGitHub {
+  owner = "apple-oss-distributions";
+  repo = "adv_cmds";
+  rev = "adv_cmds-158";
+  hash = "sha256-1qL69pGHIaefooJJ8eT83XGz9+bW7Yg3k+X9fNkMCHw=";
 };
 
 in appleDerivation {
