@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-5RZXHMov3CX0zRprs7sgz0+cGEdESLrg4I2glRnTkcU=";
+    hash = "sha256-okxZ1kALB5l94ShStAJLfzD37MLhob8MCzhbqfVISkw=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -84,10 +84,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    license = licenses.gpl3Only;
-    homepage = "https://vorta.borgbase.com/";
-    maintainers = with maintainers; [ ma27 ];
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v0.8.10";
     description = "Desktop Backup Client for Borg";
+    homepage = "https://vorta.borgbase.com/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
   };
 }

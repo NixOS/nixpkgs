@@ -9,14 +9,14 @@ in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prospector";
-  version = "1.8.3";
+  version = "1.8.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-R3Sc4Qx6bht+XJhNj+fy32akzDOgSDF5LP3WE1qEyms=";
+    hash = "sha256-g7tyn6pj5I/+b28wIitqDapR5ffk1xDEAtcYs2TpIUk=";
   };
 
   pythonRelaxDeps = [

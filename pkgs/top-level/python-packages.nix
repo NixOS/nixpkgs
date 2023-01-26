@@ -5542,6 +5542,8 @@ self: super: with self; {
 
   lsassy = callPackage ../development/python-modules/lsassy { };
 
+  lsprotocol = callPackage ../development/python-modules/lsprotocol { };
+
   luddite = callPackage ../development/python-modules/luddite { };
 
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
@@ -6165,6 +6167,8 @@ self: super: with self; {
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
+
+  nox = callPackage ../development/python-modules/nox { };
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
     inherit (pkgs) nanomsg;
