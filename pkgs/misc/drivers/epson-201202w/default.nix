@@ -4,7 +4,6 @@
     version = "1.0.0";
     filterVersion = "1.0.0";
     pname = "epson-201202w";
-    inherit version;
 
     src = fetchurl {
       # NOTE: Don't forget to update the webarchive link too!
