@@ -16,15 +16,16 @@
 , ninja
 , glib
 , python3
-, gobject-introspection
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "pango";
   version = "1.50.12";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -39,10 +40,9 @@ stdenv.mkDerivation rec {
     meson ninja
     glib # for glib-mkenum
     pkg-config
-    gobject-introspection
     gi-docgen
     python3
-  ];
+  ] ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [
     fribidi
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
-  ] ++ lib.optionals (!x11Support) [
-    "-Dxft=disabled" # only works with x11
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
   ];
 
   # Fontconfig error: Cannot load default config file
