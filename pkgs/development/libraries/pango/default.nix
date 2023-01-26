@@ -40,9 +40,11 @@ stdenv.mkDerivation rec {
     meson ninja
     glib # for glib-mkenum
     pkg-config
-    gi-docgen
     python3
-  ] ++ lib.optional withIntrospection gobject-introspection;
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+  ];
 
   buildInputs = [
     fribidi
@@ -116,6 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
