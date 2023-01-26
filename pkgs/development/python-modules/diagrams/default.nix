@@ -15,13 +15,14 @@ buildPythonPackage rec {
   pname = "diagrams";
   version = "0.23.1";
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gVUlP3offTgHUBTTIzTBf7b2NpBjGlAHYQQxe6ks0v8=";
+    hash = "sha256-gVUlP3offTgHUBTTIzTBf7b2NpBjGlAHYQQxe6ks0v8=";
   };
 
   postPatch = ''
@@ -46,14 +47,19 @@ buildPythonPackage rec {
   # these are only used at build time to process the image resource files
   nativeBuildInputs = [ inkscape imagemagick jinja2 poetry-core round ];
 
-  propagatedBuildInputs = [ graphviz ];
+  propagatedBuildInputs = [
+    graphviz
+  ];
 
-  pythonImportsCheck = [ "diagrams" ];
+  pythonImportsCheck = [
+    "diagrams"
+  ];
 
   meta = with lib; {
     description = "Diagram as Code";
-    homepage    = "https://diagrams.mingrammer.com/";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://diagrams.mingrammer.com/";
+    changelog = "https://github.com/mingrammer/diagrams/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
   };
 }
