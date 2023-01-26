@@ -24429,6 +24429,8 @@ with pkgs;
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
+  mbusd = callPackage ../servers/mbusd { };
+
   memcached = callPackage ../servers/memcached {};
 
   merecat = callPackage ../servers/http/merecat { };
