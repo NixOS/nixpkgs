@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
 
-let
-  version = "1.0.0";
-  filterVersion = "1.0.0";
-in
-  stdenv.mkDerivation {
+  stdenv.mkDerivation rec {
+  
+    version = "1.0.0";
+  
+    filterVersion = "1.0.0";
 
     pname = "epson-201202w";
     inherit version;
