@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, removeReferencesTo
+, cmake
 , cppSupport ? false
 , fortranSupport ? false
 , fortran
@@ -11,32 +11,58 @@
 , szip
 , mpiSupport ? false
 , mpi
-, enableShared ? !stdenv.hostPlatform.isStatic
 , javaSupport ? false
 , jdk
 , usev110Api ? false
 , threadsafe ? false
-, python3
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
-# cpp and mpi options are mutually exclusive
-# (--enable-unsupported could be used to force the build)
-assert !cppSupport || !mpiSupport;
-
-let inherit (lib) optional optionals; in
+assert !(cppSupport && mpiSupport);
+assert !(cppSupport && threadsafe);
+assert !(fortranSupport && threadsafe);
+assert enableShared || enableStatic;
 
 stdenv.mkDerivation rec {
+  pname = "hdf5";
   version = "1.14.0";
-  pname = "hdf5"
-    + lib.optionalString cppSupport "-cpp"
-    + lib.optionalString fortranSupport "-fortran"
-    + lib.optionalString mpiSupport "-mpi"
-    + lib.optionalString threadsafe "-threadsafe";
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
+    hash = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
   };
+
+  outputs = [ "out" "dev" ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ cmake ] ++
+    lib.optional fortranSupport fortran ++
+    lib.optional javaSupport jdk;
+
+  propagatedBuildInputs = [ ] ++
+    lib.optional zlibSupport zlib ++
+    lib.optional szipSupport szip ++
+    lib.optional mpiSupport mpi;
+
+  # https://github.com/HDFGroup/hdf5/blob/hdf5-1_14_0/release_docs/INSTALL_CMake.txt
+  cmakeFlags = [ ] ++
+    lib.optional usev110Api "-DDEFAULT_API_VERSION=v110" ++
+    lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON" ++
+    lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON" ++
+    lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON" ++
+    lib.optional mpiSupport "-DHDF5_ENABLE_PARALLEL=ON" ++
+    lib.optional threadsafe "-DHDF5_ENABLE_THREADSAFE=ON" ++
+    lib.optional zlibSupport "-DHDF5_ENABLE_Z_LIB_SUPPORT=ON" ++
+    lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON" ++
+    # BUILD_SHARED_LIBS and BUILD_STATIC_LIBS are on by default
+    lib.optional (!enableShared) "-DBUILD_SHARED_LIBS=OFF" ++
+    lib.optional (!enableStatic) "-DBUILD_STATIC_LIBS=OFF" ++
+    lib.optional enableStatic "-DBUILD_STATIC_EXECS";
+
+  # mpi does not run well in nix sandbox
+  doCheck = !mpiSupport;
 
   passthru = {
     inherit
@@ -44,55 +70,9 @@ stdenv.mkDerivation rec {
       fortranSupport
       fortran
       zlibSupport
-      zlib
       szipSupport
-      szip
       mpiSupport
-      mpi
-      ;
-  };
-
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ removeReferencesTo ]
-    ++ optional fortranSupport fortran;
-
-  buildInputs = optional fortranSupport fortran
-    ++ optional szipSupport szip
-    ++ optional javaSupport jdk;
-
-  propagatedBuildInputs = optional zlibSupport zlib
-    ++ optional mpiSupport mpi;
-
-  configureFlags = optional cppSupport "--enable-cxx"
-    ++ optional fortranSupport "--enable-fortran"
-    ++ optional szipSupport "--with-szlib=${szip}"
-    ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
-    ++ optional enableShared "--enable-shared"
-    ++ optional javaSupport "--enable-java"
-    ++ optional usev110Api "--with-default-api-version=v110"
-    # hdf5 hl (High Level) library is not considered stable with thread safety and should be disabled.
-    ++ optionals threadsafe [ "--enable-threadsafe" "--disable-hl" ];
-
-  patches = [
-    # Avoid non-determinism in autoconf build system:
-    # - build time
-    # - build user
-    # - uname -a (kernel version)
-    # Can be dropped once/if we switch to cmake.
-    ./hdf5-more-determinism.patch
-  ];
-
-  postInstall = ''
-    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    moveToOutput 'bin/h5cc' "''${!outputDev}"
-    moveToOutput 'bin/h5c++' "''${!outputDev}"
-    moveToOutput 'bin/h5fc' "''${!outputDev}"
-    moveToOutput 'bin/h5pcc' "''${!outputDev}"
-  '';
-
-  passthru.tests = {
-    inherit (python3.pkgs) h5py;
+      mpi;
   };
 
   meta = {
@@ -106,5 +86,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }
