@@ -1,0 +1,12 @@
+diff --git a/riscv_isac/requirements.txt b/riscv_isac/requirements.txt
+--- a/riscv_isac/requirements.txt
++++ b/riscv_isac/requirements.txt
+@@ -2,7 +2,7 @@ click
+ gitpython
+ ruamel.yaml>=0.16.0
+ pyyaml
+-pyelftools==0.26
++pyelftools
+ colorlog
+ pytest
+ pytablewriter
