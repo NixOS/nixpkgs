@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , setuptools-scm
-, pydantic
+, lsprotocol
 , toml
 , typeguard
 , mock
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.13.0";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "openlawlibrary";
     repo = "pygls";
     rev = "v${version}";
-    hash = "sha256-guwOnB4EEUpucfprNLLr49Yn8EdOpRzzG+cT4NCn0rA=";
+    hash = "sha256-31J4+giK1RDBS52Q/Ia3Y/Zak7fp7gRVTQ7US/eFjtM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
+    lsprotocol
     typeguard
   ];
 
