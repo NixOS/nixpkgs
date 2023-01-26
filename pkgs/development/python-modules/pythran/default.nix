@@ -4,10 +4,7 @@
 , fetchFromGitHub
 , openmp
 , ply
-, networkx
-, decorator
 , gast
-, six
 , numpy
 , beniget
 , isPy3k
@@ -38,10 +35,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ply
-    networkx
-    decorator
     gast
-    six
     numpy
     beniget
   ];
