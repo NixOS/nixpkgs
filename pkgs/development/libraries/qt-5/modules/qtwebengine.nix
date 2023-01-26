@@ -14,9 +14,10 @@
 , systemd
 , enableProprietaryCodecs ? true
 , gn
-, cctools, libobjc, libunwind, sandbox, xnu
+, cctools, libobjc, libpm, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
+, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
 , ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
@@ -94,6 +95,11 @@ qtModule {
       --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
       --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
+
+    # ld: warning: directory not found for option '-L/nix/store/...-xcodebuild-0.1.2-pre/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/usr/lib'
+    # ld: fatal warning(s) induced error (-fatal_warnings)
+    substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
+      --replace "-Wl,-fatal_warnings" ""
   '') + postPatch;
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
@@ -104,8 +110,6 @@ qtModule {
     # TODO: investigate and fix properly
     "-march=westmere"
   ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-elaborated-enum-base"
-  ] ++ lib.optionals stdenv.isDarwin [
     "-Wno-elaborated-enum-base"
   ];
 
@@ -177,6 +181,11 @@ qtModule {
     Quartz
     Cocoa
     LocalAuthentication
+    MediaPlayer
+    MediaAccessibility
+    SecurityInterface
+    Vision
+    CoreML
 
     openbsm
     libunwind
@@ -184,6 +193,7 @@ qtModule {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     cups
+    libpm
     sandbox
 
     # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
@@ -235,6 +245,7 @@ qtModule {
            (isMips && isLittleEndian))))
         (map (plat: plat.system))
       ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
 
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
