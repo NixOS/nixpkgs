@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ctypes";
-  version = "0.20.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-ctypes";
     rev = version;
-    sha256 = "sha256-fr60H/hiSVjEg11qM8LF1Y5CotS3FEyFdCcIh0A0uI4=";
+    sha256 = "sha256-H1QR0MJCqRdXxRufCA663wzTNWQ8MYYAy2nz/XHCn0Y=";
   };
 
   nativeBuildInputs = [ pkg-config ocaml findlib ];
