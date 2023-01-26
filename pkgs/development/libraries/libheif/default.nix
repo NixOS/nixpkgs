@@ -10,6 +10,7 @@
 , libpng
 , libjpeg
 , libaom
+, gdk-pixbuf
 
 # for passthru.tests
 , gimp
@@ -32,10 +33,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JwPeSNUc++z6RfMe0qAuXdekzLWR/MCmsT+Ykvp9a/s=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ dav1d rav1e libde265 x265 libpng libjpeg libaom ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    dav1d
+    rav1e
+    libde265
+    x265
+    libpng
+    libjpeg
+    libaom
+    gdk-pixbuf
+  ];
 
   enableParallelBuilding = true;
+
+  # Fix installation path for gdk-pixbuf module
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
 
   passthru.tests = {
     inherit gimp imagemagick imlib2Full imv vips;
