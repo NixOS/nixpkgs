@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-gdacs";
-    rev = "v${version}";
-    sha256 = "sha256-6z0l0PcFTQgOBj8cBgBMPJIqWG53u7h4WbYkBqU4FNE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6z0l0PcFTQgOBj8cBgBMPJIqWG53u7h4WbYkBqU4FNE=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-aio-georss-gdacs";
+    changelog = "https://github.com/exxamalte/python-aio-georss-gdacs/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
