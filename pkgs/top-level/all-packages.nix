@@ -33609,6 +33609,8 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
+  webcord = callPackage ../applications/networking/instant-messengers/webcord {};
+
   webex = callPackage ../applications/networking/instant-messengers/webex {};
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
