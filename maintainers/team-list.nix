@@ -168,6 +168,15 @@ with lib.maintainers; {
     shortName = "Cosmopolitan";
   };
 
+  deepin = {
+    members = [
+      rewine
+    ];
+    scope = "Maintain deepin desktop environment and related packages.";
+    shortName = "DDE";
+    enableFeatureFreezePing = true;
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
