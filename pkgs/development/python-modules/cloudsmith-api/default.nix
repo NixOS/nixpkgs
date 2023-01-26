@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "0";
+  pname = "cloudsmith-api";
   version = "2.0.1";
   format = "wheel";
 
