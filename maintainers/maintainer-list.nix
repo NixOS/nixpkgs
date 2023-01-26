@@ -1621,6 +1621,16 @@
     githubId = 45811;
     name = "Svein Ove Aas";
   };
+  Bauke = {
+    name = "Bauke";
+    email = "me@bauke.xyz";
+    matrix = "@baukexyz:matrix.org";
+    github = "Bauke";
+    githubId = 19501722;
+    keys = [{
+      fingerprint = "C593 27B5 9D0F 2622 23F6  1D03 C1C0 F299 52BC F558";
+    }];
+  };
   bb010g = {
     email = "me@bb010g.com";
     matrix = "@bb010g:matrix.org";
