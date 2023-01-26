@@ -111,7 +111,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-MtVatZVsV+dtjdD4AC4bztrnDFas+WZYHzQMt41FwzU=";
   };
 
-  stable = self.nix_2_12;
+  stable = self.nix_2_13;
 
   unstable = self.nix_2_13;
 })
