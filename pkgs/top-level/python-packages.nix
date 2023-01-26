@@ -2241,6 +2241,8 @@ self: super: with self; {
 
   datapoint = callPackage ../development/python-modules/datapoint { };
 
+  dataproperty = callPackage ../development/python-modules/dataproperty { };
+
   dataset = callPackage ../development/python-modules/dataset { };
 
   datasets = callPackage ../development/python-modules/datasets { };
