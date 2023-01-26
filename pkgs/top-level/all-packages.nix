@@ -531,6 +531,10 @@ with pkgs;
 
   mix2nix = callPackage ../development/tools/mix2nix { };
 
+  n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
+
+  n98-magerun2 = callPackage ../development/tools/misc/n98-magerun2 { };
+
   prisma-engines = callPackage ../development/tools/database/prisma-engines {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
