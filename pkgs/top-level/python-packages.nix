@@ -11200,6 +11200,8 @@ self: super: with self; {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
+  tabledata = callPackage ../development/python-modules/tabledata { };
+
   tables = callPackage ../development/python-modules/tables { };
 
   tablib = callPackage ../development/python-modules/tablib { };
