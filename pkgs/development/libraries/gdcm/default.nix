@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , enableVTK ? true
-, vtk
+, vtk_8
 , ApplicationServices
 , Cocoa
 , enablePython ? false
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = lib.optionals enableVTK [
-    vtk
+    vtk_8
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Cocoa

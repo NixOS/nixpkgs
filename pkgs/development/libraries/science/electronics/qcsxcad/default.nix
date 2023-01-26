@@ -4,7 +4,7 @@
 , cmake
 , csxcad
 , tinyxml
-, vtkWithQt5
+, vtk_8_withQt5
 , qtbase
 }:
 
@@ -33,7 +33,7 @@ mkDerivation {
   buildInputs = [
     csxcad
     tinyxml
-    vtkWithQt5
+    vtk_8_withQt5
     qtbase
   ];
 
