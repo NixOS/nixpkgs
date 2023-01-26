@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , pkg-config
@@ -81,6 +82,15 @@ stdenv.mkDerivation rec {
     spirv-tools
   ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
+  patches = [
+    (fetchpatch {
+      # error: use of undeclared identifier 'pthread_attr_set_qos_class_np'
+      # https://github.com/ddnet/ddnet/pull/5913
+      url = "https://github.com/ddnet/ddnet/pull/5913/commits/ccc6cd59de58905dce3a3bd5d8461a03b1adb249.patch";
+      hash = "sha256-CkHckE+bOMKDcoijNYDo+zEQ9Eq9ePDV18LybzCMPYs=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
@@ -106,8 +116,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ sirseruju lom ncfavier ];
     mainProgram = "DDNet";
-    # error: use of undeclared identifier 'pthread_attr_set_qos_class_np'
-    # https://github.com/ddnet/ddnet/pull/5913
-    broken = stdenv.isDarwin;
   };
 }
