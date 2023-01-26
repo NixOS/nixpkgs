@@ -26170,6 +26170,12 @@ with pkgs;
 
   iproute2 = callPackage ../os-specific/linux/iproute { };
 
+  ipu6-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
+
+  ipu6ep-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {
+    ipuVersion = "ipu6ep";
+  };
+
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
