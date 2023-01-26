@@ -1621,6 +1621,16 @@
     githubId = 45811;
     name = "Svein Ove Aas";
   };
+  Bauke = {
+    name = "Bauke";
+    email = "me@bauke.xyz";
+    matrix = "@baukexyz:matrix.org";
+    github = "Bauke";
+    githubId = 19501722;
+    keys = [{
+      fingerprint = "C593 27B5 9D0F 2622 23F6  1D03 C1C0 F299 52BC F558";
+    }];
+  };
   bb010g = {
     email = "me@bb010g.com";
     matrix = "@bb010g:matrix.org";
@@ -5171,6 +5181,15 @@
     github = "ggPeti";
     githubId = 3217744;
     name = "Peter Ferenczy";
+  };
+  ggwpaiushtha = {
+    name = "Ivan";
+    email = "ggwpaiushtha@gmail.com";
+    github = "GGwpAiushtha";
+    githubId = 6987136;
+    keys = [{
+      fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940";
+    }];
   };
   ghostbuster91 = {
     name = "Kasper Kondzielski";
