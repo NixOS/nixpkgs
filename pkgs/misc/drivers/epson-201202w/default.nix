@@ -16,7 +16,7 @@ in
         "http://web.archive.org/web/20220212002603/http://download.ebz.epson.net/dsc/f/01/00/01/77/09/d9c270238d35e885c89b4686665b383be8308fb8/epson-inkjet-printer-201202w-1.0.0-1lsb3.2.src.rpm"
       ];
 
-      sha256 = "46adef0d526894507e622d8e8896d3ecbadffb284931d7dbc46c0662a50dcd8d";
+      hash = "sha256-Rq3vDVJolFB+Yi2OiJbT7Lrf+yhJMdfbxGwGYqUNzY0=";
     };
 
     nativeBuildInputs = [ rpmextract autoreconfHook file ];
