@@ -1,6 +1,5 @@
 { gnustep, lib, fetchFromGitHub , libxml2, openssl
 , openldap, mariadb, libmysqlclient, postgresql }:
-with lib;
 
 gnustep.stdenv.mkDerivation rec {
   pname = "sope";
@@ -15,10 +14,10 @@ gnustep.stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
   nativeBuildInputs = [ gnustep.make ];
-  buildInputs = flatten ([ gnustep.base libxml2 openssl ]
-    ++ optional (openldap != null) openldap
-    ++ optionals (mariadb != null) [ libmysqlclient mariadb ]
-    ++ optional (postgresql != null) postgresql);
+  buildInputs = lib.flatten ([ gnustep.base libxml2 openssl ]
+    ++ lib.optional (openldap != null) openldap
+    ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]
+    ++ lib.optional (postgresql != null) postgresql);
 
   postPatch = ''
     # Exclude NIX_ variables
@@ -30,9 +29,9 @@ gnustep.stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
-    ++ optional (openldap != null) "--enable-openldap"
-    ++ optional (mariadb != null) "--enable-mysql"
-    ++ optional (postgresql != null) "--enable-postgresql";
+    ++ lib.optional (openldap != null) "--enable-openldap"
+    ++ lib.optional (mariadb != null) "--enable-mysql"
+    ++ lib.optional (postgresql != null) "--enable-postgresql";
 
   # Yes, this is ugly.
   preFixup = ''
@@ -40,7 +39,7 @@ gnustep.stdenv.mkDerivation rec {
     rm -rf $out/nix/store
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An extensive set of frameworks which form a complete Web application server environment";
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";

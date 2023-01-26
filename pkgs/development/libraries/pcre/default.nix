@@ -3,9 +3,7 @@
 , variant ? null
 }:
 
-with lib;
-
-assert elem variant [ null "cpp" "pcre16" "pcre32" ];
+assert lib.elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 stdenv.mkDerivation rec {
   pname = "pcre"
@@ -21,11 +19,11 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
+  configureFlags = lib.optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
-    ++ optional (variant != null) "--enable-${variant}";
+    ++ lib.optional (variant != null) "--enable-${variant}";
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
-  '' + optionalString (variant != null) ''
+  '' + lib.optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
   '';
 
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
       PCRE library is free, even for building proprietary software.
     '';
 
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -9,25 +9,23 @@
 , procps, icu
 }:
 
-with lib;
-
 { enableNpm ? true, version, sha256, patches ? [] } @args:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-  majorVersion = versions.major version;
-  minorVersion = versions.minor version;
+  majorVersion = lib.versions.major version;
+  minorVersion = lib.versions.minor version;
 
   pname = if enableNpm then "nodejs" else "nodejs-slim";
 
-  useSharedHttpParser = !stdenv.isDarwin && versionOlder "${majorVersion}.${minorVersion}" "11.4";
+  useSharedHttpParser = !stdenv.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
 
-  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs useSharedHttpParser { inherit http-parser; });
+  sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit http-parser; });
 
-  sharedConfigureFlags = concatMap (name: [
+  sharedConfigureFlags = lib.concatMap (name: [
     "--shared-${name}"
-    "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
+    "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
     /** Closure notes: we explicitly avoid specifying --shared-*-includes,
      *  as that would put the paths into bin/nodejs.
      *  Including pkg-config in build inputs would also have the same effect!
@@ -38,10 +36,10 @@ let
 
   copyLibHeaders =
     map
-      (name: "${getDev sharedLibDeps.${name}}/include/*")
+      (name: "${lib.getDev sharedLibDeps.${name}}/include/*")
       (builtins.attrNames sharedLibDeps);
 
-  extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
+  extraConfigFlags = lib.optionals (!enableNpm) [ "--without-npm" ];
   self = stdenv.mkDerivation {
     inherit pname version;
 
@@ -54,11 +52,11 @@ let
     CXX_host = "c++";
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
 
-    buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
+    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
     nativeBuildInputs = [ which pkg-config python ]
-      ++ optionals stdenv.isDarwin [ xcbuild ];
+      ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
     outputs = [ "out" "libv8" ];
     setOutputFlags = false;
@@ -67,9 +65,9 @@ let
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
       inherit (stdenv.hostPlatform) gcc isAarch32;
-    in sharedConfigureFlags ++ optionals (versionOlder version "19") [
+    in sharedConfigureFlags ++ lib.optionals (lib.versionOlder version "19") [
       "--without-dtrace"
-    ] ++ (optionals isCross [
+    ] ++ (lib.optionals isCross [
       "--cross-compiling"
       "--without-intl"
       "--without-snapshot"
@@ -86,9 +84,9 @@ let
                     else if platform.isS390 && platform.is64bit then "s390x"
                     else if platform.isRiscV && platform.is64bit then "riscv64"
                     else throw "unsupported cpu ${stdenv.hostPlatform.uname.processor}"}"
-    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" gcc) [
+    ]) ++ (lib.optionals (isCross && isAarch32 && lib.hasAttr "fpu" gcc) [
       "--with-arm-fpu=${gcc.fpu}"
-    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" gcc) [
+    ]) ++ (lib.optionals (isCross && isAarch32 && lib.hasAttr "float-abi" gcc) [
       "--with-arm-float-abi=${gcc.float-abi}"
     ]) ++ extraConfigFlags;
 
@@ -122,7 +120,7 @@ let
         substituteInPlace $a \
           --replace "/usr/bin/env" "${coreutils}/bin/env"
       done
-    '' + optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
       sed -i -e "s|tr1/type_traits|type_traits|g" \
              -e "s|std::tr1|std|" src/util.h
     '';
@@ -133,7 +131,7 @@ let
     postInstall = ''
       PATH=$out/bin:$PATH patchShebangs $out
 
-      ${optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
+      ${lib.optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
         mkdir -p $out/share/bash-completion/completions/
         HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
@@ -145,7 +143,7 @@ let
       ''}
 
       # install the missing headers for node-gyp
-      cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
+      cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
 
       # assemble a static v8 library and put it in the 'libv8' output
       mkdir -p $libv8/lib
@@ -183,7 +181,7 @@ let
       inherit majorVersion;
     };
 
-    meta = {
+    meta = with lib; {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = "https://nodejs.org";
       changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
