@@ -9,20 +9,21 @@
 , inkscape
 , imagemagick
 , pytestCheckHook
+, typed-ast
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.23.1";
+  version = "0.23.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gVUlP3offTgHUBTTIzTBf7b2NpBjGlAHYQQxe6ks0v8=";
+    hash = "sha256-4b+jmR56y2VV0XxD6FCmNpDB0UKH9+FqcTQuU2jRCXo=";
   };
 
   postPatch = ''
@@ -41,14 +42,22 @@ buildPythonPackage rec {
     ./remove-black-requirement.patch
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
-  nativeBuildInputs = [ inkscape imagemagick jinja2 poetry-core round ];
+  nativeBuildInputs = [
+    inkscape imagemagick
+    jinja2
+    poetry-core
+    round
+  ];
 
   propagatedBuildInputs = [
     graphviz
+    typed-ast
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
