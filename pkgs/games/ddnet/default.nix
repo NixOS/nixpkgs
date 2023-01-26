@@ -4,6 +4,7 @@
 , cmake
 , ninja
 , pkg-config
+, rustPlatform
 , curl
 , freetype
 , libGLU
@@ -22,6 +23,7 @@
 , vulkan-loader
 , glslang
 , spirv-tools
+, gtest
 , Carbon
 , Cocoa
 , OpenGL
@@ -30,16 +32,33 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.5";
+  version = "16.7.2";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fHe72ew+qoSyOqXU9Hs9EyecrYDjEqTm+Ii9Zja9up4=";
+    hash = "sha256-dK46ubcq/sYSXLeZwAeomj9+jpSNpgHsTmXKdrllLTc=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit src;
+    hash = "sha256-jLR/XriiKXmpHGBHtPa1vpE5ms3Dw1wrNt/4KARyM74=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    rustPlatform.rust.rustc
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+  ];
+
+  nativeCheckInputs = [
+    gtest
+  ];
 
   buildInputs = [
     curl
@@ -62,14 +81,17 @@ stdenv.mkDerivation rec {
     spirv-tools
   ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
-  cmakeFlags = [
-    "-DAUTOUPDATE=OFF"
-  ];
-
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
   '';
+
+  cmakeFlags = [
+    "-DAUTOUPDATE=OFF"
+  ];
+
+  doCheck = true;
+  checkTarget = "run_tests";
 
   meta = with lib; {
     description = "A Teeworlds modification with a unique cooperative gameplay.";
@@ -82,9 +104,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ddnet.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sirseruju lom ];
+    maintainers = with maintainers; [ sirseruju lom ncfavier ];
     mainProgram = "DDNet";
     # error: use of undeclared identifier 'pthread_attr_set_qos_class_np'
+    # https://github.com/ddnet/ddnet/pull/5913
     broken = stdenv.isDarwin;
   };
 }
