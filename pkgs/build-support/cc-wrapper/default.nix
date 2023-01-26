@@ -89,6 +89,10 @@ let
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
+        # Microarchitecture levels
+        x86-64-v2      = versionAtLeast ccVersion "11.0";
+        x86-64-v3      = versionAtLeast ccVersion "11.0";
+        x86-64-v4      = versionAtLeast ccVersion "11.0";
       }.${arch} or true
     else if isClang then
       { # Intel
@@ -99,6 +103,10 @@ let
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
         znver2         = versionAtLeast ccVersion "9.0";
+        # Microarchitecture levels
+        x86-64-v2      = versionAtLeast ccVersion "12.0";
+        x86-64-v3      = versionAtLeast ccVersion "12.0";
+        x86-64-v4      = versionAtLeast ccVersion "12.0";
       }.${arch} or true
     else
       false;
