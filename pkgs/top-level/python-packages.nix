@@ -5734,6 +5734,8 @@ self: super: with self; {
 
   mbddns = callPackage ../development/python-modules/mbddns { };
 
+  mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
