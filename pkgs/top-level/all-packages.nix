@@ -635,6 +635,8 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
+  directx-headers = callPackage ../os-specific/linux/directx-headers { };
+
   # Dotnet
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
