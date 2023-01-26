@@ -39,16 +39,16 @@ buildPythonPackage rec {
     export CVXOPT_SUITESPARSE_INC_DIR=${lib.getDev suitesparse}/include
   '' + lib.optionalString withGsl ''
     export CVXOPT_BUILD_GSL=1
-    export CVXOPT_GSL_LIB_DIR=${gsl}/lib
-    export CVXOPT_GSL_INC_DIR=${gsl}/include
+    export CVXOPT_GSL_LIB_DIR=${lib.getLib gsl}/lib
+    export CVXOPT_GSL_INC_DIR=${lib.getDev gsl}/include
   '' + lib.optionalString withGlpk ''
     export CVXOPT_BUILD_GLPK=1
-    export CVXOPT_GLPK_LIB_DIR=${glpk}/lib
-    export CVXOPT_GLPK_INC_DIR=${glpk}/include
+    export CVXOPT_GLPK_LIB_DIR=${lib.getLib glpk}/lib
+    export CVXOPT_GLPK_INC_DIR=${lib.getDev glpk}/include
   '' + lib.optionalString withFftw ''
     export CVXOPT_BUILD_FFTW=1
-    export CVXOPT_FFTW_LIB_DIR=${fftw}/lib
-    export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
+    export CVXOPT_FFTW_LIB_DIR=${lib.getLib fftw}/lib
+    export CVXOPT_FFTW_INC_DIR=${lib.getDev fftw}/include
   '';
 
   nativeCheckInputs = [ unittestCheckHook ];
