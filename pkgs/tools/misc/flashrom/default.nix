@@ -1,4 +1,5 @@
-{ fetchurl
+{ cmocka
+, fetchurl
 , fetchpatch
 , stdenv
 , installShellFiles
@@ -6,6 +7,8 @@
 , libftdi1
 , libjaylink
 , libusb1
+, meson
+, ninja
 , pciutils
 , pkg-config
 , jlinkSupport ? false
@@ -20,20 +23,36 @@ stdenv.mkDerivation rec {
     hash = "sha256-iaf/W+sIyJuHlbvSU6UblFNUeoZMMXkzAilrVrvFbWU=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 pciutils ]
-    ++ lib.optional jlinkSupport libjaylink;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    installShellFiles
+  ];
 
-  postPatch = ''
-    substituteInPlace util/z60_flashrom.rules \
-      --replace "plugdev" "flashrom"
-  '';
+  buildInputs = [
+    cmocka
+    libftdi1
+    libusb1
+    pciutils
+  ] ++ lib.optional jlinkSupport libjaylink;
 
-  makeFlags = [ "PREFIX=$(out)" "libinstall" ]
-    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes";
+  # These options were reworked in the 1.3.0 release,
+  # we'd instead say something like:
+  #   let programmers = lib.concatStringsSep "," ([ "auto" ] ++ optional jlinkSupport [ "_jlink_" ];
+  #   in "-Dprogrammer=${programmers};"
+  mesonFlags = [
+    (lib.strings.mesonBool "-Dconfig_jlink_spi" jlinkSupport)
+  ];
 
   postInstall = ''
-    install -Dm644 util/z60_flashrom.rules $out/lib/udev/rules.d/flashrom.rules
+    if [ -f $src/util/flashrom_udev.rules ]; then
+      install -Dm644 $src/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
+    else
+      install -Dm644 $src/util/z60_flashrom.rules $out/lib/udev/rules.d/flashrom.rules
+    fi
+    substituteInPlace $out/lib/udev/rules.d/flashrom.rules \
+      --replace "plugdev" "flashrom"
   '';
 
   meta = with lib; {
