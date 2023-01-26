@@ -26338,6 +26338,8 @@ with pkgs;
 
   rtw89-firmware = callPackage ../os-specific/linux/firmware/rtw89-firmware { };
 
+  rvvm = callPackage ../applications/virtualization/rvvm { };
+
   s3ql = callPackage ../tools/backup/s3ql { };
 
   sasutils = callPackage ../os-specific/linux/sasutils { };
