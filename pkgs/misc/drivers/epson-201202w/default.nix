@@ -73,6 +73,6 @@ in
       '';
       license = with licenses; [ lgpl21 epson ];
       platforms = platforms.linux;
-      maintainers = [ maintainers.nphilou ];
+      maintainers = with maintainers; [ nphilou ];
     };
   }
