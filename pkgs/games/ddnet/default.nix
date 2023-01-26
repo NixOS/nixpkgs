@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.4";
+  version = "16.5";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8t4UKytYmkELEMQ06jIj7C9cdOc5L22AnigwkGBzx20=";
+    sha256 = "sha256-fHe72ew+qoSyOqXU9Hs9EyecrYDjEqTm+Ii9Zja9up4=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
@@ -63,9 +63,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DAUTOUPDATE=OFF"
-    "-GNinja"
   ];
 
   postPatch = ''
