@@ -4815,6 +4815,8 @@ with pkgs;
 
   gsctl = callPackage ../applications/misc/gsctl { };
 
+  gsocket = callPackage ../tools/networking/gsocket { };
+
   gthree = callPackage ../development/libraries/gthree { };
 
   gtg = callPackage ../applications/office/gtg { };
@@ -18318,6 +18320,8 @@ with pkgs;
   inherit (callPackage ../development/tools/replay-io { })
     replay-io replay-node-cli;
 
+  reshape = callPackage ../development/tools/reshape { } ;
+
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
   };
@@ -22903,6 +22907,7 @@ with pkgs;
 
   SDL_compat = callPackage ../development/libraries/SDL_compat {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   SDL = SDL_classic;
@@ -23501,7 +23506,7 @@ with pkgs;
     stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
@@ -23511,7 +23516,7 @@ with pkgs;
   vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
@@ -24464,6 +24469,8 @@ with pkgs;
   matterbridge = callPackage ../servers/matterbridge { };
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
+
+  mbusd = callPackage ../servers/mbusd { };
 
   memcached = callPackage ../servers/memcached {};
 

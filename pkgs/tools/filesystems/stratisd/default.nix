@@ -5,6 +5,7 @@
 , pkg-config
 , asciidoc
 , ncurses
+, glibc
 , dbus
 , cryptsetup
 , util-linux
@@ -24,18 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.4.4";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6VrbouYNB2iOndnDBfww8gT4eFgfP+HWcfep+N1nErI=";
+    hash = "sha256-1x6zVWFr4WNpYGVz/UGlP+lycVF2cbWJoiAmiXWzGT8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-C3nkHQt+w0OYbExDfEpFE0Et6ILJqMNRPXCEWiURf3A=";
+    hash = "sha256-emsmdQY2od8XVjNY/rt0BbNsVy2XKtLpe8ydZGRil+Q=";
   };
 
   postPatch = ''
@@ -61,6 +62,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glibc
+    glibc.static
     dbus
     cryptsetup
     util-linux
@@ -81,7 +84,7 @@ stdenv.mkDerivation rec {
   ]);
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "INSTALL=install" ];
-  buildFlags = [ "build" "build-min" "docs/stratisd.8" ];
+  buildFlags = [ "build-all" ];
 
   doCheck = true;
   checkTarget = "test";
