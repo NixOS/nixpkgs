@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-scD/uuAtepatt8Yn7b6PJMfSj9AT7iOy0HuVHyVvEhk=";
+    hash = "sha256-UgFPRoG8wylZMuDz2Utp5A5hlaaWWzTmiUExLOa2Nt4=";
   };
 
   nativeBuildInputs = [
