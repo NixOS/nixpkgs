@@ -508,6 +508,8 @@ with pkgs;
 
   frece = callPackage ../development/tools/frece { };
 
+  frink = callPackage ../development/tools/frink { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
