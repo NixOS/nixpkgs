@@ -110,6 +110,6 @@ stdenv.mkDerivation rec {
     homepage = "https://harfbuzz.github.io/";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }
