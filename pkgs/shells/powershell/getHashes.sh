@@ -30,6 +30,9 @@ variant: $plat $arch
 hash: $hash
 "
 
+        rm -r $exDest
+        mkdir $exDest
+
     done
 done
 
