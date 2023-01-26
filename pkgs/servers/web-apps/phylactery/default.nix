@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
-  preBuild = ''
+  postPatch = ''
     cp ${./go.mod} go.mod
   '';
 
