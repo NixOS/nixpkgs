@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.11.0";
+  version = "2.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dWpsiitG58iCw8z8Hd10eAXXfRRBlq90m0cs1YjeMqE=";
+    hash = "sha256-dRavwtaU+dpRZkO49Q0Btmh2Mi/zUWbvZbImrfUkrAM=";
   };
 
   propagatedBuildInputs = [
