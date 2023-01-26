@@ -30,6 +30,8 @@
 
   obs-source-record = callPackage ./obs-source-record.nix { };
 
+  obs-vaapi = callPackage ./obs-vaapi { };
+
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
