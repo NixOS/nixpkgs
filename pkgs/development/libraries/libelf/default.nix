@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs =
-    if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ] else [ gettext ]
+    (if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ] else [ gettext ])
        # Need to regenerate configure script with newer version in order to pass
        # "mr_cv_target_elf=yes", but `autoreconfHook` brings in `makeWrapper`
        # which doesn't work with the bootstrapTools bash, so can only do this
