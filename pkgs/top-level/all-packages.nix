@@ -26172,8 +26172,14 @@ with pkgs;
 
   ipu6-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
 
+  ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {};
+
   ipu6ep-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {
     ipuVersion = "ipu6ep";
+  };
+
+  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
+    ipu6-camera-bin = ipu6ep-camera-bin;
   };
 
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
