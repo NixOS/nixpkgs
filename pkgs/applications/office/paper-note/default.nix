@@ -44,8 +44,9 @@ stdenv.mkDerivation rec {
     gtksourceview5
   ];
 
-  patchPhase = ''
-    sed -i 's/1.2.0/1.2.1/g' src/meson.build
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace "1.2.0" "${libadwaita.version}"
   '';
 
   postInstall = ''
