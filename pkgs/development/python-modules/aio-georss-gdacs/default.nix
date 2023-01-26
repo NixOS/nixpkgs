@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-gdacs";
-  version = "0.7";
+  version = "0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-georss-gdacs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6z0l0PcFTQgOBj8cBgBMPJIqWG53u7h4WbYkBqU4FNE=";
+    hash = "sha256-1mpOWd4Z2gTQtRewWfZsfEtmS6i5uMPAMTlC8UpawxM=";
   };
 
   propagatedBuildInputs = [
