@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "codrsquad";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HNGoLCTidgnaU5QA+0d/PQuCswigjdvQC3/w19i+Xuc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HNGoLCTidgnaU5QA+0d/PQuCswigjdvQC3/w19i+Xuc=";
   };
 
   preBuild = ''
