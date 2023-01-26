@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiolivisi";
-  version = "0.0.14";
+  version = "0.0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n7EQCOItr6MZRnTCfkJrq39bDbw09XyIRzSuZR2TsNg=";
+    hash = "sha256-qRIdIptvlSyxFYfi7ZFeoZKjnVPzdDW9rBr+DjUsDXc=";
   };
 
   postPatch = ''
