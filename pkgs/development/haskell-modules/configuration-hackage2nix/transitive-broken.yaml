@@ -874,7 +874,6 @@ dont-distribute-packages:
  - bv-sized
  - bv-sized-lens
  - bytable
- - bytepatch
  - bytestring-builder-varword
  - bytestring-read
  - ca
@@ -1029,7 +1028,6 @@ dont-distribute-packages:
  - comark
  - comfort-array
  - comfort-array-shape
- - comfort-array_0_5_2
  - comfort-fftw
  - comfort-glpk
  - commsec
@@ -2731,7 +2729,6 @@ dont-distribute-packages:
  - mathblog
  - mathlink
  - matsuri
- - matterhorn
  - maxent
  - maxent-learner-hw-gui
  - maxsharing
@@ -3820,7 +3817,6 @@ dont-distribute-packages:
  - synthesizer
  - synthesizer-alsa
  - synthesizer-core
- - synthesizer-core_0_8_3
  - synthesizer-dimensional
  - synthesizer-filter
  - synthesizer-llvm
