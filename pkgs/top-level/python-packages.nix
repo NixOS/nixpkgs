@@ -11234,6 +11234,8 @@ self: super: with self; {
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
+  tcolorpy = callPackage ../development/python-modules/tcolorpy { };
+
   tcxparser = callPackage ../development/python-modules/tcxparser { };
 
   tcxreader = callPackage ../development/python-modules/tcxreader { };
