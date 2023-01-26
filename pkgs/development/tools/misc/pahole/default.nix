@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
-    description = "Pahole and other DWARF utils";
+    description = "Shows, manipulates, and pretty-prints debugging information in DWARF, CTF, and BTF formats";
     license = licenses.gpl2Only;
 
     platforms = platforms.linux;
