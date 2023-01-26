@@ -3708,6 +3708,8 @@ self: super: with self; {
 
   gemfileparser = callPackage ../development/python-modules/gemfileparser { };
 
+  gemfileparser2 = callPackage ../development/python-modules/gemfileparser2 { };
+
   genanki = callPackage ../development/python-modules/genanki { };
 
   generic = callPackage ../development/python-modules/generic { };
