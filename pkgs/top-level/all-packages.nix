@@ -526,6 +526,7 @@ with pkgs;
 
   probe-run = callPackage ../development/tools/rust/probe-run {
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+    inherit (darwin) DarwinTools;
   };
 
   mix2nix = callPackage ../development/tools/mix2nix { };
@@ -4785,6 +4786,8 @@ with pkgs;
 
   gsctl = callPackage ../applications/misc/gsctl { };
 
+  gsocket = callPackage ../tools/networking/gsocket { };
+
   gthree = callPackage ../development/libraries/gthree { };
 
   gtg = callPackage ../applications/office/gtg { };
@@ -8615,6 +8618,7 @@ with pkgs;
   kakoune-unwrapped = callPackage ../applications/editors/kakoune {
     # See comments on https://github.com/NixOS/nixpkgs/pull/198836
     # Remove below when stdenv for linux-aarch64 become recent enough.
+    # https://github.com/NixOS/nixpkgs/issues/201254
     stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
   };
   kakoune = wrapKakoune kakoune-unwrapped {
@@ -18283,6 +18287,8 @@ with pkgs;
   inherit (callPackage ../development/tools/replay-io { })
     replay-io replay-node-cli;
 
+  reshape = callPackage ../development/tools/reshape { } ;
+
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
   };
@@ -19362,6 +19368,8 @@ with pkgs;
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
   expat = callPackage ../development/libraries/expat { };
+
+  exprtk = callPackage ../development/libraries/exprtk { };
 
   eventlog = callPackage ../development/libraries/eventlog { };
 
@@ -22863,6 +22871,7 @@ with pkgs;
 
   SDL_compat = callPackage ../development/libraries/SDL_compat {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   SDL = SDL_classic;
@@ -23461,7 +23470,7 @@ with pkgs;
     stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
@@ -23471,7 +23480,7 @@ with pkgs;
   vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
@@ -24424,6 +24433,8 @@ with pkgs;
   matterbridge = callPackage ../servers/matterbridge { };
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
+
+  mbusd = callPackage ../servers/mbusd { };
 
   memcached = callPackage ../servers/memcached {};
 
@@ -30608,6 +30619,7 @@ with pkgs;
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+    # https://github.com/NixOS/nixpkgs/issues/201254
     stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc11Stdenv;
   };
 
@@ -34104,6 +34116,8 @@ with pkgs;
 
   inherit (nodePackages) zx;
 
+  zxfer = callPackage ../applications/system/zxfer {};
+
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
     guiModule = "zest";
     fftw = fftwSinglePrec;
@@ -35679,6 +35693,8 @@ with pkgs;
 
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
   inherit (cinnamon) mint-x-icons mint-y-icons;
+
+  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [ libiconv ];
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   preAutoreconf = let
     reports = "https://github.com/tlwg/libdatrie/issues";

@@ -1,9 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
 
 # # To enable on NixOS:
-# config.services.postgresql = {
-#   extraPlugins = [ pkgs.timescaledb ];
-#   extraConfig = "shared_preload_libraries = 'timescaledb'";
+# config.services.postgresql = let
+#   # The postgresql pkgs has to be taken from the
+#   # postgresql package used, so the extensions
+#   # are built for the correct postgresql version.
+#   postgresqlPackages = config.services.postgresql.package.pkgs;
+# in {
+#   extraPlugins = with postgresqlPackages; [ timescaledb ];
+#   settings.shared_preload_libraries = "timescaledb";
 # }
 
 stdenv.mkDerivation rec {

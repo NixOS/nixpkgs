@@ -4,7 +4,7 @@
 , enableQt ? false, qtbase, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, python ? throw "vtk: Python support requested, but no python interpreter was given."
 # Darwin support
-, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
+, AGL, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
 , ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
 }:
 
@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
       libXt
     ] ++ optionals stdenv.isDarwin [
       xpc
+      AGL
       Cocoa
       CoreServices
       DiskArbitration

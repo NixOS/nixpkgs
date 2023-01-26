@@ -296,6 +296,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>tut</literal> has been updated from 1.0.34 to 2.0.0,
+          and now uses the TOML format for the configuration file
+          instead of INI. Additional information can be found
+          <link xlink:href="https://github.com/RasmusLindroth/tut/releases/tag/2.0.0">here</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>llvmPackages_rocm.llvm</literal> will not contain
           <literal>clang</literal> or <literal>compiler-rt</literal>.
           <literal>llvmPackages_rocm.clang</literal> will not contain

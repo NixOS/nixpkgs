@@ -297,8 +297,9 @@ let
         };
       });
 
-      # home-assistant-frontend does not exist in python3.pkgs
+      # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
+      home-assistant-intents = self.callPackage ./intents.nix { };
     })
   ];
 
@@ -496,6 +497,7 @@ in python.pkgs.buildPythonApplication rec {
       getPackages
       python
       supportedComponentsWithTests;
+    intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;
       components = callPackage ./tests.nix { };

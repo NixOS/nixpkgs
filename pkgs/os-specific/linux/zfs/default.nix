@@ -226,9 +226,9 @@ in {
     latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.8";
+    version = "2.1.9";
 
-    sha256 = "sha256-/+23SEtywa7b1dgvQNmEGrfqXzM1mlk00TSpuiCkQOk=";
+    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
   };
 
   zfsUnstable = common {
@@ -240,10 +240,10 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.9-staging-2023-01-19";
-    rev = "04b02785b67f9b976c43643dd52ce6cdbc22e11e";
+    version = "2.1.10-staging-2023-01-24";
+    rev = "92e0d9d183ce6752cd52f7277c8321d81df9ffee";
 
-    sha256 = "sha256-/+23SEtywa7b1dgvQNmEGrfqXzM1mlk00TSpuiCkQOk=";
+    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
 
     isUnstable = true;
   };

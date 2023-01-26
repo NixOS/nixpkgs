@@ -97,7 +97,7 @@ let
       version = "4.1.5";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+        hash = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
       };
       propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
         final.pythonPackages.flask_mail

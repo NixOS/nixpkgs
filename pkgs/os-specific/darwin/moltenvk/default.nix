@@ -23,68 +23,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.0";
+  version = "1.2.1";
 
-  buildInputs = [ AppKit Foundation Metal QuartzCore cereal ]
-    ++ lib.attrValues finalAttrs.passthru;
+  buildInputs = [
+    AppKit
+    Foundation
+    Metal
+    QuartzCore
+    cereal
+    glslang
+    spirv-cross
+    spirv-headers
+    spirv-tools
+    vulkan-headers
+  ];
 
   nativeBuildInputs = [ cctools sigtool xcbuild ];
 
   outputs = [ "out" "bin" "dev" ];
 
-  # MoltenVK requires specific versions of its dependencies.
-  # Pin them here except for cereal, which is four years old and has several CVEs.
-  passthru = {
-    glslang = (glslang.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "glslang";
-        rev = "5755de46b07e4374c05fb1081f65f7ae1f8cca81";
-        hash = "sha256-huPrQr+lPi7QCF8CufAavHEKGDDimGrcskiojhH9QYk=";
-      };
-      patches = [ ];
-    })).override { inherit (finalAttrs.passthru) spirv-headers spirv-tools; };
-    spirv-cross = spirv-cross.overrideAttrs (old: {
-      cmakeFlags = (old.cmakeFlags or [ ])
-        ++ [ "-DSPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross" ];
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Cross";
-        rev = "f09ba2777714871bddb70d049878af34b94fa54d";
-        hash = "sha256-yVpLW1DbcHDuM9Bm3uGhAC0v9XjmpBoU9x7kmWdg6/o=";
-      };
-    });
-    spirv-headers = spirv-headers.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "spirv-headers";
-        rev = "85a1ed200d50660786c1a88d9166e871123cce39";
-        hash = "sha256-lUWgZYGPu+IaLUrbtyC7R0o3Hq/q7C7BE8r7DAsiC30=";
-      };
-    });
-    spirv-tools = (spirv-tools.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "spirv-tools";
-        rev = "eb0a36633d2acf4de82588504f951ad0f2cecacb";
-        hash = "sha256-sqjQoz9v9alSPc0ujEcWZxDAWh2S6oAPP1+JZmNCpA0=";
-      };
-    })).override { inherit (finalAttrs.passthru) spirv-headers; };
-    vulkan-headers = vulkan-headers.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "Vulkan-Headers";
-        rev = "98f440ce6868c94f5ec6e198cc1adda4760e8849";
-        hash = "sha256-EoD48jBoJmIet4BDC6bYxOsKK2358SZ/NcZeM61q/5g=";
-      };
-    });
-  };
-
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PqrKGNGw7nJbirRgIargIV6Jbgoblu+2fn5qdHKI6BI=";
+    hash = "sha256-JqHPKLSFq+8hyOjVZbjh4AsHM8zSF7ZVxlEePmnEC2w=";
   };
 
   patches = [
@@ -98,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
       --replace '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
       --replace '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
+    # Use the SPIRV-Cross packaged in nixpkgs instead of one built specifically for MoltenVK.
+    substituteInPlace MoltenVK/MoltenVK.xcodeproj/project.pbxproj \
+      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
+    substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
+      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     # Adding all of `usr/include` from the SDK results in header conflicts with `libcxx.dev`.
     # Work around it by symlinking just the SIMD stuff needed by MoltenVK.
     mkdir -p build/include
@@ -108,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = [
     "-isystem ${lib.getDev libcxx}/include/c++/v1"
-    "-I${finalAttrs.passthru.spirv-cross}/include/spirv_cross"
-    "-I${finalAttrs.passthru.spirv-headers}/include/spirv/unified1/"
+    "-I${lib.getDev spirv-cross}/include/spirv_cross"
+    "-I${lib.getDev spirv-headers}/include/spirv/unified1/"
   ];
 
   buildPhase = ''
