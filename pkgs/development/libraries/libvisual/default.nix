@@ -1,18 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, glib }:
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, glib
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "libvisual";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/libvisual/${pname}-${version}.tar.gz";
-    sha256 = "1my1ipd5k1ixag96kwgf07bgxkjlicy9w22jfxb2kq95f6wgsk8b";
+    hash = "sha256-qhKHdBf3bTZC2fTHIzAjgNgzF1Y51jpVZB0Bkopd230=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib ];
-
-  hardeningDisable = [ "format" ];
+  buildInputs = [ SDL glib ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
