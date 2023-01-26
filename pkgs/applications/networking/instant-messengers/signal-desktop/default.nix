@@ -6,8 +6,7 @@
   };
   signal-desktop-beta = {
     dir = "Signal Beta";
-    ringrtcPrefix = "@signalapp/";
-    version = "6.3.0-beta.1";
-    hash = "sha256-cYJWhnyiWULnIZvI2/k1koLCd2zrL4CVMohcnSZa/TY=";
+    version = "6.4.0-beta.1";
+    hash = "sha256-GR7RWFT20i5dx6XYrp73inCOQ2Hj2UjSXf5jmjfDKMU=";
   };
 }
