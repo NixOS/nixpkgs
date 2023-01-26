@@ -167,11 +167,11 @@
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-EsupdOP2aWLGeQrtuTyPg4ppM/j0WT0q/UV60oK732Y=",
+    "hash": "sha256-4uwMg2DXd7T4WqdfwcZHtsPMTTCqrwSngh01DYW5yko=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.29.2",
+    "rev": "v2.30.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-foMmZbNPLww1MN4UZwuynBDgt2w40aMqVINRw//Q0d0="
   },
@@ -816,11 +816,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-EewM1/7zzmJ5KL+/KqstFg6rQT8YpvMULScYeD2ClUQ=",
+    "hash": "sha256-L8y00f+57hndpVevliJ2kNqpGeNR2Jv/FHbqkAUIRMI=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v4.104.2",
+    "rev": "v4.105.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -861,20 +861,20 @@
     "vendorHash": "sha256-hHwFm+gSMjN4YQEFd/dd50G0uZsxzqi21tHDf4mPBLY="
   },
   "opentelekomcloud": {
-    "hash": "sha256-brODSqSwZXy3B/F5jqPz1h5UJ2hNncG7tIpICJjoBW4=",
+    "hash": "sha256-D2RPpG1RE+bM7rVvmItczpRExMXK0RaKfJsnifvXRTs=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.32.2",
+    "rev": "v1.32.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-p01ZIAt8cUv/UklRnMu+TTmfEw8jdde9C4nUJrhA7wE="
+    "vendorHash": "sha256-49ViIxICpvWgpv+uY0NTDvXGJthjH6aT38COfS+AOaQ="
   },
   "opsgenie": {
-    "hash": "sha256-6lbJyBppfRqqmYpPgyzUTvnvHPSWjE3SJULqliZ2iUI=",
+    "hash": "sha256-NMaTTZQyEJ0vb+eDNTGRozTrme78Vo+/GuIR43AeDbU=",
     "homepage": "https://registry.terraform.io/providers/opsgenie/opsgenie",
     "owner": "opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.18",
+    "rev": "v0.6.19",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
