@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
-
     # On Darwin, the linker fails to find a bunch of symbols.
     broken = stdenv.isDarwin;
   };
