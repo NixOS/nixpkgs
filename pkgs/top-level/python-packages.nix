@@ -6911,6 +6911,8 @@ self: super: with self; {
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
 
+  okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
+
   okta = callPackage ../development/python-modules/okta { };
 
   olefile = callPackage ../development/python-modules/olefile { };
