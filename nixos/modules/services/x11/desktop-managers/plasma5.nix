@@ -365,6 +365,7 @@ in
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ];
           optionalPackages = [
+            pkgs.aha # needed by kinfocenter for fwupd support
             plasma-browser-integration
             konsole
             oxygen
