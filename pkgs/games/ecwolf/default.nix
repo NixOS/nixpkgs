@@ -61,11 +61,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     homepage = "https://maniacsvault.net/ecwolf/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+
+    # On Darwin, the linker fails to find a bunch of symbols.
+    broken = stdenv.isDarwin;
   };
 }
