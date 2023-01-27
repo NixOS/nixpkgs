@@ -36177,6 +36177,12 @@ with pkgs;
     inherit qt5 libsForQt5;
   });
 
+  paperde = recurseIntoAttrs (import ../desktops/paperde {
+    inherit pkgs;
+    inherit (lib) makeScope;
+    inherit qt5 libsForQt5;
+  });
+
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });

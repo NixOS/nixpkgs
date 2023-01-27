@@ -382,6 +382,11 @@ in rec {
     ec2 = makeClosure ({ ... }:
       { imports = [ modules/virtualisation/amazon-image.nix ];
       });
+    paperde = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.desktopManager.paperde.enable = true;
+      });
 
     kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
