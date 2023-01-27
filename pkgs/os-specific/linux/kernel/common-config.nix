@@ -632,6 +632,9 @@ let
       XEN_SAVE_RESTORE            = option yes;
       XEN_SCRUB_PAGES             = whenOlder "4.19" yes;
       XEN_SELFBALLOONING          = whenOlder "5.3" yes;
+      XEN_SCRUB_PAGES_DEFAULT     = whenAtLeast "4.19" (option yes);
+      XEN_STUB                    = whenOlder "5.13" (option yes);
+      XEN_TMEM                    = whenOlder "5.3" (option yes);
     };
 
     media = {
