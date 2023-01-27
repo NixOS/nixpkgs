@@ -1,62 +1,23 @@
 { lib
-, pkgs
 , stdenvNoCC
 , fetchFromGitHub
 , pkgsCross
+, stdenv
 , bash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs:
   let
-    system = lib.toLower stdenvNoCC.targetPlatform.uname.system;
-
-    # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
-    # needs to be built with a cross-compiler.
-    dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix {
-      inherit (finalAttrs) src version dxvkPatches;
-    };
-    dxvk64 = pkgsCross.mingwW64.callPackage ./dxvk.nix {
-      inherit (finalAttrs) src version dxvkPatches;
-    };
-
-    # Split out by platform to make maintenance easy in case supported versions on Darwin and other
-    # platforms diverge (due to the need for Darwin-specific patches that would fail to apply).
-    # Should that happen, set `darwin` to the last working `rev` and `hash`.
-    srcs = rec {
-      darwin = {
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-T93ZylxzJGprrP+j6axZwl2d3hJowMCUOKNjIyNzkmE=";
-        version = "1.10.3";
-      };
-      default = {
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-mboVLdPgZMzmqyeF0jAloEz6xqfIDiY/X98e7l2KZnw=";
-        version = "2.0";
-      };
-    };
+    dxvk32 = if stdenv.isDarwin then pkgsCross.mingw32.dxvk_1 else pkgsCross.mingw32.dxvk_2;
+    dxvk64 = if stdenv.isDarwin then pkgsCross.mingwW64.dxvk_1 else pkgsCross.mingwW64.dxvk_2;
   in
   {
     name = "dxvk";
-    inherit (srcs."${system}" or srcs.default) version;
-
-    src = fetchFromGitHub {
-      owner = "doitsujin";
-      repo = "dxvk";
-      inherit (srcs."${system}" or srcs.default) rev hash;
-    };
-
-    # Override this to patch DXVK itself (rather than the setup script).
-    dxvkPatches = lib.optionals stdenvNoCC.isDarwin [
-      # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
-      # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
-      ./darwin-dxvk-compat.patch
-      # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
-      # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
-      ./darwin-thread-primitives.patch
-    ];
+    inherit (dxvk64) version;
 
     outputs = [ "out" "bin" "lib" ];
 
+    dontUnpack = true;
     dontConfigure = true;
     dontBuild = true;
 
