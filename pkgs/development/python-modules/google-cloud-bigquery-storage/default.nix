@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.18.0";
+  version = "2.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RncpEPcNeCZdpeevSEeTmu1L6m4qZO/huZPAxoazrxY=";
+    hash = "sha256-XNPeWe8nYGmJr/MVxt0uBZMf0N2QEp5hYge0RJRWUqA=";
   };
 
   propagatedBuildInputs = [
