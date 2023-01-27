@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, libGL, libGLU, libXmu, cmake, ninja,
-  pkg-config, fontconfig, freetype, expat, freeimage, vtk, gl2ps, tbb,
+  pkg-config, fontconfig, freetype, expat, freeimage, vtk_8, gl2ps, tbb,
   OpenCL, Cocoa
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [
-    libGL libGLU libXmu freetype fontconfig expat freeimage vtk
+    libGL libGLU libXmu freetype fontconfig expat freeimage vtk_8
     gl2ps tbb
   ]
     ++ optionals stdenv.isDarwin [OpenCL Cocoa]

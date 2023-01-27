@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
 , packaging
 , pytest
 , cython
@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.4.1";
+  version = "1.5.0";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = "dipy";
-    repo   = pname;
-    rev    = version;
-    sha256 = "0zaqsiq73vprbqbzvzswjfmqgappl5vhpl2fwjrrda33c27klpzj";
+    owner = "dipy";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-kJ8JbnNpjTqGJXwwMTqZdgeN8fOEuxarycunDCRLB74=";
   };
 
   nativeBuildInputs = [ cython packaging ];
