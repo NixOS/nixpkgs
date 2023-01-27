@@ -5940,9 +5940,7 @@ with pkgs;
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
-  crabz = callPackage ../tools/compression/crabz {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  crabz = callPackage ../tools/compression/crabz { };
 
   ethash = callPackage ../development/libraries/ethash { };
 
