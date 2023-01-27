@@ -78,15 +78,10 @@ rec {
 
        2. (modern) a pattern for the platform `parsed` field.
 
-       3. (functional) a predicate function returning a boolean.
-
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
-  platformMatch = platform: elem:
-    if builtins.isFunction elem
-    then elem platform
-    else let
+  platformMatch = platform: elem: let
       pattern =
         if builtins.isString elem
         then { system = elem; }
