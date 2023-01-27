@@ -69,8 +69,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    # Remove when https://github.com/papis/papis/pull/478 lands in upstream
     substituteInPlace setup.py \
-      --replace "isbnlib>=3.9.1,<3.10" "isbnlib>=3.9"
+      --replace "etc/bash_completion.d/" "share/bash-completion/completions/"
     substituteInPlace setup.cfg \
       --replace "--cov=papis" ""
   '';
