@@ -21,8 +21,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    wireshark-cli
+    py
     pytestCheckHook
+    wireshark-cli
   ];
 
   pytestFlagsArray = [
