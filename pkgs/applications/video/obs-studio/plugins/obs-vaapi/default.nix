@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , gst_all_1
+, pciutils
 , pkg-config
 , meson
 , ninja
@@ -9,23 +10,23 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "obs-gstreamer";
-  version = "0.4.0";
+  pname = "obs-vaapi";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-C4yee7hzkSOjIeaacLaTGPzZ1qYdYtHK5a3m9gz2pPI=";
+    rev = version;
+    hash = "sha256-qA4xVVShkp40QHp2HmmRzVxQaBwskRpUNEULKetVMu8=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = with gst_all_1; [ gstreamer gst-plugins-base obs-studio ];
+  buildInputs = with gst_all_1; [ gstreamer gst-plugins-base obs-studio pciutils ];
 
   # - We need "getLib" instead of default derivation, otherwise it brings gstreamer-bin;
   # - without gst-plugins-base it won't even show proper errors in logs;
-  # - Without gst-plugins-bad it won't find element "h264parse";
-  # - gst-plugins-ugly adds "x264" to "Encoder type";
+  # - Without gst-plugins-bad it won't find element "vapostproc";
+  # - gst-vaapi adds "VA-API" to "Encoder type";
   # Tip: "could not link appsrc to videoconvert1" can mean a lot of things, enable GST_DEBUG=2 for help.
   passthru.obsWrapperArguments =
     let
@@ -35,18 +36,12 @@ stdenv.mkDerivation rec {
       gstreamer
       gst-plugins-base
       gst-plugins-bad
-      gst-plugins-ugly
+      gst-vaapi
     ];
 
-  # Fix output directory
-  postInstall = ''
-    mkdir $out/lib/obs-plugins
-    mv $out/lib/obs-gstreamer.so $out/lib/obs-plugins/
-  '';
-
   meta = with lib; {
-    description = "An OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio";
-    homepage = "https://github.com/fzwoch/obs-gstreamer";
+    description = "OBS Studio VAAPI support via GStreamer";
+    homepage = "https://github.com/fzwoch/obs-vaapi";
     maintainers = with maintainers; [ ahuzik pedrohlc ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];

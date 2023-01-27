@@ -3311,6 +3311,8 @@ with pkgs;
 
   itd = callPackage ../applications/misc/itd { };
 
+  kord = callPackage ../applications/misc/kord { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
@@ -12719,6 +12721,8 @@ with pkgs;
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };
+
+  uair = callPackage ../tools/misc/uair { };
 
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
