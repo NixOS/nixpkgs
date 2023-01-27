@@ -3725,6 +3725,12 @@
     githubId = 39825;
     name = "Dominik Honnef";
   };
+  doriath = {
+    email = "tomasz.zurkowski@gmail.com";
+    github = "doriath";
+    githubId = 150959;
+    name = "Tomasz Zurkowski";
+  };
   doronbehar = {
     email = "me@doronbehar.com";
     github = "doronbehar";
