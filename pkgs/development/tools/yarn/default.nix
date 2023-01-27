@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://classic.yarnpkg.com/";
     changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ offline screendriver ];
+    maintainers = with maintainers; [ offline screendriver marsam ];
     platforms = nodejs.meta.platforms;
   };
 })
