@@ -743,6 +743,8 @@ let
 
     lastfm = callPackage ../development/ocaml-modules/lastfm { };
 
+    lem = callPackage ../development/ocaml-modules/lem { };
+
     lens = callPackage ../development/ocaml-modules/lens { };
 
     letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
