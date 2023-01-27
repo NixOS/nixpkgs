@@ -11,7 +11,7 @@
 , SDL2
 , SDL2_net
 , SDL2_mixer
-, gtk2
+, gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
-  buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk2 ];
+  buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk3 ];
 
   desktopItems = [
     (makeDesktopItem {
