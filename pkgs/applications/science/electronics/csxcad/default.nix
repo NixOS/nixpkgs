@@ -5,7 +5,7 @@
 , tinyxml
 , hdf5
 , cgal_5
-, vtk
+, vtk_8
 , boost
 , gmp
 , mpfr
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     boost
     gmp
     mpfr
-    vtk
+    vtk_8
     fparser
     tinyxml
     hdf5

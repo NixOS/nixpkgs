@@ -6508,6 +6508,13 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jboy = {
+    email = "jboy+nixos@bius.moe";
+    githubId = 2187261;
+    github = "jboynyc";
+    matrix = "@jboy:utwente.io";
+    name = "John Boy";
+  };
   jc = {
     name = "Josh Cooper";
     email = "josh@cooper.is";
@@ -11462,6 +11469,12 @@
     github = "pedropombeiro";
     githubId = 138074;
     name = "Pedro Pombeiro";
+  };
+  pongo1231 = {
+    email = "pongo1999712@gmail.com";
+    github = "pongo1231";
+    githubId = 4201956;
+    name = "pongo1231";
   };
   poscat = {
     email = "poscat@mail.poscat.moe";
