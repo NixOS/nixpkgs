@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     chmod +x configure
   '';
-  
+
   ldflags = [
     "-Wl"
     "--no-as-needed"
