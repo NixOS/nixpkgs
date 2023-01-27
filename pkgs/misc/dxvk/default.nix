@@ -3,6 +3,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , pkgsCross
+, bash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs:
@@ -56,20 +57,17 @@ stdenvNoCC.mkDerivation (finalAttrs:
 
     outputs = [ "out" "bin" "lib" ];
 
-    # Also copy `mcfgthread-12.dll` due to DXVK’s being built in a MinGW cross environment.
-    patches = [ ./mcfgthread.patch ];
-
     dontConfigure = true;
     dontBuild = true;
 
     installPhase = ''
       mkdir -p $out/bin $bin $lib
-      # Replace both basedir forms to support both DXVK 2.0 and older versions.
-      substitute setup_dxvk.sh $out/bin/setup_dxvk.sh \
+      substitute ${./setup_dxvk.sh} $out/bin/setup_dxvk.sh \
+        --subst-var-by bash ${bash} \
+        --subst-var-by dxvk32 ${dxvk32} \
+        --subst-var-by dxvk64 ${dxvk64} \
         --subst-var-by mcfgthreads32 "${pkgsCross.mingw32.windows.mcfgthreads}" \
-        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads}" \
-        --replace 'basedir=$(dirname "$(readlink -f $0)")' "basedir=$bin" \
-        --replace 'basedir="$(dirname "$(readlink -f "$0")")"' "basedir=$bin"
+        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads}"
       chmod a+x $out/bin/setup_dxvk.sh
       declare -A dxvks=( [x32]=${dxvk32} [x64]=${dxvk64} )
       for arch in "''${!dxvks[@]}"; do
