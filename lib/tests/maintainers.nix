@@ -1,5 +1,6 @@
 # to run these tests (and the others)
 # nix-build nixpkgs/lib/tests/release.nix
+# These tests should stay in sync with the comment in maintainers/maintainers-list.nix
 { # The pkgs used for dependencies for the testing itself
   pkgs ? import ../.. {}
 , lib ? pkgs.lib
