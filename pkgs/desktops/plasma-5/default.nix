@@ -130,7 +130,7 @@ let
       kdeplasma-addons = callPackage ./kdeplasma-addons.nix { };
       kgamma5 = callPackage ./kgamma5.nix { };
       khotkeys = callPackage ./khotkeys.nix { };
-      kinfocenter = callPackage ./kinfocenter.nix { };
+      kinfocenter = callPackage ./kinfocenter { };
       kmenuedit = callPackage ./kmenuedit.nix { };
       kpipewire = callPackage ./kpipewire.nix { };
       kscreen = callPackage ./kscreen.nix { };
