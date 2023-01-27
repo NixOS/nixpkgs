@@ -2,6 +2,7 @@
 , lib
 , buildPackages
 , fetchFromGitLab
+, fetchpatch
 , python3
 , meson
 , ninja
@@ -101,6 +102,13 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # backport a fix to actually install the new module
+      # FIXME: remove after 0.3.66
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/fba7083f8ceb210c7c20aceafeb5c9a8767cf705.patch";
+        hash = "sha256-aZQ4OzK0B5YPq+jQNygxPE0coG2qB0ukbYzyI8E24XM=";
+      })
     ];
 
     nativeBuildInputs = [
