@@ -36,13 +36,11 @@
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with lib;
-
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
   version = "22.3.3";
-  branch  = versions.major version;
+  branch  = lib.versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
@@ -115,43 +113,43 @@ self = stdenv.mkDerivation {
     "-Ddisk-cache-key=${placeholder "drivers"}"
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
-    "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
-    "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
+    "-Dplatforms=${lib.concatStringsSep "," eglPlatforms}"
+    "-Dgallium-drivers=${lib.concatStringsSep "," galliumDrivers}"
+    "-Dvulkan-drivers=${lib.concatStringsSep "," vulkanDrivers}"
 
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
-    "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${boolToString enableOSMesa}" # used by wine
+    "-Dgallium-nine=${lib.boolToString enableGalliumNine}" # Direct3D in Wine
+    "-Dosmesa=${lib.boolToString enableOSMesa}" # used by wine
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
     # To enable non-mesa gbm backends to be found (e.g. Nvidia)
     "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
-  ] ++ optionals enableOpenCL [
+  ] ++ lib.optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ] ++ optional enablePatentEncumberedCodecs
+  ] ++ lib.optional enablePatentEncumberedCodecs
     "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
-  ++ optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
+  ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-  ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
+  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator_14 ]
     ++ lib.optional withValgrind valgrind-light
     # Mesa will not build zink when gallium-drivers=auto
-    ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
+    ++ lib.optional (lib.elem "zink" galliumDrivers) vulkan-loader;
 
   depsBuildBuild = [ pkg-config ];
 
@@ -160,21 +158,21 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.Mako
     jdupes glslang
-  ] ++ lib.optionals (elem "wayland" eglPlatforms) [
+  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
-  ] ++ optional withLibdrm libdrm
-    ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
+  ] ++ lib.optional withLibdrm libdrm
+    ++ lib.optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   doCheck = false;
 
   postInstall = ''
     # Some installs don't have any drivers so this directory is never created.
     mkdir -p $drivers $osmesa
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $drivers/lib
 
     if [ -n "$(shopt -s nullglob; echo "$out/lib/libxatracker"*)" -o -n "$(shopt -s nullglob; echo "$out/lib/libvulkan_"*)" ]; then
@@ -199,7 +197,7 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
-  '' + optionalString enableOpenCL ''
+  '' + lib.optionalString enableOpenCL ''
     # Move OpenCL stuff
     mkdir -p $opencl/lib
     mv -t "$opencl/lib/"     \
@@ -221,7 +219,7 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  postFixup = optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
     [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
@@ -252,7 +250,7 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
   ];
@@ -274,7 +272,7 @@ self = stdenv.mkDerivation {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "An open source 3D graphics library";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL

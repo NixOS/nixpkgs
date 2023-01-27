@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    homepage = "https://dracut.wiki.kernel.org";
+    homepage = "https://github.com/dracutdevs/dracut/wiki";
     description = "An event driven initramfs infrastructure";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lilyinstarlight ];

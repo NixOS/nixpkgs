@@ -121,6 +121,16 @@ in {
                 List of plugins to be disabled.
               '';
             };
+
+            EspLocation = mkOption {
+              type = types.path;
+              default = config.boot.loader.efi.efiSysMountPoint;
+              defaultText = lib.literalExpression "config.boot.loader.efi.efiSysMountPoint";
+              description = lib.mdDoc ''
+                The EFI system partition (ESP) path used if UDisks is not available
+                or if this partition is not mounted at /boot/efi, /boot, or /efi
+              '';
+            };
           };
         };
         default = {};

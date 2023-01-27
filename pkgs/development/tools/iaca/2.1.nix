@@ -1,5 +1,4 @@
 { lib, stdenv, makeWrapper, requireFile, gcc, unzip }:
-with lib;
 
 # v2.1: last version with NHM/WSM arch support
 stdenv.mkDerivation rec {
@@ -17,17 +16,17 @@ stdenv.mkDerivation rec {
     cp bin/iaca $out/bin/
     cp lib/* $out/lib
   '';
-  preFixup = let libPath = makeLibraryPath [ stdenv.cc.cc.lib gcc ]; in ''
+  preFixup = let libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib gcc ]; in ''
     patchelf \
         --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \
         --set-rpath $out/lib:"${libPath}" \
         $out/bin/iaca
   '';
   postFixup = "wrapProgram $out/bin/iaca --set LD_LIBRARY_PATH $out/lib";
-  meta = {
+  meta = with lib; {
     description = "Intel Architecture Code Analyzer";
     homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kazcw ];
