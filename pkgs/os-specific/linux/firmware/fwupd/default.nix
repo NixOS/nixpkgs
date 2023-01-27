@@ -333,7 +333,6 @@ let
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
         "fwupd/remotes.d/vendor-directory.conf"
-        "fwupd/thunderbolt.conf"
         "fwupd/uefi_capsule.conf"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
@@ -348,6 +347,8 @@ let
         "fwupd/redfish.conf"
       ] ++ lib.optionals haveMSR [
         "fwupd/msr.conf"
+      ] ++ lib.optionals isx86 [
+        "fwupd/thunderbolt.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf
