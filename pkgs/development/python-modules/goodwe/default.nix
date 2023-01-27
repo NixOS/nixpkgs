@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "goodwe";
-  version = "0.2.20";
+  version = "0.2.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "marcelblijleven";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-RDd0KR7NjBTlgeQ/E4mnLnB2n4NCPoAt2a62NGdzCZE=";
+    sha256 = "sha256-ojVwvWj7DLCUzVKCdotRSUQHP1utS60TVFctDzUaN2w=";
   };
 
   postPatch = ''
