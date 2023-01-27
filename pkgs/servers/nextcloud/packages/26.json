@@ -1,0 +1,62 @@
+{
+  "calendar": {
+    "sha256": "0yqpfp5nbzd7zar2rbcx3bhfgjxrp1sy6a57fdagndfi4y0r56hq",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.2.2/calendar-v4.2.2.tar.gz",
+    "version": "4.2.2",
+    "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
+    "homepage": "https://github.com/nextcloud/calendar/",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "files_texteditor": {
+    "sha256": "0rmk14iw34pd81snp3lm01k07wm5j2nh9spcd4j0m43l20b7kxss",
+    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.0/files_texteditor.tar.gz",
+    "version": "2.15.0",
+    "description": "This application enables Nextcloud users to open, save and edit text files in the web browser. If enabled, an entry called \"Text file\" in the \"New\" button menu at the top of the web browser appears. When clicked, a new text file opens in the browser and the file can be saved into the current Nextcloud directory. Further, when a text file is clicked in the web browser, it will be opened and editable. If the privileges allow, a user can also edit shared files and save these changes back into the web browser.\nMore information is available in the text editor documentation.",
+    "homepage": "https://github.com/nextcloud/files_texteditor",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "mail": {
+    "sha256": "",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v2.2.2/mail-v2.2.2.tar.gz",
+    "version": "2.2.2",
+    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
+    "homepage": "https://github.com/nextcloud/mail#readme",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "notes": {
+    "sha256": "1jcgv3awr45jq3n3qv851qlpbdl2plixba0iq2s54dmhciypdckl",
+    "url": "https://github.com/nextcloud/notes/releases/download/v4.6.0/notes.tar.gz",
+    "version": "4.6.0",
+    "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/stefan-niedermann/nextcloud-notes), [iOS](https://github.com/owncloud/notes-iOS-App) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
+    "homepage": "https://github.com/nextcloud/notes",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "tasks": {
+    "sha256": "0jm13d6nm7cfsw27yfiq1il9xjlh0qrq8xby2yz9dmggn7lk1dx5",
+    "url": "https://github.com/nextcloud/tasks/releases/download/v0.14.5/tasks.tar.gz",
+    "version": "0.14.5",
+    "description": "Once enabled, a new Tasks menu will appear in your Nextcloud apps menu. From there you can add and delete tasks, edit their title, description, start and due dates and mark them as important. Tasks can be shared between users. Tasks can be synchronized using CalDav (each task list is linked to an Nextcloud calendar, to sync it to your local client: Thunderbird, Evolution, KDE Kontact, iCal … - just add the calendar as a remote calendar in your client). You can download your tasks as ICS files using the download button for each calendar.",
+    "homepage": "https://github.com/nextcloud/tasks/",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "unsplash": {
+    "sha256": "17qqn6kwpvkq21c92jyy3pfvjaj5xms1hr07fnn39zxg0nmwjdd8",
+    "url": "https://github.com/nextcloud/unsplash/releases/download/v2.1.1/unsplash.tar.gz",
+    "version": "2.1.1",
+    "description": "Show a new random featured nature photo in your nextcloud. Now with choosable motives!",
+    "homepage": "https://github.com/nextcloud/unsplash/",
+    "licenses": [
+      "agpl"
+    ]
+  }
+}

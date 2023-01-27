@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "0qv3c7wmf9j74562xbjvhk6kbpna6ansiw3724dh4w8j5sldqysd",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v4.2.3/contacts-v4.2.3.tar.gz",
-    "version": "4.2.3",
+    "sha256": "1996f97w74slmh7ihv8p1lxl32rri5nnzp90mbb1imclpgac2i63",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v4.2.4/contacts-v4.2.4.tar.gz",
+    "version": "4.2.4",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "news": {
-    "sha256": "0pnriarr2iqci2v2hn6vpvszf4m4pkcxsd2i13bp7n1zqkg6swd7",
-    "url": "https://github.com/nextcloud/news/releases/download/20.0.0/news.tar.gz",
-    "version": "20.0.0",
+    "sha256": "0iz1yrl7h60yhc1d1gkalkzc5vlj8sq6lff0ggns6a6qpsdpn9c5",
+    "url": "https://github.com/nextcloud/news/releases/download/20.0.1/news.tar.gz",
+    "version": "20.0.1",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "polls": {
-    "sha256": "b6ef0e8b34cdb5169341e30340bc9cefaa1254a1a6020e951f86e828f8591a11",
-    "url": "https://github.com/nextcloud/polls/releases/download/v3.8.3/polls.tar.gz",
-    "version": "3.8.3",
+    "sha256": "0qdm0hnljkv0df1s929awyjj1gsp3d6xv9llr52cxv66kkfx086y",
+    "url": "https://github.com/nextcloud/polls/releases/download/v3.8.4/polls.tar.gz",
+    "version": "3.8.4",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -160,9 +160,9 @@
     ]
   },
   "spreed": {
-    "sha256": "0frilxny4mvp34fxw0k8al3r5apy3q6vq7z35jkph3vaq1889m9k",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v14.0.7/spreed-v14.0.7.tar.gz",
-    "version": "14.0.7",
+    "sha256": "0c5b46g5vi8fsjcd2r0wqza7iqyvbgznwww5zcyajf29a32950c6",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v14.0.8/spreed-v14.0.8.tar.gz",
+    "version": "14.0.8",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
