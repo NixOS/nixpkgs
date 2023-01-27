@@ -38495,4 +38495,6 @@ with pkgs;
   tuner = callPackage ../applications/audio/tuner { };
 
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
+
+  stash-bin = callPackage ../servers/stash-bin { };
 }
