@@ -1237,6 +1237,8 @@ let
 
     rock = callPackage ../development/ocaml-modules/rock { };
 
+    sail = callPackage ../development/ocaml-modules/sail { };
+
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
