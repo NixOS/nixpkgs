@@ -14230,6 +14230,12 @@
     githubId = 3268082;
     name = "Thibaut Marty";
   };
+  thled = {
+    name = "Thomas Le Duc";
+    email = "dev@tleduc.de";
+    github = "thled";
+    githubId = 28220902;
+  };
   thyol = {
     name = "thyol";
     email = "thyol@pm.me";
