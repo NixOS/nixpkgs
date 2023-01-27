@@ -154,6 +154,12 @@ let
 
     enableParallelBuilding = true;
 
+    # openssl3 runs `pod2man` as part of `make install`, which means that the
+    # installPhase takes longer than the buildPhase without this:
+    preInstall = ''
+      installFlagsArray+=("-j$NIX_BUILD_CORES")
+    '';
+
     postInstall =
     (if static then ''
       # OPENSSLDIR has a reference to self
