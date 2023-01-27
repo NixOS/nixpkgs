@@ -6,6 +6,7 @@
 , numpy
 , py
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -43,6 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pypytools"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/antocuni/pypytools/issues/4
+    "test_clonefunc"
   ];
 
   meta = with lib; {
