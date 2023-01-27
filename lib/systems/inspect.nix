@@ -98,6 +98,6 @@ rec {
   # apply only to the `parsed` field.
 
   platformPatterns = {
-    isStatic       = { parsed = {}; isStatic = true; };
+    isStatic = { parsed = {}; isStatic = true; };
   };
 }
