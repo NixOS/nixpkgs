@@ -5447,6 +5447,8 @@ with pkgs;
 
   step-cli = callPackage ../tools/security/step-cli { };
 
+  studio-link = callPackage ../applications/audio/studio-link { };
+
   string-machine = callPackage ../applications/audio/string-machine { };
 
   stripe-cli = callPackage ../tools/admin/stripe-cli {
