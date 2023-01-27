@@ -21,13 +21,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-u5FnfXBCjwSp8QBrH8KIkVGV32/9pff41ZWjWXOwuMI=";
+    hash = "sha256-0/wvH07bJRKFwYnOARRJNzH8enIX3TNnWQnJdfpfvgE=";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   postPatch = ''
     patchShebangs utils/
