@@ -129,3 +129,8 @@ packaged libraries may still use the old spelling: maintainers are invited to
 fix this when updating packages. Massive renaming is strongly discouraged as it
 would be challenging to review, difficult to test, and will cause unnecessary
 rebuild.
+
+The build will automatically fail if two distinct versions of the same library
+are added to `buildInputs` (which usually happens transitively because of
+`propagatedBuildInputs`). Set `dontDetectOcamlConflicts` to true to disable this
+behavior.
