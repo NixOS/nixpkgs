@@ -32129,7 +32129,7 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
+  qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat { };
 
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
@@ -37858,6 +37858,14 @@ with pkgs;
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
   sailsd = callPackage ../misc/sailsd { };
+
+  sail-riscv-rv32 = callPackage ../applications/virtualization/sail-riscv {
+    arch = "RV32";
+  };
+
+  sail-riscv-rv64 = callPackage ../applications/virtualization/sail-riscv {
+    arch = "RV64";
+  };
 
   shc = callPackage ../tools/security/shc { };
 
