@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "04g1xm3q46j7harxr0n56r7kkkqjxvah7xijddyq5fj7icr6qf5d",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.2.1/calendar-v4.2.1.tar.gz",
-    "version": "4.2.1",
+    "sha256": "0yqpfp5nbzd7zar2rbcx3bhfgjxrp1sy6a57fdagndfi4y0r56hq",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.2.2/calendar-v4.2.2.tar.gz",
+    "version": "4.2.2",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "097a71if6kkc7nphfc8b6llqlsskjwp1vg83134hzgfscvllvaj8",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.0.2/contacts-v5.0.2.tar.gz",
-    "version": "5.0.2",
+    "sha256": "181lycyz4v7v1yir6ylmblgha625sn23nf3661g3izq1whi0wgr9",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.0.3/contacts-v5.0.3.tar.gz",
+    "version": "5.0.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "news": {
-    "sha256": "0pnriarr2iqci2v2hn6vpvszf4m4pkcxsd2i13bp7n1zqkg6swd7",
-    "url": "https://github.com/nextcloud/news/releases/download/20.0.0/news.tar.gz",
-    "version": "20.0.0",
+    "sha256": "0iz1yrl7h60yhc1d1gkalkzc5vlj8sq6lff0ggns6a6qpsdpn9c5",
+    "url": "https://github.com/nextcloud/news/releases/download/20.0.1/news.tar.gz",
+    "version": "20.0.1",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "polls": {
-    "sha256": "1amywiw91acp4g90wazmqmnw51s7z6rf27bdrzxrcqryd8igsniq",
-    "url": "https://github.com/nextcloud/polls/releases/download/v4.1.0-beta4/polls.tar.gz",
-    "version": "4.1.0-beta4",
+    "sha256": "0mqc9zmxrm98byy6v13si3hwii8hx85998c4kv91vk6ad0sfxjhb",
+    "url": "https://github.com/nextcloud/polls/releases/download/v4.1.2/polls.tar.gz",
+    "version": "4.1.2",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "spreed": {
-    "sha256": "1w5v866lkd0skv666vhz75zwalr2w83shrhdvv354kill9k53awh",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v15.0.2/spreed-v15.0.2.tar.gz",
-    "version": "15.0.2",
+    "sha256": "07nh7nlz8di69ms1156fklj29526i3phlvki5vf2mxnlcz8ihg27",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v15.0.3/spreed-v15.0.3.tar.gz",
+    "version": "15.0.3",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
