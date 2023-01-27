@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "gchaincl";
+    owner = "qustavo";
     repo = "httplab";
     rev = "v${version}";
     hash = "sha256-+qcECfQo9Wa4JQ09ujhKjQndmcFn03hTfII636+1ghA=";
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    homepage = "https://github.com/gchaincl/httplab";
+    homepage = "https://github.com/qustavo/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;
     maintainers = with maintainers; [ pradeepchhetri ];

@@ -506,6 +506,10 @@ self: super: {
     };
   });
 
+  jellybeans-nvim = super.jellybeans-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
+  });
+
   LanguageClient-neovim =
     let
       version = "0.1.161";
