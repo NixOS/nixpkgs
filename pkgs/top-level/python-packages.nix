@@ -11884,6 +11884,8 @@ self: super: with self; {
 
   uptime = callPackage ../development/python-modules/uptime { };
 
+  uptime-kuma-api = callPackage ../development/python-modules/uptime-kuma-api { };
+
   uptime-kuma-monitor = callPackage ../development/python-modules/uptime-kuma-monitor { };
 
   uranium = callPackage ../development/python-modules/uranium { };
