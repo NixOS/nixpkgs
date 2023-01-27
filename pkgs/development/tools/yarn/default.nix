@@ -30,10 +30,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
-    homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management for javascript";
+    homepage = "https://classic.yarnpkg.com/";
+    changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ offline screendriver ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = nodejs.meta.platforms;
   };
 })
