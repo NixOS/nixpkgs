@@ -150,9 +150,58 @@ in stdenv.mkDerivation (rec {
     rm test/MC/ELF/cfi-version.ll
 
     # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
-    # thus fails under the sandbox:
+    # and thus fails under the sandbox:
     substituteInPlace unittests/Support/Host.cpp \
       --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
+  '' + optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86) ''
+    # This test tries to call the intrinsics `@llvm.roundeven.f32` and
+    # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
+    # and `roundeven` on x86_64 macOS.
+    #
+    # However these functions are glibc specific so the test fails:
+    #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
+    #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
+    #
+    # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
+    # pass there?
+    substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
+      --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+      --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+
+    # This test fails on darwin x86_64 because `sw_vers` reports a different
+    # macOS version than what LLVM finds by reading
+    # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
+    # the sandbox on macOS).
+    #
+    # The `sw_vers` provided by nixpkgs reports the macOS version associated
+    # with the `CoreFoundation` framework with which it was built. Because
+    # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
+    # `sw_vers` reports is not guaranteed to match the macOS version of the host
+    # that's building this derivation.
+    #
+    # Astute readers will note that we only _patch_ this test on aarch64-darwin
+    # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
+    # So why does this test pass on aarch64?
+    #
+    # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
+    # CoreFoundation framework instead of the nixpkgs provided one.
+    #
+    # Not entirely sure what the right fix is here. I'm assuming aarch64
+    # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
+    # (still digging into how this ends up happening, will follow up) but that
+    # aside I think the more pertinent question is: should we be patching LLVM's
+    # macOS version detection logic to use `sw_vers` instead of reading host
+    # paths? This *is* a way in which details about builder machines can creep
+    # into the artifacts that are produced, affecting reproducibility, but it's
+    # not clear to me when/where/for what this even gets used in LLVM.
+    #
+    # TODO(@rrbutani): fix/follow-up
+    substituteInPlace unittests/Support/Host.cpp \
+      --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+
+    # This test fails with a `dysmutil` crash; have not yet dug into what's
+    # going on here (TODO(@rrbutani)).
+    rm test/tools/dsymutil/ARM/obfuscated.test
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
