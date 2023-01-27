@@ -1,7 +1,8 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
 , cmake, python3, fixDarwinDylibNames, version
-, libcxxabi
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -15,6 +16,8 @@
 let
   basename = "libcxx";
 in
+
+assert stdenv.isDarwin -> cxxabi.libName == "c++abi";
 
 stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
@@ -59,12 +62,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
+  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
+    libcxx_cxx_abi_opt = {
+      "c++abi" = "system-libcxxabi";
+      "cxxrt" = "libcxxrt";
+    }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
+  in [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else "system-libcxxabi"}"
-  ] ++ lib.optional (!headersOnly) "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${libcxxabi.dev}/include/c++/v1"
+    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
+  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -78,6 +87,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     isLLVM = true;
+    inherit cxxabi;
   };
 
   meta = llvm_meta // {
