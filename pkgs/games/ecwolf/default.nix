@@ -11,7 +11,7 @@
 , SDL2
 , SDL2_net
 , SDL2_mixer
-, gtk2
+, gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
-  buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk2 ];
+  buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk3 ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -61,11 +61,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     homepage = "https://maniacsvault.net/ecwolf/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+    # On Darwin, the linker fails to find a bunch of symbols.
+    broken = stdenv.isDarwin;
   };
 }
