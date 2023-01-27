@@ -7,7 +7,7 @@
 , gast
 , numpy
 , beniget
-, isPy3k
+, pythonOlder
 , substituteAll
 }:
 
@@ -17,12 +17,15 @@ let
 in buildPythonPackage rec {
   pname = "pythran";
   version = "0.11.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     rev = version;
-    sha256 = "sha256-F9gUZOTSuiqvfGoN4yQqwUg9mnCeBntw5eHO7ZnjpzI=";
+    hash = "sha256-F9gUZOTSuiqvfGoN4yQqwUg9mnCeBntw5eHO7ZnjpzI=";
   };
 
   patches = [
@@ -52,11 +55,11 @@ in buildPythonPackage rec {
   # Test suite is huge and has a circular dependency on scipy.
   doCheck = false;
 
-  disabled = !isPy3k;
-
-  meta = {
+  meta = with lib; {
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
-    license = lib.licenses.bsd3;
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${version}/Changelog";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
