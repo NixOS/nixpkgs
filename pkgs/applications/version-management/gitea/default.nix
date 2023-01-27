@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, buildGoPackage
+, buildGoModule
 , fetchurl
 , makeWrapper
 , git
@@ -13,7 +13,7 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gitea";
   version = "1.18.3";
 
@@ -23,6 +23,8 @@ buildGoPackage rec {
     hash = "sha256-jqjpbDgcmwZoc/ovgburFeeta9mAJOmz7yrvmUKAwRU=";
   };
 
+  vendorHash = null;
+
   patches = [
     ./static-root-path.patch
   ];
@@ -30,6 +32,8 @@ buildGoPackage rec {
   postPatch = ''
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
+
+  subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -48,19 +52,19 @@ buildGoPackage rec {
       )
     '';
 
+  ldflags = [ "-s" "-w" ];
+
   outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
+    cp -R ./{public,templates,options} $data
     mkdir -p $out
-    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
+    cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
-
-  goPackagePath = "code.gitea.io/gitea";
 
   passthru.tests = nixosTests.gitea;
 

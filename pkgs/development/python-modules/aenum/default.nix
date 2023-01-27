@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , pyparsing
-, python
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -11,26 +11,31 @@ buildPythonPackage rec {
   version = "3.1.11";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rtLCc1R65yoNXuhpcZwCpkPaFr9QfICVj6rcfgOOP3M=";
+    hash = "sha256-rtLCc1R65yoNXuhpcZwCpkPaFr9QfICVj6rcfgOOP3M=";
   };
 
   nativeCheckInputs = [
     pyparsing
+    pytestCheckHook
   ];
-
-  # py2 likes to reorder tests
-  doCheck = isPy3k;
-
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} aenum/test.py
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [
     "aenum"
+  ];
+
+  disabledTests = [
+    # https://github.com/ethanfurman/aenum/issues/27
+    "test_class_nested_enum_and_pickle_protocol_four"
+    "test_pickle_enum_function_with_qualname"
+    "test_stdlib_inheritence"
+    "test_subclasses_with_getnewargs_ex"
+    "test_arduino_headers"
+    "test_c_header_scanner"
+    "test_extend_flag_backwards_stdlib"
   ];
 
   meta = with lib; {

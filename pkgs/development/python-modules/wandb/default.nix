@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, appdirs
 , azure-core
 , bokeh
 , buildPythonPackage
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.13.7";
+  version = "0.13.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-o9mIGSILztnHY3Eyb0MlznUEdMbCfA1BT6ux0UlesBc=";
+    hash = "sha256-BpFLN4WLT+fm5+50NDOU4bM73WjeGEhD6P8XKE9n9cI=";
   };
 
   patches = [
@@ -65,6 +66,7 @@ buildPythonPackage rec {
 
   # setuptools is necessary since pkg_resources is required at runtime.
   propagatedBuildInputs = [
+    appdirs
     click
     docker_pycreds
     gitpython
@@ -99,8 +101,10 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  # Set BOKEH_CDN_VERSION to stop bokeh throwing an exception in tests
   preCheck = ''
     export HOME=$(mktemp -d)
+    export BOKEH_CDN_VERSION=3.0.3
   '';
 
   pythonRelaxDeps = [ "protobuf" ];
@@ -117,7 +121,6 @@ buildPythonPackage rec {
     "tests/unit_tests_old/test_logging.py"
     "tests/unit_tests_old/test_metric_internal.py"
     "tests/unit_tests_old/test_public_api.py"
-    "tests/unit_tests_old/test_report_api.py"
     "tests/unit_tests_old/test_runtime.py"
     "tests/unit_tests_old/test_sender.py"
     "tests/unit_tests_old/test_tb_watcher.py"
