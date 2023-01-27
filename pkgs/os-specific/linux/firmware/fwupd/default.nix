@@ -54,6 +54,7 @@
 , libmbim
 , libcbor
 , xz
+, enableFlashrom ? false
 }:
 
 let
@@ -76,7 +77,7 @@ let
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
   # Experimental
-  haveFlashrom = false;
+  haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand = name: buildCommandPython: runCommand name {
     nativeBuildInputs = [ python3 ];
@@ -116,7 +117,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.9";
+    version = "1.8.10";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -125,7 +126,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      hash = "sha256-cZp5GsS6WYiuuT7EJ3i9ZdM8sHXQwJO1wE5eFoK+Uoo=";
+      hash = "sha256-vvNUidNdhW9xeksjEVnkIR7CZ4oBQizZJRMFtZUq6Ow=";
     };
 
     patches = [
