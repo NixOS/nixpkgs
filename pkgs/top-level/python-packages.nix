@@ -12568,6 +12568,8 @@ self: super: with self; {
 
   zimports = callPackage ../development/python-modules/zimports { };
 
+  zipfile2 = callPackage ../development/python-modules/zipfile2 { };
+
   zipfile36 = callPackage ../development/python-modules/zipfile36 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
