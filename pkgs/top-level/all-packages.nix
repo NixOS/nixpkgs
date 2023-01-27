@@ -10333,6 +10333,8 @@ with pkgs;
 
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
 
+  openrgb-with-all-plugins = openrgb.withPlugins [ openrgb-plugin-hardwaresync ];
+
   openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
   openrussian-cli = callPackage ../misc/openrussian-cli {
