@@ -3,12 +3,13 @@
     handle = {
       # Required
       name = "Your name";
-      email = "address@example.org";
 
-      # Optional
+      # Optional, but at least one of email, matrix or githubId must be given
+      email = "address@example.org";
       matrix = "@user:example.org";
       github = "GithubUsername";
       githubId = your-github-id;
+
       keys = [{
         fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
       }];
@@ -24,6 +25,9 @@
     - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
     - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
     - `keys` is a list of your PGP/GPG key fingerprints.
+
+    Specifying a GitHub account ensures that you automatically get a review request on
+    pull requests that modify a package for which you are a maintainer.
 
     `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
