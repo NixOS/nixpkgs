@@ -9971,6 +9971,9 @@ with pkgs;
   nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/25.json;
   });
+  nextcloud26Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/26.json;
+  });
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
