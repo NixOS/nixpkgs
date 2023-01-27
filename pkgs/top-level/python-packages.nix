@@ -4713,6 +4713,8 @@ self: super: with self; {
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
+  ipyxact = callPackage ../development/python-modules/ipyxact { };
+
   irc = callPackage ../development/python-modules/irc { };
 
   ircrobots = callPackage ../development/python-modules/ircrobots { };
