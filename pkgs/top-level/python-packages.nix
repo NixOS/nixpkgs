@@ -3005,6 +3005,8 @@ self: super: with self; {
 
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
+  dvc-studio-client = callPackage ../development/python-modules/dvc-studio-client {  };
+
   dvc-task = callPackage ../development/python-modules/dvc-task {  };
 
   dvclive = callPackage ../development/python-modules/dvclive {  };
