@@ -1,51 +1,57 @@
-{ buildPythonPackage
-, lib
-, isPy27
-, six
+{ lib
+, buildPythonPackage
 , fetchPypi
-, pyyaml
 , mock
-, contextlib2
-, wrapt
-, pytest
 , pytest-httpbin
-, yarl
+, pytestCheckHook
 , pythonOlder
-, pythonAtLeast
+, pyyaml
+, six
+, yarl
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "vcrpy";
   version = "4.2.1";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fNPoGixJLgHCgfGAvMKoa1ILFz0rZWy12J2ZR1Qj4BM=";
+    hash = "sha256-fNPoGixJLgHCgfGAvMKoa1ILFz0rZWy12J2ZR1Qj4BM=";
   };
-
-  nativeCheckInputs = [
-    pytest
-    pytest-httpbin
-  ];
 
   propagatedBuildInputs = [
     pyyaml
-    wrapt
     six
-  ]
-  ++ lib.optionals (pythonOlder "3.3") [ contextlib2 mock ]
-  ++ lib.optionals (pythonAtLeast "3.4") [ yarl ];
+    yarl
+    wrapt
+  ];
 
-  checkPhase = ''
-    py.test --ignore=tests/integration -k "not TestVCRConnection"
-  '';
+  nativeCheckInputs = [
+    pytest-httpbin
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    "tests/integration"
+  ];
+
+  disabledTests = [
+    "TestVCRConnection"
+  ];
+
+  pythonImportsCheck = [
+    "vcr"
+  ];
 
   meta = with lib; {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
     homepage = "https://github.com/kevin1024/vcrpy";
+    changelog = "https://github.com/kevin1024/vcrpy/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
-

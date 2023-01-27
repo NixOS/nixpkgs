@@ -11,6 +11,7 @@
 , psutil
 , python-dotenv
 , pyyaml
+, packaging
 , requests
 , rich
 , semver
@@ -31,7 +32,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "requests>=2.20.0,<2.26" "requests~=2.20" \
-      --replace "cachetools~=5.0.0" "cachetools~=5.0"
+      --replace "cachetools~=5.0.0" "cachetools~=5.0" \
+      --replace "boto3>=1.20,<1.25.0" "boto3~=1.20"
   '';
 
   propagatedBuildInputs = [
@@ -45,6 +47,7 @@ buildPythonPackage rec {
     psutil
     python-dotenv
     pyyaml
+    packaging
     requests
     rich
     semver

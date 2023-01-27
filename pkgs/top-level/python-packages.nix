@@ -2381,6 +2381,8 @@ self: super: with self; {
 
   dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
 
+  dicom-numpy = callPackage ../development/python-modules/dicom-numpy { };
+
   dict2xml = callPackage ../development/python-modules/dict2xml { };
 
   dictdiffer = callPackage ../development/python-modules/dictdiffer { };
@@ -3707,6 +3709,8 @@ self: super: with self; {
   gekitchen = callPackage ../development/python-modules/gekitchen { };
 
   gemfileparser = callPackage ../development/python-modules/gemfileparser { };
+
+  gemfileparser2 = callPackage ../development/python-modules/gemfileparser2 { };
 
   genanki = callPackage ../development/python-modules/genanki { };
 
@@ -8905,6 +8909,8 @@ self: super: with self; {
   pyte = callPackage ../development/python-modules/pyte { };
 
   pytenable = callPackage ../development/python-modules/pytenable { };
+
+  pytensor = callPackage ../development/python-modules/pytensor { };
 
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
 

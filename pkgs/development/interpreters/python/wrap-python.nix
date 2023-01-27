@@ -3,8 +3,6 @@
 , makePythonHook
 , makeWrapper }:
 
-with lib;
-
 makePythonHook {
       name = "wrap-python-hook";
       deps = makeWrapper;
@@ -20,7 +18,7 @@ makePythonHook {
 
         mkStringSkipper = labelNum: quote: let
           label = "q${toString labelNum}";
-          isSingle = elem quote [ "\"" "'\"'\"'" ];
+          isSingle = lib.elem quote [ "\"" "'\"'\"'" ];
           endQuote = if isSingle then "[^\\\\]${quote}" else quote;
         in ''
           /^[a-z]?${quote}/ {
@@ -46,8 +44,8 @@ makePythonHook {
           :r
           /\\$|,$/{N;br}
           /__future__|^ |^ *(#.*)?$/{n;br}
-          ${concatImapStrings mkStringSkipper quoteVariants}
-          /^[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
+          ${lib.concatImapStrings mkStringSkipper quoteVariants}
+          /^[^# ]/i ${lib.replaceStrings ["\n"] [";"] preamble}
         }
       '';
 } ./wrap.sh

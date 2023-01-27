@@ -3311,6 +3311,8 @@ with pkgs;
 
   itd = callPackage ../applications/misc/itd { };
 
+  kord = callPackage ../applications/misc/kord { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
@@ -5972,9 +5974,7 @@ with pkgs;
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
-  crabz = callPackage ../tools/compression/crabz {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  crabz = callPackage ../tools/compression/crabz { };
 
   ethash = callPackage ../development/libraries/ethash { };
 
@@ -12721,6 +12721,8 @@ with pkgs;
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };
+
+  uair = callPackage ../tools/misc/uair { };
 
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
@@ -31455,6 +31457,8 @@ with pkgs;
 
   pdfmixtool = libsForQt5.callPackage ../applications/office/pdfmixtool { };
 
+  pdfmm = callPackage ../applications/office/pdfmm {};
+
   pig = callPackage ../applications/networking/cluster/pig { };
 
   pijul = callPackage ../applications/version-management/pijul { };
@@ -37391,6 +37395,8 @@ with pkgs;
   lima = callPackage ../applications/virtualization/lima {
     inherit (darwin) sigtool;
   };
+
+  lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
 
   logtop = callPackage ../tools/misc/logtop { };
 

@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/krunvm";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
+    platforms = libkrun.meta.platforms;
   };
 }

@@ -719,10 +719,10 @@
     }];
   };
   alyaeanyx = {
-    email = "alexandra.hollmeier@mailbox.org";
+    email = "alyaeanyx@mailbox.org";
     github = "alyaeanyx";
     githubId = 74795488;
-    name = "Alexandra Hollmeier";
+    name = "alyaeanyx";
     keys = [{
       fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE";
     }];
@@ -7555,6 +7555,12 @@
     githubId = 44045911;
     name = "Kid";
   };
+  kidsan = {
+    email = "8798449+Kidsan@users.noreply.github.com";
+    github = "kidsan";
+    githubId = 8798449;
+    name = "kidsan";
+  };
   kierdavis = {
     email = "kierdavis@gmail.com";
     github = "kierdavis";
@@ -14223,6 +14229,12 @@
     github = "ThibautMarty";
     githubId = 3268082;
     name = "Thibaut Marty";
+  };
+  thled = {
+    name = "Thomas Le Duc";
+    email = "dev@tleduc.de";
+    github = "thled";
+    githubId = 28220902;
   };
   thyol = {
     name = "thyol";

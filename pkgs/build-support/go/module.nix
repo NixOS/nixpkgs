@@ -83,9 +83,12 @@ let
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
+    prePatch = args.prePatch or "";
     patches = args.patches or [];
     patchFlags = args.patchFlags or [];
+    postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
+    postBuild = args.postBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
