@@ -76,7 +76,7 @@ rec {
 
        1. (legacy) a system string.
 
-       2. (modern) a pattern for the entire platform structure.
+       2. (modern) a pattern for the entire platform structure (see `lib.systems.inspect.platformPatterns`).
 
        3. (modern) a pattern for the platform `parsed` field.
 
