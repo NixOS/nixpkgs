@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , bison
 , libevent
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
+
+  patches = [
+    ./CVE-2022-47016.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
