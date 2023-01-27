@@ -154,7 +154,7 @@ let
           type = with types; coercedTo
             (listOf path)
             (l: warn "setting this option with a list is deprecated"
-              listToAttrs (map (p: nameValuePair (p.name or throw "${p} does not have a name") p) l))
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
             (attrsOf path);
           default = {};
           description = lib.mdDoc ''
