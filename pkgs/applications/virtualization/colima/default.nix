@@ -1,14 +1,18 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , lima
+, lima-bin
 , makeWrapper
 , qemu
 , testers
 , colima
 }:
 
+let lima-drv = if stdenv.isDarwin then lima-bin else lima;
+in
 buildGoModule rec {
   pname = "colima";
   version = "0.5.2";
@@ -41,7 +45,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima qemu ]}
+      --prefix PATH : ${lib.makeBinPath [ lima-drv qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \
