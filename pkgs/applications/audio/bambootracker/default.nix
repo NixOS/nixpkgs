@@ -12,14 +12,14 @@
 
 mkDerivation rec {
   pname = "bambootracker";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-OaktEUWWDEW+MYnQkaB8FvkuH29VDXFqBVSTEJ7Sz7A=";
+    sha256 = "sha256-yubaKTc8NFLxMY0/5c2VubRHgAGOsRlitmXJ1UHzl60=";
   };
 
   nativeBuildInputs = [ qmake qttools pkg-config ];
