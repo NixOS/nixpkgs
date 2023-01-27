@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "0.1";
+  version = "0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hb0/BdK/jjxlPl9WJJpFdOCzZpZDCguXoGreGIyN8oo=";
+    hash = "sha256-ET8wcOep4tSZJXyL+XvfW2j9eKp6LrBk/g18ZlgLIzc=";
   };
 
   propagatedBuildInputs = [
