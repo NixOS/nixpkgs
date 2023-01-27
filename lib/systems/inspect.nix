@@ -97,7 +97,7 @@ rec {
   # that `lib.meta.availableOn` can distinguish them from the patterns which
   # apply only to the `parsed` field.
 
-  platformPatterns = {
-    isStatic = { parsed = {}; isStatic = true; };
+  platformPatterns = mapAttrs (_: p: { parsed = {}; } // p) {
+    isStatic = { isStatic = true; };
   };
 }
