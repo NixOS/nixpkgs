@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for connecting to GoodWe inverter";
     homepage = "https://github.com/marcelblijleven/goodwe";
+    changelog = "https://github.com/marcelblijleven/goodwe/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
