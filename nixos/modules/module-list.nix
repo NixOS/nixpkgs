@@ -671,6 +671,7 @@
   ./services/misc/spice-webdavd.nix
   ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
+  ./services/misc/stash-bin.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
