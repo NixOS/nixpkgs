@@ -714,7 +714,7 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    badPlatforms = [ (plat: plat.isStatic) ];
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
