@@ -2256,6 +2256,8 @@ with pkgs;
 
   fuse-emulator = callPackage ../applications/emulators/fuse-emulator { };
 
+  fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
+
   fw = callPackage ../tools/misc/fw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
