@@ -1,6 +1,6 @@
 {
   stdenv, lib, fetchFromGitHub, which,
-  buildPackages, libxcrypt,
+  buildPackages, libxcrypt, libiconv, Libsystem,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
   buildInputs = [
     libxcrypt
+  ] ++lib.optionals stdenv.isDarwin [
+    libiconv
+    Libsystem # This shouldn't be necessary, see https://github.com/NixOS/nixpkgs/issues/210923
   ] ++lib.optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
@@ -67,8 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;
-    # https://github.com/NixOS/nixpkgs/issues/101229
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hhm ];
     priority = 10;
   };
