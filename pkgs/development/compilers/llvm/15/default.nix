@@ -35,7 +35,7 @@ let
   };
 
   llvm_meta = {
-    license     = lib.licenses.ncsa;
+    license     = with lib.licenses; [ ncsa llvm-exception ];
     maintainers = lib.teams.llvm.members;
     platforms   = lib.platforms.all;
   };
