@@ -34,20 +34,19 @@ assert enableNumpy -> enablePython;
 # Boost <1.69 can't be built on linux with clang >8, because pth was removed
 assert with lib; (stdenv.isLinux && toolset == "clang" && versionAtLeast stdenv.cc.version "8.0.0") -> versionAtLeast version "1.69";
 
-with lib;
 let
 
-  variant = concatStringsSep ","
-    (optional enableRelease "release" ++
-     optional enableDebug "debug");
+  variant = lib.concatStringsSep ","
+    (lib.optional enableRelease "release" ++
+     lib.optional enableDebug "debug");
 
-  threading = concatStringsSep ","
-    (optional enableSingleThreaded "single" ++
-     optional enableMultiThreaded "multi");
+  threading = lib.concatStringsSep ","
+    (lib.optional enableSingleThreaded "single" ++
+     lib.optional enableMultiThreaded "multi");
 
-  link = concatStringsSep ","
-    (optional enableShared "shared" ++
-     optional enableStatic "static");
+  link = lib.concatStringsSep ","
+    (lib.optional enableShared "shared" ++
+     lib.optional enableStatic "static");
 
   runtime-link = if enableShared then "shared" else "static";
 
@@ -61,16 +60,16 @@ let
   # [0]: https://github.com/boostorg/build/commit/0ef40cb86728f1cd804830fef89a6d39153ff632
   # [1]: https://github.com/boostorg/build/commit/316e26ca718afc65d6170029284521392524e4f8
   jobs =
-    if versionOlder version "1.58" then
+    if lib.versionOlder version "1.58" then
       "$(($NIX_BUILD_CORES<=64 ? $NIX_BUILD_CORES : 64))"
-    else if versionOlder version "1.65" then
+    else if lib.versionOlder version "1.65" then
       "$(($NIX_BUILD_CORES<=256 ? $NIX_BUILD_CORES : 256))"
     else
       "$NIX_BUILD_CORES";
 
   needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
 
-  b2Args = concatStringsSep " " ([
+  b2Args = lib.concatStringsSep " " ([
     "--includedir=$dev/include"
     "--libdir=$out/lib"
     "-j${jobs}"
@@ -82,12 +81,12 @@ let
     "-sEXPAT_LIBPATH=${expat.out}/lib"
 
     # TODO: make this unconditional
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform ||
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform ||
                   # required on mips; see 61d9f201baeef4c4bb91ad8a8f5f89b747e0dfe4
-                  (stdenv.hostPlatform.isMips && versionAtLeast version "1.79")) [
+                  (stdenv.hostPlatform.isMips && lib.versionAtLeast version "1.79")) [
     "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
     "architecture=${if stdenv.hostPlatform.isMips64
-                    then if versionOlder version "1.78" then "mips1" else "mips"
+                    then if lib.versionOlder version "1.78" then "mips1" else "mips"
                     else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
     "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
@@ -100,13 +99,13 @@ let
            else if stdenv.hostPlatform.isMips32 then "o32"
            else if stdenv.hostPlatform.isMips64n64 then "n64"
            else "sysv"}"
-  ] ++ optional (link != "static") "runtime-link=${runtime-link}"
-    ++ optional (variant == "release") "debug-symbols=off"
-    ++ optional (toolset != null) "toolset=${toolset}"
-    ++ optional (!enablePython) "--without-python"
-    ++ optional needUserConfig "--user-config=user-config.jam"
-    ++ optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
-    ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  ] ++ lib.optional (link != "static") "runtime-link=${runtime-link}"
+    ++ lib.optional (variant == "release") "debug-symbols=off"
+    ++ lib.optional (toolset != null) "toolset=${toolset}"
+    ++ lib.optional (!enablePython) "--without-python"
+    ++ lib.optional needUserConfig "--user-config=user-config.jam"
+    ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
+    ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ] ++ extraB2Args
   );
@@ -121,38 +120,38 @@ stdenv.mkDerivation {
   patchFlags = [];
 
   patches = patches
-  ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
+  ++ lib.optional stdenv.isDarwin ./darwin-no-system-python.patch
   # Fix boost-context segmentation faults on ppc64 due to ABI violation
-  ++ optional (versionAtLeast version "1.61" &&
-               versionOlder version "1.71") (fetchpatch {
+  ++ lib.optional (lib.versionAtLeast version "1.61" &&
+               lib.versionOlder version "1.71") (fetchpatch {
     url = "https://github.com/boostorg/context/commit/2354eca9b776a6739112833f64754108cc0d1dc5.patch";
     sha256 = "067m4bjpmcanqvg28djax9a10avmdwhlpfx6gn73kbqqq70dnz29";
     stripLen = 1;
     extraPrefix = "libs/context/";
   })
   # Fix compiler warning with GCC >= 8; TODO: patch may apply to older versions
-  ++ optional (versionAtLeast version "1.65" && versionOlder version "1.67")
+  ++ lib.optional (lib.versionAtLeast version "1.65" && lib.versionOlder version "1.67")
     (fetchpatch {
       url = "https://github.com/boostorg/mpl/commit/f48fd09d021db9a28bd7b8452c175897e1af4485.patch";
       sha256 = "15d2a636hhsb1xdyp44x25dyqfcaws997vnp9kl1mhzvxjzz7hb0";
       stripLen = 1;
     })
-  ++ optional (versionAtLeast version "1.65" && versionOlder version "1.70") (fetchpatch {
+  ++ lib.optional (lib.versionAtLeast version "1.65" && lib.versionOlder version "1.70") (fetchpatch {
     # support for Mips64n64 appeared in boost-context 1.70; this patch won't apply to pre-1.65 cleanly
     url = "https://github.com/boostorg/context/commit/e3f744a1862164062d579d1972272d67bdaa9c39.patch";
     sha256 = "sha256-qjQy1b4jDsIRrI+UYtcguhvChrMbGWO0UlEzEJHYzRI=";
     stripLen = 1;
     extraPrefix = "libs/context/";
   })
-  ++ optional (versionAtLeast version "1.70" && versionOlder version "1.73") ./cmake-paths.patch
-  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch
-  ++ optional (version == "1.77.0") (fetchpatch {
+  ++ lib.optional (lib.versionAtLeast version "1.70" && lib.versionOlder version "1.73") ./cmake-paths.patch
+  ++ lib.optional (lib.versionAtLeast version "1.73") ./cmake-paths-173.patch
+  ++ lib.optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
   });
 
-  meta = {
+  meta = with lib; {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
     license = licenses.boost;
@@ -175,7 +174,7 @@ stdenv.mkDerivation {
     inherit boostBuildPatches;
   };
 
-  preConfigure = optionalString useMpi ''
+  preConfigure = lib.optionalString useMpi ''
     cat << EOF >> user-config.jam
     using mpi : ${mpi}/bin/mpiCC ;
     EOF
@@ -183,7 +182,7 @@ stdenv.mkDerivation {
   # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,
   # otherwise the dynamic linker is unable to resolve the reference to @rpath
   # when the boost libraries want to load each other at runtime.
-  + optionalString (stdenv.isDarwin && enableShared) ''
+  + lib.optionalString (stdenv.isDarwin && enableShared) ''
     cat << EOF >> user-config.jam
     using clang-darwin : : ${stdenv.cc.targetPrefix}c++
       : <linkflags>"-rpath $out/lib/"
@@ -196,7 +195,7 @@ stdenv.mkDerivation {
   # uniform way for clang and gcc (which works thanks to our cc-wrapper).
   # We pass toolset later which will make b2 invoke everything in the right
   # way -- the other toolset in user-config.jam will be ignored.
-  + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cat << EOF >> user-config.jam
     using gcc : cross : ${stdenv.cc.targetPrefix}c++
       : <archiver>$AR
@@ -210,7 +209,7 @@ stdenv.mkDerivation {
     EOF
   ''
   # b2 needs to be explicitly told how to find Python when cross-compiling
-  + optionalString enablePython ''
+  + lib.optionalString enablePython ''
     cat << EOF >> user-config.jam
     using python : : ${python.interpreter}
       : ${python}/include/python${python.pythonVersion}
@@ -225,11 +224,11 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ which boost-build ]
-    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ optional enableIcu icu
-    ++ optionals enablePython [ libxcrypt python ]
-    ++ optional enableNumpy python.pkgs.numpy;
+    ++ lib.optional enableIcu icu
+    ++ lib.optionals enablePython [ libxcrypt python ]
+    ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [];
@@ -239,7 +238,7 @@ stdenv.mkDerivation {
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
     "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-  ] ++ optional (toolset != null) "--with-toolset=${toolset}"
+  ] ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
     ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
@@ -265,7 +264,7 @@ stdenv.mkDerivation {
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-  '' + optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+  '' + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
     $RANLIB "$out/lib/"*.a
   '';
 

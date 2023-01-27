@@ -2,7 +2,6 @@
 , pam, libxcrypt, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles, nixosTests }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
   version = "2.1.28";
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) parsedmarc postfix;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;

@@ -3,8 +3,6 @@
 , withDocumentation ? false, withClangPlugins ? true
 }:
 
-with lib;
-
 let
   # Fetch clang from qt vendor, this contains submodules like this:
   # clang<-clang-tools-extra<-clazy.
@@ -31,7 +29,7 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
-    optionals withClangPlugins [ llvmPackages_8.libclang
+    lib.optionals withClangPlugins [ llvmPackages_8.libclang
                                  clang_qt_vendor
                                  llvmPackages_8.llvm ];
 
@@ -47,9 +45,9 @@ mkDerivation rec {
 
   doCheck = true;
 
-  buildFlags = optional withDocumentation "docs";
+  buildFlags = lib.optional withDocumentation "docs";
 
-  installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
+  installFlags = [ "INSTALL_ROOT=$(out)" ] ++ lib.optional withDocumentation "install_docs";
 
   qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
 
@@ -58,7 +56,7 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
     substituteInPlace src/libs/libs.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    '' + optionalString withClangPlugins ''
+    '' + lib.optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
     substituteInPlace src/shared/clang/clang_defines.pri \
       --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
@@ -72,8 +70,8 @@ mkDerivation rec {
       --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
   '';
 
-  preBuild = optionalString withDocumentation ''
-    ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
+  preBuild = lib.optionalString withDocumentation ''
+    ln -s ${lib.getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 
   postInstall = ''
@@ -92,7 +90,7 @@ mkDerivation rec {
     '';
     homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
     license = "LGPL";
-    maintainers = [ maintainers.akaWolf ];
+    maintainers = [ lib.maintainers.akaWolf ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
   };
 }
