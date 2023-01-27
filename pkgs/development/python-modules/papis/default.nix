@@ -27,7 +27,6 @@
 , tqdm
 , typing-extensions
 , whoosh
-, xdg-utils
 }:
 
 buildPythonPackage rec {
@@ -76,13 +75,8 @@ buildPythonPackage rec {
       --replace "--cov=papis" ""
   '';
 
-  # Tests are failing on Python > 3.9
-  doCheck = !stdenv.isDarwin && !(pythonAtLeast "3.10");
-
-  nativeCheckInputs = ([
+  checkInputs = [
     pytestCheckHook
-  ]) ++ [
-    xdg-utils
   ];
 
   preCheck = ''
@@ -106,6 +100,8 @@ buildPythonPackage rec {
     "test_get_data"
     "test_validate_arxivid"
     "test_yaml"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_default_opener"
   ];
 
   pythonImportsCheck = [
