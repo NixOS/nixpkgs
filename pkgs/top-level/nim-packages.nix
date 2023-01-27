@@ -18,6 +18,8 @@ lib.makeScope newScope (self:
 
     base32 = callPackage ../development/nim-packages/base32 { };
 
+    base45 = callPackage ../development/nim-packages/base45 { };
+
     bumpy = callPackage ../development/nim-packages/bumpy { };
 
     c2nim = callPackage ../development/nim-packages/c2nim { };
