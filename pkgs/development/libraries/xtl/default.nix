@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "xtensor-stack";
     repo = "xtl";
     rev = version;
-    sha256 = "huCmkWyasB9EV32waBB9IY86LsSjggp0b6Wz5Op+l4w=" ;
+    hash = "sha256-Vc1VKOWmG1sAw3UQpNJAhm9PvXSqJ0iO2qLjP6/xjtI=";
   };
 
   nativeBuildInputs = [ cmake ];
