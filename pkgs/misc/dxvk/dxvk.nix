@@ -9,7 +9,14 @@
 , spirv-headers
 , vulkan-headers
 , SDL2
+, glfw
+, pkgsBuildHost
+, sdl2Support ? true
+, glfwSupport ? false
 }:
+
+# SDL2 and GLFW support are mutually exclusive.
+assert !sdl2Support || !glfwSupport;
 
 let
   # DXVK 2.0+ no longer vendors certain dependencies. This derivation also needs to build on Darwin,
@@ -36,13 +43,13 @@ let
         ./darwin-thread-primitives.patch
       ];
     };
-    "2.0" = rec {
-      version = "2.0";
+    "2.1" = rec {
+      version = "2.1";
       src = fetchFromGitHub {
         owner = "doitsujin";
         repo = "dxvk";
         rev = "v${version}";
-        hash = "sha256-mSNFvoILsvm+CpWV7uRlb7DkjV7ctClSUdteNcF5EAY=";
+        hash = "sha256-A4KR11brfQbR56dGt371MRwMN/H6HFAU8TlFC97/bRs=";
         fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
       };
       patches = [ ];
@@ -61,7 +68,13 @@ stdenv.mkDerivation {
     ++ lib.optionals isDxvk2 (
       [ spirv-headers vulkan-headers ]
       ++ lib.optional (!isWindows && sdl2Support) SDL2
+      ++ lib.optional (!isWindows && glfwSupport) glfw
     );
+
+  postPatch = lib.optionalString isDxvk2 ''
+    substituteInPlace "subprojects/libdisplay-info/tool/gen-search-table.py" \
+      --replace "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
+  '';
 
   # Build with the Vulkan SDK in nixpkgs.
   preConfigure = ''
@@ -77,7 +90,8 @@ stdenv.mkDerivation {
       "--buildtype" "release"
       "--prefix" "${placeholder "out"}"
     ]
-    ++ lib.optionals isCross [ "--cross-file" "build-win${arch}.txt" ];
+    ++ lib.optionals isCross [ "--cross-file" "build-win${arch}.txt" ]
+    ++ lib.optional glfwSupport "-Ddxvk_native_wsi=glfw";
 
   doCheck = isDxvk2 && !isCross;
 
