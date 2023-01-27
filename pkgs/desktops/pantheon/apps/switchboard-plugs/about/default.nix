@@ -8,31 +8,26 @@
 , vala
 , libgee
 , libgtop
+, libgudev
 , libhandy
 , granite
 , gtk3
 , switchboard
+, udisks2
 , fwupd
 , appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/8K3xSbzlagOT0zHdXNwEERJP88C+H2I6qJHXwdlTS4=";
+    sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
   };
-
-  patches = [
-    # Introduces a wallpaper meson flag.
-    # The wallpapaper path does not exist on NixOS, let's just remove the wallpaper.
-    # https://github.com/elementary/switchboard-plug-about/pull/236
-    ./add-wallpaper-option.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -48,12 +43,14 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libgtop
+    libgudev
     libhandy
     switchboard
+    udisks2
   ];
 
   mesonFlags = [
-    # This option is introduced in add-wallpaper-option.patch
+    # Does not play nice with the nix-snowflake logo
     "-Dwallpaper=false"
   ];
 
