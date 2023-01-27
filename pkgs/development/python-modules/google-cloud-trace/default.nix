@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.9.0";
+  version = "1.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zqd9uiSpp6z5LyGG42axl6pGcYKmSrbku+UcLGtoUbI=";
+    hash = "sha256-aU6XD+uj/X9Gs8z2vP0rhTlaqkg7u4H9CV/CJl2b7ak=";
   };
 
   propagatedBuildInputs = [
