@@ -8,6 +8,7 @@
 , dxvkVersion
 , spirv-headers
 , vulkan-headers
+, SDL2
 }:
 
 let
@@ -41,23 +42,31 @@ let
         owner = "doitsujin";
         repo = "dxvk";
         rev = "v${version}";
-        hash = "sha256-mboVLdPgZMzmqyeF0jAloEz6xqfIDiY/X98e7l2KZnw=";
+        hash = "sha256-mSNFvoILsvm+CpWV7uRlb7DkjV7ctClSUdteNcF5EAY=";
+        fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
       };
       patches = [ ];
     };
   };
+
+  isWindows = stdenv.targetPlatform.uname.system == "Windows";
+  isCross = stdenv.hostPlatform != stdenv.targetPlatform;
 in
 stdenv.mkDerivation {
   pname = "dxvk";
   inherit (srcs.${dxvkVersion}) version src patches;
 
   nativeBuildInputs = [ glslang meson ninja ];
-  buildInputs = [ windows.pthreads ]
-    ++ lib.optionals isDxvk2 [ spirv-headers vulkan-headers ];
+  buildInputs = lib.optional isWindows [ windows.pthreads ]
+    ++ lib.optionals isDxvk2 (
+      [ spirv-headers vulkan-headers ]
+      ++ lib.optional (!isWindows && sdl2Support) SDL2
+    );
 
-  preConfigure = lib.optionalString isDxvk2 ''
-    ln -s ${lib.getDev spirv-headers}/include include/spirv/include
-    ln -s ${lib.getDev vulkan-headers}/include include/vulkan/include
+  # Build with the Vulkan SDK in nixpkgs.
+  preConfigure = ''
+    rm -rf include/spirv/include include/vulkan/include
+    mkdir -p include/spirv/include include/vulkan/include
   '';
 
   mesonFlags =
@@ -66,9 +75,11 @@ stdenv.mkDerivation {
     in
     [
       "--buildtype" "release"
-      "--cross-file" "build-win${arch}.txt"
       "--prefix" "${placeholder "out"}"
-    ];
+    ]
+    ++ lib.optionals isCross [ "--cross-file" "build-win${arch}.txt" ];
+
+  doCheck = isDxvk2 && !isCross;
 
   meta = {
     description = "A Vulkan-based translation layer for Direct3D 9/10/11";
@@ -76,6 +87,6 @@ stdenv.mkDerivation {
     changelog = "https://github.com/doitsujin/dxvk/releases";
     maintainers = [ lib.maintainers.reckenrode ];
     license = lib.licenses.zlib;
-    platforms = lib.platforms.windows;
+    platforms = lib.platforms.windows ++ lib.optionals isDxvk2 lib.platforms.linux;
   };
 }
