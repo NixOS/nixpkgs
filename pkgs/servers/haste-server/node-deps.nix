@@ -49,13 +49,13 @@ let
         sha512 = "zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==";
       };
     };
-    "anymatch-3.1.2" = {
+    "anymatch-3.1.3" = {
       name = "anymatch";
       packageName = "anymatch";
-      version = "3.1.2";
+      version = "3.1.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/anymatch/-/anymatch-3.1.2.tgz";
-        sha512 = "P43ePfOAIupkguHUycrc4qJ9kz8ZiuOUijaETwX7THt0Y/GNK7v0aa8rY816xWjZ7rJdA5XdMcpVFTKMq+RvWg==";
+        url = "https://registry.npmjs.org/anymatch/-/anymatch-3.1.3.tgz";
+        sha512 = "KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==";
       };
     };
     "argparse-2.0.1" = {
@@ -67,13 +67,13 @@ let
         sha512 = "8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==";
       };
     };
-    "async-3.2.4" = {
+    "async-2.6.4" = {
       name = "async";
       packageName = "async";
-      version = "3.2.4";
+      version = "2.6.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/async/-/async-3.2.4.tgz";
-        sha512 = "iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==";
+        url = "https://registry.npmjs.org/async/-/async-2.6.4.tgz";
+        sha512 = "mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==";
       };
     };
     "async-cache-1.1.0" = {
@@ -670,6 +670,15 @@ let
         sha512 = "iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==";
       };
     };
+    "lodash-4.17.21" = {
+      name = "lodash";
+      packageName = "lodash";
+      version = "4.17.21";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
+      };
+    };
     "log-symbols-4.0.0" = {
       name = "log-symbols";
       packageName = "log-symbols";
@@ -1237,13 +1246,13 @@ let
         sha512 = "QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA==";
       };
     };
-    "winston-2.4.6" = {
+    "winston-2.4.7" = {
       name = "winston";
       packageName = "winston";
-      version = "2.4.6";
+      version = "2.4.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/winston/-/winston-2.4.6.tgz";
-        sha512 = "J5Zu4p0tojLde8mIOyDSsmLmcP8I3Z6wtwpTDHx1+hGcdhxcJaAmG4CFtagkb+NiN1M9Ek4b42pzMWqfc9jm8w==";
+        url = "https://registry.npmjs.org/winston/-/winston-2.4.7.tgz";
+        sha512 = "vLB4BqzCKDnnZH9PHGoS2ycawueX4HLqENXQitvFHczhgW2vFpSOn31LZtVr1KU8YTw7DS4tM+cqyovxo8taVg==";
       };
     };
     "workerpool-6.1.0" = {
@@ -1341,15 +1350,15 @@ let
     name = "haste";
     packageName = "haste";
     version = "0.1.0";
-    src = ../../../../../../../../../nix/store/ksl6h7h03ks119z1skfipjh4irc8x80c-source;
+    src = ../../../../../../../../../nix/store/zmi5rwpy1kmyj52ymv3yc8ziiypjgrxd-source;
     dependencies = [
       sources."@ungap/promise-all-settled-1.1.2"
       sources."ansi-colors-4.1.1"
       sources."ansi-regex-3.0.1"
       sources."ansi-styles-4.3.0"
-      sources."anymatch-3.1.2"
+      sources."anymatch-3.1.3"
       sources."argparse-2.0.1"
-      sources."async-3.2.4"
+      sources."async-2.6.4"
       sources."async-cache-1.1.0"
       sources."balanced-match-1.0.2"
       sources."base64-js-1.5.1"
@@ -1430,6 +1439,7 @@ let
       sources."isstream-0.1.2"
       sources."js-yaml-4.0.0"
       sources."locate-path-6.0.0"
+      sources."lodash-4.17.21"
       sources."log-symbols-4.0.0"
       sources."lru-cache-4.1.5"
       sources."mime-2.6.0"
@@ -1495,7 +1505,7 @@ let
       sources."utils-merge-1.0.1"
       sources."which-2.0.2"
       sources."wide-align-1.1.3"
-      sources."winston-2.4.6"
+      sources."winston-2.4.7"
       sources."workerpool-6.1.0"
       (sources."wrap-ansi-7.0.0" // {
         dependencies = [

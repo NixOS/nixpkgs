@@ -6707,6 +6707,8 @@ with pkgs;
 
   edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
 
+  edlib = callPackage ../development/libraries/science/biology/edlib { };
+
   eff = callPackage ../development/interpreters/eff { };
 
   eflite = callPackage ../applications/audio/eflite {};
@@ -16557,6 +16559,8 @@ with pkgs;
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix {};
 
+  pw-volume = callPackage ../tools/audio/pw-volume {};
+
   pyradio = callPackage ../applications/audio/pyradio {};
 
   racket = callPackage ../development/interpreters/racket {
@@ -25617,6 +25621,8 @@ with pkgs;
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
   fan2go = callPackage ../os-specific/linux/fan2go { };
+
+  fanctl = callPackage ../os-specific/linux/fanctl { };
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 

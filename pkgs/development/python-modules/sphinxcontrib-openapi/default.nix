@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
-  version = "0.8.0";
+  version = "0.8.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rO1qloTOgU5qVHURMyA6Ug7rC3UOjICqPUiFJ9RsLzA=";
+    hash = "sha256-BPz4fCWTRRYqUEzj3+4PcTifUHw3l3mNxTHHdImVtOs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
