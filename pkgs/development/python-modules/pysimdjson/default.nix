@@ -1,5 +1,10 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, simdjson }:
-
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  simdjson,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "pysimdjson";
   version = "5.0.2";
@@ -12,17 +17,16 @@ python3Packages.buildPythonPackage rec {
   };
 
   buildInputs = [
-      simdjson
+    simdjson
   ];
 
   doCheck = false;
-  
+
   meta = with lib; {
     description = "pysimdjson";
     homepage = "https://pysimdjson.tkte.ch/";
-    maintainers = with maintainers; [ samrose ];
+    maintainers = with maintainers; [samrose];
     license = licenses.mit;
     platforms = platforms.linux;
   };
-
 }
