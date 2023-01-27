@@ -5,6 +5,7 @@
 , pkg-config
 , cmake
 , gtest
+, valgrind
 }:
 
 stdenv.mkDerivation rec {
@@ -36,24 +37,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  cmakeFlags = [
-    "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
-  ] ++ lib.optionals (!doCheck) [
-    "-DRAPIDJSON_BUILD_TESTS=OFF"
-  ];
+  # for tests, adding gtest to checkInputs does not work
+  # https://github.com/NixOS/nixpkgs/pull/212200
+  buildInputs = [ gtest ];
+  cmakeFlags = [ "-DGTEST_SOURCE_DIR=${gtest.dev}/include" ];
 
-  nativeCheckInputs = [
-    gtest
-  ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -E '.*valgrind.*'
-
-    runHook postCheck
-  '';
-
+  nativeCheckInputs = [ valgrind ];
   doCheck = !stdenv.hostPlatform.isStatic;
 
   meta = with lib; {
