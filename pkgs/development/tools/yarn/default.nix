@@ -1,4 +1,4 @@
-{ lib, stdenv, nodejs, fetchFromGitHub, fetchzip, testers, yarn }:
+{ lib, fetchFromGitHub, fetchzip, nodejs, stdenvNoCC, testers }:
 
 let
   completion = fetchFromGitHub {
@@ -8,12 +8,12 @@ let
     hash = "sha256-z7KPXeYPPRuaEPxgY6YqsLt9n8cSsW3n2FhOzVde1HU=";
   };
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yarn";
   version = "1.22.19";
 
   src = fetchzip {
-    url = "https://github.com/yarnpkg/yarn/releases/download/v${version}/yarn-v${version}.tar.gz";
+    url = "https://github.com/yarnpkg/yarn/releases/download/v${finalAttrs.version}/yarn-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-12wUuWH+kkqxAgVYkyhIYVtexjv8DFP9kLpFLWg+h0o=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ln -s ${completion}/yarn-completion.bash $out/share/bash-completion/completions/yarn.bash
   '';
 
-  passthru.tests = testers.testVersion { package = yarn; };
+  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ offline screendriver ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})
