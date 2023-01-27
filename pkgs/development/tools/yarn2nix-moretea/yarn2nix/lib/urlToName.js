@@ -8,6 +8,7 @@ const path = require("path");
 // - git+https://github.com/srghma/node-shell-quote.git
 // - git+https://1234user:1234pass@git.graphile.com/git/users/1234user/postgraphile-supporter.git
 // - https://codeload.github.com/Gargron/emoji-mart/tar.gz/934f314fd8322276765066e8a2a6be5bac61b1cf
+// - https://github.com/Gargron/emoji-mart#934f314fd8322276765066e8a2a6be5bac61b1cf
 
 function urlToName(url) {
   // Yarn generates `codeload.github.com` tarball URLs, where the final
@@ -20,9 +21,15 @@ function urlToName(url) {
     return path.basename(url);
   }
 
-  return url
+  let name = url
     .replace(/https:\/\/(.)*(.com)\//g, "") // prevents having long directory names
     .replace(/[@/%:-]/g, "_"); // replace @ and : and - and % characters with underscore
+
+  if (!(name.endsWith(".tar.gz") || name.endsWith(".tgz"))) {
+    name = name + ".tgz";
+  }
+
+  return name;
 }
 
 module.exports = urlToName;

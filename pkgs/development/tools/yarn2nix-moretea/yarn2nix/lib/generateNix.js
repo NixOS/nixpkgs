@@ -115,7 +115,7 @@ function fetchLockedDep(builtinFetchGit) {
       const githubUrl = `https://github.com/${s[3]}/${s[4]}.git`;
       const githubRev = s[6];
 
-      const [_, branch] = nameWithVersion.split("#");
+      const [, branch] = nameWithVersion.split("#");
 
       return fetchgit(
         fileName,
@@ -126,10 +126,25 @@ function fetchLockedDep(builtinFetchGit) {
       );
     }
 
+    if (resolved.startsWith("https://github.com/")) {
+      const s = resolved.split("/");
+
+      const [githubUrl, githubRev] = resolved.split("#");
+      const [, branch] = nameWithVersion.split("#");
+
+      return fetchgit(
+        fileName,
+        `${githubUrl}.git`,
+        githubRev,
+        branch || "master",
+        builtinFetchGit
+      );
+    }
+
     if (url.startsWith("git+") || url.startsWith("git:")) {
       const rev = sha1OrRev;
 
-      const [_, branch] = nameWithVersion.split("#");
+      const [, branch] = nameWithVersion.split("#");
 
       const urlForGit = url.replace(/^git\+/, "");
 
