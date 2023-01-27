@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     chmod +x configure
   '';
+  
   ldflags = [
     "-Wl"
     "--no-as-needed"
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
           drivers = [ pkgs.epson-201202w ];
         };
     '';
-    license = with licenses; [ lgpl21 epson ];
+    license = with licenses; [ epson lgpl21 ];
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ nphilou ];
   };
