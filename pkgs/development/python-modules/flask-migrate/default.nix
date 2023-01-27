@@ -1,25 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
 , alembic
 , flask
 , flask_script
 , flask-sqlalchemy
-, unittestCheckHook
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "3.1.0";
+  version = "4.0.2";
   format = "setuptools";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zj7qpknvlhrh4fsp5sx4fwyx3sp41ynclka992zympm3xym9zyq";
+    hash = "sha256-6P5oIH/mVuMy4J71VIRD1p+qbvPUlq3COpytEgKz1qo=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
     flask_script
   ];
 
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
     homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gador ];
   };
 }
