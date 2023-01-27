@@ -37352,6 +37352,8 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
+  lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
+
   logtop = callPackage ../tools/misc/logtop { };
 
   igraph = callPackage ../development/libraries/igraph { };
