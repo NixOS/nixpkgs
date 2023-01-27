@@ -3627,6 +3627,8 @@ self: super: with self; {
 
   fusepy = callPackage ../development/python-modules/fusepy { };
 
+  fusesoc = callPackage ../development/python-modules/fusesoc { };
+
   future = callPackage ../development/python-modules/future { };
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
