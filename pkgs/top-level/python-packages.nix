@@ -8769,7 +8769,7 @@ self: super: with self; {
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   pysimdjson = callPackage ../development/python-modules/pysimdjson { };
-  
+ 
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
