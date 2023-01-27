@@ -112,6 +112,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Powerful command-line document and bibliography manager";
     homepage = "https://papis.readthedocs.io/";
+    changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nico202 teto ];
   };
