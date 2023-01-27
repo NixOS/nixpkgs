@@ -17,7 +17,7 @@ let
   basename = "libcxx";
 in
 
-assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
+assert stdenv.isDarwin -> cxxabi.libName == "c++abi";
 
 stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
@@ -64,10 +64,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
+    libcxx_cxx_abi_opt = {
+      "c++abi" = "system-libcxxabi";
+      "cxxrt" = "libcxxrt";
+    }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
+  in [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
     "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
-  ] ++ lib.optional (!headersOnly && cxxabi.pname == "libcxxabi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
+  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
