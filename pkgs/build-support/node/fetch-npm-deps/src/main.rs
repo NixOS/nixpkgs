@@ -105,7 +105,7 @@ fn main() -> anyhow::Result<()> {
         eprintln!("{}", package.name);
 
         let tarball = package.tarball()?;
-        let integrity = package.integrity();
+        let integrity = package.integrity().map(ToString::to_string);
 
         cache
             .put(
