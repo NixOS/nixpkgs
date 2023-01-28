@@ -141,7 +141,11 @@ self = stdenv.mkDerivation {
     # Enable RT for Intel hardware
     "-Dintel-clc=enabled"
   ] ++ lib.optionals enableOpenCL [
-    "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
+    # Clover, old OpenCL frontend
+    "-Dgallium-opencl=icd"
+    "-Dopencl-spirv=true"
+
+    # Rusticl, new OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ] ++ lib.optional enablePatentEncumberedCodecs
