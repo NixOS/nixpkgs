@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, runCommand
+{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
 , esbuild, nodejs-16_x-openssl_1_1, libsecret, xorg, ripgrep
 , AppKit, Cocoa, Security, cctools }:
@@ -17,12 +17,25 @@ let
     aarch64-darwin = "darwin-arm64";
   }.${system} or (throw "Unsupported system ${system}");
 
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.16.17";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+      };
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+    });
+  };
+
   # replaces esbuild's download script with a binary from nixpkgs
   patchEsbuild = path : version : ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
+    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
+    ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
 
 in stdenv.mkDerivation rec {
