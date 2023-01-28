@@ -12402,6 +12402,12 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  rumpelsepp = {
+    name = "Stefan Tatschner";
+    email = "stefan@rumpelsepp.org";
+    github = "rumpelsepp";
+    githubId = 1961699;
+  };
   rushmorem = {
     email = "rushmore@webenchanter.com";
     github = "rushmorem";
