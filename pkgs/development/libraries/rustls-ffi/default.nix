@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, apacheHttpd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustls-ffi";
@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    apacheHttpd = apacheHttpd.override { modTlsSupport = true; };
+  };
 
   meta = with lib; {
     description = "C-to-rustls bindings";
