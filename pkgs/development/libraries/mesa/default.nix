@@ -10,7 +10,6 @@
   if stdenv.isLinux then
     [
       "d3d12" # WSL emulated GPU (aka Dozen)
-      "iris" # new Intel
       "kmsro" # helper driver for display-only devices
       "nouveau" # Nvidia
       "radeonsi" # new AMD (GCN+)
@@ -30,6 +29,7 @@
       "v3d" # Broadcom VC5 (Raspberry Pi 4)
       "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     ] ++ lib.optionals stdenv.isx86_64 [
+      "iris" # new Intel, could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
       "crocus" # Intel legacy, x86_64 only
     ]
   else [ "auto" ]
