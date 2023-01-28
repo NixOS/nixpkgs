@@ -199,7 +199,7 @@ rec {
 
   /* Add attributes to each output of a derivation without changing
      the derivation itself and check a given condition when evaluating. */
-  extendDerivation = condition: passthru: drv:
+  extendDerivation' = { conditionDrvPath, conditionOutPath }: passthru: drv:
     let
       outputs = drv.outputs or [ "out" ];
 
@@ -211,16 +211,23 @@ rec {
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
             outputSpecified = true;
-            drvPath = assert condition; drv.${outputName}.drvPath;
-            outPath = assert condition; drv.${outputName}.outPath;
+            drvPath = assert conditionDrvPath; drv.${outputName}.drvPath;
+            outPath = assert conditionOutPath; drv.${outputName}.outPath;
           };
         };
 
       outputsList = map outputToAttrListElement outputs;
     in commonAttrs // {
-      drvPath = assert condition; drv.drvPath;
-      outPath = assert condition; drv.outPath;
+      drvPath = assert conditionDrvPath; drv.drvPath;
+      outPath = assert conditionOutPath; drv.outPath;
     };
+
+  /* extendDerivation' with the same condition for both outPath and drvPath */
+  extendDerivation = condition: passthru: drv:
+    extendDerivation' {
+      conditionDrvPath = condition;
+      conditionOutPath = condition;
+    } passthru drv;
 
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
