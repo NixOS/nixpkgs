@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-0frP/RkpZX6LCR8cOlzcBG3pbcOh0KPuELlYUXS3dRE=";
   };
 
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Datasette plugin for publishing data using Fly";
     homepage = "https://datasette.io/plugins/datasette-publish-fly";
+    changelog = "https://github.com/simonw/datasette-publish-fly/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
