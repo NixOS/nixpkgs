@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "django-tastypie";
-  version = "0.14.4";
+  version = "0.14.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "django-tastypie";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O/aVi8BshOZmg9WQxrFlBEOXfgyqJKVK/QlEFG3Edqs=";
+    hash = "sha256-RgYinpo8eVzRaSkcnFkSq+IqpcFt6LCCHkpHyB/7u5M=";
   };
 
   propagatedBuildInputs = [
