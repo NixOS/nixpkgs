@@ -252,11 +252,6 @@ rec {
            ln -s ${bootstrapTools}/bin/codesign $out/bin
         '';
 
-        print-reexports = self.runCommandLocal "bootstrap-stage0-print-reexports" { } ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapTools}/bin/print-reexports $out/bin
-        '';
-
         rewrite-tbd = self.runCommandLocal "bootstrap-stage0-rewrite-tbd" { } ''
           mkdir -p $out/bin
           ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
@@ -300,12 +295,6 @@ rec {
             cp -r ${selfDarwin.darwin-stubs}/usr/lib $out/lib
             chmod -R +w $out/lib
             substituteInPlace $out/lib/libSystem.B.tbd --replace /usr/lib/system $out/lib/system
-
-            ln -s libSystem.B.tbd $out/lib/libSystem.tbd
-
-            for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
-              ln -s libSystem.tbd $out/lib/lib$name.tbd
-            done
 
             ln -s ${bootstrapTools}/lib/*.o $out/lib
 

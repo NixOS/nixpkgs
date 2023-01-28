@@ -26,7 +26,6 @@ makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spl
 
   # macOS 10.12 SDK
   apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk {
-    inherit (buildPackages.darwin) print-reexports;
     inherit (self) darwin-stubs;
   };
 
@@ -115,13 +114,11 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
 
-  print-reexports = callPackage ../os-specific/darwin/print-reexports { };
-
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
   checkReexportsHook = pkgs.makeSetupHook {
-    deps = [ pkgs.darwin.print-reexports ];
-  } ../os-specific/darwin/print-reexports/setup-hook.sh;
+    deps = [ pkgs.darwin.rewrite-tbd ];
+  } ../os-specific/darwin/rewrite-tbd/setup-hook.sh;
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 

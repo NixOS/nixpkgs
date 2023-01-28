@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs, print-reexports }:
+{ stdenv, buildPackages, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -38,11 +38,6 @@ let
 
       pushd lib
       cp ${darwin-stubs}/usr/lib/libcups*.tbd .
-      ln -s libcups.2.tbd      libcups.tbd
-      ln -s libcupscgi.1.tbd   libcupscgi.tbd
-      ln -s libcupsimage.2.tbd libcupsimage.tbd
-      ln -s libcupsmime.1.tbd  libcupsmime.tbd
-      ln -s libcupsppdc.1.tbd  libcupsppdc.tbd
       popd
     '';
 
@@ -53,13 +48,28 @@ let
     };
   };
 
-  mkFrameworkSubs = name: deps:
-  let
-    deps' = deps // { "${name}" = placeholder "out"; };
-    substArgs = lib.concatMap (x: [ "--subst-var-by" x deps'."${x}" ]) (lib.attrNames deps');
-  in lib.escapeShellArgs substArgs;
+  standardFrameworkPath = name: private:
+    "/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework";
 
-  framework = name: deps: stdenv.mkDerivation {
+  mkDepsRewrites = deps:
+  let
+    mergeRewrites = x: y: {
+      prefix = lib.mergeAttrs (x.prefix or {}) (y.prefix or {});
+      const = lib.mergeAttrs (x.const or {}) (y.const or {});
+    };
+
+    rewriteArgs = { prefix ? {}, const ? {} }: lib.concatLists (
+      (lib.mapAttrsToList (from: to: [ "-p" "${from}:${to}" ]) prefix) ++
+      (lib.mapAttrsToList (from: to: [ "-c" "${from}:${to}" ]) const)
+    );
+
+    rewrites = depList: lib.fold mergeRewrites {}
+      (map (dep: dep.tbdRewrites)
+        (lib.filter (dep: dep ? tbdRewrites) depList));
+  in
+    lib.escapeShellArgs (rewriteArgs (rewrites (builtins.attrValues deps)));
+
+  framework = name: deps: stdenv.mkDerivation (finalAttrs: {
     name = "apple-framework-${name}";
 
     dontUnpack = true;
@@ -69,7 +79,7 @@ let
 
     disallowedRequisites = [ sdk ];
 
-    nativeBuildInputs = [ print-reexports ];
+    nativeBuildInputs = [ buildPackages.darwin.rewrite-tbd ];
 
     extraTBDFiles = [];
 
@@ -147,22 +157,15 @@ let
       done
 
       # Fix and check tbd re-export references
-      find $out -name '*.tbd' | while read tbd; do
+      chmod u+w -R $out
+      while IFS= read -r -d $'\0' tbd; do
         echo "Fixing re-exports in $tbd"
-        substituteInPlace "$tbd" ${mkFrameworkSubs name deps}
-
-        echo "Checking re-exports in $tbd"
-        print-reexports "$tbd" | while read target; do
-          local expected="''${target%.dylib}.tbd"
-          if ! [ -e "$expected" ]; then
-            echo -e "Re-export missing:\n\t$target\n\t(expected $expected)"
-            echo -e "While processing\n\t$tbd"
-            exit 1
-          else
-            echo "Re-exported target $target ok"
-          fi
-        done
-      done
+        rewrite-tbd \
+          -p ${standardFrameworkPath name false}/:$out/Library/Frameworks/${name}.framework/ \
+          ${mkDepsRewrites deps} \
+          -r ${builtins.storeDir} \
+          "$tbd"
+      done < <(find "$out" -type f -name '*.tbd' -print0)
     '';
 
     propagatedBuildInputs = builtins.attrValues deps;
@@ -178,14 +181,20 @@ let
       "/System/Library/Frameworks/${name}.framework/${name}"
     ];
 
+    passthru = {
+      tbdRewrites = {
+        prefix."${standardFrameworkPath name false}/" = "${finalAttrs.finalPackage}/Library/Frameworks/${name}.framework/";
+      };
+    };
+
     meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;
     };
-  };
+  });
 
-  tbdOnlyFramework = name: { private ? true }: stdenv.mkDerivation {
+  tbdOnlyFramework = name: { private ? true }: stdenv.mkDerivation (finalAttrs: {
     name = "apple-framework-${name}";
     dontUnpack = true;
     installPhase = ''
@@ -208,7 +217,13 @@ let
 
       # NOTE there's no re-export checking here, this is probably wrong
     '';
-  };
+
+    passthru = {
+      tbdRewrites = {
+        prefix."${standardFrameworkPath name private}/" = "${finalAttrs.finalPackage}/Library/Frameworks/${name}.framework/";
+      };
+    };
+  });
 in rec {
   libs = {
     xpc = stdenv.mkDerivation {
@@ -270,42 +285,42 @@ in rec {
   };
 
   overrides = super: {
-    AppKit = lib.overrideDerivation super.AppKit (drv: {
+    AppKit = super.AppKit.overrideAttrs (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/PrivateFrameworks/"
       ];
     });
 
-    Carbon = lib.overrideDerivation super.Carbon (drv: {
+    Carbon = super.Carbon.overrideAttrs (drv: {
       extraTBDFiles = [ "Versions/A/Frameworks/HTMLRendering.framework/Versions/A/HTMLRendering.tbd" ];
     });
 
-    CoreFoundation = lib.overrideDerivation super.CoreFoundation (drv: {
+    CoreFoundation = super.CoreFoundation.overrideAttrs (drv: {
       setupHook = ./cf-setup-hook.sh;
     });
 
-    CoreMedia = lib.overrideDerivation super.CoreMedia (drv: {
+    CoreMedia = super.CoreMedia.overrideAttrs (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/Frameworks/CoreImage.framework"
       ];
     });
 
-    CoreMIDI = lib.overrideDerivation super.CoreMIDI (drv: {
+    CoreMIDI = super.CoreMIDI.overrideAttrs (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/PrivateFrameworks/"
       ];
       setupHook = ./private-frameworks-setup-hook.sh;
     });
 
-    IMServicePlugIn = lib.overrideDerivation super.IMServicePlugIn (drv: {
+    IMServicePlugIn = super.IMServicePlugIn.overrideAttrs (drv: {
       extraTBDFiles = [ "Versions/A/Frameworks/IMServicePlugInSupport.framework/Versions/A/IMServicePlugInSupport.tbd" ];
     });
 
-    Security = lib.overrideDerivation super.Security (drv: {
+    Security = super.Security.overrideAttrs (drv: {
       setupHook = ./security-setup-hook.sh;
     });
 
-    QuartzCore = lib.overrideDerivation super.QuartzCore (drv: {
+    QuartzCore = super.QuartzCore.overrideAttrs (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
@@ -313,14 +328,14 @@ in rec {
       '';
     });
 
-    MetalKit = lib.overrideDerivation super.MetalKit (drv: {
+    MetalKit = super.MetalKit.overrideAttrs (drv: {
       installPhase = drv.installPhase + ''
         mkdir -p $out/include/simd
         cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
       '';
     });
 
-    WebKit = lib.overrideDerivation super.WebKit (drv: {
+    WebKit = super.WebKit.overrideAttrs (drv: {
       extraTBDFiles = [
         "Versions/A/Frameworks/WebCore.framework/Versions/A/WebCore.tbd"
         "Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy.tbd"

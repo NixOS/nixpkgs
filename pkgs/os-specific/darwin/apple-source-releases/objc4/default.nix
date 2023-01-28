@@ -1,6 +1,6 @@
 { appleDerivation, darwin-stubs }:
 
-appleDerivation {
+let self = appleDerivation {
   phases = [ "unpackPhase" "installPhase" ];
 
   # Not strictly necessary, since libSystem depends on it, but it's nice to be explicit so we
@@ -34,4 +34,10 @@ appleDerivation {
     cp runtime/objc.h $out/include/objc/objc.h
     cp runtime/runtime.h $out/include/objc/runtime.h
   '';
-}
+
+  passthru = {
+    tbdRewrites = {
+      const."/usr/lib/libobjc.A.dylib" = "${self}/lib/libobjc.A.dylib";
+    };
+  };
+}; in self
