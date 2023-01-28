@@ -65,6 +65,9 @@ while [ "$#" -gt 0 ]; do
         --no-bootloader)
             noBootLoader=1
             ;;
+        --no-local-copy)
+            noLocalCopy=1
+            ;;
         --show-trace|--impure|--keep-going)
             extraBuildFlags+=("$i")
             ;;
@@ -141,7 +144,11 @@ trap 'rm -rf $tmpdir' EXIT
 # store temporary files on target filesystem by default
 export TMPDIR=${TMPDIR:-$tmpdir}
 
-sub="auto?trusted=1"
+if [[ -z "$noLocalCopy" ]]; then
+  sub="auto?trusted=1"
+else
+  sub=""
+fi
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
