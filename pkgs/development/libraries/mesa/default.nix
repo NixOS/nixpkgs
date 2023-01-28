@@ -19,11 +19,11 @@
 , enablePatentEncumberedCodecs ? true
 , libclc
 , jdupes
-, cmake
 , rustc
 , rust-bindgen
 , spirv-llvm-translator
 , zstd
+, directx-headers
 }:
 
 /** Packaging design:
@@ -57,6 +57,9 @@ let
     inherit (llvmPackages) llvm;
   };
 
+  haveWayland = lib.elem "wayland" eglPlatforms;
+  haveZink = lib.elem "zink" galliumDrivers;
+  haveDozen = (lib.elem "d3d12" galliumDrivers) || (lib.elem "microsoft-experimental" vulkanDrivers);
 self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
@@ -98,7 +101,11 @@ self = stdenv.mkDerivation {
   outputs = [ "out" "dev" "drivers" ]
     ++ lib.optional enableOSMesa "osmesa"
     ++ lib.optional stdenv.isLinux "driversdev"
-    ++ lib.optional enableOpenCL "opencl";
+    ++ lib.optional enableOpenCL "opencl"
+    # the Dozen drivers depend on libspirv2dxil, but link it statically, and
+    # libspirv2dxil itself is pretty chonky, so relocate it to its own output
+    # in case anything wants to use it at some point
+    ++ lib.optional haveDozen "spirv2dxil";
 
   # FIXME: this fixes rusticl/iris segfaulting on startup, _somehow_.
   # Needs more investigating.
@@ -129,6 +136,7 @@ self = stdenv.mkDerivation {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
+
     "-Dgallium-nine=${lib.boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${lib.boolToString enableOSMesa}" # used by wine
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
@@ -158,13 +166,13 @@ self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
     zstd
-  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
+  ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
-    # Mesa will not build zink when gallium-drivers=auto
-    ++ lib.optional (lib.elem "zink" galliumDrivers) vulkan-loader;
+    ++ lib.optional haveZink vulkan-loader
+    ++ lib.optional haveDozen directx-headers;
 
   depsBuildBuild = [ pkg-config ];
 
@@ -173,9 +181,7 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.Mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [
-    wayland-scanner
-  ];
+  ] ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
@@ -232,6 +238,10 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
       substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
     done
+  '' + lib.optionalString haveDozen ''
+    mkdir -p $spirv2dxil/{bin,lib}
+    mv -t $spirv2dxil/lib $out/lib/libspirv_to_dxil*
+    mv -t $spirv2dxil/bin $out/bin/spirv2dxil
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
