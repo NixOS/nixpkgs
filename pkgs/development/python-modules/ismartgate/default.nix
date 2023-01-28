@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , buildPythonPackage
 , click
 , defusedxml
@@ -17,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "ismartgate";
-  version = "4.0.4";
+  version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yh7gPyy3VMdyINBCZo5K2wA0BY7yYgHrKGZRB/pm77U=";
+    hash = "sha256-o2yzMxrF0WB6MbeL1Tuf0Sq4wS4FDIWZZx1x2rvwLmY=";
   };
 
   propagatedBuildInputs = [
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytest-asyncio
     pytest-raises
     pytestCheckHook
