@@ -82,6 +82,10 @@ let
 
               # requires octoprint itself during tests
               doCheck = false;
+              postPatch = ''
+                substituteInPlace octoprint_pi_support/__init__.py \
+                  --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
+              '';
             };
           }
         )
@@ -208,6 +212,7 @@ let
                 export HOME=$(mktemp -d)
                 rm pytest.ini
               '';
+
 
               disabledTests = [
                 "test_check_setup" # Why should it be able to call pip?
