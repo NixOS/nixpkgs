@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , keras
 , numba
 , numpy
@@ -26,6 +27,22 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-S2+k7Ec4AxsN6d0GUGnU81oLnBgmlZp8OmUFCNaUJYw=";
   };
+
+  patches = [
+    # Fix tests with sklearn>=1.2.0
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/umap/commit/a714b59bd9e2ca2e63312bc3491b2b037a42f2f2.patch";
+      hash = "sha256-WOSWNN5ewVTV7IEBEA7ZzgZYMZxctF1jAWs9ylKTyLs=";
+    })
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/umap/commit/c7d05683325589ad432a55e109cacb9d631cfaa9.patch";
+      hash = "sha256-hE2Svxf7Uja+DbCmTDCnd7mZynjNbC5GUjfqg4ZRO9Y=";
+    })
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/umap/commit/949abd082524fce8c45dfb147bcd8e8ef49eade3.patch";
+      hash = "sha256-8/1k8iYeF77FIaUApNtY07auPJkrt3vNRR/HTYRvq+0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     numba
