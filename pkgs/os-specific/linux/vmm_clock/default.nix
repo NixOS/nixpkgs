@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  name = "vmm_clock";
+  pname = "vmm_clock";
   version = "0.2.0";
 
   src = fetchFromGitHub {
