@@ -15,10 +15,8 @@ stdenvNoCC.mkDerivation {
     owner = "roman";
     repo = "locate-dominating-file";
     rev = "v${version}";
-    sha256 = "sha256-gwh6fAw7BV7VFIkQN02QIhK47uxpYheMk64UeLyp2IY=";
+    hash = "sha256-gwh6fAw7BV7VFIkQN02QIhK47uxpYheMk64UeLyp2IY=";
   };
-
-  doCheck = true;
 
   postPatch = ''
     for file in $(find src tests -type f); do
@@ -28,14 +26,7 @@ stdenvNoCC.mkDerivation {
 
   buildInputs = [ getopt ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    cp src/locate-dominating-file.sh $out/bin/locate-dominating-file
-
-    runHook postInstall
-  '';
+  doCheck = true;
 
   checkInputs = [ (bats.withLibraries (p: [ p.bats-support p.bats-assert ])) ];
 
@@ -47,7 +38,17 @@ stdenvNoCC.mkDerivation {
     runHook postCheck
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp src/locate-dominating-file.sh $out/bin/locate-dominating-file
+
+    runHook postInstall
+  '';
+
   meta = with lib; {
+    homepage = "https://github.com/roman/locate-dominating-file";
     description = "Program that looks up in a directory hierarchy for a given filename";
     license = licenses.mit;
     maintainers = [ maintainers.roman ];
