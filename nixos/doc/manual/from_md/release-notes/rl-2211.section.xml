@@ -1836,6 +1836,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.resolved.dnsovertls</literal> has
+          been added. If you enabled DNS over TLS via
+          <literal>services.resolved.extraConfig</literal> before,
+          consider using this option instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

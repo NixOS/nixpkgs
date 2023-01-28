@@ -86,6 +86,48 @@ in
       '';
     };
 
+    services.resolved.dnsovertls = mkOption {
+      default = "false";
+      example = "opportunistic";
+      type = types.enum [ "true" "opportunistic" "false" ];
+      description = ''
+        If set to
+        <variablelist>
+        <varlistentry>
+          <term><literal>"true"</literal></term>
+          <listitem><para>
+            If true all connections to the server will be encrypted. Note
+            that this mode requires a DNS server that supports DNS-over-TLS
+            and has a valid certificate. If the hostname was specified
+            by using the format format "address#server_name" it is used to
+            validate its certificate and also to enable Server Name
+            Indication (SNI) when opening a TLS connection. Otherwise the
+            certificate is checked against the server's IP. If the DNS
+            server does not support DNS-over-TLS all DNS requests will fail.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"opportunistic"</literal></term>
+          <listitem><para>
+            DNS request are attempted to send
+            encrypted with DNS-over-TLS. If the DNS server does not
+            support TLS, DNS-over-TLS is disabled. Note that this mode
+            makes DNS-over-TLS vulnerable to "downgrade" attacks, where
+            an attacker might be able to trigger a downgrade to
+            non-encrypted mode by synthesizing a response that suggests
+            DNS-over-TLS was not supported.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"false"</literal></term>
+          <listitem><para>
+            DNS lookups are sent over UDP.
+          </para></listitem>
+        </varlistentry>
+        </variablelist>
+      '';
+    };
+
     services.resolved.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -132,6 +174,7 @@ in
           "Domains=${concatStringsSep " " cfg.domains}"}
         LLMNR=${cfg.llmnr}
         DNSSEC=${cfg.dnssec}
+        DNSOverTLS=${cfg.dnsovertls}
         ${config.services.resolved.extraConfig}
       '';
 
