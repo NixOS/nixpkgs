@@ -13,8 +13,8 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/{doc,fonts}
-    install -Dm644 otf/*.otf                                    -t $out/share/fonts/opentype
-    install -Dm644 *Changes *README.markdown *README.xelualatex -t $out/share/doc/${pname}-${version}
+    install -Dm644 otf/*.otf                                 -t $out/share/fonts/opentype
+    install -Dm644 Changes README.markdown README.xelualatex -t $out/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
