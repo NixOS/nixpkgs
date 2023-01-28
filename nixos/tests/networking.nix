@@ -953,6 +953,7 @@ let
     } else {
       name = "RenameInterface";
       testScript = "";
+    };
     # even with disabled networkd, systemd.network.links should work
     # (as it's handled by udev, not networkd)
     link = {
