@@ -32,8 +32,8 @@ let
       # Since hard linking directories is not allowed, copying is the next best thing.
 
       # copy additional plugin(s), theme(s) and language(s)
-      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
-      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
+      ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
       ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
@@ -130,62 +130,45 @@ let
         };
 
         plugins = mkOption {
-          type = types.listOf types.path;
-          default = [];
+          type = with types; coercedTo
+            (listOf path)
+            (l: warn "setting this option with a list is deprecated"
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
+            (attrsOf path);
+          default = {};
           description = lib.mdDoc ''
-            List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
+            Path(s) to respective plugin(s) which are copied from the 'plugins' directory.
 
             ::: {.note}
             These plugins need to be packaged before use, see example.
             :::
           '';
           example = literalExpression ''
-            let
-              # Wordpress plugin 'embed-pdf-viewer' installation example
-              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-                name = "embed-pdf-viewer-plugin";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ embedPdfViewerPlugin ]
+            {
+              inherit (pkgs.wordpressPackages.plugins) embed-pdf-viewer-plugin;
+            }
           '';
         };
 
         themes = mkOption {
-          type = types.listOf types.path;
-          default = [];
+          type = with types; coercedTo
+            (listOf path)
+            (l: warn "setting this option with a list is deprecated"
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
+            (attrsOf path);
+          default = { inherit (pkgs.wordpressPackages.themes) twentytwentythree; };
+          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentythree; }";
           description = lib.mdDoc ''
-            List of path(s) to respective theme(s) which are copied from the 'theme' directory.
+            Path(s) to respective theme(s) which are copied from the 'theme' directory.
 
             ::: {.note}
             These themes need to be packaged before use, see example.
             :::
           '';
           example = literalExpression ''
-            let
-              # Let's package the responsive theme
-              responsiveTheme = pkgs.stdenv.mkDerivation {
-                name = "responsive-theme";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ responsiveTheme ]
+            {
+              inherit (pkgs.wordpressPackages.themes) responsive-theme;
+            }
           '';
         };
 

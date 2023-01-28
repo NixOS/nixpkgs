@@ -36,6 +36,7 @@
 , CoreServices
 , Foundation
 , Combine
+, MacOSX-SDK
 , CLTools_Executables
 }:
 
@@ -169,6 +170,21 @@ let
     chmod a+x "$targetFile"
   '';
 
+  # On Darwin, we need to use BOOTSTRAPPING-WITH-HOSTLIBS because of ABI
+  # stability, and have to provide the definitions for the system stdlib.
+  appleSwiftCore = stdenv.mkDerivation {
+    name = "apple-swift-core";
+    dontUnpack = true;
+
+    installPhase = ''
+      mkdir -p $out/lib/swift
+      cp -r \
+        "${MacOSX-SDK}/usr/lib/swift/Swift.swiftmodule" \
+        "${MacOSX-SDK}/usr/lib/swift/libswiftCore.tbd" \
+        $out/lib/swift/
+    '';
+  };
+
 in stdenv.mkDerivation {
   pname = "swift";
   inherit (sources) version;
@@ -263,7 +279,6 @@ in stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/swift-wrap.patch}
     patch -p1 -d swift -i ${./patches/swift-nix-resource-root.patch}
     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
-    patch -p1 -d swift -i ${./patches/swift-darwin-fix-bootstrap.patch}
     patch -p1 -d swift -i ${substituteAll {
       src = ./patches/swift-darwin-plistbuddy-workaround.patch;
       inherit swiftArch;
@@ -395,9 +410,23 @@ in stdenv.mkDerivation {
     "
     buildProject llvm llvm-project/llvm
 
+    '' + lib.optionalString stdenv.isDarwin ''
+    # Add appleSwiftCore to the search paths. We can't simply add it to
+    # buildInputs, because it is potentially an older stdlib than the one we're
+    # building. We have to remove it again after the main Swift build, or later
+    # build steps may fail. (Specific case: Concurrency backdeploy uses the
+    # Sendable protocol, which appears to not be present in the macOS 11 SDK.)
+    OLD_NIX_SWIFTFLAGS_COMPILE="$NIX_SWIFTFLAGS_COMPILE"
+    OLD_NIX_LDFLAGS="$NIX_LDFLAGS"
+    export NIX_SWIFTFLAGS_COMPILE+=" -I ${appleSwiftCore}/lib/swift"
+    export NIX_LDFLAGS+=" -L ${appleSwiftCore}/lib/swift"
+    '' + ''
+
     # Some notes:
-    # - Building with libswift defaults to OFF in CMake, but is enabled in
-    #   standard builds, so we enable it as well.
+    # - BOOTSTRAPPING_MODE defaults to OFF in CMake, but is enabled in standard
+    #   builds, so we enable it as well. On Darwin, we have to use the system
+    #   Swift libs because of ABI-stability, but this may be trouble if the
+    #   builder is an older macOS.
     # - Experimental features are OFF by default in CMake, but some are
     #   required to build the stdlib.
     # - SWIFT_STDLIB_ENABLE_OBJC_INTEROP is set explicitely because its check
@@ -405,7 +434,7 @@ in stdenv.mkDerivation {
     #   Fixed in: https://github.com/apple/swift/commit/84083afef1de5931904d5c815d53856cdb3fb232
     cmakeFlags="
       -GNinja
-      -DBOOTSTRAPPING_MODE=BOOTSTRAPPING
+      -DBOOTSTRAPPING_MODE=BOOTSTRAPPING${lib.optionalString stdenv.isDarwin "-WITH-HOSTLIBS"}
       -DSWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY=ON
       -DLLVM_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/llvm
       -DClang_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/clang
@@ -417,6 +446,12 @@ in stdenv.mkDerivation {
       -DSWIFT_STDLIB_ENABLE_OBJC_INTEROP=${if stdenv.isDarwin then "ON" else "OFF"}
     "
     buildProject swift
+
+    '' + lib.optionalString stdenv.isDarwin ''
+    # Restore search paths to remove appleSwiftCore.
+    export NIX_SWIFTFLAGS_COMPILE="$OLD_NIX_SWIFTFLAGS_COMPILE"
+    export NIX_LDFLAGS="$OLD_NIX_LDFLAGS"
+    '' + ''
 
     # These are based on flags in `utils/build-script-impl`.
     #

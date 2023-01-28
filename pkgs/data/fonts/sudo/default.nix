@@ -1,12 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "sudo-font";
   version = "0.64";
-in (fetchzip {
-  name = "sudo-font-${version}";
-  url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
-  sha256 = "sha256-ewLTeIVY76eq5mHTnjIsJ5Q2CMuBqXJzxvjZTONPsr8=";
+
+  src = fetchzip {
+    url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
+    hash = "sha256-Y99YPoNpe55Wrj5epiqqQ6ddUBTj9uI4oj4M5ARTzJo=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype/
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Font for programmers and command line users";
@@ -16,9 +25,4 @@ in (fetchzip {
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/
-  '';
-})
+}
