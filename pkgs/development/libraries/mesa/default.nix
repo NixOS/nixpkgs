@@ -23,6 +23,7 @@
 , rustc
 , rust-bindgen
 , spirv-llvm-translator
+, zstd
 }:
 
 /** Packaging design:
@@ -149,6 +150,7 @@ self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
+    zstd
   ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
