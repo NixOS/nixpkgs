@@ -5,6 +5,7 @@
 , python3
 , substituteAll
 , nix-update-script
+, nixosTests
   # To include additional plugins, pass them here as an overlay.
 , packageOverrides ? self: super: { }
 }:
@@ -217,6 +218,9 @@ let
               passthru = {
                 python = self.python;
                 updateScript = nix-update-script { };
+                tests = {
+                  inherit (nixosTests) octoprint;
+                };
               };
 
               meta = with lib; {
