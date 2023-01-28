@@ -67,6 +67,7 @@
 , spirv-llvm-translator
 , zstd
 , directx-headers
+, udev
 }:
 
 /** Packaging design:
@@ -210,7 +211,7 @@ self = stdenv.mkDerivation {
     libpthreadstubs openssl /*or another sha1 provider*/
     zstd
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
