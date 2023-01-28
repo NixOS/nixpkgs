@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab rumpelsepp ];
     platforms = platforms.linux;
   };
 }
