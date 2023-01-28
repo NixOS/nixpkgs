@@ -1,0 +1,53 @@
+name: Out-of-date package report
+description: A package has not been updated to the latest version.
+labels: '9.needs: package (update)'
+
+body:
+  - type: input
+    attributes:
+      label: Package name
+      description: Name of the package which is out-of-date.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Current version
+      description: |
+        Check the [master branch](https://github.com/NixOS/nixpkgs) to find the current version.
+        1. Use the "Go to file" functionality on GitHub to find the package.
+        2. Then, go to the history for this package.
+        3. Find the latest "package_name: old_version -> new_version" commit.
+        4. The "new_version" is the current version of the package.
+      placeholder: X.Y.Z
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Desired version
+      description: What version does the package need to be updated to?
+      placeholder: X.Y.Z
+    validations:
+      required: true
+
+  - type: checkboxes
+    attributes:
+      label: Existing pull requests
+      description: |
+        [Search for name of the package](https://github.com/NixOS/nixpkgs/pulls) and check if there is already a pull request to update it to the desired version.
+        If you find one, there is no need to create a new issue.
+
+        Please also consider reviewing the request! There's a high chance that you'll get the new version right away, while also helping the community!
+      options:
+        - label: I've checked that there are not any existing pull requests to update this package
+          required: true
+
+  - type: input
+    attributes:
+      label: Notify maintainers
+      description: |
+        Please @ people who are in the `meta.maintainers` list of the out-of-date package.
+        If in doubt, check `git blame` for whoever last touched something.
+    validations:
+      required: true
