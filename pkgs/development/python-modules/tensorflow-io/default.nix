@@ -20,10 +20,25 @@ let
       rev = "v${version}";
       hash = "sha256-SeXw9MES7tyMQ34jR9NHtO3S+y6nsvU6z0JCjj0r6Mk=";
     };
-    postPatch = ''
-      # Pins 5.1.1, we've got 5.4.0
-      rm -f .bazelversion
-    '';
+    postPatch =
+      let
+        rulesPython.oldRef = "aa96a691d3a8177f3215b14b0edc9641787abaaa30363a080165d06ab65e1161";
+        rulesPython.newRef = "8c15896f6686beb5c631a4459a3aa8392daccaab805ea899c9d14215074b60ef";
+        rulesPython.oldUrl = "https://github.com/bazelbuild/rules_python/releases/download/0.0.1/rules_python-0.0.1.tar.gz";
+        rulesPython.newUrl = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.17.3.tar.gz";
+        rulesPython.insertAfter = ''name = "rules_python"'';
+        rulesPython.insertStripPrefix = ''strip_prefix = "rules_python-0.17.3",'';
+      in
+      ''
+        # Pins 5.1.1, we've got 5.4.0
+        rm -f .bazelversion
+
+        substituteInPlace WORKSPACE \
+          --replace "${rulesPython.oldRef}" "${rulesPython.newRef}" \
+          --replace "${rulesPython.oldUrl}" "${rulesPython.newUrl}"
+        sed -i '/${rulesPython.insertAfter}/a ${rulesPython.insertStripPrefix}' WORKSPACE 
+        sed -i 's/^.*rules_python-0.0.1.*$//' WORKSPACE
+      '';
 
     nativeBuildInputs = [
       setuptools
