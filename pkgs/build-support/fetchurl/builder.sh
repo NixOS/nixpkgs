@@ -5,6 +5,48 @@ source $mirrorsFile
 
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
+atoi() {
+    printf '%d' "'$1"
+}
+
+# calculate a semi-unique activity ID from $out
+actionId=65536
+digit=0
+while read -n1 char; do
+    digit=$((digit + 1))
+    actionId=$((actionId + $(atoi "$char") * digit))
+done <<<"$out"
+
+traceFile="curl.trace"
+mkfifo "$traceFile"
+
+startActivity() {
+    # force-recreate the activity
+    echo '@nix { "action": "stop", "id": '$actionId' }' >&$NIX_LOG_FD
+    echo '@nix { "action": "start", "id": '$actionId', "type": 101, "level": 3, "text": "'$1'", "fields": [0,0,0,0] }' >&$NIX_LOG_FD
+}
+
+sendProgressToNix() {
+    echo '@nix { "action": "result", "type": 105, "id": '$actionId', "fields": [ '$1', '$2', 0, 0 ] }' >&$NIX_LOG_FD
+}
+
+# background job that parses the trace FIFO
+(
+    bytesExpected=0;
+    bytesRead=0;
+    tail -f $traceFile | while read line; do
+        if [[ "$line" = 0000:\ [Cc]ontent-[Ll]ength:* ]]; then
+            bytesExpected="${line#0000: [Cc]ontent-[Ll]ength: }"
+            sendProgressToNix "$bytesRead" "$bytesExpected"
+        elif [[ "$line" = \<=\ Recv\ data,* ]]; then
+            var1="${line#"<= Recv data, "}"
+            var2="${var1%\ bytes*}"
+            bytesRead=$((bytesRead + var2))
+            sendProgressToNix "$bytesRead" "$bytesExpected"
+        fi
+    done
+) &
+
 # Curl flags to handle redirects, not use EPSV, handle cookies for
 # servers to need them during redirects, and work on SSL without a
 # certificate (this isn't a security problem because we check the
@@ -16,6 +58,8 @@ curl=(
     --retry 3
     --disable-epsv
     --cookie-jar cookies
+    --no-progress-meter
+    --trace-ascii "$traceFile"
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
 )
 
@@ -38,6 +82,7 @@ tryDownload() {
     local url="$1"
     echo
     header "trying $url"
+    startActivity "downloading '$name' from '$url'"
     local curlexit=18;
 
     success=
