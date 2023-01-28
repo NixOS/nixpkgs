@@ -74,9 +74,11 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An GUI frontend to v2ray";
-    homepage = "https://qv2ray.net";
-    license = licenses.gpl3;
+    homepage = "https://github.com/Qv2ray/Qv2ray";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ poscat rewine ];
     platforms = platforms.all;
+    # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
+    broken = stdenv.isDarwin;
   };
 }
