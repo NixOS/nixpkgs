@@ -1,14 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "andagii";
   version = "1.0.2";
-in (fetchzip {
-  name = "andagii-${version}";
 
-  url = "http://www.i18nguy.com/unicode/andagii.zip";
-  curlOpts = "--user-agent 'Mozilla/5.0'";
-  sha256 = "0j5kf2fmyqgnf5ji6h0h79lq9n9d85hkfrr4ya8hqj4gwvc0smb2";
+  src = fetchzip {
+    url = "http://www.i18nguy.com/unicode/andagii.zip";
+    curlOpts = "--user-agent 'Mozilla/5.0'";
+    hash = "sha256-U7wC55G8jIvMMyPcEiJQ700A7nkWdgWK1LM0F/wgDCg=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    cp -v ANDAGII_.TTF $out/share/fonts/truetype/andagii.ttf
+
+    runHook postInstall
+  '';
 
   # There are multiple claims that the font is GPL, so I include the
   # package; but I cannot find the original source, so use it on your
@@ -20,10 +29,4 @@ in (fetchzip {
     license = "unknown";
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    unzip $downloadedFile
-    mkdir -p $out/share/fonts/truetype
-    cp -v ANDAGII_.TTF $out/share/fonts/truetype/andagii.ttf
-  '';
-})
+}
