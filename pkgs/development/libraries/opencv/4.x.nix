@@ -15,6 +15,7 @@
 , ocl-icd
 , buildPackages
 , qimgv
+, opencv4
 
 , enableJPEG ? true
 , libjpeg
@@ -31,8 +32,8 @@
 , openjpeg
 , enableEigen ? true
 , eigen
-, enableOpenblas ? true
-, openblas
+, enableBlas ? true
+, blas
 , enableContrib ? true
 
 , enableCuda ? (config.cudaSupport or false) && stdenv.hostPlatform.isx86_64
@@ -74,6 +75,7 @@
 , CoreMedia
 , MediaToolbox
 , bzip2
+, callPackage
 }:
 
 let
@@ -91,6 +93,13 @@ let
     repo = "opencv_contrib";
     rev = version;
     sha256 = "sha256-meya0J3RdOIeMM46e/6IOVwrKn3t/c0rhwP2WQaybkE=";
+  };
+
+  testDataSrc = fetchFromGitHub {
+    owner = "opencv";
+    repo = "opencv_extra";
+    rev = version;
+    sha256 = "sha256-6hAdJdaUgtRGQanQKuY/q6fcXWXFZ3K/oLbGxvksry0=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -171,10 +180,10 @@ let
   ade = rec {
     src = fetchurl {
       url = "https://github.com/opencv/ade/archive/${name}";
-      sha256 = "04n9na2bph706bdxnnqfcbga4cyj8kd9s9ni7qyvnpj5v98jwvlm";
+      sha256 = "sha256-TjLRbFbC7MDY9PxIy560ryviBI58cbQwqgc7A7uOHkg=";
     };
-    name = "v0.1.1f.zip";
-    md5 = "b624b995ec9c439cbc2e9e6ee940d3a2";
+    name = "v0.1.2a.zip";
+    md5 = "fa4b3e25167319cb0fa9432ef8281945";
     dst = ".cache/ade";
   };
 
@@ -208,12 +217,23 @@ let
 
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
+  runAccuracyTests = true;
+  runPerformanceTests = false;
   printEnabled = enabled: if enabled then "ON" else "OFF";
+  withOpenblas = (enableBlas && blas.provider.pname == "openblas");
+  #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
+  #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+  openblas_ = blas.provider.override { singleThreaded = true; };
 in
 
 stdenv.mkDerivation {
   pname = "opencv";
   inherit version src;
+
+  outputs = [
+    "out"
+    "package_tests"
+  ];
 
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
@@ -263,12 +283,12 @@ stdenv.mkDerivation {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
       [ VideoDecodeAcceleration bzip2 ]
-    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
     ++ lib.optional enableOvis ogre
     ++ lib.optional enableGPhoto2 libgphoto2
     ++ lib.optional enableDC1394 libdc1394
     ++ lib.optional enableEigen eigen
-    ++ lib.optional enableOpenblas openblas
+    ++ lib.optional enableBlas blas.provider
     # There is seemingly no compile-time flag for Tesseract.  It's
     # simply enabled automatically if contrib is built, and it detects
     # tesseract & leptonica.
@@ -290,7 +310,8 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
-  OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
+  OpenBLAS_HOME = lib.optionalString withOpenblas openblas_.dev;
+  OpenBLAS = lib.optionalString withOpenblas openblas_;
 
   cmakeFlags = [
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
@@ -299,8 +320,9 @@ stdenv.mkDerivation {
     "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
-    "-DBUILD_TESTS=OFF"
-    "-DBUILD_PERF_TESTS=OFF"
+    "-DBUILD_TESTS=${printEnabled runAccuracyTests}"
+    "-DBUILD_PERF_TESTS=${printEnabled runPerformanceTests}"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DBUILD_DOCS=${printEnabled enableDocs}"
     # "OpenCV disables pkg-config to avoid using of host libraries. Consider using PKG_CONFIG_LIBDIR to specify target SYSROOT"
     # but we have proper separation of build and host libs :), fixes cross
@@ -333,6 +355,14 @@ stdenv.mkDerivation {
   postBuild = lib.optionalString enableDocs ''
     make doxygen
   '';
+
+  preInstall =
+    lib.optionalString (runAccuracyTests || runPerformanceTests) ''
+    mkdir $package_tests
+    cp -R $src/samples $package_tests/
+    ''
+    + lib.optionalString runAccuracyTests "mv ./bin/*test* $package_tests/ \n"
+    + lib.optionalString runPerformanceTests "mv ./bin/*perf* $package_tests/";
 
   # By default $out/lib/pkgconfig/opencv4.pc looks something like this:
   #
@@ -368,16 +398,23 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = {
-      inherit qimgv;
       inherit (gst_all_1) gst-plugins-bad;
-    } // lib.optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; };
+    }
+    // lib.optionalAttrs (!stdenv.isDarwin) { inherit qimgv; }
+    // lib.optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
+    // lib.optionalAttrs (stdenv.buildPlatform != "x86_64-darwin") {
+      opencv4-tests = callPackage ./tests.nix {
+        inherit enableGStreamer enableGtk2 enableGtk3 runAccuracyTests runPerformanceTests testDataSrc;
+        inherit opencv4;
+        };
+      };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with maintainers; [ mdaiter basvandijk ];
+    maintainers = with maintainers; [ basvandijk ];
     platforms = with platforms; linux ++ darwin;
   };
 }
