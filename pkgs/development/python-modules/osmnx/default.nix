@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.2.2";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "gboeing";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+dUv1QrUmCIOCyUyjYX1kJtZrPuSp3t9xz/sRV7ppgA=";
+    hash = "sha256-17duWrg48Qb4ojYYFX4HBpPLeVgHn1WV84KVATvBnzY=";
   };
 
   propagatedBuildInputs = [
