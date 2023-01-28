@@ -216,6 +216,7 @@ in stdenv.mkDerivation rec {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
+    changelog = "https://github.com/mpv-player/mpv/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.unix;
