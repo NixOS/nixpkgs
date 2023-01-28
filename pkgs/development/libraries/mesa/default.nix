@@ -37,7 +37,6 @@
   if stdenv.isLinux then
     [
       "amd" # AMD (aka RADV)
-      "intel" # Intel (aka ANV)
       "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
       "swrast" # software renderer (aka Lavapipe)
       "virtio-experimental" # QEMU virtualized GPU (aka VirGL)
@@ -49,6 +48,7 @@
       "panfrost" # ARM Mali Midgard and up (T/G series)
     ]
     ++ lib.optionals stdenv.isx86_64 [
+      "intel" # Intel (aka ANV), could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
       "intel_hasvk" # Intel Haswell/Broadwell, experimental, x86_64 only
     ]
   else [ "auto" ]
