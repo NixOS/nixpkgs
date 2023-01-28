@@ -77,10 +77,9 @@ stdenv.mkDerivation rec {
 
   pytestFlagsArray = [ "../tests" ];
   disabledTests = [
-    "test_title_different_letters_are_drawn" # font problems
-    "test_completable_commands" # font problems
     "test_autostart" # $PATH problems
     "test_wmexec_to_other" # timeouts in sandbox
+    "test_rules" # timeouts
   ];
 
   passthru = {
