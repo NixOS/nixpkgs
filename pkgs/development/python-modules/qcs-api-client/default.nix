@@ -10,6 +10,7 @@
 , pyjwt
 , pytest-asyncio
 , pytestCheckHook
+, pythonRelaxDepsHook
 , python-dateutil
 , pythonOlder
 , respx
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.21.2";
+  version = "0.21.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,11 +30,17 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gQow1bNRPhUm4zRu2T5FpcgOTcS2F1TQIz8WP1K0Xww=";
+    hash = "sha256-GEsCyqawLX6fTICjAOOREsO5FsmV6U/5+sDOW1v+VKE=";
   };
+
+  pythonRelaxDeps = [
+    "attrs"
+    "httpx"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -61,24 +68,6 @@ buildPythonPackage rec {
       url = "https://github.com/rigetti/qcs-api-client-python/commit/32f0b3c7070a65f4edf5b2552648d88435469e44.patch";
       hash = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
     })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'attrs = "^20.1.0"' 'attrs = "*"' \
-      --replace 'httpx = "^0.15.0"' 'httpx = "*"' \
-      --replace 'iso8601 = "^0.1.13"' 'iso8601 = "*"' \
-      --replace 'pydantic = "^1.7.2"' 'pydantic = "*"' \
-      --replace 'pyjwt = "^1.7.1"' 'pyjwt = "*"'
-  '';
-
-  disabledTestPaths = [
-    # Test is outdated
-    "tests/test_client/test_additional_properties.py"
-    "tests/test_client/test_auth.py"
-    "tests/test_client/test_client.py"
-    "tests/test_client/test_datetime.py"
-    "tests/test_imports.py"
   ];
 
   pythonImportsCheck = [
