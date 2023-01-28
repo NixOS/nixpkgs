@@ -578,9 +578,9 @@ rec {
 
   fillDiskWithDebs =
     { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
-    runInLinuxVM (stdenv.mkDerivation {
+    runInLinuxVM (stdenv.mkDerivation ({
       inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
@@ -649,7 +649,6 @@ rec {
 
         echo "running post-install script..."
         eval "$postInstall"
-        ln -sf dash /mnt/bin/sh
 
         rm /mnt/.debug
 
@@ -660,7 +659,7 @@ rec {
       '';
 
       passthru = { inherit fullName; };
-    });
+    } // args));
 
 
   /* Generate a Nix expression containing fetchurl calls for the
@@ -746,7 +745,7 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
     , extraDebs ? [], createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
     let
       expr = debClosureGenerator {
@@ -754,10 +753,10 @@ rec {
         packages = packages ++ extraPackages;
       };
     in
-      (fillDiskWithDebs {
+      (fillDiskWithDebs ({
         inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;} ++ extraDebs;
-      }) // {inherit expr;};
+      } // args)) // {inherit expr;};
 
 
   /* The set of supported RPM-based distributions. */
