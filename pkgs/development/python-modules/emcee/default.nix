@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.3";
+  version = "3.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dfm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HAuwWFNL63BlvHomQx+hWw4et7kRYd3zhH2FAj632Lg=";
+    hash = "sha256-K2cPSbR7jnl9Vzf2sEiPZqk2vTwgChNWAf6CAerhZCg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
