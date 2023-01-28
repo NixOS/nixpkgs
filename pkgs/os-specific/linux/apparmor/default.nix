@@ -214,7 +214,7 @@ let
   };
 
   apparmor-parser = stdenv.mkDerivation {
-    name = "apparmor-parser";
+    pname = "apparmor-parser";
     version = apparmor-version;
 
     src = apparmor-sources;
