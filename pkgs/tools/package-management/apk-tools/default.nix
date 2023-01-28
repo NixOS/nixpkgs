@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "apk-tools";
-  version = "2.12.10";
+  version = "2.12.11";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "apk-tools";
     rev = "v${version}";
-    sha256 = "sha256-VKgnnrEG1cx4cx6StWh+XaCe5meSU9LqZRH1ElMQkfk=";
+    sha256 = "sha256-vhEjzCuMvMZmzkCQK25JG3tT33KnX2fJbqdaTaeuhgo=";
   };
 
   nativeBuildInputs = [ pkg-config scdoc ]

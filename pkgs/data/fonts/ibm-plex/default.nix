@@ -1,15 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "ibm-plex";
   version = "6.0.1";
 
-in (fetchzip {
-  name = "ibm-plex-${version}";
+  src = fetchzip {
+    url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
+    hash = "sha256-n13NuKrZUc0JGvDf2PLZkxogefDkEHaOZk4JN42/C74=";
+  };
 
-  url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
+  installPhase = ''
+    runHook preInstall
 
-  sha256 = "sha256-HxO0L5Q6WJQBqtg64cczzuRcSYi4jEqbOzEWxDmqFp8=";
+    install -Dm644 */*.otf IBM-Plex-Sans-JP/unhinted/* -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "IBM Plex Typeface";
@@ -19,9 +25,4 @@ in (fetchzip {
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile "OpenType/*/*.otf" -x "OpenType/IBM-Plex-Sans-JP/unhinted/*" -d $out/share/fonts/opentype
-  '';
-})
+}
