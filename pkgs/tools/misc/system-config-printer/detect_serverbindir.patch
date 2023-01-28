@@ -1,0 +1,17 @@
+diff --git a/cupshelpers/config.py.in b/cupshelpers/config.py.in
+index 55abbfc..1244327 100644
+--- a/cupshelpers/config.py.in
++++ b/cupshelpers/config.py.in
+@@ -22,3 +22,12 @@
+ prefix="@prefix@"
+ sysconfdir="@sysconfdir@"
+ cupsserverbindir="@cupsserverbindir@"
++
++try:
++    with open("/etc/cups/cups-files.conf") as config:
++        for cfgline in config:
++            args = cfgline.split(" ")
++            if len(args) == 2 and args[0] == "ServerBin":
++                cupsserverbindir = args[1].strip()
++except OSError:
++    pass

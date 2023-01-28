@@ -1,0 +1,14 @@
+--- a/unix/Makefile
++++ b/unix/Makefile
+@@ -42,9 +42,9 @@
+ # such as -DDOSWILD).
+ 
+ # UnZip flags
+-CC = cc#	try using "gcc" target rather than changing this (CC and LD
++CC ?= cc#	try using "gcc" target rather than changing this (CC and LD
+ LD = $(CC)#	must match, else "unresolved symbol:  ___main" is possible)
+-AS = as
++AS ?= as
+ LOC = $(D_USE_BZ2) $(LOCAL_UNZIP)
+ AF = $(LOC)
+ CFLAGS = -O

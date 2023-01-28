@@ -1,0 +1,101 @@
+diff --git a/src/pagemanager/pagemanager.c b/src/pagemanager/pagemanager.c
+index 029e6d3..3c1f450 100644
+--- a/src/pagemanager/pagemanager.c
++++ b/src/pagemanager/pagemanager.c
+@@ -22,7 +22,7 @@
+ #include "epcgdef.h"
+ #include "debuglog.h"
+ #include "memory.h"
+-#include "raster.h"
++#include "raster-helper.h"
+ #include "pagemanager.h"
+
+ extern int JobCanceled;
+@@ -45,7 +45,7 @@ fetchRaster(EpsPageManager *pageManager)
+ 	int error = 0;
+ 	int did_fetch = 0;
+ 	int read_bytes = 0;
+-	int nraster;
++	size_t nraster;
+
+ 	while (error == 0 && did_fetch == 0 && JobCanceled == 0) {
+ 		eps_raster_fetch(privateData->raster_h, NULL, 0, 0, &status);
+@@ -212,7 +212,7 @@ int pageManagerGetPageRegion(EpsPageManager *pageManager, EpsPageRegion *pageReg
+ 	return EPS_OK;
+ }
+
+-int pageManagerGetRaster(EpsPageManager *pageManager, char *buf, int bufSize)
++size_t pageManagerGetRaster(EpsPageManager *pageManager, char *buf, int bufSize)
+ {
+ 	PageManagerPrivateData  *privateData = NULL;
+ 	int error = EPS_OK;
+diff --git a/src/pagemanager/pagemanager.h b/src/pagemanager/pagemanager.h
+index 87fbbd5..c9743fb 100644
+--- a/src/pagemanager/pagemanager.h
++++ b/src/pagemanager/pagemanager.h
+@@ -31,7 +31,7 @@ extern "C"
+ #define	EPS_ERROR	-1
+ #define	EPS_OK		0
+
+-typedef int (*EpsRasterSource)(char *buf, int bufSize);
++typedef size_t (*EpsRasterSource)(char *buf, int bufSize);
+
+ typedef struct {
+ 	EpsRasterSource		rasterSource;
+@@ -47,7 +47,7 @@ typedef struct {
+ EpsPageManager* pageManagerCreate(EpsPageRegion pageRegion, EpsFilterPrintOption filterPrintOption, EpsRasterSource rasterSource);
+ void pageManagerDestroy(EpsPageManager *pageManager);
+ int pageManagerGetPageRegion(EpsPageManager *pageManager, EpsPageRegion *pageRegion);
+-int pageManagerGetRaster(EpsPageManager *pageManager, char *buf, int bufSize);
++size_t pageManagerGetRaster(EpsPageManager *pageManager, char *buf, int bufSize);
+ int pageManagerIsNextPage(EpsPageManager *pageManager);
+
+ #ifdef __cplusplus
+diff --git a/src/raster/raster.c b/src/raster/raster.c
+index 7e4946b..dd5aef6 100644
+--- a/src/raster/raster.c
++++ b/src/raster/raster.c
+@@ -218,7 +218,7 @@ eps_raster_init (RASTER * handle, EpsRasterOpt * data, EpsRasterPipeline * pipel
+
+ /* if raster_p equals NULL means that it is need to flush a page. */
+ int
+-eps_raster_print (RASTER handle, char * raster_p, int raster_bytes, int pixel_num, int * outraster)
++eps_raster_print (RASTER handle, char * raster_p, int raster_bytes, int pixel_num, size_t * outraster)
+ {
+ 	EpsRaster * raster = (EpsRaster *) handle;
+ 	EpsRasterPipeline * pipeline = NULL;
+diff --git a/src/raster/raster.h b/src/raster/raster.h
+index 9be0977..cc5054d 100644
+--- a/src/raster/raster.h
++++ b/src/raster/raster.h
+@@ -143,7 +143,7 @@ typedef enum {
+ } EpsRasterFetchStatus;
+
+ int eps_raster_init (RASTER *, EpsRasterOpt *, EpsRasterPipeline *);
+-int eps_raster_print (RASTER, char *, int, int, int *);
++int eps_raster_print (RASTER, char *, int, int, size_t *);
+ int eps_raster_fetch (RASTER, char *, int, int, EpsRasterFetchStatus *);
+ int eps_raster_free (RASTER);
+
+diff --git a/src/raster_to_epson.c b/src/raster_to_epson.c
+index 6e621c8..a0811d6 100644
+--- a/src/raster_to_epson.c
++++ b/src/raster_to_epson.c
+@@ -33,7 +33,7 @@
+ #include <cups/ppd.h>
+ #include <cups/raster.h>
+
+-#include "raster.h"
++#include "raster-helper.h"
+ #include "memory.h"
+ #include "raster_to_epson.h"
+ #include "pagemanager.h"
+@@ -75,7 +75,7 @@ static int page_no = 0;
+ static int pageHeight = 0;
+ #endif
+
+-int rasterSource(char *buf, int bufSize)
++size_t rasterSource(char *buf, int bufSize)
+ {
+ 	int readBytes = 0;
+ 	if (JobCanceled == 0) {

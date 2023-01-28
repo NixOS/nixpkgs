@@ -1,0 +1,21 @@
+diff -ur OpenCSG-1.4.2-pristine/example/example.pro OpenCSG-1.4.2/example/example.pro
+--- OpenCSG-1.4.2-pristine/example/example.pro	2016-09-27 06:11:16.000000000 +0900
++++ OpenCSG-1.4.2/example/example.pro	2019-05-07 10:45:18.785251737 +0900
+@@ -6,7 +6,9 @@
+ INCLUDEPATH += ../include
+ LIBS += -L../lib -lopencsg -lGLEW
+ 
+-INSTALLDIR = /usr/local
++isEmpty(INSTALLDIR) {
++  INSTALLDIR = /usr/local
++}
+ INSTALLS += target
+ target.path = $$INSTALLDIR/bin
+ 
+diff -ur OpenCSG-1.4.2-pristine/opencsg.pro OpenCSG-1.4.2/opencsg.pro
+--- OpenCSG-1.4.2-pristine/opencsg.pro	2016-09-27 06:11:16.000000000 +0900
++++ OpenCSG-1.4.2/opencsg.pro	2019-05-07 10:44:50.578698165 +0900
+@@ -1,2 +1,3 @@
+ TEMPLATE = subdirs
+ SUBDIRS  = src example
++CONFIG   += ordered

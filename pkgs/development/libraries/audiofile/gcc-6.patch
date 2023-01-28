@@ -1,0 +1,30 @@
+http://patchwork.ozlabs.org/patch/630200/
+
+From 28cfdbbcb96a69087c3d21faf69b5eae7bcf6d69 Mon Sep 17 00:00:00 2001
+From: Hodorgasm <nsane457@gmail.com>
+Date: Wed, 11 May 2016 21:42:07 -0400
+Subject: [PATCH] Cast to unsigned while left bit-shifting
+
+GCC-6 now treats the left bitwise-shift of a negative integer as nonconformant so explicitly cast to an unsigned int while bit-shifting.
+
+Downloaded from upstream PR:
+https://github.com/mpruett/audiofile/pull/28
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ libaudiofile/modules/SimpleModule.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libaudiofile/modules/SimpleModule.h b/libaudiofile/modules/SimpleModule.h
+index 03c6c69..4014fb2 100644
+--- a/libaudiofile/modules/SimpleModule.h
++++ b/libaudiofile/modules/SimpleModule.h
+@@ -123,7 +123,7 @@ struct signConverter
+ 	typedef typename IntTypes<Format>::UnsignedType UnsignedType;
+ 
+ 	static const int kScaleBits = (Format + 1) * CHAR_BIT - 1;
+-	static const int kMinSignedValue = -1 << kScaleBits;
++	static const int kMinSignedValue = static_cast<signed>(static_cast<unsigned>(-1) << kScaleBits);;
+ 
+ 	struct signedToUnsigned : public std::unary_function<SignedType, UnsignedType>
+ 	{

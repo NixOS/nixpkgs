@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message SimpleMessage {
+  int32 lucky_number = 1;
+}

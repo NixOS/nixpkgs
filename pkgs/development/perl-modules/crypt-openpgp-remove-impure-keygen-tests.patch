@@ -1,0 +1,30 @@
+diff --git a/t/13-keygen.t b/t/13-keygen.t
+index f430ffb..2050624 100644
+--- a/t/13-keygen.t
++++ b/t/13-keygen.t
+@@ -1,5 +1,5 @@
+ use strict;
+-use Test::More tests => 29;
++use Test::More tests => 25;
+ 
+ use Crypt::OpenPGP;
+ use Crypt::OpenPGP::Message;
+@@ -26,9 +26,6 @@ for my $type ( qw( RSA DSA ) ) {
+     isa_ok $pub->key, 'Crypt::OpenPGP::Certificate';
+     isa_ok $sec->key, 'Crypt::OpenPGP::Certificate';
+ 
+-    is $pub->key->key_id, $sec->key->key_id,
+-        'public key_id matches secret key_id';
+-
+     is $pub->primary_uid, $id, 'primary_uid matches';
+ 
+     is $pub->key->key->size, $bits, 'keysize (in bits) matches for pubkey';
+@@ -47,8 +44,6 @@ for my $type ( qw( RSA DSA ) ) {
+     isa_ok $pieces[1], 'Crypt::OpenPGP::UserID';
+     isa_ok $pieces[2], 'Crypt::OpenPGP::Signature';
+ 
+-    is $pieces[0]->key_id, $sec->key->key_id,
+-        'serialized public key_id matches secret key_id';
+ }
+ 
+ {

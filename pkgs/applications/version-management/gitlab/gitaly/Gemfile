@@ -1,0 +1,43 @@
+source 'https://rubygems.org'
+
+gem 'rugged', '~> 1.2'
+gem 'gitlab-markup', '~> 1.7.1'
+gem 'activesupport', '~> 6.1.6.1'
+gem 'grpc', '~> 1.42.0' # keep in lock-step with grpc-tools
+gem 'sentry-raven', '~> 3.0', require: false
+gem 'rbtrace', require: false
+
+# The Gitaly Gem contains the Protobuf and gRPC definitions required by the
+# Ruby sidecar.
+gem 'gitaly', '~> 15.5.0'
+
+# Labkit provides observability functionality
+gem 'gitlab-labkit', '~> 0.29'
+
+# Detects the open source license the repository includes
+# This version needs to be in sync with GitLab CE/EE
+gem 'licensee', '~> 9.15'
+
+gem 'google-protobuf', '~> 3.21.12'
+
+# Rails is currently blocked on the upgrade to the new major version for Redis,
+# so we don't upgrade either until the issue is resolved. This is an indirect
+# dependency and can thus be removed when the version constraint is gone.
+gem 'redis', '~> 4.8.0'
+
+group :development, :test do
+  gem 'rubocop', '~> 0.69', require: false
+  gem 'rspec', require: false
+  gem 'rspec-parameterized', require: false
+  gem 'timecop', require: false
+  gem 'factory_bot', require: false
+  gem 'pry', '~> 0.12.2', require: false
+end
+
+# Gems required in omnibus-gitlab pipeline
+group :development, :test, :omnibus do
+  # Using a fork until https://github.com/pivotal/LicenseFinder/pull/816 is
+  # resolved. For details, check discussion in
+  # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/74881
+  gem 'gitlab-license_finder', require: false
+end

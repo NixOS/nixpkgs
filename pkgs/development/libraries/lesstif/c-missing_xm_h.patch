@@ -1,0 +1,11 @@
+--- lesstif2-0.94.4.orig/include/Motif-2.1/Xm/XmStrDefs.h
++++ lesstif2-0.94.4/include/Motif-2.1/Xm/XmStrDefs.h
+@@ -28,6 +28,8 @@
+ 
+ #include <X11/StringDefs.h>
+ 
++#include <Xm/Xm.h>
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif

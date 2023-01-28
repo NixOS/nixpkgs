@@ -1,0 +1,75 @@
+diff -rc -x '*~' checkinstall-1.6.2-orig/installwatch/installwatch.c checkinstall-1.6.2/installwatch/installwatch.c
+*** checkinstall-1.6.2-orig/installwatch/installwatch.c	2008-11-16 17:20:53.000000000 +0100
+--- checkinstall-1.6.2/installwatch/installwatch.c	2010-02-08 16:35:17.000000000 +0100
+***************
+*** 100,106 ****
+  static int (*true_lxstat)(int,const char *,struct stat *);
+  static int (*true_scandir)(	const char *,struct dirent ***,
+  				int (*)(const struct dirent *),
+! 				int (*)(const void *,const void *));
+  static int (*true_symlink)(const char *, const char *);
+  static int (*true_truncate)(const char *, TRUNCATE_T);
+  static int (*true_unlink)(const char *);
+--- 100,106 ----
+  static int (*true_lxstat)(int,const char *,struct stat *);
+  static int (*true_scandir)(	const char *,struct dirent ***,
+  				int (*)(const struct dirent *),
+! 				int (*)(const struct dirent **,const struct dirent **));
+  static int (*true_symlink)(const char *, const char *);
+  static int (*true_truncate)(const char *, TRUNCATE_T);
+  static int (*true_unlink)(const char *);
+***************
+*** 120,126 ****
+  static struct dirent64 *(*true_readdir64)(DIR *dir);
+  static int (*true_scandir64)(	const char *,struct dirent64 ***,
+  				int (*)(const struct dirent64 *),
+! 				int (*)(const void *,const void *));
+  static int (*true_xstat64)(int,const char *, struct stat64 *);
+  static int (*true_lxstat64)(int,const char *, struct stat64 *);
+  static int (*true_truncate64)(const char *, __off64_t);
+--- 120,126 ----
+  static struct dirent64 *(*true_readdir64)(DIR *dir);
+  static int (*true_scandir64)(	const char *,struct dirent64 ***,
+  				int (*)(const struct dirent64 *),
+! 				int (*)(const struct dirent64 **,const struct dirent64 **));
+  static int (*true_xstat64)(int,const char *, struct stat64 *);
+  static int (*true_lxstat64)(int,const char *, struct stat64 *);
+  static int (*true_truncate64)(const char *, __off64_t);
+***************
+*** 3077,3085 ****
+  	return result;
+  }
+  
+! int scandir(	const char *dir,struct dirent ***namelist,
+  		int (*select)(const struct dirent *),
+! 		int (*compar)(const void *,const void *)	) {
+  	int result;
+  
+  	if (!libc_handle)
+--- 3077,3085 ----
+  	return result;
+  }
+  
+! int scandir(	const char * dir,struct dirent ***namelist,
+  		int (*select)(const struct dirent *),
+! 		int (*compar)(const struct dirent **,const struct dirent **)	) {
+  	int result;
+  
+  	if (!libc_handle)
+***************
+*** 3691,3697 ****
+  
+  int scandir64(	const char *dir,struct dirent64 ***namelist,
+  		int (*select)(const struct dirent64 *),
+! 		int (*compar)(const void *,const void *)	) {
+  	int result;
+  
+  	if (!libc_handle)
+--- 3691,3697 ----
+  
+  int scandir64(	const char *dir,struct dirent64 ***namelist,
+  		int (*select)(const struct dirent64 *),
+! 		int (*compar)(const struct dirent64 **,const struct dirent64 **)	) {
+  	int result;
+  
+  	if (!libc_handle)

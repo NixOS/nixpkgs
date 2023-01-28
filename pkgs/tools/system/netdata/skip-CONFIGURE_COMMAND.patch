@@ -1,0 +1,16 @@
+Shrink closure size by avoiding paths embedded from configure call.
+
+https://github.com/NixOS/nixpkgs/issues/175693
+--- a/daemon/buildinfo.c
++++ b/daemon/buildinfo.c
+@@ -248,7 +248,9 @@ void print_build_info(void) {
+     char *prebuilt_distro = NULL;
+     get_install_type(&install_type, &prebuilt_arch, &prebuilt_distro);
+ 
+-    printf("Configure options: %s\n", CONFIGURE_COMMAND);
++    // To minimize closure size do not persist configure options
++    // with build-time inputs.
++    printf("Configure options: REMOVED\n");
+ 
+     if (install_type == NULL) {
+         printf("Install type: unknown\n");

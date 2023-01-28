@@ -1,0 +1,34 @@
+From 166de50914191303b232ec123cfbaadad521560c Mon Sep 17 00:00:00 2001
+From: Alexander Myltsev <avm@altlinux.ru>
+Date: Wed, 21 Apr 2010 22:43:14 +0400
+Subject: [PATCH] GTK_WIDGET_SENSITIVE -> gtk_widget_get_sensitive
+
+---
+ gdmap/src/gui_support.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/gui_support.c b/src/gui_support.c
+index 3027e29..45272d3 100644
+--- a/src/gui_support.c
++++ b/src/gui_support.c
+@@ -85,7 +85,7 @@ on_ebox_enter(GtkWidget* box, GdkEventCrossing* event, GtkLabel* label) {
+   const char* text;
+ 
+   (void)event;
+-  if (GTK_WIDGET_SENSITIVE(label)) {
++  if (gtk_widget_get_sensitive(GTK_WIDGET(label))) {
+     char* temp;
+ 
+     text = g_object_get_data(G_OBJECT(label), "label");
+@@ -129,7 +129,7 @@ static void on_clear_label(GtkWidget* widget) {
+ void ui_event_label_set_sensitive(GtkWidget* ebox, gboolean set) {
+   gpointer callback = g_object_get_data(G_OBJECT(ebox), "callback");
+   GtkWidget* child = GTK_BIN(ebox)->child;
+-  if (GTK_WIDGET_SENSITIVE(child) == set) return;
++  if (gtk_widget_get_sensitive(child) == set) return;
+ 
+   if (set && !callback) return;
+   gtk_widget_set_sensitive(child, set);
+-- 
+1.7.3.3
+

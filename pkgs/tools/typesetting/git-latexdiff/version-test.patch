@@ -1,0 +1,17 @@
+Fix for https://gitlab.com/git-latexdiff/git-latexdiff/issues/7
+---
+--- src/git-latexdiff	2016-01-26 14:04:54.338568955 +0100
++++ src/git-latexdiff	2016-01-26 14:40:23.700381943 +0100
+@@ -44,11 +44,7 @@
+ git_latexdiff_version='@GIT_LATEXDIFF_VERSION@'
+
+ git_latexdiff_compute_version () {
+-    if [ "$git_latexdiff_version" = '@GIT_LATEXDIFF''_VERSION@' ]; then
+-	(cd "$(dirname "$0")" && git describe --tags HEAD 2>/dev/null || echo 'Unknown version')
+-    else
+-	echo "$git_latexdiff_version"
+-    fi
++    echo "$git_latexdiff_version"
+ }
+
+ usage () {

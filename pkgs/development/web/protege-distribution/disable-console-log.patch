@@ -1,0 +1,28 @@
+--- a/conf/logback.xml	2021-06-25 00:49:10.446416341 +0900
++++ b/conf/logback.xml	2021-06-25 00:50:32.889120465 +0900
+@@ -1,13 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <configuration scan="true" scanPeriod="10 seconds">
+ 
+-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+-            <Pattern>%highlight(%msg) %n</Pattern>
+-        </encoder>
+-    </appender>
+-
+-
+     <appender name="files" class="ch.qos.logback.core.FileAppender">
+         <file>${user.home}/.Protege/logs/protege.log</file>
+         <append>true</append>
+@@ -18,9 +11,8 @@
+ 
+ 
+     <root level="info">
+-        <appender-ref ref="stdout" />
+         <appender-ref ref="files"/>
+     </root>
+ 
+ 
+-</configuration>
+\ No newline at end of file
++</configuration>

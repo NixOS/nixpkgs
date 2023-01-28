@@ -1,0 +1,47 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 2ddfdd0..3fcca5f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1985,20 +1985,6 @@ version = "0.3.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ce23b50ad8242c51a442f3ff322d56b02f08852c77e4c0b4d3fd684abc89c683"
+ 
+-[[package]]
+-name = "indexed_db_futures"
+-version = "0.2.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d26ac735f676c52305becf53264b91cea9866a8de61ccbf464405b377b9cbca9"
+-dependencies = [
+- "cfg-if",
+- "js-sys",
+- "uuid 0.8.2",
+- "wasm-bindgen",
+- "wasm-bindgen-futures",
+- "web-sys",
+-]
+-
+ [[package]]
+ name = "indexed_db_futures"
+ version = "0.2.3"
+@@ -2558,8 +2544,7 @@ dependencies = [
+  "derive_builder",
+  "futures-util",
+  "getrandom 0.2.7",
+- "indexed_db_futures 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+- "indexed_db_futures 0.2.3 (git+https://github.com/Hywan/rust-indexed-db?branch=feat-factory-nodejs)",
++ "indexed_db_futures",
+  "js-sys",
+  "matrix-sdk-base",
+  "matrix-sdk-common",
+diff --git a/crates/matrix-sdk-indexeddb/Cargo.toml b/crates/matrix-sdk-indexeddb/Cargo.toml
+index 7f23dfc..c57e29a 100644
+--- a/crates/matrix-sdk-indexeddb/Cargo.toml
++++ b/crates/matrix-sdk-indexeddb/Cargo.toml
+@@ -30,7 +30,6 @@ js-sys = { version = "0.3.58" }
+ matrix-sdk-base = { version = "0.6.0", path = "../matrix-sdk-base", features = ["js"] }
+ matrix-sdk-crypto = { version = "0.6.0", path = "../matrix-sdk-crypto", features = ["js"], optional = true }
+ matrix-sdk-store-encryption = { version = "0.2.0", path = "../matrix-sdk-store-encryption" }
+-indexed_db_futures = "0.2.3"
+ indexed_db_futures_nodejs = { package = "indexed_db_futures", git = "https://github.com/Hywan/rust-indexed-db", branch = "feat-factory-nodejs", optional = true }
+ ruma = "0.7.0"
+ serde = "1.0.136"

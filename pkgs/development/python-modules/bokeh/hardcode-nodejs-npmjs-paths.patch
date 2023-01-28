@@ -1,0 +1,15 @@
+diff --git a/src/bokeh/util/compiler.py b/src/bokeh/util/compiler.py
+index 9af8691..4b93543 100644
+--- a/src/bokeh/util/compiler.py
++++ b/src/bokeh/util/compiler.py
+@@ -415,8 +415,8 @@ def _detect_nodejs() -> str:
+     raise RuntimeError(f'node.js v{version_repr} or higher is needed to allow compilation of custom models ' +
+                        '("conda install nodejs" or follow https://nodejs.org/en/download/)')
+ 
+-_nodejs = None
+-_npmjs = None
++_nodejs = "@node_bin@"
++_npmjs = "@npm_bin@"
+ 
+ def _nodejs_path() -> str:
+     global _nodejs

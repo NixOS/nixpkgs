@@ -1,0 +1,131 @@
+diff --git a/src/client/opamInitDefaults.ml b/src/client/opamInitDefaults.ml
+index eca13a7c..1fd66f43 100644
+--- a/src/client/opamInitDefaults.ml
++++ b/src/client/opamInitDefaults.ml
+@@ -35,14 +35,18 @@ let eval_variables = [
+ let os_filter os =
+   FOp (FIdent ([], OpamVariable.of_string "os", None), `Eq, FString os)
+ 
++let os_distribution_filter distro =
++  FOp (FIdent ([], OpamVariable.of_string "os-distribution", None), `Eq, FString distro)
++
+ let linux_filter = os_filter "linux"
+ let macos_filter = os_filter "macos"
+ let openbsd_filter = os_filter "openbsd"
+ let freebsd_filter = os_filter "freebsd"
+ let not_open_free_bsd_filter =
+   FNot (FOr (openbsd_filter,  freebsd_filter))
+ let win32_filter = os_filter "win32"
+ let sandbox_filter = FOr (linux_filter, macos_filter)
++let nixos_filter = os_distribution_filter "nixos"
+ 
+ let gpatch_filter = FOr (openbsd_filter, freebsd_filter)
+ let patch_filter = FNot gpatch_filter
+@@ -50,6 +54,11 @@ let wrappers ~sandboxing () =
+     CString t, None;
+   ] in
+   let w = OpamFile.Wrappers.empty in
++  let w = { w with
++            OpamFile.Wrappers.
++            pre_build = [[CString "%{hooks}%/shebangs.sh", None], Some nixos_filter];
++          }
++  in
+   if sandboxing then
+     { w with
+       OpamFile.Wrappers.
+@@ -113,6 +122,7 @@ let required_tools ~sandboxing () =
+ let init_scripts () = [
+   ("sandbox.sh", OpamScript.bwrap), Some bwrap_filter;
+   ("sandbox.sh", OpamScript.sandbox_exec), Some macos_filter;
++  ("shebangs.sh", OpamScript.patch_shebangs), Some nixos_filter;
+ ]
+ 
+ module I = OpamFile.InitConfig
+diff --git a/src/state/opamScript.mli b/src/state/opamScript.mli
+index 03449970..83de0b53 100644
+--- a/src/state/opamScript.mli
++++ b/src/state/opamScript.mli
+@@ -20,3 +20,4 @@ val env_hook : string
+ val env_hook_zsh : string
+ val env_hook_csh : string
+ val env_hook_fish : string
++val patch_shebangs : string
+diff --git a/src/state/shellscripts/patch_shebangs.sh b/src/state/shellscripts/patch_shebangs.sh
+new file mode 100755
+index 00000000..3ea84e2d
+--- /dev/null
++++ b/src/state/shellscripts/patch_shebangs.sh
+@@ -0,0 +1,73 @@
++#!/usr/bin/env bash
++# This setup hook causes the fixup phase to rewrite all script
++# interpreter file names (`#!  /path') to paths found in $PATH.  E.g.,
++# /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
++# /usr/bin/env gets special treatment so that ".../bin/env python" is
++# rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
++# already in the store are left untouched.
++
++header() { echo "$1"; }
++stopNest() { true; }
++
++fixupOutputHooks+=('if [ -z "${dontPatchShebangs-}" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
++
++patchShebangs() {
++    local dir="$1"
++    header "patching script interpreter paths in $dir"
++    local f
++    local oldPath
++    local newPath
++    local arg0
++    local args
++    local oldInterpreterLine
++    local newInterpreterLine
++
++    find "$dir" -type f -perm -0100 | while read f; do
++        if [ "$(head -1 "$f" | head -c+2)" != '#!' ]; then
++            # missing shebang => not a script
++            continue
++        fi
++
++        oldInterpreterLine=$(head -1 "$f" | tail -c+3)
++        read -r oldPath arg0 args <<< "$oldInterpreterLine"
++
++        if $(echo "$oldPath" | grep -q "/bin/env$"); then
++            # Check for unsupported 'env' functionality:
++            # - options: something starting with a '-'
++            # - environment variables: foo=bar
++            if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
++                echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
++                exit 1
++            fi
++            newPath="$(command -v "$arg0" || true)"
++        else
++            if [ "$oldPath" = "" ]; then
++                # If no interpreter is specified linux will use /bin/sh. Set
++                # oldpath="/bin/sh" so that we get /nix/store/.../sh.
++                oldPath="/bin/sh"
++            fi
++            newPath="$(command -v "$(basename "$oldPath")" || true)"
++            args="$arg0 $args"
++        fi
++
++        # Strip trailing whitespace introduced when no arguments are present
++        newInterpreterLine="$(echo "$newPath $args" | sed 's/[[:space:]]*$//')"
++
++        if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
++            if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
++                echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
++                # escape the escape chars so that sed doesn't interpret them
++                escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
++                # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
++                touch -r "$f" "$f.timestamp"
++                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
++                touch -r "$f.timestamp" "$f"
++                rm "$f.timestamp"
++            fi
++        fi
++    done
++
++    stopNest
++}
++
++patchShebangs .

@@ -1,0 +1,68 @@
+Fix for a deadlock:
+https://bugzilla.gnome.org/show_bug.cgi?id=667230
+
+From cc14440eface093548cb3bc7814da11d9a99d283 Mon Sep 17 00:00:00 2001
+From: Anssi Hannula <anssi@mageia.org>
+Date: Wed, 4 Jan 2012 00:23:55 +0200
+Subject: [PATCH] fix possible server deadlock in ih_sub_cancel
+
+ih_sub_foreach() calls ih_sub_cancel() while inotify_lock is locked.
+However, ih_sub_cancel() locks it again, and locking GMutex recursively
+causes undefined behaviour.
+
+Fix that by removing locking from ih_sub_cancel() as ih_sub_foreach()
+is its only user. Also make the function static so that it won't
+accidentally get used by other files without locking (inotify-helper.h
+is an internal server header).
+
+This should fix the intermittent deadlocks I've been experiencing
+causing KDE applications to no longer start, and probably also
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=542361
+---
+ server/inotify-helper.c |    7 ++-----
+ server/inotify-helper.h |    1 -
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/server/inotify-helper.c b/server/inotify-helper.c
+index d77203e..0789fa4 100644
+--- a/server/inotify-helper.c
++++ b/server/inotify-helper.c
+@@ -123,13 +123,11 @@ ih_sub_add (ih_sub_t * sub)
+ 
+ /**
+  * Cancels a subscription which was being monitored.
++ * inotify_lock must be held when calling.
+  */
+-gboolean
++static gboolean
+ ih_sub_cancel (ih_sub_t * sub)
+ {
+-	G_LOCK(inotify_lock);
+-
+-
+ 	if (!sub->cancelled)
+ 	{
+ 		IH_W("cancelling %s\n", sub->pathname);
+@@ -140,7 +138,6 @@ ih_sub_cancel (ih_sub_t * sub)
+ 		sub_list = g_list_remove (sub_list, sub);
+ 	}
+ 
+-	G_UNLOCK(inotify_lock);
+ 	return TRUE;
+ }
+ 
+diff --git a/server/inotify-helper.h b/server/inotify-helper.h
+index 5d3b6d0..d36b5fd 100644
+--- a/server/inotify-helper.h
++++ b/server/inotify-helper.h
+@@ -34,7 +34,6 @@ gboolean	 ih_startup		(event_callback_t ecb,
+ 					 found_callback_t fcb);
+ gboolean	 ih_running		(void);
+ gboolean	 ih_sub_add		(ih_sub_t *sub);
+-gboolean	 ih_sub_cancel		(ih_sub_t *sub);
+ 
+ /* Return FALSE from 'f' if the subscription should be cancelled */
+ void		 ih_sub_foreach		(void *callerdata, gboolean (*f)(ih_sub_t *sub, void *callerdata));
+-- 
+1.7.7.2
+

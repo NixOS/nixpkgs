@@ -1,0 +1,19 @@
+--- a/src/cpp/desktop/DesktopOptions.cpp
++++ b/src/cpp/desktop/DesktopOptions.cpp
+@@ -499,15 +499,9 @@
+ {
+    if (resourcesPath_.isEmpty())
+    {
+-#ifdef RSTUDIO_PACKAGE_BUILD
+       // release configuration: the 'resources' folder is
+       // part of the supporting files folder
+-      resourcesPath_ = supportingFilePath().completePath("resources");
+-#else
+-      // developer configuration: the 'resources' folder is
+-      // a sibling of the RStudio executable
+-      resourcesPath_ = scriptsPath().completePath("resources");
+-#endif
++      resourcesPath_ = supportingFilePath().completePath("resources");
+    }
+
+    return resourcesPath_;

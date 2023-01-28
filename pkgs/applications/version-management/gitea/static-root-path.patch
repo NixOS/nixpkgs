@@ -1,0 +1,13 @@
+diff --git a/modules/setting/setting.go b/modules/setting/setting.go
+index 45e55a2..9d18ee4 100644
+--- a/modules/setting/setting.go
++++ b/modules/setting/setting.go
+@@ -667,7 +667,7 @@ func NewContext() {
+ 	OfflineMode = sec.Key("OFFLINE_MODE").MustBool()
+ 	DisableRouterLog = sec.Key("DISABLE_ROUTER_LOG").MustBool()
+ 	if len(StaticRootPath) == 0 {
+-		StaticRootPath = AppWorkPath
++		StaticRootPath = "@data@"
+ 	}
+ 	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString(StaticRootPath)
+ 	StaticCacheTime = sec.Key("STATIC_CACHE_TIME").MustDuration(6 * time.Hour)

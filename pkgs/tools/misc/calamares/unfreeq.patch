@@ -1,0 +1,109 @@
+diff --git a/src/modules/packagechooserq/packagechooserq.qrc b/src/modules/packagechooserq/packagechooserq.qrc
+index 1b892dce1..ee80a934b 100644
+--- a/src/modules/packagechooserq/packagechooserq.qrc
++++ b/src/modules/packagechooserq/packagechooserq.qrc
+@@ -4,5 +4,6 @@
+         <file>images/libreoffice.jpg</file>
+         <file>images/no-selection.png</file>
+         <file>images/plasma.png</file>
++        <file>packagechooserq@unfree.qml</file>
+     </qresource>
+ </RCC>
+diff --git a/src/modules/packagechooserq/packagechooserq@unfree.qml b/src/modules/packagechooserq/packagechooserq@unfree.qml
+new file mode 100644
+index 000000000..cb87d864a
+--- /dev/null
++++ b/src/modules/packagechooserq/packagechooserq@unfree.qml
+@@ -0,0 +1,75 @@
++/* === This file is part of Calamares - <https://calamares.io> ===
++ *
++ *   SPDX-FileCopyrightText: 2021 Anke Boersma <demm@kaosx.us>
++ *   SPDX-License-Identifier: GPL-3.0-or-later
++ *
++ *   Calamares is Free Software: see the License-Identifier above.
++ *
++ */
++
++import io.calamares.core 1.0
++import io.calamares.ui 1.0
++
++import QtQuick 2.15
++import QtQuick.Controls 2.15
++import QtQuick.Layouts 1.3
++
++Item {
++    
++    SystemPalette {
++        id: palette
++        colorGroup: SystemPalette.Active
++    }
++
++    width:  parent.width
++    height: parent.height
++
++    Rectangle {
++        anchors.fill: parent
++        color: palette.window
++
++        ButtonGroup {
++            id: switchGroup
++        }
++
++        Column {
++            id: column
++            anchors.centerIn: parent
++            spacing: 5
++
++            Rectangle {
++                width: 700
++                height: 200
++                color: palette.base
++                radius: 10
++                border.width: 0
++                Text {
++                    color: palette.text
++                    width: 600
++                    height: 150
++                    anchors.centerIn: parent
++                    text: qsTr("NixOS is fully open source, but it also provides software packages with unfree licenses. By default unfree packages are not allowed, but you can enable it here. If you check this box, software installed might have additional End User License Agreements (EULAs) attached. If not enabled, some hardware might not work fully when no suitable open source drivers are available.<br/>")
++                    font.pointSize: 12
++                    wrapMode: Text.WordWrap
++                }
++
++                CheckBox {
++                    id: element2
++                    anchors.horizontalCenter: parent.horizontalCenter
++                    y: 145
++                    text: qsTr("Allow unfree software")
++                    checked: false
++
++                    onCheckedChanged: {
++                        if ( checked ) {
++                            config.packageChoice = "unfree"
++                        } else {
++                            config.packageChoice = "free"
++                        }
++                    }
++                }
++            }
++        }
++    }
++
++}
+diff --git a/src/modules/packagechooserq/unfree.conf b/src/modules/packagechooserq/unfree.conf
+new file mode 100644
+index 000000000..da79a8eac
+--- /dev/null
++++ b/src/modules/packagechooserq/unfree.conf
+@@ -0,0 +1,11 @@
++# SPDX-FileCopyrightText: no
++# SPDX-License-Identifier: CC0-1.0
++#
++---
++qmlLabel:
++    label: "Unfree Software"
++method: legacy
++mode: required
++labels:
++    step: "Unfree Software"
++packageChoice: free
