@@ -3803,7 +3803,9 @@ with pkgs;
 
   bukubrow = callPackage ../tools/networking/bukubrow { };
 
-  burpsuite = callPackage ../tools/networking/burpsuite {};
+  burpsuite = callPackage ../tools/networking/burpsuite/community.nix {};
+
+  burpsuite-pro = callPackage ../tools/networking/burpsuite/professional.nix {};
 
   bs-platform = callPackage ../development/compilers/bs-platform {};
 
