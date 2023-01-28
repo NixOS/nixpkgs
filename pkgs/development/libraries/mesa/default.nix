@@ -6,9 +6,52 @@
 , libelf, libvdpau
 , libglvnd, libunwind
 , vulkan-loader, glslang
-, galliumDrivers ? ["auto"]
-# upstream Mesa defaults to only enabling swrast (aka lavapipe) on aarch64 for some reason, so force building the others
-, vulkanDrivers ? if (stdenv.isLinux && stdenv.isAarch64) then [ "swrast" "broadcom" "freedreno" "panfrost" ] else [ "auto" ]
+, galliumDrivers ?
+  if stdenv.isLinux then
+    [
+      "d3d12" # WSL emulated GPU (aka Dozen)
+      "iris" # new Intel
+      "kmsro" # helper driver for display-only devices
+      "nouveau" # Nvidia
+      "radeonsi" # new AMD (GCN+)
+      "r300" # very old AMD
+      "r600" # less old AMD
+      "swrast" # software renderer (aka LLVMPipe)
+      "svga" # VMWare virtualized GPU
+      "virgl" # QEMU virtualized GPU (aka VirGL)
+      "zink" # generic OpenGL over Vulkan, experimental
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "lima" # ARM Mali 4xx
+      "panfrost" # ARM Mali Midgard and up (T/G series)
+      "tegra" # Nvidia Tegra SoCs
+      "v3d" # Broadcom VC5 (Raspberry Pi 4)
+      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    ] ++ lib.optionals stdenv.isx86_64 [
+      "crocus" # Intel legacy, x86_64 only
+    ]
+  else [ "auto" ]
+, vulkanDrivers ?
+  if stdenv.isLinux then
+    [
+      "amd" # AMD (aka RADV)
+      "intel" # Intel (aka ANV)
+      "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
+      "swrast" # software renderer (aka Lavapipe)
+      "virtio-experimental" # QEMU virtualized GPU (aka VirGL)
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "imagination-experimental" # PowerVR Rogue (currently N/A)
+      "panfrost" # ARM Mali Midgard and up (T/G series)
+    ]
+    ++ lib.optionals stdenv.isx86_64 [
+      "intel_hasvk" # Intel Haswell/Broadwell, experimental, x86_64 only
+    ]
+  else [ "auto" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
