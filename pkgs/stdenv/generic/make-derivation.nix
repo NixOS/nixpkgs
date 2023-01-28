@@ -505,7 +505,7 @@ else let
 in
 
 lib.extendDerivation
-  validity.handled
+  true #validity.handled
   ({
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
