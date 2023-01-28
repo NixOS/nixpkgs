@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kick ass affine-invariant ensemble MCMC sampling";
     homepage = "https://emcee.readthedocs.io/";
+    changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
