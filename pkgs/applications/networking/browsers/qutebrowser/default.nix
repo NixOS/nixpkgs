@@ -153,6 +153,6 @@ buildPythonApplication {
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
     platforms   = if enableWideVine then [ "x86_64-linux" ] else backendPackage.meta.platforms;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda nrdxp ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj dotlambda nrdxp ];
   };
 }

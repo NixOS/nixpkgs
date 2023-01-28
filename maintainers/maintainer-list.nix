@@ -3960,10 +3960,10 @@
     }];
   };
   ebzzry = {
-    email = "ebzzry@ebzzry.io";
+    email = "rommel.martinez@astn-group.com";
     github = "ebzzry";
     githubId = 7875;
-    name = "Rommel Martinez";
+    name = "Rommel MARTINEZ";
   };
   edanaher = {
     email = "nixos@edanaher.net";
