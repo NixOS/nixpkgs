@@ -1,4 +1,6 @@
 { lib
+, config
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , buildBazelPackage
@@ -7,11 +9,39 @@
 , absl-py
 , setuptools
 , wheel
+, numpy
+, binutils
+, cudaPackages
+, symlinkJoin
+, cudaSupport ? config.cudaSupport or false
 }:
 
 let
   pname = "tensorflow-io";
   version = "0.30.0";
+
+  inherit (cudaPackages) cudatoolkit cudnn nccl cudaFlags;
+
+  cudatoolkit_joined = symlinkJoin {
+    name = "${cudatoolkit.name}-merged";
+    paths = [
+      cudatoolkit.lib
+      cudatoolkit.out
+    ] ++ lib.optionals (lib.versionOlder cudatoolkit.version "11") [
+      # for some reason some of the required libs are in the targets/x86_64-linux
+      # directory; not sure why but this works around it
+      "${cudatoolkit}/targets/${stdenv.system}"
+    ];
+  };
+
+  cudatoolkit_cc_joined = symlinkJoin {
+    name = "${cudatoolkit.cc.name}-merged";
+    paths = [
+      cudatoolkit.cc
+      binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
+    ];
+  };
+
   bazel-wheel = buildBazelPackage {
     name = "${pname}-${version}-py2.py3-none-any.whl";
     src = fetchFromGitHub {
@@ -72,10 +102,27 @@ let
       wheel
       absl-py
     ];
+    propagatedBuildInputs = [
+      numpy
+    ];
     bazel = bazel_5;
 
     # why does it not take a list?
     bazelTarget = "//tensorflow_io/... //tensorflow_io_gcs_filesystem/...";
+
+    TF_NEED_CUDA = cudaSupport;
+    CUDA_TOOLKIT_PATH = lib.optionalString cudaSupport "${cudatoolkit_joined}";
+    CUDNN_INSTALL_PATH = lib.optionalString cudaSupport "${cudnn}";
+    TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
+    TF_CUDA_VERSION = lib.optionalString cudaSupport "${lib.versions.majorMinor cudatoolkit.version}";
+    TF_CUDNN_VERSION = lib.optionalString cudaSupport "${lib.versions.major cudnn.version}";
+    TF_CUDA_COMPUTE_CAPABILITIES = lib.optionalString cudaSupport "${cudaFlags.cudaRealCapabilitiesCommaString}";
+
+    bazelFlags = [
+      # File "/build/output/external/org_tensorflow/third_party/gpus/cuda_configure.bzl", line 1444, column 40, in <toplevel>
+      # remote_cuda_configure = repository_rule(
+      "--experimental_repo_remote_exec"
+    ];
 
     fetchAttrs = {
       sha256 = "";
