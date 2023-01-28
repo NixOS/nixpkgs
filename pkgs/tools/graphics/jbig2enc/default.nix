@@ -1,21 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, leptonica
+, zlib
+, libwebp
+, giflib
+, libjpeg
+, libpng
+, libtiff
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "jbig2enc";
-  version = "0.28";
+  version = "0.29";
 
   src = fetchFromGitHub {
     owner = "agl";
     repo = "jbig2enc";
-    rev = "${version}-dist";
-    hash = "sha256-Y3IVTjvO5tqn/O076y/llnTyenKpbx1WyT/JFZ/s0VY=";
+    rev = version;
+    hash = "sha256-IAL4egXgaGmCilzcryjuvOoHhahyrfGWY68GBfXXgAM=";
   };
 
-  propagatedBuildInputs = [ leptonica zlib libwebp giflib libjpeg libpng libtiff ];
+  buildInputs = [ autoreconfHook ];
+  propagatedBuildInputs = [
+    leptonica
+    zlib
+    libwebp
+    giflib
+    libjpeg
+    libpng
+    libtiff
+  ];
 
   patches = [
-    # https://github.com/agl/jbig2enc/commit/53ce5fe7e73d7ed95c9e12b52dd4984723f865fa
-    ./53ce5fe7e73d7ed95c9e12b52dd4984723f865fa.patch
+    (fetchpatch {
+      name = "fix-build-leptonica-1.83.patch";
+      url = "https://github.com/agl/jbig2enc/commit/ea050190466f5336c69c6a11baa1cb686677fcab.patch";
+      hash = "sha256-+kScjFgDEU9F7VOUNAhm2XBjGm49fzAH8hYhmTm8xv8=";
+    })
   ];
 
   # This is necessary, because the resulting library has
@@ -31,5 +55,6 @@ stdenv.mkDerivation rec {
     description = "Encoder for the JBIG2 image compression format";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+    homepage = "https://github.com/agl/jbig2enc";
   };
 }
