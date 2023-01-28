@@ -1,14 +1,24 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "fira-code";
   version = "6.2";
-in (fetchzip {
-  name = "fira-code-${version}";
 
-  url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
+    stripRoot = false;
+    hash = "sha256-UHOwZL9WpCHk6vZaqI/XfkZogKgycs5lWg1p0XdQt0A=";
+  };
 
-  sha256 = "0l02ivxz3jbk0rhgaq83cqarqxr07xgp7n27l0fh8fbgxwi52djl";
+  # only extract the variable font because everything else is a duplicate
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts
+    cp variable_ttf/*-VF.ttf $out/share/fonts/truetype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tonsky/FiraCode";
@@ -22,10 +32,4 @@ in (fetchzip {
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  # only extract the variable font because everything else is a duplicate
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile '*-VF.ttf' -d $out/share/fonts/truetype
-  '';
-})
+}

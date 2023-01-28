@@ -1,14 +1,26 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
-let
+{ lib, stdenvNoCC, fetchzip }:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "barlow";
   version = "1.422";
-in
-(fetchzip rec {
-  name = "barlow-${version}";
 
-  url = "https://tribby.com/fonts/barlow/download/barlow-${version}.zip";
+  src = fetchzip {
+    url = "https://tribby.com/fonts/barlow/download/barlow-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-aHAGPEgBkH41r7HR0D74OGCa7ta7Uo8Mgq4YVtYOwU8=";
+  };
 
-  sha256 = "08ld4c3zq4d1px07lc64i7l8848zsc61ddy3654w2sh0hx5sm5ld";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/otf/*.otf -t $out/share/fonts/opentype
+    install -Dm644 fonts/ttf/*.ttf fonts/gx/*.ttf -t $out/share/fonts/truetype
+    install -Dm644 fonts/eot/*.eot -t $out/share/fonts/eot
+    install -Dm644 fonts/woff/*.woff -t $out/share/fonts/woff
+    install -Dm644 fonts/woff2/*.woff2 -t $out/share/fonts/woff2
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A grotesk variable font superfamily";
@@ -17,13 +29,4 @@ in
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.eot -d $out/share/fonts/eot
-    unzip -j $downloadedFile \*.woff -d $out/share/fonts/woff
-    unzip -j $downloadedFile \*.woff2 -d $out/share/fonts/woff2
-  '';
-})
+}
