@@ -1,14 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "source-sans";
   version = "3.046";
-in (fetchzip {
-  name = "source-sans-${version}";
 
-  url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+    hash = "sha256-nBLEK+T5n1CdZK2zvCWIhF2MxPmiAwL9l55a55yHtgU=";
+  };
 
-  sha256 = "1wxdinnliq0xqbjrs0sqykwaggkmyqawfq862d9xn05g1pnxda94";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 OTF/*.otf -t $out/share/fonts/opentype
+    install -Dm444 TTF/*.ttf -t $out/share/fonts/truetype
+    install -Dm444 VAR/*.otf -t $out/share/fonts/variable
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://adobe-fonts.github.io/source-sans/";
@@ -17,11 +26,4 @@ in (fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,variable}
-    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
-    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
-  '';
-})
+}
