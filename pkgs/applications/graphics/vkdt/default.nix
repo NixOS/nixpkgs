@@ -66,5 +66,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hanatos/vkdt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ paperdigits ];
+    platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }
