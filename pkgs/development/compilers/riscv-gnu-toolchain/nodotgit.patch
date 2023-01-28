@@ -1,0 +1,15 @@
+diff --git a/Makefile.in b/Makefile.in
+index 09c5772..a988d0d 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -279,9 +279,7 @@ GCCPKGVER :=
+ endif
+ 
+ $(srcdir)/%/.git:
+-	cd $(srcdir) && \
+-	flock `git rev-parse --git-dir`/config git submodule init $(dir $@) && \
+-	flock `git rev-parse --git-dir`/config git submodule update $(dir $@)
++	true
+ 
+ #
+ # GLIBC

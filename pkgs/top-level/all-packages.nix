@@ -26319,6 +26319,21 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
+  riscv-gnu-toolchain-rv64gc-linux = callPackage ../development/compilers/riscv-gnu-toolchain {
+    isa = "rv64gc";
+    withLinux = true;
+  };
+
+  riscv-gnu-toolchain-rv64gc = callPackage ../development/compilers/riscv-gnu-toolchain {
+    isa = "rv64gc";
+    withLinux = false;
+  };
+
+  riscv-gnu-toolchain-rv32gc = callPackage ../development/compilers/riscv-gnu-toolchain {
+    isa = "rv32gc";
+    withLinux = false;
+  };
+
   riscv-pk = callPackage ../misc/riscv-pk { };
 
   ristate = callPackage ../tools/misc/ristate { };
