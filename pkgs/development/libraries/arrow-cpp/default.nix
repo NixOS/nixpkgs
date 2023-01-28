@@ -55,16 +55,16 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "00c483283433b4c02cb811f260dbe35414c806a4";
-    hash = "sha256-x645DFowLk0e4JN2hI6asWlJlhN36vg5/eC3wTbFI2k=";
+    rev = "ecab1162cbec872e17d949ecc86181670aee045c";
+    hash = "sha256-w6rEuxfLTEO8DyXV44G6JOMeTfYtskFCOj9rHXNmj2Y=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "e13af117de7c4f0a4d9908ae3827b3ab119868f3";
-    hash = "sha256-rVI9zyk9IRDlKv4u8BeMb0HRdWLfCpqOlYCeUdA7BB8=";
+    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
+    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
   };
 
   aws-sdk-cpp-arrow = aws-sdk-cpp.override {
@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "10.0.1";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-yBTgZwESoiwabsA6tCClKuI2qaQunkOMPL03835lj7M=";
+    hash = "sha256-Ldjw6ghIpYeFYo7jpXZ1VI1QnhchOi9dcrDZALQ/VDA=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "v0.6.0";
-    hash = "sha256-hxCBomL4Qg9cHLRg9ZiO9k+JVOZXn6f4ikPtK+V9tno=";
+    rev = "v0.20.0";
+    hash = "sha256-71hAwJ0cGvpwK/ibeeQt82e9uqxcu9sM1rPtPENMPfs=";
   };
 
   patches = [

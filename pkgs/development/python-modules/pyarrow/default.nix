@@ -112,7 +112,7 @@ buildPythonPackage rec {
     # Flaky test, works locally but not on Hydra
     "--deselect=pyarrow/tests/test_csv.py::TestThreadedCSVTableRead::test_cancellation"
     # expects arrow-cpp headers to be bundled
-    "--deselect=pyarrow/tests/test_misc.py::test_get_include"
+    "--deselect=pyarrow/tests/test_cpp_internals.py::test_pyarrow_include"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
