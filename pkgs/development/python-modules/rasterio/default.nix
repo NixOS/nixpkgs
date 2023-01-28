@@ -1,44 +1,38 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# build time
-, cython
-, gdal
-
-# runtime
 , affine
 , attrs
 , boto3
+, buildPythonPackage
 , click
 , click-plugins
 , cligj
+, cython
+, fetchFromGitHub
+, gdal
+, hypothesis
 , matplotlib
 , numpy
-, snuggs
-, setuptools
-
-# tests
-, hypothesis
 , packaging
 , pytest-randomly
 , pytestCheckHook
+, pythonOlder
+, setuptools
 , shapely
+, snuggs
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "4"; # not x.y[ab]z, those are alpha/beta versions
+  version = "4"; 
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
-  # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    rev = "refs/tags/release-test-${version}";
+    rev = "refs/tags/${version}";
     hash = "sha256-YO0FnmIEt+88f6k2mdXDSQg7UKq1Swr8wqVUGdRyQR4=";
   };
 
@@ -60,17 +54,17 @@ buildPythonPackage rec {
     setuptools # needs pkg_resources at runtime
   ];
 
+  nativeCheckInputs = [
+    hypothesis
+    packaging
+    pytest-randomly
+    pytestCheckHook
+    shapely
+  ];
+
   preCheck = ''
     rm -rf rasterio
   '';
-
-  nativeCheckInputs = [
-    pytest-randomly
-    pytestCheckHook
-    packaging
-    hypothesis
-    shapely
-  ];
 
   pytestFlagsArray = [
     "-m 'not network'"
@@ -85,13 +79,15 @@ buildPythonPackage rec {
   ];
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/rio --version | grep ${version} > /dev/null
   '';
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
-    homepage = "https://rasterio.readthedocs.io/en/latest/";
+    homepage = "https://rasterio.readthedocs.io/";
+    changelog = "https://github.com/rasterio/rasterio/blob/1.3.5/CHANGES.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mredaelli ];
   };
