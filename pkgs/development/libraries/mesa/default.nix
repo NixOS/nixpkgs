@@ -22,7 +22,7 @@
 , cmake
 , rustc
 , rust-bindgen
-, spirv-llvm-translator_14
+, spirv-llvm-translator
 }:
 
 /** Packaging design:
@@ -44,10 +44,16 @@ let
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
+  # Align all the Mesa versions used. Required to prevent explosions when
+  # two different LLVMs are loaded in the same process.
+  # FIXME: these should really go into some sort of versioned LLVM package set
   rust-bindgen' = rust-bindgen.override {
     rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
       clang = llvmPackages.clang;
     };
+  };
+  spirv-llvm-translator' = spirv-llvm-translator.override {
+    inherit (llvmPackages) llvm;
   };
 
 self = stdenv.mkDerivation {
@@ -146,7 +152,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator_14 ]
+    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
     # Mesa will not build zink when gallium-drivers=auto
     ++ lib.optional (lib.elem "zink" galliumDrivers) vulkan-loader;
