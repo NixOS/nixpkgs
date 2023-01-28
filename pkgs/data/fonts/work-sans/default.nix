@@ -1,15 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "work-sans";
   version = "2.010";
-in
-(fetchzip {
-  name = "work-sans-${version}";
 
-  url = "https://github.com/weiweihuanghuang/Work-Sans/archive/refs/tags/v${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/weiweihuanghuang/Work-Sans/archive/refs/tags/v${version}.zip";
+    hash = "sha256-cedcx3CpcPZk3jxxIs5Bz78dxZNtOemvXnUBO6zl2dw=";
+  };
 
-  sha256 = "sha256-S4O5EoKY4w/p+MHeHRCmPyQRAOUfEwNiETxMgNcsrws=";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/variable/*.ttf fonts/static/TTF/*.ttf -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A grotesque sans";
@@ -18,9 +24,4 @@ in
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile "*/fonts/*.ttf" -d $out/share/fonts/opentype
-  '';
-})
+}

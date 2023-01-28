@@ -169,6 +169,8 @@ self = stdenv.mkDerivation {
     "--disable-init-state"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+  ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
+    "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [

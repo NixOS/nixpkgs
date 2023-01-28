@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 *OFL-FAQ.txt *README.txt *FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
