@@ -1,6 +1,6 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
@@ -10,15 +10,19 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jpillora";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-N2voSclNH7lGbUkZo2gkrEb6XoA5f0BzNgAzQs1lOKQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N2voSclNH7lGbUkZo2gkrEb6XoA5f0BzNgAzQs1lOKQ=";
   };
 
-  vendorSha256 = "sha256-p/5g4DLoUhEPFBtAbMiIgc6O4eAfbiqBjCqYkyUHy70=";
+  vendorHash = "sha256-p/5g4DLoUhEPFBtAbMiIgc6O4eAfbiqBjCqYkyUHy70=";
 
-  ldflags = [ "-s" "-w" "-X github.com/jpillora/chisel/share.BuildVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/jpillora/chisel/share.BuildVersion=${version}"
+  ];
 
-  # tests require access to the network
+  # Tests require access to the network
   doCheck = false;
 
   meta = with lib; {
@@ -30,6 +34,7 @@ buildGoModule rec {
       used to provide a secure endpoint into your network.
     '';
     homepage = "https://github.com/jpillora/chisel";
+    changelog = "https://github.com/jpillora/chisel/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
