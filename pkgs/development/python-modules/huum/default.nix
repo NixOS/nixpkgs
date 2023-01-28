@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "huum";
-  version = "0.6.0";
+  version = "0.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PYOjfLPa/vZZP0IZuUZnQ74IrTRvizgYhKOmhd83aMQ=";
+    hash = "sha256-/NWeQfYmSRiWH/9lfpRZbpKygC5m/bTjogK/1UGdH2Y=";
   };
 
   nativeBuildInputs = [
