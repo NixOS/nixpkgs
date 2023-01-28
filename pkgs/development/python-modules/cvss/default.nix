@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "cvss";
-  version = "2.5";
+  version = "2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-6S646cvm+UwdpRGOtCuNijWcUxhZD6IG407hNBz+NA4=";
+    sha256 = "sha256-gD9MreJQPaxziy02Wt3BGFiIoQ/+pW3KqiNfNlTijJY=";
   };
 
   nativeCheckInputs = [
