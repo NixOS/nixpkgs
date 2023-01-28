@@ -82,7 +82,7 @@ let
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.35.0";
+  version = "0.35.1";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${version}";
-    sha256 = "sha256-U3NDSxlX4/WkoHFkOvpcwPMwfwTnSpCw0QI5yLMK08o=";
+    sha256 = "sha256-CoYTX9hgxLo72YdMoa0sEywg4kybHbFsypHk1rCM6tM=";
   };
 
   postPatch = ''
