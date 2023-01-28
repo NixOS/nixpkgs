@@ -137,6 +137,9 @@ self = stdenv.mkDerivation {
     "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
+
+    # Enable RT for Intel hardware
+    "-Dintel-clc=enabled"
   ] ++ lib.optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
@@ -164,7 +167,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako
+    python3Packages.python python3Packages.Mako python3Packages.ply
     jdupes glslang
   ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [
     wayland-scanner
