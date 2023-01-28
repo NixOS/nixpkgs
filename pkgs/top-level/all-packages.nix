@@ -22699,6 +22699,8 @@ with pkgs;
 
   quark-engine = callPackage ../tools/security/quark-engine { };
 
+  quantlib = callPackage ../development/libraries/quantlib { };
+
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   quickder = callPackage ../development/libraries/quickder {};
