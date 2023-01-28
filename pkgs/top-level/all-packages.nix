@@ -26555,6 +26555,8 @@ with pkgs;
 
   teck-udev-rules = callPackage ../os-specific/linux/teck-udev-rules { };
 
+  teller = callPackage ../development/tools/teller { };
+
   tiptop = callPackage ../os-specific/linux/tiptop { };
 
   tpacpi-bat = callPackage ../os-specific/linux/tpacpi-bat { };
