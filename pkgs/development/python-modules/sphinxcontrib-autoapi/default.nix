@@ -47,6 +47,5 @@ buildPythonPackage rec {
     longDescription = "Sphinx AutoAPI provides 'autodoc' style documentation for multiple programming languages without needing to load, run, or import the project being documented.";
     license = licenses.mit;
     maintainers = with maintainers; [ karolchmist ];
-    broken = stdenv.isDarwin;
   };
 }
