@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.5";
+  version = "0.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ABMXWUVptpOSPB1jQ57iXk/UG92puNCICzXo3ZMG2Pk=";
+    hash = "sha256-/VQKLmEpIOULTPpJKuVLyqqQVLKVhwVBoos9Q/upwQM=";
   };
 
   propagatedBuildInputs = [
