@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "datasette-publish-fly";
-  version = "1.2";
+  version = "1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-0frP/RkpZX6LCR8cOlzcBG3pbcOh0KPuELlYUXS3dRE=";
+    hash = "sha256-L94QYcrTWjuoz0aEFTxPi8Xg0xERP1zCs7+vzhoJagc=";
   };
 
   propagatedBuildInputs = [
