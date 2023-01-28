@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An OpenGL extension loading library for C(++)";
-    homepage = "http://glew.sourceforge.net/";
+    homepage = "https://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
     platforms = platforms.mesaPlatforms;

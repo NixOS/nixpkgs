@@ -22,7 +22,7 @@ buildPythonPackage rec {
     dbus-python
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

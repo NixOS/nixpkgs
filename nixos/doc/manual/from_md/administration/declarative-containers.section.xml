@@ -6,7 +6,7 @@
     following specifies that there shall be a container named
     <literal>database</literal> running PostgreSQL:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 containers.database =
   { config =
       { config, pkgs, ... }:
@@ -29,7 +29,7 @@ containers.database =
     However, they cannot change the network configuration. You can give
     a container its own network as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 containers.database = {
   privateNetwork = true;
   hostAddress = &quot;192.168.100.10&quot;;

@@ -22,7 +22,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ file ];
   propagatedBuildInputs = [ ctypes result ];
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

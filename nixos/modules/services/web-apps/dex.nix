@@ -83,11 +83,12 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
+          "-/etc/dex"
           "-/etc/hosts"
           "-/etc/localtime"
-          "-/etc/dex"
+          "-/etc/nsswitch.conf"
+          "-/etc/resolv.conf"
+          "-/etc/ssl/certs/ca-certificates.crt"
         ];
         BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";

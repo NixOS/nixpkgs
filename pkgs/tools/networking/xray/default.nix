@@ -20,16 +20,16 @@ let
 in
 buildGoModule rec {
   pname = "xray";
-  version = "1.6.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${version}";
-    sha256 = "0g2bmy522lhip0rgb3hqyi3bidf4ljyjvvv3n1kb6lvm0p3br51b";
+    sha256 = "sha256-jwCvo6+YXC471VqGWzcrnrLWOSJW2tBKa5SoynQg0Lo=";
   };
 
-  vendorSha256 = "sha256-QAF/05/5toP31a/l7mTIetFhXuAKsT69OI1K/gMXei0=";
+  vendorSha256 = "sha256-P2g0MqlBScm6yTnpvL5T6l9ntsb4tK9k3Civ7rTevrE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -55,9 +55,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

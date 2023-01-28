@@ -7,7 +7,7 @@
     states that a user account named <literal>alice</literal> shall
     exist:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 users.users.alice = {
   isNormalUser = true;
   home = &quot;/home/alice&quot;;
@@ -36,7 +36,7 @@ users.users.alice = {
     <xref linkend="opt-users.users" /> and run nixos-rebuild, the user
     account will cease to exist. Also, imperative commands for managing
     users and groups, such as useradd, are no longer available.
-    Passwords may still be assigned by setting the user's
+    Passwords may still be assigned by setting the user’s
     <link linkend="opt-users.users._name_.hashedPassword">hashedPassword</link>
     option. A hashed password can be generated using
     <literal>mkpasswd</literal>.
@@ -45,7 +45,7 @@ users.users.alice = {
     A user ID (uid) is assigned automatically. You can also specify a
     uid manually by adding
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 uid = 1000;
 </programlisting>
   <para>
@@ -55,7 +55,7 @@ uid = 1000;
     Groups can be specified similarly. The following states that a group
     named <literal>students</literal> shall exist:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 users.groups.students.gid = 1000;
 </programlisting>
   <para>

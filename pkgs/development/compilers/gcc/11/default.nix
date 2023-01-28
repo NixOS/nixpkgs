@@ -13,7 +13,7 @@
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
-, gmp, mpfr, libmpc, gettext, which, patchelf
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , gnatboot ? null
@@ -72,6 +72,8 @@ let majorVersion = "11";
           sha256 = "sha256-LFAXUEoYD7YeCG8V9mWanygyQOI7U5OhCRIKOVCCDAg=";
         })
       ]
+      # https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
+      ++ optional (stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch;
@@ -189,7 +191,7 @@ stdenv.mkDerivation ({
 
   preConfigure = (import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
   }) + ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
@@ -206,7 +208,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross threadsCross
       version
 
-      gmp mpfr libmpc isl
+      binutils gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib

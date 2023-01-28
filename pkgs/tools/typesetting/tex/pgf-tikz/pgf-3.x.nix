@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pgf";
-  version = "3.1.9a";
+  version = "3.1.10";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgf";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-7FBaDEaCpiiLMcHWGv5AnUNc5AFqtm5o/R9bJePIomk=";
+    hash = "sha256-/zU2aTV39XpQhSpHVi8pBNsaAshcIhl6s+vOL1SO3Vw=";
   };
 
   dontConfigure = true;

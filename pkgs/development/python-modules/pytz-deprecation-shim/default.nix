@@ -34,7 +34,7 @@ buildPythonPackage rec {
     tzdata
   ]);
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     pytz

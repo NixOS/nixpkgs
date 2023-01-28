@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     setproctitle
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     asynctest
     pytestCheckHook
   ];

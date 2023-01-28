@@ -47,8 +47,6 @@
 , addOpenGLRunpath
 }:
 
-with lib;
-
 let
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -68,8 +66,8 @@ let
     bzip2 libcap at-spi2-atk at-spi2-core
     libkrb5 libdrm libglvnd mesa coreutils
     libxkbcommon pipewire wayland
-  ] ++ optional pulseSupport libpulseaudio
-    ++ optional libvaSupport libva
+  ] ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional libvaSupport libva
     ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -99,8 +97,8 @@ in stdenv.mkDerivation {
     tar xf data.tar.xz
   '';
 
-  rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
-  binpath = makeBinPath deps;
+  rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
+  binpath = lib.makeBinPath deps;
 
   installPhase = ''
     runHook preInstall
@@ -149,7 +147,7 @@ in stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "google-chrome-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --add-flags ${escapeShellArg commandLineArgs}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary},nacl_helper}; do
       patchelf --set-rpath $rpath $elf
@@ -159,7 +157,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;

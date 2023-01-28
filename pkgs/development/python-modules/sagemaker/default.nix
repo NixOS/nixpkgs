@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.109.0";
+  version = "2.126.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hs71bIoByh5S1ncsku+y4X2i0yU65FknJE05lEmnru4=";
+    hash = "sha256-wuU53FmrtAY8E08Q+W4OhBoBQ8kks3LjJiR7kxlbfAg=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ananicy-cpp";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-07LWIC2y6b1iiPCVa8mlBYAnSmahm0oJ2d3/uW4rC94=";
+    sha256 = "sha256-iR7yIIGJbRwu62GIEYi70PjtlKXmkPYqSJtMddspBKA=";
   };
 
   nativeBuildInputs = [

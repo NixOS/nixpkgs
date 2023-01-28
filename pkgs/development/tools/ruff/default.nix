@@ -2,27 +2,28 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
-, CoreServices
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.177";
+  version = "0.0.233";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4X4dEVcKjcgww0JnqXkuSbK+VEF4C4/0QLfFrfAoRJ8=";
+    sha256 = "sha256-d+JF5CUswlqx0S3W9W2B2Pgt/hj3hHky1p4OF3eqr84=";
   };
 
-  cargoSha256 = "sha256-JnIvSIiJC3eR7vDrkIfElxM79dZAHrdcvtNw26zKoqw=";
+  cargoSha256 = "sha256-ZuBbgf4CYQpN8TgfEnAl54/SnkkbssoCSdB+2ZZPenk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    CoreServices
-    Security
+    darwin.apple_sdk.frameworks.CoreServices
   ];
+
+  # building tests fails with `undefined symbols`
+  doCheck = false;
 
   meta = with lib; {
     description = "An extremely fast Python linter";

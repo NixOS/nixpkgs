@@ -605,6 +605,21 @@ let
         };
       };
 
+      bmewburn.vscode-intelephense-client = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-intelephense-client";
+          publisher = "bmewburn";
+          version = "1.8.2";
+          sha256 = "OvWdDQfhprQNve017pNSksMuCK3Ccaar5Ko5Oegdiuo=";
+        };
+        meta = with lib; {
+          description = "PHP code intelligence for Visual Studio Code";
+          license = licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client";
+          maintainers = with maintainers; [ drupol ];
+        };
+      };
+
       catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "catppuccin-vsc";
@@ -691,6 +706,22 @@ let
         };
       };
 
+      colejcummins.llvm-syntax-highlighting = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "llvm-syntax-highlighting";
+          publisher = "colejcummins";
+          version = "0.0.3";
+          sha256 = "sha256-D5zLp3ruq0F9UFT9emgOBDLr1tya2Vw52VvCc40TtV0=";
+        };
+        meta = with lib; {
+          description = "Lightweight syntax highlighting for LLVM IR";
+          homepage = "https://github.com/colejcummins/llvm-syntax-highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=colejcummins.llvm-syntax-highlighting";
+          maintainers = with lib.maintainers; [ inclyc ];
+          license = licenses.mit;
+        };
+      };
+
       coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "coolbear";
@@ -725,8 +756,13 @@ let
           version = "2.2.6";
           sha256 = "sha256-1yZeyLrXuubhKzobWcd00F/CdU824uJDTkB6qlHkJlQ=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";
+          description = "Integrates ESLint JavaScript into VS Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint";
+          homepage = "https://github.com/Microsoft/vscode-eslint";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -747,8 +783,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.48.1";
-          sha256 = "sha256-3TpZGvas+pfabHayaA6Yd9nOO2MbfXbCvCiTcbja9Vo=";
+          version = "0.49.0";
+          sha256 = "sha256-Mh/OoRK410aXEr3sK2CYFDsXGSqFT+JOWi9jHOdK01Y=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -983,8 +1019,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.10.3";
-          sha256 = "sha256-BTuTTElPYRtbzQvUC3iMYlj7NDkGSDa/IppOGBXjfUM=";
+          version = "9.10.4";
+          sha256 = "sha256-khtyB0Qbm+iuM1GsAaF32YRv1VBTIy7daeCKdgwCIC8=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1423,8 +1459,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.12.0";
-          sha256 = "sha256-ZwdGcsvmEKDH5ZAkKiLEV/3ru74BittnxibMWbdkaco=";
+          version = "0.13.0";
+          sha256 = "sha256-1uaLFTMvkcYrYAt9qDdISJneKxHo9qsris70iowGW2s=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1468,8 +1504,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.1.1";
-          sha256 = "sha256-Xt/z5r9R090Z9nP1v7k+jYm9EOcjy0GfYiYpc7jNid4=";
+          version = "9.4.4";
+          sha256 = "sha256-EA3OABn80GciNecXwLcorWP7K3+jI+wgujpmvvFcNOA=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1726,8 +1762,8 @@ let
         mktplcRef = {
           publisher = "maximedenes";
           name = "vscoq";
-          version = "0.3.6";
-          sha256 = "sha256-b0gCaEzt5yAj53oLFZSXSD3bum9J1fYes/uf9+OlUek=";
+          version = "0.3.7";
+          sha256 = "sha256-QT+fb23g+IXlNKNAbjADEpqrS6ll2W8Yd0YzwJAjhQQ=";
         };
         meta = with lib; {
           description = "VsCoq is an extension for Visual Studio Code (VS Code) and VSCodium with support for the Coq Proof Assistant.";
@@ -2214,8 +2250,8 @@ let
         mktplcRef = {
           name = "adwaita-theme";
           publisher = "piousdeer";
-          version = "1.0.8";
-          sha256 = "XyzxiwKQGDUIXp6rnt1BmPzfpd1WrG8HnEqYEOJV6P8=";
+          version = "1.1.0";
+          sha256 = "sha256-tKpKLUcc33YrgDS95PJu22ngxhwjqeVMC1Mhhy+IPGE=";
         };
         meta = with lib; {
           description = "Theme for the GNOME desktop";
@@ -2544,8 +2580,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.12.0";
-          sha256 = "sha256-Dhd0QVWdCCvdGKuu8OB4KrBS0XUHWLzRSyreAf7sGLU=";
+          version = "2.14.0";
+          sha256 = "sha256-DvcQ0wNmWqmMen7jYVP0tCDz/wdzBb56An+OaD3d4xA=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -2995,6 +3031,22 @@ let
       };
 
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
+
+      waderyan.gitblame = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitblame";
+          publisher = "waderyan";
+          version = "10.1.0";
+          sha256 = "TTYBaJ4gcMVICz4bGZTvbNRPpWD4tXuAJbI8QcHNDv0=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";
+          description = "Visual Studio Code Extension - See Git Blame info in status bar";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=waderyan.gitblame";
+          homepage = "https://github.com/Sertion/vscode-gitblame";
+          license = lib.licenses.mit;
+        };
+      };
 
       WakaTime.vscode-wakatime = callPackage ./wakatime { };
 

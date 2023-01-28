@@ -51,7 +51,7 @@ in
   ###### interface
   options = {
     services.kerberos_server = {
-      enable = lib.mkEnableOption (lib.mdDoc "the kerberos authentification server");
+      enable = lib.mkEnableOption (lib.mdDoc "the kerberos authentication server");
 
       realms = mkOption {
         type = types.attrsOf (types.submodule realm);

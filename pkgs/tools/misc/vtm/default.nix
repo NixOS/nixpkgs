@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vtm";
-  version = "0.9.6a";
+  version = "0.9.8n";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${version}";
-    sha256 = "sha256-rl/QktX8pUbfTpqNCqNrAYM/N+CaAAo8+5RRCmOr7H8=";
+    sha256 = "sha256-uH4nyhc3u9yuUZfMJ8rU8cZGtyqMfL+LyNB0/h3X45E=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,5 +25,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ahuzik ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

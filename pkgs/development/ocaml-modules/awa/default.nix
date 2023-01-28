@@ -27,7 +27,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ cstruct-unix cmdliner fmt ];
+  nativeCheckInputs = [ cstruct-unix cmdliner fmt ];
 
   meta = with lib; {
     description = "SSH implementation in OCaml";

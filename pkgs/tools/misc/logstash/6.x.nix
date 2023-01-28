@@ -7,11 +7,9 @@
 , jre
 }:
 
-with lib;
-
 let this = stdenv.mkDerivation rec {
   version = elk6Version;
-  pname = "logstash${optionalString (!enableUnfree) "-oss"}";
+  pname = "logstash${lib.optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}.tar.gz";
@@ -63,7 +61,7 @@ let this = stdenv.mkDerivation rec {
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
   passthru.tests =
-    optionalAttrs (!enableUnfree) (
+    lib.optionalAttrs (!enableUnfree) (
       assert this.drvPath == nixosTests.elk.ELK-6.elkPackages.logstash.drvPath;
       {
         elk = nixosTests.elk.ELK-6;

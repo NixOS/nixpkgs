@@ -1,51 +1,60 @@
 PATH
-  remote: attr_encrypted
+  remote: vendor/gems/attr_encrypted
   specs:
     attr_encrypted (3.2.4)
       encryptor (~> 3.0.0)
 
 PATH
-  remote: bundler-checksum
+  remote: vendor/gems/bundler-checksum
   specs:
     bundler-checksum (0.1.0)
       bundler
 
 PATH
-  remote: devise-pbkdf2-encryptable
+  remote: vendor/gems/devise-pbkdf2-encryptable
   specs:
     devise-pbkdf2-encryptable (0.0.0)
       devise (~> 4.0)
       devise-two-factor (~> 4.0)
 
 PATH
-  remote: error_tracking_open_api
+  remote: vendor/gems/error_tracking_open_api
   specs:
     error_tracking_open_api (1.0.0)
       typhoeus (~> 1.0, >= 1.0.1)
 
 PATH
-  remote: ipynbdiff
+  remote: vendor/gems/ipynbdiff
   specs:
     ipynbdiff (0.4.7)
       diffy (~> 3.4)
       oj (~> 3.13.16)
 
 PATH
-  remote: mail-smtp_pool
+  remote: vendor/gems/kubeclient
+  specs:
+    kubeclient (4.9.4.pre.gitlab1)
+      http (>= 3.0, < 6.0)
+      jsonpath (~> 1.0)
+      recursive-open-struct (~> 1.1, >= 1.1.1)
+      rest-client (~> 2.0)
+
+PATH
+  remote: vendor/gems/mail-smtp_pool
   specs:
     mail-smtp_pool (0.1.0)
       connection_pool (~> 2.0)
       mail (~> 2.7)
 
 PATH
-  remote: microsoft_graph_mailer
+  remote: vendor/gems/microsoft_graph_mailer
   specs:
     microsoft_graph_mailer (0.1.0)
       mail (~> 2.7)
       oauth2 (>= 1.4.4, < 3)
 
 PATH
-  remote: omniauth-azure-oauth2
+  remote: vendor/gems/omniauth-azure-oauth2
   specs:
     omniauth-azure-oauth2 (0.0.10)
       jwt (>= 1.0, < 3.0)
@@ -53,7 +62,7 @@ PATH
       omniauth-oauth2 (~> 1.4)
 
 PATH
-  remote: omniauth-cas3
+  remote: vendor/gems/omniauth-cas3
   specs:
     omniauth-cas3 (1.1.4)
       addressable (~> 2.3)
@@ -61,21 +70,21 @@ PATH
       omniauth (~> 2.0)
 
 PATH
-  remote: omniauth-gitlab
+  remote: vendor/gems/omniauth-gitlab
   specs:
     omniauth-gitlab (4.0.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
 
 PATH
-  remote: omniauth-salesforce
+  remote: vendor/gems/omniauth-salesforce
   specs:
     omniauth-salesforce (1.0.5)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.0)
 
 PATH
-  remote: omniauth_crowd
+  remote: vendor/gems/omniauth_crowd
   specs:
     omniauth_crowd (2.4.0)
       activesupport
@@ -185,19 +194,19 @@ GEM
     awesome_print (1.9.2)
     awrence (1.1.1)
     aws-eventstream (1.2.0)
-    aws-partitions (1.658.0)
+    aws-partitions (1.674.0)
     aws-sdk-cloudformation (1.41.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-core (3.167.0)
+    aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.59.0)
+    aws-sdk-kms (1.61.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.117.1)
+    aws-sdk-s3 (1.117.2)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -229,7 +238,7 @@ GEM
       rack (>= 0.9.0)
     bindata (2.4.11)
     binding_ninja (0.2.3)
-    bootsnap (1.13.0)
+    bootsnap (1.15.0)
       msgpack (~> 1.2)
     bootstrap_form (4.2.0)
       actionpack (>= 5.0)
@@ -284,16 +293,14 @@ GEM
     commonmarker (0.23.6)
     concurrent-ruby (1.1.10)
     connection_pool (2.3.0)
-    contracts (0.11.0)
     cork (0.3.0)
       colored2 (~> 3.1)
     cose (1.0.0)
       cbor (~> 0.5.9)
       openssl-signature_algorithm (~> 0.4.0)
-    countries (3.0.0)
-      i18n_data (~> 0.8.0)
+    countries (4.0.1)
+      i18n_data (~> 0.13.0)
       sixarm_ruby_unaccent (~> 1.1)
-      unicode_utils (~> 1.4)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
@@ -363,11 +370,11 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.5.0.rc2)
+    doorkeeper (5.5.4)
       railties (>= 5)
-    doorkeeper-openid_connect (1.7.5)
-      doorkeeper (>= 5.2, < 5.5)
-      json-jwt (>= 1.11.0)
+    doorkeeper-openid_connect (1.8.3)
+      doorkeeper (>= 5.5, < 5.7)
+      json-jwt (>= 1.15.0)
     dotenv (2.7.6)
     dry-configurable (0.12.0)
       concurrent-ruby (~> 1.0)
@@ -484,9 +491,6 @@ GEM
     flipper-active_support_cache_store (0.25.0)
       activesupport (>= 4.2, < 8)
       flipper (~> 0.25.0)
-    flowdock (0.7.1)
-      httparty (~> 0.7)
-      multi_json
     fog-aliyun (0.3.3)
       fog-core
       fog-json
@@ -556,12 +560,12 @@ GEM
       rchardet (~> 1.8)
     gitaly (15.5.2)
       grpc (~> 1.0)
-    gitlab (4.16.1)
-      httparty (~> 0.14, >= 0.14.0)
-      terminal-table (~> 1.5, >= 1.5.1)
+    gitlab (4.19.0)
+      httparty (~> 0.20)
+      terminal-table (>= 1.5.1)
     gitlab-chronic (0.10.5)
       numerizer (~> 0.2)
-    gitlab-dangerfiles (3.6.2)
+    gitlab-dangerfiles (3.6.4)
       danger (>= 8.4.5)
       danger-gitlab (>= 8.0.0)
       rake
@@ -575,7 +579,7 @@ GEM
       fog-json (~> 1.2.0)
       mime-types
       ms_rest_azure (~> 0.12.0)
-    gitlab-labkit (0.28.0)
+    gitlab-labkit (0.29.0)
       actionpack (>= 5.0.0, < 8.0.0)
       activesupport (>= 5.0.0, < 8.0.0)
       grpc (>= 1.37)
@@ -594,13 +598,13 @@ GEM
     gitlab-sidekiq-fetcher (0.9.0)
       json (>= 2.5)
       sidekiq (~> 6.1)
-    gitlab-styles (9.0.0)
-      rubocop (~> 1.36.0)
+    gitlab-styles (9.1.0)
+      rubocop (~> 1.38.0)
       rubocop-gitlab-security (~> 0.1.1)
       rubocop-graphql (~> 0.14)
       rubocop-performance (~> 1.14)
       rubocop-rails (~> 2.15)
-      rubocop-rspec (~> 2.12)
+      rubocop-rspec (~> 2.15)
     gitlab_chronic_duration (0.10.6.2)
       numerizer (~> 0.2)
     gitlab_omniauth-ldap (2.2.0)
@@ -651,7 +655,7 @@ GEM
       google-apis-core (>= 0.9.1, < 2.a)
     google-cloud-env (1.6.0)
       faraday (>= 0.17.3, < 3.0)
-    google-protobuf (3.21.9)
+    google-protobuf (3.21.12)
     googleapis-common-protos-types (1.3.0)
       google-protobuf (~> 3.14)
     googleauth (1.3.0)
@@ -661,8 +665,8 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    gpgme (2.0.20)
-      mini_portile2 (~> 2.3)
+    gpgme (2.0.22)
+      mini_portile2 (~> 2.7)
     grape (1.5.2)
       activesupport
       builder
@@ -753,24 +757,22 @@ GEM
       nokogiri (~> 1.6)
     htmlbeautifier (1.4.2)
     htmlentities (4.3.4)
-    http (4.4.1)
-      addressable (~> 2.3)
+    http (5.1.0)
+      addressable (~> 2.8)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
-      http-parser (~> 1.2.0)
+      llhttp-ffi (~> 0.4.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    http-parser (1.2.3)
-      ffi-compiler (>= 1.0, < 2.0)
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    i18n_data (0.8.0)
+    i18n_data (0.13.1)
     icalendar (2.8.0)
       ice_cube (~> 0.16)
     ice_cube (0.16.4)
@@ -789,7 +791,7 @@ GEM
       atlassian-jwt
       multipart-post
       oauth (~> 0.5, >= 0.5.0)
-    jmespath (1.6.1)
+    jmespath (1.6.2)
     js_regex (3.8.0)
       character_set (~> 1.4)
       regexp_parser (~> 2.5)
@@ -828,14 +830,9 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    kubeclient (4.9.3)
-      http (>= 3.0, < 5.0)
-      jsonpath (~> 1.0)
-      recursive-open-struct (~> 1.1, >= 1.1.1)
-      rest-client (~> 2.0)
     launchy (2.5.0)
       addressable (~> 2.7)
-    lefthook (1.2.0)
+    lefthook (1.2.6)
     letter_opener (1.7.0)
       launchy (~> 2.2)
     letter_opener_web (2.0.0)
@@ -860,6 +857,9 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    llhttp-ffi (0.4.0)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
     locale (2.1.3)
     lockbox (0.6.2)
     lograge (0.11.2)
@@ -867,7 +867,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.19.0)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lookbook (1.2.1)
@@ -938,7 +938,7 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.8)
     no_proxy_fix (0.1.2)
-    nokogiri (1.13.9)
+    nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     notiffany (0.1.3)
@@ -1028,7 +1028,7 @@ GEM
       validate_email
       validate_url
       webfinger (>= 1.0.1)
-    openssl (2.2.1)
+    openssl (2.2.2)
       ipaddr
     openssl-signature_algorithm (0.4.0)
     opentracing (0.5.0)
@@ -1061,7 +1061,7 @@ GEM
       expgen (~> 0.1)
       rainbow (~> 3.1.1)
     parallel (1.22.1)
-    parser (3.1.2.1)
+    parser (3.1.3.0)
       ast (~> 2.4.1)
     parslet (1.8.2)
     pastel (0.8.0)
@@ -1086,7 +1086,7 @@ GEM
       coderay
       parser
       unparser
-    prometheus-client-mmap (0.16.2)
+    prometheus-client-mmap (0.17.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -1107,7 +1107,7 @@ GEM
       puma (>= 2.7)
     pyu-ruby-sasl (0.0.3.3)
     raabro (1.4.0)
-    racc (1.6.0)
+    racc (1.6.1)
     rack (2.2.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
@@ -1258,31 +1258,31 @@ GEM
       pg
       rails
       sqlite3
-    rubocop (1.36.0)
+    rubocop (1.38.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.20.1, < 2.0)
+      rubocop-ast (>= 1.23.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.21.0)
+    rubocop-ast (1.23.0)
       parser (>= 3.1.1.0)
     rubocop-gitlab-security (0.1.1)
       rubocop (>= 0.51)
-    rubocop-graphql (0.14.6)
+    rubocop-graphql (0.18.0)
       rubocop (>= 0.87, < 2)
-    rubocop-performance (1.14.3)
+    rubocop-performance (1.15.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.15.2)
+    rubocop-rails (2.17.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
-      rubocop (>= 1.7.0, < 2.0)
-    rubocop-rspec (2.12.1)
-      rubocop (~> 1.31)
+      rubocop (>= 1.33.0, < 2.0)
+    rubocop-rspec (2.15.0)
+      rubocop (~> 1.33)
     ruby-fogbugz (0.3.0)
       crack (~> 0.4)
       multipart-post (~> 2.0)
@@ -1322,7 +1322,7 @@ GEM
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    sd_notify (0.1.0)
+    sd_notify (0.1.1)
     securecompare (1.0.0)
     seed-fu (2.3.7)
       activerecord (>= 3.1)
@@ -1377,8 +1377,7 @@ GEM
     snaky_hash (2.0.0)
       hashie
       version_gem (~> 1.1)
-    snowplow-tracker (0.6.1)
-      contracts (~> 0.7, <= 0.11)
+    snowplow-tracker (0.8.0)
     solargraph (0.47.2)
       backport (~> 1.2)
       benchmark
@@ -1399,7 +1398,7 @@ GEM
       set (~> 1.0)
     spamcheck (1.0.0)
       grpc (~> 1.0)
-    spring (2.1.1)
+    spring (4.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprite-factory (1.7.1)
@@ -1442,8 +1441,8 @@ GEM
     temple (0.8.2)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
-    terminal-table (1.8.0)
-      unicode-display_width (~> 1.1, >= 1.1.1)
+    terminal-table (3.0.2)
+      unicode-display_width (>= 1.1.1, < 3)
     terser (1.0.2)
       execjs (>= 0.3.0, < 3)
     test-prof (1.0.7)
@@ -1453,7 +1452,6 @@ GEM
     thor (1.2.1)
     thrift (0.16.0)
     tilt (2.0.11)
-    timecop (0.9.1)
     timeliness (0.3.10)
     timfel-krb5-auth (0.8.3)
     tins (1.31.1)
@@ -1526,7 +1524,7 @@ GEM
       activerecord (>= 3.0)
       activesupport (>= 3.0)
     version_gem (1.1.0)
-    version_sorter (2.2.4)
+    version_sorter (2.3.0)
     view_component (2.74.1)
       activesupport (>= 5.0.0, < 8.0)
       concurrent-ruby (~> 1.0)
@@ -1569,7 +1567,7 @@ GEM
       nokogiri (~> 1.8)
     yajl-ruby (1.4.3)
     yard (0.9.26)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
@@ -1594,8 +1592,8 @@ DEPENDENCIES
   autoprefixer-rails (= 10.2.5.1)
   awesome_print
   aws-sdk-cloudformation (~> 1)
-  aws-sdk-core (~> 3.167.0)
-  aws-sdk-s3 (~> 1.117.1)
+  aws-sdk-core (~> 3.168.4)
+  aws-sdk-s3 (~> 1.117.2)
   babosa (~> 1.0.4)
   base32 (~> 0.3.0)
   batch-loader (~> 2.0.1)
@@ -1603,7 +1601,7 @@ DEPENDENCIES
   benchmark-ips (~> 2.3.0)
   benchmark-memory (~> 0.1)
   better_errors (~> 2.9.1)
-  bootsnap (~> 1.13.0)
+  bootsnap (~> 1.15.0)
   bootstrap_form (~> 4.2.0)
   browser (~> 5.3.1)
   bullet (~> 7.0.2)
@@ -1616,7 +1614,7 @@ DEPENDENCIES
   commonmarker (~> 0.23.6)
   concurrent-ruby (~> 1.1)
   connection_pool (~> 2.0)
-  countries (~> 3.0)
+  countries (~> 4.0.0)
   creole (~> 0.5.0)
   crystalball (~> 0.7.0)
   cvss-suite (~> 3.0.1)
@@ -1633,8 +1631,8 @@ DEPENDENCIES
   diff_match_patch (~> 0.1.0)
   diffy (~> 3.4)
   discordrb-webhooks (~> 3.4)
-  doorkeeper (~> 5.5.0.rc2)
-  doorkeeper-openid_connect (~> 1.7.5)
+  doorkeeper (~> 5.5)
+  doorkeeper-openid_connect (~> 1.8)
   ed25519 (~> 1.3.0)
   elasticsearch-api (= 7.13.3)
   elasticsearch-model (~> 7.2)
@@ -1650,7 +1648,6 @@ DEPENDENCIES
   flipper (~> 0.25.0)
   flipper-active_record (~> 0.25.0)
   flipper-active_support_cache_store (~> 0.25.0)
-  flowdock (~> 0.7)
   fog-aliyun (~> 0.3)
   fog-aws (~> 3.15)
   fog-core (= 2.1.0)
@@ -1665,23 +1662,23 @@ DEPENDENCIES
   gettext_i18n_rails_js (~> 1.3)
   gitaly (~> 15.5.2)
   gitlab-chronic (~> 0.10.5)
-  gitlab-dangerfiles (~> 3.6.2)
+  gitlab-dangerfiles (~> 3.6.4)
   gitlab-experiment (~> 0.7.1)
   gitlab-fog-azure-rm (~> 1.4.0)
-  gitlab-labkit (~> 0.28.0)
+  gitlab-labkit (~> 0.29.0)
   gitlab-license (~> 2.2.1)
   gitlab-mail_room (~> 0.0.9)
   gitlab-markup (~> 1.8.0)
   gitlab-net-dns (~> 0.9.1)
   gitlab-omniauth-openid-connect (~> 0.10.0)
   gitlab-sidekiq-fetcher (= 0.9.0)
-  gitlab-styles (~> 9.0.0)
+  gitlab-styles (~> 9.1.0)
   gitlab_chronic_duration (~> 0.10.6.2)
   gitlab_omniauth-ldap (~> 2.2.0)
   gon (~> 6.4.0)
   google-api-client (~> 0.33)
-  google-protobuf (~> 3.21, >= 3.21.9)
-  gpgme (~> 2.0.19)
+  google-protobuf (~> 3.21, >= 3.21.12)
+  gpgme (~> 2.0.22)
   grape (~> 1.5.2)
   grape-entity (~> 0.10.0)
   grape-path-helpers (~> 1.7.1)
@@ -1718,14 +1715,15 @@ DEPENDENCIES
   kas-grpc (~> 0.0.2)
   knapsack (~> 1.21.1)
   kramdown (~> 2.3.1)
-  kubeclient (~> 4.9.3)
-  lefthook (~> 1.2.0)
+  kubeclient (~> 4.9.3)!
+  lefthook (~> 1.2.6)
   letter_opener_web (~> 2.0.0)
   license_finder (~> 7.0)
   licensee (~> 9.15)
+  listen (~> 3.7)
   lockbox (~> 0.6.2)
   lograge (~> 0.5)
-  loofah (~> 2.19.0)
+  loofah (~> 2.19.1)
   lookbook (~> 1.2, >= 1.2.1)
   lru_redux
   mail (= 2.7.1)
@@ -1738,7 +1736,7 @@ DEPENDENCIES
   multi_json (~> 1.14.1)
   net-ldap (~> 0.16.3)
   net-ntp
-  nokogiri (~> 1.13.9)
+  nokogiri (~> 1.13.10)
   oauth2 (~> 2.0)
   octokit (~> 4.15)
   ohai (~> 16.10)
@@ -1763,7 +1761,7 @@ DEPENDENCIES
   omniauth-shibboleth (~> 1.3.0)
   omniauth-twitter (~> 1.4)
   omniauth_crowd (~> 2.4.0)!
-  openssl (= 2.2.1)
+  openssl (= 2.2.2)
   org-ruby (~> 0.9.12)
   pact (~> 1.63)
   parallel (~> 1.19)
@@ -1773,7 +1771,7 @@ DEPENDENCIES
   pg_query (~> 2.2)
   png_quantizator (~> 0.2.1)
   premailer-rails (~> 1.10.3)
-  prometheus-client-mmap (~> 0.16)
+  prometheus-client-mmap (~> 0.17)
   pry-byebug
   pry-rails (~> 0.3.9)
   pry-shell (~> 0.5.1)
@@ -1835,10 +1833,10 @@ DEPENDENCIES
   simplecov-cobertura (~> 1.3.1)
   simplecov-lcov (~> 0.8.0)
   slack-messenger (~> 2.3.4)
-  snowplow-tracker (~> 0.6.1)
+  snowplow-tracker (~> 0.8.0)
   solargraph (~> 0.47.2)
   spamcheck (~> 1.0.0)
-  spring (~> 2.1.0)
+  spring (~> 4.1.0)
   spring-commands-rspec (~> 1.0.4)
   sprite-factory (~> 1.7)
   sprockets (~> 3.7.0)
@@ -1852,7 +1850,6 @@ DEPENDENCIES
   test-prof (~> 1.0.7)
   test_file_finder (~> 0.1.3)
   thrift (>= 0.16.0)
-  timecop (~> 0.9.1)
   timfel-krb5-auth (~> 0.8)
   toml-rb (~> 2.2.0)
   truncato (~> 0.7.12)
@@ -1863,7 +1860,7 @@ DEPENDENCIES
   unleash (~> 3.2.2)
   valid_email (~> 0.1)
   validates_hostname (~> 1.0.11)
-  version_sorter (~> 2.2.4)
+  version_sorter (~> 2.3)
   view_component (~> 2.74.1)
   vmstat (~> 2.3.0)
   warning (~> 1.3.0)
@@ -1874,4 +1871,4 @@ DEPENDENCIES
   yajl-ruby (~> 1.4.3)
 
 BUNDLED WITH
-   2.3.25
+   2.3.26

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${version}";
-    hash = "sha256-cRwjg0+p+1u+tdG+skqGWzxwM375P4aUsF4JVGgCXOI=";
+    hash = "sha256-7mVLfzguQ7eNIFTJMLJyoM+/pveGO88j2JUEOqvnqvk=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config inih bash-completion ];

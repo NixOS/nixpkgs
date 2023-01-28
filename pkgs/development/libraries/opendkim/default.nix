@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trusteddomainproject";
     repo = "OpenDKIM";
-    rev = "rel-opendkim-${lib.replaceChars ["."] ["-"] version}";
+    rev = "rel-opendkim-${lib.replaceStrings ["."] ["-"] version}";
     sha256 = "0nx3in8sa6xna4vfacj8g60hfzk61jpj2ldag80xzxip9c3rd2pw";
   };
 

@@ -26,10 +26,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wyz9ab0mzi84gpf81fs19vrixglmmxi25k6n1mn9h141qmsp590";
+      sha256 = "17lacy6n0hsayafvgxgzmngfq2x62b2arbn32bj2yyzmgxwyxhqn";
       type = "gem";
     };
-    version = "2.7.1";
+    version = "2.7.2";
   };
   faraday-net_http = {
     groups = ["default"];
@@ -47,20 +47,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0n0l1c8kxhpdg6pgv1wgwpdfc7gqkygpd8h41shwc95rapdha9gg";
+      sha256 = "0i4hs0vbgp0w3pdddr37zhydm16af122rmr0w39v3nqrj1ir65kv";
       type = "gem";
     };
-    version = "9.15.3";
+    version = "9.16.0";
   };
   mini_portile2 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0rapl1sfmfi3bfr68da4ca16yhc0pp93vjwkj7y3rdqrzy3b41hy";
+      sha256 = "1af4yarhbbx62f7qsmgg5fynrik0s36wjy3difkawy536xg343mp";
       type = "gem";
     };
-    version = "2.8.0";
+    version = "2.8.1";
   };
   nokogiri = {
     dependencies = ["mini_portile2" "racc"];
@@ -68,10 +68,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0cam1455nmi3fzzpa9ixn2hsim10fbprmj62ajpd6d02mwdprwwn";
+      sha256 = "0n79k78c5vdcyl0m3y3l5x9kxl6xf5lgriwi2vd665qmdkr01vnk";
       type = "gem";
     };
-    version = "1.13.9";
+    version = "1.13.10";
   };
   octokit = {
     dependencies = ["faraday" "sawyer"];
@@ -89,20 +89,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sqw1zls6227bgq38sxb2hs8nkdz4hn1zivs27mjbniswfy4zvi6";
+      sha256 = "0hz0bx2qs2pwb0bwazzsah03ilpf3aai8b7lk7s35jsfzwbkjq35";
       type = "gem";
     };
-    version = "5.0.0";
+    version = "5.0.1";
   };
   racc = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0la56m0z26j3mfn1a9lf2l03qx1xifanndf9p3vx1azf6sqy7v9d";
+      sha256 = "09jgz6r0f7v84a7jz9an85q8vvmp743dqcsdm3z9c8rqcqv6pljq";
       type = "gem";
     };
-    version = "1.6.0";
+    version = "1.6.2";
   };
   reverse_markdown = {
     dependencies = ["nokogiri"];

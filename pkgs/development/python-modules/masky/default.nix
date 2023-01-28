@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "masky";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Z4kSec";
     repo = "Masky";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uxq4SBudxFbBiV3Cu+oBRKezIWf5p+8VJlIIqQjtSXA=";
+    hash = "sha256-awPPpdw6/zlVa7/DY1iafrbqIHJERN5+cfX1bTnCjl0=";
   };
 
   propagatedBuildInputs = [

@@ -16,8 +16,20 @@
     </para>
     <itemizedlist>
       <listitem>
-<literallayout>Nix has been updated from 2.3 to 2.8. This mainly brings experimental support for Flakes, but also marks the <literal>nix</literal> command as experimental which now has to be enabled via the configuration explicitly. For more information and instructions for upgrades, see the relase notes for <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.4.html">nix-2.4</link>,
-<link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.5.html">nix-2.5</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.6.html">nix-2.6</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.7.html">nix-2.7</link> and <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.8.html">nix-2.8</link></literallayout>
+        <para>
+          Nix has been updated from 2.3 to 2.8. This mainly brings
+          experimental support for Flakes, but also marks the
+          <literal>nix</literal> command as experimental which now has
+          to be enabled via the configuration explicitly. For more
+          information and instructions for upgrades, see the relase
+          notes for
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.4.html">nix-2.4</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.5.html">nix-2.5</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.6.html">nix-2.6</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.7.html">nix-2.7</link>
+          and
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.8.html">nix-2.8</link>
+        </para>
       </listitem>
       <listitem>
         <para>
@@ -328,7 +340,7 @@
       <listitem>
         <para>
           <link xlink:href="https://maddy.email/">Maddy</link>, a free
-          an open source mail server. Availabe as
+          an open source mail server. Available as
           <link linkend="opt-services.maddy.enable">services.maddy</link>.
         </para>
       </listitem>
@@ -714,7 +726,7 @@
           <literal>programs.msmtp.*</literal> can be used instead for an
           equivalent setup. For example:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   # Original ssmtp configuration:
   services.ssmtp = {
@@ -847,7 +859,7 @@
           <literal>config.nixpkgs.config.allowUnfree</literal> are
           enabled. If you still want these fonts, use:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   fonts.fonts = [
     pkgs.xorg.fontbhlucidatypewriter100dpi
@@ -942,7 +954,7 @@
         <para>
           Before:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.matrix-synapse = {
     enable = true;
@@ -977,7 +989,7 @@
         <para>
           After:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.matrix-synapse = {
     enable = true;
@@ -1143,7 +1155,7 @@
         <para>
           Before:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
   services.keycloak = {
     enable = true;
     httpPort = &quot;8080&quot;;
@@ -1157,7 +1169,7 @@
         <para>
           After:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
   services.keycloak = {
     enable = true;
     settings = {
@@ -1422,7 +1434,7 @@
               derivation if <literal>name</literal> is
               <literal>&quot;vim&quot;</literal> (the default). This
               makes the <literal>wrapManual</literal> argument obsolete,
-              but this behavior can be overriden by setting the
+              but this behavior can be overridden by setting the
               <literal>standalone</literal> argument.
             </para>
           </listitem>

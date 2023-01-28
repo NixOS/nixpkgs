@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1ssqb07c277010i6gzzkbdd46gd9mrj0bi0i8vn560n2k2y4j93m";
   };
 
-  checkInputs = [ testresources ];
+  nativeCheckInputs = [ testresources ];
   buildInputs = [ pbr ];
   propagatedBuildInputs = [ fixtures subunit testtools ];
 

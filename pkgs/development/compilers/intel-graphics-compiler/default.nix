@@ -6,7 +6,6 @@
 , bison
 , flex
 , llvmPackages_11
-, lld_11
 , opencl-clang
 , python3
 , spirv-tools
@@ -20,42 +19,40 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.3.0";
-    sha256 = "sha256-1Rm4TCERTOcPGWJF+yNoKeB9x3jfqnh7Vlv+0Xpmjbk=";
+    rev = "v0.7.1";
+    sha256 = "sha256-bpi4hLpov1CbFy4jr9Eytc5O4ismYw0J+KgXyZtQYks=";
   };
+
   llvmPkgs = llvmPackages_11 // {
-    inherit spirv-llvm-translator;
-  };
-  inherit (llvmPkgs) llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang libclang spirv-llvm-translator;
-  inherit (lib) getVersion optional optionals versionOlder versions;
+    spirv-llvm-translator = spirv-llvm-translator.override { llvm = llvm; };
+  } // lib.optionalAttrs buildWithPatches opencl-clang;
+
+  inherit (llvmPackages_11) lld llvm;
+  inherit (llvmPkgs) clang libclang spirv-llvm-translator;
 in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.11061";
+  version = "1.0.12504.5";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "sha256-qS/+GTqHtp3T6ggPKrCDsrTb7XvVOUaNbMzGU51jTu4=";
+    sha256 = "sha256-Ok+cXMTBABrHHM4Vc2yzlou48YHoQnaB3We8mGZhSwI=";
   };
 
-  nativeBuildInputs = [ clang cmake bison flex python3 ];
+  nativeBuildInputs = [ cmake bison flex python3 ];
 
-  buildInputs = [ spirv-headers spirv-tools clang opencl-clang spirv-llvm-translator llvm lld_11 ];
+  buildInputs = [ spirv-headers spirv-tools spirv-llvm-translator llvm lld ];
 
   strictDeps = true;
 
-  # checkInputs = [ lit pythonPackages.nose ];
-
-  # FIXME: How do we run the test suite?
-  # https://github.com/intel/intel-graphics-compiler/issues/98
+  # testing is done via intel-compute-runtime
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace ./external/SPIRV-Tools/CMakeLists.txt \
+    substituteInPlace external/SPIRV-Tools/CMakeLists.txt \
       --replace '$'''{SPIRV-Tools_DIR}../../..' \
                 '${spirv-tools}' \
       --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
@@ -64,7 +61,7 @@ stdenv.mkDerivation rec {
                 'set_target_properties(SPIRV-Tools-shared' \
       --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
                 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
-    substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
+    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
       --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
       --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
   '';
@@ -74,10 +71,10 @@ stdenv.mkDerivation rec {
   prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
     mkdir $out
     ln -s ${clang}/bin/clang $out/
-    ln -s clang $out/clang-${versions.major (getVersion clang)}
+    ln -s clang $out/clang-${lib.versions.major (lib.getVersion clang)}
     ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c-base.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
   '';
 
   cmakeFlags = [
@@ -86,15 +83,14 @@ stdenv.mkDerivation rec {
     "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
-    "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"
+    "-DIGC_PREFERRED_LLVM_VERSION=${lib.getVersion llvm}"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gloaming ];
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/intel-graphics-compiler.x86_64-darwin
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -104,7 +104,7 @@ buildPythonApplication rec {
   ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
   ;
 
-  checkInputs = [ pytest glibcLocales nose ];
+  nativeCheckInputs = [ pytest glibcLocales nose ];
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
   buildInputs = [ lame mpv-unwrapped libpulseaudio ];

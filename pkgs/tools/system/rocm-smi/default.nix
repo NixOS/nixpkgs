@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
-  version = "5.4.0";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = [ "x86_64-linux" ];
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

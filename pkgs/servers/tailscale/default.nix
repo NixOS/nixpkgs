@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "1.34.0";
+  version = "1.34.2";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    sha256 = "sha256-ngcFoEDec/6I9gWpJ767ju2OvZfS4RhlSbK//xXIFxs=";
+    sha256 = "sha256-uFr7swB7AQLvjDg+1KBCQuoLkDw454+gVe+6/iD74LM=";
   };
-  vendorSha256 = "sha256-nSllDi6G4QAGyuoGduDhI0vaVuN2//eg+gXRSZ3ERiQ=";
+  vendorSha256 = "sha256-//qhvzZzaAqfcj4HZIy6ZkGyfAwtRdf7ARaXI+trTe0=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 

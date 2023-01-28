@@ -41,7 +41,7 @@ let
 in {
 
   imports = [
-    (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
+    (mkAliasOptionModuleMD [ "services" "compton" ] [ "services" "picom" ])
     (mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
       This option corresponds to `refresh-rate`, which has been unused
       since picom v6 and was subsequently removed by upstream.

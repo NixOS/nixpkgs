@@ -14,7 +14,7 @@ with lib;
 
     # This alias module can't be where _module.check is defined because it would
     # be added to submodules as well there
-    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
+    (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
@@ -36,6 +36,7 @@ with lib;
     '')
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
     (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "gnome-documents" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))

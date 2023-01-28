@@ -4,29 +4,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uptime-kuma";
-  version = "1.18.5";
+  version = "1.19.6";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = finalAttrs.version;
-    sha256 = "sha256-4RLOY8OqhbcnSPa0VpAdMT3E1M0/ev/sSAmbQUQxqbw=";
+    sha256 = "sha256-Hk0me4VPP8vKp4IhzQKjjhM2BWLGSHnN7JiDJu2WlE8=";
   };
 
-  uiSha256 = "sha256-0KbxagFh4bxNrnekUHx0DGr3urfUUz33zn4EtJIZBps=";
+  uiSha256 = "sha256-oeXklGxAPsUoLRT6DAVRgWm0kvKbLFW4IBc0Rh3j5V4=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
     # See https://github.com/louislam/uptime-kuma/pull/2119
     ./fix-database-permissions.patch
   ];
-
-  postPatch = ''
-    substituteInPlace server/ping-lite.js \
-      --replace "/bin/ping" "${iputils}/bin/ping" \
-      --replace "/sbin/ping6" "${iputils}/bin/ping" \
-      --replace "/sbin/ping" "${iputils}/bin/ping"
-  '';
 
   nativeBuildInputs = [ makeWrapper ];
 

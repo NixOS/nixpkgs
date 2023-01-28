@@ -1,4 +1,4 @@
-commit 4f497c358e0386b65df1c1d636aadf72f8647134
+commit bd8f6ecea0663bdd150aa48941cbd47d25874396
 Author: Nick Cao <nickcao@nichi.co>
 Date:   Tue Apr 19 13:49:59 2022 +0800
 
@@ -13,10 +13,10 @@ Date:   Tue Apr 19 13:49:59 2022 +0800
     generated cmake files to point to the corrected pathes.
 
 diff --git a/Source/cmExportFileGenerator.cxx b/Source/cmExportFileGenerator.cxx
-index 8b0f64e23b..03291e2ee2 100644
+index 5a33349b19..677a6084d6 100644
 --- a/Source/cmExportFileGenerator.cxx
 +++ b/Source/cmExportFileGenerator.cxx
-@@ -6,6 +6,7 @@
+@@ -7,6 +7,7 @@
  #include <cstring>
  #include <sstream>
  #include <utility>
@@ -24,7 +24,7 @@ index 8b0f64e23b..03291e2ee2 100644
  
  #include <cm/memory>
  
-@@ -325,9 +326,23 @@ static void prefixItems(std::string& exportDirs)
+@@ -330,9 +331,21 @@ static void prefixItems(std::string& exportDirs)
    for (std::string const& e : entries) {
      exportDirs += sep;
      sep = ";";
@@ -34,8 +34,6 @@ index 8b0f64e23b..03291e2ee2 100644
 +    if (!cmSystemTools::FileIsFullPath(e)) {
 +      if (std::getenv("dev")) {
 +        if (cmHasLiteralPrefix(e, "include") || cmHasLiteralPrefix(e, "./include")) {
-+          exportDirs += std::getenv("dev");
-+        } else if (cmHasLiteralPrefix(e, "bin") || cmHasLiteralPrefix(e, "./bin")) {
 +          exportDirs += std::getenv("dev");
 +        } else if (cmHasLiteralPrefix(e, "mkspecs") || cmHasLiteralPrefix(e, "./mkspecs")) {
 +          exportDirs += std::getenv("dev");
@@ -52,18 +50,18 @@ index 8b0f64e23b..03291e2ee2 100644
      exportDirs += e;
    }
 diff --git a/Source/cmExportInstallFileGenerator.cxx b/Source/cmExportInstallFileGenerator.cxx
-index 4a3c565bce..5afa9e5e50 100644
+index adccdfeece..ba248305bd 100644
 --- a/Source/cmExportInstallFileGenerator.cxx
 +++ b/Source/cmExportInstallFileGenerator.cxx
-@@ -5,6 +5,7 @@
+@@ -6,6 +6,7 @@
  #include <memory>
  #include <sstream>
  #include <utility>
 +#include <cstdlib>
  
  #include "cmExportSet.h"
- #include "cmGeneratedFileStream.h"
-@@ -263,7 +264,7 @@ void cmExportInstallFileGenerator::LoadConfigFiles(std::ostream& os)
+ #include "cmFileSet.h"
+@@ -266,7 +267,7 @@ void cmExportInstallFileGenerator::LoadConfigFiles(std::ostream& os)
  
  void cmExportInstallFileGenerator::ReplaceInstallPrefix(std::string& input)
  {
@@ -72,7 +70,7 @@ index 4a3c565bce..5afa9e5e50 100644
  }
  
  bool cmExportInstallFileGenerator::GenerateImportFileConfig(
-@@ -381,9 +382,24 @@ void cmExportInstallFileGenerator::SetImportLocationProperty(
+@@ -382,9 +383,22 @@ void cmExportInstallFileGenerator::SetImportLocationProperty(
    // Construct the installed location of the target.
    std::string dest = itgen->GetDestination(config);
    std::string value;
@@ -82,8 +80,6 @@ index 4a3c565bce..5afa9e5e50 100644
 -    value = "${_IMPORT_PREFIX}/";
 +    if (std::getenv("dev")) {
 +      if (cmHasLiteralPrefix(dest, "include") || cmHasLiteralPrefix(dest, "./include")) {
-+        value = std::getenv("dev");
-+      } else if (cmHasLiteralPrefix(dest, "bin") || cmHasLiteralPrefix(dest, "./bin")) {
 +        value = std::getenv("dev");
 +      } else if (cmHasLiteralPrefix(dest, "mkspecs") || cmHasLiteralPrefix(dest, "./mkspecs")) {
 +        value = std::getenv("dev");
@@ -100,18 +96,16 @@ index 4a3c565bce..5afa9e5e50 100644
    value += dest;
    value += "/";
 diff --git a/Source/cmGeneratorExpression.cxx b/Source/cmGeneratorExpression.cxx
-index 840f5112d6..7bb4ab41aa 100644
+index f988e54a19..cc5c7ac9fd 100644
 --- a/Source/cmGeneratorExpression.cxx
 +++ b/Source/cmGeneratorExpression.cxx
-@@ -197,7 +197,22 @@ static void prefixItems(const std::string& content, std::string& result,
+@@ -192,7 +192,20 @@ static void prefixItems(const std::string& content, std::string& result,
      sep = ";";
      if (!cmSystemTools::FileIsFullPath(e) &&
          cmGeneratorExpression::Find(e) != 0) {
 -      result += prefix;
 +      if (std::getenv("dev")) {
 +        if (cmHasLiteralPrefix(e, "include") || cmHasLiteralPrefix(e, "./include")) {
-+          result += std::getenv("dev");
-+        } else if (cmHasLiteralPrefix(e, "bin") || cmHasLiteralPrefix(e, "./bin")) {
 +          result += std::getenv("dev");
 +        } else if (cmHasLiteralPrefix(e, "mkspecs") || cmHasLiteralPrefix(e, "./mkspecs")) {
 +          result += std::getenv("dev");

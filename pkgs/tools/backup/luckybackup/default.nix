@@ -3,7 +3,6 @@
 , rsync, ssh
 }:
 
-with lib;
 mkDerivation rec {
   pname = "luckybackup";
   version = "0.5.0";
@@ -26,7 +25,7 @@ mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A powerful, fast and reliable backup & sync tool";
     longDescription = ''
       luckyBackup is an application for data back-up and synchronization
@@ -37,7 +36,7 @@ mkDerivation rec {
       before proceeding in any data manipulation), reliable and fully
       customizable.
     '';
-    homepage = "http://luckybackup.sourceforge.net/";
+    homepage = "https://luckybackup.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

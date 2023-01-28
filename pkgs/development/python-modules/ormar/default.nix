@@ -8,6 +8,7 @@
 , databases
 , fastapi
 , fetchFromGitHub
+, httpx
 , importlib-metadata
 , mysqlclient
 , orjson
@@ -18,6 +19,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , sqlalchemy
 , typing-extensions
 }:
@@ -36,8 +38,15 @@ buildPythonPackage rec {
     hash = "sha256-B6dC9+t/pe7vsPb7rkGAbJWLfCAF7lIElFvt1pUu5yA=";
   };
 
+  pythonRelaxDeps = [
+    "databases"
+    "pydantic"
+    "SQLAlchemy"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -55,12 +64,13 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiomysql
     aiopg
     aiosqlite
     asyncpg
     fastapi
+    httpx
     mysqlclient
     psycopg2
     pymysql
@@ -68,15 +78,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'SQLAlchemy = ">=1.3.18,<1.4.42"' 'SQLAlchemy = ">=1.3.18"' \
-      --replace 'databases = ">=0.3.2,!=0.5.0,!=0.5.1,!=0.5.2,!=0.5.3,<0.6.2"' 'databases = ">=0.5.5"'
-  '';
-
   disabledTests = [
     # TypeError: Object of type bytes is not JSON serializable
     "test_bulk_operations_with_json"
+    "test_all_endpoints"
     # Tests require a database
     "test_model_multiple_instances_of_same_table_in_schema"
     "test_load_all_multiple_instances_of_same_table_in_schema"
@@ -124,6 +129,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
+    changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
   };

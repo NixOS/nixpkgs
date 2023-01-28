@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.13.5";
+  version = "0.13.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1GoFmncG5bUWJOIUDLatopQMxCFsmlcj8aofJMGUTzQ=";
+    hash = "sha256-o9mIGSILztnHY3Eyb0MlznUEdMbCfA1BT6ux0UlesBc=";
   };
 
   patches = [
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     shortuuid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     azure-core
     bokeh
     flask
@@ -114,6 +114,7 @@ buildPythonPackage rec {
     "tests/unit_tests_old/test_footer.py"
     "tests/unit_tests_old/test_internal_api.py"
     "tests/unit_tests_old/test_keras.py"
+    "tests/unit_tests_old/test_logging.py"
     "tests/unit_tests_old/test_metric_internal.py"
     "tests/unit_tests_old/test_public_api.py"
     "tests/unit_tests_old/test_report_api.py"

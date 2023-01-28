@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-naWkSXQHfImd6R+RHKkmTe8UiqxknZEFYoJ0g/URCVY=";
+
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "Authoritative dns server for A/AAAA container records";

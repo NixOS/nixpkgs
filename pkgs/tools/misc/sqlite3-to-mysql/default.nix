@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   # tests require a mysql server instance
   doCheck = false;
 
-  # run package tests as a seperate nixos test
+  # run package tests as a separate nixos test
   passthru.tests = {
     nixosTest = nixosTests.sqlite3-to-mysql;
   };

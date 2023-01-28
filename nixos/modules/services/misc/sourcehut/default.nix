@@ -1390,6 +1390,6 @@ in
     '')
   ];
 
-  meta.doc = ./sourcehut.xml;
+  meta.doc = ./default.xml;
   meta.maintainers = with maintainers; [ tomberek ];
 }

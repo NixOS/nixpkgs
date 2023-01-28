@@ -34,7 +34,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # disable tests for now due to:
   #   - some tests require data download (see dipy/dipy/issues/2092);

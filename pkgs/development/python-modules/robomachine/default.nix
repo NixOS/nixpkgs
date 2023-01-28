@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "RoboMachine";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4251d405759a38f1e665acc245dcbcdec319376718169a73c57560183370fe0e";
+    sha256 = "sha256-XrxHaV9U7mZ2TvySHGm6qw1AsoukppzwPq4wufIjL+k=";
   };
 
   propagatedBuildInputs = [ pyparsing robotframework allpairspy ];

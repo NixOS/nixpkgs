@@ -8,6 +8,7 @@
 , oildev
 , configargparse
 , binlore
+, resholve
 , resholve-utils
 }:
 
@@ -41,7 +42,7 @@ python27.pkgs.buildPythonApplication {
 
   passthru = {
     inherit (resholve-utils) mkDerivation phraseSolution writeScript writeScriptBin;
-    tests = callPackage ./test.nix { inherit rSrc binlore python27; };
+    tests = callPackage ./test.nix { inherit rSrc binlore python27 resholve; };
   };
 
   meta = with lib; {
@@ -50,5 +51,10 @@ python27.pkgs.buildPythonApplication {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ abathur ];
     platforms = platforms.all;
+    knownVulnerabilities = [ ''
+      resholve depends on python27 (EOL). While it's safe to
+      run on trusted input in the build sandbox, you should
+      avoid running it on untrusted input.
+    '' ];
   };
 }

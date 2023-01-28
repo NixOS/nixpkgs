@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "A library to handle automated deprecations";

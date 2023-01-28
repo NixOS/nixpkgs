@@ -3,22 +3,26 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, testers
+, gdu
 }:
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.20.0";
+  version = "5.21.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-8wkp6pu6QDQBrXJVasi9YhxdzyaobDp0WbwNFCQpLag=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QxepFU/ZQWVH19AeoSnXAAUhLO6VKmrZIIpVw1tTft4=";
   };
 
-  vendorSha256 = "sha256-UP6IdJLc93gRP4vwKKOJl3sNt4sOFeYXjvwk8QM+D48=";
+  vendorHash = "sha256-UP6IdJLc93gRP4vwKKOJl3sNt4sOFeYXjvwk8QM+D48=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -36,6 +40,10 @@ buildGoModule rec {
 
   doCheck = !stdenv.isDarwin;
 
+  passthru.tests.version = testers.testVersion {
+    package = gdu;
+  };
+
   meta = with lib; {
     description = "Disk usage analyzer with console interface";
     longDescription = ''
@@ -44,8 +52,8 @@ buildGoModule rec {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
+    changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab maintainers.zowoq ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ fab zowoq ];
   };
 }

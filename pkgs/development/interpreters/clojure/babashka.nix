@@ -2,11 +2,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "1.0.168";
+  version = "1.0.170";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-K56SEfSq0mjltUwR2VZxGiGn9nnEdDBoZrkaBOIIl7k=";
+    sha256 = "sha256-NM1lcDi60DuBr67kOx6CVLyO8p2DUq6c2oTZEiHBFjw=";
   };
 
   executable = "bb";
@@ -30,7 +30,7 @@ buildGraalvmNativeImage rec {
     set -euo pipefail
 
     readonly latest_version="$(curl \
-      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
       -s "https://api.github.com/repos/babashka/babashka/releases/latest" \
       | jq -r '.tag_name')"
 

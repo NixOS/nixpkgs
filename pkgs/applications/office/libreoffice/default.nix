@@ -96,7 +96,7 @@
 , gpgme
 , libwebp
 , abseil-cpp
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 , mkDerivation ? null

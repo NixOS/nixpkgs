@@ -62,7 +62,7 @@ in
           Path to logfile for logging.
 
           If set to null, logging will be output to stdout which means
-          all output will be catched by systemd.
+          all output will be caught by systemd.
         '';
       };
 

@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     makeWrapper $out/aesm/aesm_service $out/bin/aesm_service \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ protobuf ]}:$out/aesm \
+      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ protobuf ]}:$out/aesm \
       --chdir "$out/aesm"
 
     # Make sure we didn't forget to handle any files

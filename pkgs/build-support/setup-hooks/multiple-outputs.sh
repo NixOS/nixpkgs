@@ -47,7 +47,7 @@ _overrideFirst outputInfo "info" "$outputBin"
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
-    if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
+    if [ "$(getAllOutputNames)" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
@@ -66,19 +66,17 @@ _multioutConfig() {
         fi
     fi
 
-    configureFlags="\
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include --oldincludedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --docdir=${!outputDoc}/share/doc/${shareDocName} \
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --localedir=${!outputLib}/share/locale \
-        $configureFlags"
+    prependToVar configureFlags \
+        --bindir="${!outputBin}"/bin --sbindir="${!outputBin}"/sbin \
+        --includedir="${!outputInclude}"/include --oldincludedir="${!outputInclude}"/include \
+        --mandir="${!outputMan}"/share/man --infodir="${!outputInfo}"/share/info \
+        --docdir="${!outputDoc}"/share/doc/"${shareDocName}" \
+        --libdir="${!outputLib}"/lib --libexecdir="${!outputLib}"/libexec \
+        --localedir="${!outputLib}"/share/locale
 
-    installFlags="\
-        pkgconfigdir=${!outputDev}/lib/pkgconfig \
-        m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
-        $installFlags"
+    prependToVar installFlags \
+        pkgconfigdir="${!outputDev}"/lib/pkgconfig \
+        m4datadir="${!outputDev}"/share/aclocal aclocaldir="${!outputDev}"/share/aclocal
 }
 
 
@@ -94,7 +92,7 @@ moveToOutput() {
     local patt="$1"
     local dstOut="$2"
     local output
-    for output in $outputs; do
+    for output in $(getAllOutputNames); do
         if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
         for srcPath in "${!output}"/$patt; do
@@ -149,7 +147,7 @@ _multioutDocs() {
 
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
-    if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
+    if [ "$(getAllOutputNames)" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
     moveToOutput include "${!outputInclude}"
     # these files are sometimes provided even without using the corresponding tool
     moveToOutput lib/pkgconfig "${!outputDev}"
@@ -166,10 +164,10 @@ _multioutDevs() {
 
 # Make the "dev" propagate other outputs needed for development.
 _multioutPropagateDev() {
-    if [ "$outputs" = "out" ]; then return; fi;
+    if [ "$(getAllOutputNames)" = "out" ]; then return; fi;
 
     local outputFirst
-    for outputFirst in $outputs; do
+    for outputFirst in $(getAllOutputNames); do
         break
     done
     local propagaterOutput="$outputDev"

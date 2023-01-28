@@ -11,7 +11,7 @@
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
-, gmp, mpfr, libmpc, gettext, which, patchelf
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , enableMultilib ? false
@@ -191,7 +191,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langGo crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -206,7 +206,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross threadsCross
       version
 
-      gmp mpfr libmpc isl
+      binutils gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib

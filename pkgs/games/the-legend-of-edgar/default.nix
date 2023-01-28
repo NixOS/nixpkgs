@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "the-legend-of-edgar";
-  version = "1.35";
+  version = "1.36";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "riksweeney";
     repo = "edgar";
     rev = version;
-    hash = "sha256-ojy4nEW9KiSte/AoFUMPrKCxvIeQpMVIL4ileHiBydo=";
+    hash = "sha256-u2mg4hpcjPXzuZjYKIC4lgqGJPFRB9baHvaiu/YafZw=";
   };
 
   nativeBuildInputs = [

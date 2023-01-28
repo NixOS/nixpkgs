@@ -58,9 +58,10 @@ lib.recurseIntoAttrs {
       inherit hello;
     } ''
       echo "Checking $failed/testBuildFailure.log"
-      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log
+      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log >/dev/null
       [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
       touch $out
+      echo 'All good.'
     '';
 
     multiOutput = runCommand "testBuildFailure-multiOutput" {

@@ -47,14 +47,14 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.86.0";
+  version = "7.87.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    sha256 = "sha256-9cpp2wPuoX+ocFvfsan1jXakbJAQUYEJuzjzExN+Cig=";
+    hash = "sha256-XW4Sh2G3EQlG0Sdq/28PJm8rcm9eYZ9+CgV6R0FV8wc=";
   };
 
   patches = [

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     httpx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytest-mock
     pytestCheckHook

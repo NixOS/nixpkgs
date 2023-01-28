@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-dbfs";
-  version = "2.0.2";
+  version = "2.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+zypKosn+lKEjxJhjLHD43i8jK40WvapD8pjXQehU7E=";
+    hash = "sha256-WQyYgjEe2oxNXBcHMhFXJ++XlIWf/rtJylvb6exwg7k=";
   };
 
   propagatedBuildInputs = [

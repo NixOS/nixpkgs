@@ -642,7 +642,7 @@
             </para>
           </listitem>
         </itemizedlist>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.paperless-ng.extraConfig = {
     # Provide languages as ISO 639-2 codes
@@ -723,7 +723,7 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
-          The <literal>erigon</literal> ethereum node has moved it’s
+          The <literal>erigon</literal> ethereum node has moved its
           database location in <literal>2021-08-03</literal>, users
           upgrading must manually move their chaindata (see
           <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release
@@ -737,7 +737,7 @@ Superuser created successfully.
           insecure. Out-of-tree modules are likely to require
           adaptation: instead of
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   users.users.foo = {
     isSystemUser = true;
@@ -747,7 +747,7 @@ Superuser created successfully.
         <para>
           also create a group for your user:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   users.users.foo = {
     isSystemUser = true;

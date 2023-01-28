@@ -42,7 +42,7 @@ in
       description = mdDoc ''
         Group policies to install.
 
-        See [Mozilla's documentation](https://github.com/mozilla/policy-templates/blob/master/README.md")
+        See [Mozilla's documentation](https://github.com/mozilla/policy-templates/blob/master/README.md)
         for a list of available options.
 
         This can be used to install extensions declaratively! Check out the
@@ -76,6 +76,114 @@ in
         - `"locked"`: Preferences appear as default and can't be changed.
         - `"user"`: Preferences appear as changed.
         - `"clear"`: Value has no effect. Resets to factory defaults on each startup.
+      '';
+    };
+
+    languagePacks = mkOption {
+      # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
+      type = types.listOf (types.enum ([
+        "ach"
+        "af"
+        "an"
+        "ar"
+        "ast"
+        "az"
+        "be"
+        "bg"
+        "bn"
+        "br"
+        "bs"
+        "ca-valencia"
+        "ca"
+        "cak"
+        "cs"
+        "cy"
+        "da"
+        "de"
+        "dsb"
+        "el"
+        "en-CA"
+        "en-GB"
+        "en-US"
+        "eo"
+        "es-AR"
+        "es-CL"
+        "es-ES"
+        "es-MX"
+        "et"
+        "eu"
+        "fa"
+        "ff"
+        "fi"
+        "fr"
+        "fy-NL"
+        "ga-IE"
+        "gd"
+        "gl"
+        "gn"
+        "gu-IN"
+        "he"
+        "hi-IN"
+        "hr"
+        "hsb"
+        "hu"
+        "hy-AM"
+        "ia"
+        "id"
+        "is"
+        "it"
+        "ja"
+        "ka"
+        "kab"
+        "kk"
+        "km"
+        "kn"
+        "ko"
+        "lij"
+        "lt"
+        "lv"
+        "mk"
+        "mr"
+        "ms"
+        "my"
+        "nb-NO"
+        "ne-NP"
+        "nl"
+        "nn-NO"
+        "oc"
+        "pa-IN"
+        "pl"
+        "pt-BR"
+        "pt-PT"
+        "rm"
+        "ro"
+        "ru"
+        "sco"
+        "si"
+        "sk"
+        "sl"
+        "son"
+        "sq"
+        "sr"
+        "sv-SE"
+        "szl"
+        "ta"
+        "te"
+        "th"
+        "tl"
+        "tr"
+        "trs"
+        "uk"
+        "ur"
+        "uz"
+        "vi"
+        "xh"
+        "zh-CN"
+        "zh-TW"
+      ]));
+      default = [ ];
+      description = mdDoc ''
+        The language packs to install.
       '';
     };
 
@@ -136,10 +244,19 @@ in
       };
 
     # Preferences are converted into a policy
-    programs.firefox.policies = mkIf (cfg.preferences != { }) {
+    programs.firefox.policies = {
       Preferences = (mapAttrs
         (_: value: { Value = value; Status = cfg.preferencesStatus; })
         cfg.preferences);
+      ExtensionSettings = listToAttrs (map
+        (lang: nameValuePair
+          "langpack-${lang}@firefox.mozilla.org"
+          {
+            installation_mode = "normal_installed";
+            install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+          }
+        )
+        cfg.languagePacks);
     };
   };
 

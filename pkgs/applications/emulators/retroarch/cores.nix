@@ -49,7 +49,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2022-11-21"
+    , version ? "unstable-2022-12-20"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({

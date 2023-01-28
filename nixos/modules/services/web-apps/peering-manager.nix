@@ -130,7 +130,7 @@ in {
     ldapConfigPath = mkOption {
       type = types.path;
       description = lib.mdDoc ''
-        Path to the Configuration-File for LDAP-Authentification, will be loaded as `ldap_config.py`.
+        Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';
     };

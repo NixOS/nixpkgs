@@ -3,7 +3,6 @@
 , cacert
 , curl
 , runCommandLocal
-, targetPlatform
 , unzip
 , appimage-run
 , addOpenGLRunpath
@@ -49,7 +48,7 @@ let
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
           USERAGENT = builtins.concatStringsSep " " [
-            "User-Agent: Mozilla/5.0 (X11; Linux ${targetPlatform.linuxArch})"
+            "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.targetPlatform.linuxArch})"
             "AppleWebKit/537.36 (KHTML, like Gecko)"
             "Chrome/77.0.3865.75"
             "Safari/537.36"

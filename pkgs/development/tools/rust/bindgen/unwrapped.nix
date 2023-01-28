@@ -24,7 +24,7 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
-  checkInputs = [ clang ];
+  nativeCheckInputs = [ clang ];
 
   RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
 

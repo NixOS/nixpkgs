@@ -1,26 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libclang
-, libffi
-, libxml2
-, llvm
-, sphinx
-, zlib
-, withManual ? true
-, withHTML ? true
+{ lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libffi,
+  libxml2,
+  zlib,
+  withManual ? true,
+  withHTML ? true,
+  llvmPackages,
+  python3,
 }:
 
+let
+  inherit (llvmPackages) libclang llvm;
+  inherit (python3.pkgs) sphinx;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NJ6DIZWab9KayFALHON9GfYg6sQOf71SbtfV+3TYKLQ=";
+    hash = "sha256-XZIVOrTY6Ib5Cu1WtTJm5Bqoas1NbNWbvJPWkpFqH2c=";
   };
 
   nativeBuildInputs = [

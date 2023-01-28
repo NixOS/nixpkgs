@@ -280,6 +280,7 @@ with lib.maintainers; {
       kalbasit
       mic92
       zowoq
+      qbit
     ];
     scope = "Maintain Golang compilers.";
     shortName = "Go";
@@ -395,6 +396,19 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Linux kernel.";
     shortName = "Linux Kernel";
+  };
+
+  llvm = {
+    members = [
+      ericson2314
+      sternenseemann
+      lovek323
+      dtzWill
+      primeos
+    ];
+    scope = "Maintain LLVM package sets and related packages";
+    shortName = "LLVM";
+    enableFeatureFreezePing = true;
   };
 
   lumiguide = {
@@ -755,6 +769,7 @@ with lib.maintainers; {
   xfce = {
     members = [
       romildo
+      muscaln
     ];
     scope = "Maintain Xfce desktop environment and related packages.";
     shortName = "Xfce";

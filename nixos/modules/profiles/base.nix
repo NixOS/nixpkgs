@@ -35,6 +35,7 @@
     pkgs.rsync
     pkgs.socat
     pkgs.screen
+    pkgs.tcpdump
 
     # Hardware-related tools.
     pkgs.sdparm
@@ -42,6 +43,7 @@
     pkgs.smartmontools # for diagnosing hard disks
     pkgs.pciutils
     pkgs.usbutils
+    pkgs.nvme-cli
 
     # Tools to create / manipulate filesystems.
     pkgs.ntfsprogs # for resizing NTFS partitions

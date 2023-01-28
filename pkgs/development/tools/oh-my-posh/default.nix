@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "12.26.1";
+  version = "13.3.1";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-c8O3kZefTZ/IvSRMRxR+Oc6L4Tkcl2PrnuflgbTb7eQ=";
+    hash = "sha256-ssZbeb1UczWEjeRY1WJBQPnbG/p6XcUSWVHLdreGJkk=";
   };
 
-  vendorHash = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
+  vendorHash = "sha256-WiH4qu8DODEhAkxUm6VDcBwFyQO7kNjaiaWPDHCHj9E=";
 
   sourceRoot = "source/src";
 
@@ -36,6 +36,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    mv $out/bin/{src,oh-my-posh}
     mkdir -p $out/share/oh-my-posh
     cp -r ${src}/themes $out/share/oh-my-posh/
     installShellCompletion --cmd oh-my-posh \

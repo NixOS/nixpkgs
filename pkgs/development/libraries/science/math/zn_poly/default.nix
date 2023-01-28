@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  # Tuning (either autotuning or with hand-written paramters) is possible
+  # Tuning (either autotuning or with hand-written parameters) is possible
   # but not implemented here.
   # It seems buggy anyways (see homepage).
   buildFlags = [ "all" "${libbasename}${libext}" ];

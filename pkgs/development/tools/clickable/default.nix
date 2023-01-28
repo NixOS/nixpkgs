@@ -28,7 +28,7 @@ buildPythonPackage rec {
     argcomplete
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Test require network connection

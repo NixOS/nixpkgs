@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "lndhub-go";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
     rev = "${version}";
-    sha256 = "sha256-UGrIj/0ysU4i6PQVkuIeyGdKNCMa9LxikaIPhSKGvaQ=";
+    sha256 = "sha256-bwwypqaqlO+T/8ppKIHqGSzVerhQVl7YHrORyrpaa2w=";
   };
 
   vendorSha256 = "sha256-AiRbUSgMoU8nTzis/7H9HRW2/xZxXFf39JipRbukeiA=";

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     cd src
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "latexify" ];
 

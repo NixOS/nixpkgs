@@ -1,12 +1,12 @@
 { fetchzip, lib }:
 
 let
-  version = "2.100";
+  version = "2.200";
 in
 fetchzip rec {
   name = "sil-abyssinica-${version}";
   url = "https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL-${version}.zip";
-  sha256 = "sha256-06olbIdSlhJ4hgblzzabqIs57FpsyWIdPDFXb9vK31A=";
+  sha256 = "sha256-Kvswqzw8remcu36QaVjeyk03cR4wW5BKQMDihiaxJoE=";
 
   postFetch = ''
     rm -rf $out/web

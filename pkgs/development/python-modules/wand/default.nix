@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , imagemagickBig
+, py
 , pytestCheckHook
 }:
 
@@ -21,7 +22,8 @@ buildPythonPackage rec {
       "magick_home = '${imagemagickBig}'"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
   ];
 

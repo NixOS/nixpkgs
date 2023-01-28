@@ -156,7 +156,7 @@ let
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
-      checkInputs = [ zip ];
+      nativeCheckInputs = [ zip ];
 
       doCheck = true;
 
@@ -164,6 +164,9 @@ let
 
       outputs = [ "out" "doc" ]
         ++ lib.optional (builtins.elem "documentation" features_) "man";
+
+      # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+      NIX_CFLAGS_COMPILE = [ "-DPW_ENABLE_DEPRECATED" ];
 
       CXXFLAGS = lib.optionals stdenv.isDarwin [
         "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"

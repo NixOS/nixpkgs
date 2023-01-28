@@ -1,32 +1,29 @@
---- a/src/emu/emuopts.cpp	2022-10-29 15:05:18.591381088 +0200
-+++ b/src/emu/emuopts.cpp	2022-10-29 15:10:10.938037551 +0200
-@@ -39,16 +39,16 @@
+diff --git a/src/emu/emuopts.cpp b/src/emu/emuopts.cpp
+index 3defd33d0bb..33daacc4fc8 100644
+--- a/src/emu/emuopts.cpp
++++ b/src/emu/emuopts.cpp
+@@ -39,16 +39,16 @@ const options_entry emu_options::s_option_entries[] =
  	{ nullptr,                                           nullptr,     core_options::option_type::HEADER,     "CORE SEARCH PATH OPTIONS" },
- 	{ OPTION_PLUGINDATAPATH,                             ".",         core_options::option_type::STRING,     "path to base folder for plugin data (read/write)" },
- 	{ OPTION_MEDIAPATH ";rp;biospath;bp",                "roms",      core_options::option_type::STRING,     "path to ROM sets and hard disk images" },
--	{ OPTION_HASHPATH ";hash_directory;hash",            "hash",      core_options::option_type::STRING,     "path to software definition files" },
--	{ OPTION_SAMPLEPATH ";sp",                           "samples",   core_options::option_type::STRING,     "path to audio sample sets" },
--	{ OPTION_ARTPATH,                                    "artwork",   core_options::option_type::STRING,     "path to artwork files" },
--	{ OPTION_CTRLRPATH,                                  "ctrlr",     core_options::option_type::STRING,     "path to controller definitions" },
--	{ OPTION_INIPATH,                                    ".;ini;ini/presets",     core_options::option_type::STRING,     "path to ini files" },
--	{ OPTION_FONTPATH,                                   ".",         core_options::option_type::STRING,     "path to font files" },
-+	{ OPTION_HASHPATH ";hash_directory;hash",            "hash;@mamePath@/hash",      core_options::option_type::STRING,     "path to software definition files" },
-+	{ OPTION_SAMPLEPATH ";sp",                           "samples;@mamePath@/samples",   core_options::option_type::STRING,     "path to audio sample sets" },
-+	{ OPTION_ARTPATH,                                    "artwork;@mamePath@/artwork",   core_options::option_type::STRING,     "path to artwork files" },
-+	{ OPTION_CTRLRPATH,                                  "ctrlr;@mamePath@/ctrlr",     core_options::option_type::STRING,     "path to controller definitions" },
-+	{ OPTION_INIPATH,                                    ".;ini;ini/presets;@mamePath@/ini/presets",     core_options::option_type::STRING,     "path to ini files" },
-+	{ OPTION_FONTPATH,                                   ".;@mamePath@",         core_options::option_type::STRING,     "path to font files" },
- 	{ OPTION_CHEATPATH,                                  "cheat",     core_options::option_type::STRING,     "path to cheat files" },
- 	{ OPTION_CROSSHAIRPATH,                              "crosshair", core_options::option_type::STRING,     "path to crosshair files" },
--	{ OPTION_PLUGINSPATH,                                "plugins",   core_options::option_type::STRING,     "path to plugin files" },
--	{ OPTION_LANGUAGEPATH,                               "language",  core_options::option_type::STRING,     "path to UI translation files" },
-+	{ OPTION_PLUGINSPATH,                                "plugins;@mamePath@/plugins",   core_options::option_type::STRING,     "path to plugin files" },
-+	{ OPTION_LANGUAGEPATH,                               "language;@mamePath@/language",  core_options::option_type::STRING,     "path to UI translation files" },
- 	{ OPTION_SWPATH,                                     "software",  core_options::option_type::STRING,     "path to loose software" },
+ 	{ OPTION_PLUGINDATAPATH,                             ".",         core_options::option_type::PATH,       "path to base folder for plugin data (read/write)" },
+ 	{ OPTION_MEDIAPATH ";rp;biospath;bp",                "roms",      core_options::option_type::MULTIPATH,  "path to ROM sets and hard disk images" },
+-	{ OPTION_HASHPATH ";hash_directory;hash",            "hash",      core_options::option_type::MULTIPATH,  "path to software definition files" },
+-	{ OPTION_SAMPLEPATH ";sp",                           "samples",   core_options::option_type::MULTIPATH,  "path to audio sample sets" },
+-	{ OPTION_ARTPATH,                                    "artwork",   core_options::option_type::MULTIPATH,  "path to artwork files" },
+-	{ OPTION_CTRLRPATH,                                  "ctrlr",     core_options::option_type::MULTIPATH,  "path to controller definitions" },
+-	{ OPTION_INIPATH,                                    ".;ini;ini/presets",     core_options::option_type::MULTIPATH,     "path to ini files" },
+-	{ OPTION_FONTPATH,                                   ".",         core_options::option_type::MULTIPATH,  "path to font files" },
++	{ OPTION_HASHPATH ";hash_directory;hash",            "hash;@mamePath@/hash",      core_options::option_type::MULTIPATH,  "path to software definition files" },
++	{ OPTION_SAMPLEPATH ";sp",                           "samples;@mamePath@/samples",   core_options::option_type::MULTIPATH,  "path to audio sample sets" },
++	{ OPTION_ARTPATH,                                    "artwork;@mamePath@/artwork",   core_options::option_type::MULTIPATH,  "path to artwork files" },
++	{ OPTION_CTRLRPATH,                                  "ctrlr;@mamePath@/ctrlr",     core_options::option_type::MULTIPATH,  "path to controller definitions" },
++	{ OPTION_INIPATH,                                    ".;ini;ini/presets;@mamePath@/ini/presets",     core_options::option_type::MULTIPATH,     "path to ini files" },
++	{ OPTION_FONTPATH,                                   ".;@mamePath@",         core_options::option_type::MULTIPATH,  "path to font files" },
+ 	{ OPTION_CHEATPATH,                                  "cheat",     core_options::option_type::MULTIPATH,  "path to cheat files" },
+ 	{ OPTION_CROSSHAIRPATH,                              "crosshair", core_options::option_type::MULTIPATH,  "path to crosshair files" },
+-	{ OPTION_PLUGINSPATH,                                "plugins",   core_options::option_type::MULTIPATH,  "path to plugin files" },
+-	{ OPTION_LANGUAGEPATH,                               "language",  core_options::option_type::MULTIPATH,  "path to UI translation files" },
++	{ OPTION_PLUGINSPATH,                                "plugins;@mamePath@/plugins",   core_options::option_type::MULTIPATH,  "path to plugin files" },
++	{ OPTION_LANGUAGEPATH,                               "language;@mamePath@/language",  core_options::option_type::MULTIPATH,  "path to UI translation files" },
+ 	{ OPTION_SWPATH,                                     "software",  core_options::option_type::MULTIPATH,  "path to loose software" },
  
  	// output directory options
-@@ -1301,3 +1301,4 @@
- 	m_entry = entry;
- 	return entry;
- }
-+

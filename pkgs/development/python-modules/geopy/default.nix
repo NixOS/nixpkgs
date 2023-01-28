@@ -26,7 +26,7 @@ buildPythonPackage rec {
     geographiclib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async_generator
     docutils
     pytestCheckHook

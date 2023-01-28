@@ -30,7 +30,7 @@ buildPythonApplication rec {
     sqlparse
   ];
 
-  checkInputs = [ pytest glibcLocales ];
+  nativeCheckInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
     export HOME=.

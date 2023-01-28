@@ -79,7 +79,7 @@ buildPythonPackage rec {
   # Tests are failing on Python > 3.9
   doCheck = !stdenv.isDarwin && !(pythonAtLeast "3.10");
 
-  checkInputs = ([
+  nativeCheckInputs = ([
     pytestCheckHook
   ]) ++ [
     xdg-utils

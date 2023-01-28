@@ -34,7 +34,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alembic
     psycopg2
     pytestCheckHook

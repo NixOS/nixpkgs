@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ++ lib.optional (pythonOlder "3.5") typing
     ++ lib.optional (pythonOlder "3.0") configparser;
 
-  checkInputs = [
+  nativeCheckInputs = [
     click
     freezegun
     mock

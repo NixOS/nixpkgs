@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  cmakeFlags = [ "-Denable-framework=off" ];
+  cmakeFlags = [
+    "-Denable-framework=off"
+    # set CMAKE_INSTALL_NAME_DIR to correct value on darwin
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

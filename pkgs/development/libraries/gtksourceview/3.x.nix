@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config intltool perl gobject-introspection vala ];
 
-  checkInputs = [ xvfb-run dbus ];
+  nativeCheckInputs = [ xvfb-run dbus ];
 
   buildInputs = [ atk cairo glib pango libxml2 gettext ];
 

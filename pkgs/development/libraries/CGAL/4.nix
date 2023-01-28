@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./cgal_path.patch
 
     # Pull upstream fix for c++17 (gcc-12):
     #  https://github.com/CGAL/cgal/pull/6109

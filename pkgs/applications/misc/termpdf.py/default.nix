@@ -1,26 +1,15 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, bibtool
-, pybtex
-, pymupdf
-, pynvim
-, pyperclip
-, roman
-, pdfrw
-, pagelabels
-, setuptools
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, bibtool, pybtex, pymupdf, pynvim
+, pyperclip, roman, pdfrw, pagelabels, setuptools }:
 
 buildPythonApplication {
   pname = "termpdf.py";
-  version = "2019-10-03";
+  version = "2022-03-28";
 
   src = fetchFromGitHub {
     owner = "dsanson";
     repo = "termpdf.py";
-    rev = "4f3bdf4b5a00801631f2498f2c38c81e0a588ae2";
-    sha256 = "05gbj2fqzqndq1mx6g9asa7i6z8a9jdjrvilfwx8lg23cs356m6m";
+    rev = "e7bd0824cb7d340b8dba7d862e696dba9cb5e5e2";
+    sha256 = "HLQZBaDoZFVBs4JfJcwhrLx8pxdEI56/iTpUjT5pBhk=";
   };
 
   propagatedBuildInputs = [

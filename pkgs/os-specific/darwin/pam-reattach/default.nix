@@ -1,12 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, openpam, darwin }:
 
-let
-  sdk =
-    if stdenv.isAarch64
-    then null
-    else darwin.apple_sdk.sdk;
-in
-
 stdenv.mkDerivation rec {
   pname = "pam_reattach";
   version = "1.3";
@@ -26,12 +19,10 @@ stdenv.mkDerivation rec {
         "arm64"
     }"
     "-DENABLE_CLI=ON"
-  ]
-  ++ lib.optional (sdk != null)
-    "-DCMAKE_LIBRARY_PATH=${sdk}/usr/lib";
+  ] ++ lib.optional (!stdenv.isAarch64) "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
 
   buildInputs = [ openpam ]
-    ++ lib.optional (sdk != null) sdk;
+    ++ lib.optional (!stdenv.isAarch64) darwin.apple_sdk.sdk;
 
   nativeBuildInputs = [ cmake ];
 

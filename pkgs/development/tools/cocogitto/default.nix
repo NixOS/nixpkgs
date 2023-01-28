@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cocogitto";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "oknozor";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZjDZMI84z8riRtidZVeCktwJUMkZU28E23MveJSD7xY=";
+    sha256 = "sha256-BqyV4hJw7H9yN5Kj/XwhYS6hElXdKUJEUi5M/PNlPO0=";
   };
 
-  cargoSha256 = "sha256-oaWWAVTKxrshfvqE+HMQ1WeeEz8lOE7qc6RrgSjDtdU=";
+  cargoHash = "sha256-MA3XW2tPn0qVx7ve+UqCoG4nQ7UyuvXEebrPuLKqS4g=";
 
   # Test depend on git configuration that would likly exist in a normal user enviroment
   # and might be failing to create the test repository it works in.

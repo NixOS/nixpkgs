@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "2019-11";
 
   # Note: stripRoot doesn't work because the archive
-  # constains the metadata directory `__MACOSX`.
+  # contains the metadata directory `__MACOSX`.
   src = fetchzip {
     url = "https://tobiasjung.name/downloadfile.php?file=profont-x11.zip";
     sha256 = "12dbm87wvcpmn7nzgzwlk45cybp091diara8blqm6129ps27z6kb";

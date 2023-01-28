@@ -55,7 +55,7 @@ buildPythonPackage rec {
     jaraco_collections
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     objgraph
     path
     pytest-forked
@@ -78,6 +78,9 @@ buildPythonPackage rec {
 
     "test_antistampede"
     "test_file_stream"
+    "test_basic_request"
+    "test_3_Redirect"
+    "test_4_File_deletion"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];

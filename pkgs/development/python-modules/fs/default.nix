@@ -5,6 +5,7 @@
 , setuptools
 , six
 , appdirs
+, scandir ? null
 , backports_os ? null
 , typing ? null
 , pytz
@@ -31,10 +32,11 @@ buildPythonPackage rec {
 
   # strong cycle with paramaterized
   doCheck = false;
-  checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
+  nativeCheckInputs = [ pyftpdlib mock psutil pytestCheckHook ];
   propagatedBuildInputs = [ six appdirs pytz setuptools ]
     ++ lib.optionals (!isPy3k) [ backports_os ]
     ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
+    ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]
     ++ lib.optionals (!pythonAtLeast "3.5") [ enum34 ];
 
   LC_ALL="en_US.utf-8";

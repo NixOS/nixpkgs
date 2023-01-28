@@ -34,6 +34,9 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  separateDebugInfo = true;
+    # debugging requires information for both the unikernel and the tender
+
   installPhase = ''
     runHook preInstall
     export DESTDIR=$out
@@ -52,7 +55,7 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;
-  checkInputs = [ util-linux qemu ];
+  nativeCheckInputs = [ util-linux qemu ];
   checkPhase = ''
     runHook preCheck
     patchShebangs tests

@@ -3,7 +3,6 @@
 , makeWrapper
 , retroarch
 , symlinkJoin
-, writeTextDir
 , cores ? [ ]
 }:
 

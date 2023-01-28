@@ -53,7 +53,7 @@ $ . $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell
         Switch to the NixOS channel:
       </para>
       <para>
-        If you've just installed Nix on a non-NixOS distribution, you
+        If you’ve just installed Nix on a non-NixOS distribution, you
         will be on the <literal>nixpkgs</literal> channel by default.
       </para>
       <programlisting>
@@ -78,11 +78,11 @@ $ nix-channel --add https://nixos.org/channels/nixos-version nixpkgs
         Install the NixOS installation tools:
       </para>
       <para>
-        You'll need <literal>nixos-generate-config</literal> and
+        You’ll need <literal>nixos-generate-config</literal> and
         <literal>nixos-install</literal>, but this also makes some man
         pages and <literal>nixos-enter</literal> available, just in case
         you want to chroot into your NixOS partition. NixOS installs
-        these by default, but you don't have NixOS yet..
+        these by default, but you don’t have NixOS yet..
       </para>
       <programlisting>
 $ nix-env -f '&lt;nixpkgs&gt;' -iA nixos-install-tools
@@ -105,7 +105,7 @@ $ nix-env -f '&lt;nixpkgs&gt;' -iA nixos-install-tools
         mounting steps of <xref linkend="sec-installation" />
       </para>
       <para>
-        If you're about to install NixOS in place using
+        If you’re about to install NixOS in place using
         <literal>NIXOS_LUSTRATE</literal> there is nothing to do for
         this step.
       </para>
@@ -118,18 +118,18 @@ $ nix-env -f '&lt;nixpkgs&gt;' -iA nixos-install-tools
 $ sudo `which nixos-generate-config` --root /mnt
 </programlisting>
       <para>
-        You'll probably want to edit the configuration files. Refer to
+        You’ll probably want to edit the configuration files. Refer to
         the <literal>nixos-generate-config</literal> step in
         <xref linkend="sec-installation" /> for more information.
       </para>
       <para>
         Consider setting up the NixOS bootloader to give you the ability
         to boot on your existing Linux partition. For instance, if
-        you're using GRUB and your existing distribution is running
+        you’re using GRUB and your existing distribution is running
         Ubuntu, you may want to add something like this to your
         <literal>configuration.nix</literal>:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 boot.loader.grub.extraEntries = ''
   menuentry &quot;Ubuntu&quot; {
     search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
@@ -215,21 +215,21 @@ $ sudo `which nixos-generate-config`
 </programlisting>
       <para>
         Note that this will place the generated configuration files in
-        <literal>/etc/nixos</literal>. You'll probably want to edit the
+        <literal>/etc/nixos</literal>. You’ll probably want to edit the
         configuration files. Refer to the
         <literal>nixos-generate-config</literal> step in
         <xref linkend="sec-installation" /> for more information.
       </para>
       <para>
-        You'll likely want to set a root password for your first boot
-        using the configuration files because you won't have a chance to
-        enter a password until after you reboot. You can initalize the
+        You’ll likely want to set a root password for your first boot
+        using the configuration files because you won’t have a chance to
+        enter a password until after you reboot. You can initialize the
         root password to an empty one with this line: (and of course
-        don't forget to set one once you've rebooted or to lock the
+        don’t forget to set one once you’ve rebooted or to lock the
         account with <literal>sudo passwd -l root</literal> if you use
         <literal>sudo</literal>)
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 users.users.root.initialHashedPassword = &quot;&quot;;
 </programlisting>
     </listitem>
@@ -262,7 +262,7 @@ $ sudo chown -R 0:0 /nix
       </para>
       <para>
         <literal>/etc/NIXOS_LUSTRATE</literal> tells the NixOS bootup
-        scripts to move <emphasis>everything</emphasis> that's in the
+        scripts to move <emphasis>everything</emphasis> that’s in the
         root partition to <literal>/old-root</literal>. This will move
         your existing distribution out of the way in the very early
         stages of the NixOS bootup. There are exceptions (we do need to
@@ -290,12 +290,12 @@ $ sudo chown -R 0:0 /nix
       <note>
         <para>
           Support for <literal>NIXOS_LUSTRATE</literal> was added in
-          NixOS 16.09. The act of &quot;lustrating&quot; refers to the
-          wiping of the existing distribution. Creating
+          NixOS 16.09. The act of <quote>lustrating</quote> refers to
+          the wiping of the existing distribution. Creating
           <literal>/etc/NIXOS_LUSTRATE</literal> can also be used on
           NixOS to remove all mutable files from your root partition
-          (anything that's not in <literal>/nix</literal> or
-          <literal>/boot</literal> gets &quot;lustrated&quot; on the
+          (anything that’s not in <literal>/nix</literal> or
+          <literal>/boot</literal> gets <quote>lustrated</quote> on the
           next boot.
         </para>
         <para>
@@ -307,14 +307,14 @@ $ sudo chown -R 0:0 /nix
         </para>
       </note>
       <para>
-        Let's create the files:
+        Let’s create the files:
       </para>
       <programlisting>
 $ sudo touch /etc/NIXOS
 $ sudo touch /etc/NIXOS_LUSTRATE
 </programlisting>
       <para>
-        Let's also make sure the NixOS configuration files are kept once
+        Let’s also make sure the NixOS configuration files are kept once
         we reboot on NixOS:
       </para>
       <programlisting>
@@ -331,7 +331,7 @@ $ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
       <warning>
         <para>
           Once you complete this step, your current distribution will no
-          longer be bootable! If you didn't get all the NixOS
+          longer be bootable! If you didn’t get all the NixOS
           configuration right, especially those settings pertaining to
           boot loading and root partition, NixOS may not be bootable
           either. Have a USB rescue device ready in case this happens.
@@ -349,7 +349,7 @@ sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
     <listitem>
       <para>
         If for some reason you want to revert to the old distribution,
-        you'll need to boot on a USB rescue disk and do something along
+        you’ll need to boot on a USB rescue disk and do something along
         these lines:
       </para>
       <programlisting>
@@ -367,7 +367,7 @@ sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
         loader.
       </para>
       <para>
-        And of course, if you're happy with NixOS and no longer need the
+        And of course, if you’re happy with NixOS and no longer need the
         old distribution:
       </para>
       <programlisting>
@@ -376,7 +376,7 @@ sudo rm -rf /old-root
     </listitem>
     <listitem>
       <para>
-        It's also worth noting that this whole process can be automated.
+        It’s also worth noting that this whole process can be automated.
         This is especially useful for Cloud VMs, where provider do not
         provide NixOS. For instance,
         <link xlink:href="https://github.com/elitak/nixos-infect">nixos-infect</link>

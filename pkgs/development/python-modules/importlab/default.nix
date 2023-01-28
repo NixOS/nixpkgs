@@ -19,7 +19,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ networkx ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [ "tests/test_parsepy.py" ];
 

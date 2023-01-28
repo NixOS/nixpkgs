@@ -8,7 +8,7 @@
 , pkg-config
 , systemd
 , hostname
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , extraTags ? [ ]
 }:
 
@@ -110,5 +110,7 @@ in buildGo118Module rec {
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

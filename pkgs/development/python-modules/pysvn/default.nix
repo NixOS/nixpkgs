@@ -49,7 +49,7 @@ buildPythonPackage rec {
       --svn-bin-dir=${subversion.out}/bin
   '';
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase = ''
     runHook preCheck

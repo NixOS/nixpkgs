@@ -25,6 +25,7 @@
 , pcre
 , pkg-config
 , which
+, wrapGAppsHook
 , wxGTK
 , zlib
 
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     cmake
+    wrapGAppsHook
   ];
 
   buildInputs = [

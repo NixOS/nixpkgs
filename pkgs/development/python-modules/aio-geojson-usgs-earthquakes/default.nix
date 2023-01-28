@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Hb0/BdK/jjxlPl9WJJpFdOCzZpZDCguXoGreGIyN8oo=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     asynctest
     pytest-asyncio
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for accessing the U.S. Geological Survey Earthquake Hazards Program feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-usgs-earthquakes";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-usgs-earthquakes/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

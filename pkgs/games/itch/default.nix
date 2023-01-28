@@ -93,7 +93,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/itchio/itch";
     license = licenses.mit;
     platforms = platforms.linux;
-    sourceProvenance = lib.sourceTypes.binaryBytecode;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with maintainers; [ pasqui23 ];
   };
 }

@@ -65,7 +65,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
@@ -95,6 +95,7 @@ buildPythonPackage rec {
     "test_nested_css"
     "test_nested_xpath"
     "test_flavor_detection"
+    "test_follow_whitespace"
     # Requires network access
     "AnonymousFTPTestCase"
     "FTPFeedStorageTest"

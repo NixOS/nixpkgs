@@ -5,6 +5,7 @@
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
+, wayland
 , branch
 , common-updater-scripts, withOpenASAR ? false }:
 
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libappindicator-gtk3
     libdbusmenu
+    wayland
   ];
 
   installPhase = ''

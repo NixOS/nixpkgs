@@ -7,7 +7,7 @@
   config = lib.mkIf config.services.ipp-usb.enable {
     systemd.services.ipp-usb = {
       description = "Daemon for IPP over USB printer support";
-      after = [ "cups.service" "avahi-deamon.service" ];
+      after = [ "cups.service" "avahi-daemon.service" ];
       wants = [ "avahi-daemon.service" ];
       serviceConfig = {
         ExecStart = [ "${pkgs.ipp-usb}/bin/ipp-usb" ];

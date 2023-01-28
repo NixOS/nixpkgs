@@ -54,7 +54,7 @@ SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
       <link linkend="opt-fileSystems">fileSystems</link> option. Here’s
       a typical setup:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   system.fsPackages = [ pkgs.sshfs ];
 
@@ -80,7 +80,7 @@ SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
       well, for example you can change the default SSH port or specify a
       jump proxy:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   options =
     [ &quot;ProxyJump=bastion@example.com&quot;
@@ -92,7 +92,7 @@ SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
       It’s also possible to change the <literal>ssh</literal> command
       used by SSHFS to connect to the server. For example:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   options =
     [ (builtins.replaceStrings [&quot; &quot;] [&quot;\\040&quot;]

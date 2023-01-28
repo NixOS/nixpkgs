@@ -16,6 +16,7 @@
 , libappindicator-gtk3
 , libxshmfence
 , libglvnd
+, wayland
 }:
 
 version: hashes:
@@ -64,7 +65,7 @@ let
   };
 
   electronLibPath = with lib; makeLibraryPath (
-    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
+    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 wayland ]
     ++ optionals (versionAtLeast version "9.0.0") [ libdrm mesa ]
     ++ optionals (versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ optionals (versionAtLeast version "11.0.0") [ libxkbcommon ]

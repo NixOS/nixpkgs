@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dnspython
     pycountry
     pytestCheckHook

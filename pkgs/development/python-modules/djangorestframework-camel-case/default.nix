@@ -18,7 +18,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     six
   ];
 

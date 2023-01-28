@@ -1,7 +1,8 @@
 { lib, stdenv, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
-, libiconv, CoreFoundation, Security
+, CoreFoundation, Security
+, auditable ? false # TODO: change to true when this is the default
 }:
 
 rustPlatform.buildRustPackage {
@@ -11,6 +12,8 @@ rustPlatform.buildRustPackage {
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/cargo";
+
+  inherit auditable;
 
   passthru = {
     rustc = rustc;
@@ -23,9 +26,10 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config cmake installShellFiles makeWrapper
     (lib.getDev pkgsHostHost.curl)
+    zlib
   ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
   # is not compatible with the current version in nixpkgs.

@@ -26,19 +26,21 @@
 , vkbasalt-cli
 , vmtouch
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "2022.11.14";
+  version = "50.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-bigrJtqx9iZURYojwxlGe7xSGWS13wSaGcrTTROP9J8=";
+    sha256 = "sha256-+r/r3vExnvYQIicKAEmwZ+eRSep6kWte5k7gu9jC67w=";
   };
 
   patches = [ ./vulkan_icd.patch ];
 
+  # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
     blueprint-compiler
     meson
@@ -58,6 +60,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pycurl
     pyyaml
     requests
     pygobject3

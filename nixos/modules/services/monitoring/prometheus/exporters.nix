@@ -68,6 +68,7 @@ let
     "smartctl"
     "smokeping"
     "sql"
+    "statsd"
     "surfboard"
     "systemd"
     "tor"

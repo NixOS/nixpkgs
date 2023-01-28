@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, cereal, openmp
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -8,18 +8,18 @@
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
-  version = "2.0";
+  version = "unstable-2022-12-30";
   pname = "openmvg";
 
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
-    rev = "v${version}";
-    sha256 = "sha256-6F/xUgZpqY+v6CpwTBhIXI4JdT8HVB0P5JzOL66AVd8=";
+    rev = "e1bbfe801986cd7171f36443a1573b0f69f3702d";
+    sha256 = "sha256-DngfmejNFw5pogTo7Ec5aUey2LUQIojvJybLmtCfvVY=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff ];
+  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mdaiter ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mdaiter bouk ];
   };
 }

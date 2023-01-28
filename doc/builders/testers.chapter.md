@@ -62,7 +62,7 @@ runCommand "example" {
 '';
 ```
 
-While `testBuildFailure` is designed to keep changes to the original builder's 
+While `testBuildFailure` is designed to keep changes to the original builder's
 environment to a minimum, some small changes are inevitable.
 
  - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.

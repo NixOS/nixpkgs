@@ -1,7 +1,7 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions = if stdenv.isLinux then {
-    stable = "0.0.22";
+    stable = "0.0.24";
     ptb = "0.0.38";
     canary = "0.0.145";
   } else {
@@ -14,7 +14,7 @@ let
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "sha256-F1xzdx4Em6Ref7HTe9EH7whx49iFc0DFpaQKdFquq6c=";
+        sha256 = "sha256-SG+34ft0mTqtg9rFiI60N6JIONyqF8c8SlnRcn5a4Xc=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";

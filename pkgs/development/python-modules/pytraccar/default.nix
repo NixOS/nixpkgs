@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytestCheckHook
     pytest-asyncio

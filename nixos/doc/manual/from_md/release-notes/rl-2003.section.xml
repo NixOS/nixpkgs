@@ -73,7 +73,7 @@
       <listitem>
         <para>
           The graphical installer image starts the graphical session
-          automatically. Before you'd be greeted by a tty and asked to
+          automatically. Before you’d be greeted by a tty and asked to
           enter <literal>systemctl start display-manager</literal>. It
           is now possible to disable the display-manager from running by
           selecting the <literal>Disable display-manager</literal> quirk
@@ -93,7 +93,7 @@
           <link xlink:href="options.html#opt-services.xserver.desktopManager.pantheon.enable">services.xserver.desktopManager.pantheon.enable</link>,
           we now default to also use
           <link xlink:href="https://blog.elementary.io/say-hello-to-the-new-greeter/">
-          Pantheon's newly designed greeter </link>. Contrary to NixOS's
+          Pantheon’s newly designed greeter </link>. Contrary to NixOS’s
           usual update policy, Pantheon will receive updates during the
           cycle of NixOS 20.03 when backwards compatible.
         </para>
@@ -133,7 +133,7 @@
           option to improve support for upstream session files. If you
           used something like:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.xserver.desktopManager.default = &quot;xfce&quot;;
   services.xserver.windowManager.default = &quot;icewm&quot;;
@@ -142,7 +142,7 @@
         <para>
           you should change it to:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.xserver.displayManager.defaultSession = &quot;xfce+icewm&quot;;
 }
@@ -196,7 +196,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
       </listitem>
       <listitem>
         <para>
-          UPower's configuration is now managed by NixOS and can be
+          UPower’s configuration is now managed by NixOS and can be
           customized via <literal>services.upower</literal>.
         </para>
       </listitem>
@@ -505,7 +505,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
         </para>
         <para>
-          We already don't support the global
+          We already don’t support the global
           <link xlink:href="options.html#opt-networking.useDHCP">networking.useDHCP</link>,
           <link xlink:href="options.html#opt-networking.defaultGateway">networking.defaultGateway</link>
           and
@@ -522,7 +522,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           The stdenv now runs all bash with <literal>set -u</literal>,
           to catch the use of undefined variables. Before, it itself
           used <literal>set -u</literal> but was careful to unset it so
-          other packages' code ran as before. Now, all bash code is held
+          other packages’ code ran as before. Now, all bash code is held
           to the same high standard, and the rather complex stateful
           manipulation of the options can be discarded.
         </para>
@@ -558,7 +558,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           <literal>xfceUnstable</literal> all now point to the latest
           Xfce 4.14 packages. And in the future NixOS releases will be
           the latest released version of Xfce available at the time of
-          the release's development (if viable).
+          the release’s development (if viable).
         </para>
       </listitem>
       <listitem>
@@ -662,7 +662,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
       <listitem>
         <para>
           The <literal>dump1090</literal> derivation has been changed to
-          use FlightAware's dump1090 as its upstream. However, this
+          use FlightAware’s dump1090 as its upstream. However, this
           version does not have an internal webserver anymore. The
           assets in the <literal>share/dump1090</literal> directory of
           the derivation can be used in conjunction with an external
@@ -821,7 +821,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           is a <literal>loaOf</literal> option that is commonly used as
           follows:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   users.users =
     [ { name = &quot;me&quot;;
@@ -836,7 +836,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           value of <literal>name</literal> as the name of the attribute
           set:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   users.users.me =
     { description = &quot;My personal user.&quot;;
@@ -890,7 +890,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           <listitem>
             <para>
               The<literal>services.buildkite-agent.openssh.publicKeyPath</literal>
-              option has been removed, as it's not necessary to deploy
+              option has been removed, as it’s not necessary to deploy
               public keys to clone private repositories.
             </para>
           </listitem>
@@ -932,7 +932,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           The <literal>services.xserver.displayManager.auto</literal>
           module has been removed. It was only intended for use in
           internal NixOS tests, and gave the false impression of it
-          being a special display manager when it's actually LightDM.
+          being a special display manager when it’s actually LightDM.
           Please use the
           <literal>services.xserver.displayManager.lightdm.autoLogin</literal>
           options instead, or any other display manager in NixOS as they
@@ -940,7 +940,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           because it permitted root auto-login you can override the
           lightdm-autologin pam module like:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   security.pam.services.lightdm-autologin.text = lib.mkForce ''
       auth     requisite pam_nologin.so
@@ -962,13 +962,13 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
 auth required pam_succeed_if.so quiet
 </programlisting>
         <para>
-          line, where default it's:
+          line, where default it’s:
         </para>
         <programlisting>
  auth required pam_succeed_if.so uid &gt;= 1000 quiet
 </programlisting>
         <para>
-          not permitting users with uid's below 1000 (like root). All
+          not permitting users with uid’s below 1000 (like root). All
           other display managers in NixOS are configured like this.
         </para>
       </listitem>
@@ -1004,7 +1004,7 @@ auth required pam_succeed_if.so quiet
               Additionally, some Postfix configuration must now be set
               manually instead of automatically by the Mailman module:
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 {
   services.postfix.relayDomains = [ &quot;hash:/var/lib/mailman/data/postfix_domains&quot; ];
   services.postfix.config.transport_maps = [ &quot;hash:/var/lib/mailman/data/postfix_lmtp&quot; ];
@@ -1051,14 +1051,14 @@ auth required pam_succeed_if.so quiet
       <listitem>
         <para>
           The <literal>*psu</literal> versions of oraclejdk8 have been
-          removed as they aren't provided by upstream anymore.
+          removed as they aren’t provided by upstream anymore.
         </para>
       </listitem>
       <listitem>
         <para>
           The <literal>services.dnscrypt-proxy</literal> module has been
           removed as it used the deprecated version of dnscrypt-proxy.
-          We've added
+          We’ve added
           <link xlink:href="options.html#opt-services.dnscrypt-proxy2.enable">services.dnscrypt-proxy2.enable</link>
           to use the supported version. This module supports
           configuration via the Nix attribute set
@@ -1066,7 +1066,7 @@ auth required pam_succeed_if.so quiet
           or by passing a TOML configuration file via
           <link xlink:href="options.html#opt-services.dnscrypt-proxy2.configFile">services.dnscrypt-proxy2.configFile</link>.
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   # Example configuration:
   services.dnscrypt-proxy2.enable = true;
@@ -1093,7 +1093,7 @@ auth required pam_succeed_if.so quiet
       </listitem>
       <listitem>
         <para>
-          sqldeveloper_18 has been removed as it's not maintained
+          sqldeveloper_18 has been removed as it’s not maintained
           anymore, sqldeveloper has been updated to version
           <literal>19.4</literal>. Please note that this means that this
           means that the oraclejdk is now required. For further
@@ -1110,7 +1110,7 @@ auth required pam_succeed_if.so quiet
           the different lists of dependencies mashed together as one big
           list, and then partitioning into Haskell and non-Hakell
           dependencies, they work from the original many different
-          dependency parameters and don't need to algorithmically
+          dependency parameters and don’t need to algorithmically
           partition anything.
         </para>
         <para>
@@ -1123,7 +1123,7 @@ auth required pam_succeed_if.so quiet
       </listitem>
       <listitem>
         <para>
-          The gcc-snapshot-package has been removed. It's marked as
+          The gcc-snapshot-package has been removed. It’s marked as
           broken for &gt;2 years and used to point to a fairly old
           snapshot from the gcc7-branch.
         </para>
@@ -1158,7 +1158,7 @@ auth required pam_succeed_if.so quiet
       <listitem>
         <para>
           nextcloud has been updated to <literal>v18.0.2</literal>. This
-          means that users from NixOS 19.09 can't upgrade directly since
+          means that users from NixOS 19.09 can’t upgrade directly since
           you can only move one version forward and 19.09 uses
           <literal>v16.0.8</literal>.
         </para>
@@ -1181,7 +1181,7 @@ auth required pam_succeed_if.so quiet
               Existing setups will be detected using
               <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>:
               by default, nextcloud17 will be used, but will raise a
-              warning which notes that after that deploy it's
+              warning which notes that after that deploy it’s
               recommended to update to the latest stable version
               (nextcloud18) by declaring the newly introduced setting
               <link xlink:href="options.html#opt-services.nextcloud.package">services.nextcloud.package</link>.
@@ -1194,7 +1194,7 @@ auth required pam_succeed_if.so quiet
               get an evaluation error by default. This is done to ensure
               that our
               <link xlink:href="options.html#opt-services.nextcloud.package">package</link>-option
-              doesn't select an older version by accident. It's
+              doesn’t select an older version by accident. It’s
               recommended to use pkgs.nextcloud18 or to set
               <link xlink:href="options.html#opt-services.nextcloud.package">package</link>
               to pkgs.nextcloud explicitly.
@@ -1203,7 +1203,7 @@ auth required pam_succeed_if.so quiet
         </itemizedlist>
         <warning>
           <para>
-            Please note that if you're coming from
+            Please note that if you’re coming from
             <literal>19.03</literal> or older, you have to manually
             upgrade to <literal>19.09</literal> first to upgrade your
             server to Nextcloud v16.
@@ -1215,7 +1215,7 @@ auth required pam_succeed_if.so quiet
           Hydra has gained a massive performance improvement due to
           <link xlink:href="https://github.com/NixOS/hydra/pull/710">some
           database schema changes</link> by adding several IDs and
-          better indexing. However, it's necessary to upgrade Hydra in
+          better indexing. However, it’s necessary to upgrade Hydra in
           multiple steps:
         </para>
         <itemizedlist>
@@ -1229,7 +1229,7 @@ auth required pam_succeed_if.so quiet
               when upgrading. Otherwise, the package can be deployed
               using the following config:
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 { pkgs, ... }: {
   services.hydra.package = pkgs.hydra-migration;
 }
@@ -1266,12 +1266,12 @@ $ hydra-backfill-ids
             <link xlink:href="options.html#opt-system.stateVersion">stateVersion</link>
             is set to <literal>20.03</literal> or greater,
             hydra-unstable will be used automatically! This will break
-            your setup if you didn't run the migration.
+            your setup if you didn’t run the migration.
           </para>
         </warning>
         <para>
           Please note that Hydra is currently not available with
-          nixStable as this doesn't compile anymore.
+          nixStable as this doesn’t compile anymore.
         </para>
         <warning>
           <para>
@@ -1281,7 +1281,7 @@ $ hydra-backfill-ids
             assertion error will be thrown. To circumvent this, you need
             to set
             <link xlink:href="options.html#opt-services.hydra.package">services.hydra.package</link>
-            to pkgs.hydra explicitly and make sure you know what you're
+            to pkgs.hydra explicitly and make sure you know what you’re
             doing!
           </para>
         </warning>
@@ -1319,7 +1319,7 @@ $ hydra-backfill-ids
         <para>
           To continue to use the old approach, you can configure:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.nginx.appendConfig = let cfg = config.services.nginx; in ''user ${cfg.user} ${cfg.group};'';
   systemd.services.nginx.serviceConfig.User = lib.mkForce &quot;root&quot;;
@@ -1413,14 +1413,14 @@ $ hydra-backfill-ids
         <itemizedlist>
           <listitem>
             <para>
-              If you use <literal>sqlite3</literal> you don't need to do
+              If you use <literal>sqlite3</literal> you don’t need to do
               anything.
             </para>
           </listitem>
           <listitem>
             <para>
               If you use <literal>postgresql</literal> on a different
-              server, you don't need to change anything as well since
+              server, you don’t need to change anything as well since
               this module was never designed to configure remote
               databases.
             </para>
@@ -1432,7 +1432,7 @@ $ hydra-backfill-ids
               older, you simply need to enable postgresql-support
               explicitly:
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 { ... }: {
   services.matrix-synapse = {
     enable = true;
@@ -1460,7 +1460,7 @@ $ hydra-backfill-ids
           <literal>nixos-unstable</literal> <emphasis>after</emphasis>
           the <literal>19.09</literal>-release, your database is
           misconfigured due to a regression in NixOS. For now,
-          matrix-synapse will startup with a warning, but it's
+          matrix-synapse will startup with a warning, but it’s
           recommended to reconfigure the database to set the values
           <literal>LC_COLLATE</literal> and <literal>LC_CTYPE</literal>
           to
@@ -1473,7 +1473,7 @@ $ hydra-backfill-ids
           <link xlink:href="options.html#opt-systemd.network.links">systemd.network.links</link>
           option is now respected even when
           <link xlink:href="options.html#opt-systemd.network.enable">systemd-networkd</link>
-          is disabled. This mirrors the behaviour of systemd - It's udev
+          is disabled. This mirrors the behaviour of systemd - It’s udev
           that parses <literal>.link</literal> files, not
           <literal>systemd-networkd</literal>.
         </para>
@@ -1486,8 +1486,8 @@ $ hydra-backfill-ids
           <para>
             Please note that mongodb has been relicensed under their own
             <link xlink:href="https://www.mongodb.com/licensing/server-side-public-license/faq"><literal> sspl</literal></link>-license.
-            Since it's not entirely free and not OSI-approved, it's
-            listed as non-free. This means that Hydra doesn't provide
+            Since it’s not entirely free and not OSI-approved, it’s
+            listed as non-free. This means that Hydra doesn’t provide
             prebuilt mongodb-packages and needs to be built locally.
           </para>
         </warning>

@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     mpv
     peewee
     pygobject3
-    python-Levenshtein
+    levenshtein
     python-dateutil
     requests
     semver
@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest
   ];
 

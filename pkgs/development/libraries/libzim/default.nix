@@ -5,6 +5,8 @@
 , meson
 , ninja
 , pkg-config
+, python3
+, xapian
 , xz
 , zstd
 }:
@@ -24,19 +26,27 @@ stdenv.mkDerivation rec {
     ninja
     meson
     pkg-config
+    python3
   ];
 
   buildInputs = [
     icu
-    xz
     zstd
   ];
+
+  propagatedBuildInputs = [
+    xapian
+    xz
+  ];
+
+  postPatch = ''
+    patchShebangs scripts
+  '';
 
   mesonFlags = [
     # Tests are located at https://github.com/openzim/zim-testing-suite
     # "...some tests need up to 16GB of memory..."
     "-Dtest_data_dir=none"
-    "-Dwith_xapian=false"
   ];
 
   meta = with lib; {

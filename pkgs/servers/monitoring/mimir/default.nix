@@ -1,13 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    sha256 = "sha256-OpQxVp4Q2+r3Tqrqw3SrBsJDU5KJqChxsuYneT0PvYQ=";
+    sha256 = "sha256-lyF7ugnNEJug1Vx24ISrtENk6RoIt7H1zaCPYUZbBmM=";
   };
 
   vendorSha256 = null;
@@ -17,8 +17,13 @@ buildGoModule rec {
     "cmd/mimirtool"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) mimir;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "mimir-([0-9.]+)" ];
+    };
+    tests = {
+      inherit (nixosTests) mimir;
+    };
   };
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";

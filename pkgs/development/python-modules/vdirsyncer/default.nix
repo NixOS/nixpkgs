@@ -13,6 +13,7 @@
 , pytest-subtesthack
 , setuptools-scm
 , aiostream
+, aiohttp-oauthlib
 , aiohttp
 , pytest-asyncio
 , trustme
@@ -49,13 +50,14 @@ buildPythonPackage rec {
     requests-toolbelt
     aiostream
     aiohttp
+    aiohttp-oauthlib
   ];
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     pytest-subtesthack

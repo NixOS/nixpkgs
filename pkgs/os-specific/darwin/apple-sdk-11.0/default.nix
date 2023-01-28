@@ -50,6 +50,7 @@ let
     libcharset = callPackage ./libcharset.nix {};
     libunwind = callPackage ./libunwind.nix {};
     libnetwork = callPackage ./libnetwork.nix {};
+    libpm = callPackage ./libpm.nix {};
     # Avoid introducing a new objc4 if stdenv already has one, to prevent
     # conflicting LLVM modules.
     objc4 = if stdenv ? objc4 then stdenv.objc4 else callPackage ./libobjc.nix {};
@@ -58,17 +59,18 @@ let
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     IOKit = pkgs.darwin.apple_sdk.frameworks.IOKit;
 
-    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin rec {
+    xcodebuild = pkgs.xcbuild.override {
       inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreServices CoreGraphics ImageIO;
+    };
+
+    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin rec {
+      inherit (pkgs.darwin.apple_sdk_11_0) stdenv xcodebuild;
       darwin = pkgs.darwin.overrideScope (_: prev: {
         inherit (prev.darwin.apple_sdk_11_0) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
         apple_sdk = prev.darwin.apple_sdk_11_0;
         CF = prev.darwin.apple_sdk_11_0.CoreFoundation;
       });
-      xcodebuild = pkgs.xcbuild.override {
-        inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreServices CoreGraphics ImageIO;
-        inherit stdenv;
-      };
       xcbuild = xcodebuild;
     });
 

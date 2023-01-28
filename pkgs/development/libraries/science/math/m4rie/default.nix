@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

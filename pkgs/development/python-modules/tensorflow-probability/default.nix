@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, bazel_3
 , buildBazelPackage
 , buildPythonPackage
 , python
@@ -45,6 +46,8 @@ let
       tensorflow
     ];
 
+    bazel = bazel_3;
+
     bazelTarget = ":pip_pkg";
 
     fetchAttrs = {
@@ -88,7 +91,7 @@ in buildPythonPackage {
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest
     scipy

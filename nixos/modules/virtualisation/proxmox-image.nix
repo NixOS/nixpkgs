@@ -28,7 +28,7 @@ with lib;
         default = "local-lvm:vm-9999-disk-0";
         example = "ceph:vm-123-disk-0";
         description = lib.mdDoc ''
-          Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target sotrage.
+          Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target storage.
           This parameter is required by PVE even if it isn't used.
         '';
       };

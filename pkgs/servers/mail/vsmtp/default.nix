@@ -1,36 +1,39 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
+, fetchpatch
 , installShellFiles
-, openssl
 , testers
 , vsmtp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "1.3.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-nBkfIjACmjnVNF3hJ22B4ecjWrX9licV7c8Yxv2tQCg=";
+    hash = "sha256-uyu2NpHFDqJDcfQukG6TdRH7KuZnrYTULvLiABdvAog=";
   };
 
-  cargoHash = "sha256-HqQ8WD1/K7xMx97SbuP45Q/+4oADh1WZFJPXB8wlkbM=";
-
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ];
-
-  cargoBuildFlags = [
-    "--package"
-    "vsmtp"
-    "--package"
-    "vqueue"
+  patches = [
+    # https://github.com/viridIT/vSMTP/pull/952
+    # treewide: set GIT_HASH to unknown if git rev-parse HEAD fails
+    (fetchpatch {
+      url = "https://github.com/viridIT/vSMTP/commit/0ac4820c079e459f515825dfb451980119eaae9e.patch";
+      includes = [ "src/vsmtp/vsmtp-core/build.rs" "src/vqueue/build.rs" ];
+      hash = "sha256-kGjXsVokP6039rksaxw1EM/0zOlKIus1EaIEsFJvLE8=";
+    })
   ];
+
+  cargoHash = "sha256-A0Q6ciZJL13VzJgZIWZalrRElSNGHUN/9b8Csj4Tdak=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # too many upstream failures
+  doCheck = false;
 
   postInstall = ''
     installManPage tools/install/man/*.1

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.6.11";
+  version = "1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/zucBRLf5qnRURS0YS3Zv4jxRZYOIGtzPBepQ7a2nvs=";
+    sha256 = "sha256-EQ7kdX14WkmH4b40W2sXplZdJw9SICYBpy6lPbMx8WY=";
   };
 
   postPatch = ''

@@ -46,17 +46,17 @@ in {
     in your NixOS config.
 
     WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades accross multiple major versions!
+    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
   nextcloud24 = generic {
-    version = "24.0.8";
-    sha256 = "a5c3a070516debba991355e6b737b261396b15b9f2cd939617611ab0bed99299";
+    version = "24.0.9";
+    sha256 = "580a3384c9c09aefb8e9b41553d21a6e20001799549dbd25b31dea211d97dd1e";
   };
 
   nextcloud25 = generic {
-    version = "25.0.2";
-    sha256 = "d6ab40faa108937bda42395f570ff111f4c97343b55be1420024da3177e37d59";
+    version = "25.0.3";
+    sha256 = "4b2b1423736ef92469096fe24f61c24cad87a34e07c1c7a81b385d3ea25c00ec";
   };
 
   # tip: get the sha with:

@@ -130,8 +130,97 @@ let
     '';
 
   };
+
+  mk-ensure-clauses-test = postgresql-name: postgresql-package: makeTest {
+    name = postgresql-name;
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ zagy ];
+    };
+
+    machine = {...}:
+      {
+        services.postgresql = {
+          enable = true;
+          package = postgresql-package;
+          ensureUsers = [
+            {
+              name = "all-clauses";
+              ensureClauses = {
+                superuser = true;
+                createdb = true;
+                createrole = true;
+                "inherit" = true;
+                login = true;
+                replication = true;
+                bypassrls = true;
+              };
+            }
+            {
+              name = "default-clauses";
+            }
+          ];
+        };
+      };
+
+    testScript = let
+      getClausesQuery = user: pkgs.lib.concatStringsSep " "
+        [
+          "SELECT row_to_json(row)"
+          "FROM ("
+          "SELECT"
+            "rolsuper,"
+            "rolinherit,"
+            "rolcreaterole,"
+            "rolcreatedb,"
+            "rolcanlogin,"
+            "rolreplication,"
+            "rolbypassrls"
+          "FROM pg_roles"
+          "WHERE rolname = '${user}'"
+          ") row;"
+        ];
+    in ''
+      import json
+      machine.start()
+      machine.wait_for_unit("postgresql")
+
+      with subtest("All user permissions are set according to the ensureClauses attr"):
+          clauses = json.loads(
+            machine.succeed(
+                "sudo -u postgres psql -tc \"${getClausesQuery "all-clauses"}\""
+            )
+          )
+          print(clauses)
+          assert clauses['rolsuper'], 'expected user with clauses to have superuser clause'
+          assert clauses['rolinherit'], 'expected user with clauses to have inherit clause'
+          assert clauses['rolcreaterole'], 'expected user with clauses to have create role clause'
+          assert clauses['rolcreatedb'], 'expected user with clauses to have create db clause'
+          assert clauses['rolcanlogin'], 'expected user with clauses to have login clause'
+          assert clauses['rolreplication'], 'expected user with clauses to have replication clause'
+          assert clauses['rolbypassrls'], 'expected user with clauses to have bypassrls clause'
+
+      with subtest("All user permissions default when ensureClauses is not provided"):
+          clauses = json.loads(
+            machine.succeed(
+                "sudo -u postgres psql -tc \"${getClausesQuery "default-clauses"}\""
+            )
+          )
+          assert not clauses['rolsuper'], 'expected user with no clauses set to have default superuser clause'
+          assert clauses['rolinherit'], 'expected user with no clauses set to have default inherit clause'
+          assert not clauses['rolcreaterole'], 'expected user with no clauses set to have default create role clause'
+          assert not clauses['rolcreatedb'], 'expected user with no clauses set to have default create db clause'
+          assert clauses['rolcanlogin'], 'expected user with no clauses set to have default login clause'
+          assert not clauses['rolreplication'], 'expected user with no clauses set to have default replication clause'
+          assert not clauses['rolbypassrls'], 'expected user with no clauses set to have default bypassrls clause'
+
+      machine.shutdown()
+    '';
+  };
 in
-  (mapAttrs' (name: package: { inherit name; value=make-postgresql-test name package false;}) postgresql-versions) // {
+  concatMapAttrs (name: package: {
+    ${name} = make-postgresql-test name package false;
+    ${name + "-clauses"} = mk-ensure-clauses-test name package;
+  }) postgresql-versions
+  // {
     postgresql_11-backup-all = make-postgresql-test "postgresql_11-backup-all" postgresql-versions.postgresql_11 true;
   }
-

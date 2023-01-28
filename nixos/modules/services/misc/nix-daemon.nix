@@ -42,7 +42,7 @@ let
         else if isDerivation v then toString v
         else if builtins.isPath v then toString v
         else if isString v then v
-        else if isCoercibleToString v then toString v
+        else if strings.isConvertibleWithToString v then toString v
         else abort "The nix conf value: ${toPretty {} v} can not be encoded";
 
       mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
@@ -609,7 +609,7 @@ in
 
                 By default, pseudo-features `nixos-test`, `benchmark`,
                 and `big-parallel` used in Nixpkgs are set, `kvm`
-                is also included in it is avaliable.
+                is also included if it is available.
               '';
             };
 
@@ -642,7 +642,7 @@ in
         description = lib.mdDoc ''
           Configuration for Nix, see
           <https://nixos.org/manual/nix/stable/#sec-conf-file> or
-          {manpage}`nix.conf(5)` for avalaible options.
+          {manpage}`nix.conf(5)` for available options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 
           You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.nix.settings`
@@ -792,7 +792,10 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs));
+    nix.nrBuildUsers = mkDefault (
+      if cfg.settings.auto-allocate-uids or false then 0
+      else max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
+    );
 
     users.users = nixbldUsers;
 
@@ -816,10 +819,10 @@ in
 
         system-features = mkDefault (
           [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-          optionals (pkgs.hostPlatform ? gcc.arch) (
+          optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
             # a builder can run code for `gcc.arch` and inferior architectures
-            [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
-            map (x: "gccarch-${x}") systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
+            [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
+            map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
           )
         );
       }

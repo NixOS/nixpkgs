@@ -1,16 +1,32 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, cmake, pkg-config, zlib, bzip2, libjpeg, SDL, SDL_mixer, gtk2 }:
+{ stdenv
+, lib
+, fetchFromBitbucket
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, pkg-config
+, zlib
+, bzip2
+, libjpeg
+, SDL2
+, SDL2_net
+, SDL2_mixer
+, gtk2
+}:
 
 stdenv.mkDerivation rec {
   pname = "ecwolf";
-  version = "1.3.3";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "https://maniacsvault.net/ecwolf/files/ecwolf/1.x/${pname}-${version}-src.tar.xz";
-    sha256 = "1sbdv672dz47la5a5qwmdi1v258k9kc5dkx7cdj2b6gk8nbm2srl";
+  src = fetchFromBitbucket {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "n1G1zvfE1l42fbJ7ZaMdV0QXn45PjMpaaZTDQAOBtYk=";
   };
 
   nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
-  buildInputs = [ zlib bzip2 libjpeg SDL SDL_mixer gtk2 ];
+  buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk2 ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -45,6 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     homepage = "https://maniacsvault.net/ecwolf/";
     license = licenses.gpl2Plus;

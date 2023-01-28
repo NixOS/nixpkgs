@@ -4,7 +4,7 @@ self: super:
 
 let
   generatedGrammars = callPackage ./generated.nix {
-    buildGrammar = callPackage ../../../../../development/tools/parsing/tree-sitter/grammar.nix { };
+    inherit (tree-sitter) buildGrammar;
   };
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
@@ -94,5 +94,8 @@ in
         '';
   };
 
-  meta.maintainers = with lib.maintainers; [ figsoda ];
+  meta = with lib; (super.nvim-treesitter.meta or { }) // {
+    license = licenses.asl20;
+    maintainers = with maintainers; [ figsoda ];
+  };
 }

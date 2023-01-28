@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     description = "Avoid the robots and make them crash into each other";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

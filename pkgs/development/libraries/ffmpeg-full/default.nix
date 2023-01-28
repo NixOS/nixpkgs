@@ -84,6 +84,7 @@
 , libmysofa ? null # HRTF support via SOFAlizer
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
+, libopenmpt ? null # Tracked music files decoder
 , libopus ? null # Opus de/encoder
 , librsvg ? null # SVG protocol
 , libssh ? null # SFTP protocol
@@ -364,6 +365,7 @@ stdenv.mkDerivation rec {
     (enableFeature (libmodplug != null) "libmodplug")
     (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
+    (enableFeature (libopenmpt != null) "libopenmpt")
     (enableFeature (libopus != null) "libopus")
     (enableFeature (librsvg != null) "librsvg")
     (enableFeature (srt != null) "libsrt")
@@ -440,7 +442,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
-    libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
+    libogg libopenmpt libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext libxml2 xz openal ocl-icd opencl-headers openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
     zeromq4 zimg zlib openh264

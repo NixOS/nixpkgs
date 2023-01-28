@@ -22,6 +22,9 @@ rec {
     ];
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
+    isArmv7        = map ({ arch, ... }: { cpu = { inherit arch; }; })
+                       (lib.filter (cpu: lib.hasPrefix "armv7" cpu.arch or "")
+                         (lib.attrValues cpuTypes));
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isAarch        = { cpu = { family = "arm"; }; };
     isMicroBlaze   = { cpu = { family = "microblaze"; }; };
@@ -44,10 +47,12 @@ rec {
     isOr1k         = { cpu = { family = "or1k"; }; };
     isM68k         = { cpu = { family = "m68k"; }; };
     isS390         = { cpu = { family = "s390"; }; };
+    isS390x        = { cpu = { family = "s390"; bits = 64; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
+    isILP32        = map (a: { abi = { abi = a; }; }) [ "n32" "ilp32" "x32" ];
     isBigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     isLittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
@@ -77,7 +82,7 @@ rec {
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })
-                       [ "x86" "arm" "aarch64" ];
+                       [ "x86" "arm" "aarch64" "riscv" ];
   };
 
   matchAnyAttrs = patterns:

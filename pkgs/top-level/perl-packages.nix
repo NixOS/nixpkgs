@@ -3587,7 +3587,7 @@ let
       hash = "sha256-G9Q3Y8ajcxgwl6MOeH9dZxOw2ydRHFLVMyZrWdLPp4A=";
     };
     propagatedBuildInputs = [ ClassStd ];
-    checkInputs = [ TestPod TestPodCoverage ];
+    nativeCheckInputs = [ TestPod TestPodCoverage ];
     meta = {
       description = "Faster but less secure than Class::Std";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5258,7 +5258,7 @@ let
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
       hash = "sha256-DhyyI98AQfbZsBDxHm+XqXq1WhGKJzk460/oXUA/GxE=";
     };
-    checkInputs = [ pkgs.openssl MathBigIntGMP ];
+    nativeCheckInputs = [ pkgs.openssl MathBigIntGMP ];
     buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
     propagatedBuildInputs = [ BytesRandomSecureTiny ClassAccessor ConvertASN1 CryptFormat MathProvablePrime SymbolGet TryTiny ];
     meta = {
@@ -8320,7 +8320,7 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMAKHOLM/Encode-IMAPUTF7-1.05.tar.gz";
       hash = "sha256-RwMF3cN0g8/o08FtE3cKKAEfYAv1V6y4w+B3OZl8N+E=";
     };
-    checkInputs = [ TestNoWarnings ];
+    nativeCheckInputs = [ TestNoWarnings ];
     meta = {
       description = "IMAP modified UTF-7 encoding";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -9780,7 +9780,7 @@ let
     propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
     buildInputs = [ TestPod ];
     meta = {
-      homepage = "http://finance-quote.sourceforge.net/";
+      homepage = "https://finance-quote.sourceforge.net/";
       description = "Get stock and mutual fund quotes from various exchanges";
       license = with lib.licenses; [gpl2 ];
     };
@@ -10220,7 +10220,7 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       hash = "sha256-RkYoy53QKLEEOMI4kt5vijAgI1Wk5OsBv9E7jP41r1c=";
     };
-    checkInputs = [ pkgs.cairo CairoGObject ];
+    nativeCheckInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     preCheck = ''
       # Our gobject-introspection patches make the shared library paths absolute
@@ -10464,7 +10464,7 @@ let
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
-    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    nativeCheckInputs = [ TestRequires TestDeep pkgs.hexdump ];
     meta = {
       description = "Perl extension for the libtiff library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10647,7 +10647,7 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    checkInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    nativeCheckInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
@@ -12507,11 +12507,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.51";
+    version = "12.55";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-76meNQp9c0Z+81gNSMnDTtJmd/qOGu4uqeHsGhTnDkQ=";
+      hash = "sha256-CFgb16GnYPIKG0PLbTiSfm7FRdWZBtroXH32c5Ru6gg=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -12835,19 +12835,11 @@ let
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.6";
+    version = "0.8.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      hash = "sha256-lSnGUbZ/Xo3e8f0YUvl051ahe3EcRtQRjwZ3rQ5um7E=";
+      hash = "sha256-JdqdlEB3newNrdTMLUIn6Oq4dDfAcZh3J03PuQakzHk=";
     };
-    patches = [
-      (fetchpatch {
-        # https://github.com/brucemiller/LaTeXML/issues/1669
-        name = "downgrade-security-FileTemp.patch";
-        url = "https://github.com/brucemiller/LaTeXML/commit/c3d6b9b88f9eafce6eee52b1634ea33085ba9ec6.patch";
-        hash = "sha256-p+boNhshvSZtygVZUawjeN38bJsfM95JrkLOBbazhos=";
-      })
-    ];
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -13952,7 +13944,7 @@ let
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
     '';
     doCheck = !stdenv.isDarwin;
-    checkInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
+    nativeCheckInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
     meta = {
       description = "The World-Wide Web library for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -17472,6 +17464,22 @@ let
     };
   };
 
+  NetAsyncHTTPServer = buildPerlModule {
+    pname = "Net-Async-HTTP-Server";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-Server-0.13.tar.gz";
+      hash = "sha256-yk3kcfIieNI5PIqy7G56xO8hfbRjXS3Mi6KoynIhFO4=";
+    };
+    buildInputs = [ TestIdentity TestMetricsAny TestRefcount TestSimple13 ];
+    propagatedBuildInputs = [ HTTPMessage IOAsync MetricsAny ];
+    meta = {
+      description = "Serve HTTP with IO::Async";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.anoa ];
+    };
+  };
+
   NetAsyncPing = buildPerlPackage {
     pname = "Net-Async-Ping";
     version = "0.004001";
@@ -18033,7 +18041,7 @@ let
       rev = "5fccc0c270e25c65ef634304630af74b48807d21";
       hash = "sha256-pveVyFdEe/TQCEI83RrQTWr7aoYrgOGaNqc1wJeiAnw=";
     };
-    checkInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
+    nativeCheckInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ NetServer ServerStarter ];
     meta = {
@@ -19137,7 +19145,7 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
       hash = "sha256-SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
     };
-    checkInputs = [ TestException TestMemoryCycle ];
+    nativeCheckInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
@@ -20638,7 +20646,7 @@ let
     propagatedBuildInputs = [ DigestSHA1 URI ];
     meta = {
       description = "Collaborative, content-based spam filtering network agent";
-      homepage = "http://razor.sourceforge.net/";
+      homepage = "https://razor.sourceforge.net/";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -21343,7 +21351,7 @@ let
     };
     propagatedBuildInputs = [ ClassInspector IOSessionData LWPProtocolHttps TaskWeaken XMLParser ];
     buildInputs = [ TestWarn XMLParserLite ];
-    checkInputs = [ HTTPDaemon ];
+    nativeCheckInputs = [ HTTPDaemon ];
     meta = {
       description = "Perl's Web Services Toolkit";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -22638,12 +22646,12 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "8.9.0";
+    version = "9.0.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-s3N4KU0JnIXHKOme+2Vxapd6o8QeT6lUAb+r5i9Ogv0=";
+      hash = "sha256-QiaB272kxs/Y3/l8KbFy8f9iyOCxhzfA/h2FnfGzmE4=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -22770,10 +22778,10 @@ let
 
   TclpTk = buildPerlPackage {
     pname = "Tcl-pTk";
-    version = "1.09";
+    version = "1.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.09.tar.gz";
-      hash = "sha256-LR+YBlKS9+W7mBBy9/EkAOjxGVVe4MC5zToPr/pXl24=";
+      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.10.tar.gz";
+      hash = "sha256-sMb4KXzTL7KhkF17OSbWMb8p+iM/jYTNHtb+2J85/QQ=";
     };
     propagatedBuildInputs = [
       ClassISA
@@ -23029,7 +23037,7 @@ let
 
     # For some crazy reason Makefile.PL doesn't generate a Makefile if
     # AUTOMATED_TESTING is set.
-    AUTOMATED_TESTING = false;
+    env.AUTOMATED_TESTING = false;
 
     # Makefile.PL looks for ncurses in Glibc's prefix.
     preConfigure =
@@ -25137,7 +25145,7 @@ let
     };
     meta = {
       description = "Various subroutines to format text";
-      homepage = "https://www.shlomifish.org/open-source/projects/Text-Format";
+      homepage = "https://github.com/shlomif/perl-Module-Format";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
     };
@@ -25319,7 +25327,7 @@ let
       hash = "sha256-wZHG1ezrjLdcBWUZI2BmLSAtcWutB6IzxLMppChNxxs=";
     };
     nativeBuildInputs = [ shortenPerlShebang ];
-    checkInputs = [ ListMoreUtils TestDifferences TestException ];
+    nativeCheckInputs = [ ListMoreUtils TestDifferences TestException ];
     postInstall = ''
       shortenPerlShebang $out/bin/Markdown.pl
     '';
@@ -26178,10 +26186,10 @@ let
 
   Tk = buildPerlPackage {
     pname = "Tk";
-    version = "804.035";
+    version = "804.036";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.035.tar.gz";
-      hash = "sha256-TSuAKRum3jTY7IhqCFptvSt5C5JgNaCH6ZAlYUxf/dQ=";
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
+      hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
     makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
@@ -27058,7 +27066,7 @@ let
         hash = "sha256-gxxY8549/ebS3QORjSs8IgdBs2aD05Tu+9Bn70gu7gQ=";
       })
     ];
-    AUTOMATED_TESTING = false;
+    env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];

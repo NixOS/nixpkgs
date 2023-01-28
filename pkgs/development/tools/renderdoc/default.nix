@@ -82,9 +82,7 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A single-frame graphics debugger";

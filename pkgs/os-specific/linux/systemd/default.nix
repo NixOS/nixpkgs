@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
-, applyPatches
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -70,9 +69,16 @@
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
+  # Note: llvmPackages is explicitly taken from buildPackages instead of relying
+  # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
+  # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
+  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we explicitly
+  # take buildPackages.llvmPackages, this is no problem because
+  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to us. Working
+  # around this is important, because systemd is in the dependency closure of
+  # GHC via emscripten and jdk.
 , bpftools
 , libbpf
-, llvmPackages
 
 , withAnalyze ? true
 , withApparmor ? true
@@ -82,11 +88,12 @@
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
 , withFido2 ? true
-, withHomed ? false
+, withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
+, withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -123,7 +130,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.1";
+  version = "252.4";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -140,7 +147,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-G43qbNF7znTITSM78sOL0qi8nqaA7qIhmiqP/rZKjXY=";
+    hash = "sha256-8ejSEt3QyCSARGGVbXWac2dB9jdUpC4eX2rN0iENQX0=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -170,20 +177,10 @@ stdenv.mkDerivation {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-d43ec090ceb2bf0016a065103a4c34d0c43cb906.tar.gz";
-        sha256 = "sha256-e5rHmz0uyNgJwrAj96VGWWu9YHhZtJXoDpCtj17eC5w=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-cccd4bcaf381c2729adc000381bd89906003e72a.tar.gz";
+        sha256 = "2CFZEzWqUy6OOF3c+LN4Zmy3RqMzfdRHp+B5zlWJsoE=";
       };
-      oe-core-patched = applyPatches {
-        src = oe-core;
-        patches = [
-          (fetchpatch {
-            url = "https://lore.kernel.org/all/20221109002306.853567-1-raj.khem@gmail.com/raw";
-            includes = [ "meta/recipes-core/systemd/systemd/*" ];
-            sha256 = "sha256-aPJjN4vesZwFzgY4Nb6uaIuHz/quH1HccSVEof32IOU=";
-          })
-        ];
-      };
-      musl-patches = oe-core-patched + "/meta/recipes-core/systemd/systemd";
+      musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
       (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
@@ -205,8 +202,7 @@ stdenv.mkDerivation {
       (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0001-networkd-ipv4acd.c-Use-net-if.h-for-getting-IFF_LOOP.patch")
-      (musl-patches + "/0001-test-compile-test-utmp.c-only-if-UTMP-is-enabled.patch")
+      (musl-patches + "/0001-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
     ]
   );
 
@@ -368,8 +364,8 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals withLibBPF [
       bpftools
-      llvmPackages.clang
-      llvmPackages.libllvm
+      buildPackages.llvmPackages.clang
+      buildPackages.llvmPackages.libllvm
     ]
   ;
 
@@ -524,7 +520,7 @@ stdenv.mkDerivation {
   ];
   preConfigure =
     let
-      # A list of all the runtime binaries that the systemd exectuables, tests and libraries are referencing in their source code, scripts and unit files.
+      # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
       # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
       binaryReplacements = [
         { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
@@ -578,7 +574,7 @@ stdenv.mkDerivation {
             "src/import/import-tar.c"
           ];
           ignore = [
-            # occurences here refer to the tar sub command
+            # occurrences here refer to the tar sub command
             "src/sysupdate/sysupdate-resource.c"
             "src/sysupdate/sysupdate-transfer.c"
             "src/import/pull.c"
@@ -718,6 +714,7 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    badPlatforms = [ (plat: plat.isStatic) ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;

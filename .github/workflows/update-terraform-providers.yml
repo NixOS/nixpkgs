@@ -11,8 +11,8 @@ permissions:
 jobs:
   tf-providers:
     permissions:
-      contents: write  # for peter-evans/create-pull-request to create branch
-      pull-requests: write  # for peter-evans/create-pull-request to create a PR, for peter-evans/create-or-update-comment to create or update comment
+      contents: write # for peter-evans/create-pull-request to create branch
+      pull-requests: write # for peter-evans/create-pull-request to create a PR, for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
     runs-on: ubuntu-latest
     steps:
@@ -25,6 +25,8 @@ jobs:
         run: |
           echo "title=terraform-providers: update $(date -u +"%Y-%m-%d")" >> $GITHUB_OUTPUT
       - name: update terraform-providers
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"

@@ -22,7 +22,7 @@
     these dependencies into account and order the snippets accordingly.
     As a simple example:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 system.activationScripts.my-activation-script = {
   deps = [ &quot;etc&quot; ];
   # supportsDryActivation = true;
@@ -45,7 +45,7 @@ system.activationScripts.my-activation-script = {
     An activation script can write to special files instructing
     <literal>switch-to-configuration</literal> to restart/reload units.
     The script will take these requests into account and will
-    incorperate the unit configuration as described above. This means
+    incorporate the unit configuration as described above. This means
     that the activation script will <quote>fake</quote> a modified unit
     file and <literal>switch-to-configuration</literal> will act
     accordingly. By doing so, configuration like
@@ -66,7 +66,7 @@ system.activationScripts.my-activation-script = {
     <literal>/run/nixos/dry-activation-reload-list</literal>. Those
     files can contain newline-separated lists of unit names where
     duplicates are being ignored. These files are not create
-    automatically and activation scripts must take the possiblility into
+    automatically and activation scripts must take the possibility into
     account that they have to create them first.
   </para>
   <section xml:id="sec-activation-script-nixos-snippets">

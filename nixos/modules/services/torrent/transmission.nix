@@ -19,8 +19,8 @@ in
   imports = [
     (mkRenamedOptionModule ["services" "transmission" "port"]
                            ["services" "transmission" "settings" "rpc-port"])
-    (mkAliasOptionModule ["services" "transmission" "openFirewall"]
-                         ["services" "transmission" "openPeerPorts"])
+    (mkAliasOptionModuleMD ["services" "transmission" "openFirewall"]
+                           ["services" "transmission" "openPeerPorts"])
   ];
   options = {
     services.transmission = {
@@ -44,7 +44,7 @@ in
           (each time the service starts).
 
           See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
-          for documentation of settings not explicitely covered by this module.
+          for documentation of settings not explicitly covered by this module.
         '';
         default = {};
         type = types.submodule {
@@ -174,6 +174,8 @@ in
         };
       };
 
+      package = mkPackageOptionMD pkgs "transmission" {};
+
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -287,7 +289,7 @@ in
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
         '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart="${cfg.package}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
@@ -353,7 +355,7 @@ in
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
-        # ProtectHome=true would not allow BindPaths= to work accross /home,
+        # ProtectHome=true would not allow BindPaths= to work across /home,
         # and ProtectHome=tmpfs would break statfs(),
         # preventing transmission-daemon to report the available free space.
         # However, RootDirectory= is used, so this is not a security concern
@@ -385,7 +387,7 @@ in
     };
 
     # It's useful to have transmission in path, e.g. for remote control
-    environment.systemPackages = [ pkgs.transmission ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users = optionalAttrs (cfg.user == "transmission") ({
       transmission = {
@@ -457,7 +459,7 @@ in
     ];
 
     security.apparmor.policies."bin.transmission-daemon".profile = ''
-      include "${pkgs.transmission.apparmor}/bin.transmission-daemon"
+      include "${cfg.package.apparmor}/bin.transmission-daemon"
     '';
     security.apparmor.includes."local/bin.transmission-daemon" = ''
       r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},

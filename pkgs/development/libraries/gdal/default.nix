@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , bison
 , cmake
 , doxygen
@@ -62,23 +61,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.6.0.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    hash = "sha256-Yx7tmj2Y26FE5rzN+w1gg/7yRckNo6gLudrAPRoCro4=";
+    hash = "sha256-fdj/o+dm7V8QLrjnaQobaFX80+penn+ohx/yNmUryRA=";
   };
-
-  patches = [
-    # https://github.com/OSGeo/gdal/pull/6754
-    (fetchpatch {
-      name = "skip-test-failing-on-macos.patch";
-      url = "https://github.com/OSGeo/gdal/commit/65b2b12fa6638653f54d3ca0f8066225597832b9.patch";
-      hash = "sha256-zpj4jMp01Oz+Zk1b59qdoVxhkwWmTN9bwoKwbau2ADY=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -173,7 +163,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
   '';
-  installCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
     lxml
@@ -209,7 +199,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${src.rev}/RELEASE_NOTES.html";
+    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcweber dotlambda ];
     platforms = lib.platforms.unix;

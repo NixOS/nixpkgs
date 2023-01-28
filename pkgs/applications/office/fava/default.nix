@@ -10,7 +10,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-Uw8UIJa+Dtsy+o31I1ynLyhZrFNX42NFRXu1O2ISbzU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
+  pythonRelaxDeps = [ "cheroot" ];
+
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     babel
@@ -27,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

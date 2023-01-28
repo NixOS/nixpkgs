@@ -17,15 +17,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.28.3";
+  version = "1.29.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Rkzr5Y50Z2A+TeWCrrC6GUvu8/x6IgDxvd8D6mKbIGE=";
+    sha256 = "sha256-oCBtqOm/d5dpIv70/Ht0M6izxdvm59LCiDHgcMcwLek=";
   };
-  cargoSha256 = "sha256-n2K0CghobLri69oMrs8nCNSwq/5eH3YlzLtC9JRriQ8=";
+  cargoSha256 = "sha256-Y/1yfCeWleNrk5MgkIoAtkH8e6YSZWa+GF5RgLaZXQA=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -85,6 +85,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = ./update/update.ts;
+  passthru.tests = callPackage ./tests { };
 
   meta = with lib; {
     homepage = "https://deno.land/";

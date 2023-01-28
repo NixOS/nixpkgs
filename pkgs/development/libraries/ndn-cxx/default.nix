@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://named-data.net/";
-    description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
+    description = "A Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)
       primitives that can be used to implement various NDN applications.

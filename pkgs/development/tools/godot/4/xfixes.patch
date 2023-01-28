@@ -1,12 +1,12 @@
 diff --git a/platform/linuxbsd/detect.py b/platform/linuxbsd/detect.py
-index ac69f3806b..14acbf5c58 100644
+index 844b15e9fb..0c8bee1757 100644
 --- a/platform/linuxbsd/detect.py
 +++ b/platform/linuxbsd/detect.py
-@@ -191,6 +191,7 @@ def configure(env: "Environment"):
-         env.ParseConfig("pkg-config xrandr --cflags --libs")
-         env.ParseConfig("pkg-config xrender --cflags --libs")
-         env.ParseConfig("pkg-config xi --cflags --libs")
-+        env.ParseConfig("pkg-config xfixes --cflags --libs")
+@@ -192,6 +192,7 @@ def configure(env: "Environment"):
+         env.ParseConfig("pkg-config xrandr --cflags")
+         env.ParseConfig("pkg-config xrender --cflags")
+         env.ParseConfig("pkg-config xi --cflags")
++        env.ParseConfig("pkg-config xfixes --cflags")
  
      if env["touch"]:
          env.Append(CPPDEFINES=["TOUCH_ENABLED"])

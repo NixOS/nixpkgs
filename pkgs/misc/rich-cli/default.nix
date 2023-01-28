@@ -29,7 +29,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'rich = "^12.4.0"' 'rich = "*"'
+      --replace 'rich = "^12.4.0"' 'rich = "*"' \
+      --replace 'textual = "^0.1.18"' 'textual = "*"'
   '';
 
   pythonImportsCheck = [
@@ -40,6 +41,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command Line Interface to Rich";
     homepage = "https://github.com/Textualize/rich-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyooru ];
+    maintainers = with maintainers; [ joelkoen ];
   };
 }

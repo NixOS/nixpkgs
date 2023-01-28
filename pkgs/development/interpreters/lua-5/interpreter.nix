@@ -9,19 +9,19 @@
 , pkgsBuildTarget
 , pkgsHostHost
 , pkgsTargetTarget
-, sourceVersion
+, version
 , hash
 , passthruFun
 , patches ? []
 , postConfigure ? null
 , postBuild ? null
 , staticOnly ? stdenv.hostPlatform.isStatic
-, luaAttr ? "lua${sourceVersion.major}_${sourceVersion.minor}"
+, luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}"
 } @ inputs:
 let
   luaPackages = self.pkgs;
 
-  luaversion = with sourceVersion; "${major}.${minor}";
+  luaversion = lib.versions.majorMinor version;
 
 plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
        else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lua";
-  version = "${luaversion}.${sourceVersion.patch}";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
     override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
   in passthruFun rec {
-    inherit self luaversion packageOverrides luaAttr sourceVersion;
+    inherit self luaversion packageOverrides luaAttr;
     executable = "lua";
     luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};

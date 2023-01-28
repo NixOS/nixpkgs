@@ -113,7 +113,7 @@ in {
           type = types.str;
           example = "/run/secrets/ldap-bind";
           description = lib.mdDoc ''
-            Path to the file containing the bind password of the servie account
+            Path to the file containing the bind password of the service account
             defined by [](#opt-services.mailman.ldap.bindDn).
           '';
         };
@@ -570,10 +570,14 @@ in {
           type = "normal";
           plugins = ["python3"];
           home = webEnv;
-          manage-script-name = true;
-          mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
           http = "127.0.0.1:18507";
-        };
+        }
+        // (if cfg.serve.virtualRoot == "/"
+          then { module = "mailman_web.wsgi:application"; }
+          else {
+            mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
+            manage-script-name = true;
+          });
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
         wantedBy = ["multi-user.target"];

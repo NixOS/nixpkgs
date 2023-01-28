@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
   LIBS = lib.optionalString x11Support "-lX11";
 
   meta = with lib; {
-    homepage = "http://w3m.sourceforge.net/";
+    homepage = "https://w3m.sourceforge.net/";
     description = "A text-mode web browser";
     maintainers = with maintainers; [ cstrahan anthonyroussel ];
     platforms = platforms.unix;

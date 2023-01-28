@@ -38,11 +38,14 @@ Below is a short excerpt of some points in there:
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:
+  * Be short, just one sentence.
   * Be capitalized.
   * Not start with the package name.
-  * Not have a period at the end.
+    * More generally, it should not refer to the package name.
+  * Not end with a period (or any punctuation for that matter).
 * `meta.license` must be set and fit the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
+  * If in doubt, try to contact the upstream developers for clarification.
 * `meta.maintainers` must be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
@@ -53,9 +56,9 @@ In addition to writing properly formatted commit messages, it's important to inc
 
 Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
 
-We prefer not to use the "squash merge" feature in nixpkgs: in order to keep as much information as possible in the commit history, we expect pull requests to consist of self-contained commits as described above.
-This means that, after addressing review comments and before the PR is merged, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
-Useful commands to be comfortable with are `git commit --amend`, `git commit --fixup` and `git rebase -i` (and don't forget that git lets you define aliases!).
+Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
+This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
+Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
 ## Rebasing between branches (i.e. from master to staging)
 
@@ -112,7 +115,7 @@ You can also create the backport manually:
 2. Check out the target _release branch_, e.g. `release-22.11`. Do not use a _channel branch_ like `nixos-22.11` or `nixpkgs-22.11-darwin`.
 3. Create a branch for your change, e.g. `git checkout -b backport`.
 4. When the reason to backport is not obvious from the original commit message, use `git cherry-pick -xe <original commit>` and add a reason. Otherwise use `git cherry-pick -x <original commit>`. That's fine for minor version updates that only include security and bug fixes, commits that fixes an otherwise broken package or similar. Please also ensure the commits exists on the master branch; in the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
-5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-22.11`) as the target branch of the pull request, and link to the pull request in which the original change was comitted to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[22.11]`.
+5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-22.11`) as the target branch of the pull request, and link to the pull request in which the original change was committed to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[22.11]`.
 6. When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request. This way maintainers can keep track of missing backports easier.
 
 ## Criteria for Backporting changes

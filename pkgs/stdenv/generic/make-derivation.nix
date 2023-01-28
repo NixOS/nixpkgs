@@ -85,24 +85,26 @@ let
 
 # TODO(@Ericson2314): Stop using legacy dep attribute names
 
-#                           host offset -> target offset
-  depsBuildBuild              ? [] # -1 -> -1
-, depsBuildBuildPropagated    ? [] # -1 -> -1
-, nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
-, propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
-, depsBuildTarget             ? [] # -1 ->  1
-, depsBuildTargetPropagated   ? [] # -1 ->  1
+#                                 host offset -> target offset
+  depsBuildBuild                    ? [] # -1 -> -1
+, depsBuildBuildPropagated          ? [] # -1 -> -1
+, nativeBuildInputs                 ? [] # -1 ->  0  N.B. Legacy name
+, propagatedNativeBuildInputs       ? [] # -1 ->  0  N.B. Legacy name
+, depsBuildTarget                   ? [] # -1 ->  1
+, depsBuildTargetPropagated         ? [] # -1 ->  1
 
-, depsHostHost                ? [] #  0 ->  0
-, depsHostHostPropagated      ? [] #  0 ->  0
-, buildInputs                 ? [] #  0 ->  1  N.B. Legacy name
-, propagatedBuildInputs       ? [] #  0 ->  1  N.B. Legacy name
+, depsHostHost                      ? [] #  0 ->  0
+, depsHostHostPropagated            ? [] #  0 ->  0
+, buildInputs                       ? [] #  0 ->  1  N.B. Legacy name
+, propagatedBuildInputs             ? [] #  0 ->  1  N.B. Legacy name
 
-, depsTargetTarget            ? [] #  1 ->  1
-, depsTargetTargetPropagated  ? [] #  1 ->  1
+, depsTargetTarget                  ? [] #  1 ->  1
+, depsTargetTargetPropagated        ? [] #  1 ->  1
 
-, checkInputs                 ? []
-, installCheckInputs          ? []
+, checkInputs                       ? []
+, installCheckInputs                ? []
+, nativeCheckInputs                 ? []
+, nativeInstallCheckInputs          ? []
 
 # Configure Phase
 , configureFlags ? []
@@ -154,6 +156,12 @@ let
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
   && config.contentAddressedByDefault
 
+# Experimental.  For simple packages mostly just works,
+# but for anything complex, be prepared to debug if enabling.
+, __structuredAttrs ? config.structuredAttrsByDefault or false
+
+, env ? { }
+
 , ... } @ attrs:
 
 let
@@ -200,6 +208,14 @@ then abort ("mkDerivation was called with unsupported hardening flags: " + lib.g
 else let
   doCheck = doCheck';
   doInstallCheck = doInstallCheck';
+  buildInputs' = buildInputs
+         ++ lib.optionals doCheck checkInputs
+         ++ lib.optionals doInstallCheck installCheckInputs;
+  nativeBuildInputs' = nativeBuildInputs
+         ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
+         ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
+         ++ lib.optionals doCheck nativeCheckInputs
+         ++ lib.optionals doInstallCheck nativeInstallCheckInputs;
 
   outputs = outputs';
 
@@ -209,16 +225,12 @@ else let
   dependencies = map (map lib.chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
-         ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-         ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-         ++ lib.optionals doCheck checkInputs
-         ++ lib.optionals doInstallCheck' installCheckInputs))
+      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
       (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
@@ -259,13 +271,17 @@ else let
     lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
       (lib.concatLists propagatedDependencies));
 
+  envIsExportable = lib.isAttrs env && !lib.isDerivation env;
+
   derivationArg =
     (removeAttrs attrs
-      ["meta" "passthru" "pos"
+      (["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
+       "nativeCheckInputs" "nativeInstallCheckInputs"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"])
+       "sandboxProfile" "propagatedSandboxProfile"]
+       ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
@@ -289,7 +305,7 @@ else let
           then attrs.name + hostSuffix
           else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // {
+    }) // lib.optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -304,8 +320,7 @@ else let
 
       userHook = config.stdenv.userHook or null;
       __ignoreNulls = true;
-
-      inherit strictDeps;
+      inherit __structuredAttrs strictDeps;
 
       depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
       nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
@@ -410,6 +425,7 @@ else let
       outputHashAlgo = attrs.outputHashAlgo or "sha256";
       outputHashMode = attrs.outputHashMode or "recursive";
     } // lib.optionalAttrs (enableParallelBuilding) {
+      inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
@@ -473,6 +489,19 @@ else let
                    else true);
     };
 
+  checkedEnv =
+    let
+      overlappingNames = lib.attrNames (builtins.intersectAttrs env derivationArg);
+    in
+    assert lib.assertMsg envIsExportable
+      "When using structured attributes, `env` must be an attribute set of environment variables.";
+    assert lib.assertMsg (overlappingNames == [ ])
+      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " overlappingNames}";
+    lib.mapAttrs
+      (n: v: assert lib.assertMsg (lib.isString v || lib.isBool v || lib.isInt v || lib.isDerivation v)
+        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+      env;
+
 in
 
 lib.extendDerivation
@@ -509,7 +538,7 @@ lib.extendDerivation
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation derivationArg);
+  (derivation (derivationArg // lib.optionalAttrs envIsExportable checkedEnv));
 
 in
   fnOrAttrs:

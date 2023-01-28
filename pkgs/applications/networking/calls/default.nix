@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     sofia_sip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];

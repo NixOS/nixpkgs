@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lib2geom";
-  version = "1.2";
+  version = "1.2.2";
 
   outputs = [ "out" "dev" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "inkscape";
     repo = "lib2geom";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-SNo5YT7o29zdxkHLuy9MT88qBg/U1Wwa3BWShF5ACTc=";
+    sha256 = "sha256-xkUxcAk8KJkL482R7pvgmCT+5I8aUMm/q25pvK3ZPuY=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     double-conversion
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

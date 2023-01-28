@@ -120,6 +120,7 @@ with self;
   };
 
   async_smtp = janePackage {
+    duneVersion = "3";
     pname = "async_smtp";
     hash = "1xf3illn7vikdxldpnc29n4z8sv9f0wsdgdvl4iv93qlvjk8gzck";
     meta.description = "SMTP client and server";
@@ -154,7 +155,7 @@ with self;
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ sexplib0 ];
-    checkInputs = [ alcotest ];
+    nativeCheckInputs = [ alcotest ];
   };
 
   base_bigstring = janePackage {
@@ -204,7 +205,7 @@ with self;
     minimumOCamlVersion = "4.07";
     meta.description = "Trivial metaprogramming tool";
     propagatedBuildInputs = [ re ];
-    checkInputs = [ ppx_jane ];
+    nativeCheckInputs = [ ppx_jane ];
     # This currently fails with dune
     strictDeps = false;
   };
@@ -272,6 +273,7 @@ with self;
   };
 
   email_message = janePackage {
+    duneVersion = "3";
     pname = "email_message";
     hash = "0k8hjkq91ikl7wjxs04k523jbkhl6q4abj6v0lzlbjiybmrpp69n";
     meta.description = "E-mail message parser";
@@ -780,7 +782,7 @@ with self;
     meta.description = "Yet another implementation of fork&exec and related functionality";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
-    checkInputs = [ ounit ];
+    nativeCheckInputs = [ ounit ];
     # This currently fails with dune
     strictDeps = false;
   };

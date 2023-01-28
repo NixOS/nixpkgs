@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycodestyle" ];
 
   meta = with lib; {
-    changelog = "https://github.com/PyCQA/pyflakes/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";
     description = "Python style guide checker";
     homepage = "https://pycodestyle.pycqa.org/";
     license = licenses.mit;

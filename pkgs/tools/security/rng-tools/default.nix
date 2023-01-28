@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "patchShebangs tests/*.sh";
-  checkInputs = [ psmisc ]; # rngtestjitter.sh needs killall
+  nativeCheckInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
   doInstallCheck = true;
   installCheckPhase = ''

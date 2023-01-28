@@ -58,6 +58,10 @@ GEM
     jekyll-coffeescript (2.0.0)
       coffee-script (~> 2.2)
       coffee-script-source (~> 1.12)
+    jekyll-favicon (1.1.0)
+      jekyll (>= 3.0, < 5.0)
+      mini_magick (~> 4.11)
+      rexml (~> 3.2, >= 3.2.5)
     jekyll-feed (0.17.0)
       jekyll (>= 3.7, < 5.0)
     jekyll-gist (1.5.0)
@@ -100,6 +104,7 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
+    mini_magick (4.11.0)
     mini_portile2 (2.8.0)
     minitest (5.16.3)
     nokogiri (1.13.9)
@@ -146,6 +151,7 @@ DEPENDENCIES
   jekyll
   jekyll-avatar
   jekyll-coffeescript
+  jekyll-favicon
   jekyll-feed (~> 0.9)
   jekyll-gist
   jekyll-mentions
@@ -163,4 +169,4 @@ DEPENDENCIES
   yajl-ruby (~> 1.4)
 
 BUNDLED WITH
-   2.3.25
+   2.3.9

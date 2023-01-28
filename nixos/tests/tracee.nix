@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           buildPhase = ''
             runHook preBuild
             # just build the static lib we need for the go test binary
-            make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES} bpf-core ./dist/btfhub
+            make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} bpf-core ./dist/btfhub
 
             # remove the /usr/bin prefix to work with the patch above
             substituteInPlace tests/integration/integration_test.go \

@@ -157,6 +157,11 @@ rec {
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
+            # TODO: hidden during the markdown transition to not expose downstream
+            # users of the docs infra to markdown if they're not ready for it.
+            # we don't make this visible conditionally because it can impact
+            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
+            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -479,7 +484,7 @@ rec {
       ) (lib.functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
-      # context on the explicited arguments of "args" too. This update
+      # context on the explicit arguments of "args" too. This update
       # operator is used to make the "args@{ ... }: with args.lib;" notation
       # works.
     in f (args // extraArgs)
@@ -1110,6 +1115,15 @@ rec {
     use = id;
   };
 
+  /* Transitional version of mkAliasOptionModule that uses MD docs. */
+  mkAliasOptionModuleMD = from: to: doRename {
+    inherit from to;
+    visible = true;
+    warn = false;
+    use = id;
+    markdown = true;
+  };
+
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
     Create config definitions with the same priority as the definition of another option.
@@ -1130,7 +1144,7 @@ rec {
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1141,7 +1155,9 @@ rec {
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = lib.mdDoc "Alias of {option}`${showOption to}`.";
+        description = if markdown
+          then lib.mdDoc "Alias of {option}`${showOption to}`."
+          else "Alias of <option>${showOption to}</option>.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;

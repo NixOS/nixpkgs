@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utilities and Python modules for handling audio";
-    homepage = "http://audiotools.sourceforge.net/";
+    homepage = "https://audiotools.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };

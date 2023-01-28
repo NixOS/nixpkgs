@@ -131,6 +131,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = doCheck;
 
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

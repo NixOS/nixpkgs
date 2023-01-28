@@ -4,11 +4,12 @@
 , fetchFromGitHub
 , setuptools
 , pythonOlder
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "pyswitchbee";
-  version = "1.6.2";
+  version = "1.7.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,14 +18,8 @@ buildPythonPackage rec {
     owner = "jafar-atili";
     repo = "pySwitchbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-MDutpeHI6MW1VwCRTPJK/y08ee4eidOHluMf6lPQfEk=";
+    hash = "sha256-LQjtePFSMvZdAGH6f8CveaE7ASm/x9GuFj9s3TipYHQ=";
   };
-
-  postPatch = ''
-    # https://github.com/jafar-atili/pySwitchbee/pull/2
-    substituteInPlace pyproject.toml \
-      --replace '"asyncio",' ""
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -32,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    packaging
   ];
 
   # Module doesn't have tests

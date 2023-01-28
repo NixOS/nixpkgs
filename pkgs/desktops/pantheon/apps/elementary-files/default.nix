@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pJFeMG2aGaMkS00fSoRlMR2YSg5YzwqwaQT8G7Gk5S4=";
   };
 
+  patches = [
+    # Ensure special user directory icon used for bookmark
+    # https://github.com/elementary/files/pull/2106
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/00b1c2a975aeab378ed6eb1d90c8988f82596add.patch";
+      sha256 = "sha256-F/Vk7dg57uBBMO4WOJ/7kKbRNMZuWZ3QfrBfEIBozbw=";
+    })
+  ];
+
   nativeBuildInputs = [
     desktop-file-utils
     meson
@@ -73,9 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     uritools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     pytestCheckHook
   ];

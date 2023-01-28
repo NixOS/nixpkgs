@@ -5,7 +5,7 @@
 , threadsCross
 , version
 
-, gmp, mpfr, libmpc, isl
+, binutils, gmp, mpfr, libmpc, isl
 , cloog ? null
 
 , enableLTO
@@ -51,7 +51,7 @@ let
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
-      "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
+      "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (if crossStageStatic then [
@@ -94,10 +94,6 @@ let
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
-      # In uclibc cases, libgomp needs an additional '-ldl'
-      # and as I don't know how to pass it, I disable libgomp.
-      "--disable-libgomp"
     ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );

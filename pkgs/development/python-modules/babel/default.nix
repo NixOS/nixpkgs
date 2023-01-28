@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytz ];
 
-  checkInputs = [ pytestCheckHook freezegun ];
+  nativeCheckInputs = [ pytestCheckHook freezegun ];
 
   meta = with lib; {
     homepage = "https://babel.pocoo.org/";

@@ -16,7 +16,7 @@ let
         # disable default openssl extension
         (lib.filter (e: e.pname != "php-openssl") enabled)
         # use OpenSSL 1.1 for RC4 Nextcloud encryption if user
-        # has acknowledged the brokeness of the ciphers (RC4).
+        # has acknowledged the brokenness of the ciphers (RC4).
         # TODO: remove when https://github.com/nextcloud/server/issues/32003 is fixed.
         ++ (if cfg.enableBrokenCiphersForSSE then [ cfg.phpPackage.extensions.openssl-legacy ] else [ cfg.phpPackage.extensions.openssl ])
         ++ optional cfg.enableImagemagick imagick
@@ -76,7 +76,7 @@ in {
         * setting `listen.owner` & `listen.group` in the phpfpm-pool to a different value
 
       Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
-      (which can be openend e.g. by running `nixos-help`).
+      (which can be opened e.g. by running `nixos-help`).
     '')
     (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
       Use services.nextcloud.nginx.enableImagemagick instead.
@@ -388,7 +388,7 @@ in {
         default = [];
         description = lib.mdDoc ''
           Trusted domains, from which the nextcloud installation will be
-          acessible.  You don't need to add
+          accessible.  You don't need to add
           `services.nextcloud.hostname` here.
         '';
       };
@@ -698,7 +698,7 @@ in {
 
             services.nextcloud.enableBrokenCiphersForSSE = false;
 
-          If you need to use server-side encryption you can ignore this waring.
+          If you need to use server-side encryption you can ignore this warning.
           Otherwise you'd have to disable server-side encryption first in order
           to be able to safely disable this option and get rid of this warning.
           See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
@@ -758,7 +758,7 @@ in {
 
         nextcloud-setup = let
           c = cfg.config;
-          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+          writePhpArray = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
           objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
             'objectstore' => [
@@ -838,8 +838,8 @@ in {
                 ''
               }
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
-              'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              'trusted_domains' => ${writePhpArray ([ cfg.hostName ] ++ c.extraTrustedDomains)},
+              'trusted_proxies' => ${writePhpArray (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}

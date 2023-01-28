@@ -1,5 +1,8 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, gitUpdater }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "xml-light is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-xml-light";
   version = "2.4";

@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "11.9";
+  version = "11.11";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    hash = "sha256-R/Kuk4nRJg3ozNNmzzNDnGcsmBmlk0g9d+F8JwLFz98=";
+    hash = "sha256-5kT1vcbCc0Fa3ylrcQetth50IQu57upiWRRpub93jlE=";
   };
 
   patches = (substituteAll {
@@ -58,9 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

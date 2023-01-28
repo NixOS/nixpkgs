@@ -1,16 +1,21 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "lklug-sinhala";
   version = "0.6";
-in
-fetchzip {
-  name = "lklug-sinhala-${version}";
-  url = "mirror://debian/pool/main/f/fonts-lklug-sinhala/fonts-lklug-sinhala_${version}.orig.tar.xz";
-  sha256 = "sha256-Fy+QnAajA4yLf/I1vOQll5pRd0ZLfLe8UXq4XMC9qNc=";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    tar xf $downloadedFile --strip-components=1 -C $out/share/fonts fonts-lklug-sinhala-${version}/lklug.ttf
+  src = fetchurl {
+    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    hash = "sha256-oPCCa01PMQcCK5fEILgXjrGzoDg+UvxkqK6AgeQaKio=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    cp *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -195,7 +195,20 @@ if [[ -z $noBootLoader ]]; then
     echo "installing the boot loader..."
     # Grub needs an mtab.
     ln -sfn /proc/mounts "$mountPoint"/etc/mtab
-    NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -- /run/current-system/bin/switch-to-configuration boot
+    export mountPoint
+    NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -c "$(cat <<'EOF'
+      # Create a bind mount for each of the mount points inside the target file
+      # system. This preserves the validity of their absolute paths after changing
+      # the root with `nixos-enter`.
+      # Without this the bootloader installation may fail due to options that
+      # contain paths referenced during evaluation, like initrd.secrets.
+      # when not root, re-execute the script in an unshared namespace
+      mount --rbind --mkdir / "$mountPoint"
+      mount --make-rslave "$mountPoint"
+      /run/current-system/bin/switch-to-configuration boot
+      umount -R "$mountPoint" && rmdir "$mountPoint"
+EOF
+)"
 fi
 
 # Ask the user to set a root password, but only if the passwd command

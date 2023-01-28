@@ -1,6 +1,6 @@
 { lib, mkCoqDerivation, coq, mathcomp, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "gaia";
 
   release."1.11".sha256 = "sha256:0gwb0blf37sv9gb0qpn34dab71zdcx7jsnqm3j9p58qw65cgsqn5";
@@ -11,7 +11,7 @@ with lib; mkCoqDerivation {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ] [
+  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
     { cases = [ (range "8.10" "8.16") (isGe "1.12.0") ]; out = "1.15"; }
     { cases = [ (range "8.10" "8.12") "1.11.0" ]; out = "1.11"; }
   ] null;
@@ -19,7 +19,7 @@ with lib; mkCoqDerivation {
   propagatedBuildInputs =
     [ mathcomp.ssreflect mathcomp.algebra mathcomp.fingroup ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";
     maintainers = with maintainers; [ Zimmi48 ];
     license = licenses.mit;

@@ -654,7 +654,11 @@ A list of strings passed as additional flags to `make`. Like `makeFlags` and `ma
 
 ##### `checkInputs` {#var-stdenv-checkInputs}
 
-A list of dependencies used by the phase. This gets included in `nativeBuildInputs` when `doCheck` is set.
+A list of host dependencies used by the phase, usually libraries linked into executables built during tests. This gets included in `buildInputs` when `doCheck` is set.
+
+##### `nativeCheckInputs` {#var-stdenv-nativeCheckInputs}
+
+A list of native dependencies used by the phase, notably tools needed on `$PATH`. This gets included in `nativeBuildInputs` when `doCheck` is set.
 
 ##### `preCheck` {#var-stdenv-preCheck}
 
@@ -719,11 +723,11 @@ If set, libraries and executables are not stripped. By default, they are.
 
 ##### `dontStripHost` {#var-stdenv-dontStripHost}
 
-Like `dontStrip`, but only affects the `strip` command targetting the package’s host platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
+Like `dontStrip`, but only affects the `strip` command targeting the package’s host platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
 
 ##### `dontStripTarget` {#var-stdenv-dontStripTarget}
 
-Like `dontStrip`, but only affects the `strip` command targetting the packages’ target platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
+Like `dontStrip`, but only affects the `strip` command targeting the packages’ target platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
 
 ##### `dontMoveSbin` {#var-stdenv-dontMoveSbin}
 
@@ -821,7 +825,11 @@ A list of strings passed as additional flags to `make`. Like `makeFlags` and `ma
 
 ##### `installCheckInputs` {#var-stdenv-installCheckInputs}
 
-A list of dependencies used by the phase. This gets included in `nativeBuildInputs` when `doInstallCheck` is set.
+A list of host dependencies used by the phase, usually libraries linked into executables built during tests. This gets included in `buildInputs` when `doInstallCheck` is set.
+
+##### `nativeInstallCheckInputs` {#var-stdenv-nativeInstallCheckInputs}
+
+A list of native dependencies used by the phase, notably tools needed on `$PATH`. This gets included in `nativeBuildInputs` when `doInstallCheck` is set.
 
 ##### `preInstallCheck` {#var-stdenv-preInstallCheck}
 
@@ -836,6 +844,10 @@ Hook executed at the end of the installCheck phase.
 The distribution phase is intended to produce a source distribution of the package. The default `distPhase` first calls `make dist`, then it copies the resulting source tarballs to `$out/tarballs/`. This phase is only executed if the attribute `doDist` is set.
 
 #### Variables controlling the distribution phase {#variables-controlling-the-distribution-phase}
+
+##### `doDist` {#var-stdenv-doDist}
+
+If set, the distribution phase is executed.
 
 ##### `distTarget` {#var-stdenv-distTarget}
 
@@ -989,6 +1001,32 @@ someVar=$(stripHash $name)
 Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
+
+### `prependToVar` \<variableName\> \<elements...\> {#fun-prependToVar}
+
+Prepend elements to a variable.
+
+Example:
+
+```shellSession
+$ configureFlags="--disable-static"
+$ prependToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-dependency-tracking --enable-foo --disable-static
+```
+
+### `appendToVar` \<variableName\> \<elements...\> {#fun-appendToVar}
+
+Append elements to a variable.
+
+Example:
+
+```shellSession
+$ configureFlags="--disable-static"
+$ appendToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-static --disable-dependency-tracking --enable-foo
+```
 
 ## Package setup hooks {#ssec-setup-hooks}
 

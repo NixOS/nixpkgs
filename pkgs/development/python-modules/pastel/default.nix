@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "e6581ac04e973cac858828c6202c1e1e81fee1dc7de7683f3e1ffe0bfd8a573d";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';

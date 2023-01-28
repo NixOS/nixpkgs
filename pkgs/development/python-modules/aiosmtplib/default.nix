@@ -7,11 +7,12 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "1.1.7";
+  version = "2.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,18 +21,19 @@ buildPythonPackage rec {
     owner = "cole";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZVNYMVg2qeMoSojmPllvJLv2Xm5IYN9h5N13oHPFXSk=";
+    hash = "sha256-Py/44J9J8FdrsSpEM2/DR2DQH8x8Ub7y0FPIN2gcmmA=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosmtpd
     hypothesis
     pytest-asyncio
     pytestCheckHook
+    trustme
   ];
 
   pythonImportsCheck = [

@@ -1,4 +1,5 @@
-{ elk7Version
+{ config
+, elk7Version
 , enableUnfree ? true
 , lib
 , stdenv
@@ -8,12 +9,10 @@
 , jre
 }:
 
-with lib;
-
 let
-  info = splitString "-" stdenv.hostPlatform.system;
-  arch = elemAt info 0;
-  plat = elemAt info 1;
+  info = lib.splitString "-" stdenv.hostPlatform.system;
+  arch = lib.elemAt info 0;
+  plat = lib.elemAt info 1;
   shas =
     if enableUnfree
     then {
@@ -28,7 +27,7 @@ let
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
-    pname = "logstash${optionalString (!enableUnfree) "-oss"}";
+    pname = "logstash${lib.optionalString (!enableUnfree) "-oss"}";
 
 
     src = fetchurl {
@@ -78,10 +77,10 @@ let
       maintainers = with maintainers; [ wjlroe offline basvandijk ];
     };
     passthru.tests =
-      optionalAttrs (!enableUnfree) (
-        assert this.drvPath == nixosTests.elk.ELK-7.elkPackages.logstash.drvPath;
+      lib.optionalAttrs (config.allowUnfree && enableUnfree) (
+        assert this.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.logstash.drvPath;
         {
-          elk = nixosTests.elk.ELK-7;
+          elk = nixosTests.elk.unfree.ELK-7;
         }
       );
   };

@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.4.6";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mVEp/4iL23rrw6HSl/7qMGK4YCJ6I+9gcSIhyPsAWzc=";
+    sha256 = "sha256-xw+Yy9KejVkunOLJdmfXstP7aDrl3j0OZjCaf6pyL1U=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorSha256 = "sha256-tsMQMWEkTE1NhevcqBETGWiboqL6QTepgnIo4B5Y4wQ=";
+  vendorSha256 = "sha256-Iz1LYL25NpkztTM86zrLwehub8FzO1IlwZqCPW7wDN4=";
 
   CGO_ENABLED = 1;
 

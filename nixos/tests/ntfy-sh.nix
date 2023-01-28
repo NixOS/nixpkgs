@@ -1,4 +1,5 @@
 import ./make-test-python.nix {
+  name = "ntfy-sh";
 
   nodes.machine = { ... }: {
     services.ntfy-sh.enable = true;
@@ -10,6 +11,8 @@ import ./make-test-python.nix {
     msg = "Test notification"
 
     machine.wait_for_unit("multi-user.target")
+
+    machine.wait_for_open_port(80)
 
     machine.succeed(f"curl -d '{msg}' localhost:80/test")
 

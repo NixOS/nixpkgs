@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ colorlog lomond requests ];
-  checkInputs = [ pytestCheckHook requests-mock ];
+  nativeCheckInputs = [ pytestCheckHook requests-mock ];
 
   meta = with lib; {
     homepage = "https://github.com/MisterWil/abodepy";

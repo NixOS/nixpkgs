@@ -46,7 +46,7 @@ buildPythonPackage rec {
     semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-localserver
     pytestCheckHook
   ];

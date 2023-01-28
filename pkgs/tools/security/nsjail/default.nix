@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preInstallPhase
+    runHook preInstall
     install -Dm755 nsjail "$out/bin/nsjail"
     installManPage nsjail.1
-    runHook postInstallPhase
+    runHook postInstall
   '';
 
   meta = with lib; {

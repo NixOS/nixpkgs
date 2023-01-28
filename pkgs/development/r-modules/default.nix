@@ -325,6 +325,7 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
+    classInt = lib.optional stdenv.isDarwin [ pkgs.libiconv ];
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];

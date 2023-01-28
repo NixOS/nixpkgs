@@ -14,16 +14,17 @@ let
   ];
 in
 
-callPackage ./common.nix { inherit stdenv; } {
-    pname = "glibc" + lib.optionalString withGd "-gd";
-
-    inherit withLinuxHeaders profilingLibraries withGd withLibcrypt;
+(callPackage ./common.nix { inherit stdenv; } {
+  inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+  pname = "glibc" + lib.optionalString withGd "-gd";
+}).overrideAttrs(previousAttrs: {
 
     # Note:
     # Things you write here override, and do not add to,
     # the values in `common.nix`.
     # (For example, if you define `patches = [...]` here, it will
-    # override the patches in `common.nix`.)
+    # override the patches in `common.nix` -- so instead you should
+    # write `patches = (previousAttrs.patches or []) ++ [ ... ]`.
 
     NIX_NO_SELF_RPATH = true;
 
@@ -74,7 +75,7 @@ callPackage ./common.nix { inherit stdenv; } {
     # - dejagnu: during linux bootstrap tcl SIGSEGVs
     # - clang-wrapper in cross-compilation
     # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = ''
+    preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
           cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
@@ -153,5 +154,6 @@ callPackage ./common.nix { inherit stdenv; } {
 
     separateDebugInfo = true;
 
-    meta.description = "The GNU C Library";
-  }
+  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+})
+

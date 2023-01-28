@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "20.7.0";
+  version = "21.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-tNuBIfObCWd8JXq49CDLOzMl1pw7ulTQJua7CNJjRuo=";
+    hash = "sha256-5EOythXO7spLzzlqDWrwcdkkJAMH9W8OBv96rYaWxAY=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This is the Microsoft Azure Container Service Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-containerservice_${version}/sdk/containerservice/azure-mgmt-containerservice/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

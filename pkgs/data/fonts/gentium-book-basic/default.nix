@@ -1,19 +1,15 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   major = "1";
   minor = "102";
   version = "${major}.${minor}";
-in fetchzip rec {
   name = "gentium-book-basic-${version}";
+in (fetchzip rec {
+  inherit name;
 
   url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${major}${minor}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf                            -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt -d $out/share/doc/${name}
-  '';
 
   sha256 = "0598zr5f7d6ll48pbfbmmkrybhhdks9b2g3m2g67wm40070ffzmd";
 
@@ -24,4 +20,10 @@ in fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf                            -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt -d $out/share/doc/${name}
+  '';
+})

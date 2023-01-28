@@ -33,6 +33,11 @@ stdenv.mkDerivation {
       --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
   '';
 
+  postFixup = ''
+    substituteInPlace $out/share/applications/coreboot-configurator.desktop \
+      --replace '/usr/bin/coreboot-configurator' 'coreboot-configurator'
+  '';
+
   meta = with lib; {
     description = "A simple GUI to change settings in Coreboot's CBFS";
     homepage = "https://support.starlabs.systems/kb/guides/coreboot-configurator";

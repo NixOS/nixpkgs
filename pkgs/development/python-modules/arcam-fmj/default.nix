@@ -30,7 +30,7 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytest-mock
     pytestCheckHook

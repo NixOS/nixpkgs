@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic
+      , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -192,7 +192,7 @@ let
 
     # Note: the duplication of executables is about 4MB size.
     # So a nicer solution was patching postgresql to allow setting the
-    # libdir explicitely.
+    # libdir explicitly.
     postBuild = ''
       mkdir -p $out/bin
       rm $out/bin/{pg_config,postgres,pg_ctl}

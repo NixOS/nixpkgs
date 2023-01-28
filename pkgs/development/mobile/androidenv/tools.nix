@@ -1,7 +1,7 @@
-{deployAndroidPackage, requireFile, lib, packages, toolsVersion, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
+{deployAndroidPackage, requireFile, lib, packages, toolsVersion, os, callPackage, postInstall ? ""}:
 
-if toolsVersion == "26.0.1" then import ./tools/26.nix {
-  inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
+if toolsVersion == "26.0.1" then callPackage ./tools/26.nix {
+  inherit deployAndroidPackage lib os postInstall;
   package = {
     name = "tools";
     path = "tools";
@@ -17,10 +17,10 @@ if toolsVersion == "26.0.1" then import ./tools/26.nix {
       };
     };
   };
-} else if toolsVersion == "26.1.1" then import ./tools/26.nix {
-  inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
+} else if toolsVersion == "26.1.1" then callPackage ./tools/26.nix {
+  inherit deployAndroidPackage lib os postInstall;
   package = packages.tools.${toolsVersion};
-} else import ./tools/25.nix {
-  inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
+} else callPackage ./tools/25.nix {
+  inherit deployAndroidPackage lib os postInstall;
   package = packages.tools.${toolsVersion};
 }

@@ -19,7 +19,7 @@
 { pkgs
 , lib
 , options
-, transformOptions ? lib.id  # function for additional tranformations of the options
+, transformOptions ? lib.id  # function for additional transformations of the options
 , documentType ? "appendix" # TODO deprecate "appendix" in favor of "none"
                             #      and/or rename function to moduleOptionDoc for clean slate
 
@@ -41,6 +41,7 @@
 # characteristics but (hopefully) indistinguishable output.
 , allowDocBook ? true
 # whether lib.mdDoc is required for descriptions to be read as markdown.
+# !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
 , markdownByDefault ? false
 }:
 
@@ -77,16 +78,13 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          <listitem>
-            <para>
-              <link xlink:href="https://search.nixos.org/packages?show=${name}&amp;sort=relevance&amp;query=${name}">
-                <literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name}</literal>
-              </link>
-            </para>
-            ${lib.optionalString (args ? comment) "<para>${args.comment}</para>"}
-          </listitem>
+          - [`${lib.optionalString (title != null) "${title} aka "}pkgs.${name}`](
+              https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
+            )${
+              lib.optionalString (args ? comment) "\n\n  ${args.comment}"
+            }
         '';
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+    in lib.concatMapStrings (p: describe (unpack p)) packages;
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
@@ -120,7 +118,20 @@ in rec {
             inherit self;
             includeSiteCustomize = true;
            });
-         in self.withPackages (p: [ p.mistune ]))
+         in self.withPackages (p:
+           let
+            # TODO add our own small test suite when rendering is split out into a new tool
+            markdown-it-py = p.markdown-it-py.override {
+              disableTests = true;
+            };
+            mdit-py-plugins = p.mdit-py-plugins.override {
+              inherit markdown-it-py;
+              disableTests = true;
+            };
+          in [
+            markdown-it-py
+            mdit-py-plugins
+          ]))
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
@@ -130,15 +141,18 @@ in rec {
         if baseOptionsJSON == null
         then builtins.toFile "base.json" "{}"
         else baseOptionsJSON;
+
+      MANPAGE_URLS = pkgs.path + "/doc/manpage-urls.json";
     }
     ''
       # Export list of options in different format.
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
+      TOUCH_IF_DB=$dst/.used-docbook \
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-        ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
+        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
         ${lib.optionalString markdownByDefault "--markdown-by-default"} \
         $baseJSON $options \
         > $dst/options.json
@@ -149,6 +163,14 @@ in rec {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
+
+  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
+    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
+      echo 1
+    else
+      echo 0
+    fi >"$out"
+  '';
 
   # Convert options.json into an XML file.
   # The actual generation of the xml file is done in nix purely for the convenience
