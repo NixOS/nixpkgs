@@ -25,6 +25,7 @@ let
 in
 { lib
 , buildGoModule
+, runCommandLocal
   # Native build inputs
 , makeWrapper
 , pkg-config
@@ -55,6 +56,12 @@ in
   # Whether to compile with SUID support
 , enableSuid ? false
 , starterSuidPath ? null
+  # newuidmapPath and newgidmapPath are to support --fakeroot
+  # where those SUID-ed executables are unavailable from the FHS system PATH.
+  # Path to SUID-ed newuidmap executable
+, newuidmapPath ? null
+  # Path to SUID-ed newgidmap executable
+, newgidmapPath ? null
   # Remove the symlinks to `singularity*` when projectName != "singularity"
 , removeCompat ? false
   # Workaround #86349
@@ -66,6 +73,12 @@ in
 
 let
   defaultPathOriginal = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
+  privileged-un-utils = if ((isNull newuidmapPath) && (isNull newgidmapPath)) then null else
+  (runCommandLocal "privileged-un-utils" { } ''
+    mkdir -p "$out/bin"
+    ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
+    ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
+  '');
 in
 buildGoModule {
   inherit pname version src;
@@ -130,6 +143,7 @@ buildGoModule {
     coreutils
     cryptsetup # cryptsetup
     go
+    privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
   ]

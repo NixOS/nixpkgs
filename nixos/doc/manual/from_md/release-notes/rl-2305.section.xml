@@ -960,6 +960,16 @@
       </listitem>
       <listitem>
         <para>
+          The new option
+          <literal>programs.singularity.enableFakeroot</literal>, if set
+          to <literal>true</literal>, provides
+          <literal>--fakeroot</literal> support for
+          <literal>apptainer</literal> and
+          <literal>singularity</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>unifi-poller</literal> package and corresponding
           NixOS module have been renamed to <literal>unpoller</literal>
           to match upstream.

@@ -45,6 +45,14 @@ in
         Use `lib.mkForce` to forcefully specify the overriden package.
       '';
     };
+    enableFakeroot = mkOption {
+      type = types.bool;
+      default = true;
+      example = false;
+      description = mdDoc ''
+        Whether to enable the `--fakeroot` support of Singularity/Apptainer.
+      '';
+    };
     enableSuid = mkOption {
       type = types.bool;
       default = true;
@@ -57,7 +65,10 @@ in
 
   config = mkIf cfg.enable {
     programs.singularity.packageOverriden = (cfg.package.override (
-      optionalAttrs cfg.enableSuid {
+      optionalAttrs cfg.enableFakeroot {
+        newuidmapPath = "/run/wrappers/bin/newuidmap";
+        newgidmapPath = "/run/wrappers/bin/newgidmap";
+      } // optionalAttrs cfg.enableSuid {
         enableSuid = true;
         starterSuidPath = "/run/wrappers/bin/${cfg.package.projectName}-suid";
       }
