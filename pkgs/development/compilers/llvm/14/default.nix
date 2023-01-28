@@ -35,7 +35,7 @@ let
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
+    maintainers = lib.teams.llvm.members;
     platforms   = lib.platforms.all;
   };
 
