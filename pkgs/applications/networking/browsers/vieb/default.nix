@@ -2,13 +2,13 @@
 
 mkYarnPackage rec {
   pname = "vieb";
-  version = "9.5.0";
+  version = "9.5.1";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SWHjzrEvRlTn4HJnT81Le4KsFDypN3QH3F/z7zZ8p3E=";
+    sha256 = "sha256-dUHjhJt0MarRNmDxs989aBTprjt+DUoYd3U05ELc0Tw=";
   };
 
   packageJSON = ./package.json;
