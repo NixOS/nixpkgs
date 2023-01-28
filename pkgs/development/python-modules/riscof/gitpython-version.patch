@@ -1,0 +1,10 @@
+diff --git a/riscof/requirements.txt b/riscof/requirements.txt
+index 6fc0519..da51ab3 100644
+--- a/riscof/requirements.txt
++++ b/riscof/requirements.txt
+@@ -1,4 +1,4 @@
+-GitPython==3.1.17
++GitPython
+ click>=7.1.2
+ Jinja2>=2.10.1
+ pytz>=2019.1

@@ -10002,6 +10002,8 @@ self: super: with self; {
 
   ripser = callPackage ../development/python-modules/ripser { };
 
+  riscof = callPackage ../development/python-modules/riscof { };
+
   riscv-config = callPackage ../development/python-modules/riscv-config { };
 
   riscv-isac = callPackage ../development/python-modules/riscv-isac { };
