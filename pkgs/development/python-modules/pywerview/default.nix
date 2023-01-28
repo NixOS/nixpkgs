@@ -7,12 +7,13 @@
 , ldap3
 , lxml
 , pyasn1
+, pycryptodome
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "the-useless-one";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nrPhyBHW13dkXFC5YJfrkiztAxMw4KuEif0zCdjQEq0=";
+    hash = "sha256-5/Cn70qQaUp38qko1Wq+gZMCcQtcAPtZwt7Zrx8MFc4=";
   };
 
   propagatedBuildInputs = [
@@ -30,17 +31,12 @@ buildPythonPackage rec {
     impacket
     ldap3
     lxml
+    pycryptodome
     pyasn1
   ];
 
   # Module has no tests
   doCheck = false;
-
-  postPatch = ''
-    # https://github.com/the-useless-one/pywerview/pull/51
-    substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
-  '';
 
   pythonImportsCheck = [
     "pywerview"
