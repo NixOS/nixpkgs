@@ -2389,8 +2389,6 @@ self: super: with self; {
 
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
-  dictpath = callPackage ../development/python-modules/dictpath { };
-
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   dicttoxml2 = callPackage ../development/python-modules/dicttoxml2 { };
