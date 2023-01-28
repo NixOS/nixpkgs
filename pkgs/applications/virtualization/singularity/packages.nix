@@ -1,0 +1,70 @@
+{ callPackage
+, fetchFromGitHub
+, conmon
+}:
+
+{
+  apptainer = callPackage
+    (import ./generic.nix rec {
+      pname = "apptainer";
+      # TODO: Upgrade to 1.1.4 only after https://github.com/apptainer/apptainer/pull/967 get merge
+      # and https://github.com/apptainer/apptainer/issues/958 get fixed
+      version = "1.1.3";
+      projectName = "apptainer";
+
+      src = fetchFromGitHub {
+        owner = "apptainer";
+        repo = "apptainer";
+        rev = "v${version}";
+        hash = "sha256-QFg6RC77OE/a6Qlzn6Zi5I7Iaq/U3/m0eI9yLArzuNc=";
+      };
+
+      # Update by running
+      # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
+      # at the root directory of the Nixpkgs repository
+      vendorHash = "sha256-tAnh7A8Lw5KtY7hq+sqHMEUlgXvgeeCKKIfRZFoRtug=";
+
+      extraDescription = " (previously known as Singularity)";
+      extraMeta.homepage = "https://apptainer.org";
+    })
+    {
+      # Apptainer doesn't depend on conmon
+      conmon = null;
+
+      # defaultToSuid becomes false since Apptainer 1.1.0
+      # https://github.com/apptainer/apptainer/pull/495
+      # https://github.com/apptainer/apptainer/releases/tag/v1.1.0
+      defaultToSuid = false;
+    };
+
+  singularity = callPackage
+    (import ./generic.nix rec {
+      pname = "singularity-ce";
+      version = "3.10.4";
+      projectName = "singularity";
+
+      src = fetchFromGitHub {
+        owner = "sylabs";
+        repo = "singularity";
+        rev = "v${version}";
+        hash = "sha256-bUnQXQVwaVA3Lkw3X9TBWqNBgiPxAVCHnkq0vc+CIsM=";
+      };
+
+      # Update by running
+      # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).go-modules"
+      # at the root directory of the Nixpkgs repository
+      vendorHash = "sha256-K8helLcOuz3E4LzBE9y3pnZqwdwhO/iMPTN1o22ipVg=";
+
+      # Do not build conmon from the Git submodule source,
+      # Use Nixpkgs provided version
+      extraConfigureFlags = [
+        "--without-conmon"
+      ];
+
+      extraDescription = " (Sylabs Inc's fork of Singularity, a.k.a. SingularityCE)";
+      extraMeta.homepage = "https://sylabs.io/";
+    })
+    {
+      defaultToSuid = true;
+    };
+}

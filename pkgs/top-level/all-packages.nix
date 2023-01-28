@@ -30196,7 +30196,9 @@ with pkgs;
 
   shepherd = nodePackages."@nerdwallet/shepherd";
 
-  singularity = callPackage ../applications/virtualization/singularity { };
+  inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
+    apptainer
+    singularity;
 
   skate = callPackage ../applications/misc/skate { };
 

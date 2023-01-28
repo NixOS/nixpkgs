@@ -924,6 +924,42 @@
       </listitem>
       <listitem>
         <para>
+          As Singularity has renamed to
+          <link xlink:href="https://apptainer.org/news/community-announcement-20211130">Apptainer</link>
+          to distinguish from
+          <link xlink:href="https://sylabs.io/2021/05/singularity-community-edition">an
+          un-renamed fork by Sylabs Inc.</link>, there are now two
+          packages of Singularity/Apptainer:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>apptainer</literal>: From
+              <literal>github.com/apptainer/apptainer</literal>, which
+              is the new repo after renaming.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>singularity</literal>: From
+              <literal>github.com/sylabs/singularity</literal>, which is
+              the fork by Sylabs Inc..
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          <literal>programs.singularity</literal> got a new
+          <literal>package</literal> option to specify which package to
+          use.
+        </para>
+        <para>
+          <literal>singularity-tools.buildImage</literal> got a new
+          input argument <literal>singularity</literal> to specify which
+          package to use.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>unifi-poller</literal> package and corresponding
           NixOS module have been renamed to <literal>unpoller</literal>
           to match upstream.
