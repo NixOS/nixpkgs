@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
