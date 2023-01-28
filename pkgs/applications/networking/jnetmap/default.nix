@@ -16,12 +16,16 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/lib"
 
     cp "${src}" "$out/lib/jnetmap.jar"
     makeWrapper "${jre}/bin/java" "$out/bin/jnetmap" \
         --add-flags "-jar \"$out/lib/jnetmap.jar\""
+
+    runHook postInstall
   '';
 
   meta = with lib; {
