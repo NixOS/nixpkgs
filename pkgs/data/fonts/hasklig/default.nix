@@ -1,14 +1,22 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "hasklig";
   version = "1.1";
-in (fetchzip {
-  name = "hasklig-${version}";
 
-  url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-jsPQtjuegMePt4tB1dZ9mq15LSxXBYwtakbq4od/sko=";
+  };
 
-  sha256 = "0xxyx0nkapviqaqmf3b610nq17k20afirvc72l32pfspsbxz8ybq";
+  installPhase = ''
+    runHook preInstall
+
+    install -m444 -Dt $out/share/fonts/opentype *.otf
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/i-tu/Hasklig";
@@ -17,9 +25,4 @@ in (fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ davidrusu Profpatsch ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-  '';
-})
+}
