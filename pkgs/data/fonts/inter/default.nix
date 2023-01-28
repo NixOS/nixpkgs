@@ -1,14 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "inter";
   version = "3.19";
-in (fetchzip {
-  name = "inter-${version}";
 
-  url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-6kUQUTFtxiJEU6sYC6HzMwm1H4wvaKIoxoY3F6GJJa8=";
+  };
 
-  sha256 = "sha256-8p15thg3xyvCA/8dH2jGQoc54nzESFDyv5m47FgWrSI=";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/opentype
+    cp */*.otf $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://rsms.me/inter/";
@@ -17,10 +26,4 @@ in (fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ demize dtzWill ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
-})
-
+}
