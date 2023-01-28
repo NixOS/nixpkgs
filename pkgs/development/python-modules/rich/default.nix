@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, commonmark
+, markdown-it-py
 , poetry-core
 , pygments
 , typing-extensions
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.0.0";
+  version = "13.3.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -25,13 +25,13 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Mc2ZTpn2cPGXIBblwwukJGiD8etdVi8ag9Xb77gG62A=";
+    hash = "sha256-0bE3I3xuPIkBjKcHvXJhdPa4Kg+B7ByKUPJohgh9tHk=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    commonmark
+    markdown-it-py
     pygments
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
