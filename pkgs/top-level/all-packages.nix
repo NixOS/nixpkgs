@@ -10688,8 +10688,6 @@ with pkgs;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
-  jbig2enc = callPackage ../tools/graphics/jbig2enc { };
-
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
   briss = callPackage ../tools/graphics/briss { };
@@ -20397,6 +20395,8 @@ with pkgs;
   jasper = callPackage ../development/libraries/jasper { };
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
+
+  jbig2enc = callPackage ../development/libraries/jbig2enc { };
 
   jcal = callPackage ../development/libraries/jcal { };
 
