@@ -728,9 +728,6 @@ rec {
         esac
       done
 
-      # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
-      sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
-
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
