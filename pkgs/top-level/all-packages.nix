@@ -15693,6 +15693,7 @@ with pkgs;
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-flash = callPackage ../development/tools/rust/cargo-flash {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin) DarwinTools;
   };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
