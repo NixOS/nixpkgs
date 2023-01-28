@@ -1,11 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, installShellFiles
-, autoPatchelfHook
 , pkg-config
+, autoPatchelfHook
+, installShellFiles
 , scons
 , vulkan-loader
+, libGL
 , libX11
 , libXcursor
 , libXinerama
@@ -14,7 +15,7 @@
 , libXrender
 , libXi
 , libXfixes
-, freetype
+, libxkbcommon
 , alsa-lib
 , libpulseaudio
 , dbus
@@ -24,9 +25,9 @@
 , withPlatform ? "linuxbsd"
 , withTarget ? "editor"
 , withPrecision ? "single"
-, withPulseaudio ? false
+, withPulseaudio ? true
 , withDbus ? true
-, withSpeechd ? false
+, withSpeechd ? true
 , withFontconfig ? true
 , withUdev ? true
 , withTouch ? true
@@ -42,7 +43,7 @@ let
     precision = withPrecision; # Floating-point precision level
 
     # Options from 'godot/platform/linuxbsd/detect.py'
-    pulseaudio = withPulseaudio;
+    pulseaudio = withPulseaudio; # Use PulseAudio
     dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
     speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
     fontconfig = withFontconfig; # Use fontconfig for system fonts support
@@ -52,13 +53,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "4.0-beta14";
+  version = "4.0-beta16";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "28a24639c3c6a95b5b9828f5f02bf0dc2f5ce54b";
-    sha256 = "sha256-qAotCc2YUg8FMK+JFHi5B4OL/cAtvWO/pYRRz8RcNUY=";
+    rev = "518b9e5801a19229805fe837d7d0cf92920ad413";
+    sha256 = "sha256-45x4moHOn/PWRazuJ/CBb3WYaPZqv4Sn8ZIugUSaVjY=";
   };
 
   nativeBuildInputs = [
@@ -69,10 +70,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     scons
-  ]
-  ++ runtimeDependencies;
+  ];
 
   runtimeDependencies = [
+    vulkan-loader
+    libGL
     libX11
     libXcursor
     libXinerama
@@ -81,8 +83,8 @@ stdenv.mkDerivation rec {
     libXrender
     libXi
     libXfixes
+    libxkbcommon
     alsa-lib
-    vulkan-loader
   ]
   ++ lib.optional withPulseaudio libpulseaudio
   ++ lib.optional withDbus dbus
@@ -91,12 +93,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional withFontconfig fontconfig
   ++ lib.optional withFontconfig fontconfig.lib
   ++ lib.optional withUdev udev;
-
-  patches = [
-    # Godot expects to find xfixes inside xi, but nix's pkg-config only
-    # gives the libs for the requested package (ignoring the propagated-build-inputs)
-    ./xfixes.patch
-  ];
 
   enableParallelBuilding = true;
 
