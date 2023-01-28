@@ -1523,6 +1523,15 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           result, they will be garbage collected more often.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.borgbackup</literal>: In the borg job
+          wrapper, environment variables are now passed verbatim to the
+          borg process, so that its process environment is the same as
+          in the systemd service. Previously, vars were expanded in the
+          Nix build environment for the job wrapper.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-new-services">

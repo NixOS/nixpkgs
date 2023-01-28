@@ -132,7 +132,7 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
     } (with lib; ''
       makeWrapper "${original}" "$out/bin/${name}" \
-        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
+        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: "--set ${name} ${escapeShellArg value}") set)}
     '');
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
