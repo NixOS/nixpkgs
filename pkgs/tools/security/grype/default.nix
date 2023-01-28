@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.55.0";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Y72h1YCf42RinGw2mKZb8Bz8ip+LUW377xwJht67Q1s=";
+    hash = "sha256-xNv4pI6iT6lNmjeUIW8ObPFJw9H1SiVTg9fRx6Osiwc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
   };
   proxyVendor = true;
 
-  vendorHash = "sha256-xzBOZyzwxVFTFgtmu7DLBpdkV9bwzJ9RETkdyV2HtQo=";
+  vendorHash = "sha256-Sez5jNFdL11cHBBPcY0b8qUiupmjPo9MHwUUi7FaNiA=";
 
   nativeBuildInputs = [
     installShellFiles
