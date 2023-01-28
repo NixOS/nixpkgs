@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PYOjfLPa/vZZP0IZuUZnQ74IrTRvizgYhKOmhd83aMQ=";
+    hash = "sha256-PYOjfLPa/vZZP0IZuUZnQ74IrTRvizgYhKOmhd83aMQ=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for for Huum saunas";
     homepage = "https://github.com/frwickst/pyhuum";
+    changelog = "https://github.com/frwickst/pyhuum/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
