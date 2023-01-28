@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "haruna";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-UU8tbaZz7udDulh+PHPZDc3rm1MvK4dafPgXL50apMI=";
+    hash = "sha256-hhHWxmr2EzW9QqfV1bpJCiWOWsmGJmvxvtQcuXlMTc4=";
     domain = "invent.kde.org";
   };
 
