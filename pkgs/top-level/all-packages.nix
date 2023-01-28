@@ -22719,6 +22719,8 @@ with pkgs;
 
   quark-engine = callPackage ../tools/security/quark-engine { };
 
+  quantlib = callPackage ../development/libraries/quantlib { };
+
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   quickder = callPackage ../development/libraries/quickder {};
@@ -26376,6 +26378,8 @@ with pkgs;
   rtw88-firmware = callPackage ../os-specific/linux/firmware/rtw88-firmware { };
 
   rtw89-firmware = callPackage ../os-specific/linux/firmware/rtw89-firmware { };
+
+  rvvm = callPackage ../applications/virtualization/rvvm { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 

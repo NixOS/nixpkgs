@@ -112,13 +112,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-J+x3D7EpV/Kzp98AuhK8pqR26xhItG+JyfkHKc+2IA0=",
+    "hash": "sha256-jZYeMQW2DTGE/KyUJYGFPHGjFUGgfl11kE1jucZ5sH4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.51.0",
+    "rev": "v4.52.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-iL03vDNHPQTAbTRoEutRtQllFgD1wn7qFleuZ4n99q8="
+    "vendorHash": "sha256-/6RbqOh5/Fpn25woV/AzmkTs1qnIo+sl3fKQxCtVZHQ="
   },
   "azuread": {
     "hash": "sha256-Byr6AJ1kP6fBxBCD8vLxQD5tz8fI3Z1fcCa0rXS9rhs=",
@@ -130,11 +130,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-dD2o0b5JQ1bZIBFshe+JkfkO5C0a3OvUwfrO2dgIiO8=",
+    "hash": "sha256-eDlRnJUo561edblydjBGePJzMFRqtEqKnS+8HOhKGdA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.40.0",
+    "rev": "v3.41.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -825,13 +825,13 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-+aHlFu49BxdFqrVCEIEqpg+o2i4d5F1uZipc//Qipaw=",
+    "hash": "sha256-wKs5XRyyCda6pljtuo8ukAQl5ZZxeDSyt0CQWe8eXqY=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v3.40.0",
+    "rev": "v3.41.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XwQTtOsg1rktv/Oc+eTJ+Jr+BJvLEQPCaRSeXdXxWB0="
+    "vendorHash": "sha256-KWSHVI51YHHF3HXpyd1WB5Za721ak+cFhwDIfvC/ax4="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
@@ -1014,13 +1014,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "signalfx": {
-    "hash": "sha256-qzLP+IGZU5bms8zjtcUg9rApZW2+TCF7KrtqSQvr3lw=",
+    "hash": "sha256-UgZr2ZFN5RvB7BG+DIXK6eSvTyvaVUKoBTIQ6aAfCpY=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v6.20.0",
+    "rev": "v6.21.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-zIF5NA5kHXEr3aUleWrCYg8PZTKnrFubaRlALnbTLHQ="
+    "vendorHash": "sha256-Iue8P14x8P0lMa85goSF1D5mEeXw6dH1atJQhgbnZ6Y="
   },
   "skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",
@@ -1032,11 +1032,11 @@
     "vendorHash": null
   },
   "snowflake": {
-    "hash": "sha256-QikYp81omjlSckr/2oXCmAqiJlcMWuR120z86fP/zkE=",
+    "hash": "sha256-0nofzwxzf19T9klfzp+h3icyN4S92nPfq/HN+qaHK/E=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.55.1",
+    "rev": "v0.56.0",
     "spdx": "MIT",
     "vendorHash": "sha256-ulgTRY8qQ5oXONkwYtffRl1QMNnbvyn0zYiYqqvwrUU="
   },
