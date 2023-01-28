@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index e32338b3f9a..fae804fd41e 100644
+index 172c64a7c70..05961e56926 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -1894,7 +1894,7 @@ endif
+@@ -1900,7 +1900,7 @@ endif
  
  dep_clang = null_dep
  if with_clc
@@ -29,51 +29,20 @@ index 6f307018815..ab84eb1006c 100644
    'platforms',
    type : 'array',
 diff --git a/src/gallium/targets/opencl/meson.build b/src/gallium/targets/opencl/meson.build
-index 7af210b5693..ff6ac8c61ca 100644
+index db3586bd7fb..4d914206d21 100644
 --- a/src/gallium/targets/opencl/meson.build
 +++ b/src/gallium/targets/opencl/meson.build
-@@ -30,6 +30,7 @@ if with_ld_version_script
+@@ -39,7 +39,8 @@ if dep_llvm.version().version_compare('>=10.0.0')
+   polly_isl_dep = cpp.find_library('PollyISL', dirs : llvm_libdir, required : false)
  endif
  
- llvm_libdir = dep_llvm.get_variable(cmake : 'LLVM_LIBRARY_DIR', configtool: 'libdir')
+-dep_clang = cpp.find_library('clang-cpp', dirs : llvm_libdir, required : false)
 +clang_libdir = get_option('clang-libdir')
- opencl_libname = with_opencl_icd ? 'MesaOpenCL' : 'OpenCL'
++dep_clang = cpp.find_library('clang-cpp', dirs : clang_libdir, required : false)
  
- polly_dep = null_dep
-@@ -60,19 +61,19 @@ else
- endif
- if not _shared_llvm or not (dep_clang.found() and dep_clang_usable)
-   dep_clang = [
--    cpp.find_library('clangCodeGen', dirs : llvm_libdir),
--    cpp.find_library('clangFrontendTool', dirs : llvm_libdir),
--    cpp.find_library('clangFrontend', dirs : llvm_libdir),
--    cpp.find_library('clangDriver', dirs : llvm_libdir),
--    cpp.find_library('clangSerialization', dirs : llvm_libdir),
--    cpp.find_library('clangParse', dirs : llvm_libdir),
--    cpp.find_library('clangSema', dirs : llvm_libdir),
--    cpp.find_library('clangAnalysis', dirs : llvm_libdir),
--    cpp.find_library('clangAST', dirs : llvm_libdir),
--    cpp.find_library('clangASTMatchers', dirs : llvm_libdir),
--    cpp.find_library('clangEdit', dirs : llvm_libdir),
--    cpp.find_library('clangLex', dirs : llvm_libdir),
--    cpp.find_library('clangBasic', dirs : llvm_libdir),
-+    cpp.find_library('clangCodeGen', dirs : clang_libdir),
-+    cpp.find_library('clangFrontendTool', dirs : clang_libdir),
-+    cpp.find_library('clangFrontend', dirs : clang_libdir),
-+    cpp.find_library('clangDriver', dirs : clang_libdir),
-+    cpp.find_library('clangSerialization', dirs : clang_libdir),
-+    cpp.find_library('clangParse', dirs : clang_libdir),
-+    cpp.find_library('clangSema', dirs : clang_libdir),
-+    cpp.find_library('clangAnalysis', dirs : clang_libdir),
-+    cpp.find_library('clangAST', dirs : clang_libdir),
-+    cpp.find_library('clangASTMatchers', dirs : clang_libdir),
-+    cpp.find_library('clangEdit', dirs : clang_libdir),
-+    cpp.find_library('clangLex', dirs : clang_libdir),
-+    cpp.find_library('clangBasic', dirs : clang_libdir),
-     polly_dep, polly_isl_dep,
-   ]
-   # check clang once more
-@@ -119,7 +120,7 @@ if with_opencl_icd
+ # meson will return clang-cpp from system dirs if it's not found in llvm_libdir
+ linker_rpath_arg = '-Wl,--rpath=@0@'.format(llvm_libdir)
+@@ -123,7 +124,7 @@ if with_opencl_icd
      configuration : _config,
      input : 'mesa.icd.in',
      output : 'mesa.icd',
