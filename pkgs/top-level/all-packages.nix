@@ -15554,7 +15554,7 @@ with pkgs;
     targetLlvm = targetPackages.llvmPackages_15.llvm or llvmPackages_15.llvm;
   }));
 
-  llvmPackages_latest = llvmPackages_14;
+  llvmPackages_latest = llvmPackages_15;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
 
