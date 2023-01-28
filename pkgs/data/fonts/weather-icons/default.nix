@@ -1,13 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "weather-icons";
   version = "2.0.12";
-in (fetchzip {
-  name = "weather-icons-${version}";
 
-  url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${version}.zip";
-  sha256 = "sha256-NGPzAloeZa1nCazb+mjAbYw7ZYYDoKpLwcvzg1Ly9oM=";
+  src = fetchzip {
+    url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${version}.zip";
+    hash = "sha256-0ZFH2awUo4BkTpK1OsWZ4YKczJHo+HHM6ezGBJAmT+U=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 _docs/font-source/weathericons-regular.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Weather Icons";
@@ -21,9 +29,4 @@ in (fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ pnelson ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile weather-icons-${version}/_docs/font-source/weathericons-regular.otf -d $out/share/fonts/opentype
-  '';
-})
+}

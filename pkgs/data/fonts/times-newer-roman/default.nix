@@ -1,15 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation {
+  pname = "times-newer-roman";
   version = "unstable-2018-09-11";
-in
-(fetchzip {
-  name = "times-newer-roman-${version}";
 
-  url = "https://web.archive.org/web/20210609022835/https://timesnewerroman.com/assets/TimesNewerRoman.zip";
+  src = fetchzip {
+    url = "https://web.archive.org/web/20210609022835/https://timesnewerroman.com/assets/TimesNewerRoman.zip";
+    stripRoot = false;
+    hash = "sha256-wO4rxyJNQyhRLpswCYKXdeiXy5G+iWyxulYCHZb60QM=";
+  };
 
-  hash = "sha256-Hx59RYLLwfimEQjEEes0lCpg6iql46DFwhQ7kVGiEzc=";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/opentype
+    cp *.otf $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A font that looks just like Times New Roman, except each character is 5-10% wider";
@@ -18,9 +26,4 @@ in
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
-})
+}
