@@ -199,7 +199,7 @@ rec {
 
   /* Add attributes to each output of a derivation without changing
      the derivation itself and check a given condition when evaluating. */
-  extendDerivation' = { conditionDrvPath, conditionOutPath }: passthru: drv:
+  extendDerivation' = { conditionDrvPath, conditionOutPath, ... }@args: passthru: drv:
     let
       outputs = drv.outputs or [ "out" ];
 
@@ -213,6 +213,7 @@ rec {
             outputSpecified = true;
             drvPath = assert conditionDrvPath; drv.${outputName}.drvPath;
             outPath = assert conditionOutPath; drv.${outputName}.outPath;
+            __toString = _: assert args.conditionDrvPath; drv.${drv.outputName}.outPath;
           };
         };
 
@@ -220,6 +221,7 @@ rec {
     in commonAttrs // {
       drvPath = assert conditionDrvPath; drv.drvPath;
       outPath = assert conditionOutPath; drv.outPath;
+      __toString = _: assert args.conditionDrvPath; drv.outPath;
     };
 
   /* extendDerivation' with the same condition for both outPath and drvPath */
