@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
-  openimageio, libjpeg, libpng, libpthreadstubs, libX11, glib }:
+  openimageio2, libjpeg, libpng, libpthreadstubs, libX11, glib }:
 
 stdenv.mkDerivation rec {
   pname = "embree";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ ispc pkg-config cmake ];
-  buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
+  buildInputs = [ tbb glfw openimageio2 libjpeg libpng libX11 libpthreadstubs ]
                 ++ lib.optionals stdenv.isDarwin [ glib ];
 
   meta = with lib; {
