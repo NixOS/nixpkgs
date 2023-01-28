@@ -49,7 +49,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     glibcLocales
-    hypothesis
+    # hypothesis indirectly depends on pandas to build its documentation
+    (hypothesis.override { enableDocumentation = false; })
     jinja2
     pytest-asyncio
     pytest-xdist
