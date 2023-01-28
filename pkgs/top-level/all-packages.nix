@@ -3283,6 +3283,8 @@ with pkgs;
 
   itd = callPackage ../applications/misc/itd { };
 
+  kord = callPackage ../applications/misc/kord { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
@@ -5940,9 +5942,7 @@ with pkgs;
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
-  crabz = callPackage ../tools/compression/crabz {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  crabz = callPackage ../tools/compression/crabz { };
 
   ethash = callPackage ../development/libraries/ethash { };
 
@@ -6674,6 +6674,8 @@ with pkgs;
   edk2 = callPackage ../development/compilers/edk2 { };
 
   edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
+
+  edlib = callPackage ../development/libraries/science/biology/edlib { };
 
   eff = callPackage ../development/interpreters/eff { };
 
@@ -12690,6 +12692,8 @@ with pkgs;
 
   ua = callPackage ../tools/networking/ua { };
 
+  uair = callPackage ../tools/misc/uair { };
+
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
   ubridge = callPackage ../tools/networking/ubridge { };
@@ -14945,9 +14949,7 @@ with pkgs;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
-  kind2 = callPackage ../development/compilers/kind2 {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  kind2 = darwin.apple_sdk_11_0.callPackage ../development/compilers/kind2 { };
 
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
@@ -16519,6 +16521,8 @@ with pkgs;
 
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix {};
+
+  pw-volume = callPackage ../tools/audio/pw-volume {};
 
   pyradio = callPackage ../applications/audio/pyradio {};
 
@@ -25574,6 +25578,8 @@ with pkgs;
 
   fan2go = callPackage ../os-specific/linux/fan2go { };
 
+  fanctl = callPackage ../os-specific/linux/fanctl { };
+
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
   ffado = libsForQt5.callPackage ../os-specific/linux/ffado {
@@ -31412,6 +31418,8 @@ with pkgs;
   pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
 
   pdfmixtool = libsForQt5.callPackage ../applications/office/pdfmixtool { };
+
+  pdfmm = callPackage ../applications/office/pdfmm {};
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
@@ -37349,6 +37357,8 @@ with pkgs;
   lima = callPackage ../applications/virtualization/lima {
     inherit (darwin) sigtool;
   };
+
+  lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
 
   logtop = callPackage ../tools/misc/logtop { };
 

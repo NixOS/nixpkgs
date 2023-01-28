@@ -3,8 +3,6 @@
 , debug ? false
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "phonon-backend-gstreamer";
   version = "4.10.0";

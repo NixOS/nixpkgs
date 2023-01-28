@@ -77,13 +77,11 @@
 , zfs
 }:
 
-with lib;
-
 let
   inherit (stdenv) isDarwin isLinux isx86_64;
-  binPath = makeBinPath ([
+  binPath = lib.makeBinPath ([
     dnsmasq
-  ] ++ optionals isLinux [
+  ] ++ lib.optionals isLinux [
     bridge-utils
     dmidecode
     dnsmasq
@@ -95,10 +93,10 @@ let
     numad
     pmutils
     systemd
-  ] ++ optionals enableIscsi [
+  ] ++ lib.optionals enableIscsi [
     libiscsi
     openiscsi
-  ] ++ optionals enableZfs [
+  ] ++ lib.optionals enableZfs [
     zfs
   ]);
 in
@@ -148,17 +146,17 @@ stdenv.mkDerivation rec {
 
     substituteInPlace meson.build \
       --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
-  '' + optionalString isLinux ''
+  '' + lib.optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
       src/storage/storage_backend_disk.c \
       src/storage/storage_util.c
-  '' + optionalString isDarwin ''
+  '' + lib.optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/vircryptotest/d' tests/meson.build
     sed -i '/domaincapstest/d' tests/meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
-  '' + optionalString (isDarwin && isx86_64) ''
+  '' + lib.optionalString (isDarwin && isx86_64) ''
     sed -i '/qemucaps2xmltest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/virnetdaemontest/d' tests/meson.build
@@ -178,9 +176,9 @@ stdenv.mkDerivation rec {
     perl
     perlPackages.XMLXPath
   ]
-  ++ optional (!isDarwin) rpcsvc-proto
+  ++ lib.optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
-  ++ optional isDarwin darwin.developer_cmds;
+  ++ lib.optional isDarwin darwin.developer_cmds;
 
   buildInputs = [
     bash
@@ -197,7 +195,7 @@ stdenv.mkDerivation rec {
     readline
     xhtml1
     yajl
-  ] ++ optionals isLinux [
+  ] ++ lib.optionals isLinux [
     acl
     attr
     audit
@@ -213,17 +211,17 @@ stdenv.mkDerivation rec {
     parted
     systemd
     util-linux
-  ] ++ optionals isDarwin [
+  ] ++ lib.optionals isDarwin [
     AppKit
     Carbon
     gmp
     libiconv
   ]
-  ++ optionals enableCeph [ ceph ]
-  ++ optionals enableGlusterfs [ glusterfs ]
-  ++ optionals enableIscsi [ libiscsi openiscsi ]
-  ++ optionals enableXen [ xen ]
-  ++ optionals enableZfs [ zfs ];
+  ++ lib.optionals enableCeph [ ceph ]
+  ++ lib.optionals enableGlusterfs [ glusterfs ]
+  ++ lib.optionals enableIscsi [ libiscsi openiscsi ]
+  ++ lib.optionals enableXen [ xen ]
+  ++ lib.optionals enableZfs [ zfs ];
 
   preConfigure =
     let
@@ -348,7 +346,7 @@ stdenv.mkDerivation rec {
     # Added in nixpkgs:
     gettext() { "${gettext}/bin/gettext" "$@"; }
     '
-  '' + optionalString isLinux ''
+  '' + lib.optionalString isLinux ''
     for f in $out/lib/systemd/system/*.service ; do
       substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
     done
@@ -372,7 +370,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
-  meta = {
+  meta = with lib; {
     description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";

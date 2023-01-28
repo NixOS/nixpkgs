@@ -22,13 +22,15 @@
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
 
-  obs-ndi = qt6Packages.callPackage ./obs-ndi.nix { };
+  obs-ndi = qt6Packages.callPackage ./obs-ndi { };
 
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
   obs-source-record = callPackage ./obs-source-record.nix { };
+
+  obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;

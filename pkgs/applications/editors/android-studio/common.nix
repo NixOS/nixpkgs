@@ -79,7 +79,7 @@ let
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
-        --set-default JAVA_HOME "$out/jre" \
+        --set-default JAVA_HOME "$out/jbr" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
