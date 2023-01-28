@@ -24222,6 +24222,8 @@ with pkgs;
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
+  directx-headers = callPackage ../development/libraries/directx-headers {};
+
   directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler {};
 
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
