@@ -1504,8 +1504,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.4.4";
-          sha256 = "sha256-EA3OABn80GciNecXwLcorWP7K3+jI+wgujpmvvFcNOA=";
+          version = "9.5.0";
+          sha256 = "sha256-Av4RYnCh0gXQ+uRByl3Can+hvYD8Pc3x0Ec2jDcP6Fk=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
