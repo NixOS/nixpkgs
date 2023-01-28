@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ibm-plex";
-  version = "6.0.1";
+  version = "6.1.1";
 
   src = fetchzip {
     url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
-    hash = "sha256-n13NuKrZUc0JGvDf2PLZkxogefDkEHaOZk4JN42/C74=";
+    hash = "sha256-PZ7KPtaXZFVD5uMc7i+GQMA4DU5PsspeAodiU/FrTpY=";
   };
 
   installPhase = ''
