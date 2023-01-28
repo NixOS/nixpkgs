@@ -7,11 +7,13 @@
 , click
 , click-plugins
 , cligj
+, certifi
 , cython
 , fetchFromGitHub
 , gdal
 , hypothesis
 , matplotlib
+, ipython
 , numpy
 , packaging
 , pytest-randomly
@@ -24,16 +26,16 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "4"; 
+  version = "1.3.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-YO0FnmIEt+88f6k2mdXDSQg7UKq1Swr8wqVUGdRyQR4=";
+    hash = "sha256-VZE58xbTTAicGqkl8ktYBhN+5tFj8FoUYxg8fi05bmo=";
   };
 
   nativeBuildInputs = [
@@ -44,15 +46,26 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     affine
     attrs
-    boto3
     click
     click-plugins
     cligj
-    matplotlib
+    certifi
     numpy
     snuggs
-    setuptools # needs pkg_resources at runtime
+    setuptools
   ];
+
+  passthru.optional-dependencies = {
+    ipython = [
+      ipython
+    ];
+    plot = [
+      matplotlib
+    ];
+    s3 = [
+      boto3
+    ];
+  };
 
   nativeCheckInputs = [
     hypothesis
@@ -61,10 +74,6 @@ buildPythonPackage rec {
     pytestCheckHook
     shapely
   ];
-
-  preCheck = ''
-    rm -rf rasterio
-  '';
 
   pytestFlagsArray = [
     "-m 'not network'"
@@ -87,7 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
     homepage = "https://rasterio.readthedocs.io/";
-    changelog = "https://github.com/rasterio/rasterio/blob/1.3.5/CHANGES.txt";
+    changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mredaelli ];
   };
