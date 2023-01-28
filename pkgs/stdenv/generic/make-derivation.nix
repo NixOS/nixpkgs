@@ -504,8 +504,14 @@ else let
 
 in
 
-lib.extendDerivation
-  validity.handled
+lib.customisation.extendDerivation'
+  {
+    # setting `conditionOutPath` to be trivially satisfied lets us
+    # compare meta-check-failing derivations for equality against
+    # each other without a `throw` occurring.
+    conditionOutPath = true;
+    conditionDrvPath = validity.handled;
+  }
   ({
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
