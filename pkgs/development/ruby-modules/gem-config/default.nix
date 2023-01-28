@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 }@args:
 
 let
@@ -542,6 +542,10 @@ in
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
+  };
+
+  psych = attrs: {
+    buildInputs = [ libyaml ];
   };
 
   puma = attrs: {
