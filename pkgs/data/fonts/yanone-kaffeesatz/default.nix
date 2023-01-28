@@ -1,12 +1,22 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-(fetchzip {
-  name = "yanone-kaffeesatz-2004";
+stdenvNoCC.mkDerivation rec {
+  pname = "yanone-kaffeesatz";
+  version = "2004";
 
-  url = "https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip";
+  src = fetchzip {
+    url = "https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip";
+    stripRoot = false;
+    hash = "sha256-8yAB73UJ77/c8/VLqiFeT1KtoBQzOh+vWrI+JA2dCoY=";
+  };
 
-  sha256 = "190c4wx7avy3kp98lsyml7kc0jw7csf5n79af2ypbkhsadfsy8di";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "The free font classic";
@@ -15,9 +25,4 @@
     homepage = "https://yanone.de/fonts/kaffeesatz/";
     license = lib.licenses.ofl;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
-})
+}
