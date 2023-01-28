@@ -7,7 +7,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cotp";
+  pname = "cotp";
   version = "1.2.1";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DIb/lgJxwg+QuqzN/0YoUV1iZwRqh6PAN0KRK7TbWDs=";
   };
 
-  cargoHash = "sha256-uvH4mdI8ya/MJJngXQ98oXjG7JjUdvPwIzvJrdwlOEE=";
+  cargoHash = "sha256-SFx2sjph/5ys5L1Q/ljQhzcybH4k89owI4+vzDsyKjw=";
 
   buildInputs = lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ AppKit ];
