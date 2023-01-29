@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , expat
-, libyamlcpp
+, yaml-cpp
 , ilmbase
 , pystring
 , imath
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     expat
-    libyamlcpp
+    yaml-cpp
     ilmbase
     pystring
     imath

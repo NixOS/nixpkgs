@@ -25,7 +25,7 @@
 , makeWrapper
 , pandoc
 , llvmPackages
-, libyamlcpp
+, yaml-cpp
 , soci
 , postgresql
 , nodejs
@@ -95,7 +95,7 @@ in
       openssl
       R
       libuuid
-      libyamlcpp
+      yaml-cpp
       soci
       postgresql
     ] ++ (if server then [

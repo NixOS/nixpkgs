@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, kernel, installShellFiles, pkg-config
 , luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, libyamlcpp, nlohmann_json, re2
+, yaml-cpp, nlohmann_json, re2
 }:
 
 with lib;
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     re2
     protobuf
     grpc
-    libyamlcpp
+    yaml-cpp
     jsoncpp
     nlohmann_json
   ] ++ optionals (kernel != null) kernel.moduleBuildDependencies;
