@@ -484,10 +484,6 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace plugin/himalaya.vim \
