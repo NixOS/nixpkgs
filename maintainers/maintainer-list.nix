@@ -10472,6 +10472,12 @@
     githubId = 34083928;
     name = "Tim DeHerrera";
   };
+  nrhelmi = {
+    email = "helmiinour@gmail.com";
+    github = "nrhelmi";
+    githubId = 15707703;
+    name = "Helmi Nour";
+  };
   nshalman = {
     email = "nahamu@gmail.com";
     github = "nshalman";
