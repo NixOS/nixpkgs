@@ -203,6 +203,9 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # 2022-01-29: Tests require package to be in ghc-db.
+  aeson-schemas = dontCheck super.aeson-schemas;
+
   # matterhorn-50200.17.0 won't work with brick >= 0.71, brick-skylighting >= 1.0
   matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
     brick = self.brick_0_70_1;

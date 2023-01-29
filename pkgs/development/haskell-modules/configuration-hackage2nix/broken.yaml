@@ -86,7 +86,6 @@ broken-packages:
   - aeson-parsec-picky
   - aeson-prefix
   - aeson-schema
-  - aeson-schemas
   - aeson-smart
   - aeson-streams
   - aeson-t
