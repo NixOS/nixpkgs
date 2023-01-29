@@ -11259,6 +11259,8 @@ with pkgs;
 
   real_time_config_quick_scan = callPackage ../applications/audio/real_time_config_quick_scan { };
 
+  realcugan-ncnn-vulkan = callPackage ../tools/graphics/realcugan-ncnn-vulkan { };
+
   realesrgan-ncnn-vulkan = callPackage ../tools/graphics/realesrgan-ncnn-vulkan { };
 
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
@@ -12952,6 +12954,8 @@ with pkgs;
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
+
+  waifu2x-ncnn-vulkan = callPackage ../tools/graphics/waifu2x-ncnn-vulkan { };
 
   wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
