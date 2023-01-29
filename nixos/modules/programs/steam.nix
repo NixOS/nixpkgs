@@ -14,7 +14,12 @@ in {
       defaultText = literalExpression "pkgs.steam";
       example = literalExpression ''
         pkgs.steam-small.override {
-          extraLibraries = with pkgs; [
+          extraEnv = {
+            MANGOHUD = true;
+            OBS_VKCAPTURE = true;
+            RADV_TEX_ANISO = 16;
+          };
+          extraLibraries = p: with p; [
             atk
           ];
         }
