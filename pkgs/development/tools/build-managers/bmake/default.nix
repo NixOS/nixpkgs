@@ -8,13 +8,13 @@
 , pkgsMusl # for passthru.tests
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (self: {
   pname = "bmake";
-  version = "20220928";
+  version = "20230126";
 
   src = fetchurl {
-    url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yAS3feP+uOMd7ipMn7Hp7CTFo0dk56KBXIi07QFlDpA=";
+    url = "http://www.crufty.net/ftp/pub/sjg/${self.pname}-${self.version}.tar.gz";
+    hash = "sha256-hk9yGFgs95Dsc7ILcQVCXLn/ozUiJUF3LwMTMGtqC8Q=";
   };
 
   # Make tests work with musl
