@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "run";
-  version = "0.9.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "TekWizely";
     repo = "run";
     rev = "v${version}";
-    sha256 = "sha256-ClSB+v153Tj1cKLSmT9Z0IEyc+OABPeG519PzT03pX0=";
+    sha256 = "sha256-EIzIkew1JXPeUN3guLEjAwR0kBDrMkQtSUiBJd+Ww7E=";
   };
 
-  vendorSha256 = "sha256-4n8RRnDNu1Khv3V5eUB/eaFFJGVD/GdqMOywksc2LPw=";
+  vendorHash = "sha256-BAyhuE9hGGDfDGmXQ7dseUvHlK5vC87uLT78lHSvLeg=";
 
   doCheck = false;
 
