@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv
-, raft-canonical, sqlite }:
+, raft-canonical, sqlite, lxd }:
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   outputs = [ "dev" "out" ];
+
+  passthru.tests = {
+    inherit lxd;
+  };
 
   meta = with lib; {
     description = ''
