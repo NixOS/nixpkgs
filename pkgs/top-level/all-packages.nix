@@ -112,7 +112,7 @@ with pkgs;
 
   tests = callPackages ../test {};
 
-  defaultPkgConfigPackages = import ./pkg-config-packages.nix pkgs;
+  defaultPkgConfigPackages = import ./pkg-config/defaultPkgConfigPackages.nix pkgs;
 
   ### Nixpkgs maintainer tools
 

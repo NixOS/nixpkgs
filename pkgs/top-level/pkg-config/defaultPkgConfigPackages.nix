@@ -21,7 +21,7 @@ let
     importJSON
     ;
 
-  data = importJSON ./pkg-config/pkg-config-data.json;
+  data = importJSON ./pkg-config-data.json;
   inherit (data) modules;
 
   platform = pkgs.stdenv.hostPlatform;
