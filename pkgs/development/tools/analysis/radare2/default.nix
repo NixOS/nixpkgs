@@ -124,6 +124,7 @@ stdenv.mkDerivation rec {
   # TODO better?
   passthru = {
     plugins = {
+      r2ghidra = callPackage ./plugins/r2ghidra { };
     };
     # nix-build -E "with import ./. {}; pkgs.radare2.withPlugins [\"r2ghidra\"]"
     # TODO better?
