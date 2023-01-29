@@ -16016,6 +16016,12 @@
     githubId = 4113027;
     name = "Jesper Geertsen Jonsson";
   };
+  yellowsink = {
+    email = "yellowsink@riseup.net";
+    github = "yellowsink";
+    githubId = 19270622;
+    name = "Cain Atkinson";
+  };
   yinfeng = {
     email = "lin.yinfeng@outlook.com";
     github = "linyinfeng";
