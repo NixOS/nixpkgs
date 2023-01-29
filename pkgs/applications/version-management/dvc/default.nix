@@ -80,8 +80,7 @@ python3.pkgs.buildPythonApplication rec {
     boto3
     s3fs
   ] ++ lib.optionals enableAzure [
-    azure-identity
-    knack
+    dvc-azure
   ] ++ lib.optionals enableSSH [
     bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
