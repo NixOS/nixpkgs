@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
-  version = "22.2.0";
+  version = "23.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,14 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-QZm8FlUm17Vv80hB3iai54QcVlhSrq2AvbdBaRWDyok=";
+    hash = "sha256-hy/hmXxxEb44X8JUszoA1YF/41y7GkQqC4uS+Pax6WA=";
   };
+
+  postPatch = ''
+    # Upstream doesn't set version in the repo
+    substituteInPlace setup.py \
+      --replace 'version="main",' 'version="${version}",'
+  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -31,12 +37,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ];
-
-  postPatch = ''
-    # Upstream doesn't set version in the repo
-    substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
-  '';
 
   pythonImportsCheck = [
     "pyuptimerobot"
