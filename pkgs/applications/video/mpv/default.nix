@@ -80,7 +80,7 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (self: {
   pname = "mpv";
   version = "0.35.0";
 
@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
-    rev = "v${version}";
+    rev = "v${self.version}";
     sha256 = "sha256-U3NDSxlX4/WkoHFkOvpcwPMwfwTnSpCw0QI5yLMK08o=";
   };
 
@@ -216,8 +216,9 @@ in stdenv.mkDerivation rec {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
+    changelog = "https://github.com/mpv-player/mpv/releases/tag/v${self.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.unix;
   };
-}
+})
