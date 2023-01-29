@@ -4185,6 +4185,8 @@ with pkgs;
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
 
+  csvq = callPackage ../development/tools/csvq { };
+
   csvs-to-sqlite = callPackage ../tools/misc/csvs-to-sqlite { };
 
   cucumber = callPackage ../development/tools/cucumber {};
