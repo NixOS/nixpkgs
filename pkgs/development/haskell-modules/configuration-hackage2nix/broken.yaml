@@ -511,7 +511,6 @@ broken-packages:
   - byline
   - by-other-names
   - bytearray-parsing
-  - bytepatch
   - bytestring-aeson-orphans
   - bytestring-arbitrary
   - bytestring-class
