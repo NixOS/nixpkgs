@@ -747,9 +747,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_10_5 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_8;
+    hspec = self.hspec_2_10_9;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_8;
+      hspec = self.hspec_2_10_9;
     };
   });
 
@@ -1376,7 +1376,7 @@ self: super: {
   hls-hlint-plugin = super.hls-hlint-plugin.override {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" super.hlint;
-    apply-refact = self.apply-refact_0_11_0_0;
+    apply-refact = self.apply-refact_0_12_0_0;
   };
 
   # For -f-auto see cabal.project in haskell-language-server.
@@ -1436,14 +1436,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_8 = doDistribute (super.hspec_2_10_8.override {
-    hspec-discover = self.hspec-discover_2_10_8;
-    hspec-core = self.hspec-core_2_10_8;
+  hspec_2_10_9 = doDistribute (super.hspec_2_10_9.override {
+    hspec-discover = self.hspec-discover_2_10_9;
+    hspec-core = self.hspec-core_2_10_9;
   });
-  hspec-discover_2_10_8 = super.hspec-discover_2_10_8.override {
+  hspec-discover_2_10_9 = super.hspec-discover_2_10_9.override {
     hspec-meta = self.hspec-meta_2_10_5;
   };
-  hspec-core_2_10_8 = super.hspec-core_2_10_8.override {
+  hspec-core_2_10_9 = super.hspec-core_2_10_9.override {
     hspec-meta = self.hspec-meta_2_10_5;
   };
 
