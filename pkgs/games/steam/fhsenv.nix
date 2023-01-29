@@ -1,4 +1,4 @@
-{ lib, stdenv, writeScript, buildFHSUserEnv, steam, glxinfo-i686, runtimeShell
+{ lib, stdenv, writeShellScript, buildFHSUserEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -228,8 +228,7 @@ in buildFHSUserEnv rec {
     export SDL_JOYSTICK_DISABLE_UDEV=1
   '' + extraProfile;
 
-  runScript = writeScript "steam-wrapper.sh" ''
-    #!${runtimeShell}
+  runScript = writeShellScript "steam-wrapper.sh" ''
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
       ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
@@ -272,8 +271,7 @@ in buildFHSUserEnv rec {
     inherit multiPkgs profile extraInstallCommands;
     inherit unshareIpc unsharePid;
 
-    runScript = writeScript "steam-run" ''
-      #!${runtimeShell}
+    runScript = writeShellScript "steam-run" ''
       run="$1"
       if [ "$run" = "" ]; then
         echo "Usage: steam-run command-to-run args..." >&2
