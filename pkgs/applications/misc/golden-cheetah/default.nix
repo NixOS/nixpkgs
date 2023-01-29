@@ -76,7 +76,7 @@ in mkDerivation rec {
   meta = with lib; {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ adamcstephens ];
     license = licenses.gpl2Plus;
   };
 }
