@@ -1,4 +1,5 @@
 { lib
+, pkgs
 , stdenv
 , fetchFromGitHub
 , meson
@@ -9,6 +10,8 @@
 , qttools
 , radare2
 , wrapQtAppsHook
+, symlinkJoin
+, makeWrapper
 , nix-update-script
 }:
 
@@ -66,5 +69,28 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
+  };
+
+  # TODO better?
+  # based on pkgs/development/tools/analysis/radare2/default.nix
+  passthru = {
+    plugins = radare2.plugins;
+    # nix-shell -E 'with import ./. {}; mkShell { buildInputs = [ (iaito.withPlugins ["r2ghidra"]) ]; }'
+    # TODO better?
+    # load plugins from multiple paths https://github.com/radareorg/radare2/issues/21300
+    withPlugins = pluginNames: symlinkJoin {
+      name = "iaito-with-plugins";
+      paths = [ pkgs.iaito radare2 ] ++ (map (name: radare2.plugins.${name}) pluginNames);
+      # TODO future: use ABI-compatible plugin-dir 5.7.x https://github.com/radareorg/radare2/pull/20545
+      buildInputs = [
+        makeWrapper
+      ];
+      postBuild = ''
+        (set -x
+        wrapProgram $out/bin/iaito \
+          --set R2_LIBR_PLUGINS $out/lib/radare2/${radare2.version}
+        )
+      '';
+    };
   };
 }
