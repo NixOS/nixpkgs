@@ -310,6 +310,8 @@ package-maintainers:
     - matrix-client
     - optics
     - pandoc
+    - pandoc-cli
+    - pandoc-crossref
     - paths
     - postgresql-simple
     - purebred-email
