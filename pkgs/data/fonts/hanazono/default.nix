@@ -13,7 +13,6 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{doc,fonts}
     install -Dm644 *.ttf -t $out/share/fonts/truetype
     install -Dm644 *.txt -t $out/share/doc/hanazono
 
