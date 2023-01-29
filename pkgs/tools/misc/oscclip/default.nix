@@ -29,6 +29,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rumpelsepp/oscclip";
 
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.traxys ];
+    maintainers = with maintainers; [ rumpelsepp traxys ];
   };
 }
