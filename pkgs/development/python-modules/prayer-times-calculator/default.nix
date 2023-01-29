@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "prayer-times-calculator";
-  version = "0.0.7";
+  version = "0.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "uchagani";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-fIfv10oi5Lv1dj5Y5CYI94/UdWG3bAY/ENCiMTkO0RE=";
+    hash = "sha256-Zk7lzZUfojJrsrLRS9cf9AhEfGGsxZJo2MnIIOv6Ezk=";
   };
 
   propagatedBuildInputs = [
