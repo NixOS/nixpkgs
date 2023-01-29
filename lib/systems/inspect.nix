@@ -81,8 +81,13 @@ rec {
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
-    isEfi          = map (family: { cpu.family = family; })
-                       [ "x86" "arm" "riscv" ];
+    isEfi = [
+      { cpu = { family = "arm"; version = "6"; }; }
+      { cpu = { family = "arm"; version = "7"; }; }
+      { cpu = { family = "arm"; version = "8"; }; }
+      { cpu = { family = "riscv"; }; }
+      { cpu = { family = "x86"; }; }
+    ];
   };
 
   matchAnyAttrs = patterns:
