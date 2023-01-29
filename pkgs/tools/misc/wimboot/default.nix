@@ -13,15 +13,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  # Workaround '-idirafter' ordering bug in staging-next:
-  #   https://github.com/NixOS/nixpkgs/pull/210004
-  # where libc '-idirafter' gets added after user's idirafter and
-  # breaks.
-  # TODO(trofi): remove it in staging once fixed in cc-wrapper.
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"] stdenv.hostPlatform.config}=$(< ${stdenv.cc}/nix-support/libc-cflags)
-  '';
-
   buildInputs = [ libbfd zlib libiberty ];
   makeFlags = [ "wimboot.x86_64.efi" ];
 
