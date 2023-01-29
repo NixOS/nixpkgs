@@ -393,6 +393,8 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ox-rss = buildWithGit super.ox-rss;
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
