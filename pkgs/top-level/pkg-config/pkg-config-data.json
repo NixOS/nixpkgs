@@ -180,7 +180,10 @@
     "egl": {
       "attrPath": [
         "libGL"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "fftw3": {
       "attrPath": [
@@ -350,17 +353,28 @@
       ]
     },
     "hidapi": {
-      "attrPath": null
+      "attrPath": [
+        "hidapi"
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": true
+      }
     },
     "hidapi-hidraw": {
       "attrPath": [
         "hidapi"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "hidapi-libusb": {
       "attrPath": [
         "hidapi"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "icu-i18n": {
       "attrPath": [
@@ -525,7 +539,10 @@
     "libpulse-mainloop-glib": {
       "attrPath": [
         "libpulseaudio"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "libpulse-simple": {
       "attrPath": [
@@ -811,12 +828,18 @@
     "wayland-client": {
       "attrPath": [
         "wayland"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "wayland-cursor": {
       "attrPath": [
         "wayland"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "wayland-scanner": {
       "attrPath": [
@@ -826,7 +849,10 @@
     "wayland-server": {
       "attrPath": [
         "wayland"
-      ]
+      ],
+      "supportedWhenPlatformAttrsEqual": {
+        "isDarwin": false
+      }
     },
     "webkit2gtk-4.0": {
       "attrPath": [
