@@ -13,34 +13,33 @@ pkgs:
 let
   inherit (pkgs) lib;
   inherit (lib)
+    all
     flip
     mapAttrs
+    mapAttrsToList
     getAttrFromPath
     importJSON
     ;
 
-  result = modulePkgs // overrides;
-
   data = importJSON ./pkg-config/pkg-config-data.json;
   inherit (data) modules;
 
+  platform = pkgs.stdenv.hostPlatform;
+
+  isSupported = moduleData:
+    moduleData?supportedWhenPlatformAttrsEqual ->
+      all (x: x) (
+        mapAttrsToList
+          (k: v: platform?${k} && platform.${k} == v)
+          moduleData.supportedWhenPlatformAttrsEqual
+      );
+
   modulePkgs = flip mapAttrs modules (_moduleName: moduleData:
-    if moduleData?attrPath then
+    if moduleData?attrPath && isSupported moduleData then
       getAttrFromPath moduleData.attrPath pkgs
     else
       null
   );
 
-  overrides = {
-    hidapi = if pkgs.stdenv.isDarwin then pkgs.hidapi else null;
-    hidapi-hidraw = if pkgs.stdenv.isDarwin then null else pkgs.hidapi;
-    hidapi-libusb = if pkgs.stdenv.isDarwin then null else pkgs.hidapi;
-    libpulse-mainloop-glib = if pkgs.stdenv.isDarwin then null else pkgs.libpulseaudio;
-    wayland-client = if pkgs.stdenv.isDarwin then null else pkgs.wayland;
-    wayland-cursor = if pkgs.stdenv.isDarwin then null else pkgs.wayland;
-    egl = if pkgs.stdenv.isDarwin then null else pkgs.libGL;
-    wayland-server = if pkgs.stdenv.isDarwin then null else pkgs.wayland;
-  };
-
 in
-  result
+  modulePkgs
