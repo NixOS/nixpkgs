@@ -19512,6 +19512,8 @@ with pkgs;
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
+  fizz = callPackage ../development/libraries/fizz { };
+
   filtron = callPackage ../servers/filtron { };
 
   flann = callPackage ../development/libraries/flann { };
