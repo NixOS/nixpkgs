@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
 , coreutils, python3, makeWrapper, nixosTests }:
 
 let
@@ -18,6 +18,7 @@ let
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
       ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
       ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
@@ -41,7 +42,6 @@ let
       };
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
