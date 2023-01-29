@@ -7403,6 +7403,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/seoul256.vim/";
   };
 
+  sg-nvim = buildVimPluginFrom2Nix {
+    pname = "sg.nvim";
+    version = "2023-01-27";
+    src = fetchFromGitHub {
+      owner = "tjdevries";
+      repo = "sg.nvim";
+      rev = "6eb1a0dbff6d52b2f3b5d9789fb7307755c8ea1f";
+      sha256 = "1pcifz7fjdk2fp9xnmc67h2dbvy7ynvh5m8a8il8chy71sx5jnvi";
+    };
+    meta.homepage = "https://github.com/tjdevries/sg.nvim/";
+  };
+
   shabadou-vim = buildVimPluginFrom2Nix {
     pname = "shabadou.vim";
     version = "2016-07-19";
