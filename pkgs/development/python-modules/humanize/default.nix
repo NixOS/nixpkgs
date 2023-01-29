@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.4.0";
+  version = "4.5.0";
   pname = "humanize";
   format = "pyproject";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "python-humanize";
     repo = pname;
     rev = version;
-    hash = "sha256-XxlmOs3sfHOLTkrKGsHRiBWpuCIPJua2VkKxDmjOeWE=";
+    hash = "sha256-vTfK45sZ9m7TUQJwZpQWhOXgZzO46CwCsnNP+PI1YfA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
