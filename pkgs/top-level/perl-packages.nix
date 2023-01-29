@@ -12911,12 +12911,12 @@ let
     };
   };
 
-  libapreq2 = buildPerlPackage {
+  libapreq2 = buildPerlPackage rec {
     pname = "libapreq2";
-    version = "2.16";
+    version = "2.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libapreq2-2.16.tar.gz";
-      hash = "sha256-4EyFWj6gcLiGNWn7rgL+go9TSsiHVbI+JNOGPMlZg0k=";
+      url = "mirror://apache/httpd/libapreq/${pname}-${version}.tar.gz";
+      hash = "sha256-BGSH8ITBL6HIIq/8X33lbv7ZtIkFpCbmMaa5ScEU2Gw=";
     };
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
