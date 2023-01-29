@@ -10,9 +10,10 @@
 , pyjwt
 , pytest-asyncio
 , pytestCheckHook
-, pythonRelaxDepsHook
 , python-dateutil
+, pythonAtLeast
 , pythonOlder
+, pythonRelaxDepsHook
 , respx
 , retrying
 , rfc3339
@@ -32,6 +33,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-GEsCyqawLX6fTICjAOOREsO5FsmV6U/5+sDOW1v+VKE=";
   };
+
+  patches = [
+    # Switch to poetry-core, https://github.com/rigetti/qcs-api-client-python/pull/2
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/rigetti/qcs-api-client-python/commit/32f0b3c7070a65f4edf5b2552648d88435469e44.patch";
+      hash = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "attrs"
@@ -61,14 +71,8 @@ buildPythonPackage rec {
     respx
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/rigetti/qcs-api-client-python/pull/2
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/rigetti/qcs-api-client-python/commit/32f0b3c7070a65f4edf5b2552648d88435469e44.patch";
-      hash = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
-    })
-  ];
+  # Tests are failing on Python 3.11, Fatal Python error: Aborted
+  doCheck = !(pythonAtLeast "3.11");
 
   pythonImportsCheck = [
     "qcs_api_client"
