@@ -1,8 +1,28 @@
-{ stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
-, gnome2, xorg
-, libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl_1_1
+{ stdenv
+, lib
+, autoPatchelfHook
+, buildFHSUserEnv
+, cairo
+, dpkg
+, fetchurl
+, gcc-unwrapped
+, glib
+, glibc
+, gnome2
+, gtk2-x11
+, libGL
 , libpulseaudio
-, SDL2, xorg_sys_opengl, libGL
+, libSM
+, libXxf86vm
+, libX11
+, openssl_1_1
+, pango
+, SDL2
+, wrapGAppsHook
+, xdg-utils
+, xorg
+, xorg_sys_opengl
+, zlib
 }:
 let
 
@@ -19,30 +39,31 @@ let
 
     nativeBuildInputs = [
       autoPatchelfHook
-      wrapGAppsHook
       dpkg
+      wrapGAppsHook
     ];
 
     buildInputs = [
-      glibc
+      cairo
       gcc-unwrapped
+      glib
+      glibc
+      gtk2-x11
       libSM
       libXxf86vm
       libX11
-      glib
-      pango
-      cairo
-      gtk2-x11
-      zlib
       openssl_1_1
+      pango
+      zlib
     ];
 
     runtimeDependencies = [
-      libpulseaudio
       libGL
+      libpulseaudio
       SDL2
-      xorg_sys_opengl
       openssl_1_1
+      xdg-utils # The launcher uses `xdg-open` to open HTTP URLs in the user's browser
+      xorg_sys_opengl
       zlib
     ];
 
@@ -95,11 +116,24 @@ in
     name = "RuneScape";
     targetPkgs = pkgs: [
       runescape
-      dpkg glibc gcc-unwrapped
-      libSM libXxf86vm libX11 glib pango cairo gtk2-x11 zlib openssl_1_1
+      cairo
+      dpkg
+      gcc-unwrapped
+      glib
+      glibc
+      gtk2-x11
+      libGL
       libpulseaudio
+      libSM
+      libXxf86vm
+      libX11
+      openssl_1_1
+      pango
+      SDL2
+      xdg-utils
       xorg.libX11
-      SDL2 xorg_sys_opengl libGL
+      xorg_sys_opengl
+      zlib
     ];
     multiPkgs = pkgs: [ libGL ];
     runScript = "runescape-launcher";

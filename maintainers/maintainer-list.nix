@@ -10079,6 +10079,12 @@
     githubId = 137805;
     name = "Alexander Tsvyashchenko";
   };
+  nebulka = {
+    email = "arapun@proton.me";
+    github = "nebulka1";
+    githubId = 121920704;
+    name = "Nebulka";
+  };
   Necior = {
     email = "adrian@sadlocha.eu";
     github = "Necior";
@@ -14338,6 +14344,12 @@
     github = "tmarkovski";
     githubId = 1280118;
     name = "Tomislav Markovski";
+  };
+  tmarkus = {
+    email = "tobias@markus-regensburg.de";
+    github = "hesiod";
+    githubId = 3159881;
+    name = "Tobias Markus";
   };
   tmountain = {
     email = "tinymountain@gmail.com";

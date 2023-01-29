@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.5";
+  version = "0.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-ABMXWUVptpOSPB1jQ57iXk/UG92puNCICzXo3ZMG2Pk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/VQKLmEpIOULTPpJKuVLyqqQVLKVhwVBoos9Q/upwQM=";
   };
 
   propagatedBuildInputs = [
@@ -98,6 +98,7 @@ buildPythonPackage rec {
     "test_read_pattern"
     "test_remote_arr"
     "test_remote_cat"
+    "test_remote_env"
     # ValueError
     "test_mlist_parameter"
     # ImportError
@@ -118,6 +119,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
+    changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ costrouc ];
   };

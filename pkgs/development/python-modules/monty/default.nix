@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , msgpack
-, pytestCheckHook
 , numpy
 , pandas
 , pydantic
 , pymongo
+, pytestCheckHook
+, pythonOlder
 , ruamel-yaml
 , tqdm
 }:
@@ -15,13 +15,15 @@
 buildPythonPackage rec {
   pname = "monty";
   version = "2022.9.9";
-  disabled = pythonOlder "3.5"; # uses type annotations
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7ToNiRSWxe9nNcaWWmS6bhVqWMEwXN4uiwtjAmuK5qw=";
+    hash = "sha256-7ToNiRSWxe9nNcaWWmS6bhVqWMEwXN4uiwtjAmuK5qw=";
   };
 
   postPatch = ''
@@ -30,17 +32,29 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    msgpack
     ruamel-yaml
     tqdm
-    msgpack
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     numpy
     pandas
     pydantic
     pymongo
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "monty"
+  ];
+
+  disabledTests = [
+    # Test file was removed and re-added after 2022.9.9
+    "test_reverse_readfile_gz"
+    "test_Path_objects"
+    "test_zopen"
+    "test_zpath"
   ];
 
   meta = with lib; {
@@ -51,6 +65,7 @@ buildPythonPackage rec {
       patterns such as singleton and cached_class, and many more.
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
+    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

@@ -304,6 +304,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>wordpress</literal> derivation no longer contains
+          any builtin plugins or themes. If you need them you have to
+          add them back to prevent your site from breaking. You can find
+          them in <literal>wordpressPackages.{plugins,themes}</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>llvmPackages_rocm.llvm</literal> will not contain
           <literal>clang</literal> or <literal>compiler-rt</literal>.
           <literal>llvmPackages_rocm.clang</literal> will not contain
@@ -350,6 +358,17 @@
           under 10 packages in nixpkgs, largely unmaintained upstream as
           well, however, out-of-tree package expressions may need to be
           updated manually.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link linkend="opt-services.wordpress.sites._name_.plugins">services.wordpress.sites.&lt;name&gt;.plugins</link>
+          and
+          <link linkend="opt-services.wordpress.sites._name_.themes">services.wordpress.sites.&lt;name&gt;.themes</link>
+          options have been converted from sets to attribute sets to
+          allow for consumers to specify explicit install paths via
+          attribute name.
         </para>
       </listitem>
       <listitem>

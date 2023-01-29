@@ -1,27 +1,63 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, geopandas, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, folium, scikit-learn, scipy, gdal, rasterio}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, folium
+, gdal
+, geopandas
+, matplotlib
+, networkx
+, numpy
+, pandas
+, pythonOlder
+, rasterio
+, requests
+, Rtree
+, scikit-learn
+, scipy
+, shapely
+}:
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.2.2";
+  version = "1.3.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner  = "gboeing";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-+dUv1QrUmCIOCyUyjYX1kJtZrPuSp3t9xz/sRV7ppgA=";
+    owner = "gboeing";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-17duWrg48Qb4ojYYFX4HBpPLeVgHn1WV84KVATvBnzY=";
   };
 
-  propagatedBuildInputs = [ geopandas matplotlib networkx numpy pandas requests Rtree shapely folium scikit-learn scipy gdal rasterio ];
+  propagatedBuildInputs = [
+    geopandas
+    matplotlib
+    networkx
+    numpy
+    pandas
+    requests
+    Rtree
+    shapely
+    folium
+    scikit-learn
+    scipy
+    gdal
+    rasterio
+  ];
 
-  # requires network
+  # Tests require network
   doCheck = false;
-  pythonImportsCheck = [ "osmnx" ];
+
+  pythonImportsCheck = [
+    "osmnx"
+  ];
 
   meta = with lib; {
     description = "A package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX.";
     homepage = "https://github.com/gboeing/osmnx";
+    changelog = "https://github.com/gboeing/osmnx/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

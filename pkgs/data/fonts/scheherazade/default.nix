@@ -1,20 +1,30 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip, version ? "3.300" }:
+{ lib, stdenvNoCC, fetchzip, version ? "3.300" }:
 
 let
   new = lib.versionAtLeast version "3.000";
-  sha256 = {
-    "2.100" = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
-    "3.300" = "1bja1ma1mnna0qlk3dis31cvq5z1kgcqj7wjp8ml03zc5mpa2wb2";
+  hash = {
+    "2.100" = "sha256-d2UyOOOnmE1afCwyIrM1bL3lQC7XRwh03hzetk/4V30=";
+    "3.300" = "sha256-LaaA6DWAE2dcwVVX4go9cJaiuwI6efYbPk82ym3W3IY=";
   }."${version}";
-  name = "scheherazade${lib.optionalString new "-new"}-${version}";
+  pname = "scheherazade${lib.optionalString new "-new"}";
+in
+stdenvNoCC.mkDerivation rec {
+  inherit pname version;
 
-in (fetchzip rec {
-  inherit name;
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+    inherit hash;
+  };
 
-  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+  installPhase = ''
+    runHook preInstall
 
-  inherit sha256;
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc
+    cp -r documentation $out/share/doc/
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";
@@ -40,13 +50,4 @@ in (fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip    $downloadedFile \*/documentation/\*           -d $out/share/doc/
-    mv $out/share/doc/* $out/share/doc/${name}
-    unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
-  '';
-})
+}
