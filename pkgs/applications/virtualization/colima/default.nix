@@ -11,6 +11,8 @@
 , colima
 }:
 
+# use lima-bin on darwin to support native macOS virtualization
+# https://github.com/NixOS/nixpkgs/pull/209171
 let lima-drv = if stdenv.isDarwin then lima-bin else lima;
 in
 buildGoModule rec {
