@@ -45,8 +45,8 @@ in
         };
       };
 
-    node2 = { ... } @ args:
-      makeNebulaNode args "node2" {
+    allowAny = { ... } @ args:
+      makeNebulaNode args "allowAny" {
         networking.interfaces.eth1.ipv4.addresses = [{
           address = "192.168.1.2";
           prefixLength = 24;
@@ -64,8 +64,8 @@ in
         };
       };
 
-    node3 = { ... } @ args:
-      makeNebulaNode args "node3" {
+    allowFromLighthouse = { ... } @ args:
+      makeNebulaNode args "allowFromLighthouse" {
         networking.interfaces.eth1.ipv4.addresses = [{
           address = "192.168.1.3";
           prefixLength = 24;
@@ -83,8 +83,8 @@ in
         };
       };
 
-    node4 = { ... } @ args:
-      makeNebulaNode args "node4" {
+    allowToLighthouse = { ... } @ args:
+      makeNebulaNode args "allowToLighthouse" {
         networking.interfaces.eth1.ipv4.addresses = [{
           address = "192.168.1.4";
           prefixLength = 24;
@@ -103,8 +103,8 @@ in
         };
       };
 
-    node5 = { ... } @ args:
-      makeNebulaNode args "node5" {
+    disabled = { ... } @ args:
+      makeNebulaNode args "disabled" {
         networking.interfaces.eth1.ipv4.addresses = [{
           address = "192.168.1.5";
           prefixLength = 24;
@@ -152,13 +152,13 @@ in
       ${name}.succeed(
           "mkdir -p /etc/nebula",
           "nebula-cert keygen -out-key /etc/nebula/${name}.key -out-pub /etc/nebula/${name}.pub",
-          "scp ${sshOpts} /etc/nebula/${name}.pub 192.168.1.1:/tmp/${name}.pub",
+          "scp ${sshOpts} /etc/nebula/${name}.pub 192.168.1.1:/var/tmp/${name}.pub",
       )
       lighthouse.succeed(
-          'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "${name}" -groups "${name}" -ip "${ip}" -in-pub /tmp/${name}.pub -out-crt /tmp/${name}.crt',
+          'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "${name}" -groups "${name}" -ip "${ip}" -in-pub /var/tmp/${name}.pub -out-crt /var/tmp/${name}.crt',
       )
       ${name}.succeed(
-          "scp ${sshOpts} 192.168.1.1:/tmp/${name}.crt /etc/nebula/${name}.crt",
+          "scp ${sshOpts} 192.168.1.1:/var/tmp/${name}.crt /etc/nebula/${name}.crt",
           "scp ${sshOpts} 192.168.1.1:/etc/nebula/ca.crt /etc/nebula/ca.crt",
           '(id nebula-smoke >/dev/null && chown -R nebula-smoke:nebula-smoke /etc/nebula) || true'
       )
@@ -203,104 +203,104 @@ in
     lighthouse.wait_for_unit("nebula@smoke.service")
     lighthouse.succeed("ping -c5 10.0.100.1")
 
-    # Create keys for node2's nebula service and test that it comes up.
-    ${setUpPrivateKey "node2"}
-    ${signKeysFor "node2" "10.0.100.2/24"}
-    ${restartAndCheckNebula "node2" "10.0.100.2"}
+    # Create keys for allowAny's nebula service and test that it comes up.
+    ${setUpPrivateKey "allowAny"}
+    ${signKeysFor "allowAny" "10.0.100.2/24"}
+    ${restartAndCheckNebula "allowAny" "10.0.100.2"}
 
-    # Create keys for node3's nebula service and test that it comes up.
-    ${setUpPrivateKey "node3"}
-    ${signKeysFor "node3" "10.0.100.3/24"}
-    ${restartAndCheckNebula "node3" "10.0.100.3"}
+    # Create keys for allowFromLighthouse's nebula service and test that it comes up.
+    ${setUpPrivateKey "allowFromLighthouse"}
+    ${signKeysFor "allowFromLighthouse" "10.0.100.3/24"}
+    ${restartAndCheckNebula "allowFromLighthouse" "10.0.100.3"}
 
-    # Create keys for node4's nebula service and test that it comes up.
-    ${setUpPrivateKey "node4"}
-    ${signKeysFor "node4" "10.0.100.4/24"}
-    ${restartAndCheckNebula "node4" "10.0.100.4"}
+    # Create keys for allowToLighthouse's nebula service and test that it comes up.
+    ${setUpPrivateKey "allowToLighthouse"}
+    ${signKeysFor "allowToLighthouse" "10.0.100.4/24"}
+    ${restartAndCheckNebula "allowToLighthouse" "10.0.100.4"}
 
-    # Create keys for node4's nebula service and test that it does not come up.
-    ${setUpPrivateKey "node5"}
-    ${signKeysFor "node5" "10.0.100.5/24"}
-    node5.fail("systemctl status nebula@smoke.service")
-    node5.fail("ping -c5 10.0.100.5")
+    # Create keys for disabled's nebula service and test that it does not come up.
+    ${setUpPrivateKey "disabled"}
+    ${signKeysFor "disabled" "10.0.100.5/24"}
+    disabled.fail("systemctl status nebula@smoke.service")
+    disabled.fail("ping -c5 10.0.100.5")
 
-    # The lighthouse can ping node2 and node3 but not node5
+    # The lighthouse can ping allowAny and allowFromLighthouse but not disabled
     lighthouse.succeed("ping -c3 10.0.100.2")
     lighthouse.succeed("ping -c3 10.0.100.3")
     lighthouse.fail("ping -c3 10.0.100.5")
 
-    # node2 can ping the lighthouse, but not node3 because of its inbound firewall
-    node2.succeed("ping -c3 10.0.100.1")
-    node2.fail("ping -c3 10.0.100.3")
+    # allowAny can ping the lighthouse, but not allowFromLighthouse because of its inbound firewall
+    allowAny.succeed("ping -c3 10.0.100.1")
+    allowAny.fail("ping -c3 10.0.100.3")
 
-    # node3 can ping the lighthouse and node2
-    node3.succeed("ping -c3 10.0.100.1")
-    node3.succeed("ping -c3 10.0.100.2")
+    # allowFromLighthouse can ping the lighthouse and allowAny
+    allowFromLighthouse.succeed("ping -c3 10.0.100.1")
+    allowFromLighthouse.succeed("ping -c3 10.0.100.2")
 
-    # block node3 <-> node2, and node3 -> node2 should still work.
-    ${blockTrafficBetween "node3" "node2"}
-    node3.succeed("ping -c10 10.0.100.2")
-    ${allowTrafficBetween "node3" "node2"}
-    node3.succeed("ping -c10 10.0.100.2")
+    # block allowFromLighthouse <-> allowAny, and allowFromLighthouse -> allowAny should still work.
+    ${blockTrafficBetween "allowFromLighthouse" "allowAny"}
+    allowFromLighthouse.succeed("ping -c10 10.0.100.2")
+    ${allowTrafficBetween "allowFromLighthouse" "allowAny"}
+    allowFromLighthouse.succeed("ping -c10 10.0.100.2")
 
-    # node4 can ping the lighthouse but not node2 or node3
-    node4.succeed("ping -c3 10.0.100.1")
-    node4.fail("ping -c3 10.0.100.2")
-    node4.fail("ping -c3 10.0.100.3")
+    # allowToLighthouse can ping the lighthouse but not allowAny or allowFromLighthouse
+    allowToLighthouse.succeed("ping -c3 10.0.100.1")
+    allowToLighthouse.fail("ping -c3 10.0.100.2")
+    allowToLighthouse.fail("ping -c3 10.0.100.3")
 
-    # node2 can ping node3 now that node3 pinged it first
-    node2.succeed("ping -c3 10.0.100.3")
+    # allowAny can ping allowFromLighthouse now that allowFromLighthouse pinged it first
+    allowAny.succeed("ping -c3 10.0.100.3")
 
-    # block node2 <-> node3, and node2 -> node3 should still work.
-    ${blockTrafficBetween "node2" "node3"}
-    node3.succeed("ping -c10 10.0.100.2")
-    node2.succeed("ping -c10 10.0.100.3")
-    ${allowTrafficBetween "node2" "node3"}
-    node3.succeed("ping -c10 10.0.100.2")
-    node2.succeed("ping -c10 10.0.100.3")
+    # block allowAny <-> allowFromLighthouse, and allowAny -> allowFromLighthouse should still work.
+    ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
+    allowFromLighthouse.succeed("ping -c10 10.0.100.2")
+    allowAny.succeed("ping -c10 10.0.100.3")
+    ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
+    allowFromLighthouse.succeed("ping -c10 10.0.100.2")
+    allowAny.succeed("ping -c10 10.0.100.3")
 
-    # node4 can ping node2 if node2 pings it first
-    node2.succeed("ping -c3 10.0.100.4")
-    node4.succeed("ping -c3 10.0.100.2")
+    # allowToLighthouse can ping allowAny if allowAny pings it first
+    allowAny.succeed("ping -c3 10.0.100.4")
+    allowToLighthouse.succeed("ping -c3 10.0.100.2")
 
-    # block node4 <-> node2, and node2 <-> node4 should still work.
-    ${blockTrafficBetween "node2" "node4"}
-    node2.succeed("ping -c10 10.0.100.4")
-    node4.succeed("ping -c10 10.0.100.2")
-    ${allowTrafficBetween "node2" "node4"}
-    node2.succeed("ping -c10 10.0.100.4")
-    node4.succeed("ping -c10 10.0.100.2")
+    # block allowToLighthouse <-> allowAny, and allowAny <-> allowToLighthouse should still work.
+    ${blockTrafficBetween "allowAny" "allowToLighthouse"}
+    allowAny.succeed("ping -c10 10.0.100.4")
+    allowToLighthouse.succeed("ping -c10 10.0.100.2")
+    ${allowTrafficBetween "allowAny" "allowToLighthouse"}
+    allowAny.succeed("ping -c10 10.0.100.4")
+    allowToLighthouse.succeed("ping -c10 10.0.100.2")
 
-    # block lighthouse <-> node3 and node2 <-> node3; node3 won't get to node2
-    ${blockTrafficBetween "node3" "lighthouse"}
-    ${blockTrafficBetween "node3" "node2"}
-    node3.fail("ping -c3 10.0.100.2")
-    ${allowTrafficBetween "node3" "lighthouse"}
-    ${allowTrafficBetween "node3" "node2"}
-    node3.succeed("ping -c3 10.0.100.2")
+    # block lighthouse <-> allowFromLighthouse and allowAny <-> allowFromLighthouse; allowFromLighthouse won't get to allowAny
+    ${blockTrafficBetween "allowFromLighthouse" "lighthouse"}
+    ${blockTrafficBetween "allowFromLighthouse" "allowAny"}
+    allowFromLighthouse.fail("ping -c3 10.0.100.2")
+    ${allowTrafficBetween "allowFromLighthouse" "lighthouse"}
+    ${allowTrafficBetween "allowFromLighthouse" "allowAny"}
+    allowFromLighthouse.succeed("ping -c3 10.0.100.2")
 
-    # block lighthouse <-> node2, node2 <-> node3, and node2 <-> node4; it won't get to node3 or node4
-    ${blockTrafficBetween "node2" "lighthouse"}
-    ${blockTrafficBetween "node2" "node3"}
-    ${blockTrafficBetween "node2" "node4"}
-    node3.fail("ping -c3 10.0.100.2")
-    node2.fail("ping -c3 10.0.100.3")
-    node2.fail("ping -c3 10.0.100.4")
-    ${allowTrafficBetween "node2" "lighthouse"}
-    ${allowTrafficBetween "node2" "node3"}
-    ${allowTrafficBetween "node2" "node4"}
-    node3.succeed("ping -c3 10.0.100.2")
-    node2.succeed("ping -c3 10.0.100.3")
-    node2.succeed("ping -c3 10.0.100.4")
+    # block lighthouse <-> allowAny, allowAny <-> allowFromLighthouse, and allowAny <-> allowToLighthouse; it won't get to allowFromLighthouse or allowToLighthouse
+    ${blockTrafficBetween "allowAny" "lighthouse"}
+    ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
+    ${blockTrafficBetween "allowAny" "allowToLighthouse"}
+    allowFromLighthouse.fail("ping -c3 10.0.100.2")
+    allowAny.fail("ping -c3 10.0.100.3")
+    allowAny.fail("ping -c3 10.0.100.4")
+    ${allowTrafficBetween "allowAny" "lighthouse"}
+    ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
+    ${allowTrafficBetween "allowAny" "allowToLighthouse"}
+    allowFromLighthouse.succeed("ping -c3 10.0.100.2")
+    allowAny.succeed("ping -c3 10.0.100.3")
+    allowAny.succeed("ping -c3 10.0.100.4")
 
-    # block lighthouse <-> node4 and node4 <-> node2; it won't get to node2
-    ${blockTrafficBetween "node4" "lighthouse"}
-    ${blockTrafficBetween "node4" "node2"}
-    node2.fail("ping -c3 10.0.100.4")
-    node4.fail("ping -c3 10.0.100.2")
-    ${allowTrafficBetween "node4" "lighthouse"}
-    ${allowTrafficBetween "node4" "node2"}
-    node2.succeed("ping -c3 10.0.100.4")
-    node4.succeed("ping -c3 10.0.100.2")
+    # block lighthouse <-> allowToLighthouse and allowToLighthouse <-> allowAny; it won't get to allowAny
+    ${blockTrafficBetween "allowToLighthouse" "lighthouse"}
+    ${blockTrafficBetween "allowToLighthouse" "allowAny"}
+    allowAny.fail("ping -c3 10.0.100.4")
+    allowToLighthouse.fail("ping -c3 10.0.100.2")
+    ${allowTrafficBetween "allowToLighthouse" "lighthouse"}
+    ${allowTrafficBetween "allowToLighthouse" "allowAny"}
+    allowAny.succeed("ping -c3 10.0.100.4")
+    allowToLighthouse.succeed("ping -c3 10.0.100.2")
   '';
 })
