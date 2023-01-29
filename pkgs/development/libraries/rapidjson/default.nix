@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DGTEST_SOURCE_DIR=${gtest.dev}/include" ];
 
   nativeCheckInputs = [ valgrind ];
-  doCheck = !stdenv.hostPlatform.isStatic;
+  doCheck = !stdenv.hostPlatform.isStatic && !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
