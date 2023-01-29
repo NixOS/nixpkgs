@@ -24,7 +24,7 @@
 , version ? null
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux
-, pipewire_0_2
+, pipewire
 , postPatch ? ""
 }:
 
@@ -158,7 +158,7 @@ qtModule {
 
   ] ++ lib.optionals pipewireSupport [
     # Pipewire
-    pipewire_0_2
+    pipewire
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
