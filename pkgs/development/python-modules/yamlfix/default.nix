@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "lyz-code";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-TdW2vVj5wZw8xANSRY8ke1ECw8UTDwRjJDD1g+p9DV4=";
+    hash = "sha256-OXo9PkvKn+XPxfXUObwps62lwNo6lE4Ot5L0lZPIYPw=";
   };
 
   nativeBuildInputs = [
