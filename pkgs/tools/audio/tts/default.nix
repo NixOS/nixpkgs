@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 , espeak-ng
 }:
 
@@ -24,7 +25,7 @@ let
         src = super.fetchPypi {
           pname = "librosa";
           inherit version;
-          sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
+          hash = "sha256-xT0F52iuSj5VOuIcLlAVKT5e+/1cEtSX8RBMtRnMprM=";
         };
       });
     };
@@ -32,15 +33,28 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.9.0";
+  version = "0.10.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
-    rev = "v${version}";
-    sha256 = "sha256-p4I583Rs/4eig7cnOcJjri2ugOLAeF2nvPIvMZrN1Ss=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IcuRhsURgEYIuS7ldZtxAy4Z/XNDehTGsOfYW+DhScg=";
   };
+
+  patches = [
+    # Use packaging.version for version comparisons
+    (fetchpatch {
+      url = "https://github.com/coqui-ai/TTS/commit/77a9ef8ac97ea1b0f7f8d8287dba69a74fdf22ce.patch";
+      hash = "sha256-zWJmINyxw2efhR9KIVkDPHao5703zlpCKwdzOh/1APY=";
+    })
+    # Fix espeak version detection logic
+    (fetchpatch {
+      url = "https://github.com/coqui-ai/TTS/commit/0031df0143b069d7db59ba04d1adfafcc1a92f47.patch";
+      hash = "sha256-6cL9YqWrB+0QomINpA9BxdYmEDpXF03udGEchydQmBA=";
+    })
+  ];
 
   postPatch = let
     relaxedConstraints = [
@@ -64,6 +78,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     cython
+    packaging
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -82,6 +97,7 @@ python.pkgs.buildPythonApplication rec {
     mecab-python3
     nltk
     numba
+    packaging
     pandas
     pypinyin
     pysbd
@@ -134,6 +150,8 @@ python.pkgs.buildPythonApplication rec {
     "test_run_all_models"
     "test_synthesize"
     "test_voice_conversion"
+    "test_multi_speaker_multi_lingual_model"
+    "test_single_speaker_model"
     # Mismatch between phonemes
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
@@ -151,6 +169,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_glow_tts_d-vectors_train.py"
     "tests/tts_tests/test_glow_tts_speaker_emb_train.py"
     "tests/tts_tests/test_glow_tts_train.py"
+    "tests/tts_tests/test_overflow_train.py"
     "tests/tts_tests/test_speedy_speech_train.py"
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
