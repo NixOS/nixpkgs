@@ -1,6 +1,8 @@
 { lib
-, fetchurl
+, fetchFromGitHub
+, buildNpmPackage
 , nixosTests
+, gettext
 , python3
 , ghostscript
 , imagemagickBig
@@ -12,10 +14,18 @@
 , unpaper
 , poppler_utils
 , liberation_ttf
-, fetchFromGitHub
 }:
 
 let
+  version = "1.11.3";
+
+  src = fetchFromGitHub {
+    owner = "paperless-ngx";
+    repo = "paperless-ngx";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-d1O8bAXB7NPymibagWUgMDZ9LAZ6QpawmT5D5yw4j+w=";
+  };
+
   # Use specific package versions required by paperless-ngx
   python = python3.override {
     packageOverrides = self: super: {
@@ -78,20 +88,47 @@ let
     unpaper
     poppler_utils
   ];
-in
-python.pkgs.pythonPackages.buildPythonApplication rec {
-  pname = "paperless-ngx";
-  version = "1.11.3";
 
-  # Fetch the release tarball instead of a git ref because it contains the prebuilt frontend
-  src = fetchurl {
-    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-wGNkdczgV+UDd9ZO+BXMSWotpetE/+c/jJAAH+6SXps=";
+  frontend = buildNpmPackage {
+    pname = "paperless-ngx-frontend";
+    inherit version src;
+
+    npmDepsHash = "sha256-ZjIWU8i2Riz4KmC1Woi0uaJ+uNyuU27XwFqvo4bCC5k=";
+
+    nativeBuildInputs = [
+      python3
+    ];
+
+    postPatch = ''
+      cd src-ui
+    '';
+
+    CYPRESS_INSTALL_BINARY = "0";
+    NG_CLI_ANALYTICS = "false";
+
+    npmBuildFlags = [
+      "--" "--configuration" "production"
+    ];
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/lib/paperless-ui
+      mv ../src/documents/static/frontend $out/lib/paperless-ui/
+      runHook postInstall
+    '';
   };
-
+in
+python.pkgs.buildPythonApplication rec {
+  pname = "paperless-ngx";
   format = "other";
 
-  propagatedBuildInputs = with python.pkgs.pythonPackages; [
+  inherit version src;
+
+  nativeBuildInputs = [
+    gettext
+  ];
+
+  propagatedBuildInputs = with python.pkgs; [
     aioredis
     arrow
     asgiref
@@ -192,15 +229,23 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     zope_interface
   ];
 
-  # Compile manually because `pythonRecompileBytecodeHook` only works for
-  # files in `python.sitePackages`
+
   postBuild = ''
+    # Compile manually because `pythonRecompileBytecodeHook` only works
+    # for files in `python.sitePackages`
     ${python.interpreter} -OO -m compileall src
+
+    # Collect static files
+    ${python.interpreter} src/manage.py collectstatic --clear --no-input
+
+    # Compile string translations using gettext
+    ${python.interpreter} src/manage.py compilemessages
   '';
 
   installPhase = ''
-    mkdir -p $out/lib
-    cp -r . $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx
+    cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
+    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "$PYTHONPATH" \
@@ -250,7 +295,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
   ];
 
   passthru = {
-    inherit python path;
+    inherit python path frontend;
     tests = { inherit (nixosTests) paperless; };
   };
 
