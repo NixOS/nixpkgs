@@ -292,6 +292,7 @@ package-maintainers:
     - sensei
   maralorn:
     - cabal-fmt
+    - clay
     - ema
     - emanote
     - generic-optics

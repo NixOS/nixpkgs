@@ -171,6 +171,9 @@ self: super: {
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
 
+  # 2023-01-29: Restrictive base bound already loosened on master but not released: https://github.com/sebastiaanvisser/clay/commit/4483bdf7a452903f177220958f1610030ab7f28a
+  clay = throwIfNot (super.clay.version == "0.14.0") "Remove clay jailbreak in configuration-common.nix when you see this eval error." (doJailbreak super.clay);
+
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   dbmigrations = dontCheck super.dbmigrations;
