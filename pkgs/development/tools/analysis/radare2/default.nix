@@ -1,4 +1,8 @@
 { lib
+, callPackage
+, symlinkJoin
+, pkgs
+, makeWrapper
 , stdenv
 , fetchFromGitHub
 , buildPackages
@@ -115,5 +119,28 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin makefu mic92 arkivm ];
     platforms = platforms.unix;
+  };
+
+  # TODO better?
+  passthru = {
+    plugins = {
+    };
+    # nix-build -E "with import ./. {}; pkgs.radare2.withPlugins [\"r2ghidra\"]"
+    # TODO better?
+    # load plugins from multiple paths https://github.com/radareorg/radare2/issues/21300
+    withPlugins = pluginNames: symlinkJoin {
+      name = "radare2-with-plugins";
+      paths = [ pkgs.radare2 ] ++ (map (name: pkgs.radare2.plugins.${name}) pluginNames);
+      # TODO future: use ABI-compatible plugin-dir 5.7.x https://github.com/radareorg/radare2/pull/20545
+      buildInputs = [
+        makeWrapper
+      ];
+      postBuild = ''
+        (set -x
+        wrapProgram $out/bin/r2 \
+          --set R2_LIBR_PLUGINS $out/lib/radare2/${pkgs.radare2.version}
+        )
+      '';
+    };
   };
 }
