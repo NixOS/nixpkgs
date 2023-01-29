@@ -82,7 +82,7 @@ rec {
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })
-                       [ "x86" "arm" "aarch64" "riscv" ];
+                       [ "x86" "arm" "riscv" ];
   };
 
   matchAnyAttrs = patterns:
