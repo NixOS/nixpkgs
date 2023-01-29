@@ -28,8 +28,7 @@ let
       "example"
     ];
 
-    # There is now a release, but it's cpu-only it seems to be for a very specific purpose
-    # Thus, we're sticking with the develop branch for now...
+    # ROCm 5.6 should release composable_kernel as stable with a tag in the future
     src = fetchFromGitHub {
       owner = "ROCmSoftwarePlatform";
       repo = "composable_kernel";
@@ -53,6 +52,7 @@ let
       "-DCMAKE_CXX_COMPILER=hipcc"
     ] ++ lib.optionals (gpuTargets != [ ]) [
       "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     ] ++ lib.optionals buildTests [
       "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
     ];
@@ -82,7 +82,6 @@ let
       license = with licenses; [ mit ];
       maintainers = teams.rocm.members;
       platforms = platforms.linux;
-      broken = buildExamples; # bin/example_grouped_gemm_xdl_bfp16] Error 139
     };
   });
 
@@ -93,6 +92,7 @@ in stdenv.mkDerivation {
   inherit (ck) pname version outputs src passthru meta;
 
   dontUnpack = true;
+  dontPatch = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -108,5 +108,11 @@ in stdenv.mkDerivation {
     cp -a ${ck.example} $example
   '' + ''
     runHook postInstall
+  '';
+
+  # Fix paths
+  preFixup = ''
+    substituteInPlace $out/lib/cmake/composable_kernel/*.cmake \
+      --replace "${ck}" "$out"
   '';
 }
