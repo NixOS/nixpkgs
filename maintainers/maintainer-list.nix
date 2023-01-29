@@ -5316,6 +5316,12 @@
     githubId = 105204;
     name = "Godefroid Chapelle";
   };
+  gou4shi1 = {
+    name = "Guangqing Chen";
+    email = "hi@goushi.me";
+    github = "gou4shi1";
+    githubId = 16915589;
+  };
   govanify = {
     name = "Gauvain 'GovanifY' Roussel-Tarbouriech";
     email = "gauvain@govanify.com";
@@ -16423,11 +16429,5 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
-  };
-  gou4shi1 = {
-    name = "Guangqing Chen";
-    email = "hi@goushi.me";
-    github = "gou4shi1";
-    githubId = 16915589;
   };
 }
