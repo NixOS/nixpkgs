@@ -633,9 +633,6 @@
         "zeromq"
       ]
     },
-    "m": {
-      "attrPath": null
-    },
     "menu": {
       "attrPath": [
         "ncurses"
@@ -760,9 +757,6 @@
       "attrPath": [
         "poppler_gi"
       ]
-    },
-    "pthread": {
-      "attrPath": null
     },
     "python": {
       "attrPath": [
