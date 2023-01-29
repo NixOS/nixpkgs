@@ -5047,7 +5047,6 @@ broken-packages:
   - streaming-sort
   - streamly-archive
   - streamly-binary
-  - streamly-bytestring
   - streamly-cassava
   - streamly-examples
   - streamly-lmdb

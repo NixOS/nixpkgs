@@ -323,6 +323,7 @@ package-maintainers:
     - snap
     - stm-containers
     - streamly
+    - streamly-bytestring
     - taskwarrior
     - tz
     - weeder

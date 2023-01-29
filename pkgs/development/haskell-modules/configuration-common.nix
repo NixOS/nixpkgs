@@ -200,6 +200,9 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
+  streamly-bytestring = dontCheck super.streamly-bytestring;
+
   # base bound
   digit = doJailbreak super.digit;
 
