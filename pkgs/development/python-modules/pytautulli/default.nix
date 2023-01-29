@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytautulli";
-  version = "21.11.0";
+  version = "23.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zODU3aN+8Fdw/GQ/EfZhn6kOuLDARKgLULzRw2+b2BM=";
+    hash = "sha256-wNR97rGmm/Tmx/o0+r6BTL1muNv25nq9nZaE8/SAi14=";
   };
 
   postPatch = ''
