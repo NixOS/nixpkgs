@@ -213,7 +213,6 @@ let
                 rm pytest.ini
               '';
 
-
               disabledTests = [
                 "test_check_setup" # Why should it be able to call pip?
               ] ++ lib.optionals stdenv.isDarwin [
