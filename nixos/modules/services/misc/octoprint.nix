@@ -106,6 +106,9 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+      # this will allow octoprint access to raspberry specific hardware to check for throttling
+      # read-only will not work: "VCHI initialization failed" error
+      "a /dev/vchiq - - - - u:octoprint:rw"
     ];
 
     systemd.services.octoprint = {
