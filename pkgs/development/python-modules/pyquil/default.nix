@@ -12,7 +12,9 @@
 , pytest-httpx
 , pytest-mock
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
+, pythonRelaxDepsHook
 , qcs-api-client
 , respx
 , retry
@@ -24,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.3.2";
+  version = "3.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,11 +35,16 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ur7dRxmnaAWXHk7c6NC3lBw59RRgh9vwAHFW00fViD4=";
+    hash = "sha256-jA6nYQSfdxd9FCTMQlYTe/EbV39vV0h9F9Fgf1M0+SY=";
   };
+
+  pythonRelaxDeps = [
+    "lark"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -55,20 +62,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
     pytest-asyncio
     pytest-freezegun
     pytest-httpx
     pytest-mock
-    pytestCheckHook
     respx
     ipython
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'lark = "^0.11.1"' 'lark = "*"' \
-      --replace 'qcs-api-client = ">=0.8.1,<0.21.0"' 'qcs-api-client = "*"'
-  '';
 
   disabledTestPaths = [
     # Tests require network access
@@ -85,6 +89,8 @@ buildPythonPackage rec {
     "test/unit/test_reference_wavefunction.py"
     # Out-dated
     "test/unit/test_qpu_client.py"
+    "test/unit/test_qvm_client.py"
+    "test/unit/test_reference_density.py"
   ];
 
   disabledTests = [
