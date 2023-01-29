@@ -1,11 +1,14 @@
 { lib
 , stdenv
 , buildPythonPackage
+, python
 , cairocffi
 , django
 , django_tagging
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , gunicorn
+, mock
 , pyparsing
 , python-memcached
 , pythonOlder
@@ -14,7 +17,6 @@
 , txamqp
 , urllib3
 , whisper
-, whitenoise
 }:
 
 buildPythonPackage rec {
@@ -24,10 +26,25 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Pxho1QWo2jJZYAMJx999bbELDVMr7Wp7wsssYPkc01o=";
+  src = fetchFromGitHub {
+    owner = "graphite-project";
+    repo = pname;
+    rev = version;
+    hash = "sha256-2HgCBKwLfxJLKMopoIdsEW5k/j3kNAiifWDnJ98a7Qo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-1.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/9c626006eea36a9fd785e8f811359aebc9774970.patch";
+      sha256 = "sha256-JMmdhLqsaRhUG2FsH+yPNl+cR7O2YLfKFliL2GU0aAk=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-2.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/2f178f490e10efc03cd1d27c72f64ecab224eb23.patch";
+      sha256 = "sha256-NL7K5uekf3NlLa58aFFRPJT9ktjqBeNlWC4Htd0fRQ0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cairocffi
@@ -41,7 +58,6 @@ buildPythonPackage rec {
     txamqp
     urllib3
     whisper
-    whitenoise
   ];
 
   postPatch = ''
@@ -59,12 +75,28 @@ buildPythonPackage rec {
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
+  checkInputs = [ mock ];
+  checkPhase = ''
+    runHook preCheck
+
+    pushd webapp/
+    # avoid confusion with installed module
+    rm -r graphite
+    # redis not practical in test environment
+    substituteInPlace tests/test_tags.py \
+      --replace test_redis_tagdb _dont_test_redis_tagdb
+
+    DJANGO_SETTINGS_MODULE=tests.settings ${python.interpreter} manage.py test
+    popd
+
+    runHook postCheck
+  '';
+
   pythonImportsCheck = [
     "graphite"
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Enterprise scalable realtime graphing";
     homepage = "http://graphiteapp.org/";
     license = licenses.asl20;

@@ -135,6 +135,7 @@ in stdenv.mkDerivation {
   inherit (rocfft) pname version outputs src passthru meta;
 
   dontUnpack = true;
+  dontPatch = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -154,5 +155,23 @@ in stdenv.mkDerivation {
     cp -a ${rocfft.benchmark} $benchmark
   '' + ''
     runHook postInstall
+  '';
+
+  # Fix paths
+  preFixup = ''
+    substituteInPlace $out/include/*.h $out/rocfft/include/*.h \
+      --replace "${rocfft}" "$out"
+
+    patchelf --set-rpath \
+      $(patchelf --print-rpath $out/lib/librocfft.so | sed 's,${rocfft}/lib,'"$out/lib"',') \
+      $out/lib/librocfft.so
+  '' + lib.optionalString buildTests ''
+    patchelf --set-rpath \
+      $(patchelf --print-rpath $test/bin/rocfft-test | sed 's,${rocfft}/lib,'"$out/lib"',') \
+      $test/bin/rocfft-test
+  '' + lib.optionalString buildBenchmarks ''
+    patchelf --set-rpath \
+      $(patchelf --print-rpath $benchmark/bin/rocfft-rider | sed 's,${rocfft}/lib,'"$out/lib"',') \
+      $benchmark/bin/rocfft-rider
   '';
 }
