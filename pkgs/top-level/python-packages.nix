@@ -3011,6 +3011,8 @@ self: super: with self; {
 
   dvc-s3 = callPackage ../development/python-modules/dvc-s3 { };
 
+  dvc-ssh = callPackage ../development/python-modules/dvc-ssh { };
+
   dvc-studio-client = callPackage ../development/python-modules/dvc-studio-client {  };
 
   dvc-task = callPackage ../development/python-modules/dvc-task {  };
