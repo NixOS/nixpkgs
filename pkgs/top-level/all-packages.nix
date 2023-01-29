@@ -28366,6 +28366,8 @@ with pkgs;
     plugins = [];
   };
 
+  denaro = callPackage ../applications/finance/denaro { };
+
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
   dht = callPackage ../applications/networking/p2p/dht { };
