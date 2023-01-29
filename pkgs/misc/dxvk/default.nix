@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs:
     '';
 
     meta = {
-      description = "A Vulkan-based translation layer for Direct3D 9/10/11";
+      description = "Setup script for DXVK";
       homepage = "https://github.com/doitsujin/dxvk";
       changelog = "https://github.com/doitsujin/dxvk/releases";
       maintainers = [ lib.maintainers.reckenrode ];
