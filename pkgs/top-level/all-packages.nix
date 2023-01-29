@@ -17140,13 +17140,9 @@ with pkgs;
     libc = preLibcCrossHeaders;
   };
 
-  libbfd = callPackage ../development/tools/misc/binutils/libbfd.nix {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  libbfd = callPackage ../development/tools/misc/binutils/libbfd.nix { };
 
-  libopcodes = callPackage ../development/tools/misc/binutils/libopcodes.nix {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  libopcodes = callPackage ../development/tools/misc/binutils/libopcodes.nix { };
 
   # Held back 2.38 release. Remove once all dependencies are ported to 2.39.
   binutils-unwrapped_2_38 = callPackage ../development/tools/misc/binutils/2.38 {
