@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.6.2";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
     rev = "libtraceevent-${version}";
     sha256 = "sha256-iLy2rEKn0UJguRcY/W8RvUq7uX+snQojb/cXOmMsjwc=";
   };

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.4.2";
+  version = "1.5.0";
 
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     rev = "refs/tags/${version}";
-    hash = "sha256-8Of3/RltijfF5MXtVazGzIqpmRIhreT26kLNjzXLF1k=";
+    hash = "sha256-u9d9RhbikOyknMWs18j2efYJb9YdHsQrp31LfcbudoA=";
   };
 
   buildInputs = [
