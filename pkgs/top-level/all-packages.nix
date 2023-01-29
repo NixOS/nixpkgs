@@ -10396,7 +10396,6 @@ with pkgs;
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
   inherit (callPackages ../tools/networking/openvpn {})
-    openvpn_24
     openvpn;
 
   openvpn3 = callPackage ../tools/networking/openvpn3 { };
@@ -29867,6 +29866,7 @@ with pkgs;
   hledger-interest = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-interest;
   hledger-ui = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-web;
+  hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
@@ -37643,6 +37643,8 @@ with pkgs;
 
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
+
+  nix-init = callPackage ../tools/nix/nix-init { };
 
   nix-index-unwrapped = callPackage ../tools/package-management/nix-index {
     inherit (darwin.apple_sdk.frameworks) Security;

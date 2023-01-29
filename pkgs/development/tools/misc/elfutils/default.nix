@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tests/*.sh
+  '' + lib.optionalString stdenv.hostPlatform.isRiscV ''
+    # disable failing test:
+    #
+    # > dwfl_thread_getframes: No DWARF information found
+    sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
   '';
 
   outputs = [ "bin" "dev" "out" "man" ];
