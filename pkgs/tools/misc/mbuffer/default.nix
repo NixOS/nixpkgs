@@ -2,7 +2,9 @@
 , stdenv
 , fetchurl
 , openssl
+, makeWrapper
 , which
+, gcc-unwrapped
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +20,15 @@ stdenv.mkDerivation rec {
     openssl
   ];
   nativeBuildInputs = [
+    makeWrapper
     which
   ];
+
+  postFixup = ''
+    # Fix missing libgcc_s.so.1 (needed for cross-compiled binaries).
+    wrapProgram "$out/bin/mbuffer" \
+      --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath [ gcc-unwrapped ]}"
+  '';
 
   doCheck = true;
 
