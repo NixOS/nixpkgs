@@ -952,6 +952,7 @@ let
       '';
     } else {
       name = "RenameInterface";
+      nodes = { };
       testScript = "";
     };
     # even with disabled networkd, systemd.network.links should work
