@@ -296,7 +296,6 @@ package-maintainers:
     - emanote
     - generic-optics
     - ghcid
-    - ghcide
     - haskell-language-server
     - hedgehog
     - hledger
