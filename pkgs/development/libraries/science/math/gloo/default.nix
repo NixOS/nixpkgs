@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, mpi
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
+    mpi
   ];
 
   meta = {
