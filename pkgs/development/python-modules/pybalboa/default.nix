@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "garbled1";
     repo = pname;
-    rev = version;
-    sha256 = "0aw5jxpsvzyx05y1mg8d63lxx1i607yb6x19n9jil5wfis95m8pd";
+    rev = "refs/tags/${version}";
+    hash = "0aw5jxpsvzyx05y1mg8d63lxx1i607yb6x19n9jil5wfis95m8pd";
   };
 
   # Project has no tests
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = " Python module to interface with a Balboa Spa";
     homepage = "https://github.com/garbled1/pybalboa";
+    changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
