@@ -22,15 +22,15 @@ if (flashlight_FOUND)
 
 stdenv.mkDerivation rec {
   pname = "wav2letter";
-  version = "0.2";
+  version = "0.2-unstable-2022-12-03";
 
   src = fetchFromGitHub {
     owner = "flashlight";
     repo = "wav2letter";
     # this breaks because of a bug in fetchurl https://github.com/NixOS/nixpkgs/issues/213560
     #rev = "v${version}";
-    rev = "b1d1f89f586120a978a4666cffd45c55f0a2e564";
-    sha256 = "sha256-0WH6um0w4uz3lMyvMuS1v2g7hUGcsXq2fbfB6oDlFbQ=";
+    rev = "93bffaef9caa9c8711ff383c1fce338e5cb5a506";
+    sha256 = "sha256-FRWGBRKvhPr59An1L/H5gQjhYLn6b5iiTMuBMW2TLUI=";
   };
 
   nativeBuildInputs = [
