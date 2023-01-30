@@ -27066,6 +27066,8 @@ with pkgs;
 
   go-font = callPackage ../data/fonts/go-font { };
 
+  graphite-cursors = callPackage ../data/icons/graphite-cursors { };
+
   graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
   graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
