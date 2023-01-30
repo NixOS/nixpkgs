@@ -53,6 +53,23 @@
 , perl
 }:
 
+let
+  pythonEnv = python3.withPackages (pp: with pp; [
+    dbus-python
+    setproctitle
+    pygobject3
+    pycairo
+    pp.xapp # don't omit `pp.`, see #213561
+    pillow
+    pyinotify # for looking-glass
+    pytz
+    tinycss2
+    python-pam
+    pexpect
+    distro
+    requests
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
   version = "5.6.7";
@@ -70,21 +87,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (pp: with pp; [
-      dbus-python
-      setproctitle
-      pygobject3
-      pycairo
-      python3.pkgs.xapp # The scope prefix is required
-      pillow
-      pyinotify # for looking-glass
-      pytz
-      tinycss2
-      python-pam
-      pexpect
-      distro
-      requests
-    ]))
     atk
     cacert
     cinnamon-control-center
@@ -106,6 +108,7 @@ stdenv.mkDerivation rec {
     muffin
     networkmanager
     polkit
+    pythonEnv
     libxml2
     libgnomekbd
     gst_all_1.gstreamer
@@ -153,6 +156,8 @@ stdenv.mkDerivation rec {
       {} +
 
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
+
+    sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
 
     sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
 
