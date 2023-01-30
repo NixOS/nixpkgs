@@ -34,6 +34,7 @@ CMakeLists.txt:      COMPONENT cereal
 , cmake
 , pkg-config
 , googletest
+, glog
 , cereal
 , stb
 , arrayfire
@@ -44,9 +45,15 @@ CMakeLists.txt:      COMPONENT cereal
 , cudatoolkit
 , dnnl
 , gloo
+, fftw
+, lzma
+, bzip2
+, zlib
+, sndfile
+, kenlm
 , cudaSupport ? false # GPU backend
 , cudnnSupport ? false # GPU backend
-, mklSupport ? false # CPU backend
+, mklSupport ? true # CPU backend # for FL_BUILD_LIB_AUDIO
 , oneDNNSupport ? false # CPU backend
 #, glooSupport ? false # CPU distributed training
 , backendOption ? "CPU" # CUDA, CPU, OPENCL
@@ -97,6 +104,9 @@ stdenv.mkDerivation rec {
     #"-DFL_BUILD_DISTRIBUTED=ON"
     "-DBUILD_SHARED_LIBS=ON"
     "-DFL_BUILD_PKG_SPEECH=ON"
+    "-DFL_BUILD_LIB_AUDIO=ON" # for FL_BUILD_PKG_SPEECH
+    "-DFL_BUILD_LIB_TEXT=ON" # for FL_BUILD_PKG_SPEECH
+    "-DFL_BUILD_LIB_SEQUENCE=ON" # for FL_BUILD_PKG_SPEECH
     "-DFL_BUILD_PKG_RUNTIME=ON"
     "-DFL_BUILD_LIB_COMMON=ON" # for FL_BUILD_PKG_RUNTIME
     #
@@ -109,9 +119,31 @@ stdenv.mkDerivation rec {
     stb # https://github.com/nothings/stb
     arrayfire
     mpi
-    #glog # app: all
+    glog # app: all # for runtime
     #gflags # app: all
     #libsndfile # app: asr (wav2letter)
+    fftw # for FL_BUILD_LIB_AUDIO
+    lzma # for FL_BUILD_LIB_TEXT
+    bzip2 # for FL_BUILD_LIB_TEXT
+    zlib # for FL_BUILD_LIB_TEXT
+    sndfile # for FL_BUILD_PKG_SPEECH
+    kenlm # for what?
+
+/*
+CMake Error at /nix/store/xggal21xgmk747gwhzbkrg8ddgyqwkcd-fftw-double-3.3.10-dev/lib/cmake/fftw3/FFTW3Config.cmake:13 (include):
+  include could not find requested file:
+
+    /nix/store/xggal21xgmk747gwhzbkrg8ddgyqwkcd-fftw-double-3.3.10-dev/lib/cmake/fftw3/FFTW3LibraryDepends.cmake
+Call Stack (most recent call first):
+  cmake/FindFFTW3.cmake:22 (find_package)
+  flashlight/lib/audio/feature/CMakeLists.txt:17 (find_package)
+  flashlight/lib/audio/CMakeLists.txt:16 (include)
+  flashlight/lib/CMakeLists.txt:37 (include)
+  CMakeLists.txt:125 (include)
+
+
+-- FFTW found
+*/
   ] ++ (lib.optionals (backendOption == "GPU" && cudaSupport) [
     cudatoolkit
   ]) ++ (lib.optionals (backendOption == "GPU" && cudnnSupport) [
