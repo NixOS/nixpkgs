@@ -1,20 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , dnspython
+, fetchFromGitHub
 , idna
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "1.3.0";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mflUF2ZKYhCiQEoG+fKI+K266dukuSzG9cyg6gwBcTo=";
+    hash = "sha256-JW6Yrotm3HjUOUtNFxRorkrJKjzuwIXwjpUuMWEyLV0=";
   };
 
   propagatedBuildInputs = [
@@ -45,10 +49,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A robust email syntax and deliverability validation library";
-    homepage    = "https://github.com/JoshData/python-email-validator";
-    changelog   = "https://github.com/JoshData/python-email-validator/releases/tag/v${version}";
-    license     = licenses.cc0;
+    description = "Email syntax and deliverability validation library";
+    homepage = "https://github.com/JoshData/python-email-validator";
+    changelog = "https://github.com/JoshData/python-email-validator/releases/tag/v${version}";
+    license = licenses.cc0;
     maintainers = with maintainers; [ siddharthist ];
   };
 }
