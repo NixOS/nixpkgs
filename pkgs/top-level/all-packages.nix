@@ -2020,13 +2020,11 @@ with pkgs;
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
-  craftos-pc = callPackage ../applications/emulators/craftos-pc { };
+  craftos-pc-unwrapped = callPackage ../applications/emulators/craftos-pc { };
 
-  darcnes = callPackage ../applications/emulators/darcnes { };
-
-  desmume = callPackage ../applications/emulators/desmume { };
-
-  dgen-sdl = callPackage ../applications/emulators/dgen-sdl { };
+  # Wraps without trigerring a rebuild
+  wrapCraftosPC = callPackage ../applications/emulators/craftos-pc/wrapper.nix { };
+  craftos-pc = wrapCraftosPC craftos-pc-unwrapped { };
 
   dlx = callPackage ../applications/emulators/dlx { };
 
