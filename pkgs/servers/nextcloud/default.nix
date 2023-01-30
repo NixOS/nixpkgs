@@ -2,18 +2,17 @@
 
 let
   generic = {
-    version, hash,
+    version, sha256,
     eol ? false, extraVulnerabilities ? []
   }: let
     major = lib.versions.major version;
-    prerelease = builtins.length (lib.versions.splitVersion version) > 3;
   in stdenv.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
     src = fetchurl {
-      url = "https://download.nextcloud.com/server/${if prerelease then "prereleases" else "release"}/${pname}-${version}.tar.bz2";
-      inherit hash;
+      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
+      inherit sha256;
     };
 
     patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
@@ -52,19 +51,14 @@ in {
 
   nextcloud24 = generic {
     version = "24.0.9";
-    hash = "sha256-WAozhMnAmu+46bQVU9IabiAAF5lUnb0lsx3qIR2X3R4=";
+    sha256 = "580a3384c9c09aefb8e9b41553d21a6e20001799549dbd25b31dea211d97dd1e";
   };
 
   nextcloud25 = generic {
     version = "25.0.3";
-    hash = "sha256-SysUI3Nu+SRpCW/iT2HCTK2Ho04HwceoGzhdPqJcAOw=";
+    sha256 = "4b2b1423736ef92469096fe24f61c24cad87a34e07c1c7a81b385d3ea25c00ec";
   };
 
-  nextcloud26 = generic {
-    version = "26.0.0beta1";
-    hash = "sha256-EfSfn0KjQzciHa3VcrDhGC/aZUw/KDjihXs+qVIcYX0=";
-  };
-
-  # tip: get hash with:
-  # nix hash to-sri --type sha256 $(curl https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256 | cut -d' ' -f1)
+  # tip: get the sha with:
+  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }
