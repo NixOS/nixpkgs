@@ -116,5 +116,25 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
+    knownVulnerabilities = [
+      "CVE-2018-16328"
+      "CVE-2018-16329"
+      "CVE-2019-13136"
+      "CVE-2019-17547"
+      "CVE-2020-25663"
+      "CVE-2020-27768"
+      "CVE-2021-3596"
+      "CVE-2021-3596"
+      "CVE-2021-3596"
+      "CVE-2021-3610"
+      "CVE-2021-20244"
+      "CVE-2021-20244"
+      "CVE-2021-20310"
+      "CVE-2021-20311"
+      "CVE-2021-20312"
+      "CVE-2021-20313"
+      "CVE-2022-0284"
+      "CVE-2022-2719"
+    ];
   };
 }
