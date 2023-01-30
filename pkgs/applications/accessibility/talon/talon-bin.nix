@@ -6,6 +6,7 @@
 , cacert
 , requireFile
 , makeWrapper
+, autoPatchelfHook
 , dbus
 , fontconfig
 , freetype
@@ -35,10 +36,20 @@
 , libinput
 , libxml2
 , speechd
+, qt5
+, python39
+, openssl
+, libusb
+, callPackage
 }:
 
 let
   inherit (lib.importJSON ./src.json) version sha256 url mirrorUrls contentLength lastModified;
+  python3 = python39;
+  w2ldecode = callPackage ./w2ldecode.nix { };
+  # TODO try latest version of wav2letter in https://github.com/flashlight/flashlight/tree/main/flashlight/app/asr
+  # flashlight is not in nixpkgs
+  wav2letter = callPackage ./wav2letter_0_2.nix { };
 in
 
 stdenv.mkDerivation rec {
@@ -48,6 +59,7 @@ stdenv.mkDerivation rec {
   # the original url is mutable.
   # when the original url changed, fallback to mirror urls.
   #src = fetchurl { inherit url sha256; }; # this would fail with the original url
+  # TODO move fetcher to separate file
   src = stdenv.mkDerivation {
     name = builtins.baseNameOf url;
     outputHashMode = "flat";
@@ -109,6 +121,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
+    autoPatchelfHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -149,80 +163,97 @@ stdenv.mkDerivation rec {
     libinput
     libxml2
     speechd
+    qt5.qtbase
+    qt5.qtspeech
+    qt5.qtx11extras
+    openssl
+    libusb
+    qt5.qtsvg
+    qt5.qtgamepad
+    python3
+    wav2letter
+    w2ldecode
   ];
 
   dontBuild = true;
   dontConfigure = true;
 
-  installPhase =
-    let
-      libPath = lib.makeLibraryPath buildInputs;
-    in
-    ''
-      runHook preInstall
+  # TODO use python3 from nixpkgs
+  # talon requires libpython3.9.so.1.0 but nixpkgs has python 3.10
+  installPhase =  let libPath = lib.makeLibraryPath buildInputs; in ''
+    runHook preInstall
 
-      # Copy Talon to the Nix store
-      mkdir -p "$out"
-      mkdir "$out/bin"
-      mkdir -p "$out/etc/udev/rules.d"
+    mkdir -p $out/bin
+    mkdir -p $out/lib
+    mkdir -p $out/etc/udev/rules.d
+    mkdir -p $out/share/applications
+    mkdir -p $out/opt/talon
 
-      mkdir -p $out/share/applications
+    cp talon $out/bin
 
-      cat << EOF > $out/share/applications/talon.desktop
-        [Desktop Entry]
-        Categories=Utility;
-        Exec=talon
-        Name=Talon
-        Terminal=false
-        Type=Application
-      EOF
+    # TODO build from https://github.com/mono/SkiaSharp
+    cp lib/libSkiaSharp.so $out/lib
 
-      cp 10-talon.rules $out/etc/udev/rules.d
-      # Remove udev compatibility hack using plugdev for older debian/ubuntu
-      # This breaks NixOS usage of these rules (see https://github.com/NixOS/nixpkgs/issues/76482)
-      substituteInPlace $out/etc/udev/rules.d/10-talon.rules --replace 'GROUP="plugdev",' ""
+    # TODO copy some? dont copy all python
+    rm -rf resources/python
+    cp -r resources $out/opt/talon/resources
 
-      cp -r lib $out/lib
-      cp talon $out/bin
-      cp -r resources $out/bin/resources
+    # based on run.sh
+    wrapProgram $out/bin/talon \
+      --unset QT_AUTO_SCREEN_SCALE_FACTOR \
+      --unset QT_SCALE_FACTOR \
+      --set LC_NUMERIC C \
+      --set QT_PLUGIN_PATH "$out/lib/plugins" \
+      --set LD_LIBRARY_PATH "$out/opt/talon/resources/python/lib/python3.9/site-packages/numpy.libs:$out/lib:$out/opt/talon/resources/python/lib:$out/opt/talon/resources/pypy/lib:${libPath}" \
+      --set QT_DEBUG_PLUGINS 1
 
-      # Tell talon where to find glibc
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        $out/bin/talon
+    if false; then
+    # fix the talon repl
+    patchelf \
+      --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      $out/opt/talon/resources/python/bin/python3
+    # TODO remove?
+    wrapProgram "$out/opt/talon/resources/python/bin/python3" \
+      --set LD_LIBRARY_PATH ${libPath}
+    fi
+    #rm -rf $out/opt/talon/resources/python
+    ln -v -s ${python3} $out/opt/talon/resources/python
 
-      # Replicate 'run.sh' and add library path
-      wrapProgram "$out/bin/talon" \
-        --unset QT_AUTO_SCREEN_SCALE_FACTOR \
-        --unset QT_SCALE_FACTOR \
-        --set   LC_NUMERIC C \
-        --set   QT_PLUGIN_PATH "$out/lib/plugins" \
-        --set   LD_LIBRARY_PATH "$out/bin/resources/python/lib/python3.9/site-packages/numpy.libs:$out/lib:$out/bin/resources/python/lib:$out/bin/resources/pypy/lib:${libPath}" \
-        --set   QT_DEBUG_PLUGINS 1
+    # TODO remove?
+    if false; then
+    (
+      cd $out/lib
+      ln -s ${bzip2.out}/lib/libbz2.so.1 libbz2.so.1.0
+      ln -s ${gdbm}/lib/libgdbm.so libgdbm.so.5
+    )
+    fi
 
-      # This will fix the talon repl
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        $out/bin/resources/python/bin/python3
-      wrapProgram "$out/bin/resources/python/bin/python3" \
-        --set LD_LIBRARY_PATH ${libPath}
+    cat >$out/share/applications/talon.desktop <<EOF
+    [Desktop Entry]
+    Categories=Utility;
+    Exec=talon
+    Name=Talon
+    Terminal=false
+    Type=Application
+    EOF
 
-      # The libbz2 derivation in Nix doesn't provide the right .so filename, so
-      # we fake it by adding a link in the lib/ directory
-      (
-        cd "$out/lib"
-        ln -s ${bzip2.out}/lib/libbz2.so.1 libbz2.so.1.0
-        ln -s ${gdbm}/lib/libgdbm.so libgdbm.so.5
-      )
+    cp 10-talon.rules $out/etc/udev/rules.d
+    # Remove udev compatibility hack using plugdev for older debian/ubuntu
+    # This breaks NixOS usage of these rules (see https://github.com/NixOS/nixpkgs/issues/76482)
+    substituteInPlace $out/etc/udev/rules.d/10-talon.rules --replace 'GROUP="plugdev",' ""
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://talonvoice.com/";
     description = "Voice coding application";
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ milahu ];
     platforms = lib.platforms.linux;
+  };
+
+  passthru = {
+    inherit w2ldecode wav2letter;
   };
 }
