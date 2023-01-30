@@ -8654,6 +8654,8 @@ with pkgs;
 
   kent = callPackage ../applications/science/biology/kent { };
 
+  kenlm = callPackage ../development/libraries/science/math/kenlm { };
+
   keybase = callPackage ../tools/security/keybase {
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
