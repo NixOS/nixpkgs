@@ -15517,7 +15517,7 @@ with pkgs;
   wrapJulia = callPackage ../development/compilers/julia/wrap.nix { };
   julia_16-bin =  wrapJulia (callPackage ../development/compilers/julia/1.6-bin.nix { });
   julia_18-bin = wrapJulia (callPackage ../development/compilers/julia/1.8-bin.nix { });
-  julia_19-bin = wrapJulia callPackage ../development/compilers/julia/1.9-bin.nix { };
+  julia_19-bin = wrapJulia (callPackage ../development/compilers/julia/1.9-bin.nix { });
 
   julia_18 = wrapJulia (callPackage ../development/compilers/julia/1.8.nix { });
   julia_19 = wrapJulia (callPackage ../development/compilers/julia/1.9.nix { });

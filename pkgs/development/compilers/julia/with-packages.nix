@@ -38,17 +38,16 @@ let juliaPackages = lib.recurseIntoAttrs
       # '*' means that if X11 is not available, it will try other
       # backends.
       profile = ''
-          export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-          export GDK_BACKEND="x11,*"
-          '';
+        export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+        export GDK_BACKEND="x11,*"
+      '';
 
       runScript = "${julia}/bin/julia";
 
       passthru = {
         inherit juliaPackages withPackages;
         julia-unwrapped = julia;
-        version = julia.version;
-        meta = julia.meta;
+        inherit (julia) meta version;
       };
 
     };

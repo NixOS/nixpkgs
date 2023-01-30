@@ -2,13 +2,14 @@
 
 ### Installing Julia Packages {#sssec-installing-julia-packages}
 
-Most Julia compilers available in Nixpkgs have a passthru attribute
-called `withPackages`. This function permits creating a collection of
+Julia compilers available in Nixpkgs have a passthru attribute called
+`withPackages`. This function permits creating a collection of
 packages ready for use in Julia as in many other language frameworks.
-For example, to make the package `Plots` available to Julia you can run
+For example, to make the package `Plots` available to Julia you can
+use the following attr
 
-```ShellSession
-$ nix-shell -p 'julia-bin.withPackages (p: with p; [ Plots ])'
+```nix
+julia-bin.withPackages (ps: with ps; [ Plots ])
 ```
 
 The list of Julia packages in Nixpkgs is accessible through the

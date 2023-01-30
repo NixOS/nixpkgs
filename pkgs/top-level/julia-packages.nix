@@ -5,14 +5,11 @@
 , julia
 }:
 
-with lib;
-
-makeScope newScope (self:
+lib.makeScope newScope (self:
   let
     callPackage = self.callPackage;
 
     buildJuliaPackage = callPackage ../development/compilers/julia/build-julia-package.nix {
-      inherit lib stdenv;
       inherit julia;
       inherit computeRequiredJuliaPackages computeJuliaDepotPath computeJuliaLoadPath computeJuliaArtifacts;
     };
@@ -36,7 +33,7 @@ makeScope newScope (self:
     # The content of '../development/julia-modules/default.nix' is generated
     # with 'julia2nix'.
     juliaPkgsList = callPackage ../development/julia-modules {
-      inherit juliaPkgs pkgs lib;
+      inherit juliaPkgs;
       inherit computeRequiredJuliaPackages computeJuliaDepotPath computeJuliaLoadPath computeJuliaArtifacts;
     };
 

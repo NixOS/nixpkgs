@@ -11,13 +11,7 @@
 }:
 
 # Build an individual package
-{ fullPkgName ? "${attrs.pname}-${attrs.version}"
-
-, src
-
-, dontPatch ? false
-, patches ? []
-, patchPhase ? ""
+{ src
 
 , enableParallelBuilding ? true
 # Build-time dependencies for the package, which were compiled for the system compiling this.
@@ -39,7 +33,6 @@
 # requiredJuliaPackages are ALSO installed into Julia.
 , requiredJuliaPackages ? []
 
-, preBuild ? ""
 , meta ? {}
 , passthru ? {}
 
@@ -70,10 +63,10 @@ let
   ];
 
 in stdenv.mkDerivation ({
-  packageName = "${fullPkgName}";
   # The name of the package ends up being
   # "julia-version-package-version"
-  name = "${julia.pname}-${julia.version}-${fullPkgName}";
+  name = "${julia.pname}-${julia.version}-${attrs.pname}-${attrs.version}";
+  inherit (attrs) pname version;
 
   # This states that any package built with the function that this returns
   # will be a julia package. This is used for ensuring other julia
@@ -151,13 +144,13 @@ in stdenv.mkDerivation ({
   dontInstall = true;
 
   # Patch interpreter of bundled binary files
-  postFixup = if isJuliaArtifact  then ''
+  postFixup = lib.optionalString isJuliaArtifact ''
     if [[ -d "$out"/share/julia/artifacts/${attrs.juliaPath}/bin ]]; then
       for fn in $out/share/julia/artifacts/${attrs.juliaPath}/bin/*; do
           isELF $fn && patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} $fn || true
       done;
     fi
-  '' else "";
+  '';
 
   inherit meta;
 } // attrs')
