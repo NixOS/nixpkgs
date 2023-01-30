@@ -1,35 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools-scm
 , getmac
-, requests
-, semver
 , pytestCheckHook
+, pythonOlder
+, requests
 , responses
+, semver
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "vilfo-api-client";
   version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
-    rev = version;
-    sha256 = "sha256-j06Bbv0hWSmrlCv8RfgvfGTyOF+vSX+zZnX3AvG5Hys=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-j06Bbv0hWSmrlCv8RfgvfGTyOF+vSX+zZnX3AvG5Hys=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "get-mac" "getmac"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     getmac
@@ -39,10 +38,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
     responses
   ];
 
-  pythonImportsCheck = [ "vilfo" ];
+  pythonImportsCheck = [
+    "vilfo"
+  ];
 
   meta = with lib; {
     description = "Simple wrapper client for the Vilfo router API";
