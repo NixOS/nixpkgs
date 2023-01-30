@@ -5,29 +5,40 @@
 , pkg-config
 , googletest
 , cereal
+, stb
 , arrayfire
 , oneDNN
 , mkl
 , mpi
+, cudaPackages
 , cudatoolkit
-, opencl ? null # optional opencl backend. opencl requires special hardware
+, glog
+, gflags
+, dnnl
+#, gloo
+, cudaSupport ? false # GPU backend
+, cudnnSupport ? false # GPU backend
+, ncclSupport ? false # GPU distributed training
+, mklSupport ? false # CPU backend
+, oneDNNSupport ? false # CPU backend
+#, glooSupport ? false # CPU distributed training
+, backendOption ? "CPU" # CUDA, CPU, OPENCL
+#, distributedOption ? false
 }:
+
+let
+  distributedOption = ncclSupport; # || glooSupport;
+  # TODO validate backendOption: assert ...
+in
 
 stdenv.mkDerivation rec {
   pname = "flashlight";
-  /*
-  /nix/store/178vvank67pg2ckr5ic5gmdkm3ri72f3-binutils-2.39/bin/ld: ../../../libflashlight.a(ArrayFireTensor.cpp.o): in function
-  `fl::ArrayFireTensor::ArrayFireTensor(af::array&&, unsigned int)':
-  ArrayFireTensor.cpp:(.text+0x1943): undefined reference to `af::array::array(af::array&&)'
-  */
-  #version = "0.4.0";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "flashlight";
     repo = "flashlight";
     rev = "v${version}";
-    #sha256 = "sha256-1RgEBA59SydmwSoNlkaO5lwAwcHlgzI4viSkji8I1U8="; # 0.4.0
     sha256 = "sha256-wyMvpL9M7jv2B3K3NYGkgEM31nAPLdT7O955Xf8V3mI=";
   };
 
@@ -35,17 +46,39 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    ("-DFL_BACKEND=" + backendOption)
+    # distributed training
+    ("-DFL_BUILD_DISTRIBUTED=" + (if distributedOption then "ON" else "OFF"))
+    # offline build
+    "-DFL_BUILD_STANDALONE=OFF"
+  ];
+
   buildInputs = [
     pkg-config
     googletest
     cereal
+    stb # https://github.com/nothings/stb
     arrayfire
-    oneDNN
-    mkl
     mpi
+    #glog # app: all
+    #gflags # app: all
+    #libsndfile # app: asr (wav2letter)
+  ] ++ (lib.optionals (backendOption == "GPU" && cudaSupport) [
     cudatoolkit
-    opencl
-  ];
+  ]) ++ (lib.optionals (backendOption == "GPU" && cudnnSupport) [
+    cudaPackages.cudnn
+  ]) ++ (lib.optionals (backendOption == "GPU" && ncclSupport) [
+    cudaPackages.nccl
+  ]) ++ (lib.optionals (backendOption == "CPU" && mklSupport) [
+    mkl
+  ]) ++ (lib.optionals (backendOption == "CPU") [
+    dnnl
+  ]) ++ (lib.optionals (backendOption == "CPU" && oneDNNSupport) [
+    oneDNN
+  ])/* ++ (lib.optionals (backendOption == "CPU" && glooSupport) [
+    gloo
+  ])*/;
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/213585
   # cmake would replace "/opt" with "/var/empty" in
@@ -55,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/flashlight/wav2letter";
+    homepage = "https://github.com/flashlight/flashlight/tree/0.3";
     description = "A C++ standalone library for machine learning";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ milahu ];
