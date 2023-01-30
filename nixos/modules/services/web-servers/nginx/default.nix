@@ -184,7 +184,6 @@ let
         brotli_window 512k;
         brotli_min_length 256;
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
-        brotli_buffers 32 8k;
       ''}
 
       # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
