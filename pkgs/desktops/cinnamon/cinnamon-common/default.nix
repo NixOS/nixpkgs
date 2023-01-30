@@ -7,7 +7,6 @@
 , cinnamon-session
 , cinnamon-translations
 , cjs
-, clutter
 , fetchFromGitHub
 , gdk-pixbuf
 , gettext
@@ -23,6 +22,7 @@
 , libstartup_notification
 , libXtst
 , libXdamage
+, mesa
 , muffin
 , networkmanager
 , pkg-config
@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     cinnamon-menus
     cjs
-    clutter
     dbus
     gdk-pixbuf
     glib
@@ -100,6 +99,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libXtst
     libXdamage
+    mesa
     muffin
     networkmanager
     polkit
