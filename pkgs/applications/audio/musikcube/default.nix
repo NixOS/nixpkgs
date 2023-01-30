@@ -1,34 +1,33 @@
-{ lib
-, stdenv
+{ asio
 , cmake
-, pkg-config
 , curl
-, asio
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
 , gnutls
 , lame
+, lib
 , libev
 , game-music-emu
 , libmicrohttpd
 , libopenmpt
 , mpg123
 , ncurses
+, pkg-config
 , portaudio
+, stdenv
 , taglib
 # Linux Dependencies
 , alsa-lib
 , pipewireSupport ? true, pipewire
 , pulseaudio
 , sndioSupport ? true, sndio
-
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 # Darwin Dependencies
-, coreaudioSupport ? stdenv.hostPlatform.isDarwin
 , Cocoa
 , SystemConfiguration
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation rec {
@@ -55,13 +54,13 @@ stdenv.mkDerivation rec {
     ffmpeg
     gnutls
     lame
-    portaudio
     libev
     game-music-emu
     libmicrohttpd
     libopenmpt
     mpg123
     ncurses
+    portaudio
     taglib
   ] ++ lib.optionals systemdSupport [
     systemd
@@ -69,9 +68,9 @@ stdenv.mkDerivation rec {
     alsa-lib pulseaudio
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa coreaudioSupport SystemConfiguration
-  ] ++ lib.optionals sndioSupport [
+  ] ++ lib.optional sndioSupport [
     sndio
-  ] ++ lib.optionals pipewireSupport [
+  ] ++ lib.optional pipewireSupport [
     pipewire
   ];
 
