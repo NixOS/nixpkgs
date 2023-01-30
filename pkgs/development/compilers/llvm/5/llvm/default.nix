@@ -5,7 +5,7 @@
 , cmake
 , python3
 , libffi
-, enableGoldPlugin ? (!stdenv.isDarwin && !stdenv.targetPlatform.isWasi)
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libxml2
 , ncurses

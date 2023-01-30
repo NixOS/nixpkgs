@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   ];
 
   passthru = {
-    dev = binutils-unwrapped-all-targets.dev;
+    inherit (binutils-unwrapped-all-targets) dev hasPluginAPI;
   };
 
   meta = with lib; {
