@@ -7574,6 +7574,8 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
+  gitlab-container-registry = callPackage ../applications/version-management/gitlab/gitlab-container-registry { };
+
   gitleaks = callPackage ../tools/security/gitleaks { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
