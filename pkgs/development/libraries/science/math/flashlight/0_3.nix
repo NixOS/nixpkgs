@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DFL_BUILD_PKG_SPEECH=ON"
     "-DFL_BUILD_PKG_RUNTIME=ON"
+    "-DFL_BUILD_LIB_COMMON=ON" # for FL_BUILD_PKG_RUNTIME
     #
   ];
 
