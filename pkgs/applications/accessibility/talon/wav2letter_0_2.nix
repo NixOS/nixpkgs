@@ -4,6 +4,7 @@
 , cmake
 , arrayfire
 , glog
+, flashlight
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     arrayfire
     glog
+    flashlight # TODO? use old version for wav2letter 0.2
   ];
 
   meta = {
