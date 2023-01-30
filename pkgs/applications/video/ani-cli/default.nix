@@ -12,11 +12,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
-  version = "3.4";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "pystardust";
-    repo = "ani-cli";
+    repo = "${pname}";
     rev = "v${version}";
     sha256 = "sha256-Xb7MNL7YKbvyRR5ZppUfCYeYpjNAiJWNOjIFk5fUvpY=";
   };
