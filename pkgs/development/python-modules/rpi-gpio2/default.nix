@@ -1,13 +1,15 @@
-{ lib, libgpiod, buildPythonPackage, fetchurl }:
+{ lib, libgpiod, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "rpi-gpio2";
   version = "0.3.0a3";
 
   # PyPi source does not work for some reason
-  src = fetchurl {
-    url = "https://github.com/underground-software/RPi.GPIO2/archive/refs/tags/v${version}.tar.gz";
-    sha256 = "sha256-AY1AD2Yu66eJUqB4OStZnUeEhmISLVRrTOAcmEHjuOM=";
+  src = fetchFromGitHub {
+    owner = "underground-software";
+    repo = "RPi.GPIO2";
+    rev = "v${version}";
+    hash = "sha256-8HQbEnO+4Ppo2Z3HBulbBcSKJF1bNNQYz8k6aUt65oc=";
   };
 
   propagatedBuildInputs = [
