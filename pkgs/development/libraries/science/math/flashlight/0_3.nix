@@ -1,3 +1,33 @@
+# FIXME? move cmake files from $out/share/flashlight/cmake to $out/lib/cmake
+
+/*
+
+FIXME wav2letter: flashlight must be build in distributed mode for wav2letter++
+
+-> flashlight::Distributed target is missing in cmake files
+not built?
+not installed?
+
+grep -r -w flashlight::
+cmake/InternalUtils.cmake
+  # Write and install targets file
+  install(
+    EXPORT flashlightTargets                     # filename
+    NAMESPACE flashlight::                       # flashlight::Distributed should be here
+    DESTINATION ${FL_INSTALL_CMAKE_DIR}          # FIXME change to $out/lib/cmake
+    COMPONENT flashlight                         # where is "COMPONENT Distributed"?
+    )
+
+grep -r -w COMPONENT
+flashlight/fl/CMakeLists.txt:    COMPONENT examples
+cmake/InternalUtils.cmake:    COMPONENT flashlight
+cmake/InternalUtils.cmake:    COMPONENT flashlight
+cmake/InternalUtils.cmake:    COMPONENT flashlight
+cmake/InternalUtils.cmake:    COMPONENT headers
+CMakeLists.txt:      COMPONENT cereal
+
+*/
+
 { lib
 , stdenv
 , fetchFromGitHub
@@ -48,9 +78,26 @@ stdenv.mkDerivation rec {
     ("-DFL_BUILD_DISTRIBUTED=" + (if distributedOption then "ON" else "OFF"))
     # offline build
     "-DFL_BUILD_STANDALONE=OFF"
+    # TODO remove?
     ("-DUSE_GLOO=" + (if (backendOption == "CPU" && distributedOption) then "ON" else "OFF"))
+    # TODO remove?
     ("-DUSE_NCCL=" + (if (backendOption == "GPU" && distributedOption) then "ON" else "OFF"))
     # -DUSE_STATIC_CUDNN=OFF
+    # TODO remove? this should be set by FL_BACKEND
+    ("-DFL_USE_CPU=" + (if backendOption == "CPU" then "ON" else "OFF"))
+    # https://github.com/flashlight/flashlight/pull/1059
+    "-DFL_USE_ARRAYFIRE=ON"
+    #"-DFL_ARRAYFIRE_USE_CUDA=ON"
+    #"-DFL_USE_ONEDNN=OFF"
+    "-DFL_USE_ONEDNN=ON"
+    "-DFL_BUILD_TESTS=ON"
+    #"-DFL_BUILD_EXAMPLES=OFF"
+    "-DFL_BUILD_EXAMPLES=ON"
+    #"-DArrayFire_DIR=/checkpoint/jacobkahn/usr/share/ArrayFire/cmake"
+    #"-DFL_BUILD_DISTRIBUTED=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DFL_BUILD_PKG_SPEECH=ON"
+    "-DFL_BUILD_PKG_RUNTIME=ON"
     #
   ];
 
