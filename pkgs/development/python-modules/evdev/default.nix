@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7PoBtchPfoxs7TNnrJUoj0PNhO+/1919DNv8DRjIemo=";
+    hash = "sha256-KZ24YozHOyN/wcxX08KUj6oHVuKli2GUtb+B3CCB8eM=";
   };
 
   buildInputs = [
