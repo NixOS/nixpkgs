@@ -5,6 +5,7 @@
 , pytestCheckHook
 , requests
 , urllib3
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -12,11 +13,13 @@ buildPythonPackage rec {
   version = "1.0.8";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "synologydsm-api";
-    rev = "v${version}";
-    sha256 = "sha256-9bh7uLt9+uda6yFCWV6xUh//jFC4DgiS+KtRXQrU3A8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9bh7uLt9+uda6yFCWV6xUh//jFC4DgiS+KtRXQrU3A8=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Synology DSM";
     homepage = "https://github.com/hacf-fr/synologydsm-api";
+    changelog = "https://github.com/hacf-fr/synologydsm-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ uvnikita ];
   };
