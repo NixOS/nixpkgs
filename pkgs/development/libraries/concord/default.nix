@@ -8,13 +8,16 @@ stdenv.mkDerivation rec {
     owner = "Cogmasters";
     repo = "concord";
     rev = "v${version}";
-    hash =
-      "sha256-+nuVyqA/V/J6DWAeIs9Pv90ry3px1gJsF460qvfSEH8=";
+    hash = "sha256-+nuVyqA/V/J6DWAeIs9Pv90ry3px1gJsF460qvfSEH8=";
   };
 
-  buildInputs = [ curl ];
+  buildInputs = [ 
+     curl 
+  ];
 
-  installFlags = [ "PREFIX=${"out"}" ];
+  installFlags = [ 
+     "PREFIX=${"out"}" 
+  ];
 
   meta = with lib; {
     description = "A Discord API wrapper library made in C";
