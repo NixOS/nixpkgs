@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gloo";
-  version = "unstable-2022-10-17";
+  version = "unstable-2023-01-17";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
