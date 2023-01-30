@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, nix-update-script
 , nwjs
 }:
 
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "NO_DIST_INSTALL=1" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An amateur radio companion to WSJT-X or JTDX";
