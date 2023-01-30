@@ -116,11 +116,12 @@ buildNpmPackage rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://be5invis.github.io/Iosevka";
+    homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = ''
-      Slender monospace sans-serif and slab-serif typeface inspired by Pragmata
-      Pro, M+ and PF DIN Mono, designed to be the ideal font for programming.
+      Iosevka is an open-source, sans-serif + slab-serif, monospace +
+      quasi‑proportional typeface family, designed for writing code, using in
+      terminals, and preparing technical documents.
     '';
     license = licenses.ofl;
     platforms = platforms.all;
