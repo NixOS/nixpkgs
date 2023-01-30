@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flash";
-  version = "0.14.2";
+  version = "0.16.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-7sWfMFFjFUdnoMV1O8mzyHAAS8Pvvf1xsY717ZeD7i8=";
+    sha256 = "sha256-Zwb9jUZwkvuBzvACMwKwpAHEMkjLVDkXfDLo4ntG3+k=";
   };
 
-  cargoSha256 = "sha256-yae+hh2jrQn6ryn/WPFZmiZrq7d+osegD/MyBk8OOLg=";
+  cargoSha256 = "sha256-giGSTMtGTIw4ZZglHqbW2sGKO/D/3TVQR5olTgitBjE=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];

@@ -16,14 +16,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "pekwm";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "pekdon";
     repo = "pekwm";
-    rev = "release-${version}";
+    rev = "release-${self.version}";
     hash= "sha256-hA+TBAs9NMcc5DKIkzyUHWck3Xht+yeCO54xJ6oXXuQ=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libpng
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pekwm.se/";
     description = "A lightweight window manager";
     longDescription = ''
@@ -65,8 +65,9 @@ stdenv.mkDerivation rec {
         they should when starting applications.
       - Chainable Keygrabber, usability for everyone.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://raw.githubusercontent.com/pekwm/pekwm/release-${self.version}/NEWS.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
