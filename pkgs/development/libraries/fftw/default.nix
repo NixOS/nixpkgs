@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
   };
 
-  outputs = [ "out" "dev" "man" ]
-    ++ optional withDoc "info"; # it's dev-doc only
+  outputs = [ "out" "dev" "man" ];
   outputBin = "dev"; # fftw-wisdom
 
   nativeBuildInputs = [
