@@ -1,20 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "material-icons";
   version = "3.0.1";
-in fetchFromGitHub {
-  name = "material-icons-${version}";
 
-  owner  = "google";
-  repo   = "material-design-icons";
-  rev    = version;
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "material-design-icons";
+    rev = version;
+    hash = "sha256-4FphNJCsaLWzlVR4TmXnDBid0EVj39fkeoh5j1leBZ8=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp iconfont/*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
-  sha256 = "1syy6v941lb8nqxhdf7mfx28v05lwrfnq53r3c1ym13x05l9kchp";
 
   meta = with lib; {
     description = "System status icons by Google, featuring material design";

@@ -1,21 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation {
+  pname = "raleway";
   version = "2016-08-30";
-in fetchFromGitHub {
-  name = "raleway-${version}";
 
-  owner = "impallari";
-  repo = "Raleway";
-  rev = "fa27f47b087fc093c6ae11cfdeb3999ac602929a";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Raleway";
+    rev = "fa27f47b087fc093c6ae11cfdeb3999ac602929a";
+    hash = "sha256-mcIpE+iqG6M43I5TT95oV+5kNgphunmyxC+Jaj0JysQ=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     find . -name "*-Original.otf" -exec install -Dt $out/share/fonts/opentype {} \;
-    cp *.txt *.md -d $out
-  '';
 
-  sha256 = "16jr7drqg2wib2q48ajlsa7rh1jxjibl1wd4rjndi49vfl463j60";
+    runHook postInstall
+  '';
 
   meta = {
     description = "Raleway is an elegant sans-serif typeface family";
