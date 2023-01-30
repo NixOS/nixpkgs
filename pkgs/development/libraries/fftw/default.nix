@@ -1,6 +1,7 @@
 { fetchurl
 , stdenv
 , lib
+, cmake
 , gfortran
 , perl
 , llvmPackages
@@ -34,7 +35,11 @@ stdenv.mkDerivation rec {
     ++ optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [
+    gfortran
+    # build with cmake to generate FFTW3LibraryDepends.cmake https://github.com/FFTW/fftw3/issues/130
+    cmake
+  ];
 
   buildInputs = optionals stdenv.cc.isClang [
     # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
@@ -57,30 +62,6 @@ stdenv.mkDerivation rec {
     ++ optional enableMpi "--enable-mpi"
     # doc generation causes Fortran wrapper generation which hard-codes gcc
     ++ optional (!withDoc) "--disable-doc";
-
-  # fix $out/lib/cmake/fftw3/FFTW3Config.cmake
-  # include ("${CMAKE_CURRENT_LIST_DIR}/FFTW3LibraryDepends.cmake")
-/*
-FIXME this is probably wrong, FFTW3LibraryDepends.cmake should have some content
-CMake Error at flashlight/lib/audio/feature/CMakeLists.txt:72 (target_link_libraries):
-  Target "fl_lib_audio" links to:
-
-    FFTW3::fftw3
-
-  but the target was not found.  Possible reasons include:
-
-    * There is a typo in the target name.
-    * A find_package call is missing for an IMPORTED target.
-    * An ALIAS target is missing.
-
-Call Stack (most recent call first):
-  flashlight/lib/audio/CMakeLists.txt:16 (include)
-  flashlight/lib/CMakeLists.txt:37 (include)
-  CMakeLists.txt:125 (include)
-*/
-  postInstall = ''
-    touch $out/lib/cmake/fftw3/FFTW3LibraryDepends.cmake
-  '';
 
   enableParallelBuilding = true;
 
