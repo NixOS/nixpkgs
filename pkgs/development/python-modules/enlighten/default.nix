@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "enlighten";
-  version = "1.11.1";
+  version = "1.11.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V6vZij0/g0hO+fkfklX00jyLMJfs22R8e5sASdYAt/g=";
+    hash = "sha256-koSGHe5aJy4OGjdYzT87cYCxvRdUh12naHbyp/Rsy2E=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Enlighten Progress Bar for Python Console Apps";
     homepage = "https://github.com/Rockhopper-Technologies/enlighten";
+    changelog = "https://github.com/Rockhopper-Technologies/enlighten/releases/tag/${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ veprbl ];
   };
