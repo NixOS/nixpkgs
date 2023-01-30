@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     mpi
   ];
 
+  cmakeFlags = [
+    # MPI is needed for flashlight
+    "-DUSE_MPI=ON"
+  ];
+
   meta = {
     homepage = "https://github.com/facebookincubator/gloo";
     description = "Collective communications library with various primitives for multi-machine training";
