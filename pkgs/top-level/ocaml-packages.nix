@@ -1477,7 +1477,9 @@ let
 
     trie = callPackage ../development/ocaml-modules/trie { };
 
-    tsdl = callPackage ../development/ocaml-modules/tsdl { };
+    tsdl = callPackage ../development/ocaml-modules/tsdl {
+      inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback;
+    };
 
     tsdl-image = callPackage ../development/ocaml-modules/tsdl-image { };
 
