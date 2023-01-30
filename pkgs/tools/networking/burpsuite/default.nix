@@ -1,4 +1,4 @@
-{ lib, fetchurl, jdk, buildFHSUserEnv }:
+{ lib, fetchurl, jdk, buildFHSUserEnv, unzip, makeDesktopItem }:
 let
   version = "2022.12.7";
 
@@ -11,9 +11,19 @@ let
     sha256 = "2e354c2aadc58267bc282dde462d20b3aca7108077eb141d49f89a16172763cf";
   };
 
+  description = "An integrated platform for performing security testing of web applications";
+  desktopItem = makeDesktopItem rec {
+    name = "burpsuite";
+    exec = name;
+    icon = name;
+    desktopName = "Burp Suite Community Edition";
+    comment = description;
+    categories = [ "Development" "Security" "System" ];
+  };
+
 in
 buildFHSUserEnv {
-  name = "burpsuite";
+  name = "burpsuite-${version}";
 
   runScript = "${jdk}/bin/java -jar ${src}";
 
@@ -42,8 +52,14 @@ buildFHSUserEnv {
     xorg.libXrandr
   ];
 
+  extraInstallCommands = ''
+    mkdir -p "$out/share/pixmaps"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64community.png > "$out/share/pixmaps/burpsuite.png"
+    cp -r ${desktopItem}/share/applications $out/share
+  '';
+
   meta = with lib; {
-    description = "An integrated platform for performing security testing of web applications";
+    inherit description;
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
       Its various tools work seamlessly together to support the entire testing process, from
