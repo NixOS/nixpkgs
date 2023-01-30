@@ -1,3 +1,16 @@
+/*
+FIXME
+
+find_package(flashlight REQUIRED)
+if (flashlight_FOUND)
+  message(STATUS "flashlight found (include: ${FLASHLIGHT_INCLUDE_DIRS} lib: flashlight::flashlight )")
+  if (NOT TARGET flashlight::Distributed)
+    message(FATAL_ERROR "flashlight must be build in distributed mode for wav2letter++")
+
+-> try a newer version of wav2letter?
+
+*/
+
 { lib
 , stdenv
 , fetchFromGitHub
