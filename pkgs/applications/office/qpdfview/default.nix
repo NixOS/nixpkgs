@@ -12,19 +12,21 @@
 , file
 , ghostscript
 }:
+
 mkDerivation rec {
   pname = "qpdfview";
-  version = "0.4.18";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
-    sha256 = "0v1rl126hvblajnph2hkansgi0s8vjdc5yxrm4y3faa0lxzjwr6c";
+    url = "https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-0.5.tar.gz";
+    hash = "sha256-RO/EQKRhy911eps5bxRh7novQ2ToHfVb0CIfkQIZvpk=";
   };
 
-  # apply upstream fix for qt5.15 https://bazaar.launchpad.net/~adamreichold/qpdfview/trunk/revision/2104
-  patches = [ ./qpdfview-qt515-compat.patch ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [
     qtbase
     qtsvg
@@ -35,6 +37,7 @@ mkDerivation rec {
     file
     ghostscript
   ];
+
   preConfigure = ''
     qmakeFlags+=(*.pro)
   '';
