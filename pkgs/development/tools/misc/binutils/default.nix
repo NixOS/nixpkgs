@@ -243,8 +243,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit targetPrefix;
     hasGold = enableGold;
     isGNU = true;
-    # Having --enable-plugins is not enough, system has to support dlopen()
-    hasPluginAPI = enableGold && !stdenv.isDarwin && !stdenv.targetPlatform.isWasi;
+    # Having --enable-plugins is not enough, system has to support
+    # dlopen() or equivalent. See config/plugins.m4 and configure.ac
+    # (around PLUGINS) for cases that support or not support plugins.
+    hasPluginAPI = enableGold && !stdenv.isDarwin;
   };
 
   meta = with lib; {
