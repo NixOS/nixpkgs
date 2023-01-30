@@ -10,15 +10,17 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.10.3";
+  version = "0.10.4";
 
   disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = version;
-    hash = "sha256-j7c1CtZ796EYMsS11kd8YED7pPolskgT+611uvePTsA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DR4D12J/BKFpF4hMHfitNmwDZ7UEo+pI0tvEa1T5GTY=";
   };
 
   postPatch = ''

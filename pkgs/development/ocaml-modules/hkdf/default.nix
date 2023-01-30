@@ -4,14 +4,13 @@ buildDunePackage rec {
   pname = "hkdf";
   version = "1.0.4";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/hannesm/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0nzx6vzbc1hh6vx1ly8df4b16lgps6zjpp9mjycsnnn49bddc9mr";
+    hash = "sha256-uSbW2krEWquZlzXdK7/R91ETFnENeRr6NhAGtv42/Vs=";
   };
-
-  useDune2 = true;
 
   propagatedBuildInputs = [ cstruct mirage-crypto ];
   nativeCheckInputs = [ alcotest ];

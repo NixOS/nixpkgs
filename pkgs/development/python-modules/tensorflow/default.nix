@@ -6,7 +6,7 @@
 , numpy, tensorboard, absl-py
 , packaging, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator-bin
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
@@ -98,7 +98,7 @@ let
       six
       tblib
       tensorboard
-      tensorflow-estimator
+      tensorflow-estimator-bin
       termcolor
       typing-extensions
       wheel
@@ -479,7 +479,7 @@ in buildPythonPackage {
     packaging
     protobuf-python
     six
-    tensorflow-estimator
+    tensorflow-estimator-bin
     termcolor
     typing-extensions
     wrapt

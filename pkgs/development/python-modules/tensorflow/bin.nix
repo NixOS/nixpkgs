@@ -18,7 +18,7 @@
 , wheel
 , opt-einsum
 , backports_weakref
-, tensorflow-estimator
+, tensorflow-estimator-bin
 , tensorboard
 , cudaSupport ? false
 , cudaPackages ? {}
@@ -76,7 +76,7 @@ in buildPythonPackage {
     opt-einsum
     google-pasta
     wrapt
-    tensorflow-estimator
+    tensorflow-estimator-bin
     tensorboard
     keras-applications
     keras-preprocessing

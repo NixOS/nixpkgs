@@ -62,7 +62,7 @@ let
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
 
-          ls -d $PWD/bin/lldb/linux/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so

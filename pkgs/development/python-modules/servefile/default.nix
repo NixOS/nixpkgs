@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "servefile";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "sebageek";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/ZEMZIH/ImuZ2gh5bwB0FlaWnG/ELxfBGEJ2SuNSEb8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-hIqXwhmvstCslsCO973oK5FF2c8gZJ0wNUI/z8W+OjU=";
   };
 
   propagatedBuildInputs = [ pyopenssl ];
