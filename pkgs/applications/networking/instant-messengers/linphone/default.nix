@@ -33,7 +33,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "4.4.10";
+  version = "5.0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-V3vycO0kV6RTFZWi6uiCFSNfLq/09dBfyLk/5zw3kRA=";
+    hash = "sha256-e/0yGHtOHMgPhaF5xELodKS9/v/mbnT3ZpE12lXAocU=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ mkDerivation rec {
   postPatch = ''
     echo "project(linphoneqt VERSION ${version})" >linphone-app/linphoneqt_version.cmake
     substituteInPlace linphone-app/src/app/AppController.cpp \
-      --replace "LINPHONE_QT_GIT_VERSION" "\"${version}\""
+      --replace "APPLICATION_SEMVER" "\"${version}\""
   '';
 
   # TODO: After linphone-desktop and liblinphone split into separate packages,
