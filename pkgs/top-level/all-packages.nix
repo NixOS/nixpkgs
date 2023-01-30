@@ -15649,7 +15649,7 @@ with pkgs;
   cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
   cargo-lock = callPackage ../development/tools/rust/cargo-lock { };
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
   cargo-pgx = callPackage ../development/tools/rust/cargo-pgx {
     inherit (darwin.apple_sdk.frameworks) Security;
