@@ -704,6 +704,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.nginx.recommendedProxySettings</literal> now
+          removes the <literal>Connection</literal> header preventing
+          clients from closing backend connections.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
