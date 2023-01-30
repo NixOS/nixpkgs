@@ -9,7 +9,7 @@
 , oneDNN
 , mkl
 , mpi
-, cudaPackages # optional cuda backend
+, cudatoolkit
 , opencl ? null # optional opencl backend. opencl requires special hardware
 }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     oneDNN
     mkl
     mpi
-    cudaPackages.cuda_nvcc
+    cudatoolkit
     opencl
   ];
 
