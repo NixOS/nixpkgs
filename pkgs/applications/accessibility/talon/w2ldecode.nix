@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
   pname = "w2ldecode";
   version = "unstable-2022-11-29";
 
+  # kenlm = https://github.com/kpu/kenlm
   src = fetchFromGitHub {
     owner = "talonvoice";
     repo = "w2ldecode";
