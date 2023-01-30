@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     ("-DFL_BUILD_DISTRIBUTED=" + (if distributedOption then "ON" else "OFF"))
     # offline build
     "-DFL_BUILD_STANDALONE=OFF"
+    ("-DUSE_GLOO=" + (if (backendOption == "CPU" && distributedOption) then "ON" else "OFF"))
+    ("-DUSE_NCCL=" + (if (backendOption == "GPU" && distributedOption) then "ON" else "OFF"))
+    # -DUSE_STATIC_CUDNN=OFF
+    #
   ];
 
   buildInputs = [
