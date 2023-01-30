@@ -57,9 +57,7 @@ fi
 
 tempfile=$(mktemp --suffix=-$file_archive)
 echo "fetching file from $url to $tempfile ..."
-# TODO restore
-#curl -L $url -o $tempfile
-echo foo >$tempfile # test
+curl -L $url -o $tempfile
 sha256Actual=$(sha256sum $tempfile)
 sha256Actual=${sha256Actual:0:64}
 rm $tempfile
