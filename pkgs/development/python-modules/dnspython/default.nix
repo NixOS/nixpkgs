@@ -10,13 +10,15 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.2.1";
+  version = "2.3.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    sha256 = "0gk00m8zxjghxnzafhars51k5ahd6wfhf123nrc1j5gzlsj6jx8g";
+    hash = "sha256-Ik4ysD60a+cOEu9tZOC+Ejpk5iGrTAgi/21FDVKlQLk=";
   };
 
   nativeCheckInputs = [
@@ -44,11 +46,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [ "dns" ];
+  pythonImportsCheck = [
+    "dns"
+  ];
 
   meta = with lib; {
     description = "A DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
+    changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
     license = with licenses; [ isc ];
     maintainers = with maintainers; [ gador ];
   };
