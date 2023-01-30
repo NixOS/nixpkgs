@@ -766,15 +766,6 @@
           been fixed to allow more than one plugin in the path.
         </para>
       </listitem>
-      <listitem>
-        <para>
-          A new option was added to the virtualisation module that
-          enables specifying explicitly named network interfaces in QEMU
-          VMs. The existing <literal>virtualisation.vlans</literal> is
-          still supported for cases where the name of the network
-          interface is irrelevant.
-        </para>
-      </listitem>
     </itemizedlist>
   </section>
 </section>
