@@ -6635,6 +6635,8 @@ with pkgs;
 
   drone-runner-docker = callPackage ../development/tools/continuous-integration/drone-runner-docker { };
 
+  drone-runner-ssh = callPackage ../development/tools/continuous-integration/drone-runner-ssh { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
@@ -18051,6 +18053,8 @@ with pkgs;
   litefs = callPackage ../development/tools/database/litefs {};
 
   litestream = callPackage ../development/tools/database/litestream {};
+
+  ls-lint = callPackage ../development/tools/ls-lint { };
 
   lsof = callPackage ../development/tools/misc/lsof { };
 
@@ -32838,6 +32842,8 @@ with pkgs;
 
   spotify = callPackage ../applications/audio/spotify { };
 
+  spotify-player = callPackage ../applications/audio/spotify-player { };
+
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
   psst = callPackage ../applications/audio/psst { };
@@ -37509,7 +37515,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Security SystemConfiguration;
   };
 
-  lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+  lilypond = callPackage ../misc/lilypond { };
 
   lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
 

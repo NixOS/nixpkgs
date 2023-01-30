@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Virtual Pipe Organ Software";
-    homepage = "https://sourceforge.net/projects/ourorgan";
-    license = lib.licenses.gpl2;
+    homepage = "https://github.com/GrandOrgue/grandorgue";
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.puzzlewolf ];
   };
