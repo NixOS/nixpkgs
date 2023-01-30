@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     oneDNN
     mkl
     mpi
-    cudaPackages.cudnn
+    cudaPackages.cuda_nvcc
     opencl
   ];
 
