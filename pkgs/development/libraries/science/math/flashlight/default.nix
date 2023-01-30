@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1RgEBA59SydmwSoNlkaO5lwAwcHlgzI4viSkji8I1U8=";
   };
 
-  postPatch = ''
-    cp ${./flashlight_fl_tensor_backend_jit_CMakeLists.txt} flashlight/fl/tensor/backend/jit/CMakeLists.txt
-  '';
-
   nativeBuildInputs = [
     cmake
   ];
