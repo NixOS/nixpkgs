@@ -48,7 +48,8 @@
   # '';
 , extraParameters ? null
   # Custom font set name. Required if any custom settings above.
-, set ? null }:
+, set ? null
+}:
 
 assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
@@ -69,28 +70,31 @@ buildNpmPackage rec {
   nativeBuildInputs = [ nodejs remarshal ttfautohint-nox ];
 
   buildPlan =
-    if builtins.isAttrs privateBuildPlan
-      then builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
-    else privateBuildPlan;
+    if builtins.isAttrs privateBuildPlan then
+      builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
+    else
+      privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [
-    "extraParameters"
-  ] ++ lib.optionals (! (builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)) [
-    "buildPlan"
-  ];
+  passAsFile = [ "extraParameters" ] ++ lib.optionals
+    (
+      !(builtins.isString privateBuildPlan
+        && lib.hasPrefix builtins.storeDir privateBuildPlan)
+    ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
       remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
     ''}
-    ${lib.optionalString (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
-      cp "$buildPlanPath" private-build-plans.toml
-    ''}
-    ${lib.optionalString (builtins.isString privateBuildPlan && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
-      cp "$buildPlan" private-build-plans.toml
-    ''}
+    ${lib.optionalString (builtins.isString privateBuildPlan
+      && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+        cp "$buildPlanPath" private-build-plans.toml
+      ''}
+    ${lib.optionalString (builtins.isString privateBuildPlan
+      && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+        cp "$buildPlan" private-build-plans.toml
+      ''}
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> params/parameters.toml
       cat "$extraParametersPath" >> params/parameters.toml
