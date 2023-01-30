@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pNU5isAZh9cPgaWZSSvWmSqukKV3TFGGntOKN6y1zIo=";
+    sha256 = "sha256-EINi0pZo0lz3sMrcY7FaTBz8DbxxrcFRszxf597Ok5o=";
   };
 
   strictDeps = true;
