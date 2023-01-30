@@ -32824,6 +32824,8 @@ with pkgs;
 
   spotify = callPackage ../applications/audio/spotify { };
 
+  spotify-player = callPackage ../applications/audio/spotify-player { };
+
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
   psst = callPackage ../applications/audio/psst { };
