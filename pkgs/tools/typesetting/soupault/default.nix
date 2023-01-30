@@ -5,24 +5,31 @@
 , testers
 }:
 
-ocamlPackages.buildDunePackage rec {
+let
   pname = "soupault";
-  version = "4.3.1";
 
-  minimalOCamlVersion = "4.08";
+  version = "4.4.0";
+in
+ocamlPackages.buildDunePackage {
+  inherit pname version;
+
+  minimalOCamlVersion = "4.13";
+
+  duneVersion = "3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P8PGSJ7TOlnMoTcE5ZXqc7pJe4l+zRhBh0A/2iIJLQI=";
+    sha256 = "sha256-M4gaPxBxQ1Bk2C3BwvobYHyaWKIZgQ6buZ6S5wBlvPg=";
   };
 
   buildInputs = with ocamlPackages; [
     base64
     camomile
     containers
+    digestif
     ezjsonm
     fileutils
     fmt
