@@ -7140,7 +7140,7 @@ with pkgs;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
-  flashlight = callPackage ../development/libraries/science/math/flashlight { };
+  flashlight_0_3 = callPackage ../development/libraries/science/math/flashlight/0_3.nix { };
 
   flatpak = callPackage ../development/libraries/flatpak { };
 
