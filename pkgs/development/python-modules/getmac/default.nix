@@ -5,6 +5,7 @@
 , pytest-benchmark
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -12,11 +13,13 @@ buildPythonPackage rec {
   version = "0.9.1";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-U04mtg7DCC78X5Fd0wGaHrf8XkUpDLi4+ctKCyR4dKg=";
+    hash = "sha256-U04mtg7DCC78X5Fd0wGaHrf8XkUpDLi4+ctKCyR4dKg=";
   };
 
   nativeCheckInputs = [
@@ -43,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
+    changelog = "https://github.com/GhostofGoes/getmac/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
   };
