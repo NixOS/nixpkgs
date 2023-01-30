@@ -1,46 +1,35 @@
-{ lib, fetchurl, jdk, buildFHSUserEnv }:
-let
-  version = "2022.12.7";
+{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
+
+stdenv.mkDerivation rec {
+  pname = "burpsuite";
+  version = "2021.12";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
+      "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
     ];
-    sha256 = "2e354c2aadc58267bc282dde462d20b3aca7108077eb141d49f89a16172763cf";
+    sha256 = "sha256-BLX/SgHctXciOZoA6Eh4zuDJoxNSZgvoj2Teg1fV80g=";
   };
 
-in
-buildFHSUserEnv {
-  name = "burpsuite";
+  dontUnpack = true;
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
 
-  runScript = "${jdk}/bin/java -jar ${src}";
+    mkdir -p $out/bin
+    echo '#!${runtimeShell}
+    eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
+    mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
+    ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
+    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
+    chmod +x $out/bin/burpsuite
 
-  targetPkgs = pkgs: with pkgs; [
-    alsa-lib
-    at-spi2-core
-    cairo
-    cups
-    dbus
-    expat
-    glib
-    gtk3
-    libdrm
-    libudev0-shim
-    libxkbcommon
-    mesa_drivers
-    nspr
-    nss
-    pango
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-  ];
+    runHook postInstall
+  '';
+
+  preferLocalBuild = true;
 
   meta = with lib; {
     description = "An integrated platform for performing security testing of web applications";
@@ -54,8 +43,8 @@ buildFHSUserEnv {
     downloadPage = "https://portswigger.net/burp/freedownload";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = jdk.meta.platforms;
-    hydraPlatforms = [ ];
+    platforms = jdk11.meta.platforms;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ bennofs ];
   };
 }
