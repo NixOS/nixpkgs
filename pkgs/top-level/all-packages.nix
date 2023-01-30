@@ -7715,6 +7715,8 @@ with pkgs;
 
   google-guest-configs = callPackage ../tools/virtualization/google-guest-configs { };
 
+  googletest = callPackage ../development/libraries/googletest { };
+
   gdown = with python3Packages; toPythonApplication gdown;
 
   gopro = callPackage ../tools/video/gopro { };
