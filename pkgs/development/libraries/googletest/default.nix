@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  # remove bad prefix of INTERFACE_INCLUDE_DIRECTORIES
+  # based on pkgs/development/libraries/oneDNN/default.nix
+  postInstall = ''
+    substituteInPlace $out/lib/cmake/GTest/GTestTargets.cmake \
+      --replace "\''${_IMPORT_PREFIX}/" ""
+  '';
+
   meta = {
     homepage = "https://github.com/google/googletest";
     description = "Google Testing and Mocking Framework";
