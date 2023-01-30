@@ -4,7 +4,7 @@
 , cmake
 , arrayfire
 , glog
-, flashlight
+, flashlight_0_3
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     arrayfire
     glog
-    flashlight # TODO? use old version for wav2letter 0.2
+    # Use Flashlight's 0.3 branch
+    # https://github.com/flashlight/wav2letter/blob/93bffaef9caa9c8711ff383c1fce338e5cb5a506/CMakeLists.txt#L12
+    flashlight_0_3
   ];
 
   meta = {
