@@ -13,7 +13,7 @@
 , cudaPackages
 , cudatoolkit
 , dnnl
-#, gloo
+, gloo
 , cudaSupport ? false # GPU backend
 , cudnnSupport ? false # GPU backend
 , mklSupport ? false # CPU backend
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
     dnnl
   ]) ++ (lib.optionals (backendOption == "CPU" && oneDNNSupport) [
     oneDNN
-  ])/* TODO? ++ (lib.optionals (backendOption == "CPU" && distributedOption) [
+  ]) ++ (lib.optionals (backendOption == "CPU" && distributedOption) [
     gloo
-  ])*/;
+  ]);
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/213585
   # cmake would replace "/opt" with "/var/empty" in
