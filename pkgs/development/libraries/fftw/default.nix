@@ -60,6 +60,24 @@ stdenv.mkDerivation rec {
 
   # fix $out/lib/cmake/fftw3/FFTW3Config.cmake
   # include ("${CMAKE_CURRENT_LIST_DIR}/FFTW3LibraryDepends.cmake")
+/*
+FIXME this is probably wrong, FFTW3LibraryDepends.cmake should have some content
+CMake Error at flashlight/lib/audio/feature/CMakeLists.txt:72 (target_link_libraries):
+  Target "fl_lib_audio" links to:
+
+    FFTW3::fftw3
+
+  but the target was not found.  Possible reasons include:
+
+    * There is a typo in the target name.
+    * A find_package call is missing for an IMPORTED target.
+    * An ALIAS target is missing.
+
+Call Stack (most recent call first):
+  flashlight/lib/audio/CMakeLists.txt:16 (include)
+  flashlight/lib/CMakeLists.txt:37 (include)
+  CMakeLists.txt:125 (include)
+*/
   postInstall = ''
     touch $out/lib/cmake/fftw3/FFTW3LibraryDepends.cmake
   '';
