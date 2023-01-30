@@ -2,13 +2,14 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, pkg-config
 , googletest
 , cereal
 , arrayfire
 , oneDNN
 , mkl
 , mpi
-, pkg-config
+, opencl
 }:
 
 stdenv.mkDerivation rec {
@@ -27,13 +28,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    pkg-config
     googletest
     cereal
     arrayfire
     oneDNN
     mkl
     mpi
-    pkg-config
+    opencl
   ];
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/213585
