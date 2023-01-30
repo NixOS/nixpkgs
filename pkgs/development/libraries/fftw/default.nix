@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
     # doc generation causes Fortran wrapper generation which hard-codes gcc
     ++ optional (!withDoc) "--disable-doc";
 
+  # fix $dev/lib/cmake/fftw3/FFTW3Config.cmake
+  # include ("${CMAKE_CURRENT_LIST_DIR}/FFTW3LibraryDepends.cmake")
+  postInstall = ''
+    touch $dev/lib/cmake/fftw3/FFTW3LibraryDepends.cmake
+  '';
+
   enableParallelBuilding = true;
 
   nativeCheckInputs = [ perl ];
