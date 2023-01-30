@@ -9,8 +9,8 @@ let
       options = [
         "fallback-path=${pkgs.runCommand "fallback-path" {} ''
           mkdir -p $out
-          ln -s ${pkgs.coreutils}/bin/env $out/env
-          ln -s ${config.system.build.binsh}/bin/sh $out/sh
+          ln -s ${config.environment.usrbinenv} $out/env
+          ln -s ${config.environment.binsh} $out/sh
         ''}"
       ];
     };
