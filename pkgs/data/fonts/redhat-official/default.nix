@@ -1,23 +1,26 @@
-{ lib, fetchFromGitHub }:
-let
+{ lib, stdenvNoCC, fetchFromGitHub }:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "redhat-official";
   version = "4.0.2";
-in
-fetchFromGitHub {
-  name = "redhat-official-${version}";
 
-  owner = "RedHatOfficial";
-  repo = "RedHatFont";
-  rev = version;
+  src = fetchFromGitHub {
+    owner = "RedHatOfficial";
+    repo = "RedHatFont";
+    rev = version;
+    hash = "sha256-p5RS/57CDApwnRDwMi0gIEJYTDAtibIyyU2w/pnbHJI=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     for kind in mono proportional; do
       install -m444 -Dt $out/share/fonts/opentype fonts/$kind/static/otf/*.otf
       install -m444 -Dt $out/share/fonts/truetype fonts/$kind/static/ttf/*.ttf
     done
-  '';
 
-  sha256 = "sha256-904uQtbAdLx9MJudLk/vVk/+uK0nsPbWbAeXrWxTHm8=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/RedHatOfficial/RedHatFont";

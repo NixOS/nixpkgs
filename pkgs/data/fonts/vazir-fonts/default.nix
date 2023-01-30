@@ -1,20 +1,25 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "vazir-fonts";
   version = "32.0.0";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "rastikerdar";
-  repo = "vazir-font";
-  rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "vazir-font";
+    rev = "v${version}";
+    hash = "sha256-lkjlSW3Sfr1bJ9/IOsZl9yOVh9mYKhoV5XcLkqcQ71g=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
+
+    runHook postInstall
   '';
-  sha256 = "sha256-Uy8hgBtCcTLwXu9FkLN1WavUfP74Jf53ChxVGS3UBVM=";
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/vazir-font";

@@ -127,11 +127,10 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
-  ] ++ lib.optionals stdenv.isLinux [
-    util-linux
   ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ [
+  ] ++ lib.optionals stdenv.isLinux [
+    util-linux
     mtdev
     lksctp-tools
     libselinux
