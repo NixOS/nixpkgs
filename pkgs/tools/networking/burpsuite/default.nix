@@ -11,6 +11,7 @@ let
     sha256 = "2e354c2aadc58267bc282dde462d20b3aca7108077eb141d49f89a16172763cf";
   };
 
+  name = "burpsuite-${version}";
   description = "An integrated platform for performing security testing of web applications";
   desktopItem = makeDesktopItem rec {
     name = "burpsuite";
@@ -23,7 +24,7 @@ let
 
 in
 buildFHSUserEnv {
-  name = "burpsuite-${version}";
+  inherit name;
 
   runScript = "${jdk}/bin/java -jar ${src}";
 
@@ -53,6 +54,7 @@ buildFHSUserEnv {
   ];
 
   extraInstallCommands = ''
+    mv "$out/bin/${name}" "$out/bin/burpsuite" # name includes the version number
     mkdir -p "$out/share/pixmaps"
     ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64community.png > "$out/share/pixmaps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
