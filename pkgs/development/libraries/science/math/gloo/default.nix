@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "gloo";
-    # repo has no tags. use latest commit with passing tests
-    rev = "a01540ec3dabd085ad2579aa2b7a004406e2793b";
-    sha256 = "sha256-ks4tac6JuV2cEhihayE2zm0Pq6slrzW+7CHDSg3BDOc=";
+    # repo has no tags. use latest commit
+    rev = "10909297fedab0a680799211a299203e53515032";
+    sha256 = "sha256-jDn6AkvkkmlrdFKHxG+ObHnGZNp8x2+CatZJlMmvOuI=";
   };
 
   nativeBuildInputs = [
