@@ -9,8 +9,8 @@
 , oneDNN
 , mkl
 , mpi
-, opencl-clang
 , cudaPackages
+, opencl ? null # opencl requires special hardware
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     oneDNN
     mkl
     mpi
-    opencl-clang
     cudaPackages.cudnn
+    opencl
   ];
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/213585
