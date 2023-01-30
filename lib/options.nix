@@ -114,7 +114,7 @@ rec {
 
      You can omit the default path if the name of the option is also attribute path in nixpkgs.
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
+     Type: mkPackageOption :: pkgs -> string -> { default :: [string]; example :: null | string | [string]; } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -201,7 +201,7 @@ rec {
 
   /* Extracts values of all "value" keys of the given list.
 
-     Type: getValues :: [ { value :: a } ] -> [a]
+     Type: getValues :: [ { value :: a; } ] -> [a]
 
      Example:
        getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
@@ -211,7 +211,7 @@ rec {
 
   /* Extracts values of all "file" keys of the given list
 
-     Type: getFiles :: [ { file :: a } ] -> [a]
+     Type: getFiles :: [ { file :: a; } ] -> [a]
 
      Example:
        getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
