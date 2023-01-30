@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, nix-update-script
 , nixosTests
 , php}:
 
@@ -25,8 +26,11 @@ stdenvNoCC.mkDerivation rec {
     cp -R ./* $out
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) cloudlog;
+  passthru = {
+    tests = {
+      inherit (nixosTests) cloudlog;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
