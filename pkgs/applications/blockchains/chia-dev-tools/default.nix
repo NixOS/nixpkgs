@@ -37,12 +37,13 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     (toPythonModule chia)
+    pytest # required at runtime by the "test" command
+    pytest-asyncio
     pytimeparse
   ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
-    pytest-asyncio
   ];
 
   preCheck = ''
