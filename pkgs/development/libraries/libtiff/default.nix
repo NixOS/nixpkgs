@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
+, fetchpatch
 , nix-update-script
 
 , autoreconfHook
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    (fetchpatch {
+      name = "CVE-2022-48281.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/d1b6b9c1b3cae2d9e37754506c1ad8f4f7b646b5.diff";
+      sha256 = "sha256-FWUlyJyHXac6fuM5f9PG33kcF5Bm4fyFmYnaDal46iM=";
+    })
   ];
 
   postPatch = ''
